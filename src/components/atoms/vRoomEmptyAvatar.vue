@@ -1,21 +1,33 @@
 <template>
 	<div @drop.prevent="dropAvatar" @dragover.prevent>
-		<v-avatar
-			class="ma-0 pa-1 avatar-component-empty"
-			:class="{ 'hovered-avatar': hovered, 'avatar-component-empty': !hovered }"
-			:size="size"
-			@dragleave="dragLeave"
-			@dragenter.prevent.stop="dragEnter"
+		<v-badge
+			class="ma-0 badge-component"
+			bordered
+			color="var(--color-primary)"
+			icon="mdi-lock"
+			overlap
+			:value="false"
 		>
-		</v-avatar>
-		<span class="mt-1"></span>
+			<v-avatar
+				class="ma-0 pa-1 avatar-component-empty"
+				:class="{
+					'hovered-avatar': hovered,
+					'avatar-component-empty': !hovered,
+				}"
+				:size="size"
+				@dragleave="dragLeave"
+				@dragenter.prevent.stop="dragEnter"
+			>
+			</v-avatar>
+		</v-badge>
+		<span class="d-flex justify-center mt-1 sub-title"></span>
 	</div>
 </template>
 <script>
 export default {
 	props: {
 		size: {
-			type: Number || String,
+			type: String,
 			required: true,
 		},
 	},
@@ -45,6 +57,15 @@ export default {
 }
 .avatar-component-empty {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	border-radius: 24px;
+	border-radius: 1em;
+}
+.sub-title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 </style>

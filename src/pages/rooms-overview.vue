@@ -1,7 +1,28 @@
 <template>
 	<default-wireframe ref="main" :headline="title" :full-width="true">
+		<v-row class="text-left pl-2">
+			<v-col cols="8" sm="6" md="8" lg="8">
+				<v-text-field
+					ref="search"
+					:label="$t('common.words.search')"
+					:append-icon="mdiMagnify"
+					@input="searchItems"
+				>
+				</v-text-field>
+			</v-col>
+			<v-col class="text-right pr-2 pt-5" cols="4">
+				<v-btn @click="showAllcourses = true">All Rooms</v-btn>
+			</v-col>
+		</v-row>
+
+		<rooms-overview-list v-model="showAllcourses" />
+
 		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
-			<v-col v-for="(col, colIndex) in dimensions.colCount" :key="colIndex">
+			<v-col
+				v-for="(col, colIndex) in dimensions.colCount"
+				:key="colIndex"
+				class="ma-0 pa-0 mt-2 mb-2"
+			>
 				<div
 					v-if="getDataObject(rowIndex, colIndex) !== undefined"
 					class="d-flex justify-center"
@@ -11,7 +32,7 @@
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
 						:data="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth * ratios.itemRatio"
+						:size="dimensions.cellWidth"
 						:max-items="4"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
@@ -23,7 +44,7 @@
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-avatar"
 						:item="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth * ratios.itemRatio"
+						:size="dimensions.cellWidth"
 						:show-badge="true"
 						:draggable="true"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
@@ -33,7 +54,7 @@
 				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth * ratios.itemRatio"
+						:size="dimensions.cellWidth"
 						@drop="setDropElement({ x: colIndex, y: rowIndex })"
 					></vRoomEmptyAvatar>
 				</div>
@@ -43,7 +64,7 @@
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
 			:group-data="groupDialog.groupData"
-			:avatar-size="dimensions.cellWidth * ratios.itemRatio * 0.75"
+			:avatar-size="dimensions.cellWidth"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
@@ -55,8 +76,13 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
+import RoomsOverviewList from "@components/molecules/RoomsOverviewList";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
+import { mdiMagnify } from "@mdi/js";
+
+// import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
+// import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 
 export default {
 	components: {
@@ -65,6 +91,9 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
+		// vCustomDialog,
+
+		RoomsOverviewList,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -77,7 +106,7 @@ export default {
 			device: "mobile",
 			dimensions: {
 				colCount: 2,
-				cellWidth: 200,
+				cellWidth: "3em",
 				rowCount: 6,
 			},
 			groupDialog: {
@@ -92,6 +121,8 @@ export default {
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
+			showAllcourses: false,
+			mdiMagnify,
 		};
 	},
 	computed: {
@@ -105,30 +136,38 @@ export default {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 	},
-	async created() {
+	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.roomsData = RoomsModule.getRoomsData;
 		this.getDeviceDims();
 	},
+
 	methods: {
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
 				case "tablet":
-					this.dimensions.colCount = 4;
+					this.dimensions.colCount = 6;
+					this.dimensions.cellWidth = "5em";
+					break;
+				case "tabletPortrait":
+					this.dimensions.colCount = 6;
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 8;
+					this.dimensions.cellWidth = "7em";
 					break;
 				case "large":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 12;
+					this.dimensions.cellWidth = "7em";
 					break;
 				case "mobile":
-					this.dimensions.colCount = 2;
-					this.dimensions.cellWidth = 150;
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "4.5em";
 					break;
 				default:
-					this.dimensions.colCount = 2;
+					this.dimensions.colCount = 6;
 					break;
 			}
 		},
@@ -227,6 +266,24 @@ export default {
 			await RoomsModule.align(this.draggedElement);
 			this.roomsData = RoomsModule.getRoomsData;
 			this.groupDialog.groupData = {};
+		},
+		searchItems(filterText) {
+			this.roomsData = RoomsModule.getRoomsData;
+			const filtered = JSON.parse(JSON.stringify(this.roomsData)).filter(
+				(item) => {
+					if (item.groupElements) {
+						const groupElements = item.groupElements.filter((groupItem) => {
+							return groupItem.title
+								.toLowerCase()
+								.includes(filterText.toLowerCase());
+						});
+						item.groupElements = groupElements;
+						return groupElements;
+					}
+					return item.title.toLowerCase().includes(filterText.toLowerCase());
+				}
+			);
+			this.roomsData = filtered;
 		},
 	},
 };

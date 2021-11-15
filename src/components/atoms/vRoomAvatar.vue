@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="rounded-xl"
+		class="d-flex justify-center rounded"
 		:draggable="draggable"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
@@ -8,7 +8,7 @@
 		@dragend="dragEnd"
 	>
 		<v-badge
-			class="ma-0 badge-component rounded-xl"
+			class="ma-0 badge-component rounded"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -16,17 +16,21 @@
 			:value="displayBadge"
 		>
 			<v-avatar
-				class="ma-0 pa-1 avatar-component"
+				class="avatar-component"
 				:color="item.displayColor"
 				:size="size"
-				:class="condenseLayout ? 'rounded' : 'rounded-xl'"
+				:tile="condenseLayout"
 				@click="$emit('click', item)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<span :class="condenseLayout ? 'group-avatar' : 'single-avatar'">{{
-					avatarTitle
-				}}</span>
+				<span
+					class="white--text text-h7"
+					:class="
+						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h4'
+					"
+					>{{ avatarTitle }}</span
+				>
 			</v-avatar>
 			<span
 				v-if="!condenseLayout"
@@ -44,8 +48,8 @@ export default {
 			required: true,
 		},
 		size: {
-			type: Number || String,
-			required: true,
+			type: String,
+			default: "3em",
 		},
 		draggable: {
 			type: Boolean,
@@ -98,7 +102,11 @@ export default {
 </script>
 <style scoped>
 .v-avatar {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	width: 500px;
 	cursor: pointer;
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	border-radius: 0.5em;
 }
 .single-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

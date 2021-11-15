@@ -17,38 +17,30 @@
 			<v-card
 				:height="size"
 				:width="size"
-				class="rounded-xl ma-0 card-component"
 				outlined
+				class="ma-0 card-component"
 				@click.prevent="$emit('clicked', data.id)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<v-row class="ma-1 pa-1">
-					<v-col
-						v-for="item in itemsLimited"
-						:key="item.id"
-						cols="6"
-						class="ma-0 pa-1"
-					>
-						<vRoomAvatar
-							class="ma-0 pa-1 group-avatar-component"
-							:item="item"
-							:size="size / 3"
-							:draggable="false"
-							condense-layout
-						></vRoomAvatar>
-					</v-col>
-				</v-row>
+				<room-avatar-iterator
+					:items="data.groupElements"
+					condense-layout
+					item-size="1em"
+					:col-count="4"
+					:max-items="9"
+					modal-view
+				/>
 			</v-card>
 			<span class="d-flex justify-center mt-1 sub-title">{{ data.title }}</span>
 		</v-badge>
 	</div>
 </template>
 <script>
-import vRoomAvatar from "@components/atoms/vRoomAvatar";
+import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
 export default {
 	components: {
-		vRoomAvatar,
+		RoomAvatarIterator,
 	},
 	props: {
 		data: {
@@ -56,7 +48,7 @@ export default {
 			required: true,
 		},
 		size: {
-			type: Number || String,
+			type: String,
 			required: true,
 		},
 		maxItems: {
@@ -102,5 +94,10 @@ export default {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.card-component {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	border-radius: 0.5em;
 }
 </style>
