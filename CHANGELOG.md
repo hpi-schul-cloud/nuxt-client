@@ -16,6 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-157 - add typescript to task store in nuxt client
+- BC-589 - BC-653 - Change auto deployment to a reusable workflow
 
 ## [26.16.0] - 2021-11-09
 
