@@ -243,7 +243,7 @@ export default {
 		},
 		searchItems(filterText) {
 			this.roomsData = RoomsModule.getRoomsData;
-			this.roomsData = JSON.parse(JSON.stringify(this.roomsData)).filter(
+			const filtered = JSON.parse(JSON.stringify(this.roomsData)).filter(
 				(item) => {
 					if (item.groupElements) {
 						const groupElements = item.groupElements.filter((groupItem) => {
@@ -257,7 +257,7 @@ export default {
 					return item.title.toLowerCase().includes(filterText.toLowerCase());
 				}
 			);
-			// this.roomsData = filtered;
+			this.roomsData = filtered;
 		},
 	},
 };

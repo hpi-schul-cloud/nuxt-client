@@ -12,6 +12,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-155 - add toggle to filter task of substition courses
 - BC-580 - adding substitute label to task in the task overview
+- BC-705 - adding searchbar on rooms-overview dashboard
 
 ### Changed
 
