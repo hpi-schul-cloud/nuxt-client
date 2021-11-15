@@ -11,6 +11,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-537 - added new vuetify floating action button
+- BC-155 - add toggle to filter task of substition courses
+- BC-580 - adding substitute label to task in the task overview
 
 ### Changed
 

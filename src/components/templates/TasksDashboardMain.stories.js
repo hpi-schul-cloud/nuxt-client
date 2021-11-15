@@ -1,12 +1,15 @@
 import { storiesOf } from "@storybook/vue";
-import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 import Vuex from "vuex";
-import {
+
+import TasksDashboardMain from "@components/templates/TasksDashboardMain";
+import mock from "@@/stories/mockData/Tasks";
+
+import store from "../../store/tasks";
+
+const {
 	openTasksWithoutDueDate,
 	openTasksWithDueDate,
 	overDueTasks,
-	coursesStudent,
-	coursesTeacher,
 	overDueTasksTeacher,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
@@ -14,7 +17,7 @@ import {
 	gradedTasks,
 	tasks,
 	drafts,
-} from "@@/stories/mockData/Tasks";
+} = mock;
 
 storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 	.add("Tasks Dashboard Student", () => ({
@@ -22,21 +25,17 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 			TasksDashboardMain,
 		},
 		data: () => ({
-			overDueTasks,
-			coursesStudent,
 			role: "student",
 		}),
 		store: new Vuex.Store({
 			modules: {
 				tasks: {
 					namespaced: true,
-					getters: {
+					getters: Object.assign(store.getters, {
 						getStatus: () => "completed",
-						hasNoTasks: () => false,
-						hasNoOpenTasksStudent: () => false,
-						hasNoCompletedTasks: () => false,
-						getTasks: () => tasks,
-						getCourses: () => coursesStudent,
+						hasTasks: () => true,
+						hasOpenTasksStudent: () => true,
+						hasCompletedTasks: () => true,
 						getOpenTasksForStudent: () => ({
 							overdue: overDueTasks,
 							withDueDate: openTasksWithDueDate,
@@ -50,11 +49,13 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 							open: { Mathe: 7, Chemie: 1, Biologie: 0 },
 							completed: { Mathe: 2, Chemie: 0, Biologie: 1 },
 						}),
-					},
-					actions: {
+						getSelectedCourseFilters: () => [],
+					}),
+					actions: Object.assign(store.actions, {
 						getAllTasks: () => {},
 						updateFilter: () => {},
-					},
+					}),
+					state: () => Object.assign(store.state(), { tasks }),
 				},
 			},
 		}),
@@ -68,24 +69,18 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 			TasksDashboardMain,
 		},
 		data: () => ({
-			overDueTasksTeacher,
-			dueDateTasksTeacher,
-			noDueDateTasksTeacher,
-			drafts,
-			coursesTeacher,
 			role: "teacher",
 		}),
 		store: new Vuex.Store({
 			modules: {
 				tasks: {
 					namespaced: true,
-					getters: {
+					getters: Object.assign(store.getters, {
 						getStatus: () => "completed",
-						hasNoTasks: () => false,
-						hasNoOpenTasksTeacher: () => false,
-						hasNoDrafts: () => false,
+						hasTasks: () => true,
+						hasOpenTasksTeacher: () => true,
+						hasDrafts: () => true,
 						getTasks: () => tasks,
-						getCourses: () => coursesTeacher,
 						getOpenTasksForTeacher: () => ({
 							overdue: overDueTasksTeacher,
 							withDueDate: dueDateTasksTeacher,
@@ -96,11 +91,12 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 							open: { Mathe: 9, Deutsch: 1, "": 0 },
 							drafts: { Mathe: 0, Deutsch: 1, "": 2 },
 						}),
-					},
-					actions: {
+					}),
+					actions: Object.assign(store.actions, {
 						getAllTasks: () => {},
 						updateFilter: () => {},
-					},
+					}),
+					state: () => Object.assign(store.state(), { tasks }),
 				},
 			},
 		}),

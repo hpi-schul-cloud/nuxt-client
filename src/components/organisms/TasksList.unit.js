@@ -1,7 +1,9 @@
 import TasksList from "./TasksList";
-import { tasks, overDueTasks, openTasks } from "@@/stories/mockData/Tasks";
+import mocks from "@@/stories/mockData/Tasks";
 import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
+
+const { tasks, overDueTasks, openTasks } = mocks;
 
 describe("@components/organisms/TasksList", () => {
 	const mockStore = {
@@ -9,7 +11,7 @@ describe("@components/organisms/TasksList", () => {
 			getters: {
 				getList: () => tasks,
 				getStatus: () => "completed",
-				hasNoTasks: () => false,
+				hasTasks: () => true,
 				openTasks: () => openTasks,
 				overDueTasks: () => overDueTasks,
 			},
@@ -73,7 +75,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => [],
 					getStatus: () => "completed",
-					hasNoTasks: () => true,
+					hasTasks: () => false,
 					openTasks: () => [],
 					overDueTasks: () => [],
 				},
@@ -118,7 +120,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => tasks,
 					getStatus: () => "completed",
-					hasNoTasks: () => false,
+					hasTasks: () => true,
 					openTasks: () => openTasks,
 					overDueTasks: () => overDueTasks,
 				},
@@ -162,7 +164,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => [],
 					getStatus: () => "pending",
-					hasNoTasks: () => false,
+					hasTasks: () => true,
 					openTasks: () => [],
 					overDueTasks: () => [],
 				},

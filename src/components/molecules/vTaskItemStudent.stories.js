@@ -1,12 +1,14 @@
 import { storiesOf } from "@storybook/vue";
 import vTaskItemStudent from "@components/molecules/vTaskItemStudent";
-import {
+import mock from "@@/stories/mockData/Tasks";
+
+const {
 	tasks,
 	overDueTasks,
 	submittedTasks,
 	gradedTasks,
 	missedButGradedTasks,
-} from "@@/stories/mockData/Tasks";
+} = mock;
 
 const current = new Date();
 current.setHours(current.getHours() + 1);
