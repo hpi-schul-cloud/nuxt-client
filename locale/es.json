@@ -62,6 +62,7 @@
 	"common.words.schoolYearChange": "Cambio de año escolar",
 	"common.words.privacyPolicy": "Política de privacidad",
 	"common.words.substitute": "Sustituir",
+	"common.words.search": "Buscar",
 	"componente.molecules.CoursesGrid.emptystate": "Actualmente no hay cursos aquí.",
 	"components.atoms.ProfilePicture": "foto del perfil",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",

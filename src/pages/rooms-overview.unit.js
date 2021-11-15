@@ -420,4 +420,31 @@ describe("RoomPage", () => {
 			expectedPayload
 		);
 	});
+
+	it("should search elements on dashboard", async () => {
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.vm.$refs["4-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+
+		const searchInput = wrapper.vm.$refs["search"];
+		searchInput.$emit("input", "thi");
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
+		expect(wrapper.vm.$refs["4-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+		const avatarComponents = wrapper.findAll(".room-avatar");
+		expect(avatarComponents).toHaveLength(1);
+	});
 });

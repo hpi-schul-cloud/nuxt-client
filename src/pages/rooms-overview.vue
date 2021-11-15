@@ -1,5 +1,16 @@
 <template>
 	<default-wireframe ref="main" :headline="title" :full-width="true">
+		<v-row class="d-flex justify-center">
+			<v-col cols="12" sm="6" md="8" lg="8">
+				<v-text-field
+					ref="search"
+					:label="$t('common.words.search')"
+					:append-icon="mdiMagnify"
+					@input="searchItems"
+				>
+				</v-text-field>
+			</v-col>
+		</v-row>
 		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
 			<v-col v-for="(col, colIndex) in dimensions.colCount" :key="colIndex">
 				<div
@@ -57,6 +68,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
+import { mdiMagnify } from "@mdi/js";
 
 export default {
 	components: {
@@ -92,6 +104,7 @@ export default {
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
+			mdiMagnify,
 		};
 	},
 	computed: {
@@ -227,6 +240,24 @@ export default {
 			await RoomsModule.align(this.draggedElement);
 			this.roomsData = RoomsModule.getRoomsData;
 			this.groupDialog.groupData = {};
+		},
+		searchItems(filterText) {
+			this.roomsData = RoomsModule.getRoomsData;
+			this.roomsData = JSON.parse(JSON.stringify(this.roomsData)).filter(
+				(item) => {
+					if (item.groupElements) {
+						const groupElements = item.groupElements.filter((groupItem) => {
+							return groupItem.title
+								.toLowerCase()
+								.includes(filterText.toLowerCase());
+						});
+						item.groupElements = groupElements;
+						return groupElements;
+					}
+					return item.title.toLowerCase().includes(filterText.toLowerCase());
+				}
+			);
+			// this.roomsData = filtered;
 		},
 	},
 };
