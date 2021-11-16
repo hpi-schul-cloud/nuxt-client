@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Changed
+
+### Added
+
+## [26.17.0] - 2021-11-16
+
 ### Added
 
 - BC-537 - added new vuetify floating action button
