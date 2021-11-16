@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Changed
+
+### Added
+
+## [26.17.0] - 2021-11-16
+
 ### Added
 
 - BC-155 - add toggle to filter task of substition courses
