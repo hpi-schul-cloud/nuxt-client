@@ -116,8 +116,8 @@
 		/>
 		<v-custom-fab
 			v-if="
-					!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
-				"
+				!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
+			"
 			:icon="mdiPlus"
 			:title="$t('common.labels.student')"
 			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"

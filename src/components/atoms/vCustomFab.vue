@@ -38,7 +38,14 @@
 				<span>
 					{{ action.label }}
 				</span>
-				<v-btn fab small :href="action.href" :to="action.to" class="fab-action" :data-testid="action.dataTestid">
+				<v-btn
+					fab
+					small
+					:href="action.href"
+					:to="action.to"
+					class="fab-action"
+					:data-testid="action.dataTestid"
+				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
 			</div>
