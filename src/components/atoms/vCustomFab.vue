@@ -33,10 +33,7 @@
 			</v-btn>
 		</template>
 		<template v-for="(action, index) of actions">
-			<div
-				:key="index"
-				class="d-flex align-center justify-end"
-			>
+			<div :key="index" class="d-flex align-center justify-end">
 				<span>
 					{{ action.label }}
 				</span>
