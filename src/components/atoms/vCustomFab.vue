@@ -33,10 +33,7 @@
 			</v-btn>
 		</template>
 		<template v-for="(action, index) of actions">
-			<div
-				:key="index"
-				class="d-flex align-center justify-end"
-			>
+			<div :key="index" class="d-flex align-center justify-end">
 				<span>
 					{{ action.label }}
 				</span>
@@ -45,6 +42,12 @@
 				</v-btn>
 			</div>
 		</template>
+		<v-overlay
+			:value="showOverlay"
+			color="#fff"
+			z-index="-1"
+			opacity="0.6"
+		></v-overlay>
 	</v-speed-dial>
 	<v-btn
 		v-else
@@ -112,6 +115,9 @@ export default {
 		},
 		isCollapsed: function () {
 			return this.extended && !this.isSpeedDialExpanded;
+		},
+		showOverlay: function () {
+			return this.isSpeedDialExpanded;
 		},
 	},
 	methods: {

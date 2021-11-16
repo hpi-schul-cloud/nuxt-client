@@ -118,7 +118,7 @@ describe("@components/atoms/vCustomFab", () => {
 			expect(link.attributes().href).toBe("/");
 		});
 
-		// apparantly testing scroll behviour is not possible with jest
+		// apparantly testing scroll behaviour is not possible with jest
 
 		// it("extended fab should collapse on scroll down", () => {});
 		// it("extended fab should extend on scroll up", () => {});
@@ -171,5 +171,7 @@ describe("@components/atoms/vCustomFab", () => {
 		}); */
 
 		//it("should collapse when speed dial menu is opened", () => {});
+
+		//it("should show overlay when speed dial menu is opened", () => {});
 	});
 });
