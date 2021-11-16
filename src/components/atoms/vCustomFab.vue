@@ -2,6 +2,7 @@
 	<v-speed-dial
 		v-if="hasMultipleActions"
 		v-model="isSpeedDialExpanded"
+		v-bind="$attrs"
 		fixed
 		:bottom="isMobile"
 		:top="!isMobile"
@@ -51,6 +52,7 @@
 	</v-speed-dial>
 	<v-btn
 		v-else
+		v-bind="$attrs"
 		fab
 		fixed
 		right
