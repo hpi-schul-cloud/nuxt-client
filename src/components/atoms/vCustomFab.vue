@@ -182,7 +182,7 @@ export default {
 .fab-action-icon {
 	color: var(--color-primary) !important;
 }
-.fab-action:hover.fab-action-icon {
+.fab-action:hover .fab-action-icon {
 	color: var(--color-primary-dark) !important;
 }
 </style>
