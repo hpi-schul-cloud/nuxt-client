@@ -35,22 +35,13 @@
 		<template v-for="(action, index) of actions">
 			<div
 				:key="index"
-				name="speed-dial-action"
 				class="d-flex align-center justify-end"
 			>
-				<v-btn dark small color="secondary" :href="action.href" :to="action.to">
+				<span>
 					{{ action.label }}
-				</v-btn>
-				<v-btn
-					:key="index"
-					fab
-					dark
-					small
-					color="secondary"
-					:href="action.href"
-					:to="action.to"
-				>
-					<v-icon small>{{ action.icon }}</v-icon>
+				</span>
+				<v-btn fab small :href="action.href" :to="action.to">
+					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
 			</div>
 		</template>
@@ -174,5 +165,16 @@ export default {
 	width: 120px !important;
 	padding: 0 12px 0 8px; // stylelint-disable sh-waqar/declaration-use-variable
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+}
+
+::v-deep .v-btn--has-bg {
+	background-color: var(--color-white) !important;
+}
+
+.fab-action-icon {
+	color: var(--color-primary) !important;
+}
+.fab-action-icon:hover {
+	color: var(--color-primary-dark) !important;
 }
 </style>
