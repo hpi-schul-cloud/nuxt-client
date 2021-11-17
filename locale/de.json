@@ -83,7 +83,7 @@
 	"components.molecules.adminfooterlegend.title": "Legende",
 	"components.molecules.admintablelegend.externalSync": "Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o. ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte sind ebenfalls nur im Quellsystem möglich. Finde weitere Informationen im",
 	"components.molecules.admintablelegend.help": "Hilfebereich",
-	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich bestätigen Sie, dass Sie weisungsberechtigter Schul-Admin sind und befugt sind, Anpassungen an der Schule in der HPI Schul-Cloud vorzunehmen. Ihr Klick gilt insofern als Weisung der Schule gegenüber dem HPI.",
+	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {{institute_title}}.",
 	"components.molecules.ContentCard.report.body": "Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email": "inhalte@hpi-schul-cloud.de",
 	"components.molecules.ContentCard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da: [hier bitte Ihre Gründe]",
