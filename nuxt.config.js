@@ -193,11 +193,6 @@ module.exports = {
 	vuetify: {
 		customVariables: ["@styles-base/vuetify-custom.scss"],
 		defaultAssets: false,
-		// TODO - test production build with this
-		/* defaultAssets: {
-			font: false,
-			icons: "mdi",
-		}, */
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
 		options: {

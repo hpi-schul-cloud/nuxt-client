@@ -15,7 +15,6 @@
 				id="fab"
 				v-model="isSpeedDialExpanded"
 				color="primary"
-				dark
 				fab
 				rounded
 				:small="isCollapsed"
@@ -25,10 +24,10 @@
 				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
 					{{ mdiClose }}
 				</v-icon>
-				<div v-else>
-					<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{
-						icon
-					}}</v-icon>
+				<div v-else class="d-flex align-center">
+					<v-icon name="fab-icon" :class="{ 'mr-1': extended }">
+						{{ icon }}
+					</v-icon>
 					<span v-if="extended">{{ title }}</span>
 				</div>
 			</v-btn>
@@ -54,7 +53,7 @@
 			:value="showOverlay"
 			color="#fff"
 			z-index="-1"
-			opacity="0.6"
+			opacity="0.9"
 		></v-overlay>
 	</v-speed-dial>
 	<v-btn

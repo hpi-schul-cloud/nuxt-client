@@ -35,7 +35,8 @@ $headings: (
 $button-font-size: 1rem;
 $btn-text-transform: none;
 $btn-font-weight: var(--font-weight-bold);
-$btn-focus-opacity: 0 !important;
+$btn-letter-spacing: 0;
+$btn-focus-opacity: 0;
 .v-btn {
 	font-family: var(--font-accent);
 	&.v-size--small,
