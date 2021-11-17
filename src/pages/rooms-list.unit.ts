@@ -146,14 +146,14 @@ describe("@pages/rooms-list.vue", () => {
 		expect(wrapper.vm.$data.allElements).toStrictEqual(mockData);
 	});
 
-	// it("should search elements on list", async () => {
-	// 	const wrapper = getWrapper();
-	// 	await flushPromises();
+	it("should search elements on list", async () => {
+		const wrapper = getWrapper();
+		await flushPromises();
 
-	// 	const searchInput = wrapper.vm.$refs["search"] as any;
+		const searchInput = wrapper.vm.$refs["search"] as any;
 
-	// 	expect(1 == 1).toBe(true);
-	// 	searchInput.vm.$data.lazyValue = "math";
-	// 	expect(wrapper.vm.$data.allElements.length).toEqual(2);
-	// });
+		expect(wrapper.vm.$data.allElements.length).toEqual(19);
+		searchInput.$emit("input", "math");
+		expect(wrapper.vm.$data.allElements.length).toEqual(2);
+	});
 });
