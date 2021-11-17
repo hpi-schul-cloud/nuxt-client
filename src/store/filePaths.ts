@@ -103,11 +103,11 @@ export class FilePaths extends VuexModule {
 		return this.documentBaseDir;
 	}
 
-	get getSpecificFiles(): Specific {
+	get getSpecificFiles(): SpecificFiles {
 		return this.specificFiles;
 	}
 
-	get getGlobalFiles(): Global {
+	get getGlobalFiles(): GlobalFiles {
 		return this.globalFiles;
 	}
 
