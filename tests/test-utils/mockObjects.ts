@@ -1,4 +1,4 @@
-import { User } from "@/store/auth";
+import { User } from "@/store/types/auth";
 import { School } from "@/store/schools";
 
 export const mockUser: User = {
