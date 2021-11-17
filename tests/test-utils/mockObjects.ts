@@ -1,5 +1,5 @@
 import { User } from "@/store/types/auth";
-import { School } from "@/store/schools";
+import { School } from "@/store/types/schools";
 
 export const mockUser: User = {
 	_id: "",

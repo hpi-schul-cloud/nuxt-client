@@ -8,7 +8,8 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule, { School } from "@/store/schools";
+import SchoolsModule from "@/store/schools";
+import { School } from "./types/schools";
 import { User } from "@/store/types/auth";
 
 @Module({
