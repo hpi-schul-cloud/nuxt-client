@@ -71,10 +71,6 @@ export default {
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
-					to: "/community",
-					text: this.$t("components.legacy.footer.contribute"),
-				},
-				{
 					href: "https://github.com/hpi-schul-cloud",
 					text: this.$t("components.legacy.footer.github"),
 				},
