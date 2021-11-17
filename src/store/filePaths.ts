@@ -7,6 +7,7 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import EnvConfigModule from "@/store/env-config";
+import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 
 const specificFiles = {
 	privacyExemplary:
@@ -36,25 +37,6 @@ const globalFiles = {
 		"Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
 };
 
-type Specific = {
-	privacyExemplary: URL | string;
-	privacy: URL | string;
-	termsOfUseExemplary: URL | string;
-	termsOfUse: URL | string;
-	termsOfUseSchool: URL | string;
-	analogConsent: URL | string;
-};
-
-type Global = {
-	BeschreibungDerSchulCloud: URL | string;
-	TechnischerBericht2019: URL | string;
-	BroschuereSCimUnterricht1: URL | string;
-	BroschuereSCimUnterricht2: URL | string;
-	BroschuereSCundLernen4: URL | string;
-	SchulrechnerInDieSC2017: URL | string;
-	SCKonzeptPilotierung2017: URL | string;
-};
-
 @Module({
 	name: "filePaths",
 	namespaced: true,
@@ -64,7 +46,7 @@ type Global = {
 })
 export class FilePaths extends VuexModule {
 	documentBaseDir: string = "";
-	specificFiles: Specific = {
+	specificFiles: SpecificFiles = {
 		privacyExemplary: "",
 		privacy: "",
 		termsOfUseExemplary: "",
@@ -72,7 +54,7 @@ export class FilePaths extends VuexModule {
 		termsOfUseSchool: "",
 		analogConsent: "",
 	};
-	globalFiles: Global = {
+	globalFiles: GlobalFiles = {
 		BeschreibungDerSchulCloud: "",
 		TechnischerBericht2019: "",
 		BroschuereSCimUnterricht1: "",
