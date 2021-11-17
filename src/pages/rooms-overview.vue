@@ -11,11 +11,9 @@
 				</v-text-field>
 			</v-col>
 			<v-col class="text-right pr-2 pt-5" cols="4">
-				<v-btn @click="showAllcourses = true">All Rooms</v-btn>
+				<v-btn to="/rooms-list">All Rooms</v-btn>
 			</v-col>
 		</v-row>
-
-		<rooms-overview-list v-model="showAllcourses" />
 
 		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
 			<v-col
@@ -76,13 +74,9 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import RoomsOverviewList from "@components/molecules/RoomsOverviewList";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify } from "@mdi/js";
-
-// import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
-// import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 
 export default {
 	components: {
@@ -91,9 +85,6 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
-		// vCustomDialog,
-
-		RoomsOverviewList,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -155,11 +146,11 @@ export default {
 					this.dimensions.cellWidth = "5em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 8;
+					this.dimensions.colCount = 6;
 					this.dimensions.cellWidth = "7em";
 					break;
 				case "large":
-					this.dimensions.colCount = 12;
+					this.dimensions.colCount = 6;
 					this.dimensions.cellWidth = "7em";
 					break;
 				case "mobile":
@@ -208,7 +199,7 @@ export default {
 			}
 			this.showDeleteSection = false;
 		},
-		setGroupElements(pos) {
+		async setGroupElements(pos) {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
@@ -220,7 +211,13 @@ export default {
 					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
-				this.savePosition();
+				await this.savePosition();
+				// TODO: default naming
+				// const groupObject = this.findDataByPos(pos.y, pos.x);
+				// groupObject.title = "Group-1";
+				// await RoomsModule.update(groupObject);
+				// await this.$nextTick();
+				// this.$forceUpdate();
 			}
 		},
 		addGroupElements(pos) {
