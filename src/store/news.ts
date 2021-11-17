@@ -9,66 +9,12 @@ import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Status } from "./types/commons";
-
-type UserInfo = {
-	/**
-	 * The id of the User entity
-	 * @type {string}
-	 */
-	id: string;
-	/**
-	 * First name of the user
-	 * @type {string}
-	 */
-	firstName?: string;
-	/**
-	 * Last name of the user
-	 * @type {string}
-	 */
-	lastName?: string;
-};
-
-type SchoolInfo = {
-	/**
-	 * The id of the School entity
-	 * @type {string}
-	 */
-	id: string;
-	/**
-	 * Name of the school
-	 * @type {string}
-	 */
-	name?: string;
-};
-
-type News = {
-	id: string;
-	content: string;
-	createdAt: string;
-	creator: UserInfo;
-	displayAt: string;
-	school: SchoolInfo;
-	// source: string;
-	title: string;
-	updater?: UserInfo;
-};
-
-type CreateNewsPayload = {
-	title: string;
-	content: string;
-	displayAt?: string | undefined;
-	schoolId: string;
-	targetId: any;
-	targetModel: any;
-};
-
-type PatchNewsPayload = CreateNewsPayload & { id: string };
-
-type Pagination = {
-	limit: number;
-	skip: number;
-	total: number;
-};
+import {
+	CreateNewsPayload,
+	News,
+	Pagination,
+	PatchNewsPayload,
+} from "./types/news";
 
 // const newsUri = "/v3/news";
 
