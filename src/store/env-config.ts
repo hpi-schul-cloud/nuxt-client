@@ -9,13 +9,7 @@ import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import ContentModule from "@/store/content";
 import FilePathsModule from "@/store/filePaths";
-
-type Status = "pending" | "completed" | "error" | "";
-
-type BusinessError = {
-	statusCode: string;
-	message: string;
-};
+import { BusinessError, Status } from "./types/commons";
 
 export interface Envs {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
@@ -59,7 +53,8 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_MATRIX_MESSENGER_ENABLED:
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
-	FEATURE_LERNSTORE_ENABLED: process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == 'true' ,
+	FEATURE_LERNSTORE_ENABLED:
+		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,

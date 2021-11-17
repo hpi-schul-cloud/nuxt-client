@@ -8,6 +8,7 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
+import { BusinessError, Status } from "./types/commons";
 
 type UserInfo = {
 	/**
@@ -68,13 +69,6 @@ type Pagination = {
 	skip: number;
 	total: number;
 };
-
-type BusinessError = {
-	statusCode: string;
-	message: string;
-};
-
-type Status = "pending" | "completed" | "error" | "";
 
 // const newsUri = "/v3/news";
 
