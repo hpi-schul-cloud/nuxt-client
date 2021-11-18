@@ -29,9 +29,9 @@
 				</v-custom-double-panels>
 				<v-custom-empty-state
 					v-if="!hasOpenTasksStudent"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
-					:subtitle="emptyStateText.subtitle"
+					:image="emptyState.image"
+					:title="emptyState.title"
+					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -54,8 +54,8 @@
 				</v-custom-double-panels>
 				<v-custom-empty-state
 					v-if="!hasCompletedTasks"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
+					:image="emptyState.image"
+					:title="emptyState.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -64,8 +64,8 @@
 				<tasks-list :tasks="submittedTasks" type="student" />
 				<v-custom-empty-state
 					v-if="!hasCompletedTasks"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
+					:image="emptyState.image"
+					:title="emptyState.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -77,7 +77,6 @@
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 import { mapGetters } from "vuex";
 
 export default {
@@ -87,11 +86,10 @@ export default {
 			type: Number,
 			required: true,
 		},
-	},
-	data() {
-		return {
-			emptyStateImage: tasksEmptyState,
-		};
+		emptyState: {
+			type: Object,
+			required: true,
+		}
 	},
 	computed: {
 		...mapGetters("tasks", {
@@ -101,7 +99,6 @@ export default {
 			hasOpenTasksStudent: "hasOpenTasksStudent",
 			hasCompletedTasks: "hasCompletedTasks",
 			hasTasks: "hasTasks",
-			hasFilterSelected: "hasFilterSelected",
 		}),
 		overdueTasks: function () {
 			return this.openTasks.overdue;
@@ -117,34 +114,6 @@ export default {
 		},
 		gradedTasks: function () {
 			return this.completedTasks.graded;
-		},
-		// TODO - empty state text for finished tab
-		emptyStateText: function () {
-			if (this.hasFilterSelected) {
-				return {
-					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
-					subtitle: undefined,
-				};
-			} else {
-				if (this.tab === 0) {
-					return {
-						title: this.$t("pages.tasks.student.open.emptyState.title"),
-						subtitle: this.$t("pages.tasks.student.open.emptyState.subtitle"),
-					};
-				} else {
-					if (this.tab === 1) {
-						return {
-							title: this.$t("pages.tasks.student.completed.emptyState.title"),
-							subtitle: undefined,
-						};
-					} else {
-						return {
-							title: this.$t("pages.tasks.finished.emptyState.title"),
-							subtitle: undefined,
-						};
-					}
-				}
-			}
 		},
 		currentTab: {
 			get() {

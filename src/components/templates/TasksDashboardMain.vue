@@ -57,8 +57,8 @@
 				:disabled="isFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
-			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else :tab.sync="tab" />
+			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" :empty-state="emptyState" />
+			<tasks-dashboard-teacher v-else :tab.sync="tab" :empty-state="emptyState" />
 		</div>
 	</default-wireframe>
 </template>
@@ -72,6 +72,7 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
+import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
 	components: {
@@ -93,6 +94,7 @@ export default {
 		return {
 			tab: 0, // should we save this in store?
 			mdiPlus,
+			tasksEmptyStateImage
 		};
 	},
 	computed: {
@@ -127,16 +129,14 @@ export default {
 				: !this.hasOpenTasksTeacher;
 		},
 		tabTwoIsEmpty: function () {
-			return this.isStudent
-				? !this.hasCompletedTasks
-				: !this.hasDrafts;
+			return this.isStudent ? !this.hasCompletedTasks : !this.hasDrafts;
 		},
 		isFilterDisabled: function () {
 			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			if (this.tab === 0) {
 				return this.tabOneIsEmpty;
-			} 
+			}
 			if (this.tab === 1) {
 				return this.tabTwoIsEmpty;
 			}
@@ -189,6 +189,45 @@ export default {
 			};
 
 			return tabThree;
+		},
+		emptyState: function () {
+			const image = tasksEmptyStateImage;
+			//const subtitle = undefined;
+			if (this.hasFilterSelected) {
+				return {
+					image,
+					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
+					subtitle: undefined,
+				};
+			} else {
+				if (this.tab === 0) {
+					return {
+						image,
+						title: this.$t(`pages.tasks.${this.role}.open.emptyState.title`),
+						subtitle: this.$t(
+							`pages.tasks.${this.role}.open.emptyState.subtitle`
+						),
+					};
+				} else {
+					if (this.tab === 1) {
+						const title = this.isStudent
+							? this.$t("pages.tasks.student.completed.emptyState.title")
+							: this.$t("pages.tasks.teacher.drafts.emptyState.title");
+
+						return {
+							image,
+							title,
+							subtitle: undefined,
+						};
+					} else {
+						return {
+							image,
+							title: this.$t("pages.tasks.finished.emptyState.title"),
+							subtitle: undefined,
+						};
+					}
+				}
+			}
 		},
 	},
 	mounted() {
