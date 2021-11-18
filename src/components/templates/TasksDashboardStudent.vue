@@ -132,10 +132,17 @@ export default {
 						subtitle: this.$t("pages.tasks.student.open.emptyState.subtitle"),
 					};
 				} else {
-					return {
-						title: this.$t("pages.tasks.student.submitted.emptyState.title"),
-						subtitle: undefined,
-					};
+					if (this.tab === 1) {
+						return {
+							title: this.$t("pages.tasks.student.completed.emptyState.title"),
+							subtitle: undefined,
+						};
+					} else {
+						return {
+							title: this.$t("pages.tasks.finished.emptyState.title"),
+							subtitle: undefined,
+						};
+					}
 				}
 			}
 		},

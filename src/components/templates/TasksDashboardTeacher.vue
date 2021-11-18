@@ -105,8 +105,8 @@ export default {
 			} else {
 				if (this.tab === 0) {
 					return {
-						title: this.$t("pages.tasks.teacher.emptyState.title"),
-						subtitle: this.$t("pages.tasks.teacher.emptyState.subtitle"),
+						title: this.$t("pages.tasks.teacher.open.emptyState.title"),
+						subtitle: this.$t("pages.tasks.teacher.open.emptyState.subtitle"),
 					};
 				} else {
 					return {
