@@ -1,5 +1,9 @@
 <template>
-	<v-list-item :key="task.id" :href="taskGradingHref(task.id)">
+	<v-list-item
+		:key="task.id"
+		:href="taskGradingHref(task.id)"
+		class="mx-n4 mx-sm-0"
+	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
 		</v-list-item-avatar>
