@@ -133,6 +133,9 @@ export class TaskModule extends VuexModule {
 	@Mutation
 	setSubstituteFilter(enabled: boolean) {
 		this.substituteFilter = enabled;
+		this.courseFilter = new TaskFilter(this.tasks)
+			.filterSubstitute(enabled)
+			.courseNames();
 	}
 
 	@Mutation
