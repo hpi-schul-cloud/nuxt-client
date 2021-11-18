@@ -5,35 +5,6 @@ import { vuetify } from "@@/nuxt.config";
 
 declare var createComponentMocks: Function;
 
-const simpleExtendedFab = {
-	actions: [],
-	icon: mdiPlus,
-	title: "User",
-	href: "/",
-};
-
-const multipleActionsExtendedFab = {
-	actions: [
-		{
-			label: "Add User",
-			icon: mdiAccountPlus,
-			to: "/",
-		},
-		{
-			label: "Delete User",
-			icon: mdiAccountMultipleMinus,
-			to: "/",
-		},
-	],
-	icon: mdiPlus,
-	title: "User",
-};
-
-const simpleFab = {
-	actions: [],
-	icon: mdiPlus,
-};
-
 const getWrapper = (props: object, options?: object) => {
 	return mount(vCustomFab, {
 		...createComponentMocks({
@@ -46,7 +17,13 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("@components/atoms/vCustomFab", () => {
-	describe("simple fab", () => {
+	describe("where fab is simple", () => {
+
+		const simpleFab = {
+			actions: [],
+			icon: mdiPlus,
+		};
+		
 		it("should not display title", () => {
 			const wrapper = getWrapper({ ...simpleFab });
 
@@ -67,7 +44,15 @@ describe("@components/atoms/vCustomFab", () => {
 		});
 	});
 
-	describe("extended fab", () => {
+	describe("where fab is extended", () => {
+
+		const simpleExtendedFab = {
+			actions: [],
+			icon: mdiPlus,
+			title: "User",
+			href: "/",
+		};
+		
 		it("should display title", () => {
 			const wrapper = getWrapper({ ...simpleExtendedFab });
 
@@ -124,7 +109,25 @@ describe("@components/atoms/vCustomFab", () => {
 		// it("extended fab should extend on scroll up", () => {});
 	});
 
-	describe("extended fab with speed dial menu", () => {
+	describe("where fab is extended with speed dial menu", () => {
+
+		const multipleActionsExtendedFab = {
+			actions: [
+				{
+					label: "Add User",
+					icon: mdiAccountPlus,
+					to: "/",
+				},
+				{
+					label: "Delete User",
+					icon: mdiAccountMultipleMinus,
+					to: "/",
+				},
+			],
+			icon: mdiPlus,
+			title: "User",
+		};
+
 		it("should become speed dial component when multiple actions are given", () => {
 			const wrapper = getWrapper({ ...multipleActionsExtendedFab });
 
