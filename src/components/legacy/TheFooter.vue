@@ -41,6 +41,7 @@
 
 <script>
 import AuthModule from "@/store/auth";
+import FilePathsModule from "@/store/filePaths";
 
 export default {
 	data() {
@@ -63,6 +64,12 @@ export default {
 				{
 					href: "/datenschutz",
 					text: this.$t("components.legacy.footer.privacy_policy"),
+					target: "_blank",
+					rel: "noopener",
+				},
+				{
+					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
