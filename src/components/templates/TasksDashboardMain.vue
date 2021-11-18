@@ -127,16 +127,14 @@ export default {
 				: !this.hasOpenTasksTeacher;
 		},
 		tabTwoIsEmpty: function () {
-			return this.isStudent
-				? !this.hasCompletedTasks
-				: !this.hasDrafts;
+			return this.isStudent ? !this.hasCompletedTasks : !this.hasDrafts;
 		},
 		isFilterDisabled: function () {
 			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			if (this.tab === 0) {
 				return this.tabOneIsEmpty;
-			} 
+			}
 			if (this.tab === 1) {
 				return this.tabTwoIsEmpty;
 			}
