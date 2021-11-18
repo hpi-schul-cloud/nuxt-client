@@ -1,6 +1,7 @@
-import { Content, Resource } from "./content";
+import { Content } from "./content";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { Resource } from "./types/content";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v1/lessons";

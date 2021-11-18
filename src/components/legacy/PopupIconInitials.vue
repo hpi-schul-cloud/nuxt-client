@@ -84,7 +84,7 @@ export default {
 		position: absolute;
 		top: 100%;
 		right: 0%;
-		z-index: var(--layer-dropdown);
+		z-index: var(--layer-top-menu);
 		display: none;
 		flex-direction: column;
 		width: 214px;

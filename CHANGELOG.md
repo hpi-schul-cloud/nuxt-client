@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-617 - changes for transition to Dataport
+- BC-633 - moved type entitties from the store modules to store/types folder
 
 ### Added
 
@@ -18,6 +19,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-537 - added new vuetify floating action button
 - BC-155 - add toggle to filter task of substition courses
 - BC-580 - adding substitute label to task in the task overview
 
