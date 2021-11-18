@@ -75,7 +75,6 @@
 	"components.legacy.footer.security": "Sicherheit",
 	"components.legacy.footer.status": "Status",
 	"components.legacy.footer.terms": "Nutzungsordnung",
-	"components.legacy.footer.termsofuse": "Nutzungsordnung und Datenschutzerklärung",
 	"components.legacy.MenuQrCode.qrHintText": "Lotse mit dem QR-Code andere Nutzer:innen auf diese Seite",
 	"components.molecules.AccountCard.action.edit": "ändern",
 	"components.molecules.AddContentModal": "Hinzufügen zu",

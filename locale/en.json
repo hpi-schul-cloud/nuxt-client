@@ -74,7 +74,6 @@
 	"components.legacy.footer.security": "Security",
 	"components.legacy.footer.status": "Status",
 	"components.legacy.footer.terms": "Terms of use",
-	"components.legacy.footer.termsofuse": "Terms of use and privacy policy",
 	"components.legacy.MenuQrCode.qrHintText": "Navigate other users to this site",
 	"components.molecules.AccountCard.action.edit": "Edit",
 	"components.molecules.AddContentModal": "To be added to",
