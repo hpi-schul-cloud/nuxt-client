@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-617 - changes for transition to Dataport
+
 ### Added
 
 ## [26.17.0] - 2021-11-16
