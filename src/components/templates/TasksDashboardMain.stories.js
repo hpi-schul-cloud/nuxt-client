@@ -36,8 +36,6 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 						hasTasks: () => true,
 						hasOpenTasksStudent: () => true,
 						hasCompletedTasks: () => true,
-						getTasks: () => tasks,
-						getCourses: () => coursesStudent,
 						getOpenTasksForStudent: () => ({
 							overdue: overDueTasks,
 							withDueDate: openTasksWithDueDate,

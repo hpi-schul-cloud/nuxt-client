@@ -96,7 +96,7 @@ export default {
 		},
 		isFilterDisabled: function () {
 			// TODO: refactor
-			if (this.selectedCourseFilters.length > 0) return false;
+			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
@@ -170,7 +170,6 @@ export default {
 		setSubstituteFilter(enabled) {
 			TaskModule.setSubstituteFilter(enabled);
 		},
-		// Should this move to computed?
 		getTaskCount(courseName) {
 			if (this.isStudent) {
 				if (this.tab === 0) {
