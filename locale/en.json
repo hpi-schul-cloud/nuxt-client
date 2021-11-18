@@ -82,7 +82,7 @@
 	"components.molecules.adminfooterlegend.title": "Legend",
 	"components.molecules.admintablelegend.externalSync": "Some or all of your user data is synchronized with an external data source (LDAP, IDM, etc.). It is therefore not possible to edit the table manually with the School-Cloud. Creating new students or teachers is also just possible in the source system. Find more information in the",
 	"components.molecules.admintablelegend.help": "Help section",
-	"components.molecules.admintablelegend.hint": "With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {{institute_title}}.",
+	"components.molecules.admintablelegend.hint": "With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"components.molecules.ContentCard.report.body": "Report the content with the ID",
 	"components.molecules.ContentCard.report.email": "inhalte@hpi-schul-cloud.de",
 	"components.molecules.ContentCard.report.subject": "Dear team, I would like to report the content mentioned in the subject because: [state your reasons here]",
