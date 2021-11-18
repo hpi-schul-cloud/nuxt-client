@@ -1,5 +1,9 @@
 <template>
-	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
+	<default-wireframe
+		v-scroll="onScroll"
+		:headline="$t('pages.tasks.title')"
+		:full-width="false"
+	>
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
@@ -12,7 +16,7 @@
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
-				<div class="pb-0 d-flex justify-center">
+				<div class="mx-n6 mx-sm-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
@@ -33,6 +37,13 @@
 							}}</span>
 						</v-tab>
 					</v-tabs>
+					<v-custom-fab
+						v-if="!isStudent"
+						:icon="mdiPlus"
+						:title="$t('common.words.task')"
+						href="/homework/new"
+						:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
+					></v-custom-fab>
 				</div>
 			</div>
 		</div>
@@ -55,14 +66,17 @@
 <script>
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import vCustomFab from "@components/atoms/vCustomFab";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
+import { mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
 		DefaultWireframe,
+		vCustomFab,
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
@@ -78,6 +92,7 @@ export default {
 	data() {
 		return {
 			tab: 0, // should we save this in store?
+			mdiPlus,
 		};
 	},
 	computed: {
@@ -180,6 +195,9 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
+		onScroll() {
+			this.$eventBus.$emit("isScrolling");
+		},
 		setCourseFilters(courseNames) {
 			this.$store.commit("tasks/setCourseFilters", courseNames);
 		},
@@ -209,14 +227,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
 @import "@variables";
 
 .content-max-width {
 	max-width: var(--size-content-width-max);
 }
 
-.tabs-max-width {
-	max-width: 500px;
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	.tabs-max-width {
+		max-width: 500px;
+	}
 }
 
 // even out border
@@ -246,5 +267,9 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.fab-top-alignment {
+	top: 193px;
 }
 </style>
