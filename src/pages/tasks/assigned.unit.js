@@ -18,7 +18,7 @@ describe("Tasks/assigned", () => {
 				loading: () => false,
 				hasTasks: () => true,
 				getCourses: () => [],
-				hasCompletedTasks: () => true,
+				hasCompletedTasksForStudent: () => true,
 			}),
 			state: () =>
 				Object.assign(taskStore.state(), {

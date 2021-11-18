@@ -134,7 +134,7 @@ export class TaskModule extends VuexModule {
 	setSubstituteFilter(enabled: boolean) {
 		this.substituteFilter = enabled;
 		this.courseFilter = new TaskFilter(this.tasks)
-			.filterSubstitute(enabled)
+			.filterSubstituteForTeacher(enabled)
 			.courseNames();
 	}
 
@@ -169,7 +169,7 @@ export class TaskModule extends VuexModule {
 	}
 
 	get getCourseFilters(): TaskCourseFilter[] {
-		const filteredTasks = new TaskFilter(this.tasks).filterSubstitute(
+		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(
 			this.substituteFilter
 		).tasks;
 
@@ -205,7 +205,7 @@ export class TaskModule extends VuexModule {
 		return this.isReady && this.tasks.length > 0;
 	}
 
-	get hasOpenTasksStudent(): boolean {
+	get hasOpenTasksForStudent(): boolean {
 		const openTaskCount = new TaskFilter(this.tasks)
 			.byCourseNames(this.courseFilter)
 			.byOpenForStudent()
@@ -214,29 +214,29 @@ export class TaskModule extends VuexModule {
 		return this.isReady && openTaskCount > 0;
 	}
 
-	get hasOpenTasksTeacher(): boolean {
+	get hasOpenTasksForTeacher(): boolean {
 		const openTaskCount = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
+			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
 			.byOpenForTeacher()
 			.count();
 		return this.isReady && openTaskCount > 0;
 	}
 
-	get hasCompletedTasks(): boolean {
+	get hasCompletedTasksForStudent(): boolean {
 		const completedTaskCount = new TaskFilter(this.tasks)
 			.byCourseNames(this.courseFilter)
-			.byCompleted()
+			.byCompletedForStudent()
 			.count();
 
 		return this.isReady && completedTaskCount > 0;
 	}
 
-	get hasDrafts(): boolean {
+	get hasDraftsForTeacher(): boolean {
 		const draftTaskCount = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
+			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
-			.byDraft(true)
+			.byDraftForTeacher(true)
 			.count();
 
 		return this.isReady && draftTaskCount > 0;
@@ -260,8 +260,8 @@ export class TaskModule extends VuexModule {
 		const filter = new TaskFilter(this.tasks).byCourseNames(this.courseFilter);
 
 		const result = {
-			submitted: filter.bySubmitted().tasks,
-			graded: filter.byGraded().tasks,
+			submitted: filter.bySubmittedForStudent().tasks,
+			graded: filter.byGradedForStudent().tasks,
 		};
 
 		return result;
@@ -269,7 +269,7 @@ export class TaskModule extends VuexModule {
 
 	get getOpenTasksForTeacher(): OpenTasksForTeacher {
 		const filter = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
+			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
 			.byOpenForTeacher();
 
@@ -284,9 +284,9 @@ export class TaskModule extends VuexModule {
 
 	get getDraftTasksForTeacher(): Task[] {
 		const draftTasks = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
+			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
-			.byDraft(true).tasks;
+			.byDraftForTeacher(true).tasks;
 
 		return draftTasks;
 	}
@@ -299,7 +299,7 @@ export class TaskModule extends VuexModule {
 			.countByCourseName(allCourseNames);
 
 		const completedCounts = new TaskFilter(this.tasks)
-			.byCompleted()
+			.byCompletedForStudent()
 			.countByCourseName(allCourseNames);
 
 		const tasksCount: TasksCountPerCourseStudent = {
@@ -310,17 +310,17 @@ export class TaskModule extends VuexModule {
 		return tasksCount;
 	}
 
-	get getTasksCountPerCourseTeacher(): TasksCountPerCourseTeacher {
+	get getTasksCountPerCourseForTeacher(): TasksCountPerCourseTeacher {
 		const allCourseNames = new TaskFilter(this.tasks).courseNames();
 
 		const openCounts = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
+			.filterSubstituteForTeacher(this.substituteFilter)
 			.byOpenForTeacher()
 			.countByCourseName(allCourseNames);
 
 		const draftCounts = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter)
-			.byDraft(true)
+			.filterSubstituteForTeacher(this.substituteFilter)
+			.byDraftForTeacher(true)
 			.countByCourseName(allCourseNames);
 
 		const tasksCount: TasksCountPerCourseTeacher = {

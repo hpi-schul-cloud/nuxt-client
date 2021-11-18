@@ -34,8 +34,8 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: Object.assign(store.getters, {
 						getStatus: () => "completed",
 						hasTasks: () => true,
-						hasOpenTasksStudent: () => true,
-						hasCompletedTasks: () => true,
+						hasOpenTasksForStudent: () => true,
+						hasCompletedTasksForStudent: () => true,
 						getOpenTasksForStudent: () => ({
 							overdue: overDueTasks,
 							withDueDate: openTasksWithDueDate,
@@ -78,8 +78,8 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: Object.assign(store.getters, {
 						getStatus: () => "completed",
 						hasTasks: () => true,
-						hasOpenTasksTeacher: () => true,
-						hasDrafts: () => true,
+						hasOpenTasksForTeacher: () => true,
+						hasDraftsForTeacher: () => true,
 						getTasks: () => tasks,
 						getOpenTasksForTeacher: () => ({
 							overdue: overDueTasksTeacher,
@@ -87,7 +87,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 							noDueDate: noDueDateTasksTeacher,
 						}),
 						getDraftTasksForTeacher: () => drafts,
-						getTasksCountPerCourseTeacher: () => ({
+						getTasksCountPerCourseForTeacher: () => ({
 							open: { Mathe: 9, Deutsch: 1, "": 0 },
 							drafts: { Mathe: 0, Deutsch: 1, "": 2 },
 						}),

@@ -91,7 +91,7 @@ export class TaskFilter {
 	}
 
 	// it is a teacher based interpretation or and why or condition?
-	byCompleted(): TaskFilter {
+	byCompletedForStudent(): TaskFilter {
 		const completed = this.tasks.filter(
 			(task) => task.status.submitted >= 1 || task.status.graded >= 1
 		);
@@ -99,7 +99,7 @@ export class TaskFilter {
 		return new TaskFilter(completed);
 	}
 
-	bySubmitted(): TaskFilter {
+	bySubmittedForStudent(): TaskFilter {
 		const submitted = this.tasks.filter(
 			(task) => task.status.submitted > 0 && task.status.graded === 0
 		);
@@ -107,20 +107,20 @@ export class TaskFilter {
 		return new TaskFilter(submitted);
 	}
 
-	byGraded(): TaskFilter {
+	byGradedForStudent(): TaskFilter {
 		const graded = this.tasks.filter((task) => task.status.graded > 0);
 
 		return new TaskFilter(graded);
 	}
 
-	byDraft(isDraft: boolean): TaskFilter {
+	byDraftForTeacher(isDraft: boolean): TaskFilter {
 		const filteredTasks = this.tasks.filter(
 			(task) => task.status.isDraft === isDraft
 		);
 		return new TaskFilter(filteredTasks);
 	}
 
-	filterSubstitute(withSubstitute: boolean): TaskFilter {
+	filterSubstituteForTeacher(withSubstitute: boolean): TaskFilter {
 		const filteredTasks = withSubstitute
 			? this.tasks
 			: this.tasks.filter(

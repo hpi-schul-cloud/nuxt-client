@@ -78,12 +78,12 @@ export default {
 	computed: {
 		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
-		hasOpenTasksStudent: () => TaskModule.hasOpenTasksStudent,
-		hasOpenTasksTeacher: () => TaskModule.hasOpenTasksTeacher,
-		hasCompletedTasks: () => TaskModule.hasCompletedTasks,
-		hasDrafts: () => TaskModule.hasDrafts,
+		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
+		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
+		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
+		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
 		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
-		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseTeacher,
+		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
 		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
 		courseFilters: () => TaskModule.getCourseFilters,
 		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
@@ -100,10 +100,12 @@ export default {
 
 			const tabOneIsEmpty =
 				this.role === "student"
-					? !this.hasOpenTasksStudent
-					: !this.hasOpenTasksTeacher;
+					? !this.hasOpenTasksForStudent
+					: !this.hasOpenTasksForTeacher;
 			const tabTwoIsEmpty =
-				this.role === "student" ? !this.hasCompletedTasks : !this.hasDrafts;
+				this.role === "student"
+					? !this.hasCompletedTasksForStudent
+					: !this.hasDraftsForTeacher;
 
 			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;

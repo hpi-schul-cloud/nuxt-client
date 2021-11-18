@@ -171,7 +171,7 @@ describe("task filter", () => {
 			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
 			const task7 = taskFactory.build();
 			const tasks = [task1, task2, task3, task4, task5, task6, task7];
-			const filteredTasks = new TaskFilter(tasks).byCompleted().tasks;
+			const filteredTasks = new TaskFilter(tasks).byCompletedForStudent().tasks;
 			expect(filteredTasks).toEqual([task1, task2, task3, task4, task6]);
 		});
 	});
@@ -186,7 +186,7 @@ describe("task filter", () => {
 			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
 			const task7 = taskFactory.build();
 			const tasks = [task1, task2, task3, task4, task5, task6, task7];
-			const filteredTasks = new TaskFilter(tasks).bySubmitted().tasks;
+			const filteredTasks = new TaskFilter(tasks).bySubmittedForStudent().tasks;
 			expect(filteredTasks).toEqual([task2, task6]);
 		});
 	});
@@ -201,7 +201,7 @@ describe("task filter", () => {
 			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
 			const task7 = taskFactory.build();
 			const tasks = [task1, task2, task3, task4, task5, task6, task7];
-			const filteredTasks = new TaskFilter(tasks).byGraded().tasks;
+			const filteredTasks = new TaskFilter(tasks).byGradedForStudent().tasks;
 			expect(filteredTasks).toEqual([task1, task3, task4]);
 		});
 	});
@@ -212,7 +212,7 @@ describe("task filter", () => {
 			const task2 = taskFactory.build({ status: { isDraft: true } });
 			const task3 = taskFactory.build();
 			const tasks = [task1, task2, task3];
-			const filteredTasks = new TaskFilter(tasks).byDraft(true).tasks;
+			const filteredTasks = new TaskFilter(tasks).byDraftForTeacher(true).tasks;
 			expect(filteredTasks).toEqual([task1, task2]);
 		});
 
@@ -221,7 +221,9 @@ describe("task filter", () => {
 			const task2 = taskFactory.build({ status: { isDraft: false } });
 			const task3 = taskFactory.build();
 			const tasks = [task1, task2, task3];
-			const filteredTasks = new TaskFilter(tasks).byDraft(false).tasks;
+			const filteredTasks = new TaskFilter(tasks).byDraftForTeacher(
+				false
+			).tasks;
 			expect(filteredTasks).toEqual([task2, task3]);
 		});
 	});
@@ -235,7 +237,9 @@ describe("task filter", () => {
 				status: { isSubstitutionTeacher: false },
 			});
 			const tasks = [task1, task2];
-			const filteredTasks = new TaskFilter(tasks).filterSubstitute(true).tasks;
+			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(
+				true
+			).tasks;
 			expect(filteredTasks).toEqual([task1, task2]);
 		});
 
@@ -247,7 +251,9 @@ describe("task filter", () => {
 				status: { isSubstitutionTeacher: false },
 			});
 			const tasks = [task1, task2];
-			const filteredTasks = new TaskFilter(tasks).filterSubstitute(false).tasks;
+			const filteredTasks = new TaskFilter(tasks).filterSubstituteForTeacher(
+				false
+			).tasks;
 			expect(filteredTasks).toEqual([task2]);
 		});
 	});

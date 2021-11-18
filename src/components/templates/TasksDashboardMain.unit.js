@@ -32,7 +32,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasTasks: () => true,
-				hasOpenTasksStudent: () => true,
+				hasOpenTasksForStudent: () => true,
 				getTasks: () => tasks,
 				getOpenTasksForStudent: () => ({
 					overdue: overDueTasks,
@@ -47,7 +47,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
 				getSelectedCourseFilters: () => [],
 				hasOpenTasks: () => true,
-				hasCompletedTasks: () => true,
+				hasCompletedTasksForStudent: () => true,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
 				hasFilterSelected: () => false,
 			},
@@ -66,8 +66,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasTasks: () => true,
-				hasOpenTasksTeacher: () => true,
-				hasDrafts: () => false,
+				hasOpenTasksForTeacher: () => true,
+				hasDraftsForTeacher: () => false,
 				getTasks: () => tasks,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
@@ -79,7 +79,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
 				getSelectedCourseFilters: () => [],
 				hasOpenTasks: () => true,
-				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
+				getTasksCountPerCourseForTeacher: () => tasksCountTeacher,
 				hasFilterSelected: () => false,
 			},
 			actions: {
@@ -97,10 +97,10 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasTasks: () => false,
-				hasOpenTasksStudent: () => false,
-				hasCompletedTasks: () => false,
-				hasOpenTasksTeacher: () => false,
-				hasDrafts: () => false,
+				hasOpenTasksForStudent: () => false,
+				hasCompletedTasksForStudent: () => false,
+				hasOpenTasksForTeacher: () => false,
+				hasDraftsForTeacher: () => false,
 				getTasks: () => [],
 				getOpenTasksForTeacher: () => ({
 					overdue: [],
@@ -137,8 +137,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				hasOpenTasksStudent: () => false,
-				hasCompletedTasks: () => true,
+				hasOpenTasksForStudent: () => false,
+				hasCompletedTasksForStudent: () => true,
 				isSubstituteFilterEnabled: () => state.substituteFilter,
 				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
 				getSelectedCourseFilters: () => [],
