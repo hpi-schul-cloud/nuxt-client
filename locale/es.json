@@ -66,7 +66,6 @@
 	"components.atoms.ProfilePicture": "foto del perfil",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.legacy.footer.contact": "Contacto",
-	"components.legacy.footer.contribute": "Contribuir",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Impresión",
 	"components.legacy.footer.lokalise_logo_alt": "logotipo de lokalise.com",
