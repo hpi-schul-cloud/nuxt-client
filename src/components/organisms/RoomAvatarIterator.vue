@@ -62,19 +62,5 @@ export default Vue.extend({
 			type: Boolean,
 		},
 	},
-	data() {
-		const device: string = "";
-		return {
-			device,
-		};
-	},
-	// computed: {
-	// 	avatarSize(): string {
-	// 		return this.$data.device == "large" ? "1.5em" : this.itemSize;
-	// 	},
-	// },
-	// async mounted() {
-	// 	this.$data.device = this.$mq;
-	// },
 });
 </script>

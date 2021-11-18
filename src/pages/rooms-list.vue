@@ -14,7 +14,7 @@
 			<v-col cols="12">
 				<v-text-field
 					ref="search"
-					label="search"
+					:label="$t('common.words.search')"
 					:append-icon="mdiMagnify"
 					@input="searchItems"
 				>

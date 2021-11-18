@@ -16,7 +16,6 @@
 			:value="displayBadge"
 		>
 			<v-avatar
-				class=""
 				:color="item.displayColor"
 				:size="size"
 				:tile="condenseLayout"
