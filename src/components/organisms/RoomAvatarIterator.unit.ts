@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
-import flushPromises from "flush-promises";
 
 declare var createComponentMocks: Function;
 
