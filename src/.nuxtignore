@@ -4,3 +4,5 @@ store/*.unit.ts
 
 **/*.unit.ts
 **/*.unit.js
+
+store/types

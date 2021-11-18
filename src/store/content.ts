@@ -10,95 +10,15 @@ import { $axios } from "../utils/api";
 import { isCollectionHelper } from "@utils/helpers";
 import EnvConfigModule from "@/store/env-config";
 import hash from "object-hash";
-
-type Query = {
-	$limit: number;
-	$skip: number;
-	searchQuery: string;
-};
-
-export interface Resource {
-	access: string[];
-	aspects: string[];
-	collection: any;
-	commentCount: number | null;
-	content: {};
-	createdAt: any;
-	createdBy: {};
-	downloadUrl: string | null;
-	iconURL: string | null;
-	isDirectory: boolean;
-	license: {};
-	mediatype: string;
-	metadataset: string;
-	mimetype: string;
-	modifiedAt: any;
-	modifiedBy: {};
-	name: string;
-	owner: {};
-	parent: {};
-	preview: {};
-	properties: {};
-	rating: any;
-	ref: {};
-	remote: any;
-	repositoryType: string;
-	size: string;
-	title: string;
-	type: string;
-}
-
-type Resources = {
-	total: number;
-	limit: number;
-	skip: number;
-	data: Resource[];
-	pagination: undefined;
-};
-
-type Elements = {
-	data: any[];
-	limit: number;
-	skip: number;
-	total: number;
-	pagination: undefined;
-};
-
-type Lesson = {
-	contents: any[];
-	courseId: string;
-	createdAt: string;
-	date: string;
-	hidden: boolean;
-	isCopyFrom: any;
-	materialIds: string[];
-	name: string;
-	position: number;
-	time: string;
-	updatedAt: string;
-	__v: number;
-	_id: string;
-};
-
-type Lessons = {
-	data: Lesson[];
-	limit: number;
-	skip: number;
-	total: number;
-};
-
-type AddToLessonQuery = {
-	lessonId: string;
-	event: {};
-	material: {
-		client: string;
-		merlinReference: string;
-		title: string;
-		url: string;
-	};
-};
-
-type Status = "pending" | "completed" | "error" | "";
+import {
+	Query,
+	Resource,
+	Resources,
+	Elements,
+	Lessons,
+	AddToLessonQuery,
+} from "./types/content";
+import { Status } from "./types/commons";
 
 const initialState = () => ({
 	resources: {

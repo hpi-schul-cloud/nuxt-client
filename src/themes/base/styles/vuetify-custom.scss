@@ -35,6 +35,8 @@ $headings: (
 $button-font-size: 1rem;
 $btn-text-transform: none;
 $btn-font-weight: var(--font-weight-bold);
+$btn-letter-spacing: 0.044em;
+$btn-focus-opacity: 0;
 .v-btn {
 	font-family: var(--font-accent);
 	&.v-size--small,
@@ -42,6 +44,12 @@ $btn-font-weight: var(--font-weight-bold);
 	&.v-size--large,
 	&.v-size--x-large {
 		font-size: $button-font-size;
+	}
+}
+
+.v-btn.primary {
+	&:hover {
+		background-color: var(--color-primary-dark) !important;
 	}
 }
 

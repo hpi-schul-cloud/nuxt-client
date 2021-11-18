@@ -8,37 +8,9 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule, { School } from "@/store/schools";
-
-export interface User {
-	_id: string;
-	__v: number;
-	firstName: string;
-	lastName: string;
-	email: string;
-	updatedAt: string;
-	birthday: string;
-	createdAt: string;
-	preferences: {};
-	schoolId: string;
-	roles: any[];
-	emailSearchValues: string[];
-	firstNameSearchValues: string[];
-	lastNameSearchValues: string[];
-	consent: {};
-	forcePasswordChange: boolean;
-	language: string;
-	fullName: string;
-	id: string;
-	avatarInitials: string;
-	avatarBackgroundColor: string;
-	age: number;
-	displayName: string;
-	permissions: string[];
-	accountId: string;
-	schoolName: string;
-	externallyManaged: boolean;
-}
+import SchoolsModule from "@/store/schools";
+import { School } from "./types/schools";
+import { User } from "@/store/types/auth";
 
 @Module({
 	name: "auth",
