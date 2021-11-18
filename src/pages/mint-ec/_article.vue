@@ -72,11 +72,11 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutzerklärung"),
-					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+					href: "https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.nutzungsordnung"),
-					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					href: "https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
 				},
 				{
 					title: "Team",
