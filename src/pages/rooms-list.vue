@@ -2,7 +2,7 @@
 	<default-wireframe ref="main" :headline="title" :full-width="true">
 		<v-row class="mb-0 pb-0">
 			<v-col class="text-right pr-2 pt-5">
-				<v-btn to="/rooms-overview">Back to Dashhboard</v-btn>
+				<v-btn to="/rooms-overview">Back to Dashboard</v-btn>
 			</v-col>
 		</v-row>
 		<v-row>
@@ -89,7 +89,7 @@ export default Vue.extend({
 		this.$data.allElements = RoomsModule.getAllElements;
 	},
 	methods: {
-		searchItems(filterText: string) {
+		searchItems(filterText: string): void {
 			this.$data.allElements = RoomsModule.getAllElements;
 			const filtered = JSON.parse(
 				JSON.stringify(this.$data.allElements)

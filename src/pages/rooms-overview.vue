@@ -32,6 +32,7 @@
 						:data="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth"
 						:max-items="4"
+						:device="device"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
@@ -146,11 +147,11 @@ export default {
 					this.dimensions.cellWidth = "5em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 8;
 					this.dimensions.cellWidth = "7em";
 					break;
 				case "large":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 12;
 					this.dimensions.cellWidth = "7em";
 					break;
 				case "mobile":

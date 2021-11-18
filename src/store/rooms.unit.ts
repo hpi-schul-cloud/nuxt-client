@@ -191,6 +191,28 @@ describe("rooms module", () => {
 					roomsData
 				);
 			});
+
+			describe("fetchAllElements", () => {
+				beforeEach(() => {
+					receivedRequests = [];
+				});
+				it("should call 'setAllElements' mutation", async () => {
+					// TODO: call server will be here when server ready
+					const roomsModule = new Rooms({});
+
+					const setAllElementsSpy = jest.spyOn(roomsModule, "setAllElements");
+					const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+
+					await roomsModule.fetchAllElements();
+
+					expect(receivedRequests.length).toBeGreaterThan(0);
+					expect(receivedRequests[0].path).toStrictEqual("/v3/courses/");
+
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+					expect(setAllElementsSpy).toHaveBeenCalled();
+				});
+			});
 		});
 	});
 
@@ -274,6 +296,29 @@ describe("rooms module", () => {
 				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
 		});
+
+		describe("setAllElements", () => {
+			it("should set the all elements data", () => {
+				const roomsModule = new Rooms({});
+				const itemsToBeSet = [
+					{
+						id: "someId",
+						title: "exampletitle",
+						shortTitle: "ex",
+						displayColor: "#f23f76",
+					},
+					{
+						id: "someId_2",
+						title: "math",
+						shortTitle: "ma",
+						displayColor: "yellow",
+					},
+				];
+				expect(roomsModule.getAllElements).not.toStrictEqual(itemsToBeSet);
+				roomsModule.setAllElements(itemsToBeSet);
+				expect(roomsModule.allElements).toStrictEqual(itemsToBeSet);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -315,6 +360,29 @@ describe("rooms module", () => {
 				expect(roomsModule.getRoomsId).toStrictEqual("");
 				roomsModule.setError(sampleId);
 				expect(roomsModule.getError).toStrictEqual(sampleId);
+			});
+		});
+
+		describe("getAllElements", () => {
+			it("should return rooms id state", () => {
+				const roomsModule = new Rooms({});
+				const itemsToBeSet = [
+					{
+						id: "someId",
+						title: "exampletitle",
+						shortTitle: "ex",
+						displayColor: "#f23f76",
+					},
+					{
+						id: "someId_2",
+						title: "math",
+						shortTitle: "ma",
+						displayColor: "yellow",
+					},
+				];
+				expect(roomsModule.getAllElements).toStrictEqual([]);
+				roomsModule.setAllElements(itemsToBeSet);
+				expect(roomsModule.getAllElements).toStrictEqual(itemsToBeSet);
 			});
 		});
 	});

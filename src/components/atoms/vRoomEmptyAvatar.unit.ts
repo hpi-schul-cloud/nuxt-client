@@ -4,7 +4,7 @@ import vRoomEmptyAvatar from "./vRoomEmptyAvatar.vue";
 declare var createComponentMocks: Function;
 
 const propsData = {
-	size: 100,
+	size: "4em",
 };
 
 const getWrapper = (props: object, options?: object) => {
@@ -23,7 +23,7 @@ describe("vRoomEmptyAvatar", () => {
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".avatar-component-empty");
 		expect(avatarComponent).toBeTruthy();
-		expect(avatarComponent.vm.$props.size).toStrictEqual(100);
+		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
 	it("should emit 'drop' event when an element drops onto it", async () => {

@@ -45,123 +45,6 @@ type DroppedObject = {
 	item: object;
 };
 
-const mockData: AllElements = [
-	{
-		id: "6183ddx6480fdc650e44b79d1",
-		title: "Physics",
-		shortTitle: "Ph",
-		displayColor: "blue",
-	},
-	{
-		id: "6183ddc6680fdc650e44b79d2",
-		title: "Math",
-		shortTitle: "Ma",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93dfvxc71f695cfb16fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f941f71f695cfb16fvxce19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce06870b10d863vxccca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b659806870b10d863cvxca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b659806870bsdf10d863cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6183ddc6480fdc650e44b79d1",
-		title: "Physics",
-		shortTitle: "Ph",
-		displayColor: "blue",
-	},
-	{
-		id: "6183dd6680vvfdc650e44b79d2",
-		title: "Math",
-		shortTitle: "Ma",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93df71f6y95cfb1y6fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188yf941f71f695cfby16fe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce06870b10d863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b659x806870b10xd863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618bc65dd9806870b10d8c63cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93vdf71f695cfbv16fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "61y88f941f71f695cfb16vfe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce0w6870b10dw863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b65e9806870b10dt863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b6r5980687dfg0b10d86r3cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-];
-
 @Module({
 	name: "rooms",
 	namespaced: true,
@@ -172,7 +55,7 @@ const mockData: AllElements = [
 export class Rooms extends VuexModule {
 	roomsData: Array<RoomsData> = [];
 	gridElementsId: string = "";
-	allElements: Array<AllElements> = [];
+	allElements: AllElements = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -184,7 +67,7 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: Array<AllElements>): void {
+	setAllElements(data: AllElements): void {
 		this.allElements = data;
 	}
 
@@ -317,8 +200,8 @@ export class Rooms extends VuexModule {
 	async fetchAllElements(): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: fetch all alements from server
-			this.setAllElements(mockData);
+			const { data } = await $axios.$get("/v3/courses/");
+			this.setAllElements(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

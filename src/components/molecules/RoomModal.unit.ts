@@ -15,7 +15,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: false,
 			groupData: { title: "dummy title", groupElements: [] },
-			avatarSize: 200,
+			avatarSize: "4em",
 		};
 		const wrapper = mount(RoomModal, {
 			...createComponentMocks({
@@ -41,7 +41,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: false,
 			groupData: { title: "dummy title", groupElements: [] },
-			avatarSize: 200,
+			avatarSize: "4em",
 		};
 		const wrapper = mount(RoomModal, {
 			...createComponentMocks({
@@ -63,7 +63,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
-			avatarSize: 200,
+			avatarSize: "4em",
 		};
 		const wrapper = mount(RoomModal, {
 			...createComponentMocks({
@@ -83,7 +83,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
-			avatarSize: 200,
+			avatarSize: "4em",
 		};
 		const wrapper = mount(RoomModal, {
 			...createComponentMocks({
@@ -108,7 +108,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
-			avatarSize: 200,
+			avatarSize: "4em",
 		};
 		const wrapper = mount(RoomModal, {
 			...createComponentMocks({

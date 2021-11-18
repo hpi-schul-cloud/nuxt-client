@@ -1,9 +1,7 @@
 <template>
 	<v-data-iterator
 		:items="items"
-		:search="searchText"
 		:items-per-page.sync="maxItems"
-		:page.sync="page"
 		hide-default-footer
 		no-data-text=""
 	>
@@ -20,7 +18,7 @@
 							:draggable="canDraggable"
 							class="room-avatar"
 							:item="item"
-							:size="avatarSize"
+							:size="itemSize"
 							:show-badge="true"
 							:condense-layout="condenseLayout"
 							@startDrag="$emit('startDrag', $event)"
@@ -32,10 +30,11 @@
 	</v-data-iterator>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 
-export default {
+export default Vue.extend({
 	components: {
 		vRoomAvatar,
 	},
@@ -43,15 +42,6 @@ export default {
 		items: {
 			type: Array,
 			default: () => [{}],
-		},
-		hasPagination: {
-			type: Boolean,
-		},
-		listView: {
-			type: Boolean,
-		},
-		modalView: {
-			type: Boolean,
 		},
 		colCount: {
 			type: Number,
@@ -73,111 +63,18 @@ export default {
 		},
 	},
 	data() {
+		const device: string = "";
 		return {
-			searchText: "",
-			device: "",
-			page: 1,
-			data: [
-				{
-					id: "6183dd6480fdc650e44b79d1",
-					title: "Physics",
-					shortTitle: "Ph",
-					displayColor: "blue",
-				},
-				{
-					id: "6183dd6680fdc650e44b79sd2",
-					title: "Math",
-					shortTitle: "Ma",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "6s188f93df71f695cfb16fe18",
-					title: "Greek",
-					shortTitle: "Gr",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "6188f941f71f695dcfb16fe19",
-					title: "German",
-					shortTitle: "Ge",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "618a95ce06870b10ddd863cca4",
-					title: "English",
-					shortTitle: "En",
-					displayColor: "green",
-				},
-				{
-					id: "618b659806870b10d863casca5",
-					title: "Biology",
-					shortTitle: "Bi",
-					displayColor: "yellow",
-				},
-				{
-					id: "618b65980fs6870b10d863cca5",
-					title: "Chemistry",
-					shortTitle: "Ch",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "61da83dd6480fdc650e44b79d1",
-					title: "Physics",
-					shortTitle: "Ph",
-					displayColor: "blue",
-				},
-				{
-					id: "6183dd6680fdc65asd0e44b79d2",
-					title: "Math",
-					shortTitle: "Ma",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "6188f93df71f695cfbds16fe18",
-					title: "Greek",
-					shortTitle: "Gr",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "6188f941f7fsd1f695cfb16fe19",
-					title: "German",
-					shortTitle: "Ge",
-					displayColor: "#f23f76",
-				},
-				{
-					id: "618a95fsce06870b10d863cca4",
-					title: "English",
-					shortTitle: "En",
-					displayColor: "green",
-				},
-				{
-					id: "618b6598sd06870b10d863cca5",
-					title: "Biology",
-					shortTitle: "Bi",
-					displayColor: "yellow",
-				},
-				{
-					id: "618b6598068sd70b10d863cca5",
-					title: "Chemistry",
-					shortTitle: "Ch",
-					displayColor: "#f23f76",
-				},
-			],
+			device,
 		};
 	},
-	computed: {
-		maxItemPerPage() {
-			return -1;
-			return this.listView ? -1 : Math.pow(this.colCount, 2);
-		},
-		avatarSize() {
-			return this.device == "large" && this.modalView ? "1.5em" : this.itemSize;
-		},
-	},
-	mounted() {
-		this.device = this.$mq;
-	},
-
-	methods: {},
-};
+	// computed: {
+	// 	avatarSize(): string {
+	// 		return this.$data.device == "large" ? "1.5em" : this.itemSize;
+	// 	},
+	// },
+	// async mounted() {
+	// 	this.$data.device = this.$mq;
+	// },
+});
 </script>

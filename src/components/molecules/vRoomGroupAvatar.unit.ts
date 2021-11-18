@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
+import flushPromises from "flush-promises";
 
 declare var createComponentMocks: Function;
 
@@ -60,7 +61,7 @@ const secondMockData = {
 
 const propsData = {
 	data: mockData,
-	size: 100,
+	size: "4em",
 	maxItems: 4,
 };
 
@@ -96,7 +97,7 @@ describe("vRoomGroupAvatar", () => {
 	it("should NOT display the badge", () => {
 		const wrapper = getWrapper({
 			data: secondMockData,
-			size: 100,
+			size: "4em",
 			maxItems: 4,
 		});
 		const badgeElement = wrapper.find(".badge-component");
@@ -107,17 +108,18 @@ describe("vRoomGroupAvatar", () => {
 	});
 
 	it("should display the correct size and group-avatar property", () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".group-avatar-component");
+		const wrapper = getWrapper(propsData) as any;
+		const iterator = wrapper.vm.$refs["avatar-iterator"] as any;
 
-		expect(avatarComponent).toBeTruthy();
-		expect(avatarComponent.vm.$props.size).toStrictEqual(100 / 3);
-		expect(avatarComponent.vm.$props.condenseLayout).toStrictEqual(true);
+		expect(iterator).toBeTruthy();
+		expect(iterator.$props.itemSize).toStrictEqual("1em");
+		expect(iterator.$props.items).toStrictEqual(mockData.groupElements);
+		expect(iterator.$props.condenseLayout).toBe(true);
 	});
 
 	it("should have correct amount of items", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAll(".group-avatar-component");
+		const avatarComponents = wrapper.findAll(".room-avatar");
 
 		expect(avatarComponents).toBeTruthy();
 		expect(avatarComponents).toHaveLength(3);
@@ -125,7 +127,7 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should contain the correct item", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAll(".group-avatar-component");
+		const avatarComponents = wrapper.findAll(".room-avatar");
 
 		expect(avatarComponents.wrappers[0].vm.$props.item.id).toStrictEqual("5");
 	});
@@ -135,7 +137,7 @@ describe("vRoomGroupAvatar", () => {
 		const cardComponent = wrapper.find(".card-component");
 
 		cardComponent.trigger("click");
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["clicked"]).toHaveLength(1);
@@ -146,12 +148,10 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should emit 'dragStart' event when it started dragging", async () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".group-avatar-component");
+		const avatarComponent = wrapper.find(".room-avatar");
 
 		avatarComponent.trigger("dragstart");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["startDrag"]).toHaveLength(1);

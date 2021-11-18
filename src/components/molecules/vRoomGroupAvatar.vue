@@ -24,12 +24,12 @@
 				@dragenter.prevent.stop="dragEnter"
 			>
 				<room-avatar-iterator
+					ref="avatar-iterator"
 					:items="data.groupElements"
 					condense-layout
 					item-size="1em"
-					:col-count="4"
-					:max-items="9"
-					modal-view
+					:col-count="itemSpecs.columnCount"
+					:max-items="itemSpecs.maxItem"
 				/>
 			</v-card>
 			<span class="d-flex justify-center mt-1 sub-title">{{ data.title }}</span>
@@ -55,6 +55,10 @@ export default {
 			type: Number || String,
 			default: 4,
 		},
+		device: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -65,8 +69,11 @@ export default {
 		hasNotifications() {
 			return this.data.groupElements.some((item) => item.notification == true);
 		},
-		itemsLimited() {
-			return this.data.groupElements.slice(0, this.maxItems);
+		itemSpecs() {
+			return {
+				columnCount: this.device == "large" || this.device == "desktop" ? 3 : 4,
+				maxItem: this.device == "large" || this.device == "desktop" ? 16 : 9,
+			};
 		},
 	},
 	methods: {

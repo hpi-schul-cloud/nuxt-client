@@ -1,5 +1,6 @@
 import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
+import flushPromises from "flush-promises";
 
 const mockStoreData = [
 	{
@@ -99,44 +100,35 @@ describe("RoomPage", () => {
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
 		expect(wrapper.vm.$data.roomsData).toStrictEqual(mockStoreData);
 	});
 
 	it("should display 6 avatars component", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 2 avatars component in 'mobile' device", async () => {
 		const wrapper = getWrapper("mobile");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(2);
 	});
 
 	it("should display 1 group-avatar component", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
 		expect(groupAvatarComponents).toHaveLength(1);
 	});
 
 	it("should call 'openDialog' event if groupAvatar component clicked", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
@@ -144,37 +136,30 @@ describe("RoomPage", () => {
 
 	it.skip("custom-dialog component should be visible", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const customDialog = wrapper.find(".room-dialog");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		const headline = customDialog.find("h2");
 		expect(customDialog.vm.isOpen).toBe(true);
 		expect(headline.element.innerHTML).toContain("Fourth");
 	});
 
 	it("should call the necessary methods for positioning while the page loading", async () => {
-		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		getWrapper();
+		await flushPromises();
 		expect(spyMocks.getDataObjectMock).toHaveBeenCalled();
 		expect(spyMocks.findDataByPosMock).toHaveBeenCalled();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(spyMocks.hasGroupMock).toHaveBeenCalled();
 	});
 
 	it("'$refs' should be placed correctly for the components", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -194,26 +179,23 @@ describe("RoomPage", () => {
 
 	it("should set the column count '4' if the device is 'mobile'", async () => {
 		const wrapper = getWrapper("mobile");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should set the column count '6' if the device is 'tablet'", async () => {
 		const wrapper = getWrapper("tablet");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(wrapper.vm.dimensions.colCount).toBe(6);
 	});
 
-	it("should set the column count '6' if the device is 'desktop'", async () => {
+	it("should set the column count '8' if the device is 'desktop'", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-		expect(wrapper.vm.dimensions.colCount).toBe(6);
+		expect(wrapper.vm.dimensions.colCount).toBe(8);
 	});
 
 	it("should call 'setDropElement' method after avatar-to-emptyAvatar drag&drop", async () => {
@@ -237,9 +219,7 @@ describe("RoomPage", () => {
 				y: 2,
 			},
 		};
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(wrapper.vm.$refs["4-4"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -282,9 +262,7 @@ describe("RoomPage", () => {
 				y: 2,
 			},
 		};
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -328,9 +306,7 @@ describe("RoomPage", () => {
 				y: 5,
 			},
 		};
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -405,13 +381,13 @@ describe("RoomPage", () => {
 			},
 		});
 
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		wrapper.vm.$refs.roomModal.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);
 
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
 
 		const emptyAvatarComponent = wrapper.findComponent({ ref: "5-4" });
@@ -427,9 +403,7 @@ describe("RoomPage", () => {
 
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
@@ -437,7 +411,7 @@ describe("RoomPage", () => {
 
 		const searchInput = wrapper.vm.$refs["search"];
 		searchInput.$emit("input", "thi");
-		await wrapper.vm.$nextTick();
+		await flushPromises();
 
 		expect(wrapper.vm.$refs["2-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
