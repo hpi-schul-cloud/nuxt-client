@@ -12,7 +12,6 @@
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
-
 				<div class="pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
@@ -27,13 +26,19 @@
 								tabTwoHeader.title
 							}}</span>
 						</v-tab>
+						<v-tab>
+							<v-icon class="tab-icon mr-3">{{ tabThreeHeader.icon }}</v-icon>
+							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
+								tabThreeHeader.title
+							}}</span>
+						</v-tab>
 					</v-tabs>
 				</div>
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="hasTasks"
+				v-if="showFilter"
 				:value="getSelectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
@@ -96,24 +101,32 @@ export default {
 		isTeacher: function () {
 			return this.role === "teacher";
 		},
+		showFilter: function () {
+			if (this.tab === 2) return false;
+
+			return this.hasTasks;
+		},
+		tabOneIsEmpty: function () {
+			return this.isStudent
+				? !this.hasOpenTasksStudent
+				: !this.hasOpenTasksTeacher;
+		},
+		tabTwoIsEmpty: function () {
+			return this.isStudent
+				? !this.hasCompletedTasks
+				: !this.hasDrafts;
+		},
 		isFilterDisabled: function () {
-			// TODO: refactor
 			if (this.getSelectedCourseFilters.length > 0) return false;
 
-			const tabOneIsEmpty =
-				this.role === "student"
-					? !this.hasOpenTasksStudent
-					: !this.hasOpenTasksTeacher;
-			const tabTwoIsEmpty =
-				this.role === "student" ? !this.hasCompletedTasks : !this.hasDrafts;
-
-			if (this.tab === 0 && tabOneIsEmpty) {
-				return true;
-			} else if (this.tab === 1 && tabTwoIsEmpty) {
-				return true;
-			} else {
-				return false;
+			if (this.tab === 0) {
+				return this.tabOneIsEmpty;
+			} 
+			if (this.tab === 1) {
+				return this.tabTwoIsEmpty;
 			}
+
+			return false;
 		},
 		getSortedCoursesFilters: function () {
 			const filters = this.courseFilters.map((filter) => {
@@ -130,18 +143,11 @@ export default {
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
-			const tabOne = {};
-			if (this.isStudent) {
-				tabOne.icon = "$taskOpenFilled";
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.open"
-				);
-			} else {
-				tabOne.icon = "$taskOpenFilled";
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.current"
-				);
-			}
+			const tabOne = { icon: "$taskOpenFilled" };
+
+			tabOne.title = this.isStudent
+				? this.$t("components.organisms.TasksDashboardMain.tab.open")
+				: this.$t("components.organisms.TasksDashboardMain.tab.current");
 
 			return tabOne;
 		},
@@ -160,6 +166,14 @@ export default {
 			}
 
 			return tabTwo;
+		},
+		tabThreeHeader: function () {
+			const tabThree = {
+				icon: "$taskFinished",
+				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
+			};
+
+			return tabThree;
 		},
 	},
 	mounted() {

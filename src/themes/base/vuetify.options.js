@@ -6,6 +6,7 @@ import taskDoneFilled from "@assets/icons/task-done-filled.vue";
 import taskMissed from "@assets/icons/task-missed.vue";
 import taskMissedFilled from "@assets/icons/task-missed-filled.vue";
 import taskDraft from "@assets/icons/task-draft.vue";
+import taskFinished from "@assets/icons/task-finished.vue";
 
 export default {
 	theme: {
@@ -47,6 +48,9 @@ export default {
 			},
 			taskDraft: {
 				component: taskDraft,
+			},
+			taskFinished: {
+				component: taskFinished,
 			},
 		},
 	},

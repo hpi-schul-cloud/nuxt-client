@@ -44,6 +44,15 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
+			<v-tab-item>
+				<tasks-list :tasks="draftTasks" type="teacher" />
+				<v-custom-empty-state
+					v-if="!hasDrafts"
+					:image="emptyStateImage"
+					:title="emptyStateText.title"
+					class="mt-16"
+				/>
+			</v-tab-item>
 		</v-tabs-items>
 	</section>
 </template>

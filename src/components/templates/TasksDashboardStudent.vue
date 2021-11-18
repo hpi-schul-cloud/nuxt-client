@@ -59,6 +59,16 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
+			<v-tab-item>
+				<tasks-list :tasks="gradedTasks" type="student" />
+				<tasks-list :tasks="submittedTasks" type="student" />
+				<v-custom-empty-state
+					v-if="!hasCompletedTasks"
+					:image="emptyStateImage"
+					:title="emptyStateText.title"
+					class="mt-16"
+				/>
+			</v-tab-item>
 		</v-tabs-items>
 	</section>
 </template>
@@ -108,6 +118,7 @@ export default {
 		gradedTasks: function () {
 			return this.completedTasks.graded;
 		},
+		// TODO - empty state text for finished tab
 		emptyStateText: function () {
 			if (this.hasFilterSelected) {
 				return {

@@ -154,6 +154,7 @@
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
 	"components.organisms.TasksDashboardMain.tab.current": "Actual",
+	"components.organisms.TasksDashboardMain.tab.finished": "Terminado",
 	"components.organisms.TasksDashboardMain.filter.substitute": "Tareas de las Susstiticiones",
 	"components.organisms.LegacyFooter.contact": "Contacto",
 	"components.organisms.LegacyFooter.job-offer": "Anuncios de empleo",
