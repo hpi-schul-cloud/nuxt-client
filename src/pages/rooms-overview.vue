@@ -25,19 +25,26 @@
 					v-if="getDataObject(rowIndex, colIndex) !== undefined"
 					class="d-flex justify-center"
 				>
+					<vRoomEmptyAvatar
+						v-if="isEmptyGroup(rowIndex, colIndex)"
+						:ref="`${rowIndex}-${colIndex}`"
+						:size="dimensions.cellWidth"
+						@drop="setDropElement({ x: colIndex, y: rowIndex })"
+					></vRoomEmptyAvatar>
+
 					<vRoomGroupAvatar
-						v-if="hasGroup(rowIndex, colIndex)"
+						v-else-if="hasGroup(rowIndex, colIndex)"
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
 						:data="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth"
-						:max-items="4"
 						:device="device"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 					>
 					</vRoomGroupAvatar>
+
 					<vRoomAvatar
 						v-else
 						:ref="`${rowIndex}-${colIndex}`"
@@ -170,6 +177,11 @@ export default {
 			const roomObject = this.findDataByPos(row, col);
 			return roomObject.groupElements !== undefined;
 		},
+		isEmptyGroup(row, col) {
+			const roomObject = this.findDataByPos(row, col);
+			if (roomObject.groupElements?.length == 0) return true;
+			return false;
+		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.roomsData.find(
 				(item) => item.id == groupId
@@ -214,11 +226,6 @@ export default {
 			) {
 				await this.savePosition();
 				// TODO: default naming
-				// const groupObject = this.findDataByPos(pos.y, pos.x);
-				// groupObject.title = "Group-1";
-				// await RoomsModule.update(groupObject);
-				// await this.$nextTick();
-				// this.$forceUpdate();
 			}
 		},
 		addGroupElements(pos) {

@@ -197,7 +197,6 @@ describe("rooms module", () => {
 					receivedRequests = [];
 				});
 				it("should call 'setAllElements' mutation", async () => {
-					// TODO: call server will be here when server ready
 					const roomsModule = new Rooms({});
 
 					const setAllElementsSpy = jest.spyOn(roomsModule, "setAllElements");
