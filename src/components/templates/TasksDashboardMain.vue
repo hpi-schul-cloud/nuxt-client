@@ -96,7 +96,7 @@ export default {
 		},
 		isFilterDisabled: function () {
 			// TODO: refactor
-			if (this.getSelectedCourseFilters.length > 0) return false;
+			if (this.selectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
