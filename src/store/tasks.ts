@@ -9,7 +9,7 @@ import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
-import { BusinessError, Pagination, Status } from "./types/commons";
+import { BusinessError, Status } from "./types/commons";
 import {
 	CompletedTasksForStudent,
 	OpenTasksForStudent,
@@ -33,12 +33,6 @@ export class TaskModule extends VuexModule {
 	courseFilter: string[] = [];
 
 	substituteFilter: boolean = false;
-
-	pagination: Pagination = {
-		limit: 0,
-		skip: 0,
-		total: 0,
-	};
 
 	businessError: BusinessError = {
 		statusCode: "",
