@@ -30,7 +30,7 @@ export type AllElementsObject = {
 	yPosition?: number;
 };
 
-export type AllElements = Array<AllElementsObject> | any;
+export type AllElements = Array<AllElementsObject>;
 
 type DroppedObject = {
 	from: {

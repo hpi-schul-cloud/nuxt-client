@@ -120,7 +120,6 @@ export default {
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			showAllcourses: false,
 			mdiMagnify,
 		};
 	},
@@ -178,9 +177,7 @@ export default {
 			return roomObject.groupElements !== undefined;
 		},
 		isEmptyGroup(row, col) {
-			const roomObject = this.findDataByPos(row, col);
-			if (roomObject.groupElements?.length == 0) return true;
-			return false;
+			return this.findDataByPos(row, col).groupElements?.length == 0;
 		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.roomsData.find(

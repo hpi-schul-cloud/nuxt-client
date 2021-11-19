@@ -63,7 +63,7 @@ type RoomItem = {
 	yPosition?: number;
 };
 
-type AllElements = Array<RoomItem> | any;
+type AllElements = Array<RoomItem>;
 
 export default Vue.extend({
 	components: {
@@ -72,7 +72,7 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	data() {
-		const allElements: AllElements = [{}];
+		const allElements: AllElements = [];
 
 		return {
 			mdiMagnify,
