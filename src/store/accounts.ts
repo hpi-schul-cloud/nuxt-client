@@ -7,13 +7,7 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
-
-type BusinessError = {
-	statusCode: string;
-	message: string;
-};
-
-type Status = "pending" | "completed" | "error" | "";
+import { BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "accounts",

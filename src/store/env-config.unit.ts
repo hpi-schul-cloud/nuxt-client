@@ -1,4 +1,5 @@
-import { EnvConfig, Envs } from "./env-config";
+import { EnvConfig } from "./env-config";
+import { Envs } from "./types/env-config";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 

@@ -5,3 +5,5 @@ store/*.filter.ts
 
 **/*.unit.ts
 **/*.unit.js
+
+store/types
