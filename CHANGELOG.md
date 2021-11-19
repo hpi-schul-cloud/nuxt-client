@@ -8,9 +8,25 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Changed
+
+- BC-633 - moved type entitties from the store modules to store/types folder
+
 ### Added
 
+## [26.17.0] - 2021-11-16
+
+### Added
+
+- BC-537 - added new vuetify floating action button
+- BC-155 - add toggle to filter task of substition courses
+- BC-580 - adding substitute label to task in the task overview
+
 ### Changed
+
+- BC-589 - BC-653 - change auto deployment to a reusable workflow
+
+## [26.16.0] - 2021-11-09
 
 ## [26.15.0] - 2021-11-02
 

@@ -1,5 +1,9 @@
 <template>
-	<v-list-item :key="task.id" :href="taskGradingHref(task.id)">
+	<v-list-item
+		:key="task.id"
+		:href="taskGradingHref(task.id)"
+		class="mx-n4 mx-sm-0"
+	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
 		</v-list-item-avatar>
@@ -84,7 +88,14 @@ export default {
 			return this.task.status.isDraft;
 		},
 		courseName() {
-			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+			const baseName =
+				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+			const prefix =
+				this.task.status.isSubstitutionTeacher === true
+					? this.$t("common.words.substitute") + " "
+					: "";
+
+			return `${prefix}${baseName}`;
 		},
 		topic() {
 			return this.task.description

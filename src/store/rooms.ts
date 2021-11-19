@@ -45,6 +45,7 @@ type DroppedObject = {
 	item: object;
 };
 
+import { DroppedObject, RoomsData } from "./types/rooms";
 @Module({
 	name: "rooms",
 	namespaced: true,

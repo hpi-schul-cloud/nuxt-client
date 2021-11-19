@@ -1,7 +1,8 @@
-import { Rooms, RoomsData } from "./rooms";
+import { Rooms } from "./rooms";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { RoomsData } from "./types/rooms";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};

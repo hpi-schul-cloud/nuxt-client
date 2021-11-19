@@ -14,7 +14,7 @@
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
 					<span>{{ verified.users && verified.users.student }}</span>
-					<span>{{ $t("common.labels.student") }}</span>
+					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="teacher" />

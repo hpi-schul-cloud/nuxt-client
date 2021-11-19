@@ -1,6 +1,7 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
+		v-scroll="onScroll"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
 		:headline="$t('pages.administration.teachers.index.title')"
@@ -101,30 +102,29 @@
 			:show-icons="showConsent"
 			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
-		<fab-floating
+		<v-custom-fab
 			v-if="
 				!schoolIsExternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
 			"
-			position="bottom-right"
-			:show-label="true"
+			:icon="mdiPlus"
+			:title="$t('common.labels.teacher')"
+			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
 			data-testid="fab_button_teachers_table"
 			:actions="[
 				{
 					label: $t('pages.administration.teachers.fab.add'),
-					icon: 'person_add',
-					'icon-source': 'material',
+					icon: mdiAccountPlus,
 					to: '/administration/teachers/new',
 					dataTestid: 'fab_button_add_teachers',
 				},
 				{
 					label: $t('pages.administration.teachers.fab.import'),
-					icon: 'backup',
-					'icon-source': 'material',
+					icon: mdiCloudUpload,
 					href: '/administration/teachers/import',
 					dataTestid: 'fab_button_import_teachers',
 				},
 			]"
-		/>
+		></v-custom-fab>
 	</default-wireframe>
 </template>
 <script>
@@ -135,13 +135,14 @@ import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import FabFloating from "@components/molecules/FabFloating";
+import vCustomFab from "@components/atoms/vCustomFab";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
+import { mdiPlus, mdiAccountPlus, mdiCloudUpload } from "@mdi/js";
 
 export default {
 	layout: "defaultVuetify",
@@ -150,7 +151,7 @@ export default {
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
-		FabFloating,
+		vCustomFab,
 		ProgressModal,
 	},
 	mixins: [print, UserHasPermission],
@@ -164,6 +165,9 @@ export default {
 	},
 	data() {
 		return {
+			mdiPlus,
+			mdiAccountPlus,
+			mdiCloudUpload,
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.teachers.index"
@@ -397,6 +401,9 @@ export default {
 		this.find();
 	},
 	methods: {
+		onScroll() {
+			this.$eventBus.$emit("isScrolling");
+		},
 		find() {
 			const query = {
 				$limit: this.limit,
@@ -615,5 +622,9 @@ button:not(.is-none):focus {
 	margin-top: var(--space-xs);
 	margin-bottom: var(--space-xs);
 	margin-left: 0;
+}
+
+.fab-top-alignment {
+	top: 147px;
 }
 </style>
