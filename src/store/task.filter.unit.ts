@@ -1,5 +1,5 @@
-import { Task } from "./tasks";
 import { TaskFilter } from "./task.filter";
+import { Task } from "./types/tasks";
 
 type TaskParams = {
 	name?: string;
@@ -54,19 +54,6 @@ describe("task filter", () => {
 			const tasks = [taskFactory.build(), taskFactory.build()];
 			const count = new TaskFilter(tasks).count();
 			expect(count).toBe(2);
-		});
-	});
-
-	describe("byOneCourseName", () => {
-		it("should filter all tasks with the given course name", () => {
-			const task1 = taskFactory.build({ courseName: "Mathe" });
-			const task2 = taskFactory.build({ courseName: "Deutsch" });
-			const task3 = taskFactory.build({ courseName: "Mathe" });
-			const tasks = [task1, task2, task3];
-			const filteredTasks = new TaskFilter(tasks).byOneCourseName(
-				"Mathe"
-			).tasks;
-			expect(filteredTasks).toEqual([task1, task3]);
 		});
 	});
 

@@ -1,4 +1,4 @@
-import { Task, TaskStatus } from "./tasks";
+import { Task } from "./types/tasks";
 
 export class TaskFilter {
 	constructor(public readonly tasks: Task[]) {}
@@ -31,13 +31,6 @@ export class TaskFilter {
 	courseNames(): string[] {
 		const courseNames = [...new Set(this.tasks.map((o) => o.courseName))];
 		return courseNames;
-	}
-
-	byOneCourseName(courseName: string): TaskFilter {
-		const filteredTasks = this.tasks.filter(
-			(task) => task.courseName === courseName
-		);
-		return new TaskFilter(filteredTasks);
 	}
 
 	byCourseNames(courseNames: string[]): TaskFilter {

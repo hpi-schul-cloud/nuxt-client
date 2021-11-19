@@ -1,7 +1,8 @@
-import { Task, TaskModule } from "./tasks";
+import { TaskModule } from "./tasks";
 import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";
+import { Task } from "./types/tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
