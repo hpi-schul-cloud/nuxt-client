@@ -58,17 +58,17 @@ export class TaskModule extends VuexModule {
 	}
 
 	@Mutation
-	setTasks(tasks: Task[]) {
+	setTasks(tasks: Task[]): void {
 		this.tasks = tasks;
 	}
 
 	@Mutation
-	setCourseFilters(courseNames: string[]) {
+	setCourseFilters(courseNames: string[]): void {
 		this.courseFilter = courseNames;
 	}
 
 	@Mutation
-	setSubstituteFilter(enabled: boolean) {
+	setSubstituteFilter(enabled: boolean): void {
 		this.substituteFilter = enabled;
 		this.courseFilter = new TaskFilter(this.tasks)
 			.filterSubstituteForTeacher(enabled)
@@ -76,7 +76,7 @@ export class TaskModule extends VuexModule {
 	}
 
 	@Mutation
-	setStatus(status: Status) {
+	setStatus(status: Status): void {
 		this.status = status;
 	}
 
