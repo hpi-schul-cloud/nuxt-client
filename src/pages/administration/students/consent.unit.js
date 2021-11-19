@@ -42,7 +42,7 @@ const specificFilesMock = {
 	termsOfUse:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
 	termsOfUseSchool:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+		"https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
 };
