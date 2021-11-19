@@ -9,73 +9,16 @@ import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
-
-export interface TaskStatus {
-	submitted: number;
-	maxSubmissions: number;
-	graded: number;
-	isDraft: boolean;
-	isSubstitutionTeacher: boolean;
-}
-
-export interface Task {
-	id: string;
-	name: string;
-	description?: string;
-	availableDate?: string;
-	duedate?: string;
-	courseName: string;
-	displayColor?: string;
-	status: TaskStatus;
-	createdAt: string;
-	updatedAt: string;
-}
-
-type Pagination = {
-	limit: number;
-	skip: number;
-	total: number;
-};
-
-type BusinessError = {
-	statusCode: string;
-	message: string;
-};
-
-type Status = "pending" | "completed" | "error" | "";
-
-export interface OpenTasksForStudent {
-	overdue: Task[];
-	noDueDate: Task[];
-	withDueDate: Task[];
-}
-
-export interface CompletedTasksForStudent {
-	submitted: Task[];
-	graded: Task[];
-}
-
-export interface OpenTasksForTeacher {
-	overdue: Task[];
-	noDueDate: Task[];
-	withDueDate: Task[];
-}
-
-export interface TasksCountPerCourseStudent {
-	open: Record<string, number>;
-	completed: Record<string, number>;
-}
-
-export interface TasksCountPerCourseTeacher {
-	open: Record<string, number>;
-	drafts: Record<string, number>;
-}
-
-export interface TaskCourseFilter {
-	value: string;
-	text: string;
-	isSubstitution: boolean;
-}
+import { BusinessError, Pagination, Status } from "./types/commons";
+import {
+	CompletedTasksForStudent,
+	OpenTasksForStudent,
+	OpenTasksForTeacher,
+	Task,
+	TaskCourseFilter,
+	TasksCountPerCourseStudent,
+	TasksCountPerCourseTeacher,
+} from "./types/tasks";
 
 @Module({
 	name: "tasks",
