@@ -30,7 +30,7 @@
 								tabTwoHeader.title
 							}}</span>
 						</v-tab>
-						<v-tab>
+						<v-tab @click="onOpenFinishedTasksTab">
 							<v-icon class="tab-icon mr-3">{{ tabThreeHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
 								tabThreeHeader.title
@@ -57,13 +57,22 @@
 				:disabled="isFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
-			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" :empty-state="emptyState" />
-			<tasks-dashboard-teacher v-else :tab.sync="tab" :empty-state="emptyState" />
+			<tasks-dashboard-student
+				v-if="isStudent"
+				:tab.sync="tab"
+				:empty-state="emptyState"
+			/>
+			<tasks-dashboard-teacher
+				v-else
+				:tab.sync="tab"
+				:empty-state="emptyState"
+			/>
 		</div>
 	</default-wireframe>
 </template>
 
 <script>
+import FinishedTaskModule from "@/store/finished-tasks";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomFab from "@components/atoms/vCustomFab";
@@ -94,7 +103,7 @@ export default {
 		return {
 			tab: 0, // should we save this in store?
 			mdiPlus,
-			tasksEmptyStateImage
+			tasksEmptyStateImage,
 		};
 	},
 	computed: {
@@ -111,6 +120,9 @@ export default {
 			courseFilters: "getCourseFilters",
 			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
+		finishedTasksStatus: () => FinishedTaskModule.getStatus,
+		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
+		finishedTasks: () => FinishedTaskModule.getTasks,
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -191,6 +203,7 @@ export default {
 			return tabThree;
 		},
 		emptyState: function () {
+			// TODO - refactor
 			const image = tasksEmptyStateImage;
 			//const subtitle = undefined;
 			if (this.hasFilterSelected) {
@@ -232,6 +245,7 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch("tasks/getAllTasks");
+		FinishedTaskModule.fetchTasks();
 	},
 	methods: {
 		onScroll() {
@@ -261,6 +275,13 @@ export default {
 					return this.tasksCountTeacher.drafts[courseName];
 				}
 			}
+		},
+		onOpenFinishedTasksTab() {
+			console.log(this.finishedTasks);
+		/* 	if (!this.hasFinishedTasks) {
+				console.log("triggered");
+				FinishedTaskModule.fetchTasks();
+			} */
 		},
 	},
 };

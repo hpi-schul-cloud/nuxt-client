@@ -23,7 +23,7 @@
 			<v-list-item-subtitle class="d-inline-flex">
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>
-			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
+			<v-list-item-subtitle v-if="'status' in task" class="hidden-sm-and-up text--primary text-wrap">
 				<i18n path="components.molecules.VTaskItemTeacher.status">
 					<template #submitted>{{ task.status.submitted }}</template>
 					<template #max>{{ task.status.maxSubmissions }}</template>
@@ -31,7 +31,7 @@
 				</i18n>
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<section v-if="!isDraft">
+		<section v-if="'status' in task && !isDraft">
 			<v-list-item-action class="hidden-xs-only ml-4">
 				<v-list-item-subtitle>{{
 					$t("components.molecules.VTaskItemTeacher.submitted")
@@ -58,7 +58,9 @@
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
-const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+// TODO - different requiredKeys for finished and other tasks?
+// const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: {},
@@ -85,13 +87,13 @@ export default {
 			return "#54616e";
 		},
 		isDraft() {
-			return this.task.status.isDraft;
+			return this.task.status?.isDraft;
 		},
 		courseName() {
 			const baseName =
 				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 			const prefix =
-				this.task.status.isSubstitutionTeacher === true
+				this.task.status?.isSubstitutionTeacher === true
 					? this.$t("common.words.substitute") + " "
 					: "";
 

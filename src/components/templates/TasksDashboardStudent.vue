@@ -60,10 +60,9 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="gradedTasks" type="student" />
-				<tasks-list :tasks="submittedTasks" type="student" />
+				<tasks-list :tasks="finishedTasks" type="student" />
 				<v-custom-empty-state
-					v-if="!hasCompletedTasks"
+					v-if="!hasFinishedTasks"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -74,6 +73,7 @@
 </template>
 
 <script>
+import FinishedTaskModule from "@/store/finished-tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
@@ -100,6 +100,8 @@ export default {
 			hasCompletedTasks: "hasCompletedTasks",
 			hasTasks: "hasTasks",
 		}),
+		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
+		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},

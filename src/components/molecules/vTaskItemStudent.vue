@@ -12,7 +12,7 @@
 				{{ topic }}
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<v-list-item-action>
+		<v-list-item-action v-if="'status' in task">
 			<v-list-item-action-text
 				class="subtitle-2"
 				data-test-id="dueDateLabel"
@@ -60,6 +60,8 @@ export default {
 	},
 	computed: {
 		taskState() {
+			if (!("status" in this.task)) return undefined;
+
 			const { duedate, status } = this.task;
 			if (this.isCloseToDueDate(duedate)) return "warning";
 			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";

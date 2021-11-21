@@ -45,10 +45,10 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="draftTasks" type="teacher" />
+				<tasks-list :tasks="finishedTasks" type="teacher" />
 				<v-custom-empty-state
-					v-if="!hasDrafts"
-					:image="emptyState.mage"
+					v-if="!hasFinishedTasks"
+					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
 				/>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import FinishedTaskModule from "@/store/finished-tasks";
 import { mapGetters } from "vuex";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
@@ -73,7 +74,7 @@ export default {
 		emptyState: {
 			type: Object,
 			required: true,
-		}
+		},
 	},
 	computed: {
 		...mapGetters("tasks", {
@@ -84,6 +85,8 @@ export default {
 			hasOpenTasksTeacher: "hasOpenTasksTeacher",
 			hasDrafts: "hasDrafts",
 		}),
+		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
+		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},
