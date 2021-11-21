@@ -89,7 +89,7 @@ export default {
 		emptyState: {
 			type: Object,
 			required: true,
-		}
+		},
 	},
 	computed: {
 		...mapGetters("tasks", {

@@ -278,7 +278,7 @@ export default {
 		},
 		onOpenFinishedTasksTab() {
 			console.log(this.finishedTasks);
-		/* 	if (!this.hasFinishedTasks) {
+			/* 	if (!this.hasFinishedTasks) {
 				console.log("triggered");
 				FinishedTaskModule.fetchTasks();
 			} */
