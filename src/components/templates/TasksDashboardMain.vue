@@ -330,6 +330,6 @@ export default {
 }
 
 .fab-top-alignment {
-	top: 193px;
+	top: 238px;
 }
 </style>
