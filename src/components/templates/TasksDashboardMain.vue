@@ -7,7 +7,7 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-				<div v-if="isTeacher">
+				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
 						:label="
@@ -42,19 +42,19 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
-						:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
+						:class="fabTopPosition"
 					></v-custom-fab>
 				</div>
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="showFilter"
+				v-if="showCourseFilter"
 				:value="getSelectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
-				:disabled="isFilterDisabled"
+				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
 			<tasks-dashboard-student
@@ -108,7 +108,6 @@ export default {
 	},
 	computed: {
 		...mapGetters("tasks", {
-			status: "getStatus",
 			hasTasks: "hasTasks",
 			hasOpenTasksStudent: "hasOpenTasksStudent",
 			hasOpenTasksTeacher: "hasOpenTasksTeacher",
@@ -122,6 +121,13 @@ export default {
 		}),
 		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
 		finishedTasks: () => FinishedTaskModule.getTasks,
+		fabTopPosition: function () {
+			return {
+				"fab-top": this.$vuetify.breakpoint.mdAndUp,
+				"fab-top-no-substitute-filter":
+					this.$vuetify.breakpoint.mdAndUp && !this.showSubstituteFilter,
+			};
+		},
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -129,10 +135,13 @@ export default {
 		isTeacher: function () {
 			return this.role === "teacher";
 		},
-		showFilter: function () {
+		showCourseFilter: function () {
 			if (this.tab === 2) return false;
 
 			return this.hasTasks;
+		},
+		showSubstituteFilter: function () {
+			return this.isTeacher && this.tab !== 2;
 		},
 		tabOneIsEmpty: function () {
 			return this.isStudent
@@ -142,7 +151,7 @@ export default {
 		tabTwoIsEmpty: function () {
 			return this.isStudent ? !this.hasCompletedTasks : !this.hasDrafts;
 		},
-		isFilterDisabled: function () {
+		isCourseFilterDisabled: function () {
 			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			if (this.tab === 0) {
@@ -318,7 +327,11 @@ export default {
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-.fab-top-alignment {
+.fab-top {
 	top: 238px;
+}
+
+.fab-top-no-substitute-filter {
+	top: 193px;
 }
 </style>
