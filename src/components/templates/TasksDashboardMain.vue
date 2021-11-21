@@ -120,7 +120,6 @@ export default {
 			courseFilters: "getCourseFilters",
 			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
-		finishedTasksStatus: () => FinishedTaskModule.getStatus,
 		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
 		finishedTasks: () => FinishedTaskModule.getTasks,
 		// TODO: split teacher and student sides
@@ -203,49 +202,39 @@ export default {
 			return tabThree;
 		},
 		emptyState: function () {
-			// TODO - refactor
+			// TODO - refactor?
 			const image = tasksEmptyStateImage;
-			//const subtitle = undefined;
+			let title = "";
+			let subtitle = undefined;
+
 			if (this.hasFilterSelected) {
-				return {
-					image,
-					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
-					subtitle: undefined,
-				};
+				title = this.$t("pages.tasks.emptyStateOnFilter.title");
 			} else {
 				if (this.tab === 0) {
-					return {
-						image,
-						title: this.$t(`pages.tasks.${this.role}.open.emptyState.title`),
-						subtitle: this.$t(
-							`pages.tasks.${this.role}.open.emptyState.subtitle`
-						),
-					};
-				} else {
-					if (this.tab === 1) {
-						const title = this.isStudent
-							? this.$t("pages.tasks.student.completed.emptyState.title")
-							: this.$t("pages.tasks.teacher.drafts.emptyState.title");
-
-						return {
-							image,
-							title,
-							subtitle: undefined,
-						};
-					} else {
-						return {
-							image,
-							title: this.$t("pages.tasks.finished.emptyState.title"),
-							subtitle: undefined,
-						};
-					}
+					title = this.$t(`pages.tasks.${this.role}.open.emptyState.title`);
+					subtitle = this.$t(
+						`pages.tasks.${this.role}.open.emptyState.subtitle`
+					);
+				}
+				if (this.tab === 1) {
+					title = this.isStudent
+						? this.$t("pages.tasks.student.completed.emptyState.title")
+						: this.$t("pages.tasks.teacher.drafts.emptyState.title");
+				}
+				if (this.tab === 2) {
+					title = this.$t("pages.tasks.finished.emptyState.title");
 				}
 			}
+
+			return {
+				image,
+				title,
+				subtitle,
+			};
 		},
 	},
 	mounted() {
 		this.$store.dispatch("tasks/getAllTasks");
-		FinishedTaskModule.fetchTasks();
 	},
 	methods: {
 		onScroll() {
@@ -277,11 +266,11 @@ export default {
 			}
 		},
 		onOpenFinishedTasksTab() {
-			console.log(this.finishedTasks);
-		/* 	if (!this.hasFinishedTasks) {
-				console.log("triggered");
+			// this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
+			// we should probably find a better solution :D
+			if (!this.hasFinishedTasks) {
 				FinishedTaskModule.fetchTasks();
-			} */
+			}
 		},
 	},
 };
