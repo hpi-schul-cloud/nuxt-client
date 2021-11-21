@@ -14,9 +14,9 @@
 			<v-col cols="12">
 				<v-text-field
 					ref="search"
+					v-model="searchText"
 					:label="$t('common.words.search')"
 					:append-icon="mdiMagnify"
-					@input="searchItems"
 				>
 				</v-text-field>
 			</v-col>
@@ -25,7 +25,7 @@
 			<v-container fluid>
 				<v-row>
 					<v-col
-						v-for="item in allElements"
+						v-for="item in items"
 						:key="item.name"
 						class="d-flex justify-center cols-12 xs-6 sm-6 lg-4 xl-2"
 						cols="4"
@@ -53,17 +53,7 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify } from "@mdi/js";
-
-type RoomItem = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition?: number;
-	yPosition?: number;
-};
-
-type AllElements = Array<RoomItem>;
+import { RoomsData } from "@store/types/rooms";
 
 export default Vue.extend({
 	components: {
@@ -72,32 +62,25 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	data() {
-		const allElements: AllElements = [];
-
 		return {
+			isActive: false,
 			mdiMagnify,
-			allElements,
+			searchText: "",
 		};
 	},
 	computed: {
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
+		items(): Array<RoomsData> {
+			return JSON.parse(JSON.stringify(RoomsModule.getAllElements)).filter(
+				(item: RoomsData) =>
+					item.title.toLowerCase().includes(this.$data.searchText.toLowerCase())
+			);
+		},
 	},
 	async mounted() {
 		await RoomsModule.fetchAllElements();
-		this.$data.allElements = RoomsModule.getAllElements;
-	},
-	methods: {
-		searchItems(filterText: string): void {
-			this.$data.allElements = RoomsModule.getAllElements;
-			const filtered = JSON.parse(
-				JSON.stringify(this.$data.allElements)
-			).filter((item: RoomItem) =>
-				item.title.toLowerCase().includes(filterText.toLowerCase())
-			);
-			this.$data.allElements = filtered;
-		},
 	},
 });
 </script>

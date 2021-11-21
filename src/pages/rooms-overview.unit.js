@@ -102,7 +102,7 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.$data.roomsData).toStrictEqual(mockStoreData);
+		expect(wrapper.vm.items).toStrictEqual(mockStoreData);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -134,7 +134,7 @@ describe("RoomPage", () => {
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
 	});
 
-	it.skip("custom-dialog component should be visible", async () => {
+	it("custom-dialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		const cardComponent = wrapper.find(".card-component");

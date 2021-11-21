@@ -4,9 +4,9 @@
 			<v-col cols="8" sm="6" md="8" lg="8">
 				<v-text-field
 					ref="search"
+					v-model="searchText"
 					:label="$t('common.words.search')"
 					:append-icon="mdiMagnify"
-					@input="searchItems"
 				>
 				</v-text-field>
 			</v-col>
@@ -97,7 +97,6 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			roomsData: [],
 			ratios: {
 				pageRatio: 0.9,
 				itemRatio: 0.8,
@@ -121,6 +120,7 @@ export default {
 			roomNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
+			searchText: "",
 		};
 	},
 	computed: {
@@ -133,10 +133,27 @@ export default {
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
+		items() {
+			return JSON.parse(JSON.stringify(RoomsModule.getRoomsData)).filter(
+				(item) => {
+					if (item.groupElements) {
+						const groupElements = item.groupElements.filter((groupItem) => {
+							return groupItem.title
+								.toLowerCase()
+								.includes(this.searchText.toLowerCase());
+						});
+						item.groupElements = groupElements;
+						return groupElements;
+					}
+					return item.title
+						.toLowerCase()
+						.includes(this.searchText.toLowerCase());
+				}
+			);
+		},
 	},
 	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		this.roomsData = RoomsModule.getRoomsData;
 		this.getDeviceDims();
 	},
 
@@ -180,13 +197,13 @@ export default {
 			return this.findDataByPos(row, col).groupElements?.length == 0;
 		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.roomsData.find(
+			this.groupDialog.groupData = this.items.find(
 				(item) => item.id == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.roomsData.find(
+			return this.items.find(
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
@@ -222,7 +239,6 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
-				// TODO: default naming
 			}
 		},
 		addGroupElements(pos) {
@@ -247,7 +263,7 @@ export default {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: this.roomsData
+				groupIndex: this.items
 					.find((item) => item.id == this.groupDialog.groupData.id)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
@@ -255,37 +271,9 @@ export default {
 			this.draggedElementName = "groupItem";
 			this.groupDialog.isOpen = false;
 		},
-		deleteAvatar() {
-			// TODO: delete event will be here
-			this.showDeleteSection = false;
-
-			RoomsModule.delete(this.draggedElement.item.id);
-			this.roomsData = this.roomsData.filter(
-				(item) => item.id !== this.draggedElement.item.id
-			);
-		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
-			this.roomsData = RoomsModule.getRoomsData;
 			this.groupDialog.groupData = {};
-		},
-		searchItems(filterText) {
-			this.roomsData = RoomsModule.getRoomsData;
-			const filtered = JSON.parse(JSON.stringify(this.roomsData)).filter(
-				(item) => {
-					if (item.groupElements) {
-						const groupElements = item.groupElements.filter((groupItem) => {
-							return groupItem.title
-								.toLowerCase()
-								.includes(filterText.toLowerCase());
-						});
-						item.groupElements = groupElements;
-						return groupElements;
-					}
-					return item.title.toLowerCase().includes(filterText.toLowerCase());
-				}
-			);
-			this.roomsData = filtered;
 		},
 	},
 };

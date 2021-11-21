@@ -143,7 +143,12 @@ describe("@pages/rooms-list.vue", () => {
 	it("should open and close on property change", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
-		expect(wrapper.vm.$data.allElements).toStrictEqual(mockData);
+		// tslint ignored because it gives
+		// "Property 'items' does not exist on type 'Vue'" error
+		// TODO: better solution should be found
+
+		// @ts-ignore
+		expect(wrapper.vm.items).toStrictEqual(mockData);
 	});
 
 	it("should search elements on list", async () => {
@@ -152,8 +157,13 @@ describe("@pages/rooms-list.vue", () => {
 
 		const searchInput = wrapper.vm.$refs["search"] as any;
 
-		expect(wrapper.vm.$data.allElements.length).toEqual(19);
+		// @ts-ignore
+		expect(wrapper.vm.items.length).toEqual(19);
 		searchInput.$emit("input", "math");
-		expect(wrapper.vm.$data.allElements.length).toEqual(2);
+		// @ts-ignore
+		expect(wrapper.vm.items.length).toEqual(2);
+		searchInput.$emit("input", "");
+		// @ts-ignore
+		expect(wrapper.vm.items.length).toEqual(19);
 	});
 });
