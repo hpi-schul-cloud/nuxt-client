@@ -57,6 +57,8 @@ export class FinishedTaskModule extends VuexModule {
 
 	status: Status = "";
 
+	initialized: boolean = false;
+
 	_taskApi?: TaskApiInterface;
 
 	@Action
@@ -71,13 +73,14 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			this.setTasks(this.tasks.concat(response.data.data));
+			this.setTasks(response.data.data);
 			this.setPagination({
 				limit,
 				skip: skip + limit,
 				total: response.data.total,
 			});
 			this.setStatus("completed");
+			this.setInitialized(true);
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
@@ -100,14 +103,15 @@ export class FinishedTaskModule extends VuexModule {
 				skip,
 				limit
 			);
-			console.log(response.data, this.pagination);
 
+			await new Promise((resolve) => setTimeout(resolve, 300));
 			this.setTasks(this.tasks.concat(response.data.data));
 			this.setPagination({
 				limit,
 				skip: skip + limit,
 				total: response.data.total,
 			});
+
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
@@ -123,6 +127,11 @@ export class FinishedTaskModule extends VuexModule {
 	@Mutation
 	setStatus(status: Status) {
 		this.status = status;
+	}
+
+	@Mutation
+	setInitialized(initialized: boolean) {
+		this.initialized = initialized;
 	}
 
 	@Mutation
@@ -151,12 +160,16 @@ export class FinishedTaskModule extends VuexModule {
 		return this.status;
 	}
 
+	get getInitialized(): boolean {
+		return this.initialized;
+	}
+
 	get getBusinessError(): BusinessError {
 		return this.businessError;
 	}
 
-	get hasTasks(): boolean {
-		return this.isReady && this.tasks.length > 0;
+	get hasNoTasks(): boolean {
+		return this.isReady && this.tasks.length === 0;
 	}
 
 	private get isReady(): boolean {

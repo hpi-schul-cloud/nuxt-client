@@ -45,9 +45,13 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="finishedTasks" type="teacher" />
+				<tasks-list
+					:tasks="finishedTasks"
+					type="teacher"
+					:has-pagination="tab === 2"
+				/>
 				<v-custom-empty-state
-					v-if="!hasFinishedTasks"
+					v-if="hasNoFinishedTasks"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -85,7 +89,7 @@ export default {
 			hasOpenTasksTeacher: "hasOpenTasksTeacher",
 			hasDrafts: "hasDrafts",
 		}),
-		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
+		hasNoFinishedTasks: () => FinishedTaskModule.hasNoTasks,
 		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;

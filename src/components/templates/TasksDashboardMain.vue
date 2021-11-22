@@ -119,8 +119,7 @@ export default {
 			courseFilters: "getCourseFilters",
 			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
-		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
-		finishedTasks: () => FinishedTaskModule.getTasks,
+		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		fabTopPosition: function () {
 			return {
 				"fab-top": this.$vuetify.breakpoint.mdAndUp,
@@ -252,7 +251,9 @@ export default {
 				document.documentElement.scrollTop + window.innerHeight ===
 				document.documentElement.offsetHeight;
 
+			console.log(bottomOfWindow);
 			if (bottomOfWindow) {
+				console.log("xxxxxx");
 				this.loadMoreFinishedTasks();
 			}
 		},
@@ -277,7 +278,8 @@ export default {
 		onOpenFinishedTasksTab() {
 			// this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
-			if (!this.hasFinishedTasks) {
+			if (!this.finishedTasksInitialized) {
+				console.log("initial triggered");
 				this.fetchInitialFinishedTasks();
 			}
 		},
@@ -285,6 +287,8 @@ export default {
 			FinishedTaskModule.fetchInitialTasks();
 		},
 		loadMoreFinishedTasks() {
+			console.log("triggered");
+
 			FinishedTaskModule.fetchMoreTasks();
 		},
 	},
