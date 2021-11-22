@@ -45,7 +45,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 0,
+		limit: 5, // set back to 50 when developing and testing is done
 		skip: 0,
 		total: 0,
 	};
@@ -60,13 +60,54 @@ export class FinishedTaskModule extends VuexModule {
 	_taskApi?: TaskApiInterface;
 
 	@Action
-	async fetchTasks(): Promise<void> {
+	async fetchInitialTasks(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const response = await this.taskApi.taskControllerFindAllFinished();
-			
-			this.setTasks(response.data.data);
+			const { skip, limit } = this.pagination;
+
+			const response = await this.taskApi.taskControllerFindAllFinished(
+				skip,
+				limit
+			);
+
+			this.setTasks(this.tasks.concat(response.data.data));
+			this.setPagination({
+				limit,
+				skip: skip + limit,
+				total: response.data.total,
+			});
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async fetchMoreTasks(): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			const { skip, limit, total } = this.pagination;
+
+			if (total <= skip) {
+				this.setStatus("completed");
+				return;
+			}
+
+			const response = await this.taskApi.taskControllerFindAllFinished(
+				skip,
+				limit
+			);
+			console.log(response.data, this.pagination);
+
+			this.setTasks(this.tasks.concat(response.data.data));
+			this.setPagination({
+				limit,
+				skip: skip + limit,
+				total: response.data.total,
+			});
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
@@ -82,6 +123,11 @@ export class FinishedTaskModule extends VuexModule {
 	@Mutation
 	setStatus(status: Status) {
 		this.status = status;
+	}
+
+	@Mutation
+	setPagination(pagination: Pagination) {
+		this.pagination = pagination;
 	}
 
 	@Mutation

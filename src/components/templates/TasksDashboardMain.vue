@@ -211,7 +211,6 @@ export default {
 			return tabThree;
 		},
 		emptyState: function () {
-			// TODO - refactor?
 			const image = tasksEmptyStateImage;
 			let title = "";
 			let subtitle = undefined;
@@ -248,6 +247,14 @@ export default {
 	methods: {
 		onScroll() {
 			this.$eventBus.$emit("isScrolling");
+
+			const bottomOfWindow =
+				document.documentElement.scrollTop + window.innerHeight ===
+				document.documentElement.offsetHeight;
+
+			if (bottomOfWindow) {
+				this.loadMoreFinishedTasks();
+			}
 		},
 		setCourseFilters(courseNames) {
 			this.$store.commit("tasks/setCourseFilters", courseNames);
@@ -256,30 +263,29 @@ export default {
 			this.$store.commit("tasks/setSubstituteFilter", enabled);
 		},
 		getTaskCount(courseName) {
-			if (this.isStudent) {
-				if (this.tab === 0) {
-					return this.tasksCountStudent.open[courseName];
-				}
-				if (this.tab === 1) {
-					return this.tasksCountStudent.completed[courseName];
-				}
+			if (this.tab === 0) {
+				return this.isStudent
+					? this.tasksCountStudent.open[courseName]
+					: this.tasksCountTeacher.open[courseName];
 			}
-
-			if (this.isTeacher) {
-				if (this.tab === 0) {
-					return this.tasksCountTeacher.open[courseName];
-				}
-				if (this.tab === 1) {
-					return this.tasksCountTeacher.drafts[courseName];
-				}
+			if (this.tab === 1) {
+				return this.isStudent
+					? this.tasksCountStudent.completed[courseName]
+					: this.tasksCountTeacher.drafts[courseName];
 			}
 		},
 		onOpenFinishedTasksTab() {
 			// this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.hasFinishedTasks) {
-				FinishedTaskModule.fetchTasks();
+				this.fetchInitialFinishedTasks();
 			}
+		},
+		fetchInitialFinishedTasks() {
+			FinishedTaskModule.fetchInitialTasks();
+		},
+		loadMoreFinishedTasks() {
+			FinishedTaskModule.fetchMoreTasks();
 		},
 	},
 };
