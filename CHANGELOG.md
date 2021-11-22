@@ -14,6 +14,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-724 - Listing elements and search features added to room-overview
+
 ## [26.17.0] - 2021-11-16
 
 ### Added

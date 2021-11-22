@@ -19,3 +19,12 @@ export type DroppedObject = {
 	};
 	item: object;
 };
+
+export type AllElementsObject = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+};
+
+export type AllElements = Array<AllElementsObject>;
