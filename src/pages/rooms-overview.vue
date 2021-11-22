@@ -97,10 +97,6 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			ratios: {
-				pageRatio: 0.9,
-				itemRatio: 0.8,
-			},
 			device: "mobile",
 			dimensions: {
 				colCount: 2,

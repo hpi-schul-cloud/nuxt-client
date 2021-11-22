@@ -105,10 +105,9 @@ export class Rooms extends VuexModule {
 		// device parameter will be used to fetch data specified for device
 		this.setLoading(true);
 		try {
-			const fetched = await $axios.$get("/v3/dashboard/");
-
-			this.setRoomDataId(fetched.id || "");
-			this.setRoomData(fetched.gridElements || []);
+			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
+			this.setRoomDataId(data.id || "");
+			this.setRoomData(data.gridElements || []);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -126,12 +125,13 @@ export class Rooms extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const data = await $axios.$patch(
-				`/v3/dashboard/${this.gridElementsId}/moveElement`,
+			const response = await this.dashboardApi.dashboardControllerMoveElement(
+				this.getRoomsId,
 				reqObject
 			);
+
 			this.setPosition(payload);
-			this.setRoomData(data.gridElements);
+			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -174,7 +174,7 @@ export class Rooms extends VuexModule {
 	async fetchAllElements(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await $axios.$get("/v3/courses/");
+			const { data } = await $axios.$get("/v3/courses?skip=0&limit=100");
 			this.setAllElements(data);
 			this.setLoading(false);
 		} catch (error: any) {

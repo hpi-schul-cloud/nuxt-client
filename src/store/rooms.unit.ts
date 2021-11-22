@@ -53,20 +53,24 @@ describe("rooms module", () => {
 				receivedRequests = [];
 			});
 			it("should call backend and sets state correctly", async () => {
+				const mockApi = {
+					dashboardControllerFindForUser: jest.fn(),
+				};
+
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+
 				const roomsModule = new Rooms({});
 
-				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
-				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+				roomsModule.fetch("mobile").then(() => {
+					expect(roomsModule.getLoading).toBeFalsy();
+				});
 
-				await roomsModule.fetch("mobile");
-
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("/v3/dashboard/");
-
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setRoomDataSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(roomsModule.getLoading).toBeTruthy();
+				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});
 		});
 		describe("align", () => {
@@ -74,35 +78,39 @@ describe("rooms module", () => {
 				receivedRequests = [];
 			});
 			it("should call server and 'setPosition' mutation", async () => {
-				const roomsModule = new Rooms({});
+				const mockApi = {
+					dashboardControllerMoveElement: jest.fn((align) => ({
+						data: { ...align },
+					})),
+				};
 
-				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
-				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+
+				const roomsModule = new Rooms({});
 
 				const payload = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 					item: {},
 				};
-
 				const expectedParam = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 				};
 
-				roomsModule.setRoomDataId("grid_id");
-				await roomsModule.align(payload);
+				roomsModule.align(payload).then(() => {
+					expect(roomsModule.getLoading).toBeFalsy();
+				});
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v3/dashboard/grid_id/moveElement"
+				expect(roomsModule.getLoading).toBeTruthy();
+				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith(
+					"",
+					expectedParam
 				);
-				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
-
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setPositionSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 			});
 		});
 		describe("delete", () => {
@@ -206,7 +214,9 @@ describe("rooms module", () => {
 					await roomsModule.fetchAllElements();
 
 					expect(receivedRequests.length).toBeGreaterThan(0);
-					expect(receivedRequests[0].path).toStrictEqual("/v3/courses/");
+					expect(receivedRequests[0].path).toStrictEqual(
+						"/v3/courses?skip=0&limit=100"
+					);
 
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);

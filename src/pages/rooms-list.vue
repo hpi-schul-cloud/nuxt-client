@@ -63,7 +63,6 @@ export default Vue.extend({
 	layout: "defaultVuetify",
 	data() {
 		return {
-			isActive: false,
 			mdiMagnify,
 			searchText: "",
 		};

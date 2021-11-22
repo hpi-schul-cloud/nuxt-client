@@ -61,8 +61,15 @@ const mockStoreData = [
 ];
 
 const spyMocks = {
-	storeRoomAlignMock: jest.spyOn(RoomsModule, "align"),
-	storeModuleFetchMock: jest.spyOn(RoomsModule, "fetch"),
+	storeRoomAlignMock: jest
+		.spyOn(RoomsModule, "align")
+		.mockImplementation(() => {}),
+	storeModuleFetchMock: jest
+		.spyOn(RoomsModule, "fetch")
+		.mockImplementation(() => {}),
+	storeModuleFetchAllMock: jest
+		.spyOn(RoomsModule, "fetchAllElements")
+		.mockImplementation(() => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
 	getDataObjectMock: jest.spyOn(RoomsPage.methods, "getDataObject"),
