@@ -426,4 +426,26 @@ describe("RoomPage", () => {
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 	});
+
+	it("should reset search text while dragging", async () => {
+		const wrapper = getWrapper();
+		await flushPromises();
+
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+
+		const searchInput = wrapper.vm.$refs["search"];
+		searchInput.$emit("input", "thi");
+		await flushPromises();
+		const avatarComponents = wrapper.findAll(".room-avatar");
+		expect(avatarComponents).toHaveLength(1);
+
+		const avatarComponent = wrapper.findComponent({ ref: "4-4" });
+		avatarComponent.trigger("dragstart");
+		await flushPromises();
+		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
+		expect(avatarComponentsAfterDragging).toHaveLength(6);
+		expect(wrapper.vm.$data.searchText).toStrictEqual("");
+	});
 });
