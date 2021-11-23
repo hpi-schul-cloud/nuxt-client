@@ -10,6 +10,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+### Fixed
+
+## [26.18.0] - 2021-11-23
+
+### Changed
+
 - BC-633 - moved type entitties from the store modules to store/types folder
 
 ### Added
