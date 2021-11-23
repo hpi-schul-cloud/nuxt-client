@@ -136,7 +136,8 @@ export default {
 			let className = "fixed transition";
 
 			if (this.extended) className = className.concat(" ", "extended-fab");
-			if (this.positionAtTop) className = className.concat(" ", this.topPositionClass);
+			if (this.positionAtTop)
+				className = className.concat(" ", this.topPositionClass);
 
 			return className;
 		},
