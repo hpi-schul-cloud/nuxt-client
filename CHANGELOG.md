@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-661 - School logo was missing in top bar
+
 ## [26.18.0] - 2021-11-23
 
 ### Changed
