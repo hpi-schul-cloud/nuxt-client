@@ -4,10 +4,11 @@
 		v-model="isSpeedDialExpanded"
 		v-bind="$attrs"
 		fixed
-		:bottom="isMobile"
-		:top="!isMobile"
+		:bottom="!positionAtTop"
+		:top="positionAtTop"
 		right
 		class="fixed transition"
+		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
 	>
 		<template v-slot:activator>
@@ -62,15 +63,14 @@
 		fab
 		fixed
 		right
-		:bottom="isMobile"
-		:top="!isMobile"
+		:bottom="!positionAtTop"
+		:top="positionAtTop"
 		color="primary"
 		dark
 		rounded
 		:small="extended"
-		class="fixed transition"
-		:class="{ 'extended-fab': extended }"
 		:href="href"
+		:class="classes"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -101,6 +101,11 @@ export default {
 			required: false,
 			default: "",
 		},
+		topPositionClass: {
+			type: String,
+			required: false,
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -112,20 +117,28 @@ export default {
 		};
 	},
 	computed: {
-		isMobile: function () {
-			return this.$vuetify.breakpoint.smAndDown;
+		positionAtTop: function () {
+			return this.$vuetify.breakpoint.lgAndUp;
 		},
 		hasMultipleActions: function () {
 			return this.actions.length > 0;
 		},
 		speedDialDirection: function () {
-			return this.isMobile ? "top" : "bottom";
+			return !this.positionAtTop ? "top" : "bottom";
 		},
 		isCollapsed: function () {
 			return this.extended && !this.isSpeedDialExpanded;
 		},
 		showOverlay: function () {
 			return this.isSpeedDialExpanded;
+		},
+		classes: function () {
+			let className = "fixed transition";
+
+			if (this.extended) className = className.concat(" ", "extended-fab");
+			if (this.positionAtTop) className = className.concat(" ", this.topPositionClass);
+
+			return className;
 		},
 	},
 	methods: {

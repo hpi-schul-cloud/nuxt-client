@@ -24,6 +24,68 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface CourseMetadataListResponse
+ */
+export interface CourseMetadataListResponse {
+    /**
+     * 
+     * @type {Array<CourseMetadataResponse>}
+     * @memberof CourseMetadataListResponse
+     */
+    data: Array<CourseMetadataResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface CourseMetadataResponse
+ */
+export interface CourseMetadataResponse {
+    /**
+     * The id of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    id: string;
+    /**
+     * Title of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    title: string;
+    /**
+     * Short title of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    shortTitle: string;
+    /**
+     * Color of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    displayColor: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateNewsParams
  */
 export interface CreateNewsParams {
@@ -160,94 +222,46 @@ export interface DashboardResponse {
 /**
  * 
  * @export
- * @interface FinishedTaskListResponse
+ * @interface MoveElementParams
  */
-export interface FinishedTaskListResponse {
+export interface MoveElementParams {
     /**
      * 
-     * @type {Array<FinishedTaskReponse>}
-     * @memberof FinishedTaskListResponse
+     * @type {MoveElementPosition}
+     * @memberof MoveElementParams
      */
-    data: Array<FinishedTaskReponse>;
+    from: MoveElementPosition;
     /**
      * 
-     * @type {number}
-     * @memberof FinishedTaskListResponse
+     * @type {MoveElementPosition}
+     * @memberof MoveElementParams
      */
-    total: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FinishedTaskListResponse
-     */
-    skip: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FinishedTaskListResponse
-     */
-    limit: number;
+    to: MoveElementPosition;
 }
 /**
  * 
  * @export
- * @interface FinishedTaskReponse
+ * @interface MoveElementPosition
  */
-export interface FinishedTaskReponse {
+export interface MoveElementPosition {
     /**
      * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
+     * @type {number}
+     * @memberof MoveElementPosition
      */
-    name: string;
+    x: number;
     /**
      * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
+     * @type {number}
+     * @memberof MoveElementPosition
      */
-    availableDate: string;
+    y: number;
     /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
+     * used to identify a position within a group.
+     * @type {number}
+     * @memberof MoveElementPosition
      */
-    duedate: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    courseName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    displayColor?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FinishedTaskReponse
-     */
-    updatedAt: string;
+    groupIndex?: number;
 }
 /**
  * 
@@ -691,6 +705,148 @@ export interface UserInfoResponse {
 }
 
 /**
+ * CoursesApi - axios parameter creator
+ * @export
+ */
+export const CoursesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CourseMetadataListResponse} courseMetadataListResponse 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerFindForUser: async (courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseMetadataListResponse' is not null or undefined
+            assertParamExists('courseControllerFindForUser', 'courseMetadataListResponse', courseMetadataListResponse)
+            const localVarPath = `/courses`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(courseMetadataListResponse, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesApi - functional programming interface
+ * @export
+ */
+export const CoursesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CourseMetadataListResponse} courseMetadataListResponse 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(courseMetadataListResponse, skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesApi - factory interface
+ * @export
+ */
+export const CoursesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CourseMetadataListResponse} courseMetadataListResponse 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
+            return localVarFp.courseControllerFindForUser(courseMetadataListResponse, skip, limit, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesApi - interface
+ * @export
+ * @interface CoursesApi
+ */
+export interface CoursesApiInterface {
+    /**
+     * 
+     * @param {CourseMetadataListResponse} courseMetadataListResponse 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+
+}
+
+/**
+ * CoursesApi - object-oriented interface
+ * @export
+ * @class CoursesApi
+ * @extends {BaseAPI}
+ */
+export class CoursesApi extends BaseAPI implements CoursesApiInterface {
+    /**
+     * 
+     * @param {CourseMetadataListResponse} courseMetadataListResponse 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerFindForUser(courseMetadataListResponse, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * DashboardApi - axios parameter creator
  * @export
  */
@@ -698,13 +854,10 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @param {DashboardResponse} dashboardResponse 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser: async (dashboardResponse: DashboardResponse, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'dashboardResponse' is not null or undefined
-            assertParamExists('dashboardControllerFindForUser', 'dashboardResponse', dashboardResponse)
+        dashboardControllerFindForUser: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/dashboard`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -723,12 +876,9 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(dashboardResponse, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -738,15 +888,15 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @param {string} id 
-         * @param {DashboardResponse} dashboardResponse 
+         * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerMoveElement: async (id: string, dashboardResponse: DashboardResponse, options: any = {}): Promise<RequestArgs> => {
+        dashboardControllerMoveElement: async (id: string, moveElementParams: MoveElementParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('dashboardControllerMoveElement', 'id', id)
-            // verify required parameter 'dashboardResponse' is not null or undefined
-            assertParamExists('dashboardControllerMoveElement', 'dashboardResponse', dashboardResponse)
+            // verify required parameter 'moveElementParams' is not null or undefined
+            assertParamExists('dashboardControllerMoveElement', 'moveElementParams', moveElementParams)
             const localVarPath = `/dashboard/{id}/moveElement`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -771,7 +921,7 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(dashboardResponse, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(moveElementParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -847,23 +997,22 @@ export const DashboardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {DashboardResponse} dashboardResponse 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerFindForUser(dashboardResponse: DashboardResponse, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(dashboardResponse, options);
+        async dashboardControllerFindForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {string} id 
-         * @param {DashboardResponse} dashboardResponse 
+         * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerMoveElement(id: string, dashboardResponse: DashboardResponse, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, dashboardResponse, options);
+        async dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, moveElementParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -891,22 +1040,21 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {DashboardResponse} dashboardResponse 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser(dashboardResponse: DashboardResponse, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerFindForUser(dashboardResponse, options).then((request) => request(axios, basePath));
+        dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerFindForUser(options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} id 
-         * @param {DashboardResponse} dashboardResponse 
+         * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerMoveElement(id: string, dashboardResponse: DashboardResponse, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerMoveElement(id, dashboardResponse, options).then((request) => request(axios, basePath));
+        dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -931,22 +1079,21 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
 export interface DashboardApiInterface {
     /**
      * 
-     * @param {DashboardResponse} dashboardResponse 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerFindForUser(dashboardResponse: DashboardResponse, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse>;
 
     /**
      * 
      * @param {string} id 
-     * @param {DashboardResponse} dashboardResponse 
+     * @param {MoveElementParams} moveElementParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerMoveElement(id: string, dashboardResponse: DashboardResponse, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
 
     /**
      * 
@@ -971,25 +1118,24 @@ export interface DashboardApiInterface {
 export class DashboardApi extends BaseAPI implements DashboardApiInterface {
     /**
      * 
-     * @param {DashboardResponse} dashboardResponse 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerFindForUser(dashboardResponse: DashboardResponse, options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(dashboardResponse, options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerFindForUser(options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} id 
-     * @param {DashboardResponse} dashboardResponse 
+     * @param {MoveElementParams} moveElementParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerMoveElement(id: string, dashboardResponse: DashboardResponse, options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(id, dashboardResponse, options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1844,7 +1990,7 @@ export const TaskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FinishedTaskListResponse>> {
+        async taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFindAllFinished(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1875,7 +2021,7 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<FinishedTaskListResponse> {
+        taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse> {
             return localVarFp.taskControllerFindAllFinished(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -1905,7 +2051,7 @@ export interface TaskApiInterface {
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<FinishedTaskListResponse>;
+    taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse>;
 
 }
 

@@ -16,22 +16,24 @@
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
-				<div class="mx-n6 mx-sm-0 pb-0 d-flex justify-center">
+				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
-							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
+							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="openTasks">{{
 								tabOneHeader.title
 							}}</span>
 						</v-tab>
 						<v-tab>
-							<v-icon class="tab-icon mr-3">{{ tabTwoHeader.icon }}</v-icon>
+							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="closedTasks">{{
 								tabTwoHeader.title
 							}}</span>
 						</v-tab>
 						<v-tab @click="onOpenFinishedTasksTab">
-							<v-icon class="tab-icon mr-3">{{ tabThreeHeader.icon }}</v-icon>
+							<v-icon class="tab-icon mr-sm-3">{{
+								tabThreeHeader.icon
+							}}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
 								tabThreeHeader.title
 							}}</span>
@@ -42,7 +44,7 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
-						:class="fabTopPosition"
+						:top-position-class="fabTopPosition"
 					></v-custom-fab>
 				</div>
 			</div>
@@ -121,11 +123,9 @@ export default {
 		}),
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		fabTopPosition: function () {
-			return {
-				"fab-top": this.$vuetify.breakpoint.mdAndUp,
-				"fab-top-no-substitute-filter":
-					this.$vuetify.breakpoint.mdAndUp && !this.showSubstituteFilter,
-			};
+			return this.showSubstituteFilter
+				? "fab-top"
+				: "fab-top-no-substitute-filter";
 		},
 		// TODO: split teacher and student sides
 		isStudent: function () {
@@ -302,9 +302,9 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map-get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
-		max-width: 500px;
+		max-width: var(--size-content-width-max);
 	}
 }
 
