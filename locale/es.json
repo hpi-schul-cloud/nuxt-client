@@ -62,6 +62,7 @@
 	"common.words.schoolYear": "Año escolar",
 	"common.words.schoolYearChange": "Cambio de año escolar",
 	"common.words.privacyPolicy": "Política de privacidad",
+	"common.words.search": "Buscar",
 	"common.words.task": "Tarea",
 	"common.words.substitute": "Sustituir",
 	"componente.molecules.CoursesGrid.emptystate": "Actualmente no hay cursos aquí.",

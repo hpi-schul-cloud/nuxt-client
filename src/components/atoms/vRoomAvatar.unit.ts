@@ -14,7 +14,7 @@ const mockData = {
 
 const propsData = {
 	item: mockData,
-	size: 100,
+	size: "4em",
 	showBadge: true,
 	draggable: true,
 };
@@ -58,7 +58,7 @@ describe("vRoomAvatar", () => {
 	it("should display the badge", () => {
 		const wrapper = getWrapper({
 			item: { ...mockData, notification: true },
-			size: 100,
+			size: "4em",
 			showBadge: true,
 		});
 		const badgeElement = wrapper.find(".badge-component");
@@ -79,32 +79,16 @@ describe("vRoomAvatar", () => {
 
 	it("should display the correct color and size", async () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
+		const avatarComponent = wrapper.find(".v-avatar");
 
 		expect(avatarComponent).toBeTruthy();
 		expect(avatarComponent.vm.$props.color).toStrictEqual("#ffffff");
-		expect(avatarComponent.vm.$props.size).toStrictEqual(100);
-	});
-
-	it("should have 'rounded-xl' class name", () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
-
-		expect(avatarComponent).toBeTruthy();
-		expect(avatarComponent.element.className).toContain("rounded-xl");
-	});
-
-	it("should have 'rounded' class name", () => {
-		const wrapper = getWrapper({ ...propsData, showBadge: true });
-		const avatarComponent = wrapper.find(".avatar-component");
-
-		expect(avatarComponent).toBeTruthy();
-		expect(avatarComponent.element.className).toContain("rounded");
+		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
 	it("should emit 'click' event with correct payload", async () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
+		const avatarComponent = wrapper.find(".v-avatar");
 
 		avatarComponent.trigger("click");
 		await wrapper.vm.$nextTick();
@@ -116,7 +100,7 @@ describe("vRoomAvatar", () => {
 
 	it("should emit 'dragStart' event when it started dragging", async () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
+		const avatarComponent = wrapper.find(".v-avatar");
 
 		expect(wrapper.vm.$data.isDragging).toBe(false);
 		avatarComponent.trigger("dragstart");
@@ -132,7 +116,7 @@ describe("vRoomAvatar", () => {
 
 	it("should emit 'drop' event when an element dropped onto it", async () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
+		const avatarComponent = wrapper.find(".v-avatar");
 
 		avatarComponent.trigger("drop");
 		await wrapper.vm.$nextTick();

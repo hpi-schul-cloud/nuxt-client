@@ -10,10 +10,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+### Fixed
+
+## [26.18.0] - 2021-11-23
+
+### Changed
+
 - BC-633 - moved type entitties from the store modules to store/types folder
 - BC-157 - add typescript to task store in nuxt client
 
 ### Added
+
+- BC-724 - Listing elements and search features added to room-overview
 
 ## [26.17.0] - 2021-11-16
 
