@@ -16,6 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-740 - BC-849 - change ansible vars for docker image and tag
 - BC-633 - moved type entitties from the store modules to store/types folder
 - BC-157 - add typescript to task store in nuxt client
 
