@@ -52,7 +52,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 						getSelectedCourseFilters: () => [],
 					}),
 					actions: Object.assign(store.actions, {
-						getAllTasks: () => {},
+						fetchAllTasks: () => {},
 						updateFilter: () => {},
 					}),
 					state: () => Object.assign(store.state(), { tasks }),
@@ -93,7 +93,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 						}),
 					}),
 					actions: Object.assign(store.actions, {
-						getAllTasks: () => {},
+						fetchAllTasks: () => {},
 						updateFilter: () => {},
 					}),
 					state: () => Object.assign(store.state(), { tasks }),

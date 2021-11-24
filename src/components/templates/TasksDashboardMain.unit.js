@@ -28,7 +28,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 	});
 
 	it("Should should trigger a store action", async () => {
-		const spy = jest.spyOn(TaskModule, "getAllTasks");
+		const spy = jest.spyOn(TaskModule, "fetchAllTasks");
 
 		shallowMount(TasksDashboardMain, {
 			...createComponentMocks({

@@ -28,7 +28,7 @@ function mockTaskFilter(
 
 describe("task store", () => {
 	describe("actions", () => {
-		describe("getAllTasks", () => {
+		describe("fetchAllTasks", () => {
 			it("should request a list of tasks", (done) => {
 				const mockApi = {
 					taskControllerFindAll: jest.fn(() => ({
@@ -40,23 +40,65 @@ describe("task store", () => {
 						},
 					})),
 				};
-				jest
+				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 				const taskModule = new TaskModule({});
 
-				taskModule.getAllTasks().then(() => {
+				taskModule.fetchAllTasks().then(() => {
 					expect(taskModule.getTasks).toStrictEqual([
 						{
 							mockTask: "mock task value",
 						},
 					]);
 					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
 					done();
 				});
 				expect(taskModule.getStatus).toBe("pending");
-				expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
+
+				spy.mockRestore();
 			});
+
+			it("should fetch all pages", (done) => {
+				const mockApi = {
+					taskControllerFindAll: jest
+						.fn()
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #1" }],
+								total: 12,
+								skip: 0,
+								limit: 10,
+							},
+						})
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #2" }],
+								total: 12,
+								skip: 10,
+								limit: 10,
+							},
+						}),
+				};
+
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				const taskModule = new TaskModule({});
+
+				taskModule.fetchAllTasks().then(() => {
+					expect(taskModule.getTasks).toStrictEqual([
+						{ mockTask: "mock task #1" },
+						{ mockTask: "mock task #2" },
+					]);
+					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(2);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+			});
+
 			it("should handle an error", (done) => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
@@ -67,7 +109,7 @@ describe("task store", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 				const taskModule = new TaskModule({});
 
-				taskModule.getAllTasks().then(() => {
+				taskModule.fetchAllTasks().then(() => {
 					expect(taskModule.getTasks).toStrictEqual([]);
 					expect(taskModule.getStatus).toBe("error");
 					expect(taskModule.businessError).toStrictEqual(error);

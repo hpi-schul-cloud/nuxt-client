@@ -177,7 +177,7 @@ export default {
 		},
 	},
 	mounted() {
-		TaskModule.getAllTasks();
+		TaskModule.fetchAllTasks();
 	},
 	methods: {
 		onScroll() {

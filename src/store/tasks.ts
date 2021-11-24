@@ -44,12 +44,22 @@ export class TaskModule extends VuexModule {
 	_taskApi?: TaskApiInterface;
 
 	@Action
-	async getAllTasks(): Promise<void> {
+	async fetchAllTasks(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const response = await this.taskApi.taskControllerFindAll();
-			this.setTasks(response.data.data);
+			const tasks: Task[] = [];
+			let skip = 0;
+			let limit: number;
+			let total: number;
+			do {
+				const response = await this.taskApi.taskControllerFindAll();
+				tasks.push(...response.data.data);
+				skip = response.data.skip;
+				limit = response.data.limit;
+				total = response.data.total;
+			} while (skip + limit < total);
+			this.setTasks(tasks);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
