@@ -13,21 +13,33 @@
 			/>
 		</template>
 		<template v-for="(task, index) of tasks" v-else>
-			<template v-if="type === 'student'">
-				<v-task-item-student :key="index" :task="task" />
+			<template v-if="role === 'student'">
+				<v-task-item-student
+					v-if="hasPagination && index === tasks.length - 1"
+					:key="index"
+					v-intersect="loadMore"
+					:task="task"
+				/>
+				<v-task-item-student v-else :key="index" :task="task" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
-			<template v-if="type === 'teacher'">
-				<v-task-item-teacher :key="index" :task="task" />
+			<template v-if="role === 'teacher'">
+				<v-task-item-teacher
+					v-if="hasPagination && index === tasks.length - 1"
+					:key="index"
+					v-intersect="loadMore"
+					:task="task"
+				/>
+				<v-task-item-teacher v-else :key="index" :task="task" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
 		</template>
-		<!-- <div v-if="showSpinner" class="d-flex justify-center my-10">
+		<div v-if="showSpinner" class="d-flex justify-center my-10">
 			<v-progress-circular
 				indeterminate
 				color="secondary"
 			></v-progress-circular>
-		</div> -->
+		</div>
 	</v-list>
 </template>
 
@@ -50,57 +62,53 @@ export default {
 			required: false,
 			default: null,
 		},
-		type: {
+		role: {
 			type: String,
 			required: true,
 			validator: (value) => ["student", "teacher"].includes(value),
+		},
+		type: {
+			type: String,
+			required: false,
+			validator: (value) => ["current", "finished"].includes(value),
+			default: "current",
 		},
 		hasPagination: {
 			type: Boolean,
 			required: false,
 		},
 	},
-	data() {
-		return {
-			isLoading: false,
-		};
-	},
 	computed: {
-		console: () => console,
 		...mapGetters("tasks", {
-			status: "getStatus",
+			currentTaskStatus: "getStatus",
 		}),
 		finishedTasksStatus: () => FinishedTaskModule.getStatus,
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		finishedTasksOffset: () => FinishedTaskModule.getTasksOffset,
+		status: function () {
+			return this.type === "current" ? this.currentTaskStatus : this.finishedTasksStatus;
+		},
 		showSkeleton: function () {
 			if (!this.hasPagination) {
 				return this.status === "pending";
 			} else {
 				return (
 					!this.finishedTasksInitialized &&
-					this.finishedTasksStatus === "pending"
+					this.status === "pending"
 				);
 			}
 		},
 		showSpinner: function () {
-			return this.hasPagination && this.isLoading;
-		},
-		showTasksList: function () {
-			return !this.showSkeleton && !this.showSpinner;
+			return this.hasPagination && this.finishedTasksInitialized && this.status === "pending";
 		},
 		isListFilled: function () {
 			return this.status === "completed" && this.tasks.length > 0;
 		},
 	},
-	watch: {
-		finishedTasksStatus: async function (newStatus, oldStatus) {
-			if (newStatus === "pending") {
-				this.isLoading = true;
-			}
-			if (oldStatus === "pending" && newStatus === "completed") {
-				await new Promise((resolve) => setTimeout(resolve, 3000));
-				this.isLoading = false;
+	methods: {
+		loadMore(entries) {
+			if (entries[0].isIntersecting && this.status !== "pending") {
+				FinishedTaskModule.fetchMoreTasks();
 			}
 		},
 	},

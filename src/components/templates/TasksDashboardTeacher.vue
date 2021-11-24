@@ -12,18 +12,18 @@
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="noDueDateTasks" type="teacher" />
+						<tasks-list :tasks="noDueDateTasks" role="teacher" />
 					</template>
 					<template v-slot:panelTwo>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.teacher.subtitleOverDue')"
-							type="teacher"
+							role="teacher"
 						/>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
-							type="teacher"
+							role="teacher"
 						/>
 					</template>
 				</v-custom-double-panels>
@@ -36,7 +36,7 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="draftTasks" type="teacher" />
+				<tasks-list :tasks="draftTasks" role="teacher" />
 				<v-custom-empty-state
 					v-if="!hasDrafts"
 					:image="emptyState.image"
@@ -47,8 +47,9 @@
 			<v-tab-item>
 				<tasks-list
 					:tasks="finishedTasks"
-					type="teacher"
+					role="teacher"
 					:has-pagination="tab === 2"
+					type="finished"
 				/>
 				<v-custom-empty-state
 					v-if="hasNoFinishedTasks"

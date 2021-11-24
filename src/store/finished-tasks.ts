@@ -45,7 +45,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 5, // set back to 50 when developing and testing is done
+		limit: 15, // set back to 50 when developing and testing is done
 		skip: 0,
 		total: 0,
 	};
@@ -72,6 +72,8 @@ export class FinishedTaskModule extends VuexModule {
 				skip,
 				limit
 			);
+
+			await new Promise((resolve) => setTimeout(resolve, 3000));
 
 			this.setTasks(response.data.data);
 			this.setPagination({
@@ -104,7 +106,8 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			await new Promise((resolve) => setTimeout(resolve, 300));
+			await new Promise((resolve) => setTimeout(resolve, 3000));
+
 			this.setTasks(this.tasks.concat(response.data.data));
 			this.setPagination({
 				limit,

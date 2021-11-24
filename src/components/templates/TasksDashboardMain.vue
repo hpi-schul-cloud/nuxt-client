@@ -246,16 +246,6 @@ export default {
 	methods: {
 		onScroll() {
 			this.$eventBus.$emit("isScrolling");
-
-			const bottomOfWindow =
-				document.documentElement.scrollTop + window.innerHeight ===
-				document.documentElement.offsetHeight;
-
-			console.log(bottomOfWindow);
-			if (bottomOfWindow) {
-				console.log("xxxxxx");
-				this.loadMoreFinishedTasks();
-			}
 		},
 		setCourseFilters(courseNames) {
 			this.$store.commit("tasks/setCourseFilters", courseNames);
@@ -280,16 +270,8 @@ export default {
 			// we should probably find a better solution :D
 			if (!this.finishedTasksInitialized) {
 				console.log("initial triggered");
-				this.fetchInitialFinishedTasks();
+				FinishedTaskModule.fetchInitialTasks();
 			}
-		},
-		fetchInitialFinishedTasks() {
-			FinishedTaskModule.fetchInitialTasks();
-		},
-		loadMoreFinishedTasks() {
-			console.log("triggered");
-
-			FinishedTaskModule.fetchMoreTasks();
 		},
 	},
 };

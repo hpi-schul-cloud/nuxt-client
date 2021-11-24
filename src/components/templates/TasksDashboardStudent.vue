@@ -12,18 +12,18 @@
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="noDueDateTasks" type="student" />
+						<tasks-list :tasks="noDueDateTasks" role="student" />
 					</template>
 					<template v-slot:panelTwo>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
-							type="student"
+							role="student"
 						/>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.student.subtitleOverDue')"
-							type="student"
+							role="student"
 						/>
 					</template>
 				</v-custom-double-panels>
@@ -46,10 +46,10 @@
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="gradedTasks" type="student" />
+						<tasks-list :tasks="gradedTasks" role="student" />
 					</template>
 					<template v-slot:panelTwo>
-						<tasks-list :tasks="submittedTasks" type="student" />
+						<tasks-list :tasks="submittedTasks" role="student" />
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
@@ -60,9 +60,9 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="finishedTasks" type="student" />
+				<tasks-list :tasks="finishedTasks" role="student" type="finished" />
 				<v-custom-empty-state
-					v-if="!hasFinishedTasks"
+					v-if="hasNoFinishedTasks"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -100,7 +100,7 @@ export default {
 			hasCompletedTasks: "hasCompletedTasks",
 			hasTasks: "hasTasks",
 		}),
-		hasFinishedTasks: () => FinishedTaskModule.hasTasks,
+		hasNoFinishedTasks: () => FinishedTaskModule.hasNoTasks,
 		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;

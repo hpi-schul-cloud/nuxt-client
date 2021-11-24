@@ -128,6 +128,8 @@ const module = {
 			try {
 				const data = await fetchAll(this.$axios, "/v3/tasks/");
 
+				await new Promise((resolve) => setTimeout(resolve, 3000));
+
 				commit("setTasks", data);
 				commit("setStatus", "completed");
 			} catch (error) {
