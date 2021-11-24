@@ -86,20 +86,23 @@ export default {
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		finishedTasksOffset: () => FinishedTaskModule.getTasksOffset,
 		status: function () {
-			return this.type === "current" ? this.currentTaskStatus : this.finishedTasksStatus;
+			return this.type === "current"
+				? this.currentTaskStatus
+				: this.finishedTasksStatus;
 		},
 		showSkeleton: function () {
 			if (!this.hasPagination) {
 				return this.status === "pending";
 			} else {
-				return (
-					!this.finishedTasksInitialized &&
-					this.status === "pending"
-				);
+				return !this.finishedTasksInitialized && this.status === "pending";
 			}
 		},
 		showSpinner: function () {
-			return this.hasPagination && this.finishedTasksInitialized && this.status === "pending";
+			return (
+				this.hasPagination &&
+				this.finishedTasksInitialized &&
+				this.status === "pending"
+			);
 		},
 		isListFilled: function () {
 			return this.status === "completed" && this.tasks.length > 0;
