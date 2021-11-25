@@ -3,6 +3,7 @@
 		:key="task.id"
 		:href="taskGradingHref(task.id)"
 		class="mx-n4 mx-sm-0"
+		v-bind="$attrs"
 	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>

@@ -16,8 +16,9 @@
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
+				<div v-else class="substitute-filter-placeholder"></div>
 				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" class="tabs-max-width">
+					<v-tabs v-model="tab" class="tabs-max-width" grow>
 						<v-tab>
 							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="openTasks">{{
@@ -44,7 +45,7 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
-						:top-position-class="fabTopPosition"
+						top-position-class="fab-top"
 					></v-custom-fab>
 				</div>
 			</div>
@@ -59,6 +60,7 @@
 				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
+			<div v-else class="course-filter-placeholder"></div>
 			<tasks-dashboard-student
 				v-if="isStudent"
 				:tab.sync="tab"
@@ -122,11 +124,6 @@ export default {
 			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
-		fabTopPosition: function () {
-			return this.showSubstituteFilter
-				? "fab-top"
-				: "fab-top-no-substitute-filter";
-		},
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -297,8 +294,6 @@ export default {
 }
 
 .v-tab {
-	flex-basis: 50%;
-	flex-grow: 1;
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
@@ -323,7 +318,11 @@ export default {
 	top: 238px;
 }
 
-.fab-top-no-substitute-filter {
-	top: 193px;
+.substitute-filter-placeholder {
+	height: 46px;
+}
+
+.course-filter-placeholder {
+	height: 78px;
 }
 </style>
