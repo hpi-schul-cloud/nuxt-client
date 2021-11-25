@@ -112,6 +112,7 @@ export default {
 				if (newSchool && newSchool.id && (!oldSchool || !oldSchool.id)) {
 					SchoolsModule.fetchCurrentYear();
 					SchoolsModule.fetchSystems();
+					SchoolsModule.fetchFederalState();
 				}
 			},
 			immediate: true,
