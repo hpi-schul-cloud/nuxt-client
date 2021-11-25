@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-839 - Remove search filter while dragging on rooms-overview page
+
 ## [26.18.0] - 2021-11-23
 
 ### Changed
