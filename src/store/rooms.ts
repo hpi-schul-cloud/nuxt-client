@@ -10,14 +10,11 @@ import { $axios } from "../utils/api";
 import {
 	DashboardApiFactory,
 	DashboardApiInterface,
+	CoursesApiFactory,
+	CoursesApiInterface,
 } from "../serverApi/v3/api";
 
-import {
-	DroppedObject,
-	RoomsData,
-	AllElementsObject,
-	AllElements,
-} from "./types/rooms";
+import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
 
 @Module({
 	name: "rooms",
@@ -34,6 +31,7 @@ export class Rooms extends VuexModule {
 	loading: boolean = false;
 	error: null | {} = null;
 	private _dashboardApi?: DashboardApiInterface;
+	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
 	setRoomData(data: Array<RoomsData>): void {
@@ -77,7 +75,7 @@ export class Rooms extends VuexModule {
 		return this.roomsData;
 	}
 
-	get getAllElements(): Array<AllElementsObject> {
+	get getAllElements(): AllElements {
 		return this.allElements;
 	}
 
@@ -98,6 +96,13 @@ export class Rooms extends VuexModule {
 			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
 		}
 		return this._dashboardApi;
+	}
+
+	private get coursesApi(): CoursesApiInterface {
+		if (!this._coursesApi) {
+			this._coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
+		}
+		return this._coursesApi;
 	}
 
 	@Action
@@ -174,8 +179,12 @@ export class Rooms extends VuexModule {
 	async fetchAllElements(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await $axios.$get("/v3/courses?skip=0&limit=100");
-			this.setAllElements(data);
+			const { data } = await this.coursesApi.courseControllerFindForUser(
+				0,
+				100
+			);
+
+			this.setAllElements(data.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-828 use generated API client
+
 ## [26.18.0] - 2021-11-23
 
 ### Changed
