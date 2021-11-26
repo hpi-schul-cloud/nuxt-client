@@ -8,13 +8,8 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
-import { BusinessError, Status } from "./types/commons";
-import {
-	CreateNewsPayload,
-	News,
-	Pagination,
-	PatchNewsPayload,
-} from "./types/news";
+import { BusinessError, Pagination, Status } from "./types/commons";
+import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
 
 // const newsUri = "/v3/news";
 

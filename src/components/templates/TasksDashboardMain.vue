@@ -53,7 +53,7 @@
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="showCourseFilter"
-				:value="getSelectedCourseFilters"
+				:value="selectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
@@ -77,7 +77,7 @@
 
 <script>
 import FinishedTaskModule from "@/store/finished-tasks";
-import { mapGetters } from "vuex";
+import TaskModule from "@/store/tasks";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomFab from "@components/atoms/vCustomFab";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
@@ -111,18 +111,17 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("tasks", {
-			hasTasks: "hasTasks",
-			hasOpenTasksStudent: "hasOpenTasksStudent",
-			hasOpenTasksTeacher: "hasOpenTasksTeacher",
-			hasCompletedTasks: "hasCompletedTasks",
-			hasDrafts: "hasDrafts",
-			tasksCountStudent: "getTasksCountPerCourseStudent",
-			tasksCountTeacher: "getTasksCountPerCourseTeacher",
-			isSubstituteFilterEnabled: "isSubstituteFilterEnabled",
-			courseFilters: "getCourseFilters",
-			getSelectedCourseFilters: "getSelectedCourseFilters",
-		}),
+		status: () => TaskModule.getStatus,
+		hasTasks: () => TaskModule.hasTasks,
+		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
+		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
+		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
+		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
+		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
+		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
+		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
+		courseFilters: () => TaskModule.getCourseFilters,
+		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		// TODO: split teacher and student sides
 		isStudent: function () {
@@ -141,14 +140,14 @@ export default {
 		},
 		tabOneIsEmpty: function () {
 			return this.isStudent
-				? !this.hasOpenTasksStudent
-				: !this.hasOpenTasksTeacher;
+				? !this.hasOpenTasksForStudent
+				: !this.hasOpenTasksForTeacher;
 		},
 		tabTwoIsEmpty: function () {
-			return this.isStudent ? !this.hasCompletedTasks : !this.hasDrafts;
+			return this.isStudent ? !this.hasCompletedTasksForStudent : !this.hasDraftsForTeacher;
 		},
 		isCourseFilterDisabled: function () {
-			if (this.getSelectedCourseFilters.length > 0) return false;
+			if (this.selectedCourseFilters.length > 0) return false;
 
 			if (this.tab === 0) {
 				return this.tabOneIsEmpty;
@@ -238,17 +237,17 @@ export default {
 		},
 	},
 	mounted() {
-		this.$store.dispatch("tasks/getAllTasks");
+		TaskModule.fetchAllTasks();
 	},
 	methods: {
 		onScroll() {
 			this.$eventBus.$emit("isScrolling");
 		},
 		setCourseFilters(courseNames) {
-			this.$store.commit("tasks/setCourseFilters", courseNames);
+			TaskModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
-			this.$store.commit("tasks/setSubstituteFilter", enabled);
+			TaskModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === 0) {

@@ -51,9 +51,3 @@ export type CreateNewsPayload = {
 };
 
 export type PatchNewsPayload = CreateNewsPayload & { id: string };
-
-export type Pagination = {
-	limit: number;
-	skip: number;
-	total: number;
-};

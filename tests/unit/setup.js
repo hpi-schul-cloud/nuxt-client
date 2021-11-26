@@ -8,6 +8,13 @@ import path from "path";
 import commonTest from "./commonTests.js";
 import { RouterLinkStub } from "@vue/test-utils";
 
+// make object properties configurable in tests
+// so they can be mocked
+// https://stackoverflow.com/questions/58852549/error-spyonproperty-function-is-not-declared-configurable
+const { defineProperty } = Object;
+Object.defineProperty = (o, p, c) =>
+	defineProperty(o, p, Object.assign({}, c ?? {}, { configurable: true }));
+
 // ===
 // Utility functions
 // ===

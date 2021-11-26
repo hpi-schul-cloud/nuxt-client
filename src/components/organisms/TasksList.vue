@@ -47,9 +47,9 @@
 
 <script>
 import FinishedTaskModule from "@/store/finished-tasks";
+import TaskModule from "@/store/tasks";
 import VTaskItemStudent from "@components/molecules/vTaskItemStudent";
 import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher";
-import { mapGetters } from "vuex";
 
 export default {
 	components: { VTaskItemStudent, VTaskItemTeacher },
@@ -81,9 +81,7 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters("tasks", {
-			currentTaskStatus: "getStatus",
-		}),
+		currentTaskStatus: () => TaskModule.getStatus,
 		finishedTasksStatus: () => FinishedTaskModule.getStatus,
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
 		finishedTasksOffset: () => FinishedTaskModule.getTasksOffset,
