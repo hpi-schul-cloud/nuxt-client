@@ -54,7 +54,6 @@
 				</v-custom-double-panels>
 				<v-custom-empty-state
 					v-if="!hasCompletedTasksForStudent"
-					h-e-a-d
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
