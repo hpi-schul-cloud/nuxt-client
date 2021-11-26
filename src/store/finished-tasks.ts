@@ -8,31 +8,8 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
-
-export interface Task {
-	id: string;
-	name: string;
-	description?: string;
-	availableDate?: string;
-	duedate?: string;
-	courseName?: string;
-	displayColor?: string;
-	createdAt: string;
-	updatedAt: string;
-}
-
-type Pagination = {
-	limit: number;
-	skip: number;
-	total: number;
-};
-
-type BusinessError = {
-	statusCode: string;
-	message: string;
-};
-
-type Status = "pending" | "completed" | "error" | "";
+import { BusinessError, Status, Pagination } from "./types/commons";
+import { Task } from "./types/tasks";
 
 @Module({
 	name: "finished-tasks",

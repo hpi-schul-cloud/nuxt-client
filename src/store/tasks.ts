@@ -70,7 +70,7 @@ export class TaskModule extends VuexModule {
 	@Mutation
 	setTasks(tasks: Task[]): void {
 		this.tasks = tasks;
-	}g
+	}
 
 	@Mutation
 	setCourseFilters(courseNames: string[]): void {
