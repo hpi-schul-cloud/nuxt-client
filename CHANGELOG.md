@@ -13,11 +13,19 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - BC-661 - School logo was missing in top bar
+- BC-661 - Fix saving of general school settings if no county is selected
+- BC-828 use generated API client
+- BC-839 - Remove search filter while dragging on rooms-overview page
+
+### Removed
+
+- BC-832 - remove github images from CORS
 
 ## [26.18.0] - 2021-11-23
 
 ### Changed
 
+- BC-740 - BC-849 - change ansible vars for docker image and tag
 - BC-633 - moved type entitties from the store modules to store/types folder
 
 ### Added

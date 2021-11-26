@@ -66,10 +66,10 @@ describe("rooms module", () => {
 				const roomsModule = new Rooms({});
 
 				roomsModule.fetch("mobile").then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 				});
 
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});
 		});
@@ -103,10 +103,10 @@ describe("rooms module", () => {
 				};
 
 				roomsModule.align(payload).then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 				});
 
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith(
 					"",
 					expectedParam
@@ -159,10 +159,10 @@ describe("rooms module", () => {
 				};
 
 				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 					done();
 				});
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData
 				);
@@ -191,37 +191,65 @@ describe("rooms module", () => {
 				};
 
 				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 					expect(roomsModule.getError).toStrictEqual({ ...error });
 					done();
 				});
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData
 				);
 			});
+		});
+		describe("fetchAllElements", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
 
-			describe("fetchAllElements", () => {
-				beforeEach(() => {
-					receivedRequests = [];
+			it("should call the backend", async (done) => {
+				const mockApi = {
+					courseControllerFindForUser: jest.fn((fetchCourses) => ({
+						data: { ...fetchCourses },
+					})),
+				};
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				const roomsModule = new Rooms({});
+
+				roomsModule.fetchAllElements().then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					done();
 				});
-				it("should call 'setAllElements' mutation", async () => {
-					const roomsModule = new Rooms({});
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.courseControllerFindForUser).toHaveBeenCalled();
+				expect(mockApi.courseControllerFindForUser.mock.calls[0]).toStrictEqual(
+					0
+				); // $skip: 0
+				expect(mockApi.courseControllerFindForUser.mock.calls[1]).toStrictEqual(
+					100
+				); // $limit: 100
+			});
 
-					const setAllElementsSpy = jest.spyOn(roomsModule, "setAllElements");
-					const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+			it("handle error", async (done) => {
+				const error = { status: 418, statusText: "I'm not a teapot" };
+				const mockApi = {
+					courseControllerFindForUser: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				const roomsModule = new Rooms({});
 
-					await roomsModule.fetchAllElements();
-
-					expect(receivedRequests.length).toBeGreaterThan(0);
-					expect(receivedRequests[0].path).toStrictEqual(
-						"/v3/courses?skip=0&limit=100"
-					);
-
-					expect(setLoadingSpy).toHaveBeenCalled();
-					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-					expect(setAllElementsSpy).toHaveBeenCalled();
+				roomsModule.fetchAllElements().then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					expect(roomsModule.getError).toStrictEqual({ ...error });
+					done();
 				});
+
+				expect(roomsModule.getLoading).toBe(true);
 			});
 		});
 	});

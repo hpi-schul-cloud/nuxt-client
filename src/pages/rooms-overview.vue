@@ -209,6 +209,7 @@ export default {
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
 			this.draggedElementName = this.getElementNameByRef(pos);
+			this.searchText = "";
 		},
 		setDropElement(pos) {
 			this.draggedElement.to = pos;
@@ -266,6 +267,7 @@ export default {
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
 			this.groupDialog.isOpen = false;
+			this.searchText = "";
 		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
