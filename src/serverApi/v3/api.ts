@@ -712,15 +712,12 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {CourseMetadataListResponse} courseMetadataListResponse 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerFindForUser: async (courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'courseMetadataListResponse' is not null or undefined
-            assertParamExists('courseControllerFindForUser', 'courseMetadataListResponse', courseMetadataListResponse)
+        courseControllerFindForUser: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/courses`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -747,12 +744,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(courseMetadataListResponse, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -771,14 +765,13 @@ export const CoursesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CourseMetadataListResponse} courseMetadataListResponse 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(courseMetadataListResponse, skip, limit, options);
+        async courseControllerFindForUser(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -793,14 +786,13 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {CourseMetadataListResponse} courseMetadataListResponse 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
-            return localVarFp.courseControllerFindForUser(courseMetadataListResponse, skip, limit, options).then((request) => request(axios, basePath));
+        courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
+            return localVarFp.courseControllerFindForUser(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -813,14 +805,13 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 export interface CoursesApiInterface {
     /**
      * 
-     * @param {CourseMetadataListResponse} courseMetadataListResponse 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+    courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
 
 }
 
@@ -833,15 +824,14 @@ export interface CoursesApiInterface {
 export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
-     * @param {CourseMetadataListResponse} courseMetadataListResponse 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerFindForUser(courseMetadataListResponse: CourseMetadataListResponse, skip?: number, limit?: number, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerFindForUser(courseMetadataListResponse, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1348,7 +1338,6 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * * Responds with all news for a user.
-         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1357,9 +1346,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll: async (newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'newsListResponse' is not null or undefined
-            assertParamExists('newsControllerFindAll', 'newsListResponse', newsListResponse)
+        newsControllerFindAll: async (targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/news`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1398,12 +1385,9 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(newsListResponse, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1584,7 +1568,6 @@ export const NewsApiFp = function(configuration?: Configuration) {
         },
         /**
          * * Responds with all news for a user.
-         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1593,8 +1576,8 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options);
+        async newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1663,7 +1646,6 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * * Responds with all news for a user.
-         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1672,8 +1654,8 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
-            return localVarFp.newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
+        newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+            return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
@@ -1737,7 +1719,6 @@ export interface NewsApiInterface {
 
     /**
      * * Responds with all news for a user.
-     * @param {NewsListResponse} newsListResponse 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1747,7 +1728,7 @@ export interface NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
+    newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
      * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
@@ -1815,7 +1796,6 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
     /**
      * * Responds with all news for a user.
-     * @param {NewsListResponse} newsListResponse 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1825,8 +1805,8 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
-        return NewsApiFp(this.configuration).newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+        return NewsApiFp(this.configuration).newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
