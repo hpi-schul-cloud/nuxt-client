@@ -10,8 +10,12 @@ import { $axios } from "../utils/api";
 import {
 	DashboardApiFactory,
 	DashboardApiInterface,
+	CoursesApiFactory,
+	CoursesApiInterface,
 } from "../serverApi/v3/api";
-import { DroppedObject, RoomsData } from "./types/rooms";
+
+import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
+
 @Module({
 	name: "rooms",
 	namespaced: true,
@@ -22,14 +26,21 @@ import { DroppedObject, RoomsData } from "./types/rooms";
 export class Rooms extends VuexModule {
 	roomsData: Array<RoomsData> = [];
 	gridElementsId: string = "";
+	allElements: AllElements = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
 	private _dashboardApi?: DashboardApiInterface;
+	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
 	setRoomData(data: Array<RoomsData>): void {
 		this.roomsData = data;
+	}
+
+	@Mutation
+	setAllElements(data: AllElements): void {
+		this.allElements = data;
 	}
 
 	@Mutation
@@ -64,6 +75,10 @@ export class Rooms extends VuexModule {
 		return this.roomsData;
 	}
 
+	get getAllElements(): AllElements {
+		return this.allElements;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -83,15 +98,21 @@ export class Rooms extends VuexModule {
 		return this._dashboardApi;
 	}
 
+	private get coursesApi(): CoursesApiInterface {
+		if (!this._coursesApi) {
+			this._coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
+		}
+		return this._coursesApi;
+	}
+
 	@Action
 	async fetch(device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
 		this.setLoading(true);
 		try {
-			const fetched = await $axios.$get("/v3/dashboard/");
-
-			this.setRoomDataId(fetched.id || "");
-			this.setRoomData(fetched.gridElements || []);
+			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
+			this.setRoomDataId(data.id || "");
+			this.setRoomData(data.gridElements || []);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -109,12 +130,13 @@ export class Rooms extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const data = await $axios.$patch(
-				`/v3/dashboard/${this.gridElementsId}/moveElement`,
+			const response = await this.dashboardApi.dashboardControllerMoveElement(
+				this.getRoomsId,
 				reqObject
 			);
+
 			this.setPosition(payload);
-			this.setRoomData(data.gridElements);
+			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -146,6 +168,23 @@ export class Rooms extends VuexModule {
 			// TODO: delete call to to server
 			const tempData = this.roomsData.filter((item) => item.id !== id);
 			this.setRoomData(tempData);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async fetchAllElements(): Promise<void> {
+		this.setLoading(true);
+		try {
+			const { data } = await this.coursesApi.courseControllerFindForUser(
+				0,
+				100
+			);
+
+			this.setAllElements(data.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

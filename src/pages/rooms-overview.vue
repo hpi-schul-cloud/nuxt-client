@@ -1,29 +1,56 @@
 <template>
 	<default-wireframe ref="main" :headline="title" :full-width="true">
+		<v-row class="text-left pl-2">
+			<v-col cols="8" sm="6" md="8" lg="8">
+				<v-text-field
+					ref="search"
+					v-model="searchText"
+					:label="$t('common.words.search')"
+					:append-icon="mdiMagnify"
+				>
+				</v-text-field>
+			</v-col>
+			<v-col class="text-right pr-2 pt-5" cols="4">
+				<v-btn to="/rooms-list">All Rooms</v-btn>
+			</v-col>
+		</v-row>
+
 		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
-			<v-col v-for="(col, colIndex) in dimensions.colCount" :key="colIndex">
+			<v-col
+				v-for="(col, colIndex) in dimensions.colCount"
+				:key="colIndex"
+				class="ma-0 pa-0 mt-2 mb-2"
+			>
 				<div
 					v-if="getDataObject(rowIndex, colIndex) !== undefined"
 					class="d-flex justify-center"
 				>
+					<vRoomEmptyAvatar
+						v-if="isEmptyGroup(rowIndex, colIndex)"
+						:ref="`${rowIndex}-${colIndex}`"
+						:size="dimensions.cellWidth"
+						@drop="setDropElement({ x: colIndex, y: rowIndex })"
+					></vRoomEmptyAvatar>
+
 					<vRoomGroupAvatar
-						v-if="hasGroup(rowIndex, colIndex)"
+						v-else-if="hasGroup(rowIndex, colIndex)"
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
 						:data="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth * ratios.itemRatio"
-						:max-items="4"
+						:size="dimensions.cellWidth"
+						:device="device"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 					>
 					</vRoomGroupAvatar>
+
 					<vRoomAvatar
 						v-else
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-avatar"
 						:item="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth * ratios.itemRatio"
+						:size="dimensions.cellWidth"
 						:show-badge="true"
 						:draggable="true"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
@@ -33,7 +60,7 @@
 				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth * ratios.itemRatio"
+						:size="dimensions.cellWidth"
 						@drop="setDropElement({ x: colIndex, y: rowIndex })"
 					></vRoomEmptyAvatar>
 				</div>
@@ -43,7 +70,7 @@
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
 			:group-data="groupDialog.groupData"
-			:avatar-size="dimensions.cellWidth * ratios.itemRatio * 0.75"
+			:avatar-size="dimensions.cellWidth"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
@@ -57,6 +84,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
+import { mdiMagnify } from "@mdi/js";
 
 export default {
 	components: {
@@ -69,15 +97,10 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			roomsData: [],
-			ratios: {
-				pageRatio: 0.9,
-				itemRatio: 0.8,
-			},
 			device: "mobile",
 			dimensions: {
 				colCount: 2,
-				cellWidth: 200,
+				cellWidth: "3em",
 				rowCount: 6,
 			},
 			groupDialog: {
@@ -92,6 +115,8 @@ export default {
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
+			mdiMagnify,
+			searchText: "",
 		};
 	},
 	computed: {
@@ -104,31 +129,56 @@ export default {
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
+		items() {
+			return JSON.parse(JSON.stringify(RoomsModule.getRoomsData)).filter(
+				(item) => {
+					if (item.groupElements) {
+						const groupElements = item.groupElements.filter((groupItem) => {
+							return groupItem.title
+								.toLowerCase()
+								.includes(this.searchText.toLowerCase());
+						});
+						item.groupElements = groupElements;
+						return groupElements;
+					}
+					return item.title
+						.toLowerCase()
+						.includes(this.searchText.toLowerCase());
+				}
+			);
+		},
 	},
-	async created() {
+	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		this.roomsData = RoomsModule.getRoomsData;
 		this.getDeviceDims();
 	},
+
 	methods: {
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
 				case "tablet":
-					this.dimensions.colCount = 4;
+					this.dimensions.colCount = 6;
+					this.dimensions.cellWidth = "5em";
+					break;
+				case "tabletPortrait":
+					this.dimensions.colCount = 6;
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 8;
+					this.dimensions.cellWidth = "7em";
 					break;
 				case "large":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 12;
+					this.dimensions.cellWidth = "7em";
 					break;
 				case "mobile":
-					this.dimensions.colCount = 2;
-					this.dimensions.cellWidth = 150;
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "4.5em";
 					break;
 				default:
-					this.dimensions.colCount = 2;
+					this.dimensions.colCount = 6;
 					break;
 			}
 		},
@@ -139,14 +189,17 @@ export default {
 			const roomObject = this.findDataByPos(row, col);
 			return roomObject.groupElements !== undefined;
 		},
+		isEmptyGroup(row, col) {
+			return this.findDataByPos(row, col).groupElements?.length == 0;
+		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.roomsData.find(
+			this.groupDialog.groupData = this.items.find(
 				(item) => item.id == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.roomsData.find(
+			return this.items.find(
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
@@ -156,6 +209,7 @@ export default {
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
 			this.draggedElementName = this.getElementNameByRef(pos);
+			this.searchText = "";
 		},
 		setDropElement(pos) {
 			this.draggedElement.to = pos;
@@ -169,7 +223,7 @@ export default {
 			}
 			this.showDeleteSection = false;
 		},
-		setGroupElements(pos) {
+		async setGroupElements(pos) {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
@@ -181,7 +235,7 @@ export default {
 					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
-				this.savePosition();
+				await this.savePosition();
 			}
 		},
 		addGroupElements(pos) {
@@ -206,26 +260,17 @@ export default {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: this.roomsData
+				groupIndex: this.items
 					.find((item) => item.id == this.groupDialog.groupData.id)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
 			this.groupDialog.isOpen = false;
-		},
-		deleteAvatar() {
-			// TODO: delete event will be here
-			this.showDeleteSection = false;
-
-			RoomsModule.delete(this.draggedElement.item.id);
-			this.roomsData = this.roomsData.filter(
-				(item) => item.id !== this.draggedElement.item.id
-			);
+			this.searchText = "";
 		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
-			this.roomsData = RoomsModule.getRoomsData;
 			this.groupDialog.groupData = {};
 		},
 	},

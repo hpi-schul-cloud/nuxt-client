@@ -53,20 +53,24 @@ describe("rooms module", () => {
 				receivedRequests = [];
 			});
 			it("should call backend and sets state correctly", async () => {
+				const mockApi = {
+					dashboardControllerFindForUser: jest.fn(),
+				};
+
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+
 				const roomsModule = new Rooms({});
 
-				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
-				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+				roomsModule.fetch("mobile").then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+				});
 
-				await roomsModule.fetch("mobile");
-
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("/v3/dashboard/");
-
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setRoomDataSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});
 		});
 		describe("align", () => {
@@ -74,35 +78,39 @@ describe("rooms module", () => {
 				receivedRequests = [];
 			});
 			it("should call server and 'setPosition' mutation", async () => {
-				const roomsModule = new Rooms({});
+				const mockApi = {
+					dashboardControllerMoveElement: jest.fn((align) => ({
+						data: { ...align },
+					})),
+				};
 
-				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
-				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+
+				const roomsModule = new Rooms({});
 
 				const payload = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 					item: {},
 				};
-
 				const expectedParam = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 				};
 
-				roomsModule.setRoomDataId("grid_id");
-				await roomsModule.align(payload);
+				roomsModule.align(payload).then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+				});
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v3/dashboard/grid_id/moveElement"
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith(
+					"",
+					expectedParam
 				);
-				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
-
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setPositionSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 			});
 		});
 		describe("delete", () => {
@@ -151,10 +159,10 @@ describe("rooms module", () => {
 				};
 
 				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 					done();
 				});
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData
 				);
@@ -183,14 +191,65 @@ describe("rooms module", () => {
 				};
 
 				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getLoading).toBe(false);
 					expect(roomsModule.getError).toStrictEqual({ ...error });
 					done();
 				});
-				expect(roomsModule.getLoading).toBeTruthy();
+				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData
 				);
+			});
+		});
+		describe("fetchAllElements", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async (done) => {
+				const mockApi = {
+					courseControllerFindForUser: jest.fn((fetchCourses) => ({
+						data: { ...fetchCourses },
+					})),
+				};
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				const roomsModule = new Rooms({});
+
+				roomsModule.fetchAllElements().then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					done();
+				});
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.courseControllerFindForUser).toHaveBeenCalled();
+				expect(mockApi.courseControllerFindForUser.mock.calls[0]).toStrictEqual(
+					0
+				); // $skip: 0
+				expect(mockApi.courseControllerFindForUser.mock.calls[1]).toStrictEqual(
+					100
+				); // $limit: 100
+			});
+
+			it("handle error", async (done) => {
+				const error = { status: 418, statusText: "I'm not a teapot" };
+				const mockApi = {
+					courseControllerFindForUser: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				const roomsModule = new Rooms({});
+
+				roomsModule.fetchAllElements().then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					expect(roomsModule.getError).toStrictEqual({ ...error });
+					done();
+				});
+
+				expect(roomsModule.getLoading).toBe(true);
 			});
 		});
 	});
@@ -275,6 +334,29 @@ describe("rooms module", () => {
 				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
 		});
+
+		describe("setAllElements", () => {
+			it("should set the all elements data", () => {
+				const roomsModule = new Rooms({});
+				const itemsToBeSet = [
+					{
+						id: "someId",
+						title: "exampletitle",
+						shortTitle: "ex",
+						displayColor: "#f23f76",
+					},
+					{
+						id: "someId_2",
+						title: "math",
+						shortTitle: "ma",
+						displayColor: "yellow",
+					},
+				];
+				expect(roomsModule.getAllElements).not.toStrictEqual(itemsToBeSet);
+				roomsModule.setAllElements(itemsToBeSet);
+				expect(roomsModule.allElements).toStrictEqual(itemsToBeSet);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -316,6 +398,29 @@ describe("rooms module", () => {
 				expect(roomsModule.getRoomsId).toStrictEqual("");
 				roomsModule.setError(sampleId);
 				expect(roomsModule.getError).toStrictEqual(sampleId);
+			});
+		});
+
+		describe("getAllElements", () => {
+			it("should return rooms id state", () => {
+				const roomsModule = new Rooms({});
+				const itemsToBeSet = [
+					{
+						id: "someId",
+						title: "exampletitle",
+						shortTitle: "ex",
+						displayColor: "#f23f76",
+					},
+					{
+						id: "someId_2",
+						title: "math",
+						shortTitle: "ma",
+						displayColor: "yellow",
+					},
+				];
+				expect(roomsModule.getAllElements).toStrictEqual([]);
+				roomsModule.setAllElements(itemsToBeSet);
+				expect(roomsModule.getAllElements).toStrictEqual(itemsToBeSet);
 			});
 		});
 	});

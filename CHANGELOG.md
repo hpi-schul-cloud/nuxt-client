@@ -11,9 +11,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-617 - changes for transition to Dataport
+
+### Fixed
+
+- BC-828 use generated API client
+- BC-839 - Remove search filter while dragging on rooms-overview page
+
+## [26.18.0] - 2021-11-23
+
+### Changed
+
+- BC-740 - BC-849 - change ansible vars for docker image and tag
 - BC-633 - moved type entitties from the store modules to store/types folder
 
 ### Added
+
+- BC-724 - Listing elements and search features added to room-overview
 
 ## [26.17.0] - 2021-11-16
 

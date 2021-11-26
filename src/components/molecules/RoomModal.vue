@@ -27,38 +27,29 @@
 			</h2>
 		</div>
 		<template slot="content">
-			<v-row class="d-flex justify-center ma-1">
-				<v-col
-					v-for="(item, index) in groupData.groupElements"
-					:key="item.id"
-					class="d-flex justify-center"
-					:cols="4"
-				>
-					<vRoomAvatar
-						:ref="`index-${index}`"
-						:item="item"
-						:size="avatarSize"
-						:show-badge="true"
-						:draggable="true"
-						class="rounded dialog-avatar"
-						@startDrag="$emit('drag-from-group', $event)"
-					></vRoomAvatar>
-				</v-col>
-			</v-row>
+			<room-avatar-iterator
+				:items="groupData.groupElements"
+				:item-size="itemSize"
+				:col-count="4"
+				:max-items="-1"
+				can-draggable
+				@startDrag="$emit('drag-from-group', $event)"
+			/>
 		</template>
 	</vCustomDialog>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import RoomsModule from "@store/rooms";
-import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
+
 import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 
 export default Vue.extend({
 	components: {
 		vCustomDialog,
-		vRoomAvatar,
+		RoomAvatarIterator,
 	},
 	model: {
 		prop: "isOpen",
@@ -74,8 +65,12 @@ export default Vue.extend({
 			default: () => ({}),
 		},
 		avatarSize: {
-			type: Number,
+			type: String,
 			required: true,
+		},
+		itemSize: {
+			type: String,
+			default: "5em",
 		},
 	},
 	data() {

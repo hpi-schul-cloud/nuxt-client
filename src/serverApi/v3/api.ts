@@ -24,6 +24,68 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface CourseMetadataListResponse
+ */
+export interface CourseMetadataListResponse {
+    /**
+     * 
+     * @type {Array<CourseMetadataResponse>}
+     * @memberof CourseMetadataListResponse
+     */
+    data: Array<CourseMetadataResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseMetadataListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface CourseMetadataResponse
+ */
+export interface CourseMetadataResponse {
+    /**
+     * The id of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    id: string;
+    /**
+     * Title of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    title: string;
+    /**
+     * Short title of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    shortTitle: string;
+    /**
+     * Color of the Grid element
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    displayColor: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateNewsParams
  */
 export interface CreateNewsParams {
@@ -61,6 +123,86 @@ export interface CreateNewsParams {
 /**
  * 
  * @export
+ * @interface DashboardGridElementResponse
+ */
+export interface DashboardGridElementResponse {
+    /**
+     * The id of the Grid element
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    id: string;
+    /**
+     * Title of the Grid element
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    title: string;
+    /**
+     * Short title of the Grid element
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    shortTitle: string;
+    /**
+     * Color of the Grid element
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    displayColor: string;
+    /**
+     * X position of the Grid element
+     * @type {number}
+     * @memberof DashboardGridElementResponse
+     */
+    xPosition: number;
+    /**
+     * Y position of the Grid element
+     * @type {number}
+     * @memberof DashboardGridElementResponse
+     */
+    yPosition: number;
+    /**
+     * List of all subelements in the group
+     * @type {Array<DashboardGridSubElementResponse>}
+     * @memberof DashboardGridElementResponse
+     */
+    groupElements: Array<DashboardGridSubElementResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface DashboardGridSubElementResponse
+ */
+export interface DashboardGridSubElementResponse {
+    /**
+     * The id of the Grid element
+     * @type {string}
+     * @memberof DashboardGridSubElementResponse
+     */
+    id: string;
+    /**
+     * Title of the Grid element
+     * @type {string}
+     * @memberof DashboardGridSubElementResponse
+     */
+    title: string;
+    /**
+     * Short title of the Grid element
+     * @type {string}
+     * @memberof DashboardGridSubElementResponse
+     */
+    shortTitle: string;
+    /**
+     * Color of the Grid element
+     * @type {string}
+     * @memberof DashboardGridSubElementResponse
+     */
+    displayColor: string;
+}
+/**
+ * 
+ * @export
  * @interface DashboardResponse
  */
 export interface DashboardResponse {
@@ -72,10 +214,10 @@ export interface DashboardResponse {
     id: string;
     /**
      * List of all elements visible on the dashboard
-     * @type {Array<string>}
+     * @type {Array<DashboardGridElementResponse>}
      * @memberof DashboardResponse
      */
-    gridElements: Array<string>;
+    gridElements: Array<DashboardGridElementResponse>;
 }
 /**
  * 
@@ -85,16 +227,41 @@ export interface DashboardResponse {
 export interface MoveElementParams {
     /**
      * 
-     * @type {object}
+     * @type {MoveElementPosition}
      * @memberof MoveElementParams
      */
-    from: object;
+    from: MoveElementPosition;
     /**
      * 
-     * @type {object}
+     * @type {MoveElementPosition}
      * @memberof MoveElementParams
      */
-    to: object;
+    to: MoveElementPosition;
+}
+/**
+ * 
+ * @export
+ * @interface MoveElementPosition
+ */
+export interface MoveElementPosition {
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveElementPosition
+     */
+    x: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveElementPosition
+     */
+    y: number;
+    /**
+     * used to identify a position within a group.
+     * @type {number}
+     * @memberof MoveElementPosition
+     */
+    groupIndex?: number;
 }
 /**
  * 
@@ -499,6 +666,138 @@ export interface UserInfoResponse {
      */
     lastName?: string;
 }
+
+/**
+ * CoursesApi - axios parameter creator
+ * @export
+ */
+export const CoursesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerFindForUser: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/courses`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesApi - functional programming interface
+ * @export
+ */
+export const CoursesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerFindForUser(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesApi - factory interface
+ * @export
+ */
+export const CoursesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
+            return localVarFp.courseControllerFindForUser(skip, limit, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesApi - interface
+ * @export
+ * @interface CoursesApi
+ */
+export interface CoursesApiInterface {
+    /**
+     * 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+
+}
+
+/**
+ * CoursesApi - object-oriented interface
+ * @export
+ * @class CoursesApi
+ * @extends {BaseAPI}
+ */
+export class CoursesApi extends BaseAPI implements CoursesApiInterface {
+    /**
+     * 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 /**
  * DashboardApi - axios parameter creator
@@ -1065,7 +1364,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1252,7 +1551,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1330,7 +1629,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1404,7 +1703,7 @@ export interface NewsApiInterface {
     newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
-     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1484,7 +1783,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
