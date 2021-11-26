@@ -25,6 +25,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-740 - BC-849 - change ansible vars for docker image and tag
 - BC-633 - moved type entitties from the store modules to store/types folder
+- BC-157 - add typescript to task store in nuxt client
 
 ### Added
 
@@ -40,7 +41,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
-- BC-589 - BC-653 - change auto deployment to a reusable workflow
+- BC-589 - BC-653 - Change auto deployment to a reusable workflow
 
 ## [26.16.0] - 2021-11-09
 
