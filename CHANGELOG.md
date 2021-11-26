@@ -17,6 +17,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-828 use generated API client
 - BC-839 - Remove search filter while dragging on rooms-overview page
 
+### Removed
+
+- BC-832 - remove github images from CORS
+
 ## [26.18.0] - 2021-11-23
 
 ### Changed
