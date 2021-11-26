@@ -62,7 +62,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: `/${FilePathsModule.getSpecificFiles.termsOfUseSchool}`,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
@@ -91,6 +91,9 @@ export default {
 				},
 			];
 		},
+	},
+	mounted() {
+		console.log(FilePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>
