@@ -245,7 +245,11 @@ export default {
 				updatedSchool.officialSchoolNumber =
 					this.localSchool.officialSchoolNumber;
 			}
-			if (!this.school.county && this.localSchool.county._id) {
+			if (
+				!this.school.county &&
+				this.localSchool.county &&
+				this.localSchool.county._id
+			) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
