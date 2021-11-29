@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Added
+
+- BC-609 - showing finished (formerly archived) tasks in new task overview
+
 ### Changed
 
 ### Fixed
