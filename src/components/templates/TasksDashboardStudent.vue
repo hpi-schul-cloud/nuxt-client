@@ -8,7 +8,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenTasksStudent"
+					:is-empty="!hasOpenTasksForStudent"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -28,7 +28,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasOpenTasksStudent"
+					v-if="!hasOpenTasksForStudent"
 					:image="emptyStateImage"
 					:title="emptyStateText.title"
 					:subtitle="emptyStateText.subtitle"
@@ -42,7 +42,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
 					:panel-two-title="$t('pages.tasks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="!hasCompletedTasks"
+					:is-empty="!hasCompletedTasksForStudent"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -53,7 +53,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasCompletedTasks"
+					v-if="!hasCompletedTasksForStudent"
 					:image="emptyStateImage"
 					:title="emptyStateText.title"
 					class="mt-16"
@@ -64,11 +64,11 @@
 </template>
 
 <script>
+import TaskModule from "@/store/tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
-import { mapGetters } from "vuex";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
@@ -84,15 +84,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("tasks", {
-			status: "getStatus",
-			openTasks: "getOpenTasksForStudent",
-			completedTasks: "getCompletedTasksForStudent",
-			hasOpenTasksStudent: "hasOpenTasksStudent",
-			hasCompletedTasks: "hasCompletedTasks",
-			hasTasks: "hasTasks",
-			hasFilterSelected: "hasFilterSelected",
-		}),
+		status: () => TaskModule.getStatus,
+		openTasks: () => TaskModule.getOpenTasksForStudent,
+		completedTasks: () => TaskModule.getCompletedTasksForStudent,
+		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
+		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
+		hasTasks: () => TaskModule.hasTasks,
+		hasFilterSelected: () => TaskModule.hasFilterSelected,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},

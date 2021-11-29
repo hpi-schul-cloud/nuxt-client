@@ -8,13 +8,8 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
-import { BusinessError, Status } from "./types/commons";
-import {
-	CreateNewsPayload,
-	News,
-	Pagination,
-	PatchNewsPayload,
-} from "./types/news";
+import { BusinessError, Pagination, Status } from "./types/commons";
+import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
 
 // const newsUri = "/v3/news";
 
@@ -125,12 +120,6 @@ export class NewsModule extends VuexModule {
 			this.resetBusinessError();
 			this.setStatus("pending");
 			const response = await this.newsApi.newsControllerFindAll(
-				{
-					data: [],
-					skip: this.pagination.skip,
-					limit: this.pagination.limit,
-					total: this.pagination.total,
-				},
 				undefined,
 				undefined,
 				false,
@@ -141,7 +130,7 @@ export class NewsModule extends VuexModule {
 			this.setPagination(response.data);
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 
@@ -154,7 +143,7 @@ export class NewsModule extends VuexModule {
 			this.setCurrent(response.data);
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 
@@ -167,7 +156,7 @@ export class NewsModule extends VuexModule {
 			this.setCreatedNews(res.data);
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 
@@ -180,7 +169,7 @@ export class NewsModule extends VuexModule {
 			this.setCurrent(res.data);
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 
@@ -193,7 +182,7 @@ export class NewsModule extends VuexModule {
 			this.setCurrent(null);
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 }
