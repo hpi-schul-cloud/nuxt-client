@@ -15,7 +15,7 @@
 		<template v-for="(task, index) of tasks" v-else>
 			<template v-if="role === 'student'">
 				<v-task-item-student
-					v-if="hasPagination && index === tasks.length - 1"
+					v-if="isLastTaskItem(index)"
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
@@ -26,7 +26,7 @@
 			</template>
 			<template v-if="role === 'teacher'">
 				<v-task-item-teacher
-					v-if="hasPagination && index === tasks.length - 1"
+					v-if="isLastTaskItem(index)"
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
@@ -113,6 +113,9 @@ export default {
 				FinishedTaskModule.fetchMoreTasks();
 			}
 		},
+		isLastTaskItem: function (index) {
+			return this.hasPagination && index === this.tasks.length - 1
+		}
 	},
 };
 </script>
