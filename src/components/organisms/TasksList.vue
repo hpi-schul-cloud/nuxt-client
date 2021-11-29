@@ -24,9 +24,9 @@
 </template>
 
 <script>
+import TaskModule from "@/store/tasks";
 import VTaskItemStudent from "@components/molecules/vTaskItemStudent";
 import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher";
-import { mapGetters } from "vuex";
 
 export default {
 	components: { VTaskItemStudent, VTaskItemTeacher },
@@ -48,9 +48,7 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters("tasks", {
-			status: "getStatus",
-		}),
+		status: () => TaskModule.getStatus,
 		isListFilled: function () {
 			return this.status === "completed" && this.tasks.length > 0;
 		},
