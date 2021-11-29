@@ -144,7 +144,9 @@ export default {
 				: !this.hasOpenTasksForTeacher;
 		},
 		tabTwoIsEmpty: function () {
-			return this.isStudent ? !this.hasCompletedTasksForStudent : !this.hasDraftsForTeacher;
+			return this.isStudent
+				? !this.hasCompletedTasksForStudent
+				: !this.hasDraftsForTeacher;
 		},
 		isCourseFilterDisabled: function () {
 			if (this.selectedCourseFilters.length > 0) return false;
