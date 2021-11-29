@@ -2,6 +2,7 @@ import TasksList from "./TasksList";
 import mocks from "@@/stories/mockData/Tasks";
 import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
+import TaskModule from "@/store/tasks";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
@@ -159,26 +160,17 @@ describe("@components/organisms/TasksList", () => {
 	});
 
 	it("Should render loading state while fetching task", () => {
-		const mockStoreLoading = {
-			tasks: {
-				getters: {
-					getList: () => [],
-					getStatus: () => "pending",
-					hasTasks: () => true,
-					openTasks: () => [],
-					overDueTasks: () => [],
-				},
-				state: () => ({
-					list: [],
-					status: "pending",
-				}),
-			},
-		};
+		const spy1 = jest
+			.spyOn(TaskModule, "hasTasks", "get")
+			.mockReturnValue(true);
+		const spy2 = jest
+			.spyOn(TaskModule, "getStatus", "get")
+			.mockReturnValue("pending");
+
 		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStoreLoading,
 			}),
 			vuetify,
 			propsData: {
@@ -193,6 +185,9 @@ describe("@components/organisms/TasksList", () => {
 		).toBe(true);
 		expect(wrapper.props("tasks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+
+		spy1.mockRestore();
+		spy2.mockRestore();
 	});
 
 	it("should accept valid type props", () => {
@@ -227,12 +222,15 @@ describe("@components/organisms/TasksList", () => {
 		expect(subHeader.exists()).toBe(false);
 	});
 
-	it("Should render a subheader if title prop is not set", () => {
+	it("Should render a subheader if title prop is set", () => {
+		const spy = jest
+			.spyOn(TaskModule, "getStatus", "get")
+			.mockReturnValue("completed");
+
 		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {
@@ -244,5 +242,7 @@ describe("@components/organisms/TasksList", () => {
 
 		const subHeader = wrapper.findAll(".v-subheader");
 		expect(subHeader.exists()).toBe(true);
+
+		spy.mockRestore();
 	});
 });
