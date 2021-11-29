@@ -109,9 +109,18 @@ export default {
 			handler: function (newSchool, oldSchool) {
 				// fetch school year and systems when the school is loaded
 				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
-				if (newSchool && newSchool.id && (!oldSchool || !oldSchool.id)) {
+				if (
+					!SchoolsModule.getFederalState ||
+					!SchoolsModule.getFederalState._id ||
+					!SchoolsModule.currentYear ||
+					!SchoolsModule.currentYear._id ||
+					!SchoolsModule.systems ||
+					!SchoolsModule.systems.length ||
+					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
+				) {
 					SchoolsModule.fetchCurrentYear();
 					SchoolsModule.fetchSystems();
+					SchoolsModule.fetchFederalState();
 				}
 			},
 			immediate: true,

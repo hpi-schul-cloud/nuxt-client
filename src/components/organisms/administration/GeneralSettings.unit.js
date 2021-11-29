@@ -97,20 +97,12 @@ const mockData = {
 				LERNSTORE_VIEW: true,
 			},
 		},
-		county: [
-			{
-				antaresKey: "BRB",
-				_id: "5fa55eb53f472a2d986c8812",
-				countyId: 12051,
-				name: "Brandenburg an der Havel",
-			},
-			{
-				antaresKey: "CB",
-				_id: "5fa55eb53f472a2d986c8813",
-				countyId: 12052,
-				name: "Cottbus",
-			},
-		],
+		county: {
+			antaresKey: "CB",
+			_id: "5fa55eb53f472a2d986c8813",
+			countyId: 12052,
+			name: "Cottbus",
+		},
 		language: "de",
 		timezone: "Berlin (GMT+2)",
 	},
@@ -273,6 +265,26 @@ describe("GeneralSettings", () => {
 				}),
 			});
 			await wrapper.setData(mockData);
+
+			const buttonElement = wrapper.find(searchStrings.saveButton);
+			buttonElement.trigger("click");
+			expect(updateSpy).toHaveBeenCalled();
+		});
+
+		it("update works without county", async () => {
+			const updateSpy = jest.spyOn(SchoolsModule, "update");
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			const localMockData = {
+				localSchool: { ...mockData.localSchool, county: null },
+			};
+			await wrapper.setData(localMockData);
+			SchoolsModule.setSchool({ ...school, county: null });
 
 			const buttonElement = wrapper.find(searchStrings.saveButton);
 			buttonElement.trigger("click");
