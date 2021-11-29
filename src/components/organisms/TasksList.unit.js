@@ -1,8 +1,8 @@
 import TasksList from "./TasksList";
 import mocks from "@@/stories/mockData/Tasks";
-import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
 import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
@@ -31,15 +31,74 @@ describe("@components/organisms/TasksList", () => {
 
 	it(...isValidComponent(TasksList));
 
-	it("accepts only student and teacher as type prop", () => {
-		const validTypes = ["student", "teacher"];
-		const { validator } = TasksList.props.type;
+	describe("props", () => {
+		it("should accept valid type & role props", () => {
+			const typeValidator = TasksList.props.type.validator;
+			const roleValidator = TasksList.props.role.validator;
+			const validTypes = ["current", "finished"];
+			const validRoles = ["student", "teacher"];
+			const invalidValues = ["invalid", "type"];
 
-		validTypes.forEach((type) => {
-			expect(validator(type)).toBe(true);
+			validRoles.forEach((role) => {
+				expect(roleValidator(role)).toBe(true);
+			});
+
+			validTypes.forEach((type) => {
+				expect(typeValidator(type)).toBe(true);
+			});
+
+			invalidValues.forEach((type) => {
+				expect(typeValidator(type)).toBe(false);
+			});
+
+			invalidValues.forEach((role) => {
+				expect(roleValidator(role)).toBe(false);
+			});
+		});
+	});
+
+	describe("subheader rendering", () => {
+		it("Should render no subheader if title prop is not set", () => {
+			const wrapper = mount(TasksList, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+					store: mockStore,
+				}),
+				vuetify,
+				propsData: {
+					tasks,
+					role: "student",
+				},
+			});
+
+			const subHeader = wrapper.findAll(".v-subheader");
+			expect(subHeader.exists()).toBe(false);
 		});
 
-		expect(validator("wrong type")).toBe(false);
+		it("Should render a subheader if title prop is set", () => {
+			const spy = jest
+				.spyOn(TaskModule, "getStatus", "get")
+				.mockReturnValue("completed");
+
+			const wrapper = mount(TasksList, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					tasks,
+					role: "student",
+					title: "my subheader",
+				},
+			});
+
+			const subHeader = wrapper.findAll(".v-subheader");
+			expect(subHeader.exists()).toBe(true);
+
+			spy.mockRestore();
+		});
 	});
 
 	it("Should render complete task items list", () => {
@@ -52,7 +111,7 @@ describe("@components/organisms/TasksList", () => {
 			vuetify,
 			propsData: {
 				tasks,
-				type: "student",
+				role: "student",
 			},
 		});
 
@@ -95,71 +154,14 @@ describe("@components/organisms/TasksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				type: "student",
+				role: "student",
 			},
 		});
 		expect(wrapper.props("tasks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
-	it("Should render hint label, if task is close to due date", () => {
-		const current = new Date();
-		current.setHours(current.getHours() + 1);
-		const closeToDueDate = current.toISOString();
-
-		const taskCloseToDueDate = {
-			id: "59cce2c61113d1132c98dc02",
-			_id: "59cce2c61113d1132c98dc02",
-			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeToDueDate,
-			courseName: "Mathe",
-			createdAt: "2017-09-28T11:49:39.924Z",
-		};
-		const extendedTasks = openTasks.concat(taskCloseToDueDate);
-		const mockStoreCloseToDueDate = {
-			tasks: {
-				getters: {
-					getList: () => tasks,
-					getStatus: () => "completed",
-					hasTasks: () => true,
-					openTasks: () => openTasks,
-					overDueTasks: () => overDueTasks,
-				},
-				state: () => ({
-					list: tasks,
-					status: "completed",
-				}),
-			},
-		};
-
-		const tasksCloseToDueDate = extendedTasks.filter((task) => {
-			const timeDiff = fromNowToFuture(task.duedate, "hours");
-			if (timeDiff === null) {
-				return false;
-			} else return timeDiff <= 24;
-		});
-
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreCloseToDueDate,
-			}),
-			vuetify,
-			propsData: {
-				type: "student",
-				tasks: extendedTasks,
-			},
-		});
-
-		const dueDateHintLabels = wrapper.findAll(
-			"[data-test-id='dueDateHintLabel']"
-		);
-
-		expect(dueDateHintLabels).toHaveLength(tasksCloseToDueDate.length);
-	});
-
-	it("Should render loading state while fetching task", () => {
+	it("Should render loading state while fetching initial tasks", () => {
 		const spy1 = jest
 			.spyOn(TaskModule, "hasTasks", "get")
 			.mockReturnValue(true);
@@ -175,7 +177,7 @@ describe("@components/organisms/TasksList", () => {
 			vuetify,
 			propsData: {
 				tasks: [],
-				type: "student",
+				role: "student",
 			},
 		});
 
@@ -190,42 +192,16 @@ describe("@components/organisms/TasksList", () => {
 		spy2.mockRestore();
 	});
 
-	it("should accept valid type props", () => {
-		const { validator } = TasksList.props.type;
-		const validTypes = ["student", "teacher"];
-		const invalidTypes = ["invalid", "type"];
-
-		validTypes.forEach((type) => {
-			expect(validator(type)).toBe(true);
-		});
-
-		invalidTypes.forEach((type) => {
-			expect(validator(type)).toBe(false);
-		});
-	});
-
-	it("Should render no subheader if title prop is not set", () => {
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				tasks,
-				type: "student",
-			},
-		});
-
-		const subHeader = wrapper.findAll(".v-subheader");
-		expect(subHeader.exists()).toBe(false);
-	});
-
-	it("Should render a subheader if title prop is set", () => {
-		const spy = jest
-			.spyOn(TaskModule, "getStatus", "get")
-			.mockReturnValue("completed");
+	it("Should render loading state while fetching more tasks", () => {
+		const spy1 = jest
+			.spyOn(TaskModule, "hasTasks", "get")
+			.mockReturnValue(true);
+		const spy2 = jest
+			.spyOn(FinishedTaskModule, "getStatus", "get")
+			.mockReturnValue("pending");
+		const spy3 = jest
+			.spyOn(FinishedTaskModule, "getInitialized", "get")
+			.mockReturnValue(true);
 
 		const wrapper = mount(TasksList, {
 			...createComponentMocks({
@@ -235,14 +211,21 @@ describe("@components/organisms/TasksList", () => {
 			vuetify,
 			propsData: {
 				tasks,
-				type: "student",
-				title: "my subheader",
+				role: "student",
+				hasPagination: true,
 			},
 		});
 
-		const subHeader = wrapper.findAll(".v-subheader");
-		expect(subHeader.exists()).toBe(true);
+		console.log(tasks.length);
+		expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
+		/* 	expect(
+			wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
+		).toBe(true);
+		expect(wrapper.props("tasks")).toStrictEqual([]);
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0); */
 
-		spy.mockRestore();
+		spy1.mockRestore();
+		spy2.mockRestore();
+		spy3.mockRestore();
 	});
 });

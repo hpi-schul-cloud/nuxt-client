@@ -55,7 +55,7 @@ export class FinishedTaskModule extends VuexModule {
 			this.setTasks(response.data.data);
 			this.setPagination({
 				limit,
-				skip: skip + limit,
+				skip: 0,
 				total: response.data.total,
 			});
 			this.setStatus("completed");

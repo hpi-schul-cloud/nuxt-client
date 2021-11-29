@@ -84,7 +84,6 @@ export default {
 		currentTaskStatus: () => TaskModule.getStatus,
 		finishedTasksStatus: () => FinishedTaskModule.getStatus,
 		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
-		finishedTasksOffset: () => FinishedTaskModule.getTasksOffset,
 		status: function () {
 			return this.type === "current"
 				? this.currentTaskStatus

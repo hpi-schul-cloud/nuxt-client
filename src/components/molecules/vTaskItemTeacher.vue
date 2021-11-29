@@ -25,7 +25,6 @@
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>
 			<v-list-item-subtitle
-				v-if="'status' in task"
 				class="hidden-sm-and-up text--primary text-wrap"
 			>
 				<i18n path="components.molecules.VTaskItemTeacher.status">
@@ -35,7 +34,7 @@
 				</i18n>
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<section v-if="'status' in task && !isDraft">
+		<section v-if="!isDraft">
 			<v-list-item-action class="hidden-xs-only ml-4">
 				<v-list-item-subtitle>{{
 					$t("components.molecules.VTaskItemTeacher.submitted")
@@ -91,13 +90,13 @@ export default {
 			return "#54616e";
 		},
 		isDraft() {
-			return this.task.status?.isDraft;
+			return this.task.status.isDraft;
 		},
 		courseName() {
 			const baseName =
 				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 			const prefix =
-				this.task.status?.isSubstitutionTeacher === true
+				this.task.status.isSubstitutionTeacher === true
 					? this.$t("common.words.substitute") + " "
 					: "";
 
