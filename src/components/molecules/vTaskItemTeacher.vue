@@ -24,9 +24,7 @@
 			<v-list-item-subtitle class="d-inline-flex">
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>
-			<v-list-item-subtitle
-				class="hidden-sm-and-up text--primary text-wrap"
-			>
+			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
 				<i18n path="components.molecules.VTaskItemTeacher.status">
 					<template #submitted>{{ task.status.submitted }}</template>
 					<template #max>{{ task.status.maxSubmissions }}</template>
