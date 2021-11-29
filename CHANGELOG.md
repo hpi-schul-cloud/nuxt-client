@@ -16,6 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-661 - Fix saving of general school settings if no county is selected
 - BC-828 use generated API client
 - BC-839 - Remove search filter while dragging on rooms-overview page
+- BC-878 - school administration: if saving general settings the school logo is kept if not explicitly removed
 
 ### Removed
 
