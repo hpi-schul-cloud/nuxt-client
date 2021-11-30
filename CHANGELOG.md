@@ -12,6 +12,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+## [26.19.0] - 2021-11-30
+
+### Fixed
+
 - BC-661 - School logo was missing in top bar
 - BC-661 - Fix saving of general school settings if no county is selected
 - BC-828 use generated API client
