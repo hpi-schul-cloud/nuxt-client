@@ -67,7 +67,6 @@ export default {
 	data() {
 		return {
 			hovered: false,
-			titleWidth: "50px",
 		};
 	},
 	computed: {
@@ -80,17 +79,13 @@ export default {
 				maxItem: this.device == "large" || this.device == "desktop" ? 16 : 9,
 			};
 		},
+		titleWidth() {
+			return this.device == "large" || this.device == "desktop"
+				? "75px"
+				: "50px";
+		},
 	},
-	mounted() {
-		switch (this.device) {
-			case "large":
-			case "desktop":
-				this.titleWidth = "75px";
-				break;
-			default:
-				this.titleWidth = "50px";
-		}
-	},
+
 	methods: {
 		startDragAvatar() {
 			this.$emit("startDrag", this.data);
