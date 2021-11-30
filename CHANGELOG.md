@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Added
+
+- BC-872 - add set-up node action to test workflow with node version 16
+
 ### Changed
 
 ### Fixed
