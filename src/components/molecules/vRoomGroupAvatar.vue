@@ -32,9 +32,11 @@
 					:max-items="itemSpecs.maxItem"
 				/>
 			</v-card>
-			<span class="d-flex justify-left mt-1 mx-1 sub-title">{{
-				data.title
-			}}</span>
+			<span
+				class="d-flex justify-left mt-1 mx-1 sub-title"
+				:style="{ width: titleWidth }"
+				>{{ data.title }}</span
+			>
 		</v-badge>
 	</div>
 </template>
@@ -65,6 +67,7 @@ export default {
 	data() {
 		return {
 			hovered: false,
+			titleWidth: "50px",
 		};
 	},
 	computed: {
@@ -77,6 +80,16 @@ export default {
 				maxItem: this.device == "large" || this.device == "desktop" ? 16 : 9,
 			};
 		},
+	},
+	mounted() {
+		switch (this.device) {
+			case "large":
+			case "desktop":
+				this.titleWidth = "75px";
+				break;
+			default:
+				this.titleWidth = "50px";
+		}
 	},
 	methods: {
 		startDragAvatar() {
@@ -100,7 +113,6 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 75px;
 	height: var(--space-md);
 	overflow: hidden;
 	text-overflow: ellipsis;
