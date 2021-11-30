@@ -260,7 +260,7 @@ export default {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: this.items
+				groupIndex: RoomsModule.roomsData
 					.find((item) => item.id == this.groupDialog.groupData.id)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
