@@ -32,7 +32,9 @@
 					:max-items="itemSpecs.maxItem"
 				/>
 			</v-card>
-			<span class="d-flex justify-left mt-1 sub-title">{{ data.title }}</span>
+			<span class="d-flex justify-left mt-1 mx-1 sub-title">{{
+				data.title
+			}}</span>
 		</v-badge>
 	</div>
 </template>
