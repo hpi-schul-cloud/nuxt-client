@@ -159,23 +159,23 @@ export default {
 			switch (this.$mq) {
 				case "tablet":
 					this.dimensions.colCount = 6;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.cellWidth = "4em";
 					break;
 				case "tabletPortrait":
 					this.dimensions.colCount = 6;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
 					this.dimensions.colCount = 8;
-					this.dimensions.cellWidth = "7em";
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "large":
-					this.dimensions.colCount = 12;
-					this.dimensions.cellWidth = "7em";
+					this.dimensions.colCount = 10;
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "mobile":
 					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "4.5em";
+					this.dimensions.cellWidth = "3.7em";
 					break;
 				default:
 					this.dimensions.colCount = 6;
@@ -279,4 +279,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+.row {
+	flex-wrap: nowrap;
+}
 </style>
