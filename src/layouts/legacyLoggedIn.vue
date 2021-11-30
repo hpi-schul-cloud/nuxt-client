@@ -14,6 +14,8 @@
 					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
 					:expanded-menu="expandedMenu"
+					:user="user"
+					:school="school"
 					@action="handleTopAction"
 				/>
 			</div>
@@ -35,6 +37,7 @@
 
 <script>
 import AuthModule from "@/store/auth";
+import Schools from "@/store/schools";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -115,40 +118,14 @@ export default {
 		user() {
 			return AuthModule.getUser;
 		},
+		school() {
+			return Schools.getSchool;
+		},
 		authenticated() {
 			return AuthModule.getAuthenticated;
 		},
-		firstName() {
-			return this.user && this.user.firstName
-				? this.user.firstName
-				: "Unknown User";
-		},
-		lastName() {
-			return this.user && this.user.lastName
-				? this.user.lastName
-				: "Unknown User";
-		},
-		role() {
-			const roleName = this.user.roles.map((r) => r.name);
-			return this.$t(`global.topbar.roleName.${roleName[0]}`);
-		},
-		schoolName() {
-			return this.user && this.user.schoolName ? this.user.schoolName : "";
-		},
 		topBarActions() {
-			return this.authenticated
-				? [
-						...this.topbarBaseActions,
-						{ type: "text", title: this.schoolName },
-						{
-							type: "popupWithInitials",
-							firstname: this.firstName,
-							lastname: this.lastName,
-							role: this.role,
-							event: "logout",
-						},
-				  ]
-				: [...this.topbarBaseActions];
+			return [...this.topbarBaseActions];
 		},
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
