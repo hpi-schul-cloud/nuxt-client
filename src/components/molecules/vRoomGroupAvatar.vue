@@ -27,12 +27,12 @@
 					ref="avatar-iterator"
 					:items="data.groupElements"
 					condense-layout
-					item-size="1em"
+					item-size="0.8em"
 					:col-count="itemSpecs.columnCount"
 					:max-items="itemSpecs.maxItem"
 				/>
 			</v-card>
-			<span class="d-flex justify-center mt-1 sub-title">{{ data.title }}</span>
+			<span class="d-flex justify-left mt-1 sub-title">{{ data.title }}</span>
 		</v-badge>
 	</div>
 </template>
@@ -98,6 +98,8 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	width: 75px;
+	height: var(--space-md);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;

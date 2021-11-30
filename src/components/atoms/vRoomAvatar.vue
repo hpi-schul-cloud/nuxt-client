@@ -117,6 +117,7 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	height: var(--space-md);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
