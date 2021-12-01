@@ -197,23 +197,29 @@ export default {
 	},
 	watch: {
 		school: {
-			handler: function (newSchool) {
+			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
-					this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
+					await this.copyToLocalSchool();
 				}
 			},
 			immediate: true,
 		},
 	},
 	async created() {
-		this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-		this.localSchool.logo = await dataUrlToFile(
-			this.school.logo_dataUrl,
-			"logo"
-		);
+		await this.copyToLocalSchool();
 	},
 	methods: {
 		...mapActions("consent-versions", ["fetchConsentVersions"]),
+		async copyToLocalSchool() {
+			if (!this.school) {
+				return;
+			}
+			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
+			if (this.school.logo_dataUrl) {
+				schoolCopy.logo = await dataUrlToFile(this.school.logo_dataUrl, "logo");
+			}
+			this.localSchool = schoolCopy;
+		},
 		printDate,
 		toBase64,
 		dataUrlToFile,
