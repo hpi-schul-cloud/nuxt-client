@@ -19,6 +19,8 @@ jobs:
         run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit:ci
         run: npm run test:unit:ci
+        env:
+          NODE_OPTIONS: "--unhandled-rejections=warn"
       - name: codecov
         run: npx codecov
         env:
