@@ -67,7 +67,7 @@ describe("task store", () => {
 						.mockReturnValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #1" }],
-								total: 12,
+								total: 26,
 								skip: 0,
 								limit: 10,
 							},
@@ -75,8 +75,16 @@ describe("task store", () => {
 						.mockReturnValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #2" }],
-								total: 12,
+								total: 26,
 								skip: 10,
+								limit: 10,
+							},
+						})
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #3" }],
+								total: 26,
+								skip: 20,
 								limit: 10,
 							},
 						}),
@@ -91,9 +99,10 @@ describe("task store", () => {
 					expect(taskModule.getTasks).toStrictEqual([
 						{ mockTask: "mock task #1" },
 						{ mockTask: "mock task #2" },
+						{ mockTask: "mock task #3" },
 					]);
 					expect(taskModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(2);
+					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(3);
 					done();
 				});
 				expect(taskModule.getStatus).toBe("pending");
