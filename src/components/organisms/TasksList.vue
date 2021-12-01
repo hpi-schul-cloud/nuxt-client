@@ -114,8 +114,8 @@ export default {
 			}
 		},
 		isLastTaskItem: function (index) {
-			return this.hasPagination && index === this.tasks.length - 1
-		}
+			return this.hasPagination && index === this.tasks.length - 1;
+		},
 	},
 };
 </script>
