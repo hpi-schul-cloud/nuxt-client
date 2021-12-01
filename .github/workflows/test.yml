@@ -2,19 +2,20 @@ name: Test code
 
 on: [push]
 
+env:
+  node: 16
 jobs:
   unit:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: ["16"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: setup node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ env.node }}
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit:ci
