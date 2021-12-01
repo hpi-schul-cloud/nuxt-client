@@ -23,47 +23,44 @@
 			</base-button>
 			<template v-for="action in actions">
 				<popup-icon
-					v-if="action.type === 'popupIcon'"
 					:key="action.title"
 					class="item"
 					source="fa"
 					:icon="action.icon"
-					:popup-items="action.items"
 				>
 					<component :is="action.component" v-bind="action.config"></component>
 				</popup-icon>
-
-				<div
-					v-if="action.type === 'text'"
-					:key="action.title"
-					class="school-name item"
-				>
-					{{ action.title }}
-				</div>
-
-				<popup-icon-initials
-					v-if="action.type === 'popupWithInitials'"
-					:key="action.firstname"
-					:firstname="action.firstname"
-					:lastname="action.lastname"
-					:user="action.user"
-					:role="action.role"
-					class="item"
-				>
-					<a href="/account" class="account-link">{{
-						$t("global.topbar.settings")
-					}}</a>
-					<button
-						:key="action.title"
-						v-ripple
-						class="logout-button"
-						data-testid="logout"
-						@click="sendEvent(action.event)"
-					>
-						{{ $t("common.labels.logout") }}
-					</button>
-				</popup-icon-initials>
 			</template>
+			<div v-if="school" class="school-name item">
+				{{ school.name }}
+			</div>
+			<img
+				v-if="school && school.logo_dataUrl"
+				class="school-logo"
+				:src="school.logo_dataUrl"
+				:alt="school.name"
+			/>
+
+			<popup-icon-initials
+				v-if="user"
+				:firstname="user.firstName || 'Unknown'"
+				:lastname="user.lastName || 'Unknown'"
+				:user="user.user"
+				:role="role"
+				class="item"
+			>
+				<a href="/account" class="account-link">{{
+					$t("global.topbar.settings")
+				}}</a>
+				<button
+					v-ripple
+					class="logout-button"
+					data-testid="logout"
+					@click="sendEvent('logout')"
+				>
+					{{ $t("common.labels.logout") }}
+				</button>
+			</popup-icon-initials>
 		</div>
 		<base-button
 			v-else
@@ -97,18 +94,7 @@ export default {
 			default: () => [],
 			validator: function (value) {
 				return value.every((action) => {
-					const isValid =
-						// (action.icon || action.title ||
-						// (action.firstname && action.lastname && action.role)) &&
-						action.type;
-					if (!isValid) {
-						console.error(
-							`Action "${JSON.stringify(
-								action
-							)}" in prop "actions" of "TheTopBar" is invalid.`
-						);
-					}
-					return isValid;
+					return action.icon && action.component;
 				});
 			},
 		},
@@ -118,10 +104,29 @@ export default {
 		expandedMenu: {
 			type: Boolean,
 		},
+		school: {
+			type: Object,
+			default: () => ({
+				name: "",
+			}),
+		},
+		user: {
+			type: Object,
+			validator: function (user) {
+				return !user || !(user.firstname && user.lastname && user.roles);
+			},
+			default: null,
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
+	},
+	computed: {
+		role() {
+			const roleName = this.user.roles.map((r) => r.name);
+			return this.$t(`global.topbar.roleName.${roleName[0]}`);
+		},
 	},
 	methods: {
 		sendEvent(eventName) {
@@ -237,5 +242,9 @@ export default {
 	&:hover {
 		background-color: var(--hover-color);
 	}
+}
+.school-logo {
+	max-height: 100%;
+	margin-left: 1rem;
 }
 </style>

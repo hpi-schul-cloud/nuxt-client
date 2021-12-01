@@ -1,13 +1,12 @@
 import TheTopBar from "./TheTopBar";
 
 const mockActions = [
-	{ type: "popupIcon", icon: "house", title: "test home", to: "home" },
-	{ type: "text", title: "test away", href: "https://hpi-schul-cloud.de" },
+	{ type: "popupIcon", icon: "house", title: "test home", component: "v-icon" },
 	{
-		type: "popupWithInitials",
+		type: "popupIcon",
 		icon: "camera",
-		title: "test action",
-		event: "light-camera",
+		title: "test camera",
+		component: "menu-qr-code",
 	},
 ];
 
@@ -33,17 +32,25 @@ describe("@components/legacy/TheTopBar", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				actions: mockActions,
+				user: {
+					firstName: "Arthur",
+					lastName: "Dent",
+					roles: [{ name: "administrator" }],
+				},
+				school: {
+					name: "dummy school",
+				},
 			},
 			mocks: {
 				$theme,
 			},
 		});
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
-		expect(wrapper.findAll("popup-icon-stub")).toHaveLength(1);
+		expect(wrapper.findAll("popup-icon-stub")).toHaveLength(2);
 		expect(wrapper.findAll("button")).toHaveLength(1);
 		wrapper.find("button").trigger("click");
-		expect(wrapper.emitted("action")[0]).toStrictEqual(["light-camera"]);
-		expect(wrapper.findAll(".item")).toHaveLength(4);
+		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
+		expect(wrapper.findAll(".item")).toHaveLength(5);
 	});
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {

@@ -46,6 +46,29 @@ const year = {
 	isTeamCreationByStudentsEnabled: true,
 };
 
+const federalState = {
+	_id: "00001234597947823",
+	counties: [
+		{
+			antaresKey: "BRB",
+			_id: "00001234597998793",
+			countyId: 12051,
+			name: "Brandenburg an der Havel",
+		},
+		{
+			antaresKey: "CB",
+			_id: "00001234597913216",
+			countyId: 12052,
+			name: "Cottbus",
+		},
+	],
+	name: "Brandenburg",
+	abbreviation: "BB",
+	logoUr:
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
+	__v: 0,
+};
+
 const systems = [{ _id: "123", type: "itslearning" }];
 
 const envs = {
@@ -126,13 +149,29 @@ const mockStore = {
 		},
 	},
 };
+const fetchYearSpy = jest
+	.spyOn(SchoolsModule, "fetchCurrentYear")
+	.mockImplementation(() => {
+		SchoolsModule.setCurrentYear(year);
+	});
+const fetchSystemsSpy = jest
+	.spyOn(SchoolsModule, "fetchSystems")
+	.mockImplementation(() => {
+		SchoolsModule.setSystems(systems);
+	});
+const fetchFederalStateSpy = jest
+	.spyOn(SchoolsModule, "fetchFederalState")
+	.mockImplementation(() => {
+		SchoolsModule.setFederalState(federalState);
+	});
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
 		// SchoolsModule.setSchool(school);
 		// SchoolsModule.setFederalState(federalState);
-		SchoolsModule.setCurrentYear(year);
-		SchoolsModule.setSystems(systems);
+		SchoolsModule.setCurrentYear(null);
+		SchoolsModule.setSystems([]);
+		SchoolsModule.setFederalState(null);
 		EnvConfigModule.setEnvs(envs);
 	});
 	it(...isValidComponent(SchoolPage));
@@ -242,5 +281,19 @@ describe("SchoolSettingPage", () => {
 
 		expect(schoolError.exists()).toBeTrue();
 		expect(noSchoolError.exists()).toBeFalse();
+	});
+
+	it("should load needed data form server", async () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+		await wrapper.vm.$nextTick();
+		expect(fetchYearSpy).toHaveBeenCalled();
+		expect(fetchSystemsSpy).toHaveBeenCalled();
+		expect(fetchFederalStateSpy).toHaveBeenCalled();
 	});
 });
