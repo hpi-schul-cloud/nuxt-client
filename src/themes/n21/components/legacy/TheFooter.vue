@@ -39,7 +39,7 @@ export default {
 					text: "Impressum",
 				},
 				{
-					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					to: FilePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
