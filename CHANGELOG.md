@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Added
+
+- BC-872 - add set-up node action to test workflow with node version 16
+
 ### Changed
 
 ### Fixed
@@ -21,6 +25,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-828 - use generated API client
 - BC-839 - Remove search filter while dragging on rooms-overview page
 - BC-904 - fixed an issue where enabling substitute filter adds course filters
+- BC-878 - school administration: if saving general settings the school logo is kept if not explicitly removed
 
 ### Removed
 
