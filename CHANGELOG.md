@@ -18,8 +18,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-661 - School logo was missing in top bar
 - BC-661 - Fix saving of general school settings if no county is selected
-- BC-828 use generated API client
+- BC-828 - use generated API client
 - BC-839 - Remove search filter while dragging on rooms-overview page
+- BC-904 - fixed an issue where enabling substitute filter adds course filters
 
 ### Removed
 
