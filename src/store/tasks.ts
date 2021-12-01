@@ -80,9 +80,17 @@ export class TaskModule extends VuexModule {
 	@Mutation
 	setSubstituteFilter(enabled: boolean): void {
 		this.substituteFilter = enabled;
-		this.courseFilter = new TaskFilter(this.tasks)
-			.filterSubstituteForTeacher(enabled)
-			.courseNames();
+
+		// remove substitute course(s) from course filter when substitute filter is disabled
+		if (!enabled) {
+			const courseNamesWithoutSubstitutes = new TaskFilter(this.tasks)
+				.filterSubstituteForTeacher(false)
+				.courseNames();
+
+			this.courseFilter = this.courseFilter.filter((courseName) =>
+				courseNamesWithoutSubstitutes.includes(courseName)
+			);
+		}
 	}
 
 	@Mutation
