@@ -264,10 +264,9 @@ export default {
 			}
 		},
 		onOpenFinishedTasksTab() {
-			// this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
+			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.finishedTasksInitialized) {
-				console.log("initial triggered");
 				FinishedTaskModule.fetchInitialTasks();
 			}
 		},
