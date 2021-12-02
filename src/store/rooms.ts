@@ -154,6 +154,17 @@ export class Rooms extends VuexModule {
 				payload.yPosition,
 				{ title: payload.title }
 			);
+			const roomIndex = this.roomsData.findIndex(
+				(room) =>
+					room.xPosition === payload.xPosition &&
+					room.yPosition === payload.yPosition
+			);
+			const roomsData = [...this.roomsData];
+			roomsData[roomIndex] = {
+				...this.roomsData[roomIndex],
+				title: payload.title,
+			};
+			this.setRoomData(roomsData);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
