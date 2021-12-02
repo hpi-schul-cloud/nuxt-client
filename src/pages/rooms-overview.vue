@@ -41,6 +41,7 @@
 						:device="device"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@dragend="onDragend"
 						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 					>
 					</vRoomGroupAvatar>
@@ -54,6 +55,7 @@
 						:show-badge="true"
 						:draggable="true"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@dragend="onDragend"
 						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 					></vRoomAvatar>
 				</div>
@@ -61,6 +63,7 @@
 					<vRoomEmptyAvatar
 						:ref="`${rowIndex}-${colIndex}`"
 						:size="dimensions.cellWidth"
+						:show-outline="dragging"
 						@drop="setDropElement({ x: colIndex, y: rowIndex })"
 					></vRoomEmptyAvatar>
 				</div>
@@ -117,6 +120,7 @@ export default {
 			draggedElementName: "",
 			mdiMagnify,
 			searchText: "",
+			dragging: false,
 		};
 	},
 	computed: {
@@ -210,6 +214,7 @@ export default {
 			this.showDeleteSection = true;
 			this.draggedElementName = this.getElementNameByRef(pos);
 			this.searchText = "";
+			this.dragging = true;
 		},
 		setDropElement(pos) {
 			this.draggedElement.to = pos;
@@ -222,6 +227,9 @@ export default {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
+		},
+		onDragend() {
+			this.dragging = false;
 		},
 		async setGroupElements(pos) {
 			this.draggedElement.to = pos;

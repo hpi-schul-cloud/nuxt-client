@@ -1,14 +1,15 @@
 <template>
 	<div
-		class="d-flex justify-center rounded"
+		class="room-avatar"
 		:draggable="draggable"
+		:style="{ width: size }"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
-		@dragend="dragEnd"
+		@dragend="dragend"
 	>
 		<v-badge
-			class="ma-0 badge-component rounded"
+			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -31,11 +32,9 @@
 					>{{ avatarTitle }}</span
 				>
 			</v-avatar>
-			<span
-				v-if="!condenseLayout"
-				class="d-flex justify-center mt-1 sub-title"
-				>{{ item.title }}</span
-			>
+			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
+				{{ item.title }}
+			</div>
 		</v-badge>
 	</div>
 </template>
@@ -90,8 +89,9 @@ export default {
 			this.hovered = true;
 			this.isDragging = false;
 		},
-		dragEnd() {
+		dragend() {
 			this.isDragging = false;
+			this.$emit("dragend", this.item);
 		},
 		dropAvatar() {
 			this.$emit("drop");
@@ -113,12 +113,9 @@ export default {
 	user-select: none;
 }
 .sub-title {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
 	height: var(--space-md);
 	overflow: hidden;
+	text-align: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
@@ -129,5 +126,8 @@ export default {
 }
 .rounded-xl {
 	background-color: transparent;
+}
+.avatar-badge {
+	max-width: 100%;
 }
 </style>
