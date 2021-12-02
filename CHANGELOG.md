@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-609 - showing finished (formerly archived) tasks in new task overview
+- BC-872 - add set-up node action to test workflow with node version 16
 
 ### Changed
 
@@ -22,9 +23,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-661 - School logo was missing in top bar
 - BC-661 - Fix saving of general school settings if no county is selected
-- BC-828 use generated API client
+- BC-828 - use generated API client
 - BC-839 - Remove search filter while dragging on rooms-overview page
+- BC-904 - fixed an issue where enabling substitute filter adds course filters
 - BC-878 - school administration: if saving general settings the school logo is kept if not explicitly removed
+- BC-907 - fix infinite number of requests in tasks.fetchAll
 
 ### Removed
 
