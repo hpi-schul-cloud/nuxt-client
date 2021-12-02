@@ -227,6 +227,7 @@ export default {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
+			this.dragging = false;
 		},
 		onDragend() {
 			this.dragging = false;
@@ -260,6 +261,7 @@ export default {
 			) {
 				this.savePosition();
 			}
+			this.dragging = false;
 		},
 		getElementNameByRef(pos) {
 			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
@@ -276,6 +278,7 @@ export default {
 			this.draggedElementName = "groupItem";
 			this.groupDialog.isOpen = false;
 			this.searchText = "";
+			this.dragging = true;
 		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);

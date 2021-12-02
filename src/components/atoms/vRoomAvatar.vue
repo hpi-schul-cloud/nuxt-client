@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="room-avatar"
+		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
 		:style="{ width: size }"
 		@dragstart="startDragAvatar"
@@ -113,7 +114,7 @@ export default {
 	user-select: none;
 }
 .sub-title {
-	height: var(--space-md);
+	height: var(--space-lg);
 	overflow: hidden;
 	text-align: center;
 	text-overflow: ellipsis;
@@ -129,5 +130,8 @@ export default {
 }
 .avatar-badge {
 	max-width: 100%;
+}
+.dragging {
+	opacity: 0.5;
 }
 </style>

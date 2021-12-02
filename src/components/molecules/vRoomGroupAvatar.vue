@@ -2,6 +2,7 @@
 	<div
 		draggable="true"
 		class="group-avatar"
+		:class="isDragging ? 'dragging' : 'group-avatar'"
 		:style="{ width: size }"
 		@dragstart="startDragAvatar"
 		@dragend="dragend"
@@ -67,6 +68,7 @@ export default {
 	data() {
 		return {
 			hovered: false,
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -79,15 +81,11 @@ export default {
 				maxItem: this.device == "large" || this.device == "desktop" ? 16 : 9,
 			};
 		},
-		titleWidth() {
-			return this.device == "large" || this.device == "desktop"
-				? "75px"
-				: "50px";
-		},
 	},
 
 	methods: {
 		startDragAvatar() {
+			this.isDragging = true;
 			this.$emit("startDrag", this.data);
 		},
 		dragLeave() {
@@ -95,19 +93,21 @@ export default {
 		},
 		dragEnter() {
 			this.hovered = true;
+			this.isDragging = false;
 		},
 		dropAvatar() {
 			this.$emit("drop");
 		},
 		dragend() {
 			this.$emit("dragend", this.item);
+			this.isDragging = false;
 		},
 	},
 };
 </script>
 <style scoped>
 .sub-title {
-	height: var(--space-md);
+	height: var(--space-lg);
 	overflow: hidden;
 	text-align: center;
 	text-overflow: ellipsis;
@@ -120,5 +120,8 @@ export default {
 }
 .avatar-badge {
 	max-width: 100%;
+}
+.dragging {
+	opacity: 0.5;
 }
 </style>
