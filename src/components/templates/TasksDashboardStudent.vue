@@ -60,7 +60,11 @@
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="finishedTasks" user-role="student" type="finished" />
+				<tasks-list
+					:tasks="finishedTasks"
+					user-role="student"
+					type="finished"
+				/>
 				<v-custom-empty-state
 					v-if="hasNoFinishedTasks"
 					:image="emptyState.image"
