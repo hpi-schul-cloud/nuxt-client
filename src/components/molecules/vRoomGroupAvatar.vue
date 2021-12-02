@@ -2,12 +2,14 @@
 	<div
 		draggable="true"
 		class="group-avatar"
+		:style="{ width: size }"
 		@dragstart="startDragAvatar"
+		@dragend="dragend"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
 	>
 		<v-badge
-			class="badge-component"
+			class="badge-component avatar-badge"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -32,11 +34,9 @@
 					:max-items="itemSpecs.maxItem"
 				/>
 			</v-card>
-			<span
-				class="d-flex justify-left mt-1 mx-1 sub-title"
-				:style="{ width: titleWidth }"
-				>{{ data.title }}</span
-			>
+			<div class="justify-left mt-1 sub-title">
+				{{ data.title }}
+			</div>
 		</v-badge>
 	</div>
 </template>
@@ -99,17 +99,17 @@ export default {
 		dropAvatar() {
 			this.$emit("drop");
 		},
+		dragend() {
+			this.$emit("dragend", this.item);
+		},
 	},
 };
 </script>
 <style scoped>
 .sub-title {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
 	height: var(--space-md);
 	overflow: hidden;
+	text-align: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
@@ -117,5 +117,8 @@ export default {
 .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
+}
+.avatar-badge {
+	max-width: 100%;
 }
 </style>

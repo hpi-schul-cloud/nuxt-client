@@ -36,7 +36,7 @@ describe("vRoomAvatar", () => {
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML).toStrictEqual("Bio 12c");
+		expect(labelElement.innerHTML.trim()).toStrictEqual("Bio 12c");
 	});
 
 	it("should NOT display the title", () => {

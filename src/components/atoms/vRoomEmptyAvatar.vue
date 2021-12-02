@@ -13,6 +13,7 @@
 				:class="{
 					'hovered-avatar': hovered,
 					'avatar-component-empty': !hovered,
+					outlined: showOutline,
 				}"
 				:size="size"
 				@dragleave="dragLeave"
@@ -29,6 +30,10 @@ export default {
 		size: {
 			type: String,
 			required: true,
+		},
+		showOutline: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
@@ -50,6 +55,11 @@ export default {
 };
 </script>
 <style scoped>
+.outlined {
+	border: 2px dashed;
+	border-color: var(--color-primary);
+	transition: border-width 0.3s;
+}
 .hovered-avatar {
 	border: 3px solid;
 	border-color: var(--color-primary);

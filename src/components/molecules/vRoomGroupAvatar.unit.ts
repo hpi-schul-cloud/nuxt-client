@@ -82,7 +82,7 @@ describe("vRoomGroupAvatar", () => {
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML).toStrictEqual("Fourth");
+		expect(labelElement.innerHTML.trim()).toStrictEqual("Fourth");
 	});
 
 	it("should display the badge", () => {
