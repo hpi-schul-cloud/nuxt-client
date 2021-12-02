@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe ref="main" :headline="title" :full-width="true">
-		<v-row class="text-left pl-2">
-			<v-col cols="8" sm="6" md="8" lg="8">
+		<v-row class="justify-center">
+			<div class="d-flex justify-space-between col-sm-8">
 				<v-text-field
 					ref="search"
 					v-model="searchText"
@@ -9,10 +9,10 @@
 					:append-icon="mdiMagnify"
 				>
 				</v-text-field>
-			</v-col>
-			<v-col class="text-right pr-2 pt-5" cols="4">
+			</div>
+			<div class="ml-5 mt-5 mr-2">
 				<v-btn to="/rooms-list">All Rooms</v-btn>
-			</v-col>
+			</div>
 		</v-row>
 
 		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
@@ -158,19 +158,19 @@ export default {
 			this.device = this.$mq;
 			switch (this.$mq) {
 				case "tablet":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "tabletPortrait":
-					this.dimensions.colCount = 6;
+					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 8;
+					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
 					break;
 				case "large":
-					this.dimensions.colCount = 10;
+					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
 					break;
 				case "mobile":
