@@ -34,7 +34,7 @@ export class FinishedTaskModule extends VuexModule {
 
 	status: Status = "";
 
-	initialized: boolean = false;
+	isInitialized: boolean = false;
 
 	_taskApi?: TaskApiInterface;
 
@@ -50,10 +50,8 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-
 			this.setTasks(response.data.data);
-		
+
 			this.setPagination({
 				limit,
 				skip: limit,
@@ -84,10 +82,9 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 300));
 
 			this.setTasks(this.tasks.concat(response.data.data));
-		
 			this.setPagination({
 				limit,
 				skip: skip + limit,
@@ -112,8 +109,8 @@ export class FinishedTaskModule extends VuexModule {
 	}
 
 	@Mutation
-	setInitialized(initialized: boolean) {
-		this.initialized = initialized;
+	setInitialized(isInitialized: boolean) {
+		this.isInitialized = isInitialized;
 	}
 
 	@Mutation
@@ -142,8 +139,8 @@ export class FinishedTaskModule extends VuexModule {
 		return this.status;
 	}
 
-	get getInitialized(): boolean {
-		return this.initialized;
+	get getIsInitialized(): boolean {
+		return this.isInitialized;
 	}
 
 	get getBusinessError(): BusinessError {

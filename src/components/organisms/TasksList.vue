@@ -13,7 +13,7 @@
 			/>
 		</template>
 		<template v-for="(task, index) of tasks" v-else>
-			<template v-if="role === 'student'">
+			<template v-if="userRole === 'student'">
 				<v-task-item-student
 					v-if="isLastTaskItem(index)"
 					:key="index"
@@ -24,7 +24,7 @@
 				<v-task-item-student v-else :key="index" :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
-			<template v-if="role === 'teacher'">
+			<template v-if="userRole === 'teacher'">
 				<v-task-item-teacher
 					v-if="isLastTaskItem(index)"
 					:key="index"
@@ -64,7 +64,7 @@ export default {
 			required: false,
 			default: null,
 		},
-		role: {
+		userRole: {
 			type: String,
 			required: true,
 			validator: (value) => ["student", "teacher"].includes(value),
@@ -83,7 +83,7 @@ export default {
 	computed: {
 		currentTaskStatus: () => TaskModule.getStatus,
 		finishedTasksStatus: () => FinishedTaskModule.getStatus,
-		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
+		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
 		status: function () {
 			return this.type === "current"
 				? this.currentTaskStatus
@@ -93,13 +93,13 @@ export default {
 			if (!this.hasPagination) {
 				return this.status === "pending";
 			} else {
-				return !this.finishedTasksInitialized && this.status === "pending";
+				return !this.finishedTasksIsInitialized && this.status === "pending";
 			}
 		},
 		showSpinner: function () {
 			return (
 				this.hasPagination &&
-				this.finishedTasksInitialized &&
+				this.finishedTasksIsInitialized &&
 				this.status === "pending"
 			);
 		},

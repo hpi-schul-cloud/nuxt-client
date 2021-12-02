@@ -122,7 +122,7 @@ export default {
 		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
 		courseFilters: () => TaskModule.getCourseFilters,
 		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
-		finishedTasksInitialized: () => FinishedTaskModule.getInitialized,
+		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -266,7 +266,7 @@ export default {
 		onOpenFinishedTasksTab() {
 			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
-			if (!this.finishedTasksInitialized) {
+			if (!this.finishedTasksIsInitialized) {
 				FinishedTaskModule.fetchInitialTasks();
 			}
 		},
