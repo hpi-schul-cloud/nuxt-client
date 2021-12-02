@@ -50,12 +50,13 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			await new Promise((resolve) => setTimeout(resolve, 3000));
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			this.setTasks(response.data.data);
+		
 			this.setPagination({
 				limit,
-				skip: 0,
+				skip: limit,
 				total: response.data.total,
 			});
 			this.setStatus("completed");
@@ -83,9 +84,10 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			await new Promise((resolve) => setTimeout(resolve, 3000));
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			this.setTasks(this.tasks.concat(response.data.data));
+		
 			this.setPagination({
 				limit,
 				skip: skip + limit,
