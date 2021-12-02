@@ -50,15 +50,19 @@ export class TaskModule extends VuexModule {
 		try {
 			const tasks: Task[] = [];
 			let skip = 0;
-			let limit: number;
+			let limit = 10;
 			let total: number;
 			do {
-				const response = await this.taskApi.taskControllerFindAll();
+				// use initial request to get default page size from api
+				const response =
+					skip === 0
+						? await this.taskApi.taskControllerFindAll()
+						: await this.taskApi.taskControllerFindAll(skip, limit);
 				tasks.push(...response.data.data);
-				skip = response.data.skip;
+				skip = skip + response.data.limit;
 				limit = response.data.limit;
 				total = response.data.total;
-			} while (skip + limit < total);
+			} while (skip < total);
 			this.setTasks(tasks);
 			this.setStatus("completed");
 		} catch (error) {
@@ -80,9 +84,17 @@ export class TaskModule extends VuexModule {
 	@Mutation
 	setSubstituteFilter(enabled: boolean): void {
 		this.substituteFilter = enabled;
-		this.courseFilter = new TaskFilter(this.tasks)
-			.filterSubstituteForTeacher(enabled)
-			.courseNames();
+
+		// remove substitute course(s) from course filter when substitute filter is disabled
+		if (!enabled) {
+			const courseNamesWithoutSubstitutes = new TaskFilter(this.tasks)
+				.filterSubstituteForTeacher(false)
+				.courseNames();
+
+			this.courseFilter = this.courseFilter.filter((courseName) =>
+				courseNamesWithoutSubstitutes.includes(courseName)
+			);
+		}
 	}
 
 	@Mutation
