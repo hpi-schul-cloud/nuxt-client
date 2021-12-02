@@ -118,6 +118,7 @@ describe("finished task store", () => {
 					done();
 				});
 				expect(finishedTaskModule.getStatus).toBe("pending");
+				spy.mockRestore();
 			});
 
 			it("should not call api when total is reached", (done) => {
@@ -140,6 +141,7 @@ describe("finished task store", () => {
 					);
 					done();
 				});
+				spy.mockRestore();
 			});
 
 			it("should not call api when skip value is higher than total", (done) => {
@@ -162,9 +164,14 @@ describe("finished task store", () => {
 					);
 					done();
 				});
+				spy.mockRestore();
 			});
 
 			it("should handle an error", (done) => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.pagination.skip = 50;
+				finishedTaskModule.pagination.total = 100;
+
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(() =>
@@ -174,7 +181,6 @@ describe("finished task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const finishedTaskModule = new FinishedTaskModule({});
 
 				finishedTaskModule.fetchMoreTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([]);

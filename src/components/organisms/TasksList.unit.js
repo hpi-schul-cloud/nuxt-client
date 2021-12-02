@@ -161,71 +161,93 @@ describe("@components/organisms/TasksList", () => {
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
-	it("Should render loading state while fetching initial tasks", () => {
-		const spy1 = jest
-			.spyOn(TaskModule, "hasTasks", "get")
-			.mockReturnValue(true);
-		const spy2 = jest
-			.spyOn(TaskModule, "getStatus", "get")
-			.mockReturnValue("pending");
+	describe("when loading tasks", () => {
+		it("Should render loading state while fetching initial tasks", () => {
+			const spy1 = jest
+				.spyOn(TaskModule, "hasTasks", "get")
+				.mockReturnValue(true);
+			const spy2 = jest
+				.spyOn(TaskModule, "getStatus", "get")
+				.mockReturnValue("pending");
 
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				tasks: [],
-				role: "student",
-			},
+			const wrapper = mount(TasksList, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					tasks: [],
+					role: "student",
+				},
+			});
+
+			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
+			expect(
+				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
+			).toBe(true);
+			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
+			expect(wrapper.props("tasks")).toStrictEqual([]);
+			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+
+			spy1.mockRestore();
+			spy2.mockRestore();
 		});
 
-		expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
-		expect(
-			wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-		).toBe(true);
-		expect(wrapper.props("tasks")).toStrictEqual([]);
-		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+		it("Should render loading state while fetching more tasks", () => {
+			const wrapper = mount(TasksList, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					tasks,
+					role: "student",
+					hasPagination: true,
+				},
+				computed: {
+					status() {
+						return "pending";
+					},
+					finishedTasksInitialized() {
+						return true;
+					},
+				},
+			});
 
-		spy1.mockRestore();
-		spy2.mockRestore();
-	});
-
-	it("Should render loading state while fetching more tasks", () => {
-		const spy1 = jest
-			.spyOn(TaskModule, "hasTasks", "get")
-			.mockReturnValue(true);
-		const spy2 = jest
-			.spyOn(FinishedTaskModule, "getStatus", "get")
-			.mockReturnValue("pending");
-		const spy3 = jest
-			.spyOn(FinishedTaskModule, "getInitialized", "get")
-			.mockReturnValue(true);
-
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				tasks,
-				role: "student",
-				hasPagination: true,
-			},
+			expect(wrapper.vm.showSpinner).toBe(true);
+			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
+			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
+			expect(
+				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
+			).toBe(false);
 		});
 
-		console.log(tasks.length);
-		expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
-		/* 	expect(
-			wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-		).toBe(true);
-		expect(wrapper.props("tasks")).toStrictEqual([]);
-		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0); */
+		it("Should compute correct status", () => {
+			const spy1 = jest
+				.spyOn(FinishedTaskModule, "getStatus", "get")
+				.mockReturnValue("pending");
+			const spy2 = jest
+				.spyOn(TaskModule, "getStatus", "get")
+				.mockReturnValue("completed");
 
-		spy1.mockRestore();
-		spy2.mockRestore();
-		spy3.mockRestore();
+			const wrapper = mount(TasksList, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					tasks,
+					role: "student",
+				},
+			});
+
+			expect(wrapper.vm.status).toBe("completed");
+
+			spy1.mockRestore();
+			spy2.mockRestore();
+		});
 	});
 });
