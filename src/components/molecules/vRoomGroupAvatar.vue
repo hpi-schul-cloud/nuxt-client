@@ -100,7 +100,7 @@ export default {
 			this.$emit("drop");
 		},
 		dragend() {
-			this.$emit("dragEnd", this.item);
+			this.$emit("dragend", this.item);
 		},
 	},
 };
