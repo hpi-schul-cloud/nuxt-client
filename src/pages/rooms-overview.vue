@@ -20,16 +20,18 @@
 				:append-icon="mdiMagnify"
 			>
 			</v-text-field>
-			<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
-				<v-col
+			<div
+				v-for="(row, rowIndex) in dimensions.rowCount"
+				:key="rowIndex"
+				class="room-overview-row"
+			>
+				<div
 					v-for="(col, colIndex) in dimensions.colCount"
 					:key="colIndex"
-					class="ma-0 pa-0 mt-2 mb-2"
+					class="room-overview-col"
+					:style="{ width: dimensions.cellWidth }"
 				>
-					<div
-						v-if="getDataObject(rowIndex, colIndex) !== undefined"
-						class="d-flex justify-center"
-					>
+					<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
 						<vRoomEmptyAvatar
 							v-if="isEmptyGroup(rowIndex, colIndex)"
 							:ref="`${rowIndex}-${colIndex}`"
@@ -63,17 +65,17 @@
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 						></vRoomAvatar>
-					</div>
-					<div v-else class="d-flex justify-center">
+					</template>
+					<template v-else>
 						<vRoomEmptyAvatar
 							:ref="`${rowIndex}-${colIndex}`"
 							:size="dimensions.cellWidth"
 							:show-outline="dragging"
 							@drop="setDropElement({ x: colIndex, y: rowIndex })"
 						></vRoomEmptyAvatar>
-					</div>
-				</v-col>
-			</v-row>
+					</template>
+				</div>
+			</div>
 		</div>
 		<room-modal
 			ref="roomModal"
@@ -297,18 +299,13 @@ export default {
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
-.row {
-	flex-wrap: nowrap;
-}
-
 .rooms-container {
 	max-width: 600px;
 	margin: 0 auto;
 }
 
-// @media #{map-get($display-breakpoints, 'lg-and-up')} {
-// 	.rooms-container {
-// 		// width: ;
-// 	}
-// }
+.room-overview-row {
+	display: flex;
+	justify-content: space-between;
+}
 </style>
