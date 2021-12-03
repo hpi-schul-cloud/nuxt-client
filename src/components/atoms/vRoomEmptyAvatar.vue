@@ -21,7 +21,7 @@
 			>
 			</v-avatar>
 		</v-badge>
-		<span class="d-flex justify-center mt-1 sub-title"></span>
+		<div class="d-flex justify-center mt-1 sub-title"></div>
 	</div>
 </template>
 <script>
@@ -74,7 +74,7 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	height: var(--space-lg);
+	height: var(--space-xl);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
