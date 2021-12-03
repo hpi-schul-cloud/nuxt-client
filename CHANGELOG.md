@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-872 - add set-up node action to test workflow with node version 16
+- BC-830 - add link to rooms-overview items for course connection
 
 ### Changed
 

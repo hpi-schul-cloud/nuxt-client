@@ -55,6 +55,7 @@
 						:draggable="true"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+						@click="onClickSingleItem($event)"
 					></vRoomAvatar>
 				</div>
 				<div v-else class="d-flex justify-center">
@@ -272,6 +273,13 @@ export default {
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+		},
+		onClickSingleItem(item) {
+			if (item.id) {
+				this.$router.push({
+					path: `/courses/${item.id}`,
+				});
+			}
 		},
 	},
 };
