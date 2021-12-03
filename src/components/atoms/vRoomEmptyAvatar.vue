@@ -57,13 +57,11 @@ export default {
 <style scoped>
 .outlined {
 	border: 2px dashed;
-	border-color: var(--color-primary);
-	transition: border-width 0.3s;
+	border-color: var(--color-secondary);
 }
 .hovered-avatar {
-	border: 3px solid;
-	border-color: var(--color-primary);
-	transition: border-width 0.3s;
+	border: 2px solid;
+	border-color: var(--color-secondary);
 }
 .avatar-component-empty {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

@@ -1,74 +1,78 @@
 <template>
-	<default-wireframe ref="main" :headline="title" :full-width="true">
-		<v-row class="justify-center">
-			<div class="d-flex justify-space-between col-sm-8">
-				<v-text-field
-					ref="search"
-					v-model="searchText"
-					:label="$t('common.words.search')"
-					:append-icon="mdiMagnify"
-				>
-				</v-text-field>
+	<default-wireframe ref="main" headline="" :full-width="true">
+		<template slot="header">
+			<h1 class="text-h3">some dummy headline</h1>
+			<div class="mb-5">
+				<v-btn outlined small to="/rooms-list">All Rooms</v-btn>
 			</div>
-			<div class="ml-5 mt-5 mr-2">
-				<v-btn to="/rooms-list">All Rooms</v-btn>
-			</div>
-		</v-row>
+		</template>
 
-		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
-			<v-col
-				v-for="(col, colIndex) in dimensions.colCount"
-				:key="colIndex"
-				class="ma-0 pa-0 mt-2 mb-2"
+		<div class="rooms-container">
+			<v-text-field
+				ref="search"
+				v-model="searchText"
+				class="room-search"
+				solo
+				rounded
+				:label="$t('common.words.search')"
+				:append-icon="mdiMagnify"
 			>
-				<div
-					v-if="getDataObject(rowIndex, colIndex) !== undefined"
-					class="d-flex justify-center"
+			</v-text-field>
+			<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
+				<v-col
+					v-for="(col, colIndex) in dimensions.colCount"
+					:key="colIndex"
+					class="ma-0 pa-0 mt-2 mb-2"
 				>
-					<vRoomEmptyAvatar
-						v-if="isEmptyGroup(rowIndex, colIndex)"
-						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth"
-						@drop="setDropElement({ x: colIndex, y: rowIndex })"
-					></vRoomEmptyAvatar>
-
-					<vRoomGroupAvatar
-						v-else-if="hasGroup(rowIndex, colIndex)"
-						:ref="`${rowIndex}-${colIndex}`"
-						class="room-group-avatar"
-						:data="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth"
-						:device="device"
-						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
-						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-						@dragend="onDragend"
-						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+					<div
+						v-if="getDataObject(rowIndex, colIndex) !== undefined"
+						class="d-flex justify-center"
 					>
-					</vRoomGroupAvatar>
+						<vRoomEmptyAvatar
+							v-if="isEmptyGroup(rowIndex, colIndex)"
+							:ref="`${rowIndex}-${colIndex}`"
+							:size="dimensions.cellWidth"
+							@drop="setDropElement({ x: colIndex, y: rowIndex })"
+						></vRoomEmptyAvatar>
 
-					<vRoomAvatar
-						v-else
-						:ref="`${rowIndex}-${colIndex}`"
-						class="room-avatar"
-						:item="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth"
-						:show-badge="true"
-						:draggable="true"
-						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-						@dragend="onDragend"
-						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-					></vRoomAvatar>
-				</div>
-				<div v-else class="d-flex justify-center">
-					<vRoomEmptyAvatar
-						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth"
-						:show-outline="dragging"
-						@drop="setDropElement({ x: colIndex, y: rowIndex })"
-					></vRoomEmptyAvatar>
-				</div>
-			</v-col>
-		</v-row>
+						<vRoomGroupAvatar
+							v-else-if="hasGroup(rowIndex, colIndex)"
+							:ref="`${rowIndex}-${colIndex}`"
+							class="room-group-avatar"
+							:data="getDataObject(rowIndex, colIndex)"
+							:size="dimensions.cellWidth"
+							:device="device"
+							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+							@dragend="onDragend"
+							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+						>
+						</vRoomGroupAvatar>
+
+						<vRoomAvatar
+							v-else
+							:ref="`${rowIndex}-${colIndex}`"
+							class="room-avatar"
+							:item="getDataObject(rowIndex, colIndex)"
+							:size="dimensions.cellWidth"
+							:show-badge="true"
+							:draggable="true"
+							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+							@dragend="onDragend"
+							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+						></vRoomAvatar>
+					</div>
+					<div v-else class="d-flex justify-center">
+						<vRoomEmptyAvatar
+							:ref="`${rowIndex}-${colIndex}`"
+							:size="dimensions.cellWidth"
+							:show-outline="dragging"
+							@drop="setDropElement({ x: colIndex, y: rowIndex })"
+						></vRoomEmptyAvatar>
+					</div>
+				</v-col>
+			</v-row>
+		</div>
 		<room-modal
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
@@ -289,8 +293,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 .row {
 	flex-wrap: nowrap;
 }
+
+.rooms-container {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+// @media #{map-get($display-breakpoints, 'lg-and-up')} {
+// 	.rooms-container {
+// 		// width: ;
+// 	}
+// }
 </style>
