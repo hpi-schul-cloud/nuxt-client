@@ -34,7 +34,7 @@ describe("@components/organisms/TasksList", () => {
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
 			const typeValidator = TasksList.props.type.validator;
-			const roleValidator = TasksList.props.role.validator;
+			const roleValidator = TasksList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
 			const invalidValues = ["invalid", "type"];
@@ -68,7 +68,7 @@ describe("@components/organisms/TasksList", () => {
 				vuetify,
 				propsData: {
 					tasks,
-					role: "student",
+					userRole: "student",
 				},
 			});
 
@@ -89,7 +89,7 @@ describe("@components/organisms/TasksList", () => {
 				vuetify,
 				propsData: {
 					tasks,
-					role: "student",
+					userRole: "student",
 					title: "my subheader",
 				},
 			});
@@ -111,7 +111,7 @@ describe("@components/organisms/TasksList", () => {
 			vuetify,
 			propsData: {
 				tasks,
-				role: "student",
+				userRole: "student",
 			},
 		});
 
@@ -154,7 +154,7 @@ describe("@components/organisms/TasksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				role: "student",
+				userRole: "student",
 			},
 		});
 		expect(wrapper.props("tasks")).toStrictEqual([]);
@@ -178,7 +178,7 @@ describe("@components/organisms/TasksList", () => {
 				vuetify,
 				propsData: {
 					tasks: [],
-					role: "student",
+					userRole: "student",
 				},
 			});
 
@@ -203,14 +203,14 @@ describe("@components/organisms/TasksList", () => {
 				vuetify,
 				propsData: {
 					tasks,
-					role: "student",
+					userRole: "student",
 					hasPagination: true,
 				},
 				computed: {
 					status() {
 						return "pending";
 					},
-					finishedTasksInitialized() {
+					finishedTasksIsInitialized() {
 						return true;
 					},
 				},
@@ -240,7 +240,7 @@ describe("@components/organisms/TasksList", () => {
 				vuetify,
 				propsData: {
 					tasks,
-					role: "student",
+					userRole: "student",
 				},
 			});
 
