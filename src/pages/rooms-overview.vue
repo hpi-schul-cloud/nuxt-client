@@ -1,9 +1,11 @@
 <template>
 	<default-wireframe ref="main" headline="" :full-width="true">
 		<template slot="header">
-			<h1 class="text-h3">some dummy headline</h1>
+			<h1 class="text-h3">Current Courses</h1>
 			<div class="mb-5">
-				<v-btn outlined small to="/rooms-list">All Rooms</v-btn>
+				<v-btn color="secondary" outlined small to="/rooms-list"
+					>All Courses</v-btn
+				>
 			</div>
 		</template>
 
@@ -300,7 +302,7 @@ export default {
 }
 
 .rooms-container {
-	max-width: 800px;
+	max-width: 600px;
 	margin: 0 auto;
 }
 

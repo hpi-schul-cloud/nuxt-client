@@ -1,17 +1,21 @@
 <template>
-	<default-wireframe ref="main" :headline="title" :full-width="true">
+	<default-wireframe
+		ref="main"
+		headline="All Courses"
+		:full-width="true"
+		:breadcrumbs="breadcrumbs"
+	>
 		<v-row class="justify-center search">
 			<div class="d-flex justify-space-between col-sm-8">
 				<v-text-field
 					ref="search"
 					v-model="searchText"
+					rounded
+					solo
 					:label="$t('common.words.search')"
 					:append-icon="mdiMagnify"
 				>
 				</v-text-field>
-			</div>
-			<div class="ml-5 mt-5 mr-2">
-				<v-btn to="/rooms-overview">Back to Dashboard</v-btn>
 			</div>
 		</v-row>
 
@@ -59,6 +63,7 @@ export default Vue.extend({
 		return {
 			mdiMagnify,
 			searchText: "",
+			breadcrumbs: [{ text: "Current Courses", to: "/rooms-overview" }],
 		};
 	},
 	computed: {

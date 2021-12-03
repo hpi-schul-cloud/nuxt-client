@@ -28,6 +28,7 @@ import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 export type Breadcrumb = {
 	text: string;
 	href?: string;
+	to?: string;
 	disabled?: boolean;
 };
 
