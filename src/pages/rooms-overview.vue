@@ -1,72 +1,82 @@
 <template>
-	<default-wireframe ref="main" :headline="title" :full-width="true">
-		<v-row class="text-left pl-2">
-			<v-col cols="8" sm="6" md="8" lg="8">
-				<v-text-field
-					ref="search"
-					v-model="searchText"
-					:label="$t('common.words.search')"
-					:append-icon="mdiMagnify"
-				>
-				</v-text-field>
-			</v-col>
-			<v-col class="text-right pr-2 pt-5" cols="4">
-				<v-btn to="/rooms-list">All Rooms</v-btn>
-			</v-col>
-		</v-row>
+	<default-wireframe ref="main" headline="" :full-width="true">
+		<template slot="header">
+			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
+			<div class="mb-5">
+				<v-btn color="secondary" outlined small to="/rooms-list">{{
+					$t("pages.courses.index.courses.all")
+				}}</v-btn>
+			</div>
+		</template>
 
-		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
-			<v-col
-				v-for="(col, colIndex) in dimensions.colCount"
-				:key="colIndex"
-				class="ma-0 pa-0 mt-2 mb-2"
+		<div class="rooms-container">
+			<v-text-field
+				ref="search"
+				v-model="searchText"
+				class="room-search"
+				solo
+				rounded
+				:label="$t('common.words.search')"
+				:append-icon="mdiMagnify"
+			>
+			</v-text-field>
+			<div
+				v-for="(row, rowIndex) in dimensions.rowCount"
+				:key="rowIndex"
+				class="room-overview-row"
 			>
 				<div
-					v-if="getDataObject(rowIndex, colIndex) !== undefined"
-					class="d-flex justify-center"
+					v-for="(col, colIndex) in dimensions.colCount"
+					:key="colIndex"
+					class="room-overview-col"
+					:style="{ width: dimensions.cellWidth }"
 				>
-					<vRoomEmptyAvatar
-						v-if="isEmptyGroup(rowIndex, colIndex)"
-						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth"
-						@drop="setDropElement({ x: colIndex, y: rowIndex })"
-					></vRoomEmptyAvatar>
+					<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
+						<vRoomEmptyAvatar
+							v-if="isEmptyGroup(rowIndex, colIndex)"
+							:ref="`${rowIndex}-${colIndex}`"
+							:size="dimensions.cellWidth"
+							@drop="setDropElement({ x: colIndex, y: rowIndex })"
+						></vRoomEmptyAvatar>
 
-					<vRoomGroupAvatar
-						v-else-if="hasGroup(rowIndex, colIndex)"
-						:ref="`${rowIndex}-${colIndex}`"
-						class="room-group-avatar"
-						:data="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth"
-						:device="device"
-						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
-						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
-					>
-					</vRoomGroupAvatar>
-
-					<vRoomAvatar
-						v-else
-						:ref="`${rowIndex}-${colIndex}`"
-						class="room-avatar"
-						:item="getDataObject(rowIndex, colIndex)"
-						:size="dimensions.cellWidth"
-						:show-badge="true"
-						:draggable="true"
-						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-						@click="onClickSingleItem($event)"
-					></vRoomAvatar>
+						<vRoomGroupAvatar
+							v-else-if="hasGroup(rowIndex, colIndex)"
+							:ref="`${rowIndex}-${colIndex}`"
+							class="room-group-avatar"
+							:data="getDataObject(rowIndex, colIndex)"
+							:size="dimensions.cellWidth"
+							:device="device"
+							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+							@dragend="onDragend"
+							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+						>
+						</vRoomGroupAvatar>
+						<vRoomAvatar
+							v-else
+							:ref="`${rowIndex}-${colIndex}`"
+							class="room-avatar"
+							:item="getDataObject(rowIndex, colIndex)"
+							:size="dimensions.cellWidth"
+							:show-badge="true"
+							:draggable="true"
+							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+							@dragend="onDragend"
+							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+              @click="onClickSingleItem($event)"
+						></vRoomAvatar>
+					</template>
+					<template v-else>
+						<vRoomEmptyAvatar
+							:ref="`${rowIndex}-${colIndex}`"
+							:size="dimensions.cellWidth"
+							:show-outline="dragging"
+							@drop="setDropElement({ x: colIndex, y: rowIndex })"
+						></vRoomEmptyAvatar>
+					</template>
 				</div>
-				<div v-else class="d-flex justify-center">
-					<vRoomEmptyAvatar
-						:ref="`${rowIndex}-${colIndex}`"
-						:size="dimensions.cellWidth"
-						@drop="setDropElement({ x: colIndex, y: rowIndex })"
-					></vRoomEmptyAvatar>
-				</div>
-			</v-col>
-		</v-row>
+			</div>
+		</div>
 		<room-modal
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
@@ -118,6 +128,7 @@ export default {
 			draggedElementName: "",
 			mdiMagnify,
 			searchText: "",
+			dragging: false,
 		};
 	},
 	computed: {
@@ -159,24 +170,24 @@ export default {
 			this.device = this.$mq;
 			switch (this.$mq) {
 				case "tablet":
-					this.dimensions.colCount = 6;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "4em";
 					break;
 				case "tabletPortrait":
-					this.dimensions.colCount = 6;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 8;
-					this.dimensions.cellWidth = "7em";
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "large":
-					this.dimensions.colCount = 12;
-					this.dimensions.cellWidth = "7em";
+					this.dimensions.colCount = 4;
+					this.dimensions.cellWidth = "5em";
 					break;
 				case "mobile":
 					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "4.5em";
+					this.dimensions.cellWidth = "3.7em";
 					break;
 				default:
 					this.dimensions.colCount = 6;
@@ -211,6 +222,7 @@ export default {
 			this.showDeleteSection = true;
 			this.draggedElementName = this.getElementNameByRef(pos);
 			this.searchText = "";
+			this.dragging = true;
 		},
 		setDropElement(pos) {
 			this.draggedElement.to = pos;
@@ -223,6 +235,10 @@ export default {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
+			this.dragging = false;
+		},
+		onDragend() {
+			this.dragging = false;
 		},
 		async setGroupElements(pos) {
 			this.draggedElement.to = pos;
@@ -253,6 +269,7 @@ export default {
 			) {
 				this.savePosition();
 			}
+			this.dragging = false;
 		},
 		getElementNameByRef(pos) {
 			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
@@ -261,7 +278,7 @@ export default {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: this.items
+				groupIndex: RoomsModule.roomsData
 					.find((item) => item.id == this.groupDialog.groupData.id)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
@@ -269,6 +286,7 @@ export default {
 			this.draggedElementName = "groupItem";
 			this.groupDialog.isOpen = false;
 			this.searchText = "";
+			this.dragging = true;
 		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
@@ -286,5 +304,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+.rooms-container {
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.room-overview-row {
+	display: flex;
+	justify-content: space-between;
+}
 </style>
