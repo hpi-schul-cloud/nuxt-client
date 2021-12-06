@@ -15,7 +15,7 @@
 					:href="item.href"
 					:to="item.to"
 					:disabled="item.disabled"
-					class=""
+					class="breadcrumbs-item"
 				>
 					{{ item.text }}
 				</v-breadcrumbs-item>
