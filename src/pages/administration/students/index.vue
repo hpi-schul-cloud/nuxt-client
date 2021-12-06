@@ -292,7 +292,6 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
-					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),

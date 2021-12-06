@@ -13,6 +13,7 @@
 				:class="{
 					'hovered-avatar': hovered,
 					'avatar-component-empty': !hovered,
+					outlined: showOutline,
 				}"
 				:size="size"
 				@dragleave="dragLeave"
@@ -20,7 +21,7 @@
 			>
 			</v-avatar>
 		</v-badge>
-		<span class="d-flex justify-center mt-1 sub-title"></span>
+		<div class="d-flex justify-center mt-1 sub-title"></div>
 	</div>
 </template>
 <script>
@@ -29,6 +30,10 @@ export default {
 		size: {
 			type: String,
 			required: true,
+		},
+		showOutline: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
@@ -50,10 +55,13 @@ export default {
 };
 </script>
 <style scoped>
+.outlined {
+	border: 2px dashed;
+	border-color: var(--color-secondary);
+}
 .hovered-avatar {
-	border: 3px solid;
-	border-color: var(--color-primary);
-	transition: border-width 0.3s;
+	border: 2px solid;
+	border-color: var(--color-secondary);
 }
 .avatar-component-empty {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -64,6 +72,7 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	height: var(--space-xl);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
