@@ -586,6 +586,7 @@
 	"pages.courses._id.tab.tools": "Herramientas",
 	"pages.courses.index.courses.active": "Cursos actuales",
 	"pages.courses.index.courses.archived": "Cursos archivados",
+	"pages.courses.index.courses.all": "Todos los cursos",
 	"pages.courses.index.title": "Mi curso",
 	"pages.courses.new.btn_new": "Crear",
 	"pages.courses.new.title": "Crear nuevo curso",

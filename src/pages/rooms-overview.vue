@@ -1,11 +1,11 @@
 <template>
 	<default-wireframe ref="main" headline="" :full-width="true">
 		<template slot="header">
-			<h1 class="text-h3">Current Courses</h1>
+			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
 			<div class="mb-5">
-				<v-btn color="secondary" outlined small to="/rooms-list"
-					>All Courses</v-btn
-				>
+				<v-btn color="secondary" outlined small to="/rooms-list">{{
+					$t("pages.courses.index.courses.all")
+				}}</v-btn>
 			</div>
 		</template>
 

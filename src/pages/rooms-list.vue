@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe
 		ref="main"
-		headline="All Courses"
+		:headline="$t('pages.courses.index.courses.all')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
@@ -63,7 +63,12 @@ export default Vue.extend({
 		return {
 			mdiMagnify,
 			searchText: "",
-			breadcrumbs: [{ text: "Current Courses", to: "/rooms-overview" }],
+			breadcrumbs: [
+				{
+					text: this.$t("pages.courses.index.courses.active"),
+					to: "/rooms-overview",
+				},
+			],
 		};
 	},
 	computed: {
