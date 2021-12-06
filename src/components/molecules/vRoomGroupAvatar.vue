@@ -99,7 +99,7 @@ export default {
 			this.$emit("drop");
 		},
 		dragend() {
-			this.$emit("dragend", this.item);
+			this.$emit("dragend");
 			this.isDragging = false;
 		},
 	},

@@ -92,7 +92,7 @@ export default {
 		},
 		dragend() {
 			this.isDragging = false;
-			this.$emit("dragend", this.item);
+			this.$emit("dragend");
 		},
 		dropAvatar() {
 			this.$emit("drop");
