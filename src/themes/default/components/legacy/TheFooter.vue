@@ -1,4 +1,5 @@
 <template>
+	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Secuurity'; the other instances are not using this link.  -->
 	<footer class="footer">
 		<div>
 			<template v-for="(link, index) in links">
