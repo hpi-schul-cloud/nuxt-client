@@ -58,8 +58,8 @@ export default {
 		},
 		getImage() {
 			if (this.error)
-				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
-			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
+				return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
+			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
 		},
 		active() {
 			return AutoLogoutModule.getActive;
