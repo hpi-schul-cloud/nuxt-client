@@ -5,7 +5,6 @@
 		inset
 		flat
 		dense
-		:ripple="false"
 		:class="customClasses"
 		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
@@ -34,3 +33,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-input--selection-controls__ripple {
+	position: absolute !important;
+}
+</style>
