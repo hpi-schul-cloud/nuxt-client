@@ -41,6 +41,34 @@ const mockData = {
 			xPosition: 5,
 			yPosition: 2,
 		},
+		{
+			id: "789",
+			title: "Science",
+			shortTitle: "Sc",
+			displayColor: "exampleColor",
+			groupElements: [
+				{
+					id: "987",
+					title: "Biology",
+					shortTitle: "Bi",
+					displayColor: "#f23f76",
+				},
+				{
+					id: "645",
+					title: "Chemistry",
+					shortTitle: "Ch",
+					displayColor: "#f23f76",
+				},
+				{
+					id: "321",
+					title: "Physics",
+					shortTitle: "Ph",
+					displayColor: "#f23f76",
+				},
+			],
+			xPosition: 3,
+			yPosition: 3,
+		},
 	],
 };
 
@@ -166,6 +194,39 @@ describe("rooms module", () => {
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData
 				);
+			});
+
+			it("should update the state", async (done) => {
+				const mockApi = {
+					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
+						data: { ...groupToPatch },
+					})),
+				};
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+				const roomsModule = new Rooms({});
+
+				const roomsData: RoomsData = {
+					id: "dummyId",
+					title: "dummy title",
+					shortTitle: "dummy short title",
+					xPosition: 3,
+					yPosition: 3,
+					displayColor: "#FF0000",
+				};
+
+				roomsModule.update(roomsData).then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					done();
+				});
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
+					roomsData
+				);
+				expect(roomsModule.getRoomsData[3].title).toBe(roomsData.title);
 			});
 			it("handle error", async (done) => {
 				const error = { status: 418, statusText: "I'm a teapot" };
