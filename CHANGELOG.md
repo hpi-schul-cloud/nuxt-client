@@ -18,6 +18,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-445 - fixed wrong font scaling on default instance
+
 ## [26.19.0] - 2021-11-30
 
 ### Fixed
