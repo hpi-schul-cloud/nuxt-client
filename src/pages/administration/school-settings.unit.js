@@ -94,7 +94,7 @@ const envs = {
 	I18N__DEFAULT_LANGUAGE: "de",
 	I18N__DEFAULT_TIMEZONE: "Europe/Berlin",
 	I18N__FALLBACK_LANGUAGE: "de",
-	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/schul-cloud-hpi/",
+	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/cloud-instances/",
 	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
 	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
