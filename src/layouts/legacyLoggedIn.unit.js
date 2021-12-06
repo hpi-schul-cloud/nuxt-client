@@ -1,5 +1,6 @@
 import legacyLoggedIn from "./legacyLoggedIn";
 import AuthModule from "@/store/auth";
+import FilePathsModule from "@/store/filePaths";
 
 const $route = {
 	query: {
@@ -14,6 +15,8 @@ AuthModule.setUser({
 	roles: [{ name: "administrator" }],
 });
 AuthModule.setAccessToken("asdf");
+
+FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
 describe("legacyLoggedIn", () => {
 	it(...isValidComponent(legacyLoggedIn));

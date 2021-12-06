@@ -8,7 +8,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenTasksForTeacher"
+					:is-empty="openTasksForTeacherIsEmpty"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -28,7 +28,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasOpenTasksForTeacher"
+					v-if="openTasksForTeacherIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					:subtitle="emptyState.subtitle"
@@ -38,7 +38,7 @@
 			<v-tab-item>
 				<tasks-list :tasks="draftTasks" user-role="teacher" />
 				<v-custom-empty-state
-					v-if="!hasDraftsForTeacher"
+					v-if="draftsForTeacherIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -52,7 +52,7 @@
 					type="finished"
 				/>
 				<v-custom-empty-state
-					v-if="hasNoFinishedTasks"
+					v-if="finishedTasksIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -86,9 +86,9 @@ export default {
 		draftTasks: () => TaskModule.getDraftTasksForTeacher,
 		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
-		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
-		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
-		hasNoFinishedTasks: () => FinishedTaskModule.hasNoTasks,
+		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
+		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
+		finishedTasksIsEmpty: () => FinishedTaskModule.tasksIsEmpty,
 		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;

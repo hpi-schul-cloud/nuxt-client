@@ -140,11 +140,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 	// it("Should disable filter when active tab contains empty list and no course is selected", () => {
 	// 	// make tab 2 report as not empty
 	// 	const spy0 = jest
-	// 		.spyOn(TaskModule, "hasOpenTasksForStudent", "get")
+	// 		.spyOn(TaskModule, "openTasksForStudentIsEmpty", "get")
 	// 		.mockReturnValue(false);
 
 	// 	const spy1 = jest
-	// 		.spyOn(TaskModule, "hasCompletedTasksForStudent", "get")
+	// 		.spyOn(TaskModule, "completedTasksForStudentIsEmpty", "get")
 	// 		.mockReturnValue(true);
 
 	// 	const spy2 = jest

@@ -41,6 +41,7 @@
 
 <script>
 import AuthModule from "@/store/auth";
+import FilePathsModule from "@/store/filePaths";
 
 export default {
 	data() {
@@ -61,6 +62,12 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
+					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
+				},
+				{
 					href: "/datenschutz",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
@@ -69,10 +76,6 @@ export default {
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
-				},
-				{
-					to: "/community",
-					text: this.$t("components.legacy.footer.contribute"),
 				},
 				{
 					href: "https://github.com/hpi-schul-cloud",
@@ -88,6 +91,9 @@ export default {
 				},
 			];
 		},
+	},
+	mounted() {
+		console.log(FilePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

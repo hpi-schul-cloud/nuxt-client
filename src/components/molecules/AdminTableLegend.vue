@@ -46,7 +46,11 @@
 			</strong>
 		</span>
 		<p class="hint">
-			{{ $t("components.molecules.admintablelegend.hint") }}
+			{{
+				$t("components.molecules.admintablelegend.hint", {
+					institute_title: setInstituteTitle,
+				})
+			}}
 		</p>
 	</div>
 </template>
@@ -69,6 +73,20 @@ export default {
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
+	},
+	computed: {
+		setInstituteTitle() {
+			switch (process.env.SC_THEME) {
+				case "n21":
+					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+				case "thr":
+					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+				case "brb":
+					return "Dataport";
+				default:
+					return "Dataport";
+			}
+		},
 	},
 };
 </script>

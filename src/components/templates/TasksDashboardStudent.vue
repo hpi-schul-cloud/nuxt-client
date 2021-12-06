@@ -8,7 +8,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenTasksForStudent"
+					:is-empty="openTasksForStudentIsEmpty"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -28,7 +28,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasOpenTasksForStudent"
+					v-if="openTasksForStudentIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					:subtitle="emptyState.subtitle"
@@ -42,7 +42,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
 					:panel-two-title="$t('pages.tasks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="!hasCompletedTasksForStudent"
+					:is-empty="completedTasksForStudentIsEmpty"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -53,7 +53,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasCompletedTasksForStudent"
+					v-if="completedTasksForStudentIsEmpty === true"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -66,7 +66,7 @@
 					type="finished"
 				/>
 				<v-custom-empty-state
-					v-if="hasNoFinishedTasks"
+					v-if="finishedTasksIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
@@ -99,10 +99,11 @@ export default {
 		status: () => TaskModule.getStatus,
 		openTasks: () => TaskModule.getOpenTasksForStudent,
 		completedTasks: () => TaskModule.getCompletedTasksForStudent,
-		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
-		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
+		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
+		completedTasksForStudentIsEmpty: () =>
+			TaskModule.completedTasksForStudentIsEmpty,
 		hasTasks: () => TaskModule.hasTasks,
-		hasNoFinishedTasks: () => FinishedTaskModule.hasNoTasks,
+		finishedTasksIsEmpty: () => FinishedTaskModule.tasksIsEmpty,
 		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
