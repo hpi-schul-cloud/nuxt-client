@@ -85,6 +85,10 @@ export default {
 					href: "https://status.hpi-schul-cloud.de",
 					text: this.$t("components.legacy.footer.status"),
 				},
+				{
+					to: "/security",
+					text: this.$t("components.legacy.footer.security"),
+				},
 			];
 		},
 	},
