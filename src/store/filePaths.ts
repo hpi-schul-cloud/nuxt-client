@@ -17,7 +17,7 @@ const specificFiles = {
 		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
 	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
 	termsOfUseSchool:
-		"Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
@@ -116,7 +116,7 @@ export class FilePaths extends VuexModule {
 		try {
 			const baseDir =
 				EnvConfigModule.getEnv.DOCUMENT_BASE_DIR ||
-				"https://s3.hidrive.strato.com/schul-cloud-hpi/";
+				"https://s3.hidrive.strato.com/cloud-instances/";
 			const theme = EnvConfigModule.getEnv.SC_THEME;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
