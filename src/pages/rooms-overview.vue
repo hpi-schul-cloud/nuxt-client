@@ -63,7 +63,7 @@
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-              @click="onClickSingleItem($event)"
+							@click="onClickSingleItem($event)"
 						></vRoomAvatar>
 					</template>
 					<template v-else>
