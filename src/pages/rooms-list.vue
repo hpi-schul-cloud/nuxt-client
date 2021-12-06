@@ -1,26 +1,24 @@
 <template>
-	<default-wireframe ref="main" :headline="title" :full-width="true">
-		<v-row class="mb-0 pb-0">
-			<v-col class="text-right pr-2 pt-5">
-				<v-btn to="/rooms-overview">Back to Dashboard</v-btn>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col class="mb-0 pb-0">
-				<h4 class="ma-0 pa-0">Search All Courses</h4>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col cols="12">
+	<default-wireframe
+		ref="main"
+		:headline="$t('pages.courses.index.courses.all')"
+		:full-width="true"
+		:breadcrumbs="breadcrumbs"
+	>
+		<v-row class="justify-center search">
+			<div class="d-flex justify-space-between col-sm-8">
 				<v-text-field
 					ref="search"
 					v-model="searchText"
+					rounded
+					solo
 					:label="$t('common.words.search')"
 					:append-icon="mdiMagnify"
 				>
 				</v-text-field>
-			</v-col>
+			</div>
 		</v-row>
+
 		<v-row>
 			<v-container fluid>
 				<v-row>
@@ -65,6 +63,12 @@ export default Vue.extend({
 		return {
 			mdiMagnify,
 			searchText: "",
+			breadcrumbs: [
+				{
+					text: this.$t("pages.courses.index.courses.active"),
+					to: "/rooms-overview",
+				},
+			],
 		};
 	},
 	computed: {
@@ -83,3 +87,10 @@ export default Vue.extend({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+.search {
+	flex-wrap: nowrap;
+}
+</style>

@@ -28,8 +28,8 @@ const mockStoreData = [
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
 		url: "/api/xxxx/1234w",
-		xPosition: 4,
-		yPosition: 4,
+		xPosition: 0,
+		yPosition: 0,
 	},
 	{
 		id: "4",
@@ -37,8 +37,8 @@ const mockStoreData = [
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
 		url: "/api/xxxx/1234w",
-		xPosition: 5,
-		yPosition: 5,
+		xPosition: 2,
+		yPosition: 3,
 		groupElements: [
 			{
 				id: "5",
@@ -123,7 +123,7 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper("mobile");
 		await flushPromises();
 		const avatarComponents = wrapper.findAll(".room-avatar");
-		expect(avatarComponents).toHaveLength(2);
+		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 1 group-avatar component", async () => {
@@ -173,10 +173,10 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$refs["2-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["4-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["5-5"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["3-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomGroupAvatar"
 		);
 		expect(wrapper.vm.$refs["3-3"][0].$options["_componentTag"]).toStrictEqual(
@@ -191,26 +191,26 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
-	it("should set the column count '6' if the device is 'tablet'", async () => {
+	it("should set the column count '4' if the device is 'tablet'", async () => {
 		const wrapper = getWrapper("tablet");
 		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-		expect(wrapper.vm.dimensions.colCount).toBe(6);
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
-	it("should set the column count '8' if the device is 'desktop'", async () => {
+	it("should set the column count '4' if the device is 'desktop'", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-		expect(wrapper.vm.dimensions.colCount).toBe(8);
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should call 'setDropElement' method after avatar-to-emptyAvatar drag&drop", async () => {
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
-				x: 4,
-				y: 4,
+				x: 0,
+				y: 0,
 			},
 			item: {
 				id: "3",
@@ -218,25 +218,25 @@ describe("RoomPage", () => {
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
 				url: "/api/xxxx/1234w",
-				xPosition: 4,
-				yPosition: 4,
+				xPosition: 0,
+				yPosition: 0,
 			},
 			to: {
-				x: 4,
+				x: 3,
 				y: 2,
 			},
 		};
 		await flushPromises();
-		expect(wrapper.vm.$refs["4-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["2-3"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
-		const avatarComponent = wrapper.findComponent({ ref: "4-4" });
+		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
 		avatarComponent.trigger("dragstart");
 
-		const emptyAvatarComponent = wrapper.findComponent({ ref: "2-4" });
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "2-3" });
 		emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
@@ -309,22 +309,22 @@ describe("RoomPage", () => {
 				yPosition: 1,
 			},
 			to: {
-				x: 5,
-				y: 5,
+				x: 2,
+				y: 3,
 			},
 		};
 		await flushPromises();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["5-5"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["3-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomGroupAvatar"
 		);
 
 		const fromAvatarComponent = wrapper.findComponent({ ref: "1-1" });
 		fromAvatarComponent.trigger("dragstart");
 
-		const toAvatarComponent = wrapper.findComponent({ ref: "5-5" });
+		const toAvatarComponent = wrapper.findComponent({ ref: "3-2" });
 		toAvatarComponent.trigger("drop");
 
 		expect(spyMocks.addGroupElementsMock).toHaveBeenCalled();
@@ -340,8 +340,8 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
-				x: 5,
-				y: 5,
+				x: 2,
+				y: 3,
 				groupIndex: 0,
 			},
 			item: {
@@ -350,8 +350,8 @@ describe("RoomPage", () => {
 				displayColor: "yellow",
 			},
 			to: {
-				x: 4,
-				y: 5,
+				x: 2,
+				y: 1,
 			},
 		};
 
@@ -364,8 +364,8 @@ describe("RoomPage", () => {
 					shortTitle: "Bi",
 					displayColor: "#EC407A",
 					url: "/api/xxxx/1234w",
-					xPosition: 5,
-					yPosition: 5,
+					xPosition: 2,
+					yPosition: 3,
 					groupElements: [
 						{
 							id: "5",
@@ -397,7 +397,7 @@ describe("RoomPage", () => {
 		await flushPromises();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
 
-		const emptyAvatarComponent = wrapper.findComponent({ ref: "5-4" });
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "1-2" });
 		emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
@@ -441,7 +441,7 @@ describe("RoomPage", () => {
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 
-		const avatarComponent = wrapper.findComponent({ ref: "4-4" });
+		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
 		avatarComponent.trigger("dragstart");
 		await flushPromises();
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
