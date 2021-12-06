@@ -65,11 +65,11 @@ module.exports = {
 		corsSiteSpecific: {
 			"^/$": {
 				defaultSrc:
-					"https://www10-fms.hpi.uni-potsdam.de https://play.google.com https://schul-cloud-hpi.s3.hidrive.strato.com",
+					"https://www10-fms.hpi.uni-potsdam.de https://play.google.com https://cloud-instances.s3.hidrive.strato.com",
 			},
 			"^/dashboard": {
 				defaultSrc:
-					"https://www10-fms.hpi.uni-potsdam.de https://schul-cloud-hpi.s3.hidrive.strato.com",
+					"https://www10-fms.hpi.uni-potsdam.de https://cloud-instances.s3.hidrive.strato.com",
 			},
 			"^/courses": {
 				defaultSrc:
@@ -112,7 +112,7 @@ module.exports = {
 			}, */
 			"^/about": {
 				defaultSrc:
-					"https://www10-fms.hpi.uni-potsdam.de https://schul-cloud-hpi.s3.hidrive.strato.com",
+					"https://www10-fms.hpi.uni-potsdam.de https://cloud-instances.s3.hidrive.strato.com",
 			},
 			"^/community": {
 				defaultSrc: "https://play.google.com",
