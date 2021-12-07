@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nuxtclient-ldap-deployment
+  namespace: {{ NAMESPACE }}
+  labels:
+    app: nuxtclient-ldap
+spec:
+  replicas: {{ NUXTCLIENT_LDAP_REPLICAS|default("1", true) }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      #maxUnavailable: 1
+  revisionHistoryLimit: 4
+  paused: false
+  selector:
+    matchLabels:
+      app: nuxtclient-ldap
+  template:
+    metadata:
+      labels:
+        app: nuxtclient-ldap
+      annotations:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
+      containers:
+      - name: nuxtclient-ldap
+        image: {{ NUXT_CLIENT_IMAGE }}-{{ SC_THEME }}:{{ NUXT_CLIENT_IMAGE_TAG }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: nuxtclient
+          containerPort: 4000
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: nuxtclient-configmap
+        env:
+        - name: LEGACY_CLIENT_URL
+          value: "http://client-ldap-svc:3100"
+        volumeMounts:
+        - mountPath: /app/http-headers.config.js
+          subPath: http-headers.js
+          name: http-headers
+        readinessProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 3
+          periodSeconds: 15
+        startupProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 60
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: {{ NUXTCLIENT_CPU_LIMITS|default("2000m", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("4Gi", true) }}
+          requests:
+            cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("128Mi", true) }}
+      volumes:
+      - name: http-headers
+        configMap:
+          name: nuxtclient-configmap-files
+          items:
+          - key: http-headers.js
+            path: http-headers.js
