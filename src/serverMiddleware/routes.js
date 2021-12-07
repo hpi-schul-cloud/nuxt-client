@@ -26,6 +26,7 @@ const routes = [
 	`^/administration/school-settings$`,
 	`^/tasks/open`,
 	`^/tasks/assigned`,
+	`^/homework`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,
