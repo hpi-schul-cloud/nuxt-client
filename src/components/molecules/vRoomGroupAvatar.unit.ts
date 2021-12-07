@@ -82,7 +82,7 @@ describe("vRoomGroupAvatar", () => {
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML).toStrictEqual("Fourth");
+		expect(labelElement.innerHTML.trim()).toStrictEqual("Fourth");
 	});
 
 	it("should display the badge", () => {
@@ -112,7 +112,7 @@ describe("vRoomGroupAvatar", () => {
 		const iterator = wrapper.vm.$refs["avatar-iterator"] as any;
 
 		expect(iterator).toBeTruthy();
-		expect(iterator.$props.itemSize).toStrictEqual("1em");
+		expect(iterator.$props.itemSize).toStrictEqual("0.8em");
 		expect(iterator.$props.items).toStrictEqual(mockData.groupElements);
 		expect(iterator.$props.condenseLayout).toBe(true);
 	});
