@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-617 - changes for transition to Dataport
+- BC-741 - Sort and split ansible rols
 
 ### Fixed
 
