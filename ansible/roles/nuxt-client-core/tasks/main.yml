@@ -1,23 +1,23 @@
   - name: Service
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
       template: svc.yml.j2
       
   - name: Configmap
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
       template: configmap.yml.j2
       
   - name: Configmap File
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
       template: configmap-files.yml.j2
       
   - name: Deployment
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
       template: deployment.yml.j2
