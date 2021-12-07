@@ -22,7 +22,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 15, // set back to 50 when developing and testing is done
+		limit: 50,
 		skip: 0,
 		total: 0,
 	};
