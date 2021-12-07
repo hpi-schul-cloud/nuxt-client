@@ -45,7 +45,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(8);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(7);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name
 		);
