@@ -111,7 +111,6 @@ export default {
 		};
 	},
 	computed: {
-		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
 		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
 		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,

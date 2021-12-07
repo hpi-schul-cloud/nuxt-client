@@ -1,5 +1,7 @@
 import TasksDashboardMain from "./TasksDashboardMain";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import TasksDashboardStudent from "./TasksDashboardStudent";
+import TasksDashboardTeacher from "./TasksDashboardTeacher";
+import vCustomFab from "@components/atoms/vCustomFab";
 import Vuetify from "vuetify";
 import TaskModule from "@/store/tasks";
 
@@ -12,80 +14,139 @@ describe("@components/templates/TasksDashboardMain", () => {
 
 	it(...isValidComponent(TasksDashboardMain));
 
-	it("Should render empty state, if there are no tasks", () => {
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "teacher",
-			},
+	describe("when mounting the component", () => {
+		it("Should should trigger fetachAllTasks", async () => {
+			const spy = jest.spyOn(TaskModule, "fetchAllTasks");
+
+			shallowMount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "student",
+				},
+			});
+
+			expect(spy).toHaveBeenCalled();
 		});
 
-		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
+		it("Should receive valid role props", () => {
+			const validRoles = ["student", "teacher"];
+			const invalidRoles = ["janitor", "principal"];
+			const { validator } = TasksDashboardMain.props.role;
+
+			validRoles.forEach((role) => {
+				expect(validator(role)).toBe(true);
+			});
+			invalidRoles.forEach((role) => {
+				expect(validator(role)).toBe(false);
+			});
+		});
 	});
 
-	it("Should should trigger a store action", async () => {
-		const spy = jest.spyOn(TaskModule, "fetchAllTasks");
+	describe("when user role is student", () => {
+		it("Should set isStudent true", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "student",
+				},
+			});
 
-		shallowMount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "student",
-			},
+			expect(wrapper.vm.isStudent).toBe(true);
+			expect(wrapper.vm.isTeacher).toBe(false);
 		});
 
-		expect(spy).toHaveBeenCalled();
+		it("Should render student's tasks dashboard", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "student",
+				},
+			});
+
+			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			expect(studentDashboard.exists()).toBe(true);
+			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			expect(teacherDashboard.exists()).toBe(false);
+		});
+
+		it("Should not render add task button", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "student",
+				},
+			});
+
+			const fab = wrapper.findComponent(vCustomFab);
+			expect(fab.exists()).toBe(false);
+		});
 	});
 
-	it("Should render student's tasks dashboard for a student", () => {
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "student",
-			},
+	describe("when user role is teacher", () => {
+		it("Should set isTeacher true", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "teacher",
+				},
+			});
+
+			expect(wrapper.vm.isTeacher).toBe(true);
+			expect(wrapper.vm.isStudent).toBe(false);
 		});
 
-		expect(wrapper.find(".task-dashboard-student").exists()).toBe(true);
-		expect(wrapper.find(".task-dashboard-teacher").exists()).toBe(false);
-	});
+		it("Should render teacher's tasks dashboard", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "teacher",
+				},
+			});
 
-	it("Should render teacher's tasks dashboard for a teacher", () => {
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "teacher",
-			},
+			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			expect(teacherDashboard.exists()).toBe(true);
+			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			expect(studentDashboard.exists()).toBe(false);
 		});
 
-		expect(wrapper.find(".task-dashboard-teacher").exists()).toBe(true);
-		expect(wrapper.find(".task-dashboard-student").exists()).toBe(false);
-	});
+		it("Should render add task button", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "teacher",
+				},
+			});
 
-	it("Should receive valid role props", () => {
-		const validRoles = ["student", "teacher"];
-		const invalidRoles = ["janitor", "principal"];
-		const { validator } = TasksDashboardMain.props.role;
-
-		validRoles.forEach((role) => {
-			expect(validator(role)).toBe(true);
-		});
-		invalidRoles.forEach((role) => {
-			expect(validator(role)).toBe(false);
+			const fab = wrapper.findComponent(vCustomFab);
+			expect(fab.exists()).toBe(true);
 		});
 	});
 
