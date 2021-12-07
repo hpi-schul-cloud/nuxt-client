@@ -64,6 +64,7 @@
 					:tasks="finishedTasks"
 					user-role="student"
 					type="finished"
+					:has-pagination="tab === 2"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"

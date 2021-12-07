@@ -48,8 +48,8 @@
 				<tasks-list
 					:tasks="finishedTasks"
 					user-role="teacher"
-					:has-pagination="tab === 2"
 					type="finished"
+					:has-pagination="tab === 2"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"
