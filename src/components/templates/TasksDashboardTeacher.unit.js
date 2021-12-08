@@ -3,6 +3,7 @@ import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import mocks from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -26,6 +27,12 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		},
 	};
 
+	const emptyState = {
+		title: "Lorem ipsum",
+		image: tasksEmptyStateImage,
+		subtitle: undefined,
+	};
+
 	let vuetify;
 
 	beforeEach(() => {
@@ -44,6 +51,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 0,
+				emptyState,
 			},
 		});
 
@@ -69,6 +77,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 1,
+				emptyState,
 			},
 		});
 
@@ -85,7 +94,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 1,
-				hasFilterSelected: true,
+				emptyState,
 			},
 		});
 
@@ -102,6 +111,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 1,
+				emptyState,
 			},
 		});
 
