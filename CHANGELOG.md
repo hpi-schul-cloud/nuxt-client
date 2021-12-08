@@ -10,15 +10,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-609 - showing finished (formerly archived) tasks in new task overview
+
+### Fixed
+
+## [26.20.0] - 2021-12-7
+
+### Added
+
 - BC-872 - add set-up node action to test workflow with node version 16
 - BC-830 - add link to rooms-overview items for course connection
 
 ### Changed
 
+- BC-885 - adjust footer
 - BC-617 - changes for transition to Dataport
 - BC-741 - Sort and split ansible rols
-
-### Fixed
 
 ## [26.19.0] - 2021-11-30
 
