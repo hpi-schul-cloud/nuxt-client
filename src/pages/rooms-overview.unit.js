@@ -32,7 +32,7 @@ const mockStoreData = [
 		yPosition: 0,
 	},
 	{
-		id: "4",
+		groupId: "4",
 		title: "Fourth",
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
@@ -359,7 +359,7 @@ describe("RoomPage", () => {
 			groupDialog: {
 				isOpen: true,
 				groupData: {
-					id: "4",
+					groupId: "4",
 					title: "Fourth",
 					shortTitle: "Bi",
 					displayColor: "#EC407A",

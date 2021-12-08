@@ -46,7 +46,7 @@
 							:data="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:device="device"
-							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+							@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
@@ -206,7 +206,7 @@ export default {
 		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.items.find(
-				(item) => item.id == groupId
+				(item) => item.groupId == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},

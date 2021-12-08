@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - BC-641 - improved accessibility on vuetify switch
+- BC-925 - fixing groupId on room-overview page
 
 ## [26.20.0] - 2021-12-7
 
