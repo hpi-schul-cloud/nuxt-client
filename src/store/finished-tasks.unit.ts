@@ -213,7 +213,6 @@ describe("finished task store", () => {
 			it("should set the status in state", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.setStatus("completed");
-				
 				expect(finishedTaskModule.status).toBe("completed");
 			});
 		});
@@ -279,31 +278,31 @@ describe("finished task store", () => {
 			});
 		});
 
-		describe("hasNoTasks", () => {
+		describe("tasksIsEmpty", () => {
 			it("should return false if there are any tasks", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.tasks = taskFactory.buildList(3);
 				finishedTaskModule.status = "completed";
-				const hasNoTasks = finishedTaskModule.hasNoTasks;
+				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
 
-				expect(hasNoTasks).toBe(false);
+				expect(tasksIsEmpty).toBe(false);
 			});
 
 			it("should return true when tasks are empty", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.status = "completed";
-				const hasNoTasks = finishedTaskModule.hasNoTasks;
+				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
 
-				expect(hasNoTasks).toBe(true);
+				expect(tasksIsEmpty).toBe(true);
 			});
 
 			it("should return false when the store is not ready", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.tasks = taskFactory.buildList(3);
 				finishedTaskModule.status = "pending";
-				const hasNoTasks = finishedTaskModule.hasNoTasks;
+				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
 
-				expect(hasNoTasks).toBe(false);
+				expect(tasksIsEmpty).toBe(false);
 			});
 		});
 

@@ -125,7 +125,7 @@ export default {
 			return this.isOverDue(dueDate) && !status.submitted && status.graded;
 		},
 		taskHref: (id) => {
-			return "/homework/" + id;
+			return `/homework/${id}`;
 		},
 	},
 };
