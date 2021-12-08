@@ -147,7 +147,7 @@ export class FinishedTaskModule extends VuexModule {
 		return this.businessError;
 	}
 
-	get hasNoTasks(): boolean {
+	get tasksIsEmpty(): boolean {
 		return this.isReady && this.tasks.length === 0;
 	}
 
