@@ -213,7 +213,6 @@ describe("finished task store", () => {
 			it("should set the status in state", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.setStatus("completed");
-
 				expect(finishedTaskModule.status).toBe("completed");
 			});
 		});

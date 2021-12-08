@@ -53,7 +53,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="completedTasksForStudentIsEmpty === true"
+					v-if="completedTasksForStudentIsEmpty"
 					:image="emptyState.image"
 					:title="emptyState.title"
 					class="mt-16"
