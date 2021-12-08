@@ -13,7 +13,6 @@ describe("vCustomSwitch", () => {
 			propsData: {
 				value: true,
 				label: "mock label",
-				customClasses: "",
 			},
 		});
 		const customSwitch = wrapper.find("input").element as HTMLInputElement;
@@ -28,7 +27,6 @@ describe("vCustomSwitch", () => {
 			propsData: {
 				value: false,
 				label: "mock label",
-				customClasses: "",
 			},
 		});
 		const customSwitch = wrapper.find("input").element as HTMLInputElement;
@@ -44,7 +42,6 @@ describe("vCustomSwitch", () => {
 			propsData: {
 				value: true,
 				label: "mock label",
-				customClasses: "",
 			},
 		});
 		const customSwitch = wrapper.find("input").element as HTMLInputElement;
@@ -66,28 +63,11 @@ describe("vCustomSwitch", () => {
 			propsData: {
 				value: false,
 				label: "mock label",
-				customClasses: "",
 			},
 		});
 		const customSwitch = wrapper.find("label");
 		const customSwitchElement = customSwitch.element;
 		expect(customSwitch.text()).toBe("mock label");
-	});
-
-	it("should add custom classes", () => {
-		const wrapper = mount(vCustomSwitch, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: {
-				value: false,
-				label: "mock label",
-				customClasses: "custom-class another-class",
-			},
-		});
-		expect(wrapper.classes()).toContain("custom-class");
-		expect(wrapper.classes()).toContain("another-class");
 	});
 
 	it("should emit events", async () => {

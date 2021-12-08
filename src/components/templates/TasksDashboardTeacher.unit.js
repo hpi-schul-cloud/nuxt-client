@@ -1,8 +1,10 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import TaskModule from "@/store/tasks";
 import mocks from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -13,17 +15,22 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasTasks: () => true,
-				hasOpenTasksForTeacher: () => true,
-				hasDraftsForTeacher: () => false,
+				openTasksForTeacherIsEmpty: () => false,
+				draftsForTeacherIsEmpty: () => true,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
 					withDueDate: dueDateTasksTeacher,
 					noDueDate: noDueDateTasksTeacher,
 				}),
 				getDraftTasksForTeacher: () => [],
-				hasFilterSelected: () => false,
 			},
 		},
+	};
+
+	const emptyState = {
+		title: "Lorem ipsum",
+		image: tasksEmptyStateImage,
+		subtitle: undefined,
 	};
 
 	let vuetify;
@@ -44,6 +51,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 0,
+				emptyState,
 			},
 		});
 
@@ -59,37 +67,27 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render empty state when there are no drafts", () => {
+	it("Should render empty state", () => {
+		const spy = jest
+			.spyOn(TaskModule, "draftsForTeacherIsEmpty", "get")
+			.mockReturnValue(true);
+
 		const wrapper = mount(TasksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {
 				tab: 1,
+				emptyState,
 			},
 		});
 
-		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
-	});
+		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+		expect(emptyStateComponent.exists()).toBe(true);
 
-	it("Should render empty state when there are no drafts due to filter", () => {
-		const wrapper = mount(TasksDashboardTeacher, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				tab: 1,
-				hasFilterSelected: true,
-			},
-		});
-
-		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
+		spy.mockRestore();
 	});
 
 	it("Should trigger event to update tab property", async () => {
@@ -102,6 +100,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			vuetify,
 			propsData: {
 				tab: 1,
+				emptyState,
 			},
 		});
 

@@ -7,7 +7,7 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-				<div v-if="isTeacher">
+				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
 						:label="
@@ -16,18 +16,27 @@
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
-				<div class="mx-n6 mx-sm-0 pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" class="tabs-max-width">
+				<div v-else class="substitute-filter-placeholder"></div>
+				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+					<v-tabs v-model="tab" class="tabs-max-width" grow>
 						<v-tab>
-							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
+							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="openTasks">{{
 								tabOneHeader.title
 							}}</span>
 						</v-tab>
 						<v-tab>
-							<v-icon class="tab-icon mr-3">{{ tabTwoHeader.icon }}</v-icon>
+							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="closedTasks">{{
 								tabTwoHeader.title
+							}}</span>
+						</v-tab>
+						<v-tab @click="onOpenFinishedTasksTab">
+							<v-icon class="tab-icon mr-sm-3">{{
+								tabThreeHeader.icon
+							}}</v-icon>
+							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
+								tabThreeHeader.title
 							}}</span>
 						</v-tab>
 					</v-tabs>
@@ -36,28 +45,38 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
-						:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
+						top-position-class="fab-top"
 					></v-custom-fab>
 				</div>
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="hasTasks"
+				v-if="showCourseFilter"
 				:value="selectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
-				:disabled="isFilterDisabled"
+				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
-			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else :tab.sync="tab" />
+			<div v-else class="course-filter-placeholder"></div>
+			<tasks-dashboard-student
+				v-if="isStudent"
+				:tab.sync="tab"
+				:empty-state="emptyState"
+			/>
+			<tasks-dashboard-teacher
+				v-else
+				:tab.sync="tab"
+				:empty-state="emptyState"
+			/>
 		</div>
 	</default-wireframe>
 </template>
 
 <script>
+import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomFab from "@components/atoms/vCustomFab";
@@ -66,6 +85,7 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
+import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
 	components: {
@@ -87,20 +107,22 @@ export default {
 		return {
 			tab: 0, // should we save this in store?
 			mdiPlus,
+			tasksEmptyStateImage,
 		};
 	},
 	computed: {
-		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
-		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
-		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
-		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
-		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
+		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
+		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
+		completedTasksForStudentIsEmpty: () =>
+			TaskModule.completedTasksForStudentIsEmpty,
+		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
 		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
 		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
 		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
 		courseFilters: () => TaskModule.getCourseFilters,
 		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
+		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -108,26 +130,35 @@ export default {
 		isTeacher: function () {
 			return this.role === "teacher";
 		},
-		isFilterDisabled: function () {
-			// TODO: refactor
+		showCourseFilter: function () {
+			if (this.tab === 2) return false;
+
+			return this.hasTasks;
+		},
+		showSubstituteFilter: function () {
+			return this.isTeacher && this.tab !== 2;
+		},
+		tabOneIsEmpty: function () {
+			return this.isStudent
+				? this.openTasksForStudentIsEmpty
+				: this.openTasksForTeacherIsEmpty;
+		},
+		tabTwoIsEmpty: function () {
+			return this.isStudent
+				? this.completedTasksForStudentIsEmpty
+				: this.draftsForTeacherIsEmpty;
+		},
+		isCourseFilterDisabled: function () {
 			if (this.selectedCourseFilters.length > 0) return false;
 
-			const tabOneIsEmpty =
-				this.role === "student"
-					? !this.hasOpenTasksForStudent
-					: !this.hasOpenTasksForTeacher;
-			const tabTwoIsEmpty =
-				this.role === "student"
-					? !this.hasCompletedTasksForStudent
-					: !this.hasDraftsForTeacher;
-
-			if (this.tab === 0 && tabOneIsEmpty) {
-				return true;
-			} else if (this.tab === 1 && tabTwoIsEmpty) {
-				return true;
-			} else {
-				return false;
+			if (this.tab === 0) {
+				return this.tabOneIsEmpty;
 			}
+			if (this.tab === 1) {
+				return this.tabTwoIsEmpty;
+			}
+
+			return false;
 		},
 		getSortedCoursesFilters: function () {
 			const filters = this.courseFilters.map((filter) => {
@@ -144,18 +175,11 @@ export default {
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
-			const tabOne = {};
-			if (this.isStudent) {
-				tabOne.icon = "$taskOpenFilled";
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.open"
-				);
-			} else {
-				tabOne.icon = "$taskOpenFilled";
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.current"
-				);
-			}
+			const tabOne = { icon: "$taskOpenFilled" };
+
+			tabOne.title = this.isStudent
+				? this.$t("components.organisms.TasksDashboardMain.tab.open")
+				: this.$t("components.organisms.TasksDashboardMain.tab.current");
 
 			return tabOne;
 		},
@@ -175,6 +199,44 @@ export default {
 
 			return tabTwo;
 		},
+		tabThreeHeader: function () {
+			const tabThree = {
+				icon: "$taskFinished",
+				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
+			};
+
+			return tabThree;
+		},
+		emptyState: function () {
+			const image = tasksEmptyStateImage;
+			let title = "";
+			let subtitle = undefined;
+
+			if (this.hasFilterSelected) {
+				title = this.$t("pages.tasks.emptyStateOnFilter.title");
+			} else {
+				if (this.tab === 0) {
+					title = this.$t(`pages.tasks.${this.role}.open.emptyState.title`);
+					subtitle = this.$t(
+						`pages.tasks.${this.role}.open.emptyState.subtitle`
+					);
+				}
+				if (this.tab === 1) {
+					title = this.isStudent
+						? this.$t("pages.tasks.student.completed.emptyState.title")
+						: this.$t("pages.tasks.teacher.drafts.emptyState.title");
+				}
+				if (this.tab === 2) {
+					title = this.$t("pages.tasks.finished.emptyState.title");
+				}
+			}
+
+			return {
+				image,
+				title,
+				subtitle,
+			};
+		},
 	},
 	mounted() {
 		TaskModule.fetchAllTasks();
@@ -190,22 +252,22 @@ export default {
 			TaskModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
-			if (this.isStudent) {
-				if (this.tab === 0) {
-					return this.tasksCountStudent.open[courseName];
-				}
-				if (this.tab === 1) {
-					return this.tasksCountStudent.completed[courseName];
-				}
+			if (this.tab === 0) {
+				return this.isStudent
+					? this.tasksCountStudent.open[courseName]
+					: this.tasksCountTeacher.open[courseName];
 			}
-
-			if (this.isTeacher) {
-				if (this.tab === 0) {
-					return this.tasksCountTeacher.open[courseName];
-				}
-				if (this.tab === 1) {
-					return this.tasksCountTeacher.drafts[courseName];
-				}
+			if (this.tab === 1) {
+				return this.isStudent
+					? this.tasksCountStudent.completed[courseName]
+					: this.tasksCountTeacher.drafts[courseName];
+			}
+		},
+		onOpenFinishedTasksTab() {
+			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
+			// we should probably find a better solution :D
+			if (!this.finishedTasksIsInitialized) {
+				FinishedTaskModule.fetchInitialTasks();
 			}
 		},
 	},
@@ -219,9 +281,9 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map-get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
-		max-width: 500px;
+		max-width: var(--size-content-width-max);
 	}
 }
 
@@ -232,8 +294,6 @@ export default {
 }
 
 .v-tab {
-	flex-basis: 50%;
-	flex-grow: 1;
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
@@ -254,7 +314,15 @@ export default {
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-.fab-top-alignment {
-	top: 193px;
+.fab-top {
+	top: 238px;
+}
+
+.substitute-filter-placeholder {
+	height: 46px;
+}
+
+.course-filter-placeholder {
+	height: 78px;
 }
 </style>
