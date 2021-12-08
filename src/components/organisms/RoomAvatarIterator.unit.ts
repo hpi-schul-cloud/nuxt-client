@@ -66,4 +66,22 @@ describe("RoomAvatarIterator", () => {
 		expect(avatarComponents.wrappers[0].vm.item.id).toStrictEqual("123");
 		expect(avatarComponents.wrappers[0].vm.draggable).toBe(false);
 	});
+
+	it("should emit item data if an item is clicked", async () => {
+		const payload = {
+			id: "123",
+			title: "Math 1a",
+			shortTitle: "Ma",
+			displayColor: "#f23f76",
+		};
+		const wrapper = getWrapper(propsData);
+		const avatarComponent = wrapper.find(".room-avatar");
+		avatarComponent.vm.$emit("click", payload);
+		const emitted = wrapper.emitted();
+
+		expect(emitted["click-avatar"]).toHaveLength(1);
+		expect(
+			emitted["click-avatar"] && emitted["click-avatar"][0][0]
+		).toStrictEqual(payload);
+	});
 });

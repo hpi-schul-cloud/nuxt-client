@@ -21,6 +21,7 @@
 							:size="itemSize"
 							:show-badge="true"
 							:condense-layout="condenseLayout"
+							@click="$emit('click-avatar', $event)"
 							@startDrag="$emit('startDrag', $event)"
 						></vRoomAvatar>
 					</v-col>

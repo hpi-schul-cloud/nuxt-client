@@ -127,4 +127,35 @@ describe("@components/molecules/RoomModal", () => {
 		expect(storeRoomUpdateMock).toHaveBeenCalled();
 		expect(storeRoomUpdateMock.mock.calls[0][0].title).toBe("changed title");
 	});
+
+	it("should emit item data if an item is clicked", async () => {
+		const testProps = {
+			isOpen: true,
+			groupData: {
+				title: "dummy title",
+				groupElements: [],
+			},
+			avatarSize: "4em",
+		};
+		const payload = {
+			id: "123",
+			title: "Math 1a",
+			shortTitle: "Ma",
+			displayColor: "#f23f76",
+		};
+		const wrapper = mount(RoomModal, {
+			...createComponentMocks({
+				i18n: true,
+			}),
+			propsData: testProps,
+		});
+		const iteratorComponent = wrapper.find(".room-avatar-iterator");
+		iteratorComponent.vm.$emit("click-avatar", payload);
+		const emitted = wrapper.emitted();
+
+		expect(emitted["click-avatar"]).toHaveLength(1);
+		expect(
+			emitted["click-avatar"] && emitted["click-avatar"][0][0]
+		).toStrictEqual(payload);
+	});
 });

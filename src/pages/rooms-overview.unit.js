@@ -83,11 +83,12 @@ const spyMocks = {
 	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
 };
 
-const getWrapper = (device = "desktop") => {
+const getWrapper = (device = "desktop", options = {}) => {
 	return mount(RoomsPage, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
+			...options,
 		}),
 		computed: {
 			$mq: () => device,
@@ -447,5 +448,43 @@ describe("RoomPage", () => {
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
+	});
+
+	it("should redirect to the course page if an item is clicked", async () => {
+		const options = {
+			$router: {
+				push: jest.fn(),
+			},
+		};
+		const wrapper = getWrapper(null, options);
+		await flushPromises();
+
+		const payload = { id: "0123456789" };
+		const avatarComponent = wrapper.vm.$refs["1-1"];
+		avatarComponent[0].$emit("click", payload);
+
+		expect(options.$router.push).toHaveBeenCalled();
+		expect(options.$router.push.mock.calls[0][0].path).toStrictEqual(
+			"/courses/0123456789"
+		);
+	});
+
+	it("should redirect to the course page if a group-item is clicked", async () => {
+		const options = {
+			$router: {
+				push: jest.fn(),
+			},
+		};
+		const wrapper = getWrapper(null, options);
+		await flushPromises();
+
+		const payload = { id: "0123456789" };
+		const roomModal = wrapper.findComponent({ ref: "roomModal" });
+		roomModal.vm.$emit("click-avatar", payload);
+
+		expect(options.$router.push).toHaveBeenCalled();
+		expect(options.$router.push.mock.calls[0][0].path).toStrictEqual(
+			"/courses/0123456789"
+		);
 	});
 });

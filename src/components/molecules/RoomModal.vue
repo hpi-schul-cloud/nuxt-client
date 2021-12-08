@@ -28,12 +28,14 @@
 		</div>
 		<template slot="content">
 			<room-avatar-iterator
+				class="room-avatar-iterator"
 				:items="groupData.groupElements"
 				:item-size="itemSize"
 				:col-count="4"
 				:max-items="-1"
 				can-draggable
 				@startDrag="$emit('drag-from-group', $event)"
+				@click-avatar="$emit('click-avatar', $event)"
 			/>
 		</template>
 	</vCustomDialog>

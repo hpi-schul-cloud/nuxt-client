@@ -3,131 +3,49 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomList from "./rooms-list.vue";
 import flushPromises from "flush-promises";
+import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 
 const mockData = [
 	{
-		id: "6183ddx6480fdc650e44b79d1",
+		id: "123",
 		title: "Physics",
 		shortTitle: "Ph",
 		displayColor: "blue",
 	},
 	{
-		id: "6183ddc6680fdc650e44b79d2",
+		id: "234",
 		title: "Math",
 		shortTitle: "Ma",
 		displayColor: "#f23f76",
 	},
 	{
-		id: "6188f93dfvxc71f695cfb16fe18",
+		id: "345",
 		title: "Greek",
 		shortTitle: "Gr",
 		displayColor: "#f23f76",
 	},
 	{
-		id: "6188f941f71f695cfb16fvxce19",
+		id: "456",
 		title: "German",
 		shortTitle: "Ge",
 		displayColor: "#f23f76",
 	},
 	{
-		id: "618a95ce06870b10d863vxccca4",
+		id: "567",
 		title: "English",
 		shortTitle: "En",
 		displayColor: "green",
-	},
-	{
-		id: "618b659806870b10d863cvxca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b659806870bsdf10d863cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6183ddc6480fdc650e44b79d1",
-		title: "Physics",
-		shortTitle: "Ph",
-		displayColor: "blue",
-	},
-	{
-		id: "6183dd6680vvfdc650e44b79d2",
-		title: "Math",
-		shortTitle: "Ma",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93df71f6y95cfb1y6fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188yf941f71f695cfby16fe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce06870b10d863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b659x806870b10xd863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618bc65dd9806870b10d8c63cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93vdf71f695cfbv16fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "61y88f941f71f695cfb16vfe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce0w6870b10dw863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b65e9806870b10dt863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b6r5980687dfg0b10d86r3cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
 	},
 ];
 
 describe("@pages/rooms-list.vue", () => {
-	const getWrapper = (device = "desktop") => {
+	const getWrapper = (device = "desktop", options = {}) => {
 		return mount(RoomList, {
 			...createComponentMocks({
 				i18n: true,
 				//@ts-ignore
 				vuetify: true,
+				...options,
 			}),
 			computed: {
 				$mq: () => device,
@@ -140,7 +58,7 @@ describe("@pages/rooms-list.vue", () => {
 		RoomsModule.setAllElements(mockData as any);
 	});
 
-	it("should open and close on property change", async () => {
+	it("should fetch data on load", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		// tslint ignored because it gives
@@ -158,12 +76,34 @@ describe("@pages/rooms-list.vue", () => {
 		const searchInput = wrapper.vm.$refs["search"] as any;
 
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(19);
+		expect(wrapper.vm.items.length).toEqual(5);
 		searchInput.$emit("input", "math");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(2);
+		expect(wrapper.vm.items.length).toEqual(1);
 		searchInput.$emit("input", "");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(19);
+		expect(wrapper.vm.items.length).toEqual(5);
+	});
+
+	it("should redirect to the course page if an item is clicked", async () => {
+		// const options = {
+		// 	$router: {
+		// 		push: jest.fn(),
+		// 	},
+		// };
+		const location = window.location;
+		const wrapper = getWrapper();
+		await flushPromises();
+
+		// const avatarComponent = wrapper.findComponent({ ref: "123-avatar" }) as any;
+		const avatar = wrapper.find(vRoomAvatar);
+
+		avatar.vm.$emit("click");
+
+		// expect(options.$router.push).toHaveBeenCalled();
+		// expect(options.$router.push.mock.calls[0][0].path).toStrictEqual(
+		// 	"/courses/123"
+		// );
+		expect(location.href).toStrictEqual("/courses/123");
 	});
 });

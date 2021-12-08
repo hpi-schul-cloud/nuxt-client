@@ -25,6 +25,8 @@ export type AllElementsObject = {
 	title: string;
 	shortTitle: string;
 	displayColor: string;
+	startDate?: string;
+	untilDate?: string;
 };
 
 export type AllElements = Array<AllElementsObject>;

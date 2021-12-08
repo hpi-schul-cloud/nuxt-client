@@ -50,9 +50,9 @@
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+							@click-avatar="onClickSingleItem($event)"
 						>
 						</vRoomGroupAvatar>
-
 						<vRoomAvatar
 							v-else
 							:ref="`${rowIndex}-${colIndex}`"
@@ -64,6 +64,7 @@
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+							@click="onClickSingleItem($event)"
 						></vRoomAvatar>
 					</template>
 					<template v-else>
@@ -83,6 +84,7 @@
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
 			@drag-from-group="dragFromGroup"
+			@click-avatar="onClickSingleItem($event)"
 		>
 		</room-modal>
 	</default-wireframe>
@@ -164,7 +166,6 @@ export default {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
-
 	methods: {
 		getDeviceDims() {
 			this.device = this.$mq;
@@ -291,6 +292,13 @@ export default {
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+		},
+		onClickSingleItem(item) {
+			if (!item.id) return;
+
+			this.$router.push({
+				path: `/courses/${item.id}`,
+			});
 		},
 	},
 };
