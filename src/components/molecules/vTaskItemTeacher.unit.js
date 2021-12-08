@@ -30,9 +30,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		const firstLink = wrapper.find("a");
 
 		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(
-			`/homework/${tasksTeacher[0].id}`
-		);
+		expect(firstLink.attributes().href).toBe(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	it("Should render subtitle with course name and due date", () => {
