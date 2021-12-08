@@ -14,6 +14,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-641 - improved accessibility on vuetify switch
+
 ## [26.20.0] - 2021-12-7
 
 ### Added

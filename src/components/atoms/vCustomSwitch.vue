@@ -2,10 +2,10 @@
 	<v-switch
 		:input-value="value"
 		:label="label"
+		:aria-label="ariaLabel"
 		inset
 		flat
 		dense
-		:class="customClasses"
 		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
 </template>
@@ -26,9 +26,10 @@ export default {
 			type: String,
 			required: true,
 		},
-		customClasses: {
+		ariaLabel: {
 			type: String,
-			default: "",
+			required: false,
+			default: () => "toggle switch",
 		},
 	},
 };
