@@ -103,4 +103,6 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 		expect(wrapper.text()).toStrictEqual(expect.not.stringContaining("Thema "));
 	});
+
+	it.todo("missing complete coverage for coursename and topic");
 });
