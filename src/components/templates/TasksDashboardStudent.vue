@@ -12,26 +12,26 @@
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="noDueDateTasks" type="student" />
+						<tasks-list :tasks="noDueDateTasks" user-role="student" />
 					</template>
 					<template v-slot:panelTwo>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
-							type="student"
+							user-role="student"
 						/>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.student.subtitleOverDue')"
-							type="student"
+							user-role="student"
 						/>
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
 					v-if="!hasOpenTasksForStudent"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
-					:subtitle="emptyStateText.subtitle"
+					:image="emptyState.image"
+					:title="emptyState.title"
+					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -46,16 +46,30 @@
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="gradedTasks" type="student" />
+						<tasks-list :tasks="gradedTasks" user-role="student" />
 					</template>
 					<template v-slot:panelTwo>
-						<tasks-list :tasks="submittedTasks" type="student" />
+						<tasks-list :tasks="submittedTasks" user-role="student" />
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
 					v-if="!hasCompletedTasksForStudent"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
+					:image="emptyState.image"
+					:title="emptyState.title"
+					class="mt-16"
+				/>
+			</v-tab-item>
+			<v-tab-item>
+				<tasks-list
+					:tasks="finishedTasks"
+					user-role="student"
+					type="finished"
+					:has-pagination="tab === 2"
+				/>
+				<v-custom-empty-state
+					v-if="hasNoFinishedTasks"
+					:image="emptyState.image"
+					:title="emptyState.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -65,10 +79,10 @@
 
 <script>
 import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
@@ -77,11 +91,10 @@ export default {
 			type: Number,
 			required: true,
 		},
-	},
-	data() {
-		return {
-			emptyStateImage: tasksEmptyState,
-		};
+		emptyState: {
+			type: Object,
+			required: true,
+		},
 	},
 	computed: {
 		status: () => TaskModule.getStatus,
@@ -90,7 +103,8 @@ export default {
 		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
 		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
 		hasTasks: () => TaskModule.hasTasks,
-		hasFilterSelected: () => TaskModule.hasFilterSelected,
+		hasNoFinishedTasks: () => FinishedTaskModule.hasNoTasks,
+		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},
@@ -105,26 +119,6 @@ export default {
 		},
 		gradedTasks: function () {
 			return this.completedTasks.graded;
-		},
-		emptyStateText: function () {
-			if (this.hasFilterSelected) {
-				return {
-					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
-					subtitle: undefined,
-				};
-			} else {
-				if (this.tab === 0) {
-					return {
-						title: this.$t("pages.tasks.student.open.emptyState.title"),
-						subtitle: this.$t("pages.tasks.student.open.emptyState.subtitle"),
-					};
-				} else {
-					return {
-						title: this.$t("pages.tasks.student.submitted.emptyState.title"),
-						subtitle: undefined,
-					};
-				}
-			}
 		},
 		currentTab: {
 			get() {

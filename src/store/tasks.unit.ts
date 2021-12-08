@@ -11,7 +11,7 @@ type FunctionPropertyNames<T> = {
 
 /**
  * Spy on a TaskFilter method and mock its return value.
- * The mock is valid vor all instances of the TaskFilter class.
+ * The mock is valid for all instances of the TaskFilter class.
  * So make sire that you call mockRestore() othe spy instance afterwards.
  * @param method the method
  * @param result the result of the task filter
@@ -301,7 +301,7 @@ describe("task store", () => {
 				expect(hasTasks).toBe(true);
 			});
 
-			it("should return false when tasks are emty", () => {
+			it("should return false when tasks are empty", () => {
 				const taskModule = new TaskModule({});
 				taskModule.status = "completed";
 				const hasTasks = taskModule.hasTasks;

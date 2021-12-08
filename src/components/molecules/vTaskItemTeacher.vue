@@ -3,6 +3,7 @@
 		:key="task.id"
 		:href="taskGradingHref(task.id)"
 		class="mx-n4 mx-sm-0"
+		v-bind="$attrs"
 	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
@@ -58,7 +59,9 @@
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
-const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+// TODO - different requiredKeys for finished and other tasks?
+// const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: {},

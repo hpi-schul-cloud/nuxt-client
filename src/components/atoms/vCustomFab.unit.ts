@@ -17,13 +17,12 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("@components/atoms/vCustomFab", () => {
-	describe("where fab is simple", () => {
-
+	describe("when fab is simple (icon only)", () => {
 		const simpleFab = {
 			actions: [],
 			icon: mdiPlus,
 		};
-		
+
 		it("should not display title", () => {
 			const wrapper = getWrapper({ ...simpleFab });
 
@@ -44,15 +43,14 @@ describe("@components/atoms/vCustomFab", () => {
 		});
 	});
 
-	describe("where fab is extended", () => {
-
+	describe("when fab is extended", () => {
 		const simpleExtendedFab = {
 			actions: [],
 			icon: mdiPlus,
 			title: "User",
 			href: "/",
 		};
-		
+
 		it("should display title", () => {
 			const wrapper = getWrapper({ ...simpleExtendedFab });
 
@@ -74,6 +72,13 @@ describe("@components/atoms/vCustomFab", () => {
 		});
 
 		it("should be positioned top right on desktop", () => {
+			Object.defineProperty(window, "innerWidth", {
+				writable: true,
+				configurable: true,
+				value: 1264,
+			});
+			window.dispatchEvent(new Event("resize"));
+
 			const wrapper = getWrapper({ ...simpleExtendedFab });
 
 			expect(wrapper.classes()).toContain("v-btn--right");
@@ -109,8 +114,7 @@ describe("@components/atoms/vCustomFab", () => {
 		// it("extended fab should extend on scroll up", () => {});
 	});
 
-	describe("where fab is extended with speed dial menu", () => {
-
+	describe("when fab is extended with speed dial menu", () => {
 		const multipleActionsExtendedFab = {
 			actions: [
 				{
@@ -138,7 +142,7 @@ describe("@components/atoms/vCustomFab", () => {
 			Object.defineProperty(window, "innerWidth", {
 				writable: true,
 				configurable: true,
-				value: 1024,
+				value: 1264,
 			});
 			window.dispatchEvent(new Event("resize"));
 			const wrapper = getWrapper({ ...multipleActionsExtendedFab });
@@ -159,22 +163,10 @@ describe("@components/atoms/vCustomFab", () => {
 			expect(wrapper.classes()).toContain("v-speed-dial--direction-top");
 		});
 
-	/* 	it("should open speed dial menu on click", async () => {
-			const wrapper = getWrapper({ ...multipleActionsExtendedFab }, { attachTo: document.body});
-			const fab = wrapper.find("#fab");
-			await fab.trigger("click");
+		it.todo("should open speed dial menu on click");
 
-			expect(fab.emitted('click')).toHaveLength(1)
-			expect(fab.classes()).toContain("v-size--default");
+		it.todo("should collapse when speed dial menu is opened");
 
-			const actions = wrapper.find(".v-speed-dial__list");
-			const action = wrapper.findComponent({ name: 'speed-dial-action' })
-			expect(actions.exists()).toBe(true);
-			expect(action.exists()).toBe(true);
-		}); */
-
-		//it("should collapse when speed dial menu is opened", () => {});
-
-		//it("should show overlay when speed dial menu is opened", () => {});
+		it.todo("should show overlay when speed dial menu is opened");
 	});
 });
