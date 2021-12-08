@@ -164,41 +164,41 @@ export class TaskModule extends VuexModule {
 		return this.isReady && this.tasks.length > 0;
 	}
 
-	get hasOpenTasksForStudent(): boolean {
+	get openTasksForStudentIsEmpty(): boolean {
 		const openTaskCount = new TaskFilter(this.tasks)
 			.byCourseNames(this.courseFilter)
 			.byOpenForStudent()
 			.count();
 
-		return this.isReady && openTaskCount > 0;
+		return this.isReady && openTaskCount === 0;
 	}
 
-	get hasOpenTasksForTeacher(): boolean {
+	get openTasksForTeacherIsEmpty(): boolean {
 		const openTaskCount = new TaskFilter(this.tasks)
 			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
 			.byOpenForTeacher()
 			.count();
-		return this.isReady && openTaskCount > 0;
+		return this.isReady && openTaskCount === 0;
 	}
 
-	get hasCompletedTasksForStudent(): boolean {
+	get completedTasksForStudentIsEmpty(): boolean {
 		const completedTaskCount = new TaskFilter(this.tasks)
 			.byCourseNames(this.courseFilter)
 			.byCompletedForStudent()
 			.count();
 
-		return this.isReady && completedTaskCount > 0;
+		return this.isReady && completedTaskCount === 0;
 	}
 
-	get hasDraftsForTeacher(): boolean {
+	get draftsForTeacherIsEmpty(): boolean {
 		const draftTaskCount = new TaskFilter(this.tasks)
 			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
 			.byDraftForTeacher(true)
 			.count();
 
-		return this.isReady && draftTaskCount > 0;
+		return this.isReady && draftTaskCount === 0;
 	}
 
 	get getOpenTasksForStudent(): OpenTasksForStudent {
