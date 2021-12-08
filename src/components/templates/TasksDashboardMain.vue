@@ -111,12 +111,12 @@ export default {
 		};
 	},
 	computed: {
-		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
-		hasOpenTasksForStudent: () => TaskModule.hasOpenTasksForStudent,
-		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
-		hasCompletedTasksForStudent: () => TaskModule.hasCompletedTasksForStudent,
-		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
+		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
+		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
+		completedTasksForStudentIsEmpty: () =>
+			TaskModule.completedTasksForStudentIsEmpty,
+		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
 		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
 		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
 		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
@@ -140,13 +140,13 @@ export default {
 		},
 		tabOneIsEmpty: function () {
 			return this.isStudent
-				? !this.hasOpenTasksForStudent
-				: !this.hasOpenTasksForTeacher;
+				? this.openTasksForStudentIsEmpty
+				: this.openTasksForTeacherIsEmpty;
 		},
 		tabTwoIsEmpty: function () {
 			return this.isStudent
-				? !this.hasCompletedTasksForStudent
-				: !this.hasDraftsForTeacher;
+				? this.completedTasksForStudentIsEmpty
+				: this.draftsForTeacherIsEmpty;
 		},
 		isCourseFilterDisabled: function () {
 			if (this.selectedCourseFilters.length > 0) return false;

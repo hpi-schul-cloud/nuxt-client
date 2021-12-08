@@ -1,6 +1,7 @@
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import TaskModule from "@/store/tasks";
 import mocks from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
@@ -19,9 +20,8 @@ describe("@components/templates/TasksDashboardStudent", () => {
 				getStatus: () => "completed",
 				hasTasks: () => true,
 				getCompletedTasksForStudent: () => ({ submitted: [], graded: [] }),
-				hasOpenTasksForStudent: () => true,
-				hasCompletedTasksForStudent: () => false,
-				hasFilterSelected: () => false,
+				openTasksForStudentIsEmpty: () => false,
+				completedTasksForStudentIsEmpty: () => true,
 			},
 		},
 	};
@@ -57,12 +57,15 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		expect(wrapper.findComponent(TasksList).exists()).toBe(true);
 	});
 
-	it("Should render empty state when there are no completed tasks", () => {
+	it("Should render empty state", () => {
+		const spy = jest
+			.spyOn(TaskModule, "completedTasksForStudentIsEmpty", "get")
+			.mockReturnValue(true);
+
 		const wrapper = mount(TasksDashboardStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {
@@ -71,24 +74,10 @@ describe("@components/templates/TasksDashboardStudent", () => {
 			},
 		});
 
-		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
-	});
+		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+		expect(emptyStateComponent.exists()).toBe(true);
 
-	it("Should render empty state when there are no completed tasks due to filter", () => {
-		const wrapper = mount(TasksDashboardStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				tab: 1,
-				emptyState,
-			},
-		});
-
-		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
+		spy.mockRestore();
 	});
 
 	it("Should trigger event to update tab property", async () => {
