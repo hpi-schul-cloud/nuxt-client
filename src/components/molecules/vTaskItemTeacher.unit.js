@@ -15,7 +15,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 	it(...isValidComponent(vTaskItemTeacher));
 
-	it("Should link list item links to task/<id>#activetabid=submissions grading page", () => {
+	it("Should link list item links to task/<id> detail page", () => {
 		const wrapper = mount(vTaskItemTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -31,7 +31,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 		expect(firstLink.exists()).toBe(true);
 		expect(firstLink.attributes().href).toBe(
-			`/homework/${tasksTeacher[0].id}#activetabid=submissions`
+			`/homework/${tasksTeacher[0].id}`
 		);
 	});
 
