@@ -1,7 +1,7 @@
 <template>
 	<v-list-item
 		:key="task.id"
-		:href="taskGradingHref(task.id)"
+		:href="taskHref(task.id)"
 		class="mx-n4 mx-sm-0"
 		v-bind="$attrs"
 	>
@@ -116,8 +116,8 @@ export default {
 				);
 			}
 		},
-		taskGradingHref: (id) => {
-			return `/homework/${id}#activetabid=submissions`;
+		taskHref: (id) => {
+			return `/homework/${id}`;
 		},
 	},
 };
