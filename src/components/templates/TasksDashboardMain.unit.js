@@ -15,8 +15,6 @@ describe("@components/templates/TasksDashboardMain", () => {
 	it(...isValidComponent(TasksDashboardMain));
 
 	describe("when mounting the component", () => {
-		
-
 		it("Should receive valid role props", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
