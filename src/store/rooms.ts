@@ -12,6 +12,7 @@ import {
 	DashboardApiInterface,
 	CoursesApiFactory,
 	CoursesApiInterface,
+	CourseMetadataResponse,
 } from "../serverApi/v3/api";
 
 import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
@@ -40,7 +41,7 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: AllItems): void {
+	setAllElements(data: CourseMetadataResponse[]): void {
 		this.allElements = data.map((item) => {
 			const isArchived = fromUTC(item.untilDate || "") < currentDate();
 			if (!isArchived) {

@@ -38,7 +38,7 @@
 			</div>
 			<div
 				v-if="!condenseLayout && item.titleDate"
-				class="justify-center mt-1 date-title"
+				class="justify-center mt-1 sub-title date-title"
 			>
 				{{ item.titleDate }}
 			</div>
