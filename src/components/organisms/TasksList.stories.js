@@ -16,7 +16,7 @@ storiesOf("0 Vuetify/Organisms/TasksList", module)
 		template: `
 		<v-app>
 			<h1 class="h4">Task Overview for Students</h1>
-			<tasks-list :tasks="tasks" type="student"/>
+			<tasks-list :tasks="tasks" user-role="student"/>
 		</v-app>`,
 	}))
 	.add("TasksList Teacher", () => ({
@@ -30,7 +30,7 @@ storiesOf("0 Vuetify/Organisms/TasksList", module)
 		template: `
 		<v-app>
 			<h1 class="h4">Task Overview for Teachers</h1>
-			<tasks-list :tasks="tasks" type="teacher"/>
+			<tasks-list :tasks="tasks" user-role="teacher"/>
 		</v-app>`,
 	}))
 	.add("TasksListLoading", () => ({

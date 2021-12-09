@@ -23,7 +23,7 @@
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
-					custom-classes="ml-1 mt-0"
+					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
@@ -47,7 +47,7 @@
 							'pages.administration.school.index.privacySettings.labels.lernStore'
 						)
 					"
-					custom-classes="ml-1 mt-0"
+					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
@@ -72,7 +72,7 @@
 								'pages.administration.school.index.privacySettings.labels.matrixMessenger'
 							)
 						"
-						custom-classes="ml-1 mt-0"
+						class="ml-1 mt-0"
 						@input-changed="
 							($event) => $emit('update-feature-settings', $event, 'messenger')
 						"
@@ -108,7 +108,7 @@
 								'pages.administration.school.index.privacySettings.labels.messengerSchoolRoom'
 							)
 						"
-						custom-classes="ml-1 mt-0"
+						class="ml-1 mt-0"
 						@input-changed="
 							($event) =>
 								$emit('update-feature-settings', $event, 'messengerSchoolRoom')
@@ -135,7 +135,7 @@
 								'pages.administration.school.index.privacySettings.labels.messengerStudentRooms'
 							)
 						"
-						custom-classes="ml-1 mt-0"
+						class="ml-1 mt-0"
 						@input-changed="
 							($event) =>
 								$emit(
@@ -164,7 +164,7 @@
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
-					custom-classes="ml-1 mt-0"
+					class="ml-1 mt-0"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
@@ -187,7 +187,7 @@
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
 					"
-					custom-classes="ml-1 mt-0"
+					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')

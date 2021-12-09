@@ -10,7 +10,16 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-609 - showing finished (formerly archived) tasks in new task overview
+
+### Changed
+
+- BC-826 - TaskItemTeacher now linking to task detail page
+
 ### Fixed
+
+- BC-826 - fixed a bug with empty states in task overview
+- BC-641 - improved accessibility on vuetify switch
 
 ## [26.20.0] - 2021-12-7
 
