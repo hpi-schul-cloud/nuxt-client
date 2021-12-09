@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-609 - showing finished (formerly archived) tasks in new task overview
+- BC-830 - Show archived courses in course list
 
 ### Changed
 
