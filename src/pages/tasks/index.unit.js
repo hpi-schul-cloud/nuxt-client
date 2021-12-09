@@ -1,7 +1,7 @@
+import dashboard from "./index";
 import Vuetify from "vuetify";
-import dashboard from "./assigned";
 
-describe("Homework", () => {
+describe("Tasks/index", () => {
 	let vuetify;
 
 	beforeEach(() => {
@@ -19,6 +19,7 @@ describe("Homework", () => {
 			}),
 			vuetify,
 		});
+
 		const title = wrapper.vm.$i18n.t("pages.tasks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});

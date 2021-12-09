@@ -1,37 +1,33 @@
 export default function (req, res, next) {
 	const redirects = [
 		{
-			from: "/homework/",
-			to: "/homework/overview",
+			from: /\/homework\/?/,
+			to: "/tasks",
 		},
 		{
-			from: "/homework/asked/",
-			to: "/homework/overview",
+			from: /\/homework\/asked\/?/,
+			to: "/tasks",
 		},
 		{
-			from: "/homework/private/",
-			to: "/homework/overview",
+			from: /\/homework\/private\/?/,
+			to: "/tasks",
 		},
 		{
-			from: "/homework/archive/",
-			to: "/homework/overview",
+			from: /\/homework\/archive\/?/,
+			to: "/tasks",
 		},
 		{
-			from: "/tasks/assigned",
-			to: "/homework/overview",
+			from: /\/tasks\/assigned\/?/,
+			to: "/tasks",
 		},
 		{
-			from: "/tasks/open",
-			to: "/homework/overview",
+			from: /\/tasks\/open\/?/,
+			to: "/tasks",
 		},
 	];
 
-	console.log(req.url);
-	const redirect = redirects.find((r) => r.from === req.url);
-	console.log(redirect);
-	/* const redirect = redirects.find(
-		(r) => req.url.match(r.from) && req.url !== r.to
-	); */
+	const redirect = redirects.find((r) => req.url.match(r.from));
+
 	if (redirect) {
 		res.writeHead(301, { Location: redirect.to });
 		res.end();
