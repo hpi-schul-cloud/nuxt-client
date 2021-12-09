@@ -86,11 +86,11 @@ describe("@pages/rooms-list.vue", () => {
 	});
 
 	it("should redirect to the course page if an item is clicked", async () => {
-		const location = window.location;
 		const wrapper = getWrapper();
-		await flushPromises();
+		const location = window.location;
+		const avatar = wrapper.findComponent({ ref: "123-avatar" });
 
-		const avatar = wrapper.find(vRoomAvatar);
+		expect(location.href).toStrictEqual("");
 		avatar.vm.$emit("click");
 		expect(location.href).toStrictEqual("/courses/123");
 	});
