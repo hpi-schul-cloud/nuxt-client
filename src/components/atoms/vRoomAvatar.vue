@@ -36,6 +36,12 @@
 			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
 				{{ item.title }}
 			</div>
+			<div
+				v-if="!condenseLayout && item.titleDate"
+				class="justify-center mt-1 date-title"
+			>
+				{{ item.titleDate }}
+			</div>
 		</v-badge>
 	</div>
 </template>

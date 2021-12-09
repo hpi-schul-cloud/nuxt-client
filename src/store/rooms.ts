@@ -14,7 +14,8 @@ import {
 	CoursesApiInterface,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
+import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
+import { currentDate, fromUTC } from "@/plugins/datetime";
 
 @Module({
 	name: "rooms",
@@ -26,7 +27,7 @@ import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
 export class Rooms extends VuexModule {
 	roomsData: Array<RoomsData> = [];
 	gridElementsId: string = "";
-	allElements: AllElements = [];
+	allElements: AllItems = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -39,8 +40,33 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: AllElements): void {
-		this.allElements = data;
+	setAllElements(data: AllItems): void {
+		this.allElements = data.map((item) => {
+			const isArchived = fromUTC(item.untilDate || "") < currentDate();
+			if (!isArchived) {
+				return { ...item, searchText: item.title, isArchived };
+			}
+
+			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
+			const untilDate = item.untilDate ? item.untilDate.substring(0, 4) : "";
+			const shortenedUntilDate = untilDate.substring(2, 4);
+			const difference = Number(untilDate) - Number(startDate);
+
+			let titleDate = untilDate;
+			if (difference !== 0) {
+				const symbol = difference > 1 ? "-" : "/";
+				titleDate = `${startDate}${symbol}${
+					symbol == "/" ? shortenedUntilDate : untilDate
+				}`;
+			}
+
+			return {
+				...item,
+				titleDate: titleDate,
+				searchText: `${item.title} ${titleDate}`,
+				isArchived,
+			};
+		});
 	}
 
 	@Mutation
@@ -75,7 +101,7 @@ export class Rooms extends VuexModule {
 		return this.roomsData;
 	}
 
-	get getAllElements(): AllElements {
+	get getAllElements(): AllItems {
 		return this.allElements;
 	}
 

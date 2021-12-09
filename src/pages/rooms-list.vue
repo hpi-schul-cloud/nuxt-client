@@ -51,7 +51,7 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify } from "@mdi/js";
-import { RoomsData } from "@store/types/rooms";
+import { ListItemsObject } from "@store/types/rooms";
 
 export default Vue.extend({
 	components: {
@@ -75,10 +75,12 @@ export default Vue.extend({
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
-		items(): Array<RoomsData> {
+		items(): Array<ListItemsObject> {
 			return JSON.parse(JSON.stringify(RoomsModule.getAllElements)).filter(
-				(item: RoomsData) =>
-					item.title.toLowerCase().includes(this.$data.searchText.toLowerCase())
+				(item: ListItemsObject | any) =>
+					item.searchText
+						.toLowerCase()
+						.includes(this.$data.searchText.toLowerCase())
 			);
 		},
 	},
