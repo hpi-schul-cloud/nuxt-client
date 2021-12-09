@@ -128,6 +128,12 @@ export default {
 			return this.isSpeedDialExpanded;
 		},
 	},
+	created() {
+		window.addEventListener("scroll", this.onScroll);
+	},
+	destroyed() {
+		window.removeEventListener("scroll", this.onScroll);
+	},
 	methods: {
 		detectScrollingDirection() {
 			if (this.title === "" || typeof window === "undefined") return;
@@ -143,9 +149,7 @@ export default {
 
 			this.pageOffset = top;
 		},
-	},
-	onEventBus: {
-		isScrolling: function () {
+		onScroll() {
 			if (this.scrollTimer !== -1) {
 				clearTimeout(this.scrollTimer);
 			}

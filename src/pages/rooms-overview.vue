@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe ref="main" headline="" :full-width="true">
+	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
 			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
 			<div class="mb-5">
@@ -8,6 +8,12 @@
 				}}</v-btn>
 			</div>
 		</template>
+		<!-- <v-custom-fab
+			:icon="mdiPlus"
+			:title="$t('common.labels.course')"
+			href="/course/new"
+			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
+		></v-custom-fab> -->
 
 		<div class="rooms-container">
 			<v-text-field
@@ -95,7 +101,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -123,10 +129,16 @@ export default {
 				item: {},
 				to: null,
 			},
+			fab: {
+				icon: mdiPlus,
+				title: this.$t("common.labels.course"),
+				href: "/course/new",
+			},
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
+			mdiPlus,
 			searchText: "",
 			dragging: false,
 		};

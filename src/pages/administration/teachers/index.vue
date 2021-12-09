@@ -1,10 +1,10 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
-		v-scroll="onScroll"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
 		:headline="$t('pages.administration.teachers.index.title')"
+		:fab-items="fab"
 	>
 		<progress-modal
 			:active="isDeleting"
@@ -102,29 +102,6 @@
 			:show-icons="showConsent"
 			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
-		<v-custom-fab
-			v-if="
-				!schoolIsExternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
-			"
-			:icon="mdiPlus"
-			:title="$t('common.labels.teacher')"
-			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
-			data-testid="fab_button_teachers_table"
-			:actions="[
-				{
-					label: $t('pages.administration.teachers.fab.add'),
-					icon: mdiAccountPlus,
-					to: '/administration/teachers/new',
-					dataTestid: 'fab_button_add_teachers',
-				},
-				{
-					label: $t('pages.administration.teachers.fab.import'),
-					icon: mdiCloudUpload,
-					href: '/administration/teachers/import',
-					dataTestid: 'fab_button_import_teachers',
-				},
-			]"
-		></v-custom-fab>
 	</default-wireframe>
 </template>
 <script>
@@ -135,7 +112,6 @@ import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import vCustomFab from "@components/atoms/vCustomFab";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
@@ -151,7 +127,6 @@ export default {
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
-		vCustomFab,
 		ProgressModal,
 	},
 	mixins: [print, UserHasPermission],
@@ -204,9 +179,6 @@ export default {
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 					icon: { source: "fa", icon: "cog" },
-				},
-				{
-					text: this.$t("pages.administration.teachers.index.title"),
 				},
 			],
 
@@ -373,6 +345,34 @@ export default {
 
 			return editedColumns;
 		},
+		fab() {
+			if (
+				this.schoolIsExternallyManaged ||
+				!this.$_userHasPermission("TEACHER_CREATE")
+			) {
+				return null;
+			}
+
+			return {
+				icon: mdiPlus,
+				title: this.$t("common.labels.teacher"),
+				testId: "fab_button_teachers_table",
+				actions: [
+					{
+						label: this.$t("pages.administration.teachers.fab.add"),
+						icon: mdiAccountPlus,
+						to: "/administration/teachers/new",
+						dataTestid: "fab_button_add_teachers",
+					},
+					{
+						label: this.$t("pages.administration.teachers.fab.import"),
+						icon: mdiCloudUpload,
+						href: "/administration/teachers/import",
+						dataTestid: "fab_button_import_teachers",
+					},
+				],
+			};
+		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
@@ -401,9 +401,6 @@ export default {
 		this.find();
 	},
 	methods: {
-		onScroll() {
-			this.$eventBus.$emit("isScrolling");
-		},
 		find() {
 			const query = {
 				$limit: this.limit,
@@ -622,9 +619,5 @@ button:not(.is-none):focus {
 	margin-top: var(--space-xs);
 	margin-bottom: var(--space-xs);
 	margin-left: 0;
-}
-
-.fab-top-alignment {
-	top: 147px;
 }
 </style>

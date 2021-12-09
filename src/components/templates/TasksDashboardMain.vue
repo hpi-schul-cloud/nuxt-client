@@ -1,9 +1,5 @@
 <template>
-	<default-wireframe
-		v-scroll="onScroll"
-		:headline="$t('pages.tasks.title')"
-		:full-width="false"
-	>
+	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
@@ -180,9 +176,6 @@ export default {
 		TaskModule.fetchAllTasks();
 	},
 	methods: {
-		onScroll() {
-			this.$eventBus.$emit("isScrolling");
-		},
 		setCourseFilters(courseNames) {
 			TaskModule.setCourseFilters(courseNames);
 		},
