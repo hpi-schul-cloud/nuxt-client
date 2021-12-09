@@ -15,7 +15,7 @@ const serverMiddlewareList = [
 	"@serverMiddleware/proxy",
 	"@serverMiddleware/csp/cors",
 	"@serverMiddleware/csp/security_headers",
-	"@middleware/redirects"
+	"@middleware/redirects",
 ];
 
 module.exports = {
