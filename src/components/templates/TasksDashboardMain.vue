@@ -238,9 +238,6 @@ export default {
 			};
 		},
 	},
-	mounted() {
-		TaskModule.fetchAllTasks();
-	},
 	methods: {
 		onScroll() {
 			this.$eventBus.$emit("isScrolling");
