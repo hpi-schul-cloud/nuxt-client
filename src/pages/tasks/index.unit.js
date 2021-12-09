@@ -1,5 +1,6 @@
 import dashboard from "./index";
 import Vuetify from "vuetify";
+import TaskModule from "@/store/tasks";
 
 describe("Tasks/index", () => {
 	let vuetify;
@@ -22,5 +23,20 @@ describe("Tasks/index", () => {
 
 		const title = wrapper.vm.$i18n.t("pages.tasks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
+	});
+
+	it("Should should trigger fetschAllTasks", async () => {
+		const spy = jest.spyOn(TaskModule, "fetchAllTasks");
+
+		shallowMount(dashboard, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				vueMeta: true,
+			}),
+			vuetify,
+		});
+
+		expect(spy).toHaveBeenCalled();
 	});
 });
