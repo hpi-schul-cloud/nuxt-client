@@ -135,9 +135,12 @@ export default {
 	z-index: 1; // stylelint-disable-line sh-waqar/declaration-use-variable
 	background-color: var(--color-white);
 }
-.wireframe-fab {
-	position: relative !important;
-	top: 0;
+
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	.wireframe-fab {
+		position: relative !important;
+		top: 0;
+	}
 }
 
 $fab-wrapper-height: 80px;

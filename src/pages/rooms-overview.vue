@@ -8,12 +8,6 @@
 				}}</v-btn>
 			</div>
 		</template>
-		<!-- <v-custom-fab
-			:icon="mdiPlus"
-			:title="$t('common.labels.course')"
-			href="/course/new"
-			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
-		></v-custom-fab> -->
 
 		<div class="rooms-container">
 			<v-text-field
