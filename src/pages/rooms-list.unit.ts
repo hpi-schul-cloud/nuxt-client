@@ -61,7 +61,7 @@ describe("@pages/rooms-list.vue", () => {
 		RoomsModule.setAllElements(mockData as any);
 	});
 
-	it("should open and close on property change", async () => {
+	it("should fetch data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 
