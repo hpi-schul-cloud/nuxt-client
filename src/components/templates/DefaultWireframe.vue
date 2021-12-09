@@ -121,7 +121,8 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+	box-shadow: var(--shadow-sm);
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {

@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:headline="$t('pages.courses.index.courses.all')"
+		:headline="$t('pages.rooms.allRooms')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
@@ -65,7 +65,7 @@ export default Vue.extend({
 			searchText: "",
 			breadcrumbs: [
 				{
-					text: this.$t("pages.courses.index.courses.active"),
+					text: this.$t("pages.rooms.index.title"),
 					to: "/rooms-overview",
 				},
 			],
