@@ -6,7 +6,7 @@ import flushPromises from "flush-promises";
 
 const mockData = [
 	{
-		id: "0000dcfbfb5c7a3f00bf21ab",
+		id: "123",
 		title: "Mathe",
 		shortTitle: "Ma",
 		displayColor: "#54616e",
@@ -15,7 +15,7 @@ const mockData = [
 		titleDate: "2019/20",
 	},
 	{
-		id: "61b0764be94b36657cc0329f",
+		id: "234",
 		title: "History",
 		shortTitle: "Hi",
 		displayColor: "#EF6C00",
@@ -24,7 +24,7 @@ const mockData = [
 		titleDate: "2015-2018",
 	},
 	{
-		id: "61adf5eee94b36657cbffcce",
+		id: "345",
 		title: "Spanish",
 		shortTitle: "Sp",
 		displayColor: "#009688",
@@ -33,7 +33,7 @@ const mockData = [
 		titleDate: "2021",
 	},
 	{
-		id: "61adf5e3e94b36657cbffbf3",
+		id: "456",
 		title: "English",
 		shortTitle: "En",
 		displayColor: "#EC407A",
@@ -66,7 +66,7 @@ describe("@pages/rooms-list.vue", () => {
 		await flushPromises();
 
 		const expectedItem = {
-			id: "0000dcfbfb5c7a3f00bf21ab",
+			id: "123",
 			title: "Mathe",
 			shortTitle: "Ma",
 			displayColor: "#54616e",
@@ -103,7 +103,7 @@ describe("@pages/rooms-list.vue", () => {
 		expect(wrapper.vm.items.length).toEqual(1);
 		// @ts-ignore
 		expect(wrapper.vm.items[0]).toEqual({
-			id: "61b0764be94b36657cc0329f",
+			id: "234",
 			title: "History",
 			shortTitle: "Hi",
 			displayColor: "#EF6C00",
