@@ -81,6 +81,7 @@ const spyMocks = {
 	addGroupElementsMock: jest.spyOn(RoomsPage.methods, "addGroupElements"),
 	savePositionMock: jest.spyOn(RoomsPage.methods, "savePosition"),
 	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
+	defaultNamingMock: jest.spyOn(RoomsPage.methods, "defaultNaming"),
 };
 
 const getWrapper = (device = "desktop") => {
@@ -283,10 +284,12 @@ describe("RoomPage", () => {
 		const toAvatarComponent = wrapper.findComponent({ ref: "2-2" });
 		toAvatarComponent.trigger("drop");
 
+		await flushPromises();
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
 		expect(spyMocks.savePositionMock).toHaveBeenCalled();
+		expect(spyMocks.defaultNamingMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);

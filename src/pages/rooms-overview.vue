@@ -253,6 +253,7 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
+				this.defaultNaming(pos);
 			}
 		},
 		addGroupElements(pos) {
@@ -291,6 +292,15 @@ export default {
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+		},
+		defaultNaming(pos) {
+			const title = this.$t("pages.rooms.groupName");
+			const payload = {
+				title,
+				xPosition: pos.x,
+				yPosition: pos.y,
+			};
+			RoomsModule.update(payload);
 		},
 	},
 };
