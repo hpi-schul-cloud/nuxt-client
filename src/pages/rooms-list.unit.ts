@@ -86,24 +86,12 @@ describe("@pages/rooms-list.vue", () => {
 	});
 
 	it("should redirect to the course page if an item is clicked", async () => {
-		// const options = {
-		// 	$router: {
-		// 		push: jest.fn(),
-		// 	},
-		// };
 		const location = window.location;
 		const wrapper = getWrapper();
 		await flushPromises();
 
-		// const avatarComponent = wrapper.findComponent({ ref: "123-avatar" }) as any;
 		const avatar = wrapper.find(vRoomAvatar);
-
 		avatar.vm.$emit("click");
-
-		// expect(options.$router.push).toHaveBeenCalled();
-		// expect(options.$router.push.mock.calls[0][0].path).toStrictEqual(
-		// 	"/courses/123"
-		// );
 		expect(location.href).toStrictEqual("/courses/123");
 	});
 });

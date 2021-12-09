@@ -53,7 +53,7 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify } from "@mdi/js";
-import { AllElementsObject } from "@store/types/rooms";
+import { ListItemsObject } from "@store/types/rooms";
 
 export default Vue.extend({
 	components: {
@@ -77,9 +77,9 @@ export default Vue.extend({
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
-		items(): Array<AllElementsObject> {
+		items(): Array<ListItemsObject> {
 			return JSON.parse(JSON.stringify(RoomsModule.allElements)).filter(
-				(item: AllElementsObject) =>
+				(item: ListItemsObject) =>
 					item.title.toLowerCase().includes(this.$data.searchText.toLowerCase())
 			);
 		},
@@ -88,12 +88,9 @@ export default Vue.extend({
 		await RoomsModule.fetchAllElements();
 	},
 	methods: {
-		onClickSingleItem(item: AllElementsObject) {
-			// if (!item.id) return;
+		onClickSingleItem(item: ListItemsObject) {
+			if (!item.id) return;
 			window.location.href = `/courses/${item.id}`;
-			// this.$router.push({
-			// 	name: `/courses/${item.id}`,
-			// });
 		},
 	},
 });

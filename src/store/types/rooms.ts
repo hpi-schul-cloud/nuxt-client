@@ -20,7 +20,7 @@ export type DroppedObject = {
 	item: object;
 };
 
-export type AllElementsObject = {
+export type ListItemsObject = {
 	id: string;
 	title: string;
 	shortTitle: string;
@@ -29,4 +29,4 @@ export type AllElementsObject = {
 	untilDate?: string;
 };
 
-export type AllElements = Array<AllElementsObject>;
+export type AllItems = Array<ListItemsObject>;

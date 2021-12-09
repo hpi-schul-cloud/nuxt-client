@@ -14,7 +14,7 @@ import {
 	CoursesApiInterface,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
+import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
 
 @Module({
 	name: "rooms",
@@ -26,7 +26,7 @@ import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
 export class Rooms extends VuexModule {
 	roomsData: Array<RoomsData> = [];
 	gridElementsId: string = "";
-	allElements: AllElements = [];
+	allElements: AllItems = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -39,7 +39,7 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: AllElements): void {
+	setAllElements(data: AllItems): void {
 		this.allElements = data;
 	}
 
@@ -75,7 +75,7 @@ export class Rooms extends VuexModule {
 		return this.roomsData;
 	}
 
-	get getAllElements(): AllElements {
+	get getAllElements(): AllItems {
 		return this.allElements;
 	}
 
