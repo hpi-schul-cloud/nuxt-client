@@ -3,7 +3,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomList from "./rooms-list.vue";
 import flushPromises from "flush-promises";
-import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 
 const mockData = [
 	{
