@@ -132,7 +132,7 @@ export default {
 .sticky {
 	position: sticky;
 	top: 0;
-	z-index: var(--layer-modal);
+	z-index: var(--layer-sticky-header);
 	background-color: var(--color-white);
 }
 

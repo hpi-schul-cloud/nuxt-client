@@ -94,6 +94,7 @@ import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
+import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify, mdiPlus } from "@mdi/js";
 
@@ -123,11 +124,7 @@ export default {
 				item: {},
 				to: null,
 			},
-			fab: {
-				icon: mdiPlus,
-				title: this.$t("common.labels.course"),
-				href: "/course/new",
-			},
+
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
@@ -138,6 +135,18 @@ export default {
 		};
 	},
 	computed: {
+		fab() {
+			if (
+				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.labels.course"),
+					href: "/courses/add",
+				};
+			}
+			return null;
+		},
 		loading() {
 			return RoomsModule.getLoading;
 		},
