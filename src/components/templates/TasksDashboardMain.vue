@@ -27,9 +27,11 @@
 						</v-tab>
 						<v-tab>
 							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline" :data-testid="tabTwoHeader.dataTestId">{{
-								tabTwoHeader.title
-							}}</span>
+							<span
+								class="d-none d-sm-inline"
+								:data-testid="tabTwoHeader.dataTestId"
+								>{{ tabTwoHeader.title }}</span
+							>
 						</v-tab>
 						<v-tab @click="onOpenFinishedTasksTab">
 							<v-icon class="tab-icon mr-sm-3">{{
