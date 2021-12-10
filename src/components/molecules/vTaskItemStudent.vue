@@ -1,5 +1,10 @@
 <template>
-	<v-list-item :key="task.id" :href="taskHref(task.id)" class="mx-n4 mx-sm-0">
+	<v-list-item
+		:key="task.id"
+		:href="taskHref(task.id)"
+		class="mx-n4 mx-sm-0"
+		v-bind="$attrs"
+	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 		</v-list-item-avatar>
@@ -61,6 +66,7 @@ export default {
 	computed: {
 		taskState() {
 			const { duedate, status } = this.task;
+
 			if (this.isCloseToDueDate(duedate)) return "warning";
 			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
 			if (this.isOverDue(duedate)) return "overdue";
@@ -119,7 +125,7 @@ export default {
 			return this.isOverDue(dueDate) && !status.submitted && status.graded;
 		},
 		taskHref: (id) => {
-			return "/homework/" + id;
+			return `/homework/${id}`;
 		},
 	},
 };
