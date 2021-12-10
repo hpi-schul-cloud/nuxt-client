@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:headline="$t('pages.rooms.allRooms')"
+		:headline="$t('pages.courses.index.courses.all')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
@@ -12,7 +12,7 @@
 					v-model="searchText"
 					rounded
 					solo
-					:label="$t('common.words.search')"
+					:label="$t('pages.rooms.index.search.label')"
 					:append-icon="mdiMagnify"
 				>
 				</v-text-field>
@@ -65,7 +65,7 @@ export default Vue.extend({
 			searchText: "",
 			breadcrumbs: [
 				{
-					text: this.$t("pages.rooms.index.title"),
+					text: this.$t("pages.courses.index.courses.active"),
 					to: "/rooms-overview",
 				},
 			],

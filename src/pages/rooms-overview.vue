@@ -1,10 +1,10 @@
 <template>
 	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
-			<h1 class="text-h3">{{ $t("pages.rooms.index.title") }}</h1>
+			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
 			<div class="mb-5">
 				<v-btn color="secondary" outlined small to="/rooms-list">{{
-					$t("pages.rooms.allRooms")
+					$t("pages.courses.index.courses.all")
 				}}</v-btn>
 			</div>
 		</template>
@@ -125,7 +125,7 @@ export default {
 			},
 			fab: {
 				icon: mdiPlus,
-				title: this.$t("common.labels.courseRoom"),
+				title: this.$t("common.labels.course"),
 				href: "/course/new",
 			},
 			showDeleteSection: false,
