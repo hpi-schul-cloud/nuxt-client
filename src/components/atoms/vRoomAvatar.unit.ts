@@ -124,20 +124,4 @@ describe("vRoomAvatar", () => {
 
 		expect(emitted["drop"]).toHaveLength(1);
 	});
-
-	it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
-		const wrapper = getWrapper({
-			item: mockData,
-			size: "4em",
-			showBadge: true,
-			draggable: false,
-		});
-		const avatarComponent = wrapper.find(".v-avatar");
-
-		avatarComponent.trigger("dragstart");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
-
-		expect(emitted["startDrag"]).toBe(undefined);
-	});
 });
