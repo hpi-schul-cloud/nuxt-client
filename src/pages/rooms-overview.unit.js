@@ -1,8 +1,9 @@
 import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
+import AuthModule from "@/store/auth";
 import flushPromises from "flush-promises";
 
-const mockStoreData = [
+const mockRoomStoreData = [
 	{
 		id: "1",
 		title: "First",
@@ -60,16 +61,27 @@ const mockStoreData = [
 	},
 ];
 
+const mockAuthStoreData = {
+	__v: 0,
+	_id: "asdf",
+	id: "asdf",
+	firstName: "Arthur",
+	lastName: "Dent",
+	email: "arthur.dent@hitchhiker.org",
+	roles: ["student"],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+};
+
 const spyMocks = {
 	storeRoomAlignMock: jest
 		.spyOn(RoomsModule, "align")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchMock: jest
 		.spyOn(RoomsModule, "fetch")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchAllMock: jest
 		.spyOn(RoomsModule, "fetchAllElements")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
 	getDataObjectMock: jest.spyOn(RoomsPage.methods, "getDataObject"),
@@ -99,19 +111,20 @@ describe("RoomPage", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		RoomsModule.setRoomData(mockStoreData);
+		RoomsModule.setRoomData(mockRoomStoreData);
+		AuthModule.setUser(mockAuthStoreData);
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it(...isValidComponent(RoomsPage));
+	// it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items).toStrictEqual(mockStoreData);
+		expect(wrapper.vm.items).toStrictEqual(mockRoomStoreData);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -449,5 +462,20 @@ describe("RoomPage", () => {
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
+	});
+
+	it("should not show FAB if user does not have permission to create courses", () => {
+		AuthModule.setUser({
+			...mockAuthStoreData,
+			permissions: ["aksjdhf", "poikln"],
+		});
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(false);
+	});
+	it("should show FAB if user has permission to create courses", () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(true);
 	});
 });
