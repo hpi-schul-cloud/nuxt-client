@@ -96,7 +96,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 		);
 	});
 
-	it("Should render no hint label if the task is due to in the far future", () => {
+	it("Should render no hint label if the task is due in the far future", () => {
 		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,

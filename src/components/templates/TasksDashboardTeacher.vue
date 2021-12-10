@@ -8,39 +8,53 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenTasksForTeacher"
+					:is-empty="openTasksForTeacherIsEmpty"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
-						<tasks-list :tasks="noDueDateTasks" type="teacher" />
+						<tasks-list :tasks="noDueDateTasks" user-role="teacher" />
 					</template>
 					<template v-slot:panelTwo>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.teacher.subtitleOverDue')"
-							type="teacher"
+							user-role="teacher"
 						/>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
-							type="teacher"
+							user-role="teacher"
 						/>
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasOpenTasksForTeacher"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
-					:subtitle="emptyStateText.subtitle"
+					v-if="openTasksForTeacherIsEmpty"
+					:image="emptyState.image"
+					:title="emptyState.title"
+					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
 			</v-tab-item>
 			<v-tab-item>
-				<tasks-list :tasks="draftTasks" type="teacher" />
+				<tasks-list :tasks="draftTasks" user-role="teacher" />
 				<v-custom-empty-state
-					v-if="!hasDraftsForTeacher"
-					:image="emptyStateImage"
-					:title="emptyStateText.title"
+					v-if="draftsForTeacherIsEmpty"
+					:image="emptyState.image"
+					:title="emptyState.title"
+					class="mt-16"
+				/>
+			</v-tab-item>
+			<v-tab-item>
+				<tasks-list
+					:tasks="finishedTasks"
+					user-role="teacher"
+					type="finished"
+					:has-pagination="tab === 2"
+				/>
+				<v-custom-empty-state
+					v-if="finishedTasksIsEmpty"
+					:image="emptyState.image"
+					:title="emptyState.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -50,10 +64,10 @@
 
 <script>
 import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
 	components: { vCustomEmptyState, TasksList, vCustomDoublePanels },
@@ -62,20 +76,20 @@ export default {
 			type: Number,
 			required: true,
 		},
-	},
-	data() {
-		return {
-			emptyStateImage: tasksEmptyState,
-		};
+		emptyState: {
+			type: Object,
+			required: true,
+		},
 	},
 	computed: {
 		openTasks: () => TaskModule.getOpenTasksForTeacher,
 		draftTasks: () => TaskModule.getDraftTasksForTeacher,
 		status: () => TaskModule.getStatus,
 		hasTasks: () => TaskModule.hasTasks,
-		hasOpenTasksForTeacher: () => TaskModule.hasOpenTasksForTeacher,
-		hasDraftsForTeacher: () => TaskModule.hasDraftsForTeacher,
-		hasFilterSelected: () => TaskModule.hasFilterSelected,
+		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
+		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
+		finishedTasksIsEmpty: () => FinishedTaskModule.tasksIsEmpty,
+		finishedTasks: () => FinishedTaskModule.getTasks,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},
@@ -84,26 +98,6 @@ export default {
 		},
 		withDueDateTasks: function () {
 			return this.openTasks.withDueDate;
-		},
-		emptyStateText: function () {
-			if (this.hasFilterSelected) {
-				return {
-					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
-					subtitle: undefined,
-				};
-			} else {
-				if (this.tab === 0) {
-					return {
-						title: this.$t("pages.tasks.teacher.emptyState.title"),
-						subtitle: this.$t("pages.tasks.teacher.emptyState.subtitle"),
-					};
-				} else {
-					return {
-						title: this.$t("pages.tasks.teacher.drafts.emptyState.title"),
-						subtitle: undefined,
-					};
-				}
-			}
 		},
 		currentTab: {
 			get() {
