@@ -448,4 +448,41 @@ describe("RoomPage", () => {
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
 	});
+
+	it("should NOT be 'draggable' on mobile devices as default", async () => {
+		const wrapper = getWrapper("mobile");
+		await flushPromises();
+
+		expect(wrapper.vm.$data.allowDragging).toBe(false);
+
+		const avatarComponent = wrapper.findComponent({ ref: "1-1" });
+		const groupComponent = wrapper.findComponent({ ref: "3-2" });
+		expect(avatarComponent.vm.$props.draggable).toBe(false);
+		expect(groupComponent.vm.$props.draggable).toBe(false);
+
+		avatarComponent.trigger("dragstart");
+		expect(wrapper.vm.$data.draggedElement.from).toBeNull();
+		groupComponent.trigger("dragstart");
+		expect(wrapper.vm.$data.draggedElement.from).toBeNull();
+	});
+
+	it("should be 'draggable' on mobile devices if dragging active", async () => {
+		const wrapper = getWrapper("mobile");
+		await flushPromises();
+
+		wrapper.setData({ allowDragging: true });
+
+		expect(wrapper.vm.allowDragging).toBe(true);
+		await wrapper.vm.$nextTick();
+
+		const avatarComponent = wrapper.findComponent({ ref: "1-1" });
+		const groupComponent = wrapper.findComponent({ ref: "3-2" });
+		expect(avatarComponent.vm.$props.draggable).toBe(true);
+		expect(groupComponent.vm.$props.draggable).toBe(true);
+
+		avatarComponent.trigger("dragstart");
+		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual({ x: 1, y: 1 });
+		groupComponent.trigger("dragstart");
+		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual({ x: 2, y: 3 });
+	});
 });

@@ -81,7 +81,9 @@ export default {
 	methods: {
 		startDragAvatar() {
 			this.isDragging = true;
-			this.$emit("startDrag", this.item);
+			if (this.draggable) {
+				this.$emit("startDrag", this.item);
+			}
 		},
 		dragLeave() {
 			this.hovered = false;
