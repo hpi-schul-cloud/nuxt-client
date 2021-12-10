@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-951 - ux fixes rooms search label and add header shadow wireframe
+
 ### Fixed
 
 ## [26.20.0] - 2021-12-7
