@@ -118,7 +118,7 @@ module.exports = {
 	 */
 	plugins: [
 		// sorting is important
-		// "@plugins/polyfills", // disabled until it is decided to reactivate the dragging on mobile devices
+		"@plugins/polyfills",
 		"@plugins/axios-accessor",
 		"@plugins/axios",
 		"@plugins/configInit",

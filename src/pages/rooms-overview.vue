@@ -2,10 +2,21 @@
 	<default-wireframe ref="main" headline="" :full-width="true">
 		<template slot="header">
 			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
-			<div class="mb-5">
-				<v-btn color="secondary" outlined small to="/rooms-list">{{
-					$t("pages.courses.index.courses.all")
-				}}</v-btn>
+			<div class="mb-5 header-div">
+				<div class="btn">
+					<v-btn color="secondary" outlined small to="/rooms-list"
+						>{{ $t("pages.courses.index.courses.all") }}
+					</v-btn>
+				</div>
+				<div class="toggle-div">
+					<v-custom-switch
+						v-if="showAllowDraggingButton"
+						v-model="allowDragging"
+						color="secondary"
+						class="enable-disable"
+						:label="$t('pages.courses.index.courses.arrangeCourses')"
+					></v-custom-switch>
+				</div>
 			</div>
 		</template>
 
@@ -46,6 +57,7 @@
 							:data="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:device="device"
+							:draggable="allowDragging"
 							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
@@ -60,7 +72,7 @@
 							:item="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:show-badge="true"
-							:draggable="true"
+							:draggable="allowDragging"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
@@ -82,6 +94,7 @@
 			v-model="groupDialog.isOpen"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
+			:draggable="allowDragging"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
@@ -96,6 +109,7 @@ import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
 import { mdiMagnify } from "@mdi/js";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
 
 export default {
 	components: {
@@ -104,6 +118,7 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
+		vCustomSwitch,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -129,6 +144,8 @@ export default {
 			mdiMagnify,
 			searchText: "",
 			dragging: false,
+			allowDragging: false,
+			showAllowDraggingButton: true,
 		};
 	},
 	computed: {
@@ -180,10 +197,14 @@ export default {
 				case "desktop":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
+					this.showAllowDraggingButton = false;
+					this.allowDragging = true;
 					break;
 				case "large":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
+					this.showAllowDraggingButton = false;
+					this.allowDragging = true;
 					break;
 				case "mobile":
 					this.dimensions.colCount = 4;
@@ -307,5 +328,18 @@ export default {
 .room-overview-row {
 	display: flex;
 	justify-content: space-between;
+}
+
+.header-div {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	.btn {
+		display: inline-block;
+		flex: 1;
+	}
+	.toggle-div {
+		display: inline-block;
+	}
 }
 </style>
