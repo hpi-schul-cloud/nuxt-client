@@ -46,6 +46,7 @@
 						:title="$t('common.words.task')"
 						href="/homework/new"
 						top-position-class="fab-top"
+						data-testid="addTask"
 					></v-custom-fab>
 				</div>
 			</div>

@@ -10,6 +10,7 @@
 		class="fixed transition"
 		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
+		:data-testid="dataTestId"
 	>
 		<template v-slot:activator>
 			<v-btn
@@ -71,6 +72,7 @@
 		:small="extended"
 		:href="href"
 		:class="classes"
+		:data-testid="dataTestId"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -102,6 +104,11 @@ export default {
 			default: "",
 		},
 		topPositionClass: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		dataTestId: {
 			type: String,
 			required: false,
 			default: "",
