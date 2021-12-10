@@ -132,13 +132,13 @@ export default {
 .sticky {
 	position: sticky;
 	top: 0;
-	z-index: 1; // stylelint-disable-line sh-waqar/declaration-use-variable
+	z-index: var(--layer-modal);
 	background-color: var(--color-white);
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
 	.wireframe-fab {
-		position: relative !important;
+		position: relative;
 		top: 0;
 	}
 }
@@ -153,5 +153,10 @@ $fab-wrapper-height: 80px;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
 	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
+	pointer-events: none;
+
+	* {
+		pointer-events: auto;
+	}
 }
 </style>

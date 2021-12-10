@@ -3,7 +3,6 @@
 		v-if="hasMultipleActions"
 		v-model="isSpeedDialExpanded"
 		v-bind="$attrs"
-		fixed
 		:bottom="!positionAtTop"
 		:top="positionAtTop"
 		right
@@ -133,7 +132,7 @@ export default {
 			return this.isSpeedDialExpanded;
 		},
 		classes: function () {
-			let className = "fixed transition";
+			let className = "transition";
 
 			if (this.extended) className = className.concat(" ", "extended-fab");
 			if (this.positionAtTop)
@@ -178,10 +177,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixed {
-	position: fixed !important;
-}
-
 .transition {
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
