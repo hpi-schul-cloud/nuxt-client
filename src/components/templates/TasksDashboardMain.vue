@@ -285,6 +285,9 @@ export default {
 	}
 }
 
+.tab-icon {
+	fill: currentColor;
+}
 // even out border
 .v-tabs {
 	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
