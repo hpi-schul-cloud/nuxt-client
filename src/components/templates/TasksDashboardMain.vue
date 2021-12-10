@@ -27,7 +27,7 @@
 						</v-tab>
 						<v-tab>
 							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="closedTasks">{{
+							<span class="d-none d-sm-inline" :data-testid="tabTwoHeader.dataTestId">{{
 								tabTwoHeader.title
 							}}</span>
 						</v-tab>
@@ -191,11 +191,13 @@ export default {
 				tabTwo.title = this.$t(
 					"components.organisms.TasksDashboardMain.tab.completed"
 				);
+				tabTwo.dataTestId = "closedTasks";
 			} else {
 				tabTwo.icon = "$taskDraft";
 				tabTwo.title = this.$t(
 					"components.organisms.TasksDashboardMain.tab.drafts"
 				);
+				tabTwo.dataTestId = "draftTasks";
 			}
 
 			return tabTwo;
