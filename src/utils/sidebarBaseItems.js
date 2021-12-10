@@ -24,7 +24,7 @@ export default [
 		icon: "tasks",
 		source: "custom",
 		permission: "TASK_DASHBOARD_VIEW_V3",
-		testId: "Offene Aufgaben",
+		testId: "Aufgaben",
 	},
 	{
 		title: "global.sidebar.tasks",
@@ -32,7 +32,7 @@ export default [
 		icon: "tasks",
 		source: "custom",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
-		testId: "Aktuelle Aufgaben",
+		testId: "Aufgaben",
 	},
 	{
 		title: "global.sidebar.files",
