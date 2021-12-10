@@ -97,6 +97,8 @@ const getWrapper = (device = "desktop") => {
 
 describe("RoomPage", () => {
 	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
 		RoomsModule.setRoomData(mockStoreData);
 	});
 	afterEach(() => {

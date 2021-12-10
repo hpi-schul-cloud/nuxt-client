@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-826 - TaskItemTeacher now linking to task detail page
+- BC-922 - Realigned FAB and introduced a sticky header
 
 ### Fixed
 
