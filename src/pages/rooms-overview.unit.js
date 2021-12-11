@@ -101,7 +101,6 @@ describe("RoomPage", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		RoomsModule.setRoomData(mockRoomStoreData);
-
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
