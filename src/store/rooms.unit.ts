@@ -543,7 +543,7 @@ describe("rooms module", () => {
 		});
 
 		describe("getAllElements", () => {
-			it("should return rooms id state", () => {
+			it("should return rooms-list AllElements", () => {
 				const roomsModule = new Rooms({});
 				const itemsToBeSet = [
 					{
@@ -575,6 +575,7 @@ describe("rooms module", () => {
 						titleDate: "2019/20",
 						searchText: "Mathe 2019/20",
 						isArchived: true,
+						href: "/courses/123",
 					},
 					{
 						id: "234",
@@ -586,6 +587,7 @@ describe("rooms module", () => {
 						titleDate: "2015-2018",
 						searchText: "History 2015-2018",
 						isArchived: true,
+						href: "/courses/234",
 					},
 				];
 				expect(roomsModule.getAllElements).toStrictEqual([]);
