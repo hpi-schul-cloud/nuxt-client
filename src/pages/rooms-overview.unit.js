@@ -447,7 +447,18 @@ describe("RoomPage", () => {
 	});
 
 	it("should reset search text while dragging", async () => {
-		const wrapper = getWrapper();
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			computed: {
+				$mq: () => "desktop",
+				isTouchDevice: () => false,
+			},
+		});
+
+		await wrapper.setData({ allowDragging: true });
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"

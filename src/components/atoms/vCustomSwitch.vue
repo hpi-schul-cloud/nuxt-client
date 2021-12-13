@@ -6,6 +6,7 @@
 		inset
 		flat
 		dense
+		:color="color"
 		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
 </template>
@@ -30,6 +31,10 @@ export default {
 			type: String,
 			required: false,
 			default: () => "toggle switch",
+		},
+		color: {
+			type: String,
+			default: () => "primary",
 		},
 	},
 };

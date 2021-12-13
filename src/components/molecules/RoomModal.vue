@@ -28,12 +28,12 @@
 		</div>
 		<template slot="content">
 			<room-avatar-iterator
-				class="room-avatar-iterator"
+				class="iterator"
 				:items="groupData.groupElements"
 				:item-size="itemSize"
 				:col-count="4"
 				:max-items="-1"
-				can-draggable
+				:can-draggable="draggable"
 				@startDrag="$emit('drag-from-group', $event)"
 				@click-avatar="$emit('click-avatar', $event)"
 			/>
@@ -73,6 +73,9 @@ export default Vue.extend({
 		itemSize: {
 			type: String,
 			default: "5em",
+		},
+		draggable: {
+			type: Boolean,
 		},
 	},
 	data() {
