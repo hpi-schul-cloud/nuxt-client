@@ -50,7 +50,6 @@
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
-							@click-avatar="onClickSingleItem($event)"
 						>
 						</vRoomGroupAvatar>
 						<vRoomAvatar
@@ -64,7 +63,6 @@
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-							@click="onClickSingleItem($event)"
 						></vRoomAvatar>
 					</template>
 					<template v-else>
@@ -84,7 +82,6 @@
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
 			@drag-from-group="dragFromGroup"
-			@click-avatar="onClickSingleItem($event)"
 		>
 		</room-modal>
 	</default-wireframe>
@@ -309,13 +306,10 @@ export default {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
-		onClickSingleItem(item) {
-			if (!item.id) return;
-
-			this.$router.push({
-				path: `/courses/${item.id}`,
-			});
-		},
+		// onClickSingleItem(item) {
+		// 	if (!item.id) return;
+		// 	window.location.href = item.href;
+		// },
 		defaultNaming(pos) {
 			const title = this.$t("pages.rooms.groupName");
 			const payload = {

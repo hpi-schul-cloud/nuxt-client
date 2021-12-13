@@ -332,7 +332,7 @@ describe("rooms module", () => {
 				expect(roomsModule.getRoomsData).not.toStrictEqual(
 					roomsDataToBeChanged
 				);
-				roomsModule.setRoomData(roomsDataToBeChanged);
+				roomsModule.setRoomData(roomsDataToBeChanged as any);
 				expect(roomsModule.roomsData).toStrictEqual(roomsDataToBeChanged);
 			});
 		});
@@ -390,7 +390,7 @@ describe("rooms module", () => {
 					xPosition: 5,
 					yPosition: 2,
 				};
-				roomsModule.setRoomData(mockData.gridElements);
+				roomsModule.setRoomData(mockData.gridElements as any);
 				roomsModule.setPosition(draggedObject);
 				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
@@ -455,7 +455,7 @@ describe("rooms module", () => {
 				const expectedValue = mockData.gridElements;
 
 				expect(roomsModule.getRoomsData).not.toStrictEqual(expectedValue);
-				roomsModule.setRoomData(expectedValue);
+				roomsModule.setRoomData(expectedValue as any);
 				expect(roomsModule.getRoomsData).toStrictEqual(expectedValue);
 			});
 		});

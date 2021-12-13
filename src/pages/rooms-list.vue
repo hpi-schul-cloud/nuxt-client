@@ -38,7 +38,6 @@
 							:item="item"
 							size="5em"
 							:show-badge="true"
-							@click="onClickSingleItem(item)"
 						></vRoomAvatar>
 					</v-col>
 				</v-row>
@@ -90,10 +89,11 @@ export default Vue.extend({
 		await RoomsModule.fetchAllElements();
 	},
 	methods: {
-		onClickSingleItem(item: ListItemsObject) {
-			if (!item.id) return;
-			window.location.href = `/courses/${item.id}`;
-		},
+		// onClickSingleItem(item: ListItemsObject | any) {
+		// 	debugger;
+		// 	// if (!item.id) return;
+		// 	// window.location.href = item.href;
+		// },
 	},
 });
 </script>

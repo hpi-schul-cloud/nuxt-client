@@ -13,6 +13,7 @@ import {
 	CoursesApiFactory,
 	CoursesApiInterface,
 	CourseMetadataResponse,
+	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 
 import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
@@ -26,7 +27,7 @@ import { currentDate, fromUTC } from "@/plugins/datetime";
 	stateFactory: true,
 })
 export class Rooms extends VuexModule {
-	roomsData: Array<RoomsData> = [];
+	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
 	allElements: AllItems = [];
 
@@ -36,17 +37,37 @@ export class Rooms extends VuexModule {
 	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
-	setRoomData(data: Array<RoomsData>): void {
-		this.roomsData = data;
+	setRoomData(data: DashboardGridElementResponse[]): void {
+		this.roomsData = data.map((item) => {
+			let href = "";
+			if (item.groupElements) {
+				item.groupElements = item.groupElements.map((groupItem) => {
+					if (groupItem.id) {
+						href = `/courses/${groupItem.id}`;
+					}
+					return { ...groupItem, href };
+				});
+			} else {
+				if (item.id) {
+					href = `/courses/${item.id}`;
+				}
+				return { ...item, href };
+			}
+			return { ...item };
+		});
 	}
 
 	@Mutation
-	setAllElements(data: CourseMetadataResponse[]): void {
-		this.allElements = data.map((item) => {
+	setAllElements(data: CourseMetadataResponse[] | any): void {
+		this.allElements = data.map((item: any) => {
+			let href = null;
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
 			const isArchived =
 				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
 			if (!isArchived) {
-				return { ...item, searchText: item.title, isArchived };
+				return { ...item, searchText: item.title, isArchived, href };
 			}
 
 			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
@@ -67,6 +88,7 @@ export class Rooms extends VuexModule {
 				titleDate: titleDate,
 				searchText: `${item.title} ${titleDate}`,
 				isArchived,
+				href,
 			};
 		});
 	}
