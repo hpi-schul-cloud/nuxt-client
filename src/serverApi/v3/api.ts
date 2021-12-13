@@ -82,6 +82,18 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     displayColor: string;
+    /**
+     * Start date of the course
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    startDate: string;
+    /**
+     * End date of the course. After this the course counts as archived
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    untilDate: string;
 }
 /**
  * 
@@ -162,6 +174,12 @@ export interface DashboardGridElementResponse {
      * @memberof DashboardGridElementResponse
      */
     yPosition: number;
+    /**
+     * The id of the group element
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    groupId: string;
     /**
      * List of all subelements in the group
      * @type {Array<DashboardGridSubElementResponse>}
