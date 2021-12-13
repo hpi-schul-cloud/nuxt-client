@@ -121,8 +121,7 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-	box-shadow: var(--shadow-sm);
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
@@ -133,13 +132,13 @@ export default {
 .sticky {
 	position: sticky;
 	top: 0;
-	z-index: 1; // stylelint-disable-line sh-waqar/declaration-use-variable
+	z-index: var(--layer-sticky-header);
 	background-color: var(--color-white);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map-get($display-breakpoints, 'md-and-up')} {
 	.wireframe-fab {
-		position: relative !important;
+		position: relative;
 		top: 0;
 	}
 }
@@ -154,5 +153,10 @@ $fab-wrapper-height: 80px;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
 	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
+	pointer-events: none;
+
+	* {
+		pointer-events: auto;
+	}
 }
 </style>
