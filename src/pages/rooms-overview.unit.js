@@ -9,7 +9,6 @@ const mockRoomStoreData = [
 		title: "First",
 		shortTitle: "Ma",
 		displayColor: "purple",
-		url: "/api/xxxx/1234w",
 		xPosition: 1,
 		yPosition: 1,
 	},
@@ -18,8 +17,6 @@ const mockRoomStoreData = [
 		title: "Second",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
 		xPosition: 2,
 		yPosition: 2,
 	},
@@ -28,7 +25,6 @@ const mockRoomStoreData = [
 		title: "Third",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
 		xPosition: 0,
 		yPosition: 0,
 	},
@@ -37,7 +33,6 @@ const mockRoomStoreData = [
 		title: "Fourth",
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
 		xPosition: 2,
 		yPosition: 3,
 		groupElements: [
@@ -50,7 +45,6 @@ const mockRoomStoreData = [
 				id: "6",
 				title: "Bio 3a",
 				displayColor: "green",
-				notification: true,
 			},
 			{
 				id: "7",
@@ -125,8 +119,18 @@ describe("RoomPage", () => {
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
+
+		const expectedItem = {
+			id: "1",
+			title: "First",
+			shortTitle: "Ma",
+			displayColor: "purple",
+			xPosition: 1,
+			yPosition: 1,
+			href: "/courses/1",
+		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items).toStrictEqual(mockRoomStoreData);
+		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -234,7 +238,7 @@ describe("RoomPage", () => {
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				url: "/api/xxxx/1234w",
+				href: "/courses/3",
 				xPosition: 0,
 				yPosition: 0,
 			},
@@ -277,7 +281,7 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -323,7 +327,7 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},

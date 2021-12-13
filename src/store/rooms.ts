@@ -29,7 +29,7 @@ import { currentDate, fromUTC } from "@/plugins/datetime";
 export class Rooms extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
-	allElements: AllItems = [];
+	allElements: CourseMetadataResponse[] = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -58,8 +58,8 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: CourseMetadataResponse[] | any): void {
-		this.allElements = data.map((item: any) => {
+	setAllElements(data: CourseMetadataResponse[]): void {
+		this.allElements = data.map((item: CourseMetadataResponse) => {
 			let href = null;
 			if (item.id) {
 				href = `/courses/${item.id}`;
