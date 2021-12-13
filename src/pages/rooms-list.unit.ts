@@ -57,15 +57,27 @@ describe("@pages/rooms-list.vue", () => {
 		RoomsModule.setAllElements(mockData as any);
 	});
 
-	it("should fetch data on load", async () => {
+	it("should fetch data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
+
+		const expectedItem = {
+			id: "123",
+			title: "Mathe",
+			shortTitle: "Ma",
+			displayColor: "#54616e",
+			startDate: "2019-12-07T23:00:00.000Z",
+			untilDate: "2020-12-16T23:00:00.000Z",
+			titleDate: "2019/20",
+			searchText: "Mathe 2019/20",
+			isArchived: true,
+		};
 		// tslint ignored because it gives
 		// "Property 'items' does not exist on type 'Vue'" error
 		// TODO: better solution should be found
 
 		// @ts-ignore
-		expect(wrapper.vm.items).toStrictEqual(mockData);
+		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should search elements on list", async () => {

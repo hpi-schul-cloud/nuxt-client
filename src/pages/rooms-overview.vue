@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe ref="main" headline="" :full-width="true">
+	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
 			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
 			<div class="mb-5">
@@ -96,8 +96,9 @@ import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
+import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -125,15 +126,29 @@ export default {
 				item: {},
 				to: null,
 			},
+
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
+			mdiPlus,
 			searchText: "",
 			dragging: false,
 		};
 	},
 	computed: {
+		fab() {
+			if (
+				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.labels.course"),
+					href: "/courses/add",
+				};
+			}
+			return null;
+		},
 		loading() {
 			return RoomsModule.getLoading;
 		},

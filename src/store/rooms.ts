@@ -12,9 +12,11 @@ import {
 	DashboardApiInterface,
 	CoursesApiFactory,
 	CoursesApiInterface,
+	CourseMetadataResponse,
 } from "../serverApi/v3/api";
 
 import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
+import { currentDate, fromUTC } from "@/plugins/datetime";
 
 @Module({
 	name: "rooms",
@@ -39,8 +41,34 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setAllElements(data: AllItems): void {
-		this.allElements = data;
+	setAllElements(data: CourseMetadataResponse[]): void {
+		this.allElements = data.map((item) => {
+			const isArchived =
+				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
+			if (!isArchived) {
+				return { ...item, searchText: item.title, isArchived };
+			}
+
+			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
+			const untilDate = item.untilDate ? item.untilDate.substring(0, 4) : "";
+			const shortenedUntilDate = untilDate.substring(2, 4);
+			const difference = Number(untilDate) - Number(startDate);
+
+			let titleDate = untilDate;
+			if (difference !== 0) {
+				const symbol = difference > 1 ? "-" : "/";
+				titleDate = `${startDate}${symbol}${
+					symbol == "/" ? shortenedUntilDate : untilDate
+				}`;
+			}
+
+			return {
+				...item,
+				titleDate: titleDate,
+				searchText: `${item.title} ${titleDate}`,
+				isArchived,
+			};
+		});
 	}
 
 	@Mutation

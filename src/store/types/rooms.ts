@@ -27,6 +27,7 @@ export type ListItemsObject = {
 	displayColor: string;
 	startDate?: string;
 	untilDate?: string;
+	searchText?: string;
 };
 
 export type AllItems = Array<ListItemsObject>;

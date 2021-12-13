@@ -78,9 +78,11 @@ export default Vue.extend({
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 		items(): Array<ListItemsObject> {
-			return JSON.parse(JSON.stringify(RoomsModule.allElements)).filter(
-				(item: ListItemsObject) =>
-					item.title.toLowerCase().includes(this.$data.searchText.toLowerCase())
+			return JSON.parse(JSON.stringify(RoomsModule.getAllElements)).filter(
+				(item: ListItemsObject | any) =>
+					item.searchText
+						.toLowerCase()
+						.includes(this.$data.searchText.toLowerCase())
 			);
 		},
 	},
