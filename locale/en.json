@@ -582,6 +582,7 @@
 	"pages.courses._id.tab.educationalContent": "Content",
 	"pages.courses._id.tab.groups": "Groups",
 	"pages.courses._id.tab.tools": "Tools",
+	"pages.rooms.groupName": "Courses",
 	"pages.tasks.title": "Tasks",
 	"pages.tasks.student.openTasks": "Open Tasks",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
