@@ -589,6 +589,7 @@
 	"pages.courses.index.title": "Mi curso",
 	"pages.courses.new.btn_new": "Crear",
 	"pages.courses.new.title": "Crear nuevo curso",
+	"pages.rooms.groupName": "Cursos",
 	"pages.tasks.labels.due": "Entrega ",
 	"pages.tasks.labels.noCoursesAvailable": "No hay ningún curso con este nombre.",
 	"pages.tasks.labels.noDueDate": "Sin fecha de entrega",
