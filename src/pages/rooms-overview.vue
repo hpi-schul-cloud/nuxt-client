@@ -46,7 +46,7 @@
 							:data="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:device="device"
-							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+							@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
@@ -206,7 +206,7 @@ export default {
 		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.items.find(
-				(item) => item.id == groupId
+				(item) => item.groupId == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},
@@ -253,6 +253,7 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
+				this.defaultNaming(pos);
 			}
 		},
 		addGroupElements(pos) {
@@ -279,7 +280,7 @@ export default {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
 				groupIndex: RoomsModule.roomsData
-					.find((item) => item.id == this.groupDialog.groupData.id)
+					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
 			this.draggedElement.item = element;
@@ -291,6 +292,15 @@ export default {
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+		},
+		defaultNaming(pos) {
+			const title = this.$t("pages.rooms.groupName");
+			const payload = {
+				title,
+				xPosition: pos.x,
+				yPosition: pos.y,
+			};
+			RoomsModule.update(payload);
 		},
 	},
 };

@@ -2,7 +2,7 @@ import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
 import flushPromises from "flush-promises";
 
-const mockStoreData = [
+const mockRoomStoreData = [
 	{
 		id: "1",
 		title: "First",
@@ -32,7 +32,7 @@ const mockStoreData = [
 		yPosition: 0,
 	},
 	{
-		id: "4",
+		groupId: "4",
 		title: "Fourth",
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
@@ -63,13 +63,13 @@ const mockStoreData = [
 const spyMocks = {
 	storeRoomAlignMock: jest
 		.spyOn(RoomsModule, "align")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchMock: jest
 		.spyOn(RoomsModule, "fetch")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchAllMock: jest
 		.spyOn(RoomsModule, "fetchAllElements")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
 	getDataObjectMock: jest.spyOn(RoomsPage.methods, "getDataObject"),
@@ -81,6 +81,7 @@ const spyMocks = {
 	addGroupElementsMock: jest.spyOn(RoomsPage.methods, "addGroupElements"),
 	savePositionMock: jest.spyOn(RoomsPage.methods, "savePosition"),
 	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
+	defaultNamingMock: jest.spyOn(RoomsPage.methods, "defaultNaming"),
 };
 
 const getWrapper = (device = "desktop") => {
@@ -97,7 +98,9 @@ const getWrapper = (device = "desktop") => {
 
 describe("RoomPage", () => {
 	beforeEach(() => {
-		RoomsModule.setRoomData(mockStoreData);
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+		RoomsModule.setRoomData(mockRoomStoreData);
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -109,7 +112,7 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items).toStrictEqual(mockStoreData);
+		expect(wrapper.vm.items).toStrictEqual(mockRoomStoreData);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -234,10 +237,10 @@ describe("RoomPage", () => {
 			"vRoomEmptyAvatar"
 		);
 		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
-		avatarComponent.trigger("dragstart");
+		await avatarComponent.trigger("dragstart");
 
 		const emptyAvatarComponent = wrapper.findComponent({ ref: "2-3" });
-		emptyAvatarComponent.trigger("drop");
+		await emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -278,15 +281,17 @@ describe("RoomPage", () => {
 		);
 
 		const fromAvatarComponent = wrapper.findComponent({ ref: "1-1" });
-		fromAvatarComponent.trigger("dragstart");
+		await fromAvatarComponent.trigger("dragstart");
 
 		const toAvatarComponent = wrapper.findComponent({ ref: "2-2" });
-		toAvatarComponent.trigger("drop");
+		await toAvatarComponent.trigger("drop");
 
+		await flushPromises();
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
 		expect(spyMocks.savePositionMock).toHaveBeenCalled();
+		expect(spyMocks.defaultNamingMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
@@ -322,10 +327,10 @@ describe("RoomPage", () => {
 		);
 
 		const fromAvatarComponent = wrapper.findComponent({ ref: "1-1" });
-		fromAvatarComponent.trigger("dragstart");
+		await fromAvatarComponent.trigger("dragstart");
 
 		const toAvatarComponent = wrapper.findComponent({ ref: "3-2" });
-		toAvatarComponent.trigger("drop");
+		await toAvatarComponent.trigger("drop");
 
 		expect(spyMocks.addGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -359,7 +364,7 @@ describe("RoomPage", () => {
 			groupDialog: {
 				isOpen: true,
 				groupData: {
-					id: "4",
+					groupId: "4",
 					title: "Fourth",
 					shortTitle: "Bi",
 					displayColor: "#EC407A",
@@ -388,17 +393,15 @@ describe("RoomPage", () => {
 			},
 		});
 
-		await flushPromises();
-		wrapper.vm.$refs.roomModal.$emit(
+		await wrapper.vm.$refs.roomModal.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);
 
-		await flushPromises();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
 
 		const emptyAvatarComponent = wrapper.findComponent({ ref: "1-2" });
-		emptyAvatarComponent.trigger("drop");
+		await emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -410,40 +413,41 @@ describe("RoomPage", () => {
 
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
 
 		const searchInput = wrapper.vm.$refs["search"];
-		searchInput.$emit("input", "thi");
-		await flushPromises();
+		await searchInput.$emit("input", "thi");
 
-		expect(wrapper.vm.$refs["2-2"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 	});
 
 	it("should reset search text while dragging", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
 
 		const searchInput = wrapper.vm.$refs["search"];
-		searchInput.$emit("input", "thi");
-		await flushPromises();
+		await searchInput.$emit("input", "thi");
+
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 
 		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
-		avatarComponent.trigger("dragstart");
-		await flushPromises();
+		await avatarComponent.trigger("dragstart");
+
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
