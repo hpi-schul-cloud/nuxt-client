@@ -1,3 +1,2 @@
 ---
-NUXT_CLIENT_IMAGE: ghcr.io/hpi-schul-cloud/nuxt-client
 NUXTCLIENT_PORT: 3200
