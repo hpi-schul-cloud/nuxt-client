@@ -124,4 +124,29 @@ describe("vRoomAvatar", () => {
 
 		expect(emitted["drop"]).toHaveLength(1);
 	});
+
+	it("should display the date title", () => {
+		const propData = {
+			item: {
+				id: "123",
+				title: "History",
+				shortTitle: "Hi",
+				displayColor: "#EF6C00",
+				startDate: "2015-07-31T22:00:00.000Z",
+				untilDate: "2018-07-30T22:00:00.000Z",
+				titleDate: "2015-2018",
+				searchText: "History 2015-2018",
+				isArchived: true,
+			},
+			size: "4em",
+			showBadge: true,
+			draggable: true,
+		};
+
+		const wrapper = getWrapper({ ...propData });
+		const element = wrapper.find(".date-title").element as HTMLElement;
+
+		expect(element).toBeTruthy();
+		expect(element.innerHTML.trim()).toStrictEqual("2015-2018");
+	});
 });
