@@ -1,8 +1,8 @@
 <template>
 	<default-wireframe
-		v-scroll="onScroll"
 		:headline="$t('pages.tasks.title')"
 		:full-width="false"
+		:fab-items="fab"
 	>
 		<div slot="header">
 			<div>
@@ -40,13 +40,6 @@
 							}}</span>
 						</v-tab>
 					</v-tabs>
-					<v-custom-fab
-						v-if="!isStudent"
-						:icon="mdiPlus"
-						:title="$t('common.words.task')"
-						href="/homework/new"
-						top-position-class="fab-top"
-					></v-custom-fab>
 				</div>
 			</div>
 		</div>
@@ -79,7 +72,6 @@
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import vCustomFab from "@components/atoms/vCustomFab";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -90,7 +82,6 @@ import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 export default {
 	components: {
 		DefaultWireframe,
-		vCustomFab,
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
@@ -199,6 +190,16 @@ export default {
 
 			return tabTwo;
 		},
+		fab() {
+			if (!this.isStudent) {
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.words.task"),
+					href: "/homework/new",
+				};
+			}
+			return null;
+		},
 		tabThreeHeader: function () {
 			const tabThree = {
 				icon: "$taskFinished",
@@ -242,9 +243,6 @@ export default {
 		TaskModule.fetchAllTasks();
 	},
 	methods: {
-		onScroll() {
-			this.$eventBus.$emit("isScrolling");
-		},
 		setCourseFilters(courseNames) {
 			TaskModule.setCourseFilters(courseNames);
 		},
@@ -287,6 +285,9 @@ export default {
 	}
 }
 
+.tab-icon {
+	fill: currentColor;
+}
 // even out border
 .v-tabs {
 	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
@@ -299,10 +300,6 @@ export default {
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-.tab-icon {
-	fill: currentColor;
-}
-
 ::v-deep .v-slide-group__prev,
 ::v-deep .v-slide-group__next {
 	display: none !important;
@@ -312,17 +309,5 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
-}
-
-.fab-top {
-	top: 238px;
-}
-
-.substitute-filter-placeholder {
-	height: 46px;
-}
-
-.course-filter-placeholder {
-	height: 78px;
 }
 </style>
