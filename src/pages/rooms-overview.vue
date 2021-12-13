@@ -10,7 +10,7 @@
 				</div>
 				<div class="toggle-div">
 					<v-custom-switch
-						v-if="showAllowDraggingButton"
+						v-if="isTouchDevice"
 						v-model="allowDragging"
 						color="secondary"
 						class="enable-disable"
@@ -145,7 +145,6 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
-			showAllowDraggingButton: true,
 		};
 	},
 	computed: {
@@ -176,12 +175,14 @@ export default {
 				}
 			);
 		},
+		isTouchDevice() {
+			return window.ontouchstart !== undefined;
+		},
 	},
 	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
-
 	methods: {
 		getDeviceDims() {
 			this.device = this.$mq;
@@ -197,13 +198,11 @@ export default {
 				case "desktop":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
-					this.showAllowDraggingButton = false;
 					this.allowDragging = true;
 					break;
 				case "large":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
-					this.showAllowDraggingButton = false;
 					this.allowDragging = true;
 					break;
 				case "mobile":
