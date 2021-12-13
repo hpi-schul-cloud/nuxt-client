@@ -43,7 +43,8 @@ export class Rooms extends VuexModule {
 	@Mutation
 	setAllElements(data: CourseMetadataResponse[]): void {
 		this.allElements = data.map((item) => {
-			const isArchived = fromUTC(item.untilDate || "") < currentDate();
+			const isArchived =
+				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
 			if (!isArchived) {
 				return { ...item, searchText: item.title, isArchived };
 			}
