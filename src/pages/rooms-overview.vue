@@ -299,8 +299,8 @@ export default {
 
 			this.$router.push({
 				path: `/courses/${item.id}`,
-		});
-
+			});
+		},
 		defaultNaming(pos) {
 			const title = this.$t("pages.rooms.groupName");
 			const payload = {
