@@ -4,6 +4,7 @@
 		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
 		:style="{ width: size }"
+		@click="onClick"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
@@ -85,6 +86,17 @@ export default {
 		},
 	},
 	methods: {
+		onClick() {
+			if (this.item.to) {
+				this.$router.push({
+					path: this.item.to,
+				});
+				return;
+			}
+			if (!this.item.href) {
+				window.location = this.item.href;
+			}
+		},
 		startDragAvatar() {
 			this.isDragging = true;
 			this.$emit("startDrag", this.item);

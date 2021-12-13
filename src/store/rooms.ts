@@ -62,11 +62,17 @@ export class Rooms extends VuexModule {
 				}`;
 			}
 
+			let href = null;
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+
 			return {
 				...item,
 				titleDate: titleDate,
 				searchText: `${item.title} ${titleDate}`,
 				isArchived,
+				href,
 			};
 		});
 	}
