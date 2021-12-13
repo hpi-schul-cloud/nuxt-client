@@ -446,7 +446,18 @@ describe("RoomPage", () => {
 	});
 
 	it("should reset search text while dragging", async () => {
-		const wrapper = getWrapper();
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			computed: {
+				$mq: () => "desktop",
+				isTouchDevice: () => false,
+			},
+		});
+
+		await wrapper.setData({ allowDragging: true });
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
@@ -467,8 +478,16 @@ describe("RoomPage", () => {
 	});
 
 	it("should NOT be 'draggable' on mobile devices as default", async () => {
-		const wrapper = getWrapper("mobile");
-		await flushPromises();
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			computed: {
+				$mq: () => "mobile",
+				isTouchDevice: () => true,
+			},
+		});
 
 		expect(wrapper.vm.$data.allowDragging).toBe(false);
 
@@ -476,11 +495,6 @@ describe("RoomPage", () => {
 		const groupComponent = wrapper.findComponent({ ref: "3-2" });
 		expect(avatarComponent.vm.$props.draggable).toBe(false);
 		expect(groupComponent.vm.$props.draggable).toBe(false);
-
-		avatarComponent.trigger("dragstart");
-		expect(wrapper.vm.$data.draggedElement.from).toBeNull();
-		groupComponent.trigger("dragstart");
-		expect(wrapper.vm.$data.draggedElement.from).toBeNull();
 	});
 
 	it("should be 'draggable' on mobile devices if dragging active", async () => {
