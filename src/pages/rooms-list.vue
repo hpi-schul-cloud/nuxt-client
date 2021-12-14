@@ -85,15 +85,8 @@ export default Vue.extend({
 			);
 		},
 	},
-	async created() {
+	async mounted() {
 		await RoomsModule.fetchAllElements();
-	},
-	methods: {
-		// onClickSingleItem(item: ListItemsObject | any) {
-		// 	debugger;
-		// 	// if (!item.id) return;
-		// 	// window.location.href = item.href;
-		// },
 	},
 });
 </script>

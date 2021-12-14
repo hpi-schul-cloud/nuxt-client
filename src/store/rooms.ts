@@ -47,13 +47,11 @@ export class Rooms extends VuexModule {
 					}
 					return { ...groupItem, href };
 				});
-			} else {
-				if (item.id) {
-					href = `/courses/${item.id}`;
-				}
-				return { ...item, href };
 			}
-			return { ...item };
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+			return { ...item, href };
 		});
 	}
 

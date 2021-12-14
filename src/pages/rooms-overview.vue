@@ -327,10 +327,6 @@ export default {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
-		// onClickSingleItem(item) {
-		// 	if (!item.id) return;
-		// 	window.location.href = item.href;
-		// },
 		defaultNaming(pos) {
 			const title = this.$t("pages.rooms.groupName");
 			const payload = {

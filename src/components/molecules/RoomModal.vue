@@ -35,7 +35,6 @@
 				:max-items="-1"
 				:can-draggable="draggable"
 				@startDrag="$emit('drag-from-group', $event)"
-				@click-avatar="$emit('click-avatar', $event)"
 			/>
 		</template>
 	</vCustomDialog>
