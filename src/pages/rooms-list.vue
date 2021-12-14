@@ -12,7 +12,7 @@
 					v-model="searchText"
 					rounded
 					solo
-					:label="$t('common.words.search')"
+					:label="$t('pages.rooms.index.search.label')"
 					:append-icon="mdiMagnify"
 				>
 				</v-text-field>
