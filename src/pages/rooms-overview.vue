@@ -29,6 +29,7 @@
 				rounded
 				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
+				:aria-label="$t('common.labels.search')"
 			>
 			</v-text-field>
 			<div

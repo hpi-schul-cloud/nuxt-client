@@ -19,6 +19,7 @@
 		>
 			<v-avatar
 				:color="item.displayColor"
+				:aria-label="item.title"
 				:size="size"
 				:tile="condenseLayout"
 				tabindex="0"
