@@ -235,6 +235,7 @@ export default {
 			}, {});
 
 			this.dimensions.rowCount =
+				lastItem.yPosition &&
 				lastItem.yPosition + 2 > this.dimensions.defaultRowCount
 					? lastItem.yPosition + 2
 					: this.dimensions.defaultRowCount;
