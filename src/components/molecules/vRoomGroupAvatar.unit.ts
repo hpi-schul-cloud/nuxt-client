@@ -146,6 +146,20 @@ describe("vRoomGroupAvatar", () => {
 		);
 	});
 
+	it("should emit 'click' event with correct payload if keyboard event triggered", async () => {
+		const wrapper = getWrapper(propsData);
+		const cardComponent = wrapper.find(".card-component");
+
+		cardComponent.trigger("keypress.enter");
+		await flushPromises();
+		const emitted = wrapper.emitted();
+
+		expect(emitted["clicked"]).toHaveLength(1);
+		expect(emitted["clicked"] && emitted["clicked"][0][0]).toStrictEqual(
+			mockData.id
+		);
+	});
+
 	it("should emit 'dragStart' event when it started dragging", async () => {
 		const wrapper = getWrapper({
 			data: mockData,

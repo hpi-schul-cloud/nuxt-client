@@ -25,6 +25,7 @@
 				@click.prevent="$emit('clicked', data.id)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="$emit('clicked', data.id)"
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"

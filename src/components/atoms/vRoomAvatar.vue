@@ -21,9 +21,11 @@
 				:color="item.displayColor"
 				:size="size"
 				:tile="condenseLayout"
+				tabindex="0"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="onClick"
 			>
 				<span
 					class="white--text text-h7"
