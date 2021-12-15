@@ -1,7 +1,9 @@
 <template>
 	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
-			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
+			<h1 class="text-h3 pt-2">
+				{{ $t("pages.courses.index.courses.active") }}
+			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
 					<v-btn color="secondary" outlined small to="/rooms-list"
