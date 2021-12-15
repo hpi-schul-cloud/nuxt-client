@@ -129,6 +129,7 @@ export default {
 				colCount: 2,
 				cellWidth: "3em",
 				rowCount: 6,
+				defaultRowCount: 6,
 			},
 			groupDialog: {
 				isOpen: false,
@@ -228,6 +229,14 @@ export default {
 					this.dimensions.colCount = 6;
 					break;
 			}
+			const lastItem = RoomsModule.getRoomsData.reduce((prev, current) => {
+				return prev.yPosition > current.yPosition ? prev : current;
+			}, {});
+
+			this.dimensions.rowCount =
+				lastItem.yPosition + 2 > this.dimensions.defaultRowCount
+					? lastItem.yPosition + 2
+					: this.dimensions.defaultRowCount;
 		},
 		getDataObject(row, col) {
 			return this.findDataByPos(row, col);
