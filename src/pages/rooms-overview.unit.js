@@ -9,7 +9,6 @@ const mockRoomStoreData = [
 		title: "First",
 		shortTitle: "Ma",
 		displayColor: "purple",
-		url: "/api/xxxx/1234w",
 		xPosition: 1,
 		yPosition: 1,
 	},
@@ -18,8 +17,6 @@ const mockRoomStoreData = [
 		title: "Second",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
 		xPosition: 2,
 		yPosition: 2,
 	},
@@ -28,7 +25,6 @@ const mockRoomStoreData = [
 		title: "Third",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
 		xPosition: 0,
 		yPosition: 0,
 	},
@@ -37,7 +33,6 @@ const mockRoomStoreData = [
 		title: "Fourth",
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
 		xPosition: 2,
 		yPosition: 3,
 		groupElements: [
@@ -50,7 +45,6 @@ const mockRoomStoreData = [
 				id: "6",
 				title: "Bio 3a",
 				displayColor: "green",
-				notification: true,
 			},
 			{
 				id: "7",
@@ -96,11 +90,12 @@ const spyMocks = {
 	defaultNamingMock: jest.spyOn(RoomsPage.methods, "defaultNaming"),
 };
 
-const getWrapper = (device = "desktop") => {
+const getWrapper = (device = "desktop", options = {}) => {
 	return mount(RoomsPage, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
+			...options,
 		}),
 		computed: {
 			$mq: () => device,
@@ -124,8 +119,18 @@ describe("RoomPage", () => {
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
+
+		const expectedItem = {
+			id: "1",
+			title: "First",
+			shortTitle: "Ma",
+			displayColor: "purple",
+			xPosition: 1,
+			yPosition: 1,
+			href: "/courses/1",
+		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items).toStrictEqual(mockRoomStoreData);
+		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -233,7 +238,7 @@ describe("RoomPage", () => {
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				url: "/api/xxxx/1234w",
+				href: "/courses/3",
 				xPosition: 0,
 				yPosition: 0,
 			},
@@ -276,7 +281,7 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -322,7 +327,7 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -475,55 +480,6 @@ describe("RoomPage", () => {
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
-	});
-
-	it("should NOT be 'draggable' on mobile devices as default", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "mobile",
-				isTouchDevice: () => true,
-			},
-		});
-		expect(wrapper.vm.$data.allowDragging).toBe(false);
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-
-		const avatarComponent = wrapper.findComponent({ ref: "1-1" });
-		const groupComponent = wrapper.findComponent({ ref: "3-2" });
-		expect(avatarComponent.vm.$props.draggable).toBe(false);
-		expect(groupComponent.vm.$props.draggable).toBe(false);
-	});
-
-	it("should be 'draggable' on mobile devices if dragging active", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "mobile",
-				isTouchDevice: () => true,
-			},
-		});
-
-		wrapper.setData({ allowDragging: true });
-
-		expect(wrapper.vm.allowDragging).toBe(true);
-		await wrapper.vm.$nextTick();
-
-		const avatarComponent = wrapper.findComponent({ ref: "1-1" });
-		const groupComponent = wrapper.findComponent({ ref: "3-2" });
-		expect(avatarComponent.vm.$props.draggable).toBe(true);
-		expect(groupComponent.vm.draggable).toBe(true);
-
-		avatarComponent.trigger("dragstart");
-		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual({ x: 1, y: 1 });
-		groupComponent.trigger("dragstart");
-		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual({ x: 2, y: 3 });
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {

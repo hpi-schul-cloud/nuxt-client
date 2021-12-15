@@ -75,6 +75,7 @@ describe("@pages/rooms-list.vue", () => {
 			titleDate: "2019/20",
 			searchText: "Mathe 2019/20",
 			isArchived: true,
+			href: "/courses/123",
 		};
 		// tslint ignored because it gives
 		// "Property 'items' does not exist on type 'Vue'" error
@@ -112,6 +113,7 @@ describe("@pages/rooms-list.vue", () => {
 			titleDate: "2015-2018",
 			searchText: "History 2015-2018",
 			isArchived: true,
+			href: "/courses/234",
 		});
 	});
 });
