@@ -532,10 +532,12 @@ describe("RoomPage", () => {
 
 		RoomsModule.setRoomData(roomData);
 		const wrapper = getWrapper();
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
 		await wrapper.vm.$nextTick();
 		const avatar = wrapper.findComponent({ ref: "7-3" });
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 		expect(avatar.vm.$options["_componentTag"]).toStrictEqual("vRoomAvatar");
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(true);
 		expect(wrapper.vm.$refs["8-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
