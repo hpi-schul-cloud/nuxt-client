@@ -95,6 +95,7 @@
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
 			:draggable="allowDragging"
+			tabindex="0"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>

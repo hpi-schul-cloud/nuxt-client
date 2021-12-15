@@ -35,6 +35,7 @@
 					:can-draggable="draggable"
 					:col-count="itemSpecs.columnCount"
 					:max-items="itemSpecs.maxItem"
+					tabindex="-1"
 				/>
 			</v-card>
 			<div class="justify-left mt-1 sub-title">

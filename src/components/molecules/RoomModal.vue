@@ -18,7 +18,7 @@
 			<h2
 				v-show="!roomNameEditMode"
 				class="text-h4 my-2"
-				tabindex="5"
+				tabindex="0"
 				@click="onEditRoom"
 				@focus="onEditRoom"
 			>
