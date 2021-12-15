@@ -64,7 +64,6 @@
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 						>
 						</vRoomGroupAvatar>
-
 						<vRoomAvatar
 							v-else
 							:ref="`${rowIndex}-${colIndex}`"
