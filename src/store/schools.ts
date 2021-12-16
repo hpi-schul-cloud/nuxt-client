@@ -78,6 +78,7 @@ export class Schools extends VuexModule {
 		enableStudentTeamCreation: false,
 		permissions: {},
 		inMaintenance: false,
+		inUserMigration: false,
 		documentBaseDir: "",
 		isExternal: false,
 		id: "",
