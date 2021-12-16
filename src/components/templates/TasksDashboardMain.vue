@@ -200,6 +200,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.words.task"),
 					href: "/homework/new",
+					testId: "addTask",
 				};
 			}
 			return null;
