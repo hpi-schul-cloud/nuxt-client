@@ -22,6 +22,12 @@
 				:width="size"
 				outlined
 				class="ma-0 card-component"
+				:aria-label="
+					$t('pages.rooms.a11y.group.text', {
+						title: data.title,
+						itemCount: data.groupElements.length,
+					})
+				"
 				@click.prevent="$emit('clicked', data.id)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"

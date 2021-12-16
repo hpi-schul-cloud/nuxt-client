@@ -660,6 +660,7 @@
 	"pages.news.title": "Neuigkeiten",
 	"pages.rooms.index.search.label": "Kurs suchen",
 	"pages.rooms.groupName": "Kurse",
+	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount}-Objekte, zum Öffnen die Eingabetaste drücken",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.adminFilter.class.title": "Klasse(n)",

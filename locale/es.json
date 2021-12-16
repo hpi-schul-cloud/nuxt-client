@@ -666,6 +666,7 @@
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
 	"pages.rooms.index.search.label": "Buscar curso",
+	"pages.rooms.a11y.group.text": "{título}, carpeta, {itemCount} objetos, presione Intro para abrir",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"storybook.lang": "¡Estoy en inglés ahora!",
 	"utils.adminFilter.class.title": "Clase(s)",
