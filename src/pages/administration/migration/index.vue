@@ -86,7 +86,6 @@
 
 		<v-data-table
 			v-if="canStartMigration"
-
 			:headers="tableHead"
 			:items="importUsers"
 			:items-per-page="25"
@@ -106,7 +105,9 @@
 				<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 				{{ getMatch(item.match) }}
 				<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-				<v-icon v-if="item.match" small @click="deleteItem(item)">{{ mdiDelete }}</v-icon>
+				<v-icon v-if="item.match" small @click="deleteItem(item)">{{
+					mdiDelete
+				}}</v-icon>
 			</template>
 		</v-data-table>
 
