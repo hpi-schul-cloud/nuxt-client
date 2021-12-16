@@ -5,23 +5,23 @@ export default function (req, res, next) {
 			to: "/tasks",
 		},
 		{
-			from: /\/homework\/asked\/?/,
+			from: /\/homework\/asked\/?.*/,
 			to: "/tasks",
 		},
 		{
-			from: /\/homework\/private\/?/,
+			from: /\/homework\/private\/?.*/,
 			to: "/tasks",
 		},
 		{
-			from: /\/homework\/archive\/?/,
+			from: /\/homework\/archive\/?.*/,
 			to: "/tasks",
 		},
 		{
-			from: /\/tasks\/assigned\/?/,
+			from: /\/tasks\/assigned\/?.*/,
 			to: "/tasks",
 		},
 		{
-			from: /\/tasks\/open\/?/,
+			from: /\/tasks\/open\/?.*/,
 			to: "/tasks",
 		},
 	];
