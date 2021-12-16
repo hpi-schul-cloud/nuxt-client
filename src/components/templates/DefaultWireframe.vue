@@ -136,7 +136,7 @@ export default {
 	background-color: var(--color-white);
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get($display-breakpoints, 'lg-and-up')} {
 	.wireframe-fab {
 		position: relative;
 		top: 0;
