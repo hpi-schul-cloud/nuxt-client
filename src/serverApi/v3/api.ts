@@ -275,7 +275,7 @@ export interface ImportUserListResponse {
  */
 export interface ImportUserResponse {
     /**
-     * id reference to a user
+     * id reference to a import user
      * @type {string}
      * @memberof ImportUserResponse
      */
@@ -2320,7 +2320,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         importUserControllerRemoveMatch: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('importUserControllerRemoveMatch', 'id', id)
-            const localVarPath = `/user/import/match/{id}`
+            const localVarPath = `/user/import/{id}/match`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2360,7 +2360,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('importUserControllerUpdateMatch', 'id', id)
             // verify required parameter 'updateMatchParams' is not null or undefined
             assertParamExists('importUserControllerUpdateMatch', 'updateMatchParams', updateMatchParams)
-            const localVarPath = `/user/import/match/{id}`
+            const localVarPath = `/user/import/{id}/match`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
