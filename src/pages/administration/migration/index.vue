@@ -13,8 +13,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn text @click="closeDelete">Cancel</v-btn>
-					<v-btn text @click="deleteItemConfirm">OK</v-btn
-					>
+					<v-btn text @click="deleteItemConfirm">OK</v-btn>
 					<v-spacer></v-spacer>
 				</v-card-actions>
 			</v-card>
@@ -48,51 +47,44 @@
 			</v-card>
 		</v-dialog>
 
+		<v-row>
+			<v-col cols="12" md="3">
+				<v-text-field
+					v-model="search"
+					:prepend-inner-icon="mdiMagnify"
+					label="Filter"
+					single-line
+					hide-details
+					dense
+					clearable
+				></v-text-field>
+			</v-col>
+			<v-col cols="12" md="9">
+				<v-checkbox
+					v-model="matchedBy"
+					class="float-left"
+					label="unmatched"
+					value=""
+					dense
+				></v-checkbox>
+				<v-checkbox
+					v-model="matchedBy"
+					class="float-left"
+					label="manual"
+					value="admin"
+					dense
+				></v-checkbox>
+				<v-checkbox
+					v-model="matchedBy"
+					class="float-left"
+					label="automatic"
+					value="auto"
+					dense
+				></v-checkbox>
+			</v-col>
+		</v-row>
 
-
-
-      <v-row>
-        <v-col
-            cols="12"
-            md="3"
-        >
-        <v-text-field
-            v-model="search"
-            :prepend-inner-icon="mdiMagnify"
-            label="Filter"
-            single-line
-            hide-details
-            dense
-            clearable
-        ></v-text-field>
-        </v-col>
-          <v-col
-              cols="12"
-              md="9"
-          >
-
-        <v-checkbox  v-model="matchedBy"
-            class="float-left"
-            label="unmatched"
-            value=""
-            dense
-        ></v-checkbox>
-        <v-checkbox  v-model="matchedBy"
-            class="float-left"
-            label="manual"
-            value="admin"
-            dense
-        ></v-checkbox>
-        <v-checkbox  v-model="matchedBy"
-            class="float-left"
-            label="automatic"
-            value="auto"
-            dense
-        ></v-checkbox>
-        </v-col>
-      </v-row>
-
-    <v-data-table
+		<v-data-table
 			v-if="canStartMigration"
 			dense
 			:headers="tableHead"
@@ -101,9 +93,8 @@
 			:options.sync="options"
 			:server-items-length="totalImportUsers"
 			class="elevation-1"
-      :search="search"
+			:search="search"
 		>
-
 			<template v-slot:item.ldapDn="{ item }">
 				{{ getAccount(item.ldapDn) }}
 			</template>
@@ -125,7 +116,14 @@
 <script>
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import SchoolsModule from "@/store/schools";
-import { mdiDelete, mdiPencil, mdiAccountArrowRight, mdiAccountArrowLeftOutline, mdiAccountOffOutline, mdiMagnify } from "@mdi/js";
+import {
+	mdiDelete,
+	mdiPencil,
+	mdiAccountArrowRight,
+	mdiAccountArrowLeftOutline,
+	mdiAccountOffOutline,
+	mdiMagnify,
+} from "@mdi/js";
 
 export default {
 	components: {
@@ -134,11 +132,11 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-      matchedBy: ['admin', 'auto', ''],
+			matchedBy: ["admin", "auto", ""],
 			mdiDelete,
 			mdiPencil,
 			mdiAccountArrowRight,
-      mdiMagnify,
+			mdiMagnify,
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -147,7 +145,7 @@ export default {
 			],
 			dialogEdit: false,
 			dialogDelete: false,
-      search: '',
+			search: "",
 			options: {},
 			importUsersMock: [
 				{
@@ -436,7 +434,7 @@ export default {
 				match: {},
 			},
 			editedIndex: -1,
-    };
+		};
 	},
 	computed: {
 		editMatch() {
@@ -471,35 +469,37 @@ export default {
 			},
 			deep: true,
 		},
-    search() {
-      this.getDataFromApi();
-    }
+		search() {
+			this.getDataFromApi();
+		},
 	},
 	methods: {
-    getMatch(match) {
-      if (!match || !match.userId) {
-        return '';
-      }
-      console.log(match)
-      // TODO fetch data about user
-      const matchedUser = this.localUsersMock.find(user => user._id['$oid'] === match.userId['$oid']);
-      if (matchedUser) {
-        return `${matchedUser.firstName} ${matchedUser.lastName}`;
-      }
-      return '';
-    },
-    getMatchedByIcon(match) {
-      if (!match || !match.matchedBy) {
-        return mdiAccountOffOutline;
-      }
-      console.log('getMatchedByIcon', match)
-      if (match.matchedBy === 'auto') {
-        return mdiAccountArrowLeftOutline;
-      }
-      if (match.matchedBy === 'admin') {
-        return mdiAccountArrowRight;
-      }
-    },
+		getMatch(match) {
+			if (!match || !match.userId) {
+				return "";
+			}
+			console.log(match);
+			// TODO fetch data about user
+			const matchedUser = this.localUsersMock.find(
+				(user) => user._id["$oid"] === match.userId["$oid"]
+			);
+			if (matchedUser) {
+				return `${matchedUser.firstName} ${matchedUser.lastName}`;
+			}
+			return "";
+		},
+		getMatchedByIcon(match) {
+			if (!match || !match.matchedBy) {
+				return mdiAccountOffOutline;
+			}
+			console.log("getMatchedByIcon", match);
+			if (match.matchedBy === "auto") {
+				return mdiAccountArrowLeftOutline;
+			}
+			if (match.matchedBy === "admin") {
+				return mdiAccountArrowRight;
+			}
+		},
 		deleteItem(item) {
 			console.log("deleteItem", item);
 			this.editedIndex = this.importUsers.indexOf(item);
@@ -548,11 +548,11 @@ export default {
 		getDataFromApi() {
 			this.loading = true;
 
-      console.log('filter', this.search)
-      console.log('options', this.options);
-      console.log('matchedBy', this.matchedBy)
+			console.log("filter", this.search);
+			console.log("options", this.options);
+			console.log("matchedBy", this.matchedBy);
 
-      this.fakeApiCall().then((data) => {
+			this.fakeApiCall().then((data) => {
 				this.importUsers = data.items;
 				this.totalImportUsers = data.total;
 				this.loading = false;
@@ -597,23 +597,23 @@ export default {
 				}, 1000);
 			});
 		},
-    getLocalUsersSelect() {
-      const localUsers = this.localUsersMock.map(user => {
-        const obj = {
-          value: user._id.$oid,
-          name: `${user.firstName} ${user.lastName}`
-        };
-        return obj;
-      });
-      console.log('getLocalUsersSelect', localUsers);
-      return localUsers;
-    }
+		getLocalUsersSelect() {
+			const localUsers = this.localUsersMock.map((user) => {
+				const obj = {
+					value: user._id.$oid,
+					name: `${user.firstName} ${user.lastName}`,
+				};
+				return obj;
+			});
+			console.log("getLocalUsersSelect", localUsers);
+			return localUsers;
+		},
 	},
 	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};
-	}
+	},
 };
 </script>
 <style lang="scss" scoped>
