@@ -143,6 +143,12 @@ export default {
 	}
 }
 
+@media #{map-get($display-breakpoints, 'md-and-down')} {
+	.wireframe-fab {
+		position: fixed !important;
+	}
+}
+
 $fab-wrapper-height: 80px;
 
 .fab-wrapper {

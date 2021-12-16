@@ -6,7 +6,7 @@
 		:bottom="!positionAtTop"
 		:top="positionAtTop"
 		right
-		class="fixed transition"
+		class="transition"
 		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
 	>
