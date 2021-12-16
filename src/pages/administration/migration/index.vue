@@ -89,11 +89,14 @@
 			dense
 			:headers="tableHead"
 			:items="importUsers"
-			:items-per-page="5"
+			:items-per-page="25"
 			:options.sync="options"
 			:server-items-length="totalImportUsers"
-			class="elevation-1"
+			class="table"
 			:search="search"
+      :footer-props="{
+        itemsPerPageOptions: [5, 10, 25, 50, 100, -1],
+      }"
 		>
 			<template v-slot:item.ldapDn="{ item }">
 				{{ getAccount(item.ldapDn) }}
@@ -410,6 +413,7 @@ export default {
 					value: "firstName",
 					sortable: true,
 					align: "start",
+          class: "head"
 				},
 				{ text: "Last Name", value: "lastName", sortable: true },
 				{ text: "Account", value: "ldapDn" },
@@ -616,6 +620,10 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr:last-child > th {
+  border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) ;
+}
 </style>
