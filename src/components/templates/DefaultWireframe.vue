@@ -21,6 +21,7 @@
 						:actions="fabItems.actions"
 						:class="fabItems.class"
 						class="wireframe-fab"
+						:aria-label="fabItems.ariaLabel"
 					></v-custom-fab>
 				</slot>
 			</div>

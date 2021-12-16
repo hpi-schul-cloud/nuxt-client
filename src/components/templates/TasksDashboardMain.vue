@@ -192,10 +192,12 @@ export default {
 		},
 		fab() {
 			if (!this.isStudent) {
+				const title = this.$t("common.words.task");
 				return {
 					icon: mdiPlus,
-					title: this.$t("common.words.task"),
+					title,
 					href: "/homework/new",
+					ariaLabel: `${title} ${this.$t("common.actions.add")}`,
 				};
 			}
 			return null;

@@ -14,12 +14,14 @@
 			<v-btn
 				id="fab"
 				v-model="isSpeedDialExpanded"
+				role="menu"
 				color="primary"
 				fab
 				rounded
 				:small="isCollapsed"
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
+				:aria-label="speedDialAriaLabel"
 			>
 				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
 					{{ mdiClose }}
@@ -44,6 +46,8 @@
 					:to="action.to"
 					class="fab-action"
 					:data-testid="action.dataTestid"
+					role="menuitem"
+					:aria-label="action.ariaLabel"
 				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
@@ -70,6 +74,7 @@
 		:small="extended"
 		:href="href"
 		:class="classes"
+		:aria-label="ariaLabel"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -105,6 +110,11 @@ export default {
 			required: false,
 			default: "",
 		},
+		ariaLabel: {
+			type: String,
+			required: false,
+			default: "button",
+		},
 	},
 	data() {
 		return {
@@ -139,6 +149,11 @@ export default {
 				className = className.concat(" ", this.topPositionClass);
 
 			return className;
+		},
+		speedDialAriaLabel: function () {
+			return this.isSpeedDialExpanded
+				? this.$t("common.labels.expanded")
+				: this.ariaLabel + this.$t("common.labels.collapsed");
 		},
 	},
 	created() {

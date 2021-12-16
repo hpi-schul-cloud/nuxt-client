@@ -156,10 +156,12 @@ export default {
 			if (
 				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
+				const title = this.$t("common.labels.course");
 				return {
 					icon: mdiPlus,
-					title: this.$t("common.labels.course"),
+					title,
 					href: "/courses/add",
+					ariaLabel: `${title} ${this.$t("common.actions.add")}`,
 				};
 			}
 			return null;
@@ -366,5 +368,12 @@ export default {
 	.toggle-div {
 		display: inline-block;
 	}
+}
+
+::v-deep .v-messages {
+	display: none;
+}
+::v-deep .v-input {
+	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
 }
 </style>
