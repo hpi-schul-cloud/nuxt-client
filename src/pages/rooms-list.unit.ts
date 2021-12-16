@@ -6,118 +6,39 @@ import flushPromises from "flush-promises";
 
 const mockData = [
 	{
-		id: "6183ddx6480fdc650e44b79d1",
-		title: "Physics",
-		shortTitle: "Ph",
-		displayColor: "blue",
-	},
-	{
-		id: "6183ddc6680fdc650e44b79d2",
-		title: "Math",
+		id: "123",
+		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#f23f76",
+		displayColor: "#54616e",
+		startDate: "2019-12-07T23:00:00.000Z",
+		untilDate: "2020-12-16T23:00:00.000Z",
+		titleDate: "2019/20",
 	},
 	{
-		id: "6188f93dfvxc71f695cfb16fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
+		id: "234",
+		title: "History",
+		shortTitle: "Hi",
+		displayColor: "#EF6C00",
+		startDate: "2015-07-31T22:00:00.000Z",
+		untilDate: "2018-07-30T22:00:00.000Z",
+		titleDate: "2015-2018",
 	},
 	{
-		id: "6188f941f71f695cfb16fvxce19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
+		id: "345",
+		title: "Spanish",
+		shortTitle: "Sp",
+		displayColor: "#009688",
+		startDate: "2021-07-31T22:00:00.000Z",
+		untilDate: "2021-11-05T23:00:00.000Z",
+		titleDate: "2021",
 	},
 	{
-		id: "618a95ce06870b10d863vxccca4",
+		id: "456",
 		title: "English",
 		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b659806870b10d863cvxca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b659806870bsdf10d863cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6183ddc6480fdc650e44b79d1",
-		title: "Physics",
-		shortTitle: "Ph",
-		displayColor: "blue",
-	},
-	{
-		id: "6183dd6680vvfdc650e44b79d2",
-		title: "Math",
-		shortTitle: "Ma",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93df71f6y95cfb1y6fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188yf941f71f695cfby16fe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce06870b10d863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b659x806870b10xd863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618bc65dd9806870b10d8c63cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "6188f93vdf71f695cfbv16fe18",
-		title: "Greek",
-		shortTitle: "Gr",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "61y88f941f71f695cfb16vfe19",
-		title: "German",
-		shortTitle: "Ge",
-		displayColor: "#f23f76",
-	},
-	{
-		id: "618a95ce0w6870b10dw863cca4",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "green",
-	},
-	{
-		id: "618b65e9806870b10dt863cca5",
-		title: "Biology",
-		shortTitle: "Bi",
-		displayColor: "yellow",
-	},
-	{
-		id: "618b6r5980687dfg0b10d86r3cca5",
-		title: "Chemistry",
-		shortTitle: "Ch",
-		displayColor: "#f23f76",
+		displayColor: "#EC407A",
+		startDate: "2021-07-31T22:00:00.000Z",
+		untilDate: "2022-07-30T22:00:00.000Z",
 	},
 ];
 
@@ -140,15 +61,28 @@ describe("@pages/rooms-list.vue", () => {
 		RoomsModule.setAllElements(mockData as any);
 	});
 
-	it("should open and close on property change", async () => {
+	it("should fetch data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
+
+		const expectedItem = {
+			id: "123",
+			title: "Mathe",
+			shortTitle: "Ma",
+			displayColor: "#54616e",
+			startDate: "2019-12-07T23:00:00.000Z",
+			untilDate: "2020-12-16T23:00:00.000Z",
+			titleDate: "2019/20",
+			searchText: "Mathe 2019/20",
+			isArchived: true,
+			href: "/courses/123",
+		};
 		// tslint ignored because it gives
 		// "Property 'items' does not exist on type 'Vue'" error
 		// TODO: better solution should be found
 
 		// @ts-ignore
-		expect(wrapper.vm.items).toStrictEqual(mockData);
+		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should search elements on list", async () => {
@@ -158,12 +92,28 @@ describe("@pages/rooms-list.vue", () => {
 		const searchInput = wrapper.vm.$refs["search"] as any;
 
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(19);
+		expect(wrapper.vm.items.length).toEqual(4);
 		searchInput.$emit("input", "math");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(2);
+		expect(wrapper.vm.items.length).toEqual(1);
 		searchInput.$emit("input", "");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(19);
+		expect(wrapper.vm.items.length).toEqual(4);
+		searchInput.$emit("input", "15");
+		// @ts-ignore
+		expect(wrapper.vm.items.length).toEqual(1);
+		// @ts-ignore
+		expect(wrapper.vm.items[0]).toEqual({
+			id: "234",
+			title: "History",
+			shortTitle: "Hi",
+			displayColor: "#EF6C00",
+			startDate: "2015-07-31T22:00:00.000Z",
+			untilDate: "2018-07-30T22:00:00.000Z",
+			titleDate: "2015-2018",
+			searchText: "History 2015-2018",
+			isArchived: true,
+			href: "/courses/234",
+		});
 	});
 });

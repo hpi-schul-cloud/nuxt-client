@@ -3,7 +3,6 @@
 		v-if="hasMultipleActions"
 		v-model="isSpeedDialExpanded"
 		v-bind="$attrs"
-		fixed
 		:bottom="!positionAtTop"
 		:top="positionAtTop"
 		right
@@ -140,7 +139,7 @@ export default {
 			return this.isSpeedDialExpanded;
 		},
 		classes: function () {
-			let className = "fixed transition";
+			let className = "transition";
 
 			if (this.extended) className = className.concat(" ", "extended-fab");
 			if (this.positionAtTop)
@@ -148,6 +147,12 @@ export default {
 
 			return className;
 		},
+	},
+	created() {
+		window.addEventListener("scroll", this.onScroll);
+	},
+	destroyed() {
+		window.removeEventListener("scroll", this.onScroll);
 	},
 	methods: {
 		detectScrollingDirection() {
@@ -164,9 +169,7 @@ export default {
 
 			this.pageOffset = top;
 		},
-	},
-	onEventBus: {
-		isScrolling: function () {
+		onScroll() {
 			if (this.scrollTimer !== -1) {
 				clearTimeout(this.scrollTimer);
 			}
@@ -181,10 +184,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixed {
-	position: fixed !important;
-}
-
 .transition {
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }

@@ -12,9 +12,12 @@ import {
 	DashboardApiInterface,
 	CoursesApiFactory,
 	CoursesApiInterface,
+	CourseMetadataResponse,
+	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
+import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
+import { currentDate, fromUTC } from "@/plugins/datetime";
 
 @Module({
 	name: "rooms",
@@ -24,9 +27,9 @@ import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
 	stateFactory: true,
 })
 export class Rooms extends VuexModule {
-	roomsData: Array<RoomsData> = [];
+	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
-	allElements: AllElements = [];
+	allElements: CourseMetadataResponse[] = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -34,13 +37,58 @@ export class Rooms extends VuexModule {
 	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
-	setRoomData(data: Array<RoomsData>): void {
-		this.roomsData = data;
+	setRoomData(data: DashboardGridElementResponse[]): void {
+		this.roomsData = data.map((item) => {
+			let href = "";
+			if (item.groupElements) {
+				item.groupElements = item.groupElements.map((groupItem) => {
+					if (groupItem.id) {
+						href = `/courses/${groupItem.id}`;
+					}
+					return { ...groupItem, href };
+				});
+			}
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+			return { ...item, href };
+		});
 	}
 
 	@Mutation
-	setAllElements(data: AllElements): void {
-		this.allElements = data;
+	setAllElements(data: CourseMetadataResponse[]): void {
+		this.allElements = data.map((item: CourseMetadataResponse) => {
+			let href = null;
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+			const isArchived =
+				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
+			if (!isArchived) {
+				return { ...item, searchText: item.title, isArchived, href };
+			}
+
+			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
+			const untilDate = item.untilDate ? item.untilDate.substring(0, 4) : "";
+			const shortenedUntilDate = untilDate.substring(2, 4);
+			const difference = Number(untilDate) - Number(startDate);
+
+			let titleDate = untilDate;
+			if (difference !== 0) {
+				const symbol = difference > 1 ? "-" : "/";
+				titleDate = `${startDate}${symbol}${
+					symbol == "/" ? shortenedUntilDate : untilDate
+				}`;
+			}
+
+			return {
+				...item,
+				titleDate: titleDate,
+				searchText: `${item.title} ${titleDate}`,
+				isArchived,
+				href,
+			};
+		});
 	}
 
 	@Mutation
@@ -75,7 +123,7 @@ export class Rooms extends VuexModule {
 		return this.roomsData;
 	}
 
-	get getAllElements(): AllElements {
+	get getAllElements(): AllItems {
 		return this.allElements;
 	}
 

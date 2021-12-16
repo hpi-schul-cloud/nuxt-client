@@ -21,7 +21,7 @@
 				:color="item.displayColor"
 				:size="size"
 				:tile="condenseLayout"
-				@click="$emit('click', item)"
+				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
@@ -35,6 +35,12 @@
 			</v-avatar>
 			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
 				{{ item.title }}
+			</div>
+			<div
+				v-if="!condenseLayout && item.titleDate"
+				class="justify-center mt-1 sub-title date-title"
+			>
+				{{ item.titleDate }}
 			</div>
 		</v-badge>
 	</div>
@@ -79,9 +85,24 @@ export default {
 		},
 	},
 	methods: {
+		onClick() {
+			if (!this.condenseLayout) {
+				if (this.item.to) {
+					this.$router.push({
+						path: this.item.to,
+					});
+					return;
+				}
+				if (this.item.href) {
+					window.location = this.item.href;
+				}
+			}
+		},
 		startDragAvatar() {
 			this.isDragging = true;
-			this.$emit("startDrag", this.item);
+			if (this.draggable) {
+				this.$emit("startDrag", this.item);
+			}
 		},
 		dragLeave() {
 			this.hovered = false;

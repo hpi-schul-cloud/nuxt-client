@@ -1,11 +1,22 @@
 <template>
-	<default-wireframe ref="main" headline="" :full-width="true">
+	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
 			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
-			<div class="mb-5">
-				<v-btn color="secondary" outlined small to="/rooms-list">{{
-					$t("pages.courses.index.courses.all")
-				}}</v-btn>
+			<div class="mb-5 header-div">
+				<div class="btn">
+					<v-btn color="secondary" outlined small to="/rooms-list"
+						>{{ $t("pages.courses.index.courses.all") }}
+					</v-btn>
+				</div>
+				<div class="toggle-div">
+					<v-custom-switch
+						v-if="isTouchDevice"
+						v-model="allowDragging"
+						color="secondary"
+						class="enable-disable"
+						:label="$t('pages.courses.index.courses.arrangeCourses')"
+					></v-custom-switch>
+				</div>
 			</div>
 		</template>
 
@@ -16,7 +27,7 @@
 				class="room-search"
 				solo
 				rounded
-				:label="$t('common.words.search')"
+				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
 			>
 			</v-text-field>
@@ -46,13 +57,13 @@
 							:data="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:device="device"
-							@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+							:draggable="allowDragging"
+							@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 						>
 						</vRoomGroupAvatar>
-
 						<vRoomAvatar
 							v-else
 							:ref="`${rowIndex}-${colIndex}`"
@@ -60,7 +71,7 @@
 							:item="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:show-badge="true"
-							:draggable="true"
+							:draggable="allowDragging"
 							@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 							@dragend="onDragend"
 							@drop="setGroupElements({ x: colIndex, y: rowIndex })"
@@ -82,6 +93,7 @@
 			v-model="groupDialog.isOpen"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
+			:draggable="allowDragging"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
@@ -94,8 +106,10 @@ import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
+import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
-import { mdiMagnify } from "@mdi/js";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
+import { mdiMagnify, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -104,6 +118,7 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
+		vCustomSwitch,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -123,15 +138,30 @@ export default {
 				item: {},
 				to: null,
 			},
+
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
+			mdiPlus,
 			searchText: "",
 			dragging: false,
+			allowDragging: false,
 		};
 	},
 	computed: {
+		fab() {
+			if (
+				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.labels.course"),
+					href: "/courses/add",
+				};
+			}
+			return null;
+		},
 		loading() {
 			return RoomsModule.getLoading;
 		},
@@ -159,12 +189,14 @@ export default {
 				}
 			);
 		},
+		isTouchDevice() {
+			return window.ontouchstart !== undefined;
+		},
 	},
 	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
-
 	methods: {
 		getDeviceDims() {
 			this.device = this.$mq;
@@ -180,10 +212,12 @@ export default {
 				case "desktop":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
+					this.allowDragging = true;
 					break;
 				case "large":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
+					this.allowDragging = true;
 					break;
 				case "mobile":
 					this.dimensions.colCount = 4;
@@ -206,7 +240,7 @@ export default {
 		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.items.find(
-				(item) => item.id == groupId
+				(item) => item.groupId == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},
@@ -253,6 +287,7 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
+				this.defaultNaming(pos);
 			}
 		},
 		addGroupElements(pos) {
@@ -279,7 +314,7 @@ export default {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
 				groupIndex: RoomsModule.roomsData
-					.find((item) => item.id == this.groupDialog.groupData.id)
+					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
 			this.draggedElement.item = element;
@@ -291,6 +326,15 @@ export default {
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+		},
+		defaultNaming(pos) {
+			const title = this.$t("pages.rooms.groupName");
+			const payload = {
+				title,
+				xPosition: pos.x,
+				yPosition: pos.y,
+			};
+			RoomsModule.update(payload);
 		},
 	},
 };
@@ -307,5 +351,18 @@ export default {
 .room-overview-row {
 	display: flex;
 	justify-content: space-between;
+}
+
+.header-div {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	.btn {
+		display: inline-block;
+		flex: 1;
+	}
+	.toggle-div {
+		display: inline-block;
+	}
 }
 </style>

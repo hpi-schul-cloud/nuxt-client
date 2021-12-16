@@ -1,6 +1,6 @@
 <template>
 	<div
-		draggable="true"
+		:draggable="draggable"
 		class="group-avatar"
 		:class="isDragging ? 'dragging' : 'group-avatar'"
 		:style="{ width: size }"
@@ -31,6 +31,7 @@
 					:items="data.groupElements"
 					condense-layout
 					item-size="0.8em"
+					:can-draggable="draggable"
 					:col-count="itemSpecs.columnCount"
 					:max-items="itemSpecs.maxItem"
 				/>
@@ -64,6 +65,9 @@ export default {
 			type: String,
 			default: "",
 		},
+		draggable: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -86,7 +90,9 @@ export default {
 	methods: {
 		startDragAvatar() {
 			this.isDragging = true;
-			this.$emit("startDrag", this.data);
+			if (this.draggable) {
+				this.$emit("startDrag", this.data);
+			}
 		},
 		dragLeave() {
 			this.hovered = false;
