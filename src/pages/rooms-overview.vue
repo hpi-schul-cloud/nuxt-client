@@ -1,7 +1,9 @@
 <template>
 	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
 		<template slot="header">
-			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
+			<h1 class="text-h3 pt-2">
+				{{ $t("pages.courses.index.courses.active") }}
+			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
 					<v-btn color="secondary" outlined small to="/rooms-list"
@@ -128,6 +130,7 @@ export default {
 				colCount: 2,
 				cellWidth: "3em",
 				rowCount: 6,
+				defaultRowCount: 6,
 			},
 			groupDialog: {
 				isOpen: false,
@@ -227,6 +230,15 @@ export default {
 					this.dimensions.colCount = 6;
 					break;
 			}
+			const lastItem = RoomsModule.getRoomsData.reduce((prev, current) => {
+				return prev.yPosition > current.yPosition ? prev : current;
+			}, {});
+
+			this.dimensions.rowCount =
+				lastItem.yPosition &&
+				lastItem.yPosition + 2 > this.dimensions.defaultRowCount
+					? lastItem.yPosition + 2
+					: this.dimensions.defaultRowCount;
 		},
 		getDataObject(row, col) {
 			return this.findDataByPos(row, col);
