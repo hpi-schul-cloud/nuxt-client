@@ -28,6 +28,8 @@ export type ListItemsObject = {
 	startDate?: string;
 	untilDate?: string;
 	searchText?: string;
+	href?: string;
+	to?: string;
 };
 
 export type AllItems = Array<ListItemsObject>;
