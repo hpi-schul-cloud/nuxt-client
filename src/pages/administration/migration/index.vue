@@ -47,7 +47,7 @@
 			</v-card>
 		</v-dialog>
 
-    <!--v-text-field
+		<!--v-text-field
         v-model="search"
         :prepend-inner-icon="mdiMagnify"
         label="Filter"
@@ -92,7 +92,7 @@
 			:items-per-page="10"
 			:options.sync="options"
 			:server-items-length="totalImportUsers"
-      :loading="loading"
+			:loading="loading"
 			class="table"
 			:footer-props="{
 				itemsPerPageOptions: [5, 10, 25, 50, 100],
@@ -136,27 +136,27 @@ export default Vue.extend({
 	components: {
 		DefaultWireframe,
 	},
-	layout: 'defaultVuetify',
+	layout: "defaultVuetify",
 	data() {
 		return {
-      //searchFirstName: '',
-			matchedBy: ['admin', 'auto', 'none'],
+			//searchFirstName: '',
+			matchedBy: ["admin", "auto", "none"],
 			mdiDelete,
 			mdiPencil,
 			mdiAccountArrowRight,
 			mdiMagnify,
 			breadcrumbs: [
 				{
-					text: this.$t('pages.administration.index.title'),
-					href: '/administration/',
+					text: this.$t("pages.administration.index.title"),
+					href: "/administration/",
 				},
 			],
 			dialogEdit: false,
 			dialogDelete: false,
-			search: '',
+			search: "",
 			options: {
-        itemsPerPage: 25
-      },
+				itemsPerPage: 25,
+			},
 			localUsersMock: [
 				{
 					_id: {
@@ -313,17 +313,17 @@ export default Vue.extend({
 			localUsers: [],
 			totalImportUsers: 0,
 			defaultItem: {
-				firstName: '',
-				lastName: '',
-				loginName: '',
+				firstName: "",
+				lastName: "",
+				loginName: "",
 				roleNames: [],
 				classNames: [],
 				match: {},
 			},
 			editedItem: {
-				firstName: '',
-				lastName: '',
-				loginName: '',
+				firstName: "",
+				lastName: "",
+				loginName: "",
 				roleNamess: [],
 				classNames: [],
 				match: {},
@@ -332,20 +332,20 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-    tableHead() {
-      return [
-        {
-          text: "First Name",
-          value: "firstName",
-          sortable: true,
-        },
-        { text: "Last Name", value: "lastName", sortable: true },
-        { text: "Login", value: "loginName" },
-        { text: "Roles", value: "roleNames" },
-        { text: "Classes", value: "classNames" },
-        { text: "Action", value: "match" },
-      ]
-    },
+		tableHead() {
+			return [
+				{
+					text: "First Name",
+					value: "firstName",
+					sortable: true,
+				},
+				{ text: "Last Name", value: "lastName", sortable: true },
+				{ text: "Login", value: "loginName" },
+				{ text: "Roles", value: "roleNames" },
+				{ text: "Classes", value: "classNames" },
+				{ text: "Action", value: "match" },
+			];
+		},
 		editMatch() {
 			console.log("editMatch", this.editedIndex);
 			//if (this.importUsers[this.editedIndex].match) {
@@ -363,26 +363,26 @@ export default Vue.extend({
 			return SchoolsModule.getSchool;
 		},
 	},
-  watch: {
-    dialogEdit(val) {
-      console.log("dialogEdit", val);
-      val || this.closeEdit();
-    },
-    dialogDelete(val) {
-      console.log(`dialogDelete ${val}`);
-      val || this.closeDelete();
-    },
-    options: {
-      async handler() {
-        await this.getDataFromApi();
-      },
-      deep: true,
-    },
-    async matchedBy() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-  },
+	watch: {
+		dialogEdit(val) {
+			console.log("dialogEdit", val);
+			val || this.closeEdit();
+		},
+		dialogDelete(val) {
+			console.log(`dialogDelete ${val}`);
+			val || this.closeDelete();
+		},
+		options: {
+			async handler() {
+				await this.getDataFromApi();
+			},
+			deep: true,
+		},
+		async matchedBy() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+	},
 	methods: {
 		getMatch(match) {
 			if (!match || !match.userId) {
@@ -455,26 +455,31 @@ export default Vue.extend({
 		async getDataFromApi() {
 			this.loading = true;
 
-      ImportUserModule.setLimit(this.options.itemsPerPage);
-      ImportUserModule.setSkip((this.options.page - 1) * this.options.itemsPerPage);
+			ImportUserModule.setLimit(this.options.itemsPerPage);
+			ImportUserModule.setSkip(
+				(this.options.page - 1) * this.options.itemsPerPage
+			);
 
-      if (this.options.sortBy) {
-        ImportUserModule.setSort(this.options.sortBy[0], this.options.sortDesc[0] ? 'desc' : 'asc');
-      }
+			if (this.options.sortBy) {
+				ImportUserModule.setSort(
+					this.options.sortBy[0],
+					this.options.sortDesc[0] ? "desc" : "asc"
+				);
+			}
 
-      if (this.matchedBy) {
-        ImportUserModule.setMatch(this.matchedBy);
-      }
+			if (this.matchedBy) {
+				ImportUserModule.setMatch(this.matchedBy);
+			}
 
-      ImportUserModule.fetchAllElements().then(() => {
-        this.importUsers = ImportUserModule.getImportUserList.data;
-        this.totalImportUsers = ImportUserModule.getImportUserList.total;
-        this.loading = false;
-      });
+			ImportUserModule.fetchAllElements().then(() => {
+				this.importUsers = ImportUserModule.getImportUserList.data;
+				this.totalImportUsers = ImportUserModule.getImportUserList.total;
+				this.loading = false;
+			});
 		},
 
 		getLocalUsersSelect() {
-      // TODO fetch from API
+			// TODO fetch from API
 			const localUsers = this.localUsersMock.map((user) => {
 				return {
 					value: user._id.$oid,
@@ -485,11 +490,11 @@ export default Vue.extend({
 			return localUsers;
 		},
 	},
-  head() {
-    return {
-      title: this.$t("pages.administration.migration.title"),
-    };
-  },
+	head() {
+		return {
+			title: this.$t("pages.administration.migration.title"),
+		};
+	},
 });
 </script>
 <style lang="scss">
