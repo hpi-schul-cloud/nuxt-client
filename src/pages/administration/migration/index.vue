@@ -47,36 +47,37 @@
 			</v-card>
 		</v-dialog>
 
+    <!--v-text-field
+        v-model="search"
+        :prepend-inner-icon="mdiMagnify"
+        label="Filter"
+        single-line
+        hide-details
+        dense
+        clearable
+    ></v-text-field-->
+
 		<v-row>
-			<v-col cols="12" md="3">
-				<v-text-field
-					v-model="search"
-					:prepend-inner-icon="mdiMagnify"
-					label="Filter"
-					single-line
-					hide-details
-					dense
-					clearable
-				></v-text-field>
-			</v-col>
-			<v-col cols="12" md="9">
+			<v-col>
 				<v-checkbox
 					v-model="matchedBy"
-					class="float-left"
+					class="float-right"
 					label="unmatched"
-					value=""
+					value="none"
 					dense
 				></v-checkbox>
+				<v-spacer></v-spacer>
 				<v-checkbox
 					v-model="matchedBy"
-					class="float-left"
+					class="float-right mr-4"
 					label="manual"
 					value="admin"
 					dense
 				></v-checkbox>
+				<v-spacer></v-spacer>
 				<v-checkbox
 					v-model="matchedBy"
-					class="float-left"
+					class="float-right mr-4"
 					label="automatic"
 					value="auto"
 					dense
@@ -86,27 +87,28 @@
 
 		<v-data-table
 			v-if="canStartMigration"
-
 			:headers="tableHead"
 			:items="importUsers"
-			:items-per-page="25"
+			:items-per-page="10"
 			:options.sync="options"
 			:server-items-length="totalImportUsers"
+      :loading="loading"
 			class="table"
-			:search="search"
 			:footer-props="{
-				itemsPerPageOptions: [5, 10, 25, 50, 100, -1],
+				itemsPerPageOptions: [5, 10, 25, 50, 100],
 			}"
 		>
-			<template v-slot:item.ldapDn="{ item }">
-				{{ getAccount(item.ldapDn) }}
+			<template v-slot:item.loginName="{ item }">
+				{{ getAccount(item.loginName) }}
 			</template>
 
 			<template v-slot:item.match="{ item }">
 				<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 				{{ getMatch(item.match) }}
 				<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-				<v-icon v-if="item.match" small @click="deleteItem(item)">{{ mdiDelete }}</v-icon>
+				<v-icon v-if="item.match" small @click="deleteItem(item)">{{
+					mdiDelete
+				}}</v-icon>
 			</template>
 		</v-data-table>
 
@@ -119,6 +121,7 @@
 <script>
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import SchoolsModule from "@/store/schools";
+import ImportUserModule from "@store/import-users";
 import {
 	mdiDelete,
 	mdiPencil,
@@ -127,131 +130,33 @@ import {
 	mdiAccountOffOutline,
 	mdiMagnify,
 } from "@mdi/js";
+import Vue from "vue";
 
-export default {
+export default Vue.extend({
 	components: {
 		DefaultWireframe,
 	},
-	layout: "defaultVuetify",
+	layout: 'defaultVuetify',
 	data() {
 		return {
-			matchedBy: ["admin", "auto", ""],
+      //searchFirstName: '',
+			matchedBy: ['admin', 'auto', 'none'],
 			mdiDelete,
 			mdiPencil,
 			mdiAccountArrowRight,
 			mdiMagnify,
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					text: this.$t('pages.administration.index.title'),
+					href: '/administration/',
 				},
 			],
 			dialogEdit: false,
 			dialogDelete: false,
-			search: "",
-			options: {},
-			importUsersMock: [
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25632",
-					},
-					firstName: "Gulien-Marlo",
-					lastName: "Amann",
-					ldapDn:
-						"uid=gulien-marlo1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["11/4"],
-					match: {
-						userId: {
-							$oid: "0000d224816abba584714c9c",
-						},
-						matchedBy: "admin",
-					},
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25634",
-					},
-					firstName: "Helen",
-					lastName: "Alt",
-					ldapDn:
-						"uid=helena1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["administrator", "teacher"],
-					classNames: ["11/5", "11/4"],
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25636",
-					},
-					firstName: "Adrian",
-					lastName: "Amann",
-					ldapDn:
-						"uid=adriana1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["teacher"],
-					classNames: ["11/3"],
-					match: {
-						userId: {
-							$oid: "0000d231816abba584714c9e",
-						},
-						matchedBy: "auto",
-					},
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25638",
-					},
-					firstName: "Fabian",
-					lastName: "Anders",
-					ldapDn:
-						"uid=fabiana1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["11/6"],
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c2563a",
-					},
-					firstName: "Cedric",
-					lastName: "Apel",
-					ldapDn:
-						"uid=cedrica1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["12/1"],
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25640",
-					},
-					firstName: "Maditha",
-					lastName: "Arndt",
-					ldapDn:
-						"uid=madithaa1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["8c"],
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25642",
-					},
-					firstName: "Leon",
-					lastName: "Arnold",
-					ldapDn:
-						"uid=leona1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["12/4"],
-				},
-				{
-					_id: {
-						$oid: "61b22f1ff2eef8a520c25644",
-					},
-					firstName: "Rahel",
-					lastName: "Auer",
-					ldapDn:
-						"uid=rahela1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-					roles: ["student"],
-					classNames: ["8b"],
-				},
-			],
+			search: '',
+			options: {
+        itemsPerPage: 25
+      },
 			localUsersMock: [
 				{
 					_id: {
@@ -407,33 +312,19 @@ export default {
 			importUsers: [],
 			localUsers: [],
 			totalImportUsers: 0,
-			tableHead: [
-				{
-					text: "First Name",
-					value: "firstName",
-					sortable: true,
-					align: "start",
-					class: "head",
-				},
-				{ text: "Last Name", value: "lastName", sortable: true },
-				{ text: "Account", value: "ldapDn" },
-				{ text: "Roles", value: "roles", sortable: true },
-				{ text: "Classes", value: "classNames", sortable: true },
-				{ text: "Action", value: "match" },
-			],
 			defaultItem: {
-				firstName: "",
-				lastName: "",
-				account: "",
-				roles: [],
+				firstName: '',
+				lastName: '',
+				loginName: '',
+				roleNames: [],
 				classNames: [],
 				match: {},
 			},
 			editedItem: {
-				firstName: "",
-				lastName: "",
-				account: "",
-				roles: [],
+				firstName: '',
+				lastName: '',
+				loginName: '',
+				roleNamess: [],
 				classNames: [],
 				match: {},
 			},
@@ -441,6 +332,20 @@ export default {
 		};
 	},
 	computed: {
+    tableHead() {
+      return [
+        {
+          text: "First Name",
+          value: "firstName",
+          sortable: true,
+        },
+        { text: "Last Name", value: "lastName", sortable: true },
+        { text: "Login", value: "loginName" },
+        { text: "Roles", value: "roleNames" },
+        { text: "Classes", value: "classNames" },
+        { text: "Action", value: "match" },
+      ]
+    },
 		editMatch() {
 			console.log("editMatch", this.editedIndex);
 			//if (this.importUsers[this.editedIndex].match) {
@@ -458,25 +363,26 @@ export default {
 			return SchoolsModule.getSchool;
 		},
 	},
-	watch: {
-		dialogEdit(val) {
-			console.log("dialogEdit", val);
-			val || this.closeEdit();
-		},
-		dialogDelete(val) {
-			console.log(`dialogDelete ${val}`);
-			val || this.closeDelete();
-		},
-		options: {
-			handler() {
-				this.getDataFromApi();
-			},
-			deep: true,
-		},
-		search() {
-			this.getDataFromApi();
-		},
-	},
+  watch: {
+    dialogEdit(val) {
+      console.log("dialogEdit", val);
+      val || this.closeEdit();
+    },
+    dialogDelete(val) {
+      console.log(`dialogDelete ${val}`);
+      val || this.closeDelete();
+    },
+    options: {
+      async handler() {
+        await this.getDataFromApi();
+      },
+      deep: true,
+    },
+    async matchedBy() {
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+  },
 	methods: {
 		getMatch(match) {
 			if (!match || !match.userId) {
@@ -496,7 +402,6 @@ export default {
 			if (!match || !match.matchedBy) {
 				return mdiAccountOffOutline;
 			}
-			console.log("getMatchedByIcon", match);
 			if (match.matchedBy === "auto") {
 				return mdiAccountArrowLeftOutline;
 			}
@@ -505,14 +410,12 @@ export default {
 			}
 		},
 		deleteItem(item) {
-			console.log("deleteItem", item);
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			this.dialogDelete = true;
 		},
 		deleteItemConfirm() {
 			// TODO persist in API
-			console.log(this.importUsers[this.editedIndex]);
 			delete this.importUsers[this.editedIndex].match;
 			this.closeDelete();
 		},
@@ -545,84 +448,51 @@ export default {
 			}
 			this.close();
 		},
-		getAccount(ldapDn) {
-			const attributes = ldapDn.split(",");
+		getAccount(loginName) {
+			const attributes = loginName.split(",");
 			return attributes[0].replace("uid=", "");
 		},
-		getDataFromApi() {
+		async getDataFromApi() {
 			this.loading = true;
 
-			console.log("filter", this.search);
-			console.log("options", this.options);
-			console.log("matchedBy", this.matchedBy);
+      ImportUserModule.setLimit(this.options.itemsPerPage);
+      ImportUserModule.setSkip((this.options.page - 1) * this.options.itemsPerPage);
 
-			this.fakeApiCall().then((data) => {
-				this.importUsers = data.items;
-				this.totalImportUsers = data.total;
-				this.loading = false;
-			});
+      if (this.options.sortBy) {
+        ImportUserModule.setSort(this.options.sortBy[0], this.options.sortDesc[0] ? 'desc' : 'asc');
+      }
+
+      if (this.matchedBy) {
+        ImportUserModule.setMatch(this.matchedBy);
+      }
+
+      ImportUserModule.fetchAllElements().then(() => {
+        this.importUsers = ImportUserModule.getImportUserList.data;
+        this.totalImportUsers = ImportUserModule.getImportUserList.total;
+        this.loading = false;
+      });
 		},
-		/**
-		 * TODO call API instead
-		 */
-		fakeApiCall() {
-			return new Promise((resolve) => {
-				const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-				let items = this.importUsersMock;
-				const total = items.length;
-
-				if (sortBy.length === 1 && sortDesc.length === 1) {
-					items = items.sort((a, b) => {
-						const sortA = a[sortBy[0]];
-						const sortB = b[sortBy[0]];
-
-						if (sortDesc[0]) {
-							if (sortA < sortB) return 1;
-							if (sortA > sortB) return -1;
-							return 0;
-						} else {
-							if (sortA < sortB) return -1;
-							if (sortA > sortB) return 1;
-							return 0;
-						}
-					});
-				}
-
-				if (itemsPerPage > 0) {
-					items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-				}
-
-				setTimeout(() => {
-					resolve({
-						items,
-						total,
-					});
-				}, 1000);
-			});
-		},
 		getLocalUsersSelect() {
+      // TODO fetch from API
 			const localUsers = this.localUsersMock.map((user) => {
-				const obj = {
+				return {
 					value: user._id.$oid,
 					name: `${user.firstName} ${user.lastName}`,
 				};
-				return obj;
 			});
 			console.log("getLocalUsersSelect", localUsers);
 			return localUsers;
 		},
 	},
-	head() {
-		return {
-			title: this.$t("pages.administration.migration.title"),
-		};
-	},
-};
+  head() {
+    return {
+      title: this.$t("pages.administration.migration.title"),
+    };
+  },
+});
 </script>
 <style lang="scss">
-@import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 .theme--light.v-data-table
 	> .v-data-table__wrapper
 	> table
