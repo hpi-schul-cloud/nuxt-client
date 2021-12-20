@@ -21,7 +21,7 @@
 				:color="item.displayColor"
 				:size="size"
 				:tile="condenseLayout"
-				@click="$emit('click', item)"
+				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
@@ -85,6 +85,19 @@ export default {
 		},
 	},
 	methods: {
+		onClick() {
+			if (!this.condenseLayout) {
+				if (this.item.to) {
+					this.$router.push({
+						path: this.item.to,
+					});
+					return;
+				}
+				if (this.item.href) {
+					window.location = this.item.href;
+				}
+			}
+		},
 		startDragAvatar() {
 			this.isDragging = true;
 			if (this.draggable) {

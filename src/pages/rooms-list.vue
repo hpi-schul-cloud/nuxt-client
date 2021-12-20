@@ -33,6 +33,7 @@
 						sm="3"
 					>
 						<vRoomAvatar
+							:ref="`${item.id}-avatar`"
 							class="room-avatar"
 							:item="item"
 							size="5em"

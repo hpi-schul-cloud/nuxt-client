@@ -10,6 +10,10 @@ const mockData = {
 	displayColor: "#ffffff",
 	xPosition: 5,
 	yPosition: 2,
+	startDate: "2019-12-07T23:00:00.000Z",
+	untilDate: "2020-12-16T23:00:00.000Z",
+	titleDate: "2019/20",
+	href: "/courses/456",
 };
 
 const propsData = {
@@ -31,6 +35,9 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("vRoomAvatar", () => {
+	beforeEach(() => {
+		window.location.pathname = "";
+	});
 	it("should display the title", () => {
 		const wrapper = getWrapper({ ...propsData });
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
@@ -86,16 +93,28 @@ describe("vRoomAvatar", () => {
 		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
-	it("should emit 'click' event with correct payload", async () => {
+	it("should redirect to course page", async () => {
+		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
 
 		avatarComponent.trigger("click");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
+		expect(location.pathname).toStrictEqual("/courses/456");
+	});
 
-		expect(emitted["click"]).toHaveLength(1);
-		expect(emitted["click"] && emitted["click"][0][0]).toStrictEqual(mockData);
+	it("should not redirect to course page if condenseLayout props is true", async () => {
+		const location = window.location;
+		const wrapper = getWrapper({
+			item: mockData,
+			size: "4em",
+			showBadge: true,
+			draggable: true,
+			condenseLayout: true,
+		});
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("click");
+		expect(location.pathname).toStrictEqual("");
 	});
 
 	it("should emit 'dragStart' event when it started dragging", async () => {
