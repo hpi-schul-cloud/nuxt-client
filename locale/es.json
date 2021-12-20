@@ -187,6 +187,7 @@
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",
 	"global.sidebar.courses": "Cursos",
+	"global.sidebar.newCourses": "Cursos Actuales",
 	"global.sidebar.files": "Mis archivos",
 	"global.sidebar.filesPersonal": "archivos personales",
 	"global.sidebar.filesShared": "archivos compartidos",

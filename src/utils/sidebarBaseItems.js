@@ -6,6 +6,12 @@ export default [
 		testId: "Übersicht",
 	},
 	{
+		title: "global.sidebar.newCourses",
+		href: "/rooms-overview",
+		icon: "book",
+		testId: "Aktuelle Kurse",
+	},
+	{
 		title: "global.sidebar.courses",
 		href: "/courses",
 		icon: "graduation-cap",
