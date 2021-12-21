@@ -42,7 +42,7 @@ export class ImportUsers extends VuexModule {
 
 	limit: number = 10;
 	skip: number = 0;
-	sortBy: any = {};
+	sortBy: any = '';
 	sortOrder: any = 'asc';
 
 	loading: boolean = false;
@@ -76,8 +76,12 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setSort(sortBy: string, sortOrder: string): void {
+	setSortBy(sortBy: string): void {
 		this.sortBy = sortBy;
+	}
+
+	@Mutation
+	setSortOrder(sortOrder: string): void {
 		this.sortOrder = sortOrder;
 	}
 
@@ -117,7 +121,7 @@ export class ImportUsers extends VuexModule {
 					this.limit
 				)
 				.then((data) => {
-					console.log(data)
+					//console.log(data)
 					this.setImportUsersList(data.data);
 				});
 		} catch (error: any) {
