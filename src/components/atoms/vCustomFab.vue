@@ -21,6 +21,7 @@
 				:small="isCollapsed"
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
+				:aria-label="ariaLabel ? ariaLabel : title"
 			>
 				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
 					{{ mdiClose }}
@@ -45,6 +46,7 @@
 					:to="action.to"
 					class="fab-action"
 					:data-testid="action.dataTestid"
+					:aria-label="action.ariaLabel ? action.ariaLabel : action.label"
 				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
@@ -72,6 +74,7 @@
 		:href="href"
 		:class="classes"
 		:data-testid="dataTestId"
+		:aria-label="ariaLabel ? ariaLabel : title"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -111,6 +114,11 @@ export default {
 			type: String,
 			required: false,
 			default: "",
+		},
+		ariaLabel: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	data() {

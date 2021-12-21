@@ -360,12 +360,14 @@ export default {
 				actions: [
 					{
 						label: this.$t("pages.administration.teachers.fab.add"),
+						ariaLabel: this.$t("pages.administration.teachers.fab.add.aria"),
 						icon: mdiAccountPlus,
 						to: "/administration/teachers/new",
 						dataTestid: "fab_button_add_teachers",
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
+						ariaLabel: this.$t("pages.administration.teachers.fab.import.aria"),
 						icon: mdiCloudUpload,
 						href: "/administration/teachers/import",
 						dataTestid: "fab_button_import_teachers",

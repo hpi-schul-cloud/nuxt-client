@@ -20,6 +20,7 @@
 						:href="fabItems.href"
 						:actions="fabItems.actions"
 						:class="fabItems.class"
+						:aria-label="fabItems.ariaLabel"
 						class="wireframe-fab"
 					></v-custom-fab>
 				</slot>
@@ -56,6 +57,7 @@ type FabAction = {
 	dataTestid?: String;
 	class?: String;
 	testId?: String;
+	ariaLabel?: String;
 };
 
 export type Fab = {

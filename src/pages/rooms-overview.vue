@@ -160,6 +160,7 @@ export default {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.labels.course"),
+					ariaLabel: this.$t("pages.courses.new.title"),
 					href: "/courses/add",
 				};
 			}

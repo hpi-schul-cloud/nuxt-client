@@ -372,12 +372,14 @@ export default {
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
+						ariaLabel: this.$t("pages.administration.students.fab.add.aria"),
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
 						dataTestid: "fab_button_add_students",
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
+						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),
 						icon: mdiCloudUpload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
