@@ -13,10 +13,10 @@ import {
 	UserApiInterface,
 	ImportUserListResponse,
 	//ImportUserResponse,
-	ImportUserResponseRoleNamesEnum,
+	//ImportUserResponseRoleNamesEnum,
 	//UpdateMatchParams,
 	//UserMatchResponse,
-	UserMatchResponseMatchedByEnum,
+	//UserMatchResponseMatchedByEnum,
 } from "@/serverApi/v3";
 
 // @ts-ignore
@@ -29,94 +29,6 @@ import {
 })
 
 export class ImportUsers extends VuexModule {
-	dataMock = [
-		{
-			importUserId: "61b22f1ff2eef8a520c25632",
-			firstName: "Gulien-Marlo",
-			lastName: "Amann",
-			loginName:
-				"uid=gulien-marlo1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["11/4"],
-			match: {
-				userId: "0000d224816abba584714c9c",
-				loginName: "test",
-				firstName: "Test",
-				lastName: "Last",
-				matchedBy: UserMatchResponseMatchedByEnum.Auto,
-			},
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25634",
-			firstName: "Helen",
-			lastName: "Alt",
-			loginName:
-				"uid=helena1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Teacher,
-			classNames: ["11/5", "11/4"],
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25636",
-			firstName: "Adrian",
-			lastName: "Amann",
-			loginName:
-				"uid=adriana1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Teacher,
-			classNames: ["11/3"],
-			match: {
-				userId: "0000d231816abba584714c9e",
-				loginName: "test",
-				firstName: "Test",
-				lastName: "Last",
-				matchedBy: UserMatchResponseMatchedByEnum.Auto,
-			},
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25638",
-			firstName: "Fabian",
-			lastName: "Anders",
-			loginName:
-				"uid=fabiana1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["11/6"],
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c2563a",
-			firstName: "Cedric",
-			lastName: "Apel",
-			loginName:
-				"uid=cedrica1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["12/1"],
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25640",
-			firstName: "Maditha",
-			lastName: "Arndt",
-			loginName:
-				"uid=madithaa1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["8c"],
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25642",
-			firstName: "Leon",
-			lastName: "Arnold",
-			loginName: "uid=leona1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["12/4"],
-		},
-		{
-			importUserId: "61b22f1ff2eef8a520c25644",
-			firstName: "Rahel",
-			lastName: "Auer",
-			loginName:
-				"uid=rahela1,cn=schueler,cn=users,ou=100001,dc=training,dc=ucs",
-			roleNames: ImportUserResponseRoleNamesEnum.Student,
-			classNames: ["8b"],
-		},
-	];
-
 	importUserList: ImportUserListResponse = {
 		data: [],
 		total: 0,
@@ -205,6 +117,7 @@ export class ImportUsers extends VuexModule {
 					this.limit
 				)
 				.then((data) => {
+					console.log(data)
 					this.setImportUsersList(data.data);
 				});
 		} catch (error: any) {

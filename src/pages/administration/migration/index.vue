@@ -57,64 +57,68 @@
         clearable
     ></v-text-field-->
 
-		<v-row>
-			<v-col>
-				<v-checkbox
-					v-model="matchedBy"
-					class="float-right"
-					label="unmatched"
-					value="none"
-					dense
-				></v-checkbox>
-				<v-spacer></v-spacer>
-				<v-checkbox
-					v-model="matchedBy"
-					class="float-right mr-4"
-					label="manual"
-					value="admin"
-					dense
-				></v-checkbox>
-				<v-spacer></v-spacer>
-				<v-checkbox
-					v-model="matchedBy"
-					class="float-right mr-4"
-					label="automatic"
-					value="auto"
-					dense
-				></v-checkbox>
-			</v-col>
-		</v-row>
+    <v-container v-if="canStartMigration">
+      <v-row>
+        <v-col>
+          <v-checkbox
+            v-model="matchedBy"
+            class="float-right"
+            label="unmatched"
+            value="none"
+            dense
+          ></v-checkbox>
+          <v-spacer></v-spacer>
+          <v-checkbox
+            v-model="matchedBy"
+            class="float-right mr-4"
+            label="manual"
+            value="admin"
+            dense
+          ></v-checkbox>
+          <v-spacer></v-spacer>
+          <v-checkbox
+            v-model="matchedBy"
+            class="float-right mr-4"
+            label="automatic"
+            value="auto"
+            dense
+          ></v-checkbox>
+        </v-col>
+      </v-row>
 
-		<v-data-table
-			v-if="canStartMigration"
-			:headers="tableHead"
-			:items="importUsers"
-			:items-per-page="10"
-			:options.sync="options"
-			:server-items-length="totalImportUsers"
-      :loading="loading"
-			class="table"
-			:footer-props="{
-				itemsPerPageOptions: [5, 10, 25, 50, 100],
-			}"
-		>
-			<template v-slot:item.loginName="{ item }">
-				{{ getAccount(item.loginName) }}
-			</template>
+      <v-data-table
+            v-if="canStartMigration"
+            :headers="tableHead"
+            :items="importUsers"
+            :options.sync="options"
+            :server-items-length="totalImportUsers"
+            :loading="loading"
+            class="table"
+            :footer-props="{
+        itemsPerPageOptions: [5, 10, 25, 50, 100],
+      }"
+        >
+          <template v-slot:item.loginName="{ item }">
+            {{ getAccount(item.loginName) }}
+          </template>
 
-			<template v-slot:item.match="{ item }">
-				<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-				{{ getMatch(item.match) }}
-				<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-				<v-icon v-if="item.match" small @click="deleteItem(item)">{{
-					mdiDelete
-				}}</v-icon>
-			</template>
-		</v-data-table>
+          <template v-slot:item.match="{ item }">
+            <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+            {{ getMatch(item.match) }}
+            <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+            <v-icon v-if="item.match" small @click="deleteItem(item)">{{
+                mdiDelete
+              }}</v-icon>
+          </template>
+        </v-data-table>
+    </v-container>
 
-		<v-alert v-else light prominent text type="error">{{
-			$t("pages.administration.migration.cannotStart")
-		}}</v-alert>
+    <v-alert v-else light prominent text type="error">{{
+        $t("pages.administration.migration.cannotStart")
+      }}</v-alert>
+
+
+
 	</default-wireframe>
 </template>
 
@@ -139,7 +143,7 @@ export default Vue.extend({
 	layout: 'defaultVuetify',
 	data() {
 		return {
-      //searchFirstName: '',
+      loading: false,
 			matchedBy: ['admin', 'auto', 'none'],
 			mdiDelete,
 			mdiPencil,
@@ -155,7 +159,7 @@ export default Vue.extend({
 			dialogDelete: false,
 			search: '',
 			options: {
-        itemsPerPage: 25
+        itemsPerPage: 5
       },
 			localUsersMock: [
 				{
@@ -340,10 +344,10 @@ export default Vue.extend({
           sortable: true,
         },
         { text: "Last Name", value: "lastName", sortable: true },
-        { text: "Login", value: "loginName" },
-        { text: "Roles", value: "roleNames" },
-        { text: "Classes", value: "classNames" },
-        { text: "Action", value: "match" },
+        { text: "Login", value: "loginName",  sortable: false },
+        { text: "Roles", value: "roleNames", sortable: false },
+        { text: "Classes", value: "classNames",  sortable: false },
+        { text: "Action", value: "match",  sortable: false },
       ]
     },
 		editMatch() {
@@ -385,13 +389,13 @@ export default Vue.extend({
   },
 	methods: {
 		getMatch(match) {
+			console.log('match', match);
 			if (!match || !match.userId) {
-				return "";
+				return '';
 			}
-			console.log(match);
 			// TODO fetch data about user
 			const matchedUser = this.localUsersMock.find(
-				(user) => user._id["$oid"] === match.userId["$oid"]
+				(user) => user._id["$oid"] === match.userId.toString()
 			);
 			if (matchedUser) {
 				return `${matchedUser.firstName} ${matchedUser.lastName}`;
@@ -449,8 +453,8 @@ export default Vue.extend({
 			this.close();
 		},
 		getAccount(loginName) {
-			const attributes = loginName.split(",");
-			return attributes[0].replace("uid=", "");
+			const attributes = loginName.split("@");
+			return attributes[0];
 		},
 		async getDataFromApi() {
 			this.loading = true;
