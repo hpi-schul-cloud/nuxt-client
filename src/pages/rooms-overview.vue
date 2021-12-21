@@ -6,7 +6,12 @@
 			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
-					<v-btn color="secondary" outlined small to="/rooms-list" data-testid="go-to-all-courses"
+					<v-btn
+						color="secondary"
+						outlined
+						small
+						to="/rooms-list"
+						data-testid="go-to-all-courses"
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
