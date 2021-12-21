@@ -47,7 +47,7 @@
 			</v-card>
 		</v-dialog>
 
-    <!--v-text-field
+		<!--v-text-field
         v-model="search"
         :prepend-inner-icon="mdiMagnify"
         label="Filter"
@@ -57,68 +57,65 @@
         clearable
     ></v-text-field-->
 
-    <v-container v-if="canStartMigration">
-      <v-row>
-        <v-col>
-          <v-checkbox
-            v-model="matchedBy"
-            class="float-right"
-            label="unmatched"
-            value="none"
-            dense
-          ></v-checkbox>
-          <v-spacer></v-spacer>
-          <v-checkbox
-            v-model="matchedBy"
-            class="float-right mr-4"
-            label="manual"
-            value="admin"
-            dense
-          ></v-checkbox>
-          <v-spacer></v-spacer>
-          <v-checkbox
-            v-model="matchedBy"
-            class="float-right mr-4"
-            label="automatic"
-            value="auto"
-            dense
-          ></v-checkbox>
-        </v-col>
-      </v-row>
+		<v-container v-if="canStartMigration">
+			<v-row>
+				<v-col>
+					<v-checkbox
+						v-model="matchedBy"
+						class="float-right"
+						label="unmatched"
+						value="none"
+						dense
+					></v-checkbox>
+					<v-spacer></v-spacer>
+					<v-checkbox
+						v-model="matchedBy"
+						class="float-right mr-4"
+						label="manual"
+						value="admin"
+						dense
+					></v-checkbox>
+					<v-spacer></v-spacer>
+					<v-checkbox
+						v-model="matchedBy"
+						class="float-right mr-4"
+						label="automatic"
+						value="auto"
+						dense
+					></v-checkbox>
+				</v-col>
+			</v-row>
 
-      <v-data-table
-            v-if="canStartMigration"
-            :headers="tableHead"
-            :items="importUsers"
-            :options.sync="options"
-            :server-items-length="totalImportUsers"
-            :loading="loading"
-            class="table"
-            :footer-props="{
-        itemsPerPageOptions: [5, 10, 25, 50, 100],
-      }"
-        >
-          <template v-slot:item.loginName="{ item }">
-            {{ getAccount(item.loginName) }}
-          </template>
+			<v-data-table
+				v-if="canStartMigration"
+				:headers="tableHead"
+				:items="importUsers"
+				:options.sync="options"
+				:server-items-length="totalImportUsers"
+				:loading="loading"
+				class="table"
+				:footer-props="{
+					itemsPerPageOptions: [5, 10, 25, 50, 100],
+				}"
+			>
+				<template v-slot:item.loginName="{ item }">
+					{{ getAccount(item.loginName) }}
+				</template>
 
-          <template v-slot:item.match="{ item }">
-            <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-            {{ getMatch(item.match) }}
-            <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-            <v-icon v-if="item.match" small @click="deleteItem(item)">{{
-                mdiDelete
-              }}</v-icon>
-          </template>
-        </v-data-table>
-    </v-container>
+				<template v-slot:item.match="{ item }">
+					<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+					{{ getMatch(item.match) }}
+					<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+					<v-icon v-if="item.match" small @click="deleteItem(item)">{{
+						mdiDelete
+					}}</v-icon>
+				</template>
+			</v-data-table>
+		</v-container>
 
-    <v-alert v-else light prominent text type="error">{{
-        $t("pages.administration.migration.cannotStart")
-      }}</v-alert>
-
-
-
+		<v-alert v-else light prominent text type="error">{{
+			$t("pages.administration.migration.cannotStart")
+		}}</v-alert>
 	</default-wireframe>
 </template>
 
@@ -140,27 +137,27 @@ export default Vue.extend({
 	components: {
 		DefaultWireframe,
 	},
-	layout: 'defaultVuetify',
+	layout: "defaultVuetify",
 	data() {
 		return {
-      loading: false,
-			matchedBy: ['admin', 'auto', 'none'],
+			loading: false,
+			matchedBy: ["admin", "auto", "none"],
 			mdiDelete,
 			mdiPencil,
 			mdiAccountArrowRight,
 			mdiMagnify,
 			breadcrumbs: [
 				{
-					text: this.$t('pages.administration.index.title'),
-					href: '/administration/',
+					text: this.$t("pages.administration.index.title"),
+					href: "/administration/",
 				},
 			],
 			dialogEdit: false,
 			dialogDelete: false,
-			search: '',
+			search: "",
 			options: {
-        itemsPerPage: 5
-      },
+				itemsPerPage: 5,
+			},
 			localUsersMock: [
 				{
 					_id: {
@@ -317,17 +314,17 @@ export default Vue.extend({
 			localUsers: [],
 			totalImportUsers: 0,
 			defaultItem: {
-				firstName: '',
-				lastName: '',
-				loginName: '',
+				firstName: "",
+				lastName: "",
+				loginName: "",
 				roleNames: [],
 				classNames: [],
 				match: {},
 			},
 			editedItem: {
-				firstName: '',
-				lastName: '',
-				loginName: '',
+				firstName: "",
+				lastName: "",
+				loginName: "",
 				roleNamess: [],
 				classNames: [],
 				match: {},
@@ -336,20 +333,20 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-    tableHead() {
-      return [
-        {
-          text: "First Name",
-          value: "firstName",
-          sortable: true,
-        },
-        { text: "Last Name", value: "lastName", sortable: true },
-        { text: "Login", value: "loginName",  sortable: false },
-        { text: "Roles", value: "roleNames", sortable: false },
-        { text: "Classes", value: "classNames",  sortable: false },
-        { text: "Action", value: "match",  sortable: false },
-      ]
-    },
+		tableHead() {
+			return [
+				{
+					text: "First Name",
+					value: "firstName",
+					sortable: true,
+				},
+				{ text: "Last Name", value: "lastName", sortable: true },
+				{ text: "Login", value: "loginName", sortable: false },
+				{ text: "Roles", value: "roleNames", sortable: false },
+				{ text: "Classes", value: "classNames", sortable: false },
+				{ text: "Action", value: "match", sortable: false },
+			];
+		},
 		editMatch() {
 			console.log("editMatch", this.editedIndex);
 			//if (this.importUsers[this.editedIndex].match) {
@@ -367,31 +364,31 @@ export default Vue.extend({
 			return SchoolsModule.getSchool;
 		},
 	},
-  watch: {
-    dialogEdit(val) {
-      console.log("dialogEdit", val);
-      val || this.closeEdit();
-    },
-    dialogDelete(val) {
-      console.log(`dialogDelete ${val}`);
-      val || this.closeDelete();
-    },
-    options: {
-      async handler() {
-        await this.getDataFromApi();
-      },
-      deep: true,
-    },
-    async matchedBy() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-  },
+	watch: {
+		dialogEdit(val) {
+			console.log("dialogEdit", val);
+			val || this.closeEdit();
+		},
+		dialogDelete(val) {
+			console.log(`dialogDelete ${val}`);
+			val || this.closeDelete();
+		},
+		options: {
+			async handler() {
+				await this.getDataFromApi();
+			},
+			deep: true,
+		},
+		async matchedBy() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+	},
 	methods: {
 		getMatch(match) {
-			console.log('match', match);
+			console.log("match", match);
 			if (!match || !match.userId) {
-				return '';
+				return "";
 			}
 			// TODO fetch data about user
 			const matchedUser = this.localUsersMock.find(
@@ -459,27 +456,31 @@ export default Vue.extend({
 		async getDataFromApi() {
 			this.loading = true;
 
-      ImportUserModule.setLimit(this.options.itemsPerPage);
-      ImportUserModule.setSkip((this.options.page - 1) * this.options.itemsPerPage);
+			ImportUserModule.setLimit(this.options.itemsPerPage);
+			ImportUserModule.setSkip(
+				(this.options.page - 1) * this.options.itemsPerPage
+			);
 
-      if (this.options.sortBy) {
-        ImportUserModule.setSortBy(this.options.sortBy[0]);
-        ImportUserModule.setSortOrder(this.options.sortDesc[0] ? 'desc' : 'asc');
-      }
+			if (this.options.sortBy) {
+				ImportUserModule.setSortBy(this.options.sortBy[0]);
+				ImportUserModule.setSortOrder(
+					this.options.sortDesc[0] ? "desc" : "asc"
+				);
+			}
 
-      if (this.matchedBy) {
-        ImportUserModule.setMatch(this.matchedBy);
-      }
+			if (this.matchedBy) {
+				ImportUserModule.setMatch(this.matchedBy);
+			}
 
-      ImportUserModule.fetchAllElements().then(() => {
-        this.importUsers = ImportUserModule.getImportUserList.data;
-        this.totalImportUsers = ImportUserModule.getImportUserList.total;
-        this.loading = false;
-      });
+			ImportUserModule.fetchAllElements().then(() => {
+				this.importUsers = ImportUserModule.getImportUserList.data;
+				this.totalImportUsers = ImportUserModule.getImportUserList.total;
+				this.loading = false;
+			});
 		},
 
 		getLocalUsersSelect() {
-      // TODO fetch from API
+			// TODO fetch from API
 			const localUsers = this.localUsersMock.map((user) => {
 				return {
 					value: user._id.$oid,
@@ -490,11 +491,11 @@ export default Vue.extend({
 			return localUsers;
 		},
 	},
-  head() {
-    return {
-      title: this.$t("pages.administration.migration.title"),
-    };
-  },
+	head() {
+		return {
+			title: this.$t("pages.administration.migration.title"),
+		};
+	},
 });
 </script>
 <style lang="scss">
