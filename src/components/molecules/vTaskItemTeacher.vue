@@ -20,7 +20,7 @@
 					)}`
 				}}
 			</v-list-item-subtitle>
-			<v-list-item-title data-testid="taskName" v-text="task.name" />
+			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 			<v-list-item-subtitle class="d-inline-flex">
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>

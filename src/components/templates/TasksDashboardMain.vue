@@ -27,9 +27,11 @@
 						</v-tab>
 						<v-tab>
 							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="closedTasks">{{
-								tabTwoHeader.title
-							}}</span>
+							<span
+								class="d-none d-sm-inline"
+								:data-testid="tabTwoHeader.dataTestId"
+								>{{ tabTwoHeader.title }}</span
+							>
 						</v-tab>
 						<v-tab @click="onOpenFinishedTasksTab">
 							<v-icon class="tab-icon mr-sm-3">{{
@@ -181,11 +183,13 @@ export default {
 				tabTwo.title = this.$t(
 					"components.organisms.TasksDashboardMain.tab.completed"
 				);
+				tabTwo.dataTestId = "closedTasks";
 			} else {
 				tabTwo.icon = "$taskDraft";
 				tabTwo.title = this.$t(
 					"components.organisms.TasksDashboardMain.tab.drafts"
 				);
+				tabTwo.dataTestId = "draftTasks";
 			}
 
 			return tabTwo;
@@ -196,6 +200,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.words.task"),
 					href: "/homework/new",
+					testId: "addTask",
 				};
 			}
 			return null;
@@ -238,9 +243,6 @@ export default {
 				subtitle,
 			};
 		},
-	},
-	mounted() {
-		TaskModule.fetchAllTasks();
 	},
 	methods: {
 		setCourseFilters(courseNames) {

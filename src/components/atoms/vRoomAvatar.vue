@@ -38,7 +38,8 @@
 			</div>
 			<div
 				v-if="!condenseLayout && item.titleDate"
-				class="justify-center mt-1 sub-title date-title"
+				class="justify-center sub-title date-title"
+				:class="{ 'ma-n1': $vuetify.breakpoint.xs }"
 			>
 				{{ item.titleDate }}
 			</div>

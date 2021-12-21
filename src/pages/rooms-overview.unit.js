@@ -491,9 +491,55 @@ describe("RoomPage", () => {
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(false);
 	});
+
 	it("should show FAB if user has permission to create courses", () => {
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(true);
+	});
+
+	it("should set rowCount while loading", async () => {
+		const roomData = [
+			{
+				id: "1",
+				title: "First",
+				shortTitle: "Ma",
+				displayColor: "purple",
+				url: "/api/xxxx/1234w",
+				xPosition: 1,
+				yPosition: 1,
+			},
+			{
+				id: "2",
+				title: "Second",
+				shortTitle: "Ma",
+				displayColor: "#EC407A",
+				url: "/api/xxxx/1234w",
+				notification: true,
+				xPosition: 2,
+				yPosition: 2,
+			},
+			{
+				id: "3",
+				title: "Third",
+				shortTitle: "Ma",
+				displayColor: "#EC407A",
+				url: "/api/xxxx/1234w",
+				xPosition: 3,
+				yPosition: 7,
+			},
+		];
+
+		RoomsModule.setRoomData(roomData);
+		const wrapper = getWrapper();
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
+		await wrapper.vm.$nextTick();
+		const avatar = wrapper.findComponent({ ref: "7-3" });
+		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
+		expect(avatar.vm.$options["_componentTag"]).toStrictEqual("vRoomAvatar");
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(true);
+		expect(wrapper.vm.$refs["8-0"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
 	});
 });
