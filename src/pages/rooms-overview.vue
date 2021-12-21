@@ -71,6 +71,7 @@
 							v-else
 							:ref="`${rowIndex}-${colIndex}`"
 							class="room-avatar"
+							:data-testid="getDataObject(rowIndex, colIndex).id"
 							:item="getDataObject(rowIndex, colIndex)"
 							:size="dimensions.cellWidth"
 							:show-badge="true"
