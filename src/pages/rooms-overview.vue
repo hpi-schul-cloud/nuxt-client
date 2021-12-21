@@ -31,6 +31,7 @@
 				rounded
 				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
+				data-testid="search-field"
 			>
 			</v-text-field>
 			<div
