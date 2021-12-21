@@ -167,7 +167,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.labels.course"),
 					href: "/courses/add",
-					dataTestId: "add-course-button",
+					testId: "add-course-button",
 				};
 			}
 			return null;
