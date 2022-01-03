@@ -357,25 +357,23 @@ export default {
 				icon: mdiPlus,
 				title,
 				testId: "fab_button_teachers_table",
-				ariaLabel: `${title} ${this.$t("common.actions.add")}`,
+				ariaLabel: this.$t("pages.administration.teachers.new.title"),
 				actions: [
 					{
 						label: this.$t("pages.administration.teachers.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/teachers/new",
 						dataTestid: "fab_button_add_teachers",
-						ariaLabel: `${title} ${this.$t(
-							"pages.administration.teachers.fab.add"
-						)}`,
+						ariaLabel: this.$t("pages.administration.teachers.new.title"),
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
 						icon: mdiCloudUpload,
 						href: "/administration/teachers/import",
 						dataTestid: "fab_button_import_teachers",
-						ariaLabel: `${title} ${this.$t(
-							"pages.administration.teachers.fab.import"
-						)}`,
+						ariaLabel: this.$t(
+							"pages.administration.teachers.fab.import.ariaLabel"
+						),
 					},
 				],
 			};

@@ -22,7 +22,7 @@
 				:aria-label="item.title"
 				:size="size"
 				:tile="condenseLayout"
-				:tabindex="!condenseLayout ? '0' : '-1'"
+				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"

@@ -197,7 +197,7 @@ export default {
 					icon: mdiPlus,
 					title,
 					href: "/homework/new",
-					ariaLabel: `${title} ${this.$t("common.actions.add")}`,
+					ariaLabel: this.$t("pages.tasks.fab.ariaLabel"),
 				};
 			}
 			return null;

@@ -370,7 +370,7 @@ export default {
 				icon: mdiPlus,
 				title,
 				testId: "fab_button_students_table",
-				ariaLabel: `${title} ${this.$t("common.actions.add")}`,
+				ariaLabel: this.$t("pages.administration.students.new.title"),
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
@@ -384,9 +384,9 @@ export default {
 						icon: mdiCloudUpload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
-						ariaLabel: `${title} ${this.$t(
-							"pages.administration.students.fab.import"
-						)}`,
+						ariaLabel: this.$t(
+							"pages.administration.students.fab.import.ariaLabel"
+						),
 					},
 				],
 			};
