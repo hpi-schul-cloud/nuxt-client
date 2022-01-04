@@ -52,6 +52,7 @@ export class EnvConfig extends VuexModule {
 		DOCUMENT_BASE_DIR: "",
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
+		ALERT_STATUS_URL: "",
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";

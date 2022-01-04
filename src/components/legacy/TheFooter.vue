@@ -56,6 +56,9 @@ export default {
 		currentYear() {
 			return new Date().getFullYear();
 		},
+		env() {
+			return EnvConfigModule.getEnv;
+		},
 		links() {
 			return [
 				{
@@ -83,7 +86,7 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 				{
-					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
+					href: this.env.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 				},
 			];
