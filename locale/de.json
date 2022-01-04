@@ -667,6 +667,7 @@
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount}-Objekte, zum Öffnen die Eingabetaste drücken",
 	"pages.rooms.fab.ariaLabel": "Kurs hinzufügen",
+	"pages.rooms.headerSection.ariaLabel": "Kursname Liste {itemCount} Elemente",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.adminFilter.class.title": "Klasse(n)",

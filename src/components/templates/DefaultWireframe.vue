@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header sticky" :aria-label="ariaLabel" tabindex="0">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -90,6 +90,10 @@ export default {
 			type: Object,
 			required: false,
 			default: null,
+		},
+		ariaLabel: {
+			type: String,
+			default: "",
 		},
 	},
 };

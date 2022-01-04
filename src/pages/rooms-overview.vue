@@ -1,5 +1,11 @@
 <template>
-	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
+	<default-wireframe
+		ref="main"
+		headline=""
+		:full-width="true"
+		:fab-items="fab"
+		:aria-label="sectionAriaLabel"
+	>
 		<template slot="header">
 			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
 			<div class="mb-5 header-div">
@@ -196,6 +202,11 @@ export default {
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
 		},
+		sectionAriaLabel() {
+			return this.$t("pages.rooms.headerSection.ariaLabel", {
+				itemCount: this.items.length,
+			});
+		},
 	},
 	async mounted() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
@@ -340,6 +351,13 @@ export default {
 			};
 			RoomsModule.update(payload);
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.courses.index.courses.active")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>
