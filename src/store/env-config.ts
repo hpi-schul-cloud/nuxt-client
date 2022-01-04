@@ -27,6 +27,7 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+	ROOMS_OVERVIEW_ENABLED: process.env.ROOMS_OVERVIEW_ENABLED,
 };
 
 const retryLimit: number = 10;

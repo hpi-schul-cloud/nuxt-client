@@ -1,3 +1,5 @@
+import EnvConfigModule from "@/store/env-config";
+
 export default [
 	{
 		title: "global.sidebar.overview",
@@ -7,7 +9,9 @@ export default [
 	},
 	{
 		title: "global.sidebar.courses",
-		href: "/courses",
+		href: EnvConfigModule.getEnv.ROOMS_OVERVIEW_ENABLED
+			? "/rooms-overview"
+			: "/courses",
 		icon: "graduation-cap",
 		testId: "Kurse",
 	},
