@@ -42,6 +42,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 export default {
 	data() {
@@ -82,7 +83,7 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 				{
-					href: "https://status.hpi-schul-cloud.de",
+					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 				},
 			];

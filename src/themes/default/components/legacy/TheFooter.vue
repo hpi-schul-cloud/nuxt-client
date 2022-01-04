@@ -83,7 +83,7 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 				{
-					href: "https://status.hpi-schul-cloud.de",
+					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 				},
 				{
