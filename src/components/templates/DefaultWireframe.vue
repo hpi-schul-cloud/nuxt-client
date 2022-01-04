@@ -57,6 +57,7 @@ type FabAction = {
 	dataTestid?: String;
 	class?: String;
 	testId?: String;
+	ariaLabel?: String;
 };
 
 export type Fab = {

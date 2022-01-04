@@ -364,16 +364,14 @@ export default {
 						icon: mdiAccountPlus,
 						to: "/administration/teachers/new",
 						dataTestid: "fab_button_add_teachers",
-						ariaLabel: this.$t("pages.administration.teachers.new.title"),
+						ariaLabel: this.$t("pages.administration.teachers.fab.add.aria"),
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
 						icon: mdiCloudUpload,
 						href: "/administration/teachers/import",
 						dataTestid: "fab_button_import_teachers",
-						ariaLabel: this.$t(
-							"pages.administration.teachers.fab.import.ariaLabel"
-						),
+						ariaLabel: this.$t("pages.administration.teachers.fab.import.aria"),
 					},
 				],
 			};

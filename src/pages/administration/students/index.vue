@@ -377,16 +377,14 @@ export default {
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
 						dataTestid: "fab_button_add_students",
-						ariaLabel: `${this.$t("pages.administration.students.new.title")}`,
+						ariaLabel: this.$t("pages.administration.students.fab.add.aria"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
 						icon: mdiCloudUpload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
-						ariaLabel: this.$t(
-							"pages.administration.students.fab.import.ariaLabel"
-						),
+						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),
 					},
 				],
 			};

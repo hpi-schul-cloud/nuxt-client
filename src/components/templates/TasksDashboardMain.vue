@@ -197,7 +197,7 @@ export default {
 					icon: mdiPlus,
 					title,
 					href: "/homework/new",
-					ariaLabel: this.$t("pages.tasks.fab.ariaLabel"),
+					ariaLabel: this.$t("components.organisms.TasksDashboardMain.addTask"),
 				};
 			}
 			return null;

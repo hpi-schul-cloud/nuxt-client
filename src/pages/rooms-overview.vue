@@ -167,7 +167,7 @@ export default {
 					icon: mdiPlus,
 					title,
 					href: "/courses/add",
-					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
+					ariaLabel: this.$t("pages.courses.new.title"),
 				};
 			}
 			return null;
