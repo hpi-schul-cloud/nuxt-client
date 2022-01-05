@@ -128,6 +128,9 @@ export class EnvConfig extends VuexModule {
 	get getAvailableLanguages() {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
+	get getStatusLink() {
+		return this.env.ALERT_STATUS_URL;
+	}
 
 	get getEnv(): Envs {
 		return this.env;
