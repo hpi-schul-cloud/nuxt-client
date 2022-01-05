@@ -40,7 +40,7 @@ Output Directory: `dist/nuxt`
 | FEATURE_MESSENGER_SCHOOL_ROOM_ENABLED | `false` | If enabled, school admins can choose to create a room for all students and teachers of the school. |
 | MATRIX_MESSENGER_EMBED_URI | _undefined_ | Where to find the messenger dependencies. |
 | MATRIX_MESSENGER_HOMESERVER_URI | _undefined_ | Where to find the messenger server. |
-| ROOMS_OVERVIEW_ENABLED | `true` | Enables rooms-overview for Courses. |
+| LEGACY_COURSE_OVERVIEW_ENABLED | `true` | Enables legacy Course link activated. |
 
 ## Storybook
 

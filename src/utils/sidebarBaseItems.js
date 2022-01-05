@@ -1,5 +1,3 @@
-import EnvConfigModule from "@/store/env-config";
-
 export default [
 	{
 		title: "global.sidebar.overview",
@@ -9,11 +7,19 @@ export default [
 	},
 	{
 		title: "global.sidebar.courses",
-		href: EnvConfigModule.getEnv.ROOMS_OVERVIEW_ENABLED
-			? "/rooms-overview"
-			: "/courses",
+		href: "/courses",
 		icon: "graduation-cap",
 		testId: "Kurse",
+		linkType: "legacyCourse",
+		visibility: "false",
+	},
+	{
+		title: "global.sidebar.courses",
+		to: "/rooms-overview",
+		icon: "graduation-cap",
+		testId: "Course-Overview",
+		linkType: "nuxtCourse",
+		visibility: "false",
 	},
 	{
 		title: "global.sidebar.teams",

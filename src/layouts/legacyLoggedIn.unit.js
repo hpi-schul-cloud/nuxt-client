@@ -1,6 +1,7 @@
 import legacyLoggedIn from "./legacyLoggedIn";
 import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 const $route = {
 	query: {
@@ -19,11 +20,16 @@ AuthModule.setAccessToken("asdf");
 FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
 describe("legacyLoggedIn", () => {
-	it(...isValidComponent(legacyLoggedIn));
-	it("should mark active links", () => {
-		const wrapper = mount(legacyLoggedIn, {
+	let wrapper;
+	beforeAll(() => {
+		wrapper = mount(legacyLoggedIn, {
 			...createComponentMocks({ i18n: true, $router, $route }),
 		});
+	});
+
+	it(...isValidComponent(legacyLoggedIn));
+
+	it("should mark active links", () => {
 		const administrationListItem = wrapper.find("[data-testId='Verwaltung']");
 		const studentAdministrationListItem = wrapper.find(
 			"[data-testId='Schüler:innen']"
@@ -34,5 +40,19 @@ describe("legacyLoggedIn", () => {
 		expect(
 			studentAdministrationListItem.element.classList.contains("active")
 		).toBeTrue();
+
+		const courseLinkItem = wrapper.find("[data-testId='Kurse']");
+		expect(courseLinkItem.element.style.display).toStrictEqual("none");
+	});
+
+	it("should mark course link visibility if env-varable set", async () => {
+		EnvConfigModule.setEnvs({
+			LEGACY_COURSE_OVERVIEW_ENABLED: true,
+		});
+		const legacyRoute = wrapper.vm.sidebarItems.filter(
+			(item) => item.linkType === "legacyCourse"
+		);
+
+		expect(legacyRoute[0].visibility).toStrictEqual("true");
 	});
 });
