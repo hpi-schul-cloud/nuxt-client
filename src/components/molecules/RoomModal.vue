@@ -11,6 +11,7 @@
 				ref="roomNameInput"
 				v-model="groupData.title"
 				dense
+				:aria-label="$t('common.labels.title')"
 				:append-icon="mdiKeyboardReturn"
 				@blur="onUpdateRoomName"
 				@keyup.enter="onRoomNameInputEnter"
