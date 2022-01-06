@@ -19,7 +19,7 @@
 		>
 			<v-avatar
 				:color="item.displayColor"
-				:aria-label="item.title"
+				:aria-label="`${$t('common.labels.course')} ${item.title}`"
 				:size="size"
 				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"

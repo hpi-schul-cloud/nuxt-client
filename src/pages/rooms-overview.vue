@@ -98,6 +98,8 @@
 		<room-modal
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
+			:role="dialog"
+			aria-describedby="folder open"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
 			:draggable="allowDragging"
