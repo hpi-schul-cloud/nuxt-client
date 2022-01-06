@@ -85,6 +85,8 @@ export default {
 				{
 					href: EnvConfigModule.getStatusLink,
 					text: this.$t("components.legacy.footer.status"),
+					target: "_blank",
+					rel: "noopener",
 				},
 			];
 		},
