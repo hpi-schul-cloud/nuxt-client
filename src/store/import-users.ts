@@ -38,7 +38,12 @@ export class ImportUsers extends VuexModule {
 
 	firstName: string = '';
 	lastName: string = '';
+	loginName: string = '';
+	role: string = '';
 	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
+
+
+	flagged: boolean = false;
 
 	limit: number = 10;
 	skip: number = 0;
@@ -66,6 +71,25 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
+	setLoginName(loginName: string): void {
+		this.loginName = loginName;
+	}
+
+	@Mutation
+	setRole(role: string): void {
+		this.role = role;
+	}
+	@Mutation
+	setMatch(match: Array<'auto' | 'admin' | 'none'>): void {
+		this.match = match;
+	}
+
+	@Mutation
+	setFlagged(flagged: boolean): void {
+		this.flagged = flagged;
+	}
+
+	@Mutation
 	setLimit(limit: number): void {
 		this.limit = limit;
 	}
@@ -83,11 +107,6 @@ export class ImportUsers extends VuexModule {
 	@Mutation
 	setSortOrder(sortOrder: string): void {
 		this.sortOrder = sortOrder;
-	}
-
-	@Mutation
-	setMatch(match: Array<'auto' | 'admin' | 'none'>): void {
-		this.match = match;
 	}
 
 	@Mutation
@@ -109,12 +128,13 @@ export class ImportUsers extends VuexModule {
 		this.setLoading(true);
 		try {
 			return this.userApi
+				// TODO filter by role
 				.importUserControllerFindAll(
-					undefined, //this.firstName,
-					undefined,
-					undefined,
+					this.firstName ? this.firstName : undefined,
+					this.lastName ? this.lastName : undefined,
+					this.loginName ? this.loginName : undefined,
 					this.match,
-					undefined,
+					this.flagged ? true : undefined,
 					this.sortBy,
 					this.sortOrder,
 					this.skip,

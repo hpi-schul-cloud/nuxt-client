@@ -47,44 +47,7 @@
 			</v-card>
 		</v-dialog>
 
-		<!--v-text-field
-        v-model="search"
-        :prepend-inner-icon="mdiMagnify"
-        label="Filter"
-        single-line
-        hide-details
-        dense
-        clearable
-    ></v-text-field-->
-
 		<v-container v-if="canStartMigration">
-			<v-row>
-				<v-col>
-					<v-checkbox
-						v-model="matchedBy"
-						class="float-right"
-						label="unmatched"
-						value="none"
-						dense
-					></v-checkbox>
-					<v-spacer></v-spacer>
-					<v-checkbox
-						v-model="matchedBy"
-						class="float-right mr-4"
-						label="manual"
-						value="admin"
-						dense
-					></v-checkbox>
-					<v-spacer></v-spacer>
-					<v-checkbox
-						v-model="matchedBy"
-						class="float-right mr-4"
-						label="automatic"
-						value="auto"
-						dense
-					></v-checkbox>
-				</v-col>
-			</v-row>
 
 			<v-data-table
 				v-if="canStartMigration"
@@ -98,6 +61,85 @@
 					itemsPerPageOptions: [5, 10, 25, 50, 100],
 				}"
 			>
+
+        <template v-slot:body.prepend>
+          <tr>
+            <td>
+              <v-text-field
+                  v-model="firstName"
+                  type="string"
+                  label="Search first name"
+                  clearable
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  v-model="lastName"
+                  type="string"
+                  label="Search last name"
+                  clearable
+              ></v-text-field>
+            </td>
+
+            <td>
+              <v-text-field
+                  v-model="loginName"
+                  type="string"
+                  label="Search login Name"
+                  clearable
+              ></v-text-field>
+            </td>
+            <td>
+              <v-select
+                  v-model="searchRole"
+                  :items="roles"
+                  label="Select Role"
+                  clearable
+              ></v-select>
+            </td>
+            <td>
+              <v-text-field
+                  v-model="searchClass"
+                  type="string"
+                  label="Search Class"
+                  clearable
+              ></v-text-field>
+            </td>
+            <td>
+              <v-checkbox
+                  v-model="matchedBy"
+                  class=""
+                  label="unmatched"
+                  value="none"
+                  dense
+              ></v-checkbox>
+              <v-spacer></v-spacer>
+              <v-checkbox
+                  v-model="matchedBy"
+                  class="mr-4"
+                  label="manual"
+                  value="admin"
+                  dense
+              ></v-checkbox>
+              <v-spacer></v-spacer>
+              <v-checkbox
+                  v-model="matchedBy"
+                  class="mr-4"
+                  label="automatic"
+                  value="auto"
+                  dense
+              ></v-checkbox>
+            </td>
+            <td>
+              <v-switch
+                  v-model="flagged"
+                  label="Flagged"
+                  hide-details
+              ></v-switch>
+            </td>
+          </tr>
+        </template>
+
 				<template v-slot:item.loginName="{ item }">
 					{{ getAccount(item.loginName) }}
 				</template>
@@ -105,11 +147,47 @@
 				<template v-slot:item.match="{ item }">
 					<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 					{{ getMatch(item.match) }}
-					<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-					<v-icon v-if="item.match" small @click="deleteItem(item)">{{
-						mdiDelete
-					}}</v-icon>
-				</template>
+
+          <v-btn
+              v-if="item.match"
+              class="ma-2"
+              text
+              icon
+              color=""
+          >
+            <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+          </v-btn>
+          <v-btn
+              v-else
+              class="ma-2"
+              text
+              icon
+              color="red"
+          >
+            <v-icon small @click="editItem(item)">{{ mdiPlus }}</v-icon>
+          </v-btn>
+        </template>
+
+        <template v-slot:item.flagged="{ item }">
+          <v-btn
+              v-if="item.flagged"
+              class="ma-2"
+              icon
+              color="red"
+          >
+            <v-icon small color="">{{ mdiFlag }}</v-icon>
+          </v-btn>
+          <v-btn
+              v-else
+              class="ma-2"
+              text
+              icon
+              color=""
+          >
+            <v-icon small color="">{{ mdiFlagOutline }}</v-icon>
+          </v-btn>
+        </template>
+
 			</v-data-table>
 		</v-container>
 
@@ -124,12 +202,15 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import SchoolsModule from "@/store/schools";
 import ImportUserModule from "@store/import-users";
 import {
-	mdiDelete,
-	mdiPencil,
-	mdiAccountArrowRight,
-	mdiAccountArrowLeftOutline,
-	mdiAccountOffOutline,
-	mdiMagnify,
+	mdiAccountCheck,
+  mdiSync,
+  mdiAccountOffOutline,
+  mdiDelete,
+  mdiFlag,
+  mdiFlagOutline,
+  mdiMagnify,
+  mdiPencil,
+  mdiPlus,
 } from "@mdi/js";
 import Vue from "vue";
 
@@ -141,11 +222,20 @@ export default Vue.extend({
 	data() {
 		return {
 			loading: false,
-			matchedBy: ["admin", "auto", "none"],
-			mdiDelete,
-			mdiPencil,
-			mdiAccountArrowRight,
-			mdiMagnify,
+      firstName: '',
+      lastName: '',
+      loginName: '',
+      roles: ["student", "teacher", "administrator"],
+      searchRole: '',
+			matchedBy: ["none"],
+      flagged: false,
+			mdiAccountCheck,
+      mdiDelete,
+      mdiFlag,
+      mdiFlagOutline,
+      mdiPencil,
+      mdiPlus,
+      mdiMagnify,
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -320,6 +410,7 @@ export default Vue.extend({
 				roleNames: [],
 				classNames: [],
 				match: {},
+        flagged: false,
 			},
 			editedItem: {
 				firstName: "",
@@ -328,6 +419,7 @@ export default Vue.extend({
 				roleNamess: [],
 				classNames: [],
 				match: {},
+        flagged: false,
 			},
 			editedIndex: -1,
 		};
@@ -344,7 +436,8 @@ export default Vue.extend({
 				{ text: "Login", value: "loginName", sortable: false },
 				{ text: "Roles", value: "roleNames", sortable: false },
 				{ text: "Classes", value: "classNames", sortable: false },
-				{ text: "Action", value: "match", sortable: false },
+				{ text: "Match", value: "match", sortable: false },
+				{ text: "Flagged", value: "flagged", sortable: false },
 			];
 		},
 		editMatch() {
@@ -383,6 +476,26 @@ export default Vue.extend({
 			this.options.page = 1;
 			await this.getDataFromApi();
 		},
+    async flagged() {
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+    async firstName() {
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+    async lastName() {
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+    async loginName() {
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+    async searchRoles() {
+      this.options.page = 0;
+      await this.getDataFromApi();
+    }
 	},
 	methods: {
 		getMatch(match) {
@@ -404,10 +517,10 @@ export default Vue.extend({
 				return mdiAccountOffOutline;
 			}
 			if (match.matchedBy === "auto") {
-				return mdiAccountArrowLeftOutline;
+				return mdiSync;
 			}
 			if (match.matchedBy === "admin") {
-				return mdiAccountArrowRight;
+				return mdiAccountCheck;
 			}
 		},
 		deleteItem(item) {
@@ -471,6 +584,15 @@ export default Vue.extend({
 			if (this.matchedBy) {
 				ImportUserModule.setMatch(this.matchedBy);
 			}
+
+
+      ImportUserModule.setFlagged(this.flagged);
+
+
+      ImportUserModule.setFirstName(this.firstName);
+      ImportUserModule.setLastName(this.lastName);
+      ImportUserModule.setLoginName(this.loginName);
+      ImportUserModule.setRole(this.searchRole);
 
 			ImportUserModule.fetchAllElements().then(() => {
 				this.importUsers = ImportUserModule.getImportUserList.data;
