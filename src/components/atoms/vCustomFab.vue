@@ -9,6 +9,7 @@
 		class="transition"
 		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
+		:data-testid="dataTestId"
 	>
 		<template v-slot:activator>
 			<v-btn
@@ -75,6 +76,7 @@
 		:href="href"
 		:class="classes"
 		:aria-label="ariaLabel ? ariaLabel : title"
+		:data-testid="dataTestId"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -114,6 +116,10 @@ export default {
 			type: String,
 			required: false,
 			default: null,
+		dataTestId: {
+			type: String,
+			required: false,
+			default: "",
 		},
 	},
 	data() {

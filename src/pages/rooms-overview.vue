@@ -7,10 +7,17 @@
 		:aria-label="sectionAriaLabel"
 	>
 		<template slot="header">
-			<h1 class="text-h3">{{ $t("pages.courses.index.courses.active") }}</h1>
+			<h1 class="text-h3 pt-2">
+				{{ $t("pages.courses.index.courses.active") }}
+			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
-					<v-btn color="secondary" outlined small to="/rooms-list"
+					<v-btn
+						color="secondary"
+						outlined
+						small
+						to="/rooms-list"
+						data-testid="go-to-all-courses"
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
@@ -36,6 +43,7 @@
 				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
 				:aria-label="$t('common.labels.search')"
+				data-testid="search-field"
 			>
 			</v-text-field>
 			<div
@@ -138,6 +146,7 @@ export default {
 				colCount: 2,
 				cellWidth: "3em",
 				rowCount: 6,
+				defaultRowCount: 6,
 			},
 			groupDialog: {
 				isOpen: false,
@@ -170,6 +179,7 @@ export default {
 					title,
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.courses.new.title"),
+					testId: "add-course-button",
 				};
 			}
 			return null;
@@ -244,6 +254,15 @@ export default {
 					this.dimensions.colCount = 6;
 					break;
 			}
+			const lastItem = RoomsModule.getRoomsData.reduce((prev, current) => {
+				return prev.yPosition > current.yPosition ? prev : current;
+			}, {});
+
+			this.dimensions.rowCount =
+				lastItem.yPosition &&
+				lastItem.yPosition + 2 > this.dimensions.defaultRowCount
+					? lastItem.yPosition + 2
+					: this.dimensions.defaultRowCount;
 		},
 		getDataObject(row, col) {
 			return this.findDataByPos(row, col);

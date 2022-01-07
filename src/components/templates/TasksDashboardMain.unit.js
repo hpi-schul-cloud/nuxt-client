@@ -15,23 +15,6 @@ describe("@components/templates/TasksDashboardMain", () => {
 	it(...isValidComponent(TasksDashboardMain));
 
 	describe("when mounting the component", () => {
-		it("Should should trigger fetachAllTasks", async () => {
-			const spy = jest.spyOn(TaskModule, "fetchAllTasks");
-
-			shallowMount(TasksDashboardMain, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				vuetify,
-				propsData: {
-					role: "student",
-				},
-			});
-
-			expect(spy).toHaveBeenCalled();
-		});
-
 		it("Should receive valid role props", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];

@@ -1,6 +1,7 @@
 import legacyLoggedIn from "./legacyLoggedIn";
 import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 const $route = {
 	query: {
@@ -17,6 +18,10 @@ AuthModule.setUser({
 AuthModule.setAccessToken("asdf");
 
 FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
+
+EnvConfigModule.setEnvs({
+	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
+});
 
 describe("legacyLoggedIn", () => {
 	it(...isValidComponent(legacyLoggedIn));
