@@ -4,6 +4,7 @@ import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
 const mockEnvs: Envs = {
+	ALERT_STATUS_URL: "mockValue",
 	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,

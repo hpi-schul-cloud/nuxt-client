@@ -19,6 +19,10 @@ AuthModule.setAccessToken("asdf");
 
 FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
+EnvConfigModule.setEnvs({
+	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
+});
+
 describe("legacyLoggedIn", () => {
 	let wrapper;
 	beforeAll(() => {
