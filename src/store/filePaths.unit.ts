@@ -42,6 +42,7 @@ const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__URI: "",
 	MATRIX_MESSENGER__DISCOVER_URI: "",
 	LERNSTORE_MODE: "",
+	ALERT_STATUS_URL: "",
 };
 
 const envs = {

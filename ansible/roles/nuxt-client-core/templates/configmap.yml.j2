@@ -21,6 +21,7 @@ data:
   FEATURE_EXTENSIONS_ENABLED: "{{ FEATURE_EXTENSIONS_ENABLED|default("false", true) }}"
   FEATURE_TEAMS_ENABLED: "{{ FEATURE_TEAMS_ENABLED }}"
   FEATURE_MORGAN_LOG_ENABLED: "false"
+  ALERT_STATUS_URL: "{{ ALERT_STATUS_URL|default("https://status.dbildungscloud.de", true) }}"
   LOG_LEVEL: "error"
   # Lernstore
   FEATURE_LERNSTORE_ENABLED: "{{ FEATURE_LERNSTORE_ENABLED|default("false", true) }}"
