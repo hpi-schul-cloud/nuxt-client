@@ -293,7 +293,7 @@ export default Vue.extend({
 			dialogDelete: false,
 			search: "",
 			options: {
-				itemsPerPage: 5,
+				itemsPerPage: 25,
 			},
 			localUsersMock: [
 				{
