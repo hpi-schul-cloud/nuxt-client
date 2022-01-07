@@ -116,6 +116,7 @@ export default {
 			type: String,
 			required: false,
 			default: null,
+		},
 		dataTestId: {
 			type: String,
 			required: false,
