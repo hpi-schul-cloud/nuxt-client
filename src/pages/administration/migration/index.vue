@@ -5,243 +5,196 @@
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
-    <div slot="header">
-        <h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-        <v-stepper v-model="e1" flat>
-          <v-stepper-header>
-            <v-stepper-step
-                editable
-                step="1"
-            >
-              Intro
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step
-                editable
-                step="2"
-            >
-              Accounts matching
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step editable step="3">
-              Summary
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="4">
-              Finish
-            </v-stepper-step>
+		<div slot="header">
+			<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+			<v-stepper v-model="e1" flat>
+				<v-stepper-header>
+					<v-stepper-step editable step="1"> Intro </v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step editable step="2"> Accounts matching </v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step editable step="3"> Summary </v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="4"> Finish </v-stepper-step>
+				</v-stepper-header>
+			</v-stepper>
+		</div>
+		<div>
+			<v-stepper v-model="e1" flat>
+				<v-stepper-items>
+					<v-stepper-content step="1">
+						<v-card elevation="2" class="pa-2 mb-10" color="grey lighten-5"
+							>TODO info / tutorial</v-card
+						>
+						<v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
+					</v-stepper-content>
+					<v-stepper-content step="2">
+						<v-dialog v-model="dialogDelete" max-width="500px">
+							<v-card>
+								<v-card-title class="text-h5"
+									>Are you sure you want to delete this item?</v-card-title
+								>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn text @click="closeDelete">Cancel</v-btn>
+									<v-btn text @click="deleteItemConfirm">OK</v-btn>
+									<v-spacer></v-spacer>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
 
-          </v-stepper-header>
-        </v-stepper>
-    </div>
-    <div>
-      <v-stepper v-model="e1" flat>
-      <v-stepper-items>
-        <v-stepper-content step="1">
-          <v-card
-              elevation="2"
-              class="pa-2 mb-10"
-              color="grey lighten-5"
-          >TODO info / tutorial</v-card>
-          <v-btn
-              color="primary"
-              @click="e1 = 2"
-          >
-            Continue
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-content step="2">
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="text-h5"
-              >Are you sure you want to delete this item?</v-card-title
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="closeDelete">Cancel</v-btn>
-                <v-btn text @click="deleteItemConfirm">OK</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+						<v-dialog v-model="dialogEdit" max-width="500px">
+							<v-card>
+								<v-card-title>
+									<span class="text-h5">{{ editMatch }}</span>
+								</v-card-title>
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="6" md="4">
+												<v-autocomplete
+													v-model="editedItem.match"
+													:items="getLocalUsersSelect()"
+													color="white"
+													item-text="name"
+													label="Local accounts"
+												></v-autocomplete>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn text @click="closeEdit"> Cancel </v-btn>
+									<v-btn text @click="saveEdit"> Save </v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
 
-          <v-dialog v-model="dialogEdit" max-width="500px">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ editMatch }}</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-autocomplete
-                          v-model="editedItem.match"
-                          :items="getLocalUsersSelect()"
-                          color="white"
-                          item-text="name"
-                          label="Local accounts"
-                      ></v-autocomplete>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="closeEdit"> Cancel </v-btn>
-                <v-btn text @click="saveEdit"> Save </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+						<v-container v-if="canStartMigration">
+							<v-data-table
+								v-if="canStartMigration"
+								:headers="tableHead"
+								:items="importUsers"
+								:options.sync="options"
+								:server-items-length="totalImportUsers"
+								:loading="loading"
+								class="table"
+								:footer-props="{
+									itemsPerPageOptions: [5, 10, 25, 50, 100],
+								}"
+							>
+								<template v-slot:body.prepend>
+									<tr>
+										<td>
+											<v-text-field
+												v-model="firstName"
+												type="string"
+												label="Search first name"
+												clearable
+											></v-text-field>
+										</td>
+										<td>
+											<v-text-field
+												v-model="lastName"
+												type="string"
+												label="Search last name"
+												clearable
+											></v-text-field>
+										</td>
+										<td>
+											<v-text-field
+												v-model="loginName"
+												type="string"
+												label="Search login Name"
+												clearable
+											></v-text-field>
+										</td>
+										<td>
+											<v-select
+												v-model="searchRole"
+												:items="roles"
+												label="Select Role"
+												clearable
+											></v-select>
+										</td>
+										<td>
+											<v-text-field
+												v-model="searchClass"
+												type="string"
+												label="Search Class"
+												clearable
+											></v-text-field>
+										</td>
+										<td>
+											<v-btn-toggle v-model="matchedBy" :multiple="true">
+												<v-btn value="none">
+													<v-icon>{{ mdiAccountPlus }}</v-icon>
+												</v-btn>
+												<v-btn value="admin">
+													<v-icon>{{ mdiAccountSwitch }}</v-icon>
+												</v-btn>
+												<v-btn value="auto">
+													<v-icon>{{ mdiAccountSwitchOutline }}</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</td>
+										<td>
+											<v-btn-toggle v-model="flagged">
+												<v-btn value="true">
+													<v-icon>{{ mdiFlag }}</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</td>
+									</tr>
+								</template>
 
-          <v-container v-if="canStartMigration">
+								<template v-slot:item.loginName="{ item }">
+									{{ getAccount(item.loginName) }}
+								</template>
 
-            <v-data-table
-                v-if="canStartMigration"
-                :headers="tableHead"
-                :items="importUsers"
-                :options.sync="options"
-                :server-items-length="totalImportUsers"
-                :loading="loading"
-                class="table"
-                :footer-props="{
-					itemsPerPageOptions: [5, 10, 25, 50, 100],
-				}"
-            >
-              <template v-slot:body.prepend>
-                <tr>
-                  <td>
-                    <v-text-field
-                        v-model="firstName"
-                        type="string"
-                        label="Search first name"
-                        clearable
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-text-field
-                        v-model="lastName"
-                        type="string"
-                        label="Search last name"
-                        clearable
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-text-field
-                        v-model="loginName"
-                        type="string"
-                        label="Search login Name"
-                        clearable
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-select
-                        v-model="searchRole"
-                        :items="roles"
-                        label="Select Role"
-                        clearable
-                    ></v-select>
-                  </td>
-                  <td>
-                    <v-text-field
-                        v-model="searchClass"
-                        type="string"
-                        label="Search Class"
-                        clearable
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-btn-toggle v-model="matchedBy" :multiple="true">
-                      <v-btn value="none">
-                        <v-icon>{{ mdiAccountPlus }}</v-icon>
-                      </v-btn>
-                      <v-btn value="admin">
-                        <v-icon>{{ mdiAccountSwitch }}</v-icon>
-                      </v-btn>
-                      <v-btn value="auto">
-                        <v-icon>{{ mdiAccountSwitchOutline }}</v-icon>
-                      </v-btn>
-                    </v-btn-toggle>
-                  </td>
-                  <td>
-                    <v-btn-toggle v-model="flagged">
-                      <v-btn value="true">
-                        <v-icon>{{ mdiFlag }}</v-icon>
-                      </v-btn>
-                    </v-btn-toggle>
-                  </td>
-                </tr>
-              </template>
+								<template v-slot:item.match="{ item }">
+									<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+									{{ getMatch(item.match) }}
+									<v-btn class="ma-2" text icon color="">
+										<v-icon small @click="editItem(item)">{{
+											mdiPencil
+										}}</v-icon>
+									</v-btn>
+								</template>
 
-              <template v-slot:item.loginName="{ item }">
-                {{ getAccount(item.loginName) }}
-              </template>
+								<template v-slot:item.flagged="{ item }">
+									<v-btn v-if="item.flagged" class="ma-2" icon color="red">
+										<v-icon small color="">{{ mdiFlag }}</v-icon>
+									</v-btn>
+									<v-btn v-else class="ma-2" text icon color="">
+										<v-icon small color="">{{ mdiFlagOutline }}</v-icon>
+									</v-btn>
+								</template>
+							</v-data-table>
+						</v-container>
 
-              <template v-slot:item.match="{ item }">
-                <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-                {{ getMatch(item.match) }}
-                <v-btn
-                    class="ma-2"
-                    text
-                    icon
-                    color=""
-                >
-                  <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-                </v-btn>
-              </template>
+						<v-alert v-else light prominent text type="error">{{
+							$t("pages.administration.migration.cannotStart")
+						}}</v-alert>
 
-              <template v-slot:item.flagged="{ item }">
-                <v-btn
-                    v-if="item.flagged"
-                    class="ma-2"
-                    icon
-                    color="red"
-                >
-                  <v-icon small color="">{{ mdiFlag }}</v-icon>
-                </v-btn>
-                <v-btn
-                    v-else
-                    class="ma-2"
-                    text
-                    icon
-                    color=""
-                >
-                  <v-icon small color="">{{ mdiFlagOutline }}</v-icon>
-                </v-btn>
-              </template>
-            </v-data-table>
-          </v-container>
-
-          <v-alert v-else light prominent text type="error">{{
-              $t("pages.administration.migration.cannotStart")
-            }}</v-alert>
-
-          <v-btn
-              color="primary"
-              @click="e1 = 3"
-          >
-            Continue
-          </v-btn>
-
-        </v-stepper-content>
-        <v-stepper-content step="3">
-          <v-card
-              elevation="2"
-              class="pa-2 mb-10"
-              color="grey lighten-5"
-          >TODO summary</v-card>
-          <v-btn color="primary">Back</v-btn>
-          <v-btn color="secondary">Finish Migration</v-btn>
-        </v-stepper-content>
-        <v-stepper-content step="4">
-          <v-card
-              elevation="2"
-              class="pa-2 mb-10"
-              color="grey lighten-5"
-          >TODO show message or redirect</v-card>
-        </v-stepper-content>
-      </v-stepper-items>
-      </v-stepper>
-    </div>
+						<v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
+					</v-stepper-content>
+					<v-stepper-content step="3">
+						<v-card elevation="2" class="pa-2 mb-10" color="grey lighten-5"
+							>TODO summary</v-card
+						>
+						<v-btn color="primary">Back</v-btn>
+						<v-btn color="secondary">Finish Migration</v-btn>
+					</v-stepper-content>
+					<v-stepper-content step="4">
+						<v-card elevation="2" class="pa-2 mb-10" color="grey lighten-5"
+							>TODO show message or redirect</v-card
+						>
+					</v-stepper-content>
+				</v-stepper-items>
+			</v-stepper>
+		</div>
 	</default-wireframe>
 </template>
 
@@ -250,13 +203,13 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import SchoolsModule from "@/store/schools";
 import ImportUserModule from "@store/import-users";
 import {
-  mdiAccountPlus,
-  mdiAccountSwitch,
-  mdiAccountSwitchOutline,
-  mdiDelete,
-  mdiFlag,
-  mdiFlagOutline,
-  mdiPencil,
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiDelete,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencil,
 } from "@mdi/js";
 import Vue from "vue";
 
@@ -267,22 +220,22 @@ export default Vue.extend({
 	layout: "defaultVuetify",
 	data() {
 		return {
-      e1: 1,
-      mdiAccountPlus,
-      mdiAccountSwitch,
-      mdiAccountSwitchOutline,
-      mdiDelete,
-      mdiFlag,
-      mdiFlagOutline,
-      mdiPencil,
-      loading: false,
-      firstName: '',
-      lastName: '',
-      loginName: '',
-      roles: ["student", "teacher", "administrator"],
-      searchRole: '',
-      matchedBy: ["none"],
-      flagged: false,
+			e1: 1,
+			mdiAccountPlus,
+			mdiAccountSwitch,
+			mdiAccountSwitchOutline,
+			mdiDelete,
+			mdiFlag,
+			mdiFlagOutline,
+			mdiPencil,
+			loading: false,
+			firstName: "",
+			lastName: "",
+			loginName: "",
+			roles: ["student", "teacher", "administrator"],
+			searchRole: "",
+			matchedBy: ["none"],
+			flagged: false,
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -457,7 +410,7 @@ export default Vue.extend({
 				roleNames: [],
 				classNames: [],
 				match: {},
-        flagged: false,
+				flagged: false,
 			},
 			editedItem: {
 				firstName: "",
@@ -466,7 +419,7 @@ export default Vue.extend({
 				roleNamess: [],
 				classNames: [],
 				match: {},
-        flagged: false,
+				flagged: false,
 			},
 			editedIndex: -1,
 		};
@@ -523,33 +476,33 @@ export default Vue.extend({
 			this.options.page = 1;
 			await this.getDataFromApi();
 		},
-    async flagged() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-    async firstName() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-    async lastName() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-    async loginName() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
-    async searchRoles() {
-      this.options.page = 0;
-      await this.getDataFromApi();
-    }
+		async flagged() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+		async firstName() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+		async lastName() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+		async loginName() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
+		async searchRoles() {
+			this.options.page = 0;
+			await this.getDataFromApi();
+		},
 	},
 	methods: {
 		getMatch(match) {
 			if (match) {
 				return `${match.firstName} ${match.lastName}`;
 			}
-			return 'Neu erstellen';
+			return "Neu erstellen";
 		},
 		getMatchedByIcon(match) {
 			if (!match || !match.matchedBy) {
@@ -624,14 +577,12 @@ export default Vue.extend({
 				ImportUserModule.setMatch(this.matchedBy);
 			}
 
+			ImportUserModule.setFlagged(this.flagged);
 
-      ImportUserModule.setFlagged(this.flagged);
-
-
-      ImportUserModule.setFirstName(this.firstName);
-      ImportUserModule.setLastName(this.lastName);
-      ImportUserModule.setLoginName(this.loginName);
-      ImportUserModule.setRole(this.searchRole);
+			ImportUserModule.setFirstName(this.firstName);
+			ImportUserModule.setLastName(this.lastName);
+			ImportUserModule.setLoginName(this.loginName);
+			ImportUserModule.setRole(this.searchRole);
 
 			ImportUserModule.fetchAllElements().then(() => {
 				this.importUsers = ImportUserModule.getImportUserList.data;
