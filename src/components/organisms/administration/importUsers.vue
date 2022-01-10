@@ -111,12 +111,23 @@
 							</v-btn-toggle>
 						</td>
 						<td>
-              <v-btn v-if="searchFlagged" icon value="true" color="red" @click="searchFlagged = !searchFlagged">
-                <v-icon>{{ mdiFlag }}</v-icon>
-              </v-btn>
-              <v-btn v-else value="false" icon @click="searchFlagged = !searchFlagged">
-                <v-icon>{{ mdiFlagOutline }}</v-icon>
-              </v-btn>
+							<v-btn
+								v-if="searchFlagged"
+								icon
+								value="true"
+								color="red"
+								@click="searchFlagged = !searchFlagged"
+							>
+								<v-icon>{{ mdiFlag }}</v-icon>
+							</v-btn>
+							<v-btn
+								v-else
+								value="false"
+								icon
+								@click="searchFlagged = !searchFlagged"
+							>
+								<v-icon>{{ mdiFlagOutline }}</v-icon>
+							</v-btn>
 						</td>
 					</tr>
 				</template>
@@ -126,13 +137,13 @@
 				</template>
 
 				<template v-slot:item.match="{ item }">
-          <div class="text-no-wrap">
-            <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-            {{ getMatch(item.match) }}
-            <v-btn class="ma-2" text icon color="">
-              <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-            </v-btn>
-          </div>
+					<div class="text-no-wrap">
+						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+						{{ getMatch(item.match) }}
+						<v-btn class="ma-2" text icon color="">
+							<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+						</v-btn>
+					</div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
@@ -444,9 +455,9 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-    getFlagColor() {
-      return this.searchFlagged ? 'red' : '';
-    },
+		getFlagColor() {
+			return this.searchFlagged ? "red" : "";
+		},
 		getMatch(match) {
 			if (match) {
 				return `${match.firstName} ${match.lastName}`;
