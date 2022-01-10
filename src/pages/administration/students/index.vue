@@ -365,22 +365,26 @@ export default {
 				return null;
 			}
 
+			const title = this.$t("common.labels.student");
 			return {
 				icon: mdiPlus,
-				title: this.$t("common.labels.student"),
+				title,
 				testId: "fab_button_students_table",
+				ariaLabel: this.$t("pages.administration.students.new.title"),
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
 						dataTestid: "fab_button_add_students",
+						ariaLabel: this.$t("pages.administration.students.fab.add.aria"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
 						icon: mdiCloudUpload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
+						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),
 					},
 				],
 			};

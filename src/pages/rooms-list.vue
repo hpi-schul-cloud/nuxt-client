@@ -4,6 +4,7 @@
 		:headline="$t('pages.courses.index.courses.all')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
+		:aria-label="$t('pages.courses.index.courses.all')"
 	>
 		<v-row class="justify-center search">
 			<div class="d-flex justify-space-between col-sm-8">
@@ -14,6 +15,7 @@
 					solo
 					:label="$t('pages.rooms.index.search.label')"
 					:append-icon="mdiMagnify"
+					:aria-label="$t('common.labels.search')"
 				>
 				</v-text-field>
 			</div>
@@ -87,6 +89,13 @@ export default Vue.extend({
 	},
 	async mounted() {
 		await RoomsModule.fetchAllElements();
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.courses.index.courses.all")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 });
 </script>
