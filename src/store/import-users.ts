@@ -40,6 +40,7 @@ export class ImportUsers extends VuexModule {
 	lastName: string = '';
 	loginName: string = '';
 	role: string = '';
+	classes: string = '';
 	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
 
 
@@ -79,6 +80,12 @@ export class ImportUsers extends VuexModule {
 	setRole(role: string): void {
 		this.role = role;
 	}
+
+	@Mutation
+	setClasses(classes: string): void {
+		this.classes = classes;
+	}
+
 	@Mutation
 	setMatch(match: Array<'auto' | 'admin' | 'none'>): void {
 		this.match = match;
@@ -135,6 +142,8 @@ export class ImportUsers extends VuexModule {
 					this.loginName ? this.loginName : undefined,
 					this.match,
 					this.flagged ? true : undefined,
+					this.classes ? this.classes : undefined,
+					this.role ? this.role : undefined,
 					this.sortBy,
 					this.sortOrder,
 					this.skip,

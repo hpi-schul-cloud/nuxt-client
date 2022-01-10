@@ -91,7 +91,7 @@
 						</td>
 						<td>
 							<v-text-field
-								v-model="searchClass"
+								v-model="searchClasses"
 								type="string"
 								label="Search Class"
 								clearable
@@ -121,7 +121,7 @@
 				</template>
 
 				<template v-slot:item.loginName="{ item }">
-					{{ getAccount(item.loginName) }}
+					{{ item.loginName }}
 				</template>
 
 				<template v-slot:item.match="{ item }">
@@ -173,13 +173,13 @@ export default Vue.extend({
 			mdiFlagOutline,
 			mdiPencil,
 			loading: false,
-			roles: ["student", "teacher", "administrator"],
+			roles: ["student", "teacher", "admin"],
 			search: "",
 			searchFirstName: "",
 			searchLastName: "",
 			searchLoginName: "",
 			searchRole: "",
-			searchClass: "",
+			searchClasses: "",
 			searchMatchedBy: ["none"],
 			searchFlagged: false,
 			dialogEdit: false,
@@ -355,7 +355,7 @@ export default Vue.extend({
 				firstName: "",
 				lastName: "",
 				loginName: "",
-				roleNamess: [],
+				roleNames: [],
 				classNames: [],
 				match: {},
 				flagged: false,
@@ -423,11 +423,11 @@ export default Vue.extend({
 			this.options.page = 1;
 			await this.getDataFromApi();
 		},
-		async searchRoles() {
-			this.options.page = 0;
+		async searchRole() {
+			this.options.page = 1;
 			await this.getDataFromApi();
 		},
-		async searchClass() {
+		async searchClasses() {
 			this.options.page = 1;
 			await this.getDataFromApi();
 		},
@@ -497,37 +497,32 @@ export default Vue.extend({
 			}
 			this.close();
 		},
-		getAccount(loginName) {
-			const attributes = loginName.split("@");
-			return attributes[0];
-		},
 		async getDataFromApi() {
 			this.loading = true;
 
-			ImportUserModule.setLimit(this.options.itemsPerPage);
-			ImportUserModule.setSkip(
-				(this.options.page - 1) * this.options.itemsPerPage
-			);
-
-			if (this.options.sortBy) {
-				ImportUserModule.setSortBy(this.options.sortBy[0]);
-				ImportUserModule.setSortOrder(
-					this.options.sortDesc[0] ? "desc" : "asc"
-				);
-			}
-
-			if (this.matchedBy) {
-				ImportUserModule.setMatch(this.searchMatchedBy);
-			}
-
-			ImportUserModule.setFlagged(this.searchFlagged);
-
 			ImportUserModule.setFirstName(this.searchFirstName);
-			ImportUserModule.setLastName(this.searchLastName);
-			ImportUserModule.setLoginName(this.searchLoginName);
-			ImportUserModule.setRole(this.searchRole);
+      ImportUserModule.setLastName(this.searchLastName);
+      ImportUserModule.setLoginName(this.searchLoginName);
+      ImportUserModule.setRole(this.searchRole);
+      ImportUserModule.setClasses(this.searchClasses);
 
-			ImportUserModule.fetchAllElements().then(() => {
+      if (this.searchMatchedBy) {
+        ImportUserModule.setMatch(this.searchMatchedBy);
+      }
+      ImportUserModule.setFlagged(this.searchFlagged);
+
+      ImportUserModule.setLimit(this.options.itemsPerPage);
+      ImportUserModule.setSkip(
+          (this.options.page - 1) * this.options.itemsPerPage
+      );
+      if (this.options.sortBy) {
+        ImportUserModule.setSortBy(this.options.sortBy[0]);
+        ImportUserModule.setSortOrder(
+            this.options.sortDesc[0] ? "desc" : "asc"
+        );
+      }
+
+      ImportUserModule.fetchAllElements().then(() => {
 				this.importUsers = ImportUserModule.getImportUserList.data;
 				this.totalImportUsers = ImportUserModule.getImportUserList.total;
 				this.loading = false;
