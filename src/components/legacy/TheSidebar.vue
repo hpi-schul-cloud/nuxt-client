@@ -22,6 +22,11 @@
 						class="list-item"
 						:class="{ active: route.active, 'child-active': route.childActive }"
 						:data-testId="route.testId"
+						:style="
+							route.visibility && route.visibility === 'false'
+								? { display: 'none' }
+								: {}
+						"
 					>
 						<base-link
 							class="list-content"
