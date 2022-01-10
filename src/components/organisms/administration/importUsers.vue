@@ -501,28 +501,28 @@ export default Vue.extend({
 			this.loading = true;
 
 			ImportUserModule.setFirstName(this.searchFirstName);
-      ImportUserModule.setLastName(this.searchLastName);
-      ImportUserModule.setLoginName(this.searchLoginName);
-      ImportUserModule.setRole(this.searchRole);
-      ImportUserModule.setClasses(this.searchClasses);
+			ImportUserModule.setLastName(this.searchLastName);
+			ImportUserModule.setLoginName(this.searchLoginName);
+			ImportUserModule.setRole(this.searchRole);
+			ImportUserModule.setClasses(this.searchClasses);
 
-      if (this.searchMatchedBy) {
-        ImportUserModule.setMatch(this.searchMatchedBy);
-      }
-      ImportUserModule.setFlagged(this.searchFlagged);
+			if (this.searchMatchedBy) {
+				ImportUserModule.setMatch(this.searchMatchedBy);
+			}
+			ImportUserModule.setFlagged(this.searchFlagged);
 
-      ImportUserModule.setLimit(this.options.itemsPerPage);
-      ImportUserModule.setSkip(
-          (this.options.page - 1) * this.options.itemsPerPage
-      );
-      if (this.options.sortBy) {
-        ImportUserModule.setSortBy(this.options.sortBy[0]);
-        ImportUserModule.setSortOrder(
-            this.options.sortDesc[0] ? "desc" : "asc"
-        );
-      }
+			ImportUserModule.setLimit(this.options.itemsPerPage);
+			ImportUserModule.setSkip(
+				(this.options.page - 1) * this.options.itemsPerPage
+			);
+			if (this.options.sortBy) {
+				ImportUserModule.setSortBy(this.options.sortBy[0]);
+				ImportUserModule.setSortOrder(
+					this.options.sortDesc[0] ? "desc" : "asc"
+				);
+			}
 
-      ImportUserModule.fetchAllElements().then(() => {
+			ImportUserModule.fetchAllElements().then(() => {
 				this.importUsers = ImportUserModule.getImportUserList.data;
 				this.totalImportUsers = ImportUserModule.getImportUserList.total;
 				this.loading = false;
