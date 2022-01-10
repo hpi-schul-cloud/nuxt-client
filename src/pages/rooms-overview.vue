@@ -6,7 +6,12 @@
 			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
-					<v-btn color="secondary" outlined small to="/rooms-list"
+					<v-btn
+						color="secondary"
+						outlined
+						small
+						to="/rooms-list"
+						data-testid="go-to-all-courses"
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
@@ -31,6 +36,7 @@
 				rounded
 				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
+				data-testid="search-field"
 			>
 			</v-text-field>
 			<div
@@ -161,6 +167,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.labels.course"),
 					href: "/courses/add",
+					testId: "add-course-button",
 				};
 			}
 			return null;

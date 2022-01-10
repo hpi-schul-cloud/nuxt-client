@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="room-avatar"
+		:data-testid="item.id"
 		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
 		:style="{ width: size }"

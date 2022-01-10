@@ -27,6 +27,7 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+	ALERT_STATUS_URL: process.env.ALERT_STATUS_URL,
 };
 
 const retryLimit: number = 10;
@@ -51,6 +52,7 @@ export class EnvConfig extends VuexModule {
 		DOCUMENT_BASE_DIR: "",
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
+		ALERT_STATUS_URL: "",
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";
@@ -125,6 +127,9 @@ export class EnvConfig extends VuexModule {
 	}
 	get getAvailableLanguages() {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
+	}
+	get getStatusLink() {
+		return this.env.ALERT_STATUS_URL;
 	}
 
 	get getEnv(): Envs {
