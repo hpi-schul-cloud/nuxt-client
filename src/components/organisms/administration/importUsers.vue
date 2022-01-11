@@ -167,17 +167,20 @@
 					</v-btn>
 				</template>
 			</v-data-table>
-      <p class="text-sm">
-        <b>Legend</b>
-        <br>
-        <v-icon color="secondary">{{ mdiAccountPlus }}</v-icon> - Local account not matched. User will be created new
-        <br>
-        <v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> - Matched to local account automatically
-        <br>
-        <v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> - Matched to local account manually
-      </p>
-      <v-divider ></v-divider>
-      <br>
+			<p class="text-sm">
+				<b>Legend</b>
+				<br />
+				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon> - Local account
+				not matched. User will be created new
+				<br />
+				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> - Matched to
+				local account automatically
+				<br />
+				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> -
+				Matched to local account manually
+			</p>
+			<v-divider></v-divider>
+			<br />
 		</v-container>
 
 		<v-alert v-else light prominent text type="error">{{
