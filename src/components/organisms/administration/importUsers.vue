@@ -56,7 +56,7 @@
 				}"
 			>
 				<template v-slot:body.prepend>
-					<tr>
+					<tr class="head">
 						<td>
 							<v-text-field
 								v-model="searchFirstName"
@@ -98,36 +98,25 @@
 							></v-text-field>
 						</td>
 						<td>
-							<v-btn-toggle v-model="searchMatchedBy" :multiple="true">
-								<v-btn value="none">
-									<v-icon>{{ mdiAccountPlus }}</v-icon>
+							<v-btn-toggle v-model="searchMatchedBy"
+                            multiple borderless group="false">
+								<v-btn icon value="none" title="Unmached" color="">
+									<v-icon :color="searchMatchedBy.includes('none') ? 'primary' : 'secondary'">{{ mdiAccountPlus }}</v-icon>
 								</v-btn>
-								<v-btn value="admin">
-									<v-icon>{{ mdiAccountSwitch }}</v-icon>
+								<v-btn icon value="admin" title="Manually mached"  color="">
+									<v-icon  :color="searchMatchedBy.includes('admin') ? 'primary' : 'secondary'">{{ mdiAccountSwitch }}</v-icon>
 								</v-btn>
-								<v-btn value="auto">
-									<v-icon>{{ mdiAccountSwitchOutline }}</v-icon>
+								<v-btn icon value="auto" title="Automatic matched"  color="">
+									<v-icon :color="searchMatchedBy.includes('auto') ? 'primary' : 'secondary'">{{ mdiAccountSwitchOutline }}</v-icon>
 								</v-btn>
 							</v-btn-toggle>
 						</td>
 						<td>
-							<v-btn
-								v-if="searchFlagged"
-								icon
-								value="true"
-								color="red"
-								@click="searchFlagged = !searchFlagged"
-							>
-								<v-icon>{{ mdiFlag }}</v-icon>
-							</v-btn>
-							<v-btn
-								v-else
-								value="false"
-								icon
-								@click="searchFlagged = !searchFlagged"
-							>
-								<v-icon>{{ mdiFlagOutline }}</v-icon>
-							</v-btn>
+              <v-btn-toggle v-model="searchFlagged" borderless group="false">
+                <v-btn icon value="true">
+                  <v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{ mdiFlag }}</v-icon>
+                </v-btn>
+              </v-btn-toggle>
 						</td>
 					</tr>
 				</template>
@@ -137,20 +126,20 @@
 				</template>
 
 				<template v-slot:item.match="{ item }">
-					<div class="text-no-wrap">
-						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-						{{ getMatch(item.match) }}
-						<v-btn class="ma-2" text icon color="">
-							<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-						</v-btn>
-					</div>
+          <div class="text-no-wrap">
+            <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+            {{ getMatch(item.match) }}
+            <v-btn class="ma-2" text icon color="">
+              <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+            </v-btn>
+          </div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="red">
-						<v-icon small>{{ mdiFlag }}</v-icon>
+					<v-btn v-if="item.flagged" icon color="primary">
+						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else icon color="">
+					<v-btn v-else icon>
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</template>
@@ -455,9 +444,6 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		getFlagColor() {
-			return this.searchFlagged ? "red" : "";
-		},
 		getMatch(match) {
 			if (match) {
 				return `${match.firstName} ${match.lastName}`;
@@ -561,13 +547,12 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
-.theme--light.v-data-table
-	> .v-data-table__wrapper
-	> table
-	> thead
-	> tr:last-child
-	> th {
-	border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary);
+<style lang="scss" scoped>
+$rounded: 50%;
+tr.head td {
+  border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) !important;
+}
+.v-btn--round {
+  border-radius: $rounded !important;
 }
 </style>
