@@ -1,78 +1,96 @@
 <template>
-	<v-list-item
-		:key="task.id"
-		class="mx-n4 mx-sm-0"
-		v-bind="$attrs"
-		:ripple="false"
-		@click="onTaskItemClick"
-	>
-		<v-list-item-avatar>
-			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
-		</v-list-item-avatar>
-		<v-list-item-content>
-			<v-list-item-subtitle class="d-inline-flex">
-				<span class="text-truncate" data-testid="taskSubtitle">{{
-					courseName
-				}}</span>
-				{{
-					`&nbsp;– ${computedDueDateLabel(
-						task.duedate,
-						(shorten = $vuetify.breakpoint.xsOnly)
-					)}`
-				}}
-			</v-list-item-subtitle>
-			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
-			<v-list-item-subtitle class="d-inline-flex">
-				<span class="text-truncate">{{ topic }}</span>
-			</v-list-item-subtitle>
-			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-				<i18n path="components.molecules.VTaskItemTeacher.status">
-					<template #submitted>{{ task.status.submitted }}</template>
-					<template #max>{{ task.status.maxSubmissions }}</template>
-					<template #graded>{{ task.status.graded }}</template>
-				</i18n>
-			</v-list-item-subtitle>
-		</v-list-item-content>
-		<section v-if="!isDraft" class="mr-13">
-			<v-list-item-action class="hidden-xs-only ml-4">
-				<v-list-item-subtitle>{{
-					$t("components.molecules.VTaskItemTeacher.submitted")
-				}}</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskSubmitted"
-					>{{ task.status.submitted }}/{{
-						task.status.maxSubmissions
-					}}</v-list-item-title
+	<v-hover v-model="onHover" :disabled="isMenuActive">
+		<v-list-item
+			:key="task.id"
+			class="mx-n4 mx-sm-0"
+			v-bind="$attrs"
+			:ripple="false"
+			@click="onTaskItemClick"
+		>
+			<v-list-item-avatar>
+				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
+			</v-list-item-avatar>
+			<v-list-item-content>
+				<v-list-item-subtitle class="d-inline-flex">
+					<span class="text-truncate" data-testid="taskSubtitle">{{
+						courseName
+					}}</span>
+					{{
+						`&nbsp;– ${computedDueDateLabel(
+							task.duedate,
+							(shorten = $vuetify.breakpoint.xsOnly)
+						)}`
+					}}
+				</v-list-item-subtitle>
+				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+				<v-list-item-subtitle class="d-inline-flex">
+					<span class="text-truncate">{{ topic }}</span>
+				</v-list-item-subtitle>
+				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
+					<i18n path="components.molecules.VTaskItemTeacher.status">
+						<template #submitted>{{ task.status.submitted }}</template>
+						<template #max>{{ task.status.maxSubmissions }}</template>
+						<template #graded>{{ task.status.graded }}</template>
+					</i18n>
+				</v-list-item-subtitle>
+			</v-list-item-content>
+			<section v-if="!isDraft" class="mr-13">
+				<v-list-item-action class="hidden-xs-only ml-4">
+					<v-list-item-subtitle>{{
+						$t("components.molecules.VTaskItemTeacher.submitted")
+					}}</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskSubmitted"
+						>{{ task.status.submitted }}/{{
+							task.status.maxSubmissions
+						}}</v-list-item-title
+					>
+				</v-list-item-action>
+				<v-list-item-action class="hidden-xs-only">
+					<v-list-item-subtitle>{{
+						$t("components.molecules.VTaskItemTeacher.graded")
+					}}</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskGraded">{{
+						task.status.graded
+					}}</v-list-item-title>
+				</v-list-item-action>
+			</section>
+			<v-list-item-action style="min-width: 45px">
+				<v-menu
+					v-if="onHover"
+					bottom
+					left
+					offset-y
+					close-on-click
+					@update:return-value="handleHover(true)"
 				>
+					<template v-slot:activator="{ on, attrs, value }">
+						<v-btn
+							class="context-menu-btn"
+							v-bind="attrs"
+							icon
+							v-on="on"
+							@click="handleHover(value)"
+						>
+							<v-icon>{{ mdiDotsVertical }}</v-icon>
+						</v-btn>
+					</template>
+					<v-list>
+						<v-list-item
+							:href="`${taskHref(task.id)}/edit`"
+							class="task-action"
+						>
+							<v-list-item-title>
+								<v-icon class="task-action-icon">
+									{{ mdiPencilOutline }}
+								</v-icon>
+								{{ $t("common.actions.edit") }}
+							</v-list-item-title>
+						</v-list-item>
+					</v-list>
+				</v-menu>
 			</v-list-item-action>
-			<v-list-item-action class="hidden-xs-only">
-				<v-list-item-subtitle>{{
-					$t("components.molecules.VTaskItemTeacher.graded")
-				}}</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskGraded">{{
-					task.status.graded
-				}}</v-list-item-title>
-			</v-list-item-action>
-		</section>
-		<v-list-item-action>
-			<v-menu bottom left offset-y>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn v-bind="attrs" icon v-on="on">
-						<v-icon>{{ mdiDotsVertical }}</v-icon>
-					</v-btn>
-				</template>
-				<v-list>
-					<v-list-item :href="`${taskHref(task.id)}/edit`" class="task-action">
-						<v-list-item-title>
-							<v-icon class="task-action-icon">
-								{{ mdiPencilOutline }}
-							</v-icon>
-							{{ $t("common.actions.edit") }}
-						</v-list-item-title>
-					</v-list-item>
-				</v-list>
-			</v-menu>
-		</v-list-item-action>
-	</v-list-item>
+		</v-list-item>
+	</v-hover>
 </template>
 
 <script>
@@ -98,6 +116,8 @@ export default {
 			fromNow,
 			mdiDotsVertical,
 			mdiPencilOutline,
+			isMenuActive: false,
+			onHover: true,
 		};
 	},
 	computed: {
@@ -129,6 +149,9 @@ export default {
 				: "";
 		},
 	},
+	mounted() {
+		this.handleHover(true);
+	},
 	methods: {
 		computedDueDateLabel(dueDate) {
 			if (!dueDate) {
@@ -144,6 +167,12 @@ export default {
 		},
 		onTaskItemClick() {
 			this.$router.push(this.taskHref(this.task.id));
+		},
+
+		handleHover(value) {
+			const stateValue = this.$vuetify.breakpoint.mobile ? true : !value;
+			this.$set(this, "isMenuActive", stateValue);
+			this.$set(this, "onHover", stateValue);
 		},
 	},
 };
