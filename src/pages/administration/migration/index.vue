@@ -78,6 +78,6 @@ export default {
 </script>
 <style scoped>
 .v-stepper__content {
-  padding: 0;
+	padding: 0;
 }
 </style>

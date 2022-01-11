@@ -98,25 +98,48 @@
 							></v-text-field>
 						</td>
 						<td>
-							<v-btn-toggle v-model="searchMatchedBy"
-                            multiple borderless group="false">
+							<v-btn-toggle
+								v-model="searchMatchedBy"
+								multiple
+								borderless
+								group="false"
+							>
 								<v-btn icon value="none" title="Unmached" color="">
-									<v-icon :color="searchMatchedBy.includes('none') ? 'primary' : 'secondary'">{{ mdiAccountPlus }}</v-icon>
+									<v-icon
+										:color="
+											searchMatchedBy.includes('none') ? 'primary' : 'secondary'
+										"
+										>{{ mdiAccountPlus }}</v-icon
+									>
 								</v-btn>
-								<v-btn icon value="admin" title="Manually mached"  color="">
-									<v-icon  :color="searchMatchedBy.includes('admin') ? 'primary' : 'secondary'">{{ mdiAccountSwitch }}</v-icon>
+								<v-btn icon value="admin" title="Manually mached" color="">
+									<v-icon
+										:color="
+											searchMatchedBy.includes('admin')
+												? 'primary'
+												: 'secondary'
+										"
+										>{{ mdiAccountSwitch }}</v-icon
+									>
 								</v-btn>
-								<v-btn icon value="auto" title="Automatic matched"  color="">
-									<v-icon :color="searchMatchedBy.includes('auto') ? 'primary' : 'secondary'">{{ mdiAccountSwitchOutline }}</v-icon>
+								<v-btn icon value="auto" title="Automatic matched" color="">
+									<v-icon
+										:color="
+											searchMatchedBy.includes('auto') ? 'primary' : 'secondary'
+										"
+										>{{ mdiAccountSwitchOutline }}</v-icon
+									>
 								</v-btn>
 							</v-btn-toggle>
 						</td>
 						<td>
-              <v-btn-toggle v-model="searchFlagged" borderless group="false">
-                <v-btn icon value="true">
-                  <v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{ mdiFlag }}</v-icon>
-                </v-btn>
-              </v-btn-toggle>
+							<v-btn-toggle v-model="searchFlagged" borderless group="false">
+								<v-btn icon value="true">
+									<v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
+										mdiFlag
+									}}</v-icon>
+								</v-btn>
+							</v-btn-toggle>
 						</td>
 					</tr>
 				</template>
@@ -126,13 +149,13 @@
 				</template>
 
 				<template v-slot:item.match="{ item }">
-          <div class="text-no-wrap">
-            <v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-            {{ getMatch(item.match) }}
-            <v-btn class="ma-2" text icon color="">
-              <v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
-            </v-btn>
-          </div>
+					<div class="text-no-wrap">
+						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+						{{ getMatch(item.match) }}
+						<v-btn class="ma-2" text icon color="">
+							<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+						</v-btn>
+					</div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
@@ -550,9 +573,9 @@ export default Vue.extend({
 <style lang="scss" scoped>
 $rounded: 50%;
 tr.head td {
-  border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) !important;
+	border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) !important;
 }
 .v-btn--round {
-  border-radius: $rounded !important;
+	border-radius: $rounded !important;
 }
 </style>
