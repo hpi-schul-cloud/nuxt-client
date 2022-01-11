@@ -32,7 +32,7 @@ jobs:
       - name: update screenshots
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         run: npx start-server-and-test 'start:storybook' 'http-get://localhost:4001' 'npm run test:screenshot:jest -- -u'
-      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      - uses: stefanzweifel/git-auto-commit-action@v4.13.0
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         with:
           commit_message: update screenshots
