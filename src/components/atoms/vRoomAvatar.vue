@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="room-avatar"
+		:data-testid="item.id"
 		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
 		:style="{ width: size }"
@@ -19,11 +20,14 @@
 		>
 			<v-avatar
 				:color="item.displayColor"
+				:aria-label="`${$t('common.labels.course')} ${item.title}`"
 				:size="size"
 				:tile="condenseLayout"
+				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="onClick"
 			>
 				<span
 					class="white--text text-h7"
@@ -38,7 +42,8 @@
 			</div>
 			<div
 				v-if="!condenseLayout && item.titleDate"
-				class="justify-center mt-1 sub-title date-title"
+				class="justify-center sub-title date-title"
+				:class="{ 'ma-n1': $vuetify.breakpoint.xs }"
 			>
 				{{ item.titleDate }}
 			</div>
