@@ -5,6 +5,19 @@ import mocks from "@@/stories/mockData/Tasks";
 import vTaskItemTeacher from "./vTaskItemTeacher";
 
 const { tasksTeacher, drafts } = mocks;
+const routerPushStub = { push: jest.fn() };
+
+const getWrapper = (props, options) => {
+	return mount(vTaskItemTeacher, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+			$router: routerPushStub,
+		}),
+		propsData: props,
+		...options,
+	});
+};
 
 describe("@components/molecules/vTaskItemTeacher", () => {
 	let vuetify;
@@ -15,22 +28,24 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 	it(...isValidComponent(vTaskItemTeacher));
 
-	it("Should link list item links to task/<id> detail page", () => {
-		const wrapper = mount(vTaskItemTeacher, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: tasksTeacher[0],
-			},
+	it("Should call onTaskItemClick() by click on v-list-item", async () => {
+		const mockMethod = jest.spyOn(vTaskItemTeacher.methods, "onTaskItemClick");
+		const wrapper = getWrapper({
+			task: tasksTeacher[0],
 		});
 
-		const firstLink = wrapper.find("a");
+		await wrapper.find(".v-list-item").trigger("click");
+		expect(mockMethod).toHaveBeenCalled();
+	});
 
-		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(`/homework/${tasksTeacher[0].id}`);
+	it("Should call taskHref() and return link by click on v-list-item", async () => {
+		const mockMethod = jest.spyOn(vTaskItemTeacher.methods, "taskHref");
+		const wrapper = getWrapper({
+			task: tasksTeacher[0],
+		});
+
+		await wrapper.find(".v-list-item").trigger("click");
+		expect(mockMethod).toHaveReturnedWith(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	it("Should render subtitle with course name and due date", () => {
