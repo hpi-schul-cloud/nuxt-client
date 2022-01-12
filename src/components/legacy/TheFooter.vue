@@ -83,9 +83,9 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 			];
-			if (EnvConfigModule.getStatusURL) {
+			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
 				links.push({
-					href: EnvConfigModule.getStatusURL,
+					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 					target: "_blank",
 					rel: "noopener",
