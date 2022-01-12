@@ -162,7 +162,7 @@
 					<v-btn v-if="item.flagged" icon color="primary" class="ma-2">
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else icon class="ma-2" >
+					<v-btn v-else icon class="ma-2">
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</template>
