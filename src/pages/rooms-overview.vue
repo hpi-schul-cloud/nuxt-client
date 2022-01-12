@@ -106,7 +106,6 @@
 		<room-modal
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
-			:role="dialog"
 			aria-describedby="folder open"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
@@ -173,10 +172,9 @@ export default {
 			if (
 				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				const title = this.$t("common.labels.course");
 				return {
 					icon: mdiPlus,
-					title,
+					title: this.$t("common.labels.course"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.courses.new.title"),
 					testId: "add-course-button",
