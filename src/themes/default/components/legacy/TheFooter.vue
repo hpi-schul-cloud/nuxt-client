@@ -58,7 +58,7 @@ export default {
 			return new Date().getFullYear();
 		},
 		links() {
-			return [
+			const links = [
 				{
 					to: "/imprint",
 					text: this.$t("components.legacy.footer.imprint"),
@@ -83,17 +83,20 @@ export default {
 					href: "https://github.com/hpi-schul-cloud",
 					text: this.$t("components.legacy.footer.github"),
 				},
-				{
-					href: EnvConfigModule.getStatusLink,
+			];
+			if (EnvConfigModule.getStatusURL) {
+				links.push({
+					href: EnvConfigModule.getStatusURL,
 					text: this.$t("components.legacy.footer.status"),
 					target: "_blank",
 					rel: "noopener",
-				},
-				{
-					to: "/security",
-					text: this.$t("components.legacy.footer.security"),
-				},
-			];
+				});
+			}
+			links.push({
+				to: "/security",
+				text: this.$t("components.legacy.footer.security"),
+			});
+			return links;
 		},
 	},
 	mounted() {
