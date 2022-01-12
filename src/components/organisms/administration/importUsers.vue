@@ -159,10 +159,10 @@
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="primary">
+					<v-btn v-if="item.flagged" icon color="primary" class="ma-2">
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else icon>
+					<v-btn v-else icon class="ma-2" >
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</template>
@@ -174,10 +174,10 @@
 				not matched. User will be created new
 				<br />
 				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> - Matched to
-				local account automatically
+				local account manually
 				<br />
 				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> -
-				Matched to local account manually
+				Matched to local account automatically
 			</p>
 			<v-divider></v-divider>
 			<br />
