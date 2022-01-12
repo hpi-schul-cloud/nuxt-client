@@ -54,13 +54,13 @@
 					}}</v-list-item-title>
 				</v-list-item-action>
 			</section>
-			<v-list-item-action style="min-width: 45px">
+			<v-list-item-action>
 				<v-menu
-					v-if="onHover"
 					bottom
 					left
 					offset-y
 					close-on-click
+					:class="onHover ? 'menu-visible' : 'menu-hidden'"
 					@update:return-value="handleHover(true)"
 				>
 					<template v-slot:activator="{ on, attrs, value }">
@@ -68,6 +68,7 @@
 							class="context-menu-btn"
 							v-bind="attrs"
 							icon
+							:data-testId="`task-menu-${task.name}`"
 							v-on="on"
 							@click="handleHover(value)"
 						>
@@ -78,6 +79,7 @@
 						<v-list-item
 							:href="`${taskHref(task.id)}/edit`"
 							class="task-action"
+							:data-testId="`task-edit-${task.name}`"
 						>
 							<v-list-item-title>
 								<v-icon class="task-action-icon">
@@ -195,5 +197,13 @@ export default {
 	margin-right: 4px;
 	font-size: 1rem;
 	color: rgba(0, 0, 0, 0.87);
+}
+
+.menu-visible {
+	visibility: visible;
+}
+
+.menu-hidden {
+	visibility: hidden;
 }
 </style>
