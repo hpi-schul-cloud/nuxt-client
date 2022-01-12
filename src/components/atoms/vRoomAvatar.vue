@@ -20,11 +20,14 @@
 		>
 			<v-avatar
 				:color="item.displayColor"
+				:aria-label="`${$t('common.labels.course')} ${item.title}`"
 				:size="size"
 				:tile="condenseLayout"
+				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="onClick"
 			>
 				<span
 					class="white--text text-h7"
