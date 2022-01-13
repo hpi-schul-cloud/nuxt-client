@@ -1,57 +1,49 @@
 <template>
-  <div>
+	<div>
 		<v-dialog v-model="dialogEdit" large max-width="700px">
 			<v-card>
-        <v-toolbar
-            dark
-            color="primary"
-        >
-          <v-toolbar-title>{{ editMatch }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn
-                icon
-                dark
-                @click="closeEdit"
-            ><v-icon>{{ mdiClose }}</v-icon>
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
+				<v-toolbar dark color="primary">
+					<v-toolbar-title>{{ editMatch }}</v-toolbar-title>
+					<v-spacer></v-spacer>
+					<v-toolbar-items>
+						<v-btn icon dark @click="closeEdit"
+							><v-icon>{{ mdiClose }}</v-icon>
+						</v-btn>
+					</v-toolbar-items>
+				</v-toolbar>
 				<v-card-text>
 					<v-container>
-
-								<v-autocomplete
-									v-model="editedItem.match"
-									:items="getLocalUsersSelect()"
-									item-text="name"
-									label="Search existing accounts"
-								></v-autocomplete>
-                <p>
-                  Email:
-                  <br>
-                  Class:
-                  <br>
-                  Login:
-                </p>
-                <v-divider></v-divider>
-                <br>
-                <p>
-                  New login: {{ editedItem.loginName }}
-                </p>
+						<v-autocomplete
+							v-model="editedItem.match"
+							:items="getLocalUsersSelect()"
+							item-text="name"
+							label="Search existing accounts"
+						></v-autocomplete>
+						<p>
+							Email:
+							<br />
+							Class:
+							<br />
+							Login:
+						</p>
+						<v-divider></v-divider>
+						<br />
+						<p>New login: {{ editedItem.loginName }}</p>
 					</v-container>
 				</v-card-text>
 				<v-card-actions>
-          <v-col class="col-6">
-                <v-btn text class="primary m-2" @click="saveEdit">
-                  <v-icon small>{{ mdiContentSave }}</v-icon>  Save</v-btn>
-                <v-btn text class="m-2" @click="closeEdit">Cancel</v-btn>
-          </v-col>
-          <v-col class="col-6 text-right">
-              <v-btn text class="secondary m-2" @click="deleteItem">
-                <v-icon small>{{ mdiDelete }}</v-icon>
-                Delete
-              </v-btn>
-          </v-col>
+					<v-col class="col-6">
+						<v-btn text class="primary m-2" @click="saveEdit">
+							<v-icon small>{{ mdiContentSave }}</v-icon> Save</v-btn
+						>
+						<v-btn text class="m-2" @click="closeEdit">Cancel</v-btn>
+					</v-col>
+					<v-col class="col-6 text-right">
+						<v-btn text class="secondary m-2" @click="deleteItem">
+							<v-icon small>{{ mdiDelete }}</v-icon>
+							Delete
+						</v-btn>
+					</v-col>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -210,13 +202,12 @@ import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
 	mdiAccountSwitchOutline,
-  mdiClose,
-  mdiContentSave,
-  mdiDelete,
-  mdiFlag,
-  mdiFlagOutline,
-  mdiPencil
-
+	mdiClose,
+	mdiContentSave,
+	mdiDelete,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencil,
 } from "@mdi/js";
 import Vue from "vue";
 export default Vue.extend({
@@ -225,9 +216,9 @@ export default Vue.extend({
 			mdiAccountPlus,
 			mdiAccountSwitch,
 			mdiAccountSwitchOutline,
-      mdiClose,
-      mdiContentSave,
-      mdiDelete,
+			mdiClose,
+			mdiContentSave,
+			mdiDelete,
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencil,
@@ -471,25 +462,25 @@ export default Vue.extend({
 			deep: true,
 		},
 		async searchFirstName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchLastName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchLoginName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchRole() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchClasses() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchMatchedBy() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchFlagged() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 	},
 	methods: {
@@ -513,10 +504,10 @@ export default Vue.extend({
 		deleteItem(item) {
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
-      // TODO persist in API
-      delete this.importUsers[this.editedIndex].match;
-      this.closeEdit();
-    },
+			// TODO persist in API
+			delete this.importUsers[this.editedIndex].match;
+			this.closeEdit();
+		},
 		editItem(item) {
 			console.log(`editItem`, item);
 			this.editedIndex = this.importUsers.indexOf(item);
@@ -539,10 +530,10 @@ export default Vue.extend({
 			}
 			this.closeEdit();
 		},
-    async searchApi() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
+		async searchApi() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
 		async getDataFromApi() {
 			this.loading = true;
 
