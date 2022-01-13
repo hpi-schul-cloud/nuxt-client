@@ -34,7 +34,7 @@
 					</i18n>
 				</v-list-item-subtitle>
 			</v-list-item-content>
-			<section v-if="!isDraft" class="mr-13">
+			<section v-if="!isDraft" class="mr-8">
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.VTaskItemTeacher.submitted")
@@ -54,7 +54,7 @@
 					}}</v-list-item-title>
 				</v-list-item-action>
 			</section>
-			<v-list-item-action>
+			<v-list-item-action class="context-menu-btn">
 				<v-menu
 					bottom
 					left
@@ -65,7 +65,6 @@
 					<template v-slot:activator="{ on, attrs, value }">
 						<v-btn
 							v-show="onHover"
-							class="context-menu-btn"
 							v-bind="attrs"
 							icon
 							:data-testId="`task-menu-${task.name}`"
@@ -190,6 +189,10 @@ export default {
 }
 
 // stylelint-disable sh-waqar/declaration-use-variable
+.context-menu-btn {
+	min-width: 45px;
+}
+
 .task-action {
 	min-height: 25px;
 }
