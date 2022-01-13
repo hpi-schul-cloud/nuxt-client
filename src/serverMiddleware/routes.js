@@ -45,6 +45,7 @@ const routes = [
 	`^/nuxtversion/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
+	`^/rooms/${mongoId}?$`,
 	// `^/courses/?$`,
 ];
 
