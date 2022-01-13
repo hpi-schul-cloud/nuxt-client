@@ -28,16 +28,6 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 	it(...isValidComponent(vTaskItemTeacher));
 
-	it("Should call onTaskItemClick() by click on v-list-item", async () => {
-		const mockMethod = jest.spyOn(vTaskItemTeacher.methods, "onTaskItemClick");
-		const wrapper = getWrapper({
-			task: tasksTeacher[0],
-		});
-
-		await wrapper.find(".v-list-item").trigger("click");
-		expect(mockMethod).toHaveBeenCalled();
-	});
-
 	it("Should call taskHref() and return link by click on v-list-item", async () => {
 		const mockMethod = jest.spyOn(vTaskItemTeacher.methods, "taskHref");
 		const wrapper = getWrapper({

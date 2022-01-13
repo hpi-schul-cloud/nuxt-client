@@ -5,7 +5,7 @@
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:ripple="false"
-			@click="onTaskItemClick"
+			:href="taskHref(task.id)"
 		>
 			<v-list-item-avatar>
 				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
@@ -60,17 +60,17 @@
 					left
 					offset-y
 					close-on-click
-					:class="onHover ? 'menu-visible' : 'menu-hidden'"
 					@update:return-value="handleHover(true)"
 				>
 					<template v-slot:activator="{ on, attrs, value }">
 						<v-btn
+							v-show="onHover"
 							class="context-menu-btn"
 							v-bind="attrs"
 							icon
 							:data-testId="`task-menu-${task.name}`"
 							v-on="on"
-							@click="handleHover(value)"
+							@click.prevent="handleHover(value)"
 						>
 							<v-icon>{{ mdiDotsVertical }}</v-icon>
 						</v-btn>
@@ -151,6 +151,11 @@ export default {
 				: "";
 		},
 	},
+	watch: {
+		"$vuetify.breakpoint.mobile": {
+			handler: "onBreakpointChanged",
+		},
+	},
 	mounted() {
 		this.handleHover(true);
 	},
@@ -167,14 +172,13 @@ export default {
 		taskHref: (id) => {
 			return `/homework/${id}`;
 		},
-		onTaskItemClick() {
-			this.$router.push(this.taskHref(this.task.id));
-		},
-
 		handleHover(value) {
 			const stateValue = this.$vuetify.breakpoint.mobile ? true : !value;
 			this.$set(this, "isMenuActive", stateValue);
 			this.$set(this, "onHover", stateValue);
+		},
+		onBreakpointChanged(val) {
+			this.handleHover(!val);
 		},
 	},
 };
@@ -197,13 +201,5 @@ export default {
 	margin-right: 4px;
 	font-size: 1rem;
 	color: rgba(0, 0, 0, 0.87);
-}
-
-.menu-visible {
-	visibility: visible;
-}
-
-.menu-hidden {
-	visibility: hidden;
 }
 </style>
