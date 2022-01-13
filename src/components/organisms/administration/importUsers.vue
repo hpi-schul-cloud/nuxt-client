@@ -1,7 +1,12 @@
 <template>
-  <div>
+	<div>
 		<v-dialog v-model="dialogEdit" large max-width="700px">
-      <v-import-users-match-search :edited-item="editedItem" :is-dialog="true" :edited-index="editedIndex" @close="closeEdit"></v-import-users-match-search>
+			<v-import-users-match-search
+				:edited-item="editedItem"
+				:is-dialog="true"
+				:edited-index="editedIndex"
+				@close="closeEdit"
+			></v-import-users-match-search>
 		</v-dialog>
 
 		<v-container v-if="canStartMigration">
@@ -60,12 +65,7 @@
 							></v-text-field>
 						</td>
 						<td>
-							<v-btn-toggle
-								v-model="searchMatchedBy"
-								multiple
-								borderless
-								group
-							>
+							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
 								<v-btn icon value="none" title="Unmached" color="">
 									<v-icon
 										:color="
@@ -156,24 +156,23 @@ import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
 	mdiAccountSwitchOutline,
-  mdiFlag,
-  mdiFlagOutline,
-  mdiPencil
-
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencil,
 } from "@mdi/js";
 import Vue from "vue";
 export default Vue.extend({
-  components: {
-    vImportUsersMatchSearch,
-  },
+	components: {
+		vImportUsersMatchSearch,
+	},
 	data() {
 		return {
-      mdiAccountPlus,
-      mdiAccountSwitch,
-      mdiAccountSwitchOutline,
-      mdiFlag,
-      mdiFlagOutline,
-      mdiPencil,
+			mdiAccountPlus,
+			mdiAccountSwitch,
+			mdiAccountSwitchOutline,
+			mdiFlag,
+			mdiFlagOutline,
+			mdiPencil,
 			loading: false,
 			roles: ["student", "teacher", "admin"],
 			search: "",
@@ -254,25 +253,25 @@ export default Vue.extend({
 			deep: true,
 		},
 		async searchFirstName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchLastName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchLoginName() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchRole() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchClasses() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchMatchedBy() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 		async searchFlagged() {
-      await this.searchApi();
+			await this.searchApi();
 		},
 	},
 	methods: {
@@ -299,17 +298,17 @@ export default Vue.extend({
 			this.editedItem = Object.assign({}, item);
 			this.dialogEdit = true;
 		},
-    closeEdit() {
-      this.dialogEdit = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-    async searchApi() {
-      this.options.page = 1;
-      await this.getDataFromApi();
-    },
+		closeEdit() {
+			this.dialogEdit = false;
+			this.$nextTick(() => {
+				this.editedItem = Object.assign({}, this.defaultItem);
+				this.editedIndex = -1;
+			});
+		},
+		async searchApi() {
+			this.options.page = 1;
+			await this.getDataFromApi();
+		},
 		async getDataFromApi() {
 			this.loading = true;
 
