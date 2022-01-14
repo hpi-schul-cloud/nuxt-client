@@ -98,6 +98,25 @@ export class FinishedTaskModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async finishTask(taskId: any): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			$axios.setBaseURL("http://localhost:4000/");
+			const response = await $axios.$patch(
+				`/homework/${taskId}`,
+				"archive=done"
+			);
+			console.log(response);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
 	@Mutation
 	setTasks(tasks: Task[]) {
 		this.tasks = tasks;

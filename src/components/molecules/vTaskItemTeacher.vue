@@ -87,6 +87,18 @@
 								{{ $t("common.actions.edit") }}
 							</v-list-item-title>
 						</v-list-item>
+						<v-list-item
+							class="task-action"
+							:data-testId="`task-finish-${task.name}`"
+							@click="handleFinish"
+						>
+							<v-list-item-title>
+								<v-icon class="task-action-icon">
+									{{ mdiPencilOutline }}
+								</v-icon>
+								{{ $t("common.actions.edit") }}
+							</v-list-item-title>
+						</v-list-item>
 					</v-list>
 				</v-menu>
 			</v-list-item-action>
@@ -97,6 +109,7 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
+import FinishedTaskModule from "@/store/finished-tasks";
 import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
 
 // TODO - different requiredKeys for finished and other tasks?
@@ -178,6 +191,10 @@ export default {
 		},
 		onBreakpointChanged(val) {
 			this.handleHover(!val);
+		},
+		handleFinish() {
+			console.log("hi");
+			FinishedTaskModule.finishTask(this.task.id);
 		},
 	},
 };
