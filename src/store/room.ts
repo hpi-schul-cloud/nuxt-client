@@ -31,7 +31,7 @@ const roomData = {
 				},
 				availableDate: "2017-09-20T11:00:00.000Z",
 				duedate: "2300-09-28T13:00:00.000Z",
-				displayColor: "#54616e",
+				displayColor: "#D50000",
 				description: "",
 			},
 		},

@@ -1,8 +1,6 @@
-import RoomModule from "@store/room";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
-import flushPromises from "flush-promises";
 
 const mockData = {
 	roomId: "123",
@@ -121,7 +119,7 @@ const getWrapper = () => {
 	return mount(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
-			//@ts-ignore
+			// @ts-ignore
 			vuetify: true,
 		}),
 		propsData: {

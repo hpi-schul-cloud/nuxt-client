@@ -35,7 +35,7 @@ export default Vue.extend({
 	head() {
 		return {
 			//@ts-ignore
-			title: `${this.roomData.courseName} - ${this.$theme.short_name}`,
+			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
 });
