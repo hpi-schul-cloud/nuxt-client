@@ -667,6 +667,7 @@
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse, zum Öffnen die Eingabetaste drücken",
 	"pages.rooms.headerSection.ariaLabel": "Liste der aktuellen Kurse {itemCount} Elemente",
+	"pages.room.taskCard.aria": "{itemType}, link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.adminFilter.class.title": "Klasse(n)",

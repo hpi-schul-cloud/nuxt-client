@@ -669,6 +669,7 @@
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos, presione Intro para abrir",
 	"pages.rooms.headerSection.ariaLabel": "Lista de cursos actuales {itemCount} elementos",
+	"pages.room.taskCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"storybook.lang": "¡Estoy en inglés ahora!",
 	"utils.adminFilter.class.title": "Clase(s)",

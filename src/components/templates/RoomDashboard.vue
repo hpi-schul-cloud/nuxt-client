@@ -1,12 +1,18 @@
 <template>
 	<div class="rooms-container">
-		<template v-for="(item, index) of taskList">
+		<template v-for="(item, index) of items">
 			<v-task-item-teacher
 				v-if="item.type === 'task'"
 				:key="index"
 				:task="item.content"
+				:aria-label="
+					$t('pages.room.taskCard.aria', {
+						itemType: item.type,
+						itemName: item.content.name,
+					})
+				"
 			/>
-			<v-divider v-if="index < taskList.length - 1" :key="`divider-${index}`" />
+			<v-divider v-if="index < items.length - 1" :key="`divider-${index}`" />
 		</template>
 	</div>
 </template>
@@ -20,7 +26,7 @@ export default Vue.extend({
 		VTaskItemTeacher,
 	},
 	props: {
-		taskList: {
+		items: {
 			type: Array,
 			required: true,
 			default: () => [],

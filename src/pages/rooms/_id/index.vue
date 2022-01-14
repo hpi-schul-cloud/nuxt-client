@@ -5,7 +5,7 @@
 		:full-width="true"
 		:aria-label="roomData.title"
 	>
-		<room-dashboard :task-list="roomData.elements" />
+		<room-dashboard :items="roomData.elements" />
 	</default-wireframe>
 </template>
 

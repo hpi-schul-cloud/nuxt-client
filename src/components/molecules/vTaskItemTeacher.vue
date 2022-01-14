@@ -4,6 +4,7 @@
 		:href="taskHref(task.id)"
 		class="mx-n4 mx-sm-0"
 		v-bind="$attrs"
+		:aria-label="ariaLabel"
 	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
@@ -70,6 +71,10 @@ export default {
 			type: Object,
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
+		},
+		ariaLabel: {
+			type: String,
+			default: "",
 		},
 	},
 	data() {
