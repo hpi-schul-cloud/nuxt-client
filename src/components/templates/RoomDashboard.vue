@@ -5,8 +5,8 @@
 				v-if="item.type === 'task'"
 				:key="index"
 				:task="item.content"
-				@dragstart="startDrag"
 			/>
+			<v-divider v-if="index < taskList.length - 1" :key="`divider-${index}`" />
 		</template>
 	</div>
 </template>
@@ -28,12 +28,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {};
-	},
-	methods: {
-		startDrag() {
-			debugger;
-			this.$emit("dragStart");
-		},
 	},
 });
 </script>

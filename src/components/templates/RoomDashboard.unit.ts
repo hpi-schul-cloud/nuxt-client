@@ -1,7 +1,7 @@
 import RoomModule from "@store/room";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import Room from "./index.vue";
+import RoomDashboard from "./RoomDashboard.vue";
 import flushPromises from "flush-promises";
 
 const mockData = {
@@ -117,40 +117,33 @@ const mockData = {
 	],
 };
 
-const $route = {
-	params: {
-		id: "123",
-	},
-	path: "/rooms/",
+const getWrapper = () => {
+	return mount(RoomDashboard, {
+		...createComponentMocks({
+			i18n: true,
+			//@ts-ignore
+			vuetify: true,
+		}),
+		propsData: {
+			taskList: mockData.elements,
+		},
+	});
 };
 
-const $router = { push: jest.fn() };
+describe("@components/templates/RoomDashboard.vue", () => {
+	beforeEach(() => {});
 
-describe("@pages/rooms/index.vue", () => {
-	const getWrapper = () => {
-		return mount(Room, {
-			...createComponentMocks({
-				i18n: true,
-				//@ts-ignore
-				vuetify: true,
-				$router,
-				//@ts-ignore
-				$route,
-			}),
-		});
-	};
-	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
-		RoomModule.setRoomData(mockData as any);
-		window.location.pathname = "http://dummy-url/rooms/123";
-	});
-
-	it("should fetch data", async () => {
+	it("should have props", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
 
 		// @ts-ignore
-		expect(wrapper.vm.roomData).toStrictEqual(mockData);
+		expect(wrapper.vm.taskList[1]).toStrictEqual(mockData.elements[1]);
+	});
+
+	it("should have five 'v-list-component'", async () => {
+		const wrapper = getWrapper();
+
+		const listItems = wrapper.findAll(".v-list-item");
+		expect(listItems).toHaveLength(5);
 	});
 });
