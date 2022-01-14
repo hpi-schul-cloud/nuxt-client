@@ -6,7 +6,7 @@
 		:bottom="!positionAtTop"
 		:top="positionAtTop"
 		right
-		class="fixed transition"
+		class="transition"
 		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
 		:data-testid="dataTestId"
@@ -15,12 +15,14 @@
 			<v-btn
 				id="fab"
 				v-model="isSpeedDialExpanded"
+				role="menu"
 				color="primary"
 				fab
 				rounded
 				:small="isCollapsed"
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
+				:aria-label="ariaLabel ? ariaLabel : title"
 			>
 				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
 					{{ mdiClose }}
@@ -45,6 +47,8 @@
 					:to="action.to"
 					class="fab-action"
 					:data-testid="action.dataTestid"
+					role="menuitem"
+					:aria-label="action.ariaLabel ? action.ariaLabel : action.label"
 				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
@@ -71,6 +75,7 @@
 		:small="extended"
 		:href="href"
 		:class="classes"
+		:aria-label="ariaLabel ? ariaLabel : title"
 		:data-testid="dataTestId"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
@@ -106,6 +111,11 @@ export default {
 			type: String,
 			required: false,
 			default: "",
+		},
+		ariaLabel: {
+			type: String,
+			required: false,
+			default: null,
 		},
 		dataTestId: {
 			type: String,

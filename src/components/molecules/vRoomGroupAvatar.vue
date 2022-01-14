@@ -22,9 +22,16 @@
 				:width="size"
 				outlined
 				class="ma-0 card-component"
+				:aria-label="
+					$t('pages.rooms.a11y.group.text', {
+						title: data.title,
+						itemCount: data.groupElements.length,
+					})
+				"
 				@click.prevent="$emit('clicked', data.id)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="$emit('clicked', data.id)"
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"
@@ -34,6 +41,7 @@
 					:can-draggable="draggable"
 					:col-count="itemSpecs.columnCount"
 					:max-items="itemSpecs.maxItem"
+					tabindex="-1"
 				/>
 			</v-card>
 			<div class="justify-left mt-1 sub-title">

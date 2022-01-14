@@ -102,6 +102,15 @@ describe("vRoomAvatar", () => {
 		expect(location.pathname).toStrictEqual("/courses/456");
 	});
 
+	it("should redirect to course page if keyboard event triggered", async () => {
+		const location = window.location;
+		const wrapper = getWrapper(propsData);
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("keypress.enter");
+		expect(location.pathname).toStrictEqual("/courses/456");
+	});
+
 	it("should not redirect to course page if condenseLayout props is true", async () => {
 		const location = window.location;
 		const wrapper = getWrapper({

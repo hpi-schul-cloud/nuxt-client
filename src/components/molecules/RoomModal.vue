@@ -11,6 +11,7 @@
 				ref="roomNameInput"
 				v-model="groupData.title"
 				dense
+				:aria-label="$t('common.labels.title')"
 				:append-icon="mdiKeyboardReturn"
 				@blur="onUpdateRoomName"
 				@keyup.enter="onRoomNameInputEnter"
@@ -18,7 +19,7 @@
 			<h2
 				v-show="!roomNameEditMode"
 				class="text-h4 my-2"
-				tabindex="5"
+				tabindex="0"
 				@click="onEditRoom"
 				@focus="onEditRoom"
 			>

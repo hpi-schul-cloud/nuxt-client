@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header sticky" :aria-label="ariaLabel" tabindex="0">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -21,6 +21,7 @@
 						:actions="fabItems.actions"
 						:class="fabItems.class"
 						class="wireframe-fab"
+						:aria-label="fabItems.ariaLabel"
 					></v-custom-fab>
 				</slot>
 			</div>
@@ -56,6 +57,7 @@ type FabAction = {
 	dataTestid?: String;
 	class?: String;
 	testId?: String;
+	ariaLabel?: String;
 };
 
 export type Fab = {
@@ -89,6 +91,10 @@ export default {
 			type: Object,
 			required: false,
 			default: null,
+		},
+		ariaLabel: {
+			type: String,
+			default: "",
 		},
 	},
 };
@@ -136,10 +142,16 @@ export default {
 	background-color: var(--color-white);
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get($display-breakpoints, 'lg-and-up')} {
 	.wireframe-fab {
 		position: relative;
 		top: 0;
+	}
+}
+
+@media #{map-get($display-breakpoints, 'md-and-down')} {
+	.wireframe-fab {
+		position: fixed !important;
 	}
 }
 

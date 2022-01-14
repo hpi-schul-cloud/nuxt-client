@@ -41,6 +41,19 @@ describe("@components/atoms/vCustomFab", () => {
 
 			expect(wrapper.classes()).toContain("v-size--default");
 		});
+
+		it("should have aria label", () => {
+			const wrapper = getWrapper({
+				...simpleFab,
+				ariaLabel: "dummy aria label",
+			});
+
+			const attributes = wrapper.element.attributes;
+
+			expect(wrapper.element.getAttribute("aria-label")).toContain(
+				"dummy aria label"
+			);
+		});
 	});
 
 	describe("when fab is extended", () => {
@@ -121,6 +134,7 @@ describe("@components/atoms/vCustomFab", () => {
 					label: "Add User",
 					icon: mdiAccountPlus,
 					to: "/",
+					ariaLabel: "Custom Aria Label",
 				},
 				{
 					label: "Delete User",
@@ -161,6 +175,20 @@ describe("@components/atoms/vCustomFab", () => {
 			const wrapper = getWrapper({ ...multipleActionsExtendedFab });
 
 			expect(wrapper.classes()).toContain("v-speed-dial--direction-top");
+		});
+
+		it("should have aria-labels", async () => {
+			const wrapper = getWrapper({ ...multipleActionsExtendedFab });
+			wrapper.setData({ isSpeedDialExpanded: true });
+			await wrapper.vm.$nextTick();
+			const actionButtons = wrapper.findAll(".fab-action").wrappers;
+
+			expect(actionButtons[0].element.getAttribute("aria-label")).toContain(
+				"Custom Aria Label"
+			);
+			expect(actionButtons[1].element.getAttribute("aria-label")).toContain(
+				"Delete User"
+			);
 		});
 
 		it.todo("should open speed dial menu on click");

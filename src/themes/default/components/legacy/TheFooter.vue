@@ -43,6 +43,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 export default {
 	data() {
@@ -57,7 +58,7 @@ export default {
 			return new Date().getFullYear();
 		},
 		links() {
-			return [
+			const links = [
 				{
 					to: "/imprint",
 					text: this.$t("components.legacy.footer.imprint"),
@@ -82,15 +83,20 @@ export default {
 					href: "https://github.com/hpi-schul-cloud",
 					text: this.$t("components.legacy.footer.github"),
 				},
-				{
-					href: "https://status.hpi-schul-cloud.de",
-					text: this.$t("components.legacy.footer.status"),
-				},
-				{
-					to: "/security",
-					text: this.$t("components.legacy.footer.security"),
-				},
 			];
+			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
+				links.push({
+					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
+					text: this.$t("components.legacy.footer.status"),
+					target: "_blank",
+					rel: "noopener",
+				});
+			}
+			links.push({
+				to: "/security",
+				text: this.$t("components.legacy.footer.security"),
+			});
+			return links;
 		},
 	},
 	mounted() {

@@ -1,5 +1,11 @@
 <template>
-	<default-wireframe ref="main" headline="" :full-width="true" :fab-items="fab">
+	<default-wireframe
+		ref="main"
+		headline=""
+		:full-width="true"
+		:fab-items="fab"
+		:aria-label="sectionAriaLabel"
+	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
 				{{ $t("pages.courses.index.courses.active") }}
@@ -36,6 +42,7 @@
 				rounded
 				:label="$t('pages.rooms.index.search.label')"
 				:append-icon="mdiMagnify"
+				:aria-label="$t('common.labels.search')"
 				data-testid="search-field"
 			>
 			</v-text-field>
@@ -99,9 +106,11 @@
 		<room-modal
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
+			aria-describedby="folder open"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
 			:draggable="allowDragging"
+			tabindex="0"
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
@@ -167,6 +176,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.labels.course"),
 					href: "/courses/add",
+					ariaLabel: this.$t("pages.courses.new.title"),
 					testId: "add-course-button",
 				};
 			}
@@ -201,6 +211,11 @@ export default {
 		},
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
+		},
+		sectionAriaLabel() {
+			return this.$t("pages.rooms.headerSection.ariaLabel", {
+				itemCount: this.items.length,
+			});
 		},
 	},
 	async mounted() {
@@ -356,6 +371,13 @@ export default {
 			RoomsModule.update(payload);
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.courses.index.courses.active")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>
 
@@ -383,5 +405,12 @@ export default {
 	.toggle-div {
 		display: inline-block;
 	}
+}
+
+::v-deep .v-messages {
+	display: none;
+}
+::v-deep .v-input {
+	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
 }
 </style>
