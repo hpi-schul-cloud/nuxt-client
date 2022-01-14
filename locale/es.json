@@ -666,6 +666,7 @@
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
 	"pages.rooms.index.search.label": "Buscar curso",
+	"pages.rooms.headerSection.legacyView": "A la vista clásica",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos, presione Intro para abrir",
 	"pages.rooms.headerSection.ariaLabel": "Lista de cursos actuales {itemCount} elementos",

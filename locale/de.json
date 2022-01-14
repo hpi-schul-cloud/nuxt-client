@@ -664,6 +664,7 @@
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
 	"pages.rooms.index.search.label": "Kurs suchen",
+	"pages.rooms.headerSection.legacyView": "Zur klassischen Ansicht",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse, zum Öffnen die Eingabetaste drücken",
 	"pages.rooms.headerSection.ariaLabel": "Liste der aktuellen Kurse {itemCount} Elemente",

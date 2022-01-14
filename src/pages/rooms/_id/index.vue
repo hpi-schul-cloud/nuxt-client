@@ -5,6 +5,23 @@
 		:full-width="true"
 		:aria-label="roomData.title"
 	>
+		<template slot="header">
+			<h1 class="text-h3 pt-2">
+				{{ roomData.title }}
+			</h1>
+			<div class="mb-5 header-div">
+				<div class="btn">
+					<v-btn
+						color="secondary"
+						outlined
+						small
+						:to="`/courses/${roomData.roomId}`"
+						:data-testid="`room-${roomData.roomId}`"
+						>{{ $t("pages.rooms.headerSection.legacyView") }}
+					</v-btn>
+				</div>
+			</div>
+		</template>
 		<room-dashboard :items="roomData.elements" />
 	</default-wireframe>
 </template>
