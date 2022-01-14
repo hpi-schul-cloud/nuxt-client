@@ -12,6 +12,8 @@ import {
 	//UserApi,
 	UserApiInterface,
 	ImportUserListResponse,
+	UserDetailsListResponse,
+	ImportUserResponseRoleNamesEnum,
 	//ImportUserResponse,
 	//ImportUserResponseRoleNamesEnum,
 	//UpdateMatchParams,
@@ -36,30 +38,31 @@ export class ImportUsers extends VuexModule {
 		limit: 0,
 	};
 
+	userList: UserDetailsListResponse = {
+		data: [],
+		total: 0,
+		skip: 0,
+		limit: 0,
+	};
+
 	firstName: string = '';
 	lastName: string = '';
 	loginName: string = '';
-	role: string = '';
+	role: ImportUserResponseRoleNamesEnum | '' = '';
 	classes: string = '';
 	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
-
-
 	flagged: boolean = false;
+
+	search: string = '';
 
 	limit: number = 10;
 	skip: number = 0;
 	sortBy: any = '';
 	sortOrder: any = 'asc';
 
-	loading: boolean = false;
 	error: null | {} = null;
 
 	private _userApi?: UserApiInterface;
-
-	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -77,7 +80,7 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setRole(role: string): void {
+	setRole(role: ImportUserResponseRoleNamesEnum): void {
 		this.role = role;
 	}
 
@@ -130,12 +133,25 @@ export class ImportUsers extends VuexModule {
 		return this.importUserList;
 	}
 
+
+	@Mutation
+	setSearch(search: string): void {
+		this.search = search;
+	}
+
+	@Mutation
+	setUsersList(importUsersList: UserDetailsListResponse): void {
+		this.userList = importUsersList;
+	}
+
+	get getUserList(): UserDetailsListResponse {
+		return this.userList;
+	}
+
 	@Action
 	async fetchAllElements(): Promise<void> {
-		this.setLoading(true);
 		try {
 			return this.userApi
-				// TODO filter by role
 				.importUserControllerFindAll(
 					this.firstName ? this.firstName : undefined,
 					this.lastName ? this.lastName : undefined,
@@ -150,14 +166,30 @@ export class ImportUsers extends VuexModule {
 					this.limit
 				)
 				.then((data) => {
-					//console.log(data)
 					this.setImportUsersList(data.data);
 				});
 		} catch (error: any) {
 			this.setError(error);
-			this.setLoading(false);
 		}
 	}
+
+	@Action
+	async fetchAllUsers(): Promise<void> {
+		try {
+			return this.userApi
+				.importUserControllerFindAllUnassignedUsers(
+					this.search ? this.search : undefined,
+					this.skip,
+					this.limit
+				)
+				.then((data) => {
+					this.setUsersList(data.data);
+				});
+		} catch (error: any) {
+			this.setError(error);
+		}
+	}
+
 
 	private get userApi(): UserApiInterface {
 		if (!this._userApi) {

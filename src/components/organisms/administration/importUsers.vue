@@ -109,15 +109,15 @@
 				<template v-slot:item.match="{ item }">
 					<div class="text-no-wrap">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-						{{ getMatch(item.match) }}
-						<v-btn class="ma-2" text icon color="">
-							<v-icon small @click="editItem(item)">{{ mdiPencil }}</v-icon>
+						{{ item.match ? `${match.firstName} ${match.lastName}` : 'Neu Erstellen' }}
+						<v-btn class="ma-2" text icon @click="editItem(item)">
+							<v-icon small>{{ mdiPencil }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="primary" class="ma-2">
+					<v-btn v-if="item.flagged" icon color="primary" class="ma-2" >
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
 					<v-btn v-else icon class="ma-2">
@@ -242,10 +242,6 @@ export default Vue.extend({
 			console.log("dialogEdit", val);
 			val || this.closeEdit();
 		},
-		dialogDelete(val) {
-			console.log(`dialogDelete ${val}`);
-			val || this.closeDelete();
-		},
 		options: {
 			async handler() {
 				await this.getDataFromApi();
@@ -275,12 +271,6 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		getMatch(match) {
-			if (match) {
-				return `${match.firstName} ${match.lastName}`;
-			}
-			return "Neu erstellen";
-		},
 		getMatchedByIcon(match) {
 			if (!match || !match.matchedBy) {
 				return mdiAccountPlus;

@@ -809,6 +809,85 @@ export interface UpdateNewsParams {
 /**
  * 
  * @export
+ * @interface UserDetailsListResponse
+ */
+export interface UserDetailsListResponse {
+    /**
+     * 
+     * @type {Array<UserDetailsResponse>}
+     * @memberof UserDetailsListResponse
+     */
+    data: Array<UserDetailsResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDetailsListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDetailsListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDetailsListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface UserDetailsResponse
+ */
+export interface UserDetailsResponse {
+    /**
+     * local user id
+     * @type {string}
+     * @memberof UserDetailsResponse
+     */
+    userId: string;
+    /**
+     * login name of local user
+     * @type {string}
+     * @memberof UserDetailsResponse
+     */
+    loginName: string;
+    /**
+     * firstname of local user
+     * @type {string}
+     * @memberof UserDetailsResponse
+     */
+    firstName: string;
+    /**
+     * lastname of local user
+     * @type {string}
+     * @memberof UserDetailsResponse
+     */
+    lastName: string;
+    /**
+     * list of user roles from external system: student, teacher, admin
+     * @type {string}
+     * @memberof UserDetailsResponse
+     */
+    roleNames: UserDetailsResponseRoleNamesEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum UserDetailsResponseRoleNamesEnum {
+    Student = 'student',
+    Teacher = 'teacher',
+    Admin = 'admin'
+}
+
+/**
+ * 
+ * @export
  * @interface UserInfoResponse
  */
 export interface UserInfoResponse {
@@ -2257,7 +2336,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
-         * @param {string} [role] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
          * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2265,7 +2344,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAll: async (firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerFindAll: async (firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2316,6 +2395,54 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (sortOrder !== undefined) {
                 localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFindAllUnassignedUsers: async (name?: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/unassigned`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
             }
 
             if (skip !== undefined) {
@@ -2468,7 +2595,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
-         * @param {string} [role] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
          * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2476,8 +2603,20 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
+        async importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAll(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDetailsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllUnassignedUsers(name, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2528,7 +2667,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
-         * @param {string} [role] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
          * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2536,8 +2675,19 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
+        importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
             return localVarFp.importUserControllerFindAll(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse> {
+            return localVarFp.importUserControllerFindAllUnassignedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2583,7 +2733,7 @@ export interface UserApiInterface {
      * @param {Array<'auto' | 'admin' | 'none'>} [match] 
      * @param {boolean} [flagged] 
      * @param {string} [classes] 
-     * @param {string} [role] 
+     * @param {'student' | 'teacher' | 'admin'} [role] 
      * @param {string} [sortBy] 
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2592,7 +2742,18 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
+    importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse>;
 
     /**
      * 
@@ -2638,7 +2799,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {Array<'auto' | 'admin' | 'none'>} [match] 
      * @param {boolean} [flagged] 
      * @param {string} [classes] 
-     * @param {string} [role] 
+     * @param {'student' | 'teacher' | 'admin'} [role] 
      * @param {string} [sortBy] 
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2647,8 +2808,21 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: string, sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any) {
+    public importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any) {
         return UserApiFp(this.configuration).importUserControllerFindAll(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any) {
+        return UserApiFp(this.configuration).importUserControllerFindAllUnassignedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
