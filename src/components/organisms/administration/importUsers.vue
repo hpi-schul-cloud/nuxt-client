@@ -109,7 +109,11 @@
 				<template v-slot:item.match="{ item }">
 					<div class="text-no-wrap">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-						{{ item.match ? `${match.firstName} ${match.lastName}` : 'Neu Erstellen' }}
+						{{
+							item.match
+								? `${match.firstName} ${match.lastName}`
+								: "Neu Erstellen"
+						}}
 						<v-btn class="ma-2" text icon @click="editItem(item)">
 							<v-icon small>{{ mdiPencil }}</v-icon>
 						</v-btn>
@@ -117,7 +121,7 @@
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="primary" class="ma-2" >
+					<v-btn v-if="item.flagged" icon color="primary" class="ma-2">
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
 					<v-btn v-else icon class="ma-2">
