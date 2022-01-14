@@ -352,10 +352,10 @@ export default {
 			) {
 				return null;
 			}
-			const title = this.$t("common.labels.teacher");
+
 			return {
 				icon: mdiPlus,
-				title,
+				title: this.$t("common.labels.teacher"),
 				testId: "fab_button_teachers_table",
 				ariaLabel: this.$t("pages.administration.teachers.new.title"),
 				actions: [
