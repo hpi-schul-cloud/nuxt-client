@@ -1,11 +1,13 @@
 <template>
-	<v-hover v-model="onHover" :disabled="isMenuActive">
+	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:ripple="false"
 			:href="taskHref(task.id)"
+			@keydown.space.prevent="$router.push(taskHref(task.id))"
+			@focus="handleFocus(true)"
 		>
 			<v-list-item-avatar>
 				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
@@ -54,22 +56,23 @@
 					}}</v-list-item-title>
 				</v-list-item-action>
 			</section>
-			<v-list-item-action class="context-menu-btn">
+			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
 				<v-menu
 					bottom
 					left
 					offset-y
-					close-on-click
-					@update:return-value="handleHover(true)"
+					:attach="`#task-menu-${task.id}`"
+					@update:return-value="toggleMenu(false)"
 				>
 					<template v-slot:activator="{ on, attrs, value }">
 						<v-btn
-							v-show="onHover"
+							v-show="showMenu"
 							v-bind="attrs"
 							icon
 							:data-testId="`task-menu-${task.name}`"
 							v-on="on"
-							@click.prevent="handleHover(value)"
+							@click.prevent="toggleMenu(!value)"
+							@keydown.space.stop="toggleMenu(!value)"
 						>
 							<v-icon>{{ mdiDotsVertical }}</v-icon>
 						</v-btn>
@@ -118,7 +121,8 @@ export default {
 			mdiDotsVertical,
 			mdiPencilOutline,
 			isMenuActive: false,
-			onHover: true,
+			isHovering: false,
+			isActive: false,
 		};
 	},
 	computed: {
@@ -126,10 +130,8 @@ export default {
 			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
 		},
 		iconColor() {
-			return this.task.displayColor || this.defaultIconColor;
-		},
-		defaultIconColor() {
-			return "#54616e";
+			const defaultColor = "#54616e";
+			return this.task.displayColor || defaultColor;
 		},
 		isDraft() {
 			return this.task.status.isDraft;
@@ -149,14 +151,14 @@ export default {
 				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
 				: "";
 		},
-	},
-	watch: {
-		"$vuetify.breakpoint.mobile": {
-			handler: "onBreakpointChanged",
+		showMenu() {
+			return (
+				this.$vuetify.breakpoint.mobile ||
+				this.isHovering ||
+				this.isActive ||
+				this.isMenuActive
+			);
 		},
-	},
-	mounted() {
-		this.handleHover(true);
 	},
 	methods: {
 		computedDueDateLabel(dueDate) {
@@ -171,13 +173,16 @@ export default {
 		taskHref: (id) => {
 			return `/homework/${id}`;
 		},
-		handleHover(value) {
-			const stateValue = this.$vuetify.breakpoint.mobile ? true : !value;
-			this.$set(this, "isMenuActive", stateValue);
-			this.$set(this, "onHover", stateValue);
+		toggleMenu(stateValue) {
+			this.isMenuActive = stateValue;
+			this.isHovering = stateValue;
 		},
-		onBreakpointChanged(val) {
-			this.handleHover(!val);
+		handleFocus(value) {
+			console.log("hi", this.task.id);
+			this.isActive = value;
+		},
+		handle(e, text) {
+			console.log(text, e);
 		},
 	},
 };
