@@ -109,15 +109,31 @@
 				<template v-slot:item.match="{ item }">
 					<div class="text-no-wrap">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-						{{ item.match ? `${match.firstName} ${match.lastName}` : 'Neu erstellen' }}
-						<v-btn class="ma-2" text icon title="bearbeite" @click="editItem(item)">
+						{{
+							item.match
+								? `${match.firstName} ${match.lastName}`
+								: "Neu erstellen"
+						}}
+						<v-btn
+							class="ma-2"
+							text
+							icon
+							title="bearbeite"
+							@click="editItem(item)"
+						>
 							<v-icon small>{{ mdiPencil }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="primary" class="ma-2" title="markiere">
+					<v-btn
+						v-if="item.flagged"
+						icon
+						color="primary"
+						class="ma-2"
+						title="markiere"
+					>
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
 					<v-btn v-else icon class="ma-2" title="markiere">
@@ -129,11 +145,15 @@
 			<p class="text-sm">
 				<b>Legende</b>
 				<br />
-				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>  {{ this.$theme.short_name }} Benutzer nicht gefunden. Das Konto wird neu erstellt.
+				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
+				{{ this.$theme.short_name }} Benutzer nicht gefunden. Das Konto wird neu
+				erstellt.
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> Konto von Admin mit {{ this.$theme.short_name }} Benutzer verknüpft.
+				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> Konto von
+				Admin mit {{ this.$theme.short_name }} Benutzer verknüpft.
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> Konto automatish mit {{ this.$theme.short_name }} Benutzer vverknüpft.
+				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> Konto
+				automatish mit {{ this.$theme.short_name }} Benutzer vverknüpft.
 			</p>
 			<v-divider></v-divider>
 			<br />
