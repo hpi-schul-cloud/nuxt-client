@@ -25,11 +25,12 @@
 						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<p>
 								In den folgenden Schritten besteht die Möglichkeit, die lokalen
-								Benutzerkonten auf das <i>zentrale LDAP-System des Landes
-                Brandenburg</i> zu migrieren. Dies bedeutet, dass Informationen zu
-								Benutzerkonten wie Name, E-Mail-Adresse und Berechtigungsrolle
-								nicht mehr lokal in der {{ this.$theme.short_name }}, sondern zentral in
-								weBBschule gepflegt und von dort bezogen werden.
+								Benutzerkonten auf das
+								<i>zentrale LDAP-System des Landes Brandenburg</i> zu migrieren.
+								Dies bedeutet, dass Informationen zu Benutzerkonten wie Name,
+								E-Mail-Adresse und Berechtigungsrolle nicht mehr lokal in der
+								{{ this.$theme.short_name }}, sondern zentral in weBBschule
+								gepflegt und von dort bezogen werden.
 							</p>
 							<p>
 								Damit User ihre alten Unterrichtsinhalte mit den LDAP-Accounts
@@ -65,8 +66,8 @@
 									manuell vorgenommen werden.
 								</li>
 								<li>
-									LDAP-Konten ohne Zuordnung werden in der {{ this.$theme.short_name }} neu
-									erstellt.
+									LDAP-Konten ohne Zuordnung werden in der
+									{{ this.$theme.short_name }} neu erstellt.
 								</li>
 								<li>
 									Nicht mehr benötigte lokale Benutzerkonten, die keinem
@@ -106,18 +107,21 @@
 							<p>Folgende Zuordnungen wurden vorgenommen:</p>
 							<br />
 							<p>
-								<b>xxx</b> LDAP-Benutzerkonten haben ein {{ this.$theme.short_name }} Benutzerkonto
-								zugeordnet. Die {{ this.$theme.short_name }} Benutzerkonten werden auf die
+								<b>xxx</b> LDAP-Benutzerkonten haben ein
+								{{ this.$theme.short_name }} Benutzerkonto zugeordnet. Die
+								{{ this.$theme.short_name }} Benutzerkonten werden auf die
 								LDAP-Konten migriert
 							</p>
 							<p>
 								<b>yyy</b> LDAP-Benutzerkonten haben kein lokales Benutzerkonto
-								zugeordnet. Die LDAP-Konten werden neu in der {{ this.$theme.short_name }}
+								zugeordnet. Die LDAP-Konten werden neu in der
+								{{ this.$theme.short_name }}
 								erstellt.
 							</p>
 							<p>
-								<b>zzz</b> {{ this.$theme.short_name }} Benutzerkonten wurden keinem LDAP-Konto
-								zugeordnet. Die {{ this.$theme.short_name }} Benutzerkonten bleiben erhalten und
+								<b>zzz</b> {{ this.$theme.short_name }} Benutzerkonten wurden
+								keinem LDAP-Konto zugeordnet. Die
+								{{ this.$theme.short_name }} Benutzerkonten bleiben erhalten und
 								können über die Verwaltungsseite nachträglich gelöscht werden.
 							</p>
 							<br />
@@ -136,7 +140,12 @@
 							>Migration durchführen</v-btn
 						>
 					</v-stepper-content>
-					<v-stepper-content v-if="canStartMigration && migrationConfirm /* && canFinishMigration */" step="4">
+					<v-stepper-content
+						v-if="
+							canStartMigration && migrationConfirm /* && canFinishMigration */
+						"
+						step="4"
+					>
 						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<p>
 								Die Migration der Benutzerkonten wurde erfolgreich durchgeführt.
@@ -174,14 +183,14 @@ export default {
 			migrationConfirm: false,
 		};
 	},
-  computed: {
-    canStartMigration() {
-      return this.school.inUserMigration && this.school.inMaintenance;
-    },
-    school() {
-      return SchoolsModule.getSchool;
-    },
-  },
+	computed: {
+		canStartMigration() {
+			return this.school.inUserMigration && this.school.inMaintenance;
+		},
+		school() {
+			return SchoolsModule.getSchool;
+		},
+	},
 	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
