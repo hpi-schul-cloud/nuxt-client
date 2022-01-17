@@ -177,7 +177,7 @@ export class ImportUsers extends VuexModule {
 	async fetchAllUsers(): Promise<void> {
 		try {
 			return this.userApi
-				.importUserControllerFindAllUnassignedUsers(
+				.importUserControllerFindAllUnmatchedUsers(
 					this.search ? this.search : undefined,
 					this.skip,
 					this.limit

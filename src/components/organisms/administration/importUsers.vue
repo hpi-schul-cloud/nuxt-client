@@ -111,7 +111,7 @@
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
 							item.match
-								? `${match.firstName} ${match.lastName}`
+								? `${item.match.firstName} ${item.match.lastName}`
 								: "Neu erstellen"
 						}}
 						<v-btn

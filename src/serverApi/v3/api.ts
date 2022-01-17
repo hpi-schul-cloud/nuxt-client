@@ -2424,7 +2424,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAllUnassignedUsers: async (name?: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerFindAllUnmatchedUsers: async (name?: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import/unassigned`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2615,8 +2615,8 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDetailsListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllUnassignedUsers(name, skip, limit, options);
+        async importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDetailsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2636,7 +2636,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserMatchResponse>> {
+        async importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateMatch(id, updateMatchParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2686,8 +2686,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse> {
-            return localVarFp.importUserControllerFindAllUnassignedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
+        importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse> {
+            return localVarFp.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2705,7 +2705,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<UserMatchResponse> {
+        importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
             return localVarFp.importUserControllerUpdateMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2753,7 +2753,7 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse>;
+    importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse>;
 
     /**
      * 
@@ -2772,7 +2772,7 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<UserMatchResponse>;
+    importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -2821,8 +2821,8 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public importUserControllerFindAllUnassignedUsers(name?: string, skip?: number, limit?: number, options?: any) {
-        return UserApiFp(this.configuration).importUserControllerFindAllUnassignedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any) {
+        return UserApiFp(this.configuration).importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
