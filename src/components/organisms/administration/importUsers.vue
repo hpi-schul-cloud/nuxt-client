@@ -28,7 +28,7 @@
 							<v-text-field
 								v-model="searchFirstName"
 								type="string"
-								label="Search first name"
+								label="Suche nach Vorname"
 								clearable
 							></v-text-field>
 						</td>
@@ -36,7 +36,7 @@
 							<v-text-field
 								v-model="searchLastName"
 								type="string"
-								label="Search last name"
+								label="Suche nach Nachname"
 								clearable
 							></v-text-field>
 						</td>
@@ -44,7 +44,7 @@
 							<v-text-field
 								v-model="searchLoginName"
 								type="string"
-								label="Search login Name"
+								label="Suche nach Nuzername"
 								clearable
 							></v-text-field>
 						</td>
@@ -52,7 +52,7 @@
 							<v-select
 								v-model="searchRole"
 								:items="roles"
-								label="Select Role"
+								label="Rolle wähle"
 								clearable
 							></v-select>
 						</td>
@@ -60,13 +60,13 @@
 							<v-text-field
 								v-model="searchClasses"
 								type="string"
-								label="Search Class"
+								label="Suche nach Klasse"
 								clearable
 							></v-text-field>
 						</td>
 						<td>
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
-								<v-btn icon value="none" title="Unmached" color="">
+								<v-btn icon value="none" title="nicht verknüpft" color="">
 									<v-icon
 										:color="
 											searchMatchedBy.includes('none') ? 'primary' : 'secondary'
@@ -74,7 +74,7 @@
 										>{{ mdiAccountPlus }}</v-icon
 									>
 								</v-btn>
-								<v-btn icon value="admin" title="Manually mached" color="">
+								<v-btn icon value="admin" title="von admin verknüpft" color="">
 									<v-icon
 										:color="
 											searchMatchedBy.includes('admin')
@@ -84,7 +84,7 @@
 										>{{ mdiAccountSwitch }}</v-icon
 									>
 								</v-btn>
-								<v-btn icon value="auto" title="Automatic matched" color="">
+								<v-btn icon value="auto" title="automatisch verknüpft" color="">
 									<v-icon
 										:color="
 											searchMatchedBy.includes('auto') ? 'primary' : 'secondary'
@@ -109,34 +109,31 @@
 				<template v-slot:item.match="{ item }">
 					<div class="text-no-wrap">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
-						{{ item.match ? `${match.firstName} ${match.lastName}` : 'Neu Erstellen' }}
-						<v-btn class="ma-2" text icon @click="editItem(item)">
+						{{ item.match ? `${match.firstName} ${match.lastName}` : 'Neu erstellen' }}
+						<v-btn class="ma-2" text icon title="bearbeite" @click="editItem(item)">
 							<v-icon small>{{ mdiPencil }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn v-if="item.flagged" icon color="primary" class="ma-2" >
+					<v-btn v-if="item.flagged" icon color="primary" class="ma-2" title="markiere">
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else icon class="ma-2">
+					<v-btn v-else icon class="ma-2" title="markiere">
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</v-data-table>
 
 			<p class="text-sm">
-				<b>Legend</b>
+				<b>Legende</b>
 				<br />
-				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon> - Local account
-				not matched. User will be created new
+				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>  {{ this.$theme.short_name }} Benutzer nicht gefunden. Das Konto wird neu erstellt.
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> - Matched to
-				local account manually
+				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> Konto von Admin mit {{ this.$theme.short_name }} Benutzer verknüpft.
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> -
-				Matched to local account automatically
+				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> Konto automatish mit {{ this.$theme.short_name }} Benutzer vverknüpft.
 			</p>
 			<v-divider></v-divider>
 			<br />
@@ -215,16 +212,16 @@ export default Vue.extend({
 		tableHead() {
 			return [
 				{
-					text: "First Name",
+					text: "Vorname",
 					value: "firstName",
 					sortable: true,
 				},
-				{ text: "Last Name", value: "lastName", sortable: true },
-				{ text: "Login", value: "loginName", sortable: false },
-				{ text: "Roles", value: "roleNames", sortable: false },
-				{ text: "Classes", value: "classNames", sortable: false },
-				{ text: "Match", value: "match", sortable: false },
-				{ text: "Flagged", value: "flagged", sortable: false },
+				{ text: "Nachname", value: "lastName", sortable: true },
+				{ text: "Nutzername", value: "loginName", sortable: false },
+				{ text: "Rollen", value: "roleNames", sortable: false },
+				{ text: "Klassen", value: "classNames", sortable: false },
+				{ text: "Konten verknüpfen", value: "match", sortable: false },
+				{ text: "Markieren", value: "flagged", sortable: false },
 			];
 		},
 		canStartMigration() {

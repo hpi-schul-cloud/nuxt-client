@@ -4,7 +4,7 @@
         dark
         color="primary"
     >
-      <v-toolbar-title>Merge <strong>WebSchule</strong> account of {{ editedItem.firstName }} {{ editedItem.lastName }} with:</v-toolbar-title>
+      <v-toolbar-title>Verknüpfe <strong>weBBschule-Konto</strong>  von {{ editedItem.firstName }} {{ editedItem.lastName }} mit:</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn v-if="isDialog"
@@ -16,23 +16,22 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-card-text>
-      Search from <strong>{{ this.$theme.short_name }}</strong> <base-link target="_blank" :href="editedItem.roleNames.includes('teacher') ? '/administration/teachers' : '/administration/students'">existing accounts</base-link>
-      and click Save, in order to prepare the user accounts merging.
+      Suche in <strong>{{ this.$theme.short_name }}</strong>  <base-link target="_blank" :href="editedItem.roleNames.includes('teacher') ? '/administration/teachers' : '/administration/students'">bestehendes Benutzerkonten</base-link> und klicke "Speichern", um das Zusammenführen der Benutzerkonten vorzubereiten.
     </v-card-text>
     <v-card-text>
         <v-autocomplete
             v-model="model"
             :items="items"
-            :label="`Search ${this.$theme.short_name} accounts`"
+            :label="`${this.$theme.short_name} Benutzerkonto suchen`"
             :loading="loading"
             :search-input.sync="search"
             hide-no-data
             hide-selected
-            placeholder="Start typing to search account to merge"
+            placeholder="Vornamen oder Nachnamen eingeben"
             :prepend-inner-icon="mdiAccountSearch"
             return-object
             clearable
-            hint="or leave empty to create new"
+            hint="oder leer lassen, um ein neues Benutzerkonto zu erstellen."
             persistent-hint
             no-data-text="No data found"
             no-filter
@@ -47,18 +46,18 @@
         >
           Name: {{ model.firstName }} {{ model.lastName }}
           <br>
-          Login: {{ model.loginName }}
+          Rolle: {{ model.roleNames.join(', ') }}
           <br>
-          Role: {{ model.roleNames.join(', ') }}
+          Nutzername: {{ model.loginName }}
           <v-divider></v-divider>
         </div>
         <div>
           <br>
           <p>
-            New login: {{ editedItem.loginName }}
+            Neuer Nutzername: {{ editedItem.loginName }}
           </p>
           <p>
-            Flag this account:
+            Markiere dieses Konto:
             <v-btn v-if="editedItem.flagged" v-model="editedItem.flagged" icon color="primary" class="ma-2" >
               <v-icon color="primary">{{ mdiFlag }}</v-icon>
             </v-btn>
@@ -72,13 +71,13 @@
     <v-card-actions>
       <v-col class="col-6">
         <v-btn text class="primary m-2" @click="saveEdit">
-          <v-icon small>{{ mdiContentSave }}</v-icon>  Save</v-btn>
-        <v-btn v-if="isDialog" text class="m-2" @click="closeEdit">Cancel</v-btn>
+          <v-icon small>{{ mdiContentSave }}</v-icon>  Speichern </v-btn>
+        <v-btn v-if="isDialog" text class="m-2" @click="closeEdit">Abbrechen</v-btn>
       </v-col>
       <v-col class="col-6 text-right">
         <v-btn text class="secondary m-2" @click="deleteItem">
           <v-icon small>{{ mdiDelete }}</v-icon>
-          Delete
+          Auswahl löschen
         </v-btn>
       </v-col>
     </v-card-actions>
@@ -163,11 +162,10 @@ export default {
   },
   computed: {
     items () {
-      const itemsList = this.entries.map(user => {
+      return this.entries.map(user => {
         user.text = `${user.firstName} ${user.lastName}`;
         return user;
       });
-      return itemsList;
     },
   },
 
