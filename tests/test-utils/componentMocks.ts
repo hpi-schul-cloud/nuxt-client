@@ -12,7 +12,7 @@ type componentMockOptions = {
 			actions: any;
 		};
 	};
-	$route?: string;
+	$route?: string | any;
 	$router?: any;
 	router?: boolean;
 	uiState?: any;
