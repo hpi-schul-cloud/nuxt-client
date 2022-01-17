@@ -13,9 +13,10 @@
 				<div class="btn">
 					<v-btn
 						color="secondary"
+						class="back-button"
 						outlined
 						small
-						:to="`/courses/${roomData.roomId}`"
+						:href="`/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}`"
 						>{{ $t("pages.rooms.headerSection.legacyView") }}
 					</v-btn>
@@ -32,8 +33,6 @@ import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 
-import { RoomData } from "@store/types/room";
-
 export default Vue.extend({
 	components: {
 		DefaultWireframe,
@@ -41,7 +40,7 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	computed: {
-		roomData(): RoomData {
+		roomData() {
 			return RoomModule.getRoomData;
 		},
 	},
