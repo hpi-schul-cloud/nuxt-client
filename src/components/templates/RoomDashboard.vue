@@ -43,7 +43,6 @@ export default Vue.extend({
 @import "@styles";
 .rooms-container {
 	max-width: var(--size-content-width-max);
-	// max-width: 600px;
 	margin: 0 auto;
 }
 </style>

@@ -24,7 +24,7 @@ export type RoomData = {
 	elements: [
 		{
 			type: string;
-			content?: Task | {};
+			content: Task | {};
 		}
 	];
 };

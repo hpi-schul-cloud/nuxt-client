@@ -67,17 +67,12 @@ describe("@pages/rooms/index.vue", () => {
 		return mount(Room, {
 			...createComponentMocks({
 				i18n: true,
-				//@ts-ignore
-				vuetify: true,
 				$router,
-				//@ts-ignore
 				$route,
 			}),
 		});
 	};
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		RoomModule.setRoomData(mockData as any);
 	});
 
@@ -87,7 +82,7 @@ describe("@pages/rooms/index.vue", () => {
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("back-button should have correct path", async () => {
+	it("return to courses button should have correct path", async () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		// @ts-ignore

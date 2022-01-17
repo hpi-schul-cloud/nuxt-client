@@ -12,7 +12,6 @@ import {
 	RoomsApiFactory,
 	BoardResponse,
 } from "../serverApi/v3/api";
-// import { RoomData } from "./types/room";
 
 @Module({
 	name: "room",
