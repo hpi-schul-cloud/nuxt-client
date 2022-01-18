@@ -61,7 +61,7 @@
 					bottom
 					left
 					offset-y
-					:attach="`#task-menu-${task.id}`"
+					attach
 					@update:return-value="toggleMenu(false)"
 				>
 					<template v-slot:activator="{ on, attrs, value }">
@@ -178,11 +178,7 @@ export default {
 			this.isHovering = stateValue;
 		},
 		handleFocus(value) {
-			console.log("hi", this.task.id);
 			this.isActive = value;
-		},
-		handle(e, text) {
-			console.log(text, e);
 		},
 	},
 };
