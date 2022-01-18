@@ -312,10 +312,10 @@ export interface ImportUserResponse {
     classNames: Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {UserMatchResponse}
+     * @type {object}
      * @memberof ImportUserResponse
      */
-    match?: UserMatchResponse;
+    match?: object;
     /**
      * manual flag to apply it as filter
      * @type {object}
@@ -809,85 +809,6 @@ export interface UpdateNewsParams {
 /**
  * 
  * @export
- * @interface UserDetailsListResponse
- */
-export interface UserDetailsListResponse {
-    /**
-     * 
-     * @type {Array<UserDetailsResponse>}
-     * @memberof UserDetailsListResponse
-     */
-    data: Array<UserDetailsResponse>;
-    /**
-     * 
-     * @type {number}
-     * @memberof UserDetailsListResponse
-     */
-    total: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UserDetailsListResponse
-     */
-    skip: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UserDetailsListResponse
-     */
-    limit: number;
-}
-/**
- * 
- * @export
- * @interface UserDetailsResponse
- */
-export interface UserDetailsResponse {
-    /**
-     * local user id
-     * @type {string}
-     * @memberof UserDetailsResponse
-     */
-    userId: string;
-    /**
-     * login name of local user
-     * @type {string}
-     * @memberof UserDetailsResponse
-     */
-    loginName: string;
-    /**
-     * firstname of local user
-     * @type {string}
-     * @memberof UserDetailsResponse
-     */
-    firstName: string;
-    /**
-     * lastname of local user
-     * @type {string}
-     * @memberof UserDetailsResponse
-     */
-    lastName: string;
-    /**
-     * list of user roles from external system: student, teacher, admin
-     * @type {string}
-     * @memberof UserDetailsResponse
-     */
-    roleNames: UserDetailsResponseRoleNamesEnum;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UserDetailsResponseRoleNamesEnum {
-    Student = 'student',
-    Teacher = 'teacher',
-    Admin = 'admin'
-}
-
-/**
- * 
- * @export
  * @interface UserInfoResponse
  */
 export interface UserInfoResponse {
@@ -913,46 +834,92 @@ export interface UserInfoResponse {
 /**
  * 
  * @export
- * @interface UserMatchResponse
+ * @interface UserListResponse
  */
-export interface UserMatchResponse {
+export interface UserListResponse {
+    /**
+     * 
+     * @type {Array<UserResponse>}
+     * @memberof UserListResponse
+     */
+    data: Array<UserResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface UserResponse
+ */
+export interface UserResponse {
     /**
      * local user id
      * @type {string}
-     * @memberof UserMatchResponse
+     * @memberof UserResponse
      */
     userId: string;
     /**
      * login name of local user
      * @type {string}
-     * @memberof UserMatchResponse
+     * @memberof UserResponse
      */
     loginName: string;
     /**
      * firstname of local user
      * @type {string}
-     * @memberof UserMatchResponse
+     * @memberof UserResponse
      */
     firstName: string;
     /**
      * lastname of local user
      * @type {string}
-     * @memberof UserMatchResponse
+     * @memberof UserResponse
      */
     lastName: string;
     /**
+     * list of user roles from external system: student, teacher, admin
+     * @type {string}
+     * @memberof UserResponse
+     */
+    roleNames: UserResponseRoleNamesEnum;
+    /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
      * @type {string}
-     * @memberof UserMatchResponse
+     * @memberof UserResponse
      */
-    matchedBy: UserMatchResponseMatchedByEnum;
+    matchedBy?: UserResponseMatchedByEnum;
 }
 
 /**
     * @export
     * @enum {string}
     */
-export enum UserMatchResponseMatchedByEnum {
+export enum UserResponseRoleNamesEnum {
+    Student = 'student',
+    Teacher = 'teacher',
+    Admin = 'admin'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum UserResponseMatchedByEnum {
     Auto = 'auto',
     Admin = 'admin'
 }
@@ -2615,7 +2582,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDetailsListResponse>> {
+        async importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2686,7 +2653,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse> {
+        importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserListResponse> {
             return localVarFp.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2753,7 +2720,7 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserDetailsListResponse>;
+    importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserListResponse>;
 
     /**
      * 

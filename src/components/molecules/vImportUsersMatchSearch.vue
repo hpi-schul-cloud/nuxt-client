@@ -53,7 +53,7 @@
 				<div v-if="selectedItem">
 					Name: {{ selectedItem.firstName }} {{ selectedItem.lastName }}
 					<br />
-					Rolle: {{ selectedItem.roleNames.join(", ") }}
+					Rolle: {{ selectedItem.roleNames ? selectedItem.roleNames.join(", ") : '' }}
 					<br />
 					Nutzername: {{ selectedItem.loginName }}
 					<v-divider></v-divider>
@@ -205,7 +205,7 @@ export default {
 					firstName: this.editedItem.match.firstName,
 					lastName: this.editedItem.match.firstName,
 					loginName: this.editedItem.match.loginName,
-					roleNames: [], //TODO,
+					roleNames: this.editedItem.match.roleNames,
 				};
 				this.selectedItem = initMatch;
 				//return initMatch;
