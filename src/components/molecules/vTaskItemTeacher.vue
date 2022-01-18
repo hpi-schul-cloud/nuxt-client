@@ -2,13 +2,14 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
+			v-click-outside="handleClickOutside"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:ripple="false"
 			:href="taskHref(task.id)"
 			:aria-label="ariaLabel"
-			@keydown.space.prevent="$router.push(taskHref(task.id))"
 			@focus="handleFocus(true)"
+			@keydown.tab.shift="handleFocus(false)"
 		>
 			<v-list-item-avatar>
 				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
@@ -74,6 +75,8 @@
 							v-on="on"
 							@click.prevent="toggleMenu(!value)"
 							@keydown.space.stop="toggleMenu(!value)"
+							@focus="handleFocus(true)"
+							@blur="handleFocus(false)"
 						>
 							<v-icon>{{ mdiDotsVertical }}</v-icon>
 						</v-btn>
@@ -184,6 +187,9 @@ export default {
 		},
 		handleFocus(value) {
 			this.isActive = value;
+		},
+		handleClickOutside() {
+			this.isActive = false;
 		},
 	},
 };
