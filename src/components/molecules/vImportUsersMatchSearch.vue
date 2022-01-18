@@ -53,7 +53,8 @@
 				<div v-if="selectedItem">
 					Name: {{ selectedItem.firstName }} {{ selectedItem.lastName }}
 					<br />
-					Rolle: {{ selectedItem.roleNames ? selectedItem.roleNames.join(", ") : '' }}
+					Rolle:
+					{{ selectedItem.roleNames ? selectedItem.roleNames.join(", ") : "" }}
 					<br />
 					Nutzername: {{ selectedItem.loginName }}
 					<v-divider></v-divider>
