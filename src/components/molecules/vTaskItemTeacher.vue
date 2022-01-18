@@ -6,6 +6,7 @@
 			v-bind="$attrs"
 			:ripple="false"
 			:href="taskHref(task.id)"
+			:aria-label="ariaLabel"
 			@keydown.space.prevent="$router.push(taskHref(task.id))"
 			@focus="handleFocus(true)"
 		>
@@ -113,6 +114,10 @@ export default {
 			type: Object,
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
+		},
+		ariaLabel: {
+			type: String,
+			default: "",
 		},
 	},
 	data() {
