@@ -14,12 +14,14 @@ import {
 	ImportUserListResponse,
 	UserDetailsListResponse,
 	ImportUserResponseRoleNamesEnum,
+	//UpdateMatchParams, ImportUserResponse, UserDetailsResponse,
 	//ImportUserResponse,
 	//ImportUserResponseRoleNamesEnum,
 	//UpdateMatchParams,
 	//UserMatchResponse,
 	//UserMatchResponseMatchedByEnum,
 } from "@/serverApi/v3";
+import {BusinessError} from "@store/types/commons";
 
 // @ts-ignore
 @Module({
@@ -53,14 +55,18 @@ export class ImportUsers extends VuexModule {
 	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
 	flagged: boolean = false;
 
-	search: string = '';
-
 	limit: number = 10;
 	skip: number = 0;
 	sortBy: any = '';
 	sortOrder: any = 'asc';
 
-	error: null | {} = null;
+	userSearch: string = '';
+
+	// TODO
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+	};
 
 	private _userApi?: UserApiInterface;
 
@@ -120,8 +126,12 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
-		this.error = error;
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	get getBusinessError(): BusinessError {
+		return this.businessError;
 	}
 
 	@Mutation
@@ -135,8 +145,8 @@ export class ImportUsers extends VuexModule {
 
 
 	@Mutation
-	setSearch(search: string): void {
-		this.search = search;
+	setUserSearch(userSearch: string): void {
+		this.userSearch = userSearch;
 	}
 
 	@Mutation
@@ -149,7 +159,7 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Action
-	async fetchAllElements(): Promise<void> {
+	async fetchAllImportUsers(): Promise<void> {
 		try {
 			return this.userApi
 				.importUserControllerFindAll(
@@ -169,7 +179,7 @@ export class ImportUsers extends VuexModule {
 					this.setImportUsersList(data.data);
 				});
 		} catch (error: any) {
-			this.setError(error);
+			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
 
@@ -178,7 +188,7 @@ export class ImportUsers extends VuexModule {
 		try {
 			return this.userApi
 				.importUserControllerFindAllUnmatchedUsers(
-					this.search ? this.search : undefined,
+					this.userSearch ? this.userSearch : undefined,
 					this.skip,
 					this.limit
 				)
@@ -186,10 +196,18 @@ export class ImportUsers extends VuexModule {
 					this.setUsersList(data.data);
 				});
 		} catch (error: any) {
-			this.setError(error);
+			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
 
+	@Action
+	async saveMatch(payload: {importUserId: string, userId: string}): Promise<void> {
+		try {
+			await this.userApi.importUserControllerUpdateMatch(payload.importUserId, { userId: payload.userId } );
+		} catch (error: any) {
+			this.setBusinessError({ statusCode: '500', message: error });
+		}
+	}
 
 	private get userApi(): UserApiInterface {
 		if (!this._userApi) {

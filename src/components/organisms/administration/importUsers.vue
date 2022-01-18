@@ -6,6 +6,7 @@
 				:is-dialog="true"
 				:edited-index="editedIndex"
 				@close="closeEdit"
+        @savedMatch="savedMatch"
 			></v-import-users-match-search>
 		</v-dialog>
 
@@ -300,7 +301,6 @@ export default Vue.extend({
 			}
 		},
 		editItem(item) {
-			console.log(`editItem`, item);
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			this.dialogEdit = true;
@@ -312,6 +312,11 @@ export default Vue.extend({
 				this.editedIndex = -1;
 			});
 		},
+    async savedMatch() {
+      // TODO should reset page?
+      await this.searchApi();
+      this.closeEdit();
+    },
 		async searchApi() {
 			this.options.page = 1;
 			await this.getDataFromApi();
@@ -341,7 +346,7 @@ export default Vue.extend({
 				);
 			}
 
-			ImportUserModule.fetchAllElements().then(() => {
+			ImportUserModule.fetchAllImportUsers().then(() => {
 				this.importUsers = ImportUserModule.getImportUserList.data;
 				this.totalImportUsers = ImportUserModule.getImportUserList.total;
 				this.loading = false;

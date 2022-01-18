@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card :ripple="false">
 		<v-toolbar dark color="primary">
 			<v-toolbar-title
 				>Verknüpfe <strong>weBBschule-Konto</strong> von
@@ -29,33 +29,33 @@
 		</v-card-text>
 		<v-card-text>
 			<v-autocomplete
-				v-model="model"
-				:items="items"
-				:label="`${this.$theme.short_name} Benutzerkonto suchen`"
-				:loading="loading"
-				:search-input.sync="search"
-				hide-no-data
-				hide-selected
-				placeholder="Vornamen oder Nachnamen eingeben"
-				:prepend-inner-icon="mdiAccountSearch"
-				return-object
-				clearable
-				hint="oder leer lassen, um ein neues Benutzerkonto zu erstellen."
-				persistent-hint
-				no-data-text="No data found"
-				no-filter
-				item-value="importUserId"
+				v-model="selectedItem"
+        item-value="userId"
+        :items="items"
+        :label="`${this.$theme.short_name} Benutzerkonto suchen`"
+        :loading="loading"
+        :search-input.sync="searchUser"
+        hide-no-data
+        hide-selected
+        :prepend-inner-icon="mdiAccountSearch"
+        return-object
+        clearable
+        placeholder="Vornamen oder Nachnamen eingeben"
+        hint="oder leer lassen, um ein neues Benutzerkonto zu erstellen."
+        persistent-hint
+        no-data-text="No data found"
+        no-filter
 			></v-autocomplete>
 		</v-card-text>
 		<v-expand-transition>
 			<v-container>
 				<v-divider></v-divider>
-				<div v-if="model">
-					Name: {{ model.firstName }} {{ model.lastName }}
+				<div v-if="selectedItem">
+					Name: {{ selectedItem.firstName }} {{ selectedItem.lastName }}
 					<br />
-					Rolle: {{ model.roleNames.join(", ") }}
+					Rolle: {{ selectedItem.roleNames.join(", ") }}
 					<br />
-					Nutzername: {{ model.loginName }}
+					Nutzername: {{ selectedItem.loginName }}
 					<v-divider></v-divider>
 				</div>
 				<div>
@@ -81,7 +81,7 @@
 		</v-expand-transition>
 		<v-card-actions>
 			<v-col class="col-6">
-				<v-btn text class="primary m-2" @click="saveEdit">
+				<v-btn text class="primary m-2" @click="saveMatch">
 					<v-icon small>{{ mdiContentSave }}</v-icon> Speichern
 				</v-btn>
 				<v-btn v-if="isDialog" text class="m-2" @click="closeEdit"
@@ -89,7 +89,7 @@
 				>
 			</v-col>
 			<v-col class="col-6 text-right">
-				<v-btn text class="secondary m-2" @click="deleteItem">
+				<v-btn text class="secondary m-2" @click="deleteMatch">
 					<v-icon small>{{ mdiDelete }}</v-icon>
 					Auswahl löschen
 				</v-btn>
@@ -170,8 +170,8 @@ export default {
 			},
 			entries: [],
 			loading: false,
-			search: null,
-			model: this.editedItem.match,
+			searchUser: null,
+      selectedItem: null,
 		};
 	},
 	computed: {
@@ -184,17 +184,36 @@ export default {
 	},
 
 	watch: {
-		search(val) {
-			val && val !== this.select && this.getDataFromApi(val);
+		async searchUser(val) {
+      await this.getDataFromApi(val);
 		},
+    editedItem() {
+      this.getInitMatch();
+    },
 	},
 	created() {
 		this.getDataFromApi("");
+    this.getInitMatch();
 	},
 	methods: {
+    getInitMatch() {
+      if (this.editedItem.match) {
+        console.log('initMatch', this.editedItem.match)
+        const initMatch = {
+          text: `${this.editedItem.match.firstName} ${this.editedItem.match.lastName}`,
+          userId: this.editedItem.match.userId,
+          firstName: this.editedItem.match.firstName,
+          lastName: this.editedItem.match.firstName,
+          loginName: this.editedItem.match.loginName,
+          roleNames: [] //TODO,
+        };
+        this.selectedItem = initMatch;
+        //return initMatch;
+      }
+    },
 		async getDataFromApi(name) {
-			this.loading = true;
-			ImportUserModule.setSearch(name);
+      this.loading = true;
+			ImportUserModule.setUserSearch(name);
 			ImportUserModule.fetchAllUsers().then(() => {
 				this.count = ImportUserModule.getUserList.total;
 				this.entries = ImportUserModule.getUserList.data;
@@ -202,23 +221,25 @@ export default {
 			});
 		},
 		closeEdit() {
+      this.selectedItem = null;
 			this.$emit("close");
 		},
-		saveEdit() {
-			// TODO
-			if (this.editedIndex > -1) {
-				//Object.assign(this.desserts[this.editedIndex], this.editedItem)
-			} else {
-				// this.importUsers.push(this.editedItem)
-			}
-			this.closeEdit();
+		async saveMatch() {
+      if (this.selectedItem) {
+        this.loading = true;
+        await ImportUserModule.saveMatch({ importUserId: this.editedItem.importUserId, userId: this.selectedItem.userId });
+        this.loading = false;
+        this.$emit("savedMatch");
+      }
 		},
-		deleteItem(item) {
+		deleteMatch() {
 			// TODO
+      /*
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			// TODO persist in API
 			delete this.importUsers[this.editedIndex].match;
+       */
 			this.closeEdit();
 		},
 	},

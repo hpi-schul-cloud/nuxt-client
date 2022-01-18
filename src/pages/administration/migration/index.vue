@@ -4,6 +4,28 @@
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
+    <!--v-snackbar
+        v-model="businessError"
+        :timeout="timeout"
+        absolute
+        top
+        centered
+        class=""
+    >
+     text
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+            color="blue"
+            icon
+            v-bind="attrs"
+            @click="businessError = false"
+        >
+          <v-icon>{{ mdiClose }}</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar-->
+
 		<div slot="header">
 			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
 			<v-stepper v-model="progressStepper" flat>
@@ -155,7 +177,10 @@
 	</default-wireframe>
 </template>
 <script>
+//import { mdiClose } from "@mdi/js";
+
 import SchoolsModule from "@/store/schools";
+//import ImportUserModule from "@store/import-users";
 
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import ImportUsers from "@components/organisms/administration/importUsers";
@@ -164,6 +189,7 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
+      //mdiClose,
 			progressStepper: 1,
 			breadcrumbs: [
 				{
@@ -172,6 +198,12 @@ export default {
 				},
 			],
 			migrationConfirm: false,
+      /*
+      businessError: true,
+      businessErrorMessage: '',
+      businessErrorType: 'info',
+      timeout: 2500,
+      */
 		};
 	},
   computed: {
@@ -181,6 +213,14 @@ export default {
     school() {
       return SchoolsModule.getSchool;
     },
+  },
+  watch: {
+    /*
+    businessError() {
+      this.businessErrorMessage = ImportUserModule.getBusinessError.message;
+      this.businessErrorType = ImportUserModule.getBusinessError.statusCode === '500' ? 'error' : 'info';
+    }
+    */
   },
 	head() {
 		return {
