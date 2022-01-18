@@ -30,21 +30,21 @@
 		<v-card-text>
 			<v-autocomplete
 				v-model="selectedItem"
-        item-value="userId"
-        :items="items"
-        :label="`${this.$theme.short_name} Benutzerkonto suchen`"
-        :loading="loading"
-        :search-input.sync="searchUser"
-        hide-no-data
-        hide-selected
-        :prepend-inner-icon="mdiAccountSearch"
-        return-object
-        clearable
-        placeholder="Vornamen oder Nachnamen eingeben"
-        hint="oder leer lassen, um ein neues Benutzerkonto zu erstellen."
-        persistent-hint
-        no-data-text="No data found"
-        no-filter
+				item-value="userId"
+				:items="items"
+				:label="`${this.$theme.short_name} Benutzerkonto suchen`"
+				:loading="loading"
+				:search-input.sync="searchUser"
+				hide-no-data
+				hide-selected
+				:prepend-inner-icon="mdiAccountSearch"
+				return-object
+				clearable
+				placeholder="Vornamen oder Nachnamen eingeben"
+				hint="oder leer lassen, um ein neues Benutzerkonto zu erstellen."
+				persistent-hint
+				no-data-text="No data found"
+				no-filter
 			></v-autocomplete>
 		</v-card-text>
 		<v-expand-transition>
@@ -171,7 +171,7 @@ export default {
 			entries: [],
 			loading: false,
 			searchUser: null,
-      selectedItem: null,
+			selectedItem: null,
 		};
 	},
 	computed: {
@@ -185,34 +185,34 @@ export default {
 
 	watch: {
 		async searchUser(val) {
-      await this.getDataFromApi(val);
+			await this.getDataFromApi(val);
 		},
-    editedItem() {
-      this.getInitMatch();
-    },
+		editedItem() {
+			this.getInitMatch();
+		},
 	},
 	created() {
 		this.getDataFromApi("");
-    this.getInitMatch();
+		this.getInitMatch();
 	},
 	methods: {
-    getInitMatch() {
-      if (this.editedItem.match) {
-        console.log('initMatch', this.editedItem.match)
-        const initMatch = {
-          text: `${this.editedItem.match.firstName} ${this.editedItem.match.lastName}`,
-          userId: this.editedItem.match.userId,
-          firstName: this.editedItem.match.firstName,
-          lastName: this.editedItem.match.firstName,
-          loginName: this.editedItem.match.loginName,
-          roleNames: [] //TODO,
-        };
-        this.selectedItem = initMatch;
-        //return initMatch;
-      }
-    },
+		getInitMatch() {
+			if (this.editedItem.match) {
+				console.log("initMatch", this.editedItem.match);
+				const initMatch = {
+					text: `${this.editedItem.match.firstName} ${this.editedItem.match.lastName}`,
+					userId: this.editedItem.match.userId,
+					firstName: this.editedItem.match.firstName,
+					lastName: this.editedItem.match.firstName,
+					loginName: this.editedItem.match.loginName,
+					roleNames: [], //TODO,
+				};
+				this.selectedItem = initMatch;
+				//return initMatch;
+			}
+		},
 		async getDataFromApi(name) {
-      this.loading = true;
+			this.loading = true;
 			ImportUserModule.setUserSearch(name);
 			ImportUserModule.fetchAllUsers().then(() => {
 				this.count = ImportUserModule.getUserList.total;
@@ -221,20 +221,23 @@ export default {
 			});
 		},
 		closeEdit() {
-      this.selectedItem = null;
+			this.selectedItem = null;
 			this.$emit("close");
 		},
 		async saveMatch() {
-      if (this.selectedItem) {
-        this.loading = true;
-        await ImportUserModule.saveMatch({ importUserId: this.editedItem.importUserId, userId: this.selectedItem.userId });
-        this.loading = false;
-        this.$emit("savedMatch");
-      }
+			if (this.selectedItem) {
+				this.loading = true;
+				await ImportUserModule.saveMatch({
+					importUserId: this.editedItem.importUserId,
+					userId: this.selectedItem.userId,
+				});
+				this.loading = false;
+				this.$emit("savedMatch");
+			}
 		},
 		deleteMatch() {
 			// TODO
-      /*
+			/*
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			// TODO persist in API

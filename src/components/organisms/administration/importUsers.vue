@@ -6,7 +6,7 @@
 				:is-dialog="true"
 				:edited-index="editedIndex"
 				@close="closeEdit"
-        @savedMatch="savedMatch"
+				@savedMatch="savedMatch"
 			></v-import-users-match-search>
 		</v-dialog>
 
@@ -312,11 +312,11 @@ export default Vue.extend({
 				this.editedIndex = -1;
 			});
 		},
-    async savedMatch() {
-      // TODO should reset page?
-      await this.searchApi();
-      this.closeEdit();
-    },
+		async savedMatch() {
+			// TODO should reset page?
+			await this.searchApi();
+			this.closeEdit();
+		},
 		async searchApi() {
 			this.options.page = 1;
 			await this.getDataFromApi();
