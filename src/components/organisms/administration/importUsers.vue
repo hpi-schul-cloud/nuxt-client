@@ -1,12 +1,13 @@
 <template>
 	<div>
-		<v-dialog v-model="dialogEdit" large max-width="700px">
+		<v-dialog v-model="dialogEdit" large max-width="900px">
 			<v-import-users-match-search
 				:edited-item="editedItem"
 				:is-dialog="true"
 				:edited-index="editedIndex"
 				@close="closeEdit"
 				@savedMatch="savedMatch"
+				@deletedMatch="deletedMatch"
 			></v-import-users-match-search>
 		</v-dialog>
 
@@ -317,6 +318,11 @@ export default Vue.extend({
 			await this.searchApi();
 			this.closeEdit();
 		},
+    async deletedMatch() {
+      // TODO should reset page?
+      await this.searchApi();
+      this.closeEdit();
+    },
 		async searchApi() {
 			this.options.page = 1;
 			await this.getDataFromApi();

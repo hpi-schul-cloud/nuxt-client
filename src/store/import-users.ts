@@ -12,7 +12,7 @@ import {
 	//UserApi,
 	UserApiInterface,
 	ImportUserListResponse,
-	UserDetailsListResponse,
+	UserListResponse,
 	ImportUserResponseRoleNamesEnum,
 	//UpdateMatchParams, ImportUserResponse, UserDetailsResponse,
 	//ImportUserResponse,
@@ -40,7 +40,7 @@ export class ImportUsers extends VuexModule {
 		limit: 0,
 	};
 
-	userList: UserDetailsListResponse = {
+	userList: UserListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
@@ -150,11 +150,11 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setUsersList(importUsersList: UserDetailsListResponse): void {
+	setUsersList(importUsersList: UserListResponse): void {
 		this.userList = importUsersList;
 	}
 
-	get getUserList(): UserDetailsListResponse {
+	get getUserList(): UserListResponse {
 		return this.userList;
 	}
 
@@ -201,6 +201,16 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Action
+	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<void> {
+		try {
+			// TODO implement api service
+			// await this.userApi.importUserControllerUpdateMatch(payload.importUserId, payload.flagged);
+		} catch (error: any) {
+			this.setBusinessError({ statusCode: '500', message: error });
+		}
+	}
+
+	@Action
 	async saveMatch(payload: {importUserId: string, userId: string}): Promise<void> {
 		try {
 			await this.userApi.importUserControllerUpdateMatch(payload.importUserId, { userId: payload.userId } );
@@ -208,6 +218,17 @@ export class ImportUsers extends VuexModule {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
+
+	@Action
+	async deleteMatch(importUserId: string): Promise<void> {
+		try {
+			await this.userApi.importUserControllerRemoveMatch(importUserId);
+		} catch (error: any) {
+			this.setBusinessError({ statusCode: '500', message: error });
+		}
+	}
+
+
 
 	private get userApi(): UserApiInterface {
 		if (!this._userApi) {

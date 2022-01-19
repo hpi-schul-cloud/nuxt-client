@@ -41,10 +41,10 @@
 			</v-stepper>
 		</div>
 		<div>
-			<v-stepper v-model="progressStepper" flat>
+			<v-stepper v-model="progressStepper" v-ripple="false" flat>
 				<v-stepper-items>
 					<v-stepper-content step="1">
-						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
+						<v-card :ripple="true" elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<p>
 								In den folgenden Schritten besteht die Möglichkeit, die lokalen
 								Benutzerkonten auf das
@@ -125,7 +125,7 @@
 						<v-btn color="primary" @click="progressStepper = 3">Weiter</v-btn>
 					</v-stepper-content>
 					<v-stepper-content v-if="canStartMigration" step="3">
-						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
+						<v-card :ripple="false" elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<p>Folgende Zuordnungen wurden vorgenommen:</p>
 							<br />
 							<p>
@@ -168,7 +168,7 @@
 						"
 						step="4"
 					>
-						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
+						<v-card :ripple="false" elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<p>
 								Die Migration der Benutzerkonten wurde erfolgreich durchgeführt.
 							</p>
