@@ -318,11 +318,11 @@ export default Vue.extend({
 			await this.searchApi();
 			this.closeEdit();
 		},
-    async deletedMatch() {
-      // TODO should reset page?
-      await this.searchApi();
-      this.closeEdit();
-    },
+		async deletedMatch() {
+			// TODO should reset page?
+			await this.searchApi();
+			this.closeEdit();
+		},
 		async searchApi() {
 			this.options.page = 1;
 			await this.getDataFromApi();
