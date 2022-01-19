@@ -24,6 +24,160 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface BoardElementResponse
+ */
+export interface BoardElementResponse {
+    /**
+     * ElementType. Can be any of: \"task\", \"lesson\".
+     * @type {string}
+     * @memberof BoardElementResponse
+     */
+    type: string;
+    /**
+     * Content of the Board, either: a task or a lesson specific for the board
+     * @type {BoardTaskResponse}
+     * @memberof BoardElementResponse
+     */
+    content: BoardTaskResponse;
+}
+/**
+ * 
+ * @export
+ * @interface BoardResponse
+ */
+export interface BoardResponse {
+    /**
+     * The id of the room this board belongs to
+     * @type {string}
+     * @memberof BoardResponse
+     */
+    roomId: string;
+    /**
+     * Title of the Board
+     * @type {string}
+     * @memberof BoardResponse
+     */
+    title: string;
+    /**
+     * Color of the Board
+     * @type {string}
+     * @memberof BoardResponse
+     */
+    displayColor: string;
+    /**
+     * Array of board specific tasks or lessons with matching type property
+     * @type {Array<BoardElementResponse>}
+     * @memberof BoardResponse
+     */
+    elements: Array<BoardElementResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface BoardTaskResponse
+ */
+export interface BoardTaskResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    availableDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    duedate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    displayColor?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {BoardTaskStatusResponse}
+     * @memberof BoardTaskResponse
+     */
+    status: BoardTaskStatusResponse;
+}
+/**
+ * 
+ * @export
+ * @interface BoardTaskStatusResponse
+ */
+export interface BoardTaskStatusResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    submitted: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    maxSubmissions: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    graded: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardTaskStatusResponse
+     */
+    isDraft: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardTaskStatusResponse
+     */
+    isSubstitutionTeacher: boolean;
+}
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -2067,6 +2221,128 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      */
     public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
         return NewsApiFp(this.configuration).teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * RoomsApi - axios parameter creator
+ * @export
+ */
+export const RoomsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerGetRoomBoard: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('roomsControllerGetRoomBoard', 'id', id)
+            const localVarPath = `/rooms/{id}/board`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RoomsApi - functional programming interface
+ * @export
+ */
+export const RoomsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoomsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerGetRoomBoard(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RoomsApi - factory interface
+ * @export
+ */
+export const RoomsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoomsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse> {
+            return localVarFp.roomsControllerGetRoomBoard(id, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RoomsApi - interface
+ * @export
+ * @interface RoomsApi
+ */
+export interface RoomsApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse>;
+
+}
+
+/**
+ * RoomsApi - object-oriented interface
+ * @export
+ * @class RoomsApi
+ * @extends {BaseAPI}
+ */
+export class RoomsApi extends BaseAPI implements RoomsApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerGetRoomBoard(id: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
