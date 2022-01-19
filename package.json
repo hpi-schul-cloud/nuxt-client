@@ -35,9 +35,6 @@
 		"test:unit:ci": "npm run test:unit -- --coverage --ci",
 		"test:unit:file": "npm run test:unit -- --bail --findRelatedTests",
 		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
-		"test:screenshot:jest": "jest --config tests/screenshot/jest.config.js",
-		"test:screenshot": "start-test start:storybook 4001 test:screenshot:jest",
-		"test:screenshot:ci": "start-test start:storybook 4001 \"npm run test:screenshot:jest -- --ci\"",
 		"test:ci": "run-s test:*:ci",
 		"test": "npm run test:unit",
 		"generate-client:server": "node generate-client.js"
