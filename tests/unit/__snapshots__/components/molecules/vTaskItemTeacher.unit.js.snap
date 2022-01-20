@@ -17,3 +17,21 @@ exports[`@components/molecules/vTaskItemTeacher Should render subtitle with no c
   &nbsp;– Kein Abgabedatum
 </div>
 `;
+
+exports[`@components/molecules/vTaskItemTeacher course name Should render subtitle with course name and due date 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span data-testid="taskSubtitle" class="text-truncate">Mathe</span>
+  &nbsp;– Abgabe 07.06.17
+</div>
+`;
+
+exports[`@components/molecules/vTaskItemTeacher course name Should render subtitle with course name and no due date for tasks without due date 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span data-testid="taskSubtitle" class="text-truncate">Mathe</span>
+  &nbsp;– Kein Abgabedatum
+</div>
+`;
+
+exports[`@components/molecules/vTaskItemTeacher course name Should render subtitle with no course name 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span data-testid="taskSubtitle" class="text-truncate">Ohne Kurszuordnung</span>
+  &nbsp;– Kein Abgabedatum
+</div>
+`;
