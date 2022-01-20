@@ -37,10 +37,7 @@
 					>{{ avatarTitle }}</span
 				>
 			</v-avatar>
-			<div
-				v-if="!condenseLayout"
-				class="justify-center mt-1 mr-n3 ml-n3 sub-title"
-			>
+			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
 				{{ item.title }}
 			</div>
 			<div
@@ -145,20 +142,24 @@ export default {
 	user-select: none;
 }
 .sub-title {
+	margin-right: calc(var(--space-base-vuetify) * -5);
+	margin-left: calc(var(--space-base-vuetify) * -5);
 	overflow: hidden;
 	text-align: center;
-	text-overflow: ellipsis;
 
 	@include excerpt(
-		$font-size: calc(var(--radius-lg) * 1.25),
+		$font-size: calc(var(--space-base-vuetify) * 4),
 		$line-height: var(--line-height-sm),
 		$lines-to-show: 2
 	);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-down')} {
+@media #{map-get($display-breakpoints, 'xs-only')} {
 	.sub-title {
-		font-size: var(--radius-lg);
+		margin-right: calc(var(--space-base-vuetify) * -3);
+		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		font-size: 14px;
 	}
 }
 .group-avatar {

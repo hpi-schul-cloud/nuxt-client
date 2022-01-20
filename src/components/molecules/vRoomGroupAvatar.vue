@@ -44,7 +44,7 @@
 					tabindex="-1"
 				/>
 			</v-card>
-			<div class="justify-left mt-1 mr-n3 ml-n3 sub-title">
+			<div class="justify-left mt-1 sub-title">
 				{{ data.title }}
 			</div>
 		</v-badge>
@@ -124,19 +124,23 @@ export default {
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 .sub-title {
+	margin-right: calc(var(--space-base-vuetify) * -5);
+	margin-left: calc(var(--space-base-vuetify) * -5);
 	text-align: center;
-	text-overflow: ellipsis;
 
 	@include excerpt(
-		$font-size: calc(var(--radius-lg) * 1.25),
+		$font-size: calc(var(--space-base-vuetify) * 4),
 		$line-height: var(--line-height-sm),
 		$lines-to-show: 2
 	);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-down')} {
+@media #{map-get($display-breakpoints, 'xs-only')} {
 	.sub-title {
-		font-size: var(--radius-lg);
+		margin-right: calc(var(--space-base-vuetify) * -3);
+		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		font-size: 14px;
 	}
 }
 .card-component {
