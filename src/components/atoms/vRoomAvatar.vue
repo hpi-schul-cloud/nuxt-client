@@ -144,12 +144,12 @@ export default {
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
-	overflow: hidden;
 	text-align: center;
+	overflow-wrap: break-word;
 
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-sm),
+		$line-height: var(--line-height-md),
 		$lines-to-show: 2
 	);
 }
