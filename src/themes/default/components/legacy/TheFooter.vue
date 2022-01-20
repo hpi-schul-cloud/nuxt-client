@@ -76,7 +76,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
+					href: "mailto:schulcloud-support@thillm.de?subject=Schul_Cloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
