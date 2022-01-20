@@ -278,6 +278,9 @@ export default {
 @import "~vuetify/src/styles/styles.sass";
 @import "@variables";
 
+.substitute-filter-placeholder {
+	min-height: 46px;
+}
 .content-max-width {
 	max-width: var(--size-content-width-max);
 }
