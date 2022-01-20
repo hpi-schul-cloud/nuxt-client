@@ -19,7 +19,6 @@
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
-					role="article"
 				/>
 				<v-task-item-student v-else :key="index" :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
@@ -30,7 +29,6 @@
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
-					role="article"
 				/>
 				<v-task-item-teacher v-else :key="index" :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
