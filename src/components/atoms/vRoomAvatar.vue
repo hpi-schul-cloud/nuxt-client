@@ -32,7 +32,7 @@
 				<span
 					class="white--text text-h7"
 					:class="
-						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h4'
+						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
 					>{{ avatarTitle }}</span
 				>
