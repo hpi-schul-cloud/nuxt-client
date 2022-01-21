@@ -925,6 +925,19 @@ export interface TaskStatusResponse {
 /**
  * 
  * @export
+ * @interface UpdateFlagParams
+ */
+export interface UpdateFlagParams {
+    /**
+     * updates flag for an import user
+     * @type {boolean}
+     * @memberof UpdateFlagParams
+     */
+    flagged: boolean;
+}
+/**
+ * 
+ * @export
  * @interface UpdateMatchParams
  */
 export interface UpdateMatchParams {
@@ -2617,7 +2630,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             }
 
             if (match) {
-                localVarQueryParameter['match'] = match;
+                // TODO fix api, [] should not be used
+                //localVarQueryParameter['match'] = match;
+                localVarQueryParameter['match[]'] = match;
             }
 
             if (flagged !== undefined) {
@@ -2751,11 +2766,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateMatch: async (id: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerSetMatch: async (id: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('importUserControllerUpdateMatch', 'id', id)
+            assertParamExists('importUserControllerSetMatch', 'id', id)
             // verify required parameter 'updateMatchParams' is not null or undefined
-            assertParamExists('importUserControllerUpdateMatch', 'updateMatchParams', updateMatchParams)
+            assertParamExists('importUserControllerSetMatch', 'updateMatchParams', updateMatchParams)
             const localVarPath = `/user/import/{id}/match`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2781,6 +2796,49 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateMatchParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerUpdateFlag: async (id: string, updateFlagParams: UpdateFlagParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('importUserControllerUpdateFlag', 'id', id)
+            // verify required parameter 'updateFlagParams' is not null or undefined
+            assertParamExists('importUserControllerUpdateFlag', 'updateFlagParams', updateFlagParams)
+            const localVarPath = `/user/import/{id}/flag`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateFlagParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2868,7 +2926,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerRemoveMatch(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async importUserControllerRemoveMatch(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerRemoveMatch(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2879,8 +2937,19 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateMatch(id, updateMatchParams, options);
+        async importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSetMatch(id, updateMatchParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateFlag(id, updateFlagParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2938,7 +3007,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<void> {
+        importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse> {
             return localVarFp.importUserControllerRemoveMatch(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2948,8 +3017,18 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
-            return localVarFp.importUserControllerUpdateMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
+        importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3005,7 +3084,7 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<void>;
+    importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -3015,7 +3094,17 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
+    importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {UpdateFlagParams} updateFlagParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -3087,8 +3176,20 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
-        return UserApiFp(this.configuration).importUserControllerUpdateMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
+        return UserApiFp(this.configuration).importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {UpdateFlagParams} updateFlagParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any) {
+        return UserApiFp(this.configuration).importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

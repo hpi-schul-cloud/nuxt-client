@@ -61,9 +61,11 @@ export class ImportUsers extends VuexModule {
 	sortOrder: any = 'asc';
 
 	userSearch: string = '';
+	usersLimit: number = 1;
+	usersSkip: number = 0;
 
 	// TODO
-	businessError: BusinessError = {
+	businessError: BusinessError | null = {
 		statusCode: "",
 		message: "",
 	};
@@ -126,11 +128,11 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setBusinessError(businessError: BusinessError): void {
+	setBusinessError(businessError: BusinessError | null): void {
 		this.businessError = businessError;
 	}
 
-	get getBusinessError(): BusinessError {
+	get getBusinessError(): BusinessError | null {
 		return this.businessError;
 	}
 
@@ -149,6 +151,10 @@ export class ImportUsers extends VuexModule {
 		this.userSearch = userSearch;
 	}
 
+	get getUserSearch(): string {
+		return this.userSearch;
+	}
+
 	@Mutation
 	setUsersList(importUsersList: UserListResponse): void {
 		this.userList = importUsersList;
@@ -158,9 +164,21 @@ export class ImportUsers extends VuexModule {
 		return this.userList;
 	}
 
+	@Mutation
+	setUsersLimit(limit: number): void {
+		this.usersLimit = limit;
+	}
+
+	@Mutation
+	setUsersSkip(skip: number): void {
+		this.usersSkip = skip;
+	}
+
+
 	@Action
 	async fetchAllImportUsers(): Promise<void> {
 		try {
+			console.log(this.match)
 			return this.userApi
 				.importUserControllerFindAll(
 					this.firstName ? this.firstName : undefined,
@@ -189,8 +207,8 @@ export class ImportUsers extends VuexModule {
 			return this.userApi
 				.importUserControllerFindAllUnmatchedUsers(
 					this.userSearch ? this.userSearch : undefined,
-					this.skip,
-					this.limit
+					this.usersSkip,
+					this.usersLimit
 				)
 				.then((data) => {
 					this.setUsersList(data.data);
@@ -202,9 +220,10 @@ export class ImportUsers extends VuexModule {
 
 	@Action
 	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<void> {
+			console.log('saveFlag', payload)
 		try {
 			// TODO implement api service
-			// await this.userApi.importUserControllerUpdateMatch(payload.importUserId, payload.flagged);
+			await this.userApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
@@ -213,7 +232,7 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async saveMatch(payload: {importUserId: string, userId: string}): Promise<void> {
 		try {
-			await this.userApi.importUserControllerUpdateMatch(payload.importUserId, { userId: payload.userId } );
+			await this.userApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
@@ -224,7 +243,7 @@ export class ImportUsers extends VuexModule {
 		try {
 			await this.userApi.importUserControllerRemoveMatch(importUserId);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError(error);
 		}
 	}
 
