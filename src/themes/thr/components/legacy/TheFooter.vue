@@ -1,5 +1,4 @@
 <template>
-	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Secuurity'; the other instances are not using this link.  -->
 	<footer class="footer">
 		<div>
 			<template v-for="(link, index) in links">
@@ -76,7 +75,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:support@dbildungscloud.de",
+					href: "mailto:schulcloud-support@thillm.de",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
@@ -92,10 +91,6 @@ export default {
 					rel: "noopener",
 				});
 			}
-			links.push({
-				to: "/security",
-				text: this.$t("components.legacy.footer.security"),
-			});
 			return links;
 		},
 	},

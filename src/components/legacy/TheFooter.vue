@@ -75,7 +75,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:schulcloud-support@thillm.de?subject=Schul_Cloud%20Anfrage",
+					href: "mailto:support@dbildungscloud.de",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
