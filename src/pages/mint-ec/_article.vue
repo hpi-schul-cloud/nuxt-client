@@ -97,8 +97,8 @@ export default {
 					href: "mailto:info@hpi-schul-cloud.de",
 				},
 				{
-					title: "Support: dataportlernen.cloud@dataport.de",
-					href: "mailto:dataportlernen.cloud@dataport.de",
+					title: "Support: support@dbildungscloud.de",
+					href: "mailto:support@dbildungscloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.anbieter"),
@@ -106,7 +106,7 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
-					href: "mailto:datenschutz-fragen@hpi-schul-cloud.de",
+					href: "mailto:datenschutz@dbildungscloud.de",
 				},
 				{
 					title: this.$t(
