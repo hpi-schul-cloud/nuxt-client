@@ -69,6 +69,7 @@
 					<template v-slot:activator="{ on, attrs, value }">
 						<v-btn
 							v-show="showMenu"
+							id="task-menu-btn"
 							v-bind="attrs"
 							icon
 							:data-testId="`task-menu-${task.name}`"
