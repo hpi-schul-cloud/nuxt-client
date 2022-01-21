@@ -5,25 +5,29 @@
 		:breadcrumbs="breadcrumbs"
 	>
 		<v-snackbar
-        v-model="businessError"
-        :timeout="timeout"
-        top
-        centered
-        :color="businessError !== null && businessError.statusCode === '200' ? 'success darken-3' : 'error darken-3'"
-    >
-      <div v-if="businessError !== null && businessError.statusCode === '200'">{{ businessError.message }}</div>
-      <div v-else>Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.</div>
-      <template v-slot:action="{ attrs }">
-        <v-btn
-            color="white"
-            icon
-            v-bind="attrs"
-            @click="resetBusinessError"
-        >
-          <v-icon>{{ mdiClose }}</v-icon>
-        </v-btn>
-      </template>
-    </v-snackbar>
+			v-model="businessError"
+			:timeout="timeout"
+			top
+			centered
+			:color="
+				businessError !== null && businessError.statusCode === '200'
+					? 'success darken-3'
+					: 'error darken-3'
+			"
+		>
+			<div v-if="businessError !== null && businessError.statusCode === '200'">
+				{{ businessError.message }}
+			</div>
+			<div v-else>
+				Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch
+				einmal.
+			</div>
+			<template v-slot:action="{ attrs }">
+				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
+					<v-icon>{{ mdiClose }}</v-icon>
+				</v-btn>
+			</template>
+		</v-snackbar>
 
 		<div slot="header">
 			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
@@ -221,8 +225,7 @@ export default {
 				},
 			],
 			migrationConfirm: false,
-      timeout: 7500,
-
+			timeout: 7500,
 		};
 	},
 	computed: {
@@ -232,23 +235,23 @@ export default {
 		school() {
 			return SchoolsModule.getSchool;
 		},
-    businessError() {
-      const error = ImportUserModule.getBusinessError;
-      if (error && error.message && error.statusCode) {
-        return {
-          message: error.message,
-          statusCode: error.statusCode,
-        }
-      }
-      return false;
-    },
+		businessError() {
+			const error = ImportUserModule.getBusinessError;
+			if (error && error.message && error.statusCode) {
+				return {
+					message: error.message,
+					statusCode: error.statusCode,
+				};
+			}
+			return false;
+		},
 	},
-  methods: {
-    resetBusinessError() {
-      ImportUserModule.setBusinessError(null)
-    }
-  },
-  head() {
+	methods: {
+		resetBusinessError() {
+			ImportUserModule.setBusinessError(null);
+		},
+	},
+	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};

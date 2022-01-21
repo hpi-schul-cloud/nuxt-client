@@ -32,8 +32,7 @@
 									>{{ editedItem.firstName }}
 									{{ editedItem.lastName }}</v-list-item-title
 								>
-								<v-list-item-subtitle
-									>
+								<v-list-item-subtitle>
 									{{ editedItem.roleNames.join(", ") }}</v-list-item-subtitle
 								>
 								<v-list-item-subtitle
@@ -49,40 +48,43 @@
 					</v-col>
 					<v-col class="md-6">
 						<v-card-title>{{ this.$theme.short_name }} Konto</v-card-title>
-            <v-list-item>
-              <v-list-item-content v-if="selectedItem">
-                <v-list-item-title>
-                  {{ selectedItem.firstName }} {{ selectedItem.lastName }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{
-                    selectedItem.roleNames
-                      ? selectedItem.roleNames.join(", ")
-                      : ""
-                  }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  Nutzername: {{ selectedItem.loginName }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-content v-else-if="editedItem.match">
-                <v-list-item-title>
-                  {{ editedItem.match.firstName }} {{ editedItem.match.lastName }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{
-                    editedItem.match.roleNames
-                      ? editedItem.match.roleNames.join(", ")
-                      : ""
-                  }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  Nutzername: {{ editedItem.match.loginName }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-content v-else>keine. Benuter wird neu erstellt.</v-list-item-content>
-            </v-list-item>
-            <v-autocomplete
+						<v-list-item>
+							<v-list-item-content v-if="selectedItem">
+								<v-list-item-title>
+									{{ selectedItem.firstName }} {{ selectedItem.lastName }}
+								</v-list-item-title>
+								<v-list-item-subtitle>
+									{{
+										selectedItem.roleNames
+											? selectedItem.roleNames.join(", ")
+											: ""
+									}}
+								</v-list-item-subtitle>
+								<v-list-item-subtitle>
+									Nutzername: {{ selectedItem.loginName }}
+								</v-list-item-subtitle>
+							</v-list-item-content>
+							<v-list-item-content v-else-if="editedItem.match">
+								<v-list-item-title>
+									{{ editedItem.match.firstName }}
+									{{ editedItem.match.lastName }}
+								</v-list-item-title>
+								<v-list-item-subtitle>
+									{{
+										editedItem.match.roleNames
+											? editedItem.match.roleNames.join(", ")
+											: ""
+									}}
+								</v-list-item-subtitle>
+								<v-list-item-subtitle>
+									Nutzername: {{ editedItem.match.loginName }}
+								</v-list-item-subtitle>
+							</v-list-item-content>
+							<v-list-item-content v-else
+								>keine. Benuter wird neu erstellt.</v-list-item-content
+							>
+						</v-list-item>
+						<v-autocomplete
 							v-model="selectedItem"
 							item-value="userId"
 							:items="items"
@@ -98,9 +100,9 @@
 							persistent-hint
 							no-data-text="keine Konten gefunden"
 							no-filter
-              solo
-              rounded
-              small-chips
+							solo
+							rounded
+							small-chips
 						>
 							<template v-slot:selection="{ attr, on, item, selected }">
 								<v-chip
@@ -126,9 +128,11 @@
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
-              <template v-slot:append-item>
-                <div v-intersect="endIntersect" class="pa-4 teal--text">More...</div>
-              </template>
+							<template v-slot:append-item>
+								<div v-intersect="endIntersect" class="pa-4 teal--text">
+									More...
+								</div>
+							</template>
 						</v-autocomplete>
 					</v-col>
 				</v-row>
@@ -144,11 +148,17 @@
 						class="ma-2"
 						aria-label="Markieren"
 						aria-labelledby="xxx"
-            @click="saveFlag"
+						@click="saveFlag"
 					>
 						<v-icon color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else v-model="editedItem.flagged" icon class="ma-2" @click="saveFlag">
+					<v-btn
+						v-else
+						v-model="editedItem.flagged"
+						icon
+						class="ma-2"
+						@click="saveFlag"
+					>
 						<v-icon>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</v-col>
@@ -252,8 +262,8 @@ export default {
 			loading: false,
 			searchUser: null,
 			selectedItem: null,
-      limit: 2, // TODO
-      skip: 0,
+			limit: 2, // TODO
+			skip: 0,
 		};
 	},
 	computed: {
@@ -288,20 +298,20 @@ export default {
 		this.getDataFromApi("");
 	},
 	methods: {
-    async endIntersect(entries, observer, isIntersecting) {
-      if (isIntersecting) {
-        this.skip += this.limit;
-        await this.getDataFromApi();
-      }
-    },
+		async endIntersect(entries, observer, isIntersecting) {
+			if (isIntersecting) {
+				this.skip += this.limit;
+				await this.getDataFromApi();
+			}
+		},
 		async getDataFromApi() {
 			this.loading = true;
-      ImportUserModule.setUsersLimit(this.limit);
-      ImportUserModule.setUsersSkip(this.skip);
-      if (this.searchUser !== ImportUserModule.getUserSearch) {
-        this.entries = [];
-        ImportUserModule.setUserSearch(this.searchUser);
-      }
+			ImportUserModule.setUsersLimit(this.limit);
+			ImportUserModule.setUsersSkip(this.skip);
+			if (this.searchUser !== ImportUserModule.getUserSearch) {
+				this.entries = [];
+				ImportUserModule.setUserSearch(this.searchUser);
+			}
 			ImportUserModule.fetchAllUsers().then(() => {
 				this.count = ImportUserModule.getUserList.total;
 
@@ -338,7 +348,7 @@ export default {
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
-      this.editedItem.flagged = !this.editedItem.flagged;
+			this.editedItem.flagged = !this.editedItem.flagged;
 		},
 	},
 };
