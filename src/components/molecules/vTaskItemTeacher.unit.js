@@ -96,19 +96,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 	describe("when menu is used", () => {
 		describe("mouse events", () => {
-			it.todo(
-				"should show menu btn on hover" /* async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				await wrapper.trigger("mouseover");
-				const menuBtn = wrapper.find("#task-menu-btn");
-				expect(menuBtn.isVisible()).toBe(true);
-				//expect(wrapper.vm.isHovering).toBe(true);
-				//	expect(wrapper.find(".v-menu").exists()).toBe(true);
-			} */
-			);
+			it.todo("should show menu btn on hover");
 
 			it("should open menu on btn click", async () => {
 				const wrapper = getWrapper({
@@ -166,6 +154,20 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 			);
 		});
 
-		it.todo("always show menu on mobile");
+		it("always show menu on mobile", () => {
+			Object.defineProperty(window, "innerWidth", {
+				writable: true,
+				configurable: true,
+				value: 375,
+			});
+			window.dispatchEvent(new Event("resize"));
+
+			const wrapper = getWrapper({
+				task: tasksTeacher[0],
+			});
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			expect(menuBtn.isVisible()).toBe(true);
+		});
 	});
 });
