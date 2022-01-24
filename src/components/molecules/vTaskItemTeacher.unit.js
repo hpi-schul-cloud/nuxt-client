@@ -39,13 +39,14 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 	});
 
 	it("Should call taskHref() and return link by click on v-list-item", async () => {
-		const mockMethod = jest.spyOn(vTaskItemTeacher.methods, "taskHref");
+		const mockMethod = jest.spyOn(vTaskItemTeacher.computed, "href");
 		const wrapper = getWrapper({
 			task: tasksTeacher[0],
 		});
 
-		await wrapper.find(".v-list-item").trigger("click");
+		await wrapper.trigger("click");
 		expect(mockMethod).toHaveReturnedWith(`/homework/${tasksTeacher[0].id}`);
+		expect(wrapper.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	describe("course name", () => {
