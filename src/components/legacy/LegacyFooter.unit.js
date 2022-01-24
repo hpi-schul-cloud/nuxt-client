@@ -37,7 +37,7 @@ describe("@components/legacy/LegacyFooter", () => {
 					},
 					{
 						title: "mail2",
-						href: "mailto:dataportlernen.cloud@dataport.de",
+						href: "mailto:support@dbildungscloud.de",
 					},
 					{
 						title: "mail3",
