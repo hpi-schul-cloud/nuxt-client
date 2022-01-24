@@ -2,6 +2,7 @@
 	"common.actions.add": "Add",
 	"common.actions.back": "Back",
 	"common.actions.cancel": "Cancel",
+	"common.actions.edit": "Edit",
 	"common.actions.discard": "Discard",
 	"common.actions.ok": "OK",
 	"common.actions.confirm": "Confirm",
