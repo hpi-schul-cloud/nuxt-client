@@ -1,23 +1,22 @@
-import Vuetify from "vuetify";
 import mocks from "@@/stories/mockData/Tasks";
 import vTaskItemTeacher from "./vTaskItemTeacher";
 
 const { tasksTeacher, drafts } = mocks;
-const routerPushStub = { push: jest.fn() };
 
-Object.defineProperty(window, "innerWidth", {
-	writable: true,
-	configurable: true,
-	value: 1264,
-});
-window.dispatchEvent(new Event("resize"));
+const defineWindowWidth = (width) => {
+	Object.defineProperty(window, "innerWidth", {
+		writable: true,
+		configurable: true,
+		value: width,
+	});
+	window.dispatchEvent(new Event("resize"));
+};
 
 const getWrapper = (props, options) => {
 	return mount(vTaskItemTeacher, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
-			$router: routerPushStub,
 		}),
 		propsData: props,
 		attachTo: document.body,
@@ -26,12 +25,7 @@ const getWrapper = (props, options) => {
 };
 
 describe("@components/molecules/vTaskItemTeacher", () => {
-	// eslint-disable-next-line no-unused-vars
-	let vuetify; // TODO - figure this out
-
-	beforeEach(() => {
-		vuetify = new Vuetify();
-	});
+	defineWindowWidth(1264);
 
 	it(...isValidComponent(vTaskItemTeacher));
 
@@ -155,12 +149,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		});
 
 		it("always show menu on mobile", () => {
-			Object.defineProperty(window, "innerWidth", {
-				writable: true,
-				configurable: true,
-				value: 375,
-			});
-			window.dispatchEvent(new Event("resize"));
+			defineWindowWidth(375);
 
 			const wrapper = getWrapper({
 				task: tasksTeacher[0],
