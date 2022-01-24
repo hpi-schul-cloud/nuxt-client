@@ -13,16 +13,13 @@
 		<v-list-item-content>
 			<v-list-item-subtitle data-testid="taskSubtitle">
 				{{ task.courseName }}
-				<template v-if="isPlanned">
-					{{ `&nbsp;– ${plannedLabel}` }}
-				</template>
 			</v-list-item-subtitle>
 			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 			<v-list-item-subtitle>
 				{{ topic }}
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<v-list-item-action v-if="!isPlanned">
+		<v-list-item-action>
 			<v-list-item-action-text
 				class="subtitle-2"
 				data-test-id="dueDateLabel"
@@ -65,14 +62,6 @@ export default {
 		iconColor() {
 			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
-		},
-		isPlanned() {
-			return new Date(this.task.availableDate) > new Date();
-		},
-		plannedLabel() {
-			return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
-				this.task.availableDate
-			)}`;
 		},
 		isCloseToDueDate() {
 			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
