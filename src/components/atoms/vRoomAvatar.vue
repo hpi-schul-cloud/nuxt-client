@@ -32,7 +32,7 @@
 				<span
 					class="white--text text-h7"
 					:class="
-						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h4'
+						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
 					>{{ avatarTitle }}</span
 				>
@@ -42,8 +42,7 @@
 			</div>
 			<div
 				v-if="!condenseLayout && item.titleDate"
-				class="justify-center sub-title date-title"
-				:class="{ 'ma-n1': $vuetify.breakpoint.xs }"
+				class="justify-center sub-title date-title mt-1"
 			>
 				{{ item.titleDate }}
 			</div>
@@ -126,7 +125,10 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "@utils/multiline-ellipsis.scss";
+@import "~vuetify/src/styles/styles.sass";
+@import "@styles";
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	width: 500px;
@@ -140,11 +142,25 @@ export default {
 	user-select: none;
 }
 .sub-title {
-	height: var(--space-lg);
-	overflow: hidden;
+	margin-right: calc(var(--space-base-vuetify) * -5);
+	margin-left: calc(var(--space-base-vuetify) * -5);
 	text-align: center;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	overflow-wrap: break-word;
+
+	@include excerpt(
+		$font-size: calc(var(--space-base-vuetify) * 4),
+		$line-height: var(--line-height-md),
+		$lines-to-show: 2
+	);
+}
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	.sub-title {
+		margin-right: calc(var(--space-base-vuetify) * -3);
+		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		font-size: 14px;
+	}
 }
 .group-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
