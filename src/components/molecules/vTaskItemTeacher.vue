@@ -2,7 +2,7 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="handleClickOutside"
+			v-click-outside="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:ripple="false"
@@ -191,9 +191,6 @@ export default {
 		},
 		handleFocus(value) {
 			this.isActive = value;
-		},
-		handleClickOutside() {
-			this.isActive = false;
 		},
 	},
 };
