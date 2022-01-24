@@ -50,7 +50,11 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			this.setTasks(response.data.data);
+			const tasks = response.data.data.map((task) => {
+				task.status.isFinished = true;
+				return task;
+			});
+			this.setTasks(tasks);
 
 			this.setPagination({
 				limit,
@@ -84,7 +88,11 @@ export class FinishedTaskModule extends VuexModule {
 
 			await new Promise((resolve) => setTimeout(resolve, 300));
 
-			this.setTasks(this.tasks.concat(response.data.data));
+			const tasks = response.data.data.map((task) => {
+				task.status.isFinished = true;
+				return task;
+			});
+			this.setTasks(this.tasks.concat(tasks));
 			this.setPagination({
 				limit,
 				skip: skip + limit,
@@ -99,16 +107,41 @@ export class FinishedTaskModule extends VuexModule {
 	}
 
 	@Action
-	async finishTask(taskId: any): Promise<void> {
+	async finishTask(taskId: String): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			$axios.setBaseURL("http://localhost:4000/");
-			const response = await $axios.$patch(
-				`/homework/${taskId}`,
-				"archive=done"
+			//	$axios.setBaseURL("http://localhost:3030/api/v1/");
+			const task = await $axios.$get(
+				`http://localhost:3030/api/v1/homework/${taskId}`
 			);
-			console.log(response);
+
+			const response = await $axios.$patch(
+				`http://localhost:3030/api/v1/homework/${taskId}`,
+				{ archived: [task.teacherId] }
+			);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async restoreTask(taskId: String): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			//	$axios.setBaseURL("http://localhost:3030/api/v1/");
+			const task = await $axios.$get(
+				`http://localhost:3030/api/v1/homework/${taskId}`
+			);
+
+			const response = await $axios.$patch(
+				`http://localhost:3030/api/v1/homework/${taskId}`,
+				{ archived: [] }
+			);
 
 			this.setStatus("completed");
 		} catch (error) {

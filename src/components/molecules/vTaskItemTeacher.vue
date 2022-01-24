@@ -99,13 +99,17 @@
 						<v-list-item
 							class="task-action"
 							:data-testId="`task-finish-${task.name}`"
-							@click="handleFinish"
+							@click.stop.prevent="handleFinish"
 						>
 							<v-list-item-title>
-								<v-icon class="task-action-icon">
-									{{ mdiPencilOutline }}
-								</v-icon>
-								Abschließen
+								<template v-if="task.status.isFinished">
+									<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
+									Wiederherstellen
+								</template>
+								<template v-else>
+									<v-icon class="task-action-icon"> $taskFinished </v-icon>
+									Abschließen
+								</template>
 							</v-list-item-title>
 						</v-list-item>
 					</v-list>
@@ -117,7 +121,8 @@
 
 <script>
 import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
-import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
+import { mdiDotsVertical, mdiPencilOutline, mdiUndo } from "@mdi/js";
+import FinishedTaskModule from "@/store/finished-tasks";
 
 // TODO - different requiredKeys for finished and other tasks?
 // const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -136,6 +141,7 @@ export default {
 		return {
 			mdiDotsVertical,
 			mdiPencilOutline,
+			mdiUndo,
 			isMenuActive: false,
 			isHovering: false,
 			isActive: false,
@@ -205,8 +211,11 @@ export default {
 			this.isActive = value;
 		},
 		handleFinish() {
-			console.log("hi");
-			FinishedTaskModule.finishTask(this.task.id);
+			if (this.task.status.isFinished) {
+				FinishedTaskModule.restoreTask(this.task.id);
+			} else {
+				FinishedTaskModule.finishTask(this.task.id);
+			}
 		},
 	},
 };
