@@ -41,7 +41,7 @@
 
 <script>
 import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
-import { fromNow, fromNowToFuture } from "@plugins/datetime";
+import { fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
@@ -57,11 +57,6 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-	},
-	data() {
-		return {
-			fromNow,
-		};
 	},
 	computed: {
 		href() {

@@ -104,7 +104,6 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
 import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
 
@@ -123,7 +122,6 @@ export default {
 	},
 	data() {
 		return {
-			fromNow,
 			mdiDotsVertical,
 			mdiPencilOutline,
 			isMenuActive: false,
