@@ -2,12 +2,13 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="handleClickOutside"
+			v-click-outside="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:ripple="false"
-			:href="taskHref(task.id)"
-			:aria-label="ariaLabel"
+			:href="href"
+			:aria-label="`${$t('common.words.task')} ${task.name}`"
+			role="article"
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
@@ -19,12 +20,12 @@
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						courseName
 					}}</span>
-					{{
-						`&nbsp;– ${computedDueDateLabel(
-							task.duedate,
-							(shorten = $vuetify.breakpoint.xsOnly)
-						)}`
-					}}
+					<template v-if="isPlanned">
+						{{ `&nbsp;– ${plannedLabel}` }}
+					</template>
+					<template v-else>
+						{{ `&nbsp;– ${dueDateLabel}` }}
+					</template>
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle class="d-inline-flex">
@@ -38,7 +39,7 @@
 					</i18n>
 				</v-list-item-subtitle>
 			</v-list-item-content>
-			<section v-if="!isDraft" class="mr-8">
+			<section v-if="showTaskStatus" class="mr-8">
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.VTaskItemTeacher.submitted")
@@ -84,7 +85,7 @@
 					</template>
 					<v-list>
 						<v-list-item
-							:href="`${taskHref(task.id)}/edit`"
+							:href="`${href}/edit`"
 							class="task-action"
 							:data-testId="`task-edit-${task.name}`"
 						>
@@ -103,8 +104,7 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
-import { printDateFromStringUTC } from "@plugins/datetime";
+import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
 import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
 
 // TODO - different requiredKeys for finished and other tasks?
@@ -119,14 +119,9 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-		ariaLabel: {
-			type: String,
-			default: "",
-		},
 	},
 	data() {
 		return {
-			fromNow,
 			mdiDotsVertical,
 			mdiPencilOutline,
 			isMenuActive: false,
@@ -135,6 +130,9 @@ export default {
 		};
 	},
 	computed: {
+		href() {
+			return `/homework/${this.task.id}`;
+		},
 		avatarIcon() {
 			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
 		},
@@ -145,15 +143,32 @@ export default {
 		isDraft() {
 			return this.task.status.isDraft;
 		},
+		isPlanned() {
+			return new Date(this.task.availableDate) > new Date();
+		},
+		showTaskStatus() {
+			return !this.isDraft && !this.isPlanned;
+		},
+		dueDateLabel() {
+			const dueDate = this.task.duedate;
+
+			return !dueDate
+				? this.$t("pages.tasks.labels.noDueDate")
+				: `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`;
+		},
+		plannedLabel() {
+			return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
+				this.task.availableDate
+			)}`;
+		},
 		courseName() {
+			const { isSubstitutionTeacher } = this.task.status;
 			const baseName =
 				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
-			const prefix =
-				this.task.status.isSubstitutionTeacher === true
-					? this.$t("common.words.substitute") + " "
-					: "";
 
-			return `${prefix}${baseName}`;
+			return isSubstitutionTeacher
+				? `${this.$t("common.words.substitute")} ${baseName}`
+				: baseName;
 		},
 		topic() {
 			return this.task.description
@@ -170,27 +185,12 @@ export default {
 		},
 	},
 	methods: {
-		computedDueDateLabel(dueDate) {
-			if (!dueDate) {
-				return this.$t("pages.tasks.labels.noDueDate");
-			} else {
-				return (
-					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
-				);
-			}
-		},
-		taskHref: (id) => {
-			return `/homework/${id}`;
-		},
 		toggleMenu(stateValue) {
 			this.isMenuActive = stateValue;
 			this.isHovering = stateValue;
 		},
 		handleFocus(value) {
 			this.isActive = value;
-		},
-		handleClickOutside() {
-			this.isActive = false;
 		},
 	},
 };
