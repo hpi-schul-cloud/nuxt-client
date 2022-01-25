@@ -1,10 +1,11 @@
 <template>
 	<div class="rooms-container">
 		<template v-for="(item, index) of items">
-			<v-task-item-teacher
+			<room-task-card-teacher
 				v-if="item.type === 'task'"
 				:key="index"
 				:task="item.content"
+				:type="item.type"
 				:aria-label="
 					$t('pages.room.taskCard.aria', {
 						itemType: item.type,
@@ -19,11 +20,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher.vue";
+import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
 
 export default Vue.extend({
 	components: {
-		VTaskItemTeacher,
+		RoomTaskCardTeacher,
 	},
 	props: {
 		items: {
@@ -31,6 +32,7 @@ export default Vue.extend({
 			required: true,
 			default: () => [],
 		},
+		role: { type: String, default: "" },
 	},
 	data() {
 		return {};
