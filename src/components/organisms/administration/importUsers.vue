@@ -1,10 +1,13 @@
 <template>
 	<div>
-		<v-dialog v-model="dialogEdit" large max-width="900px"
-              @click:outside="editedItem = defaultItem"
-    >
+		<v-dialog
+			v-model="dialogEdit"
+			large
+			max-width="900px"
+			@click:outside="editedItem = defaultItem"
+		>
 			<v-import-users-match-search
-          v-if="dialogEdit"
+				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
 				:edited-index="editedIndex"
@@ -29,15 +32,15 @@
 					pageText: '{0}-{1} von {2}',
 				}"
 			>
-        <template v-slot:loading>
-          <v-skeleton-loader
-              class="mx-auto"
-              width="100%"
-              type="table-thead, table-tbody"
-          >
-          </v-skeleton-loader>
-        </template>
-        <template v-slot:body.prepend>
+				<template v-slot:loading>
+					<v-skeleton-loader
+						class="mx-auto"
+						width="100%"
+						type="table-thead, table-tbody"
+					>
+					</v-skeleton-loader>
+				</template>
+				<template v-slot:body.prepend>
 					<tr class="head">
 						<td>
 							<v-text-field
@@ -148,11 +151,17 @@
 						color="primary"
 						class="ma-2"
 						title="markiere"
-            @click="saveFlag(item)"
+						@click="saveFlag(item)"
 					>
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
 					</v-btn>
-					<v-btn v-else icon class="ma-2" title="markiere" @click="saveFlag(item)">
+					<v-btn
+						v-else
+						icon
+						class="ma-2"
+						title="markiere"
+						@click="saveFlag(item)"
+					>
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</template>
@@ -273,7 +282,7 @@ export default Vue.extend({
 			return SchoolsModule.getSchool;
 		},
 	},
-  watch: {
+	watch: {
 		dialogEdit(val) {
 			val || this.closeEdit();
 		},
@@ -331,45 +340,45 @@ export default Vue.extend({
 		},
 		async savedMatch() {
 			// TODO should reset page?
-      if (this.searchMatchedBy) {
-        this.loading = true;
-        setTimeout(() => {
-			    this.searchApi();
-        }, 2000);
-      }
+			if (this.searchMatchedBy) {
+				this.loading = true;
+				setTimeout(() => {
+					this.searchApi();
+				}, 2000);
+			}
 			this.closeEdit();
 		},
 		async deletedMatch() {
 			// TODO should reset page?
-      console.log(this.importUsers[this.editedIndex]);
-      this.importUsers[this.editedIndex].match = null;
-      this.importUsers[this.editedIndex].class = 'primary';
-      if (this.searchMatchedBy) {
-        this.loading = true;
-        setTimeout(() => {
-          this.searchApi();
-        }, 2000);
-      }
+			console.log(this.importUsers[this.editedIndex]);
+			this.importUsers[this.editedIndex].match = null;
+			this.importUsers[this.editedIndex].class = "primary";
+			if (this.searchMatchedBy) {
+				this.loading = true;
+				setTimeout(() => {
+					this.searchApi();
+				}, 2000);
+			}
 			this.closeEdit();
 		},
-    async saveFlag(item) {
-      if (this.loading) return false;
-      this.loading = true;
-      this.editedIndex = this.importUsers.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      await ImportUserModule.saveFlag({
-        importUserId: this.editedItem.importUserId,
-        flagged: !this.editedItem.flagged,
-      });
-      this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
-      if (this.searchFlagged) {
-        setTimeout(() => {
-          this.searchApi();
-        }, 2000);
-      } else {
-        this.loading = false;
-      }
-    },
+		async saveFlag(item) {
+			if (this.loading) return false;
+			this.loading = true;
+			this.editedIndex = this.importUsers.indexOf(item);
+			this.editedItem = Object.assign({}, item);
+			await ImportUserModule.saveFlag({
+				importUserId: this.editedItem.importUserId,
+				flagged: !this.editedItem.flagged,
+			});
+			this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
+			if (this.searchFlagged) {
+				setTimeout(() => {
+					this.searchApi();
+				}, 2000);
+			} else {
+				this.loading = false;
+			}
+		},
 		async searchApi() {
 			this.options.page = 1;
 			await this.getDataFromApi();
