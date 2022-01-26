@@ -2,10 +2,13 @@
 	<div>
 		<v-card :ripple="false" min-height="550px">
 			<v-toolbar dark color="primary">
-				<v-toolbar-title> {{ $t('components.molecules.importUsersMatch.title', {
-          instance: this.$theme.short_name,
-          source: $t('pages.administration.migration.ldapSource'),
-        }) }}
+				<v-toolbar-title>
+					{{
+						$t("components.molecules.importUsersMatch.title", {
+							instance: this.$theme.short_name,
+							source: $t("pages.administration.migration.ldapSource"),
+						})
+					}}
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
@@ -16,10 +19,12 @@
 			</v-toolbar>
 
 			<v-card-text class="mt-5">
-        {{ $t('components.molecules.importUsersMatch.subtitle', {
-        instance: this.$theme.short_name,
-        source: $t('pages.administration.migration.ldapSource'),
-      }) }}
+				{{
+					$t("components.molecules.importUsersMatch.subtitle", {
+						instance: this.$theme.short_name,
+						source: $t("pages.administration.migration.ldapSource"),
+					})
+				}}
 			</v-card-text>
 			<v-card-text>
 				<v-row>
@@ -60,7 +65,8 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									{{ $t('components.organisms.importUsers.tableUserName') }}: {{ selectedItem.loginName }}
+									{{ $t("components.organisms.importUsers.tableUserName") }}:
+									{{ selectedItem.loginName }}
 								</v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else-if="editedItem.match">
@@ -76,12 +82,13 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									{{ $t('components.organisms.importUsers.tableUserName') }}: {{ editedItem.match.loginName }}
+									{{ $t("components.organisms.importUsers.tableUserName") }}:
+									{{ editedItem.match.loginName }}
 								</v-list-item-subtitle>
 							</v-list-item-content>
-							<v-list-item-content v-else
-								>{{ $t('components.molecules.importUsersMatch.unMatched')  }}</v-list-item-content
-							>
+							<v-list-item-content v-else>{{
+								$t("components.molecules.importUsersMatch.unMatched")
+							}}</v-list-item-content>
 						</v-list-item>
 						<v-autocomplete
 							v-model="selectedItem"
@@ -97,7 +104,9 @@
 							:label="$t('components.molecules.importUsersMatch.search')"
 							:placeholder="$t('components.molecules.importUsersMatch.write')"
 							persistent-hint
-							:no-data-text="$t('components.molecules.importUsersMatch.notFound')"
+							:no-data-text="
+								$t('components.molecules.importUsersMatch.notFound')
+							"
 							no-filter
 							solo
 							rounded
@@ -123,7 +132,8 @@
 										{{ item.roleNames ? item.roleNames.join(", ") : "" }}
 									</v-list-item-subtitle>
 									<v-list-item-subtitle>
-										{{ $t('components.organisms.importUsers.tableUserName') }}: {{ item.loginName }}
+										{{ $t("components.organisms.importUsers.tableUserName") }}:
+										{{ item.loginName }}
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
@@ -136,7 +146,7 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-col class="col-6">
-          {{ $t('components.molecules.importUsersMatch.flag') }}
+					{{ $t("components.molecules.importUsersMatch.flag") }}
 					<v-btn
 						v-if="editedItem.flagged"
 						v-model="editedItem.flagged"
@@ -166,7 +176,7 @@
 						@click="saveMatch"
 					>
 						<v-icon small>{{ mdiContentSave }}</v-icon>
-            {{ $t('components.molecules.importUsersMatch.saveMatch') }}
+						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
 						text
@@ -176,7 +186,7 @@
 						@click="deleteMatch"
 					>
 						<v-icon small>{{ mdiDelete }}</v-icon>
-            {{ $t('components.molecules.importUsersMatch.deleteMatch') }}
+						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
 					</v-btn>
 				</v-col>
 			</v-card-actions>
