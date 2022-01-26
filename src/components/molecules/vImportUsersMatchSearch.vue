@@ -2,9 +2,10 @@
 	<div>
 		<v-card :ripple="false" min-height="550px">
 			<v-toolbar dark color="primary">
-				<v-toolbar-title>
-					Verknüpfe <strong>weBBschule-Konto</strong> mit
-					{{ this.$theme.short_name }} Konto
+				<v-toolbar-title> {{ $t('components.molecules.importUsersMatch.title', {
+          instance: this.$theme.short_name,
+          source: $t('pages.administration.migration.ldapSource'),
+        }) }}
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
@@ -15,12 +16,10 @@
 			</v-toolbar>
 
 			<v-card-text class="mt-5">
-				Das webbschule-Konto wird später in die
-				{{ this.$theme.short_name }} importiert. Wenn Sie das Konto mit einem
-				bestehenden {{ this.$theme.short_name }} Konto verknüpfen möchten, so
-				dass die Benutzerdaten erhalten bleiben, wählen Sie hier das
-				{{ this.$theme.short_name }} Konto aus. Andernfalls wird dieses als
-				neues Konto angeleg.
+        {{ $t('components.molecules.importUsersMatch.subtitle', {
+        instance: this.$theme.short_name,
+        source: $t('pages.administration.migration.ldapSource'),
+      }) }}
 			</v-card-text>
 			<v-card-text>
 				<v-row>
@@ -61,7 +60,7 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									Nutzername: {{ selectedItem.loginName }}
+									{{ $t('components.organisms.importUsers.tableUserName') }}: {{ selectedItem.loginName }}
 								</v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else-if="editedItem.match">
@@ -77,11 +76,11 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									Nutzername: {{ editedItem.match.loginName }}
+									{{ $t('components.organisms.importUsers.tableUserName') }}: {{ editedItem.match.loginName }}
 								</v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else
-								>keine. Benuter wird neu erstellt.</v-list-item-content
+								>{{ $t('components.molecules.importUsersMatch.unMatched')  }}</v-list-item-content
 							>
 						</v-list-item>
 						<v-autocomplete
@@ -95,10 +94,10 @@
 							:prepend-inner-icon="mdiAccountSearch"
 							return-object
 							clearable
-							label="Benutzerkonto suchen"
-							placeholder="Vornamen oder Nachnamen eingeben"
+							:label="$t('components.molecules.importUsersMatch.search')"
+							:placeholder="$t('components.molecules.importUsersMatch.write')"
 							persistent-hint
-							no-data-text="keine Konten gefunden"
+							:no-data-text="$t('components.molecules.importUsersMatch.notFound')"
 							no-filter
 							solo
 							rounded
@@ -124,12 +123,12 @@
 										{{ item.roleNames ? item.roleNames.join(", ") : "" }}
 									</v-list-item-subtitle>
 									<v-list-item-subtitle>
-										Nutzername: {{ item.loginName }}
+										{{ $t('components.organisms.importUsers.tableUserName') }}: {{ item.loginName }}
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
 							<template v-slot:append-item>
-								<div v-intersect="endIntersect" class="pa-2">mehr...</div>
+								<div v-intersect="endIntersect" class="pa-2"></div>
 							</template>
 						</v-autocomplete>
 					</v-col>
@@ -137,15 +136,13 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-col class="col-6">
-					Konto markieren
+          {{ $t('components.molecules.importUsersMatch.flag') }}
 					<v-btn
 						v-if="editedItem.flagged"
 						v-model="editedItem.flagged"
 						icon
 						color="primary"
 						class="ma-2"
-						aria-label="Markieren"
-						aria-labelledby="xxx"
 						@click="saveFlag"
 					>
 						<v-icon color="primary">{{ mdiFlag }}</v-icon>
@@ -169,7 +166,7 @@
 						@click="saveMatch"
 					>
 						<v-icon small>{{ mdiContentSave }}</v-icon>
-						Verknüpfung Speichern
+            {{ $t('components.molecules.importUsersMatch.saveMatch') }}
 					</v-btn>
 					<v-btn
 						text
@@ -179,7 +176,7 @@
 						@click="deleteMatch"
 					>
 						<v-icon small>{{ mdiDelete }}</v-icon>
-						Verknüpfung löschen
+            {{ $t('components.molecules.importUsersMatch.deleteMatch') }}
 					</v-btn>
 				</v-col>
 			</v-card-actions>

@@ -46,7 +46,7 @@
 							<v-text-field
 								v-model="searchFirstName"
 								type="string"
-								label="Suche nach Vorname"
+								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
 							></v-text-field>
 						</td>
@@ -54,7 +54,7 @@
 							<v-text-field
 								v-model="searchLastName"
 								type="string"
-								label="Suche nach Nachname"
+								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
 							></v-text-field>
 						</td>
@@ -62,7 +62,7 @@
 							<v-text-field
 								v-model="searchLoginName"
 								type="string"
-								label="Suche nach Nuzername"
+								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
 							></v-text-field>
 						</td>
@@ -70,7 +70,7 @@
 							<v-select
 								v-model="searchRole"
 								:items="roles"
-								label="Rolle wähle"
+								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
 							></v-select>
 						</td>
@@ -78,13 +78,20 @@
 							<v-text-field
 								v-model="searchClasses"
 								type="string"
-								label="Suche nach Klasse"
+								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
 							></v-text-field>
 						</td>
 						<td>
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
-								<v-btn icon value="none" title="nicht verknüpft" color="">
+								<v-btn
+									icon
+									value="none"
+									:title="
+										$t('components.organisms.importUsers.searchUnMatched')
+									"
+									color=""
+								>
 									<v-icon
 										:color="
 											searchMatchedBy.includes('none') ? 'primary' : 'secondary'
@@ -92,7 +99,14 @@
 										>{{ mdiAccountPlus }}</v-icon
 									>
 								</v-btn>
-								<v-btn icon value="admin" title="von admin verknüpft" color="">
+								<v-btn
+									icon
+									value="admin"
+									:title="
+										$t('components.organisms.importUsers.searchAdminMatched')
+									"
+									color=""
+								>
 									<v-icon
 										:color="
 											searchMatchedBy.includes('admin')
@@ -102,7 +116,14 @@
 										>{{ mdiAccountSwitch }}</v-icon
 									>
 								</v-btn>
-								<v-btn icon value="auto" title="automatisch verknüpft" color="">
+								<v-btn
+									icon
+									value="auto"
+									:title="
+										$t('components.organisms.importUsers.searchAutoMatched')
+									"
+									color=""
+								>
 									<v-icon
 										:color="
 											searchMatchedBy.includes('auto') ? 'primary' : 'secondary'
@@ -114,7 +135,11 @@
 						</td>
 						<td>
 							<v-btn-toggle v-model="searchFlagged" borderless group>
-								<v-btn icon value="true">
+								<v-btn
+									icon
+									value="true"
+									:title="$t('components.organisms.importUsers.searchFlagged')"
+								>
 									<v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
 										mdiFlag
 									}}</v-icon>
@@ -130,13 +155,13 @@
 						{{
 							item.match
 								? `${item.match.firstName} ${item.match.lastName}`
-								: "Neu erstellen"
+								: $t("components.organisms.importUsers.createNew")
 						}}
 						<v-btn
 							class="ma-2"
 							text
 							icon
-							title="bearbeite"
+							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"
 						>
 							<v-icon small>{{ mdiPencil }}</v-icon>
@@ -150,7 +175,7 @@
 						icon
 						color="primary"
 						class="ma-2"
-						title="markiere"
+						:title="$t('components.organisms.importUsers.flagImportUser')"
 						@click="saveFlag(item)"
 					>
 						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
@@ -159,7 +184,7 @@
 						v-else
 						icon
 						class="ma-2"
-						title="markiere"
+						:title="$t('components.organisms.importUsers.flagImportUser')"
 						@click="saveFlag(item)"
 					>
 						<v-icon small>{{ mdiFlagOutline }}</v-icon>
@@ -168,17 +193,32 @@
 			</v-data-table>
 
 			<p class="text-sm">
-				<b>Legende</b>
+				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
 				<br />
 				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
-				{{ this.$theme.short_name }} Benutzer nicht gefunden. Das Konto wird neu
-				erstellt.
+				{{
+					$t("components.organisms.importUsers.legendUnMatched", {
+						instance: this.$theme.short_name,
+						source: $t("pages.administration.migration.ldapSource"),
+					})
+				}}
+
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon> Konto von
-				Admin mit {{ this.$theme.short_name }} Benutzer verknüpft.
+				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
+				{{
+					$t("components.organisms.importUsers.legendAdminMatched", {
+						instance: this.$theme.short_name,
+						source: $t("pages.administration.migration.ldapSource"),
+					})
+				}}
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon> Konto
-				automatish mit {{ this.$theme.short_name }} Benutzer vverknüpft.
+				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
+				{{
+					$t("components.organisms.importUsers.legendAutoMatched", {
+						instance: this.$theme.short_name,
+						source: $t("pages.administration.migration.ldapSource"),
+					})
+				}}
 			</p>
 			<v-divider></v-divider>
 			<br />
@@ -261,16 +301,40 @@ export default Vue.extend({
 		tableHead() {
 			return [
 				{
-					text: "Vorname",
+					text: this.$t("components.organisms.importUsers.tableFirstName"),
 					value: "firstName",
 					sortable: true,
 				},
-				{ text: "Nachname", value: "lastName", sortable: true },
-				{ text: "Nutzername", value: "loginName", sortable: false },
-				{ text: "Rollen", value: "roleNames", sortable: false },
-				{ text: "Klassen", value: "classNames", sortable: false },
-				{ text: "Konten verknüpfen", value: "match", sortable: false },
-				{ text: "Markieren", value: "flagged", sortable: false },
+				{
+					text: this.$t("components.organisms.importUsers.tableLastName"),
+					value: "lastName",
+					sortable: true,
+				},
+				{
+					text: this.$t("components.organisms.importUsers.tableUserName"),
+					value: "loginName",
+					sortable: false,
+				},
+				{
+					text: this.$t("components.organisms.importUsers.tableRoles"),
+					value: "roleNames",
+					sortable: false,
+				},
+				{
+					text: this.$t("components.organisms.importUsers.tableClasses"),
+					value: "classNames",
+					sortable: false,
+				},
+				{
+					text: this.$t("components.organisms.importUsers.tableMatch"),
+					value: "match",
+					sortable: false,
+				},
+				{
+					text: this.$t("components.organisms.importUsers.tableFlag"),
+					value: "flagged",
+					sortable: false,
+				},
 			];
 		},
 		canStartMigration() {
