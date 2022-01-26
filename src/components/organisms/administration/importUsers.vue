@@ -175,7 +175,11 @@
 			<br />
 		</v-container>
 
-		<v-alert v-else light prominent text type="error">{{
+		<v-alert v-else
+             border="right top"
+             colored-border
+             type="error"
+             elevation="2">{{
 			$t("pages.administration.migration.cannotStart")
 		}}</v-alert>
 	</div>

@@ -127,7 +127,7 @@
 								</v-list-item-content>
 							</template>
               <template v-slot:append-item>
-                <div v-intersect="endIntersect" class="pa-4 teal--text">More...</div>
+                <div v-intersect="endIntersect" class="pa-2">mehr...</div>
               </template>
 						</v-autocomplete>
 					</v-col>
@@ -252,7 +252,8 @@ export default {
 			loading: false,
 			searchUser: null,
 			selectedItem: null,
-      limit: 2, // TODO
+      total: 5, // TODO 0
+      limit: 2, // TODO 25
       skip: 0,
 		};
 	},
@@ -303,7 +304,7 @@ export default {
         ImportUserModule.setUserSearch(this.searchUser);
       }
 			ImportUserModule.fetchAllUsers().then(() => {
-				this.count = ImportUserModule.getUserList.total;
+				this.total = ImportUserModule.getUserList.total;
 
 				this.entries = [...this.entries, ...ImportUserModule.getUserList.data];
 				this.loading = false;

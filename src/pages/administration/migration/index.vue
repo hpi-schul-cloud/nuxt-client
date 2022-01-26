@@ -5,37 +5,66 @@
 		:breadcrumbs="breadcrumbs"
 	>
 		<v-snackbar
-        v-model="businessError"
-        :timeout="timeout"
-        top
-        centered
-        :color="businessError !== null && businessError.statusCode === '200' ? 'success darken-3' : 'error darken-3'"
-    >
-      <div v-if="businessError !== null && businessError.statusCode === '200'">{{ businessError.message }}</div>
-      <div v-else>Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.</div>
-      <template v-slot:action="{ attrs }">
-        <v-btn
-            color="white"
-            icon
-            v-bind="attrs"
-            @click="resetBusinessError"
-        >
-          <v-icon>{{ mdiClose }}</v-icon>
-        </v-btn>
-      </template>
-    </v-snackbar>
+			v-model="businessError"
+			:timeout="errorTimeout"
+			top
+			centered
+			:color="
+				businessError && businessError.statusCode === '200'
+					? 'success darken-3'
+					: 'error darken-3'
+			"
+		>
+			<div v-if="businessError && businessError.statusCode === '200'">
+				{{ businessError.message }}
+			</div>
+			<div v-else>{{ $t("pages.administration.migration.error") }}</div>
+			<template v-slot:action="{ attrs }">
+				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
+					<v-icon>{{ mdiClose }}</v-icon>
+				</v-btn>
+			</template>
+		</v-snackbar>
 
 		<div slot="header">
 			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
 			<v-stepper v-model="progressStepper" flat>
 				<v-stepper-header>
-					<v-stepper-step editable step="1"> Anleitung </v-stepper-step>
+					<v-stepper-step
+						:editable="!loading && !maintanenceFinished"
+						:complete="maintanenceFinished"
+						step="1"
+					>
+						{{ $t("pages.administration.migration.step1") }}
+					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step editable step="2"> Kontenverknüpfung </v-stepper-step>
+					<v-stepper-step
+						:editable="canStartMigration && !migrationFinished"
+						step="2"
+						:complete="migrationFinished"
+					>
+						{{ $t("pages.administration.migration.step2") }}
+					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step editable step="3"> Zusammenfassung </v-stepper-step>
+					<v-stepper-step
+						:editable="canStartMigration && !migrationFinished"
+						:complete="migrationFinished"
+						step="3"
+					>
+						{{ $t("pages.administration.migration.step3") }}
+					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="4"> Ende </v-stepper-step>
+					<v-stepper-step
+						step="4"
+						:complete="maintanenceFinished"
+						:editable="!loading && migrationFinished && !maintanenceFinished"
+					>
+						{{ $t("pages.administration.migration.step4") }}
+					</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="5">
+						{{ $t("pages.administration.migration.step5") }}
+					</v-stepper-step>
 				</v-stepper-header>
 			</v-stepper>
 		</div>
@@ -44,138 +73,42 @@
 				<v-stepper-items>
 					<v-stepper-content step="1">
 						<v-card
+							data-id="migration_tutorial"
 							:ripple="false"
 							elevation="2"
 							class="pa-5 mb-10"
 							color="grey lighten-5"
+							v-html="
+								$t('pages.administration.migration.tutorial', {
+									instance: this.$theme.short_name,
+								})
+							"
+						></v-card>
+						<v-btn
+							id="step2"
+							color="primary"
+							@click="progressStepper = migrationFinished ? 4 : 2"
+							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
-							<p>
-								In den folgenden Schritten besteht die Möglichkeit, die lokalen
-								Benutzerkonten auf das
-								<i>zentrale LDAP-System des Landes Brandenburg</i> zu migrieren.
-								Dies bedeutet, dass Informationen zu Benutzerkonten wie Name,
-								E-Mail-Adresse und Berechtigungsrolle nicht mehr lokal in der
-								{{ this.$theme.short_name }}, sondern zentral in weBBschule
-								gepflegt und von dort bezogen werden.
-							</p>
-							<p>
-								Damit User ihre alten Unterrichtsinhalte mit den LDAP-Accounts
-								weiterhin nutzen können, unterstützen wir die Migration mit
-								einem Assistenten. Mit Abschluss der Migration können Nutzer
-								sich mit den LDAP-Login-Namen in ihrem existierenden Account
-								anmelden.
-							</p>
-							<p>
-								Die Schule befindet sich derzeit in der Transferphase und im
-								Migrationsmodus. Die Migration der Benutzerkonten wird auf Basis
-								des letzten Schuljahres durchgeführt.
-							</p>
-							<br />
-							<p>
-								Im ersten Schritt werden die Benutzerkonteninformationen
-								angezeigt, die wir für die Schule aus dem zentralen LDAP
-								erhalten. Jedem LDAP-Benutzerkonto muss jeweils das lokale
-								Benutzerkonto zugeordnet werden, sofern es existiert.
-							</p>
-							<br />
-							<ol>
-								<li>
-									Die automatische Zuordnung sind zu prüfen, die wir vorgenommen
-									haben, sofern die Kombination aus Vorname + Nachname zwischen
-									LDAP- und lokalem Konto übereinstimmt und innerhalb der Schule
-									eindeutig ist.
-								</li>
-								<li>
-									Für LDAP-Konten, denen noch kein lokales Konto zugeordnet ist,
-									kann dies per Stift-Symbol nachgeholt werden. Im sich
-									öffnenden Dialog kann nach Namen gesucht und die Zuordnung
-									manuell vorgenommen werden.
-								</li>
-								<li>
-									LDAP-Konten ohne Zuordnung werden in der
-									{{ this.$theme.short_name }} neu erstellt.
-								</li>
-								<li>
-									Nicht mehr benötigte lokale Benutzerkonten, die keinem
-									LDAP-Konto zugeordnet wurden, können im Verwaltungsbereich
-									nach der Migration gelöscht werden.
-								</li>
-							</ol>
-							<br />
-							<p>
-								Nach Bestätigung der Zuordnung wird im folgenden Schritt eine
-								Zusammenfassung anzeigt, wie viele Konten zugeordnet werden, wie
-								viele lokale Benutzerkonten ohne Zuordnung sind und wie viele
-								Konten lokal neu anlegt werden. Diese Information muss bestätigt
-								werden, um die Migration anzuwenden. Dabei werden die
-								LDAP-Informationen an die lokalen Konten geschrieben und der
-								Migrationsmodus für die Schule beendet.
-							</p>
-							<br />
-							<p>
-								Im letzten Schritt muss die Transferphase der Schule beendet
-								werden. Der Login mit den neuen Login-Daten ist erst nach
-								beenden der Transferphase und anschließendem
-								Synchronisationslauf gegen LDAP möglich. Dieser erfolgt dann
-								automatisch und einmal in der Stunde. Es kann also etwas dauern,
-								bis die neuen Login-Daten genutzt werden können.
-							</p>
-						</v-card>
-						<v-btn color="primary" @click="progressStepper = 2">Weiter</v-btn>
 					</v-stepper-content>
+
 					<v-stepper-content step="2">
 						<import-users></import-users>
-						<v-btn color="secondary" @click="progressStepper = 1">Zurück</v-btn>
-						<v-btn color="primary" @click="progressStepper = 3">Weiter</v-btn>
-					</v-stepper-content>
-					<v-stepper-content v-if="canStartMigration" step="3">
-						<v-card
-							:ripple="false"
-							elevation="2"
-							class="pa-5 mb-10"
-							color="grey lighten-5"
-						>
-							<p>Folgende Zuordnungen wurden vorgenommen:</p>
-							<br />
-							<p>
-								<b>xxx</b> LDAP-Benutzerkonten haben ein
-								{{ this.$theme.short_name }} Benutzerkonto zugeordnet. Die
-								{{ this.$theme.short_name }} Benutzerkonten werden auf die
-								LDAP-Konten migriert
-							</p>
-							<p>
-								<b>yyy</b> LDAP-Benutzerkonten haben kein lokales Benutzerkonto
-								zugeordnet. Die LDAP-Konten werden neu in der
-								{{ this.$theme.short_name }}
-								erstellt.
-							</p>
-							<p>
-								<b>zzz</b> {{ this.$theme.short_name }} Benutzerkonten wurden
-								keinem LDAP-Konto zugeordnet. Die
-								{{ this.$theme.short_name }} Benutzerkonten bleiben erhalten und
-								können über die Verwaltungsseite nachträglich gelöscht werden.
-							</p>
-							<br />
-							<p>
-								<v-checkbox
-									v-model="migrationConfirm"
-									label="Hiermit wird bestätigt, dass die Zuordnung der lokalen Benutzerkonten geprüft bzw. vorgenommen wurden und die Migration durchgeführt werden kann."
-								></v-checkbox>
-							</p>
-						</v-card>
-						<v-btn color="secondary" @click="progressStepper = 2">Zurück</v-btn>
+						<v-btn color="secondary" @click="progressStepper = 1">{{
+							$t("pages.administration.migration.back")
+						}}</v-btn>
 						<v-btn
+							id="step3"
 							color="primary"
-							:disabled="!migrationConfirm"
-							@click="progressStepper = 4"
-							>Migration durchführen</v-btn
+							:disabled="!canStartMigration"
+							@click="progressStepper = 3"
+							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
+
 					<v-stepper-content
-						v-if="
-							canStartMigration && migrationConfirm /* && canFinishMigration */
-						"
-						step="4"
+						v-if="canStartMigration && !migrationFinished"
+						step="3"
 					>
 						<v-card
 							:ripple="false"
@@ -183,16 +116,72 @@
 							class="pa-5 mb-10"
 							color="grey lighten-5"
 						>
-							<p>
-								Die Migration der Benutzerkonten wurde erfolgreich durchgeführt.
-							</p>
-							<p>
-								Ein Login mit den neuen Login-Daten ist erst nach einem
-								Synchronisationslauf gegen LDAP möglich. Dafür muss die
-								Transferphase beendet werden. Nach spätestens einer Stunde
-								findet der nächste LDAP-Lauf automatisch statt.
-							</p>
+							<div v-if="!loading">
+								<div
+									v-html="
+										$t('pages.administration.migration.summary', {
+											instance: this.$theme.short_name,
+											source: $t('pages.administration.migration.ldapSource'),
+											importUsersCount: 'XXX',
+											importUsersUnmatchedCount: 'YYY',
+											usersUnmatchedCount: 'ZZZ',
+										})
+									"
+								></div>
+								<br />
+								<p>
+									<v-checkbox
+										v-model="migrationConfirm"
+										:label="$t('pages.administration.migration.confirm')"
+									></v-checkbox>
+								</p>
+							</div>
+							<div v-else>
+								<v-progress-linear indeterminate></v-progress-linear>
+								{{ $t("pages.administration.migration.performingMigration") }}
+							</div>
 						</v-card>
+						<v-btn
+							color="secondary"
+							:disabled="loading"
+							@click="progressStepper = 2"
+							>{{ $t("pages.administration.migration.back") }}</v-btn
+						>
+						<v-btn
+							color="primary"
+							:disabled="!migrationConfirm || loading"
+							@click="performMigration"
+						>
+							<v-progress-circular
+								v-if="loading"
+								:size="20"
+								indeterminate
+							></v-progress-circular>
+							{{ $t("pages.administration.migration.migrate") }}</v-btn
+						>
+					</v-stepper-content>
+
+					<v-stepper-content v-if="canFinishMaintanence" step="4">
+						<v-card
+							:ripple="false"
+							elevation="2"
+							class="pa-5 mb-10"
+							color="grey lighten-5"
+							v-html="$t('pages.administration.migration.endTransferPhase')"
+						></v-card>
+						<v-btn class="primary" @click="endMaintanence">{{
+							$t("pages.administration.migration.finishTransferPhase")
+						}}</v-btn>
+					</v-stepper-content>
+
+					<v-stepper-content step="5">
+						<v-card
+							:ripple="false"
+							elevation="2"
+							class="pa-5 mb-10"
+							color="grey lighten-5"
+							v-html="$t('pages.administration.migration.waitForSync')"
+						></v-card>
 					</v-stepper-content>
 				</v-stepper-items>
 			</v-stepper>
@@ -221,34 +210,69 @@ export default {
 				},
 			],
 			migrationConfirm: false,
-      timeout: 7500,
-
+			errorTimeout: 7500,
+			loading: false,
 		};
 	},
 	computed: {
 		canStartMigration() {
-			return this.school.inUserMigration && this.school.inMaintenance;
+			return this.school.inUserMigration === true && this.school.inMaintenance;
+		},
+		canFinishMaintanence() {
+			// TODO
+			return true;
+			//return this.school.inUserMigration === false && this.school.inMaintenance;
+		},
+		migrationFinished() {
+			return this.school.inUserMigration === false;
+		},
+		maintanenceFinished() {
+			return !this.school.inMaintenance;
 		},
 		school() {
 			return SchoolsModule.getSchool;
 		},
-    businessError() {
-      const error = ImportUserModule.getBusinessError;
-      if (error && error.message && error.statusCode) {
-        return {
-          message: error.message,
-          statusCode: error.statusCode,
-        }
-      }
-      return false;
-    },
+		businessError() {
+			const error = ImportUserModule.getBusinessError;
+			if (error && error.message && error.statusCode) {
+				return {
+					message: error.message,
+					statusCode: error.statusCode,
+				};
+			}
+			return false;
+		},
 	},
-  methods: {
-    resetBusinessError() {
-      ImportUserModule.setBusinessError(null)
-    }
-  },
-  head() {
+	methods: {
+		performMigration() {
+			// TODO call api
+			this.loading = true;
+
+			// fake api call
+			const getMigrationStatus = true;
+			setTimeout(() => {
+				this.school.inUserMigration = false;
+				this.loading = false;
+				this.progressStepper = 4;
+				resolve({
+					getMigrationStatus,
+				});
+			}, 1000);
+		},
+		endMaintanence() {
+			this.loading = true;
+			// fake api call
+			setTimeout(() => {
+				this.school.inMaintenance = false;
+				this.loading = false;
+				this.progressStepper = 5;
+			}, 1000);
+		},
+		resetBusinessError() {
+			ImportUserModule.setBusinessError(null);
+		},
+	},
+	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};
