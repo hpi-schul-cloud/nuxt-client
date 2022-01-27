@@ -16,8 +16,14 @@ import {
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
+import {
+	DroppedObject,
+	RoomsData,
+	AllItems,
+	SharingCourseObject,
+} from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
+import { BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "rooms",
@@ -30,6 +36,16 @@ export class Rooms extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
 	allElements: CourseMetadataResponse[] = [];
+	courseSharingStatus: SharingCourseObject = {
+		msg: "",
+		status: "",
+	};
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+	};
+
+	status: Status = "";
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -119,6 +135,21 @@ export class Rooms extends VuexModule {
 		}
 	}
 
+	@Mutation
+	setCourseSharingStatus(status: SharingCourseObject): void {
+		this.courseSharingStatus = status;
+	}
+
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	setStatus(status: Status): void {
+		this.status = status;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -137,6 +168,10 @@ export class Rooms extends VuexModule {
 
 	get getRoomsId(): string {
 		return this.gridElementsId;
+	}
+
+	get getCourseSharingStatus(): object {
+		return this.courseSharingStatus;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -248,6 +283,34 @@ export class Rooms extends VuexModule {
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async checkSharingStatus(sharingCode: string): Promise<void> {
+		const params = {
+			qs: {
+				shareToken: sharingCode,
+			},
+		};
+		try {
+			// debugger;
+			const shareCodeResponse = await $axios.$get("/v1/courses-share", {
+				params,
+			});
+			// debugger;
+			this.setCourseSharingStatus({
+				msg: shareCodeResponse,
+				status: "success",
+			});
+		} catch (error) {
+			// debugger;
+			this.setCourseSharingStatus({
+				msg: "ShareToken is not in use.",
+				status: "error",
+			});
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
 		}
 	}
 }
