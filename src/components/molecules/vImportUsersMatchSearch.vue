@@ -297,7 +297,7 @@ export default {
 	},
 	watch: {
 		async searchUser() {
-      this.skip = 0;
+			this.skip = 0;
 			await this.getDataFromApi();
 		},
 	},
@@ -307,10 +307,10 @@ export default {
 	methods: {
 		async endIntersect(entries, observer, isIntersecting) {
 			if (isIntersecting) {
-        if (this.total > this.items.length) {
-          this.skip += this.limit;
-          await this.getDataFromApi();
-        }
+				if (this.total > this.items.length) {
+					this.skip += this.limit;
+					await this.getDataFromApi();
+				}
 			}
 		},
 		async getDataFromApi() {
