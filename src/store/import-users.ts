@@ -10,10 +10,10 @@ import { $axios } from "@utils/api";
 import {
 	UserApiFactory,
 	//UserApi,
-	UserApiInterface,
+	UserImportApiFactory,
 	ImportUserListResponse,
-	UserListResponse,
-	ImportUserResponseRoleNamesEnum,
+	UserMatchListResponse,
+	ImportUserResponseRoleNamesEnum, UserImportApiInterface,
 	//UpdateMatchParams, ImportUserResponse, UserDetailsResponse,
 	//ImportUserResponse,
 	//ImportUserResponseRoleNamesEnum,
@@ -40,7 +40,7 @@ export class ImportUsers extends VuexModule {
 		limit: 0,
 	};
 
-	userList: UserListResponse = {
+	userList: UserMatchListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
@@ -70,7 +70,7 @@ export class ImportUsers extends VuexModule {
 		message: "",
 	};
 
-	private _userApi?: UserApiInterface;
+	private _userApi?: UserImportApiInterface;
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -156,11 +156,11 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setUsersList(importUsersList: UserListResponse): void {
+	setUsersList(importUsersList: UserMatchListResponse): void {
 		this.userList = importUsersList;
 	}
 
-	get getUserList(): UserListResponse {
+	get getUserList(): UserMatchListResponse {
 		return this.userList;
 	}
 
@@ -180,7 +180,7 @@ export class ImportUsers extends VuexModule {
 		try {
 			console.log(this.match)
 			return this.userApi
-				.importUserControllerFindAll(
+				.importUserControllerFindAllImportUsers(
 					this.firstName ? this.firstName : undefined,
 					this.lastName ? this.lastName : undefined,
 					this.loginName ? this.loginName : undefined,
@@ -249,9 +249,9 @@ export class ImportUsers extends VuexModule {
 
 
 
-	private get userApi(): UserApiInterface {
+	private get userApi(): UserImportApiInterface {
 		if (!this._userApi) {
-			this._userApi = UserApiFactory(undefined, "/v3", $axios);
+			this._userApi = UserImportApiFactory(undefined, "/v3", $axios);
 		}
 		return this._userApi;
 	}
