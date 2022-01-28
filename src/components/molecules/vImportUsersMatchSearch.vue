@@ -267,7 +267,7 @@ export default {
 			loading: false,
 			searchUser: null,
 			selectedItem: null,
-			total: 5, // TODO 0
+			total: 0,
 			limit: 2, // TODO 25
 			skip: 0,
 		};
@@ -297,6 +297,7 @@ export default {
 	},
 	watch: {
 		async searchUser() {
+      this.skip = 0;
 			await this.getDataFromApi();
 		},
 	},
@@ -306,8 +307,10 @@ export default {
 	methods: {
 		async endIntersect(entries, observer, isIntersecting) {
 			if (isIntersecting) {
-				this.skip += this.limit;
-				await this.getDataFromApi();
+        if (this.total > this.items.length) {
+          this.skip += this.limit;
+          await this.getDataFromApi();
+        }
 			}
 		},
 		async getDataFromApi() {
