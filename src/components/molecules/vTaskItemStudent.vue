@@ -1,9 +1,11 @@
 <template>
 	<v-list-item
 		:key="task.id"
-		:href="taskHref(task.id)"
+		:href="href"
 		class="mx-n4 mx-sm-0"
 		v-bind="$attrs"
+		:aria-label="`${$t('common.words.task')} ${task.name}`"
+		role="article"
 	>
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
@@ -21,12 +23,7 @@
 			<v-list-item-action-text
 				class="subtitle-2"
 				data-test-id="dueDateLabel"
-				v-text="
-					computedDueDateLabel(
-						task.duedate,
-						(shorten = $vuetify.breakpoint.xsOnly)
-					)
-				"
+				v-text="dueDateLabel"
 			/>
 			<v-spacer />
 			<v-custom-chip-time-remaining
@@ -41,10 +38,10 @@
 
 <script>
 import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
-import { fromNow, fromNowToFuture } from "@plugins/datetime";
+import { fromNowToFuture } from "@plugins/datetime";
 import {
-	printDateFromStringUTC,
-	printDateTimeFromStringUTC,
+	printDateFromStringUTC as dateFromUTC,
+	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@plugins/datetime";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
@@ -58,18 +55,34 @@ export default {
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
 	},
-	data() {
-		return {
-			fromNow,
-		};
-	},
 	computed: {
+		href() {
+			return `/homework/${this.task.id}`;
+		},
+		iconColor() {
+			const defaultColor = "#54616e";
+			return this.task.displayColor || defaultColor;
+		},
+		isCloseToDueDate() {
+			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		},
+		isOverDue() {
+			const dueDate = this.task.duedate;
+			return dueDate && new Date(dueDate) < new Date();
+		},
+		isGradedButMissed() {
+			const { status } = this.task;
+			return this.isOverDue && !status.submitted && status.graded;
+		},
 		taskState() {
-			const { duedate, status } = this.task;
+			const { status } = this.task;
 
-			if (this.isCloseToDueDate(duedate)) return "warning";
-			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
-			if (this.isOverDue(duedate)) return "overdue";
+			if (this.isCloseToDueDate) return "warning";
+			if (this.isGradedButMissed) return "gradedOverdue";
+			if (this.isOverDue) return "overdue";
 			if (status.submitted && !status.graded) return "submitted";
 			if (status.graded) return "graded";
 			return undefined;
@@ -85,47 +98,20 @@ export default {
 			};
 			return stateIcons[this.taskState] || stateIcons["open"];
 		},
-		iconColor() {
-			return this.task.displayColor || this.defaultIconColor;
-		},
-		defaultIconColor() {
-			return "#54616e";
-		},
 		topic() {
 			return this.task.description
 				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
 				: "";
 		},
-	},
-	methods: {
-		computedDueDateLabel(dueDate, shorten = false) {
-			if (!dueDate) {
-				return this.$t("pages.tasks.labels.noDueDate");
-			} else if (shorten) {
-				return (
-					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
-				);
-			} else {
-				return (
-					this.$t("pages.tasks.labels.due") +
-					printDateTimeFromStringUTC(dueDate)
-				);
-			}
-		},
-		isCloseToDueDate(dueDate) {
-			const timeDiff = fromNowToFuture(dueDate, "hours");
-			if (timeDiff === null) {
-				return false;
-			} else return timeDiff <= 24;
-		},
-		isOverDue(dueDate) {
-			return dueDate && new Date(dueDate) < new Date();
-		},
-		isGradedButMissed(dueDate, status) {
-			return this.isOverDue(dueDate) && !status.submitted && status.graded;
-		},
-		taskHref: (id) => {
-			return `/homework/${id}`;
+		dueDateLabel() {
+			const dueDate = this.task.duedate;
+			const convertedDueDate = this.$vuetify.breakpoint.xsOnly
+				? dateFromUTC(dueDate)
+				: dateTimeFromUTC(dueDate);
+
+			return !dueDate
+				? this.$t("pages.tasks.labels.noDueDate")
+				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
 	},
 };

@@ -119,15 +119,31 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "@utils/multiline-ellipsis.scss";
+@import "~vuetify/src/styles/styles.sass";
+@import "@styles";
 .sub-title {
-	height: var(--space-lg);
-	overflow: hidden;
+	margin-right: calc(var(--space-base-vuetify) * -5);
+	margin-left: calc(var(--space-base-vuetify) * -5);
 	text-align: center;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	overflow-wrap: break-word;
+
+	@include excerpt(
+		$font-size: calc(var(--space-base-vuetify) * 4),
+		$line-height: var(--line-height-md),
+		$lines-to-show: 2
+	);
 }
 
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	.sub-title {
+		margin-right: calc(var(--space-base-vuetify) * -3);
+		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		font-size: 14px;
+	}
+}
 .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
