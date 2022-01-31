@@ -3,6 +3,7 @@
 		<v-tabs-items v-model="currentTab">
 			<v-tab-item>
 				<v-custom-double-panels
+					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
@@ -37,6 +38,7 @@
 			</v-tab-item>
 			<v-tab-item>
 				<v-custom-double-panels
+					class="pb-16"
 					:panel-one-count="gradedTasks.length"
 					:panel-two-count="submittedTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
@@ -61,6 +63,7 @@
 			</v-tab-item>
 			<v-tab-item>
 				<tasks-list
+					class="pb-16"
 					:tasks="finishedTasks"
 					user-role="student"
 					type="finished"

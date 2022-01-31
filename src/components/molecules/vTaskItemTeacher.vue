@@ -104,11 +104,11 @@
 							<v-list-item-title>
 								<template v-if="task.status.isFinished">
 									<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
-									Wiederherstellen
+									{{ $t("components.molecules.TaskItemMenu.restore") }}
 								</template>
 								<template v-else>
 									<v-icon class="task-action-icon"> $taskFinished </v-icon>
-									Abschließen
+									{{ $t("components.molecules.TaskItemMenu.finish") }}
 								</template>
 							</v-list-item-title>
 						</v-list-item>
@@ -123,6 +123,7 @@
 import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
 import { mdiDotsVertical, mdiPencilOutline, mdiUndo } from "@mdi/js";
 import FinishedTaskModule from "@/store/finished-tasks";
+import TaskModule from "@/store/tasks";
 
 // TODO - different requiredKeys for finished and other tasks?
 // const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];

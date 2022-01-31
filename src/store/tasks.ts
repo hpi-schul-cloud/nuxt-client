@@ -6,6 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import AuthModule from "@/store/auth";
+import FinishedTasksModule from "@/store/finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
@@ -81,6 +82,7 @@ export class TaskModule extends VuexModule {
 			await $axios.$patch(`/v1/homework/${taskId}`, { archived: [userId] });
 
 			await this.fetchAllTasks();
+			await FinishedTasksModule.refetchTasks();
 
 			this.setStatus("completed");
 		} catch (error) {
