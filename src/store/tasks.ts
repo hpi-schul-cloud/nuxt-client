@@ -5,6 +5,7 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
+import AuthModule from "@/store/auth";
 import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
@@ -64,6 +65,23 @@ export class TaskModule extends VuexModule {
 				total = response.data.total;
 			} while (skip < total);
 			this.setTasks(tasks);
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async finishTask(taskId: String): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			const userId = AuthModule.getUser?.id;
+			await $axios.$patch(`/v1/homework/${taskId}`, { archived: [userId] });
+
+			await this.fetchAllTasks();
+
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);

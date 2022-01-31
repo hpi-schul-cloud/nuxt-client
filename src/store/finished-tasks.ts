@@ -5,6 +5,8 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
+//import AuthModule from "@/store/auth";
+import TasksModule from "@/store/tasks";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
@@ -22,7 +24,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 50,
+		limit: 11,
 		skip: 0,
 		total: 0,
 	};
@@ -50,11 +52,7 @@ export class FinishedTaskModule extends VuexModule {
 				limit
 			);
 
-			const tasks = response.data.data.map((task) => {
-				task.status.isFinished = true;
-				return task;
-			});
-			this.setTasks(tasks);
+			this.setTasks(response.data.data);
 
 			this.setPagination({
 				limit,
@@ -88,11 +86,7 @@ export class FinishedTaskModule extends VuexModule {
 
 			await new Promise((resolve) => setTimeout(resolve, 300));
 
-			const tasks = response.data.data.map((task) => {
-				task.status.isFinished = true;
-				return task;
-			});
-			this.setTasks(this.tasks.concat(tasks));
+			this.setTasks(this.tasks.concat(response.data.data));
 			this.setPagination({
 				limit,
 				skip: skip + limit,
@@ -106,20 +100,66 @@ export class FinishedTaskModule extends VuexModule {
 		}
 	}
 
-	@Action
-	async finishTask(taskId: String): Promise<void> {
+	/* 	@Action
+	async fetchTasks(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			//	$axios.setBaseURL("http://localhost:3030/api/v1/");
-			const task = await $axios.$get(
-				`http://localhost:3030/api/v1/homework/${taskId}`
+			const { skip, limit, total } = this.pagination;
+
+			if (this.tasks.length >= total && this.isInitialized) {
+				this.setStatus("completed");
+				return;
+			}
+
+			const response = await this.taskApi.taskControllerFindAllFinished(
+				skip,
+				limit
 			);
 
-			const response = await $axios.$patch(
-				`http://localhost:3030/api/v1/homework/${taskId}`,
-				{ archived: [task.teacherId] }
-			);
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			this.setTasks(this.tasks.concat(response.data.data));
+
+			if (!this.isInitialized) {
+				this.setInitialized(true);
+			}
+
+			this.setPagination({
+				limit,
+				skip: skip + limit,
+				total: response.data.total,
+			});
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	} */
+
+	@Action
+	async refetchTasks(): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			const { limit } = this.pagination;
+
+			const oldSkipValue = this.pagination.skip;
+			let skip = 0;
+			const tasks: Task[] = [];
+
+			do {
+				const response = await this.taskApi.taskControllerFindAllFinished(
+					skip,
+					limit
+				);
+				tasks.push(...response.data.data);
+
+				skip += limit;
+			} while (skip !== oldSkipValue);
+
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			this.setTasks(tasks);
 
 			this.setStatus("completed");
 		} catch (error) {
@@ -133,15 +173,11 @@ export class FinishedTaskModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			//	$axios.setBaseURL("http://localhost:3030/api/v1/");
-			const task = await $axios.$get(
-				`http://localhost:3030/api/v1/homework/${taskId}`
-			);
+			// TODO - multiple userIds possible if same task is archived by different users?
+			await $axios.$patch(`/v1/homework/${taskId}`, { archived: [] });
 
-			const response = await $axios.$patch(
-				`http://localhost:3030/api/v1/homework/${taskId}`,
-				{ archived: [] }
-			);
+			await this.refetchTasks();
+			await TasksModule.fetchAllTasks();
 
 			this.setStatus("completed");
 		} catch (error) {

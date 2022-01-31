@@ -214,7 +214,7 @@ export default {
 			if (this.task.status.isFinished) {
 				FinishedTaskModule.restoreTask(this.task.id);
 			} else {
-				FinishedTaskModule.finishTask(this.task.id);
+				TaskModule.finishTask(this.task.id);
 			}
 		},
 	},
