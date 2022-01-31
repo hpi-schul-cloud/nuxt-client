@@ -301,7 +301,7 @@ export class Rooms extends VuexModule {
 				code: courseCode,
 				courseName: "",
 				status: "error",
-				message: "ShareToken is not in use.",
+				message: "The course code is not in use.",
 			});
 			this.setError(error);
 		}

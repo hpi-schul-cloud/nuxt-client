@@ -679,6 +679,7 @@
 	"pages.rooms.importCourse.step_3": "The imported course can be renamed in the next step.",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.btn.confirm": "Import",
+	"pages.rooms.importCourse.error": "The course code is not in use.",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"storybook.lang": "I'm in English now!",
 	"utils.adminFilter.class.title": "Class(es)",

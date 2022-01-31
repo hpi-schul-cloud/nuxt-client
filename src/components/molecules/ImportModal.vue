@@ -8,15 +8,15 @@
 		<template slot="content" class="import-modal-content">
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
 				<v-stepper-header>
-					<v-stepper-step step="1">
+					<v-stepper-step step="1" class="step" @click="onClickStepper(1)">
 						{{ $t("pages.rooms.importCourse.step_1.text") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="2">
+					<v-stepper-step step="2" class="step" @click="onClickStepper(2)">
 						{{ $t("pages.rooms.importCourse.step_2.text") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="3">
+					<v-stepper-step step="3" class="step">
 						{{ $t("pages.rooms.importCourse.step_3.text") }}
 					</v-stepper-step>
 				</v-stepper-header>
@@ -42,6 +42,7 @@
 				</div>
 				<div v-if="step === 3">
 					{{ $t("pages.rooms.importCourse.step_3") }}
+					{{ $t("pages.rooms.importCourse.error") }}
 					<v-text-field
 						v-model="sharedCourseData.courseName"
 						outlined
@@ -51,7 +52,7 @@
 				</div>
 				<div v-if="sharedCourseData.status === 'error' && step === 3">
 					<v-alert dense outlined type="error">
-						{{ sharedCourseData.message }}
+						{{ $t("pages.rooms.importCourse.error") }}
 					</v-alert>
 				</div>
 			</div>
@@ -64,7 +65,7 @@
 							outlined
 							@click="stepBack"
 						>
-							Back
+							{{ $t("common.actions.back") }}
 						</v-btn>
 					</v-col>
 					<v-col md="8" class="ml-auto cancel-confirm-button">
@@ -158,8 +159,13 @@ export default {
 			this.step = 1;
 		},
 		stepBack() {
-			if (this.step == 1) return;
+			if (this.step == 1) {
+				this.$emit("dialog-closed", false);
+			}
 			this.step--;
+		},
+		onClickStepper(step) {
+			this.step = step;
 		},
 	},
 };
@@ -176,5 +182,8 @@ export default {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 1rem;
 	color: var(--color-black);
+}
+.step {
+	cursor: pointer;
 }
 </style>

@@ -684,6 +684,7 @@
 	"pages.rooms.importCourse.step_3": "Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.btn.confirm": "Importieren",
+	"pages.rooms.importCourse.error": "Der Kurscode wird nicht verwendet.",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.adminFilter.class.title": "Klasse(n)",
