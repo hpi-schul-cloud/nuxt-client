@@ -1,61 +1,69 @@
 <template>
 	<vCustomDialog
-		ref="customDialog"
+		ref="importDialog"
 		:is-open="isOpen"
-		class="room-dialog"
+		class="import-dialog"
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
-		<template slot="content">
-			<div>
-				<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0">
-					<v-stepper-header>
-						<v-stepper-step step="1">
-							{{ $t("pages.rooms.importCourse.step_1.text") }}
-						</v-stepper-step>
-						<v-divider></v-divider>
-						<v-stepper-step step="2">
-							{{ $t("pages.rooms.importCourse.step_2.text") }}
-						</v-stepper-step>
-						<v-divider></v-divider>
-						<v-stepper-step step="3">
-							{{ $t("pages.rooms.importCourse.step_3.text") }}
-						</v-stepper-step>
-					</v-stepper-header>
-				</v-stepper>
-			</div>
-			<div v-if="step === 1" class="step-sections">
-				<p>
-					{{ $t("pages.rooms.importCourse.step_1.info_1") }}
-				</p>
-				<p>
-					{{ $t("pages.rooms.importCourse.step_1.info_2") }}
-				</p>
-			</div>
-			<div v-if="step === 2" class="step-sections">
-				{{ $t("pages.rooms.importCourse.step_2") }}
-				<v-text-field
-					v-model="sharedCourseData.code"
-					outlined
-					dense
-					class="mt-1"
-				></v-text-field>
-			</div>
-			<div v-if="step === 3" class="step-sections">
-				{{ $t("pages.rooms.importCourse.step_3") }}
-				<v-text-field
-					v-model="sharedCourseData.courseName"
-					outlined
-					dense
-					class="mt-1"
-				></v-text-field>
-			</div>
-			<div v-if="sharedCourseData.status === 'error' && step === 3">
-				<v-alert type="error"> {{ sharedCourseData.message }} </v-alert>
+		<template slot="content" class="import-modal-content">
+			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
+				<v-stepper-header>
+					<v-stepper-step step="1">
+						{{ $t("pages.rooms.importCourse.step_1.text") }}
+					</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="2">
+						{{ $t("pages.rooms.importCourse.step_2.text") }}
+					</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="3">
+						{{ $t("pages.rooms.importCourse.step_3.text") }}
+					</v-stepper-step>
+				</v-stepper-header>
+			</v-stepper>
+
+			<div class="step-sections">
+				<div v-if="step === 1">
+					<p>
+						{{ $t("pages.rooms.importCourse.step_1.info_1") }}
+					</p>
+					<p>
+						{{ $t("pages.rooms.importCourse.step_1.info_2") }}
+					</p>
+				</div>
+				<div v-if="step === 2">
+					{{ $t("pages.rooms.importCourse.step_2") }}
+					<v-text-field
+						v-model="sharedCourseData.code"
+						outlined
+						dense
+						class="mt-1 text-field-course-code"
+					></v-text-field>
+				</div>
+				<div v-if="step === 3">
+					{{ $t("pages.rooms.importCourse.step_3") }}
+					<v-text-field
+						v-model="sharedCourseData.courseName"
+						outlined
+						dense
+						class="mt-1 text-field-course-name"
+					></v-text-field>
+				</div>
+				<div v-if="sharedCourseData.status === 'error' && step === 3">
+					<v-alert dense outlined type="error">
+						{{ sharedCourseData.message }}
+					</v-alert>
+				</div>
 			</div>
 			<div class="button-section mt-8">
 				<v-row>
 					<v-col md="4">
-						<v-btn class="dialog-closed" depressed outlined @click="stepBack">
+						<v-btn
+							class="dialog-back-button"
+							depressed
+							outlined
+							@click="stepBack"
+						>
 							Back
 						</v-btn>
 					</v-col>
@@ -160,11 +168,11 @@ export default {
 .v-dialog--active {
 	overflow-y: hidden !important;
 }
-
 .cancel-confirm-button {
 	text-align: right;
 }
 .step-sections {
+	min-height: var(--sidebar-width);
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 1rem;
 	color: var(--color-black);
