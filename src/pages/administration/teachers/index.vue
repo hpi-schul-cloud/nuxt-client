@@ -142,7 +142,7 @@ export default {
 		return {
 			mdiPlus,
 			mdiAccountPlus,
-			mdiCloudUpload,
+			mdiCloudDownload,
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.teachers.index"

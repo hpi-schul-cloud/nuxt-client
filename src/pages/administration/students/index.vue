@@ -150,7 +150,7 @@ export default {
 		return {
 			mdiPlus,
 			mdiAccountPlus,
-			mdiCloudUpload,
+			mdiCloudDownload,
 			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
