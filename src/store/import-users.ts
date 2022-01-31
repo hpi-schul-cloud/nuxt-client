@@ -8,18 +8,10 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "@utils/api";
 import {
-	UserApiFactory,
-	//UserApi,
 	UserImportApiFactory,
 	ImportUserListResponse,
 	UserMatchListResponse,
 	ImportUserResponseRoleNamesEnum, UserImportApiInterface,
-	//UpdateMatchParams, ImportUserResponse, UserDetailsResponse,
-	//ImportUserResponse,
-	//ImportUserResponseRoleNamesEnum,
-	//UpdateMatchParams,
-	//UserMatchResponse,
-	//UserMatchResponseMatchedByEnum,
 } from "@/serverApi/v3";
 import {BusinessError} from "@store/types/commons";
 
@@ -57,7 +49,7 @@ export class ImportUsers extends VuexModule {
 
 	limit: number = 10;
 	skip: number = 0;
-	sortBy: any = '';
+	sortBy?: 'firstName' | 'lastName';
 	sortOrder: any = 'asc';
 
 	userSearch: string = '';
@@ -118,7 +110,7 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setSortBy(sortBy: string): void {
+	setSortBy(sortBy: 'firstName' | 'lastName'): void {
 		this.sortBy = sortBy;
 	}
 
@@ -178,7 +170,6 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async fetchAllImportUsers(): Promise<void> {
 		try {
-			console.log(this.match)
 			return this.userApi
 				.importUserControllerFindAllImportUsers(
 					this.firstName ? this.firstName : undefined,
@@ -188,8 +179,8 @@ export class ImportUsers extends VuexModule {
 					this.flagged ? true : undefined,
 					this.classes ? this.classes : undefined,
 					this.role ? this.role : undefined,
+					this.sortBy ? this.sortOrder : undefined,
 					this.sortBy,
-					this.sortOrder,
 					this.skip,
 					this.limit
 				)

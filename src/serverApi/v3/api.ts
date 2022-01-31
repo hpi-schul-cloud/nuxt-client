@@ -921,6 +921,12 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isSubstitutionTeacher: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskStatusResponse
+     */
+    isFinished: boolean;
 }
 /**
  * 
@@ -2707,14 +2713,14 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
          * @param {'student' | 'teacher' | 'admin'} [role] 
-         * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAllImportUsers: async (firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerFindAllImportUsers: async (firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2759,12 +2765,12 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['role'] = role;
             }
 
-            if (sortBy !== undefined) {
-                localVarQueryParameter['sortBy'] = sortBy;
-            }
-
             if (sortOrder !== undefined) {
                 localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
             }
 
             if (skip !== undefined) {
@@ -2976,15 +2982,15 @@ export const UserImportApiFp = function(configuration?: Configuration) {
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
          * @param {'student' | 'teacher' | 'admin'} [role] 
-         * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options);
+        async importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3050,15 +3056,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
          * @param {boolean} [flagged] 
          * @param {string} [classes] 
          * @param {'student' | 'teacher' | 'admin'} [role] 
-         * @param {string} [sortBy] 
          * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
-            return localVarFp.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options).then((request) => request(axios, basePath));
+        importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
+            return localVarFp.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3118,15 +3124,15 @@ export interface UserImportApiInterface {
      * @param {boolean} [flagged] 
      * @param {string} [classes] 
      * @param {'student' | 'teacher' | 'admin'} [role] 
-     * @param {string} [sortBy] 
      * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'firstName' | 'lastName'} [sortBy] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
+    importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
 
     /**
      * 
@@ -3186,16 +3192,16 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      * @param {boolean} [flagged] 
      * @param {string} [classes] 
      * @param {'student' | 'teacher' | 'admin'} [role] 
-     * @param {string} [sortBy] 
      * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'firstName' | 'lastName'} [sortBy] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortBy?: string, sortOrder?: 'asc' | 'desc', skip?: number, limit?: number, options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortBy, sortOrder, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
