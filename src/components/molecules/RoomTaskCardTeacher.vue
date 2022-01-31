@@ -38,11 +38,15 @@
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item pa-1">
 					<div class="chip-title">Submitted</div>
-					<div class="chip-value">0/1</div>
+					<div class="chip-value">
+						{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+					</div>
 				</div>
 				<div class="grey lighten-2 chip-item pa-1">
 					<div class="chip-title">Graded</div>
-					<div class="chip-value">0/1</div>
+					<div class="chip-value">
+						{{ task.status.graded }}/{{ task.status.maxSubmissions }}
+					</div>
 				</div>
 			</div>
 		</v-card-text>
