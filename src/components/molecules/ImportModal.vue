@@ -5,7 +5,7 @@
 		class="room-dialog"
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
-		<template slot="content import-modal-content">
+		<template slot="content">
 			<div>
 				<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0">
 					<v-stepper-header>
