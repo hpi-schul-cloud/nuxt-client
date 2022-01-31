@@ -24,7 +24,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 11,
+		limit: 10,
 		skip: 0,
 		total: 0,
 	};
@@ -41,67 +41,7 @@ export class FinishedTaskModule extends VuexModule {
 	_taskApi?: TaskApiInterface;
 
 	@Action
-	async fetchInitialTasks(): Promise<void> {
-		this.resetBusinessError();
-		this.setStatus("pending");
-		try {
-			const { skip, limit } = this.pagination;
-
-			const response = await this.taskApi.taskControllerFindAllFinished(
-				skip,
-				limit
-			);
-
-			this.setTasks(response.data.data);
-
-			this.setPagination({
-				limit,
-				skip: limit,
-				total: response.data.total,
-			});
-			this.setStatus("completed");
-			this.setInitialized(true);
-		} catch (error) {
-			this.setBusinessError(error as BusinessError);
-			this.setStatus("error");
-		}
-	}
-
-	@Action
-	async fetchMoreTasks(): Promise<void> {
-		this.resetBusinessError();
-		this.setStatus("pending");
-		try {
-			const { skip, limit, total } = this.pagination;
-
-			if (total <= skip) {
-				this.setStatus("completed");
-				return;
-			}
-
-			const response = await this.taskApi.taskControllerFindAllFinished(
-				skip,
-				limit
-			);
-
-			await new Promise((resolve) => setTimeout(resolve, 300));
-
-			this.setTasks(this.tasks.concat(response.data.data));
-			this.setPagination({
-				limit,
-				skip: skip + limit,
-				total: response.data.total,
-			});
-
-			this.setStatus("completed");
-		} catch (error) {
-			this.setBusinessError(error as BusinessError);
-			this.setStatus("error");
-		}
-	}
-
-	/* 	@Action
-	async fetchTasks(): Promise<void> {
+	async fetchFinishedTasks(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
@@ -135,7 +75,7 @@ export class FinishedTaskModule extends VuexModule {
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
 		}
-	} */
+	}
 
 	@Action
 	async refetchTasks(): Promise<void> {

@@ -268,7 +268,7 @@ export default {
 			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.finishedTasksIsInitialized) {
-				FinishedTaskModule.fetchInitialTasks();
+				FinishedTaskModule.fetchFinishedTasks();
 			}
 		},
 	},
