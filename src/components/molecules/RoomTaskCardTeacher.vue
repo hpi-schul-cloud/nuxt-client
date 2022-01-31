@@ -2,8 +2,8 @@
 	<v-card
 		class="mx-auto mb-2"
 		max-width="100%"
-		:click="onClick(task.id)"
 		:aria-label="ariaLabel"
+		:href="taskHref(task.id)"
 		tabindex="0"
 	>
 		<v-card-text>
@@ -27,12 +27,7 @@
 				</div>
 			</div>
 			<div class="text-h4 text--primary">{{ task.name }}</div>
-			<div class="text--primary mt-1">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum officia
-				sint pariatur fugiat consequatur sapiente dolores reprehenderit
-				assumenda sequi illum, vero consectetur maiores eius accusantium ratione
-				ullam voluptatibus beatae? Eveniet.
-			</div>
+			<div class="text--primary mt-1">{{ task.description }}</div>
 		</v-card-text>
 		<v-card-text class="ma-0 pb-0 pt-0">
 			<div class="chip-items-group">
@@ -112,8 +107,8 @@ export default {
 				);
 			}
 		},
-		onClick(id) {
-			console.log(id);
+		taskHref: (id) => {
+			return `/homework/${id}`;
 		},
 	},
 };
