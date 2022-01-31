@@ -8,11 +8,21 @@
 		<template slot="content" class="import-modal-content">
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
 				<v-stepper-header>
-					<v-stepper-step step="1" class="step" @click="onClickStepper(1)">
+					<v-stepper-step
+						step="1"
+						:complete="step > 1"
+						class="step"
+						@click="onClickStepper(1)"
+					>
 						{{ $t("pages.rooms.importCourse.step_1.text") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="2" class="step" @click="onClickStepper(2)">
+					<v-stepper-step
+						step="2"
+						:complete="step > 2"
+						class="step"
+						@click="onClickStepper(2)"
+					>
 						{{ $t("pages.rooms.importCourse.step_2.text") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
@@ -131,6 +141,7 @@ export default {
 	methods: {
 		nextStep() {
 			if (this.step == 2) {
+				if (this.sharedCourseData.code === "") return;
 				this.getSharingStatus(this.sharedCourseData.code);
 			}
 			if (this.step == 3) {
