@@ -50,7 +50,7 @@ describe("@components/molecules/RoomModal", () => {
 		expect(emitted && emitted[0][0]).toBeFalsy();
 	});
 
-	it("should stepper work by setting step value", async () => {
+	it("stepper should work by setting step value", async () => {
 		const testProps = {
 			isOpen: true,
 		};
@@ -77,7 +77,7 @@ describe("@components/molecules/RoomModal", () => {
 		expect(stepper.vm.steps[2].isActive).toBe(true);
 	});
 
-	it("text fields should correct value", async () => {
+	it("text fields should have correct value", async () => {
 		const testProps = {
 			isOpen: true,
 		};
@@ -147,7 +147,7 @@ describe("@components/molecules/RoomModal", () => {
 		expect(emitted["dialog-closed"]).toHaveLength(1);
 	});
 
-	it("confirm button should disable if status is error", async () => {
+	it("confirm button should be disabled if status is error", async () => {
 		const testProps = {
 			isOpen: true,
 		};

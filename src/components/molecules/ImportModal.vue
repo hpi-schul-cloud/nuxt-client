@@ -144,11 +144,11 @@ export default {
 	},
 	methods: {
 		nextStep() {
-			if (this.step == 2) {
+			if (this.step === 2) {
 				if (this.sharedCourseData.code === "") return;
 				this.getSharingStatus(this.sharedCourseData.code);
 			}
-			if (this.step == 3) {
+			if (this.step === 3) {
 				this.confirmImport();
 				return;
 			}
@@ -174,7 +174,7 @@ export default {
 			this.step = 1;
 		},
 		stepBack() {
-			if (this.step == 1) {
+			if (this.step === 1) {
 				this.$emit("dialog-closed", false);
 			}
 			this.step--;
