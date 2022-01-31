@@ -5,7 +5,7 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-//import AuthModule from "@/store/auth";
+import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
@@ -173,8 +173,11 @@ export class FinishedTaskModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			// TODO - multiple userIds possible if same task is archived by different users?
-			await $axios.$patch(`/v1/homework/${taskId}`, { archived: [] });
+			const task = await $axios.$get(`/v1/homework/${taskId}`);
+			const userId = AuthModule.getUser?.id;
+
+			const archived = task.archived.filter((id: String) => id !== userId);
+			await $axios.$patch(`/v1/homework/${taskId}`, { archived });
 
 			await this.refetchTasks();
 			await TasksModule.fetchAllTasks();

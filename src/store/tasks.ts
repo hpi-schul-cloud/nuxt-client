@@ -79,10 +79,17 @@ export class TaskModule extends VuexModule {
 		this.setStatus("pending");
 		try {
 			const userId = AuthModule.getUser?.id;
-			await $axios.$patch(`/v1/homework/${taskId}`, { archived: [userId] });
+			const task = await $axios.$get(`/v1/homework/${taskId}`);
+			task.archived.push(userId);
+
+			await $axios.$patch(`/v1/homework/${taskId}`, {
+				archived: task.archived,
+			});
 
 			await this.fetchAllTasks();
-			await FinishedTasksModule.refetchTasks();
+			if (FinishedTasksModule.isInitialized) {
+				await FinishedTasksModule.refetchTasks();
+			}
 
 			this.setStatus("completed");
 		} catch (error) {
