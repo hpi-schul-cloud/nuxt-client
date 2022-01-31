@@ -5,24 +5,25 @@
 		class="room-dialog"
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
-		<div slot="title" class="room-title"></div>
-		<template slot="content">
-			<v-stepper v-model="step" alt-labels flat class="mb-4">
-				<v-stepper-header class="pa-0">
-					<v-stepper-step step="1">
-						{{ $t("pages.rooms.importCourse.step_1.text") }}
-					</v-stepper-step>
-					<v-divider></v-divider>
-					<v-stepper-step step="2">
-						{{ $t("pages.rooms.importCourse.step_2.text") }}
-					</v-stepper-step>
-					<v-divider></v-divider>
-					<v-stepper-step step="3">
-						{{ $t("pages.rooms.importCourse.step_3.text") }}
-					</v-stepper-step>
-				</v-stepper-header>
-			</v-stepper>
-			<div v-if="step === 1">
+		<template slot="content import-modal-content">
+			<div>
+				<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0">
+					<v-stepper-header>
+						<v-stepper-step step="1">
+							{{ $t("pages.rooms.importCourse.step_1.text") }}
+						</v-stepper-step>
+						<v-divider></v-divider>
+						<v-stepper-step step="2">
+							{{ $t("pages.rooms.importCourse.step_2.text") }}
+						</v-stepper-step>
+						<v-divider></v-divider>
+						<v-stepper-step step="3">
+							{{ $t("pages.rooms.importCourse.step_3.text") }}
+						</v-stepper-step>
+					</v-stepper-header>
+				</v-stepper>
+			</div>
+			<div v-if="step === 1" class="step-sections">
 				<p>
 					{{ $t("pages.rooms.importCourse.step_1.info_1") }}
 				</p>
@@ -30,46 +31,63 @@
 					{{ $t("pages.rooms.importCourse.step_1.info_2") }}
 				</p>
 			</div>
-			<div v-if="step === 2">
+			<div v-if="step === 2" class="step-sections">
 				{{ $t("pages.rooms.importCourse.step_2") }}
 				<v-text-field
-					v-model="sharedCode"
+					v-model="sharedCourseData.code"
 					outlined
 					dense
 					class="mt-1"
 				></v-text-field>
 			</div>
-			<div v-if="step === 3">
+			<div v-if="step === 3" class="step-sections">
 				{{ $t("pages.rooms.importCourse.step_3") }}
 				<v-text-field
-					v-model="courseDataToBeImported.msg"
+					v-model="sharedCourseData.courseName"
 					outlined
 					dense
 					class="mt-1"
 				></v-text-field>
 			</div>
-			<div style="text-align: right">
-				<v-btn class="dialog-closed" depressed outlined @click="cancel">
-					{{ this.$t("common.actions.cancel") }}
-				</v-btn>
-				<v-btn
-					class="dialog-confirmed"
-					color="primary"
-					depressed
-					@click="nextStep"
-				>
-					{{ nextButtonName }}
-				</v-btn>
+			<div v-if="sharedCourseData.status === 'error' && step === 3">
+				<v-alert type="error"> {{ sharedCourseData.message }} </v-alert>
+			</div>
+			<div class="button-section mt-8">
+				<v-row>
+					<v-col md="4">
+						<v-btn class="dialog-closed" depressed outlined @click="stepBack">
+							Back
+						</v-btn>
+					</v-col>
+					<v-col md="8" class="ml-auto cancel-confirm-button">
+						<v-btn
+							class="dialog-closed"
+							depressed
+							style="background: transparent"
+							@click="cancel"
+						>
+							{{ this.$t("common.actions.cancel") }}
+						</v-btn>
+						<v-btn
+							class="dialog-confirmed"
+							color="primary"
+							depressed
+							:disabled="sharedCourseData.status === 'error' && step === 3"
+							@click="nextStep"
+						>
+							{{ nextButtonName }}
+						</v-btn>
+					</v-col>
+				</v-row>
 			</div>
 		</template>
 	</vCustomDialog>
 </template>
-<script lang="ts">
-import Vue from "vue";
+<script>
 import RoomsModule from "@store/rooms";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 
-export default Vue.extend({
+export default {
 	components: {
 		vCustomDialog,
 	},
@@ -86,8 +104,12 @@ export default Vue.extend({
 	data() {
 		return {
 			step: 1,
-			sharedCode: "",
-			courseDataToBeImported: {},
+			sharedCourseData: {
+				code: "",
+				courseName: "",
+				status: "",
+				message: "",
+			},
 		};
 	},
 	computed: {
@@ -99,33 +121,52 @@ export default Vue.extend({
 	},
 	methods: {
 		nextStep() {
-			// @ts-ignore
-			this.step++;
-			// @ts-ignore
+			if (this.step == 2) {
+				this.getSharingStatus(this.sharedCourseData.code);
+			}
 			if (this.step == 3) {
-				this.getSharingStatus(this.sharedCode);
+				this.confirmImport();
+				return;
 			}
-			// @ts-ignore
-			if (this.step == 4) {
-				this.$emit("dialog-closed", false);
-				// @ts-ignore
-				this.step = 1;
-			}
+			this.step++;
 		},
-		async getSharingStatus(sharingCode: string) {
-			await RoomsModule.checkSharingStatus(sharingCode);
-			this.courseDataToBeImported = RoomsModule.getCourseSharingStatus;
+		async getSharingStatus(sharingCode) {
+			await RoomsModule.getSharedCourseData(sharingCode);
+			this.sharedCourseData = RoomsModule.getCourseSharingStatus;
+		},
+		async confirmImport() {
+			await RoomsModule.confirmSharedCourseData(this.sharedCourseData);
 
-			console.log(RoomsModule.getCourseSharingStatus);
-		},
-		confirm() {
-			// server call
+			const importedCourseId = RoomsModule.getImportedCourseId;
+
+			if (importedCourseId) {
+				this.step = 1;
+				this.$emit("dialog-closed", false);
+				window.location = `/courses/${importedCourseId}/edit/`;
+			}
 		},
 		cancel() {
 			this.$emit("dialog-closed", false);
-			// @ts-ignore
 			this.step = 1;
 		},
+		stepBack() {
+			if (this.step == 1) return;
+			this.step--;
+		},
 	},
-});
+};
 </script>
+<style lang="scss">
+.v-dialog--active {
+	overflow-y: hidden !important;
+}
+
+.cancel-confirm-button {
+	text-align: right;
+}
+.step-sections {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	font-size: 1rem;
+	color: var(--color-black);
+}
+</style>

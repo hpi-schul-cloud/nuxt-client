@@ -118,7 +118,7 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudUpload } from "@mdi/js";
+import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	layout: "defaultVuetify",
@@ -368,7 +368,7 @@ export default {
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
-						icon: mdiCloudUpload,
+						icon: mdiCloudDownload,
 						href: "/administration/teachers/import",
 						dataTestid: "fab_button_import_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.import.aria"),

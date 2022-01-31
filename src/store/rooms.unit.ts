@@ -9,8 +9,9 @@ let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string) => {
+		$get: async (path: string, data?: object) => {
 			receivedRequests.push({ path });
+			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
 		$post: async (path: string) => {},
@@ -313,6 +314,53 @@ describe("rooms module", () => {
 				expect(roomsModule.getLoading).toBe(true);
 			});
 		});
+		describe("getSharedCourseData", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"getSharedCourseData"
+				);
+				await roomsModule.getSharedCourseData("sampleCode");
+
+				expect(receivedRequests[0].path).toStrictEqual("/v1/courses-share");
+				expect(receivedRequests[1].data.params.shareToken).toStrictEqual(
+					"sampleCode"
+				);
+				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
+					"sampleCode"
+				);
+			}, 1000);
+		});
+
+		describe("confirmSharedCourseData", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"confirmSharedCourseData"
+				);
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+
+				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
+					sharedCourseData
+				);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -459,6 +507,24 @@ describe("rooms module", () => {
 				];
 				roomsModule.setAllElements(itemsToBeSet);
 				expect(roomsModule.allElements).toStrictEqual(expectedData);
+			});
+
+			describe("setSharedCourseData, setImportedCourseId", () => {
+				it("should set the state", () => {
+					const roomsModule = new Rooms({});
+					const sharedCourseData = {
+						code: "123",
+						courseName: "Mathe",
+						status: "success",
+						message: "",
+					};
+					const importedCourseId = "456789";
+
+					roomsModule.setSharedCourseData(sharedCourseData);
+					roomsModule.setImportedCourseId(importedCourseId);
+					expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
+					expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
+				});
 			});
 		});
 	});

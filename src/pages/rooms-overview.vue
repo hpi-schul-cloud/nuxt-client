@@ -130,7 +130,7 @@ import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
 import EnvConfigModule from "@/store/env-config";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import { mdiMagnify, mdiPlus, mdiCloudUpload } from "@mdi/js";
+import { mdiMagnify, mdiPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
@@ -195,7 +195,7 @@ export default {
 							},
 							{
 								label: this.$t("pages.rooms.fab.import"),
-								icon: mdiCloudUpload,
+								icon: mdiCloudDownload,
 								dataTestid: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import"),
 								customEvent: {
@@ -405,8 +405,7 @@ export default {
 			};
 			RoomsModule.update(payload);
 		},
-		fabClick(payload) {
-			console.log(payload);
+		fabClick() {
 			this.importDialog.isOpen = true;
 		},
 	},

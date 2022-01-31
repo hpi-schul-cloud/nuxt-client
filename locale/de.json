@@ -677,7 +677,7 @@
 	"pages.rooms.fab.import.aria": "Import course",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Code einfügen",
-	"pages.rooms.importCourse.step_3.text": "Kurs benennen",
+	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_1.info_1": "A course folder is automatically created for the imported course. Student-related data from the original course will be removed. Then add students and make an appointment for the course.",
 	"pages.rooms.importCourse.step_1.info_2": "Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. neXboard, Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
 	"pages.rooms.importCourse.step_2": "Füge hier den Code ein, um den geteilten Kurs zu importieren.",

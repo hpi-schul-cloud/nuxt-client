@@ -23,7 +23,6 @@ import {
 	SharingCourseObject,
 } from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
-import { BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "rooms",
@@ -36,16 +35,13 @@ export class Rooms extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
 	allElements: CourseMetadataResponse[] = [];
-	courseSharingStatus: SharingCourseObject = {
-		msg: "",
+	sharedCourseData: SharingCourseObject = {
+		code: "",
+		courseName: "",
 		status: "",
-	};
-	businessError: BusinessError = {
-		statusCode: "",
 		message: "",
 	};
-
-	status: Status = "";
+	importedCourseId: string = "";
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -136,18 +132,13 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
-	setCourseSharingStatus(status: SharingCourseObject): void {
-		this.courseSharingStatus = status;
+	setSharedCourseData(status: SharingCourseObject): void {
+		this.sharedCourseData = status;
 	}
 
 	@Mutation
-	setBusinessError(businessError: BusinessError): void {
-		this.businessError = businessError;
-	}
-
-	@Mutation
-	setStatus(status: Status): void {
-		this.status = status;
+	setImportedCourseId(importedCourseId: string): void {
+		this.importedCourseId = importedCourseId;
 	}
 
 	get getRoomsData(): Array<RoomsData> {
@@ -171,7 +162,11 @@ export class Rooms extends VuexModule {
 	}
 
 	get getCourseSharingStatus(): object {
-		return this.courseSharingStatus;
+		return this.sharedCourseData;
+	}
+
+	get getImportedCourseId(): string {
+		return this.importedCourseId;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -287,30 +282,44 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async checkSharingStatus(sharingCode: string): Promise<void> {
+	async getSharedCourseData(courseCode: string): Promise<void> {
 		const params = {
-			qs: {
-				shareToken: sharingCode,
-			},
+			shareToken: courseCode,
 		};
 		try {
-			// debugger;
-			const shareCodeResponse = await $axios.$get("/v1/courses-share", {
+			const courseName = await $axios.$get("/v1/courses-share", {
 				params,
 			});
-			// debugger;
-			this.setCourseSharingStatus({
-				msg: shareCodeResponse,
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: courseName,
 				status: "success",
+				message: "",
 			});
-		} catch (error) {
-			// debugger;
-			this.setCourseSharingStatus({
-				msg: "ShareToken is not in use.",
+		} catch (error: any) {
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: "",
 				status: "error",
+				message: "ShareToken is not in use.",
 			});
-			this.setBusinessError(error as BusinessError);
-			this.setStatus("error");
+			this.setError(error);
+		}
+	}
+
+	@Action
+	async confirmSharedCourseData(
+		courseData: SharingCourseObject
+	): Promise<void> {
+		try {
+			const importedCourseResponse = await $axios.$post("/v1/courses-share", {
+				shareToken: courseData.code,
+				courseName: courseData.courseName,
+			});
+
+			this.setImportedCourseId(importedCourseResponse.id || undefined);
+		} catch (error: any) {
+			this.setError(error);
 		}
 	}
 }
