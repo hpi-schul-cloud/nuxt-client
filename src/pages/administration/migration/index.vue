@@ -257,6 +257,7 @@ export default {
       if (val === '3') {
         await this.summary();
       }
+      this.scrollToTop();
     },
   },
   created() {
@@ -294,6 +295,9 @@ export default {
 		resetBusinessError() {
 			ImportUserModule.setBusinessError(null);
 		},
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    }
 	},
   head() {
 		return {
