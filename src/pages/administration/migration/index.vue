@@ -212,9 +212,6 @@ export default {
 			migrationConfirm: false,
 			errorTimeout: 7500,
 			loading: false,
-      totalUnmatched: 0,
-      totalMatched: 0,
-      totalImportUsers: 0,
 		};
 	},
 	computed: {
@@ -245,17 +242,31 @@ export default {
 			}
 			return false;
 		},
+    totalMatched() {
+      return ImportUserModule.getTotalMatched;
+    },
+    totalUnmatched() {
+      return ImportUserModule.getTotalUnmatched;
+    },
+    totalImportUsers() {
+      return ImportUserModule.importUserList.total;
+    },
 	},
+  watch: {
+    async progressStepper(val) {
+      if (val === '3') {
+      console.log(val)
+        await this.summary();
+      }
+    },
+  },
   created() {
     this.summary();
   },
 	methods: {
     async summary() {
       await ImportUserModule.summaryMatched();
-      this.totalMatched = ImportUserModule.getTotalMatched;
       await ImportUserModule.summaryUnmatched();
-      this.totalUnmatched = ImportUserModule.getTotalUnmatched;
-      this.totalImportUsers = ImportUserModule.importUserList.total;
     },
     performMigration() {
 			// TODO call api
