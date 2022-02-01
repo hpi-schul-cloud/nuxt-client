@@ -49,14 +49,13 @@ export class ImportUsers extends VuexModule {
 
 	limit: number = 10;
 	skip: number = 0;
-	sortBy?: 'firstName' | 'lastName';
+	sortBy: string = '';
 	sortOrder: any = 'asc';
 
 	userSearch: string = '';
 	usersLimit: number = 1;
 	usersSkip: number = 0;
 
-	// TODO
 	businessError: BusinessError | null = {
 		statusCode: "",
 		message: "",
@@ -110,8 +109,12 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setSortBy(sortBy: 'firstName' | 'lastName'): void {
+	setSortBy(sortBy: string): void {
 		this.sortBy = sortBy;
+	}
+
+	get getSortBy() {
+		return this.sortBy;
 	}
 
 	@Mutation
@@ -170,19 +173,21 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async fetchAllImportUsers(): Promise<void> {
 		try {
+			// TODO fix type
+			const sortBy = this.sortBy === 'firstName' || this.sortBy === 'lastName'  ? this.sortBy : undefined;
 			return this.userApi
 				.importUserControllerFindAllImportUsers(
 					this.firstName ? this.firstName : undefined,
 					this.lastName ? this.lastName : undefined,
 					this.loginName ? this.loginName : undefined,
-					this.match,
+					this.match ? this.match : undefined,
 					this.flagged ? true : undefined,
 					this.classes ? this.classes : undefined,
 					this.role ? this.role : undefined,
 					this.sortBy ? this.sortOrder : undefined,
-					this.sortBy,
-					this.skip,
-					this.limit
+					sortBy,
+					this.skip ? this.skip : 0,
+					this.limit ? this.limit : 25
 				)
 				.then((data) => {
 					this.setImportUsersList(data.data);

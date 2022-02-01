@@ -35,10 +35,10 @@ export interface BoardElementResponse {
     type: string;
     /**
      * Content of the Board, either: a task or a lesson specific for the board
-     * @type {BoardTaskResponse}
+     * @type {object}
      * @memberof BoardElementResponse
      */
-    content: BoardTaskResponse;
+    content: object;
 }
 /**
  * 
@@ -70,110 +70,6 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     elements: Array<BoardElementResponse>;
-}
-/**
- * 
- * @export
- * @interface BoardTaskResponse
- */
-export interface BoardTaskResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    availableDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    duedate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    courseName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    displayColor?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {BoardTaskStatusResponse}
-     * @memberof BoardTaskResponse
-     */
-    status: BoardTaskStatusResponse;
-}
-/**
- * 
- * @export
- * @interface BoardTaskStatusResponse
- */
-export interface BoardTaskStatusResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    submitted: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    maxSubmissions: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    graded: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardTaskStatusResponse
-     */
-    isDraft: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardTaskStatusResponse
-     */
-    isSubstitutionTeacher: boolean;
 }
 /**
  * 

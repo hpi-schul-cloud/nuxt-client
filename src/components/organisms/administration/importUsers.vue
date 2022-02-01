@@ -149,6 +149,12 @@
 					</tr>
 				</template>
 
+        <template v-slot:item.roleNames="{ item }">
+          <div>
+            {{ getRoles(item.roleNames) }}
+          </div>
+        </template>
+
 				<template v-slot:item.match="{ item }">
 					<div class="text-no-wrap">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
@@ -261,7 +267,20 @@ export default Vue.extend({
 			mdiFlagOutline,
 			mdiPencil,
 			loading: false,
-			roles: ["student", "teacher", "admin"],
+			roles: [
+				{
+					text: this.$t("components.organisms.importUsers.roleStudent"),
+					value: "student",
+				},
+				{
+					text: this.$t("components.organisms.importUsers.roleTeacher"),
+					value: "teacher",
+				},
+				{
+					text: this.$t("components.organisms.importUsers.roleAdministrator"),
+					value: "admin",
+				},
+			],
 			search: "",
 			searchFirstName: "",
 			searchLastName: "",
@@ -380,6 +399,21 @@ export default Vue.extend({
 		},
 	},
 	methods: {
+    getRoles(roles) {
+      const rolesLables = [];
+      if (Array.isArray(roles) && roles.length > 0 ){
+        if (roles.includes('student')) {
+          rolesLables.push(this.$t('components.organisms.importUsers.roleStudent'));
+        }
+        if (roles.includes('teacher')) {
+          rolesLables.push(this.$t('components.organisms.importUsers.roleTeacher'));
+        }
+        if (roles.includes('admin')) {
+          rolesLables.push(this.$t('components.organisms.importUsers.roleAdministrator'));
+        }
+      }
+      return rolesLables.join(', ');
+    },
 		getMatchedByIcon(match) {
 			if (!match || !match.matchedBy) {
 				return mdiAccountPlus;
