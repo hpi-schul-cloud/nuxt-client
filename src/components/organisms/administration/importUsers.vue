@@ -443,14 +443,14 @@ export default Vue.extend({
 				this.editedIndex = -1;
 			});
 		},
-    async savedFlag() {
-      console.log('saved flag emited')
-      // TODO should reset page?
-        this.loading = true;
-        setTimeout(() => {
-          this.searchApi();
-        }, 500);
-    },
+		async savedFlag() {
+			console.log("saved flag emited");
+			// TODO should reset page?
+			this.loading = true;
+			setTimeout(() => {
+				this.searchApi();
+			}, 500);
+		},
 		async savedMatch() {
 			// TODO should reset page?
 			if (this.searchMatchedBy) {

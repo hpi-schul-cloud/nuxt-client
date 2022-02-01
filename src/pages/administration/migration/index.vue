@@ -62,7 +62,11 @@
 						{{ $t("pages.administration.migration.step4") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="5" :editable="isStepEditable(5)" :complete="migrationStep === 5">
+					<v-stepper-step
+						step="5"
+						:editable="isStepEditable(5)"
+						:complete="migrationStep === 5"
+					>
 						{{ $t("pages.administration.migration.step5") }}
 					</v-stepper-step>
 				</v-stepper-header>
@@ -265,21 +269,25 @@ export default {
 		this.summary();
 	},
 	methods: {
-    isStepEditable(step) {
-      switch (step) {
-        case 1:
-          return !this.isLoading && !this.maintanenceFinished;
-        case 2:
-          return this.canStartMigration && !this.isMigrationFinished;
-        case 3:
-          return this.canStartMigration && !this.isMigrationFinished;
-        case 4:
-          return !this.isLoading && this.isMigrationFinished && !this.maintanenceFinished;
-        case 5:
-        default:
-          return false;
-      }
-    },
+		isStepEditable(step) {
+			switch (step) {
+				case 1:
+					return !this.isLoading && !this.maintanenceFinished;
+				case 2:
+					return this.canStartMigration && !this.isMigrationFinished;
+				case 3:
+					return this.canStartMigration && !this.isMigrationFinished;
+				case 4:
+					return (
+						!this.isLoading &&
+						this.isMigrationFinished &&
+						!this.maintanenceFinished
+					);
+				case 5:
+				default:
+					return false;
+			}
+		},
 		async summary() {
 			await ImportUserModule.summaryMatched();
 			await ImportUserModule.summaryUnmatched();

@@ -29,7 +29,9 @@
 			<v-card-text>
 				<v-row>
 					<v-col class="md-6">
-						<v-card-title>{{ $t('pages.administration.migration.ldapSource') }}</v-card-title>
+						<v-card-title>{{
+							$t("pages.administration.migration.ldapSource")
+						}}</v-card-title>
 						<v-list-item>
 							<v-list-item-content>
 								<v-list-item-title
@@ -40,11 +42,12 @@
 									{{ editedItem.roleNames.join(", ") }}</v-list-item-subtitle
 								>
 								<v-list-item-subtitle
-									>{{ $t('components.organisms.importUsers.tableClasses') }}:
+									>{{ $t("components.organisms.importUsers.tableClasses") }}:
 									{{ editedItem.classNames.join(", ") }}</v-list-item-subtitle
 								>
 								<v-list-item-subtitle
-									>{{ $t('components.organisms.importUsers.tableUserName') }}: {{ editedItem.loginName }}</v-list-item-subtitle
+									>{{ $t("components.organisms.importUsers.tableUserName") }}:
+									{{ editedItem.loginName }}</v-list-item-subtitle
 								>
 							</v-list-item-content>
 							<v-list-item-content> </v-list-item-content>
@@ -349,12 +352,12 @@ export default {
 			this.closeEdit();
 		},
 		async saveFlag() {
-      const importUser = await ImportUserModule.saveFlag({
+			const importUser = await ImportUserModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
 			this.editedItem.flagged = importUser.flagged;
-      this.$emit("savedFlag");
+			this.$emit("savedFlag");
 		},
 	},
 };
