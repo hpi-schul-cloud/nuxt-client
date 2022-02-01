@@ -22,6 +22,7 @@
 						:class="fabItems.class"
 						class="wireframe-fab"
 						:aria-label="fabItems.ariaLabel"
+						v-on="$listeners"
 					></v-custom-fab>
 				</slot>
 			</div>

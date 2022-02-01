@@ -32,4 +32,11 @@ export type ListItemsObject = {
 	to?: string;
 };
 
+export type SharingCourseObject = {
+	code: string;
+	courseName: string;
+	status: string;
+	message: string;
+};
+
 export type AllItems = Array<ListItemsObject>;

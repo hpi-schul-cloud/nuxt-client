@@ -130,7 +130,7 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudUpload } from "@mdi/js";
+import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
@@ -150,7 +150,7 @@ export default {
 		return {
 			mdiPlus,
 			mdiAccountPlus,
-			mdiCloudUpload,
+			mdiCloudDownload,
 			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
@@ -380,7 +380,7 @@ export default {
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
-						icon: mdiCloudUpload,
+						icon: mdiCloudDownload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
 						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),

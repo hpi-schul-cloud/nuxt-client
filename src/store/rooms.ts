@@ -16,7 +16,12 @@ import {
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllItems } from "./types/rooms";
+import {
+	DroppedObject,
+	RoomsData,
+	AllItems,
+	SharingCourseObject,
+} from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
 
 @Module({
@@ -30,6 +35,13 @@ export class Rooms extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
 	allElements: CourseMetadataResponse[] = [];
+	sharedCourseData: SharingCourseObject = {
+		code: "",
+		courseName: "",
+		status: "",
+		message: "",
+	};
+	importedCourseId: string = "";
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -119,6 +131,16 @@ export class Rooms extends VuexModule {
 		}
 	}
 
+	@Mutation
+	setSharedCourseData(status: SharingCourseObject): void {
+		this.sharedCourseData = status;
+	}
+
+	@Mutation
+	setImportedCourseId(importedCourseId: string): void {
+		this.importedCourseId = importedCourseId;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -137,6 +159,14 @@ export class Rooms extends VuexModule {
 
 	get getRoomsId(): string {
 		return this.gridElementsId;
+	}
+
+	get getCourseSharingStatus(): object {
+		return this.sharedCourseData;
+	}
+
+	get getImportedCourseId(): string {
+		return this.importedCourseId;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -248,6 +278,48 @@ export class Rooms extends VuexModule {
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async getSharedCourseData(courseCode: string): Promise<void> {
+		const params = {
+			shareToken: courseCode,
+		};
+		try {
+			const courseName = await $axios.$get("/v1/courses-share", {
+				params,
+			});
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: courseName,
+				status: "success",
+				message: "",
+			});
+		} catch (error: any) {
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: "",
+				status: "error",
+				message: "The course code is not in use.",
+			});
+			this.setError(error);
+		}
+	}
+
+	@Action
+	async confirmSharedCourseData(
+		courseData: SharingCourseObject
+	): Promise<void> {
+		try {
+			const importedCourseResponse = await $axios.$post("/v1/courses-share", {
+				shareToken: courseData.code,
+				courseName: courseData.courseName,
+			});
+
+			this.setImportedCourseId(importedCourseResponse.id || undefined);
+		} catch (error: any) {
+			this.setError(error);
 		}
 	}
 }
