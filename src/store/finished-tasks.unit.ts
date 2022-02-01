@@ -14,7 +14,7 @@ import { Task } from "./types/tasks";
 
 describe("finished task store", () => {
 	describe("actions", () => {
-		describe("fetchInitialTasks", () => {
+		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(() => ({
@@ -32,7 +32,7 @@ describe("finished task store", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 				const finishedTaskModule = new FinishedTaskModule({});
 
-				finishedTaskModule.fetchInitialTasks().then(() => {
+				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([
 						{
 							mockTask: "mock task value",
@@ -49,34 +49,6 @@ describe("finished task store", () => {
 				spy.mockRestore();
 			});
 
-			it("should handle an error", (done) => {
-				const error = { status: 418, statusText: "I'm a teapot" };
-				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
-				};
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const finishedTaskModule = new FinishedTaskModule({});
-
-				finishedTaskModule.fetchInitialTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([]);
-					expect(finishedTaskModule.getStatus).toBe("error");
-					expect(finishedTaskModule.businessError).toStrictEqual(error);
-					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-						1
-					);
-					done();
-				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
-
-				spy.mockRestore();
-			});
-		});
-
-		describe("fetchMoreTasks", () => {
 			it("should fetch the next page", (done) => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.pagination.skip = 50;
@@ -107,7 +79,7 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchMoreTasks().then(() => {
+				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([
 						{ mockTask: "mock task #1" },
 					]);
@@ -125,6 +97,7 @@ describe("finished task store", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.pagination.skip = 100;
 				finishedTaskModule.pagination.total = 100;
+				finishedTaskModule.isInitialized = true;
 
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(),
@@ -134,7 +107,7 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchMoreTasks().then(() => {
+				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						0
@@ -148,6 +121,7 @@ describe("finished task store", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				finishedTaskModule.pagination.skip = 150;
 				finishedTaskModule.pagination.total = 120;
+				finishedTaskModule.isInitialized = true;
 
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(),
@@ -157,7 +131,7 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchMoreTasks().then(() => {
+				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						0
@@ -182,7 +156,7 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchMoreTasks().then(() => {
+				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([]);
 					expect(finishedTaskModule.getStatus).toBe("error");
 					expect(finishedTaskModule.businessError).toStrictEqual(error);
@@ -195,6 +169,47 @@ describe("finished task store", () => {
 
 				spy.mockRestore();
 			});
+		});
+
+		describe("refetchTasks", () => {
+			it.todo("should fetch all tasks up until current pagination");
+
+			it("should handle an error", (done) => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.pagination.skip = 50;
+				finishedTaskModule.pagination.total = 100;
+
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerFindAllFinished: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				finishedTaskModule.refetchTasks().then(() => {
+					expect(finishedTaskModule.getTasks).toStrictEqual([]);
+					expect(finishedTaskModule.getStatus).toBe("error");
+					expect(finishedTaskModule.businessError).toStrictEqual(error);
+					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
+						1
+					);
+					done();
+				});
+				expect(finishedTaskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("restoreTask", () => {
+			it.todo("should remove userId from archived list");
+
+			it.todo("should refetch all tasks");
+
+			it.todo("should handle an error");
 		});
 	});
 
@@ -278,6 +293,16 @@ describe("finished task store", () => {
 			});
 		});
 
+		describe("getIsInitialized", () => {
+			it("should return isInitialized value", () => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.isInitialized = true;
+				const isInitialized = finishedTaskModule.getIsInitialized;
+
+				expect(isInitialized).toBe(finishedTaskModule.isInitialized);
+			});
+		});
+
 		describe("tasksIsEmpty", () => {
 			it("should return false if there are any tasks", () => {
 				const finishedTaskModule = new FinishedTaskModule({});
@@ -306,6 +331,17 @@ describe("finished task store", () => {
 			});
 		});
 
-		// TODO - add test for initialized; also for get businesserror and such?
+		describe("getBusinessError", () => {
+			it("should return business error", () => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.businessError = {
+					statusCode: "404",
+					message: "not found",
+				};
+				const businessError = finishedTaskModule.getBusinessError;
+
+				expect(businessError).toBe(finishedTaskModule.businessError);
+			});
+		});
 	});
 });

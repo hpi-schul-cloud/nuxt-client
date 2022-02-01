@@ -24,7 +24,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 10,
+		limit: 7,
 		skip: 0,
 		total: 0,
 	};
@@ -47,7 +47,7 @@ export class FinishedTaskModule extends VuexModule {
 		try {
 			const { skip, limit, total } = this.pagination;
 
-			if (this.tasks.length >= total && this.isInitialized) {
+			if (total <= skip && this.isInitialized) {
 				this.setStatus("completed");
 				return;
 			}

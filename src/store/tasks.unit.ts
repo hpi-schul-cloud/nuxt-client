@@ -128,6 +128,12 @@ describe("task store", () => {
 				expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
 			});
 		});
+
+		describe("finishTask", () => {
+			it.todo("should request a list of tasks");
+
+			it.todo("should handle an error");
+		});
 	});
 
 	describe("mutations", () => {
@@ -163,6 +169,10 @@ describe("task store", () => {
 				const taskModule = new TaskModule({});
 				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
 			});
+
+			it.todo(
+				"should remove substitute course(s) from course filter when disabled"
+			);
 		});
 
 		describe("setStatus", () => {
@@ -278,6 +288,19 @@ describe("task store", () => {
 			});
 		});
 
+		describe("getBusinessError", () => {
+			it("should return business error", () => {
+				const taskModule = new TaskModule({});
+				taskModule.businessError = {
+					statusCode: "404",
+					message: "not found",
+				};
+				const businessError = taskModule.getBusinessError;
+
+				expect(businessError).toBe(taskModule.businessError);
+			});
+		});
+
 		describe("isSubstituteFilterEnabled", () => {
 			it("should return false by default", () => {
 				const taskModule = new TaskModule({});
@@ -288,6 +311,19 @@ describe("task store", () => {
 				const taskModule = new TaskModule({});
 				taskModule.substituteFilter = true;
 				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+			});
+		});
+
+		describe("hasFilterSelected", () => {
+			it("should return false by default", () => {
+				const taskModule = new TaskModule({});
+				expect(taskModule.hasFilterSelected).toBe(false);
+			});
+
+			it("should return true if enabled", () => {
+				const taskModule = new TaskModule({});
+				taskModule.courseFilter = ["Mathe"];
+				expect(taskModule.hasFilterSelected).toBe(true);
 			});
 		});
 
