@@ -31,14 +31,6 @@ export class ImportUsers extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-
-	userList: UserMatchListResponse = {
-		data: [],
-		total: 0,
-		skip: 0,
-		limit: 0,
-	};
-
 	firstName: string = '';
 	lastName: string = '';
 	loginName: string = '';
@@ -46,15 +38,22 @@ export class ImportUsers extends VuexModule {
 	classes: string = '';
 	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
 	flagged: boolean = false;
-
 	limit: number = 10;
 	skip: number = 0;
 	sortBy: string = '';
 	sortOrder: any = 'asc';
+	totalMatched: number = 0;
 
+	userList: UserMatchListResponse = {
+		data: [],
+		total: 0,
+		skip: 0,
+		limit: 0,
+	};
 	userSearch: string = '';
 	usersLimit: number = 1;
 	usersSkip: number = 0;
+	totalUnmatched: number = 0;
 
 	businessError: BusinessError | null = {
 		statusCode: "",
@@ -160,6 +159,25 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
+	setTotalUnmatched(total: number): void {
+		this.totalUnmatched = total;
+	}
+
+	get getTotalUnmatched(): number {
+		return this.totalUnmatched;
+	}
+
+	@Mutation
+	setTotalMatched(total: number): void {
+		this.totalMatched = total;
+	}
+
+	get getTotalMatched(): number {
+		return this.totalMatched;
+	}
+
+
+	@Mutation
 	setUsersLimit(limit: number): void {
 		this.usersLimit = limit;
 	}
@@ -243,7 +261,47 @@ export class ImportUsers extends VuexModule {
 		}
 	}
 
+	@Action
+	async summaryUnmatched(): Promise<void> {
+		try {
+			return this.userApi
+				.importUserControllerFindAllUnmatchedUsers(
+					undefined,
+					this.usersSkip,
+					this.usersLimit
+				)
+				.then((data) => {
+					this.setTotalUnmatched(data.data.total);
+				});
+		} catch (error: any) {
+			this.setBusinessError({ statusCode: '500', message: error });
+		}
+	}
 
+	@Action
+	async summaryMatched(): Promise<void> {
+		try {
+			return this.userApi
+				.importUserControllerFindAllImportUsers(
+					undefined,
+					undefined,
+					undefined,
+					['admin', 'auto'],
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					0,
+					1
+				)
+				.then((data) => {
+					this.setTotalMatched(data.data.total);
+				});
+		} catch (error: any) {
+			this.setBusinessError({ statusCode: '500', message: error });
+		}
+	}
 
 	private get userApi(): UserImportApiInterface {
 		if (!this._userApi) {

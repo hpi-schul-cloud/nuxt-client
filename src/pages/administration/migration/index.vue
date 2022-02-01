@@ -122,9 +122,9 @@
 										$t('pages.administration.migration.summary', {
 											instance: this.$theme.short_name,
 											source: $t('pages.administration.migration.ldapSource'),
-											importUsersCount: 'XXX',
-											importUsersUnmatchedCount: 'YYY',
-											usersUnmatchedCount: 'ZZZ',
+											importUsersCount: totalImportUsers,
+											importUsersUnmatchedCount: totalUnmatched,
+											usersUnmatchedCount: totalMatched,
 										})
 									"
 								></div>
@@ -212,10 +212,13 @@ export default {
 			migrationConfirm: false,
 			errorTimeout: 7500,
 			loading: false,
+      totalUnmatched: 0,
+      totalMatched: 0,
+      totalImportUsers: 0,
 		};
 	},
 	computed: {
-		canStartMigration() {
+    canStartMigration() {
 			return this.school.inUserMigration === true && this.school.inMaintenance;
 		},
 		canFinishMaintanence() {
@@ -243,8 +246,18 @@ export default {
 			return false;
 		},
 	},
+  created() {
+    this.summary();
+  },
 	methods: {
-		performMigration() {
+    async summary() {
+      await ImportUserModule.summaryMatched();
+      this.totalMatched = ImportUserModule.getTotalMatched;
+      await ImportUserModule.summaryUnmatched();
+      this.totalUnmatched = ImportUserModule.getTotalUnmatched;
+      this.totalImportUsers = ImportUserModule.importUserList.total;
+    },
+    performMigration() {
 			// TODO call api
 			this.loading = true;
 
@@ -272,7 +285,7 @@ export default {
 			ImportUserModule.setBusinessError(null);
 		},
 	},
-	head() {
+  head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};
