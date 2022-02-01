@@ -212,13 +212,13 @@ export default {
 			migrationConfirm: false,
 			errorTimeout: 7500,
 			loading: false,
-      totalUnmatched: 0,
-      totalMatched: 0,
-      totalImportUsers: 0,
+			totalUnmatched: 0,
+			totalMatched: 0,
+			totalImportUsers: 0,
 		};
 	},
 	computed: {
-    canStartMigration() {
+		canStartMigration() {
 			return this.school.inUserMigration === true && this.school.inMaintenance;
 		},
 		canFinishMaintanence() {
@@ -246,18 +246,18 @@ export default {
 			return false;
 		},
 	},
-  created() {
-    this.summary();
-  },
+	created() {
+		this.summary();
+	},
 	methods: {
-    async summary() {
-      await ImportUserModule.summaryMatched();
-      this.totalMatched = ImportUserModule.getTotalMatched;
-      await ImportUserModule.summaryUnmatched();
-      this.totalUnmatched = ImportUserModule.getTotalUnmatched;
-      this.totalImportUsers = ImportUserModule.importUserList.total;
-    },
-    performMigration() {
+		async summary() {
+			await ImportUserModule.summaryMatched();
+			this.totalMatched = ImportUserModule.getTotalMatched;
+			await ImportUserModule.summaryUnmatched();
+			this.totalUnmatched = ImportUserModule.getTotalUnmatched;
+			this.totalImportUsers = ImportUserModule.importUserList.total;
+		},
+		performMigration() {
 			// TODO call api
 			this.loading = true;
 
@@ -285,7 +285,7 @@ export default {
 			ImportUserModule.setBusinessError(null);
 		},
 	},
-  head() {
+	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};
