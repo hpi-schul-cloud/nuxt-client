@@ -28,48 +28,49 @@
 
 		<div slot="header">
 			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
-			<v-stepper v-model="progressStepper" flat>
+			<v-stepper v-model="migrationStep" flat>
 				<v-stepper-header>
 					<v-stepper-step
-						:editable="!loading && !maintanenceFinished"
-						:complete="maintanenceFinished"
+						:complete="isMaintanenceFinished"
+						:editable="isStepEditable(1)"
 						step="1"
 					>
 						{{ $t("pages.administration.migration.step1") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-						:editable="canStartMigration && !migrationFinished"
+						:complete="isMigrationFinished"
+						:editable="isStepEditable(2)"
 						step="2"
-						:complete="migrationFinished"
 					>
 						{{ $t("pages.administration.migration.step2") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-						:editable="canStartMigration && !migrationFinished"
-						:complete="migrationFinished"
+						:editable="isStepEditable(3)"
+						:complete="isMigrationFinished"
 						step="3"
 					>
 						{{ $t("pages.administration.migration.step3") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
+						:complete="isMaintanenceFinished"
+						:editable="isStepEditable(4)"
 						step="4"
-						:complete="maintanenceFinished"
-						:editable="!loading && migrationFinished && !maintanenceFinished"
 					>
 						{{ $t("pages.administration.migration.step4") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="5">
+					<v-stepper-step step="5" :editable="isStepEditable(5)" :complete="migrationStep === 5">
 						{{ $t("pages.administration.migration.step5") }}
 					</v-stepper-step>
 				</v-stepper-header>
 			</v-stepper>
 		</div>
+
 		<div>
-			<v-stepper v-model="progressStepper" v-ripple="false" flat>
+			<v-stepper v-model="migrationStep" v-ripple="false" flat>
 				<v-stepper-items>
 					<v-stepper-content step="1">
 						<v-card
@@ -87,27 +88,27 @@
 						<v-btn
 							id="step2"
 							color="primary"
-							@click="progressStepper = migrationFinished ? 4 : 2"
+							@click="migrationStep = isMigrationFinished ? 4 : 2"
 							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
 
 					<v-stepper-content step="2">
 						<import-users></import-users>
-						<v-btn color="secondary" @click="progressStepper = 1">{{
+						<v-btn color="secondary" @click="migrationStep = 1">{{
 							$t("pages.administration.migration.back")
 						}}</v-btn>
 						<v-btn
 							id="step3"
 							color="primary"
 							:disabled="!canStartMigration"
-							@click="progressStepper = 3"
+							@click="migrationStep = 3"
 							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
 
 					<v-stepper-content
-						v-if="canStartMigration && !migrationFinished"
+						v-if="canStartMigration && !isMigrationFinished"
 						step="3"
 					>
 						<v-card
@@ -116,7 +117,7 @@
 							class="pa-5 mb-10"
 							color="grey lighten-5"
 						>
-							<div v-if="!loading">
+							<div v-if="!isLoading">
 								<div
 									v-html="
 										$t('pages.administration.migration.summary', {
@@ -131,7 +132,7 @@
 								<br />
 								<p>
 									<v-checkbox
-										v-model="migrationConfirm"
+										v-model="isMigrationConfirm"
 										:label="$t('pages.administration.migration.confirm')"
 									></v-checkbox>
 								</p>
@@ -143,17 +144,17 @@
 						</v-card>
 						<v-btn
 							color="secondary"
-							:disabled="loading"
-							@click="progressStepper = 2"
+							:disabled="isLoading"
+							@click="migrationStep = 2"
 							>{{ $t("pages.administration.migration.back") }}</v-btn
 						>
 						<v-btn
 							color="primary"
-							:disabled="!migrationConfirm || loading"
+							:disabled="!isMigrationConfirm || isLoading"
 							@click="performMigration"
 						>
 							<v-progress-circular
-								v-if="loading"
+								v-if="isLoading"
 								:size="20"
 								indeterminate
 							></v-progress-circular>
@@ -202,16 +203,16 @@ export default {
 	data() {
 		return {
 			mdiClose,
-			progressStepper: 1,
+			migrationStep: 1,
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 			],
-			migrationConfirm: false,
+			isMigrationConfirm: false,
 			errorTimeout: 7500,
-			loading: false,
+			isLoading: false,
 		};
 	},
 	computed: {
@@ -223,10 +224,10 @@ export default {
 			return true;
 			//return this.school.inUserMigration === false && this.school.inMaintenance;
 		},
-		migrationFinished() {
+		isMigrationFinished() {
 			return this.school.inUserMigration === false;
 		},
-		maintanenceFinished() {
+		isMaintanenceFinished() {
 			return !this.school.inMaintenance;
 		},
 		school() {
@@ -264,32 +265,47 @@ export default {
 		this.summary();
 	},
 	methods: {
+    isStepEditable(step) {
+      switch (step) {
+        case 1:
+          return !this.isLoading && !this.maintanenceFinished;
+        case 2:
+          return this.canStartMigration && !this.isMigrationFinished;
+        case 3:
+          return this.canStartMigration && !this.isMigrationFinished;
+        case 4:
+          return !this.isLoading && this.isMigrationFinished && !this.maintanenceFinished;
+        case 5:
+        default:
+          return false;
+      }
+    },
 		async summary() {
 			await ImportUserModule.summaryMatched();
 			await ImportUserModule.summaryUnmatched();
 		},
 		performMigration() {
 			// TODO call api
-			this.loading = true;
+			this.isLoading = true;
 
 			// fake api call
 			const getMigrationStatus = true;
 			setTimeout(() => {
 				this.school.inUserMigration = false;
-				this.loading = false;
-				this.progressStepper = 4;
+				this.isLoading = false;
+				this.migrationStep = 4;
 				resolve({
 					getMigrationStatus,
 				});
 			}, 1000);
 		},
 		endMaintanence() {
-			this.loading = true;
+			this.isLoading = true;
 			// fake api call
 			setTimeout(() => {
 				this.school.inMaintenance = false;
-				this.loading = false;
-				this.progressStepper = 5;
+				this.isLoading = false;
+				this.migrationStep = 5;
 			}, 1000);
 		},
 		resetBusinessError() {

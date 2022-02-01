@@ -10,10 +10,10 @@
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
-				:edited-index="editedIndex"
 				@close="closeEdit"
 				@savedMatch="savedMatch"
 				@deletedMatch="deletedMatch"
+				@savedFlag="savedFlag"
 			></v-import-users-match-search>
 		</v-dialog>
 
@@ -443,6 +443,14 @@ export default Vue.extend({
 				this.editedIndex = -1;
 			});
 		},
+    async savedFlag() {
+      console.log('saved flag emited')
+      // TODO should reset page?
+        this.loading = true;
+        setTimeout(() => {
+          this.searchApi();
+        }, 500);
+    },
 		async savedMatch() {
 			// TODO should reset page?
 			if (this.searchMatchedBy) {
@@ -455,7 +463,6 @@ export default Vue.extend({
 		},
 		async deletedMatch() {
 			// TODO should reset page?
-			console.log(this.importUsers[this.editedIndex]);
 			this.importUsers[this.editedIndex].match = null;
 			this.importUsers[this.editedIndex].class = "primary";
 			if (this.searchMatchedBy) {

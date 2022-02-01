@@ -11,6 +11,7 @@ import {
 	UserImportApiFactory,
 	ImportUserListResponse,
 	UserMatchListResponse,
+	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum, UserImportApiInterface,
 } from "@/serverApi/v3";
 import {BusinessError} from "@store/types/commons";
@@ -193,7 +194,7 @@ export class ImportUsers extends VuexModule {
 		try {
 			// TODO fix type
 			const sortBy = this.sortBy === 'firstName' || this.sortBy === 'lastName'  ? this.sortBy : undefined;
-			return this.userApi
+			const response = await this.userApi
 				.importUserControllerFindAllImportUsers(
 					this.firstName ? this.firstName : undefined,
 					this.lastName ? this.lastName : undefined,
@@ -206,10 +207,8 @@ export class ImportUsers extends VuexModule {
 					sortBy,
 					this.skip ? this.skip : 0,
 					this.limit ? this.limit : 25
-				)
-				.then((data) => {
-					this.setImportUsersList(data.data);
-				});
+				);
+			this.setImportUsersList(response.data);
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
@@ -218,44 +217,43 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async fetchAllUsers(): Promise<void> {
 		try {
-			return this.userApi
+			const response = await this.userApi
 				.importUserControllerFindAllUnmatchedUsers(
 					this.userSearch ? this.userSearch : undefined,
 					this.usersSkip,
 					this.usersLimit
-				)
-				.then((data) => {
-					this.setUsersList(data.data);
-				});
+				);
+			this.setUsersList(response.data);
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
 
 	@Action
-	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<void> {
-			console.log('saveFlag', payload)
+	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<ImportUserResponse | undefined> {
 		try {
-			// TODO implement api service
-			await this.userApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
+			const response = await this.userApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
+			return response.data;
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
 
 	@Action
-	async saveMatch(payload: {importUserId: string, userId: string}): Promise<void> {
+	async saveMatch(payload: {importUserId: string, userId: string}): Promise<ImportUserResponse | undefined> {
 		try {
-			await this.userApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
+			const response = await this.userApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
+			return response.data;
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
 	}
 
 	@Action
-	async deleteMatch(importUserId: string): Promise<void> {
+	async deleteMatch(importUserId: string): Promise<ImportUserResponse | undefined> {
 		try {
-			await this.userApi.importUserControllerRemoveMatch(importUserId);
+			const response = await this.userApi.importUserControllerRemoveMatch(importUserId);
+			return response.data;
 		} catch (error: any) {
 			this.setBusinessError(error);
 		}
@@ -264,15 +262,13 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async summaryUnmatched(): Promise<void> {
 		try {
-			return this.userApi
+			const response = await this.userApi
 				.importUserControllerFindAllUnmatchedUsers(
 					undefined,
-					this.usersSkip,
-					this.usersLimit
-				)
-				.then((data) => {
-					this.setTotalUnmatched(data.data.total);
-				});
+					0,
+					1
+				);
+			this.setTotalUnmatched(response.data.total);
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
@@ -281,7 +277,7 @@ export class ImportUsers extends VuexModule {
 	@Action
 	async summaryMatched(): Promise<void> {
 		try {
-			return this.userApi
+			const response = await this.userApi
 				.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
@@ -294,10 +290,8 @@ export class ImportUsers extends VuexModule {
 					undefined,
 					0,
 					1
-				)
-				.then((data) => {
-					this.setTotalMatched(data.data.total);
-				});
+				);
+			this.setTotalMatched(response.data.total);
 		} catch (error: any) {
 			this.setBusinessError({ statusCode: '500', message: error });
 		}
