@@ -215,7 +215,7 @@ export default {
 		};
 	},
 	computed: {
-    canStartMigration() {
+		canStartMigration() {
 			return this.school.inUserMigration === true && this.school.inMaintenance;
 		},
 		canFinishMaintanence() {
@@ -242,33 +242,33 @@ export default {
 			}
 			return false;
 		},
-    totalMatched() {
-      return ImportUserModule.getTotalMatched;
-    },
-    totalUnmatched() {
-      return ImportUserModule.getTotalUnmatched;
-    },
-    totalImportUsers() {
-      return ImportUserModule.importUserList.total;
-    },
+		totalMatched() {
+			return ImportUserModule.getTotalMatched;
+		},
+		totalUnmatched() {
+			return ImportUserModule.getTotalUnmatched;
+		},
+		totalImportUsers() {
+			return ImportUserModule.importUserList.total;
+		},
 	},
-  watch: {
-    async progressStepper(val) {
-      if (val === '3') {
-        await this.summary();
-      }
-      this.scrollToTop();
-    },
-  },
-  created() {
-    this.summary();
-  },
+	watch: {
+		async progressStepper(val) {
+			if (val === "3") {
+				await this.summary();
+			}
+			this.scrollToTop();
+		},
+	},
+	created() {
+		this.summary();
+	},
 	methods: {
-    async summary() {
-      await ImportUserModule.summaryMatched();
-      await ImportUserModule.summaryUnmatched();
-    },
-    performMigration() {
+		async summary() {
+			await ImportUserModule.summaryMatched();
+			await ImportUserModule.summaryUnmatched();
+		},
+		performMigration() {
 			// TODO call api
 			this.loading = true;
 
@@ -295,11 +295,11 @@ export default {
 		resetBusinessError() {
 			ImportUserModule.setBusinessError(null);
 		},
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    }
+		scrollToTop() {
+			window.scrollTo(0, 0);
+		},
 	},
-  head() {
+	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),
 		};
