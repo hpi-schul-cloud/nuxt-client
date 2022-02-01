@@ -409,7 +409,7 @@ export default Vue.extend({
 				this.loading = true;
 				setTimeout(() => {
 					this.searchApi();
-				}, 2000);
+				}, 500);
 			}
 			this.closeEdit();
 		},
@@ -422,7 +422,7 @@ export default Vue.extend({
 				this.loading = true;
 				setTimeout(() => {
 					this.searchApi();
-				}, 2000);
+				}, 500);
 			}
 			this.closeEdit();
 		},
@@ -439,7 +439,7 @@ export default Vue.extend({
 			if (this.searchFlagged) {
 				setTimeout(() => {
 					this.searchApi();
-				}, 2000);
+				}, 500);
 			} else {
 				this.loading = false;
 			}

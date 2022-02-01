@@ -268,7 +268,7 @@ export default {
 			searchUser: null,
 			selectedItem: null,
 			total: 0,
-			limit: 2, // TODO 25
+			limit: 25,
 			skip: 0,
 		};
 	},
