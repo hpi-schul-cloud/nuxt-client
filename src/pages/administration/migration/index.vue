@@ -255,7 +255,6 @@ export default {
   watch: {
     async progressStepper(val) {
       if (val === '3') {
-      console.log(val)
         await this.summary();
       }
     },
