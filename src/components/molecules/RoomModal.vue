@@ -11,6 +11,7 @@
 				ref="roomNameInput"
 				v-model="groupData.title"
 				dense
+				:aria-label="$t('common.labels.title')"
 				:append-icon="mdiKeyboardReturn"
 				@blur="onUpdateRoomName"
 				@keyup.enter="onRoomNameInputEnter"
@@ -18,7 +19,7 @@
 			<h2
 				v-show="!roomNameEditMode"
 				class="text-h4 my-2"
-				tabindex="5"
+				tabindex="0"
 				@click="onEditRoom"
 				@focus="onEditRoom"
 			>
@@ -28,11 +29,12 @@
 		</div>
 		<template slot="content">
 			<room-avatar-iterator
+				class="iterator"
 				:items="groupData.groupElements"
 				:item-size="itemSize"
 				:col-count="4"
 				:max-items="-1"
-				can-draggable
+				:can-draggable="draggable"
 				@startDrag="$emit('drag-from-group', $event)"
 			/>
 		</template>
@@ -71,6 +73,9 @@ export default Vue.extend({
 		itemSize: {
 			type: String,
 			default: "5em",
+		},
+		draggable: {
+			type: Boolean,
 		},
 	},
 	data() {

@@ -82,7 +82,7 @@ describe("vRoomGroupAvatar", () => {
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML).toStrictEqual("Fourth");
+		expect(labelElement.innerHTML.trim()).toStrictEqual("Fourth");
 	});
 
 	it("should display the badge", () => {
@@ -112,7 +112,7 @@ describe("vRoomGroupAvatar", () => {
 		const iterator = wrapper.vm.$refs["avatar-iterator"] as any;
 
 		expect(iterator).toBeTruthy();
-		expect(iterator.$props.itemSize).toStrictEqual("1em");
+		expect(iterator.$props.itemSize).toStrictEqual("0.8em");
 		expect(iterator.$props.items).toStrictEqual(mockData.groupElements);
 		expect(iterator.$props.condenseLayout).toBe(true);
 	});
@@ -146,8 +146,27 @@ describe("vRoomGroupAvatar", () => {
 		);
 	});
 
-	it("should emit 'dragStart' event when it started dragging", async () => {
+	it("should emit 'click' event with correct payload if keyboard event triggered", async () => {
 		const wrapper = getWrapper(propsData);
+		const cardComponent = wrapper.find(".card-component");
+
+		cardComponent.trigger("keypress.enter");
+		await flushPromises();
+		const emitted = wrapper.emitted();
+
+		expect(emitted["clicked"]).toHaveLength(1);
+		expect(emitted["clicked"] && emitted["clicked"][0][0]).toStrictEqual(
+			mockData.id
+		);
+	});
+
+	it("should emit 'dragStart' event when it started dragging", async () => {
+		const wrapper = getWrapper({
+			data: mockData,
+			size: "4em",
+			maxItems: 4,
+			draggable: true,
+		});
 		const avatarComponent = wrapper.find(".room-avatar");
 
 		avatarComponent.trigger("dragstart");
@@ -158,5 +177,21 @@ describe("vRoomGroupAvatar", () => {
 		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
 			mockData
 		);
+	});
+
+	it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
+		const wrapper = getWrapper({
+			data: mockData,
+			size: "4em",
+			maxItems: 4,
+			draggable: false,
+		});
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("dragstart");
+		await flushPromises();
+		const emitted = wrapper.emitted();
+
+		expect(emitted["startDrag"]).toBe(undefined);
 	});
 });

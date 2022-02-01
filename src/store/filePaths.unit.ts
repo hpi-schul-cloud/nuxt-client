@@ -9,7 +9,7 @@ const specificFiles = {
 		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
 	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
 	termsOfUseSchool:
-		"Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
@@ -42,6 +42,7 @@ const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__URI: "",
 	MATRIX_MESSENGER__DISCOVER_URI: "",
 	LERNSTORE_MODE: "",
+	ALERT_STATUS_URL: "",
 };
 
 const envs = {

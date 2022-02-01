@@ -1,10 +1,10 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
-		v-scroll="onScroll"
 		:headline="$t('pages.administration.students.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
+		:fab-items="fab"
 	>
 		<progress-modal
 			:active="isDeleting"
@@ -114,29 +114,6 @@
 			:show-icons="showConsent"
 			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
-		<v-custom-fab
-			v-if="
-				!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
-			"
-			:icon="mdiPlus"
-			:title="$t('common.labels.student')"
-			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
-			data-testid="fab_button_students_table"
-			:actions="[
-				{
-					label: $t('pages.administration.students.fab.add'),
-					icon: mdiAccountPlus,
-					to: '/administration/students/new',
-					dataTestid: 'fab_button_add_students',
-				},
-				{
-					label: $t('pages.administration.students.fab.import'),
-					icon: mdiCloudUpload,
-					href: '/administration/students/import',
-					dataTestid: 'fab_button_import_students',
-				},
-			]"
-		></v-custom-fab>
 	</default-wireframe>
 </template>
 
@@ -146,7 +123,6 @@ import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import vCustomFab from "@components/atoms/vCustomFab";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import { studentFilter } from "@utils/adminFilter";
@@ -154,14 +130,13 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudUpload } from "@mdi/js";
+import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
 		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
-		vCustomFab,
 		AdminTableLegend,
 		ProgressModal,
 	},
@@ -175,7 +150,7 @@ export default {
 		return {
 			mdiPlus,
 			mdiAccountPlus,
-			mdiCloudUpload,
+			mdiCloudDownload,
 			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
@@ -292,10 +267,6 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
-					icon: { source: "fa", icon: "cog" },
-				},
-				{
-					text: this.$t("pages.administration.students.index.title"),
 				},
 			],
 			icons: [
@@ -386,6 +357,37 @@ export default {
 
 			return editedColumns;
 		},
+		fab() {
+			if (
+				this.schoolIsExternallyManaged ||
+				!this.$_userHasPermission("STUDENT_CREATE")
+			) {
+				return null;
+			}
+
+			return {
+				icon: mdiPlus,
+				title: this.$t("common.labels.student"),
+				testId: "fab_button_students_table",
+				ariaLabel: this.$t("pages.administration.students.new.title"),
+				actions: [
+					{
+						label: this.$t("pages.administration.students.fab.add"),
+						icon: mdiAccountPlus,
+						to: "/administration/students/new",
+						dataTestid: "fab_button_add_students",
+						ariaLabel: this.$t("pages.administration.students.fab.add.aria"),
+					},
+					{
+						label: this.$t("pages.administration.students.fab.import"),
+						icon: mdiCloudDownload,
+						href: "/administration/students/import",
+						dataTestid: "fab_button_import_students",
+						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),
+					},
+				],
+			};
+		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
@@ -415,9 +417,6 @@ export default {
 		this.find();
 	},
 	methods: {
-		onScroll() {
-			this.$eventBus.$emit("isScrolling");
-		},
 		find() {
 			const query = {
 				$limit: this.limit,
@@ -641,9 +640,5 @@ button:not(.is-none):focus {
 	margin-top: var(--space-xs);
 	margin-bottom: var(--space-xs);
 	margin-left: 0;
-}
-
-.fab-top-alignment {
-	top: 147px;
 }
 </style>

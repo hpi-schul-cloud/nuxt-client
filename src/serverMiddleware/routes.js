@@ -24,8 +24,13 @@ const routes = [
 	`^/administration/ldap/config/?$`,
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
-	`^/tasks/open`,
-	`^/tasks/assigned`,
+	`^/tasks/?$`,
+	`^/tasks/open/?$`,
+	`^/tasks/assigned/?$`,
+	`^/homework/?$`,
+	`^/homework/asked/?$`,
+	`^/homework/private/?$`,
+	`^/homework/archive/?$`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,
@@ -40,6 +45,7 @@ const routes = [
 	`^/nuxtversion/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
+	`^/rooms/${mongoId}/?$`,
 	// `^/courses/?$`,
 ];
 

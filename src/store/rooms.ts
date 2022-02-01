@@ -12,9 +12,17 @@ import {
 	DashboardApiInterface,
 	CoursesApiFactory,
 	CoursesApiInterface,
+	CourseMetadataResponse,
+	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 
-import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
+import {
+	DroppedObject,
+	RoomsData,
+	AllItems,
+	SharingCourseObject,
+} from "./types/rooms";
+import { currentDate, fromUTC } from "@/plugins/datetime";
 
 @Module({
 	name: "rooms",
@@ -24,9 +32,16 @@ import { DroppedObject, RoomsData, AllElements } from "./types/rooms";
 	stateFactory: true,
 })
 export class Rooms extends VuexModule {
-	roomsData: Array<RoomsData> = [];
+	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
-	allElements: AllElements = [];
+	allElements: CourseMetadataResponse[] = [];
+	sharedCourseData: SharingCourseObject = {
+		code: "",
+		courseName: "",
+		status: "",
+		message: "",
+	};
+	importedCourseId: string = "";
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -34,13 +49,58 @@ export class Rooms extends VuexModule {
 	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
-	setRoomData(data: Array<RoomsData>): void {
-		this.roomsData = data;
+	setRoomData(data: DashboardGridElementResponse[]): void {
+		this.roomsData = data.map((item) => {
+			let href = "";
+			if (item.groupElements) {
+				item.groupElements = item.groupElements.map((groupItem) => {
+					if (groupItem.id) {
+						href = `/courses/${groupItem.id}`;
+					}
+					return { ...groupItem, href };
+				});
+			}
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+			return { ...item, href };
+		});
 	}
 
 	@Mutation
-	setAllElements(data: AllElements): void {
-		this.allElements = data;
+	setAllElements(data: CourseMetadataResponse[]): void {
+		this.allElements = data.map((item: CourseMetadataResponse) => {
+			let href = null;
+			if (item.id) {
+				href = `/courses/${item.id}`;
+			}
+			const isArchived =
+				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
+			if (!isArchived) {
+				return { ...item, searchText: item.title, isArchived, href };
+			}
+
+			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
+			const untilDate = item.untilDate ? item.untilDate.substring(0, 4) : "";
+			const shortenedUntilDate = untilDate.substring(2, 4);
+			const difference = Number(untilDate) - Number(startDate);
+
+			let titleDate = untilDate;
+			if (difference !== 0) {
+				const symbol = difference > 1 ? "-" : "/";
+				titleDate = `${startDate}${symbol}${
+					symbol == "/" ? shortenedUntilDate : untilDate
+				}`;
+			}
+
+			return {
+				...item,
+				titleDate: titleDate,
+				searchText: `${item.title} ${titleDate}`,
+				isArchived,
+				href,
+			};
+		});
 	}
 
 	@Mutation
@@ -71,11 +131,21 @@ export class Rooms extends VuexModule {
 		}
 	}
 
+	@Mutation
+	setSharedCourseData(status: SharingCourseObject): void {
+		this.sharedCourseData = status;
+	}
+
+	@Mutation
+	setImportedCourseId(importedCourseId: string): void {
+		this.importedCourseId = importedCourseId;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
 
-	get getAllElements(): AllElements {
+	get getAllElements(): AllItems {
 		return this.allElements;
 	}
 
@@ -89,6 +159,14 @@ export class Rooms extends VuexModule {
 
 	get getRoomsId(): string {
 		return this.gridElementsId;
+	}
+
+	get getCourseSharingStatus(): object {
+		return this.sharedCourseData;
+	}
+
+	get getImportedCourseId(): string {
+		return this.importedCourseId;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -154,6 +232,17 @@ export class Rooms extends VuexModule {
 				payload.yPosition,
 				{ title: payload.title }
 			);
+			const roomIndex = this.roomsData.findIndex(
+				(room) =>
+					room.xPosition === payload.xPosition &&
+					room.yPosition === payload.yPosition
+			);
+			const roomsData = [...this.roomsData];
+			roomsData[roomIndex] = {
+				...this.roomsData[roomIndex],
+				title: payload.title,
+			};
+			this.setRoomData(roomsData);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -189,6 +278,48 @@ export class Rooms extends VuexModule {
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async getSharedCourseData(courseCode: string): Promise<void> {
+		const params = {
+			shareToken: courseCode,
+		};
+		try {
+			const courseName = await $axios.$get("/v1/courses-share", {
+				params,
+			});
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: courseName,
+				status: "success",
+				message: "",
+			});
+		} catch (error: any) {
+			this.setSharedCourseData({
+				code: courseCode,
+				courseName: "",
+				status: "error",
+				message: "The course code is not in use.",
+			});
+			this.setError(error);
+		}
+	}
+
+	@Action
+	async confirmSharedCourseData(
+		courseData: SharingCourseObject
+	): Promise<void> {
+		try {
+			const importedCourseResponse = await $axios.$post("/v1/courses-share", {
+				shareToken: courseData.code,
+				courseName: courseData.courseName,
+			});
+
+			this.setImportedCourseId(importedCourseResponse.id || undefined);
+		} catch (error: any) {
+			this.setError(error);
 		}
 	}
 }

@@ -99,7 +99,7 @@
 											text-decoration: underline;
 										"
 										to="/"
-										href="https://s3.hidrive.strato.com/schul-cloud-hpi/default/Dokumente/Einwilligungserklaerung_analog.pdf"
+										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
 										target="_blank"
 										:no-styles="true"
 										traget="_blank"

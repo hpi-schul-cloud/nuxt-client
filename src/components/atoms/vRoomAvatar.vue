@@ -1,14 +1,17 @@
 <template>
 	<div
-		class="d-flex justify-center rounded"
+		class="room-avatar"
+		:data-testid="item.id"
+		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
+		:style="{ width: size }"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
-		@dragend="dragEnd"
+		@dragend="dragend"
 	>
 		<v-badge
-			class="ma-0 badge-component rounded"
+			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -17,25 +20,32 @@
 		>
 			<v-avatar
 				:color="item.displayColor"
+				:aria-label="`${$t('common.labels.course')} ${item.title}`"
 				:size="size"
 				:tile="condenseLayout"
-				@click="$emit('click', item)"
+				:tabindex="condenseLayout ? '-1' : '0'"
+				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
+				@keypress.enter="onClick"
 			>
 				<span
 					class="white--text text-h7"
 					:class="
-						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h4'
+						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
 					>{{ avatarTitle }}</span
 				>
 			</v-avatar>
-			<span
-				v-if="!condenseLayout"
-				class="d-flex justify-center mt-1 sub-title"
-				>{{ item.title }}</span
+			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
+				{{ item.title }}
+			</div>
+			<div
+				v-if="!condenseLayout && item.titleDate"
+				class="justify-center sub-title date-title mt-1"
 			>
+				{{ item.titleDate }}
+			</div>
 		</v-badge>
 	</div>
 </template>
@@ -79,9 +89,24 @@ export default {
 		},
 	},
 	methods: {
+		onClick() {
+			if (!this.condenseLayout) {
+				if (this.item.to) {
+					this.$router.push({
+						path: this.item.to,
+					});
+					return;
+				}
+				if (this.item.href) {
+					window.location = this.item.href;
+				}
+			}
+		},
 		startDragAvatar() {
 			this.isDragging = true;
-			this.$emit("startDrag", this.item);
+			if (this.draggable) {
+				this.$emit("startDrag", this.item);
+			}
 		},
 		dragLeave() {
 			this.hovered = false;
@@ -90,8 +115,9 @@ export default {
 			this.hovered = true;
 			this.isDragging = false;
 		},
-		dragEnd() {
+		dragend() {
 			this.isDragging = false;
+			this.$emit("dragend");
 		},
 		dropAvatar() {
 			this.$emit("drop");
@@ -99,7 +125,10 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "@utils/multiline-ellipsis.scss";
+@import "~vuetify/src/styles/styles.sass";
+@import "@styles";
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	width: 500px;
@@ -113,13 +142,25 @@ export default {
 	user-select: none;
 }
 .sub-title {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	margin-right: calc(var(--space-base-vuetify) * -5);
+	margin-left: calc(var(--space-base-vuetify) * -5);
+	text-align: center;
+	overflow-wrap: break-word;
+
+	@include excerpt(
+		$font-size: calc(var(--space-base-vuetify) * 4),
+		$line-height: var(--line-height-md),
+		$lines-to-show: 2
+	);
+}
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	.sub-title {
+		margin-right: calc(var(--space-base-vuetify) * -3);
+		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		font-size: 14px;
+	}
 }
 .group-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -128,5 +169,11 @@ export default {
 }
 .rounded-xl {
 	background-color: transparent;
+}
+.avatar-badge {
+	max-width: 100%;
+}
+.dragging {
+	opacity: 0.5;
 }
 </style>

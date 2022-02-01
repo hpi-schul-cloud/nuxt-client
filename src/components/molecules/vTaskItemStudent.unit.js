@@ -1,7 +1,5 @@
 import Vuetify from "vuetify";
-
 import mocks from "@@/stories/mockData/Tasks";
-
 import vTaskItemStudent from "./vTaskItemStudent";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
@@ -14,19 +12,22 @@ describe("@components/molecules/vTaskItemStudent", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(vTaskItemStudent));
-
-	it("Should link list item links to task/<id> page", () => {
-		const wrapper = mount(vTaskItemStudent, {
+	const getWrapper = (props, options) => {
+		return mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
-			propsData: {
-				task: tasks[0],
-			},
+			propsData: props,
+			...options,
 		});
+	};
+
+	it(...isValidComponent(vTaskItemStudent));
+
+	it("Should link list item links to task/<id> page", () => {
+		const wrapper = getWrapper({ task: tasks[0] });
 
 		const firstLink = wrapper.find("a");
 
@@ -35,32 +36,14 @@ describe("@components/molecules/vTaskItemStudent", () => {
 	});
 
 	it("Should display no due date label if task has no duedate", () => {
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: openTasksWithoutDueDate[0],
-			},
-		});
+		const wrapper = getWrapper({ task: openTasksWithoutDueDate[0] });
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
 		expect(dueDateLabel.text()).toBe("Kein Abgabedatum");
 	});
 
 	it("Should display due date label if task has duedate", () => {
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: tasks[0],
-			},
-		});
+		const wrapper = getWrapper({ task: tasks[0] });
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
 		expect(dueDateLabel.text()).toBe("Abgabe 11.06.00 16:00");
@@ -80,33 +63,15 @@ describe("@components/molecules/vTaskItemStudent", () => {
 			createdAt: "2017-09-28T11:49:39.924Z",
 		};
 
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: taskCloseToDueDate,
-			},
-		});
+		const wrapper = getWrapper({ task: taskCloseToDueDate });
 
 		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
 			true
 		);
 	});
 
-	it("Should render no hint label if the task is due to in the far future", () => {
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: openTasksWithDueDate[0],
-			},
-		});
+	it("Should render no hint label if the task is due in the far future", () => {
+		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
 		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
 			false
@@ -114,24 +79,13 @@ describe("@components/molecules/vTaskItemStudent", () => {
 	});
 
 	it("computedDueDateLabel() method should be able to render a shortened date", () => {
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: openTasksWithDueDate[0],
-			},
-		});
+		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		expect(
-			wrapper.vm.computedDueDateLabel(openTasksWithDueDate[0].duedate)
-		).toBe("Abgabe 11.06.00 16:00");
+		expect(wrapper.vm.dueDateLabel).toBe("Abgabe 11.06.00 16:00");
 
-		expect(
+		/* 	expect(
 			wrapper.vm.computedDueDateLabel(openTasksWithDueDate[0].duedate, true)
-		).toBe("Abgabe 11.06.00");
+		).toBe("Abgabe 11.06.00"); */
 	});
 
 	it("accepts valid task props", () => {
@@ -148,16 +102,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 	});
 
 	it("should display topic", () => {
-		const wrapper = mount(vTaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				task: openTasksWithDueDate[0],
-			},
-		});
+		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
 		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
 	});

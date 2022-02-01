@@ -9,8 +9,9 @@ let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string) => {
+		$get: async (path: string, data?: object) => {
 			receivedRequests.push({ path });
+			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
 		$post: async (path: string) => {},
@@ -40,6 +41,34 @@ const mockData = {
 			displayColor: "#ffffff",
 			xPosition: 5,
 			yPosition: 2,
+		},
+		{
+			id: "789",
+			title: "Science",
+			shortTitle: "Sc",
+			displayColor: "exampleColor",
+			groupElements: [
+				{
+					id: "987",
+					title: "Biology",
+					shortTitle: "Bi",
+					displayColor: "#f23f76",
+				},
+				{
+					id: "645",
+					title: "Chemistry",
+					shortTitle: "Ch",
+					displayColor: "#f23f76",
+				},
+				{
+					id: "321",
+					title: "Physics",
+					shortTitle: "Ph",
+					displayColor: "#f23f76",
+				},
+			],
+			xPosition: 3,
+			yPosition: 3,
 		},
 	],
 };
@@ -167,6 +196,39 @@ describe("rooms module", () => {
 					roomsData
 				);
 			});
+
+			it("should update the state", async (done) => {
+				const mockApi = {
+					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
+						data: { ...groupToPatch },
+					})),
+				};
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+				const roomsModule = new Rooms({});
+
+				const roomsData: RoomsData = {
+					id: "dummyId",
+					title: "dummy title",
+					shortTitle: "dummy short title",
+					xPosition: 3,
+					yPosition: 3,
+					displayColor: "#FF0000",
+				};
+
+				roomsModule.update(roomsData).then(() => {
+					expect(roomsModule.getLoading).toBe(false);
+					done();
+				});
+				expect(roomsModule.getLoading).toBe(true);
+				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
+					roomsData
+				);
+				expect(roomsModule.getRoomsData[3].title).toBe(roomsData.title);
+			});
 			it("handle error", async (done) => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
@@ -252,6 +314,53 @@ describe("rooms module", () => {
 				expect(roomsModule.getLoading).toBe(true);
 			});
 		});
+		describe("getSharedCourseData", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"getSharedCourseData"
+				);
+				await roomsModule.getSharedCourseData("sampleCode");
+
+				expect(receivedRequests[0].path).toStrictEqual("/v1/courses-share");
+				expect(receivedRequests[1].data.params.shareToken).toStrictEqual(
+					"sampleCode"
+				);
+				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
+					"sampleCode"
+				);
+			}, 1000);
+		});
+
+		describe("confirmSharedCourseData", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"confirmSharedCourseData"
+				);
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+
+				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
+					sharedCourseData
+				);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -268,11 +377,23 @@ describe("rooms module", () => {
 						yPosition: 5,
 					},
 				];
+
+				const expectedData = [
+					{
+						id: "someId",
+						title: "exampletitle",
+						shortTitle: "ex",
+						displayColor: "#f23f76",
+						xPosition: 2,
+						yPosition: 5,
+						href: "/courses/someId",
+					},
+				];
 				expect(roomsModule.getRoomsData).not.toStrictEqual(
 					roomsDataToBeChanged
 				);
-				roomsModule.setRoomData(roomsDataToBeChanged);
-				expect(roomsModule.roomsData).toStrictEqual(roomsDataToBeChanged);
+				roomsModule.setRoomData(roomsDataToBeChanged as any);
+				expect(roomsModule.roomsData).toStrictEqual(expectedData);
 			});
 		});
 
@@ -328,8 +449,9 @@ describe("rooms module", () => {
 					displayColor: "#f23f76",
 					xPosition: 5,
 					yPosition: 2,
+					href: "/courses/123",
 				};
-				roomsModule.setRoomData(mockData.gridElements);
+				roomsModule.setRoomData(mockData.gridElements as any);
 				roomsModule.setPosition(draggedObject);
 				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
@@ -340,21 +462,69 @@ describe("rooms module", () => {
 				const roomsModule = new Rooms({});
 				const itemsToBeSet = [
 					{
-						id: "someId",
-						title: "exampletitle",
-						shortTitle: "ex",
-						displayColor: "#f23f76",
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
 					},
 					{
-						id: "someId_2",
-						title: "math",
-						shortTitle: "ma",
-						displayColor: "yellow",
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
 					},
 				];
-				expect(roomsModule.getAllElements).not.toStrictEqual(itemsToBeSet);
+
+				const expectedData = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+						titleDate: "2019/20",
+						searchText: "Mathe 2019/20",
+						isArchived: true,
+						href: "/courses/123",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+						titleDate: "2015-2018",
+						searchText: "History 2015-2018",
+						isArchived: true,
+						href: "/courses/234",
+					},
+				];
 				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.allElements).toStrictEqual(itemsToBeSet);
+				expect(roomsModule.allElements).toStrictEqual(expectedData);
+			});
+
+			describe("setSharedCourseData, setImportedCourseId", () => {
+				it("should set the state", () => {
+					const roomsModule = new Rooms({});
+					const sharedCourseData = {
+						code: "123",
+						courseName: "Mathe",
+						status: "success",
+						message: "",
+					};
+					const importedCourseId = "456789";
+
+					roomsModule.setSharedCourseData(sharedCourseData);
+					roomsModule.setImportedCourseId(importedCourseId);
+					expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
+					expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
+				});
 			});
 		});
 	});
@@ -363,11 +533,48 @@ describe("rooms module", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
 				const roomsModule = new Rooms({});
-				const expectedValue = mockData.gridElements;
+				const itemsToBeSet = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+					},
+				];
 
-				expect(roomsModule.getRoomsData).not.toStrictEqual(expectedValue);
-				roomsModule.setRoomData(expectedValue);
-				expect(roomsModule.getRoomsData).toStrictEqual(expectedValue);
+				const expectedData = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+						href: "/courses/123",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+						href: "/courses/234",
+					},
+				];
+
+				roomsModule.setRoomData(itemsToBeSet as any);
+				expect(roomsModule.getRoomsData).toStrictEqual(expectedData);
 			});
 		});
 
@@ -396,31 +603,62 @@ describe("rooms module", () => {
 				const roomsModule = new Rooms({});
 				const sampleId = "sample_id";
 				expect(roomsModule.getRoomsId).toStrictEqual("");
-				roomsModule.setError(sampleId);
-				expect(roomsModule.getError).toStrictEqual(sampleId);
+				roomsModule.setRoomDataId(sampleId);
+				expect(roomsModule.getRoomsId).toStrictEqual(sampleId);
 			});
 		});
 
 		describe("getAllElements", () => {
-			it("should return rooms id state", () => {
+			it("should return rooms-list AllElements", () => {
 				const roomsModule = new Rooms({});
 				const itemsToBeSet = [
 					{
-						id: "someId",
-						title: "exampletitle",
-						shortTitle: "ex",
-						displayColor: "#f23f76",
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
 					},
 					{
-						id: "someId_2",
-						title: "math",
-						shortTitle: "ma",
-						displayColor: "yellow",
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+					},
+				];
+
+				const expectedData = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+						titleDate: "2019/20",
+						searchText: "Mathe 2019/20",
+						isArchived: true,
+						href: "/courses/123",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+						titleDate: "2015-2018",
+						searchText: "History 2015-2018",
+						isArchived: true,
+						href: "/courses/234",
 					},
 				];
 				expect(roomsModule.getAllElements).toStrictEqual([]);
 				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.getAllElements).toStrictEqual(itemsToBeSet);
+				expect(roomsModule.getAllElements).toStrictEqual(expectedData);
 			});
 		});
 	});

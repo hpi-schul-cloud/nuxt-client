@@ -17,7 +17,7 @@ storiesOf("5 Molecules/LegacyFooter", module).add("default", () => ({
 			},
 			{
 				title: "Datenschutzerklärung Muster Schulen",
-				href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+				href: "https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 			},
 		],
 		contacts: [
@@ -26,8 +26,8 @@ storiesOf("5 Molecules/LegacyFooter", module).add("default", () => ({
 				href: "mailto:info@schulcloud.org",
 			},
 			{
-				title: "Support: dataportlernen.cloud@dataport.de",
-				href: "mailto:dataportlernen.cloud@dataport.de",
+				title: "Support: support@dbildungscloud.de",
+				href: "mailto:support@dbildungscloud.de",
 			},
 			{
 				title: "Inhalteanbieter: inhalte@schulcloud.org",

@@ -2,11 +2,11 @@
 	<v-switch
 		:input-value="value"
 		:label="label"
+		:aria-label="ariaLabel"
 		inset
 		flat
 		dense
-		:ripple="false"
-		:class="customClasses"
+		:color="color"
 		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
 </template>
@@ -27,10 +27,26 @@ export default {
 			type: String,
 			required: true,
 		},
-		customClasses: {
+		ariaLabel: {
 			type: String,
-			default: "",
+			required: false,
+			default: () => "toggle switch",
+		},
+		color: {
+			type: String,
+			default: () => "primary",
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-input--selection-controls__ripple {
+	position: absolute !important;
+}
+
+::v-deep .v-input--selection-controls__input {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	margin-right: 0 !important;
+}
+</style>

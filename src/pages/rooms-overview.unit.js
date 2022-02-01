@@ -1,14 +1,14 @@
 import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
+import AuthModule from "@/store/auth";
 import flushPromises from "flush-promises";
 
-const mockStoreData = [
+const mockRoomStoreData = [
 	{
 		id: "1",
 		title: "First",
 		shortTitle: "Ma",
 		displayColor: "purple",
-		url: "/api/xxxx/1234w",
 		xPosition: 1,
 		yPosition: 1,
 	},
@@ -17,8 +17,6 @@ const mockStoreData = [
 		title: "Second",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
 		xPosition: 2,
 		yPosition: 2,
 	},
@@ -27,18 +25,16 @@ const mockStoreData = [
 		title: "Third",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
-		xPosition: 4,
-		yPosition: 4,
+		xPosition: 0,
+		yPosition: 0,
 	},
 	{
-		id: "4",
+		groupId: "4",
 		title: "Fourth",
 		shortTitle: "Bi",
 		displayColor: "#EC407A",
-		url: "/api/xxxx/1234w",
-		xPosition: 5,
-		yPosition: 5,
+		xPosition: 2,
+		yPosition: 3,
 		groupElements: [
 			{
 				id: "5",
@@ -49,7 +45,6 @@ const mockStoreData = [
 				id: "6",
 				title: "Bio 3a",
 				displayColor: "green",
-				notification: true,
 			},
 			{
 				id: "7",
@@ -60,16 +55,27 @@ const mockStoreData = [
 	},
 ];
 
+const mockAuthStoreData = {
+	__v: 0,
+	_id: "asdf",
+	id: "asdf",
+	firstName: "Arthur",
+	lastName: "Dent",
+	email: "arthur.dent@hitchhiker.org",
+	roles: ["student"],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+};
+
 const spyMocks = {
 	storeRoomAlignMock: jest
 		.spyOn(RoomsModule, "align")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchMock: jest
 		.spyOn(RoomsModule, "fetch")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	storeModuleFetchAllMock: jest
 		.spyOn(RoomsModule, "fetchAllElements")
-		.mockImplementation(() => {}),
+		.mockImplementation(async () => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
 	getDataObjectMock: jest.spyOn(RoomsPage.methods, "getDataObject"),
@@ -81,13 +87,15 @@ const spyMocks = {
 	addGroupElementsMock: jest.spyOn(RoomsPage.methods, "addGroupElements"),
 	savePositionMock: jest.spyOn(RoomsPage.methods, "savePosition"),
 	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
+	defaultNamingMock: jest.spyOn(RoomsPage.methods, "defaultNaming"),
 };
 
-const getWrapper = (device = "desktop") => {
+const getWrapper = (device = "desktop", options = {}) => {
 	return mount(RoomsPage, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
+			...options,
 		}),
 		computed: {
 			$mq: () => device,
@@ -97,19 +105,32 @@ const getWrapper = (device = "desktop") => {
 
 describe("RoomPage", () => {
 	beforeEach(() => {
-		RoomsModule.setRoomData(mockStoreData);
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+		RoomsModule.setRoomData(mockRoomStoreData);
+		AuthModule.setUser(mockAuthStoreData);
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it(...isValidComponent(RoomsPage));
+	// it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
+
+		const expectedItem = {
+			id: "1",
+			title: "First",
+			shortTitle: "Ma",
+			displayColor: "purple",
+			xPosition: 1,
+			yPosition: 1,
+			href: "/courses/1",
+		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items).toStrictEqual(mockStoreData);
+		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -123,7 +144,7 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper("mobile");
 		await flushPromises();
 		const avatarComponents = wrapper.findAll(".room-avatar");
-		expect(avatarComponents).toHaveLength(2);
+		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 1 group-avatar component", async () => {
@@ -173,10 +194,10 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$refs["2-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["4-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["5-5"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["3-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomGroupAvatar"
 		);
 		expect(wrapper.vm.$refs["3-3"][0].$options["_componentTag"]).toStrictEqual(
@@ -191,53 +212,53 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
-	it("should set the column count '6' if the device is 'tablet'", async () => {
+	it("should set the column count '4' if the device is 'tablet'", async () => {
 		const wrapper = getWrapper("tablet");
 		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-		expect(wrapper.vm.dimensions.colCount).toBe(6);
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
-	it("should set the column count '8' if the device is 'desktop'", async () => {
+	it("should set the column count '4' if the device is 'desktop'", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-		expect(wrapper.vm.dimensions.colCount).toBe(8);
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should call 'setDropElement' method after avatar-to-emptyAvatar drag&drop", async () => {
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
-				x: 4,
-				y: 4,
+				x: 0,
+				y: 0,
 			},
 			item: {
 				id: "3",
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				url: "/api/xxxx/1234w",
-				xPosition: 4,
-				yPosition: 4,
+				href: "/courses/3",
+				xPosition: 0,
+				yPosition: 0,
 			},
 			to: {
-				x: 4,
+				x: 3,
 				y: 2,
 			},
 		};
 		await flushPromises();
-		expect(wrapper.vm.$refs["4-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["2-3"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
-		const avatarComponent = wrapper.findComponent({ ref: "4-4" });
-		avatarComponent.trigger("dragstart");
+		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
+		await avatarComponent.trigger("dragstart");
 
-		const emptyAvatarComponent = wrapper.findComponent({ ref: "2-4" });
-		emptyAvatarComponent.trigger("drop");
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "2-3" });
+		await emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -260,7 +281,7 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -278,15 +299,17 @@ describe("RoomPage", () => {
 		);
 
 		const fromAvatarComponent = wrapper.findComponent({ ref: "1-1" });
-		fromAvatarComponent.trigger("dragstart");
+		await fromAvatarComponent.trigger("dragstart");
 
 		const toAvatarComponent = wrapper.findComponent({ ref: "2-2" });
-		toAvatarComponent.trigger("drop");
+		await toAvatarComponent.trigger("drop");
 
+		await flushPromises();
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
 		expect(spyMocks.savePositionMock).toHaveBeenCalled();
+		expect(spyMocks.defaultNamingMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
@@ -304,28 +327,28 @@ describe("RoomPage", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
+				href: "/courses/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
 			to: {
-				x: 5,
-				y: 5,
+				x: 2,
+				y: 3,
 			},
 		};
 		await flushPromises();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
-		expect(wrapper.vm.$refs["5-5"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["3-2"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomGroupAvatar"
 		);
 
 		const fromAvatarComponent = wrapper.findComponent({ ref: "1-1" });
-		fromAvatarComponent.trigger("dragstart");
+		await fromAvatarComponent.trigger("dragstart");
 
-		const toAvatarComponent = wrapper.findComponent({ ref: "5-5" });
-		toAvatarComponent.trigger("drop");
+		const toAvatarComponent = wrapper.findComponent({ ref: "3-2" });
+		await toAvatarComponent.trigger("drop");
 
 		expect(spyMocks.addGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -340,8 +363,8 @@ describe("RoomPage", () => {
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
-				x: 5,
-				y: 5,
+				x: 2,
+				y: 3,
 				groupIndex: 0,
 			},
 			item: {
@@ -350,8 +373,8 @@ describe("RoomPage", () => {
 				displayColor: "yellow",
 			},
 			to: {
-				x: 4,
-				y: 5,
+				x: 2,
+				y: 1,
 			},
 		};
 
@@ -359,13 +382,13 @@ describe("RoomPage", () => {
 			groupDialog: {
 				isOpen: true,
 				groupData: {
-					id: "4",
+					groupId: "4",
 					title: "Fourth",
 					shortTitle: "Bi",
 					displayColor: "#EC407A",
 					url: "/api/xxxx/1234w",
-					xPosition: 5,
-					yPosition: 5,
+					xPosition: 2,
+					yPosition: 3,
 					groupElements: [
 						{
 							id: "5",
@@ -388,17 +411,15 @@ describe("RoomPage", () => {
 			},
 		});
 
-		await flushPromises();
-		wrapper.vm.$refs.roomModal.$emit(
+		await wrapper.vm.$refs.roomModal.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);
 
-		await flushPromises();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
 
-		const emptyAvatarComponent = wrapper.findComponent({ ref: "5-4" });
-		emptyAvatarComponent.trigger("drop");
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "1-2" });
+		await emptyAvatarComponent.trigger("drop");
 
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
@@ -410,42 +431,115 @@ describe("RoomPage", () => {
 
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
 
 		const searchInput = wrapper.vm.$refs["search"];
-		searchInput.$emit("input", "thi");
-		await flushPromises();
+		await searchInput.$emit("input", "thi");
 
-		expect(wrapper.vm.$refs["2-2"][0].$options["_componentTag"]).toStrictEqual(
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
+		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 	});
 
 	it("should reset search text while dragging", async () => {
-		const wrapper = getWrapper();
-		await flushPromises();
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			computed: {
+				$mq: () => "desktop",
+				isTouchDevice: () => false,
+			},
+		});
+
+		await wrapper.setData({ allowDragging: true });
 
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
 
 		const searchInput = wrapper.vm.$refs["search"];
-		searchInput.$emit("input", "thi");
-		await flushPromises();
+		await searchInput.$emit("input", "thi");
+
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
 
-		const avatarComponent = wrapper.findComponent({ ref: "4-4" });
-		avatarComponent.trigger("dragstart");
-		await flushPromises();
+		const avatarComponent = wrapper.findComponent({ ref: "0-0" });
+		await avatarComponent.trigger("dragstart");
+
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
+	});
+
+	it("should not show FAB if user does not have permission to create courses", () => {
+		AuthModule.setUser({
+			...mockAuthStoreData,
+			permissions: ["aksjdhf", "poikln"],
+		});
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(false);
+	});
+
+	it("should show FAB if user has permission to create courses", () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(true);
+	});
+
+	it("should set rowCount while loading", async () => {
+		const roomData = [
+			{
+				id: "1",
+				title: "First",
+				shortTitle: "Ma",
+				displayColor: "purple",
+				url: "/api/xxxx/1234w",
+				xPosition: 1,
+				yPosition: 1,
+			},
+			{
+				id: "2",
+				title: "Second",
+				shortTitle: "Ma",
+				displayColor: "#EC407A",
+				url: "/api/xxxx/1234w",
+				notification: true,
+				xPosition: 2,
+				yPosition: 2,
+			},
+			{
+				id: "3",
+				title: "Third",
+				shortTitle: "Ma",
+				displayColor: "#EC407A",
+				url: "/api/xxxx/1234w",
+				xPosition: 3,
+				yPosition: 7,
+			},
+		];
+
+		RoomsModule.setRoomData(roomData);
+		const wrapper = getWrapper();
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
+		await wrapper.vm.$nextTick();
+		const avatar = wrapper.findComponent({ ref: "7-3" });
+		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
+		expect(avatar.vm.$options["_componentTag"]).toStrictEqual("vRoomAvatar");
+		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(true);
+		expect(wrapper.vm.$refs["8-0"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
 	});
 });

@@ -3,23 +3,26 @@
 		v-if="hasMultipleActions"
 		v-model="isSpeedDialExpanded"
 		v-bind="$attrs"
-		fixed
-		:bottom="isMobile"
-		:top="!isMobile"
+		:bottom="!positionAtTop"
+		:top="positionAtTop"
 		right
-		class="fixed transition"
+		class="transition"
+		:class="positionAtTop ? topPositionClass : ''"
 		:direction="speedDialDirection"
+		:data-testid="dataTestId"
 	>
 		<template v-slot:activator>
 			<v-btn
 				id="fab"
 				v-model="isSpeedDialExpanded"
+				role="menu"
 				color="primary"
 				fab
 				rounded
 				:small="isCollapsed"
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
+				:aria-label="ariaLabel ? ariaLabel : title"
 			>
 				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
 					{{ mdiClose }}
@@ -44,6 +47,9 @@
 					:to="action.to"
 					class="fab-action"
 					:data-testid="action.dataTestid"
+					role="menuitem"
+					:aria-label="action.ariaLabel ? action.ariaLabel : action.label"
+					@click="onCustomEvent(action.customEvent || null)"
 				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
@@ -62,15 +68,16 @@
 		fab
 		fixed
 		right
-		:bottom="isMobile"
-		:top="!isMobile"
+		:bottom="!positionAtTop"
+		:top="positionAtTop"
 		color="primary"
 		dark
 		rounded
 		:small="extended"
-		class="fixed transition"
-		:class="{ 'extended-fab': extended }"
 		:href="href"
+		:class="classes"
+		:aria-label="ariaLabel ? ariaLabel : title"
+		:data-testid="dataTestId"
 	>
 		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ title }}</span>
@@ -101,6 +108,21 @@ export default {
 			required: false,
 			default: "",
 		},
+		topPositionClass: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		ariaLabel: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		dataTestId: {
+			type: String,
+			required: false,
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -112,14 +134,14 @@ export default {
 		};
 	},
 	computed: {
-		isMobile: function () {
-			return this.$vuetify.breakpoint.smAndDown;
+		positionAtTop: function () {
+			return this.$vuetify.breakpoint.lgAndUp;
 		},
 		hasMultipleActions: function () {
 			return this.actions.length > 0;
 		},
 		speedDialDirection: function () {
-			return this.isMobile ? "top" : "bottom";
+			return !this.positionAtTop ? "top" : "bottom";
 		},
 		isCollapsed: function () {
 			return this.extended && !this.isSpeedDialExpanded;
@@ -127,6 +149,21 @@ export default {
 		showOverlay: function () {
 			return this.isSpeedDialExpanded;
 		},
+		classes: function () {
+			let className = "transition";
+
+			if (this.extended) className = className.concat(" ", "extended-fab");
+			if (this.positionAtTop)
+				className = className.concat(" ", this.topPositionClass);
+
+			return className;
+		},
+	},
+	created() {
+		window.addEventListener("scroll", this.onScroll);
+	},
+	destroyed() {
+		window.removeEventListener("scroll", this.onScroll);
 	},
 	methods: {
 		detectScrollingDirection() {
@@ -143,9 +180,7 @@ export default {
 
 			this.pageOffset = top;
 		},
-	},
-	onEventBus: {
-		isScrolling: function () {
+		onScroll() {
 			if (this.scrollTimer !== -1) {
 				clearTimeout(this.scrollTimer);
 			}
@@ -155,15 +190,14 @@ export default {
 
 			this.detectScrollingDirection();
 		},
+		onCustomEvent(customEvent) {
+			if (customEvent) this.$emit(customEvent.name, customEvent.value);
+		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.fixed {
-	position: fixed !important;
-}
-
 .transition {
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }

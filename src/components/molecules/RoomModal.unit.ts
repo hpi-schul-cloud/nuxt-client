@@ -127,4 +127,22 @@ describe("@components/molecules/RoomModal", () => {
 		expect(storeRoomUpdateMock).toHaveBeenCalled();
 		expect(storeRoomUpdateMock.mock.calls[0][0].title).toBe("changed title");
 	});
+
+	it("should pass 'draggable' prop to room-avatar-iterator", async () => {
+		const testProps = {
+			isOpen: true,
+			groupData: { title: "dummy title", groupElements: [] },
+			avatarSize: "4em",
+			draggable: true,
+		};
+		const wrapper = mount(RoomModal, {
+			...createComponentMocks({
+				i18n: true,
+			}),
+			propsData: testProps,
+		});
+
+		const iterator = wrapper.find(".iterator");
+		expect(iterator.vm.$props.canDraggable).toBe(true);
+	});
 });

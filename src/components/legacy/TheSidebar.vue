@@ -22,6 +22,11 @@
 						class="list-item"
 						:class="{ active: route.active, 'child-active': route.childActive }"
 						:data-testId="route.testId"
+						:style="
+							route.visibility && route.visibility === 'false'
+								? { display: 'none' }
+								: {}
+						"
 					>
 						<base-link
 							class="list-content"
@@ -34,7 +39,7 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="
-									route.active
+									route.active || route.childActive
 										? 'var(--color-sidebar-menu-item-active)'
 										: 'var(--color-sidebar-menu-item)'
 								"
@@ -62,7 +67,7 @@
 									:icon="child.icon"
 									:source="child.source || 'fa'"
 									:fill="
-										$route.path.includes(child.href)
+										child.active
 											? 'var(--color-sidebar-menu-item-active)'
 											: 'var(--color-sidebar-menu-item)'
 									"

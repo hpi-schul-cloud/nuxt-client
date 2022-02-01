@@ -20,11 +20,23 @@ export type DroppedObject = {
 	item: object;
 };
 
-export type AllElementsObject = {
+export type ListItemsObject = {
 	id: string;
 	title: string;
 	shortTitle: string;
 	displayColor: string;
+	startDate?: string;
+	untilDate?: string;
+	searchText?: string;
+	href?: string;
+	to?: string;
 };
 
-export type AllElements = Array<AllElementsObject>;
+export type SharingCourseObject = {
+	code: string;
+	courseName: string;
+	status: string;
+	message: string;
+};
+
+export type AllItems = Array<ListItemsObject>;

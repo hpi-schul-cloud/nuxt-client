@@ -72,11 +72,11 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutzerklärung"),
-					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+					href: "https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.nutzungsordnung"),
-					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					href: "https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 				},
 				{
 					title: "Team",
@@ -97,8 +97,8 @@ export default {
 					href: "mailto:info@hpi-schul-cloud.de",
 				},
 				{
-					title: "Support: dataportlernen.cloud@dataport.de",
-					href: "mailto:dataportlernen.cloud@dataport.de",
+					title: "Support: support@dbildungscloud.de",
+					href: "mailto:support@dbildungscloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.anbieter"),
@@ -106,7 +106,7 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
-					href: "mailto:datenschutz-fragen@hpi-schul-cloud.de",
+					href: "mailto:datenschutz@dbildungscloud.de",
 				},
 				{
 					title: this.$t(

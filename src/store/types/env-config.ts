@@ -1,5 +1,6 @@
 export type Envs = {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
+	ALERT_STATUS_URL?: string;
 	DOCUMENT_BASE_DIR: string;
 	FALLBACK_DISABLED?: boolean;
 	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED?: boolean;
@@ -28,4 +29,5 @@ export type Envs = {
 	SC_THEME: string;
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
+	LEGACY_COURSE_OVERVIEW_ENABLED?: boolean;
 };

@@ -10,6 +10,10 @@ const mockData = {
 	displayColor: "#ffffff",
 	xPosition: 5,
 	yPosition: 2,
+	startDate: "2019-12-07T23:00:00.000Z",
+	untilDate: "2020-12-16T23:00:00.000Z",
+	titleDate: "2019/20",
+	href: "/courses/456",
 };
 
 const propsData = {
@@ -31,12 +35,15 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("vRoomAvatar", () => {
+	beforeEach(() => {
+		window.location.pathname = "";
+	});
 	it("should display the title", () => {
 		const wrapper = getWrapper({ ...propsData });
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML).toStrictEqual("Bio 12c");
+		expect(labelElement.innerHTML.trim()).toStrictEqual("Bio 12c");
 	});
 
 	it("should NOT display the title", () => {
@@ -86,16 +93,37 @@ describe("vRoomAvatar", () => {
 		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
-	it("should emit 'click' event with correct payload", async () => {
+	it("should redirect to course page", async () => {
+		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
 
 		avatarComponent.trigger("click");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
+		expect(location.pathname).toStrictEqual("/courses/456");
+	});
 
-		expect(emitted["click"]).toHaveLength(1);
-		expect(emitted["click"] && emitted["click"][0][0]).toStrictEqual(mockData);
+	it("should redirect to course page if keyboard event triggered", async () => {
+		const location = window.location;
+		const wrapper = getWrapper(propsData);
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("keypress.enter");
+		expect(location.pathname).toStrictEqual("/courses/456");
+	});
+
+	it("should not redirect to course page if condenseLayout props is true", async () => {
+		const location = window.location;
+		const wrapper = getWrapper({
+			item: mockData,
+			size: "4em",
+			showBadge: true,
+			draggable: true,
+			condenseLayout: true,
+		});
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("click");
+		expect(location.pathname).toStrictEqual("");
 	});
 
 	it("should emit 'dragStart' event when it started dragging", async () => {
@@ -123,5 +151,45 @@ describe("vRoomAvatar", () => {
 		const emitted = wrapper.emitted();
 
 		expect(emitted["drop"]).toHaveLength(1);
+	});
+
+	it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
+		const wrapper = getWrapper({
+			item: mockData,
+			size: "4em",
+			showBadge: true,
+			draggable: false,
+		});
+		const avatarComponent = wrapper.find(".v-avatar");
+
+		avatarComponent.trigger("dragstart");
+		await wrapper.vm.$nextTick();
+		const emitted = wrapper.emitted();
+
+		expect(emitted["startDrag"]).toBe(undefined);
+	});
+	it("should display the date title", () => {
+		const propData = {
+			item: {
+				id: "123",
+				title: "History",
+				shortTitle: "Hi",
+				displayColor: "#EF6C00",
+				startDate: "2015-07-31T22:00:00.000Z",
+				untilDate: "2018-07-30T22:00:00.000Z",
+				titleDate: "2015-2018",
+				searchText: "History 2015-2018",
+				isArchived: true,
+			},
+			size: "4em",
+			showBadge: true,
+			draggable: true,
+		};
+
+		const wrapper = getWrapper({ ...propData });
+		const element = wrapper.find(".date-title").element as HTMLElement;
+
+		expect(element).toBeTruthy();
+		expect(element.innerHTML.trim()).toStrictEqual("2015-2018");
 	});
 });
