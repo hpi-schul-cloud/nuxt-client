@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mx-auto mb-2"
+		class="mx-auto mb-4"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"

@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mx-auto mb-2"
+		class="mx-auto mb-4"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"
@@ -12,41 +12,49 @@
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
 				<div class="title-section">
-					<span
-						>Aufgabe -
-						{{
-							computedDueDateLabel(
-								task.duedate,
-								(shorten = $vuetify.breakpoint.xsOnly)
-							)
-						}}</span
-					>
+					<span> {{ cardTitle(task.duedate) }} </span>
 				</div>
 				<div class="dot-menu-section">
+					<!-- Action menu to be determined with UXers-->
 					<v-icon>{{ mdiDotsVertical }}</v-icon>
 				</div>
 			</div>
 			<div class="text-h4 text--primary">{{ task.name }}</div>
 			<div class="text--primary mt-1">{{ task.description }}</div>
 		</v-card-text>
-		<v-card-text class="ma-0 pb-0 pt-0">
+		<v-card-text
+			v-if="showSubmittedSection"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item pa-1">
-					<div class="chip-title">Submitted</div>
+					<div class="chip-title">
+						{{ $t("pages.room.teacherTaskCard.submitted") }}
+					</div>
 					<div class="chip-value">
 						{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
 					</div>
 				</div>
 				<div class="grey lighten-2 chip-item pa-1">
-					<div class="chip-title">Graded</div>
+					<div class="chip-title">
+						{{ $t("pages.room.teacherTaskCard.graded") }}
+					</div>
 					<div class="chip-value">
 						{{ task.status.graded }}/{{ task.status.maxSubmissions }}
 					</div>
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-0">
-			<v-btn text color="#0091EA"> Open </v-btn>
+		<v-card-actions class="pt-1">
+			<!-- Action menu to be determined with UXers-->
+			<v-btn
+				v-for="(action, index) in actions"
+				:key="index"
+				text
+				color="#0091EA"
+			>
+				{{ action.name }}</v-btn
+			>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -57,8 +65,6 @@ import { mdiDotsVertical } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 import { mdiFormatListChecks } from "@mdi/js";
 
-// TODO - remove inline css
-// TODO - Remove lorem ipsum
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -72,6 +78,10 @@ export default {
 		type: {
 			type: String,
 			default: "",
+		},
+		actions: {
+			type: Array,
+			required: true,
 		},
 		ariaLabel: {
 			type: String,
@@ -96,16 +106,19 @@ export default {
 		defaultIconColor() {
 			return "#54616e";
 		},
+		showSubmittedSection() {
+			return !this.task.status.isDraft;
+		},
 	},
 	methods: {
-		computedDueDateLabel(dueDate) {
-			if (!dueDate) {
-				return this.$t("pages.tasks.labels.noDueDate");
-			} else {
-				return (
-					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
-				);
-			}
+		cardTitle(dueDate) {
+			const dueTitle = !dueDate
+				? this.$t("pages.room.teacherTaskCard.noDueDate")
+				: `${this.$t(
+						"pages.room.teacherTaskCard.due"
+				  )} - ${printDateFromStringUTC(dueDate)}`;
+
+			return `${this.$t("pages.room.teacherTaskCard.task")} - ${dueTitle}`;
 		},
 		taskHref: (id) => {
 			return `/homework/${id}`;

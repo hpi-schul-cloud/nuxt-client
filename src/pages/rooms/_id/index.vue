@@ -23,18 +23,17 @@
 				</div>
 			</div>
 		</template>
-		<room-dashboard :items="roomData.elements" :role="dashBoardRole" />
+		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
 	</default-wireframe>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
 import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 
-export default Vue.extend({
+export default {
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
@@ -59,9 +58,8 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			//@ts-ignore
 			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
-});
+};
 </script>
