@@ -39,48 +39,13 @@
 				/>
 			</v-list-item-action>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<v-menu
-					bottom
-					left
-					offset-y
-					attach
-					@update:return-value="toggleMenu(false)"
-				>
-					<template v-slot:activator="{ on, attrs, value }">
-						<v-btn
-							v-show="showMenu"
-							id="task-menu-btn"
-							v-bind="attrs"
-							icon
-							:data-testId="`task-menu-${task.name}`"
-							v-on="on"
-							@click.prevent="toggleMenu(!value)"
-							@keydown.space.stop="toggleMenu(!value)"
-							@focus="handleFocus(true)"
-							@blur="handleFocus(false)"
-						>
-							<v-icon>{{ mdiDotsVertical }}</v-icon>
-						</v-btn>
-					</template>
-					<v-list>
-						<v-list-item
-							class="task-action"
-							:data-testId="`task-finish-${task.name}`"
-							@click.stop.prevent="handleFinish"
-						>
-							<v-list-item-title>
-								<template v-if="task.status.isFinished">
-									<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
-									{{ $t("components.molecules.TaskItemMenu.restore") }}
-								</template>
-								<template v-else>
-									<v-icon class="task-action-icon"> $taskFinished </v-icon>
-									{{ $t("components.molecules.TaskItemMenu.finish") }}
-								</template>
-							</v-list-item-title>
-						</v-list-item>
-					</v-list>
-				</v-menu>
+				<task-item-menu
+					:show="showMenu"
+					:task="task"
+					user-role="student"
+					@toggled-menu="toggleMenu"
+					@focus-changed="handleFocus"
+				/>
 			</v-list-item-action>
 		</v-list-item>
 	</v-hover>
@@ -93,14 +58,12 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 	fromNowToFuture,
 } from "@plugins/datetime";
-import { mdiDotsVertical, mdiUndo } from "@mdi/js";
-import FinishedTaskModule from "@/store/finished-tasks";
-import TaskModule from "@/store/tasks";
+import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining },
+	components: { VCustomChipTimeRemaining, TaskItemMenu },
 	props: {
 		task: {
 			type: Object,
@@ -110,8 +73,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiDotsVertical,
-			mdiUndo,
 			isMenuActive: false,
 			isHovering: false,
 			isActive: false,
@@ -191,13 +152,6 @@ export default {
 		},
 		handleFocus(value) {
 			this.isActive = value;
-		},
-		handleFinish() {
-			if (this.task.status.isFinished) {
-				FinishedTaskModule.restoreTask(this.task.id);
-			} else {
-				TaskModule.finishTask(this.task.id);
-			}
 		},
 	},
 };

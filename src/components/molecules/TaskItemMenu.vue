@@ -1,14 +1,14 @@
 <template>
-	<v-menu v-click-outside="() => toggleMenu(false)" bottom left offset-y attach>
+	<v-menu bottom left offset-y attach @update:return-value="toggleMenu(false)">
 		<template v-slot:activator="{ on, attrs, value }">
 			<v-btn
-				v-show="isMenuActive || isHovering || isFocused"
+				v-show="show"
 				id="task-menu-btn"
 				v-bind="attrs"
 				icon
-				:data-testId="`task-menu-${task.name}`"
+				data-testId="task-menu"
 				v-on="on"
-				@click.prevent="(e) => toggleMenu(!value, e)"
+				@click.prevent="toggleMenu(!value)"
 				@keydown.space.stop="toggleMenu(!value)"
 				@focus="handleFocus(true)"
 				@blur="handleFocus(false)"
@@ -18,9 +18,10 @@
 		</template>
 		<v-list>
 			<v-list-item
+				v-if="isTeacher"
 				:href="editLink"
 				class="task-action"
-				:data-testId="`task-edit-${task.name}`"
+				data-testId="task-edit"
 			>
 				<v-list-item-title>
 					<v-icon class="task-action-icon">
@@ -37,11 +38,11 @@
 				<v-list-item-title>
 					<template v-if="task.status.isFinished">
 						<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
-						Wiederherstellen
+						{{ $t("components.molecules.TaskItemMenu.restore") }}
 					</template>
 					<template v-else>
 						<v-icon class="task-action-icon"> $taskFinished </v-icon>
-						Abschließen
+						{{ $t("components.molecules.TaskItemMenu.finish") }}
 					</template>
 				</v-list-item-title>
 			</v-list-item>
@@ -52,6 +53,7 @@
 <script>
 import { mdiDotsVertical, mdiPencilOutline, mdiUndo } from "@mdi/js";
 import FinishedTaskModule from "@/store/finished-tasks";
+import TaskModule from "@/store/tasks";
 
 // TODO - different requiredKeys for finished and other tasks?
 // const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -64,18 +66,14 @@ export default {
 			type: Object,
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
-		} /* 
+		},
 		show: {
 			type: Boolean,
 			required: true,
-		}, */,
-		isHovering: {
-			type: Boolean,
-			required: true,
 		},
-		isFocused: {
-			type: Boolean,
-			required: true,
+		userRole: {
+			type: String,
+			required: true, // TODO - add validator
 		},
 	},
 	data() {
@@ -83,28 +81,28 @@ export default {
 			mdiDotsVertical,
 			mdiPencilOutline,
 			mdiUndo,
-			isMenuActive: false,
-			isActive: false,
 		};
 	},
 	computed: {
 		editLink() {
 			return `/homework/${this.task.id}/edit`;
 		},
+		isTeacher() {
+			return this.userRole === "teacher";
+		},
 	},
 	methods: {
-		toggleMenu(stateValue, e) {
-			console.log(e, !stateValue);
-			this.isMenuActive = stateValue;
+		toggleMenu(value) {
+			this.$emit("toggled-menu", value);
 		},
 		handleFocus(value) {
-			this.isActive = value;
+			this.$emit("focus-changed", value);
 		},
 		handleFinish() {
 			if (this.task.status.isFinished) {
 				FinishedTaskModule.restoreTask(this.task.id);
 			} else {
-				FinishedTaskModule.finishTask(this.task.id);
+				TaskModule.finishTask(this.task.id);
 			}
 		},
 	},
@@ -113,10 +111,6 @@ export default {
 
 <style lang="scss" scoped>
 // stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-btn {
-	min-width: 45px;
-}
-
 .task-action {
 	min-height: 25px;
 }
