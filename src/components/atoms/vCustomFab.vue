@@ -49,6 +49,7 @@
 					:data-testid="action.dataTestid"
 					role="menuitem"
 					:aria-label="action.ariaLabel ? action.ariaLabel : action.label"
+					@click="onCustomEvent(action.customEvent || null)"
 				>
 					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
@@ -188,6 +189,9 @@ export default {
 			}, 300);
 
 			this.detectScrollingDirection();
+		},
+		onCustomEvent(customEvent) {
+			if (customEvent) this.$emit(customEvent.name, customEvent.value);
 		},
 	},
 };

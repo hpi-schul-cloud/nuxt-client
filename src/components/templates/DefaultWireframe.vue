@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky" :aria-label="ariaLabel" tabindex="0">
+		<div class="wireframe-header sticky" :aria-label="ariaLabel">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -22,6 +22,7 @@
 						:class="fabItems.class"
 						class="wireframe-fab"
 						:aria-label="fabItems.ariaLabel"
+						v-on="$listeners"
 					></v-custom-fab>
 				</slot>
 			</div>
