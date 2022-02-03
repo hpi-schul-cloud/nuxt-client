@@ -5,6 +5,7 @@
 		:full-width="true"
 		:fab-items="fab"
 		:aria-label="sectionAriaLabel"
+		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
@@ -114,6 +115,7 @@
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
+		<import-modal v-model="importDialog.isOpen"> </import-modal>
 	</default-wireframe>
 </template>
 
@@ -123,10 +125,12 @@ import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
+import ImportModal from "@components/molecules/ImportModal";
 import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
+import EnvConfigModule from "@/store/env-config";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import { mdiMagnify, mdiPlus } from "@mdi/js";
+import { mdiMagnify, mdiPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
@@ -136,6 +140,7 @@ export default {
 		vRoomEmptyAvatar,
 		RoomModal,
 		vCustomSwitch,
+		ImportModal,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -156,7 +161,9 @@ export default {
 				item: {},
 				to: null,
 			},
-
+			importDialog: {
+				isOpen: false,
+			},
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
@@ -172,6 +179,33 @@ export default {
 			if (
 				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
+				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+					return {
+						icon: mdiPlus,
+						title: this.$t("common.labels.course"),
+						ariaLabel: this.$t("pages.courses.new.title"),
+						testId: "add-course-button",
+						actions: [
+							{
+								label: this.$t("pages.rooms.fab.add"),
+								icon: mdiPlus,
+								href: "/courses/add",
+								dataTestid: "fab_button_add_course",
+								ariaLabel: this.$t("pages.rooms.fab.add.aria"),
+							},
+							{
+								label: this.$t("pages.rooms.fab.import"),
+								icon: mdiCloudDownload,
+								dataTestid: "fab_button_import_course",
+								ariaLabel: this.$t("pages.rooms.fab.import"),
+								customEvent: {
+									name: "fabButtonEvent",
+									value: true,
+								},
+							},
+						],
+					};
+				}
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.labels.course"),
@@ -180,6 +214,7 @@ export default {
 					testId: "add-course-button",
 				};
 			}
+
 			return null;
 		},
 		loading() {
@@ -218,7 +253,7 @@ export default {
 			});
 		},
 	},
-	async mounted() {
+	async created() {
 		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
@@ -369,6 +404,9 @@ export default {
 				yPosition: pos.y,
 			};
 			RoomsModule.update(payload);
+		},
+		fabClick() {
+			this.importDialog.isOpen = true;
 		},
 	},
 	head() {
