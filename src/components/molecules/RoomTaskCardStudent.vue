@@ -12,17 +12,10 @@
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
 				<div class="title-section">
-					<span
-						>Aufgabe -
-						{{
-							computedDueDateLabel(
-								task.duedate,
-								(shorten = $vuetify.breakpoint.xsOnly)
-							)
-						}}</span
-					>
+					<span> {{ cardTitle(task.duedate) }} </span>
 				</div>
 				<div class="dot-menu-section">
+					<!-- Action menu to be determined with UXers-->
 					<v-icon>{{ mdiDotsVertical }}</v-icon>
 				</div>
 			</div>
@@ -34,25 +27,32 @@
 				<div class="grey lighten-2 chip-item pa-1">
 					<div v-if="taskState === submitted" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("components.molecules.VTaskItemTeacher.submitted") }}
+						{{ $t("pages.room.studentTaskCard.submitted") }}
 					</div>
 					<div v-else-if="taskState === graded" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("components.molecules.VTaskItemTeacher.graded") }}
+						{{ $t("pages.room.studentTaskCard.graded") }}
 					</div>
 					<div v-else-if="taskState === overdue" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.tasks.labels.overdue") }}
+						{{ $t("pages.room.studentTaskCard.overdue") }}
 					</div>
 					<div v-else class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("components.organisms.TasksDashboardMain.tab.open") }}
+						{{ $t("pages.room.studentTaskCard.open") }}
 					</div>
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-0">
-			<v-btn text color="#0091EA"> Open </v-btn>
+		<v-card-actions v-if="!isFinished" class="pt-0">
+			<v-btn text color="#0091EA">
+				{{ $t("pages.room.studentTaskCard.done") }}
+			</v-btn>
+		</v-card-actions>
+		<v-card-actions v-else class="pt-0">
+			<v-btn text color="#0091EA">
+				{{ $t("pages.room.studentTaskCard.reopen") }}
+			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -96,12 +96,18 @@ export default {
 		avatarIcon() {
 			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
 		},
+		iconColor() {
+			return this.task.displayColor || this.defaultIconColor;
+		},
 		defaultIconColor() {
-			return "#0091ea";
+			return "#54616e";
 		},
 		isOverDue() {
 			const dueDate = this.task.duedate;
 			return dueDate && new Date(dueDate) < new Date();
+		},
+		isFinished() {
+			return this.task.status.isFinished;
 		},
 		taskState() {
 			const { status } = this.task;
@@ -122,14 +128,14 @@ export default {
 		},
 	},
 	methods: {
-		computedDueDateLabel(dueDate) {
-			if (!dueDate) {
-				return this.$t("pages.tasks.labels.noDueDate");
-			} else {
-				return (
-					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
-				);
-			}
+		cardTitle(dueDate) {
+			const dueTitle = !dueDate
+				? this.$t("pages.room.studentTaskCard.noDueDate")
+				: `${this.$t(
+						"pages.room.studentTaskCard.due"
+				  )} - ${printDateFromStringUTC(dueDate)}`;
+
+			return `${this.$t("pages.room.studentTaskCard.task")} - ${dueTitle}`;
 		},
 		taskHref: (id) => {
 			return `/homework/${id}`;
@@ -169,12 +175,12 @@ export default {
 		.chip-title {
 			font-size: var(--text-xs);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: #0091ea;
+			color: rgba(0, 0, 0, 0.6);
 		}
 		.chip-value {
 			font-size: var(--text-sm);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: #0091ea;
+			color: rgba(0, 0, 0, 0.87);
 			.icon-color {
 				fill: #0091ea;
 			}

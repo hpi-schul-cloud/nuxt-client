@@ -44,7 +44,7 @@ export default {
 	computed: {
 		taskItems() {
 			return this.roomData.elements.map((item) => {
-				if (item.content.status.isDraft) {
+				if (item.content.status && item.content.status.isDraft) {
 					return {
 						...item,
 						actions: [
