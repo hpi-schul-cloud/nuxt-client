@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mx-auto mb-4"
+		class="mx-auto mb-4 task-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"
@@ -12,7 +12,7 @@
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
 				<div class="title-section">
-					<span> {{ cardTitle(task.duedate) }} </span>
+					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
 					<!-- Action menu to be determined with UXers-->
@@ -45,12 +45,12 @@
 			</div>
 		</v-card-text>
 		<v-card-actions v-if="!isFinished" class="pt-0">
-			<v-btn text color="#0091EA">
+			<v-btn text color="#0091EA" class="action-done">
 				{{ $t("pages.room.studentTaskCard.done") }}
 			</v-btn>
 		</v-card-actions>
 		<v-card-actions v-else class="pt-0">
-			<v-btn text color="#0091EA">
+			<v-btn text color="#0091EA" class="action-reopen">
 				{{ $t("pages.room.studentTaskCard.reopen") }}
 			</v-btn>
 		</v-card-actions>
