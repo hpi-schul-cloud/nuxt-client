@@ -32,7 +32,6 @@ Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`
 
 ### Regeln, für die Entwicklung
 
-- Neue Komponenten immer im Storybook reflektieren
 - UI Reviews schon während der Entwicklung anstoßen (z. B. mit dem jeweiligen Designer)
 - Tests schreiben
 - Komponenten reusable gestalten

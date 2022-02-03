@@ -1,6 +1,6 @@
 import LernstoreCollectionDetailView from "./LernstoreCollectionDetailView";
 import Vuex from "vuex";
-import { Collection } from "@@/stories/mockData/Collection";
+import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import VueRouter from "vue-router";
 import { createLocalVue } from "@vue/test-utils";
 

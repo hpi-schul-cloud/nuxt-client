@@ -10,7 +10,6 @@ export const i18n = () => {
 	const fallbackLocale = EnvConfigModule.getFallbackLanguage;
 
 	return new VueI18n({
-		// fallback for storybook
 		locale,
 		fallbackLocale,
 		messages: {
