@@ -4,11 +4,6 @@ import RoomTaskCardTeacher from "./RoomTaskCardTeacher.vue";
 declare var createComponentMocks: Function;
 
 const testProps = {
-	actions: [
-		{ icon: "taskFinish", to: "some.url here", name: "Finish" },
-		{ icon: "taskDelete", to: "some.url here", name: "Delete" },
-		{ icon: "Copy", to: "some.url here", name: "Copy" },
-	],
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -29,7 +24,6 @@ const testProps = {
 	},
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
-	type: "task",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -51,10 +45,8 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 	it("should have correct props", () => {
 		const wrapper = getWrapper(testProps);
 
-		expect(wrapper.vm.actions).toStrictEqual(testProps.actions);
 		expect(wrapper.vm.task).toStrictEqual(testProps.task);
 		expect(wrapper.vm.ariaLabel).toStrictEqual(testProps.ariaLabel);
-		expect(wrapper.vm.type).toStrictEqual(testProps.type);
 	});
 
 	it("task card should have correct 'href' value", () => {
@@ -70,14 +62,11 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		const wrapper = getWrapper(testProps);
 		const title = wrapper.find(".title-section");
 
-		expect(title.element.textContent).toStrictEqual(
-			"Aufgabe - Abgabe - 28.09.00"
-		);
+		expect(title.element.textContent).toContain("Aufgabe - Abgabe - 28.09.00");
 	});
 
 	it("should have submitted and graded section if task is not a draft", () => {
 		const draftTestProps = {
-			actions: [],
 			task: {
 				id: "123",
 				name: "Test Name",
@@ -94,7 +83,6 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			},
 			ariaLabel:
 				"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
-			type: "task",
 		};
 		const wrapper = getWrapper(draftTestProps);
 		const submitSection = wrapper.findAll(".chip-value");
@@ -111,13 +99,11 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		expect(submitSection.wrappers[1].element.textContent).toContain("0/1");
 	});
 
-	it("should have 3 action button", () => {
+	it("should have one action button if is a draft", () => {
 		const wrapper = getWrapper(testProps);
 		const actionButtons = wrapper.findAll(".action-button");
 
-		expect(actionButtons).toHaveLength(3);
+		expect(actionButtons).toHaveLength(1);
 		expect(actionButtons.wrappers[0].element.textContent).toContain("Finish");
-		expect(actionButtons.wrappers[1].element.textContent).toContain("Delete");
-		expect(actionButtons.wrappers[2].element.textContent).toContain("Copy");
 	});
 });

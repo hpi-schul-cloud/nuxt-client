@@ -27,15 +27,15 @@
 				<div class="grey lighten-2 chip-item pa-1">
 					<div v-if="taskState === submitted" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.studentTaskCard.submitted") }}
+						{{ $t("pages.room.taskCard.label.submitted") }}
 					</div>
 					<div v-else-if="taskState === graded" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.studentTaskCard.graded") }}
+						{{ $t("pages.room.taskCard.label.graded") }}
 					</div>
 					<div v-else-if="taskState === overdue" class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.studentTaskCard.overdue") }}
+						{{ $t("pages.room.taskCard.label.overdue") }}
 					</div>
 					<div v-else class="chip-value">
 						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
@@ -130,12 +130,12 @@ export default {
 	methods: {
 		cardTitle(dueDate) {
 			const dueTitle = !dueDate
-				? this.$t("pages.room.studentTaskCard.noDueDate")
+				? this.$t("pages.room.taskCard.label.noDueDate")
 				: `${this.$t(
-						"pages.room.studentTaskCard.due"
+						"pages.room.taskCard.label.due"
 				  )} - ${printDateFromStringUTC(dueDate)}`;
 
-			return `${this.$t("pages.room.studentTaskCard.task")} - ${dueTitle}`;
+			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
 		taskHref: (id) => {
 			return `/homework/${id}`;
@@ -145,6 +145,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+@import "@styles";
+
 .top-row-container {
 	display: grid;
 	grid-template-columns: 5% 90% 5%;
@@ -154,7 +157,6 @@ export default {
 		text-align: left;
 	}
 	.title-section {
-		overflow: none;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		color: #0091ea;
 		text-align: left;
@@ -166,17 +168,16 @@ export default {
 
 .chip-items-group {
 	display: grid;
-	grid-template-columns: repeat(2, var(--space-xl-5));
-	gap: var(--space-md);
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(var(--space-xl-4), var(--space-xl-5))
+	);
+	grid-gap: var(--space-md);
 	align-items: center;
+	vertical-align: middle;
 	.chip-item {
 		text-align: center;
 		border-radius: var(--radius-sm);
-		.chip-title {
-			font-size: var(--text-xs);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: rgba(0, 0, 0, 0.6);
-		}
 		.chip-value {
 			font-size: var(--text-sm);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -185,6 +186,12 @@ export default {
 				fill: #0091ea;
 			}
 		}
+	}
+}
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	.title-section {
+		padding-left: var(--text-sm);
 	}
 }
 </style>

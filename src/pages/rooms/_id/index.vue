@@ -6,7 +6,7 @@
 		:aria-label="roomData.title"
 	>
 		<template slot="header">
-			<h1 class="text-h3 pt-2">
+			<h1 class="text-h3 pt-2 course-title">
 				{{ roomData.title }}
 			</h1>
 			<div class="mb-5 header-div">
@@ -49,7 +49,7 @@ export default {
 		dashBoardRole() {
 			if (AuthModule.getUserRoles.includes("teacher")) return "teacher";
 			if (AuthModule.getUserRoles.includes("student")) return "student";
-			return "";
+			return undefined;
 		},
 	},
 	async created() {

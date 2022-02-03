@@ -12,7 +12,7 @@
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
 				<div class="title-section">
-					<span>{{ cardTitle(task.duedate) }}</span>
+					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
 					<!-- Action menu to be determined with UXers-->
@@ -22,33 +22,36 @@
 			<div class="text-h4 text--primary">{{ task.name }}</div>
 			<div class="text--primary mt-1">{{ task.description }}</div>
 		</v-card-text>
-		<v-card-text
-			v-if="showSubmittedSection"
-			class="ma-0 pb-0 pt-0 submitted-section"
-		>
+		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item pa-1">
-					<div class="chip-title">
-						{{ $t("pages.room.teacherTaskCard.submitted") }}
-					</div>
 					<div class="chip-value">
-						{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						{{
+							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
+								"pages.room.taskCard.label.submitted"
+							)}`
+						}}
 					</div>
 				</div>
 				<div class="grey lighten-2 chip-item pa-1">
-					<div class="chip-title">
-						{{ $t("pages.room.teacherTaskCard.graded") }}
-					</div>
 					<div class="chip-value">
-						{{ task.status.graded }}/{{ task.status.maxSubmissions }}
+						{{
+							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
+								"pages.room.taskCard.label.graded"
+							)}`
+						}}
+					</div>
+				</div>
+				<div v-if="isOverDue" class="grey lighten-2 chip-item pa-1">
+					<div class="chip-value">
+						{{ $t("pages.room.taskCard.label.overdue") }}
 					</div>
 				</div>
 			</div>
 		</v-card-text>
 		<v-card-actions class="pt-1">
-			<!-- Action menu to be determined with UXers-->
 			<v-btn
-				v-for="(action, index) in actions"
+				v-for="(action, index) in cardActions"
 				:key="index"
 				class="action-button"
 				text
@@ -76,14 +79,7 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-		type: {
-			type: String,
-			default: "",
-		},
-		actions: {
-			type: Array,
-			required: true,
-		},
+
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -107,19 +103,65 @@ export default {
 		defaultIconColor() {
 			return "#54616e";
 		},
-		showSubmittedSection() {
-			return !this.task.status.isDraft;
+		isDraft() {
+			return this.task.status.isDraft;
+		},
+		isOverDue() {
+			const dueDate = this.task.duedate;
+			return dueDate && new Date(dueDate) < new Date();
+		},
+		isFinished() {
+			return this.task.status.isFinished;
+		},
+		cardActions() {
+			// TODO: add i18i files
+			// TODO: actions must be controled by UX
+			if (this.isDraft) {
+				return [
+					{
+						icon: "taskSend",
+						action: "action name",
+						name: "Send",
+					},
+					{
+						icon: "Delete",
+						action: "action name",
+						name: "Delete",
+					},
+				];
+			}
+
+			if (!this.isDraft) {
+				return [
+					{
+						icon: "taskFinish",
+						action: "action name",
+						name: "Finish",
+					},
+				];
+			}
+
+			if (!this.isFinished) {
+				return [
+					{
+						icon: "taskFinish",
+						action: "action name",
+						name: "Restore",
+					},
+				];
+			}
+			return [];
 		},
 	},
 	methods: {
 		cardTitle(dueDate) {
 			const dueTitle = !dueDate
-				? this.$t("pages.room.teacherTaskCard.noDueDate")
+				? this.$t("pages.room.taskCard.label.noDueDate")
 				: `${this.$t(
-						"pages.room.teacherTaskCard.due"
+						"pages.room.taskCard.label.due"
 				  )} - ${printDateFromStringUTC(dueDate)}`;
 
-			return `${this.$t("pages.room.teacherTaskCard.task")} - ${dueTitle}`;
+			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
 		taskHref: (id) => {
 			return `/homework/${id}`;
@@ -129,6 +171,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+@import "@styles";
+
 .top-row-container {
 	display: grid;
 	grid-template-columns: 5% 90% 5%;
@@ -138,7 +183,6 @@ export default {
 		text-align: left;
 	}
 	.title-section {
-		overflow: none;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		color: #0091ea;
 		text-align: left;
@@ -150,22 +194,27 @@ export default {
 
 .chip-items-group {
 	display: grid;
-	grid-template-columns: repeat(2, var(--space-xl-5));
-	gap: var(--space-md);
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(var(--space-xl-3), var(--space-xl-5))
+	);
+	grid-gap: var(--space-md);
 	align-items: center;
+	vertical-align: middle;
 	.chip-item {
 		text-align: center;
 		border-radius: var(--radius-sm);
-		.chip-title {
-			font-size: var(--text-xs);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: rgba(0, 0, 0, 0.6);
-		}
 		.chip-value {
 			font-size: var(--text-sm);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}
+	}
+}
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	.title-section {
+		padding-left: var(--text-sm);
 	}
 }
 </style>

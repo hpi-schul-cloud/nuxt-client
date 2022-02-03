@@ -1,34 +1,49 @@
 <template>
 	<div class="rooms-container">
-		<template v-for="(item, index) of taskItems">
-			<div v-if="item.type === 'task' && role.type !== ''" :key="index">
-				<room-task-card-teacher
-					v-if="item.type === 'task'"
-					:task="item.content"
-					:type="item.type"
-					:actions="item.actions"
-					:aria-label="
-						$t('pages.room.taskCard.aria', {
-							itemType: item.type,
-							itemName: item.content.name,
-						})
-					"
-				/>
-				<v-divider
-					v-if="index < roomData.elements.length - 1"
-					:key="`divider-${index}`"
-				/>
+		<div v-if="role === undefined">No task available</div>
+		<div v-else>
+			<div v-if="role === 'teacher'">
+				<div v-for="(item, index) of roomData.elements" :key="index">
+					<room-task-card-teacher
+						v-if="item.type === 'task'"
+						:task="item.content"
+						:aria-label="
+							$t('pages.room.taskCard.aria', {
+								itemType: item.type,
+								itemName: item.content.name,
+							})
+						"
+						class="card-teacher"
+					/>
+				</div>
 			</div>
-		</template>
+			<div v-if="role === 'student'">
+				<div v-for="(item, index) of roomData.elements" :key="index">
+					<room-task-card-student
+						v-if="item.type === 'task'"
+						:task="item.content"
+						:aria-label="
+							$t('pages.room.taskCard.aria', {
+								itemType: item.type,
+								itemName: item.content.name,
+							})
+						"
+						class="card-student"
+					/>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
+import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
 
 export default {
 	components: {
 		RoomTaskCardTeacher,
+		RoomTaskCardStudent,
 	},
 	props: {
 		roomData: {
@@ -40,50 +55,6 @@ export default {
 	},
 	data() {
 		return {};
-	},
-	computed: {
-		taskItems() {
-			return this.roomData.elements.map((item) => {
-				if (item.content.status && item.content.status.isDraft) {
-					return {
-						...item,
-						actions: [
-							{
-								icon: "taskSend",
-								to: "some.url here",
-								name: "Send", // TODO:add i18i files
-							},
-							{
-								icon: "Delete",
-								to: "some.url here",
-								name: "Delete", // TODO:add i18i files
-							},
-						],
-					};
-				}
-
-				return {
-					...item,
-					actions: [
-						{
-							icon: "taskFinish",
-							to: "some.url here",
-							name: "Finish", // TODO:add i18i files
-						},
-						{
-							icon: "taskDelete",
-							to: "some.url here",
-							name: "Delete", // TODO:add i18i files
-						},
-						{
-							icon: "Copy",
-							to: "some.url here",
-							name: "Copy", // TODO:add i18i files
-						},
-					],
-				};
-			});
-		},
 	},
 };
 </script>
