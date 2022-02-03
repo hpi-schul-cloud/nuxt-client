@@ -22,16 +22,6 @@ On CI (GitHub Actions) Build, this directory is made available as an artifact to
 
 It's as simple as commenting `@schul-cloud-bot update screenshots` on any PR. This will trigger a github action that will update the failing screenshots.
 
-## Write a screenshot test
-
-Writing a new screenshot test is easy. We snapshot all storybook stories by default. You do not have to do anything.
-
-### Exclude stories from screenshot tests
-
-But some things are not useful to test with a static screenshot (like a loading spinner, because the state at which the screenshot will be done is not static). To exclude these stories you can add them to the list of excluded stories at `@/tests/screenshot/ignoredStories.js`.
-
-<<< @/tests/screenshot/ignoredStories.js
-
 ### What not to test
 
 In general you should not test:
