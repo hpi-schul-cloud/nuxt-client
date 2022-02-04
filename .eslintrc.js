@@ -15,15 +15,6 @@ module.exports = {
 			},
 		},
 		{
-			files: ["**/*.stories.js"],
-			rules: {
-				"max-lines": [
-					"warn",
-					{ max: 500, skipBlankLines: true, skipComments: true },
-				],
-			},
-		},
-		{
 			files: ["**/*.unit.js"],
 			extends: ["@schul-cloud/eslint-config/javascriptJest"],
 			globals: {

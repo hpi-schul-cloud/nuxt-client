@@ -1,5 +1,5 @@
 import Vuetify from "vuetify";
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import vTaskItemStudent from "./vTaskItemStudent";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
