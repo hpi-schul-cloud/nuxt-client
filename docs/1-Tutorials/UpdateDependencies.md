@@ -14,4 +14,3 @@ Some hints what to test:
 - `npm run build`
 - `npm run lint`
 - `npm run test:unit`
-- `npm run test:screenshot`

@@ -681,7 +681,6 @@
 	"pages.rooms.importCourse.btn.confirm": "Import",
 	"pages.rooms.importCourse.error": "The course code is not in use.",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
-	"storybook.lang": "I'm in English now!",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
 	"utils.adminFilter.consent.label.missing": "User created",

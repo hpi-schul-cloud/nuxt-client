@@ -32,7 +32,6 @@ Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`
 
 ### Regeln, für die Entwicklung
 
-- Neue Komponenten immer im Storybook reflektieren
 - UI Reviews schon während der Entwicklung anstoßen (z. B. mit dem jeweiligen Designer)
 - Tests schreiben
 - Komponenten reusable gestalten
@@ -53,18 +52,6 @@ Der Pull Request sollte wie der Branchname benannt werden, jedoch mit `SPACE` st
 #### Pull Request Beschreibung
 
 Die Bescheibung des Pull Requests sollte das entsprechende Template bestmöglich ausfüllen. Alles was Visuelle Änderungen hervorruft sollte mit einem Screenshot dokumentiert werden, damit die Reviewer eine Vorstellung davon bekommen, wie das Resultat aussehen soll.
-
-### Pull Request Update Screenshots
-
-If you have modified or added components that are represented in the storybook, it is usually necessary to update the corresponding screenshots for the [Screenshot Tests](../4-Tools.md#screenshot-tests). This is also necessary when the check `Test / screenshot (push)` in your PR fails.
-
-::: tip Attention
-
-Please check first if the updated/changed component screenshots are as expected. That's what the visual regression tests are made for. You can do this by running npm run `test:screenshot:jest` locally, which will yield you a list of diffs.
-
-:::
-
-To update the screenshots, you can simply write a comment under your PR with the following content: `@schul-cloud-bot update screenshots`. <br /> Afterwards the update process is triggered and if changes are made, the screenshots are automatically committed to your current PR. <br /> (Please note that this process may take several minutes.)
 
 ### Pull Request Review
 

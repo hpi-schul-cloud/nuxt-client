@@ -43,14 +43,6 @@ Output Directory: `dist/nuxt`
 | LEGACY_COURSE_OVERVIEW_ENABLED | `false` | Enables legacy Course link. |
 | ALERT_STATUS_URL | `https://status.dbildungscloud.de` | URL to status page. |
 
-## Storybook
-
-```bash
-npm run build:storybook
-```
-
-Output Directory: `./dist/storybook`
-
 ### Environment-Variables
 
 | env-variable | default | info |
