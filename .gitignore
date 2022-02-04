@@ -32,6 +32,5 @@ tsconfig.json
 **/.tmp*
 
 docker-compose.yml
-tests/screenshot/__image_snapshots__/__diff_output__/**/*
 .vscode/*
 .idea
