@@ -330,7 +330,6 @@ export default {
 		},
 		async saveMatch() {
 			if (!this.selectedItem) {
-				// TODO set error?
 				return false;
 			}
 			await ImportUserModule.saveMatch({

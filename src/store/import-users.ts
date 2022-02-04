@@ -26,42 +26,42 @@ import {BusinessError} from "@store/types/commons";
 })
 
 export class ImportUsers extends VuexModule {
-	importUserList: ImportUserListResponse = {
+	private importUserList: ImportUserListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 0,
 	};
-	firstName: string = '';
-	lastName: string = '';
-	loginName: string = '';
-	role: ImportUserResponseRoleNamesEnum | '' = '';
-	classes: string = '';
-	match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
-	flagged: boolean = false;
-	limit: number = 10;
-	skip: number = 0;
-	sortBy: string = '';
-	sortOrder: any = 'asc';
-	totalMatched: number = 0;
+	private firstName?: string;
+	private lastName?: string;
+	private loginName?: string;
+	private role?: ImportUserResponseRoleNamesEnum;
+	private classes?: string;
+	private match?: Array<'auto' | 'admin' | 'none'>;
+	private flagged?: boolean;
+	private limit: number = 25;
+	private skip: number = 0;
+	private sortBy?: string;
+	private sortOrder: any = 'asc';
+	private totalMatched: number = 0;
 
-	userList: UserMatchListResponse = {
+	private userList: UserMatchListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 0,
 	};
-	userSearch: string = '';
-	usersLimit: number = 1;
-	usersSkip: number = 0;
-	totalUnmatched: number = 0;
+	private userSearch?: string;
+	private usersLimit: number = 1;
+	private usersSkip: number = 0;
+	private totalUnmatched: number = 0;
 
-	businessError: BusinessError | null = {
+	private businessError: BusinessError | null = {
 		statusCode: "",
 		message: "",
 	};
 
-	private _userApi?: UserImportApiInterface;
+	private _importUserApi?: UserImportApiInterface;
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -146,7 +146,7 @@ export class ImportUsers extends VuexModule {
 		this.userSearch = userSearch;
 	}
 
-	get getUserSearch(): string {
+	get getUserSearch(): string | undefined {
 		return this.userSearch;
 	}
 
@@ -194,75 +194,75 @@ export class ImportUsers extends VuexModule {
 		try {
 			// TODO fix type
 			const sortBy = this.sortBy === 'firstName' || this.sortBy === 'lastName'  ? this.sortBy : undefined;
-			const response = await this.userApi
+			const response = await this.importUserApi
 				.importUserControllerFindAllImportUsers(
-					this.firstName ? this.firstName : undefined,
-					this.lastName ? this.lastName : undefined,
-					this.loginName ? this.loginName : undefined,
-					this.match ? this.match : undefined,
-					this.flagged ? true : undefined,
-					this.classes ? this.classes : undefined,
+					this.firstName,
+					this.lastName,
+					this.loginName,
+					this.match,
+					this.flagged,
+					this.classes,
 					this.role ? this.role : undefined,
 					this.sortBy ? this.sortOrder : undefined,
 					sortBy,
-					this.skip ? this.skip : 0,
-					this.limit ? this.limit : 25
+					this.skip,
+					this.limit
 				);
 			this.setImportUsersList(response.data);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
 	async fetchAllUsers(): Promise<void> {
 		try {
-			const response = await this.userApi
+			const response = await this.importUserApi
 				.importUserControllerFindAllUnmatchedUsers(
-					this.userSearch ? this.userSearch : undefined,
+					this.userSearch,
 					this.usersSkip,
 					this.usersLimit
 				);
 			this.setUsersList(response.data);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
 	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.userApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
+			const response = await this.importUserApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
 	async saveMatch(payload: {importUserId: string, userId: string}): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.userApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
+			const response = await this.importUserApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.userApi.importUserControllerRemoveMatch(importUserId);
+			const response = await this.importUserApi.importUserControllerRemoveMatch(importUserId);
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError(error);
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
-	async summaryUnmatched(): Promise<void> {
+	async fetchTotalUnmatched(): Promise<void> {
 		try {
-			const response = await this.userApi
+			const response = await this.importUserApi
 				.importUserControllerFindAllUnmatchedUsers(
 					undefined,
 					0,
@@ -270,14 +270,14 @@ export class ImportUsers extends VuexModule {
 				);
 			this.setTotalUnmatched(response.data.total);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
 	@Action
-	async summaryMatched(): Promise<void> {
+	async fetchTotalMatched(): Promise<void> {
 		try {
-			const response = await this.userApi
+			const response = await this.importUserApi
 				.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
@@ -293,15 +293,15 @@ export class ImportUsers extends VuexModule {
 				);
 			this.setTotalMatched(response.data.total);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: '500', message: error });
+			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
 		}
 	}
 
-	private get userApi(): UserImportApiInterface {
-		if (!this._userApi) {
-			this._userApi = UserImportApiFactory(undefined, "/v3", $axios);
+	private get importUserApi(): UserImportApiInterface {
+		if (!this._importUserApi) {
+			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
 		}
-		return this._userApi;
+		return this._importUserApi;
 	}
 }
 

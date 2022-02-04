@@ -268,21 +268,21 @@ export default {
     isStepEditable(step) {
       switch (step) {
         case 1:
-          return !this.isLoading && !this.maintanenceFinished;
+          return !this.isLoading && !this.isMaintanenceFinished;
         case 2:
           return this.canStartMigration && !this.isMigrationFinished;
         case 3:
           return this.canStartMigration && !this.isMigrationFinished;
         case 4:
-          return !this.isLoading && this.isMigrationFinished && !this.maintanenceFinished;
+          return !this.isLoading && this.isMigrationFinished && !this.isMaintanenceFinished;
         case 5:
         default:
           return false;
       }
     },
 		async summary() {
-			await ImportUserModule.summaryMatched();
-			await ImportUserModule.summaryUnmatched();
+			await ImportUserModule.fetchTotalMatched();
+			await ImportUserModule.fetchTotalUnmatched();
 		},
 		performMigration() {
 			// TODO call api

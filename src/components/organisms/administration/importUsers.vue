@@ -254,6 +254,7 @@ import {
 	mdiPencil,
 } from "@mdi/js";
 import Vue from "vue";
+import { ImportUserResponseRoleNamesEnum } from '@/serverApi/v3';
 export default Vue.extend({
 	components: {
 		vImportUsersMatchSearch,
@@ -270,15 +271,15 @@ export default Vue.extend({
 			roles: [
 				{
 					text: this.$t("components.organisms.importUsers.roleStudent"),
-					value: "student",
+					value: ImportUserResponseRoleNamesEnum.Student,
 				},
 				{
 					text: this.$t("components.organisms.importUsers.roleTeacher"),
-					value: "teacher",
+					value: ImportUserResponseRoleNamesEnum.Teacher,
 				},
 				{
 					text: this.$t("components.organisms.importUsers.roleAdministrator"),
-					value: "admin",
+					value: ImportUserResponseRoleNamesEnum.Admin,
 				},
 			],
 			search: "",
