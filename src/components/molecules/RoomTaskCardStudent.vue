@@ -22,37 +22,32 @@
 			<div class="text-h4 text--primary">{{ task.name }}</div>
 			<div class="text--primary mt-1">{{ task.description }}</div>
 		</v-card-text>
-		<v-card-text class="ma-0 pb-0 pt-0">
+		<v-card-text v-if="!isFinished" class="ma-0 pb-0 pt-0">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item pa-1">
-					<div v-if="taskState === submitted" class="chip-value">
-						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.taskCard.label.submitted") }}
-					</div>
-					<div v-else-if="taskState === graded" class="chip-value">
-						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.taskCard.label.graded") }}
-					</div>
-					<div v-else-if="taskState === overdue" class="chip-value">
-						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.taskCard.label.overdue") }}
-					</div>
-					<div v-else class="chip-value">
-						<v-icon class="icon-color">{{ taskIcon }}</v-icon>
-						{{ $t("pages.room.studentTaskCard.open") }}
+					<div
+						v-for="(state, index) in taskStates"
+						:key="index"
+						class="chip-value"
+					>
+						<v-icon class="icon-color">
+							{{ state.icon }}
+						</v-icon>
+						{{ $t(`pages.room.taskCard.label.${state.name}`) }}
 					</div>
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions v-if="!isFinished" class="pt-0">
-			<v-btn text color="#0091EA" class="action-done">
-				{{ $t("pages.room.studentTaskCard.done") }}
-			</v-btn>
-		</v-card-actions>
-		<v-card-actions v-else class="pt-0">
-			<v-btn text color="#0091EA" class="action-reopen">
-				{{ $t("pages.room.studentTaskCard.reopen") }}
-			</v-btn>
+		<v-card-actions class="pt-1">
+			<v-btn
+				v-for="(action, index) in cardActions"
+				:key="index"
+				class="action-button"
+				text
+				color="#0091EA"
+			>
+				{{ action.name }}</v-btn
+			>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -93,15 +88,6 @@ export default {
 		};
 	},
 	computed: {
-		avatarIcon() {
-			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
-		},
-		iconColor() {
-			return this.task.displayColor || this.defaultIconColor;
-		},
-		defaultIconColor() {
-			return "#54616e";
-		},
 		isOverDue() {
 			const dueDate = this.task.duedate;
 			return dueDate && new Date(dueDate) < new Date();
@@ -109,22 +95,70 @@ export default {
 		isFinished() {
 			return this.task.status.isFinished;
 		},
-		taskState() {
-			const { status } = this.task;
+		cardActions() {
+			// TODO: add i18i files
+			// TODO: actions must be controled by UX
+			if (this.isFinished) {
+				return [
+					{
+						icon: "taskRestore",
+						action: "action name",
+						name: "Restore",
+					},
+				];
+			}
 
-			if (status.submitted && !status.graded) return "submitted";
-			if (status.graded) return "graded";
-			if (this.isOverDue) return "overdue";
-			return "open";
+			if (!this.isFinished) {
+				return [
+					{
+						icon: "taskSend",
+						action: "action name",
+						name: "Send",
+					},
+					{
+						icon: "taskFinish",
+						action: "action name",
+						name: "Finish",
+					},
+				];
+			}
+			return [];
 		},
-		taskIcon() {
-			const stateIcons = {
-				overdue: "$taskMissed",
-				submitted: "$taskDone",
-				graded: "$taskDoneFilled",
-				open: "$taskOpenFilled",
-			};
-			return stateIcons[this.taskState];
+		taskStates() {
+			const { status } = this.task;
+			if (status.submitted && !status.graded) {
+				return [
+					{
+						icon: "$taskDone",
+						name: "submitted",
+					},
+				];
+			}
+
+			if (status.graded) {
+				return [
+					{
+						icon: "$taskDoneFilled",
+						name: "graded",
+					},
+				];
+			}
+
+			if (this.isOverDue) {
+				return [
+					{
+						icon: "$taskMissed",
+						name: "overdue",
+					},
+				];
+			}
+
+			return [
+				{
+					icon: "$taskOpenFilled",
+					name: "open",
+				},
+			];
 		},
 	},
 	methods: {
