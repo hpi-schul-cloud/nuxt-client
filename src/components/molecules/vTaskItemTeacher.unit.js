@@ -49,6 +49,8 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		expect(wrapper.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}`);
 	});
 
+	// TODO - remove matchsnapshot
+	// TODO - add planned label
 	describe("course name", () => {
 		it("Should render subtitle with course name and no due date for tasks without due date", () => {
 			const wrapper = getWrapper({

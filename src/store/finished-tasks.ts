@@ -109,15 +109,11 @@ export class FinishedTaskModule extends VuexModule {
 	}
 
 	@Action
-	async restoreTask(taskId: String): Promise<void> {
+	async restoreTask(taskId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const task = await $axios.$get(`/v1/homework/${taskId}`);
-			const userId = AuthModule.getUser?.id;
-
-			const archived = task.archived.filter((id: String) => id !== userId);
-			await $axios.$patch(`/v1/homework/${taskId}`, { archived });
+			await this.taskApi.taskControllerRestore(taskId);
 
 			await this.refetchTasks();
 			await TasksModule.fetchAllTasks();
