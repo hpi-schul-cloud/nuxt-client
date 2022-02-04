@@ -212,6 +212,7 @@ const overDueTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 1,
+			isFinished: false,
 		}),
 	},
 	{
@@ -224,6 +225,7 @@ const overDueTasksTeacher = [
 		status: generateStatus({
 			submitted: 5,
 			maxSubmissions: 15,
+			isFinished: true,
 		}),
 	},
 	{

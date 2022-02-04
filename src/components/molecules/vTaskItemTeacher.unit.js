@@ -142,7 +142,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 			const menuBtn = wrapper.find(".v-btn");
 			await menuBtn.trigger("click");
-			const editBtn = wrapper.find(".task-action");
+			const editBtn = wrapper.find("#task-action-edit");
 
 			expect(editBtn.attributes("href")).toBe(
 				`/homework/${tasksTeacher[0].id}/edit`

@@ -19,6 +19,7 @@
 		<v-list>
 			<v-list-item
 				v-if="isTeacher"
+				id="task-action-edit"
 				:href="editLink"
 				class="task-action"
 				data-testId="task-edit"
@@ -31,8 +32,9 @@
 				</v-list-item-title>
 			</v-list-item>
 			<v-list-item
+				id="task-action-finish"
 				class="task-action"
-				:data-testId="`task-finish-${task.name}`"
+				data-testId="task-finish"
 				@click.stop.prevent="handleFinish"
 			>
 				<v-list-item-title>
@@ -56,8 +58,8 @@ import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 
 // TODO - different requiredKeys for finished and other tasks?
-// const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
-const taskRequiredKeys = ["createdAt", "id", "name"];
+const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: {},
@@ -65,7 +67,11 @@ export default {
 		task: {
 			type: Object,
 			required: true,
-			validator: (task) => taskRequiredKeys.every((key) => key in task),
+			validator: (task) => {
+				return task.status.isFinished
+					? finishedTaskRequiredKeys.every((key) => key in task)
+					: taskRequiredKeys.every((key) => key in task);
+			},
 		},
 		show: {
 			type: Boolean,
@@ -73,7 +79,8 @@ export default {
 		},
 		userRole: {
 			type: String,
-			required: true, // TODO - add validator
+			required: true,
+			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
 	data() {
