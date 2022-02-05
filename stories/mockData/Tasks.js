@@ -251,8 +251,10 @@ const dueDateTasksTeacher = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		description: "Malen nach Zahlen",
 		status: generateStatus({
 			maxSubmissions: 1,
+			isSubstitutionTeacher: true,
 		}),
 	},
 	{
@@ -336,6 +338,7 @@ const drafts = [
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus({
 			isDraft: true,
+			isSubstitutionTeacher: true,
 		}),
 	},
 	{
@@ -349,6 +352,21 @@ const drafts = [
 		}),
 	},
 ];
+
+const plannedTask = {
+	id: "59cce1d38129702re02cdc4b",
+	_id: "59cce1d38129702re02cdc4b",
+	name: "Bildung des Konjunktiv I",
+	availableDate: "2200-09-28T13:00:00.000Z",
+	duedate: "2300-09-28T13:00:00.000Z",
+	courseName: "Deutsch",
+	createdAt: "2017-09-28T11:49:39.924Z",
+	status: generateStatus({
+		submitted: 10,
+		maxSubmissions: 12,
+		graded: 4,
+	}),
+};
 
 const allTasksTeacher = [...tasksTeacher, ...drafts];
 
@@ -468,5 +486,6 @@ export default {
 	openTasksWithoutDueDate,
 	openTasksWithDueDate,
 	overDueTasks,
+	plannedTask,
 	generateTask,
 };

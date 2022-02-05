@@ -16,7 +16,7 @@
 				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
 			</v-list-item-avatar>
 			<v-list-item-content>
-				<v-list-item-subtitle class="d-inline-flex">
+				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						courseName
 					}}</span>
@@ -28,7 +28,11 @@
 					</template>
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
-				<v-list-item-subtitle class="d-inline-flex">
+				<v-list-item-subtitle
+					v-if="topic"
+					data-testid="task-topic"
+					class="d-inline-flex"
+				>
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
@@ -39,7 +43,7 @@
 					</i18n>
 				</v-list-item-subtitle>
 			</v-list-item-content>
-			<section v-if="showTaskStatus" class="mr-8">
+			<section v-if="showTaskStatus" id="task-status" class="mr-8">
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.VTaskItemTeacher.submitted")
@@ -100,13 +104,6 @@ export default {
 		href() {
 			return `/homework/${this.task.id}`;
 		},
-		avatarIcon() {
-			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
-		},
-		iconColor() {
-			const defaultColor = "#54616e";
-			return this.task.displayColor || defaultColor;
-		},
 		isDraft() {
 			return this.task.status.isDraft;
 		},
@@ -115,6 +112,13 @@ export default {
 		},
 		showTaskStatus() {
 			return !this.isDraft && !this.isPlanned;
+		},
+		avatarIcon() {
+			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
+		},
+		iconColor() {
+			const defaultColor = "#54616e";
+			return this.task.displayColor || defaultColor;
 		},
 		dueDateLabel() {
 			const dueDate = this.task.duedate;

@@ -205,11 +205,54 @@ describe("finished task store", () => {
 		});
 
 		describe("restoreTask", () => {
-			it.todo("should remove userId from archived list");
+			it("should call restore task api and refetch all tasks", (done) => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				const task = taskFactory.build();
 
-			it.todo("should refetch all tasks");
+				const mockApi = {
+					taskControllerRestore: jest.fn(),
+					taskControllerFindAll: jest.fn(),
+					taskControllerFindAllFinished: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-			it.todo("should handle an error");
+				finishedTaskModule.restoreTask(task.id).then(() => {
+					expect(finishedTaskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerRestore).toHaveBeenCalledTimes(1);
+					//	expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
+						1
+					);
+
+					done();
+				});
+				expect(finishedTaskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
+			});
+
+			it("should handle an error", (done) => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				const task = taskFactory.build();
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
+				};
+
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				finishedTaskModule.restoreTask(task.id).then(() => {
+					expect(finishedTaskModule.getStatus).toBe("error");
+					expect(finishedTaskModule.businessError).toStrictEqual(error);
+					done();
+				});
+				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 

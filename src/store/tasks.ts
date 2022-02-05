@@ -5,7 +5,6 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-import AuthModule from "@/store/auth";
 import FinishedTasksModule from "@/store/finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";

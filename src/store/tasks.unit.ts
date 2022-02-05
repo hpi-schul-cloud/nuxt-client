@@ -3,6 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
+import { FinishedTaskModule } from "./finished-tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -130,9 +131,56 @@ describe("task store", () => {
 		});
 
 		describe("finishTask", () => {
-			it.todo("should request a list of tasks");
+			it("should call finish task api and refetch all tasks", (done) => {
+				const taskModule = new TaskModule({});
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.isInitialized = true;
+				const task = taskFactory.build();
 
-			it.todo("should handle an error");
+				const mockApi = {
+					taskControllerFinish: jest.fn(),
+					taskControllerFindAll: jest.fn(),
+					//	taskControllerFindAllFinished: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				taskModule.finishTask(task.id).then(() => {
+					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
+					// expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
+					// 	1
+					// );
+
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
+			});
+
+			it("should handle an error", (done) => {
+				const task = taskFactory.build();
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
+				};
+
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				const taskModule = new TaskModule({});
+
+				taskModule.finishTask(task.id).then(() => {
+					expect(taskModule.getStatus).toBe("error");
+					expect(taskModule.businessError).toStrictEqual(error);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 

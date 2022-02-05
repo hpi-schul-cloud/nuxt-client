@@ -5,7 +5,6 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
