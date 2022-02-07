@@ -166,17 +166,4 @@ export default {
 .context-menu-btn {
 	min-width: 45px;
 }
-
-.task-action {
-	min-height: 25px;
-}
-
-.task-action-icon {
-	width: 1rem;
-	height: 1rem;
-	margin-top: -2px;
-	margin-right: 4px;
-	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
-}
 </style>
