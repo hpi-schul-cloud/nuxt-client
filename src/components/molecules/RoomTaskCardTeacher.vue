@@ -11,7 +11,7 @@
 				<div class="icon-section">
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
-				<div class="title-section">
+				<div class="title-section" tabindex="0">
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -20,7 +20,8 @@
 				</div>
 			</div>
 			<div class="text-h4 text--primary">{{ task.name }}</div>
-			<div class="text--primary mt-1">{{ task.description }}</div>
+			<!-- eslint-disable vue/no-v-html -->
+			<div class="text--primary mt-1" v-html="task.description"></div>
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
@@ -55,7 +56,6 @@
 				:key="index"
 				class="action-button"
 				text
-				color="#0091EA"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -116,18 +116,23 @@ export default {
 		cardActions() {
 			// TODO: add i18i files
 			// TODO: actions must be controled by UX
-			if (this.isDraft) {
+			if (this.isDraft && !this.isFinished) {
 				return [
 					{
 						icon: "taskSend",
 						action: "action name",
-						name: "Send",
+						name: "Post",
 					},
 					{
-						icon: "Delete",
+						icon: "taskFinish",
 						action: "action name",
-						name: "Delete",
+						name: "Edit",
 					},
+					// {
+					// 	icon: "Delete",
+					// 	action: "action name",
+					// 	name: "Delete",
+					// },
 				];
 			}
 
@@ -138,10 +143,15 @@ export default {
 						action: "action name",
 						name: "Finish",
 					},
+					{
+						icon: "taskFinish",
+						action: "action name",
+						name: "Edit",
+					},
 				];
 			}
 
-			if (!this.isFinished) {
+			if (this.isFinished) {
 				return [
 					{
 						icon: "taskFinish",
@@ -184,7 +194,8 @@ export default {
 	}
 	.title-section {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		color: #0091ea;
+		// color: #0091ea;
+		color: var(--color-primary);
 		text-align: left;
 	}
 	.dot-menu-section {
@@ -210,6 +221,11 @@ export default {
 			color: rgba(0, 0, 0, 0.87);
 		}
 	}
+}
+.action-button {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	// color: #0091ea;
+	color: var(--color-primary);
 }
 
 @media #{map-get($display-breakpoints, 'xs-only')} {

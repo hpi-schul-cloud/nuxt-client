@@ -81,13 +81,13 @@ describe("@pages/rooms/index.vue", () => {
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("return to courses button should have correct path", async () => {
+	it("'return to courses' button should have correct path", async () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		expect(backButton.vm.href).toStrictEqual("/courses/123");
 	});
 
-	it("return to courses button should have correct path", async () => {
+	it("title should be the course name", async () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");

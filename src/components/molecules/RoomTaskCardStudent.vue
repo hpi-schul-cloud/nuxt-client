@@ -20,7 +20,8 @@
 				</div>
 			</div>
 			<div class="text-h4 text--primary">{{ task.name }}</div>
-			<div class="text--primary mt-1">{{ task.description }}</div>
+			<!-- eslint-disable vue/no-v-html -->
+			<div class="text--primary mt-1" v-html="task.description"></div>
 		</v-card-text>
 		<v-card-text v-if="!isFinished" class="ma-0 pb-0 pt-0">
 			<div class="chip-items-group">
