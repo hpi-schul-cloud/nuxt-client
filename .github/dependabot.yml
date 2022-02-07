@@ -15,12 +15,6 @@ updates:
   - dependency-name: vue-svg-loader
     versions:
     - "> 0.16.0, < 0.17"
-  - dependency-name: "@storybook/vue"
-    versions:
-    - 5.3.21
-    - 6.2.5
-    - 6.2.7
-    - 6.2.8
   - dependency-name: puppeteer
     versions:
     - 5.5.0
@@ -28,9 +22,6 @@ updates:
   - dependency-name: jwt-decode
     versions:
     - 3.0.0
-  - dependency-name: "@storybook/addon-storysource"
-    versions:
-    - 6.1.1
   - dependency-name: "@babel/plugin-proposal-optional-chaining"
     versions:
     - 7.12.7
@@ -67,19 +58,12 @@ updates:
   - dependency-name: "@testing-library/vue"
     versions:
     - 5.3.1
-  - dependency-name: "@storybook/addon-viewport"
-    versions:
-    - 6.1.1
-    - 6.2.5
   - dependency-name: "@testing-library/jest-dom"
     versions:
     - 5.11.8
   - dependency-name: "@babel/preset-env"
     versions:
     - 7.12.11
-  - dependency-name: "@storybook/addon-backgrounds"
-    versions:
-    - 6.1.11
   - dependency-name: "@nuxt/types"
     versions:
     - 2.14.12
@@ -89,10 +73,6 @@ updates:
   - dependency-name: faker
     versions:
     - 5.1.0
-  - dependency-name: "@storybook/addon-a11y"
-    versions:
-    - 6.1.11
-    - 6.2.5
   - dependency-name: nuxt
     versions:
     - 2.14.9
@@ -105,9 +85,6 @@ updates:
   - dependency-name: sharp
     versions:
     - 0.27.0
-  - dependency-name: "@storybook/addon-actions"
-    versions:
-    - 6.1.1
   rebase-strategy: disabled
 - package-ecosystem: github-actions
   directory: "/"

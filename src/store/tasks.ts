@@ -5,6 +5,7 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
+import FinishedTasksModule from "@/store/finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
@@ -64,6 +65,25 @@ export class TaskModule extends VuexModule {
 				total = response.data.total;
 			} while (skip < total);
 			this.setTasks(tasks);
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async finishTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			await this.taskApi.taskControllerFinish(taskId);
+
+			await this.fetchAllTasks();
+			if (FinishedTasksModule.isInitialized) {
+				await FinishedTasksModule.refetchTasks();
+			}
+
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);

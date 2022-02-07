@@ -1,6 +1,6 @@
 import ContentCard from "./ContentCard";
-import { Resource } from "@@/stories/mockData/Resource";
-import { Collection } from "@@/stories/mockData/Collection";
+import { Resource } from "@@/tests/test-utils/mockDataResource";
+import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import VueRouter from "vue-router";
 import { createLocalVue } from "@vue/test-utils";
 

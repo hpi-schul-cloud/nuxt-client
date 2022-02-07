@@ -1,6 +1,6 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
+declare var createComponentMocks: Function;
 
 const mockData = {
 	roomId: "123",
@@ -21,6 +21,7 @@ const mockData = {
 					graded: 0,
 					isDraft: false,
 					isSubstitutionTeacher: false,
+					isFinished: false,
 				},
 				availableDate: "2017-09-20T11:00:00.000Z",
 				duedate: "2300-09-28T13:00:00.000Z",
@@ -42,6 +43,7 @@ const mockData = {
 					graded: 0,
 					isDraft: true,
 					isSubstitutionTeacher: false,
+					isFinished: false,
 				},
 				availableDate: "2017-09-28T12:00:00.000Z",
 				duedate: "2300-06-28T13:00:00.000Z",
@@ -52,16 +54,14 @@ const mockData = {
 	],
 };
 
-const getWrapper = () => {
+const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
-			// @ts-ignore
 			vuetify: true,
 		}),
-		propsData: {
-			items: mockData.elements,
-		},
+		propsData: props,
+		...options,
 	});
 };
 
@@ -69,16 +69,27 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	beforeEach(() => {});
 
 	it("should have props", async () => {
-		const wrapper = getWrapper();
+		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
-		// @ts-ignore
-		expect(wrapper.vm.items[1]).toStrictEqual(mockData.elements[1]);
+		expect(wrapper.vm.roomData).toStrictEqual(mockData);
+		expect(wrapper.vm.role).toStrictEqual("teacher");
 	});
 
-	it("should list 'v-list-component'", async () => {
-		const wrapper = getWrapper();
+	it("should list teacher cards", async () => {
+		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
-		const listItems = wrapper.findAll(".v-list-item");
-		expect(listItems).toHaveLength(2);
+		const listItemsTeacher = wrapper.findAll(".card-teacher");
+		const listItemsStudent = wrapper.findAll(".card-student");
+		expect(listItemsTeacher).toHaveLength(2);
+		expect(listItemsStudent).toHaveLength(0);
+	});
+
+	it("should list student card", async () => {
+		const wrapper = getWrapper({ roomData: mockData, role: "student" });
+
+		const listItemsStudent = wrapper.findAll(".card-student");
+		const listItemsTeacher = wrapper.findAll(".card-teacher");
+		expect(listItemsStudent).toHaveLength(2);
+		expect(listItemsTeacher).toHaveLength(0);
 	});
 });

@@ -1,5 +1,5 @@
 import Vuetify from "vuetify";
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import vTaskItemStudent from "./vTaskItemStudent";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
@@ -61,6 +61,9 @@ describe("@components/molecules/vTaskItemStudent", () => {
 			duedate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
+			status: {
+				isFinished: false,
+			},
 		};
 
 		const wrapper = getWrapper({ task: taskCloseToDueDate });

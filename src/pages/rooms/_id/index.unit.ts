@@ -22,6 +22,7 @@ const mockData = {
 					graded: 0,
 					isDraft: false,
 					isSubstitutionTeacher: false,
+					isFinished: false,
 				},
 				availableDate: "2017-09-20T11:00:00.000Z",
 				duedate: "2300-09-28T13:00:00.000Z",
@@ -43,6 +44,7 @@ const mockData = {
 					graded: 0,
 					isDraft: true,
 					isSubstitutionTeacher: false,
+					isFinished: false,
 				},
 				availableDate: "2017-09-28T12:00:00.000Z",
 				duedate: "2300-06-28T13:00:00.000Z",
@@ -61,31 +63,35 @@ const $route = {
 };
 
 const $router = { push: jest.fn() };
+const getWrapper: any = () => {
+	return mount(Room, {
+		...createComponentMocks({
+			i18n: true,
+			$router,
+			$route,
+		}),
+	});
+};
 
 describe("@pages/rooms/index.vue", () => {
-	const getWrapper = () => {
-		return mount(Room, {
-			...createComponentMocks({
-				i18n: true,
-				$router,
-				$route,
-			}),
-		});
-	};
 	beforeEach(() => {
 		RoomModule.setRoomData(mockData as any);
 	});
 
 	it("should fetch data", async () => {
 		const wrapper = getWrapper();
-		// @ts-ignore
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("return to courses button should have correct path", async () => {
+	it("'return to courses' button should have correct path", async () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
-		// @ts-ignore
 		expect(backButton.vm.href).toStrictEqual("/courses/123");
+	});
+
+	it("title should be the course name", async () => {
+		const wrapper = getWrapper();
+		const title = wrapper.find(".course-title");
+		expect(title.element.textContent).toContain("Sample Course");
 	});
 });
