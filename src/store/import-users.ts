@@ -17,6 +17,13 @@ import {
 } from "@/serverApi/v3";
 import { BusinessError } from "@store/types/commons";
 
+
+export enum MatchedBy {
+	Admin= 'admin',
+	Auto = 'auto',
+	None = 'none'
+}
+
 // @ts-ignore
 @Module({
 	name: "importUsers",
@@ -25,6 +32,7 @@ import { BusinessError } from "@store/types/commons";
 	store: rootStore,
 	stateFactory: true,
 })
+
 export class ImportUsersModule extends VuexModule {
 	private importUserList: ImportUserListResponse = {
 		data: [],
@@ -37,7 +45,7 @@ export class ImportUsersModule extends VuexModule {
 	private loginName: string = '';
 	private role: ImportUserResponseRoleNamesEnum | '' = '';
 	private classes: string = '';
-	private match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
+	private match: Array<MatchedBy> = [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None];
 	private flagged: boolean = false;
 	private limit: number = 25;
 	private skip: number = 0;
@@ -89,7 +97,7 @@ export class ImportUsersModule extends VuexModule {
 	}
 
 	@Mutation
-	setMatch(match: Array<"auto" | "admin" | "none">): void {
+	setMatch(match: Array<MatchedBy>): void {
 		this.match = match;
 	}
 

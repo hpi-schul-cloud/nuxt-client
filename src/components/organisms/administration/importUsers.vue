@@ -86,7 +86,7 @@
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
 								<v-btn
 									icon
-									value="none"
+									:value="MatchedBy.None"
 									:title="
 										$t('components.organisms.importUsers.searchUnMatched')
 									"
@@ -94,14 +94,14 @@
 								>
 									<v-icon
 										:color="
-											searchMatchedBy.includes('none') ? 'primary' : 'secondary'
+											searchMatchedBy.includes(MatchedBy.None) ? 'primary' : 'secondary'
 										"
 										>{{ mdiAccountPlus }}</v-icon
 									>
 								</v-btn>
 								<v-btn
 									icon
-									value="admin"
+									:value="MatchedBy.Admin"
 									:title="
 										$t('components.organisms.importUsers.searchAdminMatched')
 									"
@@ -109,7 +109,7 @@
 								>
 									<v-icon
 										:color="
-											searchMatchedBy.includes('admin')
+											searchMatchedBy.includes(MatchedBy.Admin)
 												? 'primary'
 												: 'secondary'
 										"
@@ -118,7 +118,7 @@
 								</v-btn>
 								<v-btn
 									icon
-									value="auto"
+									:value="MatchedBy.Auto"
 									:title="
 										$t('components.organisms.importUsers.searchAutoMatched')
 									"
@@ -126,7 +126,7 @@
 								>
 									<v-icon
 										:color="
-											searchMatchedBy.includes('auto') ? 'primary' : 'secondary'
+											searchMatchedBy.includes(MatchedBy.Auto) ? 'primary' : 'secondary'
 										"
 										>{{ mdiAccountSwitchOutline }}</v-icon
 									>
@@ -243,7 +243,7 @@
 
 <script>
 import SchoolsModule from "@/store/schools";
-import ImportUsersModule from "@store/import-users";
+import ImportUsersModule, { MatchedBy } from "@store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
@@ -267,6 +267,7 @@ export default Vue.extend({
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencil,
+      MatchedBy,
 			loading: false,
 			roles: [
 				{
@@ -288,7 +289,7 @@ export default Vue.extend({
 			searchLoginName: "",
 			searchRole: "",
 			searchClasses: "",
-			searchMatchedBy: ["none"],
+			searchMatchedBy: [MatchedBy.None],
 			searchFlagged: false,
 			dialogEdit: false,
 			options: {
@@ -426,10 +427,10 @@ export default Vue.extend({
 			if (!match || !match.matchedBy) {
 				return mdiAccountPlus;
 			}
-			if (match.matchedBy === "auto") {
+			if (match.matchedBy === MatchedBy.Auto) {
 				return mdiAccountSwitchOutline;
 			}
-			if (match.matchedBy === "admin") {
+			if (match.matchedBy === MatchedBy.Admin) {
 				return mdiAccountSwitch;
 			}
 		},

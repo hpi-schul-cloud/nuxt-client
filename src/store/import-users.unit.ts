@@ -1,4 +1,4 @@
-import { ImportUsersModule } from "@store/import-users";
+import { ImportUsersModule, MatchedBy } from "@store/import-users";
 import * as serverApi from "@/serverApi/v3/api";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3/api";
 
@@ -181,7 +181,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				["auto", "admin", "none"],
+				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 				undefined,
 				undefined,
 				undefined,
@@ -203,7 +203,7 @@ describe("import-users store actions", () => {
 			importUserModule.setFirstName("john");
 			importUserModule.setLastName("doe");
 			importUserModule.setLoginName("johnny");
-			importUserModule.setMatch(["admin", "auto", "none"]);
+			importUserModule.setMatch([MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None]);
 			importUserModule.setFlagged(true);
 			importUserModule.setClasses("5a");
 			importUserModule.setRole(ImportUserResponseRoleNamesEnum.Student);
@@ -224,7 +224,7 @@ describe("import-users store actions", () => {
 				"john",
 				"doe",
 				"johnny",
-				["admin", "auto", "none"],
+				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 				true,
 				"5a",
 				"student",
@@ -261,7 +261,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				["auto", "admin", "none"],
+				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 				undefined,
 				undefined,
 				undefined,
@@ -299,7 +299,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				["auto", "admin", "none"],
+				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 				undefined,
 				undefined,
 				undefined,
@@ -337,7 +337,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				["auto", "admin", "none"],
+				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 				undefined,
 				undefined,
 				undefined,
