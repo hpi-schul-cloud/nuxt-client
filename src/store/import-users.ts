@@ -32,25 +32,26 @@ export class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	firstName?: string;
-	lastName?: string;
-	loginName?: string;
-	role?: ImportUserResponseRoleNamesEnum;
-	classes?: string;
-	match?: Array<"auto" | "admin" | "none">;
-	flagged?: boolean;
-	limit: number = 25;
-	skip: number = 0;
-	sortBy?: string;
-	sortOrder: any = "asc";
-	totalMatched: number = 0;
-	userList: UserMatchListResponse = {
+	private firstName: string = '';
+	private lastName: string = '';
+	private loginName: string = '';
+	private role: ImportUserResponseRoleNamesEnum | '' = '';
+	private classes: string = '';
+	private match: Array<'auto' | 'admin' | 'none'> = ['auto', 'admin', 'none'];
+	private flagged: boolean = false;
+	private limit: number = 25;
+	private skip: number = 0;
+	private sortBy: string = '';
+	private sortOrder: any = "asc";
+	private totalMatched: number = 0;
+
+	private userList: UserMatchListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 0,
 	};
-	private userSearch?: string;
+	private userSearch: string = '';
 	private usersLimit: number = 1;
 	private usersSkip: number = 0;
 	private totalUnmatched: number = 0;
@@ -140,7 +141,7 @@ export class ImportUsersModule extends VuexModule {
 		this.userSearch = userSearch;
 	}
 
-	get getUserSearch(): string | undefined {
+	get getUserSearch(): string {
 		return this.userSearch;
 	}
 
@@ -193,12 +194,12 @@ export class ImportUsersModule extends VuexModule {
 
 			const response =
 				await this.importUserApi.importUserControllerFindAllImportUsers(
-					this.firstName,
-					this.lastName,
-					this.loginName,
-					this.match,
-					this.flagged,
-					this.classes,
+					this.firstName ? this.firstName : undefined,
+					this.lastName ? this.lastName : undefined,
+					this.loginName ? this.loginName : undefined,
+					this.match ? this.match : undefined,
+					this.flagged ? true : undefined,
+					this.classes ? this.classes : undefined,
 					this.role ? this.role : undefined,
 					this.sortBy ? this.sortOrder : undefined,
 					sortBy,
@@ -219,7 +220,7 @@ export class ImportUsersModule extends VuexModule {
 		try {
 			const response =
 				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
-					this.userSearch,
+					this.userSearch ? this.userSearch : undefined,
 					this.usersSkip,
 					this.usersLimit
 				);

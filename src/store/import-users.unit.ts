@@ -181,7 +181,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				undefined,
+				["auto", "admin", "none"],
 				undefined,
 				undefined,
 				undefined,
@@ -261,7 +261,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				undefined,
+				["auto", "admin", "none"],
 				undefined,
 				undefined,
 				undefined,
@@ -299,7 +299,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				undefined,
+				["auto", "admin", "none"],
 				undefined,
 				undefined,
 				undefined,
@@ -337,7 +337,7 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				undefined,
+				["auto", "admin", "none"],
 				undefined,
 				undefined,
 				undefined,
@@ -555,7 +555,7 @@ describe("import-users store actions", () => {
 describe("getters", () => {
 	it("getUserSearch", () => {
 		const importUserModule = new ImportUsersModule({});
-		expect(importUserModule.getUserSearch).toBe(undefined);
+		expect(importUserModule.getUserSearch).toBe('');
 		const userSearch = "foo";
 		importUserModule.setUserSearch(userSearch);
 		expect(importUserModule.getUserSearch).toBe(userSearch);
