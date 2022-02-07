@@ -29,7 +29,7 @@
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item pa-1 mr-2">
+				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
@@ -38,7 +38,7 @@
 						}}
 					</div>
 				</div>
-				<div class="grey lighten-2 chip-item pa-1 mr-2">
+				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
@@ -47,7 +47,11 @@
 						}}
 					</div>
 				</div>
-				<div v-if="isOverDue" class="grey lighten-2 chip-item pa-1">
+				<div
+					v-if="isOverDue"
+					class="grey lighten-2 chip-item pa-1"
+					tabindex="0"
+				>
 					<div class="chip-value">
 						{{ $t("pages.room.taskCard.label.overdue") }}
 					</div>

@@ -226,7 +226,9 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		const actionButtons = wrapper.findAll(".action-button");
 
 		expect(actionButtons).toHaveLength(1);
-		expect(actionButtons.wrappers[0].element.textContent).toContain("Restore");
+		expect(actionButtons.wrappers[0].element.textContent).toContain(
+			"Aufgabe wiederherstellen"
+		);
 	});
 
 	it("should have finish button if task is not marked as finished", () => {
@@ -234,6 +236,8 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		const actionButtons = wrapper.findAll(".action-button");
 
 		expect(actionButtons).toHaveLength(1);
-		expect(actionButtons.wrappers[0].element.textContent).toContain("Finish");
+		expect(actionButtons.wrappers[0].element.textContent).toContain(
+			"Abschließen"
+		);
 	});
 });

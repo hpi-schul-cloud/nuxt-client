@@ -104,6 +104,8 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		const actionButtons = wrapper.findAll(".action-button");
 
 		expect(actionButtons).toHaveLength(1);
-		expect(actionButtons.wrappers[0].element.textContent).toContain("Finish");
+		expect(actionButtons.wrappers[0].element.textContent).toContain(
+			"Abschließen"
+		);
 	});
 });
