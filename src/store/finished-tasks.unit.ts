@@ -172,7 +172,62 @@ describe("finished task store", () => {
 		});
 
 		describe("refetchTasks", () => {
-			it.todo("should fetch all tasks up until current pagination");
+			it("should fetch all tasks up until current pagination", (done) => {
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.pagination = {
+					total: 26,
+					skip: 10,
+					limit: 10,
+				};
+
+				const mockApi = {
+					taskControllerFindAllFinished: jest
+						.fn()
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #1" }],
+								total: 26,
+								skip: 0,
+								limit: 10,
+							},
+						})
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #2" }],
+								total: 26,
+								skip: 10,
+								limit: 10,
+							},
+						})
+						.mockReturnValueOnce({
+							data: {
+								data: [{ mockTask: "mock task #3" }],
+								total: 26,
+								skip: 20,
+								limit: 10,
+							},
+						}),
+				};
+
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				finishedTaskModule.refetchTasks().then(() => {
+					expect(finishedTaskModule.getTasks).toStrictEqual([
+						{ mockTask: "mock task #1" },
+						{ mockTask: "mock task #2" },
+					]);
+					expect(finishedTaskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
+						2
+					);
+					done();
+				});
+				expect(finishedTaskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
+			});
 
 			it("should handle an error", (done) => {
 				const finishedTaskModule = new FinishedTaskModule({});
@@ -204,41 +259,16 @@ describe("finished task store", () => {
 			});
 		});
 
+		// TODO - implement when we figured out how to correctly mock stores
 		describe("restoreTask", () => {
-			it("should call restore task api and refetch all tasks", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				const task = taskFactory.build();
-
-				const mockApi = {
-					taskControllerRestore: jest.fn(),
-					taskControllerFindAll: jest.fn(),
-					taskControllerFindAllFinished: jest.fn(),
-				};
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-
-				finishedTaskModule.restoreTask(task.id).then(() => {
-					expect(finishedTaskModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerRestore).toHaveBeenCalledTimes(1);
-					//	expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
-					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-						1
-					);
-
-					done();
-				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
-
-				spy.mockRestore();
-			});
+			it.todo("should call restore task api and refetch all tasks");
 
 			it("should handle an error", (done) => {
 				const finishedTaskModule = new FinishedTaskModule({});
 				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerRestore: jest.fn(() => Promise.reject({ ...error })),
 				};
 
 				jest
@@ -251,7 +281,7 @@ describe("finished task store", () => {
 					done();
 				});
 				expect(finishedTaskModule.getStatus).toBe("pending");
-				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+				expect(mockApi.taskControllerRestore).toHaveBeenCalledTimes(1);
 			});
 		});
 	});

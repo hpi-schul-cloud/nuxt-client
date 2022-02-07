@@ -95,7 +95,7 @@ export class FinishedTaskModule extends VuexModule {
 				tasks.push(...response.data.data);
 
 				skip += limit;
-			} while (skip !== oldSkipValue);
+			} while (skip <= oldSkipValue);
 
 			await new Promise((resolve) => setTimeout(resolve, 300));
 			this.setTasks(tasks);
