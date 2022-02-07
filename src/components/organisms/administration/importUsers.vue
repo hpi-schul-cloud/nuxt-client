@@ -315,7 +315,7 @@ export default Vue.extend({
 				flagged: false,
 			},
 			editedIndex: -1,
-      delay: 500,
+			delay: 500,
 		};
 	},
 	computed: {
@@ -519,7 +519,7 @@ export default Vue.extend({
 				);
 			}
 			await ImportUsersModule.fetchAllImportUsers();
-      this.importUsers = ImportUsersModule.getImportUserList.data;
+			this.importUsers = ImportUsersModule.getImportUserList.data;
 			this.totalImportUsers = ImportUsersModule.getImportUserList.total;
 
 			this.loading = false;
