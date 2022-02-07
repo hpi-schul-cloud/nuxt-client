@@ -1,41 +1,62 @@
 <template>
 	<div class="rooms-container">
-		<template v-for="(item, index) of items">
-			<v-task-item-teacher
-				v-if="item.type === 'task'"
-				:key="index"
-				:task="item.content"
-				:aria-label="
-					$t('pages.room.taskCard.aria', {
-						itemType: item.type,
-						itemName: item.content.name,
-					})
-				"
-			/>
-			<v-divider v-if="index < items.length - 1" :key="`divider-${index}`" />
-		</template>
+		<div v-if="role === undefined">No task available</div>
+		<div v-else>
+			<div v-if="role === 'teacher'">
+				<div v-for="(item, index) of roomData.elements" :key="index">
+					<room-task-card-teacher
+						v-if="item.type === 'task'"
+						:task="item.content"
+						:aria-label="
+							$t('pages.room.taskCard.aria', {
+								itemType: $t('pages.room.taskCard.label.task'),
+								itemName: item.content.name,
+							})
+						"
+						class="card-teacher"
+					/>
+				</div>
+			</div>
+			<div v-if="role === 'student'">
+				<div v-for="(item, index) of roomData.elements" :key="index">
+					<room-task-card-student
+						v-if="item.type === 'task'"
+						:task="item.content"
+						:aria-label="
+							$t('pages.room.taskCard.aria', {
+								itemType: item.type,
+								itemName: item.content.name,
+							})
+						"
+						class="card-student"
+					/>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher.vue";
+<script>
+import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
+import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
 
-export default Vue.extend({
+export default {
 	components: {
-		VTaskItemTeacher,
+		RoomTaskCardTeacher,
+		RoomTaskCardStudent,
 	},
 	props: {
-		items: {
-			type: Array,
+		roomData: {
+			type: Object,
 			required: true,
-			default: () => [],
+			default: () => {},
 		},
+		role: { type: String, required: true, default: "" },
 	},
 	data() {
 		return {};
 	},
-});
+};
 </script>
 
 <style lang="scss" scoped>

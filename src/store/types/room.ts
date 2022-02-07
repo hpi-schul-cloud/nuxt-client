@@ -21,6 +21,7 @@ export type Task = {
 		graded: number;
 		isDraft: boolean;
 		isSubstitutionTeacher: boolean;
+		isFinished: boolean;
 	};
 	createdAt: string;
 	updatedAt: string;
