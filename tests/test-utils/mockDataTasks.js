@@ -14,6 +14,7 @@ const generateStatus = (props = {}) =>
 			isDraft: false,
 			isSubstitutionTeacher: false,
 			maxSubmissions: 1,
+			isFinished: false,
 		},
 		props
 	);

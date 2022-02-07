@@ -1,7 +1,6 @@
 import TasksModule from "@/store/tasks";
 import FinishedTasksModule from "@/store/finished-tasks";
-
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemMenu from "./TaskItemMenu";
 
 const { tasksTeacher } = mocks;
@@ -50,28 +49,29 @@ describe("@components/molecules/TaskItemMenu", () => {
 				expect(validator(task)).toBe(false);
 			});
 		});
-
-		it("should accept valid task prop", () => {
-			const { validator } = TaskItemMenu.props.task;
-			const validTasks = tasksTeacher;
-
-			validTasks.forEach((task) => {
-				expect(validator(task)).toBe(true);
-			});
-		});
 	});
 
 	describe("computed properties", () => {
 		it("should compute correct edit link", () => {
 			const task = tasksTeacher[0];
-			const wrapper = getWrapper({ task, show: false, userRole: "teacher" });
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
 
 			expect(wrapper.vm.editLink).toStrictEqual(`/homework/${task.id}/edit`);
 		});
 
 		it("should set isTeacher correctly", () => {
 			const task = tasksTeacher[0];
-			const wrapper = getWrapper({ task, show: true, userRole: "teacher" });
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: true,
+				userRole: "teacher",
+			});
 
 			expect(wrapper.vm.isTeacher).toBe(true);
 		});
@@ -81,7 +81,12 @@ describe("@components/molecules/TaskItemMenu", () => {
 		it("should call finishTask of TaskModule", async () => {
 			const finishTaskMock = jest.spyOn(TasksModule, "finishTask");
 			const task = tasksTeacher[0];
-			const wrapper = getWrapper({ task, show: false, userRole: "teacher" });
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
@@ -97,7 +102,12 @@ describe("@components/molecules/TaskItemMenu", () => {
 		it("should call restoreTask of FinishedTaskModule", async () => {
 			const restoreTaskMock = jest.spyOn(FinishedTasksModule, "restoreTask");
 			const task = tasksTeacher[1];
-			const wrapper = getWrapper({ task, show: false, userRole: "teacher" });
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
