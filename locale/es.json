@@ -696,6 +696,7 @@
 	"pages.room.taskCard.label.open": "Abrir",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.reopen": "Restaurar la tarea",
+	"pages.room.taskCard.label.post": "Posten",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",

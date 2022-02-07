@@ -11,7 +11,7 @@
 				<div class="icon-section">
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
-				<div class="title-section" tabindex="0">
+				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -56,6 +56,7 @@
 				:key="index"
 				class="action-button"
 				text
+				:color="titleColor"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -91,17 +92,15 @@ export default {
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
 			mdiDotsVertical: mdiDotsVertical,
 			mdiFormatListChecks: mdiFormatListChecks,
+			defaultTitleColor: "#54616e",
 		};
 	},
 	computed: {
 		avatarIcon() {
 			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
 		},
-		iconColor() {
-			return this.task.displayColor || this.defaultIconColor;
-		},
-		defaultIconColor() {
-			return "#54616e";
+		titleColor() {
+			return this.task.displayColor || this.defaultTitleColor;
 		},
 		isDraft() {
 			return this.task.status.isDraft;
@@ -121,18 +120,8 @@ export default {
 					{
 						icon: "taskSend",
 						action: "action name",
-						name: "Post",
+						name: this.$t("pages.room.taskCard.label.post"),
 					},
-					{
-						icon: "taskFinish",
-						action: "action name",
-						name: "Edit",
-					},
-					// {
-					// 	icon: "Delete",
-					// 	action: "action name",
-					// 	name: "Delete",
-					// },
 				];
 			}
 
@@ -141,12 +130,7 @@ export default {
 					{
 						icon: "taskFinish",
 						action: "action name",
-						name: "Finish",
-					},
-					{
-						icon: "taskFinish",
-						action: "action name",
-						name: "Edit",
+						name: this.$t("pages.room.taskCard.label.done"),
 					},
 				];
 			}
@@ -156,7 +140,7 @@ export default {
 					{
 						icon: "taskFinish",
 						action: "action name",
-						name: "Restore",
+						name: this.$t("pages.room.taskCard.label.reopen"),
 					},
 				];
 			}

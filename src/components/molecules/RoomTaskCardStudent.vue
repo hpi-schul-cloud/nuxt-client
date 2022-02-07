@@ -11,7 +11,7 @@
 				<div class="icon-section">
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
-				<div class="title-section">
+				<div class="title-section" :style="`color: ${titleColor}`">
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -19,11 +19,17 @@
 					<v-icon>{{ mdiDotsVertical }}</v-icon>
 				</div>
 			</div>
-			<div class="text-h4 text--primary">{{ task.name }}</div>
+			<div class="text-h4 text--primary">
+				{{ task.name }}
+			</div>
 			<!-- eslint-disable vue/no-v-html -->
-			<div class="text--primary mt-1" v-html="task.description"></div>
+			<div
+				v-if="!isFinished"
+				class="text--primary mt-1"
+				v-html="task.description"
+			></div>
 		</v-card-text>
-		<v-card-text v-if="!isFinished" class="ma-0 pb-0 pt-0">
+		<v-card-text v-if="showChips" class="ma-0 pb-0 pt-0">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item pa-1">
 					<div
@@ -45,7 +51,7 @@
 				:key="index"
 				class="action-button"
 				text
-				color="#0091EA"
+				:color="titleColor"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -59,8 +65,6 @@ import { mdiDotsVertical } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 import { mdiFormatListChecks } from "@mdi/js";
 
-// TODO - remove inline css
-// TODO - Remove lorem ipsum
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -86,9 +90,15 @@ export default {
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
 			mdiDotsVertical: mdiDotsVertical,
 			mdiFormatListChecks: mdiFormatListChecks,
+			defaultTitleColor: "#54616e",
+			// showChips is false until decided in next iterations
+			showChips: false,
 		};
 	},
 	computed: {
+		titleColor() {
+			return this.task.displayColor || this.defaultTitleColor;
+		},
 		isOverDue() {
 			const dueDate = this.task.duedate;
 			return dueDate && new Date(dueDate) < new Date();
@@ -97,14 +107,12 @@ export default {
 			return this.task.status.isFinished;
 		},
 		cardActions() {
-			// TODO: add i18i files
-			// TODO: actions must be controled by UX
 			if (this.isFinished) {
 				return [
 					{
 						icon: "taskRestore",
 						action: "action name",
-						name: "Restore",
+						name: this.$t("pages.room.taskCard.label.reopen"),
 					},
 				];
 			}
@@ -112,14 +120,9 @@ export default {
 			if (!this.isFinished) {
 				return [
 					{
-						icon: "taskSend",
-						action: "action name",
-						name: "Send",
-					},
-					{
 						icon: "taskFinish",
 						action: "action name",
-						name: "Finish",
+						name: this.$t("pages.room.taskCard.label.done"),
 					},
 				];
 			}

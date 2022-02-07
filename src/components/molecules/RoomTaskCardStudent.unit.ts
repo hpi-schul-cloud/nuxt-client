@@ -91,7 +91,8 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		expect(statusSection).toHaveLength(0);
 	});
 
-	it("should have submitted visual when task submitted but not graded", () => {
+	// is skipped until decided in next iterations
+	it.skip("should have submitted visual when task submitted but not graded", () => {
 		const testProps = {
 			task: {
 				id: "123",
@@ -118,7 +119,8 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		expect(taskStateName.element.textContent).toContain("$taskDone");
 	});
 
-	it("should have graded visual when task submitted and graded", () => {
+	// is skipped until decided in next iterations
+	it.skip("should have graded visual when task submitted and graded", () => {
 		const testProps = {
 			task: {
 				id: "123",
@@ -145,7 +147,8 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		expect(taskStateName.element.textContent).toContain("$taskDoneFilled");
 	});
 
-	it("should have overdue visual when task duedate is in the past and no submittion was done", () => {
+	// is skipped until decided in next iterations
+	it.skip("should have overdue visual when task duedate is in the past and no submittion was done", () => {
 		const testProps = {
 			task: {
 				id: "123",
@@ -172,7 +175,8 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		expect(taskStateName.element.textContent).toContain("$taskMissed");
 	});
 
-	it("should have open visual when task was not worked on yet", () => {
+	// is skipped until decided in next iterations
+	it.skip("should have open visual when task was not worked on yet", () => {
 		const testProps = {
 			task: {
 				id: "123",
@@ -225,12 +229,11 @@ describe("@components/molecules/RoomTaskCardStudent", () => {
 		expect(actionButtons.wrappers[0].element.textContent).toContain("Restore");
 	});
 
-	it("should have send and finish button if task is not marked as finished", () => {
+	it("should have finish button if task is not marked as finished", () => {
 		const wrapper = getWrapper(baseTestProps);
 		const actionButtons = wrapper.findAll(".action-button");
 
-		expect(actionButtons).toHaveLength(2);
-		expect(actionButtons.wrappers[0].element.textContent).toContain("Send");
-		expect(actionButtons.wrappers[1].element.textContent).toContain("Finish");
+		expect(actionButtons).toHaveLength(1);
+		expect(actionButtons.wrappers[0].element.textContent).toContain("Finish");
 	});
 });

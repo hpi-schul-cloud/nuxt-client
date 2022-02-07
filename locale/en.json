@@ -689,6 +689,7 @@
 	"pages.room.taskCard.label.open": "Open",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.reopen": "Restore task",
+	"pages.room.taskCard.label.post": "Post",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",

@@ -694,6 +694,7 @@
 	"pages.room.taskCard.label.open": "Offen",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.reopen": "Aufgabe wiederherstellen",
+	"pages.room.taskCard.label.post": "Posten",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
