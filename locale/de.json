@@ -613,6 +613,8 @@
 	"components.molecules.VTaskItemTeacher.status": "{submitted}/{max} abgegeben, {graded} bewertet",
 	"components.molecules.VTaskItemTeacher.submitted": "Abgegeben",
 	"components.molecules.VTaskItemTeacher.graded": "Bewertet",
+	"components.molecules.TaskItemMenu.finish": "Abschließen",
+	"components.molecules.TaskItemMenu.restore": "Wiederherstellen",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.labels.noCoursesAvailable": "Es gibt keinen Kurs mit diesem Namen.",
