@@ -1,6 +1,6 @@
-import { ImportUsers } from "@store/import-users";
+import { ImportUsersModule } from "@store/import-users";
 import * as serverApi from "@/serverApi/v3/api";
-import {ImportUserResponseRoleNamesEnum} from "@/serverApi/v3/api";
+import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3/api";
 
 const mockResponse = {
 	data: {
@@ -12,14 +12,14 @@ const mockResponse = {
 };
 
 describe("import-users store actions", () => {
-	let importUsersStore: ImportUsers;
+	let importUserModule: ImportUsersModule;
 	let spy: any;
 	let mockApi: any;
 
 	beforeEach(() => {
 		spy = jest.spyOn(serverApi, "UserImportApiFactory");
 
-		importUsersStore = new ImportUsers({});
+		importUserModule = new ImportUsersModule({});
 	});
 
 	afterEach((done) => {
@@ -35,13 +35,13 @@ describe("import-users store actions", () => {
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
-			await importUsersStore.fetchAllUsers();
-			expect(importUsersStore.getUserList.data).toStrictEqual([
+			await importUserModule.fetchAllUsers();
+			expect(importUserModule.getUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getUserList.total).toEqual(3);
+			expect(importUserModule.getUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
 			).toHaveBeenCalledTimes(1);
@@ -57,20 +57,20 @@ describe("import-users store actions", () => {
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
-			importUsersStore.setUserSearch('john');
-			await importUsersStore.fetchAllUsers();
-			expect(importUsersStore.getUserList.data).toStrictEqual([
+			importUserModule.setUserSearch("john");
+			await importUserModule.fetchAllUsers();
+			expect(importUserModule.getUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getUserList.total).toEqual(3);
+			expect(importUserModule.getUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
 			).toHaveBeenCalledTimes(1);
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
-			).toHaveBeenCalledWith('john', 0, 1);
+			).toHaveBeenCalledWith("john", 0, 1);
 		});
 
 		it("should request list of unmatched users with pagination", async () => {
@@ -80,15 +80,15 @@ describe("import-users store actions", () => {
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
-			importUsersStore.setUsersSkip(10);
-			importUsersStore.setUsersLimit(5);
-			await importUsersStore.fetchAllUsers();
-			expect(importUsersStore.getUserList.data).toStrictEqual([
+			importUserModule.setUsersSkip(10);
+			importUserModule.setUsersLimit(5);
+			await importUserModule.fetchAllUsers();
+			expect(importUserModule.getUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getUserList.total).toEqual(3);
+			expect(importUserModule.getUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
 			).toHaveBeenCalledTimes(1);
@@ -97,19 +97,23 @@ describe("import-users store actions", () => {
 			).toHaveBeenCalledWith(undefined, 10, 5);
 		});
 
-		it('should handle business errors', async () => {
+		it("should handle business errors", async () => {
 			const error = { statusCode: "500", message: "foo" };
 			const mockApi = {
-				importUserControllerFindAllUnmatchedUsers: jest.fn(() => Promise.reject({ ...error })),
+				importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
 			};
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			await importUsersStore.fetchAllUsers();
+			await importUserModule.fetchAllUsers();
 
-			expect(importUsersStore.getBusinessError).toStrictEqual(error);
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
+			expect(
+				mockApi.importUserControllerFindAllUnmatchedUsers
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -121,14 +125,33 @@ describe("import-users store actions", () => {
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
-			await importUsersStore.fetchTotalUnmatched();
+			await importUserModule.fetchTotalUnmatched();
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
 			).toHaveBeenCalledWith(undefined, 0, 1);
 			expect(
 				mockApi.importUserControllerFindAllUnmatchedUsers
 			).toHaveBeenCalledTimes(1);
-			expect(importUsersStore.getTotalUnmatched).toEqual(3);
+			expect(importUserModule.getTotalUnmatched).toEqual(3);
+		});
+
+		it("should handle buness error", async () => {
+			const error = { statusCode: "500", message: "foo" };
+			const mockApi = {
+				importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
+			};
+			spy.mockReturnValue(
+				mockApi as unknown as serverApi.UserImportApiInterface
+			);
+
+			await importUserModule.fetchTotalUnmatched();
+
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
+			expect(
+				mockApi.importUserControllerFindAllUnmatchedUsers
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -141,14 +164,14 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			await importUsersStore.fetchAllImportUsers();
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getImportUserList.data).toStrictEqual([
+			expect(importUserModule.getImportUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getImportUserList.total).toEqual(3);
+			expect(importUserModule.getImportUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
@@ -177,34 +200,34 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			importUsersStore.setFirstName('john');
-			importUsersStore.setLastName('doe');
-			importUsersStore.setLoginName('johnny');
-			importUsersStore.setMatch(['admin', 'auto', 'none']);
-			importUsersStore.setFlagged(true);
-			importUsersStore.setClasses('5a');
-			importUsersStore.setRole(ImportUserResponseRoleNamesEnum.Student);
-			await importUsersStore.fetchAllImportUsers();
+			importUserModule.setFirstName("john");
+			importUserModule.setLastName("doe");
+			importUserModule.setLoginName("johnny");
+			importUserModule.setMatch(["admin", "auto", "none"]);
+			importUserModule.setFlagged(true);
+			importUserModule.setClasses("5a");
+			importUserModule.setRole(ImportUserResponseRoleNamesEnum.Student);
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getImportUserList.data).toStrictEqual([
+			expect(importUserModule.getImportUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getImportUserList.total).toEqual(3);
+			expect(importUserModule.getImportUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledWith(
-				'john',
-				'doe',
-				'johnny',
+				"john",
+				"doe",
+				"johnny",
 				["admin", "auto", "none"],
 				true,
-				'5a',
-				'student',
+				"5a",
+				"student",
 				undefined,
 				undefined,
 				0,
@@ -220,15 +243,15 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			importUsersStore.setSortBy('firstName')
-			await importUsersStore.fetchAllImportUsers();
+			importUserModule.setSortBy("firstName");
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getImportUserList.data).toStrictEqual([
+			expect(importUserModule.getImportUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getImportUserList.total).toEqual(3);
+			expect(importUserModule.getImportUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
@@ -242,8 +265,8 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				'asc',
-				'firstName',
+				"asc",
+				"firstName",
 				0,
 				25
 			);
@@ -257,16 +280,16 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			importUsersStore.setSortBy('lastName');
-			importUsersStore.setSortOrder('desc')
-			await importUsersStore.fetchAllImportUsers();
+			importUserModule.setSortBy("lastName");
+			importUserModule.setSortOrder("desc");
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getImportUserList.data).toStrictEqual([
+			expect(importUserModule.getImportUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getImportUserList.total).toEqual(3);
+			expect(importUserModule.getImportUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
@@ -280,8 +303,8 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				'desc',
-				'lastName',
+				"desc",
+				"lastName",
 				0,
 				25
 			);
@@ -295,14 +318,16 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			await importUsersStore.fetchAllImportUsers();
+			importUserModule.setSkip(7);
+			importUserModule.setLimit(11);
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getImportUserList.data).toStrictEqual([
+			expect(importUserModule.getImportUserList.data).toStrictEqual([
 				{
 					mockKey: "mock value",
 				},
 			]);
-			expect(importUsersStore.getImportUserList.total).toEqual(3);
+			expect(importUserModule.getImportUserList.total).toEqual(3);
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
@@ -318,24 +343,28 @@ describe("import-users store actions", () => {
 				undefined,
 				undefined,
 				undefined,
-				0,
-				25
+				7,
+				11
 			);
 		});
 
-		it("should handle buness error", async() => {
+		it("should handle buness error", async () => {
 			const error = { statusCode: "500", message: "foo" };
 			const mockApi = {
-				importUserControllerFindAllImportUsers: jest.fn(() => Promise.reject({ ...error })),
+				importUserControllerFindAllImportUsers: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
 			};
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			await importUsersStore.fetchAllImportUsers();
+			await importUserModule.fetchAllImportUsers();
 
-			expect(importUsersStore.getBusinessError).toStrictEqual(error);
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledTimes(1);
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
+			expect(
+				mockApi.importUserControllerFindAllImportUsers
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -348,7 +377,7 @@ describe("import-users store actions", () => {
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
-			await importUsersStore.fetchTotalMatched();
+			await importUserModule.fetchTotalMatched();
 
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
@@ -368,7 +397,26 @@ describe("import-users store actions", () => {
 			expect(
 				mockApi.importUserControllerFindAllImportUsers
 			).toHaveBeenCalledTimes(1);
-			expect(importUsersStore.getTotalMatched).toEqual(3);
+			expect(importUserModule.getTotalMatched).toEqual(3);
+		});
+
+		it("should handle buness error", async () => {
+			const error = { statusCode: "500", message: "foo" };
+			const mockApi = {
+				importUserControllerFindAllImportUsers: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
+			};
+			spy.mockReturnValue(
+				mockApi as unknown as serverApi.UserImportApiInterface
+			);
+
+			await importUserModule.fetchTotalMatched();
+
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
+			expect(
+				mockApi.importUserControllerFindAllImportUsers
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -382,14 +430,30 @@ describe("import-users store actions", () => {
 			);
 
 			const importUserId = "abc";
-			await importUsersStore.deleteMatch(importUserId);
+			await importUserModule.deleteMatch(importUserId);
 
 			expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledWith(
 				importUserId
 			);
-			expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(
-				1
+			expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(1);
+		});
+
+		it("should handle buness error", async () => {
+			const error = { statusCode: "500", message: "foo" };
+			const mockApi = {
+				importUserControllerRemoveMatch: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
+			};
+			spy.mockReturnValue(
+				mockApi as unknown as serverApi.UserImportApiInterface
 			);
+
+			const importUserId = "abc";
+			await importUserModule.deleteMatch(importUserId);
+
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
+			expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -404,19 +468,20 @@ describe("import-users store actions", () => {
 
 			const importUserId = "abc";
 			const userId = "abc";
-			await importUsersStore.saveMatch({ importUserId, userId });
+			await importUserModule.saveMatch({ importUserId, userId });
 
 			expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledWith(
-				importUserId, {userId}
+				importUserId,
+				{ userId }
 			);
-			expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(
-				1
-			);
+			expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(1);
 		});
-		it("should handle error", async() => {
+		it("should handle error", async () => {
 			const error = { statusCode: "500", message: "foo" };
 			const mockApi = {
-				importUserControllerSetMatch: jest.fn(() => Promise.reject({ ...error })),
+				importUserControllerSetMatch: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
 			};
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
@@ -424,9 +489,9 @@ describe("import-users store actions", () => {
 
 			const importUserId = "abc";
 			const userId = "abc";
-			await importUsersStore.saveMatch({ importUserId, userId });
+			await importUserModule.saveMatch({ importUserId, userId });
 
-			expect(importUsersStore.getBusinessError).toStrictEqual(error);
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
 			expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(1);
 		});
 	});
@@ -441,14 +506,13 @@ describe("import-users store actions", () => {
 			);
 
 			const importUserId = "abc";
-			await importUsersStore.saveFlag({ importUserId, flagged: true });
+			await importUserModule.saveFlag({ importUserId, flagged: true });
 
 			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(
-				importUserId, { flagged: true }
+				importUserId,
+				{ flagged: true }
 			);
-			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(
-				1
-			);
+			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 		});
 		it("should call UpdateFlag with flag=false and return importUser with flag=false", async () => {
 			mockApi = {
@@ -459,30 +523,41 @@ describe("import-users store actions", () => {
 			);
 
 			const importUserId = "abc";
-			await importUsersStore.saveFlag({ importUserId, flagged: false });
+			await importUserModule.saveFlag({ importUserId, flagged: false });
 
 			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledWith(
-				importUserId, { flagged: false }
+				importUserId,
+				{ flagged: false }
 			);
-			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(
-				1
-			);
+			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 		});
 
-		it("should handle buness error", async() => {
+		it("should handle buness error", async () => {
 			const error = { statusCode: "500", message: "foo" };
 			const mockApi = {
-				importUserControllerUpdateFlag: jest.fn(() => Promise.reject({ ...error })),
+				importUserControllerUpdateFlag: jest.fn(() =>
+					Promise.reject({ ...error })
+				),
 			};
 			spy.mockReturnValue(
 				mockApi as unknown as serverApi.UserImportApiInterface
 			);
 
 			const importUserId = "abc";
-			await importUsersStore.saveFlag({ importUserId, flagged: false });
+			await importUserModule.saveFlag({ importUserId, flagged: false });
 
-			expect(importUsersStore.getBusinessError).toStrictEqual(error);
+			expect(importUserModule.getBusinessError).toStrictEqual(error);
 			expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 		});
+	});
+});
+
+describe("getters", () => {
+	it("getUserSearch", () => {
+		const importUserModule = new ImportUsersModule({});
+		expect(importUserModule.getUserSearch).toBe(undefined);
+		const userSearch = "foo";
+		importUserModule.setUserSearch(userSearch);
+		expect(importUserModule.getUserSearch).toBe(userSearch);
 	});
 });

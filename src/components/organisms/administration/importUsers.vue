@@ -243,7 +243,7 @@
 
 <script>
 import SchoolsModule from "@/store/schools";
-import ImportUserModule from "@store/import-users";
+import ImportUsersModule from "@store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
@@ -315,6 +315,7 @@ export default Vue.extend({
 				flagged: false,
 			},
 			editedIndex: -1,
+      delay: 500,
 		};
 	},
 	computed: {
@@ -450,7 +451,7 @@ export default Vue.extend({
 			this.loading = true;
 			setTimeout(() => {
 				this.searchApi();
-			}, 500);
+			}, this.delay);
 		},
 		async savedMatch() {
 			// TODO should reset page?
@@ -458,7 +459,7 @@ export default Vue.extend({
 				this.loading = true;
 				setTimeout(() => {
 					this.searchApi();
-				}, 500);
+				}, this.delay);
 			}
 			this.closeEdit();
 		},
@@ -470,7 +471,7 @@ export default Vue.extend({
 				this.loading = true;
 				setTimeout(() => {
 					this.searchApi();
-				}, 500);
+				}, this.delay);
 			}
 			this.closeEdit();
 		},
@@ -479,7 +480,7 @@ export default Vue.extend({
 			this.loading = true;
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
-			await ImportUserModule.saveFlag({
+			await ImportUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
@@ -487,7 +488,7 @@ export default Vue.extend({
 			if (this.searchFlagged) {
 				setTimeout(() => {
 					this.searchApi();
-				}, 500);
+				}, this.delay);
 			} else {
 				this.loading = false;
 			}
@@ -499,33 +500,29 @@ export default Vue.extend({
 		async getDataFromApi() {
 			this.loading = true;
 
-			ImportUserModule.setFirstName(this.searchFirstName);
-			ImportUserModule.setLastName(this.searchLastName);
-			ImportUserModule.setLoginName(this.searchLoginName);
-			ImportUserModule.setRole(this.searchRole);
-			ImportUserModule.setClasses(this.searchClasses);
+			ImportUsersModule.setFirstName(this.searchFirstName);
+			ImportUsersModule.setLastName(this.searchLastName);
+			ImportUsersModule.setLoginName(this.searchLoginName);
+			ImportUsersModule.setRole(this.searchRole);
+			ImportUsersModule.setClasses(this.searchClasses);
+			ImportUsersModule.setMatch(this.searchMatchedBy);
+			ImportUsersModule.setFlagged(this.searchFlagged);
 
-			if (this.searchMatchedBy) {
-				ImportUserModule.setMatch(this.searchMatchedBy);
-			}
-			ImportUserModule.setFlagged(this.searchFlagged);
-
-			ImportUserModule.setLimit(this.options.itemsPerPage);
-			ImportUserModule.setSkip(
+			ImportUsersModule.setLimit(this.options.itemsPerPage);
+			ImportUsersModule.setSkip(
 				(this.options.page - 1) * this.options.itemsPerPage
 			);
 			if (this.options.sortBy) {
-				ImportUserModule.setSortBy(this.options.sortBy[0]);
-				ImportUserModule.setSortOrder(
+				ImportUsersModule.setSortBy(this.options.sortBy[0]);
+				ImportUsersModule.setSortOrder(
 					this.options.sortDesc[0] ? "desc" : "asc"
 				);
 			}
+			await ImportUsersModule.fetchAllImportUsers();
+      this.importUsers = ImportUsersModule.getImportUserList.data;
+			this.totalImportUsers = ImportUsersModule.getImportUserList.total;
 
-			ImportUserModule.fetchAllImportUsers().then(() => {
-				this.importUsers = ImportUserModule.getImportUserList.data;
-				this.totalImportUsers = ImportUserModule.getImportUserList.total;
-				this.loading = false;
-			});
+			this.loading = false;
 		},
 	},
 });

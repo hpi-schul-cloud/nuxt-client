@@ -208,7 +208,7 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 } from "@mdi/js";
-import ImportUserModule from "@store/import-users";
+import { ImportUsersModule } from "@store/import-users";
 
 export default {
 	components: {},
@@ -314,16 +314,16 @@ export default {
 		},
 		async getDataFromApi() {
 			this.loading = true;
-			ImportUserModule.setUsersLimit(this.limit);
-			ImportUserModule.setUsersSkip(this.skip);
-			if (this.searchUser !== ImportUserModule.getUserSearch) {
+			ImportUsersModule.setUsersLimit(this.limit);
+			ImportUsersModule.setUsersSkip(this.skip);
+			if (this.searchUser !== ImportUsersModule.getUserSearch) {
 				this.entries = [];
-				ImportUserModule.setUserSearch(this.searchUser);
+				ImportUsersModule.setUserSearch(this.searchUser);
 			}
-			ImportUserModule.fetchAllUsers().then(() => {
-				this.total = ImportUserModule.getUserList.total;
+			ImportUsersModule.fetchAllUsers().then(() => {
+				this.total = ImportUsersModule.getUserList.total;
 
-				this.entries = [...this.entries, ...ImportUserModule.getUserList.data];
+				this.entries = [...this.entries, ...ImportUsersModule.getUserList.data];
 				this.loading = false;
 			});
 		},
@@ -335,7 +335,7 @@ export default {
 			if (!this.selectedItem) {
 				return false;
 			}
-			await ImportUserModule.saveMatch({
+			await ImportUsersModule.saveMatch({
 				importUserId: this.editedItem.importUserId,
 				userId: this.selectedItem.userId,
 			});
@@ -346,12 +346,12 @@ export default {
 			if (!this.editedItem.match) {
 				return false;
 			}
-			await ImportUserModule.deleteMatch(this.editedItem.importUserId);
+			await ImportUsersModule.deleteMatch(this.editedItem.importUserId);
 			this.$emit("deletedMatch");
 			this.closeEdit();
 		},
 		async saveFlag() {
-			const importUser = await ImportUserModule.saveFlag({
+			const importUser = await ImportUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});

@@ -12,9 +12,10 @@ import {
 	ImportUserListResponse,
 	UserMatchListResponse,
 	ImportUserResponse,
-	ImportUserResponseRoleNamesEnum, UserImportApiInterface,
+	ImportUserResponseRoleNamesEnum,
+	UserImportApiInterface,
 } from "@/serverApi/v3";
-import {BusinessError} from "@store/types/commons";
+import { BusinessError } from "@store/types/commons";
 
 // @ts-ignore
 @Module({
@@ -24,28 +25,26 @@ import {BusinessError} from "@store/types/commons";
 	store: rootStore,
 	stateFactory: true,
 })
-
-export class ImportUsers extends VuexModule {
+export class ImportUsersModule extends VuexModule {
 	private importUserList: ImportUserListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
 		limit: 0,
 	};
-	private firstName?: string;
-	private lastName?: string;
-	private loginName?: string;
-	private role?: ImportUserResponseRoleNamesEnum;
-	private classes?: string;
-	private match?: Array<'auto' | 'admin' | 'none'>;
-	private flagged?: boolean;
-	private limit: number = 25;
-	private skip: number = 0;
-	private sortBy?: string;
-	private sortOrder: any = 'asc';
-	private totalMatched: number = 0;
-
-	private userList: UserMatchListResponse = {
+	firstName?: string;
+	lastName?: string;
+	loginName?: string;
+	role?: ImportUserResponseRoleNamesEnum;
+	classes?: string;
+	match?: Array<"auto" | "admin" | "none">;
+	flagged?: boolean;
+	limit: number = 25;
+	skip: number = 0;
+	sortBy?: string;
+	sortOrder: any = "asc";
+	totalMatched: number = 0;
+	userList: UserMatchListResponse = {
 		data: [],
 		total: 0,
 		skip: 0,
@@ -89,7 +88,7 @@ export class ImportUsers extends VuexModule {
 	}
 
 	@Mutation
-	setMatch(match: Array<'auto' | 'admin' | 'none'>): void {
+	setMatch(match: Array<"auto" | "admin" | "none">): void {
 		this.match = match;
 	}
 
@@ -111,10 +110,6 @@ export class ImportUsers extends VuexModule {
 	@Mutation
 	setSortBy(sortBy: string): void {
 		this.sortBy = sortBy;
-	}
-
-	get getSortBy() {
-		return this.sortBy;
 	}
 
 	@Mutation
@@ -139,7 +134,6 @@ export class ImportUsers extends VuexModule {
 	get getImportUserList(): ImportUserListResponse {
 		return this.importUserList;
 	}
-
 
 	@Mutation
 	setUserSearch(userSearch: string): void {
@@ -177,7 +171,6 @@ export class ImportUsers extends VuexModule {
 		return this.totalMatched;
 	}
 
-
 	@Mutation
 	setUsersLimit(limit: number): void {
 		this.usersLimit = limit;
@@ -193,9 +186,13 @@ export class ImportUsers extends VuexModule {
 	async fetchAllImportUsers(): Promise<void> {
 		try {
 			// TODO fix type
-			const sortBy = this.sortBy === 'firstName' || this.sortBy === 'lastName'  ? this.sortBy : undefined;
-			const response = await this.importUserApi
-				.importUserControllerFindAllImportUsers(
+			const sortBy =
+				this.sortBy === "firstName" || this.sortBy === "lastName"
+					? this.sortBy
+					: undefined;
+
+			const response =
+				await this.importUserApi.importUserControllerFindAllImportUsers(
 					this.firstName,
 					this.lastName,
 					this.loginName,
@@ -210,79 +207,113 @@ export class ImportUsers extends VuexModule {
 				);
 			this.setImportUsersList(response.data);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
 	async fetchAllUsers(): Promise<void> {
 		try {
-			const response = await this.importUserApi
-				.importUserControllerFindAllUnmatchedUsers(
+			const response =
+				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
 					this.userSearch,
 					this.usersSkip,
 					this.usersLimit
 				);
 			this.setUsersList(response.data);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
-	async saveFlag(payload: { importUserId: string, flagged: boolean }): Promise<ImportUserResponse | undefined> {
+	async saveFlag(payload: {
+		importUserId: string;
+		flagged: boolean;
+	}): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.importUserApi.importUserControllerUpdateFlag(payload.importUserId, { flagged: payload.flagged });
+			const response = await this.importUserApi.importUserControllerUpdateFlag(
+				payload.importUserId,
+				{ flagged: payload.flagged }
+			);
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
-	async saveMatch(payload: {importUserId: string, userId: string}): Promise<ImportUserResponse | undefined> {
+	async saveMatch(payload: {
+		importUserId: string;
+		userId: string;
+	}): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.importUserApi.importUserControllerSetMatch(payload.importUserId, { userId: payload.userId } );
+			const response = await this.importUserApi.importUserControllerSetMatch(
+				payload.importUserId,
+				{ userId: payload.userId }
+			);
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
-	async deleteMatch(importUserId: string): Promise<ImportUserResponse | undefined> {
+	async deleteMatch(
+		importUserId: string
+	): Promise<ImportUserResponse | undefined> {
 		try {
-			const response = await this.importUserApi.importUserControllerRemoveMatch(importUserId);
+			const response = await this.importUserApi.importUserControllerRemoveMatch(
+				importUserId
+			);
 			return response.data;
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
 	async fetchTotalUnmatched(): Promise<void> {
 		try {
-			const response = await this.importUserApi
-				.importUserControllerFindAllUnmatchedUsers(
+			const response =
+				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
 					undefined,
 					0,
 					1
 				);
 			this.setTotalUnmatched(response.data.total);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
 	@Action
 	async fetchTotalMatched(): Promise<void> {
 		try {
-			const response = await this.importUserApi
-				.importUserControllerFindAllImportUsers(
+			const response =
+				await this.importUserApi.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
 					undefined,
-					['admin', 'auto'],
+					["admin", "auto"],
 					undefined,
 					undefined,
 					undefined,
@@ -293,7 +324,10 @@ export class ImportUsers extends VuexModule {
 				);
 			this.setTotalMatched(response.data.total);
 		} catch (error: any) {
-			this.setBusinessError({ statusCode: `${error.statusCode}`, message: error.message });
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
 		}
 	}
 
@@ -305,4 +339,4 @@ export class ImportUsers extends VuexModule {
 	}
 }
 
-export default getModule(ImportUsers);
+export default getModule(ImportUsersModule);
