@@ -203,15 +203,10 @@ export default {
 }
 
 .chip-items-group {
-	display: grid;
-	grid-template-columns: repeat(
-		auto-fit,
-		minmax(var(--space-xl-4), var(--space-xl-5))
-	);
-	grid-gap: var(--space-md);
-	align-items: center;
 	vertical-align: middle;
 	.chip-item {
+		display: inline-block;
+		width: fit-content;
 		text-align: center;
 		border-radius: var(--radius-sm);
 		.chip-value {
