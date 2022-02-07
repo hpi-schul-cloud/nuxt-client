@@ -94,9 +94,6 @@ export default {
 			return links;
 		},
 	},
-	mounted() {
-		console.log(FilePathsModule.getSpecificFiles.termsOfUseSchool);
-	},
 };
 </script>
 
