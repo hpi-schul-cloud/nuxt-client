@@ -94,7 +94,9 @@
 								>
 									<v-icon
 										:color="
-											searchMatchedBy.includes(MatchedBy.None) ? 'primary' : 'secondary'
+											searchMatchedBy.includes(MatchedBy.None)
+												? 'primary'
+												: 'secondary'
 										"
 										>{{ mdiAccountPlus }}</v-icon
 									>
@@ -126,7 +128,9 @@
 								>
 									<v-icon
 										:color="
-											searchMatchedBy.includes(MatchedBy.Auto) ? 'primary' : 'secondary'
+											searchMatchedBy.includes(MatchedBy.Auto)
+												? 'primary'
+												: 'secondary'
 										"
 										>{{ mdiAccountSwitchOutline }}</v-icon
 									>
@@ -267,7 +271,7 @@ export default Vue.extend({
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencil,
-      MatchedBy,
+			MatchedBy,
 			loading: false,
 			roles: [
 				{
