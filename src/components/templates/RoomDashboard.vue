@@ -9,7 +9,7 @@
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
-								itemType: item.type,
+								itemType: $t('pages.room.taskCard.label.task'),
 								itemName: item.content.name,
 							})
 						"

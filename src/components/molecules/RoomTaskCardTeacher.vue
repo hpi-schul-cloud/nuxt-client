@@ -21,7 +21,11 @@
 			</div>
 			<div class="text-h4 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
-			<div class="text--primary mt-1" v-html="task.description"></div>
+			<div
+				class="text--primary mt-1"
+				tabindex="0"
+				v-html="task.description"
+			></div>
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
@@ -113,8 +117,6 @@ export default {
 			return this.task.status.isFinished;
 		},
 		cardActions() {
-			// TODO: add i18i files
-			// TODO: actions must be controled by UX
 			if (this.isDraft && !this.isFinished) {
 				return [
 					{
@@ -177,8 +179,6 @@ export default {
 		text-align: left;
 	}
 	.title-section {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		// color: #0091ea;
 		color: var(--color-primary);
 		text-align: left;
 	}
@@ -207,8 +207,6 @@ export default {
 	}
 }
 .action-button {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	// color: #0091ea;
 	color: var(--color-primary);
 }
 

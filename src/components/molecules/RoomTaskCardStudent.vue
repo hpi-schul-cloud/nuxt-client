@@ -11,7 +11,7 @@
 				<div class="icon-section">
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
 				</div>
-				<div class="title-section" :style="`color: ${titleColor}`">
+				<div class="title-section" :style="`color: ${titleColor}`" tabindex="0">
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -195,8 +195,6 @@ export default {
 		text-align: left;
 	}
 	.title-section {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		color: #0091ea;
 		text-align: left;
 	}
 	.dot-menu-section {
