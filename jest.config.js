@@ -35,7 +35,6 @@ module.exports = {
 		"<rootDir>/src/store/**/*.(js|ts)",
 		"<rootDir>/src/utils/**/*.js",
 		// Exclude
-		"!<rootDir>/src/components/**/*.stories.js",
 		"!<rootDir>/src/components/base/_globals.js",
 		"!<rootDir>/src/serverMiddleware/routes.js",
 	],

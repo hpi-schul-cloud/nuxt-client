@@ -20,5 +20,3 @@ export default = {
 	}
 }
 ```
-
-Welche designs zu verfügung stehen, können im Storybook nachgeschlagen werden und sollten dort auch bei jedem neu hinzugekommenen design eingepflegt werden.

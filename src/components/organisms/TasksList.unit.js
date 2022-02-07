@@ -1,5 +1,5 @@
 import TasksList from "./TasksList";
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import TaskModule from "@/store/tasks";
 import FinishedTaskModule from "@/store/finished-tasks";

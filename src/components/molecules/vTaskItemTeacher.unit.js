@@ -1,4 +1,4 @@
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import vTaskItemTeacher from "./vTaskItemTeacher";
 
 const {

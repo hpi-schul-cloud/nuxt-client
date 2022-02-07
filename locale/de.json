@@ -688,7 +688,6 @@
 	"pages.rooms.importCourse.btn.confirm": "Importieren",
 	"pages.rooms.importCourse.error": "Der Kurs-Code wird nicht verwendet.",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
-	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
