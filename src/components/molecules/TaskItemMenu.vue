@@ -38,7 +38,7 @@
 				@click.stop.prevent="handleFinish"
 			>
 				<v-list-item-title>
-					<template v-if="task.status.isFinished">
+					<template v-if="taskIsFinished">
 						<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
 						{{ $t("components.molecules.TaskItemMenu.restore") }}
 					</template>
@@ -57,21 +57,16 @@ import { mdiDotsVertical, mdiPencilOutline, mdiUndo } from "@mdi/js";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 
-// TODO - different requiredKeys for finished and other tasks?
-const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
-const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
-
 export default {
 	components: {},
 	props: {
-		task: {
-			type: Object,
+		taskId: {
+			type: String,
 			required: true,
-			validator: (task) => {
-				return task.status.isFinished
-					? finishedTaskRequiredKeys.every((key) => key in task)
-					: taskRequiredKeys.every((key) => key in task);
-			},
+		},
+		taskIsFinished: {
+			type: Boolean,
+			required: true,
 		},
 		show: {
 			type: Boolean,
@@ -92,7 +87,7 @@ export default {
 	},
 	computed: {
 		editLink() {
-			return `/homework/${this.task.id}/edit`;
+			return `/homework/${this.taskId}/edit`;
 		},
 		isTeacher() {
 			return this.userRole === "teacher";
@@ -106,10 +101,10 @@ export default {
 			this.$emit("focus-changed", value);
 		},
 		handleFinish() {
-			if (this.task.status.isFinished) {
-				FinishedTaskModule.restoreTask(this.task.id);
+			if (this.taskIsFinished) {
+				FinishedTaskModule.restoreTask(this.taskId);
 			} else {
-				TaskModule.finishTask(this.task.id);
+				TaskModule.finishTask(this.taskId);
 			}
 		},
 	},

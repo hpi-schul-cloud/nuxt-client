@@ -41,7 +41,8 @@
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
 				<task-item-menu
 					:show="showMenu"
-					:task="task"
+					:task-id="task.id"
+					:task-is-finished="task.status.isFinished"
 					user-role="student"
 					@toggled-menu="toggleMenu"
 					@focus-changed="handleFocus"

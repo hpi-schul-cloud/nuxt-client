@@ -43,7 +43,7 @@
 					</i18n>
 				</v-list-item-subtitle>
 			</v-list-item-content>
-			<section v-if="showTaskStatus" id="task-status" class="mr-8">
+			<section v-if="showTaskStatus" data-testid="task-status" class="mr-8">
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.VTaskItemTeacher.submitted")
@@ -66,7 +66,8 @@
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
 				<task-item-menu
 					:show="showMenu"
-					:task="task"
+					:task-id="task.id"
+					:task-is-finished="task.status.isFinished"
 					user-role="teacher"
 					@toggled-menu="toggleMenu"
 					@focus-changed="handleFocus"
@@ -81,8 +82,8 @@ import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
 import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 // TODO - different requiredKeys for finished and other tasks?
-// const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
-const taskRequiredKeys = ["createdAt", "id", "name"];
+const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
+const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: { TaskItemMenu },
@@ -90,7 +91,11 @@ export default {
 		task: {
 			type: Object,
 			required: true,
-			validator: (task) => taskRequiredKeys.every((key) => key in task),
+			validator: (task) => {
+				return task.status.isFinished
+					? finishedTaskRequiredKeys.every((key) => key in task)
+					: taskRequiredKeys.every((key) => key in task);
+			},
 		},
 	},
 	data() {
