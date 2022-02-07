@@ -680,6 +680,7 @@
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.btn.confirm": "Import",
 	"pages.rooms.importCourse.error": "The course code is not in use.",
+	"pages.room.lessonCard.label.post": "Post",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",

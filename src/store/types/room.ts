@@ -1,3 +1,12 @@
+export type Lesson = {
+	id: string;
+	name: string;
+	courseName?: string;
+	createdAt: string;
+	updatedAt: string;
+	hidden: boolean;
+};
+
 export type Task = {
 	id: string;
 	name: string;
@@ -24,7 +33,7 @@ export type RoomData = {
 	elements: [
 		{
 			type: string;
-			content: Task | {};
+			content: Task | Lesson | {};
 		}
 	];
 };

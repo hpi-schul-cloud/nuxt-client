@@ -685,6 +685,7 @@
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.btn.confirm": "Importieren",
 	"pages.rooms.importCourse.error": "Der Kurs-Code wird nicht verwendet.",
+	"pages.room.lessonCard.label.post": "Posten",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",

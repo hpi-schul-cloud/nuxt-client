@@ -687,6 +687,7 @@
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.btn.confirm": "Importar",
 	"pages.rooms.importCourse.error": "El código del curso no está en uso.",
+	"pages.room.lessonCard.label.post": "Publicar",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",
