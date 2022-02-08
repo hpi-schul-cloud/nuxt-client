@@ -607,6 +607,8 @@
 	"components.molecules.VTaskItemTeacher.status": "{submitted}/{max} submitted, {graded} graded",
 	"components.molecules.VTaskItemTeacher.submitted": "Submitted",
 	"components.molecules.VTaskItemTeacher.graded": "Graded",
+	"components.molecules.TaskItemMenu.finish": "Finish",
+	"components.molecules.TaskItemMenu.restore": "Restore",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",

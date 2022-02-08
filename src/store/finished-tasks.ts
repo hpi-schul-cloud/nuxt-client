@@ -5,6 +5,7 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
+import TasksModule from "@/store/tasks";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
@@ -22,7 +23,7 @@ export class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
-		limit: 50,
+		limit: 10,
 		skip: 0,
 		total: 0,
 	};
@@ -39,40 +40,13 @@ export class FinishedTaskModule extends VuexModule {
 	_taskApi?: TaskApiInterface;
 
 	@Action
-	async fetchInitialTasks(): Promise<void> {
-		this.resetBusinessError();
-		this.setStatus("pending");
-		try {
-			const { skip, limit } = this.pagination;
-
-			const response = await this.taskApi.taskControllerFindAllFinished(
-				skip,
-				limit
-			);
-
-			this.setTasks(response.data.data);
-
-			this.setPagination({
-				limit,
-				skip: limit,
-				total: response.data.total,
-			});
-			this.setStatus("completed");
-			this.setInitialized(true);
-		} catch (error) {
-			this.setBusinessError(error as BusinessError);
-			this.setStatus("error");
-		}
-	}
-
-	@Action
-	async fetchMoreTasks(): Promise<void> {
+	async fetchFinishedTasks(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
 			const { skip, limit, total } = this.pagination;
 
-			if (total <= skip) {
+			if (total <= skip && this.isInitialized) {
 				this.setStatus("completed");
 				return;
 			}
@@ -83,13 +57,65 @@ export class FinishedTaskModule extends VuexModule {
 			);
 
 			await new Promise((resolve) => setTimeout(resolve, 300));
-
 			this.setTasks(this.tasks.concat(response.data.data));
+
+			if (!this.isInitialized) {
+				this.setInitialized(true);
+			}
+
 			this.setPagination({
 				limit,
 				skip: skip + limit,
 				total: response.data.total,
 			});
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async refetchTasks(): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			const { limit } = this.pagination;
+
+			const oldSkipValue = this.pagination.skip;
+			let skip = 0;
+			const tasks: Task[] = [];
+
+			do {
+				const response = await this.taskApi.taskControllerFindAllFinished(
+					skip,
+					limit
+				);
+				tasks.push(...response.data.data);
+
+				skip += limit;
+			} while (skip <= oldSkipValue);
+
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			this.setTasks(tasks);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async restoreTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			await this.taskApi.taskControllerRestore(taskId);
+
+			await this.refetchTasks();
+			await TasksModule.fetchAllTasks();
 
 			this.setStatus("completed");
 		} catch (error) {

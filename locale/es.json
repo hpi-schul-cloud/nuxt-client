@@ -637,6 +637,8 @@
 	"components.molecules.VTaskItemTeacher.status": "{submitted}/{max} entregado, {graded} calificado",
 	"components.molecules.VTaskItemTeacher.submitted": "Entregado",
 	"components.molecules.VTaskItemTeacher.graded": "Calificado",
+	"components.molecules.TaskItemMenu.finish": "Terminar",
+	"components.molecules.TaskItemMenu.restore": "Restaurar",
 	"pages.impressum.title": "Impresión",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "¿En qué provincia le gustaría iniciar sesión?",

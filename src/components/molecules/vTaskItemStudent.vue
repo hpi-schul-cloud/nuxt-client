@@ -1,59 +1,83 @@
 <template>
-	<v-list-item
-		:key="task.id"
-		:href="href"
-		class="mx-n4 mx-sm-0"
-		v-bind="$attrs"
-		:aria-label="`${$t('common.words.task')} ${task.name}`"
-		role="article"
-	>
-		<v-list-item-avatar>
-			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-		</v-list-item-avatar>
-		<v-list-item-content>
-			<v-list-item-subtitle data-testid="taskSubtitle">
-				{{ task.courseName }}
-			</v-list-item-subtitle>
-			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
-			<v-list-item-subtitle>
-				{{ topic }}
-			</v-list-item-subtitle>
-		</v-list-item-content>
-		<v-list-item-action>
-			<v-list-item-action-text
-				class="subtitle-2"
-				data-test-id="dueDateLabel"
-				v-text="dueDateLabel"
-			/>
-			<v-spacer />
-			<v-custom-chip-time-remaining
-				v-if="taskState === 'warning'"
-				:type="taskState"
-				:due-date="task.duedate"
-				:shorten-date="$vuetify.breakpoint.xsOnly"
-			/>
-		</v-list-item-action>
-	</v-list-item>
+	<v-hover v-model="isHovering" :disabled="isMenuActive">
+		<v-list-item
+			:key="task.id"
+			v-click-outside="() => handleFocus(false)"
+			:href="href"
+			class="mx-n4 mx-sm-0"
+			v-bind="$attrs"
+			:ripple="false"
+			:aria-label="`${$t('common.words.task')} ${task.name}`"
+			role="article"
+			@focus="handleFocus(true)"
+			@keydown.tab.shift="handleFocus(false)"
+		>
+			<v-list-item-avatar>
+				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+			</v-list-item-avatar>
+			<v-list-item-content>
+				<v-list-item-subtitle data-testid="taskSubtitle">
+					{{ task.courseName }}
+				</v-list-item-subtitle>
+				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+				<v-list-item-subtitle>
+					{{ topic }}
+				</v-list-item-subtitle>
+			</v-list-item-content>
+			<v-list-item-action>
+				<v-list-item-action-text
+					class="subtitle-2"
+					data-test-id="dueDateLabel"
+					v-text="dueDateLabel"
+				/>
+				<v-spacer />
+				<v-custom-chip-time-remaining
+					v-if="taskState === 'warning'"
+					:type="taskState"
+					:due-date="task.duedate"
+					:shorten-date="$vuetify.breakpoint.xsOnly"
+				/>
+			</v-list-item-action>
+			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
+				<task-item-menu
+					:show="showMenu"
+					:task-id="task.id"
+					:task-is-finished="task.status.isFinished"
+					user-role="student"
+					@toggled-menu="toggleMenu"
+					@focus-changed="handleFocus"
+				/>
+			</v-list-item-action>
+		</v-list-item>
+	</v-hover>
 </template>
 
 <script>
 import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
-import { fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
+	fromNowToFuture,
 } from "@plugins/datetime";
+import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining },
+	components: { VCustomChipTimeRemaining, TaskItemMenu },
 	props: {
 		task: {
 			type: Object,
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
+	},
+	data() {
+		return {
+			isMenuActive: false,
+			isHovering: false,
+			isActive: false,
+		};
 	},
 	computed: {
 		href() {
@@ -113,6 +137,23 @@ export default {
 				? this.$t("pages.tasks.labels.noDueDate")
 				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
+		showMenu() {
+			return (
+				this.$vuetify.breakpoint.mobile ||
+				this.isHovering ||
+				this.isActive ||
+				this.isMenuActive
+			);
+		},
+	},
+	methods: {
+		toggleMenu(stateValue) {
+			this.isMenuActive = stateValue;
+			this.isHovering = stateValue;
+		},
+		handleFocus(value) {
+			this.isActive = value;
+		},
 	},
 };
 </script>
@@ -120,5 +161,10 @@ export default {
 <style lang="scss" scoped>
 .fill {
 	fill: currentColor;
+}
+
+// stylelint-disable sh-waqar/declaration-use-variable
+.context-menu-btn {
+	min-width: 45px;
 }
 </style>

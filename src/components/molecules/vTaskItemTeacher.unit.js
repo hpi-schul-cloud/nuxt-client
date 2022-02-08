@@ -1,7 +1,13 @@
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import vTaskItemTeacher from "./vTaskItemTeacher";
 
-const { tasksTeacher, drafts } = mocks;
+const {
+	tasksTeacher,
+	drafts,
+	plannedTask,
+	dueDateTasksTeacher,
+	noDueDateTasksTeacher,
+} = mocks;
 
 const defineWindowWidth = (width) => {
 	Object.defineProperty(window, "innerWidth", {
@@ -38,55 +44,182 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		});
 	});
 
-	it("Should call taskHref() and return link by click on v-list-item", async () => {
-		const mockMethod = jest.spyOn(vTaskItemTeacher.computed, "href");
+	it("should compute correct href value", () => {
 		const wrapper = getWrapper({
 			task: tasksTeacher[0],
 		});
 
-		await wrapper.trigger("click");
-		expect(mockMethod).toHaveReturnedWith(`/homework/${tasksTeacher[0].id}`);
-		expect(wrapper.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}`);
+		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
+		expect(wrapper.attributes("href")).toStrictEqual(
+			`/homework/${tasksTeacher[0].id}`
+		);
 	});
 
-	describe("course name", () => {
-		it("Should render subtitle with course name and no due date for tasks without due date", () => {
-			const wrapper = getWrapper({
-				task: tasksTeacher[7],
+	describe("when task is a draft task", () => {
+		describe("when task has no course", () => {
+			it("should set course name to 'no course assigned'", () => {
+				const wrapper = getWrapper({
+					task: drafts[2],
+				});
+
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+
+				expect(taskLabel.exists()).toBe(true);
+				expect(taskLabel.text()).toMatch(/Ohne Kurszuordnung/i);
+				expect(wrapper.vm.courseName).toStrictEqual("Ohne Kurszuordnung");
 			});
 
-			expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+			describe("when teacher is a subtitution teacher", () => {
+				const wrapper = getWrapper({
+					task: drafts[1],
+				});
+
+				it("should add 'substitution' to the course label", () => {
+					const taskLabel = wrapper.find("[data-testid='task-label']");
+
+					expect(taskLabel.exists()).toBe(true);
+					expect(taskLabel.text()).toMatch(/Vertretung Ohne Kurszuordnung/i);
+					expect(wrapper.vm.courseName).toStrictEqual(
+						"Vertretung Ohne Kurszuordnung"
+					);
+				});
+			});
 		});
 
-		it("Should render subtitle with no course name", () => {
-			const wrapper = getWrapper({
-				task: drafts[1],
-			});
-
-			expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+		const wrapper = getWrapper({
+			task: drafts[0],
 		});
 
-		it("Should render subtitle with course name and due date", () => {
-			const wrapper = getWrapper({
-				task: tasksTeacher[0],
-			});
+		it("should set isDraft to true", () => {
+			expect(wrapper.vm.isDraft).toBe(true);
+		});
 
-			expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+		it("should compute correct avatar icon value", () => {
+			expect(wrapper.vm.avatarIcon).toStrictEqual("$taskDraft");
+		});
+
+		it("should not show task status", () => {
+			expect(wrapper.find("[data-testid='task-status']").exists()).toBe(false);
+			expect(wrapper.vm.showTaskStatus).toBe(false);
 		});
 	});
 
-	describe("topic", () => {
-		it("should display topic", () => {
+	describe("when task is not a draft task", () => {
+		it("should set course name correctly", () => {
 			const wrapper = getWrapper({
-				task: drafts[1],
+				task: dueDateTasksTeacher[1],
 			});
 
-			expect(wrapper.text()).toStrictEqual(
-				expect.not.stringContaining("Thema ")
-			);
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.exists()).toBe(true);
+			expect(taskLabel.text()).toMatch(/Mathe/i);
+			expect(wrapper.vm.courseName).toStrictEqual("Mathe");
 		});
 
-		it.todo("missing complete coverage for coursename and topic");
+		describe("when teacher is a subtitution teacher", () => {
+			const wrapper = getWrapper({
+				task: dueDateTasksTeacher[0],
+			});
+
+			it("should add 'substitution' to the course label", () => {
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+
+				expect(taskLabel.exists()).toBe(true);
+				expect(taskLabel.text()).toMatch(/Vertretung Mathe/i);
+				expect(wrapper.vm.courseName).toStrictEqual("Vertretung Mathe");
+			});
+		});
+
+		const wrapper = getWrapper({
+			task: tasksTeacher[0],
+		});
+
+		it("should set isDraft to true", () => {
+			expect(wrapper.vm.isDraft).toBe(false);
+		});
+
+		it("should compute correct avatar icon value", () => {
+			expect(wrapper.vm.avatarIcon).toStrictEqual("$taskOpenFilled");
+		});
+	});
+
+	describe("when a task is planned", () => {
+		const wrapper = getWrapper({
+			task: plannedTask,
+		});
+
+		it("should set isPlanned to true", () => {
+			expect(wrapper.vm.isPlanned).toBe(true);
+		});
+
+		it("should not show task status", () => {
+			expect(wrapper.find("[data-testid='task-status']").exists()).toBe(false);
+			expect(wrapper.vm.showTaskStatus).toBe(false);
+		});
+
+		it("should show planned label", () => {
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.exists()).toBe(true);
+			expect(taskLabel.text()).toMatch(/Geplant 28.09.00/i);
+			expect(wrapper.vm.plannedLabel).toStrictEqual(`Geplant 28.09.00`);
+		});
+	});
+
+	describe("when a task is without due date", () => {
+		const wrapper = getWrapper({
+			task: noDueDateTasksTeacher[0],
+		});
+
+		it("should show correct due date label", () => {
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.exists()).toBe(true);
+			expect(taskLabel.text()).toMatch(/Kein Abgabedatum/i);
+			expect(wrapper.vm.dueDateLabel).toStrictEqual(`Kein Abgabedatum`);
+		});
+	});
+
+	describe("when a task has a due date", () => {
+		const wrapper = getWrapper({
+			task: dueDateTasksTeacher[0],
+		});
+
+		it("should show correct due date label", () => {
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.exists()).toBe(true);
+			expect(taskLabel.text()).toMatch(/Abgabe 11.06.00/i);
+			expect(wrapper.vm.dueDateLabel).toStrictEqual(`Abgabe 11.06.00`);
+		});
+	});
+
+	describe("when a task has a topic", () => {
+		const wrapper = getWrapper({
+			task: dueDateTasksTeacher[0],
+		});
+
+		it("should show correct topic label", () => {
+			const topicLabel = wrapper.find("[data-testid='task-topic']");
+
+			expect(topicLabel.exists()).toBe(true);
+			expect(topicLabel.text()).toMatch(/Thema Malen nach Zahlen/i);
+			expect(wrapper.vm.topic).toStrictEqual(`Thema Malen nach Zahlen`);
+		});
+	});
+
+	describe("when a task has no topic", () => {
+		const wrapper = getWrapper({
+			task: dueDateTasksTeacher[1],
+		});
+
+		it("should show correct topic label", () => {
+			const topicLabel = wrapper.find("[data-testid='task-topic']");
+
+			expect(topicLabel.exists()).toBe(false);
+			expect(wrapper.vm.topic).toStrictEqual("");
+		});
 	});
 
 	describe("when menu is used", () => {
@@ -142,7 +275,7 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 
 			const menuBtn = wrapper.find(".v-btn");
 			await menuBtn.trigger("click");
-			const editBtn = wrapper.find(".task-action");
+			const editBtn = wrapper.find("#task-action-edit");
 
 			expect(editBtn.attributes("href")).toBe(
 				`/homework/${tasksTeacher[0].id}/edit`
