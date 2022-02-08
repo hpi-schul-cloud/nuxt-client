@@ -3,7 +3,7 @@
 		class="mx-auto mb-4 lesson-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
-		:href="lessonHref(lesson.id)"
+		:href="lessonHref(lesson.id, room.roomId)"
 		tabindex="0"
 	>
 		<v-card-text>
@@ -21,6 +21,7 @@
 				:key="index"
 				class="action-button"
 				text
+				:color="defaultColor"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -31,8 +32,8 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import { mdiDotsVertical } from "@mdi/js";
-import RoomModule from "@store/room";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
+const roomRequiredKeys = ["roomId", "displayColor"];
 export default {
 	components: {},
 	props: {
@@ -40,6 +41,11 @@ export default {
 			type: Object,
 			required: true,
 			validator: (lesson) => lessonRequiredKeys.every((key) => key in lesson),
+		},
+		room: {
+			type: Object,
+			required: true,
+			validator: (room) => roomRequiredKeys.every((key) => key in room),
 		},
 		ariaLabel: {
 			type: String,
@@ -55,11 +61,8 @@ export default {
 		};
 	},
 	computed: {
-		roomData() {
-			return RoomModule.getRoomData;
-		},
-		defaultColor() {
-			return roomData.displayColor || this.defaultTitleColor;
+		defaultColor(room) {
+			return room.displayColor || this.defaultTitleColor;
 		},
 		cardActions() {
 			// TODO: add i18i files
@@ -68,8 +71,8 @@ export default {
 		},
 	},
 	methods: {
-		lessonHref: (id) => {
-			return `/courses/${roomData.roomId}/topics/${id}`;
+		lessonHref: (id, roomId) => {
+			return `/courses/${roomId}/topics/${id}`;
 		},
 	},
 };
@@ -93,10 +96,4 @@ export default {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	color: var(--color-primary);
 }
-
-/* @media #{map-get($display-breakpoints, 'xs-only')} {
-	.title-section {
-		padding-left: var(--text-sm);
-	}
-} */
 </style>
