@@ -86,6 +86,7 @@
 							v-html="
 								$t('pages.administration.migration.tutorial', {
 									instance: this.$theme.short_name,
+									source: $t('pages.administration.migration.ldapSource'),
 								})
 							"
 						></v-card>

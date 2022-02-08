@@ -42,7 +42,7 @@
 				</template>
 				<template v-slot:body.prepend>
 					<tr class="head">
-						<td>
+						<td class="col-2">
 							<v-text-field
 								v-model="searchFirstName"
 								type="string"
@@ -50,7 +50,7 @@
 								clearable
 							></v-text-field>
 						</td>
-						<td>
+						<td class="col-2">
 							<v-text-field
 								v-model="searchLastName"
 								type="string"
@@ -82,7 +82,7 @@
 								clearable
 							></v-text-field>
 						</td>
-						<td>
+						<td class="col-2">
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
 								<v-btn
 									icon
@@ -156,7 +156,7 @@
 				</template>
 
 				<template v-slot:item.match="{ item }">
-					<div class="text-no-wrap">
+					<div class="text-no-wrap md">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
 							item.match
