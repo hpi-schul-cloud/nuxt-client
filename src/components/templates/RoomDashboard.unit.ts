@@ -41,7 +41,7 @@ const mockData = {
 					submitted: 0,
 					maxSubmissions: 2,
 					graded: 0,
-					isDraft: true,
+					isDraft: false,
 					isSubstitutionTeacher: false,
 					isFinished: false,
 				},
@@ -49,6 +49,28 @@ const mockData = {
 				duedate: "2300-06-28T13:00:00.000Z",
 				displayColor: "#54616e",
 				description: "",
+			},
+		},
+		{
+			type: "lesson",
+			content: {
+				id: "59cce4c3c6abf042248e888f",
+				name: "Test Name",
+				courseName: "Mathe",
+				createdAt: "2017-09-28T11:58:46.601Z",
+				updatedAt: "2017-09-28T11:58:46.601Z",
+				hidden: false,
+			},
+		},
+		{
+			type: "lesson",
+			content: {
+				id: "59cce4c3c6abf042248e888g",
+				name: "Test Name2",
+				courseName: "Mathe",
+				createdAt: "2017-09-28T11:58:46.601Z",
+				updatedAt: "2017-09-28T11:58:46.601Z",
+				hidden: false,
 			},
 		},
 	],
@@ -80,7 +102,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		const listItemsTeacher = wrapper.findAll(".card-teacher");
 		const listItemsStudent = wrapper.findAll(".card-student");
-		expect(listItemsTeacher).toHaveLength(2);
+		expect(listItemsTeacher).toHaveLength(4);
 		expect(listItemsStudent).toHaveLength(0);
 	});
 
@@ -89,7 +111,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		const listItemsStudent = wrapper.findAll(".card-student");
 		const listItemsTeacher = wrapper.findAll(".card-teacher");
-		expect(listItemsStudent).toHaveLength(2);
+		expect(listItemsStudent).toHaveLength(4);
 		expect(listItemsTeacher).toHaveLength(0);
 	});
 });
