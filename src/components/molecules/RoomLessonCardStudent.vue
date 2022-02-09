@@ -28,10 +28,8 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
 import { mdiDotsVertical } from "@mdi/js";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
-const roomRequiredKeys = ["roomId", "displayColor"];
 export default {
 	components: {},
 	props: {
@@ -43,7 +41,6 @@ export default {
 		room: {
 			type: Object,
 			required: true,
-			validator: (room) => roomRequiredKeys.every((key) => key in room),
 		},
 		ariaLabel: {
 			type: String,
@@ -52,7 +49,6 @@ export default {
 	},
 	data() {
 		return {
-			fromNow,
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
 			mdiDotsVertical: mdiDotsVertical,
 			defaultTitleColor: "#54616e",

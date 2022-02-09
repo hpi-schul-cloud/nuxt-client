@@ -18,7 +18,7 @@
 					<room-lesson-card-teacher
 						v-if="item.type === 'lesson'"
 						:lesson="item.content"
-						:room="roomData"
+						:room="lessonData"
 						:aria-label="
 							$t('pages.room.lessonCard.aria', {
 								itemType: $t('pages.room.lessonCard.label.lesson'),
@@ -45,7 +45,7 @@
 					<room-lesson-card-student
 						v-if="item.type === 'lesson'"
 						:lesson="item.content"
-						:room="roomData"
+						:room="lessonData"
 						:aria-label="
 							$t('pages.room.lessonCard.aria', {
 								itemType: $t('pages.room.lessonCard.label.lesson'),
@@ -83,6 +83,14 @@ export default {
 	},
 	data() {
 		return {};
+	},
+	computed: {
+		lessonData() {
+			return {
+				roomId: this.roomData.roomId,
+				displayColor: this.roomData.displayColor,
+			};
+		},
 	},
 };
 </script>
