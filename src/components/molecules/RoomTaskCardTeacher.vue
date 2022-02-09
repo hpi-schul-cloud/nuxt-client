@@ -8,10 +8,13 @@
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<div class="icon-section">
+				<!-- <div class="icon-section">
 					<v-icon>{{ mdiFormatListChecks }}</v-icon>
-				</div>
+				</div> -->
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
+					<v-icon size="20" :color="task.displayColor" dark>{{
+						mdiFormatListChecks
+					}}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -19,10 +22,10 @@
 					<v-icon>{{ mdiDotsVertical }}</v-icon>
 				</div>
 			</div>
-			<div class="text-h4 text--primary">{{ task.name }}</div>
+			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
-				class="text--primary mt-1"
+				class="text--primary mt-1 text-description"
 				tabindex="0"
 				v-html="task.description"
 			></div>
@@ -176,7 +179,7 @@ export default {
 
 .top-row-container {
 	display: grid;
-	grid-template-columns: 5% 90% 5%;
+	grid-template-columns: 95% 5%;
 	align-items: center;
 	.icon-section {
 		overflow: none;
@@ -191,6 +194,10 @@ export default {
 	}
 }
 
+.text-description {
+	font-size: var(--text-md);
+}
+
 .chip-items-group {
 	vertical-align: middle;
 	.chip-item {
@@ -199,7 +206,7 @@ export default {
 		text-align: center;
 		border-radius: var(--radius-sm);
 		.chip-value {
-			font-size: var(--text-sm);
+			font-size: var(--text-md);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}
