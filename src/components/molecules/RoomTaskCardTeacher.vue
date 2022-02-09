@@ -8,9 +8,6 @@
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<!-- <div class="icon-section">
-					<v-icon>{{ mdiFormatListChecks }}</v-icon>
-				</div> -->
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					<v-icon size="20" :color="task.displayColor" dark>{{
 						mdiFormatListChecks
@@ -56,7 +53,7 @@
 					tabindex="0"
 				>
 					<div class="chip-value">
-						{{ $t("pages.room.taskCard.label.overdue") }}
+						{{ $t("pages.room.taskCard.teacher.label.overdue") }}
 					</div>
 				</div>
 			</div>
@@ -193,11 +190,9 @@ export default {
 		text-align: right;
 	}
 }
-
 .text-description {
 	font-size: var(--text-md);
 }
-
 .chip-items-group {
 	vertical-align: middle;
 	.chip-item {
@@ -206,7 +201,7 @@ export default {
 		text-align: center;
 		border-radius: var(--radius-sm);
 		.chip-value {
-			font-size: var(--text-md);
+			font-size: var(--text-sm);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}
@@ -214,11 +209,5 @@ export default {
 }
 .action-button {
 	color: var(--color-primary);
-}
-
-@media #{map-get($display-breakpoints, 'xs-only')} {
-	.title-section {
-		padding-left: var(--text-sm);
-	}
 }
 </style>
