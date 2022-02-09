@@ -8,10 +8,8 @@
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<div class="text-h4 title-section">{{ lesson.name }}</div>
-				<div class="dot-menu-section hidden">
-					<!-- Action menu to be determined with UXers-->
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
+				<div class="text-h4 title-section text--primary" tabindex="0">
+					{{ lesson.name }}
 				</div>
 			</div>
 		</v-card-text>
