@@ -5,6 +5,7 @@
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"
 		tabindex="0"
+		outlined
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -29,7 +30,7 @@
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
+				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
@@ -38,7 +39,7 @@
 						}}
 					</div>
 				</div>
-				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
+				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
@@ -49,7 +50,7 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-1"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -209,5 +210,17 @@ export default {
 }
 .action-button {
 	color: var(--color-primary);
+}
+
+.v-card {
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+
+	&:hover {
+		box-shadow: var(--shadow-m);
+	}
+}
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
 }
 </style>

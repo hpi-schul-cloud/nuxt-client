@@ -5,6 +5,7 @@
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"
 		tabindex="0"
+		outlined
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -223,5 +224,17 @@ export default {
 }
 .action-button {
 	color: var(--color-primary);
+}
+
+.v-card {
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+
+	&:hover {
+		box-shadow: var(--shadow-m);
+	}
+}
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
 }
 </style>
