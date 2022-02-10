@@ -21,7 +21,7 @@
 				@click.prevent="item.action"
 			>
 				<v-list-item-title>
-					<v-icon class="task-action-icon">
+					<v-icon class="task-action-icon mr-1">
 						{{ item.icon }}
 					</v-icon>
 					{{ item.name }}
@@ -55,17 +55,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// stylelint-disable sh-waqar/declaration-use-variable
+$color: rgba(0, 0, 0, 0.87);
 .task-action {
-	min-height: 25px;
+	min-height: var(--space-lg);
 }
 
 .task-action-icon {
-	width: 1rem;
-	height: 1rem;
-	margin-top: -2px;
-	margin-right: 4px;
-	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
+	width: var(--space-md);
+	height: var(--space-md);
+	margin-top: calc(-0.5 + var(--space-base-vuetify));
+	font-size: var(--space-md);
+	color: $color;
 }
 </style>
