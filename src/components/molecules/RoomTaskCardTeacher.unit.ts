@@ -108,4 +108,19 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			"Abschließen"
 		);
 	});
+
+	it("'more action' button should trigger the 'redirectAction' method", async () => {
+		const redirectAction = jest.fn();
+		const wrapper = getWrapper(testProps);
+		wrapper.vm.redirectAction = redirectAction;
+
+		const threeDotButton = wrapper.find(".three-dot-button");
+		await threeDotButton.trigger("click");
+
+		const moreActionButton = wrapper.find(".task-action");
+		await moreActionButton.trigger("click");
+
+		expect(redirectAction).toHaveBeenCalled();
+		expect(redirectAction.mock.calls[0][0]).toStrictEqual("/homework/123/edit");
+	});
 });
