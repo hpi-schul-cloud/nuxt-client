@@ -39,7 +39,7 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
 				const roomModule = new Room({});
-				await roomModule.fetchTasks("123");
+				await roomModule.fetchContent("123");
 
 				expect(roomModule.getLoading).toBe(false);
 				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
