@@ -1,5 +1,5 @@
 import LernstoreDetailView from "./LernstoreDetailView";
-import { Resource } from "@@/stories/mockData/Resource";
+import { Resource } from "@@/tests/test-utils/mockDataResource";
 
 const testProps = {
 	resource: Resource,

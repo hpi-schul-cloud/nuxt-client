@@ -1,6 +1,5 @@
 import { printDate } from "@plugins/datetime";
 import faker from "faker/locale/en";
-// set a seed to have a consistent fake for the screenshot tests
 faker.seed(512); // any static number will do the job
 
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";

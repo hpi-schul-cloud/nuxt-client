@@ -2,7 +2,6 @@
 /src/legacy-client/**
 dist
 .nuxt
-docs/storybook/**/*.md
 LICENSE.md
 .browserslistrc
 docs/Changelog.md

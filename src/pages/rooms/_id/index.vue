@@ -6,7 +6,7 @@
 		:aria-label="roomData.title"
 	>
 		<template slot="header">
-			<h1 class="text-h3 pt-2">
+			<h1 class="text-h3 pt-2 course-title">
 				{{ roomData.title }}
 			</h1>
 			<div class="mb-5 header-div">
@@ -23,36 +23,43 @@
 				</div>
 			</div>
 		</template>
-		<room-dashboard :items="roomData.elements" />
+		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
 	</default-wireframe>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
+import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 
-export default Vue.extend({
+export default {
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
 	},
 	layout: "defaultVuetify",
+	data() {
+		return {};
+	},
 	computed: {
 		roomData() {
 			return RoomModule.getRoomData;
 		},
+		dashBoardRole() {
+			if (AuthModule.getUserRoles.includes("teacher")) return "teacher";
+			if (AuthModule.getUserRoles.includes("student")) return "student";
+			return undefined;
+		},
 	},
 	async created() {
 		const courseId = this.$route.params.id;
-		await RoomModule.fetchTasks(courseId);
+		await RoomModule.fetchContent(courseId);
 	},
 	head() {
 		return {
-			//@ts-ignore
 			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
-});
+};
 </script>
