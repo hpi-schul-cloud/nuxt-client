@@ -701,6 +701,7 @@
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.reopen": "Aufgabe wiederherstellen",
 	"pages.room.taskCard.label.post": "Posten",
+	"pages.room.taskCard.label.edit": "Bearbeiten",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",

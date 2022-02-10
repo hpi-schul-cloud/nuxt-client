@@ -16,8 +16,7 @@
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
-					<!-- Action menu to be determined with UXers-->
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
+					<more-item-menu :menu-items="moreActionsMenuItems" :show="true" />
 				</div>
 			</div>
 			<div class="text-h6 text--primary">{{ task.name }}</div>
@@ -75,14 +74,14 @@
 
 <script>
 import { fromNow } from "@plugins/datetime";
-import { mdiDotsVertical } from "@mdi/js";
+import MoreItemMenu from "./MoreItemMenu";
+import { mdiPencilOutline, mdiFormatListChecks } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
-import { mdiFormatListChecks } from "@mdi/js";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: {},
+	components: { MoreItemMenu },
 	props: {
 		task: {
 			type: Object,
@@ -99,8 +98,8 @@ export default {
 		return {
 			fromNow,
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiDotsVertical: mdiDotsVertical,
-			mdiFormatListChecks: mdiFormatListChecks,
+			mdiFormatListChecks,
+			mdiPencilOutline,
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -153,6 +152,15 @@ export default {
 			}
 			return [];
 		},
+		moreActionsMenuItems() {
+			return [
+				{
+					icon: this.mdiPencilOutline,
+					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
+					name: this.$t("pages.room.taskCard.label.edit"),
+				},
+			];
+		},
 	},
 	methods: {
 		cardTitle(dueDate) {
@@ -166,6 +174,9 @@ export default {
 		},
 		taskHref: (id) => {
 			return `/homework/${id}`;
+		},
+		redirectAction(value) {
+			window.location = value;
 		},
 	},
 };
