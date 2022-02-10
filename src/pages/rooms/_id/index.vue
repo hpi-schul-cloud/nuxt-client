@@ -54,7 +54,7 @@ export default {
 	},
 	async created() {
 		const courseId = this.$route.params.id;
-		await RoomModule.fetchTasks(courseId);
+		await RoomModule.fetchContent(courseId);
 	},
 	head() {
 		return {

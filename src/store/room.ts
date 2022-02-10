@@ -39,7 +39,7 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	async fetchTasks(id: string): Promise<void> {
+	async fetchContent(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
 			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
