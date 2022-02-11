@@ -33,8 +33,8 @@
 							$t("pages.administration.migration.ldapSource")
 						}}</v-card-title>
 						<v-list-item>
-							<v-list-item-content>
-								<v-list-item-title
+							<v-list-item-content id="edited-item">
+								<v-list-item-title id="edited-item-fullname"
 									>{{ editedItem.firstName }}
 									{{ editedItem.lastName }}</v-list-item-title
 								>
@@ -152,6 +152,7 @@
 					{{ $t("components.molecules.importUsersMatch.flag") }}
 					<v-btn
 						v-if="editedItem.flagged"
+						id="flag-button"
 						v-model="editedItem.flagged"
 						icon
 						color="primary"
@@ -162,6 +163,7 @@
 					</v-btn>
 					<v-btn
 						v-else
+						id="flag-button"
 						v-model="editedItem.flagged"
 						icon
 						class="ma-2"
@@ -172,6 +174,7 @@
 				</v-col>
 				<v-col class="col-6 text-right">
 					<v-btn
+						id="save-match-btn"
 						text
 						:class="canSave ? 'primary' : ''"
 						class="m-2"
@@ -182,6 +185,7 @@
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
+						id="delete-match-btn"
 						text
 						:class="canDelete ? 'secondary' : ''"
 						class="m-2"
