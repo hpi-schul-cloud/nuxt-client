@@ -17,7 +17,15 @@
 			></v-import-users-match-search>
 		</v-dialog>
 
-		<v-container v-if="canStartMigration">
+		<v-alert
+			v-if="!canStartMigration"
+			colored-border
+			type="error"
+			elevation="2"
+			>{{ $t("pages.administration.migration.cannotStart") }}</v-alert
+		>
+
+		<v-container v-else>
 			<v-data-table
 				v-if="canStartMigration"
 				:headers="tableHead"
@@ -233,15 +241,6 @@
 			<v-divider></v-divider>
 			<br />
 		</v-container>
-
-		<v-alert
-			v-else
-			border="right top"
-			colored-border
-			type="error"
-			elevation="2"
-			>{{ $t("pages.administration.migration.cannotStart") }}</v-alert
-		>
 	</div>
 </template>
 
@@ -257,9 +256,9 @@ import {
 	mdiFlagOutline,
 	mdiPencil,
 } from "@mdi/js";
-import Vue from "vue";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
-export default Vue.extend({
+
+export default {
 	components: {
 		vImportUsersMatchSearch,
 	},
@@ -499,6 +498,9 @@ export default Vue.extend({
 			}
 		},
 		async searchApi() {
+			if (!this.canStartMigration) {
+				return;
+			}
 			this.options.page = 1;
 			await this.getDataFromApi();
 		},
@@ -530,7 +532,7 @@ export default Vue.extend({
 			this.loading = false;
 		},
 	},
-});
+};
 </script>
 
 <style lang="scss" scoped>

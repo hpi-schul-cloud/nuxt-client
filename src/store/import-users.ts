@@ -17,11 +17,10 @@ import {
 } from "@/serverApi/v3";
 import { BusinessError } from "@store/types/commons";
 
-
 export enum MatchedBy {
-	Admin= 'admin',
-	Auto = 'auto',
-	None = 'none'
+	Admin = "admin",
+	Auto = "auto",
+	None = "none",
 }
 
 // @ts-ignore
@@ -32,7 +31,6 @@ export enum MatchedBy {
 	store: rootStore,
 	stateFactory: true,
 })
-
 export class ImportUsersModule extends VuexModule {
 	private importUserList: ImportUserListResponse = {
 		data: [],
@@ -40,16 +38,20 @@ export class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private firstName: string = '';
-	private lastName: string = '';
-	private loginName: string = '';
-	private role: ImportUserResponseRoleNamesEnum | '' = '';
-	private classes: string = '';
-	private match: Array<MatchedBy> = [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None];
+	private firstName: string = "";
+	private lastName: string = "";
+	private loginName: string = "";
+	private role: ImportUserResponseRoleNamesEnum | "" = "";
+	private classes: string = "";
+	private match: Array<MatchedBy> = [
+		MatchedBy.Admin,
+		MatchedBy.Auto,
+		MatchedBy.None,
+	];
 	private flagged: boolean = false;
 	private limit: number = 25;
 	private skip: number = 0;
-	private sortBy: string = '';
+	private sortBy: string = "";
 	private sortOrder: any = "asc";
 	private totalMatched: number = 0;
 
@@ -59,7 +61,7 @@ export class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private userSearch: string = '';
+	private userSearch: string = "";
 	private usersLimit: number = 1;
 	private usersSkip: number = 0;
 	private totalUnmatched: number = 0;
@@ -190,7 +192,6 @@ export class ImportUsersModule extends VuexModule {
 		this.usersSkip = skip;
 	}
 
-
 	@Action
 	async fetchAllImportUsers(): Promise<void> {
 		try {
@@ -247,6 +248,7 @@ export class ImportUsersModule extends VuexModule {
 		flagged: boolean;
 	}): Promise<ImportUserResponse | undefined> {
 		try {
+			payload.importUserId = "abc";
 			const response = await this.importUserApi.importUserControllerUpdateFlag(
 				payload.importUserId,
 				{ flagged: payload.flagged }

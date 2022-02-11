@@ -5,20 +5,14 @@
 		:breadcrumbs="breadcrumbs"
 	>
 		<v-snackbar
+			v-if="businessError && businessError.statusCode !== '200'"
 			v-model="businessError"
 			:timeout="errorTimeout"
 			top
 			centered
-			:color="
-				businessError && businessError.statusCode === '200'
-					? 'success darken-3'
-					: 'error darken-3'
-			"
+			color="error darken-3"
 		>
-			<div v-if="businessError && businessError.statusCode === '200'">
-				{{ businessError.message }}
-			</div>
-			<div v-else>{{ $t("pages.administration.migration.error") }}</div>
+			{{ $t("pages.administration.migration.error") }}
 			<template v-slot:action="{ attrs }">
 				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
 					<v-icon>{{ mdiClose }}</v-icon>
@@ -31,7 +25,7 @@
 			<v-stepper v-model="migrationStep" flat>
 				<v-stepper-header>
 					<v-stepper-step
-						:complete="isMaintanenceFinished"
+						:complete="isMaintenanceFinished"
 						:editable="isStepEditable(1)"
 						step="1"
 					>
@@ -55,7 +49,7 @@
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-						:complete="isMaintanenceFinished"
+						:complete="isMaintenanceFinished"
 						:editable="isStepEditable(4)"
 						step="4"
 					>
@@ -76,9 +70,8 @@
 		<div>
 			<v-stepper v-model="migrationStep" v-ripple="false" flat>
 				<v-stepper-items>
-					<v-stepper-content step="1">
+					<v-stepper-content step="1" data-testid="migration_tutorial">
 						<v-card
-							data-id="migration_tutorial"
 							:ripple="false"
 							elevation="2"
 							class="pa-5 mb-10"
@@ -98,7 +91,7 @@
 						>
 					</v-stepper-content>
 
-					<v-stepper-content step="2">
+					<v-stepper-content step="2" data-testid="migration_importUsers">
 						<import-users></import-users>
 						<v-btn color="secondary" @click="migrationStep = 1">{{
 							$t("pages.administration.migration.back")
@@ -115,6 +108,7 @@
 					<v-stepper-content
 						v-if="canStartMigration && !isMigrationFinished"
 						step="3"
+						data-testid="migration_summary"
 					>
 						<v-card
 							:ripple="false"
@@ -156,6 +150,7 @@
 						<v-btn
 							color="primary"
 							:disabled="!isMigrationConfirm || isLoading"
+							data-testid="migration_performMigration"
 							@click="performMigration"
 						>
 							<v-progress-circular
@@ -167,7 +162,11 @@
 						>
 					</v-stepper-content>
 
-					<v-stepper-content v-if="canFinishMaintanence" step="4">
+					<v-stepper-content
+						v-if="canFinishMaintenance"
+						data-testid="migration_finish"
+						step="4"
+					>
 						<v-card
 							:ripple="false"
 							elevation="2"
@@ -180,7 +179,7 @@
 						}}</v-btn>
 					</v-stepper-content>
 
-					<v-stepper-content step="5">
+					<v-stepper-content step="5" data-testid="migration_waitForSync">
 						<v-card
 							:ripple="false"
 							elevation="2"
@@ -224,15 +223,13 @@ export default {
 		canStartMigration() {
 			return this.school.inUserMigration === true && this.school.inMaintenance;
 		},
-		canFinishMaintanence() {
-			// TODO
-			return true;
-			//return this.school.inUserMigration === false && this.school.inMaintenance;
+		canFinishMaintenance() {
+			return this.isMigrationConfirm && this.canStartMigration;
 		},
 		isMigrationFinished() {
 			return this.school.inUserMigration === false;
 		},
-		isMaintanenceFinished() {
+		isMaintenanceFinished() {
 			return !this.school.inMaintenance;
 		},
 		school() {
@@ -255,7 +252,7 @@ export default {
 			return ImportUserModule.getTotalUnmatched;
 		},
 		totalImportUsers() {
-			return ImportUserModule.importUserList.total;
+			return ImportUserModule.getImportUserList.total;
 		},
 	},
 	watch: {
@@ -273,7 +270,7 @@ export default {
 		isStepEditable(step) {
 			switch (step) {
 				case 1:
-					return !this.isLoading && !this.isMaintanenceFinished;
+					return !this.isLoading && !this.isMaintenanceFinished;
 				case 2:
 					return this.canStartMigration && !this.isMigrationFinished;
 				case 3:
@@ -282,7 +279,7 @@ export default {
 					return (
 						!this.isLoading &&
 						this.isMigrationFinished &&
-						!this.isMaintanenceFinished
+						!this.isMaintenanceFinished
 					);
 				case 5:
 				default:
@@ -290,6 +287,9 @@ export default {
 			}
 		},
 		async summary() {
+			if (!this.canStartMigration) {
+				return;
+			}
 			await ImportUserModule.fetchTotalMatched();
 			await ImportUserModule.fetchTotalUnmatched();
 		},
