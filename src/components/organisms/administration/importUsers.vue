@@ -22,8 +22,9 @@
 			colored-border
 			type="error"
 			elevation="2"
-			>{{ $t("pages.administration.migration.cannotStart") }}</v-alert
 		>
+			{{ $t("pages.administration.migration.cannotStart") }}
+		</v-alert>
 
 		<v-container v-else>
 			<v-data-table
@@ -56,6 +57,7 @@
 								type="string"
 								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
+								class="searchFirstName"
 							></v-text-field>
 						</td>
 						<td class="col-2">
@@ -64,6 +66,7 @@
 								type="string"
 								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
+								class="searchLastName"
 							></v-text-field>
 						</td>
 						<td>
@@ -72,6 +75,7 @@
 								type="string"
 								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
+								class="searchLoginName"
 							></v-text-field>
 						</td>
 						<td>
@@ -80,6 +84,7 @@
 								:items="roles"
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
+								class="searchRole"
 							></v-select>
 						</td>
 						<td>
@@ -88,6 +93,7 @@
 								type="string"
 								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
+								class="searchClasses"
 							></v-text-field>
 						</td>
 						<td class="col-2">
