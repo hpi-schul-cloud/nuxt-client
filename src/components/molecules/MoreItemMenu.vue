@@ -55,7 +55,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color: rgba(0, 0, 0, 0.87);
 .task-action {
 	min-height: var(--space-lg);
 }
@@ -65,6 +64,6 @@ $color: rgba(0, 0, 0, 0.87);
 	height: var(--space-md);
 	margin-top: calc(-0.5 + var(--space-base-vuetify));
 	font-size: var(--space-md);
-	color: $color;
+	color: var(--color-gray-dark);
 }
 </style>

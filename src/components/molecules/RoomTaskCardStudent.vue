@@ -167,11 +167,7 @@ export default {
 		},
 		moreActionsMenuItems() {
 			return [
-				// {
-				// 	icon: this.mdiPencilOutline,
-				// 	action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
-				// 	name: this.$t("pages.room.taskCard.label.edit"),
-				// },
+				// see RoomTaskCardTeacher if it is needed
 			];
 		},
 	},
