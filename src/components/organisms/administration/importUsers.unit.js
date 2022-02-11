@@ -2,7 +2,6 @@ import Vuetify from "vuetify";
 import importUsers from "./importUsers";
 import SchoolsModule from "@/store/schools";
 
-
 const schoolMock = {
 	_id: "5f2987e020834114b8efd6f8",
 	officialSchoolNumber: "100000",
@@ -65,24 +64,25 @@ describe("importUsers", () => {
 
 	it(...isValidComponent(importUsers));
 
-	describe('show import users table', () => {
+	describe("show import users table", () => {
 		beforeEach(() => {
 			SchoolsModule.setSchool(schoolMock);
 		});
-
 	});
 
 	it("should show error message if school is not in userMigration", () => {
 		schoolMock.inUserMigration = false;
 		SchoolsModule.setSchool(schoolMock);
 		const wrapper = mount(importUsers, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				vueMeta: true,
-				dialog: true,
-			},
-				vuetify)
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					vueMeta: true,
+					dialog: true,
+				},
+				vuetify
+			),
 		});
 		const findText = wrapper.find(".v-alert");
 		const errorMsg = wrapper.vm.$i18n.t(
@@ -92,5 +92,4 @@ describe("importUsers", () => {
 			errorMsg.replace(/\s/g, "")
 		);
 	});
-
 });
