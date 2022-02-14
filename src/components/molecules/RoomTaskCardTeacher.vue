@@ -5,31 +5,31 @@
 		:aria-label="ariaLabel"
 		:href="taskHref(task.id)"
 		tabindex="0"
+		outlined
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<div class="icon-section">
-					<v-icon>{{ mdiFormatListChecks }}</v-icon>
-				</div>
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
+					<v-icon size="20" :color="task.displayColor" dark>{{
+						mdiFormatListChecks
+					}}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
-					<!-- Action menu to be determined with UXers-->
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
+					<more-item-menu :menu-items="moreActionsMenuItems" :show="true" />
 				</div>
 			</div>
-			<div class="text-h4 text--primary">{{ task.name }}</div>
+			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
-				class="text--primary mt-1"
+				class="text--primary mt-1 text-description"
 				tabindex="0"
 				v-html="task.description"
 			></div>
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
+				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
@@ -38,7 +38,7 @@
 						}}
 					</div>
 				</div>
-				<div class="grey lighten-2 chip-item pa-1 mr-2" tabindex="0">
+				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
 					<div class="chip-value">
 						{{
 							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
@@ -49,11 +49,11 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-1"
 					tabindex="0"
 				>
 					<div class="chip-value">
-						{{ $t("pages.room.taskCard.label.overdue") }}
+						{{ $t("pages.room.taskCard.teacher.label.overdue") }}
 					</div>
 				</div>
 			</div>
@@ -74,14 +74,14 @@
 
 <script>
 import { fromNow } from "@plugins/datetime";
-import { mdiDotsVertical } from "@mdi/js";
+import MoreItemMenu from "./MoreItemMenu";
+import { mdiPencilOutline, mdiFormatListChecks } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
-import { mdiFormatListChecks } from "@mdi/js";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: {},
+	components: { MoreItemMenu },
 	props: {
 		task: {
 			type: Object,
@@ -98,8 +98,8 @@ export default {
 		return {
 			fromNow,
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiDotsVertical: mdiDotsVertical,
-			mdiFormatListChecks: mdiFormatListChecks,
+			mdiFormatListChecks,
+			mdiPencilOutline,
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -152,6 +152,15 @@ export default {
 			}
 			return [];
 		},
+		moreActionsMenuItems() {
+			return [
+				{
+					icon: this.mdiPencilOutline,
+					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
+					name: this.$t("pages.room.taskCard.label.edit"),
+				},
+			];
+		},
 	},
 	methods: {
 		cardTitle(dueDate) {
@@ -166,6 +175,9 @@ export default {
 		taskHref: (id) => {
 			return `/homework/${id}`;
 		},
+		redirectAction(value) {
+			window.location = value;
+		},
 	},
 };
 </script>
@@ -176,7 +188,7 @@ export default {
 
 .top-row-container {
 	display: grid;
-	grid-template-columns: 5% 90% 5%;
+	grid-template-columns: 95% 5%;
 	align-items: center;
 	.icon-section {
 		overflow: none;
@@ -190,7 +202,9 @@ export default {
 		text-align: right;
 	}
 }
-
+.text-description {
+	font-size: var(--text-md);
+}
 .chip-items-group {
 	vertical-align: middle;
 	.chip-item {
@@ -209,9 +223,15 @@ export default {
 	color: var(--color-primary);
 }
 
-@media #{map-get($display-breakpoints, 'xs-only')} {
-	.title-section {
-		padding-left: var(--text-sm);
+.v-card {
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+
+	&:hover {
+		box-shadow: var(--shadow-m);
 	}
+}
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
 }
 </style>
