@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
-import * as serverApi from "@/serverApi/v3/api";
 import { ImportUsersModule } from "@store/import-users";
 
 declare var createComponentMocks: Function;
