@@ -221,32 +221,32 @@ export default {
 			type: Boolean,
 		},
 		editedItem: {
-      type: Object,
-      default: () => ({
-        firstName: "",
-        lastName: "",
-        loginName: "",
-        roleNames: [],
-        classNames: [],
-        match: {},
-        flagged: false,
-      }),
-      firstName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
-      },
-      loginName: {
-        type: String,
-      },
-      roleNames: {
+			type: Object,
+			default: () => ({
+				firstName: "",
+				lastName: "",
+				loginName: "",
+				roleNames: [],
+				classNames: [],
+				match: {},
+				flagged: false,
+			}),
+			firstName: {
+				type: String,
+			},
+			lastName: {
+				type: String,
+			},
+			loginName: {
+				type: String,
+			},
+			roleNames: {
 				type: Array,
 			},
 			classNames: {
-        type: Array,
-        default: [],
-      },
+				type: Array,
+				default: [],
+			},
 			match: {
 				type: Object,
 			},
@@ -345,52 +345,52 @@ export default {
 			this.$emit("close");
 		},
 		async saveMatch() {
-      if (!this.selectedItem) {
-        return false;
-      }
-      const importUser = await ImportUsersModule.saveMatch({
-        importUserId: this.editedItem.importUserId,
-        userId: this.selectedItem.userId,
-      });
-      if (
-          !ImportUsersModule.getBusinessError &&
-          importUser.match &&
-          importUser.match.userId === this.selectedItem.userId
-      ) {
-        this.$emit("savedMatch");
-        this.closeEdit();
-      }
-    },
+			if (!this.selectedItem) {
+				return false;
+			}
+			const importUser = await ImportUsersModule.saveMatch({
+				importUserId: this.editedItem.importUserId,
+				userId: this.selectedItem.userId,
+			});
+			if (
+				!ImportUsersModule.getBusinessError &&
+				importUser.match &&
+				importUser.match.userId === this.selectedItem.userId
+			) {
+				this.$emit("savedMatch");
+				this.closeEdit();
+			}
+		},
 		async deleteMatch() {
-      if (!this.editedItem.match) {
-        return false;
-      }
-      const importUser = await ImportUsersModule.deleteMatch(
-          this.editedItem.importUserId
-      );
-      console.log(importUser.match);
-      if (
-          !ImportUsersModule.getBusinessError &&
-          importUser.match === undefined
-      ) {
-        this.$emit("deletedMatch");
-        this.closeEdit();
-      }
-    },
+			if (!this.editedItem.match) {
+				return false;
+			}
+			const importUser = await ImportUsersModule.deleteMatch(
+				this.editedItem.importUserId
+			);
+			console.log(importUser.match);
+			if (
+				!ImportUsersModule.getBusinessError &&
+				importUser.match === undefined
+			) {
+				this.$emit("deletedMatch");
+				this.closeEdit();
+			}
+		},
 		async saveFlag() {
-      const importUser = await ImportUsersModule.saveFlag({
-        importUserId: this.editedItem.importUserId,
-        flagged: !this.editedItem.flagged,
-      });
-      debugger;
-      if (
-          !ImportUsersModule.getBusinessError &&
-          importUser.flagged === !this.editedItem.flagged
-      ) {
-        this.editedItem.flagged = importUser.flagged;
-        this.$emit("savedFlag");
-      }
-    },
+			const importUser = await ImportUsersModule.saveFlag({
+				importUserId: this.editedItem.importUserId,
+				flagged: !this.editedItem.flagged,
+			});
+			debugger;
+			if (
+				!ImportUsersModule.getBusinessError &&
+				importUser.flagged === !this.editedItem.flagged
+			) {
+				this.editedItem.flagged = importUser.flagged;
+				this.$emit("savedFlag");
+			}
+		},
 	},
 };
 </script>
