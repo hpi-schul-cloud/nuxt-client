@@ -23,16 +23,16 @@
 		<div slot="header">
 			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
 			<v-stepper v-model="migrationStep" flat class="stepper">
-        <v-stepper-header>
-          <v-stepper-step
-              :complete="isMaintenanceFinished"
-              :editable="isStepEditable(1)"
-              step="1"
-              data-testid="migration_tutorial_head"
-          >
-            {{ $t("pages.administration.migration.step1") }}
-          </v-stepper-step>
-          <v-divider></v-divider>
+				<v-stepper-header>
+					<v-stepper-step
+						:complete="isMaintenanceFinished"
+						:editable="isStepEditable(1)"
+						step="1"
+						data-testid="migration_tutorial_head"
+					>
+						{{ $t("pages.administration.migration.step1") }}
+					</v-stepper-step>
+					<v-divider></v-divider>
 					<v-stepper-step
 						:complete="isMigrationFinished"
 						:editable="isStepEditable(2)"
@@ -89,9 +89,9 @@
 							"
 						></v-card>
 						<v-btn
-                id="migration_tutorial_next"
-                color="primary"
-                @click="migrationStep = isMigrationFinished ? 4 : 2"
+							id="migration_tutorial_next"
+							color="primary"
+							@click="migrationStep = isMigrationFinished ? 4 : 2"
 							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
@@ -102,10 +102,10 @@
 							$t("pages.administration.migration.back")
 						}}</v-btn>
 						<v-btn
-                id="migration_importUsers_next"
-                color="primary"
-                :disabled="!canStartMigration"
-                @click="migrationStep = 3"
+							id="migration_importUsers_next"
+							color="primary"
+							:disabled="!canStartMigration"
+							@click="migrationStep = 3"
 							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
@@ -167,24 +167,20 @@
 						>
 					</v-stepper-content>
 
-          <v-stepper-content
-              data-testid="migration_finish"
-              step="4"
-          >
-            <div v-if="canFinishMaintenance">
-              <v-card
-                  :ripple="false"
-                  elevation="2"
-                  class="pa-5 mb-10"
-                  color="grey lighten-5"
-                  v-html="$t('pages.administration.migration.endTransferPhase')"
-              ></v-card>
-              <v-btn class="primary" @click="endMaintanence">{{
-                  $t("pages.administration.migration.finishTransferPhase")
-                }}
-              </v-btn>
-            </div>
-          </v-stepper-content>
+					<v-stepper-content data-testid="migration_finish" step="4">
+						<div v-if="canFinishMaintenance">
+							<v-card
+								:ripple="false"
+								elevation="2"
+								class="pa-5 mb-10"
+								color="grey lighten-5"
+								v-html="$t('pages.administration.migration.endTransferPhase')"
+							></v-card>
+							<v-btn class="primary" @click="endMaintanence"
+								>{{ $t("pages.administration.migration.finishTransferPhase") }}
+							</v-btn>
+						</div>
+					</v-stepper-content>
 
 					<v-stepper-content step="5" data-testid="migration_waitForSync">
 						<v-card
@@ -227,22 +223,22 @@ export default {
 		};
 	},
 	computed: {
-    canStartMigration() {
-      return this.school.inUserMigration === true && this.school.inMaintenance;
-    },
-    isMigrationFinished() {
-      return this.school.inUserMigration === false;
-    },
-    canFinishMaintenance() {
-      return this.isMigrationConfirm && this.isMigrationFinished;
-    },
-    isMaintenanceFinished() {
-      return !this.school.inMaintenance;
-    },
-    school() {
-      return SchoolsModule.getSchool;
-    },
-    businessError() {
+		canStartMigration() {
+			return this.school.inUserMigration === true && this.school.inMaintenance;
+		},
+		isMigrationFinished() {
+			return this.school.inUserMigration === false;
+		},
+		canFinishMaintenance() {
+			return this.isMigrationConfirm && this.isMigrationFinished;
+		},
+		isMaintenanceFinished() {
+			return !this.school.inMaintenance;
+		},
+		school() {
+			return SchoolsModule.getSchool;
+		},
+		businessError() {
 			const error = ImportUserModule.getBusinessError;
 			if (error && error.message && error.statusCode) {
 				return {
@@ -306,14 +302,14 @@ export default {
 
 			// fake api call
 			setTimeout(() => {
-        SchoolsModule.setSchool({
-          ...SchoolsModule.getSchool,
-          inUserMigration: false,
-        });
-        //this.school.inUserMigration = false;
-        this.isLoading = false;
-        this.migrationStep = 4;
-      }, 1000);
+				SchoolsModule.setSchool({
+					...SchoolsModule.getSchool,
+					inUserMigration: false,
+				});
+				//this.school.inUserMigration = false;
+				this.isLoading = false;
+				this.migrationStep = 4;
+			}, 1000);
 		},
 		endMaintanence() {
 			this.isLoading = true;
