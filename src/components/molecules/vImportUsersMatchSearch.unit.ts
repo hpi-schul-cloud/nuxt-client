@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
-import { ImportUsersModule } from "@store/import-users";
+import ImportUsersModule from "@store/import-users";
 
 declare var createComponentMocks: Function;
 
@@ -52,9 +52,13 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		expect(editedItemElement.element.textContent).toContain("6a");
 	});
 
-	it.skip("should set 'flagged' property true when flag-button clicked", async () => {
+	it("should set 'flagged' property true when flag-button clicked", async () => {
 		const saveFlagMock = jest.spyOn(ImportUsersModule, "saveFlag");
-		saveFlagMock.mockReturnValue({ flagged: true });
+		saveFlagMock.mockImplementation(async () => {
+			return Promise.resolve({
+				flagged: true,
+			}) as any;
+		});
 
 		const wrapper = getWrapper(testProps);
 
@@ -63,6 +67,8 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		await flagButtonElement.trigger("click");
 
 		expect(saveFlagMock).toHaveBeenCalled();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 
 		expect(flagButtonElement.element.innerHTML).toContain(mdiFlag);
 		expect(wrapper.vm.flagged).toBe(true);
@@ -108,3 +114,6 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		expect(saveMatch).toHaveBeenCalled();
 	});
 });
+function resolve(arg0: { importUser: { flagged: boolean } }): any {
+	throw new Error("Function not implemented.");
+}
