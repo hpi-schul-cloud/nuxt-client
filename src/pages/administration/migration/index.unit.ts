@@ -172,7 +172,48 @@ describe("User Migration / Index", () => {
 		expect(findText.element.innerHTML).toContain(tutorial);
 	});
 
-	it.todo("check stepper steps");
+	it("should be possible to click on steps 1-3", async () => {
+		SchoolsModule.setSchool(schoolMock);
+		const wrapper = getWrapper();
+
+		const stepper = wrapper.find(".stepper");
+		expect(stepper.vm.steps[0].editable).toBe(true);
+		expect(stepper.vm.steps[0].complete).toBe(false);
+
+		expect(stepper.vm.steps[1].editable).toBe(true);
+		expect(stepper.vm.steps[1].complete).toBe(false);
+
+		expect(stepper.vm.steps[2].editable).toBe(true);
+		expect(stepper.vm.steps[2].complete).toBe(false);
+
+		expect(stepper.vm.steps[3].editable).toBe(false);
+		expect(stepper.vm.steps[3].complete).toBe(false);
+	});
+
+	it("should not be possible to click on steps 2-3 when migration finished", async () => {
+		SchoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
+
+		const wrapper = getWrapper();
+		const stepper = wrapper.find(".stepper");
+
+		expect(stepper.vm.steps[0].editable).toBe(true);
+		expect(stepper.vm.steps[0].complete).toBe(false);
+
+		expect(stepper.vm.steps[1].editable).toBe(false);
+		expect(stepper.vm.steps[1].complete).toBe(true);
+
+		expect(stepper.vm.steps[2].editable).toBe(false);
+		expect(stepper.vm.steps[2].complete).toBe(true);
+
+		expect(stepper.vm.steps[3].editable).toBe(true);
+		expect(stepper.vm.steps[3].complete).toBe(false);
+
+		wrapper.setData({ migrationStep: 1 });
+		const btn = wrapper.find("#migration_tutorial_next");
+		btn.trigger("click");
+		await wrapper.vm.$nextTick();
+		expect(stepper.vm.steps[3].isActive).toBe(true);
+	});
 
 	describe("show summary", () => {
 		it("should display summary text with totals", async () => {
@@ -203,9 +244,6 @@ describe("User Migration / Index", () => {
 					usersUnmatchedCount: totalMatched,
 				}
 			);
-			//const stepper = wrapper.find("[data-testid=migration_summary_head]");
-			//stepper.trigger("click");
-			//await wrapper.vm.$nextTick();
 			const findText = wrapper.find("[data-testid=migration_summary]");
 			expect(findText.element.innerHTML).toContain(summaryText);
 		});
