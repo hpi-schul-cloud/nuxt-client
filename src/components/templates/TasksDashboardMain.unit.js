@@ -3,7 +3,33 @@ import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import vCustomFab from "@components/atoms/vCustomFab";
 import Vuetify from "vuetify";
-import TaskModule from "@/store/tasks";
+import taskModule, { TaskModule } from "@/store/tasks";
+
+const mockModule = jest.fn();
+jest.mock("@store/tasks", () => ({
+	...jest.requireActual("@store/tasks"),
+	__esModule: true,
+	get default() {
+		return mockModule();
+	},
+}));
+
+const createStoreModuleMock = (module) => {
+	const statics = {};
+
+	// mock mutations
+	Object.keys(module.mutations).forEach((key) => {
+		// eslint-disable-next-line jest/prefer-spy-on
+		statics[key] = jest.fn();
+	});
+
+	Object.keys(module.actions).forEach((key) => {
+		// eslint-disable-next-line jest/prefer-spy-on
+		statics[key] = jest.fn();
+	});
+
+	return statics;
+};
 
 describe("@components/templates/TasksDashboardMain", () => {
 	let vuetify;
@@ -13,6 +39,44 @@ describe("@components/templates/TasksDashboardMain", () => {
 	});
 
 	it(...isValidComponent(TasksDashboardMain));
+
+	describe("mock store module", () => {
+		it("should be able to mock the store", () => {
+			mockModule.mockReturnValue({ foo: "bar" });
+
+			expect(taskModule).toStrictEqual({ foo: "bar" });
+		});
+
+		it("should make the mocked store available in the component", () => {
+			const taskModuleMock = {
+				...createStoreModuleMock(TaskModule),
+				getOpenTasksForTeacher: {
+					overdue: [],
+					noDueDate: [],
+					withDueDate: [],
+				},
+				getDraftTasksForTeacher: [],
+				getStatus: "completed",
+				hasTasks: false,
+				openTasksForTeacherIsEmpty: true,
+				draftsForTeacherIsEmpty: true,
+			};
+
+			mockModule.mockReturnValue(taskModuleMock);
+
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "teacher",
+				},
+			});
+			expect(wrapper.vm.isTeacher).toBe(true);
+		});
+	});
 
 	describe("when mounting the component", () => {
 		it("Should receive valid role props", () => {
@@ -134,7 +198,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 	});
 
 	it("Should render v-autocomplete component", () => {
-		const spy = jest.spyOn(TaskModule, "hasTasks", "get").mockReturnValue(true);
+		const spy = jest.spyOn(taskModule, "hasTasks", "get").mockReturnValue(true);
 
 		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
@@ -155,7 +219,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 
 	it("Should call 'setCourseFilters' method with v-autocomplete on change", async () => {
 		const spy1 = jest
-			.spyOn(TaskModule, "hasTasks", "get")
+			.spyOn(taskModule, "hasTasks", "get")
 			.mockReturnValue(true);
 
 		const setterSpy = jest.spyOn(
