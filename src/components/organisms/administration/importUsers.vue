@@ -449,63 +449,62 @@ export default {
 				this.editedIndex = -1;
 			});
 		},
-		async savedFlag() {
-			console.log("saved flag emited");
-			// TODO should reset page?
-			this.loading = true;
-			setTimeout(() => {
-				this.searchApi();
-			}, this.delay);
-		},
 		async savedMatch() {
 			// TODO should reset page?
 			if (this.searchMatchedBy) {
 				this.loading = true;
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
+        this.reloadData();
 			}
 			this.closeEdit();
 		},
 		async deletedMatch() {
-			// TODO should reset page?
 			this.importUsers[this.editedIndex].match = null;
 			this.importUsers[this.editedIndex].class = "primary";
 			if (this.searchMatchedBy) {
-				this.loading = true;
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
+        this.loading = true;
+        this.reloadData();
 			}
 			this.closeEdit();
 		},
 		async saveFlag(item) {
-			if (this.loading) return false;
-			this.loading = true;
-			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			await ImportUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.editedItem.flagged,
-			});
-			this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
-			if (this.searchFlagged) {
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
-			} else {
-				this.loading = false;
-			}
-		},
-		async searchApi() {
-			if (!this.canStartMigration) {
-				return;
-			}
-			this.options.page = 1;
-			await this.getDataFromApi();
-		},
-		async getDataFromApi() {
-			this.loading = true;
+      if (this.loading) return false;
+      this.loading = true;
+      this.editedIndex = this.importUsers.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      const importUser = await ImportUsersModule.saveFlag({
+        importUserId: this.editedItem.importUserId,
+        flagged: !this.editedItem.flagged,
+      });
+      if (
+          !ImportUsersModule.getBusinessError &&
+          importUser.flagged === !this.editedItem.flagged
+      ) {
+        this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
+      }
+      if (this.searchFlagged) {
+        this.reloadData();
+      } else {
+        this.loading = false;
+      }
+    },
+    async savedFlag() {
+      this.loading = true;
+      this.reloadData();
+    },
+    reloadData() {
+      setTimeout(() => {
+        this.searchApi();
+      }, this.delay);
+    },
+    async searchApi() {
+      if (!this.canStartMigration) {
+        return;
+      }
+      this.options.page = 1;
+      await this.getDataFromApi();
+    },
+    async getDataFromApi() {
+      this.loading = true;
 
 			ImportUsersModule.setFirstName(this.searchFirstName);
 			ImportUsersModule.setLastName(this.searchLastName);
