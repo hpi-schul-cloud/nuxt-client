@@ -203,7 +203,11 @@ describe("import-users store actions", () => {
 			importUserModule.setFirstName("john");
 			importUserModule.setLastName("doe");
 			importUserModule.setLoginName("johnny");
-			importUserModule.setMatch([MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None]);
+			importUserModule.setMatch([
+				MatchedBy.Admin,
+				MatchedBy.Auto,
+				MatchedBy.None,
+			]);
 			importUserModule.setFlagged(true);
 			importUserModule.setClasses("5a");
 			importUserModule.setRole(ImportUserResponseRoleNamesEnum.Student);
@@ -555,7 +559,7 @@ describe("import-users store actions", () => {
 describe("getters", () => {
 	it("getUserSearch", () => {
 		const importUserModule = new ImportUsersModule({});
-		expect(importUserModule.getUserSearch).toBe('');
+		expect(importUserModule.getUserSearch).toBe("");
 		const userSearch = "foo";
 		importUserModule.setUserSearch(userSearch);
 		expect(importUserModule.getUserSearch).toBe(userSearch);
