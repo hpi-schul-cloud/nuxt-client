@@ -25,46 +25,46 @@
 			<v-stepper v-model="migrationStep" flat>
 				<v-stepper-header>
 					<v-stepper-step
-              :complete="isMaintenanceFinished"
-              :editable="isStepEditable(1)"
-              step="1"
-              data-testid="migration_tutorial_head"
+						:complete="isMaintenanceFinished"
+						:editable="isStepEditable(1)"
+						step="1"
+						data-testid="migration_tutorial_head"
 					>
 						{{ $t("pages.administration.migration.step1") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-              :complete="isMigrationFinished"
-              :editable="isStepEditable(2)"
-              step="2"
-              data-testid="migration_importUsers_head"
+						:complete="isMigrationFinished"
+						:editable="isStepEditable(2)"
+						step="2"
+						data-testid="migration_importUsers_head"
 					>
 						{{ $t("pages.administration.migration.step2") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-              :editable="isStepEditable(3)"
-              :complete="isMigrationFinished"
-              step="3"
-              data-testid="migration_summary_head"
+						:editable="isStepEditable(3)"
+						:complete="isMigrationFinished"
+						step="3"
+						data-testid="migration_summary_head"
 					>
 						{{ $t("pages.administration.migration.step3") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-              :complete="isMaintenanceFinished"
-              :editable="isStepEditable(4)"
-              step="4"
-              data-testid="migration_finish_head"
+						:complete="isMaintenanceFinished"
+						:editable="isStepEditable(4)"
+						step="4"
+						data-testid="migration_finish_head"
 					>
 						{{ $t("pages.administration.migration.step4") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
-              step="5"
-              :editable="isStepEditable(5)"
-              :complete="migrationStep === 5"
-              data-testid="migration_waitForSync_head"
+						step="5"
+						:editable="isStepEditable(5)"
+						:complete="migrationStep === 5"
+						data-testid="migration_waitForSync_head"
 					>
 						{{ $t("pages.administration.migration.step5") }}
 					</v-stepper-step>
