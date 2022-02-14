@@ -455,33 +455,20 @@ export default {
 				this.editedIndex = -1;
 			});
 		},
-		async savedFlag() {
-			console.log("saved flag emited");
-			// TODO should reset page?
-			this.loading = true;
-			setTimeout(() => {
-				this.searchApi();
-			}, this.delay);
-		},
 		async savedMatch() {
 			// TODO should reset page?
 			if (this.searchMatchedBy) {
 				this.loading = true;
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
+				this.reloadData();
 			}
 			this.closeEdit();
 		},
 		async deletedMatch() {
-			// TODO should reset page?
 			this.importUsers[this.editedIndex].match = null;
 			this.importUsers[this.editedIndex].class = "primary";
 			if (this.searchMatchedBy) {
 				this.loading = true;
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
+				this.reloadData();
 			}
 			this.closeEdit();
 		},
@@ -490,18 +477,30 @@ export default {
 			this.loading = true;
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
-			await ImportUsersModule.saveFlag({
+			const importUser = await ImportUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
-			this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
+			if (
+				!ImportUsersModule.getBusinessError &&
+				importUser.flagged === !this.editedItem.flagged
+			) {
+				this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
+			}
 			if (this.searchFlagged) {
-				setTimeout(() => {
-					this.searchApi();
-				}, this.delay);
+				this.reloadData();
 			} else {
 				this.loading = false;
 			}
+		},
+		async savedFlag() {
+			this.loading = true;
+			this.reloadData();
+		},
+		reloadData() {
+			setTimeout(() => {
+				this.searchApi();
+			}, this.delay);
 		},
 		async searchApi() {
 			if (!this.canStartMigration) {

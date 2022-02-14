@@ -66,10 +66,7 @@ export class ImportUsersModule extends VuexModule {
 	private usersSkip: number = 0;
 	private totalUnmatched: number = 0;
 
-	private businessError: BusinessError | null = {
-		statusCode: "",
-		message: "",
-	};
+	private businessError: BusinessError | null = null;
 
 	private _importUserApi?: UserImportApiInterface;
 
@@ -246,9 +243,8 @@ export class ImportUsersModule extends VuexModule {
 	async saveFlag(payload: {
 		importUserId: string;
 		flagged: boolean;
-	}): Promise<ImportUserResponse | undefined> {
+	}): Promise<ImportUserResponse | void> {
 		try {
-			payload.importUserId = "abc";
 			const response = await this.importUserApi.importUserControllerUpdateFlag(
 				payload.importUserId,
 				{ flagged: payload.flagged }
@@ -266,7 +262,7 @@ export class ImportUsersModule extends VuexModule {
 	async saveMatch(payload: {
 		importUserId: string;
 		userId: string;
-	}): Promise<ImportUserResponse | undefined> {
+	}): Promise<ImportUserResponse | void> {
 		try {
 			const response = await this.importUserApi.importUserControllerSetMatch(
 				payload.importUserId,
@@ -282,9 +278,7 @@ export class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async deleteMatch(
-		importUserId: string
-	): Promise<ImportUserResponse | undefined> {
+	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
 			const response = await this.importUserApi.importUserControllerRemoveMatch(
 				importUserId
