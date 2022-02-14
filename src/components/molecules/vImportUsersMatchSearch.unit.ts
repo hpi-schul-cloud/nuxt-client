@@ -1,5 +1,8 @@
 import { mount } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
+import { mdiFlag, mdiFlagOutline } from "@mdi/js";
+import * as serverApi from "@/serverApi/v3/api";
+import { ImportUsersModule } from "@store/import-users";
 
 declare var createComponentMocks: Function;
 
@@ -41,7 +44,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 
 	it("should display 'editedItem' property in HTML section", async () => {
 		const wrapper = getWrapper(testProps);
-		const editedItemElement = wrapper.find("#edited-item");
+		const editedItemElement = wrapper.find("[data-testid=edited-item]");
 
 		expect(editedItemElement.element.textContent).toContain("Max");
 		expect(editedItemElement.element.textContent).toContain("Mustermann");
@@ -51,13 +54,19 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 	});
 
 	it.skip("should set 'flagged' property true when flag-button clicked", async () => {
+		const saveFlagMock = jest.spyOn(ImportUsersModule, "saveFlag");
+		saveFlagMock.mockReturnValue({ flagged: true });
+
 		const wrapper = getWrapper(testProps);
-		const flagButtonElement = wrapper.find("#flag-button");
+
+		const flagButtonElement = wrapper.find("[data-testid=flag-button]");
+		expect(flagButtonElement.element.innerHTML).toContain(mdiFlagOutline);
 		await flagButtonElement.trigger("click");
 
-		expect(wrapper.vm.editedItem.flagged).toBe(true);
-		// expect(received).toBe(expected) // Object.is equality
-		// probably this caused from the 'Avoid mutating a prop directly' error
+		expect(saveFlagMock).toHaveBeenCalled();
+
+		expect(flagButtonElement.element.innerHTML).toContain(mdiFlag);
+		expect(wrapper.vm.flagged).toBe(true);
 	});
 
 	it("should set 'selectedItem' property when autoComplete element is selected ", async () => {
@@ -94,7 +103,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		await autoCompleteElement.vm.$emit("input", payload);
 		await wrapper.vm.$nextTick();
 
-		const saveMatchButton = wrapper.find("#save-match-btn");
+		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
 		await saveMatchButton.trigger("click");
 
 		expect(saveMatch).toHaveBeenCalled();

@@ -33,18 +33,21 @@
 							$t("pages.administration.migration.ldapSource")
 						}}</v-card-title>
 						<v-list-item>
-							<v-list-item-content id="edited-item">
-								<v-list-item-title id="edited-item-fullname"
-									>{{ editedItem.firstName }}
-									{{ editedItem.lastName }}</v-list-item-title
-								>
-								<v-list-item-subtitle>
-									{{ editedItem.roleNames.join(", ") }}</v-list-item-subtitle
-								>
-								<v-list-item-subtitle
-									>{{ $t("components.organisms.importUsers.tableClasses") }}:
-									{{ editedItem.classNames.join(", ") }}</v-list-item-subtitle
-								>
+              <v-list-item-content data-testid="edited-item">
+                <v-list-item-title data-testid="edited-item-fullname"
+                >{{ editedItem.firstName }}
+                  {{ editedItem.lastName }}
+                </v-list-item-title
+                >
+                <v-list-item-subtitle>
+                  {{ editedItem.roleNames.join(", ") }}
+                </v-list-item-subtitle
+                >
+                <v-list-item-subtitle
+                >{{ $t("components.organisms.importUsers.tableClasses") }}:
+                  {{ editedItem.classNames.join(", ") }}
+                </v-list-item-subtitle
+                >
 								<v-list-item-subtitle
 									>{{ $t("components.organisms.importUsers.tableUserName") }}:
 									{{ editedItem.loginName }}</v-list-item-subtitle
@@ -150,47 +153,47 @@
 			<v-card-actions>
 				<v-col class="col-6">
 					{{ $t("components.molecules.importUsersMatch.flag") }}
+          <v-btn
+              v-if="flagged"
+              v-model="flagged"
+              icon
+              color="primary"
+              class="ma-2"
+              data-testid="flag-button"
+              @click="saveFlag"
+          >
+            <v-icon color="primary">{{ mdiFlag }}</v-icon>
+          </v-btn>
 					<v-btn
-						v-if="editedItem.flagged"
-						id="flag-button"
-						v-model="editedItem.flagged"
-						icon
-						color="primary"
-						class="ma-2"
-						@click="saveFlag"
-					>
-						<v-icon color="primary">{{ mdiFlag }}</v-icon>
-					</v-btn>
-					<v-btn
-						v-else
-						id="flag-button"
-						v-model="editedItem.flagged"
-						icon
-						class="ma-2"
-						@click="saveFlag"
+              v-else
+              v-model="flagged"
+              icon
+              class="ma-2"
+              data-testid="flag-button"
+              @click="saveFlag"
 					>
 						<v-icon>{{ mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</v-col>
 				<v-col class="col-6 text-right">
 					<v-btn
-						id="save-match-btn"
-						text
-						:class="canSave ? 'primary' : ''"
-						class="m-2"
-						:disabled="!canSave"
-						@click="saveMatch"
+              text
+              :class="canSave ? 'primary' : ''"
+              class="m-2"
+              :disabled="!canSave"
+              data-testid="save-match-btn"
+              @click="saveMatch"
 					>
 						<v-icon small>{{ mdiContentSave }}</v-icon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
-						id="delete-match-btn"
-						text
-						:class="canDelete ? 'secondary' : ''"
-						class="m-2"
-						:disabled="!canDelete"
-						@click="deleteMatch"
+              text
+              :class="canDelete ? 'secondary' : ''"
+              class="m-2"
+              :disabled="!canDelete"
+              data-testid="delete-match-btn"
+              @click="deleteMatch"
 					>
 						<v-icon small>{{ mdiDelete }}</v-icon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
@@ -267,22 +270,23 @@ export default {
 			mdiFlag,
 			mdiFlagOutline,
 			localUser: {
-				userId: "",
-				firstName: "",
-				lastName: "",
-				login: "",
-				email: "",
-				classes: [],
-				roles: [],
-			},
-			entries: [],
-			loading: false,
-			searchUser: null,
-			selectedItem: null,
-			total: 0,
-			limit: 10,
-			skip: 0,
-		};
+        userId: "",
+        firstName: "",
+        lastName: "",
+        login: "",
+        email: "",
+        classes: [],
+        roles: [],
+      },
+      entries: [],
+      loading: false,
+      flagged: false,
+      searchUser: null,
+      selectedItem: null,
+      total: 0,
+      limit: 10,
+      skip: 0,
+    };
 	},
 	computed: {
 		items() {
@@ -314,7 +318,8 @@ export default {
 		},
 	},
 	created() {
-		this.getDataFromApi("");
+    this.flagged = this.editedItem.flagged;
+    this.getDataFromApi("");
 	},
 	methods: {
 		async endIntersect(entries, observer, isIntersecting) {
@@ -379,16 +384,15 @@ export default {
 		},
 		async saveFlag() {
 			const importUser = await ImportUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.editedItem.flagged,
-			});
-			debugger;
+        importUserId: this.editedItem.importUserId,
+        flagged: !this.flagged,
+      });
 			if (
 				!ImportUsersModule.getBusinessError &&
-				importUser.flagged === !this.editedItem.flagged
+          importUser.flagged === !this.flagged
 			) {
-				this.editedItem.flagged = importUser.flagged;
-				this.$emit("savedFlag");
+        this.flagged = !this.flagged;
+        this.$emit("savedFlag");
 			}
 		},
 	},
