@@ -94,6 +94,28 @@ describe("@components/templates/TasksDashboardMain", () => {
 	});
 
 	describe("when user role is student", () => {
+		let taskModuleMock;
+
+		beforeEach(() => {
+			taskModuleMock = {
+				...createStoreModuleMock(TaskModule),
+				getStatus: "completed",
+				getOpenTasksForStudent: {
+					overdue: [],
+					noDueDate: [],
+					withDueDate: [],
+				},
+				getCompletedTasksForStudent: {
+					submitted: [],
+					graded: [],
+				},
+				openTasksForStudentIsEmpty: true,
+				completedTasksForStudentIsEmpty: true,
+				hasTasks: false,
+			};
+			mockModule.mockReturnValue(taskModuleMock);
+		});
+
 		it("Should set isStudent true", () => {
 			const wrapper = mount(TasksDashboardMain, {
 				...createComponentMocks({
@@ -143,9 +165,51 @@ describe("@components/templates/TasksDashboardMain", () => {
 			const fab = wrapper.findComponent(vCustomFab);
 			expect(fab.exists()).toBe(false);
 		});
+
+		it("Should call 'setCourseFilters' mutation with v-autocomplete on change", async () => {
+			taskModuleMock.hasTasks = true;
+			taskModuleMock.getCourseFilters = [];
+			taskModuleMock.getSelectedCourseFilters = [];
+
+			const wrapper = await mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "student",
+				},
+			});
+
+			const autocompleteEl = wrapper.find(".v-autocomplete");
+			await autocompleteEl.vm.$emit("selected-item");
+
+			expect(taskModuleMock.setCourseFilters).toHaveBeenCalled();
+		});
 	});
 
 	describe("when user role is teacher", () => {
+		let taskModuleMock;
+
+		beforeEach(() => {
+			taskModuleMock = {
+				...createStoreModuleMock(TaskModule),
+				getOpenTasksForTeacher: {
+					overdue: [],
+					noDueDate: [],
+					withDueDate: [],
+				},
+				getDraftTasksForTeacher: [],
+				getStatus: "completed",
+				hasTasks: false,
+				openTasksForTeacherIsEmpty: true,
+				draftsForTeacherIsEmpty: true,
+			};
+
+			mockModule.mockReturnValue(taskModuleMock);
+		});
+
 		it("Should set isTeacher true", () => {
 			const wrapper = mount(TasksDashboardMain, {
 				...createComponentMocks({
@@ -195,54 +259,26 @@ describe("@components/templates/TasksDashboardMain", () => {
 			const fab = wrapper.findComponent(vCustomFab);
 			expect(fab.exists()).toBe(true);
 		});
-	});
 
-	it("Should render v-autocomplete component", () => {
-		const spy = jest.spyOn(taskModule, "hasTasks", "get").mockReturnValue(true);
+		it("Should render v-autocomplete component", () => {
+			taskModuleMock.hasTasks = true;
+			taskModuleMock.getCourseFilters = [];
+			taskModuleMock.getSelectedCourseFilters = [];
 
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "teacher",
-			},
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				vuetify,
+				propsData: {
+					role: "teacher",
+				},
+			});
+
+			const autocompleteEl = wrapper.find(".v-autocomplete");
+			expect(autocompleteEl.exists()).toBe(true);
 		});
-
-		const autocompleteEl = wrapper.find(".v-autocomplete");
-		expect(autocompleteEl.exists()).toBe(true);
-
-		spy.mockRestore();
-	});
-
-	it("Should call 'setCourseFilters' method with v-autocomplete on change", async () => {
-		const spy1 = jest
-			.spyOn(taskModule, "hasTasks", "get")
-			.mockReturnValue(true);
-
-		const setterSpy = jest.spyOn(
-			TasksDashboardMain.methods,
-			"setCourseFilters"
-		);
-		const wrapper = await mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				role: "student",
-			},
-		});
-
-		const autocompleteEl = wrapper.find(".v-autocomplete");
-		await autocompleteEl.vm.$emit("selected-item");
-
-		expect(setterSpy).toHaveBeenCalled();
-
-		spy1.mockRestore();
 	});
 
 	// it("Should disable filter when active tab contains empty list and no course is selected", () => {
