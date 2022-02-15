@@ -6,7 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
-import { $axios } from "../utils/api";
+import { $axios } from "@utils/api";
 import AuthModule from "./auth";
 import { Year, FederalState, School } from "./types/schools";
 
@@ -168,7 +168,7 @@ export class Schools extends VuexModule {
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
 
-		if (true) {
+		if (AuthModule.getUser?.schoolId) {
 			try {
 				const school = await $axios.$get(
 					`/v1/schools/${AuthModule.getUser?.schoolId} `
@@ -271,6 +271,26 @@ export class Schools extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
+		}
+	}
+
+	@Action
+	async endMaintenance(): Promise<void> {
+		const school = this.getSchool;
+		if (!school.inMaintenance) {
+			return;
+		}
+		this.setLoading(true);
+		try {
+			await $axios.$post(`/v1/schools/${school._id}/maintenance`, {
+				maintenance: false,
+			});
+			school.inMaintenance = false;
+			this.setSchool(school);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
 		}
 	}
 }

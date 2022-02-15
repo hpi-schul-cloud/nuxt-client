@@ -215,6 +215,10 @@ describe("User Migration / Index", () => {
 		expect(stepper.vm.steps[3].isActive).toBe(true);
 	});
 
+	it.todo(
+		"should not be possible to click on steps 2-4 when maintenance finished"
+	);
+
 	describe("show summary", () => {
 		it("should display summary text with totals", async () => {
 			SchoolsModule.setSchool(schoolMock);
@@ -260,5 +264,12 @@ describe("User Migration / Index", () => {
 			await wrapper.vm.$nextTick();
 			expect(btn.vm.disabled).toBe(false);
 		});
+
+		it.todo("perform migration");
+	});
+
+	describe("show maintenance/Transferphase", () => {
+		it.todo("should disable end maintenance button, if confirm not checked");
+		it.todo("perform end maintenance");
 	});
 });

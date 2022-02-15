@@ -169,17 +169,29 @@
 
 					<v-stepper-content data-testid="migration_finish" step="4">
 						<div v-if="canFinishMaintenance">
-							<v-card
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey lighten-5"
-								v-html="$t('pages.administration.migration.endTransferPhase')"
-							></v-card>
-							<v-btn class="primary" @click="endMaintanence"
-								>{{ $t("pages.administration.migration.finishTransferPhase") }}
-							</v-btn>
-						</div>
+              <v-card
+                  :ripple="false"
+                  elevation="2"
+                  class="pa-5 mb-10"
+                  color="grey lighten-5"
+              >
+                <div
+                    v-html="$t('pages.administration.migration.endTransferPhase')"
+                ></div>
+                <v-checkbox
+                    v-model="isMaintenanceConfirm"
+                    :label="
+										$t('pages.administration.migration.confirmMaintenance')
+									"
+                ></v-checkbox>
+              </v-card>
+              <v-btn
+                  :disabled="!isMaintenanceConfirm"
+                  class="primary"
+                  @click="endMaintenance"
+              >{{ $t("pages.administration.migration.finishTransferPhase") }}
+              </v-btn>
+            </div>
 					</v-stepper-content>
 
 					<v-stepper-content step="5" data-testid="migration_waitForSync">
@@ -209,18 +221,20 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			mdiClose,
-			migrationStep: 1,
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
-				},
-			],
-			isMigrationConfirm: false,
-			errorTimeout: 7500,
-			isLoading: false,
-		};
+      mdiClose,
+      migrationStep: 1,
+      breadcrumbs: [
+        {
+          text: this.$t("pages.administration.index.title"),
+          href: "/administration/",
+        },
+      ],
+      isMigrationConfirm: false,
+      isMaintenanceConfirm: false,
+      errorTimeout: 7500,
+      isLoading: false,
+      endMaintenanceError: false,
+    };
 	},
 	computed: {
 		canStartMigration() {
@@ -255,7 +269,7 @@ export default {
 			return ImportUserModule.getTotalUnmatched;
 		},
 		totalImportUsers() {
-			return ImportUserModule.getImportUserList.total;
+      return ImportUserModule.getTotal;
 		},
 	},
 	watch: {
@@ -293,33 +307,42 @@ export default {
 			if (!this.canStartMigration) {
 				return;
 			}
-			await ImportUserModule.fetchTotalMatched();
+      await ImportUserModule.fetchTotal();
+      await ImportUserModule.fetchTotalMatched();
 			await ImportUserModule.fetchTotalUnmatched();
 		},
-		performMigration() {
-			// TODO call api
-			this.isLoading = true;
+    async performMigration() {
+      // TODO call api
+      this.isLoading = true;
 
-			// fake api call
-			setTimeout(() => {
-				SchoolsModule.setSchool({
-					...SchoolsModule.getSchool,
-					inUserMigration: false,
-				});
-				//this.school.inUserMigration = false;
-				this.isLoading = false;
-				this.migrationStep = 4;
-			}, 1000);
-		},
-		endMaintanence() {
-			this.isLoading = true;
-			// fake api call
-			setTimeout(() => {
-				this.school.inMaintenance = false;
-				this.isLoading = false;
-				this.migrationStep = 5;
-			}, 1000);
-		},
+      // fake api call
+      setTimeout(() => {
+        SchoolsModule.setSchool({
+          ...SchoolsModule.getSchool,
+          inUserMigration: false,
+        });
+        //this.school.inUserMigration = false;
+        this.isLoading = false;
+        this.migrationStep = 4;
+      }, 1000);
+    },
+    async endMaintenance() {
+      if (!this.isMaintenanceConfirm) {
+        return;
+      }
+      this.isLoading = true;
+      await SchoolsModule.endMaintenance();
+      if (SchoolsModule.getError) {
+        // TODO better error handling
+        ImportUserModule.setBusinessError({
+          message: SchoolsModule.getError,
+          statusCode: "500",
+        });
+      } else {
+        this.migrationStep = 5;
+      }
+      this.isLoading = false;
+    },
 		resetBusinessError() {
 			ImportUserModule.setBusinessError(null);
 		},

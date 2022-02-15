@@ -152,18 +152,19 @@
 							</v-btn-toggle>
 						</td>
 						<td>
-							<v-btn-toggle v-model="searchFlagged" borderless group>
-								<v-btn
-									icon
-									value="true"
-									:title="$t('components.organisms.importUsers.searchFlagged')"
-								>
-									<v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
-										mdiFlag
-									}}</v-icon>
-								</v-btn>
-							</v-btn-toggle>
-						</td>
+              <v-btn-toggle v-model="searchFlagged" class="searchFlagged" borderless group>
+                <v-btn
+                    icon
+                    value="true"
+                    :title="$t('components.organisms.importUsers.searchFlagged')"
+                >
+                  <v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
+                      mdiFlag
+                    }}
+                  </v-icon>
+                </v-btn>
+              </v-btn-toggle>
+            </td>
 					</tr>
 				</template>
 
@@ -265,189 +266,191 @@ import {
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 
 export default {
-	components: {
-		vImportUsersMatchSearch,
-	},
-	data() {
-		return {
-			mdiAccountPlus,
-			mdiAccountSwitch,
-			mdiAccountSwitchOutline,
-			mdiFlag,
-			mdiFlagOutline,
-			mdiPencil,
-			MatchedBy,
-			loading: false,
-			roles: [
-				{
-					text: this.$t("components.organisms.importUsers.roleStudent"),
-					value: ImportUserResponseRoleNamesEnum.Student,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.roleTeacher"),
-					value: ImportUserResponseRoleNamesEnum.Teacher,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.roleAdministrator"),
-					value: ImportUserResponseRoleNamesEnum.Admin,
-				},
-			],
-			search: "",
-			searchFirstName: "",
-			searchLastName: "",
-			searchLoginName: "",
-			searchRole: "",
-			searchClasses: "",
-			searchMatchedBy: [MatchedBy.None],
-			searchFlagged: false,
-			dialogEdit: false,
-			options: {
-				itemsPerPage: 25,
-			},
-			importUsers: [],
-			totalImportUsers: 0,
-			defaultItem: {
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			},
-			editedItem: {
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			},
-			editedIndex: -1,
-			delay: 500,
-		};
-	},
-	computed: {
-		tableHead() {
-			return [
-				{
-					text: this.$t("components.organisms.importUsers.tableFirstName"),
-					value: "firstName",
-					sortable: true,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableLastName"),
-					value: "lastName",
-					sortable: true,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableUserName"),
-					value: "loginName",
-					sortable: false,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableRoles"),
-					value: "roleNames",
-					sortable: false,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableClasses"),
-					value: "classNames",
-					sortable: false,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableMatch"),
-					value: "match",
-					sortable: false,
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableFlag"),
-					value: "flagged",
-					sortable: false,
-				},
-			];
-		},
-		canStartMigration() {
-			return this.school.inUserMigration && this.school.inMaintenance;
-		},
-		canFinishMigration() {
-			return false;
-		},
-		school() {
-			return SchoolsModule.getSchool;
-		},
-	},
-	watch: {
-		dialogEdit(val) {
-			val || this.closeEdit();
-		},
-		options: {
-			async handler() {
-				await this.getDataFromApi();
-			},
-			deep: true,
-		},
-		async searchFirstName() {
-			await this.searchApi();
-		},
-		async searchLastName() {
-			await this.searchApi();
-		},
-		async searchLoginName() {
-			await this.searchApi();
-		},
-		async searchRole() {
-			await this.searchApi();
-		},
-		async searchClasses() {
-			await this.searchApi();
-		},
-		async searchMatchedBy() {
-			await this.searchApi();
-		},
-		async searchFlagged() {
-			await this.searchApi();
-		},
-	},
-	methods: {
-		getRoles(roles) {
-			const rolesLables = [];
-			if (Array.isArray(roles) && roles.length > 0) {
-				if (roles.includes("student")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleStudent")
-					);
-				}
-				if (roles.includes("teacher")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleTeacher")
-					);
-				}
-				if (roles.includes("admin")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleAdministrator")
-					);
-				}
-			}
-			return rolesLables.join(", ");
-		},
-		getMatchedByIcon(match) {
-			if (!match || !match.matchedBy) {
-				return mdiAccountPlus;
-			}
-			if (match.matchedBy === MatchedBy.Auto) {
-				return mdiAccountSwitchOutline;
-			}
-			if (match.matchedBy === MatchedBy.Admin) {
-				return mdiAccountSwitch;
-			}
-		},
-		editItem(item) {
-			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			this.dialogEdit = true;
-		},
+  components: {
+    vImportUsersMatchSearch,
+  },
+  data() {
+    return {
+      mdiAccountPlus,
+      mdiAccountSwitch,
+      mdiAccountSwitchOutline,
+      mdiFlag,
+      mdiFlagOutline,
+      mdiPencil,
+      MatchedBy,
+      loading: false,
+      roles: [
+        {
+          text: this.$t("components.organisms.importUsers.roleStudent"),
+          value: ImportUserResponseRoleNamesEnum.Student,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.roleTeacher"),
+          value: ImportUserResponseRoleNamesEnum.Teacher,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.roleAdministrator"),
+          value: ImportUserResponseRoleNamesEnum.Admin,
+        },
+      ],
+      search: "",
+      searchFirstName: "",
+      searchLastName: "",
+      searchLoginName: "",
+      searchRole: "",
+      searchClasses: "",
+      searchMatchedBy: [MatchedBy.None],
+      searchFlagged: false,
+      dialogEdit: false,
+      options: {
+        itemsPerPage: 25,
+      },
+      importUsers: [],
+      totalImportUsers: 0,
+      defaultItem: {
+        firstName: "",
+        lastName: "",
+        loginName: "",
+        roleNames: [],
+        classNames: [],
+        match: {},
+        flagged: false,
+      },
+      editedItem: {
+        firstName: "",
+        lastName: "",
+        loginName: "",
+        roleNames: [],
+        classNames: [],
+        match: {},
+        flagged: false,
+      },
+      editedIndex: -1,
+      delay: 500,
+    };
+  },
+  computed: {
+    tableHead() {
+      return [
+        {
+          text: this.$t("components.organisms.importUsers.tableFirstName"),
+          value: "firstName",
+          sortable: true,
+          class: 'head_firstName',
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableLastName"),
+          value: "lastName",
+          sortable: true,
+          class: 'head_lastName',
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableUserName"),
+          value: "loginName",
+          sortable: false,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableRoles"),
+          value: "roleNames",
+          sortable: false,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableClasses"),
+          value: "classNames",
+          sortable: false,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableMatch"),
+          value: "match",
+          sortable: false,
+        },
+        {
+          text: this.$t("components.organisms.importUsers.tableFlag"),
+          value: "flagged",
+          sortable: false,
+        },
+      ];
+    },
+    canStartMigration() {
+      return this.school.inUserMigration && this.school.inMaintenance;
+    },
+    canFinishMigration() {
+      return false;
+    },
+    school() {
+      return SchoolsModule.getSchool;
+    },
+  },
+  watch: {
+    dialogEdit(val) {
+      val || this.closeEdit();
+    },
+    options: {
+      async handler() {
+        await this.getDataFromApi();
+      },
+      deep: true,
+    },
+    async searchFirstName() {
+      await this.searchApi();
+    },
+    async searchLastName() {
+      await this.searchApi();
+    },
+    async searchLoginName() {
+      await this.searchApi();
+    },
+    async searchRole() {
+      await this.searchApi();
+    },
+    async searchClasses() {
+      await this.searchApi();
+    },
+    async searchMatchedBy() {
+      await this.searchApi();
+    },
+    async searchFlagged() {
+      await this.searchApi();
+    },
+  },
+  methods: {
+    getRoles(roles) {
+      const rolesLables = [];
+      if (Array.isArray(roles) && roles.length > 0) {
+        if (roles.includes("student")) {
+          rolesLables.push(
+              this.$t("components.organisms.importUsers.roleStudent")
+          );
+        }
+        if (roles.includes("teacher")) {
+          rolesLables.push(
+              this.$t("components.organisms.importUsers.roleTeacher")
+          );
+        }
+        if (roles.includes("admin")) {
+          rolesLables.push(
+              this.$t("components.organisms.importUsers.roleAdministrator")
+          );
+        }
+      }
+      return rolesLables.join(", ");
+    },
+    getMatchedByIcon(match) {
+      if (!match || !match.matchedBy) {
+        return mdiAccountPlus;
+      }
+      if (match.matchedBy === MatchedBy.Auto) {
+        return mdiAccountSwitchOutline;
+      }
+      if (match.matchedBy === MatchedBy.Admin) {
+        return mdiAccountSwitch;
+      }
+    },
+    editItem(item) {
+      this.editedIndex = this.importUsers.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogEdit = true;
+    },
 		closeEdit() {
 			this.dialogEdit = false;
 			this.$nextTick(() => {

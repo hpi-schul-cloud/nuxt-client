@@ -53,6 +53,7 @@ export class ImportUsersModule extends VuexModule {
 	private skip: number = 0;
 	private sortBy: string = "";
 	private sortOrder: any = "asc";
+	private total: number = 0;
 	private totalMatched: number = 0;
 
 	private userList: UserMatchListResponse = {
@@ -168,6 +169,15 @@ export class ImportUsersModule extends VuexModule {
 
 	get getTotalUnmatched(): number {
 		return this.totalUnmatched;
+	}
+
+	@Mutation
+	setTotal(total: number): void {
+		this.total = total;
+	}
+
+	get getTotal(): number {
+		return this.total;
 	}
 
 	@Mutation
@@ -293,15 +303,23 @@ export class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async fetchTotalUnmatched(): Promise<void> {
+	async fetchTotal(): Promise<void> {
 		try {
 			const response =
-				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
+				await this.importUserApi.importUserControllerFindAllImportUsers(
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
 					undefined,
 					0,
 					1
 				);
-			this.setTotalUnmatched(response.data.total);
+			this.setTotal(response.data.total);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
@@ -328,6 +346,24 @@ export class ImportUsersModule extends VuexModule {
 					1
 				);
 			this.setTotalMatched(response.data.total);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
+		}
+	}
+
+	@Action
+	async fetchTotalUnmatched(): Promise<void> {
+		try {
+			const response =
+				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
+					undefined,
+					0,
+					1
+				);
+			this.setTotalUnmatched(response.data.total);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,

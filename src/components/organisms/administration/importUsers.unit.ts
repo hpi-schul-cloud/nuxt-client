@@ -140,7 +140,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 	});
 
 	describe("should search with all columns", async () => {
-		it("should set search data properties when search texts change", async () => {
+		it("should set search data properties when search first name changes", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -153,7 +153,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			getDataFromApiSpy.mockClear();
 		});
 
-		it("should set search data properties when search texts change", async () => {
+		it("should set search data properties when search last name changes", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -166,7 +166,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			getDataFromApiSpy.mockClear();
 		});
 
-		it("should set search data properties when search texts change", async () => {
+		it("should set search data properties when search username changes", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -179,7 +179,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			getDataFromApiSpy.mockClear();
 		});
 
-		it("should set search data properties when search texts change", async () => {
+		it("should set search data properties when search role changes", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -193,7 +193,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			getDataFromApiSpy.mockClear();
 		});
 
-		it("should set search data properties when search texts change", async () => {
+		it("should set search data properties when search classes changes", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -205,6 +205,66 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			expect(wrapper.vm.searchClasses).toStrictEqual("class search");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 			getDataFromApiSpy.mockClear();
+		});
+
+		it.todo("should search data proprieties when match filter is set");
+		it.skip("should set search data proprieties when flag filter is toggle", async () => {
+			const getDataFromApiSpy = jest.fn();
+			const wrapper = getWrapper(mockData);
+			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+
+			const searchFlaggedElement = wrapper.find("#searchFlagged");
+			searchFlaggedElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.searchFlagged).toStrictEqual(true);
+
+			searchFlaggedElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.searchFlagged).toStrictEqual(false);
+
+			expect(getDataFromApiSpy).toHaveBeenCalled();
+			getDataFromApiSpy.mockClear();
+		});
+	});
+
+	describe("should sort by column", async () => {
+		it.skip("should sort by first name", async () => {
+			const getDataFromApiSpy = jest.fn();
+			const wrapper = getWrapper(mockData);
+			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+
+			const sortFirstNameElement = wrapper.find(".head_firstName");
+			sortFirstNameElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.options.sortBy[0]).toBe("firstName"); // does not work
+			expect(wrapper.vm.options.sortDesc[0]).toBe(false);
+
+			sortFirstNameElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.options.sortDesc[0]).toBe(true);
+
+			getDataFromApiSpy.mockClear();
+		});
+		it.skip("should sort by last name", async () => {
+			const getDataFromApiSpy = jest.fn();
+			const wrapper = getWrapper(mockData);
+			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+
+			const sortLastNameElement = wrapper.find(".head_lastName"); // does not work
+			sortLastNameElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.options.sortBy[0]).toBe("lastName");
+			expect(wrapper.vm.options.sortDesc[0]).toBe(false);
+
+			sortLastNameElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.options.sortDesc[0]).toBe(true);
 		});
 	});
 });

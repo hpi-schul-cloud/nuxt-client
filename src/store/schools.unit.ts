@@ -1,5 +1,5 @@
 import { Schools } from "./schools";
-import { initializeAxios } from "../utils/api";
+import { initializeAxios } from "@utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import AuthModule from "./auth";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
@@ -408,6 +408,13 @@ describe("schools module", () => {
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
+		});
+		describe("endMaintenance", () => {
+			it.todo("should call backend and set state correctly", async () => {});
+			it.todo(
+				"should trigger error and goes into the catch block",
+				async () => {}
+			);
 		});
 	});
 
