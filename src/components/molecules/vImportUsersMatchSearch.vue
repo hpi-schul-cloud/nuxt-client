@@ -355,20 +355,19 @@ export default {
 			}
 		},
 		async deleteMatch() {
-			if (!this.editedItem.match) {
-				return false;
-			}
-			const importUser = await ImportUsersModule.deleteMatch(
-				this.editedItem.importUserId
-			);
-			console.log(importUser.match);
-			if (
-				!ImportUsersModule.getBusinessError &&
-				importUser.match === undefined
-			) {
-				this.$emit("deletedMatch");
-				this.closeEdit();
-			}
+      if (!this.editedItem.match || !this.editedItem.match.userId) {
+        return false;
+      }
+      const importUser = await ImportUsersModule.deleteMatch(
+          this.editedItem.importUserId
+      );
+      if (
+          !ImportUsersModule.getBusinessError &&
+          importUser.match === undefined
+      ) {
+        this.$emit("deletedMatch");
+        this.closeEdit();
+      }
 		},
 		async saveFlag() {
 			const importUser = await ImportUsersModule.saveFlag({

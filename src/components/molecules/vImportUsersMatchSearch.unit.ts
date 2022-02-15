@@ -93,8 +93,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 	});
 
 	it("should saveMatch method triggered when save button clicked", async () => {
-		const saveMatch = jest.fn();
-		const payload = {
+		const match = {
 			userId: "0000d231816abba584714c9e",
 			loginName: "lehrer@schul-cloud.org",
 			firstName: "Cord",
@@ -102,18 +101,78 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			roleNames: ["teacher"],
 			text: "Cord Carl",
 		};
+
+		const saveMatchMock = jest.spyOn(ImportUsersModule, "saveMatch");
+		saveMatchMock.mockImplementation(async () => {
+			return Promise.resolve({ ...testProps.editedItem, match }) as any;
+		});
+
 		const wrapper = getWrapper(testProps);
-		wrapper.vm.saveMatch = saveMatch;
+
 		const autoCompleteElement = wrapper.find(".v-autocomplete");
-		await autoCompleteElement.vm.$emit("input", payload);
+		await autoCompleteElement.vm.$emit("input", match);
 		await wrapper.vm.$nextTick();
 
 		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
 		await saveMatchButton.trigger("click");
 
-		expect(saveMatch).toHaveBeenCalled();
+		expect(saveMatchMock).toHaveBeenCalledTimes(1);
+		expect(saveMatchMock).toHaveBeenCalledWith({
+			importUserId: testProps.editedItem.importUserId,
+			userId: match.userId,
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.emitted().savedMatch).toBeTruthy();
+	});
+
+	it("should deleteMatch method triggered when delete button clicked", async () => {
+		const importUser = {
+			flagged: false,
+			importUserId: "123",
+			loginName: "max_mus",
+			firstName: "Max",
+			lastName: "Mustermann",
+			roleNames: ["student"],
+			classNames: ["6a"],
+		};
+		const match = {
+			userId: "0000d213816abba584714c0a",
+			loginName: "admin@schul-cloud.org",
+			firstName: "Thorsten",
+			lastName: "Test",
+			roleNames: ["admin"],
+			matchedBy: "admin",
+		};
+		const wrapper = getWrapper({
+			editedItem: { ...importUser, match },
+		});
+
+		const deleteMatchMock = jest.spyOn(ImportUsersModule, "deleteMatch");
+		deleteMatchMock.mockImplementation(async () => {
+			return Promise.resolve(importUser) as any;
+		});
+		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
+		await deleteMatchButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		expect(deleteMatchMock).toHaveBeenCalledTimes(1);
+		expect(deleteMatchMock).toHaveBeenCalledWith(
+			testProps.editedItem.importUserId
+		);
+		expect(wrapper.emitted().deletedMatch).toBeTruthy();
+	});
+
+	it("should disable delete button when edited item has no match", () => {
+		const wrapper = getWrapper(testProps);
+		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
+
+		expect(deleteMatchButton.vm.disabled).toBe(true);
+	});
+
+	it("should disable save button when no no item was selected", () => {
+		const wrapper = getWrapper(testProps);
+		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
+
+		expect(saveMatchButton.vm.disabled).toBe(true);
 	});
 });
-function resolve(arg0: { importUser: { flagged: boolean } }): any {
-	throw new Error("Function not implemented.");
-}
