@@ -5,10 +5,11 @@
 		:aria-label="ariaLabel"
 		:href="lessonHref(lesson.id, room.roomId)"
 		tabindex="0"
+		outlined
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<div class="text-h4 title-section text--primary" tabindex="0">
+				<div class="text-h6 title-section text--primary" tabindex="0">
 					{{ lesson.name }}
 				</div>
 			</div>
@@ -50,7 +51,7 @@ export default {
 	data() {
 		return {
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiDotsVertical: mdiDotsVertical,
+			mdiDotsVertical,
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -59,8 +60,6 @@ export default {
 			return room.displayColor || this.defaultTitleColor;
 		},
 		cardActions() {
-			// TODO: add i18i files
-			// TODO: actions must be controled by UX
 			return [];
 		},
 	},
@@ -87,7 +86,17 @@ export default {
 	}
 }
 .action-button {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	color: var(--color-primary);
+}
+.v-card {
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+
+	&:hover {
+		box-shadow: var(--shadow-m);
+	}
+}
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
 }
 </style>

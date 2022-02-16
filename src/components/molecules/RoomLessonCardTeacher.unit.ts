@@ -90,4 +90,21 @@ describe("@components/molecules/RoomLessonCardTeacher", () => {
 
 		expect(actionButtons).toHaveLength(0);
 	});
+
+	it("'more action' button should trigger the 'redirectAction' method", async () => {
+		const redirectAction = jest.fn();
+		const wrapper = getWrapper(baseTestProps);
+		wrapper.vm.redirectAction = redirectAction;
+
+		const threeDotButton = wrapper.find(".three-dot-button");
+		await threeDotButton.trigger("click");
+
+		const moreActionButton = wrapper.find(".task-action");
+		await moreActionButton.trigger("click");
+
+		expect(redirectAction).toHaveBeenCalled();
+		expect(redirectAction.mock.calls[0][0]).toStrictEqual(
+			"/courses/456/topics/123/edit"
+		);
+	});
 });
