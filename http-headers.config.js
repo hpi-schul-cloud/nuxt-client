@@ -49,7 +49,7 @@ module.exports = {
 			styleSrc: `'self' 'unsafe-inline' ${matrixMessengerEmbed}`,
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
 			scriptSrc: `'self' 'unsafe-eval' ${matrixMessengerEmbed}`,
-			frameSrc: "'self' data: blob: https://docs.hpi-schul-cloud.org'",
+			frameSrc: "'self' ${matrixMessengerEmbed} https://docs.hpi-schul-cloud.org'",
 			// Please activate for production
 			// upgradeInsecureRequestsSrc: 'upgrade-insecure-requests',
 			// blockAllMixedContentSrc: 'block-all-mixed-content',
