@@ -276,17 +276,17 @@ export class Schools extends VuexModule {
 
 	@Action
 	async endMaintenance(): Promise<void> {
-		const school = this.getSchool;
-		if (!school.inMaintenance) {
+		if (!this.school.inMaintenance) {
 			return;
 		}
 		this.setLoading(true);
 		try {
-			await $axios.$post(`/v1/schools/${school._id}/maintenance`, {
+			await $axios.$post(`/v1/schools/${this.school._id}/maintenance`, {
 				maintenance: false,
 			});
-			school.inMaintenance = false;
-			this.setSchool(school);
+			const school = this.school;
+			delete school.inMaintenance;
+			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

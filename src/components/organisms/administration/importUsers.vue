@@ -99,12 +99,12 @@
 						<td class="col-2">
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
 								<v-btn
-									icon
-									:value="MatchedBy.None"
-									:title="
+                    icon
+                    :value="MatchedBy.None"
+                    :title="
 										$t('components.organisms.importUsers.searchUnMatched')
 									"
-									color=""
+                    class="searchMatchedByNone"
 								>
 									<v-icon
 										:color="
@@ -116,12 +116,12 @@
 									>
 								</v-btn>
 								<v-btn
-									icon
-									:value="MatchedBy.Admin"
-									:title="
+                    icon
+                    :value="MatchedBy.Admin"
+                    :title="
 										$t('components.organisms.importUsers.searchAdminMatched')
 									"
-									color=""
+                    class="searchMatchedByAdmin"
 								>
 									<v-icon
 										:color="
@@ -133,12 +133,12 @@
 									>
 								</v-btn>
 								<v-btn
-									icon
-									:value="MatchedBy.Auto"
-									:title="
+                    icon
+                    :value="MatchedBy.Auto"
+                    :title="
 										$t('components.organisms.importUsers.searchAutoMatched')
 									"
-									color=""
+                    class="searchMatchedByAuto"
 								>
 									<v-icon
 										:color="
@@ -152,11 +152,12 @@
 							</v-btn-toggle>
 						</td>
 						<td>
-              <v-btn-toggle v-model="searchFlagged" class="searchFlagged" borderless group>
+              <v-btn-toggle v-model="searchFlagged" borderless group>
                 <v-btn
                     icon
                     value="true"
                     :title="$t('components.organisms.importUsers.searchFlagged')"
+                    class="searchFlagged"
                 >
                   <v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
                       mdiFlag

@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import importUsers from "./importUsers.vue";
+import { MatchedBy } from "@store/import-users";
 
 declare var createComponentMocks: Function;
 
@@ -84,7 +85,7 @@ const mockData = {
 	searchFlagged: false,
 	searchLastName: "",
 	searchLoginName: "",
-	searchMatchedBy: ["none"],
+	searchMatchedBy: [],
 	searchRole: "",
 	totalImportUsers: 3,
 };
@@ -100,7 +101,7 @@ const getWrapper: any = (data?: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/RoomTaskCardTeacher", () => {
+describe("@components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 	});
@@ -139,98 +140,107 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		expect(dataTableElement.vm.items).toStrictEqual(mockData.importUsers);
 	});
 
-	describe("should search with all columns", async () => {
-		it("should set search data properties when search first name changes", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
+	describe("should search with all columns", () => {
+		let getDataFromApiSpy: any;
+		let wrapper: any;
+		beforeEach(() => {
+			getDataFromApiSpy = jest.fn();
+			wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+		});
 
+		afterEach(() => {
+			getDataFromApiSpy.mockClear();
+		});
+
+		it("should set search data properties when search first name changes", async () => {
 			const searchFirstNameElement = wrapper.find(".searchFirstName");
 			searchFirstNameElement.vm.$emit("input", "some text");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.searchFirstName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 
 		it("should set search data properties when search last name changes", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-
 			const searchLastNameElement = wrapper.find(".searchLastName");
 			searchLastNameElement.vm.$emit("input", "some text");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.searchLastName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 
 		it("should set search data properties when search username changes", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-
 			const searchLoginNameElement = wrapper.find(".searchLoginName");
 			searchLoginNameElement.vm.$emit("input", "some text");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.searchLoginName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 
 		it("should set search data properties when search role changes", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-
 			const searchRoleElement = wrapper.find(".searchRole");
 			searchRoleElement.vm.$emit("input", "role search");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.searchRole).toStrictEqual("role search");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 
 		it("should set search data properties when search classes changes", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-
 			const searchClassesElement = wrapper.find(".searchClasses");
 			searchClassesElement.vm.$emit("input", "class search");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.searchClasses).toStrictEqual("class search");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 
-		it.todo("should search data proprieties when match filter is set");
-		it.skip("should set search data proprieties when flag filter is toggle", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+		it("should search data proprieties when match filter is set", async () => {
+			const searchMatchedByNoneElement = wrapper.find(".searchMatchedByNone");
+			const searchMatchedByAdminElement = wrapper.find(".searchMatchedByAdmin");
+			const searchMatchedByAutoElement = wrapper.find(".searchMatchedByAuto");
 
-			const searchFlaggedElement = wrapper.find("#searchFlagged");
+			searchMatchedByNoneElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None]);
+
+			searchMatchedByAdminElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
+				MatchedBy.None,
+				MatchedBy.Admin,
+			]);
+
+			searchMatchedByAutoElement.trigger("click");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
+				MatchedBy.None,
+				MatchedBy.Admin,
+				MatchedBy.Auto,
+			]);
+		});
+
+		it("should set search data proprieties when flag filter is toggle", async () => {
+			const searchFlaggedElement = wrapper.find(".searchFlagged");
 			searchFlaggedElement.trigger("click");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.searchFlagged).toStrictEqual(true);
+			expect(wrapper.vm.searchFlagged).toBeTruthy();
 
 			searchFlaggedElement.trigger("click");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.searchFlagged).toStrictEqual(false);
+			expect(wrapper.vm.searchFlagged).toBeFalsy();
 
 			expect(getDataFromApiSpy).toHaveBeenCalled();
-			getDataFromApiSpy.mockClear();
 		});
 	});
 
-	describe("should sort by column", async () => {
-		it.skip("should sort by first name", async () => {
+	describe("should sort by column", () => {
+		it("should sort by first name", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
@@ -240,7 +250,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 
-			expect(wrapper.vm.options.sortBy[0]).toBe("firstName"); // does not work
+			expect(wrapper.vm.options.sortBy[0]).toBe("firstName");
 			expect(wrapper.vm.options.sortDesc[0]).toBe(false);
 
 			sortFirstNameElement.trigger("click");
@@ -249,12 +259,12 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 
 			getDataFromApiSpy.mockClear();
 		});
-		it.skip("should sort by last name", async () => {
+		it("should sort by last name", async () => {
 			const getDataFromApiSpy = jest.fn();
 			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
 
-			const sortLastNameElement = wrapper.find(".head_lastName"); // does not work
+			const sortLastNameElement = wrapper.find(".head_lastName");
 			sortLastNameElement.trigger("click");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
@@ -265,6 +275,8 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			sortLastNameElement.trigger("click");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.options.sortDesc[0]).toBe(true);
+
+			getDataFromApiSpy.mockClear();
 		});
 	});
 });
