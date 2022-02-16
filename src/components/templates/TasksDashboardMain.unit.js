@@ -105,11 +105,14 @@ describe("@components/templates/TasksDashboardMain", () => {
 
 		describe("with hasTasks === true", () => {
 			beforeEach(() => {
-				Object.assign(taskModuleMock, {
+				taskModuleMock = {
+					...taskModuleMock,
 					hasTasks: true,
 					getCourseFilters: [],
 					getSelectedCourseFilters: [],
-				});
+				};
+				mockTaskModule.mockReturnValue(taskModuleMock);
+
 				wrapper = mountComponent({
 					propsData: {
 						role: "student",
