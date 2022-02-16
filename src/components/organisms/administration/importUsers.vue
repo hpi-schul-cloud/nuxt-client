@@ -105,9 +105,9 @@
 										$t('components.organisms.importUsers.searchUnMatched')
 									"
                     class="searchMatchedByNone"
-								>
-									<v-icon
-										:color="
+                >
+                  <v-icon
+                      :color="
 											searchMatchedBy.includes(MatchedBy.None)
 												? 'primary'
 												: 'secondary'
@@ -115,16 +115,16 @@
 										>{{ mdiAccountPlus }}</v-icon
 									>
 								</v-btn>
-								<v-btn
+                <v-btn
                     icon
                     :value="MatchedBy.Admin"
                     :title="
 										$t('components.organisms.importUsers.searchAdminMatched')
 									"
                     class="searchMatchedByAdmin"
-								>
-									<v-icon
-										:color="
+                >
+                  <v-icon
+                      :color="
 											searchMatchedBy.includes(MatchedBy.Admin)
 												? 'primary'
 												: 'secondary'
@@ -132,16 +132,16 @@
 										>{{ mdiAccountSwitch }}</v-icon
 									>
 								</v-btn>
-								<v-btn
+                <v-btn
                     icon
                     :value="MatchedBy.Auto"
                     :title="
 										$t('components.organisms.importUsers.searchAutoMatched')
 									"
                     class="searchMatchedByAuto"
-								>
-									<v-icon
-										:color="
+                >
+                  <v-icon
+                      :color="
 											searchMatchedBy.includes(MatchedBy.Auto)
 												? 'primary'
 												: 'secondary'
@@ -151,7 +151,7 @@
 								</v-btn>
 							</v-btn-toggle>
 						</td>
-						<td>
+            <td>
               <v-btn-toggle v-model="searchFlagged" borderless group>
                 <v-btn
                     icon
@@ -159,9 +159,8 @@
                     :title="$t('components.organisms.importUsers.searchFlagged')"
                     class="searchFlagged"
                 >
-                  <v-icon :color="searchFlagged ? 'primary' : 'secondary'">{{
-                      mdiFlag
-                    }}
+                  <v-icon :color="searchFlagged ? 'primary' : 'secondary'"
+                  >{{ mdiFlag }}
                   </v-icon>
                 </v-btn>
               </v-btn-toggle>
@@ -337,13 +336,13 @@ export default {
           text: this.$t("components.organisms.importUsers.tableFirstName"),
           value: "firstName",
           sortable: true,
-          class: 'head_firstName',
+          class: "head_firstName",
         },
         {
           text: this.$t("components.organisms.importUsers.tableLastName"),
           value: "lastName",
           sortable: true,
-          class: 'head_lastName',
+          class: "head_lastName",
         },
         {
           text: this.$t("components.organisms.importUsers.tableUserName"),
@@ -452,16 +451,16 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialogEdit = true;
     },
-		closeEdit() {
-			this.dialogEdit = false;
-			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem);
-				this.editedIndex = -1;
-			});
-		},
-		async savedMatch() {
-			// TODO should reset page?
-			if (this.searchMatchedBy) {
+    closeEdit() {
+      this.dialogEdit = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    async savedMatch() {
+      // TODO should reset page?
+      if (this.searchMatchedBy) {
 				this.loading = true;
 				this.reloadData();
 			}
