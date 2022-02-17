@@ -5,15 +5,15 @@
 		:aria-label="ariaLabel"
 		:href="lessonHref(lesson.id, room.roomId)"
 		tabindex="0"
+		outlined
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
-				<div class="text-h4 title-section text--primary" tabindex="0">
+				<div class="text-h6 title-section text--primary" tabindex="0">
 					{{ lesson.name }}
 				</div>
 				<div class="dot-menu-section">
-					<!-- Action menu to be determined with UXers-->
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
+					<more-item-menu :menu-items="moreActionsMenuItems" :show="true" />
 				</div>
 			</div>
 		</v-card-text>
@@ -32,10 +32,12 @@
 </template>
 
 <script>
-import { mdiDotsVertical } from "@mdi/js";
+import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
+import MoreItemMenu from "./MoreItemMenu";
+
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 export default {
-	components: {},
+	components: { MoreItemMenu },
 	props: {
 		lesson: {
 			type: Object,
@@ -54,7 +56,8 @@ export default {
 	data() {
 		return {
 			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiDotsVertical: mdiDotsVertical,
+			mdiDotsVertical,
+			mdiPencilOutline,
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -66,8 +69,6 @@ export default {
 			return this.lesson.hidden;
 		},
 		cardActions() {
-			// TODO: add i18i files
-			// TODO: actions must be controled by UX
 			if (this.isHidden) {
 				return [
 					{
@@ -79,10 +80,25 @@ export default {
 			}
 			return [];
 		},
+		moreActionsMenuItems() {
+			return [
+				{
+					icon: this.mdiPencilOutline,
+					action: () =>
+						this.redirectAction(
+							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit`
+						),
+					name: this.$t("pages.room.taskCard.label.edit"),
+				},
+			];
+		},
 	},
 	methods: {
 		lessonHref: (id, roomId) => {
 			return `/courses/${roomId}/topics/${id}`;
+		},
+		redirectAction(value) {
+			window.location = value;
 		},
 	},
 };
@@ -103,7 +119,17 @@ export default {
 	}
 }
 .action-button {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	color: var(--color-primary);
+}
+.v-card {
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+
+	&:hover {
+		box-shadow: var(--shadow-m);
+	}
+}
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
 }
 </style>
