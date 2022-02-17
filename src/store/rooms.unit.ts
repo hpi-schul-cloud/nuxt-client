@@ -527,6 +527,32 @@ describe("rooms module", () => {
 				});
 			});
 		});
+
+		describe("setBusinessError", () => {
+			it("should set businessError", () => {
+				const roomsModule = new Rooms({});
+				const businessErrorData = {
+					statusCode: "400",
+					message: "error",
+					error: { type: "BadRequest" },
+				};
+				expect(roomsModule.getBusinessError).not.toBe(businessErrorData);
+				roomsModule.setBusinessError(businessErrorData);
+				expect(roomsModule.businessError).toBe(businessErrorData);
+			});
+			it("should reset businessError", () => {
+				const roomsModule = new Rooms({});
+				roomsModule.businessError = {
+					statusCode: "400",
+					message: "error",
+					error: {},
+				};
+
+				roomsModule.resetBusinessError();
+				expect(roomsModule.businessError.statusCode).toStrictEqual("");
+				expect(roomsModule.businessError.message).toStrictEqual("");
+			});
+		});
 	});
 
 	describe("getters", () => {
