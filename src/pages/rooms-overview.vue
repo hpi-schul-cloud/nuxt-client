@@ -115,7 +115,11 @@
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
-		<import-modal v-model="importDialog.isOpen" @update-rooms="updateRooms">
+		<import-modal
+			v-model="importDialog.isOpen"
+			class="import-modal"
+			@update-rooms="updateRooms"
+		>
 		</import-modal>
 	</default-wireframe>
 </template>
