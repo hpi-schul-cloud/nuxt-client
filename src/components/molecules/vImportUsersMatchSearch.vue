@@ -365,23 +365,28 @@ export default {
 				!ImportUsersModule.getBusinessError &&
 				importUser.match === undefined
 			) {
-				this.$emit("deletedMatch");
-				this.closeEdit();
-			}
-		},
-		async saveFlag() {
-			const importUser = await ImportUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.flagged,
-			});
-			if (
-				!ImportUsersModule.getBusinessError &&
-				importUser.flagged === !this.flagged
-			) {
-				this.flagged = !this.flagged;
-				this.$emit("savedFlag");
-			}
-		},
-	},
+        this.$emit("deletedMatch");
+        this.closeEdit();
+      }
+    },
+    async saveFlag() {
+      const importUser = await ImportUsersModule.saveFlag({
+        importUserId: this.editedItem.importUserId,
+        flagged: !this.flagged,
+      });
+      if (
+          !ImportUsersModule.getBusinessError &&
+          importUser.flagged === !this.flagged
+      ) {
+        this.flagged = !this.flagged;
+        this.$emit("savedFlag");
+      }
+    },
+  },
 };
 </script>
+<style scoped>
+.v-dialog--active {
+  overflow-y: hidden !important;
+}
+</style>
