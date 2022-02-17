@@ -115,7 +115,8 @@
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
-		<import-modal v-model="importDialog.isOpen"> </import-modal>
+		<import-modal v-model="importDialog.isOpen" @update-rooms="updateRooms">
+		</import-modal>
 	</default-wireframe>
 </template>
 
@@ -407,6 +408,9 @@ export default {
 		},
 		fabClick() {
 			this.importDialog.isOpen = true;
+		},
+		async updateRooms() {
+			await RoomsModule.fetch();
 		},
 	},
 	head() {

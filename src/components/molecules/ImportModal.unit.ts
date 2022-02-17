@@ -10,70 +10,64 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should open and close on property change", async () => {
-		const testProps = {
-			isOpen: false,
-		};
 		const wrapper = mount(ImportModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			propsData: testProps,
+			propsData: {
+				isOpen: false,
+			},
 		});
 		const dialog = wrapper.find(".import-dialog");
 		const importDialog = wrapper.vm.$refs.importDialog as any;
 		expect(dialog.exists()).toBe(true);
-		expect(importDialog.isOpen).toBeFalsy();
+		expect(importDialog.isOpen).toBe(false);
 		await wrapper.setProps({
 			isOpen: true,
 		});
-		expect(importDialog.isOpen).toBeTruthy();
+		expect(importDialog.isOpen).toBe(true);
 		await wrapper.setProps({
 			isOpen: false,
 		});
-		expect(importDialog.isOpen).toBeFalsy();
+		expect(importDialog.isOpen).toBe(false);
 	});
 
 	it("should emit event if vuetify modal is closed", async () => {
-		const testProps = {
-			isOpen: false,
-		};
 		const wrapper = mount(ImportModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			propsData: testProps,
+			propsData: {
+				isOpen: true,
+			},
 		});
 		const customDialog = wrapper.vm.$refs.importDialog as any;
 		customDialog.$emit("dialog-closed");
 		const emitted = wrapper.emitted("dialog-closed");
 		expect(emitted).toHaveLength(1);
-		expect(emitted && emitted[0][0]).toBeFalsy();
+		expect(emitted && emitted[0][0]).toBe(false);
 	});
 
 	it("stepper should work by setting step value", async () => {
-		const testProps = {
-			isOpen: true,
-		};
-		const wrapper = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			propsData: testProps,
+			propsData: {
+				isOpen: true,
+			},
 		});
 		const stepper = wrapper.find(".stepper");
 
 		wrapper.setData({ step: 1 });
-		// @ts-ignore
 		expect(stepper.vm.steps[0].isActive).toBe(true);
 
 		wrapper.setData({ step: 2 });
 		await wrapper.vm.$nextTick();
-		// @ts-ignore
 		expect(stepper.vm.steps[1].isActive).toBe(true);
 
 		wrapper.setData({ step: 3 });
 		await wrapper.vm.$nextTick();
-		// @ts-ignore
 		expect(stepper.vm.steps[2].isActive).toBe(true);
 	});
 
@@ -87,23 +81,22 @@ describe("@components/molecules/RoomModal", () => {
 			status: "success",
 			message: "",
 		};
-		const wrapper = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			propsData: testProps,
 		});
+
 		wrapper.setData({ step: 2, sharedCourseData });
 		await wrapper.vm.$nextTick();
 
 		const textCourseCode = wrapper.find(".text-field-course-code");
-		// @ts-ignore
 		expect(textCourseCode.vm.value).toStrictEqual("123");
 
 		wrapper.setData({ step: 3, sharedCourseData });
 		await wrapper.vm.$nextTick();
 		const textCourseName = wrapper.find(".text-field-course-name");
-		// @ts-ignore
 		expect(textCourseName.vm.value).toStrictEqual("Mathe");
 	});
 
@@ -111,21 +104,19 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 		};
-		const wrapper = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			propsData: testProps,
 		});
 
-		const btnConfirm = wrapper.find(".dialog-confirmed");
+		const btnConfirm = wrapper.find(".dialog-next");
 		const btnBack = wrapper.find(".dialog-back-button");
 		btnConfirm.trigger("click");
-		// @ts-ignore
 		expect(wrapper.vm.step).toStrictEqual(2);
 
 		btnBack.trigger("click");
-		// @ts-ignore
 		expect(wrapper.vm.step).toStrictEqual(1);
 	});
 
@@ -147,30 +138,6 @@ describe("@components/molecules/RoomModal", () => {
 		expect(emitted["dialog-closed"]).toHaveLength(1);
 	});
 
-	it("confirm button should be disabled if status is error", async () => {
-		const testProps = {
-			isOpen: true,
-		};
-		const sharedCourseData = {
-			code: "123",
-			courseName: "",
-			status: "error",
-			message: "",
-		};
-		const wrapper = mount(ImportModal, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: testProps,
-		});
-		wrapper.setData({ step: 3, sharedCourseData });
-		await wrapper.vm.$nextTick();
-
-		const btnConfirm = wrapper.find(".dialog-confirmed");
-		// @ts-ignore
-		expect(btnConfirm.vm.disabled).toBe(true);
-	});
-
 	it("next button title should change if step=3 ", async () => {
 		const testProps = {
 			isOpen: true,
@@ -185,10 +152,66 @@ describe("@components/molecules/RoomModal", () => {
 		wrapper.setData({ step: 2 });
 		await wrapper.vm.$nextTick();
 
-		const btnConfirm = wrapper.find(".dialog-confirmed");
+		const btnConfirm = wrapper.find(".dialog-next");
 		expect(btnConfirm.element.innerHTML).toContain("Weiter");
 		wrapper.setData({ step: 3 });
 		await wrapper.vm.$nextTick();
 		expect(btnConfirm.element.innerHTML).toContain("Importieren");
+	});
+
+	describe("error handling", () => {
+		it("should show code-error section if server sends shareToken error", async () => {
+			const getSharedCourseDataMock = jest.spyOn(
+				RoomsModule,
+				"getSharedCourseData"
+			);
+			const wrapper: any = mount(ImportModal, {
+				...createComponentMocks({
+					i18n: true,
+				}),
+				propsData: {
+					isOpen: true,
+				},
+			});
+
+			wrapper.setData({ step: 2 });
+			await wrapper.vm.$nextTick();
+			const errorElementBefore = wrapper.find(".code-error");
+			expect(errorElementBefore.exists()).toBe(false);
+
+			const btnNext = wrapper.find(".dialog-next");
+			await btnNext.trigger("click");
+			expect(getSharedCourseDataMock).toHaveBeenCalled();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.businessError.message).toStrictEqual("code error");
+			expect(wrapper.vm.businessError.statusCode).toStrictEqual("400");
+			const errorElementAfter = wrapper.find(".code-error");
+			expect(errorElementAfter.element.textContent).toContain(
+				"Der Kurs-Code wird nicht verwendet."
+			);
+			getSharedCourseDataMock.mockClear();
+		});
+
+		it("should not go to step#3 if there is a code error", async () => {
+			const wrapper: any = mount(ImportModal, {
+				...createComponentMocks({
+					i18n: true,
+				}),
+				propsData: {
+					isOpen: true,
+				},
+			});
+
+			wrapper.setData({ step: 2 });
+			await wrapper.vm.$nextTick();
+
+			const btnNext = wrapper.find(".dialog-next");
+			await btnNext.trigger("click");
+			await wrapper.vm.$nextTick();
+
+			await btnNext.trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.step).toStrictEqual(2);
+		});
 	});
 });
