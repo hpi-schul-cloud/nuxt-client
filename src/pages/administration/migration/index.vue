@@ -334,7 +334,6 @@ export default {
 			this.isLoading = true;
 			await SchoolsModule.endMaintenance();
 			if (SchoolsModule.getError) {
-				console.log(SchoolsModule.getError);
 				// TODO better error handling
 				ImportUserModule.setBusinessError({
 					statusCode: "500",

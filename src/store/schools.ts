@@ -288,7 +288,6 @@ export class Schools extends VuexModule {
 				inMaintenanceSince: null,
 			});
 			this.setSchool({ ...this.school, inMaintenance: false });
-			console.log(this.getSchool);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

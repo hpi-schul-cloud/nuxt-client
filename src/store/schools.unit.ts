@@ -409,12 +409,83 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+
 		describe("endMaintenance", () => {
-			it.todo("should call backend and set state correctly", async () => {});
-			it.todo(
-				"should trigger error and goes into the catch block",
-				async () => {}
-			);
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should not call backend if inMaintenance is false", async () => {
+				initializeAxios({
+					$patch: async (path: string) => {
+						receivedRequests.push({ path });
+						return {};
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new Schools({});
+
+				await schoolsModule.endMaintenance();
+				schoolsModule.setSchool({
+					...mockSchool,
+					inMaintenance: false,
+				});
+
+				expect(receivedRequests.length).toBe(0);
+			});
+			it("should call backend and set state correctly", async () => {
+				initializeAxios({
+					$patch: async (path: string) => {
+						receivedRequests.push({ path });
+						return {};
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new Schools({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					inMaintenance: true,
+				});
+
+				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+
+				await schoolsModule.endMaintenance();
+
+				expect(receivedRequests.length).toBe(1);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"/v1/schools/mockSchoolId"
+				);
+				expect(setLoadingSpy).toHaveBeenCalled();
+
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setSchoolSpy).toHaveBeenCalled();
+				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					$patch: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new Schools({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					inMaintenance: true,
+				});
+				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+				await schoolsModule.endMaintenance();
+
+				expect(receivedRequests.length).toBe(0);
+				expect(setErrorSpy).toHaveBeenCalled();
+				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
 		});
 	});
 
