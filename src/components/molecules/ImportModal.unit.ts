@@ -187,7 +187,7 @@ describe("@components/molecules/RoomModal", () => {
 			expect(wrapper.vm.businessError.statusCode).toStrictEqual("400");
 			const errorElementAfter = wrapper.find(".code-error");
 			expect(errorElementAfter.element.textContent).toContain(
-				"Der Kurs-Code wird nicht verwendet."
+				wrapper.vm.$i18n.t("pages.rooms.importCourse.codeError")
 			);
 			getSharedCourseDataMock.mockClear();
 		});
@@ -212,6 +212,42 @@ describe("@components/molecules/RoomModal", () => {
 			await btnNext.trigger("click");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.step).toStrictEqual(2);
+		});
+
+		it("should show import-error section if server sends import-error", async () => {
+			const wrapper: any = mount(ImportModal, {
+				...createComponentMocks({
+					i18n: true,
+				}),
+				propsData: {
+					isOpen: true,
+				},
+			});
+
+			await wrapper.setData({ step: 3 });
+			await wrapper.vm.$nextTick();
+			const confirmButtonBefore = wrapper.find(".dialog-confirmed");
+			const errorElementBefore = wrapper.find(".import-error");
+
+			expect(errorElementBefore.exists()).toBe(false);
+			expect(confirmButtonBefore.exists()).toBe(false);
+
+			await wrapper.setData({
+				businessError: {
+					statusCode: "400",
+					message: "import error",
+					error: {},
+				},
+				step: 3,
+				isImportError: true,
+			});
+
+			const errorElementAfter = wrapper.find(".import-error");
+			const confirmButtonAfter = wrapper.find(".dialog-confirmed");
+			expect(errorElementAfter.element.textContent).toContain(
+				wrapper.vm.$i18n.t("pages.rooms.importCourse.importError")
+			);
+			expect(confirmButtonAfter.exists()).toBe(true);
 		});
 	});
 });

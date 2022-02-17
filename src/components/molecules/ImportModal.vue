@@ -51,7 +51,7 @@
 						dense
 						class="mt-1 text-field-course-code"
 					></v-text-field>
-					<div v-if="businessError.message !== ''">
+					<div v-if="businessError.message === 'code error'">
 						<v-alert dense outlined type="error" class="code-error">
 							{{ $t("pages.rooms.importCourse.codeError") }}
 						</v-alert>
@@ -67,7 +67,7 @@
 						class="mt-1 text-field-course-name"
 						:disabled="isImportError"
 					></v-text-field>
-					<div v-if="businessError.message !== ''">
+					<div v-if="businessError.message === 'import error'">
 						<v-alert dense outlined type="error" class="import-error">
 							{{ $t("pages.rooms.importCourse.importError") }}
 						</v-alert>
