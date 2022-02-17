@@ -7,7 +7,7 @@ import SchoolsModule from "@store/schools";
 declare var createComponentMocks: Function;
 
 const $theme = {
-	short_name: "testxxx",
+	short_name: "instance name",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -225,15 +225,11 @@ describe("User Migration / Index", () => {
 			const totalImportUsers = 10;
 			const totalMatched = 2;
 			const totalUnmatched = 4;
-			const importUsersListMock = {
-				data: [],
-				total: totalImportUsers,
-				skip: 0,
-				limit: 1,
-			};
+
+			ImportUsersModule.setTotal(totalImportUsers);
 			ImportUsersModule.setTotalUnmatched(totalUnmatched);
 			ImportUsersModule.setTotalMatched(totalMatched);
-			ImportUsersModule.setImportUsersList(importUsersListMock);
+
 			const wrapper = getWrapper();
 
 			const summaryText = wrapper.vm.$i18n.t(
@@ -265,11 +261,88 @@ describe("User Migration / Index", () => {
 			expect(btn.vm.disabled).toBe(false);
 		});
 
-		it.todo("perform migration");
+		it("implement perform migration", async () => {
+			SchoolsModule.setSchool(schoolMock);
+
+			const performMigrationMock = jest.spyOn(
+				ImportUsersModule,
+				"performMigration"
+			);
+			performMigrationMock.mockImplementation(async () => {
+				return Promise.resolve() as any;
+			});
+
+			const wrapper = getWrapper();
+			const btn = wrapper.find("[data-testid=migration_performMigration]");
+			wrapper.setData({ migrationStep: 3, isMigrationConfirm: true });
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(btn.vm.disabled).toBe(false);
+
+			btn.trigger("click");
+
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			// TODO after implementing of backend and store, mock store response and expect to be called with
+			expect(performMigrationMock).toHaveBeenCalledTimes(1);
+			expect(wrapper.vm.migrationStep).toBe(4);
+			expect(SchoolsModule.getSchool.inUserMigration).toBe(false);
+			expect(wrapper.vm.school.inUserMigration).toBe(false);
+		});
 	});
 
 	describe("show maintenance/Transferphase", () => {
-		it.todo("should disable end maintenance button, if confirm not checked");
-		it.todo("perform end maintenance");
+		let wrapper: any;
+		beforeEach(async () => {
+			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
+			wrapper = getWrapper();
+			wrapper.setData({
+				migrationStep: 4,
+				isMigrationConfirm: true,
+			});
+			await wrapper.vm.$nextTick();
+		});
+
+		it("should show text", async () => {
+			const stepperContent = wrapper.find("[data-testid=migration_finish]");
+			const endTransferPhase = wrapper.vm.$i18n
+				.t("pages.administration.migration.endTransferPhase")
+				.replace(/<(.|\n)*?>/g, "");
+			expect(stepperContent.element.textContent).toContain(endTransferPhase);
+		});
+
+		it("should disable end maintenance button, if confirm not checked", async () => {
+			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
+			expect(btn.vm.disabled).toBe(true);
+
+			const check = wrapper.find("[data-testid=isMaintenanceConfirm]");
+			check.trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(btn.vm.disabled).toBe(false);
+		});
+
+		it("perform end maintenance", async () => {
+			const endMaintenanceMock = jest.spyOn(SchoolsModule, "endMaintenance");
+			endMaintenanceMock.mockImplementation(async () => {
+				SchoolsModule.setSchool({
+					...SchoolsModule.getSchool,
+					inMaintenance: false,
+				});
+				return Promise.resolve({}) as any;
+			});
+
+			wrapper.setData({ isMaintenanceConfirm: true });
+			await wrapper.vm.$nextTick();
+
+			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
+			btn.trigger("click");
+
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
+			expect(wrapper.vm.migrationStep).toBe(5);
+			expect(wrapper.vm.school.inMaintenance).toBe(false);
+		});
 	});
 });

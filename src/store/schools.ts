@@ -281,12 +281,14 @@ export class Schools extends VuexModule {
 		}
 		this.setLoading(true);
 		try {
-			await $axios.$post(`/v1/schools/${this.school._id}/maintenance`, {
-				maintenance: false,
+			// TODO use a new endpoint and don't send null
+			// schools/${this.school._id}/maintenance has unwanted logic about school year
+			await $axios.$patch(`/v1/schools/${this.school._id}`, {
+				inMaintenance: false,
+				inMaintenanceSince: null,
 			});
-			const school = this.school;
-			delete school.inMaintenance;
 			this.setSchool({ ...this.school, inMaintenance: false });
+			console.log(this.getSchool);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

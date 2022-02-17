@@ -47,7 +47,7 @@ export type School = {
 	};
 	enableStudentTeamCreation: boolean;
 	permissions: {};
-	inMaintenance?: boolean;
+	inMaintenance: boolean;
 	inUserMigration: boolean;
 	documentBaseDir: string;
 	isExternal: boolean;

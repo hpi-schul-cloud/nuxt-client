@@ -101,29 +101,30 @@
 						<v-btn color="secondary" @click="migrationStep = 1">{{
 							$t("pages.administration.migration.back")
 						}}</v-btn>
-						<v-btn
-							id="migration_importUsers_next"
-							color="primary"
-							:disabled="!canStartMigration"
-							@click="migrationStep = 3"
-							>{{ $t("pages.administration.migration.next") }}</v-btn
-						>
-					</v-stepper-content>
+            <v-btn
+                id="migration_importUsers_next"
+                color="primary"
+                :disabled="!canPerformMigration"
+                @click="migrationStep = 3"
+            >{{ $t("pages.administration.migration.next") }}
+            </v-btn
+            >
+          </v-stepper-content>
 
-					<v-stepper-content
-						v-if="canStartMigration && !isMigrationFinished"
-						step="3"
-						data-testid="migration_summary"
-					>
-						<v-card
-							:ripple="false"
-							elevation="2"
-							class="pa-5 mb-10"
-							color="grey lighten-5"
-						>
-							<div v-if="!isLoading">
-								<div
-									v-html="
+          <v-stepper-content
+              v-if="canPerformMigration && !isMigrationFinished"
+              step="3"
+              data-testid="migration_summary"
+          >
+            <v-card
+                :ripple="false"
+                elevation="2"
+                class="pa-5 mb-10"
+                color="grey lighten-5"
+            >
+              <div v-if="!isLoading">
+                <div
+                    v-html="
 										$t('pages.administration.migration.summary', {
 											instance: this.$theme.short_name,
 											source: $t('pages.administration.migration.ldapSource'),
@@ -132,8 +133,8 @@
 											usersUnmatchedCount: totalMatched,
 										})
 									"
-								></div>
-								<br />
+                ></div>
+                <br/>
 								<p>
 									<v-checkbox
 										v-model="isMigrationConfirm"
@@ -169,29 +170,31 @@
 
 					<v-stepper-content data-testid="migration_finish" step="4">
 						<div v-if="canFinishMaintenance">
-							<v-card
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey lighten-5"
-							>
-								<div
-									v-html="$t('pages.administration.migration.endTransferPhase')"
-								></div>
-								<v-checkbox
-									v-model="isMaintenanceConfirm"
-									:label="
+              <v-card
+                  :ripple="false"
+                  elevation="2"
+                  class="pa-5 mb-10"
+                  color="grey lighten-5"
+              >
+                <div
+                    v-html="$t('pages.administration.migration.endTransferPhase')"
+                ></div>
+                <v-checkbox
+                    v-model="isMaintenanceConfirm"
+                    :label="
 										$t('pages.administration.migration.confirmMaintenance')
 									"
-								></v-checkbox>
-							</v-card>
-							<v-btn
-								:disabled="!isMaintenanceConfirm"
-								class="primary"
-								@click="endMaintenance"
-								>{{ $t("pages.administration.migration.finishTransferPhase") }}
-							</v-btn>
-						</div>
+                    data-testid="isMaintenanceConfirm"
+                ></v-checkbox>
+              </v-card>
+              <v-btn
+                  :disabled="!isMaintenanceConfirm"
+                  class="primary"
+                  data-testid="migration_endMaintenance"
+                  @click="endMaintenance"
+              >{{ $t("pages.administration.migration.finishTransferPhase") }}
+              </v-btn>
+            </div>
 					</v-stepper-content>
 
 					<v-stepper-content step="5" data-testid="migration_waitForSync">
@@ -237,29 +240,29 @@ export default {
 		};
 	},
 	computed: {
-		canStartMigration() {
-			return this.school.inUserMigration === true && this.school.inMaintenance;
-		},
-		isMigrationFinished() {
-			return this.school.inUserMigration === false;
-		},
-		canFinishMaintenance() {
-			return this.isMigrationConfirm && this.isMigrationFinished;
-		},
-		isMaintenanceFinished() {
-			return !this.school.inMaintenance;
-		},
-		school() {
-			return SchoolsModule.getSchool;
-		},
-		businessError() {
-			const error = ImportUserModule.getBusinessError;
-			if (error && error.message && error.statusCode) {
-				return {
-					message: error.message,
-					statusCode: error.statusCode,
-				};
-			}
+    canPerformMigration() {
+      return this.school.inUserMigration === true && this.school.inMaintenance;
+    },
+    isMigrationFinished() {
+      return this.school.inUserMigration === false;
+    },
+    canFinishMaintenance() {
+      return this.isMigrationConfirm && this.isMigrationFinished;
+    },
+    isMaintenanceFinished() {
+      return !this.school.inMaintenance;
+    },
+    school() {
+      return SchoolsModule.getSchool;
+    },
+    businessError() {
+      const error = ImportUserModule.getBusinessError;
+      if (error && error.message && error.statusCode) {
+        return {
+          message: error.message,
+          statusCode: error.statusCode,
+        };
+      }
 			return false;
 		},
 		totalMatched() {
@@ -289,64 +292,65 @@ export default {
 				case 1:
 					return !this.isLoading && !this.isMaintenanceFinished;
 				case 2:
-					return this.canStartMigration && !this.isMigrationFinished;
+          return this.canPerformMigration && !this.isMigrationFinished;
 				case 3:
-					return this.canStartMigration && !this.isMigrationFinished;
-				case 4:
-					return (
-						!this.isLoading &&
-						this.isMigrationFinished &&
-						!this.isMaintenanceFinished
-					);
-				case 5:
-				default:
-					return false;
-			}
-		},
-		async summary() {
-			if (!this.canStartMigration) {
-				return;
-			}
-			await ImportUserModule.fetchTotal();
-			await ImportUserModule.fetchTotalMatched();
-			await ImportUserModule.fetchTotalUnmatched();
-		},
-		async performMigration() {
-			// TODO call api
-			this.isLoading = true;
-
-			// fake api call
-			setTimeout(() => {
-				SchoolsModule.setSchool({
-					...SchoolsModule.getSchool,
-					inUserMigration: false,
-				});
-				//this.school.inUserMigration = false;
-				this.isLoading = false;
-				this.migrationStep = 4;
-			}, 1000);
-		},
-		async endMaintenance() {
-			if (!this.isMaintenanceConfirm) {
-				return;
-			}
-			this.isLoading = true;
-			await SchoolsModule.endMaintenance();
-			if (SchoolsModule.getError) {
-				// TODO better error handling
-				ImportUserModule.setBusinessError({
-					message: SchoolsModule.getError,
-					statusCode: "500",
-				});
-			} else {
-				this.migrationStep = 5;
-			}
-			this.isLoading = false;
-		},
-		resetBusinessError() {
-			ImportUserModule.setBusinessError(null);
-		},
-		scrollToTop() {
+          return this.canPerformMigration && !this.isMigrationFinished;
+        case 4:
+          return (
+              !this.isLoading &&
+              this.isMigrationFinished &&
+              !this.isMaintenanceFinished
+          );
+        case 5:
+        default:
+          return false;
+      }
+    },
+    async summary() {
+      if (!this.canPerformMigration) {
+        return;
+      }
+      await ImportUserModule.fetchTotal();
+      await ImportUserModule.fetchTotalMatched();
+      await ImportUserModule.fetchTotalUnmatched();
+    },
+    async performMigration() {
+      this.isLoading = true;
+      // TODO
+      await ImportUserModule.performMigration();
+      if (!ImportUserModule.getBusinessError) {
+        SchoolsModule.setSchool({
+          ...SchoolsModule.getSchool,
+          inUserMigration: false,
+        });
+        this.school.inUserMigration = false;
+        this.isLoading = false;
+        this.migrationStep = 4;
+      }
+    },
+    async endMaintenance() {
+      if (!this.isMaintenanceConfirm) {
+        return;
+      }
+      this.isLoading = true;
+      await SchoolsModule.endMaintenance();
+      if (SchoolsModule.getError) {
+        console.log(SchoolsModule.getError);
+        // TODO better error handling
+        ImportUserModule.setBusinessError({
+          statusCode: "500",
+          message: SchoolsModule.getError.message,
+        });
+      } else {
+        this.school.inMaintenance = false;
+        this.migrationStep = 5;
+      }
+      this.isLoading = false;
+    },
+    resetBusinessError() {
+      ImportUserModule.setBusinessError(null);
+    },
+    scrollToTop() {
 			window.scrollTo(0, 0);
 		},
 	},

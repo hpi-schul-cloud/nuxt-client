@@ -372,6 +372,19 @@ export class ImportUsersModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async performMigration(): Promise<void> {
+		try {
+			// TODO
+			// await callApi();
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
+		}
+	}
+
 	private get importUserApi(): UserImportApiInterface {
 		if (!this._importUserApi) {
 			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
