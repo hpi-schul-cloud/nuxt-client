@@ -74,10 +74,10 @@
 							</v-list-item-content>
 							<v-list-item-content v-else-if="editedItem.match">
 								<v-list-item-title>
-                  {{
-                    `${editedItem.match.firstName} ${editedItem.match.lastName}`
-                  }}
-                </v-list-item-title>
+									{{
+										`${editedItem.match.firstName} ${editedItem.match.lastName}`
+									}}
+								</v-list-item-title>
 								<v-list-item-subtitle>
 									{{
 										editedItem.match.roleNames
@@ -85,13 +85,13 @@
 											: ""
 									}}
 								</v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  {{
-                    `${$t("components.organisms.importUsers.tableUserName")}: ${
-                        editedItem.match.loginName
-                    }`
-                  }}
-                </v-list-item-subtitle>
+								<v-list-item-subtitle>
+									{{
+										`${$t("components.organisms.importUsers.tableUserName")}: ${
+											editedItem.match.loginName
+										}`
+									}}
+								</v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else>{{
 								$t("components.molecules.importUsersMatch.unMatched")
@@ -127,7 +127,7 @@
 									class="white--text"
 									v-on="on"
 								>
-                  <span>{{ `${item.firstName} ${item.lastName}` }}</span>
+									<span>{{ `${item.firstName} ${item.lastName}` }}</span>
 								</v-chip>
 							</template>
 							<template v-slot:item="{ item }">
@@ -138,13 +138,13 @@
 									<v-list-item-subtitle>
 										{{ item.roleNames ? item.roleNames.join(", ") : "" }}
 									</v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    {{
-                      `${$t(
-                          "components.organisms.importUsers.tableUserName"
-                      )}: ${item.loginName}`
-                    }}
-                  </v-list-item-subtitle>
+									<v-list-item-subtitle>
+										{{
+											`${$t(
+												"components.organisms.importUsers.tableUserName"
+											)}: ${item.loginName}`
+										}}
+									</v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
 							<template v-slot:append-item>
@@ -157,19 +157,18 @@
 			<v-card-actions>
 				<v-col class="col-6">
 					{{ $t("components.molecules.importUsersMatch.flag") }}
-          <v-btn
-              v-model="flagged"
-              icon
-              :color="flagged ? 'primary' : ''"
-              class="ma-2"
-              data-testid="flag-button"
-              @click="saveFlag"
-          >
-            <v-icon color="primary">{{
-                flagged ? mdiFlag : mdiFlagOutline
-              }}
-            </v-icon>
-          </v-btn>
+					<v-btn
+						v-model="flagged"
+						icon
+						:color="flagged ? 'primary' : ''"
+						class="ma-2"
+						data-testid="flag-button"
+						@click="saveFlag"
+					>
+						<v-icon color="primary"
+							>{{ flagged ? mdiFlag : mdiFlagOutline }}
+						</v-icon>
+					</v-btn>
 				</v-col>
 				<v-col class="col-6 text-right">
 					<v-btn
@@ -299,9 +298,9 @@ export default {
 		},
 	},
 	created() {
-    this.flagged = this.editedItem.flagged;
-    this.getDataFromApi();
-  },
+		this.flagged = this.editedItem.flagged;
+		this.getDataFromApi();
+	},
 	methods: {
 		async endIntersect(entries, observer, isIntersecting) {
 			if (isIntersecting) {
@@ -343,9 +342,9 @@ export default {
 				importUser.match &&
 				importUser.match.userId === this.selectedItem.userId
 			) {
-        this.$emit("saved-match");
-        this.closeEdit();
-      }
+				this.$emit("saved-match");
+				this.closeEdit();
+			}
 		},
 		async deleteMatch() {
 			if (!this.editedItem.match || !this.editedItem.match.userId) {
@@ -358,9 +357,9 @@ export default {
 				!ImportUsersModule.getBusinessError &&
 				importUser.match === undefined
 			) {
-        this.$emit("deleted-match");
-        this.closeEdit();
-      }
+				this.$emit("deleted-match");
+				this.closeEdit();
+			}
 		},
 		async saveFlag() {
 			const importUser = await ImportUsersModule.saveFlag({
@@ -371,9 +370,9 @@ export default {
 				!ImportUsersModule.getBusinessError &&
 				importUser.flagged === !this.flagged
 			) {
-        this.flagged = !this.flagged;
-        this.$emit("saved-flag");
-      }
+				this.flagged = !this.flagged;
+				this.$emit("saved-flag");
+			}
 		},
 	},
 };
