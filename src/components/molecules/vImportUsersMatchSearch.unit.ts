@@ -122,7 +122,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			userId: match.userId,
 		});
 		await wrapper.vm.$nextTick();
-		expect(wrapper.emitted().savedMatch).toBeTruthy();
+		expect(wrapper.emitted()["saved-match"]).toBeTruthy();
 	});
 
 	it("should deleteMatch method triggered when delete button clicked", async () => {
@@ -159,7 +159,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 		expect(deleteMatchMock).toHaveBeenCalledWith(
 			testProps.editedItem.importUserId
 		);
-		expect(wrapper.emitted().deletedMatch).toBeTruthy();
+		expect(wrapper.emitted()["deleted-match"]).toBeTruthy();
 	});
 
 	it("should disable delete button when edited item has no match", () => {
