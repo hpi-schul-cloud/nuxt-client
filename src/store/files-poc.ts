@@ -31,15 +31,14 @@ export class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			console.log(file);
 			const schoolId = AuthModule.getUser?.schoolId;
 
-			const form = new FormData();
-			form.append("file", file, file.name);
+			const formData = new FormData();
+			formData.append("file", file, file.name);
 
 			const response = await $axios.post(
 				`http://localhost:4444/api/v3/files-storage/upload/${schoolId}/schools/${schoolId}`,
-				form,
+				formData,
 				{
 					onUploadProgress: (...args) => {
 						console.log(args);

@@ -26,14 +26,15 @@
 				multiple
 				label="Datei auswählen"
 			></v-file-input>
-			<v-btn color="primary" @click="upload">Hochladen</v-btn>
+			<v-btn color="primary" :loading="loading" @click="upload">
+				Hochladen
+			</v-btn>
 		</div>
 	</default-wireframe>
 </template>
 
 <script>
 import FilesPOCModule from "@/store/files-poc";
-
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 export default {
@@ -45,6 +46,11 @@ export default {
 		return {
 			files: null,
 		};
+	},
+	computed: {
+		loading: () => {
+			return FilesPOCModule.getStatus === "pending";
+		},
 	},
 	methods: {
 		upload() {
