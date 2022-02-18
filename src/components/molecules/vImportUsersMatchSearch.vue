@@ -74,9 +74,8 @@
 							</v-list-item-content>
 							<v-list-item-content v-else-if="editedItem.match">
 								<v-list-item-title>
-									{{ editedItem.match.firstName }}
-									{{ editedItem.match.lastName }}
-								</v-list-item-title>
+                  {{ `${editedItem.match.firstName} ${editedItem.match.lastName}` }}
+                </v-list-item-title>
 								<v-list-item-subtitle>
 									{{
 										editedItem.match.roleNames
@@ -85,9 +84,8 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									{{ $t("components.organisms.importUsers.tableUserName") }}:
-									{{ editedItem.match.loginName }}
-								</v-list-item-subtitle>
+                  {{ `${$t("components.organisms.importUsers.tableUserName")}: ${editedItem.match.loginName}` }}
+                </v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else>{{
 								$t("components.molecules.importUsersMatch.unMatched")
@@ -123,7 +121,7 @@
 									class="white--text"
 									v-on="on"
 								>
-									<span>{{ item.firstName }} {{ item.lastName }}</span>
+                  <span>{{ `${item.firstName} ${item.lastName}` }}</span>
 								</v-chip>
 							</template>
 							<template v-slot:item="{ item }">
@@ -135,9 +133,8 @@
 										{{ item.roleNames ? item.roleNames.join(", ") : "" }}
 									</v-list-item-subtitle>
 									<v-list-item-subtitle>
-										{{ $t("components.organisms.importUsers.tableUserName") }}:
-										{{ item.loginName }}
-									</v-list-item-subtitle>
+                    {{ `${$t("components.organisms.importUsers.tableUserName")}: ${item.loginName}` }}
+                  </v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
 							<template v-slot:append-item>
@@ -151,25 +148,14 @@
 				<v-col class="col-6">
 					{{ $t("components.molecules.importUsersMatch.flag") }}
 					<v-btn
-						v-if="flagged"
-						v-model="flagged"
-						icon
-						color="primary"
-						class="ma-2"
-						data-testid="flag-button"
-						@click="saveFlag"
+              v-model="flagged"
+              icon
+              :color="flagged ? 'primary' : ''"
+              class="ma-2"
+              data-testid="flag-button"
+              @click="saveFlag"
 					>
-						<v-icon color="primary">{{ mdiFlag }}</v-icon>
-					</v-btn>
-					<v-btn
-						v-else
-						v-model="flagged"
-						icon
-						class="ma-2"
-						data-testid="flag-button"
-						@click="saveFlag"
-					>
-						<v-icon>{{ mdiFlagOutline }}</v-icon>
+            <v-icon color="primary">{{ flagged ? mdiFlag : mdiFlagOutline }}</v-icon>
 					</v-btn>
 				</v-col>
 				<v-col class="col-6 text-right">
@@ -202,10 +188,7 @@
 </template>
 <script>
 import {
-	mdiAccountPlus,
 	mdiAccountSearch,
-	mdiAccountSwitch,
-	mdiAccountSwitchOutline,
 	mdiClose,
 	mdiContentSave,
 	mdiDelete,
@@ -257,10 +240,7 @@ export default {
 	},
 	data() {
 		return {
-			mdiAccountPlus,
 			mdiAccountSearch,
-			mdiAccountSwitch,
-			mdiAccountSwitchOutline,
 			mdiClose,
 			mdiContentSave,
 			mdiDelete,
@@ -306,8 +286,8 @@ export default {
 		},
 	},
 	created() {
-		this.flagged = this.editedItem.flagged;
-		this.getDataFromApi("");
+    this.flagged = this.editedItem.flagged;
+    this.getDataFromApi();
 	},
 	methods: {
 		async endIntersect(entries, observer, isIntersecting) {
@@ -350,8 +330,8 @@ export default {
 				importUser.match &&
 				importUser.match.userId === this.selectedItem.userId
 			) {
-				this.$emit("savedMatch");
-				this.closeEdit();
+        this.$emit("saved-match");
+        this.closeEdit();
 			}
 		},
 		async deleteMatch() {
@@ -365,8 +345,8 @@ export default {
 				!ImportUsersModule.getBusinessError &&
 				importUser.match === undefined
 			) {
-				this.$emit("deletedMatch");
-				this.closeEdit();
+        this.$emit("deleted-match");
+        this.closeEdit();
 			}
 		},
 		async saveFlag() {
@@ -378,8 +358,8 @@ export default {
 				!ImportUsersModule.getBusinessError &&
 				importUser.flagged === !this.flagged
 			) {
-				this.flagged = !this.flagged;
-				this.$emit("savedFlag");
+        this.flagged = !this.flagged;
+        this.$emit("saved-flag");
 			}
 		},
 	},
