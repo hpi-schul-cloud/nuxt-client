@@ -2263,6 +2263,124 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
 
 
 /**
+ * SSOApi - axios parameter creator
+ * @export
+ */
+export const SSOApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow: async (systemid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemid' is not null or undefined
+            assertParamExists('oauthSSOControllerStartOauthAuthorizationCodeFlow', 'systemid', systemid)
+            const localVarPath = `/sso/oauth/{systemid}`
+                .replace(`{${"systemid"}}`, encodeURIComponent(String(systemid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SSOApi - functional programming interface
+ * @export
+ */
+export const SSOApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SSOApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SSOApi - factory interface
+ * @export
+ */
+export const SSOApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SSOApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SSOApi - interface
+ * @export
+ * @interface SSOApi
+ */
+export interface SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object>;
+
+}
+
+/**
+ * SSOApi - object-oriented interface
+ * @export
+ * @class SSOApi
+ * @extends {BaseAPI}
+ */
+export class SSOApi extends BaseAPI implements SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * TaskApi - axios parameter creator
  * @export
  */
