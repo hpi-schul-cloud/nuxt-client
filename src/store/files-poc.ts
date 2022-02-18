@@ -29,22 +29,23 @@ export class FilesPOCModule extends VuexModule {
 	async upload(file: File): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
+
 		try {
 			console.log(file);
 			const schoolId = AuthModule.getUser?.schoolId;
 
-			const fileReader = new FileReader();
-			fileReader.onload = async function () {
-				//	console.log(fileReader.result);
-				const response = await $axios.$post(
-					`http://localhost:4444/api/v3/files-storage/upload/${schoolId}/schools/${schoolId}`,
-					{ file: fileReader.result }
-				);
+			const form = new FormData();
+			form.append("file", file, file.name);
 
-				console.log(response);
-			};
-			fileReader.readAsBinaryString(file);
-			//	console.log(fileReader, fileReader.result);
+			const response = await $axios.post(
+				`http://localhost:4444/api/v3/files-storage/upload/${schoolId}/schools/${schoolId}`,
+				form,
+				{
+					onUploadProgress: (...args) => {
+						console.log(args);
+					},
+				}
+			);
 
 			this.setStatus("completed");
 		} catch (error) {
