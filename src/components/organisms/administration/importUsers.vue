@@ -7,14 +7,14 @@
 			@click:outside="editedItem = defaultItem"
 		>
 			<v-import-users-match-search
-          v-if="dialogEdit"
-          :edited-item="editedItem"
-          :is-dialog="true"
-          @close="closeEdit"
-          @saved-match="savedMatch"
-          @deleted-match="deletedMatch"
-          @saved-flag="savedFlag"
-      ></v-import-users-match-search>
+				v-if="dialogEdit"
+				:edited-item="editedItem"
+				:is-dialog="true"
+				@close="closeEdit"
+				@saved-match="savedMatch"
+				@deleted-match="deletedMatch"
+				@saved-flag="savedFlag"
+			></v-import-users-match-search>
 		</v-dialog>
 
 		<v-alert
