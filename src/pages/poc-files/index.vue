@@ -1,35 +1,24 @@
 <template>
 	<default-wireframe headline="Files POC" :full-width="false">
-		<v-list>
-			<v-list-item>
-				<v-list-item-title>File 1</v-list-item-title>
-			</v-list-item>
-			<v-list-item>
-				<v-list-item-title>File 1</v-list-item-title>
-			</v-list-item>
-			<v-list-item>
-				<v-list-item-title>File 1</v-list-item-title>
-			</v-list-item>
-			<v-list-item>
-				<v-list-item-title>File 1</v-list-item-title>
-			</v-list-item>
-			<v-list-item>
-				<v-list-item-title>File 1</v-list-item-title>
-			</v-list-item>
-		</v-list>
 		<div class="d-flex">
 			<v-file-input
-				v-model="files"
+				v-model="file"
 				show-size
-				counter
 				small-chips
-				multiple
 				label="Datei auswählen"
 			></v-file-input>
-			<v-btn color="primary" :loading="loading" @click="upload">
+			<v-btn color="primary" :loading="isLoading" @click="upload">
 				Hochladen
 			</v-btn>
 		</div>
+		<v-list>
+			<h2 class="h4">Uploaded files</h2>
+			<template v-for="f in files">
+				<v-list-item :key="f.id">
+					<v-list-item-title>{{ f.name }}</v-list-item-title>
+				</v-list-item>
+			</template>
+		</v-list>
 	</default-wireframe>
 </template>
 
@@ -44,20 +33,28 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			files: null,
+			file: null,
 		};
 	},
 	computed: {
-		loading: () => {
-			return FilesPOCModule.getStatus === "pending";
+		loadingState: () => FilesPOCModule.getStatus,
+		files: () => FilesPOCModule.getFiles,
+		isLoading() {
+			return this.loadingState === "pending";
+		},
+	},
+	watch: {
+		loadingState: function (newValue, oldValue) {
+			if (oldValue === "pending" && newValue === "completed") {
+				this.file = null;
+			}
 		},
 	},
 	methods: {
 		upload() {
-			const { files } = this;
-			console.log("upload", this.files);
-			if (files && files.length > 0) {
-				FilesPOCModule.upload(files[0]);
+			const { file } = this;
+			if (file) {
+				FilesPOCModule.upload(file);
 			}
 		},
 	},

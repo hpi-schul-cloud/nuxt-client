@@ -11,13 +11,15 @@ import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
-	name: "finished-tasks",
+	name: "files-poc",
 	namespaced: true,
 	dynamic: true,
 	store: rootStore,
 	stateFactory: true,
 })
 export class FilesPOCModule extends VuexModule {
+	files: File[] = [];
+
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -38,19 +40,26 @@ export class FilesPOCModule extends VuexModule {
 
 			const response = await $axios.post(
 				`http://localhost:4444/api/v3/files-storage/upload/${schoolId}/schools/${schoolId}`,
-				formData,
-				{
-					onUploadProgress: (...args) => {
-						console.log(args);
-					},
-				}
+				formData
+				// {
+				// 	onUploadProgress: (...args) => {
+				// 		console.log(args);
+				// 	},
+				// }
 			);
+
+			this.appendFile(response.data as File);
 
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
 		}
+	}
+
+	@Mutation
+	appendFile(file: File) {
+		this.files.push(file);
 	}
 
 	@Mutation
@@ -69,6 +78,10 @@ export class FilesPOCModule extends VuexModule {
 			statusCode: "",
 			message: "",
 		};
+	}
+
+	get getFiles(): File[] {
+		return this.files;
 	}
 
 	get getStatus(): Status {
