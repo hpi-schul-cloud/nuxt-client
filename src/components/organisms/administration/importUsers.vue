@@ -160,8 +160,8 @@
 									class="searchFlagged"
 								>
 									<v-icon :color="searchFlagged ? 'primary' : 'secondary'"
-										>{{ mdiFlag }}
-									</v-icon>
+                  >{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
+                  </v-icon>
 								</v-btn>
 							</v-btn-toggle>
 						</td>
@@ -195,25 +195,15 @@
 				</template>
 
 				<template v-slot:item.flagged="{ item }">
-					<v-btn
-						v-if="item.flagged"
-						icon
-						color="primary"
-						class="ma-2"
-						:title="$t('components.organisms.importUsers.flagImportUser')"
-						@click="saveFlag(item)"
-					>
-						<v-icon small color="primary">{{ mdiFlag }}</v-icon>
-					</v-btn>
-					<v-btn
-						v-else
-						icon
-						class="ma-2"
-						:title="$t('components.organisms.importUsers.flagImportUser')"
-						@click="saveFlag(item)"
-					>
-						<v-icon small>{{ mdiFlagOutline }}</v-icon>
-					</v-btn>
+          <v-btn
+              icon
+              :color="item.flagged ? 'primary' : ''"
+              class="ma-2"
+              :title="$t('components.organisms.importUsers.flagImportUser')"
+              @click="saveFlag(item)"
+          >
+            <v-icon small :color="item.flagged ? 'primary' : ''">{{ item.flagged ? mdiFlag : mdiFlagOutline }}</v-icon>
+          </v-btn>
 				</template>
 			</v-data-table>
 
@@ -252,6 +242,7 @@
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import SchoolsModule from "@/store/schools";
 import ImportUsersModule, { MatchedBy } from "@store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
@@ -293,7 +284,6 @@ export default {
 					value: ImportUserResponseRoleNamesEnum.Admin,
 				},
 			],
-			search: "",
 			searchFirstName: "",
 			searchLastName: "",
 			searchLoginName: "",
@@ -372,57 +362,58 @@ export default {
 			];
 		},
 		canStartMigration() {
-			return this.school.inUserMigration && this.school.inMaintenance;
-		},
-		canFinishMigration() {
-			return false;
-		},
-		school() {
-			return SchoolsModule.getSchool;
-		},
-	},
-	watch: {
-		dialogEdit(val) {
-			val || this.closeEdit();
-		},
-		options: {
-			async handler() {
-				await this.getDataFromApi();
-			},
-			deep: true,
-		},
-		async searchFirstName() {
-			await this.searchApi();
-		},
-		async searchLastName() {
-			await this.searchApi();
-		},
-		async searchLoginName() {
-			await this.searchApi();
-		},
-		async searchRole() {
-			await this.searchApi();
-		},
-		async searchClasses() {
-			await this.searchApi();
-		},
-		async searchMatchedBy() {
-			await this.searchApi();
-		},
-		async searchFlagged() {
-			await this.searchApi();
-		},
-	},
-	methods: {
-		getRoles(roles) {
-			const rolesLables = [];
-			if (Array.isArray(roles) && roles.length > 0) {
-				if (roles.includes("student")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleStudent")
-					);
-				}
-				if (roles.includes("teacher")) {
+      return this.school.inUserMigration && this.school.inMaintenance;
+    },
+    canFinishMigration() {
+      return false;
+    },
+    school() {
+      return SchoolsModule.getSchool;
+    },
+  },
+  watch: {
+    dialogEdit(val) {
+      console.log(val)
+      val || this.closeEdit();
+    },
+    options: {
+      handler() {
+        this.getDataFromApi();
+      },
+      deep: true,
+    },
+    searchFirstName() {
+      this.searchApi();
+    },
+    searchLastName() {
+      this.searchApi();
+    },
+    searchLoginName() {
+      this.searchApi();
+    },
+    searchRole() {
+      this.searchApi();
+    },
+    searchClasses() {
+      this.searchApi();
+    },
+    searchMatchedBy() {
+      this.searchApi();
+    },
+    searchFlagged() {
+      this.searchApi();
+    },
+  },
+  methods: {
+    getRoles(roles) {
+      const rolesLables = [];
+      if (Array.isArray(roles) && roles.length > 0) {
+        if (roles.includes("student")) {
+          rolesLables.push(
+              this.$t("components.organisms.importUsers.roleStudent")
+          );
+        }
+        if (roles.includes("teacher")) {
 					rolesLables.push(
 						this.$t("components.organisms.importUsers.roleTeacher")
 					);
@@ -448,43 +439,42 @@ export default {
 		},
 		editItem(item) {
 			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			this.dialogEdit = true;
-		},
-		closeEdit() {
-			this.dialogEdit = false;
-			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem);
-				this.editedIndex = -1;
-			});
-		},
-		async savedMatch() {
-			// TODO should reset page?
-			if (this.searchMatchedBy) {
-				this.loading = true;
-				this.reloadData();
-			}
-			this.closeEdit();
-		},
-		async deletedMatch() {
-			this.importUsers[this.editedIndex].match = null;
-			this.importUsers[this.editedIndex].class = "primary";
-			if (this.searchMatchedBy) {
-				this.loading = true;
-				this.reloadData();
-			}
-			this.closeEdit();
-		},
-		async saveFlag(item) {
-			if (this.loading) return false;
-			this.loading = true;
-			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			const importUser = await ImportUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.editedItem.flagged,
-			});
-			if (
+      this.editedItem = Object.assign({}, item);
+      this.dialogEdit = true;
+    },
+    closeEdit() {
+      this.dialogEdit = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    savedMatch() {
+      if (this.searchMatchedBy) {
+        this.loading = true;
+        this.reloadData();
+      }
+      this.closeEdit();
+    },
+    deletedMatch() {
+      this.importUsers[this.editedIndex].match = null;
+      this.importUsers[this.editedIndex].class = "primary";
+      if (this.searchMatchedBy) {
+        this.loading = true;
+        this.reloadData();
+      }
+      this.closeEdit();
+    },
+    async saveFlag(item) {
+      if (this.loading) return false;
+      this.loading = true;
+      this.editedIndex = this.importUsers.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      const importUser = await ImportUsersModule.saveFlag({
+        importUserId: this.editedItem.importUserId,
+        flagged: !this.editedItem.flagged,
+      });
+      if (
 				!ImportUsersModule.getBusinessError &&
 				importUser.flagged === !this.editedItem.flagged
 			) {
@@ -495,33 +485,33 @@ export default {
 			} else {
 				this.loading = false;
 			}
-		},
-		async savedFlag() {
-			this.loading = true;
-			this.reloadData();
-		},
-		reloadData() {
-			setTimeout(() => {
-				this.searchApi();
-			}, this.delay);
-		},
-		async searchApi() {
-			if (!this.canStartMigration) {
-				return;
-			}
-			this.options.page = 1;
-			await this.getDataFromApi();
-		},
-		async getDataFromApi() {
-			this.loading = true;
+    },
+    async savedFlag() {
+      this.loading = true;
+      this.reloadData();
+    },
+    reloadData() {
+      setTimeout(() => {
+        this.searchApi();
+      }, this.delay);
+    },
+    searchApi() {
+      if (!this.canStartMigration) {
+        return;
+      }
+      this.options.page = 1;
+      this.getDataFromApi();
+    },
+    async getDataFromApi() {
+      this.loading = true;
 
-			ImportUsersModule.setFirstName(this.searchFirstName);
-			ImportUsersModule.setLastName(this.searchLastName);
-			ImportUsersModule.setLoginName(this.searchLoginName);
-			ImportUsersModule.setRole(this.searchRole);
-			ImportUsersModule.setClasses(this.searchClasses);
-			ImportUsersModule.setMatch(this.searchMatchedBy);
-			ImportUsersModule.setFlagged(this.searchFlagged);
+      ImportUsersModule.setFirstName(this.searchFirstName);
+      ImportUsersModule.setLastName(this.searchLastName);
+      ImportUsersModule.setLoginName(this.searchLoginName);
+      ImportUsersModule.setRole(this.searchRole);
+      ImportUsersModule.setClasses(this.searchClasses);
+      ImportUsersModule.setMatch(this.searchMatchedBy);
+      ImportUsersModule.setFlagged(this.searchFlagged);
 
 			ImportUsersModule.setLimit(this.options.itemsPerPage);
 			ImportUsersModule.setSkip(

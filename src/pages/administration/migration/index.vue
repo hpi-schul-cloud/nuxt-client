@@ -235,7 +235,6 @@ export default {
 			isMaintenanceConfirm: false,
 			errorTimeout: 7500,
 			isLoading: false,
-			endMaintenanceError: false,
 		};
 	},
 	computed: {
@@ -275,13 +274,10 @@ export default {
 		},
 	},
 	watch: {
-		async progressStepper(val) {
-			if (val === "3") {
-				await this.summary();
-			}
-			this.scrollToTop();
-		},
-	},
+    async migrationStep() {
+      this.scrollToTop();
+    },
+  },
 	created() {
 		this.summary();
 	},
