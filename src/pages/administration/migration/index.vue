@@ -274,10 +274,10 @@ export default {
 		},
 	},
 	watch: {
-    async migrationStep() {
-      this.scrollToTop();
-    },
-  },
+		async migrationStep() {
+			this.scrollToTop();
+		},
+	},
 	created() {
 		this.summary();
 	},
