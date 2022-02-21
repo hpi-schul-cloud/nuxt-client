@@ -1,31 +1,27 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import TaskModule from "@/store/tasks";
+import { TaskModule } from "@/store/tasks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
 
+const mockTaskModule = jest.fn();
+jest.mock("@store/tasks", () => ({
+	...jest.requireActual("@store/tasks"),
+	__esModule: true,
+	get default() {
+		return mockTaskModule();
+	},
+}));
+
 describe("@components/templates/TasksDashboardTeacher", () => {
-	const mockStore = {
-		tasks: {
-			getters: {
-				getStatus: () => "completed",
-				hasTasks: () => true,
-				openTasksForTeacherIsEmpty: () => false,
-				draftsForTeacherIsEmpty: () => true,
-				getOpenTasksForTeacher: () => ({
-					overdue: overDueTasksTeacher,
-					withDueDate: dueDateTasksTeacher,
-					noDueDate: noDueDateTasksTeacher,
-				}),
-				getDraftTasksForTeacher: () => [],
-			},
-		},
-	};
+	let taskModuleMock;
+	let vuetify;
 
 	const emptyState = {
 		title: "Lorem ipsum",
@@ -33,10 +29,23 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		subtitle: undefined,
 	};
 
-	let vuetify;
-
 	beforeEach(() => {
 		vuetify = new Vuetify();
+
+		taskModuleMock = {
+			...createModuleMocks(TaskModule),
+			getStatus: "completed",
+			hasTasks: true,
+			openTasksForTeacherIsEmpty: false,
+			draftsForTeacherIsEmpty: true,
+			getOpenTasksForTeacher: {
+				overdue: overDueTasksTeacher,
+				withDueDate: dueDateTasksTeacher,
+				noDueDate: noDueDateTasksTeacher,
+			},
+			getDraftTasksForTeacher: [],
+		};
+		mockTaskModule.mockReturnValue(taskModuleMock);
 	});
 
 	it(...isValidComponent(TasksDashboardTeacher));
@@ -46,7 +55,6 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {
@@ -68,9 +76,11 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	});
 
 	it("Should render empty state", () => {
-		const spy = jest
-			.spyOn(TaskModule, "draftsForTeacherIsEmpty", "get")
-			.mockReturnValue(true);
+		taskModuleMock = {
+			...taskModuleMock,
+			draftsForTeacherIsEmpty: true,
+		};
+		mockTaskModule.mockReturnValue(taskModuleMock);
 
 		const wrapper = mount(TasksDashboardTeacher, {
 			...createComponentMocks({
@@ -86,8 +96,6 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 		const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
-
-		spy.mockRestore();
 	});
 
 	it("Should trigger event to update tab property", async () => {
@@ -95,7 +103,6 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {

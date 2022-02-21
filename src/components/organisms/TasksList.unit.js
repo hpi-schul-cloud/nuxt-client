@@ -1,32 +1,36 @@
 import TasksList from "./TasksList";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
-import TaskModule from "@/store/tasks";
-import FinishedTaskModule from "@/store/finished-tasks";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { TaskModule } from "@/store/tasks";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
-describe("@components/organisms/TasksList", () => {
-	const mockStore = {
-		tasks: {
-			getters: {
-				getList: () => tasks,
-				getStatus: () => "completed",
-				hasTasks: () => true,
-				openTasks: () => openTasks,
-				overDueTasks: () => overDueTasks,
-			},
-			state: () => ({
-				list: tasks,
-				status: "completed",
-			}),
-		},
-	};
+const mockTaskModule = jest.fn();
+jest.mock("@store/tasks", () => ({
+	...jest.requireActual("@store/tasks"),
+	__esModule: true,
+	get default() {
+		return mockTaskModule();
+	},
+}));
 
+describe("@components/organisms/TasksList", () => {
+	let taskModuleMock;
 	let vuetify;
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
+
+		taskModuleMock = {
+			...createModuleMocks(TaskModule),
+			getList: tasks,
+			getStatus: "completed",
+			hasTasks: true,
+			openTasks: openTasks,
+			overDueTasks: overDueTasks,
+		};
+		mockTaskModule.mockReturnValue(taskModuleMock);
 	});
 
 	it(...isValidComponent(TasksList));
@@ -63,7 +67,6 @@ describe("@components/organisms/TasksList", () => {
 				...createComponentMocks({
 					i18n: true,
 					vuetify: true,
-					store: mockStore,
 				}),
 				vuetify,
 				propsData: {
@@ -77,10 +80,6 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should render a subheader if title prop is set", () => {
-			const spy = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("completed");
-
 			const wrapper = mount(TasksList, {
 				...createComponentMocks({
 					i18n: true,
@@ -96,8 +95,6 @@ describe("@components/organisms/TasksList", () => {
 
 			const subHeader = wrapper.findAll(".v-subheader");
 			expect(subHeader.exists()).toBe(true);
-
-			spy.mockRestore();
 		});
 	});
 
@@ -106,7 +103,6 @@ describe("@components/organisms/TasksList", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 			vuetify,
 			propsData: {
@@ -130,27 +126,19 @@ describe("@components/organisms/TasksList", () => {
 	});
 
 	it("Should render an empty list, if there are no tasks", () => {
-		const mockStoreEmpty = {
-			tasks: {
-				getters: {
-					getList: () => [],
-					getStatus: () => "completed",
-					hasTasks: () => false,
-					openTasks: () => [],
-					overDueTasks: () => [],
-				},
-				state: () => ({
-					list: [],
-					status: "completed",
-				}),
-			},
+		taskModuleMock = {
+			...taskModuleMock,
+			getList: [],
+			getStatus: "completed",
+			hasTasks: false,
+			openTasks: [],
+			overDueTasks: [],
 		};
 
 		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStoreEmpty,
 			}),
 			vuetify,
 			propsData: {
@@ -163,12 +151,12 @@ describe("@components/organisms/TasksList", () => {
 
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
-			const spy1 = jest
-				.spyOn(TaskModule, "hasTasks", "get")
-				.mockReturnValue(true);
-			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("pending");
+			taskModuleMock = {
+				...taskModuleMock,
+				hasTasks: true,
+				getStatus: "pending",
+			};
+			mockTaskModule.mockReturnValue(taskModuleMock);
 
 			const wrapper = mount(TasksList, {
 				...createComponentMocks({
@@ -189,9 +177,6 @@ describe("@components/organisms/TasksList", () => {
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
 			expect(wrapper.props("tasks")).toStrictEqual([]);
 			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
-
-			spy1.mockRestore();
-			spy2.mockRestore();
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
@@ -225,12 +210,11 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should compute correct status", () => {
-			const spy1 = jest
-				.spyOn(FinishedTaskModule, "getStatus", "get")
-				.mockReturnValue("pending");
-			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("completed");
+			taskModuleMock = {
+				...taskModuleMock,
+				getStatus: "completed",
+			};
+			mockTaskModule.mockReturnValue(taskModuleMock);
 
 			const wrapper = mount(TasksList, {
 				...createComponentMocks({
@@ -245,9 +229,6 @@ describe("@components/organisms/TasksList", () => {
 			});
 
 			expect(wrapper.vm.status).toBe("completed");
-
-			spy1.mockRestore();
-			spy2.mockRestore();
 		});
 	});
 });
