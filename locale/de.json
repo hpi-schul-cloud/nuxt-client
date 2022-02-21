@@ -686,7 +686,7 @@
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.btn.confirm": "Importieren",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
-	"pages.rooms.importCourse.importError": "Leider können wir nicht den gesamten Inhalt des Kurses importieren. Wir sind uns dieses Fehlers bewusst und werden ihn bald beheben.",
+	"pages.rooms.importCourse.importError": "Leider konnte nicht der gesamte Kursinhalt importieren werden. Der Fehler ist uns bekannt und wird in den kommenden Monaten behoben.",
 	"pages.rooms.importCourse.importErrorButton": "Okay, verstanden",
 	"pages.room.lessonCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.lessonCard.label.post": "Posten",
