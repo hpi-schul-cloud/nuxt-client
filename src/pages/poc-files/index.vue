@@ -25,7 +25,6 @@
 <script>
 import FilesPOCModule from "@/store/files-poc";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { download } from "@utils/fileHelper.ts";
 
 export default {
 	components: {
@@ -59,11 +58,7 @@ export default {
 			}
 		},
 		async download(file) {
-			const res = await this.$axios.get(
-				`http://localhost:4444/api/v3/files-storage/download/${file.id}/${file.name}`,
-				{ responseType: "blob" }
-			);
-			download(res.data, file.name);
+			FilesPOCModule.download(file);
 		},
 	},
 	head() {

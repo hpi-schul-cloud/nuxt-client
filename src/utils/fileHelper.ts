@@ -23,11 +23,11 @@ export async function dataUrlToFile(
 	return new File([blob], fileName, { type: "image/png" });
 }
 
-export function download(
+export function downloadFile(
 	data: Blob,
 	filename: string,
-	mime: string,
-	bom: string
+	mime?: string,
+	bom?: string
 ) {
 	var blobData = typeof bom !== "undefined" ? [bom, data] : [data];
 	var blob = new Blob(blobData, { type: mime || "application/octet-stream" });

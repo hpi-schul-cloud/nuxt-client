@@ -9,7 +9,9 @@ import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
+import { downloadFile } from "@utils/fileHelper";
 
+const API_URL = "http://localhost:4444/api/v3/files-storage";
 @Module({
 	name: "files-poc",
 	namespaced: true,
@@ -39,7 +41,7 @@ export class FilesPOCModule extends VuexModule {
 			formData.append("file", file, file.name);
 
 			const response = await $axios.post(
-				`http://localhost:4444/api/v3/files-storage/upload/${schoolId}/schools/${schoolId}`,
+				`${API_URL}/upload/${schoolId}/schools/${schoolId}`,
 				formData
 				// {
 				// 	onUploadProgress: (...args) => {
@@ -49,6 +51,25 @@ export class FilesPOCModule extends VuexModule {
 			);
 
 			this.appendFile(response.data as File);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async download(file: File): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			const res = await $axios.get(
+				`${API_URL}/download/${file.id}/${file.name}`,
+				{ responseType: "blob" }
+			);
+			downloadFile(res.data, file.name);
 
 			this.setStatus("completed");
 		} catch (error) {
