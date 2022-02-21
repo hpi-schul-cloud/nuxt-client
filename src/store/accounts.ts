@@ -61,7 +61,7 @@ export class AccountsModule extends VuexModule {
 			$axios.$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 }
