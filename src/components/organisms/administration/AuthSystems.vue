@@ -4,7 +4,7 @@
 			{{ $t("pages.administration.school.index.authSystems.title") }}
 		</h2>
 		<v-simple-table class="table-system">
-			<template v-slot:default>
+			<template #default>
 				<thead>
 					<tr>
 						<th class="text-left">

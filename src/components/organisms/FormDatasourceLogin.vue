@@ -11,7 +11,7 @@
 			"
 			class="mt--md"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="server" />
 			</template>
 		</base-input>

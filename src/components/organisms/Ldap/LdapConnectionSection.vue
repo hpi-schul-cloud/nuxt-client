@@ -16,7 +16,7 @@
 			:validation-messages="urlValidationMessages"
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="material" icon="dns" />
 			</template>
 		</base-input>
@@ -32,7 +32,7 @@
 			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="account_tree" />
 			</template>
 		</base-input>
@@ -48,7 +48,7 @@
 			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="user" />
 			</template>
 		</base-input>
@@ -64,7 +64,7 @@
 			:validation-model="$v.value.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
-			><template v-slot:icon>
+			><template #icon>
 				<base-icon source="material" icon="lock" />
 			</template>
 		</base-input>

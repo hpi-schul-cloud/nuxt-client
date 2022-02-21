@@ -30,7 +30,7 @@
 			<strong class="external-sync-hint">
 				{{
 					$t("components.molecules.admintablelegend.externalSync", {
-						shortName: this.$theme.short_name,
+						shortName: $theme.short_name,
 					})
 				}}
 				<base-link

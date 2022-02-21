@@ -6,17 +6,17 @@
 			{{ $t("pages.administration.students.consent.title") }}
 		</h1>
 		<i18n path="pages.administration.students.consent.info" tag="p">
-			<template v-slot:dataProtection>
+			<template #dataProtection>
 				<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
 					$t("common.words.privacyPolicy")
 				}}</a>
 			</template>
-			<template v-slot:terms>
+			<template #terms>
 				<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{
 					$t("components.legacy.footer.terms")
 				}}</a>
 			</template>
-			<template v-slot:handout>
+			<template #handout>
 				<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
 					$t("pages.administration.students.consent.handout")
 				}}</a>
@@ -44,7 +44,7 @@
 				data-testid="consent_table_1"
 				@update:sort="onUpdateSort"
 			>
-				<template v-slot:datacolumn-birthday="slotProps">
+				<template #datacolumn-birthday="slotProps">
 					<base-input
 						:error="birthdayWarning && !slotProps.data ? inputError : null"
 						class="date base-input"
@@ -61,7 +61,7 @@
 						"
 					/>
 				</template>
-				<template v-slot:datacolumn-password="slotProps">
+				<template #datacolumn-password="slotProps">
 					<base-input
 						:vmodel="slotProps.data"
 						type="text"
@@ -104,7 +104,7 @@
 				data-testid="consent_table_2"
 				@update:sort="onUpdateSort"
 			>
-				<template v-slot:datacolumn-birthday="slotProps">
+				<template #datacolumn-birthday="slotProps">
 					<div class="text-content">
 						{{ printDateFromDeUTC(slotProps.data) }}
 					</div>
@@ -124,7 +124,7 @@
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
-						<template v-slot:analogConsent>
+						<template #analogConsent>
 							<a class="link" :href="fileLinks.analogConsent" target="_">{{
 								$t(
 									"pages.administration.students.consent.steps.register.analog-consent"
@@ -170,7 +170,7 @@
 				data-testid="consent_table_3"
 				@update:sort="onUpdateSort"
 			>
-				<template v-slot:datacolumn-birthday="slotProps">
+				<template #datacolumn-birthday="slotProps">
 					{{ printDateFromDeUTC(slotProps.data) }}
 				</template>
 			</backend-data-table>
@@ -208,14 +208,14 @@
 		</section>
 
 		<base-modal :active.sync="cancelWarning">
-			<template v-slot:header></template>
-			<template v-slot:body>
+			<template #header></template>
+			<template #body>
 				<modal-body-info
 					:title="
 						$t('pages.administration.students.consent.cancel.modal.title')
 					"
 				>
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon
 							class="warning"
 							source="material"
@@ -234,7 +234,7 @@
 					{{ $t("pages.administration.students.consent.cancel.modal.info") }}
 				</span>
 			</template>
-			<template v-slot:footerRight>
+			<template #footerRight>
 				<base-button design="danger text" @click="cancel">
 					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
 				</base-button>
@@ -256,7 +256,7 @@
 		<div hidden>
 			<div id="tableStudentsForPrint">
 				<h3 class="print-title">
-					{{ this.$t("pages.administration.students.consent.print.title") }}
+					{{ $t("pages.administration.students.consent.print.title") }}
 				</h3>
 				<p>
 					{{ printPageInfo }}

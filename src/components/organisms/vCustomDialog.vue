@@ -21,14 +21,14 @@
 					outlined
 					@click="$emit('dialog-closed', false)"
 				>
-					{{ this.$t("common.actions.cancel") }}
+					{{ $t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn
 					class="dialog-confirmed"
 					color="primary"
 					depressed
 					@click="confirmDialog"
-					>{{ this.$t("common.actions.confirm") }}</v-btn
+					>{{ $t("common.actions.confirm") }}</v-btn
 				>
 			</v-card-actions>
 		</v-card>

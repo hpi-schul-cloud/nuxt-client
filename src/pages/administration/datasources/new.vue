@@ -17,7 +17,7 @@
 			"
 			class="mb--md"
 		>
-			<template v-slot:actions>
+			<template #actions>
 				<responsive-icon-button
 					design="primary text"
 					source="material"

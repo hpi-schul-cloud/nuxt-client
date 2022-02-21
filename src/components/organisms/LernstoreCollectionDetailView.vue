@@ -8,7 +8,7 @@
 			class="arrow__back"
 			:to="{
 				name: 'content',
-				query: { q: this.$route.query.q, inline: this.$route.query.inline },
+				query: { q: $route.query.q, inline: $route.query.inline },
 			}"
 		>
 			<base-icon source="material" icon="navigate_before" />

@@ -9,7 +9,7 @@
 		@blur="handleBlur($event)"
 		@focus="handleFocus($event)"
 	>
-		<template v-for="(cmp, name) in $slots" v-slot:[name]>
+		<template v-for="(cmp, name) in $slots" #[name]>
 			<slot :name="name">
 				<component :is="cmp.context" :key="name" />
 			</slot>

@@ -12,10 +12,10 @@
 					:is-empty="openTasksForTeacherIsEmpty"
 					:expanded-default="1"
 				>
-					<template v-slot:panelOne>
+					<template #panelOne>
 						<tasks-list :tasks="noDueDateTasks" user-role="teacher" />
 					</template>
-					<template v-slot:panelTwo>
+					<template #panelTwo>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.teacher.subtitleOverDue')"

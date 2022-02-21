@@ -19,7 +19,7 @@
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
 			>
-				<template v-slot:datacolumn-state="{ data }">
+				<template #datacolumn-state="{ data }">
 					<base-icon
 						v-if="data === 'new'"
 						source="custom"
@@ -54,7 +54,7 @@
 				</template>
 			</data-table>
 			<form-actions>
-				<template v-slot:primary>
+				<template #primary>
 					<base-button design="primary" @click="triggerRun">
 						{{ $t("components.organisms.DatasourceRunWebuntis.import") }}
 					</base-button>
@@ -62,14 +62,14 @@
 						{{ $t("common.actions.cancel") }}
 					</base-button>
 				</template>
-				<template v-slot:secondary> </template>
+				<template #secondary> </template>
 			</form-actions>
 		</template>
 		<template v-else-if="run.dryrun === false">
 			<base-modal :active="true">
-				<template v-slot:body>
+				<template #body>
 					<modal-body-info title="Die Daten wurden erfolgreich importiert.">
-						<template v-slot:icon>
+						<template #icon>
 							<base-icon
 								source="material"
 								icon="check_circle"
@@ -78,7 +78,7 @@
 						</template>
 					</modal-body-info>
 				</template>
-				<template v-slot:footer>
+				<template #footer>
 					<modal-footer-confirm text="Ok" @click="gotoOverview" />
 				</template>
 			</base-modal>

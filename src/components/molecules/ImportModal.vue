@@ -87,7 +87,7 @@
 							style="background: transparent"
 							@click="cancel"
 						>
-							{{ this.$t("common.actions.cancel") }}
+							{{ $t("common.actions.cancel") }}
 						</v-btn>
 						<v-btn
 							class="dialog-confirmed"

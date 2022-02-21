@@ -14,7 +14,7 @@
 					title="RSS"
 					class="mb--md"
 				>
-					<template v-slot:actions>
+					<template #actions>
 						<responsive-icon-button
 							design="primary text"
 							source="custom"
@@ -32,7 +32,7 @@
 					title="LDAP"
 					class="mb--xl-3"
 				>
-					<template v-slot:actions>
+					<template #actions>
 						<responsive-icon-button
 							design="primary text"
 							source="custom"
@@ -51,7 +51,7 @@
 					:title="element.name"
 					class="mb--md"
 				>
-					<template v-slot:subtitle>
+					<template #subtitle>
 						<template v-if="element.lastStatus === 'Success'">
 							{{
 								$t("pages.administraion.datasources.index.success", {
@@ -90,7 +90,7 @@
 						</template>
 					</template>
 
-					<template v-slot:actions>
+					<template #actions>
 						<responsive-icon-button
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
@@ -142,7 +142,7 @@
 		</ol>
 		<template v-else>
 			<empty-state :image="imgsrc">
-				<template v-slot:description>
+				<template #description>
 					{{ $t("pages.administration.datasources.index.empty") }}
 				</template>
 			</empty-state>

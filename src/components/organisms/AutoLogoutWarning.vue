@@ -1,6 +1,6 @@
 <template>
 	<base-modal :active="active" @onBackdropClick="extendSession">
-		<template v-slot:body>
+		<template #body>
 			<div class="wrapper">
 				<img
 					:src="getImage"
@@ -12,7 +12,7 @@
 				<p class="sloth-text" v-html="getText" />
 			</div>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<center-slot class="mb--md">
 				<base-button design="primary" @click="extendSession">{{
 					$t("components.organisms.AutoLogoutWarning.confirm")

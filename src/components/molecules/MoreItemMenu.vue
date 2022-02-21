@@ -1,6 +1,6 @@
 <template>
 	<v-menu bottom left offset-y attach>
-		<template v-slot:activator="{ on, attrs }">
+		<template #activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
 				v-bind="attrs"

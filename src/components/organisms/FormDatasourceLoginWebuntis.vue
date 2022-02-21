@@ -19,7 +19,7 @@
 		</p>
 
 		<form-datasource-login type="webuntis" :datasource-id="datasourceId">
-			<template v-slot:inputs="{ config }">
+			<template #inputs="{ config }">
 				<base-input
 					v-model="config.schoolname"
 					type="text"
@@ -35,7 +35,7 @@
 						)
 					"
 				>
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon source="material" icon="school" />
 					</template>
 				</base-input>
@@ -54,7 +54,7 @@
 						)
 					"
 				>
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon source="custom" icon="user" />
 					</template>
 				</base-input>
@@ -74,7 +74,7 @@
 					"
 					autocomplete="new-password"
 				>
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon source="custom" icon="lock" />
 					</template>
 				</base-input>

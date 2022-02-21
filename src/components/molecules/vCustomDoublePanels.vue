@@ -4,7 +4,7 @@
 			<v-expansion-panel :disabled="isPanelOneDisabled">
 				<v-expansion-panel-header v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
-					<template v-slot:actions>
+					<template #actions>
 						<v-skeleton-loader type="chip" />
 					</template>
 				</v-expansion-panel-header>
@@ -15,7 +15,7 @@
 					@click="toggle"
 				>
 					{{ panelOneTitle }}
-					<template v-slot:actions
+					<template #actions
 						>{{ panelOneCount }}
 						<v-icon class="ml-3" data-testid="upperTaskSectionIcon">
 							$expand
@@ -29,7 +29,7 @@
 			<v-expansion-panel :disabled="isPanelTwoDisabled">
 				<v-expansion-panel-header v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
-					<template v-slot:actions>
+					<template #actions>
 						<v-skeleton-loader type="chip" />
 					</template>
 				</v-expansion-panel-header>
@@ -40,7 +40,7 @@
 					@click="toggle"
 				>
 					{{ panelTwoTitle }}
-					<template v-slot:actions>
+					<template #actions>
 						{{ panelTwoCount }}
 						<v-icon class="ml-3" data-testid="lowerTaskSectionIcon">
 							$expand

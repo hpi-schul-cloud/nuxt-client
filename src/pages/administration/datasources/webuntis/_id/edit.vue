@@ -3,16 +3,16 @@
 		<base-breadcrumb
 			:inputs="[
 				{
-					text: this.$t('pages.administration.index.title'),
+					text: $t('pages.administration.index.title'),
 					to: '/administration/',
 					icon: { source: 'fa', icon: 'cog' },
 				},
 				{
-					text: this.$t('pages.administration.datasources.index.title'),
+					text: $t('pages.administration.datasources.index.title'),
 					to: '/administration/datasources',
 				},
 				{
-					text: this.$t(
+					text: $t(
 						'pages.administration.datasources.webuntis._id.edit.title'
 					),
 				},
