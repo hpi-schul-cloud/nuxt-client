@@ -323,11 +323,10 @@ export class Rooms extends VuexModule {
 			});
 		} catch (error: any) {
 			this.setBusinessError({
-				statusCode: "400",
-				message: "code error",
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
 				...error,
 			});
-			this.setError(error);
 		}
 	}
 
@@ -341,23 +340,13 @@ export class Rooms extends VuexModule {
 				shareToken: courseData.code,
 				courseName: courseData.courseName,
 			});
-
-			// This error handling is not in the catch block, because the course is being partly created
-			// and the server doesn't send the actual error yet.
-			if (importedCourseResponse.name == "BadRequest") {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "import error",
-					error: {
-						...importedCourseResponse.errors,
-						name: importedCourseResponse.name,
-					},
-				});
-				return;
-			}
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
 		} catch (error: any) {
-			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
 		}
 	}
 }

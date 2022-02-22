@@ -161,10 +161,9 @@ describe("@components/molecules/RoomModal", () => {
 
 	describe("error handling", () => {
 		it("should show code-error section if server sends shareToken error", async () => {
-			const getSharedCourseDataMock = jest.spyOn(
-				RoomsModule,
-				"getSharedCourseData"
-			);
+			const getSharedCourseDataMock = jest
+				.spyOn(RoomsModule, "getSharedCourseData")
+				.mockImplementation();
 			const wrapper: any = mount(ImportModal, {
 				...createComponentMocks({
 					i18n: true,
@@ -178,12 +177,16 @@ describe("@components/molecules/RoomModal", () => {
 			await wrapper.vm.$nextTick();
 			const errorElementBefore = wrapper.find(".code-error");
 			expect(errorElementBefore.exists()).toBe(false);
-
+			RoomsModule.setBusinessError({
+				statusCode: "400",
+				message: "BadRequest",
+				error: {},
+			});
 			const btnNext = wrapper.find(".dialog-next");
 			await btnNext.trigger("click");
 			expect(getSharedCourseDataMock).toHaveBeenCalled();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.businessError.message).toStrictEqual("code error");
+			expect(wrapper.vm.businessError.message).toStrictEqual("BadRequest");
 			expect(wrapper.vm.businessError.statusCode).toStrictEqual("400");
 			const errorElementAfter = wrapper.find(".code-error");
 			expect(errorElementAfter.element.textContent).toContain(
@@ -192,7 +195,7 @@ describe("@components/molecules/RoomModal", () => {
 			getSharedCourseDataMock.mockClear();
 		});
 
-		it("should not go to step#3 if there is a code error", async () => {
+		it.only("should not go to step#3 if there is a code error", async () => {
 			const wrapper: any = mount(ImportModal, {
 				...createComponentMocks({
 					i18n: true,

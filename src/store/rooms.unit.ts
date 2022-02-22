@@ -343,22 +343,38 @@ describe("rooms module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomsModule = new Rooms({});
-				const getSharedCourseDataSpy = jest.spyOn(
-					roomsModule,
-					"confirmSharedCourseData"
-				);
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
 					status: "success",
 					message: "",
 				};
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"confirmSharedCourseData"
+				);
+				getSharedCourseDataSpy.mockImplementation();
 
 				await roomsModule.confirmSharedCourseData(sharedCourseData);
 				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
 					sharedCourseData
 				);
+			});
+
+			it("should call the businessError mutation", async () => {
+				const sharedCourseData = {
+					code: "",
+					courseName: "",
+					status: "",
+					message: "",
+				};
+				const setBusinessErrorMock = jest.fn();
+				const roomsModule = new Rooms({});
+				roomsModule.setBusinessError = setBusinessErrorMock;
+
+				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				expect(setBusinessErrorMock).toHaveBeenCalled();
 			});
 		});
 	});
