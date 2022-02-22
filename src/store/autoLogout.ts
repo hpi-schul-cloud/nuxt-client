@@ -5,9 +5,12 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-import { rootStore } from "./index";
+import axios, { AxiosError } from "axios";
+
 import EnvConfigModule from "@/store/env-config";
 import AccountsModule from "@/store/accounts";
+
+import { rootStore } from "./index";
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
@@ -65,11 +68,14 @@ const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 				console.error("Update remaining session time failed!");
 			}
 		} catch (error) {
-			if (error.response && error.response.status === 405) {
-				console.warn(
-					"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
-				);
-				clearInterval(polling);
+			if (axios.isAxiosError(error)) {
+				const axiosError = error as AxiosError;
+				if (axiosError.response?.status === 405) {
+					console.warn(
+						"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
+					);
+					clearInterval(polling);
+				}
 			} else {
 				console.error("Update remaining session time failed!");
 			}
@@ -104,33 +110,37 @@ const extendSession = async (
 		setRemainingTimeInSeconds(defaultRemainingTimeInSeconds);
 	} catch (err) {
 		setToastValue(toast.error);
-		if (err.response && err.response.status !== 405) {
-			if (err.response && err.response.status !== 401) {
-				// retry 4 times before showing error
-				if (retry < 4) {
-					retry += 1;
-					setTimeout(() => {
-						extendSession(
-							remainingTimeInSeconds,
-							setRemainingTimeInSeconds,
-							active,
-							showWarningOnRemainingSeconds,
-							setActive,
-							defaultRemainingTimeInSeconds,
-							setToastValue
-						);
-					}, 2 ** retry * 1000);
-				} else {
-					retry = 0;
-					if (totalRetry) {
-						setToastValue(toast.error);
+		if (axios.isAxiosError(err)) {
+			const axiosError = err as AxiosError;
+
+			if (axiosError.response?.status !== 405) {
+				if (axiosError.response?.status !== 401) {
+					// retry 4 times before showing error
+					if (retry < 4) {
+						retry += 1;
+						setTimeout(() => {
+							extendSession(
+								remainingTimeInSeconds,
+								setRemainingTimeInSeconds,
+								active,
+								showWarningOnRemainingSeconds,
+								setActive,
+								defaultRemainingTimeInSeconds,
+								setToastValue
+							);
+						}, 2 ** retry * 1000);
 					} else {
-						setActive(true, true);
+						retry = 0;
+						if (totalRetry) {
+							setToastValue(toast.error);
+						} else {
+							setActive(true, true);
+						}
+						totalRetry += 1;
 					}
-					totalRetry += 1;
+				} else {
+					setToastValue(toast.error401);
 				}
-			} else {
-				setToastValue(toast.error401);
 			}
 		}
 	}
