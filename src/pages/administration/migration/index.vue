@@ -89,9 +89,9 @@
 							"
 						></v-card>
 						<v-btn
-							id="migration_tutorial_next"
-							color="primary"
-							@click="migrationStep = isMigrationFinished ? 4 : 2"
+                id="migration_tutorial_next"
+                color="primary"
+                @click="nextStep"
 							>{{ $t("pages.administration.migration.next") }}</v-btn
 						>
 					</v-stepper-content>
@@ -265,44 +265,49 @@ export default {
 			return false;
 		},
 		totalMatched() {
-			return ImportUserModule.getTotalMatched;
-		},
-		totalUnmatched() {
-			return ImportUserModule.getTotalUnmatched;
-		},
-		totalImportUsers() {
-			return ImportUserModule.getTotal;
-		},
-	},
-	watch: {
+      return ImportUserModule.getTotalMatched;
+    },
+    totalUnmatched() {
+      return ImportUserModule.getTotalUnmatched;
+    },
+    totalImportUsers() {
+      return ImportUserModule.getTotal;
+    },
+  },
+  watch: {
     async migrationStep(val) {
-      if (val === '3') {
+      if (val === "3") {
         await this.summary();
       }
       this.scrollToTop();
     },
   },
-	created() {
-		this.summary();
-	},
-	methods: {
-		isStepEditable(step) {
-			switch (step) {
-				case 1:
-					return !this.isLoading && !this.isMaintenanceFinished;
-				case 2:
-					return this.canPerformMigration && !this.isMigrationFinished;
+  created() {
+    this.summary();
+  },
+  methods: {
+    isStepEditable(step) {
+      switch (step) {
+        case 1:
+          return !this.isLoading && !this.isMaintenanceFinished;
+        case 2:
+          return this.canPerformMigration && !this.isMigrationFinished;
 				case 3:
 					return this.canPerformMigration && !this.isMigrationFinished;
-				case 4:
-					return (
-						!this.isLoading &&
-						this.isMigrationFinished &&
-						!this.isMaintenanceFinished
-					);
-				case 5:
-				default:
-					return false;
+        case 4:
+          return (
+              !this.isLoading &&
+              this.isMigrationFinished &&
+              !this.isMaintenanceFinished
+          );
+        case 5:
+          return (
+              !this.isLoading &&
+              this.isMigrationFinished &&
+              this.isMaintenanceFinished
+          );
+        default:
+          return false;
 			}
 		},
 		async summary() {
@@ -341,17 +346,30 @@ export default {
 				});
 			} else {
 				this.school.inMaintenance = false;
-				this.migrationStep = 5;
-			}
-			this.isLoading = false;
-		},
-		resetBusinessError() {
-			ImportUserModule.setBusinessError(null);
-		},
-		scrollToTop() {
-			window.scrollTo(0, 0);
-		},
-	},
+        this.migrationStep = 5;
+      }
+      this.isLoading = false;
+    },
+    resetBusinessError() {
+      ImportUserModule.setBusinessError(null);
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    nextStep() {
+      let nextStep;
+      if (this.migrationStep === 1) {
+        nextStep = 2;
+        if (this.isMigrationFinished) {
+          nextStep = 4;
+        }
+        if (this.isMaintenanceFinished) {
+          nextStep = 5;
+        }
+      }
+      this.migrationStep = nextStep;
+    },
+  },
 	head() {
 		return {
 			title: this.$t("pages.administration.migration.title"),

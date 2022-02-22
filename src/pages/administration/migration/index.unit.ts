@@ -128,6 +128,8 @@ const schoolMock = {
 	isTeamCreationByStudentsEnabled: false,
 };
 
+window.scrollTo = jest.fn();
+
 describe("User Migration / Index", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
@@ -214,10 +216,6 @@ describe("User Migration / Index", () => {
 		await wrapper.vm.$nextTick();
 		expect(stepper.vm.steps[3].isActive).toBe(true);
 	});
-
-	it.todo(
-		"should not be possible to click on steps 2-4 when maintenance finished"
-	);
 
 	describe("show summary", () => {
 		it("should display summary text with totals", async () => {
