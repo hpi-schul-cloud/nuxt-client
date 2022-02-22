@@ -210,13 +210,13 @@ export class ImportUsersModule extends VuexModule {
 
 			const response =
 				await this.importUserApi.importUserControllerFindAllImportUsers(
-					this.firstName ? this.firstName : undefined,
-					this.lastName ? this.lastName : undefined,
-					this.loginName ? this.loginName : undefined,
-					this.match ? this.match : undefined,
+					this.firstName || undefined,
+					this.lastName || undefined,
+					this.loginName || undefined,
+					this.match || undefined,
 					this.flagged ? true : undefined,
-					this.classes ? this.classes : undefined,
-					this.role ? this.role : undefined,
+					this.classes || undefined,
+					this.role || undefined,
 					this.sortBy ? this.sortOrder : undefined,
 					sortBy,
 					this.skip,
@@ -236,7 +236,7 @@ export class ImportUsersModule extends VuexModule {
 		try {
 			const response =
 				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
-					this.userSearch ? this.userSearch : undefined,
+					this.userSearch || undefined,
 					this.usersSkip,
 					this.usersLimit
 				);
