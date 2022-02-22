@@ -35,21 +35,25 @@
 						<v-list-item>
 							<v-list-item-content data-testid="edited-item">
 								<v-list-item-title data-testid="edited-item-fullname"
-									>{{ editedItem.firstName }}
-									{{ editedItem.lastName }}
-								</v-list-item-title>
-								<v-list-item-subtitle>
-									{{ editedItem.roleNames.join(", ") }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
-									>{{ $t("components.organisms.importUsers.tableClasses") }}:
-									{{ editedItem.classNames.join(", ") }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
-									>{{ $t("components.organisms.importUsers.tableUserName") }}:
-									{{ editedItem.loginName }}</v-list-item-subtitle
-								>
-							</v-list-item-content>
+                >{{ `${editedItem.firstName} ${editedItem.lastName}` }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ editedItem.roleNames.join(", ") }}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle
+                >{{
+                    `${$t(
+                        "components.organisms.importUsers.tableClasses"
+                    )}: ${editedItem.classNames.join(", ")}`
+                  }}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>{{
+                    `${$t("components.organisms.importUsers.tableUserName")}: ${
+                        editedItem.loginName
+                    }`
+                  }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
 							<v-list-item-content> </v-list-item-content>
 						</v-list-item>
 					</v-col>
@@ -58,8 +62,8 @@
 						<v-list-item>
 							<v-list-item-content v-if="selectedItem">
 								<v-list-item-title>
-									{{ selectedItem.firstName }} {{ selectedItem.lastName }}
-								</v-list-item-title>
+                  {{ `${selectedItem.firstName} ${selectedItem.lastName}` }}
+                </v-list-item-title>
 								<v-list-item-subtitle>
 									{{
 										selectedItem.roleNames
@@ -68,9 +72,12 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
-									{{ $t("components.organisms.importUsers.tableUserName") }}:
-									{{ selectedItem.loginName }}
-								</v-list-item-subtitle>
+                  {{
+                    `${$t("components.organisms.importUsers.tableUserName")}: ${
+                        selectedItem.loginName
+                    }`
+                  }}
+                </v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-content v-else-if="editedItem.match">
 								<v-list-item-title>
