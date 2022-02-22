@@ -375,7 +375,6 @@ export default {
 	},
 	watch: {
 		dialogEdit(val) {
-			console.log(val);
 			val || this.closeEdit();
 		},
 		options: {
