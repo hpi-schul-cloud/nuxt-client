@@ -274,10 +274,13 @@ export default {
 		},
 	},
 	watch: {
-		async migrationStep() {
-			this.scrollToTop();
-		},
-	},
+    async migrationStep(val) {
+      if (val === '3') {
+        await this.summary();
+      }
+      this.scrollToTop();
+    },
+  },
 	created() {
 		this.summary();
 	},
