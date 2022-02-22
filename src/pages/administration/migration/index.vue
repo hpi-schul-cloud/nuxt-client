@@ -128,7 +128,8 @@
 											instance: this.$theme.short_name,
 											source: $t('pages.administration.migration.ldapSource'),
 											importUsersCount: totalMatched,
-											importUsersUnmatchedCount: totalImportUsers - totalMatched,
+											importUsersUnmatchedCount:
+												totalImportUsers - totalMatched,
 											usersUnmatchedCount: totalUnmatched,
 										})
 									"
