@@ -34,7 +34,7 @@ let requestPath: string;
 const axiosInitializer = (envs?: any, error?: boolean) => {
 	initializeAxios({
 		$get: async (path: string) => {
-			if (error) Promise.reject();
+			if (error) throw new Error();
 
 			requestPath = path;
 			return envs;

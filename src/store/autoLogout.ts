@@ -208,7 +208,7 @@ export class AutoLogoutModule extends VuexModule {
 	}
 
 	@Action
-	init(): void {
+	async init(): Promise<void> {
 		try {
 			const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
 				EnvConfigModule.getEnv;
@@ -235,19 +235,19 @@ export class AutoLogoutModule extends VuexModule {
 	}
 
 	@Action
-	extendSessionAction(): void {
+	async extendSessionAction(): Promise<void> {
 		try {
 			processing = true;
 			this.setActive(false, false);
 
-			extendSession(
+			await extendSession(
 				this.remainingTimeInSeconds,
-				this.setRemainingTimeInSeconds,
+				this.setRemainingTimeInSeconds.bind(this),
 				this.active,
 				this.showWarningOnRemainingSeconds,
-				this.setActive,
+				this.setActive.bind(this),
 				this.defaultRemainingTimeInSeconds,
-				this.setToastValue
+				this.setToastValue.bind(this)
 			);
 		} catch (error) {
 			console.error(error);
