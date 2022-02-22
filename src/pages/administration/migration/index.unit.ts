@@ -239,9 +239,9 @@ describe("User Migration / Index", () => {
 					source: wrapper.vm.$i18n.t(
 						"pages.administration.migration.ldapSource"
 					),
-					importUsersCount: totalImportUsers,
-					importUsersUnmatchedCount: totalUnmatched,
-					usersUnmatchedCount: totalMatched,
+					importUsersCount: totalMatched,
+					importUsersUnmatchedCount: totalImportUsers - totalMatched,
+					usersUnmatchedCount: totalUnmatched,
 				}
 			);
 			const findText = wrapper.find("[data-testid=migration_summary]");

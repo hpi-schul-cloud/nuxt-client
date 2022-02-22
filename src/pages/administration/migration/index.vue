@@ -127,9 +127,9 @@
 										$t('pages.administration.migration.summary', {
 											instance: this.$theme.short_name,
 											source: $t('pages.administration.migration.ldapSource'),
-											importUsersCount: totalImportUsers,
-											importUsersUnmatchedCount: totalUnmatched,
-											usersUnmatchedCount: totalMatched,
+											importUsersCount: totalMatched,
+											importUsersUnmatchedCount: totalImportUsers - totalMatched,
+											usersUnmatchedCount: totalUnmatched,
 										})
 									"
 								></div>
