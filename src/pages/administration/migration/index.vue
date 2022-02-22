@@ -89,12 +89,11 @@
 							"
 						></v-card>
 						<v-btn
-                id="migration_tutorial_next"
-                color="primary"
-                @click="nextStep"
-            >{{ $t("pages.administration.migration.next") }}
-            </v-btn
-            >
+							id="migration_tutorial_next"
+							color="primary"
+							@click="nextStep"
+							>{{ $t("pages.administration.migration.next") }}
+						</v-btn>
 					</v-stepper-content>
 
 					<v-stepper-content step="2" data-testid="migration_importUsers">
@@ -256,60 +255,60 @@ export default {
 			return SchoolsModule.getSchool;
 		},
 		businessError() {
-      const error = ImportUserModule.getBusinessError;
-      if (error && error.message && error.statusCode) {
-        return {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      }
-      return false;
-    },
-    totalMatched() {
-      return ImportUserModule.getTotalMatched;
-    },
-    totalUnmatched() {
-      return ImportUserModule.getTotalUnmatched;
-    },
-    totalImportUsers() {
-      return ImportUserModule.getTotal;
-    },
-  },
-  watch: {
-    async migrationStep(val) {
-      if (val === "3") {
-        await this.summary();
-      }
-      this.scrollToTop();
-    },
-  },
-  created() {
-    this.summary();
-  },
-  methods: {
-    isStepEditable(step) {
-      switch (step) {
-        case 1:
-          return !this.isLoading && !this.isMaintenanceFinished;
-        case 2:
-          return this.canPerformMigration && !this.isMigrationFinished;
-        case 3:
-          return this.canPerformMigration && !this.isMigrationFinished;
-        case 4:
-          return (
-              !this.isLoading &&
-              this.isMigrationFinished &&
-              !this.isMaintenanceFinished
-          );
-        case 5:
-          return (
-              !this.isLoading &&
-              this.isMigrationFinished &&
-              this.isMaintenanceFinished
-          );
-        default:
-          return false;
-      }
+			const error = ImportUserModule.getBusinessError;
+			if (error && error.message && error.statusCode) {
+				return {
+					message: error.message,
+					statusCode: error.statusCode,
+				};
+			}
+			return false;
+		},
+		totalMatched() {
+			return ImportUserModule.getTotalMatched;
+		},
+		totalUnmatched() {
+			return ImportUserModule.getTotalUnmatched;
+		},
+		totalImportUsers() {
+			return ImportUserModule.getTotal;
+		},
+	},
+	watch: {
+		async migrationStep(val) {
+			if (val === "3") {
+				await this.summary();
+			}
+			this.scrollToTop();
+		},
+	},
+	created() {
+		this.summary();
+	},
+	methods: {
+		isStepEditable(step) {
+			switch (step) {
+				case 1:
+					return !this.isLoading && !this.isMaintenanceFinished;
+				case 2:
+					return this.canPerformMigration && !this.isMigrationFinished;
+				case 3:
+					return this.canPerformMigration && !this.isMigrationFinished;
+				case 4:
+					return (
+						!this.isLoading &&
+						this.isMigrationFinished &&
+						!this.isMaintenanceFinished
+					);
+				case 5:
+					return (
+						!this.isLoading &&
+						this.isMigrationFinished &&
+						this.isMaintenanceFinished
+					);
+				default:
+					return false;
+			}
 		},
 		async summary() {
 			if (!this.canPerformMigration) {
@@ -337,45 +336,45 @@ export default {
 			if (!this.isMaintenanceConfirm) {
 				return;
 			}
-      this.isLoading = true;
-      await SchoolsModule.endMaintenance();
-      if (SchoolsModule.getError) {
-        // TODO better error handling
-        ImportUserModule.setBusinessError({
-          statusCode: "500",
-          message: SchoolsModule.getError.message,
-        });
-      } else {
-        this.school.inMaintenance = false;
-        this.migrationStep = 5;
-      }
-      this.isLoading = false;
-    },
-    resetBusinessError() {
-      ImportUserModule.setBusinessError(null);
-    },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    nextStep() {
-      let nextStep;
-      if (this.migrationStep === 1) {
-        nextStep = 2;
-        if (this.isMigrationFinished) {
-          nextStep = 4;
-        }
-        if (this.isMaintenanceFinished) {
-          nextStep = 5;
-        }
-      }
-      this.migrationStep = nextStep;
-    },
-  },
-  head() {
-    return {
-      title: this.$t("pages.administration.migration.title"),
-    };
-  },
+			this.isLoading = true;
+			await SchoolsModule.endMaintenance();
+			if (SchoolsModule.getError) {
+				// TODO better error handling
+				ImportUserModule.setBusinessError({
+					statusCode: "500",
+					message: SchoolsModule.getError.message,
+				});
+			} else {
+				this.school.inMaintenance = false;
+				this.migrationStep = 5;
+			}
+			this.isLoading = false;
+		},
+		resetBusinessError() {
+			ImportUserModule.setBusinessError(null);
+		},
+		scrollToTop() {
+			window.scrollTo(0, 0);
+		},
+		nextStep() {
+			let nextStep;
+			if (this.migrationStep === 1) {
+				nextStep = 2;
+				if (this.isMigrationFinished) {
+					nextStep = 4;
+				}
+				if (this.isMaintenanceFinished) {
+					nextStep = 5;
+				}
+			}
+			this.migrationStep = nextStep;
+		},
+	},
+	head() {
+		return {
+			title: this.$t("pages.administration.migration.title"),
+		};
+	},
 };
 </script>
 <style scoped>
