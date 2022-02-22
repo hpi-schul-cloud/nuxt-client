@@ -246,7 +246,7 @@ export default {
 			return this.school.inUserMigration === false;
 		},
 		canFinishMaintenance() {
-			return this.isMigrationConfirm && this.isMigrationFinished;
+			return this.isMigrationConfirm || this.isMigrationFinished;
 		},
 		isMaintenanceFinished() {
 			return !this.school.inMaintenance;
