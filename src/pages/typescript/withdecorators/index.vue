@@ -16,7 +16,7 @@ type PageData = {
 };
 
 @Component
-class index extends Vue {
+class Index extends Vue {
 	isMounted: boolean = false;
 	pageData: PageData = {
 		id: "",
@@ -54,5 +54,5 @@ class index extends Vue {
 	}
 }
 
-export default index;
+export default Index;
 </script>
