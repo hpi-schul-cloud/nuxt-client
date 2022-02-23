@@ -80,6 +80,7 @@ export const mockSchool: School = {
 	enableStudentTeamCreation: false,
 	permissions: {},
 	inMaintenance: false,
+	inUserMigration: false,
 	documentBaseDir: "",
 	isExternal: false,
 	id: "mockSchoolId",
