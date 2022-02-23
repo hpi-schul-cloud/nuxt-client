@@ -42,11 +42,13 @@
 								</v-list-item-subtitle>
 								<v-list-item-subtitle
 									>{{
-                    `${$t(
-                        "components.organisms.importUsers.tableClasses"
-                    )}: ${editedItem.classNames ? editedItem.classNames.join(", ") : ''}`
-                  }}
-                </v-list-item-subtitle>
+										`${$t("components.organisms.importUsers.tableClasses")}: ${
+											editedItem.classNames
+												? editedItem.classNames.join(", ")
+												: ""
+										}`
+									}}
+								</v-list-item-subtitle>
 								<v-list-item-subtitle
 									>{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
