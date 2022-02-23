@@ -5,6 +5,7 @@ interface User {
 	name: string;
 	schoolId: string;
 	firstName: string;
+	lastName: string;
 }
 
 declare module "vue/types/vue" {
