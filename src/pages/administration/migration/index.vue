@@ -13,7 +13,7 @@
 			color="error darken-3"
 		>
 			{{ $t("pages.administration.migration.error") }}
-			<template v-slot:action="{ attrs }">
+			<template #action="{ attrs }">
 				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
 					<v-icon>{{ mdiClose }}</v-icon>
 				</v-btn>
@@ -83,7 +83,7 @@
 							color="grey lighten-5"
 							v-html="
 								$t('pages.administration.migration.tutorial', {
-									instance: this.$theme.short_name,
+									instance: $theme.short_name,
 									source: $t('pages.administration.migration.ldapSource'),
 								})
 							"
@@ -125,7 +125,7 @@
 								<div
 									v-html="
 										$t('pages.administration.migration.summary', {
-											instance: this.$theme.short_name,
+											instance: $theme.short_name,
 											source: $t('pages.administration.migration.ldapSource'),
 											importUsersCount: totalMatched,
 											importUsersUnmatchedCount:
