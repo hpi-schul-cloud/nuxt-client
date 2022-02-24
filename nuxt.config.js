@@ -131,6 +131,7 @@ module.exports = {
 		"@plugins/datetime",
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
+		"@plugins/composition-api",
 	],
 
 	/*

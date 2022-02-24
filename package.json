@@ -49,6 +49,7 @@
 		"@nuxtjs/toast": "^3.3.1",
 		"@openapitools/openapi-generator-cli": "^2.4.5",
 		"@tryghost/content-api": "^1.4.11",
+		"@vue/composition-api": "^1.4.6",
 		"babel-plugin-transform-decorators": "^6.24.1",
 		"cookie-universal-nuxt": "^2.1.5",
 		"dayjs": "^1.9.7",

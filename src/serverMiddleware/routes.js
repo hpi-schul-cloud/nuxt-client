@@ -48,6 +48,7 @@ const routes = [
 	`^/rooms/${mongoId}/?$`,
 	`^/typescript/withdecorators/?$`,
 	`^/typescript/withoutdecorators/?$`,
+	`^/typescript/composition-api/?$`,
 	// `^/courses/?$`,
 ];
 
