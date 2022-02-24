@@ -94,7 +94,7 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-		role: { type: String, required: true, default: "" },
+		role: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -110,9 +110,6 @@ export default {
 		};
 	},
 	computed: {
-		avatarIcon() {
-			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
-		},
 		titleColor() {
 			return this.task.displayColor || this.defaultTitleColor;
 		},
@@ -192,6 +189,7 @@ export default {
 					});
 				}
 			}
+
 			if (this.role == "student") {
 				// if more action is needed for the students add actions like above
 			}

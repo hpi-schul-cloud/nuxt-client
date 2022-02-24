@@ -105,8 +105,8 @@ describe("@components/molecules/RoomTaskCard", () => {
 	});
 
 	describe("common behaviors and actions", () => {
+		const role = "teacher";
 		it("should have correct props", () => {
-			const role = "teacher";
 			const wrapper = getWrapper({ ...testProps, role });
 
 			expect(wrapper.vm.task).toStrictEqual(testProps.task);
@@ -114,7 +114,6 @@ describe("@components/molecules/RoomTaskCard", () => {
 		});
 
 		it("task card should have correct 'href' value", () => {
-			const role = "teacher";
 			const wrapper = getWrapper({ ...testProps, role });
 			const taskCard = wrapper.find(".task-card");
 
@@ -124,7 +123,6 @@ describe("@components/molecules/RoomTaskCard", () => {
 		});
 
 		it("should have correct combined title", () => {
-			const role = "teacher";
 			const wrapper = getWrapper({ ...testProps, role });
 			const title = wrapper.find(".title-section");
 
