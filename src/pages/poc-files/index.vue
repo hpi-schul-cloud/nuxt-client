@@ -57,7 +57,8 @@ export default {
 				FilesPOCModule.upload(file);
 			}
 		},
-		async download(file) {
+		download(file) {
+			console.log(file);
 			FilesPOCModule.download(file);
 		},
 	},

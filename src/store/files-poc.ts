@@ -12,6 +12,15 @@ import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
 
 const API_URL = "http://localhost:4444/api/v3/files-storage";
+
+type APIFile = {
+	creatorId: string;
+	id: string;
+	name: string;
+	targetId: string;
+	targetType: string;
+	type: string;
+};
 @Module({
 	name: "files-poc",
 	namespaced: true,
@@ -60,7 +69,7 @@ export class FilesPOCModule extends VuexModule {
 	}
 
 	@Action
-	async download(file: File): Promise<void> {
+	async download(file: APIFile): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
