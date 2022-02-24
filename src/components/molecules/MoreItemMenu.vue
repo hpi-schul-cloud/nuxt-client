@@ -1,5 +1,5 @@
 <template>
-	<v-menu bottom left offset-y attach>
+	<v-menu v-if="menuItems.length" bottom left offset-y attach>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
@@ -17,7 +17,7 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				class="task-action"
+				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
 				@click.prevent="item.action"
 			>
 				<v-list-item-title>

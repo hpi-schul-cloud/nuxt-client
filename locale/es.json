@@ -759,6 +759,7 @@
 	"pages.room.taskCard.label.reopen": "Restaurar la tarea",
 	"pages.room.taskCard.label.post": "Publicar",
 	"pages.room.taskCard.label.edit": "Editar",
+	"pages.room.taskCard.label.revert": "Revert to draft",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",

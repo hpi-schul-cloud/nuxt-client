@@ -2,36 +2,35 @@
 	<div class="rooms-container">
 		<div v-if="role === undefined">No content available</div>
 		<div v-else>
-			<div v-if="role === 'teacher'">
-				<div v-for="(item, index) of roomData.elements" :key="index">
-					<room-task-card-teacher
-						v-if="item.type === 'task'"
-						:task="item.content"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-teacher"
-					/>
-					<room-lesson-card-teacher
-						v-if="item.type === 'lesson'"
-						:lesson="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.lessonCard.aria', {
-								itemType: $t('pages.room.lessonCard.label.lesson'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-teacher"
-					/>
-				</div>
+			<div v-for="(item, index) of roomData.elements" :key="index">
+				<room-task-card
+					v-if="item.type === 'task'"
+					:role="role"
+					:task="item.content"
+					:aria-label="
+						$t('pages.room.taskCard.aria', {
+							itemType: $t('pages.room.taskCard.label.task'),
+							itemName: item.content.name,
+						})
+					"
+					class="card-teacher"
+				/>
+				<room-lesson-card-teacher
+					v-if="item.type === 'lesson'"
+					:lesson="item.content"
+					:room="lessonData"
+					:aria-label="
+						$t('pages.room.lessonCard.aria', {
+							itemType: $t('pages.room.lessonCard.label.lesson'),
+							itemName: item.content.name,
+						})
+					"
+					class="card-teacher"
+				/>
 			</div>
-			<div v-if="role === 'student'">
+			<!-- <div v-if="role === 'student'">
 				<div v-for="(item, index) of roomData.elements" :key="index">
-					<room-task-card-student
+					<room-task-card
 						v-if="item.type === 'task'"
 						:task="item.content"
 						:aria-label="
@@ -55,23 +54,25 @@
 						class="card-student"
 					/>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
 
 <script>
-import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
-import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
+// import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
+import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
+// import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
 import RoomLessonCardTeacher from "@components/molecules/RoomLessonCardTeacher.vue";
-import RoomLessonCardStudent from "@components/molecules/RoomLessonCardStudent.vue";
+// import RoomLessonCardStudent from "@components/molecules/RoomLessonCardStudent.vue";
 
 export default {
 	components: {
-		RoomTaskCardTeacher,
-		RoomTaskCardStudent,
+		// RoomTaskCardTeacher,
+		// RoomTaskCardStudent,
 		RoomLessonCardTeacher,
-		RoomLessonCardStudent,
+		// RoomLessonCardStudent,
+		RoomTaskCard,
 	},
 	props: {
 		roomData: {

@@ -752,6 +752,7 @@
 	"pages.room.taskCard.label.reopen": "Restore task",
 	"pages.room.taskCard.label.post": "Post",
 	"pages.room.taskCard.label.edit": "Edit",
+	"pages.room.taskCard.label.revert": "Revert to draft",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
