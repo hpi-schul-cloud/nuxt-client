@@ -58,7 +58,6 @@ export default {
 			}
 		},
 		download(file) {
-			console.log(file);
 			FilesPOCModule.download(file);
 		},
 	},
