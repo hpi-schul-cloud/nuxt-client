@@ -343,22 +343,38 @@ describe("rooms module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomsModule = new Rooms({});
-				const getSharedCourseDataSpy = jest.spyOn(
-					roomsModule,
-					"confirmSharedCourseData"
-				);
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
 					status: "success",
 					message: "",
 				};
+				const roomsModule = new Rooms({});
+				const getSharedCourseDataSpy = jest.spyOn(
+					roomsModule,
+					"confirmSharedCourseData"
+				);
+				getSharedCourseDataSpy.mockImplementation();
 
 				await roomsModule.confirmSharedCourseData(sharedCourseData);
 				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
 					sharedCourseData
 				);
+			});
+
+			it("should call the businessError mutation", async () => {
+				const sharedCourseData = {
+					code: "",
+					courseName: "",
+					status: "",
+					message: "",
+				};
+				const setBusinessErrorMock = jest.fn();
+				const roomsModule = new Rooms({});
+				roomsModule.setBusinessError = setBusinessErrorMock;
+
+				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				expect(setBusinessErrorMock).toHaveBeenCalled();
 			});
 		});
 	});
@@ -525,6 +541,32 @@ describe("rooms module", () => {
 					expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
 					expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
 				});
+			});
+		});
+
+		describe("setBusinessError", () => {
+			it("should set businessError", () => {
+				const roomsModule = new Rooms({});
+				const businessErrorData = {
+					statusCode: "400",
+					message: "error",
+					error: { type: "BadRequest" },
+				};
+				expect(roomsModule.getBusinessError).not.toBe(businessErrorData);
+				roomsModule.setBusinessError(businessErrorData);
+				expect(roomsModule.businessError).toBe(businessErrorData);
+			});
+			it("should reset businessError", () => {
+				const roomsModule = new Rooms({});
+				roomsModule.businessError = {
+					statusCode: "400",
+					message: "error",
+					error: {},
+				};
+
+				roomsModule.resetBusinessError();
+				expect(roomsModule.businessError.statusCode).toStrictEqual("");
+				expect(roomsModule.businessError.message).toStrictEqual("");
 			});
 		});
 	});
