@@ -542,4 +542,27 @@ describe("RoomPage", () => {
 			"vRoomEmptyAvatar"
 		);
 	});
+
+	it("should open the import-modal", async () => {
+		const wrapper = getWrapper();
+
+		const importModalComponent = wrapper.find(".import-modal");
+		expect(importModalComponent.vm.isOpen).toBe(false);
+
+		await wrapper.setData({ importDialog: { isOpen: true } });
+		expect(importModalComponent.vm.isOpen).toBe(true);
+	});
+
+	it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
+		const updateRoomsMock = jest.fn();
+		const wrapper = getWrapper();
+		wrapper.vm.updateRooms = updateRoomsMock;
+		await wrapper.setData({ importDialog: { isOpen: true } });
+
+		const importModalComponent = wrapper.find(".import-modal");
+		await importModalComponent.vm.$emit("update-rooms");
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(updateRoomsMock).toHaveBeenCalled();
+	});
 });

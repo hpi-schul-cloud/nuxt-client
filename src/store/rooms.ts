@@ -23,6 +23,7 @@ import {
 	SharingCourseObject,
 } from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
+import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "rooms",
@@ -45,6 +46,11 @@ export class Rooms extends VuexModule {
 
 	loading: boolean = false;
 	error: null | {} = null;
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+		error: {},
+	};
 	private _dashboardApi?: DashboardApiInterface;
 	private _coursesApi?: CoursesApiInterface;
 
@@ -141,6 +147,20 @@ export class Rooms extends VuexModule {
 		this.importedCourseId = importedCourseId;
 	}
 
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+			error: {},
+		};
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -167,6 +187,10 @@ export class Rooms extends VuexModule {
 
 	get getImportedCourseId(): string {
 		return this.importedCourseId;
+	}
+
+	get getBusinessError() {
+		return this.businessError;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -283,6 +307,7 @@ export class Rooms extends VuexModule {
 
 	@Action
 	async getSharedCourseData(courseCode: string): Promise<void> {
+		this.resetBusinessError();
 		const params = {
 			shareToken: courseCode,
 		};
@@ -297,13 +322,11 @@ export class Rooms extends VuexModule {
 				message: "",
 			});
 		} catch (error: any) {
-			this.setSharedCourseData({
-				code: courseCode,
-				courseName: "",
-				status: "error",
-				message: "The course code is not in use.",
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
 			});
-			this.setError(error);
 		}
 	}
 
@@ -311,15 +334,19 @@ export class Rooms extends VuexModule {
 	async confirmSharedCourseData(
 		courseData: SharingCourseObject
 	): Promise<void> {
+		this.resetBusinessError();
 		try {
 			const importedCourseResponse = await $axios.$post("/v1/courses-share", {
 				shareToken: courseData.code,
 				courseName: courseData.courseName,
 			});
-
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
 		} catch (error: any) {
-			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
 		}
 	}
 }
