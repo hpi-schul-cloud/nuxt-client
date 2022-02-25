@@ -1,5 +1,5 @@
 <template>
-	<div>{{ pageData }}</div>
+	<div class="page-data">{{ pageData }}</div>
 </template>
 <script lang="ts">
 import {
@@ -10,7 +10,7 @@ import {
 } from "@vue/composition-api";
 
 export default defineComponent({
-	name: "Composition API",
+	name: "IndexPage",
 	// head() {
 	// 	return {
 	// 		title: `${isOpen.value}`,

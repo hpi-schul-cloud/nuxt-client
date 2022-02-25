@@ -37,10 +37,12 @@ Vue.config.productionTip = false;
 
 import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
+import CompositionApi from "@vue/composition-api";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 Vue.use(Vuelidate);
 Vue.use(Vuex);
+Vue.use(CompositionApi);
 
 function readDirRecursiveSync(dir) {
 	const results = [];
