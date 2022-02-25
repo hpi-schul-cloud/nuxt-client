@@ -40,7 +40,7 @@ module.exports = {
 	publicRuntimeConfig: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		axios: {
-			browserBaseURL: process.env.API_URL || "http://localhost:3030/api",
+			browserBaseURL: process.env.API_URL || "http://localhost:4000/api",
 		},
 		FEATURE_MATRIX_MESSENGER_ENABLED:
 			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
@@ -144,11 +144,17 @@ module.exports = {
 		"@nuxtjs/toast",
 		"cookie-universal-nuxt",
 		"nuxt-babel",
+		"@nuxtjs/proxy",
 	],
 	sentry: sentryConfig,
 	toast: {
 		duration: 3000,
 	},
+
+	proxy: [
+		"http://localhost:4444/api/v3/files-storage/**/*",
+		"http://localhost:3030/api/**/*",
+	],
 
 	/*
 	 ** Build configuration

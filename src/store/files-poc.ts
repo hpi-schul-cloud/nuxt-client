@@ -11,7 +11,7 @@ import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
 
-const API_URL = "http://localhost:4444/api/v3/files-storage";
+const API_URL = "http://localhost:4000/api/v3/files-storage";
 
 type APIFile = {
 	creatorId: string;
