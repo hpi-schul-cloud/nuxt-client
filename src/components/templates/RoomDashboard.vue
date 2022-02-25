@@ -13,7 +13,7 @@
 							itemName: item.content.name,
 						})
 					"
-					class="card-teacher"
+					class="task-card"
 				/>
 				<room-lesson-card
 					v-if="item.type === 'lesson'"
@@ -26,7 +26,7 @@
 							itemName: item.content.name,
 						})
 					"
-					class="card-teacher"
+					class="lesson-card"
 				/>
 			</div>
 		</div>
@@ -48,7 +48,7 @@ export default {
 			required: true,
 			default: () => {},
 		},
-		role: { type: String, required: true, default: "" },
+		role: { type: String, required: true },
 	},
 	data() {
 		return {};
