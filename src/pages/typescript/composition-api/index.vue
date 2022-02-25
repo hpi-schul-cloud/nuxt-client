@@ -1,5 +1,8 @@
 <template>
-	<div class="page-data">{{ pageData }}</div>
+	<div>
+		<div class="page-data">{{ pageData }}</div>
+		<div class="school">{{ school.name }}</div>
+	</div>
 </template>
 <script lang="ts">
 import {
@@ -8,6 +11,7 @@ import {
 	computed,
 	onMounted,
 } from "@vue/composition-api";
+import authModule from "@store/auth";
 
 export default defineComponent({
 	name: "IndexPage",
@@ -27,6 +31,9 @@ export default defineComponent({
 		const userName = computed(() => {
 			return `User: ${pageData.value.name} ${pageData.value.surname}`;
 		});
+		const school = computed(() => {
+			return authModule.getSchool;
+		});
 
 		const setData = () => {
 			pageData.value = { id: "123", name: "Murat", surname: "Merdoglu" };
@@ -41,6 +48,7 @@ export default defineComponent({
 			isOpen,
 			userName,
 			setData,
+			school,
 		};
 	},
 });
