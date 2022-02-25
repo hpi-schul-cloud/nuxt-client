@@ -1,20 +1,17 @@
-// import Vue from "vue";
-// import CompositionApi from "@vue/composition-api";
-
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Index from "./index.vue";
 
-// Vue.use(CompositionApi);
-
 describe("@index", () => {
 	it("index", async () => {
-		const wrapper = mount<Index>(Index, {});
+		const wrapper = mount(Index, {
+			...createComponentMocks({
+				i18n: true,
+			}),
+		});
 
 		await wrapper.vm.$nextTick();
 
-		// const vm: any = wrapper.vm;
-		// expect(vm.isMounted).toBe(true);
-
-		expect(wrapper.vm.isMounted).toBe(true);
+		expect(wrapper.text()).toContain("Murat");
 	});
 });
