@@ -24,6 +24,7 @@ const routes = [
 	`^/administration/ldap/config/?$`,
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
+	`^/administration/migration`,
 	`^/tasks/?$`,
 	`^/tasks/open/?$`,
 	`^/tasks/assigned/?$`,
@@ -50,6 +51,7 @@ const routes = [
 	`^/typescript/withoutdecorators/?$`,
 	`^/typescript/composition-api/?$`,
 	// `^/courses/?$`,
+	`^/poc-files/?$`,
 ];
 
 const uuid =

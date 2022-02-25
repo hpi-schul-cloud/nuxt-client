@@ -108,7 +108,7 @@ export default {
 	methods: {
 		loadMore(entries) {
 			if (entries[0].isIntersecting && this.status !== "pending") {
-				FinishedTaskModule.fetchMoreTasks();
+				FinishedTaskModule.fetchFinishedTasks();
 			}
 		},
 		isLastTaskItem: function (index) {

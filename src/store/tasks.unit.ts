@@ -3,6 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
+import { FinishedTaskModule } from "./finished-tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -128,6 +129,32 @@ describe("task store", () => {
 				expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
 			});
 		});
+
+		// TODO - implement when we figured out how to correctly mock stores
+		describe("finishTask", () => {
+			it.todo("should call finish task api and refetch all tasks");
+
+			it("should handle an error", (done) => {
+				const task = taskFactory.build();
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
+				};
+
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				const taskModule = new TaskModule({});
+
+				taskModule.finishTask(task.id).then(() => {
+					expect(taskModule.getStatus).toBe("error");
+					expect(taskModule.businessError).toStrictEqual(error);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -163,6 +190,10 @@ describe("task store", () => {
 				const taskModule = new TaskModule({});
 				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
 			});
+
+			it.todo(
+				"should remove substitute course(s) from course filter when disabled"
+			);
 		});
 
 		describe("setStatus", () => {
@@ -278,6 +309,19 @@ describe("task store", () => {
 			});
 		});
 
+		describe("getBusinessError", () => {
+			it("should return business error", () => {
+				const taskModule = new TaskModule({});
+				taskModule.businessError = {
+					statusCode: "404",
+					message: "not found",
+				};
+				const businessError = taskModule.getBusinessError;
+
+				expect(businessError).toBe(taskModule.businessError);
+			});
+		});
+
 		describe("isSubstituteFilterEnabled", () => {
 			it("should return false by default", () => {
 				const taskModule = new TaskModule({});
@@ -288,6 +332,19 @@ describe("task store", () => {
 				const taskModule = new TaskModule({});
 				taskModule.substituteFilter = true;
 				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+			});
+		});
+
+		describe("hasFilterSelected", () => {
+			it("should return false by default", () => {
+				const taskModule = new TaskModule({});
+				expect(taskModule.hasFilterSelected).toBe(false);
+			});
+
+			it("should return true if enabled", () => {
+				const taskModule = new TaskModule({});
+				taskModule.courseFilter = ["Mathe"];
+				expect(taskModule.hasFilterSelected).toBe(true);
 			});
 		});
 

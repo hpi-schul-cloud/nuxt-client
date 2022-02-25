@@ -35,7 +35,7 @@ npm i
 ## Developing
 
 ```bash
-# serve nuxt, docs und storybook in parallel
+# serve nuxt und docs in parallel
 npm run dev
 ```
 
@@ -52,16 +52,6 @@ npm run dev:nuxt
 All Nuxt source-files can be found at `src/`.
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
-
-### Storybook
-
-```bash
-npm run dev:storybook
-```
-
-**URL**: [http://localhost:4001](http://localhost:4001)
-
-For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
 
 ### Docs
 
@@ -105,7 +95,7 @@ We have [a seperate page](/4-Tools.md) for our other tools
 
 ## Aliases
 
-To simplify referencing local modules and refactoring, you shpuld use aliases that are shared between nuxt-dev, unit tests and storybook. You can find them in `aliases.config.js`. As a convention, this project uses an `@` prefix to denote aliases.
+To simplify referencing local modules and refactoring, you shpuld use aliases that are shared between nuxt-dev and unit tests. You can find them in `aliases.config.js`. As a convention, this project uses an `@` prefix to denote aliases.
 
 ## Pre-commit
 

@@ -2,7 +2,7 @@ import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TaskModule from "@/store/tasks";
-import mocks from "@@/stories/mockData/Tasks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
 

@@ -35,10 +35,10 @@ export interface BoardElementResponse {
     type: string;
     /**
      * Content of the Board, either: a task or a lesson specific for the board
-     * @type {BoardTaskResponse}
+     * @type {object}
      * @memberof BoardElementResponse
      */
-    content: BoardTaskResponse;
+    content: object;
 }
 /**
  * 
@@ -70,110 +70,6 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     elements: Array<BoardElementResponse>;
-}
-/**
- * 
- * @export
- * @interface BoardTaskResponse
- */
-export interface BoardTaskResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    availableDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    duedate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    courseName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    displayColor?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardTaskResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {BoardTaskStatusResponse}
-     * @memberof BoardTaskResponse
-     */
-    status: BoardTaskStatusResponse;
-}
-/**
- * 
- * @export
- * @interface BoardTaskStatusResponse
- */
-export interface BoardTaskStatusResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    submitted: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    maxSubmissions: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BoardTaskStatusResponse
-     */
-    graded: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardTaskStatusResponse
-     */
-    isDraft: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardTaskStatusResponse
-     */
-    isSubstitutionTeacher: boolean;
 }
 /**
  * 
@@ -466,10 +362,16 @@ export interface ImportUserResponse {
     classNames: Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {UserMatchResponse}
+     * @type {object}
      * @memberof ImportUserResponse
      */
-    match?: UserMatchResponse;
+    match?: object;
+    /**
+     * manual flag to apply it as filter
+     * @type {object}
+     * @memberof ImportUserResponse
+     */
+    flagged: object;
 }
 
 /**
@@ -915,6 +817,25 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isSubstitutionTeacher: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskStatusResponse
+     */
+    isFinished: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateFlagParams
+ */
+export interface UpdateFlagParams {
+    /**
+     * updates flag for an import user
+     * @type {boolean}
+     * @memberof UpdateFlagParams
+     */
+    flagged: boolean;
 }
 /**
  * 
@@ -982,6 +903,37 @@ export interface UserInfoResponse {
 /**
  * 
  * @export
+ * @interface UserMatchListResponse
+ */
+export interface UserMatchListResponse {
+    /**
+     * 
+     * @type {Array<UserMatchResponse>}
+     * @memberof UserMatchListResponse
+     */
+    data: Array<UserMatchResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserMatchListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserMatchListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserMatchListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface UserMatchResponse
  */
 export interface UserMatchResponse {
@@ -1010,13 +962,28 @@ export interface UserMatchResponse {
      */
     lastName: string;
     /**
+     * list of user roles from external system: student, teacher, admin
+     * @type {string}
+     * @memberof UserMatchResponse
+     */
+    roleNames: UserMatchResponseRoleNamesEnum;
+    /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
      * @type {string}
      * @memberof UserMatchResponse
      */
-    matchedBy: UserMatchResponseMatchedByEnum;
+    matchedBy?: UserMatchResponseMatchedByEnum;
 }
 
+/**
+    * @export
+    * @enum {string}
+    */
+export enum UserMatchResponseRoleNamesEnum {
+    Student = 'student',
+    Teacher = 'teacher',
+    Admin = 'admin'
+}
 /**
     * @export
     * @enum {string}
@@ -1718,7 +1685,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1904,7 +1871,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1981,7 +1948,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2054,7 +2021,7 @@ export interface NewsApiInterface {
     newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
-     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2133,7 +2100,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2296,6 +2263,124 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
 
 
 /**
+ * SSOApi - axios parameter creator
+ * @export
+ */
+export const SSOApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow: async (systemid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemid' is not null or undefined
+            assertParamExists('oauthSSOControllerStartOauthAuthorizationCodeFlow', 'systemid', systemid)
+            const localVarPath = `/sso/oauth/{systemid}`
+                .replace(`{${"systemid"}}`, encodeURIComponent(String(systemid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SSOApi - functional programming interface
+ * @export
+ */
+export const SSOApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SSOApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SSOApi - factory interface
+ * @export
+ */
+export const SSOApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SSOApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SSOApi - interface
+ * @export
+ * @interface SSOApi
+ */
+export interface SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object>;
+
+}
+
+/**
+ * SSOApi - object-oriented interface
+ * @export
+ * @class SSOApi
+ * @extends {BaseAPI}
+ */
+export class SSOApi extends BaseAPI implements SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * TaskApi - axios parameter creator
  * @export
  */
@@ -2387,6 +2472,80 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerFinish: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('taskControllerFinish', 'id', id)
+            const localVarPath = `/tasks/{id}/finish`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRestore: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('taskControllerRestore', 'id', id)
+            const localVarPath = `/tasks/{id}/restore`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2419,6 +2578,26 @@ export const TaskApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFindAllFinished(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerFinish(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFinish(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerRestore(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRestore(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -2449,6 +2628,24 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
         taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse> {
             return localVarFp.taskControllerFindAllFinished(skip, limit, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerFinish(id: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerFinish(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRestore(id: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerRestore(id, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2477,6 +2674,24 @@ export interface TaskApiInterface {
      * @memberof TaskApiInterface
      */
     taskControllerFindAllFinished(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerFinish(id: string, options?: any): AxiosPromise<TaskResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerRestore(id: string, options?: any): AxiosPromise<TaskResponse>;
 
 }
 
@@ -2510,6 +2725,28 @@ export class TaskApi extends BaseAPI implements TaskApiInterface {
     public taskControllerFindAllFinished(skip?: number, limit?: number, options?: any) {
         return TaskApiFp(this.configuration).taskControllerFindAllFinished(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerFinish(id: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerFinish(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerRestore(id: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerRestore(id, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -2521,17 +2758,135 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserApi - functional programming interface
+ * @export
+ */
+export const UserApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserApi - factory interface
+ * @export
+ */
+export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerMe(options?: any): AxiosPromise<ResolvedUser> {
+            return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserApi - interface
+ * @export
+ * @interface UserApi
+ */
+export interface UserApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    userControllerMe(options?: any): AxiosPromise<ResolvedUser>;
+
+}
+
+/**
+ * UserApi - object-oriented interface
+ * @export
+ * @class UserApi
+ * @extends {BaseAPI}
+ */
+export class UserApi extends BaseAPI implements UserApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerMe(options?: any) {
+        return UserApiFp(this.configuration).userControllerMe(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserImportApi - axios parameter creator
+ * @export
+ */
+export const UserImportApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
          * @param {string} [loginName] 
-         * @param {'auto' | 'admin' | 'none'} [match] 
+         * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
+         * @param {string} [classes] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAll: async (firstName?: string, lastName?: string, loginName?: string, match?: 'auto' | 'admin' | 'none', flagged?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerFindAllImportUsers: async (firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2560,12 +2915,76 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['loginName'] = loginName;
             }
 
-            if (match !== undefined) {
+            if (match) {
                 localVarQueryParameter['match'] = match;
             }
 
             if (flagged !== undefined) {
                 localVarQueryParameter['flagged'] = flagged;
+            }
+
+            if (classes !== undefined) {
+                localVarQueryParameter['classes'] = classes;
+            }
+
+            if (role !== undefined) {
+                localVarQueryParameter['role'] = role;
+            }
+
+            if (sortOrder !== undefined) {
+                localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFindAllUnmatchedUsers: async (name?: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/unassigned`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
             }
 
             if (skip !== undefined) {
@@ -2631,11 +3050,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateMatch: async (id: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerSetMatch: async (id: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('importUserControllerUpdateMatch', 'id', id)
+            assertParamExists('importUserControllerSetMatch', 'id', id)
             // verify required parameter 'updateMatchParams' is not null or undefined
-            assertParamExists('importUserControllerUpdateMatch', 'updateMatchParams', updateMatchParams)
+            assertParamExists('importUserControllerSetMatch', 'updateMatchParams', updateMatchParams)
             const localVarPath = `/user/import/{id}/match`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2669,11 +3088,18 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/me`;
+        importUserControllerUpdateFlag: async (id: string, updateFlagParams: UpdateFlagParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('importUserControllerUpdateFlag', 'id', id)
+            // verify required parameter 'updateFlagParams' is not null or undefined
+            assertParamExists('importUserControllerUpdateFlag', 'updateFlagParams', updateFlagParams)
+            const localVarPath = `/user/import/{id}/flag`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2681,7 +3107,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -2691,9 +3117,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateFlagParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2704,26 +3133,42 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 };
 
 /**
- * UserApi - functional programming interface
+ * UserImportApi - functional programming interface
  * @export
  */
-export const UserApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
+export const UserImportApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserImportApiAxiosParamCreator(configuration)
     return {
         /**
          * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
          * @param {string} [loginName] 
-         * @param {'auto' | 'admin' | 'none'} [match] 
+         * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
+         * @param {string} [classes] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: 'auto' | 'admin' | 'none', flagged?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAll(firstName, lastName, loginName, match, flagged, skip, limit, options);
+        async importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserMatchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2732,7 +3177,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerRemoveMatch(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async importUserControllerRemoveMatch(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerRemoveMatch(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2743,43 +3188,60 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserMatchResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateMatch(id, updateMatchParams, options);
+        async importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSetMatch(id, updateMatchParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUser>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
+        async importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateFlag(id, updateFlagParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * UserApi - factory interface
+ * UserImportApi - factory interface
  * @export
  */
-export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = UserApiFp(configuration)
+export const UserImportApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserImportApiFp(configuration)
     return {
         /**
          * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
          * @param {string} [loginName] 
-         * @param {'auto' | 'admin' | 'none'} [match] 
+         * @param {Array<'auto' | 'admin' | 'none'>} [match] 
          * @param {boolean} [flagged] 
+         * @param {string} [classes] 
+         * @param {'student' | 'teacher' | 'admin'} [role] 
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'firstName' | 'lastName'} [sortBy] 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: 'auto' | 'admin' | 'none', flagged?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
-            return localVarFp.importUserControllerFindAll(firstName, lastName, loginName, match, flagged, skip, limit, options).then((request) => request(axios, basePath));
+        importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse> {
+            return localVarFp.importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserMatchListResponse> {
+            return localVarFp.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2787,7 +3249,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<void> {
+        importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse> {
             return localVarFp.importUserControllerRemoveMatch(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2797,49 +3259,66 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<UserMatchResponse> {
-            return localVarFp.importUserControllerUpdateMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
+        importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} id 
+         * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerMe(options?: any): AxiosPromise<ResolvedUser> {
-            return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
+        importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * UserApi - interface
+ * UserImportApi - interface
  * @export
- * @interface UserApi
+ * @interface UserImportApi
  */
-export interface UserApiInterface {
+export interface UserImportApiInterface {
     /**
      * 
      * @param {string} [firstName] 
      * @param {string} [lastName] 
      * @param {string} [loginName] 
-     * @param {'auto' | 'admin' | 'none'} [match] 
+     * @param {Array<'auto' | 'admin' | 'none'>} [match] 
      * @param {boolean} [flagged] 
+     * @param {string} [classes] 
+     * @param {'student' | 'teacher' | 'admin'} [role] 
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'firstName' | 'lastName'} [sortBy] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApiInterface
+     * @memberof UserImportApiInterface
      */
-    importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: 'auto' | 'admin' | 'none', flagged?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
+    importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any): AxiosPromise<ImportUserListResponse>;
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserMatchListResponse>;
 
     /**
      * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApiInterface
+     * @memberof UserImportApiInterface
      */
-    importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<void>;
+    importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -2847,42 +3326,61 @@ export interface UserApiInterface {
      * @param {UpdateMatchParams} updateMatchParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApiInterface
+     * @memberof UserImportApiInterface
      */
-    importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<UserMatchResponse>;
+    importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
+     * @param {string} id 
+     * @param {UpdateFlagParams} updateFlagParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApiInterface
+     * @memberof UserImportApiInterface
      */
-    userControllerMe(options?: any): AxiosPromise<ResolvedUser>;
+    importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse>;
 
 }
 
 /**
- * UserApi - object-oriented interface
+ * UserImportApi - object-oriented interface
  * @export
- * @class UserApi
+ * @class UserImportApi
  * @extends {BaseAPI}
  */
-export class UserApi extends BaseAPI implements UserApiInterface {
+export class UserImportApi extends BaseAPI implements UserImportApiInterface {
     /**
      * 
      * @param {string} [firstName] 
      * @param {string} [lastName] 
      * @param {string} [loginName] 
-     * @param {'auto' | 'admin' | 'none'} [match] 
+     * @param {Array<'auto' | 'admin' | 'none'>} [match] 
      * @param {boolean} [flagged] 
+     * @param {string} [classes] 
+     * @param {'student' | 'teacher' | 'admin'} [role] 
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'firstName' | 'lastName'} [sortBy] 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof UserImportApi
      */
-    public importUserControllerFindAll(firstName?: string, lastName?: string, loginName?: string, match?: 'auto' | 'admin' | 'none', flagged?: boolean, skip?: number, limit?: number, options?: any) {
-        return UserApiFp(this.configuration).importUserControllerFindAll(firstName, lastName, loginName, match, flagged, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerFindAllImportUsers(firstName?: string, lastName?: string, loginName?: string, match?: Array<'auto' | 'admin' | 'none'>, flagged?: boolean, classes?: string, role?: 'student' | 'teacher' | 'admin', sortOrder?: 'asc' | 'desc', sortBy?: 'firstName' | 'lastName', skip?: number, limit?: number, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerFindAllImportUsers(firstName, lastName, loginName, match, flagged, classes, role, sortOrder, sortBy, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2890,10 +3388,10 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof UserImportApi
      */
     public importUserControllerRemoveMatch(id: string, options?: any) {
-        return UserApiFp(this.configuration).importUserControllerRemoveMatch(id, options).then((request) => request(this.axios, this.basePath));
+        return UserImportApiFp(this.configuration).importUserControllerRemoveMatch(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2902,20 +3400,22 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {UpdateMatchParams} updateMatchParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof UserImportApi
      */
-    public importUserControllerUpdateMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
-        return UserApiFp(this.configuration).importUserControllerUpdateMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} id 
+     * @param {UpdateFlagParams} updateFlagParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof UserImportApi
      */
-    public userControllerMe(options?: any) {
-        return UserApiFp(this.configuration).userControllerMe(options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
