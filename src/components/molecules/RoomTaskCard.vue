@@ -11,7 +11,7 @@
 			<div class="top-row-container mb-1">
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					<v-icon size="20" :color="task.displayColor" dark>{{
-						mdiFormatListChecks
+						icons.mdiFormatListChecks
 					}}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
@@ -81,7 +81,7 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
-import { mdiPencilOutline, mdiFormatListChecks } from "@mdi/js";
+import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
@@ -103,9 +103,11 @@ export default {
 	data() {
 		return {
 			fromNow,
-			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiFormatListChecks,
-			mdiPencilOutline,
+			icons: {
+				mdiFormatListChecks,
+				mdiPencilOutline,
+				mdiUndoVariant,
+			},
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -176,14 +178,14 @@ export default {
 
 			if (this.role == "teacher") {
 				roleBasedMoreActions.teacher.push({
-					icon: this.mdiPencilOutline,
+					icon: this.icons.mdiPencilOutline,
 					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions.teacher.push({
-						icon: this.mdiPencilOutline,
+						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.taskCard.label.revert"),
 					});

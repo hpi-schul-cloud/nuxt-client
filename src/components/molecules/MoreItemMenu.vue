@@ -19,11 +19,10 @@
 				:key="i"
 				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
 				@click.prevent="item.action"
-			>
+				><v-icon class="task-action-icon mr-1">
+					{{ item.icon }}
+				</v-icon>
 				<v-list-item-title>
-					<v-icon class="task-action-icon mr-1">
-						{{ item.icon }}
-					</v-icon>
 					{{ item.name }}
 				</v-list-item-title>
 			</v-list-item>
