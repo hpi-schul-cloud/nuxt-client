@@ -24,7 +24,9 @@
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
-				class="action-button"
+				:class="`action-button action-button-${action.name
+					.split(' ')
+					.join('-')}`"
 				text
 				:color="titleColor"
 				@click.prevent="action.action"
@@ -36,7 +38,7 @@
 </template>
 
 <script>
-import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
@@ -60,8 +62,10 @@ export default {
 	},
 	data() {
 		return {
-			mdiDotsVertical,
-			mdiPencilOutline,
+			icons: {
+				mdiPencilOutline,
+				mdiUndoVariant,
+			},
 			defaultTitleColor: "#54616e",
 		};
 	},
@@ -101,13 +105,21 @@ export default {
 
 			if (this.role == "teacher") {
 				roleBasedMoreActions.teacher.push({
-					icon: this.mdiPencilOutline,
+					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
 							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
+
+				if (!this.isHidden) {
+					roleBasedMoreActions.teacher.push({
+						icon: this.icons.mdiUndoVariant,
+						action: () => this.revertPublishedCard(),
+						name: this.$t("pages.room.taskCard.label.revert"),
+					});
+				}
 			}
 
 			if (this.role == "student") {
@@ -125,7 +137,10 @@ export default {
 			window.location = value;
 		},
 		postLesson() {
-			console.log("post lesson");
+			this.$emit("post-lesson");
+		},
+		revertPublishedCard() {
+			this.$emit("revert-lesson");
 		},
 	},
 };

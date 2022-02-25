@@ -215,16 +215,16 @@ export default {
 			window.location = value;
 		},
 		publishDraftCard() {
-			console.log("posted");
+			this.$emit("post-task");
 		},
 		revertPublishedCard() {
-			console.log("reverted");
+			this.$emit("revert-task");
 		},
 		finishCard() {
-			console.log("finish");
+			this.$emit("finish-task");
 		},
 		restoreCard() {
-			console.log("restore");
+			this.$emit("restore-task");
 		},
 	},
 };

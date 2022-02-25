@@ -14,6 +14,8 @@
 						})
 					"
 					class="task-card"
+					@post-task="postDraftElement(item.content.id)"
+					@revert-task="revertPublishedElement(item.content.id)"
 				/>
 				<room-lesson-card
 					v-if="item.type === 'lesson'"
@@ -27,6 +29,8 @@
 						})
 					"
 					class="lesson-card"
+					@post-lesson="postDraftElement(item.content.id)"
+					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
 			</div>
 		</div>
@@ -36,6 +40,7 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import RoomModule from "@store/room";
 
 // TODO: These components still exist but should be removed at the end of the implementation
 // import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
@@ -63,6 +68,14 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
+		},
+	},
+	methods: {
+		async postDraftElement(elementId) {
+			await RoomModule.publishCard({ elementId, visibility: true });
+		},
+		async revertPublishedElement(elementId) {
+			await RoomModule.publishCard({ elementId, visibility: false });
 		},
 	},
 };

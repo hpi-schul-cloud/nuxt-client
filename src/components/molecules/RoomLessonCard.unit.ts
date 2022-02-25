@@ -106,8 +106,8 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(".task-action");
-				await moreActionButton.trigger("click");
+				const moreActionButton = wrapper.findAll(".task-action");
+				await moreActionButton.wrappers[0].trigger("click");
 
 				expect(redirectActionMock).toHaveBeenCalled();
 				expect(redirectActionMock.mock.calls[0][0]).toStrictEqual(
@@ -115,7 +115,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				);
 			});
 
-			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
+			it("should trigger the 'post' method when 'post' button is clicked", async () => {
 				const postLessonMock = jest.fn();
 				const wrapper = getWrapper({ ...hiddenTestProps, role });
 				wrapper.vm.postLesson = postLessonMock;
@@ -124,6 +124,18 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await actionButton.trigger("click");
 
 				expect(postLessonMock).toHaveBeenCalled();
+			});
+
+			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
+				const revertPublishedCardMock = jest.fn();
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+
+				const moreActionButton = wrapper.findAll(".task-action");
+				await moreActionButton.wrappers[1].trigger("click");
+				await wrapper.vm.$nextTick();
 			});
 		});
 		describe("students", () => {
