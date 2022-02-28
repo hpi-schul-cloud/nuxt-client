@@ -181,11 +181,11 @@ describe("@components/molecules/RoomTaskCard", () => {
 				);
 			});
 
-			it.skip("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
+			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n
+				const buttonClassName = `.task-action-${wrapper.vm.$i18n
 					.t("pages.room.taskCard.label.revert")
 					.split(" ")
 					.join("-")}`;
