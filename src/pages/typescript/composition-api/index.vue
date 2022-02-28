@@ -15,11 +15,11 @@ import authModule from "@store/auth";
 
 export default defineComponent({
 	name: "IndexPage",
-	// head() {
-	// 	return {
-	// 		title: `${isOpen.value}`,
-	// 	};
-	// },
+	head() {
+		return {
+			title: `${this.title}`,
+		};
+	},
 	setup() {
 		const pageData = ref({
 			id: "",
@@ -39,6 +39,8 @@ export default defineComponent({
 			pageData.value = { id: "123", name: "Murat", surname: "Merdoglu" };
 		};
 
+		const title = "Composition API Test Page";
+
 		onMounted(() => {
 			setData();
 		});
@@ -49,6 +51,7 @@ export default defineComponent({
 			userName,
 			setData,
 			school,
+			title,
 		};
 	},
 });
