@@ -26,14 +26,17 @@ axiosInitializer();
 describe("room module", () => {
 	describe("actions", () => {
 		describe("fetch", () => {
+			const mockApi = {
+				roomsControllerGetRoomBoard: jest.fn(),
+				roomsControllerPatchElementVisibility: jest.fn(),
+			};
 			beforeEach(() => {
 				receivedRequests = [];
 			});
+			afterEach(() => {
+				jest.clearAllMocks();
+			});
 			it("should call backend and sets state correctly", async () => {
-				const mockApi = {
-					roomsControllerGetRoomBoard: jest.fn(),
-				};
-
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
@@ -46,6 +49,24 @@ describe("room module", () => {
 				expect(
 					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
+			});
+
+			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+
+				const roomModule = new Room({});
+				await roomModule.publishCard({ elementId: "54321", visibility: true });
+
+				expect(roomModule.getLoading).toBe(false);
+				expect(
+					mockApi.roomsControllerPatchElementVisibility
+				).toHaveBeenCalled();
+				expect(
+					mockApi.roomsControllerPatchElementVisibility.mock.calls[0]
+				).toContain("54321");
+				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 	});

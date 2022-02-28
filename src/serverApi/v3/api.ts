@@ -593,6 +593,19 @@ export interface PatchGroupParams {
 /**
  * 
  * @export
+ * @interface PatchVisibilityParams
+ */
+export interface PatchVisibilityParams {
+    /**
+     * Title of the Group grid element
+     * @type {boolean}
+     * @memberof PatchVisibilityParams
+     */
+    visibility: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ResolvedUser
  */
 export interface ResolvedUser {
@@ -2183,6 +2196,53 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility: async (roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'roomid', roomid)
+            // verify required parameter 'elementid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'elementid', elementid)
+            // verify required parameter 'patchVisibilityParams' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'patchVisibilityParams', patchVisibilityParams)
+            const localVarPath = `/rooms/{roomid}/elements/{elementid}/visibility`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)))
+                .replace(`{${"elementid"}}`, encodeURIComponent(String(elementid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchVisibilityParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2201,6 +2261,18 @@ export const RoomsApiFp = function(configuration?: Configuration) {
          */
         async roomsControllerGetRoomBoard(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2222,6 +2294,17 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
         roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse> {
             return localVarFp.roomsControllerGetRoomBoard(id, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2239,6 +2322,17 @@ export interface RoomsApiInterface {
      * @memberof RoomsApiInterface
      */
     roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -2258,6 +2352,19 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
      */
     public roomsControllerGetRoomBoard(id: string, options?: any) {
         return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
