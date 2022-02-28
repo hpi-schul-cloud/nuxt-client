@@ -136,6 +136,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const moreActionButton = wrapper.findAll(".task-action");
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
+				expect(revertPublishedCardMock).toHaveBeenCalled();
 			});
 		});
 		describe("students", () => {
