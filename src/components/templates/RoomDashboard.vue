@@ -42,10 +42,6 @@ import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomModule from "@store/room";
 
-// TODO: These components still exist but should be removed at the end of the implementation
-// import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
-// import RoomLessonCardStudent from "@components/molecules/RoomLessonCardStudent.vue";
-
 export default {
 	components: {
 		RoomTaskCard,
