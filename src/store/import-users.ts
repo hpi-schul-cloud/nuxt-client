@@ -375,8 +375,7 @@ export class ImportUsersModule extends VuexModule {
 	@Action
 	async performMigration(): Promise<void> {
 		try {
-			// TODO
-			// await callApi();
+			await this.importUserApi.importUserControllerSaveAllUsersMatches();
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
