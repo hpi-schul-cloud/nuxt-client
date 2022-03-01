@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import {mount} from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
 
 declare var createComponentMocks: Function;
@@ -39,7 +39,7 @@ describe("vRoomAvatar", () => {
 		window.location.pathname = "";
 	});
 	it("should display the title", () => {
-		const wrapper = getWrapper({ ...propsData });
+		const wrapper = getWrapper({...propsData});
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
@@ -47,7 +47,7 @@ describe("vRoomAvatar", () => {
 	});
 
 	it("should NOT display the title", () => {
-		const wrapper = getWrapper({ ...propsData, condenseLayout: true });
+		const wrapper = getWrapper({...propsData, condenseLayout: true});
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeFalsy();
@@ -62,9 +62,20 @@ describe("vRoomAvatar", () => {
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
 	});
 
+	it("should display Empoji as short title", () => {
+		const newMockData = {...mockData, title: "🙂 Bio 12c"};
+
+		const wrapper = getWrapper({...propsData, item: newMockData});
+		const shortLabelElement = wrapper.find(".single-avatar")
+			.element as HTMLElement;
+
+		expect(shortLabelElement).toBeTruthy();
+		expect(shortLabelElement.innerHTML).toStrictEqual("🙂");
+	});
+
 	it("should display the badge", () => {
 		const wrapper = getWrapper({
-			item: { ...mockData, notification: true },
+			item: {...mockData, notification: true},
 			size: "4em",
 			showBadge: true,
 		});
@@ -186,7 +197,7 @@ describe("vRoomAvatar", () => {
 			draggable: true,
 		};
 
-		const wrapper = getWrapper({ ...propData });
+		const wrapper = getWrapper({...propData});
 		const element = wrapper.find(".date-title").element as HTMLElement;
 
 		expect(element).toBeTruthy();
