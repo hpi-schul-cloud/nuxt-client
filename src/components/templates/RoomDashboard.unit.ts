@@ -97,21 +97,27 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		expect(wrapper.vm.role).toStrictEqual("teacher");
 	});
 
-	it("should list teacher cards", async () => {
+	it("should list task cards", async () => {
 		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
-		const listItemsTeacher = wrapper.findAll(".card-teacher");
-		const listItemsStudent = wrapper.findAll(".card-student");
-		expect(listItemsTeacher).toHaveLength(4);
-		expect(listItemsStudent).toHaveLength(0);
+		const taskCards = wrapper.findAll(".task-card");
+		expect(taskCards).toHaveLength(2);
 	});
 
-	it("should list student card", async () => {
+	it("should list lesson cards", async () => {
 		const wrapper = getWrapper({ roomData: mockData, role: "student" });
 
-		const listItemsStudent = wrapper.findAll(".card-student");
-		const listItemsTeacher = wrapper.findAll(".card-teacher");
-		expect(listItemsStudent).toHaveLength(4);
-		expect(listItemsTeacher).toHaveLength(0);
+		const lessonCards = wrapper.findAll(".lesson-card");
+		expect(lessonCards).toHaveLength(2);
+	});
+
+	it("should have lessonData object", async () => {
+		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+		const expectedObject = {
+			roomId: "123",
+			displayColor: "black",
+		};
+
+		expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
 	});
 });

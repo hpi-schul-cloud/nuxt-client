@@ -1,4 +1,5 @@
 import RoomModule from "@store/room";
+import AuthModule from "@/store/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
@@ -55,6 +56,11 @@ const mockData = {
 	],
 };
 
+const user = {
+	name: "abc",
+	roles: [{ name: "teacher" }],
+};
+
 const $route = {
 	params: {
 		id: "123",
@@ -73,9 +79,10 @@ const getWrapper: any = () => {
 	});
 };
 
-describe("@pages/rooms/index.vue", () => {
+describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
 		RoomModule.setRoomData(mockData as any);
+		AuthModule.setUser(user as any);
 	});
 
 	it("should fetch data", async () => {

@@ -11,6 +11,7 @@ import {
 	RoomsApiInterface,
 	RoomsApiFactory,
 	BoardResponse,
+	PatchVisibilityParams,
 } from "../serverApi/v3/api";
 
 @Module({
@@ -44,6 +45,30 @@ export class Room extends VuexModule {
 		try {
 			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async publishCard(payload: {
+		elementId: string;
+		visibility: boolean;
+	}): Promise<void> {
+		this.setLoading(true);
+		const visibilityParam: PatchVisibilityParams = {
+			visibility: payload.visibility,
+		};
+		try {
+			await this.roomsApi.roomsControllerPatchElementVisibility(
+				this.roomData.roomId,
+				payload.elementId,
+				visibilityParam
+			);
+			await this.fetchContent(this.roomData.roomId);
+
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

@@ -13,17 +13,23 @@
 					{{ lesson.name }}
 				</div>
 				<div class="dot-menu-section">
-					<more-item-menu :menu-items="moreActionsMenuItems" :show="true" />
+					<more-item-menu
+						:menu-items="moreActionsMenuItems[role]"
+						:show="true"
+					/>
 				</div>
 			</div>
 		</v-card-text>
 		<v-card-actions class="pt-1">
 			<v-btn
-				v-for="(action, index) in cardActions"
+				v-for="(action, index) in cardActions[role]"
 				:key="index"
-				class="action-button"
+				:class="`action-button action-button-${action.name
+					.split(' ')
+					.join('-')}`"
 				text
-				:color="defaultColor"
+				:color="titleColor"
+				@click.prevent="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -32,10 +38,10 @@
 </template>
 
 <script>
-import { mdiDotsVertical, mdiPencilOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
-
 const lessonRequiredKeys = ["createdAt", "id", "name"];
+
 export default {
 	components: { MoreItemMenu },
 	props: {
@@ -48,6 +54,7 @@ export default {
 			type: Object,
 			required: true,
 		},
+		role: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -55,42 +62,71 @@ export default {
 	},
 	data() {
 		return {
-			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiDotsVertical,
-			mdiPencilOutline,
+			icons: {
+				mdiPencilOutline,
+				mdiUndoVariant,
+			},
 			defaultTitleColor: "#54616e",
 		};
 	},
 	computed: {
-		defaultColor(room) {
-			return room.displayColor || this.defaultTitleColor;
+		titleColor() {
+			return this.room.displayColor || this.defaultTitleColor;
 		},
 		isHidden() {
 			return this.lesson.hidden;
 		},
 		cardActions() {
-			if (this.isHidden) {
-				return [
-					{
+			const roleBasedActions = {
+				teacher: [],
+				student: [],
+			};
+
+			if (this.role == "teacher") {
+				if (this.isHidden) {
+					roleBasedActions.teacher.push({
 						icon: "lessonSend",
-						action: "action name",
+						action: () => this.postLesson(),
 						name: this.$t("pages.room.lessonCard.label.post"),
-					},
-				];
+					});
+				}
 			}
-			return [];
+
+			if (this.role == "student") {
+				// if action is needed for the students add actions like above
+			}
+			return roleBasedActions;
 		},
 		moreActionsMenuItems() {
-			return [
-				{
-					icon: this.mdiPencilOutline,
+			const roleBasedMoreActions = {
+				teacher: [],
+				student: [],
+			};
+
+			if (this.role == "teacher") {
+				roleBasedMoreActions.teacher.push({
+					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
 							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
-				},
-			];
+				});
+
+				if (!this.isHidden) {
+					roleBasedMoreActions.teacher.push({
+						icon: this.icons.mdiUndoVariant,
+						action: () => this.revertPublishedCard(),
+						name: this.$t("pages.room.taskCard.label.revert"),
+					});
+				}
+			}
+
+			if (this.role == "student") {
+				// if more action is needed for the students add actions like above
+			}
+
+			return roleBasedMoreActions;
 		},
 	},
 	methods: {
@@ -99,6 +135,12 @@ export default {
 		},
 		redirectAction(value) {
 			window.location = value;
+		},
+		postLesson() {
+			this.$emit("post-lesson");
+		},
+		revertPublishedCard() {
+			this.$emit("revert-lesson");
 		},
 	},
 };
