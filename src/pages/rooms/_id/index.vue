@@ -47,8 +47,9 @@ export default {
 			return RoomModule.getRoomData;
 		},
 		dashBoardRole() {
-			if (AuthModule.getUserRoles.includes("teacher")) return "teacher";
-			if (AuthModule.getUserRoles.includes("student")) return "student";
+			const roles = AuthModule.getUserRoles;
+			if (roles.includes("teacher")) return "teacher";
+			if (roles.includes("student")) return "student";
 			return undefined;
 		},
 	},

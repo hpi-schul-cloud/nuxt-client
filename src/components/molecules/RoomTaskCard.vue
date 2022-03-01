@@ -11,12 +11,15 @@
 			<div class="top-row-container mb-1">
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					<v-icon size="20" :color="task.displayColor" dark>{{
-						mdiFormatListChecks
+						icons.mdiFormatListChecks
 					}}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
-					<more-item-menu :menu-items="moreActionsMenuItems" :show="true" />
+					<more-item-menu
+						:menu-items="moreActionsMenuItems[role]"
+						:show="true"
+					/>
 				</div>
 			</div>
 			<div class="text-h6 text--primary">{{ task.name }}</div>
@@ -49,7 +52,7 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-1"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-1 overdue"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -60,11 +63,14 @@
 		</v-card-text>
 		<v-card-actions class="pt-1">
 			<v-btn
-				v-for="(action, index) in cardActions"
+				v-for="(action, index) in cardActions[role]"
 				:key="index"
-				class="action-button"
+				:class="`action-button action-button-${action.name
+					.split(' ')
+					.join('-')}`"
 				text
 				:color="titleColor"
+				@click.prevent="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -75,7 +81,7 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
-import { mdiPencilOutline, mdiFormatListChecks } from "@mdi/js";
+import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
@@ -88,7 +94,7 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-
+		role: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -97,16 +103,15 @@ export default {
 	data() {
 		return {
 			fromNow,
-			iconStyle: { height: "20px", minWidth: "20px", width: "20px" },
-			mdiFormatListChecks,
-			mdiPencilOutline,
+			icons: {
+				mdiFormatListChecks,
+				mdiPencilOutline,
+				mdiUndoVariant,
+			},
 			defaultTitleColor: "#54616e",
 		};
 	},
 	computed: {
-		avatarIcon() {
-			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
-		},
 		titleColor() {
 			return this.task.displayColor || this.defaultTitleColor;
 		},
@@ -121,45 +126,76 @@ export default {
 			return this.task.status.isFinished;
 		},
 		cardActions() {
-			if (this.isDraft && !this.isFinished) {
-				return [
-					{
-						icon: "taskSend",
-						action: "action name",
+			const roleBasedActions = {
+				teacher: [],
+				student: [],
+			};
+
+			if (this.role == "teacher") {
+				if (this.isDraft && !this.isFinished) {
+					roleBasedActions.teacher.push({
+						action: () => this.publishDraftCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
-					},
-				];
-			}
-
-			if (!this.isDraft) {
-				return [
-					{
-						icon: "taskFinish",
-						action: "action name",
+					});
+				}
+				if (!this.isDraft) {
+					roleBasedActions.teacher.push({
+						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
-					},
-				];
+					});
+				}
+				if (this.isFinished) {
+					roleBasedActions.teacher.push({
+						action: () => this.restoreCard(),
+						name: this.$t("pages.room.taskCard.label.reopen"),
+					});
+				}
 			}
 
-			if (this.isFinished) {
-				return [
-					{
-						icon: "taskFinish",
-						action: "action name",
+			if (this.role == "student") {
+				if (this.isFinished) {
+					roleBasedActions.student.push({
+						action: () => this.restoreCard(),
 						name: this.$t("pages.room.taskCard.label.reopen"),
-					},
-				];
+					});
+				}
+
+				if (!this.isFinished) {
+					roleBasedActions.student.push({
+						action: () => this.finishCard(),
+						name: this.$t("pages.room.taskCard.label.done"),
+					});
+				}
 			}
-			return [];
+
+			return roleBasedActions;
 		},
 		moreActionsMenuItems() {
-			return [
-				{
-					icon: this.mdiPencilOutline,
+			const roleBasedMoreActions = {
+				teacher: [],
+				student: [],
+			};
+
+			if (this.role == "teacher") {
+				roleBasedMoreActions.teacher.push({
+					icon: this.icons.mdiPencilOutline,
 					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
 					name: this.$t("pages.room.taskCard.label.edit"),
-				},
-			];
+				});
+
+				if (!this.isDraft && !this.isFinished) {
+					roleBasedMoreActions.teacher.push({
+						icon: this.icons.mdiUndoVariant,
+						action: () => this.revertPublishedCard(),
+						name: this.$t("pages.room.taskCard.label.revert"),
+					});
+				}
+			}
+
+			if (this.role == "student") {
+				// if more action is needed for the students add actions like above
+			}
+			return roleBasedMoreActions;
 		},
 	},
 	methods: {
@@ -177,6 +213,18 @@ export default {
 		},
 		redirectAction(value) {
 			window.location = value;
+		},
+		publishDraftCard() {
+			this.$emit("post-task");
+		},
+		revertPublishedCard() {
+			this.$emit("revert-task");
+		},
+		finishCard() {
+			this.$emit("finish-task");
+		},
+		restoreCard() {
+			this.$emit("restore-task");
 		},
 	},
 };

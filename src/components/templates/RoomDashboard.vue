@@ -2,76 +2,50 @@
 	<div class="rooms-container">
 		<div v-if="role === undefined">No content available</div>
 		<div v-else>
-			<div v-if="role === 'teacher'">
-				<div v-for="(item, index) of roomData.elements" :key="index">
-					<room-task-card-teacher
-						v-if="item.type === 'task'"
-						:task="item.content"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-teacher"
-					/>
-					<room-lesson-card-teacher
-						v-if="item.type === 'lesson'"
-						:lesson="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.lessonCard.aria', {
-								itemType: $t('pages.room.lessonCard.label.lesson'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-teacher"
-					/>
-				</div>
-			</div>
-			<div v-if="role === 'student'">
-				<div v-for="(item, index) of roomData.elements" :key="index">
-					<room-task-card-student
-						v-if="item.type === 'task'"
-						:task="item.content"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-student"
-					/>
-					<room-lesson-card-student
-						v-if="item.type === 'lesson'"
-						:lesson="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.lessonCard.aria', {
-								itemType: $t('pages.room.lessonCard.label.lesson'),
-								itemName: item.content.name,
-							})
-						"
-						class="card-student"
-					/>
-				</div>
+			<div v-for="(item, index) of roomData.elements" :key="index">
+				<room-task-card
+					v-if="item.type === 'task'"
+					:role="role"
+					:task="item.content"
+					:aria-label="
+						$t('pages.room.taskCard.aria', {
+							itemType: $t('pages.room.taskCard.label.task'),
+							itemName: item.content.name,
+						})
+					"
+					class="task-card"
+					@post-task="postDraftElement(item.content.id)"
+					@revert-task="revertPublishedElement(item.content.id)"
+				/>
+				<room-lesson-card
+					v-if="item.type === 'lesson'"
+					:role="role"
+					:lesson="item.content"
+					:room="lessonData"
+					:aria-label="
+						$t('pages.room.lessonCard.aria', {
+							itemType: $t('pages.room.lessonCard.label.lesson'),
+							itemName: item.content.name,
+						})
+					"
+					class="lesson-card"
+					@post-lesson="postDraftElement(item.content.id)"
+					@revert-lesson="revertPublishedElement(item.content.id)"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import RoomTaskCardTeacher from "@components/molecules/RoomTaskCardTeacher.vue";
-import RoomTaskCardStudent from "@components/molecules/RoomTaskCardStudent.vue";
-import RoomLessonCardTeacher from "@components/molecules/RoomLessonCardTeacher.vue";
-import RoomLessonCardStudent from "@components/molecules/RoomLessonCardStudent.vue";
+import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
+import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import RoomModule from "@store/room";
 
 export default {
 	components: {
-		RoomTaskCardTeacher,
-		RoomTaskCardStudent,
-		RoomLessonCardTeacher,
-		RoomLessonCardStudent,
+		RoomTaskCard,
+		RoomLessonCard,
 	},
 	props: {
 		roomData: {
@@ -79,7 +53,7 @@ export default {
 			required: true,
 			default: () => {},
 		},
-		role: { type: String, required: true, default: "" },
+		role: { type: String, required: true },
 	},
 	data() {
 		return {};
@@ -90,6 +64,14 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
+		},
+	},
+	methods: {
+		async postDraftElement(elementId) {
+			await RoomModule.publishCard({ elementId, visibility: true });
+		},
+		async revertPublishedElement(elementId) {
+			await RoomModule.publishCard({ elementId, visibility: false });
 		},
 	},
 };

@@ -1,5 +1,5 @@
 <template>
-	<v-menu bottom left offset-y attach>
+	<v-menu v-if="menuItems.length" bottom left offset-y attach>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
@@ -17,13 +17,12 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				class="task-action"
+				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
 				@click.prevent="item.action"
-			>
+				><v-icon class="task-action-icon mr-1">
+					{{ item.icon }}
+				</v-icon>
 				<v-list-item-title>
-					<v-icon class="task-action-icon mr-1">
-						{{ item.icon }}
-					</v-icon>
 					{{ item.name }}
 				</v-list-item-title>
 			</v-list-item>
