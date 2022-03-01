@@ -12,8 +12,8 @@ import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
 import {
 	FileRecordResponse,
-	FilesStorageApiFactory,
-	FilesStorageApiInterface,
+	FileApiInterface,
+	FileApiFactory,
 } from "@/fileStorageApi/v3";
 @Module({
 	name: "files-poc",
@@ -31,7 +31,7 @@ export class FilesPOCModule extends VuexModule {
 	};
 
 	status: Status = "";
-	private _fileStorageApi?: FilesStorageApiInterface;
+	private _fileStorageApi?: FileApiInterface;
 
 	@Action
 	async upload(file: File): Promise<void> {
@@ -40,13 +40,12 @@ export class FilesPOCModule extends VuexModule {
 
 		try {
 			const schoolId = AuthModule.getUser?.schoolId as string;
-			const response =
-				await this.fileStorageApi.filesStorageControllerUploadAsStream(
-					schoolId,
-					schoolId,
-					"schools",
-					file
-				);
+			const response = await this.fileStorageApi.filesStorageControllerUpload(
+				schoolId,
+				schoolId,
+				"schools",
+				file
+			);
 			this.appendFile(response.data);
 
 			this.setStatus("completed");
@@ -116,7 +115,7 @@ export class FilesPOCModule extends VuexModule {
 
 	private get fileStorageApi() {
 		if (!this._fileStorageApi) {
-			this._fileStorageApi = FilesStorageApiFactory(undefined, "/v3", $axios);
+			this._fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
 		}
 		return this._fileStorageApi;
 	}

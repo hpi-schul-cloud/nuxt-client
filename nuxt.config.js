@@ -152,7 +152,7 @@ module.exports = {
 	},
 
 	proxy: [
-		"http://localhost:4444/api/v3/files-storage/**/*",
+		"http://localhost:4444/api/v3/file/**/*",
 		"http://localhost:3030/api/**/*",
 	],
 
