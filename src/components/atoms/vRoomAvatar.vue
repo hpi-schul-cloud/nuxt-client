@@ -133,7 +133,6 @@ export default {
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
-
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	width: 500px;
@@ -141,13 +140,11 @@ export default {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }
-
 .single-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 3em;
 	user-select: none;
 }
-
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
@@ -169,21 +166,17 @@ export default {
 		font-size: 14px;
 	}
 }
-
 .group-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 0.5em;
 	user-select: none;
 }
-
 .rounded-xl {
 	background-color: transparent;
 }
-
 .avatar-badge {
 	max-width: 100%;
 }
-
 .dragging {
 	opacity: 0.5;
 }
