@@ -22,7 +22,7 @@
 				><v-icon class="task-action-icon mr-1">
 					{{ item.icon }}
 				</v-icon>
-				<v-list-item-title>
+				<v-list-item-title class="pl-1">
 					{{ item.name }}
 				</v-list-item-title>
 			</v-list-item>
@@ -56,6 +56,7 @@ export default {
 <style lang="scss" scoped>
 .task-action {
 	min-height: var(--space-lg);
+	text-align: left;
 }
 
 .task-action-icon {
