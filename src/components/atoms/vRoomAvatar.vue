@@ -135,7 +135,7 @@ export default {
 	user-select: none;
 }
 .single-avatar::first-letter {
-  text-transform:capitalize;
+	text-transform: capitalize;
 }
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
