@@ -78,15 +78,12 @@ export default {
 	},
 	computed: {
 		avatarTitle() {
-			const title = this.item.title || "";
-			const pattern = /$\p{Emoji}/u;
-			if (pattern.test(title)) {
-				return [...title][0];
+			const title = [...this.item.title];
+			const pattern = /\p{Emoji}/u;
+			if (pattern.test(title[0])) {
+				return title[0];
 			}
-			return (
-				title.charAt(0).toUpperCase() +
-				title.slice(1).toLowerCase().substring(0, 1)
-			);
+			return title[0] + title[1];
 		},
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
