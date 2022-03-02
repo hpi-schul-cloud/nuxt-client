@@ -62,17 +62,6 @@ describe("vRoomAvatar", () => {
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
 	});
 
-	it("should display Empoji as short title", () => {
-		const newMockData = { ...mockData, title: "🙂 Bio 12c" };
-
-		const wrapper = getWrapper({ ...propsData, item: newMockData });
-		const shortLabelElement = wrapper.find(".single-avatar")
-			.element as HTMLElement;
-
-		expect(shortLabelElement).toBeTruthy();
-		expect(shortLabelElement.innerHTML).toStrictEqual("🙂");
-	});
-
 	it("should display the badge", () => {
 		const wrapper = getWrapper({
 			item: { ...mockData, notification: true },
