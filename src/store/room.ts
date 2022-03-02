@@ -76,6 +76,25 @@ export class Room extends VuexModule {
 		}
 	}
 
+	@Action
+	async sortCard(payload: Array<string>): Promise<void> {
+		this.setLoading(true);
+		// debugger;
+		console.table(payload);
+
+		try {
+			// TODO: post action here
+			// TODO: check return value
+
+			// await this.fetchContent(this.roomData.roomId);
+
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
