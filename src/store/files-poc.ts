@@ -10,11 +10,17 @@ import { $axios } from "../utils/api";
 import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
-import {
-	FileRecordResponse,
-	FileApiInterface,
-	FileApiFactory,
-} from "@/fileStorageApi/v3";
+import { FileApiInterface, FileApiFactory } from "@/fileStorageApi/v3";
+
+type FileRecord = {
+	id: string;
+	name: string;
+	parentId: string;
+	creatorId: string;
+	type: string;
+	parentType: string;
+};
+
 @Module({
 	name: "files-poc",
 	namespaced: true,
@@ -23,7 +29,7 @@ import {
 	stateFactory: true,
 })
 export class FilesPOCModule extends VuexModule {
-	files: FileRecordResponse[] = [];
+	files: FileRecord[] = [];
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -32,6 +38,28 @@ export class FilesPOCModule extends VuexModule {
 
 	status: Status = "";
 	private _fileStorageApi?: FileApiInterface;
+
+	@Action
+	async fetchFiles(): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			const schoolId = AuthModule.getUser?.schoolId as string;
+			const response = await this.fileStorageApi.filesStorageControllerList(
+				schoolId,
+				schoolId,
+				"schools"
+			);
+
+			this.setFiles(response.data.data);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
 
 	@Action
 	async upload(file: File): Promise<void> {
@@ -56,7 +84,7 @@ export class FilesPOCModule extends VuexModule {
 	}
 
 	@Action
-	async download(file: FileRecordResponse): Promise<void> {
+	async download(file: FileRecord): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
@@ -79,7 +107,12 @@ export class FilesPOCModule extends VuexModule {
 	}
 
 	@Mutation
-	appendFile(file: FileRecordResponse) {
+	setFiles(files: FileRecord[]) {
+		this.files = files;
+	}
+
+	@Mutation
+	appendFile(file: FileRecord) {
 		this.files.push(file);
 	}
 
@@ -101,7 +134,7 @@ export class FilesPOCModule extends VuexModule {
 		};
 	}
 
-	get getFiles(): FileRecordResponse[] {
+	get getFiles(): FileRecord[] {
 		return this.files;
 	}
 
