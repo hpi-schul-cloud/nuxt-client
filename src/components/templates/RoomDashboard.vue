@@ -10,7 +10,6 @@
 				:force-fallback="true"
 				class="elements"
 				@input="onSort"
-				@change="onChange"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
@@ -42,6 +41,18 @@
 						@post-lesson="postDraftElement(item.content.id)"
 						@revert-lesson="revertPublishedElement(item.content.id)"
 					/>
+					<room-locked-card
+						v-if="item.type === 'lockedTask'"
+						:task="item.content"
+						:room="lessonData"
+						:aria-label="
+							$t('pages.room.taskCard.aria', {
+								itemType: $t('pages.room.taskCard.label.task'),
+								itemName: item.content.name,
+							})
+						"
+						class="locked-card"
+					/>
 				</div>
 			</draggable>
 		</div>
@@ -51,6 +62,7 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
 
@@ -58,6 +70,7 @@ export default {
 	components: {
 		RoomTaskCard,
 		RoomLessonCard,
+		RoomLockedCard,
 		draggable,
 	},
 	props: {
@@ -101,9 +114,6 @@ export default {
 			});
 
 			await RoomModule.sortElements(idList);
-		},
-		async onChange(items) {
-			console.table(items);
 		},
 	},
 };

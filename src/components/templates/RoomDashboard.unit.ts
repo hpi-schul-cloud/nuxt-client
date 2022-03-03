@@ -73,6 +73,22 @@ const mockData = {
 				hidden: false,
 			},
 		},
+		{
+			type: "lockedTask",
+			content: {
+				id: "123",
+				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+				allowed: false,
+			},
+		},
+		{
+			type: "lockedTask",
+			content: {
+				id: "123",
+				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+				allowed: false,
+			},
+		},
 	],
 };
 
@@ -120,6 +136,13 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			};
 
 			expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
+		});
+
+		it("should list locked cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			const taskCards = wrapper.findAll(".locked-card");
+			expect(taskCards).toHaveLength(2);
 		});
 	});
 	describe("Drag & Drop operations", () => {
