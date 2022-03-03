@@ -7,7 +7,9 @@
 				:animation="400"
 				:delay="touchDelay"
 				:sort="sortable"
+				class="elements"
 				@input="onSort"
+				@change="onChange"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
@@ -92,12 +94,15 @@ export default {
 		async revertPublishedElement(elementId) {
 			await RoomModule.publishCard({ elementId, visibility: false });
 		},
-		onSort(items) {
+		async onSort(items) {
 			const idList = items.map((item) => {
 				return item.content.id;
 			});
 
-			RoomModule.sortCard(idList);
+			await RoomModule.sortElements(idList);
+		},
+		async onChange(items) {
+			console.table(items);
 		},
 	},
 };

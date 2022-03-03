@@ -32,7 +32,7 @@ const mockData = {
 		{
 			type: "task",
 			content: {
-				courseName: "Mathe",
+				courseName: "Mathe_2",
 				id: "59cce4c3c6abf042248e888e",
 				name: "Private Aufgabe von Cord - mit Kurs, offen",
 				createdAt: "2017-09-28T12:02:11.432Z",
@@ -90,34 +90,84 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/templates/RoomDashboard.vue", () => {
 	beforeEach(() => {});
 
-	it("should have props", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+	describe("common features", () => {
+		it("should have props", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
-		expect(wrapper.vm.roomData).toStrictEqual(mockData);
-		expect(wrapper.vm.role).toStrictEqual("teacher");
+			expect(wrapper.vm.roomData).toStrictEqual(mockData);
+			expect(wrapper.vm.role).toStrictEqual("teacher");
+		});
+
+		it("should list task cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			const taskCards = wrapper.findAll(".task-card");
+			expect(taskCards).toHaveLength(2);
+		});
+
+		it("should list lesson cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+
+			const lessonCards = wrapper.findAll(".lesson-card");
+			expect(lessonCards).toHaveLength(2);
+		});
+
+		it("should have lessonData object", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const expectedObject = {
+				roomId: "123",
+				displayColor: "black",
+			};
+
+			expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
+		});
 	});
+	describe("Drag & Drop operations", () => {
+		it("should sortable value 'true' if user is a 'teacher'", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.sortable).toBe(true);
+		});
 
-	it("should list task cards", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+		it("should sortable value 'false' if user is NOT a 'teacher'", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			expect(wrapper.vm.sortable).toBe(false);
+		});
 
-		const taskCards = wrapper.findAll(".task-card");
-		expect(taskCards).toHaveLength(2);
-	});
+		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.isTouchDevice).toBe(false);
+			expect(wrapper.vm.touchDelay).toStrictEqual(0);
+		});
 
-	it("should list lesson cards", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "student" });
+		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
+			const tempOntouchstart = window.ontouchstart;
+			window.ontouchstart = () => null;
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.isTouchDevice).toBe(true);
+			expect(wrapper.vm.touchDelay).toStrictEqual(200);
+			window.ontouchstart = tempOntouchstart;
+		});
 
-		const lessonCards = wrapper.findAll(".lesson-card");
-		expect(lessonCards).toHaveLength(2);
-	});
+		it("should sort elements after Drag&Drop", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
+			items.splice(1, 0, items.splice(0, 1)[0]);
 
-	it("should have lessonData object", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-		const expectedObject = {
-			roomId: "123",
-			displayColor: "black",
-		};
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
+				"Mathe"
+			);
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
+				"Mathe_2"
+			);
 
-		expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
+			const draggableElement = wrapper.find(".elements");
+			await draggableElement.vm.$emit("input", items);
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
+				"Mathe_2"
+			);
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
+				"Mathe"
+			);
+		});
 	});
 });

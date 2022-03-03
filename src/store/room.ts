@@ -13,6 +13,7 @@ import {
 	BoardResponse,
 	PatchVisibilityParams,
 } from "../serverApi/v3/api";
+import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "room",
@@ -30,6 +31,11 @@ export class Room extends VuexModule {
 	};
 	loading: boolean = false;
 	error: null | {} = null;
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+		error: {},
+	};
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -77,11 +83,8 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	async sortCard(payload: Array<string>): Promise<void> {
+	async sortElements(payload: Array<string>): Promise<void> {
 		this.setLoading(true);
-		// debugger;
-		console.table(payload);
-
 		try {
 			// TODO: post action here
 			// TODO: check return value
@@ -90,7 +93,11 @@ export class Room extends VuexModule {
 
 			this.setLoading(false);
 		} catch (error: any) {
-			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -110,6 +117,20 @@ export class Room extends VuexModule {
 		this.error = error;
 	}
 
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+			error: {},
+		};
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -120,6 +141,10 @@ export class Room extends VuexModule {
 
 	get getRoomData(): BoardResponse {
 		return this.roomData;
+	}
+
+	get getBusinessError() {
+		return this.businessError;
 	}
 }
 

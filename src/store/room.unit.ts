@@ -25,17 +25,18 @@ axiosInitializer();
 
 describe("room module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			receivedRequests = [];
+		});
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
 		describe("fetch", () => {
 			const mockApi = {
 				roomsControllerGetRoomBoard: jest.fn(),
 				roomsControllerPatchElementVisibility: jest.fn(),
 			};
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			afterEach(() => {
-				jest.clearAllMocks();
-			});
+
 			it("should call backend and sets state correctly", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -50,6 +51,13 @@ describe("room module", () => {
 					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
 			});
+		});
+
+		describe("publishCard", () => {
+			const mockApi = {
+				roomsControllerGetRoomBoard: jest.fn(),
+				roomsControllerPatchElementVisibility: jest.fn(),
+			};
 
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
@@ -68,6 +76,16 @@ describe("room module", () => {
 				).toContain("54321");
 				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
+		});
+
+		describe.skip("sortElements", () => {
+			const mockApi = {
+				roomsControllerGetRoomBoard: jest.fn(),
+				roomsControllerPatchElementVisibility: jest.fn(),
+				// TODO: add openApi route
+			};
+
+			// TODO: after server implementation
 		});
 	});
 
@@ -127,6 +145,32 @@ describe("room module", () => {
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
 				expect(roomModule.error).toBe(errorData);
+			});
+		});
+
+		describe("setBusinessError", () => {
+			it("should set businessError", () => {
+				const roomModule = new Room({});
+				const businessErrorData = {
+					statusCode: "400",
+					message: "error",
+					error: { type: "BadRequest" },
+				};
+				expect(roomModule.getBusinessError).not.toBe(businessErrorData);
+				roomModule.setBusinessError(businessErrorData);
+				expect(roomModule.businessError).toBe(businessErrorData);
+			});
+			it("should reset businessError", () => {
+				const roomModule = new Room({});
+				roomModule.businessError = {
+					statusCode: "400",
+					message: "error",
+					error: {},
+				};
+
+				roomModule.resetBusinessError();
+				expect(roomModule.businessError.statusCode).toStrictEqual("");
+				expect(roomModule.businessError.message).toStrictEqual("");
 			});
 		});
 	});
