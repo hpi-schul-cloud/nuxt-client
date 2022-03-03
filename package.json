@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "27.6.0",
+	"version": "27.7.0",
 	"description": "The next Level of Dataport Bildungscloud",
 	"author": "Dataport Bildungscloud",
 	"private": true,
@@ -42,7 +42,6 @@
 	"dependencies": {
 		"@mdi/js": "^5.9.55",
 		"@nuxtjs/axios": "^5.12.3",
-		"@nuxtjs/sentry": "^5.0.3",
 		"@nuxtjs/toast": "^3.3.1",
 		"@openapitools/openapi-generator-cli": "^2.4.5",
 		"@tryghost/content-api": "^1.4.11",
