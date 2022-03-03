@@ -8,6 +8,7 @@
 				:delay="touchDelay"
 				:sort="sortable"
 				:force-fallback="true"
+				ghost-class="ghost"
 				class="elements"
 				@input="onSort"
 			>
@@ -125,5 +126,8 @@ export default {
 .rooms-container {
 	max-width: var(--size-content-width-max);
 	margin: 0 auto;
+}
+.ghost {
+	opacity: 0;
 }
 </style>
