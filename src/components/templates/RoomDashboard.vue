@@ -7,6 +7,7 @@
 				:animation="400"
 				:delay="touchDelay"
 				:sort="sortable"
+				:force-fallback="true"
 				class="elements"
 				@input="onSort"
 				@change="onChange"
