@@ -3,8 +3,6 @@ require("dotenv").config();
 const pkg = require("./package");
 const webpack = require("webpack");
 
-const sentryConfig = require("./sentry.config.js");
-
 const themeName = process.env.SC_THEME || "default";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
@@ -126,7 +124,6 @@ module.exports = {
 		"@plugins/global",
 		"@plugins/authenticate",
 		"@plugins/user",
-		"@plugins/sentry",
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
@@ -140,13 +137,11 @@ module.exports = {
 		"@nuxtjs/dotenv",
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
-		"@nuxtjs/sentry",
 		"@nuxtjs/toast",
 		"cookie-universal-nuxt",
 		"nuxt-babel",
 		"@nuxtjs/proxy",
 	],
-	sentry: sentryConfig,
 	toast: {
 		duration: 3000,
 	},
