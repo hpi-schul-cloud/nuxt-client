@@ -114,7 +114,8 @@ export default {
 			await RoomModule.publishCard({ elementId, visibility: false });
 		},
 		async onSort(items) {
-			const idList = items.map((item) => {
+			const idList = {};
+			idList.elements = items.map((item) => {
 				return item.content.id;
 			});
 

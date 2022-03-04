@@ -12,6 +12,7 @@ import {
 	RoomsApiFactory,
 	BoardResponse,
 	PatchVisibilityParams,
+	PatchOrderParams,
 } from "../serverApi/v3/api";
 import { BusinessError } from "./types/commons";
 
@@ -83,11 +84,15 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	async sortElements(payload: Array<string>): Promise<void> {
+	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: post action here
-			// TODO: check return value
+			const response =
+				await this.roomsApi.roomsControllerPatchOrderingOfElements(
+					this.roomData.roomId,
+					payload
+				);
+			console.log(response);
 
 			// await this.fetchContent(this.roomData.roomId);
 

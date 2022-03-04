@@ -78,7 +78,7 @@ describe("room module", () => {
 			});
 		});
 
-		describe.skip("sortElements", () => {
+		describe("sortElements", () => {
 			const mockApi = {
 				roomsControllerGetRoomBoard: jest.fn(),
 				roomsControllerPatchElementVisibility: jest.fn(),
@@ -86,6 +86,22 @@ describe("room module", () => {
 			};
 
 			// TODO: after server implementation
+			it("'compareSortedArrays' method should compare two string list", async () => {
+				const roomModule = new Room({});
+				const arr_1 = ["a", "b", "c", "d"];
+				const arr_2 = ["a", "b", "c", "d"];
+				const arr_3 = ["b", "a", "c", "d"];
+				const arr_4 = ["a", "b", "c"];
+				expect(roomModule.compareSortedArrays(arr_1, arr_2)).toStrictEqual(
+					undefined
+				);
+				expect(roomModule.compareSortedArrays(arr_1, arr_3)).toStrictEqual(
+					"Sorted items don't match"
+				);
+				expect(roomModule.compareSortedArrays(arr_1, arr_4)).toStrictEqual(
+					"Sorted items length don't match"
+				);
+			});
 		});
 	});
 
