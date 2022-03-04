@@ -10,16 +10,11 @@ import { $axios } from "../utils/api";
 import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
-import { FileApiInterface, FileApiFactory } from "@/fileStorageApi/v3";
-
-type FileRecord = {
-	id: string;
-	name: string;
-	parentId: string;
-	creatorId: string;
-	type: string;
-	parentType: string;
-};
+import {
+	FileRecordResponse as FileRecord,
+	FileApiInterface,
+	FileApiFactory,
+} from "@/fileStorageApi/v3";
 
 @Module({
 	name: "files-poc",
