@@ -87,15 +87,11 @@ export class Room extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response =
-				await this.roomsApi.roomsControllerPatchOrderingOfElements(
-					this.roomData.roomId,
-					payload
-				);
-			console.log(response);
-
-			// await this.fetchContent(this.roomData.roomId);
-
+			await this.roomsApi.roomsControllerPatchOrderingOfElements(
+				this.roomData.roomId,
+				payload
+			);
+			await this.fetchContent(this.roomData.roomId);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setBusinessError({

@@ -31,12 +31,12 @@ describe("room module", () => {
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
+		const mockApi = {
+			roomsControllerGetRoomBoard: jest.fn(),
+			roomsControllerPatchElementVisibility: jest.fn(),
+			roomsControllerPatchOrderingOfElements: jest.fn(),
+		};
 		describe("fetch", () => {
-			const mockApi = {
-				roomsControllerGetRoomBoard: jest.fn(),
-				roomsControllerPatchElementVisibility: jest.fn(),
-			};
-
 			it("should call backend and sets state correctly", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -54,11 +54,6 @@ describe("room module", () => {
 		});
 
 		describe("publishCard", () => {
-			const mockApi = {
-				roomsControllerGetRoomBoard: jest.fn(),
-				roomsControllerPatchElementVisibility: jest.fn(),
-			};
-
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -79,28 +74,25 @@ describe("room module", () => {
 		});
 
 		describe("sortElements", () => {
-			const mockApi = {
-				roomsControllerGetRoomBoard: jest.fn(),
-				roomsControllerPatchElementVisibility: jest.fn(),
-				// TODO: add openApi route
-			};
+			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-			// TODO: after server implementation
-			it("'compareSortedArrays' method should compare two string list", async () => {
 				const roomModule = new Room({});
-				const arr_1 = ["a", "b", "c", "d"];
-				const arr_2 = ["a", "b", "c", "d"];
-				const arr_3 = ["b", "a", "c", "d"];
-				const arr_4 = ["a", "b", "c"];
-				expect(roomModule.compareSortedArrays(arr_1, arr_2)).toStrictEqual(
-					undefined
-				);
-				expect(roomModule.compareSortedArrays(arr_1, arr_3)).toStrictEqual(
-					"Sorted items don't match"
-				);
-				expect(roomModule.compareSortedArrays(arr_1, arr_4)).toStrictEqual(
-					"Sorted items length don't match"
-				);
+				const payload = {
+					elements: ["1234", "2345", "3456", "4567"],
+				};
+				await roomModule.sortElements(payload);
+
+				expect(roomModule.getLoading).toBe(false);
+				expect(
+					mockApi.roomsControllerPatchOrderingOfElements
+				).toHaveBeenCalled();
+				expect(
+					mockApi.roomsControllerPatchOrderingOfElements.mock.calls[0][1]
+				).toStrictEqual(payload);
+				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 	});
