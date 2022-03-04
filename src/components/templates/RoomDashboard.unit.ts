@@ -74,7 +74,7 @@ const mockData = {
 			},
 		},
 		{
-			type: "lockedTask",
+			type: "lockedtask",
 			content: {
 				id: "123",
 				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
@@ -82,7 +82,7 @@ const mockData = {
 			},
 		},
 		{
-			type: "lockedTask",
+			type: "lockedtask",
 			content: {
 				id: "123",
 				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
