@@ -50,6 +50,9 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		FilesPOCModule.fetchFiles();
+	},
 	methods: {
 		upload() {
 			const { file } = this;
