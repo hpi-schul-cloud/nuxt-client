@@ -597,7 +597,7 @@ export interface PatchGroupParams {
  */
 export interface PatchVisibilityParams {
     /**
-     * Title of the Group grid element
+     * true to publish the element, false to unpublish
      * @type {boolean}
      * @memberof PatchVisibilityParams
      */
@@ -2161,15 +2161,15 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('roomsControllerGetRoomBoard', 'id', id)
-            const localVarPath = `/rooms/{id}/board`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        roomsControllerGetRoomBoard: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerGetRoomBoard', 'roomid', roomid)
+            const localVarPath = `/rooms/{roomid}/board`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2255,12 +2255,12 @@ export const RoomsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerGetRoomBoard(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(id, options);
+        async roomsControllerGetRoomBoard(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomid, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2287,12 +2287,12 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse> {
-            return localVarFp.roomsControllerGetRoomBoard(id, options).then((request) => request(axios, basePath));
+        roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse> {
+            return localVarFp.roomsControllerGetRoomBoard(roomid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2316,12 +2316,12 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
 export interface RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse>;
+    roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse>;
 
     /**
      * 
@@ -2345,13 +2345,13 @@ export interface RoomsApiInterface {
 export class RoomsApi extends BaseAPI implements RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerGetRoomBoard(id: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(id, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerGetRoomBoard(roomid: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

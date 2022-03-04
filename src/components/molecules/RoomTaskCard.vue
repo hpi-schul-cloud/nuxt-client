@@ -83,6 +83,7 @@ import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
 import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -127,41 +128,41 @@ export default {
 		},
 		cardActions() {
 			const roleBasedActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
+			if (this.role == Roles.Teacher) {
 				if (this.isDraft && !this.isFinished) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishDraftCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
 				if (!this.isDraft) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
 				}
 				if (this.isFinished) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.restoreCard(),
 						name: this.$t("pages.room.taskCard.label.reopen"),
 					});
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role == Roles.Student) {
 				if (this.isFinished) {
-					roleBasedActions.student.push({
+					roleBasedActions[Roles.Student].push({
 						action: () => this.restoreCard(),
 						name: this.$t("pages.room.taskCard.label.reopen"),
 					});
 				}
 
 				if (!this.isFinished) {
-					roleBasedActions.student.push({
+					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
@@ -172,19 +173,19 @@ export default {
 		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
-				roleBasedMoreActions.teacher.push({
+			if (this.role == Roles.Teacher) {
+				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
 				if (!this.isDraft && !this.isFinished) {
-					roleBasedMoreActions.teacher.push({
+					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.taskCard.label.revert"),
@@ -192,7 +193,7 @@ export default {
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role == Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 			return roleBasedMoreActions;

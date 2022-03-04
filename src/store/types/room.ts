@@ -38,3 +38,9 @@ export type RoomData = {
 		}
 	];
 };
+
+export enum RoomCardTypes {
+	Task = "task",
+	Lesson = "lesson",
+	LockedTask = "lockedTask",
+}

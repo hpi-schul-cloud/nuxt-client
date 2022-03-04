@@ -14,7 +14,7 @@
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
-						v-if="item.type === 'task'"
+						v-if="item.type === cardTypes.Task"
 						:role="role"
 						:task="item.content"
 						:aria-label="
@@ -28,7 +28,7 @@
 						@revert-task="revertPublishedElement(item.content.id)"
 					/>
 					<room-lesson-card
-						v-if="item.type === 'lesson'"
+						v-if="item.type === cardTypes.Lesson"
 						:role="role"
 						:lesson="item.content"
 						:room="lessonData"
@@ -43,7 +43,7 @@
 						@revert-lesson="revertPublishedElement(item.content.id)"
 					/>
 					<room-locked-card
-						v-if="item.type === 'lockedTask'"
+						v-if="item.type === cardTypes.LockedTask"
 						:task="item.content"
 						:room="lessonData"
 						:aria-label="
@@ -66,6 +66,8 @@ import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { RoomCardTypes } from "@/store/types/room";
 
 export default {
 	components: {
@@ -83,7 +85,9 @@ export default {
 		role: { type: String, required: true },
 	},
 	data() {
-		return {};
+		return {
+			cardTypes: RoomCardTypes,
+		};
 	},
 	computed: {
 		lessonData() {
@@ -96,7 +100,7 @@ export default {
 			return window.ontouchstart !== undefined;
 		},
 		sortable() {
-			return this.role === "teacher" || false;
+			return this.role === Roles.Teacher || false;
 		},
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 0;

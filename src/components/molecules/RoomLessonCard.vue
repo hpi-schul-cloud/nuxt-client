@@ -40,6 +40,7 @@
 <script>
 import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -78,13 +79,13 @@ export default {
 		},
 		cardActions() {
 			const roleBasedActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
+			if (this.role == Roles.Teacher) {
 				if (this.isHidden) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
 						action: () => this.postLesson(),
 						name: this.$t("pages.room.lessonCard.label.post"),
@@ -92,19 +93,19 @@ export default {
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role == Roles.Student) {
 				// if action is needed for the students add actions like above
 			}
 			return roleBasedActions;
 		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
-				roleBasedMoreActions.teacher.push({
+			if (this.role == Roles.Teacher) {
+				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
@@ -114,7 +115,7 @@ export default {
 				});
 
 				if (!this.isHidden) {
-					roleBasedMoreActions.teacher.push({
+					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.taskCard.label.revert"),
@@ -122,7 +123,7 @@ export default {
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role == Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
