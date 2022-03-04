@@ -34,7 +34,7 @@
 					:class="
 						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
-					>{{ avatarTitle }}</span
+					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
 			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
@@ -77,13 +77,6 @@ export default {
 		};
 	},
 	computed: {
-		avatarTitle() {
-			const title = this.item.title || "";
-			return (
-				title.charAt(0).toUpperCase() +
-				title.slice(1).toLowerCase().substring(0, 1)
-			);
-		},
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
@@ -140,6 +133,9 @@ export default {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 3em;
 	user-select: none;
+}
+.single-avatar::first-letter {
+	text-transform: capitalize;
 }
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
