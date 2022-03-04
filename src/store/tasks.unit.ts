@@ -157,6 +157,11 @@ describe("task store", () => {
 		});
 	});
 
+	describe("deleteTask", () => {
+		it.todo("should call api to delete a task");
+		it.todo("should refetch all tasks");
+	});
+
 	describe("mutations", () => {
 		describe("setTasks", () => {
 			it("should set the tasks in state", () => {
