@@ -1,5 +1,5 @@
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vTaskItemTeacher from "./vTaskItemTeacher";
+import TaskItemTeacher from "./TaskItemTeacher";
 
 const {
 	tasksTeacher,
@@ -19,7 +19,7 @@ const defineWindowWidth = (width) => {
 };
 
 const getWrapper = (props, options) => {
-	return mount(vTaskItemTeacher, {
+	return mount(TaskItemTeacher, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -30,13 +30,13 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/molecules/vTaskItemTeacher", () => {
+describe("@components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
 
-	it(...isValidComponent(vTaskItemTeacher));
+	it(...isValidComponent(TaskItemTeacher));
 
 	it("accepts valid task props", () => {
-		const { validator } = vTaskItemTeacher.props.task;
+		const { validator } = TaskItemTeacher.props.task;
 		const validTasks = tasksTeacher;
 
 		validTasks.forEach((task) => {

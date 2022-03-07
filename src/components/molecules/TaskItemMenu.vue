@@ -48,12 +48,31 @@
 					</template>
 				</v-list-item-title>
 			</v-list-item>
+			<v-list-item
+				v-if="isTeacher"
+				id="task-action-delete"
+				class="task-action"
+				data-testId="task-delete"
+				@click.stop.prevent="handleDelete"
+			>
+				<v-list-item-title>
+					<v-icon class="task-action-icon">
+						{{ mdiTrashCanOutline }}
+					</v-icon>
+					{{ $t("common.actions.remove") }}
+				</v-list-item-title>
+			</v-list-item>
 		</v-list>
 	</v-menu>
 </template>
 
 <script>
-import { mdiDotsVertical, mdiPencilOutline, mdiUndo } from "@mdi/js";
+import {
+	mdiDotsVertical,
+	mdiPencilOutline,
+	mdiUndo,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 
@@ -83,6 +102,7 @@ export default {
 			mdiDotsVertical,
 			mdiPencilOutline,
 			mdiUndo,
+			mdiTrashCanOutline,
 		};
 	},
 	computed: {
@@ -106,6 +126,9 @@ export default {
 			} else {
 				TaskModule.finishTask(this.taskId);
 			}
+		},
+		handleDelete() {
+			TaskModule.deleteTask(this.taskId);
 		},
 	},
 };

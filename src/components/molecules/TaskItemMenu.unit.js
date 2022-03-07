@@ -118,4 +118,25 @@ describe("@components/molecules/TaskItemMenu", () => {
 			expect(restoreTaskMock).toHaveBeenCalled();
 		});
 	});
+
+	describe("when deleting a task", () => {
+		it("should call deleteTask of TaskModule", async () => {
+			const deleteTaskMock = jest.spyOn(TasksModule, "deleteTask");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const deleteBtn = wrapper.find("#task-action-delete");
+			await deleteBtn.trigger("click");
+
+			expect(deleteTaskMock).toHaveBeenCalled();
+		});
+	});
 });
