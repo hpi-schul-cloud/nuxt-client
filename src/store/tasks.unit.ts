@@ -158,8 +158,29 @@ describe("task store", () => {
 	});
 
 	describe("deleteTask", () => {
-		it.todo("should call api to delete a task");
-		it.todo("should refetch all tasks");
+		it("should call api to delete a task", (done) => {
+			const mockApi = {
+				taskControllerDelete: jest.fn(),
+			};
+			const spy = jest
+				.spyOn(serverApi, "TaskApiFactory")
+				.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+			const taskModule = new TaskModule({});
+			const tasks = taskFactory.buildList(3);
+			taskModule.setTasks(tasks);
+			const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+
+			taskModule.deleteTask(tasks[0].id).then(() => {
+				expect(taskModule.getStatus).toBe("completed");
+				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+				expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+				done();
+			});
+			expect(taskModule.getStatus).toBe("pending");
+
+			spy.mockRestore();
+		});
 	});
 
 	describe("mutations", () => {
