@@ -17,8 +17,14 @@
 				</div>
 			</div>
 			<div v-if="alert">
-				<v-alert dense outlined type="error" class="alert-locked-card">
-					You are not allowed the see the task details.
+				<v-alert
+					dense
+					outlined
+					prominent
+					type="warning"
+					class="alert-locked-card"
+				>
+					{{ $t("pages.room.locked.label.info") }}
 				</v-alert>
 			</div>
 			<div class="text-h6 text--primary mb-2">{{ task.name }}</div>
@@ -54,7 +60,7 @@ export default {
 			},
 			defaultTitleColor: "#54616e",
 			alert: false,
-			alertDuration: 3000,
+			alertDuration: 5000,
 		};
 	},
 	computed: {
