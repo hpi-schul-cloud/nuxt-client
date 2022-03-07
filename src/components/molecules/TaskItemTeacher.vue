@@ -36,7 +36,7 @@
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-					<i18n path="components.molecules.VTaskItemTeacher.status">
+					<i18n path="components.molecules.TaskItemTeacher.status">
 						<template #submitted>{{ task.status.submitted }}</template>
 						<template #max>{{ task.status.maxSubmissions }}</template>
 						<template #graded>{{ task.status.graded }}</template>
@@ -46,7 +46,7 @@
 			<section v-if="showTaskStatus" data-testid="task-status" class="mr-8">
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
-						$t("components.molecules.VTaskItemTeacher.submitted")
+						$t("components.molecules.TaskItemTeacher.submitted")
 					}}</v-list-item-subtitle>
 					<v-list-item-title data-testid="taskSubmitted"
 						>{{ task.status.submitted }}/{{
@@ -56,7 +56,7 @@
 				</v-list-item-action>
 				<v-list-item-action class="hidden-xs-only">
 					<v-list-item-subtitle>{{
-						$t("components.molecules.VTaskItemTeacher.graded")
+						$t("components.molecules.TaskItemTeacher.graded")
 					}}</v-list-item-subtitle>
 					<v-list-item-title data-testid="taskGraded">{{
 						task.status.graded
