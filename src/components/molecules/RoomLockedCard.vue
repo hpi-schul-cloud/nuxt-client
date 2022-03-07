@@ -60,7 +60,7 @@ export default {
 			},
 			defaultTitleColor: "#54616e",
 			alert: false,
-			alertDuration: 5000,
+			alertDuration: 3000,
 		};
 	},
 	computed: {
