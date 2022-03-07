@@ -43,7 +43,7 @@
 						@revert-lesson="revertPublishedElement(item.content.id)"
 					/>
 					<room-locked-card
-						v-if="item.type === cardTypes.LockedTask"
+						v-if="item.type === cardTypes.Lockedtask"
 						:task="item.content"
 						:room="lessonData"
 						:aria-label="
@@ -67,7 +67,7 @@ import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { RoomCardTypes } from "@/store/types/room";
+import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -86,7 +86,7 @@ export default {
 	},
 	data() {
 		return {
-			cardTypes: RoomCardTypes,
+			cardTypes: BoardElementResponseTypeEnum,
 		};
 	},
 	computed: {
