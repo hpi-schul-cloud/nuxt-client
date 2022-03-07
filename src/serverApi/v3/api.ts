@@ -28,7 +28,7 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
  */
 export interface BoardElementResponse {
     /**
-     * ElementType. Can be any of: \"task\", \"lesson\", \"lockedlesson\"
+     * the type of the element in the content. For possible types, please refer to the enum
      * @type {string}
      * @memberof BoardElementResponse
      */

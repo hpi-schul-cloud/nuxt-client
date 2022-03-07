@@ -186,7 +186,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
 				const buttonClassName = `.task-action-${wrapper.vm.$i18n
-					.t("pages.room.taskCard.label.revert")
+					.t("pages.room.cards.label.revert")
 					.split(" ")
 					.join("-")}`;
 				const threeDotButton = wrapper.find(".three-dot-button");

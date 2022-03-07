@@ -83,7 +83,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role == Roles.Teacher) {
+			if (this.role === Roles.Teacher) {
 				if (this.isHidden) {
 					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
@@ -93,7 +93,7 @@ export default {
 				}
 			}
 
-			if (this.role == Roles.Student) {
+			if (this.role === Roles.Student) {
 				// if action is needed for the students add actions like above
 			}
 			return roleBasedActions;
@@ -104,7 +104,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role == Roles.Teacher) {
+			if (this.role === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
@@ -118,12 +118,12 @@ export default {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
-						name: this.$t("pages.room.taskCard.label.revert"),
+						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
 			}
 
-			if (this.role == Roles.Student) {
+			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
