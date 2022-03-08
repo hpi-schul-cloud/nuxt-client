@@ -1,11 +1,11 @@
 import Vuetify from "vuetify";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vTaskItemStudent from "./vTaskItemStudent";
+import TaskItemStudent from "./TaskItemStudent";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
 
-describe("@components/molecules/vTaskItemStudent", () => {
+describe("@components/molecules/TaskItemStudent", () => {
 	let vuetify;
 
 	beforeEach(() => {
@@ -13,7 +13,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 	});
 
 	const getWrapper = (props, options) => {
-		return mount(vTaskItemStudent, {
+		return mount(TaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -24,7 +24,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 		});
 	};
 
-	it(...isValidComponent(vTaskItemStudent));
+	it(...isValidComponent(TaskItemStudent));
 
 	it("Should link list item links to task/<id> page", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
@@ -92,7 +92,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 	});
 
 	it("accepts valid task props", () => {
-		const { validator } = vTaskItemStudent.props.task;
+		const { validator } = TaskItemStudent.props.task;
 		const validTasks = tasks;
 
 		validTasks.forEach((task) => {

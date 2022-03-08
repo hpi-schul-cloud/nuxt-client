@@ -51,25 +51,43 @@
 						dense
 						class="mt-1 text-field-course-code"
 					></v-text-field>
+					<div v-if="businessError.message !== ''">
+						<v-alert dense outlined type="error" class="code-error">
+							{{ $t("pages.rooms.importCourse.codeError") }}
+						</v-alert>
+					</div>
 				</div>
 				<div v-if="step === 3">
 					{{ $t("pages.rooms.importCourse.step_3") }}
-					{{ $t("pages.rooms.importCourse.error") }}
+
 					<v-text-field
 						v-model="sharedCourseData.courseName"
 						outlined
 						dense
 						class="mt-1 text-field-course-name"
+						:disabled="isImportError"
 					></v-text-field>
-				</div>
-				<div v-if="sharedCourseData.status === 'error' && step === 3">
-					<v-alert dense outlined type="error">
-						{{ $t("pages.rooms.importCourse.error") }}
-					</v-alert>
+					<div v-if="businessError.message !== ''">
+						<v-alert dense outlined type="error" class="import-error">
+							{{ $t("pages.rooms.importCourse.importError") }}
+						</v-alert>
+					</div>
 				</div>
 			</div>
 			<div class="button-section mt-8">
-				<v-row>
+				<v-row v-if="isImportError && step === 3">
+					<v-col class="ml-auto cancel-confirm-button">
+						<v-btn
+							class="dialog-confirmed"
+							color="primary"
+							depressed
+							@click="cancel"
+						>
+							{{ this.$t("pages.rooms.importCourse.importErrorButton") }}
+						</v-btn>
+					</v-col>
+				</v-row>
+				<v-row v-else>
 					<v-col md="4">
 						<v-btn
 							class="dialog-back-button"
@@ -90,10 +108,9 @@
 							{{ this.$t("common.actions.cancel") }}
 						</v-btn>
 						<v-btn
-							class="dialog-confirmed"
+							class="dialog-next"
 							color="primary"
 							depressed
-							:disabled="sharedCourseData.status === 'error' && step === 3"
 							@click="nextStep"
 						>
 							{{ nextButtonName }}
@@ -133,6 +150,7 @@ export default {
 				message: "",
 			},
 			mdiCheck,
+			isImportError: false,
 		};
 	},
 	computed: {
@@ -141,12 +159,16 @@ export default {
 				return this.$t("pages.rooms.importCourse.btn.continue");
 			return this.$t("pages.rooms.importCourse.btn.confirm");
 		},
+		businessError() {
+			return RoomsModule.getBusinessError;
+		},
 	},
 	methods: {
-		nextStep() {
+		async nextStep() {
 			if (this.step === 2) {
-				if (this.sharedCourseData.code === "") return;
-				this.getSharingStatus(this.sharedCourseData.code);
+				await RoomsModule.getSharedCourseData(this.sharedCourseData.code);
+				if (this.businessError.statusCode != "") return;
+				this.sharedCourseData = RoomsModule.getCourseSharingStatus;
 			}
 			if (this.step === 3) {
 				this.confirmImport();
@@ -154,33 +176,50 @@ export default {
 			}
 			this.step++;
 		},
-		async getSharingStatus(sharingCode) {
-			await RoomsModule.getSharedCourseData(sharingCode);
-			this.sharedCourseData = RoomsModule.getCourseSharingStatus;
-		},
+
 		async confirmImport() {
 			await RoomsModule.confirmSharedCourseData(this.sharedCourseData);
+			if (this.businessError.statusCode !== "") {
+				this.isImportError = true;
+				this.$emit("update-rooms");
+			}
 
 			const importedCourseId = RoomsModule.getImportedCourseId;
 
 			if (importedCourseId) {
+				this.clearMessages();
 				this.step = 1;
 				this.$emit("dialog-closed", false);
 				window.location = `/courses/${importedCourseId}/edit/`;
 			}
 		},
 		cancel() {
-			this.$emit("dialog-closed", false);
+			this.clearMessages();
 			this.step = 1;
+			this.$emit("dialog-closed", false);
 		},
 		stepBack() {
+			this.clearMessages();
 			if (this.step === 1) {
-				this.$emit("dialog-closed", false);
+				this.cancel();
+				return;
 			}
+			this.isImportError = false;
 			this.step--;
 		},
 		onClickStepper(step) {
+			if (this.isImportError) return;
 			this.step = step;
+		},
+		clearMessages() {
+			RoomsModule.resetBusinessError();
+			this.sharedCourseData = {
+				code: "",
+				courseName: "",
+				status: "",
+				message: "",
+			};
+			this.isImportError = false;
 		},
 	},
 };
@@ -194,8 +233,7 @@ export default {
 }
 .step-sections {
 	min-height: var(--sidebar-width);
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: 1rem;
+	font-size: var(--space-md);
 	color: var(--color-black);
 }
 .step {

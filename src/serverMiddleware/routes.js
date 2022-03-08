@@ -24,6 +24,7 @@ const routes = [
 	`^/administration/ldap/config/?$`,
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
+	`^/administration/migration`,
 	`^/tasks/?$`,
 	`^/tasks/open/?$`,
 	`^/tasks/assigned/?$`,
@@ -47,6 +48,7 @@ const routes = [
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
 	// `^/courses/?$`,
+	`^/poc-files/?$`,
 ];
 
 const uuid =

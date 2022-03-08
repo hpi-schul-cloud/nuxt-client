@@ -46,6 +46,8 @@ const staticFiles = glob
 
 const isStaticFile = (url) => staticFiles.includes(url);
 
+const isApiRoute = (url) => !!new RegExp("^/api/*").exec(url);
+
 export default async function (req, res, next) {
 	if (process.env.FALLBACK_DISABLED === "true") {
 		return next();
@@ -53,7 +55,8 @@ export default async function (req, res, next) {
 	const url = req.url.split("?")[0];
 
 	const useNuxt =
-		req.method === "GET" && (isNuxtRoute(url) || isStaticFile(url));
+		isApiRoute(url) ||
+		(req.method === "GET" && (isNuxtRoute(url) || isStaticFile(url)));
 	if (useNuxt) {
 		return next();
 	} else {

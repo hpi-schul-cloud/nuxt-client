@@ -593,6 +593,19 @@ export interface PatchGroupParams {
 /**
  * 
  * @export
+ * @interface PatchVisibilityParams
+ */
+export interface PatchVisibilityParams {
+    /**
+     * true to publish the element, false to unpublish
+     * @type {boolean}
+     * @memberof PatchVisibilityParams
+     */
+    visibility: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ResolvedUser
  */
 export interface ResolvedUser {
@@ -2148,15 +2161,15 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('roomsControllerGetRoomBoard', 'id', id)
-            const localVarPath = `/rooms/{id}/board`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        roomsControllerGetRoomBoard: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerGetRoomBoard', 'roomid', roomid)
+            const localVarPath = `/rooms/{roomid}/board`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2183,6 +2196,53 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility: async (roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'roomid', roomid)
+            // verify required parameter 'elementid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'elementid', elementid)
+            // verify required parameter 'patchVisibilityParams' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'patchVisibilityParams', patchVisibilityParams)
+            const localVarPath = `/rooms/{roomid}/elements/{elementid}/visibility`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)))
+                .replace(`{${"elementid"}}`, encodeURIComponent(String(elementid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchVisibilityParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2195,12 +2255,24 @@ export const RoomsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerGetRoomBoard(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(id, options);
+        async roomsControllerGetRoomBoard(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2215,12 +2287,23 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse> {
-            return localVarFp.roomsControllerGetRoomBoard(id, options).then((request) => request(axios, basePath));
+        roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse> {
+            return localVarFp.roomsControllerGetRoomBoard(roomid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2233,12 +2316,23 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
 export interface RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse>;
+    roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -2251,13 +2345,144 @@ export interface RoomsApiInterface {
 export class RoomsApi extends BaseAPI implements RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerGetRoomBoard(id: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(id, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerGetRoomBoard(roomid: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SSOApi - axios parameter creator
+ * @export
+ */
+export const SSOApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow: async (systemid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemid' is not null or undefined
+            assertParamExists('oauthSSOControllerStartOauthAuthorizationCodeFlow', 'systemid', systemid)
+            const localVarPath = `/sso/oauth/{systemid}`
+                .replace(`{${"systemid"}}`, encodeURIComponent(String(systemid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SSOApi - functional programming interface
+ * @export
+ */
+export const SSOApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SSOApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SSOApi - factory interface
+ * @export
+ */
+export const SSOApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SSOApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} systemid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object> {
+            return localVarFp.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SSOApi - interface
+ * @export
+ * @interface SSOApi
+ */
+export interface SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object>;
+
+}
+
+/**
+ * SSOApi - object-oriented interface
+ * @export
+ * @class SSOApi
+ * @extends {BaseAPI}
+ */
+export class SSOApi extends BaseAPI implements SSOApiInterface {
+    /**
+     * 
+     * @param {string} systemid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2268,6 +2493,43 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
  */
 export const TaskApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerDelete: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('taskControllerDelete', 'id', id)
+            const localVarPath = `/tasks/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2440,6 +2702,16 @@ export const TaskApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2492,6 +2764,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerDelete(id: string, options?: any): AxiosPromise<string> {
+            return localVarFp.taskControllerDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2539,6 +2820,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
 export interface TaskApiInterface {
     /**
      * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerDelete(id: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
@@ -2584,6 +2874,17 @@ export interface TaskApiInterface {
  * @extends {BaseAPI}
  */
 export class TaskApi extends BaseAPI implements TaskApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerDelete(id: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2927,6 +3228,39 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerSaveAllUsersMatches: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/migrate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3065,6 +3399,15 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerSaveAllUsersMatches(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSaveAllUsersMatches(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3136,6 +3479,14 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerSaveAllUsersMatches(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerSaveAllUsersMatches(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3201,6 +3552,14 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerSaveAllUsersMatches(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -3274,6 +3633,16 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerRemoveMatch(id: string, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerRemoveMatch(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerSaveAllUsersMatches(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerSaveAllUsersMatches(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
