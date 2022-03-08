@@ -80,8 +80,7 @@ With some data:
 {
 	"pagination": {
 		"pages.administration.students.index": { "page": 2, "limit": 5 },
-		"pages.administration.teachers.index": { "page": 3, "limit": 10 },
-		"pages.administration.datasources.index": { "limit": 25 }
+		"pages.administration.teachers.index": { "page": 3, "limit": 10 }
 	},
 	"filter": {
 		"pages.administration.students.index": { "query": { "firstName": "Jack" } },
