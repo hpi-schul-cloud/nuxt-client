@@ -9,6 +9,7 @@
 	"common.actions.remove": "Löschen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
+	"common.actions.copy": "Kopieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",

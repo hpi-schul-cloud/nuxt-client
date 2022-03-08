@@ -32,6 +32,20 @@
 				</v-list-item-title>
 			</v-list-item>
 			<v-list-item
+				v-if="isTeacher"
+				id="task-action-copy"
+				:href="copyLink"
+				class="task-action"
+				data-testId="task-copy"
+			>
+				<v-list-item-title>
+					<v-icon class="task-action-icon">
+						{{ mdiContentCopy }}
+					</v-icon>
+					{{ $t("common.actions.copy") }}
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
 				id="task-action-finish"
 				class="task-action"
 				data-testId="task-finish"
@@ -72,6 +86,7 @@ import {
 	mdiPencilOutline,
 	mdiUndo,
 	mdiTrashCanOutline,
+	mdiContentCopy,
 } from "@mdi/js";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
@@ -103,11 +118,15 @@ export default {
 			mdiPencilOutline,
 			mdiUndo,
 			mdiTrashCanOutline,
+			mdiContentCopy,
 		};
 	},
 	computed: {
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
+		},
+		copyLink() {
+			return `/homework/${this.taskId}/copy`;
 		},
 		isTeacher() {
 			return this.userRole === "teacher";
