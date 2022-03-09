@@ -91,6 +91,25 @@ export class TaskModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async deleteTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			await this.taskApi.taskControllerDelete(taskId);
+
+			await this.fetchAllTasks();
+			if (FinishedTasksModule.isInitialized) {
+				await FinishedTasksModule.refetchTasks();
+			}
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
 	@Mutation
 	setTasks(tasks: Task[]): void {
 		this.tasks = tasks;
