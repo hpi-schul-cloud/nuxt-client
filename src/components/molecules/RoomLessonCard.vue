@@ -6,6 +6,9 @@
 		tabindex="0"
 		outlined
 		@click="handleClick"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -68,6 +71,7 @@ export default {
 				mdiUndoVariant,
 			},
 			defaultTitleColor: "#54616e",
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -142,6 +146,32 @@ export default {
 		},
 		revertPublishedCard() {
 			this.$emit("revert-lesson");
+		},
+		toogleDragging() {
+			if (this.isDragging) {
+				this.isDragging = false;
+				return;
+			}
+			this.isDragging = true;
+		},
+
+		onKeyPress(e) {
+			switch (e.keyCode) {
+				case 32:
+					this.toogleDragging();
+					break;
+				case 38:
+					if (this.isDragging)
+						this.$emit("move-element", { id: this.lesson.id, moveIndex: -1 });
+					break;
+				case 40:
+					if (this.isDragging)
+						this.$emit("move-element", { id: this.lesson.id, moveIndex: 1 });
+					break;
+
+				default:
+					break;
+			}
 		},
 	},
 };

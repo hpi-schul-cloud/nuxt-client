@@ -15,6 +15,7 @@
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
+						:ref="`item_${index}`"
 						:role="role"
 						:task="item.content"
 						:aria-label="
@@ -29,6 +30,7 @@
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
+						:ref="`item_${index}`"
 						:role="role"
 						:lesson="item.content"
 						:room="lessonData"
@@ -41,9 +43,11 @@
 						class="lesson-card"
 						@post-lesson="postDraftElement(item.content.id)"
 						@revert-lesson="revertPublishedElement(item.content.id)"
+						@move-element="moveByKeyboard"
 					/>
 					<room-locked-card
 						v-if="item.type === cardTypes.Lockedtask"
+						:ref="`item_${index}`"
 						:task="item.content"
 						:room="lessonData"
 						:aria-label="
@@ -108,7 +112,7 @@ export default {
 	},
 	created() {
 		if (this.isTouchDevice) {
-			// window.addEventListener("contextmenu", (e) => e.preventDefault());
+			window.addEventListener("contextmenu", (e) => e.preventDefault());
 		}
 	},
 	methods: {
@@ -125,6 +129,22 @@ export default {
 			});
 
 			await RoomModule.sortElements(idList);
+		},
+		async moveByKeyboard(e) {
+			const items = this.roomData.elements.map((item) => {
+				return item.content.id;
+			});
+			const itemIndex = items.findIndex((item) => item === e.id);
+			const position = itemIndex + e.moveIndex;
+			if (position < 0 || position > items.length - 1) {
+				return;
+			}
+
+			[items[itemIndex], items[itemIndex + e.moveIndex]] = [
+				items[itemIndex + e.moveIndex],
+				items[itemIndex],
+			];
+			await RoomModule.sortElements({ elements: items });
 		},
 	},
 };
