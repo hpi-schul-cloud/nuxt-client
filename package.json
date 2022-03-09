@@ -34,7 +34,8 @@
 		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
 		"test:ci": "run-s test:*:ci",
 		"test": "npm run test:unit",
-		"generate-client:server": "node generate-client.js"
+		"generate-client:server": "node generate-client.js",
+		"generate-client:filestorage": "npm run generate-client:server -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3'"
 	},
 	"gitHooks": {
 		"pre-commit": "npx lint-staged"
