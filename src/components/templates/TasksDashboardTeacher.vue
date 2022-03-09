@@ -1,9 +1,8 @@
 <template>
 	<section class="task-dashboard-teacher">
 		<v-tabs-items v-model="currentTab">
-			<v-tab-item>
+			<v-tab-item class="padding-bottom">
 				<v-custom-double-panels
-					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
@@ -36,8 +35,8 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
-				<tasks-list class="pb-16" :tasks="draftTasks" user-role="teacher" />
+			<v-tab-item class="padding-bottom">
+				<tasks-list :tasks="draftTasks" user-role="teacher" />
 				<v-custom-empty-state
 					v-if="draftsForTeacherIsEmpty"
 					:image="emptyState.image"
@@ -45,9 +44,8 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
+			<v-tab-item class="padding-bottom">
 				<tasks-list
-					class="pb-16"
 					:tasks="finishedTasks"
 					user-role="teacher"
 					type="finished"
@@ -112,3 +110,10 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+// stylelint-disable sh-waqar/declaration-use-variable
+.padding-bottom {
+	padding-bottom: 100px;
+}
+</style>
