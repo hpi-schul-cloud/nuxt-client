@@ -3,7 +3,6 @@
 		class="mx-auto mb-4 lesson-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
-		:href="lessonHref(lesson.id, room.roomId)"
 		tabindex="0"
 		outlined
 	>
