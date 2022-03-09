@@ -106,6 +106,10 @@ export default {
 			return this.isTouchDevice ? 200 : 0;
 		},
 	},
+	created() {
+		if (this.isTouchDevice)
+			window.addEventListener("contextmenu", (e) => e.preventDefault());
+	},
 	methods: {
 		async postDraftElement(elementId) {
 			await RoomModule.publishCard({ elementId, visibility: true });

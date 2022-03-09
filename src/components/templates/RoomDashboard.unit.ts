@@ -192,5 +192,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				"Mathe"
 			);
 		});
+
+		it("sortable option should not true if the user is 'student'", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			expect(wrapper.vm.sortable).toBe(false);
+		});
 	});
 });
