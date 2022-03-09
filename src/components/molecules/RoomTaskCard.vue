@@ -3,9 +3,9 @@
 		class="mx-auto mb-4 task-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
-		:href="taskHref(task.id)"
 		tabindex="0"
 		outlined
+		@click="handleClick"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -209,8 +209,8 @@ export default {
 
 			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
-		taskHref: (id) => {
-			return `/homework/${id}`;
+		handleClick() {
+			window.location = `/homework/${this.task.id}`;
 		},
 		redirectAction(value) {
 			window.location = value;

@@ -107,8 +107,9 @@ export default {
 		},
 	},
 	created() {
-		if (this.isTouchDevice)
-			window.addEventListener("contextmenu", (e) => e.preventDefault());
+		if (this.isTouchDevice) {
+			// window.addEventListener("contextmenu", (e) => e.preventDefault());
+		}
 	},
 	methods: {
 		async postDraftElement(elementId) {

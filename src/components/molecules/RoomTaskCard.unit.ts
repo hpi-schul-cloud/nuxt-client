@@ -102,6 +102,7 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/molecules/RoomTaskCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		window.location.pathname = "";
 	});
 
 	describe("common behaviors and actions", () => {
@@ -113,13 +114,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 			expect(wrapper.vm.ariaLabel).toStrictEqual(testProps.ariaLabel);
 		});
 
-		it("task card should have correct 'href' value", () => {
+		it("should redirect to homework page", () => {
+			const location = window.location;
 			const wrapper = getWrapper({ ...testProps, role });
 			const taskCard = wrapper.find(".task-card");
+			taskCard.trigger("click");
 
-			expect(taskCard.element.href).toStrictEqual(
-				"http://localhost/homework/123"
-			);
+			expect(location.pathname).toStrictEqual("/homework/123");
 		});
 
 		it("should have correct combined title", () => {

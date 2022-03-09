@@ -51,6 +51,7 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/molecules/RoomLessonCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		window.location.pathname = "";
 	});
 
 	describe("common behaviors and actions", () => {
@@ -63,13 +64,13 @@ describe("@components/molecules/RoomLessonCard", () => {
 			expect(wrapper.vm.room).toStrictEqual(baseTestProps.room);
 		});
 
-		it("lesson card should have correct 'href' value", () => {
+		it("should redirect to lesson page", () => {
+			const location = window.location;
 			const wrapper = getWrapper({ ...baseTestProps, role });
 			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.trigger("click");
 
-			expect(lessonCard.element.href).toStrictEqual(
-				"http://localhost/courses/456/topics/123"
-			);
+			expect(location.pathname).toStrictEqual("/courses/456/topics/123");
 		});
 
 		it("should have correct title", () => {

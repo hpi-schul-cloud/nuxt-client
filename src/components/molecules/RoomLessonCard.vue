@@ -5,6 +5,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		outlined
+		@click="handleClick"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -130,8 +131,8 @@ export default {
 		},
 	},
 	methods: {
-		lessonHref: (id, roomId) => {
-			return `/courses/${roomId}/topics/${id}`;
+		handleClick() {
+			window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
 		},
 		redirectAction(value) {
 			window.location = value;
