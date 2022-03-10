@@ -41,10 +41,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .v-input--selection-controls__ripple {
-	position: absolute !important;
-}
-
 ::v-deep .v-input--selection-controls__input {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-right: 0 !important;
