@@ -6,6 +6,7 @@
 		tabindex="0"
 		outlined
 		@click="handleClick"
+		@keypress.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"
@@ -148,11 +149,7 @@ export default {
 			this.$emit("revert-lesson");
 		},
 		toogleDragging() {
-			if (this.isDragging) {
-				this.isDragging = false;
-				return;
-			}
-			this.isDragging = true;
+			this.isDragging = !this.isDragging;
 		},
 
 		onKeyPress(e) {
@@ -162,11 +159,17 @@ export default {
 					break;
 				case 38:
 					if (this.isDragging)
-						this.$emit("move-element", { id: this.lesson.id, moveIndex: -1 });
+						this.$emit("move-element", {
+							id: this.lesson.id,
+							moveIndex: -1,
+						});
 					break;
 				case 40:
 					if (this.isDragging)
-						this.$emit("move-element", { id: this.lesson.id, moveIndex: 1 });
+						this.$emit("move-element", {
+							id: this.lesson.id,
+							moveIndex: 1,
+						});
 					break;
 
 				default:

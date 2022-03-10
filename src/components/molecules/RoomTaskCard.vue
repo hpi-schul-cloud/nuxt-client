@@ -6,6 +6,10 @@
 		tabindex="0"
 		outlined
 		@click="handleClick"
+		@keypress.enter="handleClick"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -110,6 +114,7 @@ export default {
 				mdiUndoVariant,
 			},
 			defaultTitleColor: "#54616e",
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -226,6 +231,34 @@ export default {
 		},
 		restoreCard() {
 			this.$emit("restore-task");
+		},
+		toogleDragging() {
+			this.isDragging = !this.isDragging;
+		},
+
+		onKeyPress(e) {
+			switch (e.keyCode) {
+				case 32:
+					this.toogleDragging();
+					break;
+				case 38:
+					if (this.isDragging)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: -1,
+						});
+					break;
+				case 40:
+					if (this.isDragging)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: 1,
+						});
+					break;
+
+				default:
+					break;
+			}
 		},
 	},
 };

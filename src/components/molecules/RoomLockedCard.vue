@@ -6,6 +6,10 @@
 		tabindex="0"
 		outlined
 		@click.native="onClick"
+		@keypress.enter="onclick"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-3">
@@ -61,6 +65,7 @@ export default {
 			defaultTitleColor: "#54616e",
 			alert: false,
 			alertDuration: 3000,
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -74,6 +79,34 @@ export default {
 			setTimeout(() => {
 				this.alert = false;
 			}, this.alertDuration);
+		},
+		toogleDragging() {
+			this.isDragging = !this.isDragging;
+		},
+
+		onKeyPress(e) {
+			switch (e.keyCode) {
+				case 32:
+					this.toogleDragging();
+					break;
+				case 38:
+					if (this.isDragging)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: -1,
+						});
+					break;
+				case 40:
+					if (this.isDragging)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: 1,
+						});
+					break;
+
+				default:
+					break;
+			}
 		},
 	},
 };

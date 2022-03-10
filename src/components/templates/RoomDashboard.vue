@@ -27,6 +27,7 @@
 						class="task-card"
 						@post-task="postDraftElement(item.content.id)"
 						@revert-task="revertPublishedElement(item.content.id)"
+						@move-element="moveByKeyboard"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -57,6 +58,7 @@
 							})
 						"
 						class="locked-card"
+						@move-element="moveByKeyboard"
 					/>
 				</div>
 			</draggable>
@@ -144,7 +146,10 @@ export default {
 				items[itemIndex + e.moveIndex],
 				items[itemIndex],
 			];
+
 			await RoomModule.sortElements({ elements: items });
+			const refName = `item_${position}`;
+			this.$refs[refName][0].$el.focus();
 		},
 	},
 };
