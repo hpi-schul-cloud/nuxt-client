@@ -24,10 +24,13 @@
 								itemName: item.content.name,
 							})
 						"
+						:key-drag="isDragging"
 						class="task-card"
 						@post-task="postDraftElement(item.content.id)"
 						@revert-task="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -41,10 +44,13 @@
 								itemName: item.content.name,
 							})
 						"
+						:key-drag="isDragging"
 						class="lesson-card"
 						@post-lesson="postDraftElement(item.content.id)"
 						@revert-lesson="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
 					/>
 					<room-locked-card
 						v-if="item.type === cardTypes.Lockedtask"
@@ -57,8 +63,11 @@
 								itemName: item.content.name,
 							})
 						"
+						:key-drag="isDragging"
 						class="locked-card"
 						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
 					/>
 				</div>
 			</draggable>
@@ -93,6 +102,7 @@ export default {
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -148,8 +158,7 @@ export default {
 			];
 
 			await RoomModule.sortElements({ elements: items });
-			const refName = `item_${position}`;
-			this.$refs[refName][0].$el.focus();
+			this.$refs[`item_${position}`][0].$el.focus();
 		},
 	},
 };

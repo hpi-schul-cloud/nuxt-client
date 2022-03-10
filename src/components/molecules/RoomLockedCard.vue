@@ -10,6 +10,7 @@
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"
+		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-3">
@@ -55,6 +56,7 @@ export default {
 			type: String,
 			default: "",
 		},
+		keyDrag: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -65,7 +67,6 @@ export default {
 			defaultTitleColor: "#54616e",
 			alert: false,
 			alertDuration: 3000,
-			isDragging: false,
 		};
 	},
 	computed: {
@@ -80,24 +81,20 @@ export default {
 				this.alert = false;
 			}, this.alertDuration);
 		},
-		toogleDragging() {
-			this.isDragging = !this.isDragging;
-		},
-
 		onKeyPress(e) {
 			switch (e.keyCode) {
 				case 32:
-					this.toogleDragging();
+					this.$emit("on-drag");
 					break;
 				case 38:
-					if (this.isDragging)
+					if (this.keyDrag)
 						this.$emit("move-element", {
 							id: this.task.id,
 							moveIndex: -1,
 						});
 					break;
 				case 40:
-					if (this.isDragging)
+					if (this.keyDrag)
 						this.$emit("move-element", {
 							id: this.task.id,
 							moveIndex: 1,
