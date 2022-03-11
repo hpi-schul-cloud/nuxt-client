@@ -34,7 +34,7 @@
 					.join('-')}`"
 				text
 				:color="titleColor"
-				@click.prevent="action.action"
+				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -73,7 +73,7 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 			},
-			defaultTitleColor: "#54616e",
+			defaultTitleColor: "--color-secondary",
 		};
 	},
 	computed: {

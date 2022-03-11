@@ -1,5 +1,12 @@
 <template>
-	<v-menu v-if="menuItems.length" bottom left offset-y attach>
+	<v-menu
+		v-if="menuItems.length"
+		v-model="showMenu"
+		bottom
+		left
+		offset-y
+		attach
+	>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
@@ -7,7 +14,6 @@
 				class="three-dot-button"
 				icon
 				v-on="on"
-				@click.prevent
 				@keydown.space.stop
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
@@ -18,8 +24,9 @@
 				v-for="(item, i) in menuItems"
 				:key="i"
 				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
-				@click.prevent="item.action"
-				><v-icon class="task-action-icon mr-1">
+				@click.stop="handleClick(item)"
+			>
+				<v-icon class="task-action-icon mr-1">
 					{{ item.icon }}
 				</v-icon>
 				<v-list-item-title class="pl-1">
@@ -48,7 +55,14 @@ export default {
 	data() {
 		return {
 			mdiDotsVertical,
+			showMenu: false,
 		};
+	},
+	methods: {
+		handleClick(menuItem) {
+			this.showMenu = false;
+			menuItem.action();
+		},
 	},
 };
 </script>

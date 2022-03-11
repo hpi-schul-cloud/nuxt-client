@@ -119,7 +119,7 @@ export default {
 			return this.role === Roles.Teacher || false;
 		},
 		touchDelay() {
-			return this.isTouchDevice ? 200 : 0;
+			return this.isTouchDevice ? 200 : 20;
 		},
 	},
 	created() {

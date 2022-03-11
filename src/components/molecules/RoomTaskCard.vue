@@ -13,7 +13,7 @@
 		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text>
-			<div class="top-row-container mb-1">
+			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					<v-icon size="20" :color="task.displayColor" dark>{{
 						icons.mdiFormatListChecks
@@ -30,14 +30,18 @@
 			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
-				class="text--primary mt-1 text-description"
+				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
 				v-html="task.description"
 			></div>
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
+				<div
+					v-if="roles.Teacher === role"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					tabindex="0"
+				>
 					<div class="chip-value">
 						{{
 							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
@@ -46,7 +50,11 @@
 						}}
 					</div>
 				</div>
-				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
+				<div
+					v-if="roles.Teacher === role"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					tabindex="0"
+				>
 					<div class="chip-value">
 						{{
 							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
@@ -57,11 +65,11 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-1 overdue"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0 overdue"
 					tabindex="0"
 				>
 					<div class="chip-value">
-						{{ $t("pages.room.taskCard.teacher.label.overdue") }}
+						{{ $t(`pages.room.taskCard.${role}.label.overdue`) }}
 					</div>
 				</div>
 			</div>
@@ -75,7 +83,7 @@
 					.join('-')}`"
 				text
 				:color="titleColor"
-				@click.prevent="action.action"
+				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -115,7 +123,8 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 			},
-			defaultTitleColor: "#54616e",
+			defaultTitleColor: "--color-secondary",
+			roles: Roles,
 		};
 	},
 	computed: {
