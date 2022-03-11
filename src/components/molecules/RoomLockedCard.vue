@@ -64,7 +64,7 @@ export default {
 			icons: {
 				mdiFormatListChecks,
 			},
-			defaultTitleColor: "#54616e",
+			defaultTitleColor: "--color-secondary",
 			alert: false,
 			alertDuration: 3000,
 		};
