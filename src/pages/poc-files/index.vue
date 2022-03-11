@@ -33,11 +33,14 @@
 						></template
 					>
 					<template v-else>
-						<v-list-item-title @click="download(f)">{{
-							f.name
-						}}</v-list-item-title
+						<v-list-item-title>
+							<a :href="getDownloadUrl(f)" target="_blank">{{
+								f.name
+							}}</a> </v-list-item-title
 						><v-btn icon @click.prevent="beginEdit(f)"
 							><v-icon>{{ mdiPencil }}</v-icon></v-btn
+						><v-btn icon @click.prevent="download(f)"
+							><v-icon>{{ mdiDownload }}</v-icon></v-btn
 						>
 					</template>
 				</v-list-item>
@@ -49,8 +52,8 @@
 <script>
 import FilesPOCModule from "@/store/files-poc";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-
-import { mdiPencil, mdiCheck, mdiClose } from "@mdi/js";
+import { mdiPencil, mdiCheck, mdiClose, mdiDownload } from "@mdi/js";
+import { $axios } from "../../utils/api";
 
 export default {
 	components: {
@@ -62,6 +65,7 @@ export default {
 			mdiPencil,
 			mdiCheck,
 			mdiClose,
+			mdiDownload,
 			file: null,
 			editing: {},
 		};
@@ -108,6 +112,11 @@ export default {
 		},
 		isEditing(file) {
 			return !!this.editing[file.id];
+		},
+		getDownloadUrl(file) {
+			console.dir($axios.defaults);
+			const url = `${$axios.defaults.baseURL}/v3/file/download/${file.id}/${file.name}`;
+			return url;
 		},
 	},
 	head() {
