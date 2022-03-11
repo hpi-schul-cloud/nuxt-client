@@ -5,7 +5,6 @@
 			v-click-outside="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
-			:ripple="false"
 			:href="href"
 			:aria-label="`${$t('common.words.task')} ${task.name}`"
 			role="article"
