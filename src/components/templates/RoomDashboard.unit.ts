@@ -1,8 +1,9 @@
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
+import Vue from "vue";
 declare var createComponentMocks: Function;
 
-const mockData = {
+let mockData = {
 	roomId: "123",
 	title: "Sample Course",
 	displayColor: "black",
@@ -11,7 +12,7 @@ const mockData = {
 			type: "task",
 			content: {
 				courseName: "Mathe",
-				id: "59cce1d381297026d02cdc4b",
+				id: "1234",
 				name: "Private Aufgabe von Marla - mit Kurs, offen",
 				createdAt: "2017-09-28T11:49:39.924Z",
 				updatedAt: "2017-09-28T11:49:39.924Z",
@@ -33,7 +34,7 @@ const mockData = {
 			type: "task",
 			content: {
 				courseName: "Mathe_2",
-				id: "59cce4c3c6abf042248e888e",
+				id: "2345",
 				name: "Private Aufgabe von Cord - mit Kurs, offen",
 				createdAt: "2017-09-28T12:02:11.432Z",
 				updatedAt: "2017-09-28T12:02:11.432Z",
@@ -54,7 +55,7 @@ const mockData = {
 		{
 			type: "lesson",
 			content: {
-				id: "59cce4c3c6abf042248e888f",
+				id: "3456",
 				name: "Test Name",
 				courseName: "Mathe",
 				createdAt: "2017-09-28T11:58:46.601Z",
@@ -65,7 +66,7 @@ const mockData = {
 		{
 			type: "lesson",
 			content: {
-				id: "59cce4c3c6abf042248e888g",
+				id: "7890",
 				name: "Test Name2",
 				courseName: "Mathe",
 				createdAt: "2017-09-28T11:58:46.601Z",
@@ -76,7 +77,7 @@ const mockData = {
 		{
 			type: "lockedtask",
 			content: {
-				id: "123",
+				id: "8901",
 				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 				allowed: false,
 			},
@@ -84,7 +85,7 @@ const mockData = {
 		{
 			type: "lockedtask",
 			content: {
-				id: "123",
+				id: "9012",
 				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 				allowed: false,
 			},
@@ -92,8 +93,8 @@ const mockData = {
 	],
 };
 
-const getWrapper: any = (props: object, options?: object) => {
-	return mount(RoomDashboard, {
+const getWrapper = (props: object, options?: object) => {
+	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -104,8 +105,6 @@ const getWrapper: any = (props: object, options?: object) => {
 };
 
 describe("@components/templates/RoomDashboard.vue", () => {
-	beforeEach(() => {});
-
 	describe("common features", () => {
 		it("should have props", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
@@ -159,7 +158,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 			expect(wrapper.vm.isTouchDevice).toBe(false);
-			expect(wrapper.vm.touchDelay).toStrictEqual(0);
+			expect(wrapper.vm.touchDelay).toStrictEqual(20);
 		});
 
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
@@ -193,9 +192,30 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			);
 		});
 
-		it("sortable option should not true if the user is 'student'", async () => {
+		it("sortable option should not true if the user is 'student'", () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "student" });
 			expect(wrapper.vm.sortable).toBe(false);
+		});
+
+		it.skip("should be sorted the elements by keyboard'", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.find(".task-card");
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(true);
+
+			cardElement.vm.$emit("move-element", [
+				{
+					id: "1234",
+					moveIndex: 1,
+				},
+			]);
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(moveByKeyboardMock).toHaveBeenCalled();
 		});
 	});
 });

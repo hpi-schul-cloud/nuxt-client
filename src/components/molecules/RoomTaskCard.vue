@@ -6,7 +6,7 @@
 		tabindex="0"
 		outlined
 		@click="handleClick"
-		@keypress.enter="handleClick"
+		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"

@@ -15,6 +15,7 @@ const baseTestProps = {
 	},
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -67,5 +68,53 @@ describe("@components/molecules/RoomLockedCard", () => {
 		expect(wrapper.vm.alert).toBe(false);
 		alertComponent = wrapper.findAll(".alert-locked-card");
 		expect(alertComponent).toHaveLength(0);
+	});
+
+	describe("keypress events", () => {
+		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
+			const handleClickMock = jest.fn();
+			const wrapper = getWrapper(baseTestProps);
+
+			wrapper.vm.handleClick = handleClickMock;
+
+			await wrapper.trigger("keydown.enter");
+			expect(handleClickMock).toHaveBeenCalled();
+			expect(handleClickMock.mock.calls[0][0].keyCode).toStrictEqual(13);
+			expect(handleClickMock.mock.calls[0][0].key).toStrictEqual("Enter");
+		});
+
+		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
+			const onKeyPressMock = jest.fn();
+			const wrapper = getWrapper(baseTestProps);
+
+			wrapper.vm.onKeyPress = onKeyPressMock;
+
+			await wrapper.trigger("keydown.up");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(38);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Up");
+
+			jest.clearAllMocks();
+			await wrapper.trigger("keydown.down");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(40);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Down");
+
+			jest.clearAllMocks();
+			await wrapper.trigger("keydown.space");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(32);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual(" ");
+			jest.clearAllMocks();
+		});
+
+		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
+			const wrapper = getWrapper(baseTestProps);
+
+			await wrapper.trigger("keydown.tab");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["tab-pressed"]).toHaveLength(1);
+		});
 	});
 });

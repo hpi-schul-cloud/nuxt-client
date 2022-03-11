@@ -5,8 +5,8 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		outlined
-		@click.native="onClick"
-		@keypress.enter="onclick"
+		@click.native="handleClick"
+		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"
@@ -64,7 +64,7 @@ export default {
 			icons: {
 				mdiFormatListChecks,
 			},
-			defaultTitleColor: "--color-secondary",
+			defaultTitleColor: "#54616e",
 			alert: false,
 			alertDuration: 3000,
 		};
@@ -75,7 +75,7 @@ export default {
 		},
 	},
 	methods: {
-		onClick() {
+		handleClick() {
 			this.alert = true;
 			setTimeout(() => {
 				this.alert = false;

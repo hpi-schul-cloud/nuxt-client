@@ -142,7 +142,7 @@ export default {
 
 			await RoomModule.sortElements(idList);
 		},
-		async moveByKeyboard(e) {
+		moveByKeyboard: async function (e) {
 			const items = this.roomData.elements.map((item) => {
 				return item.content.id;
 			});
@@ -159,6 +159,7 @@ export default {
 
 			await RoomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
+			return items;
 		},
 	},
 };

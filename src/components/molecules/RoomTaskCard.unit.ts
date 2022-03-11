@@ -25,6 +25,7 @@ const testProps = {
 	},
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
 };
 
 const draftTestProps = {
@@ -44,6 +45,7 @@ const draftTestProps = {
 	},
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
 };
 
 const finishedTestProps = {
@@ -63,6 +65,7 @@ const finishedTestProps = {
 	},
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
 };
 
 const overdueTestProps = {
@@ -86,6 +89,7 @@ const overdueTestProps = {
 	},
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -271,6 +275,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 					},
 					ariaLabel:
 						"task, Link, Aufgabe an Marla (Mathe) - abgeschlossen, zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
 				};
 				const wrapper = getWrapper({ ...studentTestProps, role });
 				wrapper.vm.restoreCard = restoreCardMock;
@@ -305,6 +310,55 @@ describe("@components/molecules/RoomTaskCard", () => {
 				await actionButton.trigger("click");
 				expect(finishCardMock).toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe("keypress events", () => {
+		const role = "teacher";
+		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
+			const handleClickMock = jest.fn();
+			const wrapper = getWrapper({ ...testProps, role });
+
+			wrapper.vm.handleClick = handleClickMock;
+
+			await wrapper.trigger("keydown.enter");
+			expect(handleClickMock).toHaveBeenCalled();
+			expect(handleClickMock.mock.calls[0][0].keyCode).toStrictEqual(13);
+			expect(handleClickMock.mock.calls[0][0].key).toStrictEqual("Enter");
+		});
+
+		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
+			const onKeyPressMock = jest.fn();
+			const wrapper = getWrapper({ ...testProps, role });
+
+			wrapper.vm.onKeyPress = onKeyPressMock;
+
+			await wrapper.trigger("keydown.up");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(38);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Up");
+
+			jest.clearAllMocks();
+			await wrapper.trigger("keydown.down");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(40);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Down");
+
+			jest.clearAllMocks();
+			await wrapper.trigger("keydown.space");
+			expect(onKeyPressMock).toHaveBeenCalled();
+			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(32);
+			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual(" ");
+			jest.clearAllMocks();
+		});
+
+		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
+			const wrapper = getWrapper({ ...testProps, role });
+
+			await wrapper.trigger("keydown.tab");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["tab-pressed"]).toHaveLength(1);
 		});
 	});
 });
