@@ -28,8 +28,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import RoomModule from "@store/room";
+import { authModule, roomModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 
@@ -44,10 +43,10 @@ export default {
 	},
 	computed: {
 		roomData() {
-			return RoomModule.getRoomData;
+			return roomModule.getRoomData;
 		},
 		dashBoardRole() {
-			const roles = AuthModule.getUserRoles;
+			const roles = authModule.getUserRoles;
 			if (roles.includes("teacher")) return "teacher";
 			if (roles.includes("student")) return "student";
 			return undefined;
@@ -55,7 +54,7 @@ export default {
 	},
 	async created() {
 		const courseId = this.$route.params.id;
-		await RoomModule.fetchContent(courseId);
+		await roomModule.fetchContent(courseId);
 	},
 	head() {
 		return {

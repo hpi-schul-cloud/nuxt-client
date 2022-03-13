@@ -1,7 +1,7 @@
 import { Schools } from "./schools";
 import { initializeAxios } from "@utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
-import AuthModule from "./auth";
+import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 
 let receivedRequests: any[] = [];
@@ -34,7 +34,7 @@ describe("schools module", () => {
 				receivedRequests = [];
 			});
 			it("should call backend and sets state correctly", async () => {
-				AuthModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
 				getRequestReturn = {
 					id: "id_123",
 					features: ["rocketChat", "messengerSchoolRoom"],

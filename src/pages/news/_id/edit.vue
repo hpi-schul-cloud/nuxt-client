@@ -32,7 +32,7 @@
 
 <script>
 import FormNews from "@components/organisms/FormNews";
-import NewsModule from "@/store/news";
+import { newsModule } from "@/store";
 
 export default {
 	components: {
@@ -42,18 +42,18 @@ export default {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
 	computed: {
-		news: () => NewsModule.getCurrentNews,
+		news: () => newsModule.getCurrentNews,
 	},
 	meta: {
 		requiredPermissions: ["NEWS_EDIT"],
 	},
 	mounted() {
-		NewsModule.fetchNews(this.$route.params.id);
+		newsModule.fetchNews(this.$route.params.id);
 	},
 	methods: {
 		save: async function (newsToPatch) {
 			try {
-				await NewsModule.patchNews({
+				await newsModule.patchNews({
 					id: this.news.id,
 					title: newsToPatch.title,
 					content: newsToPatch.content,
@@ -74,7 +74,7 @@ export default {
 		},
 		deleteHandler: async function () {
 			try {
-				await NewsModule.removeNews(this.news.id);
+				await newsModule.removeNews(this.news.id);
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.remove")
 				);

@@ -1,8 +1,7 @@
 import TasksList from "./TasksList";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
-import TaskModule from "@/store/tasks";
-import FinishedTaskModule from "@/store/finished-tasks";
+import { taskModule, finishedTaskModule } from "@/store";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
@@ -78,7 +77,7 @@ describe("@components/organisms/TasksList", () => {
 
 		it("Should render a subheader if title prop is set", () => {
 			const spy = jest
-				.spyOn(TaskModule, "getStatus", "get")
+				.spyOn(taskModule, "getStatus", "get")
 				.mockReturnValue("completed");
 
 			const wrapper = mount(TasksList, {
@@ -164,10 +163,10 @@ describe("@components/organisms/TasksList", () => {
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
 			const spy1 = jest
-				.spyOn(TaskModule, "hasTasks", "get")
+				.spyOn(taskModule, "hasTasks", "get")
 				.mockReturnValue(true);
 			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
+				.spyOn(taskModule, "getStatus", "get")
 				.mockReturnValue("pending");
 
 			const wrapper = mount(TasksList, {
@@ -226,10 +225,10 @@ describe("@components/organisms/TasksList", () => {
 
 		it("Should compute correct status", () => {
 			const spy1 = jest
-				.spyOn(FinishedTaskModule, "getStatus", "get")
+				.spyOn(finishedTaskModule, "getStatus", "get")
 				.mockReturnValue("pending");
 			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
+				.spyOn(taskModule, "getStatus", "get")
 				.mockReturnValue("completed");
 
 			const wrapper = mount(TasksList, {

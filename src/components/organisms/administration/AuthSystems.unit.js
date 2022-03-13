@@ -1,5 +1,5 @@
 import AuthSystems from "./AuthSystems";
-import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
 
 const generateProps = () => ({
 	systems: [
@@ -148,7 +148,7 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const deleteSpy = jest.spyOn(SchoolsModule, "deleteSystem");
+			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,

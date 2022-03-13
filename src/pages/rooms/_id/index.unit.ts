@@ -1,5 +1,4 @@
-import RoomModule from "@store/room";
-import AuthModule from "@/store/auth";
+import { authModule, roomModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
@@ -81,8 +80,8 @@ const getWrapper: any = () => {
 
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
-		RoomModule.setRoomData(mockData as any);
-		AuthModule.setUser(user as any);
+		roomModule.setRoomData(mockData as any);
+		authModule.setUser(user as any);
 	});
 
 	it("should fetch data", async () => {

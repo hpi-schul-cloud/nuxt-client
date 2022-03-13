@@ -1,5 +1,5 @@
 import UserHasRole from "./UserHasRole";
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -39,20 +39,20 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 describe("@components/helpers/UserHasRole", () => {
 	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
-		AuthModule.setUser({ roles: [{ name: "admin" }] });
+		authModule.setUser({ roles: [{ name: "admin" }] });
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		AuthModule.setUser({ roles: [{ name: "user" }] });
+		authModule.setUser({ roles: [{ name: "user" }] });
 
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
-		AuthModule.setUser({ roles: [{ name: "user" }] });
+		authModule.setUser({ roles: [{ name: "user" }] });
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		AuthModule.setUser({ roles: [] });
+		authModule.setUser({ roles: [] });
 		checkCorrectView("ADMIN", [], false);
 	});
 });

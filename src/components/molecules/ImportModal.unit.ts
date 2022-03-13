@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/rooms";
+import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import ImportModal from "./ImportModal.vue";
@@ -162,7 +162,7 @@ describe("@components/molecules/RoomModal", () => {
 	describe("error handling", () => {
 		it("should show code-error section if server sends shareToken error", async () => {
 			const getSharedCourseDataMock = jest
-				.spyOn(RoomsModule, "getSharedCourseData")
+				.spyOn(roomsModule, "getSharedCourseData")
 				.mockImplementation();
 			const wrapper: any = mount(ImportModal, {
 				...createComponentMocks({
@@ -177,7 +177,7 @@ describe("@components/molecules/RoomModal", () => {
 			await wrapper.vm.$nextTick();
 			const errorElementBefore = wrapper.find(".code-error");
 			expect(errorElementBefore.exists()).toBe(false);
-			RoomsModule.setBusinessError({
+			roomsModule.setBusinessError({
 				statusCode: "400",
 				message: "BadRequest",
 				error: {},

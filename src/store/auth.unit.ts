@@ -1,7 +1,6 @@
 import { Auth } from "./auth";
 import { mockUser } from "../../tests/test-utils/mockObjects";
-import SchoolsModule from "./schools";
-import EnvConfigModule from "./env-config";
+import { envConfigModule, schoolsModule } from "@/store";
 
 jest.useFakeTimers();
 
@@ -77,23 +76,23 @@ describe("auth store module", () => {
 			it("returns the school's language", () => {
 				const authModule = new Auth({});
 				authModule.locale = "";
-				SchoolsModule.school.language = "fi";
+				schoolsModule.school.language = "fi";
 				expect(authModule.getLocale).toBe("fi");
 			});
 
 			it("returns the instance language", () => {
 				const authModule = new Auth({});
 				authModule.locale = "";
-				SchoolsModule.school.language = "";
-				EnvConfigModule.env.I18N__DEFAULT_LANGUAGE = "fu";
+				schoolsModule.school.language = "";
+				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "fu";
 				expect(authModule.getLocale).toBe("fu");
 			});
 
 			it("returns the default language", () => {
 				const authModule = new Auth({});
 				authModule.locale = "";
-				SchoolsModule.school.language = "";
-				EnvConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
+				schoolsModule.school.language = "";
+				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
 				expect(authModule.getLocale).toBe("de");
 			});
 		});

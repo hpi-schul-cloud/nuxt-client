@@ -1,7 +1,5 @@
 import legacyLoggedIn from "./legacyLoggedIn";
-import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, filePathsModule } from "@/store";
 
 const $route = {
 	query: {
@@ -11,15 +9,15 @@ const $route = {
 };
 
 const $router = { push: jest.fn() };
-AuthModule.setUser({
+authModule.setUser({
 	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
 	roles: [{ name: "administrator" }],
 });
-AuthModule.setAccessToken("asdf");
+authModule.setAccessToken("asdf");
 
-FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
+filePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
-EnvConfigModule.setEnvs({
+envConfigModule.setEnvs({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 });
 
@@ -50,7 +48,7 @@ describe("legacyLoggedIn", () => {
 	});
 
 	it("should mark course link visibility if env-varable set", async () => {
-		EnvConfigModule.setEnvs({
+		envConfigModule.setEnvs({
 			LEGACY_COURSE_OVERVIEW_ENABLED: true,
 		});
 		const legacyRoute = wrapper.vm.sidebarItems.filter(

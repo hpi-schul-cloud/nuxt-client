@@ -1,8 +1,7 @@
 import { mount, shallowMount } from "@vue/test-utils";
 
 import migrationIndex from "@pages/administration/migration/index.vue";
-import ImportUsersModule from "@store/import-users";
-import SchoolsModule from "@store/schools";
+import { importUsersModule, schoolsModule } from "@/store";
 
 declare var createComponentMocks: Function;
 
@@ -143,7 +142,7 @@ describe("User Migration / Index", () => {
 	});
 
 	it("shows business error", () => {
-		ImportUsersModule.setBusinessError({
+		importUsersModule.setBusinessError({
 			statusCode: "123",
 			message: "foo",
 		});
@@ -154,7 +153,7 @@ describe("User Migration / Index", () => {
 	});
 
 	it("shows not show business error, if it is not set", () => {
-		ImportUsersModule.setBusinessError(null);
+		importUsersModule.setBusinessError(null);
 		const wrapper = getWrapper();
 		const findText = wrapper.find(".v-snack");
 		expect(findText.exists()).toBe(false);
@@ -175,7 +174,7 @@ describe("User Migration / Index", () => {
 	});
 
 	it("should be possible to click on steps 1-3", async () => {
-		SchoolsModule.setSchool(schoolMock);
+		schoolsModule.setSchool(schoolMock);
 		const wrapper = getWrapper();
 
 		const stepper = wrapper.find(".stepper");
@@ -193,7 +192,7 @@ describe("User Migration / Index", () => {
 	});
 
 	it("should not be possible to click on steps 2-3 when migration finished", async () => {
-		SchoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
+		schoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
 
 		const wrapper = getWrapper();
 		const stepper = wrapper.find(".stepper");
@@ -219,14 +218,14 @@ describe("User Migration / Index", () => {
 
 	describe("show summary", () => {
 		it("should display summary text with totals", async () => {
-			SchoolsModule.setSchool(schoolMock);
+			schoolsModule.setSchool(schoolMock);
 			const totalImportUsers = 10;
 			const totalMatched = 2;
 			const totalUnmatched = 4;
 
-			ImportUsersModule.setTotal(totalImportUsers);
-			ImportUsersModule.setTotalUnmatched(totalUnmatched);
-			ImportUsersModule.setTotalMatched(totalMatched);
+			importUsersModule.setTotal(totalImportUsers);
+			importUsersModule.setTotalUnmatched(totalUnmatched);
+			importUsersModule.setTotalMatched(totalMatched);
 
 			const wrapper = getWrapper();
 
@@ -247,7 +246,7 @@ describe("User Migration / Index", () => {
 		});
 
 		it("should disable perform migration button, if confirm not checked", async () => {
-			SchoolsModule.setSchool(schoolMock);
+			schoolsModule.setSchool(schoolMock);
 
 			const wrapper = getWrapper();
 			const btn = wrapper.find("[data-testid=migration_performMigration]");
@@ -260,10 +259,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			SchoolsModule.setSchool(schoolMock);
+			schoolsModule.setSchool(schoolMock);
 
 			const performMigrationMock = jest.spyOn(
-				ImportUsersModule,
+				importUsersModule,
 				"performMigration"
 			);
 			performMigrationMock.mockImplementation(async () => {
@@ -284,7 +283,7 @@ describe("User Migration / Index", () => {
 			// TODO after implementing of backend and store, mock store response and expect to be called with
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
-			expect(SchoolsModule.getSchool.inUserMigration).toBe(false);
+			expect(schoolsModule.getSchool.inUserMigration).toBe(false);
 			expect(wrapper.vm.school.inUserMigration).toBe(false);
 		});
 	});
@@ -292,7 +291,7 @@ describe("User Migration / Index", () => {
 	describe("show maintenance/Transferphase", () => {
 		let wrapper: any;
 		beforeEach(async () => {
-			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
+			schoolsModule.setSchool({ ...schoolMock, inUserMigration: false });
 			wrapper = getWrapper();
 			wrapper.setData({
 				migrationStep: 4,
@@ -320,10 +319,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("perform end maintenance", async () => {
-			const endMaintenanceMock = jest.spyOn(SchoolsModule, "endMaintenance");
+			const endMaintenanceMock = jest.spyOn(schoolsModule, "endMaintenance");
 			endMaintenanceMock.mockImplementation(async () => {
-				SchoolsModule.setSchool({
-					...SchoolsModule.getSchool,
+				schoolsModule.setSchool({
+					...schoolsModule.getSchool,
 					inMaintenance: false,
 				});
 				return Promise.resolve({}) as any;

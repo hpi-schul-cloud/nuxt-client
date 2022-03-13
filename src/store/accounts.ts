@@ -1,19 +1,10 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "accounts",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class AccountsModule extends VuexModule {
@@ -49,7 +40,7 @@ export class AccountsModule extends VuexModule {
 			$axios.$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 
@@ -61,9 +52,7 @@ export class AccountsModule extends VuexModule {
 			$axios.$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
-			this.setBusinessError(error);
+			this.setBusinessError(error as BusinessError);
 		}
 	}
 }
-
-export default getModule(AccountsModule);

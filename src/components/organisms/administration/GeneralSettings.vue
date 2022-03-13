@@ -149,8 +149,7 @@
 </template>
 
 <script>
-import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schools";
+import { envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
@@ -176,15 +175,15 @@ export default {
 		};
 	},
 	computed: {
-		availableLanguages: () => EnvConfigModule.getAvailableLanguages,
+		availableLanguages: () => envConfigModule.getAvailableLanguages,
 		federalState() {
-			return SchoolsModule.getFederalState;
+			return schoolsModule.getFederalState;
 		},
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		loading() {
-			return SchoolsModule.getLoading;
+			return schoolsModule.getLoading;
 		},
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
@@ -263,7 +262,7 @@ export default {
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
-			SchoolsModule.update(updatedSchool);
+			schoolsModule.update(updatedSchool);
 		},
 	},
 };

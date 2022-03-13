@@ -1,23 +1,15 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
+import { envConfigModule } from "@/store";
 
 // const newsUri = "/v3/news";
 
 @Module({
 	name: "news",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class NewsModule extends VuexModule {
@@ -69,7 +61,7 @@ export class NewsModule extends VuexModule {
 		if (!this._newsApi) {
 			this._newsApi = NewsApiFactory(
 				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				"/v3", //`${envConfigModule.getApiUrl}/v3`,
 				$axios
 			);
 		}
@@ -186,5 +178,3 @@ export class NewsModule extends VuexModule {
 		}
 	}
 }
-
-export default getModule(NewsModule);

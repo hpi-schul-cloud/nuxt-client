@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 
@@ -122,7 +122,7 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			SchoolsModule.deleteSystem(systemId);
+			schoolsModule.deleteSystem(systemId);
 			// TODO show error
 		},
 	},

@@ -105,10 +105,8 @@
 	</default-wireframe>
 </template>
 <script>
-import AuthModule from "@/store/auth";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
@@ -278,13 +276,13 @@ export default {
 			qrLinks: "getQrLinks",
 		}),
 		user() {
-			return AuthModule.getUser;
+			return authModule.getUser;
 		},
 		schoolIsExternallyManaged() {
-			return SchoolsModule.schoolIsExternallyManaged;
+			return schoolsModule.schoolIsExternallyManaged;
 		},
 		env() {
-			return EnvConfigModule.getEnv;
+			return envConfigModule.getEnv;
 		},
 		tableData: {
 			get() {

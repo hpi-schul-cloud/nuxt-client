@@ -122,7 +122,7 @@
 	</vCustomDialog>
 </template>
 <script>
-import RoomsModule from "@store/rooms";
+import { roomsModule } from "@store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiCheck } from "@mdi/js";
 
@@ -160,15 +160,15 @@ export default {
 			return this.$t("pages.rooms.importCourse.btn.confirm");
 		},
 		businessError() {
-			return RoomsModule.getBusinessError;
+			return roomsModule.getBusinessError;
 		},
 	},
 	methods: {
 		async nextStep() {
 			if (this.step === 2) {
-				await RoomsModule.getSharedCourseData(this.sharedCourseData.code);
+				await roomsModule.getSharedCourseData(this.sharedCourseData.code);
 				if (this.businessError.statusCode != "") return;
-				this.sharedCourseData = RoomsModule.getCourseSharingStatus;
+				this.sharedCourseData = roomsModule.getCourseSharingStatus;
 			}
 			if (this.step === 3) {
 				this.confirmImport();
@@ -178,13 +178,13 @@ export default {
 		},
 
 		async confirmImport() {
-			await RoomsModule.confirmSharedCourseData(this.sharedCourseData);
+			await roomsModule.confirmSharedCourseData(this.sharedCourseData);
 			if (this.businessError.statusCode !== "") {
 				this.isImportError = true;
 				this.$emit("update-rooms");
 			}
 
-			const importedCourseId = RoomsModule.getImportedCourseId;
+			const importedCourseId = roomsModule.getImportedCourseId;
 
 			if (importedCourseId) {
 				this.clearMessages();
@@ -212,7 +212,7 @@ export default {
 			this.step = step;
 		},
 		clearMessages() {
-			RoomsModule.resetBusinessError();
+			roomsModule.resetBusinessError();
 			this.sharedCourseData = {
 				code: "",
 				courseName: "",

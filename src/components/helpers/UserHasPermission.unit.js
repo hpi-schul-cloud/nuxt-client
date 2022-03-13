@@ -1,5 +1,5 @@
 import UserHasPermission from "./UserHasPermission";
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 /**
  * @param  { String } expectedPermission used as prop
@@ -45,18 +45,18 @@ const checkCorrectView = (
 describe("@components/helpers/UserHasPermission", () => {
 	it(...isValidComponent(UserHasPermission));
 	it("view true-slot if user has permission", () => {
-		AuthModule.setUser({ permissions: ["admin"] });
+		authModule.setUser({ permissions: ["admin"] });
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have permission", () => {
-		AuthModule.setUser({ permissions: [] });
+		authModule.setUser({ permissions: [] });
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view true-slot when permission is empty or undefined", () => {
 		checkCorrectView(undefined, ["user"], true);
 	});
 	it("defaults to false when user has no permissions", () => {
-		AuthModule.setUser({ permissions: [] });
+		authModule.setUser({ permissions: [] });
 		checkCorrectView("ADMIN", [], false);
 	});
 });

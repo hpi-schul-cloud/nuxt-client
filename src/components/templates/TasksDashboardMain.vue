@@ -71,8 +71,7 @@
 </template>
 
 <script>
-import FinishedTaskModule from "@/store/finished-tasks";
-import TaskModule from "@/store/tasks";
+import { taskModule, finishedTaskModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
@@ -104,18 +103,18 @@ export default {
 		};
 	},
 	computed: {
-		hasTasks: () => TaskModule.hasTasks,
-		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
-		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
+		hasTasks: () => taskModule.hasTasks,
+		openTasksForStudentIsEmpty: () => taskModule.openTasksForStudentIsEmpty,
+		openTasksForTeacherIsEmpty: () => taskModule.openTasksForTeacherIsEmpty,
 		completedTasksForStudentIsEmpty: () =>
-			TaskModule.completedTasksForStudentIsEmpty,
-		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
-		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
-		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
-		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
-		courseFilters: () => TaskModule.getCourseFilters,
-		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
-		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
+			taskModule.completedTasksForStudentIsEmpty,
+		draftsForTeacherIsEmpty: () => taskModule.draftsForTeacherIsEmpty,
+		tasksCountStudent: () => taskModule.getTasksCountPerCourseStudent,
+		tasksCountTeacher: () => taskModule.getTasksCountPerCourseForTeacher,
+		isSubstituteFilterEnabled: () => taskModule.isSubstituteFilterEnabled,
+		courseFilters: () => taskModule.getCourseFilters,
+		selectedCourseFilters: () => taskModule.getSelectedCourseFilters,
+		finishedTasksIsInitialized: () => finishedTaskModule.getIsInitialized,
 		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
@@ -247,10 +246,10 @@ export default {
 	},
 	methods: {
 		setCourseFilters(courseNames) {
-			TaskModule.setCourseFilters(courseNames);
+			taskModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
-			TaskModule.setSubstituteFilter(enabled);
+			taskModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === 0) {
@@ -268,7 +267,7 @@ export default {
 			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.finishedTasksIsInitialized) {
-				FinishedTaskModule.fetchFinishedTasks();
+				finishedTaskModule.fetchFinishedTasks();
 			}
 		},
 	},

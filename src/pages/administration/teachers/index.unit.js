@@ -1,8 +1,6 @@
 import { default as TeacherPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
-import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 
 const mockData = [
@@ -57,8 +55,8 @@ describe("teachers/index", () => {
 		jest.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
 
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		AuthModule.setUser({
+		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
+		authModule.setUser({
 			roles: [
 				{
 					name: "administrator",
@@ -342,7 +340,7 @@ describe("teachers/index", () => {
 	});
 
 	it("should not display the edit button if school is external", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -394,7 +392,7 @@ describe("teachers/index", () => {
 	});
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -408,7 +406,7 @@ describe("teachers/index", () => {
 	});
 
 	it("should render the adminTableLegend component when school is external", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -483,7 +481,7 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
-		EnvConfigModule.setEnvs({
+		envConfigModule.setEnvs({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
@@ -493,7 +491,7 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
 		);
 		expect(
@@ -502,7 +500,7 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
-		EnvConfigModule.setEnvs({
+		envConfigModule.setEnvs({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
@@ -512,7 +510,7 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
 		);
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);

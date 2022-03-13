@@ -1,16 +1,8 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
-import ContentModule from "@/store/content";
-import FilePathsModule from "@/store/filePaths";
 import { BusinessError, Status } from "./types/commons";
 import { Envs } from "./types/env-config";
+import { contentModule, filePathsModule } from "@/store";
 
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -34,8 +26,6 @@ const retryLimit: number = 10;
 @Module({
 	name: "env-config",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class EnvConfig extends VuexModule {
@@ -144,8 +134,8 @@ export class EnvConfig extends VuexModule {
 			});
 			this.setEnvs({ ...configsFromEnvironmentVars, ...envs });
 
-			ContentModule.init();
-			FilePathsModule.init();
+			contentModule.init();
+			filePathsModule.init();
 			this.setStatus("completed");
 		} catch (error: any) {
 			this.setBusinessError(error);
@@ -160,5 +150,3 @@ export class EnvConfig extends VuexModule {
 		}
 	}
 }
-
-export default getModule(EnvConfig);

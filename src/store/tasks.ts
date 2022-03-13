@@ -1,13 +1,6 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import FinishedTasksModule from "@/store/finished-tasks";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { envConfigModule, finishedTaskModule } from "@/store";
 import { TaskFilter } from "./task.filter";
-import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Status } from "./types/commons";
@@ -24,8 +17,6 @@ import {
 @Module({
 	name: "tasks",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class TaskModule extends VuexModule {
@@ -80,8 +71,8 @@ export class TaskModule extends VuexModule {
 			await this.taskApi.taskControllerFinish(taskId);
 
 			await this.fetchAllTasks();
-			if (FinishedTasksModule.isInitialized) {
-				await FinishedTasksModule.refetchTasks();
+			if (finishedTaskModule.isInitialized) {
+				await finishedTaskModule.refetchTasks();
 			}
 
 			this.setStatus("completed");
@@ -99,8 +90,8 @@ export class TaskModule extends VuexModule {
 			await this.taskApi.taskControllerDelete(taskId);
 
 			await this.fetchAllTasks();
-			if (FinishedTasksModule.isInitialized) {
-				await FinishedTasksModule.refetchTasks();
+			if (finishedTaskModule.isInitialized) {
+				await finishedTaskModule.refetchTasks();
 			}
 
 			this.setStatus("completed");
@@ -337,12 +328,10 @@ export class TaskModule extends VuexModule {
 		if (!this._taskApi) {
 			this._taskApi = TaskApiFactory(
 				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				"/v3", //`${envConfigModule.getApiUrl}/v3`,
 				$axios
 			);
 		}
 		return this._taskApi;
 	}
 }
-
-export default getModule(TaskModule);

@@ -1,10 +1,10 @@
 import Vue from "vue";
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export const mixin = {
 	computed: {
 		$user() {
-			return AuthModule.getUser;
+			return authModule.getUser;
 		},
 	},
 };

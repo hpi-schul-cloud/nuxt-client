@@ -42,7 +42,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import RoomsModule from "@store/rooms";
+import { roomsModule } from "@store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
 
@@ -94,7 +94,7 @@ export default Vue.extend({
 			}
 		},
 		onUpdateRoomName() {
-			RoomsModule.update(this.groupData);
+			roomsModule.update(this.groupData);
 			this.roomNameEditMode = false;
 		},
 		/*

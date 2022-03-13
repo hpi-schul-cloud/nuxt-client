@@ -88,8 +88,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import FinishedTaskModule from "@/store/finished-tasks";
-import TaskModule from "@/store/tasks";
+import { taskModule, finishedTaskModule } from "@/store";
 
 export default {
 	components: {},
@@ -141,13 +140,13 @@ export default {
 		},
 		handleFinish() {
 			if (this.taskIsFinished) {
-				FinishedTaskModule.restoreTask(this.taskId);
+				finishedTaskModule.restoreTask(this.taskId);
 			} else {
-				TaskModule.finishTask(this.taskId);
+				taskModule.finishTask(this.taskId);
 			}
 		},
 		handleDelete() {
-			TaskModule.deleteTask(this.taskId);
+			taskModule.deleteTask(this.taskId);
 		},
 	},
 };

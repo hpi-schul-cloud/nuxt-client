@@ -202,8 +202,7 @@
 <script>
 import { mdiClose } from "@mdi/js";
 
-import SchoolsModule from "@/store/schools";
-import ImportUserModule from "@store/import-users";
+import { importUsersModule, schoolsModule } from "@/store";
 
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import ImportUsers from "@components/organisms/administration/importUsers";
@@ -240,10 +239,10 @@ export default {
 			return !this.school.inMaintenance;
 		},
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		businessError() {
-			const error = ImportUserModule.getBusinessError;
+			const error = importUsersModule.getBusinessError;
 			if (error && error.message && error.statusCode) {
 				return {
 					message: error.message,
@@ -253,13 +252,13 @@ export default {
 			return false;
 		},
 		totalMatched() {
-			return ImportUserModule.getTotalMatched;
+			return importUsersModule.getTotalMatched;
 		},
 		totalUnmatched() {
-			return ImportUserModule.getTotalUnmatched;
+			return importUsersModule.getTotalUnmatched;
 		},
 		totalImportUsers() {
-			return ImportUserModule.getTotal;
+			return importUsersModule.getTotal;
 		},
 	},
 	watch: {
@@ -302,17 +301,17 @@ export default {
 			if (!this.canPerformMigration) {
 				return;
 			}
-			await ImportUserModule.fetchTotal();
-			await ImportUserModule.fetchTotalMatched();
-			await ImportUserModule.fetchTotalUnmatched();
+			await importUsersModule.fetchTotal();
+			await importUsersModule.fetchTotalMatched();
+			await importUsersModule.fetchTotalUnmatched();
 		},
 		async performMigration() {
 			this.isLoading = true;
 			// TODO
-			await ImportUserModule.performMigration();
-			if (!ImportUserModule.getBusinessError) {
-				SchoolsModule.setSchool({
-					...SchoolsModule.getSchool,
+			await importUsersModule.performMigration();
+			if (!importUsersModule.getBusinessError) {
+				schoolsModule.setSchool({
+					...schoolsModule.getSchool,
 					inUserMigration: false,
 				});
 				this.school.inUserMigration = false;
@@ -325,12 +324,12 @@ export default {
 				return;
 			}
 			this.isLoading = true;
-			await SchoolsModule.endMaintenance();
-			if (SchoolsModule.getError) {
+			await schoolsModule.endMaintenance();
+			if (schoolsModule.getError) {
 				// TODO better error handling
-				ImportUserModule.setBusinessError({
+				importUsersModule.setBusinessError({
 					statusCode: "500",
-					message: SchoolsModule.getError.message,
+					message: schoolsModule.getError.message,
 				});
 			} else {
 				this.school.inMaintenance = false;
@@ -339,7 +338,7 @@ export default {
 			this.isLoading = false;
 		},
 		resetBusinessError() {
-			ImportUserModule.setBusinessError(null);
+			importUsersModule.setBusinessError(null);
 		},
 		scrollToTop() {
 			window.scrollTo(0, 0);

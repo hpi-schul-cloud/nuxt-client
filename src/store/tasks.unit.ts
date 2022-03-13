@@ -3,7 +3,6 @@ import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
-import { FinishedTaskModule } from "./finished-tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;

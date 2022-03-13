@@ -1,22 +1,13 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
-import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schools";
+import { envConfigModule } from "@/store";
+import { schoolsModule } from "@/store";
 import { School } from "./types/schools";
 import { User } from "@/store/types/auth";
 
 @Module({
 	name: "auth",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class Auth extends VuexModule {
@@ -104,17 +95,17 @@ export class Auth extends VuexModule {
 		if (this.locale) {
 			return this.locale;
 		}
-		if (SchoolsModule.getSchool && SchoolsModule.getSchool.language) {
-			return SchoolsModule.getSchool.language;
+		if (schoolsModule.getSchool && schoolsModule.getSchool.language) {
+			return schoolsModule.getSchool.language;
 		}
-		if (EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
-			return EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
+		if (envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
+			return envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
 		return "de";
 	}
 
 	get getSchool(): School {
-		return SchoolsModule.getSchool;
+		return schoolsModule.getSchool;
 	}
 
 	get getUser(): User | null {
@@ -159,17 +150,17 @@ export class Auth extends VuexModule {
 		);
 		this.setUser(user);
 		if (user.schoolId) {
-			SchoolsModule.fetchSchool();
+			schoolsModule.fetchSchool();
 		}
 		if (user.language) {
 			this.setLocale(user.language);
 		}
 
 		//TODO Remove once added to User permissions SC-2401
-		if (EnvConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
+		if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
 			this.addUserPermmission("ADDONS_ENABLED");
 		}
-		if (EnvConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
+		if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
 			this.addUserPermmission("TEAMS_ENABLED");
 		}
 	}
@@ -198,5 +189,3 @@ export class Auth extends VuexModule {
 		this.clearAuthData();
 	}
 }
-
-export default getModule(Auth);

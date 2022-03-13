@@ -1,6 +1,6 @@
 import dashboard from "./index";
 import Vuetify from "vuetify";
-import TaskModule from "@/store/tasks";
+import { taskModule } from "@/store";
 
 describe("Tasks/index", () => {
 	let vuetify;
@@ -26,7 +26,7 @@ describe("Tasks/index", () => {
 	});
 
 	it("Should should trigger fetschAllTasks", async () => {
-		const spy = jest.spyOn(TaskModule, "fetchAllTasks");
+		const spy = jest.spyOn(taskModule, "fetchAllTasks");
 
 		shallowMount(dashboard, {
 			...createComponentMocks({

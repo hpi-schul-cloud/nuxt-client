@@ -1,6 +1,6 @@
 import Messenger from "./MatrixMessenger";
 import { extractRoomTypeAndIdFromPath } from "./MatrixMessenger";
-import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
 
 const session = {
 	homeserverUrl: "https://matrix.domain",
@@ -31,7 +31,7 @@ describe("MatrixMessenger.unit", () => {
 	beforeEach(() => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
-		SchoolsModule.setSchool({ features: ["messenger"] });
+		schoolsModule.setSchool({ features: ["messenger"] });
 	});
 	afterEach(() => {
 		window.localStorage.clear();
@@ -81,7 +81,7 @@ describe("MatrixMessenger.unit", () => {
 	});
 
 	it("do not initialize if feature is not enabled for school", async () => {
-		SchoolsModule.setSchool({ features: [] });
+		schoolsModule.setSchool({ features: [] });
 
 		const mockStoresTestSpecific = { ...mockStores };
 
@@ -98,7 +98,7 @@ describe("MatrixMessenger.unit", () => {
 	});
 
 	it("init messenger from localStorage", async () => {
-		SchoolsModule.setSchool({ features: [] });
+		schoolsModule.setSchool({ features: [] });
 
 		window.localStorage.setItem("mx_hs_url", "domain");
 		window.localStorage.setItem("mx_access_token", "token");
@@ -142,7 +142,7 @@ describe("MatrixMessenger.unit", () => {
 	it("init messenger from api", async () => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
-		SchoolsModule.setSchool({ features: ["messenger"] });
+		schoolsModule.setSchool({ features: ["messenger"] });
 
 		mount(Messenger, {
 			...createComponentMocks({

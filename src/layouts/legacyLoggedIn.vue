@@ -36,8 +36,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import Schools from "@/store/schools";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -48,7 +47,6 @@ import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
-import EnvConfigModule from "@store/env-config";
 
 export default {
 	components: {
@@ -117,20 +115,20 @@ export default {
 	},
 	computed: {
 		user() {
-			return AuthModule.getUser;
+			return authModule.getUser;
 		},
 		school() {
-			return Schools.getSchool;
+			return schoolsModule.getSchool;
 		},
 		authenticated() {
-			return AuthModule.getAuthenticated;
+			return authModule.getAuthenticated;
 		},
 		topBarActions() {
 			return [...this.topbarBaseActions];
 		},
 		sidebarItems() {
 			const showLegacyCourse =
-				EnvConfigModule.getEnv.LEGACY_COURSE_OVERVIEW_ENABLED || false;
+				envConfigModule.getEnv.LEGACY_COURSE_OVERVIEW_ENABLED || false;
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
 				// Check permissions for all children
 				if ((item.children || []).length >= 1) {
@@ -204,7 +202,7 @@ export default {
 			if (event === "logout") {
 				// TODO temporary workaround until $cookies are accessible from TS modules
 				this.$cookies.remove("jwt");
-				AuthModule.logout();
+				authModule.logout();
 				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {

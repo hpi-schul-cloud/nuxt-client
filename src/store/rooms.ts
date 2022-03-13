@@ -5,7 +5,6 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import {
 	DashboardApiFactory,
@@ -28,8 +27,6 @@ import { BusinessError } from "./types/commons";
 @Module({
 	name: "rooms",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class Rooms extends VuexModule {
@@ -350,5 +347,3 @@ export class Rooms extends VuexModule {
 		}
 	}
 }
-
-export default getModule(Rooms);

@@ -40,7 +40,7 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import RoomModule from "@store/room";
+import { roomModule } from "@store";
 
 export default {
 	components: {
@@ -68,10 +68,10 @@ export default {
 	},
 	methods: {
 		async postDraftElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: true });
+			await roomModule.publishCard({ elementId, visibility: true });
 		},
 		async revertPublishedElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: false });
+			await roomModule.publishCard({ elementId, visibility: false });
 		},
 	},
 };

@@ -18,7 +18,7 @@
 
 <script>
 import FormNews from "@components/organisms/FormNews";
-import NewsModule from "@/store/news";
+import { newsModule } from "@/store";
 
 export default {
 	components: {
@@ -28,9 +28,9 @@ export default {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
 	computed: {
-		news: () => NewsModule.getNews,
-		status: () => NewsModule.getStatus,
-		createdNews: () => NewsModule.getCreatedNews,
+		news: () => newsModule.getNews,
+		status: () => newsModule.getStatus,
+		createdNews: () => newsModule.getCreatedNews,
 	},
 	methods: {
 		getNewsTarget(query, schoolId) {
@@ -48,7 +48,7 @@ export default {
 					this.$route.query,
 					this.$user.schoolId
 				);
-				await NewsModule.createNews({
+				await newsModule.createNews({
 					title: news.title,
 					content: news.content,
 					displayAt: news.displayAt,

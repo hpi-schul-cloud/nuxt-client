@@ -1,6 +1,5 @@
 import { default as RoomsPage } from "./rooms-overview.vue";
-import RoomsModule from "@/store/rooms";
-import AuthModule from "@/store/auth";
+import { authModule, roomsModule } from "@/store";
 import flushPromises from "flush-promises";
 
 const mockRoomStoreData = [
@@ -68,13 +67,13 @@ const mockAuthStoreData = {
 
 const spyMocks = {
 	storeRoomAlignMock: jest
-		.spyOn(RoomsModule, "align")
+		.spyOn(roomsModule, "align")
 		.mockImplementation(async () => {}),
 	storeModuleFetchMock: jest
-		.spyOn(RoomsModule, "fetch")
+		.spyOn(roomsModule, "fetch")
 		.mockImplementation(async () => {}),
 	storeModuleFetchAllMock: jest
-		.spyOn(RoomsModule, "fetchAllElements")
+		.spyOn(roomsModule, "fetchAllElements")
 		.mockImplementation(async () => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
@@ -107,8 +106,8 @@ describe("RoomPage", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		RoomsModule.setRoomData(mockRoomStoreData);
-		AuthModule.setUser(mockAuthStoreData);
+		roomsModule.setRoomData(mockRoomStoreData);
+		authModule.setUser(mockAuthStoreData);
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -483,7 +482,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		AuthModule.setUser({
+		authModule.setUser({
 			...mockAuthStoreData,
 			permissions: ["aksjdhf", "poikln"],
 		});
@@ -530,7 +529,7 @@ describe("RoomPage", () => {
 			},
 		];
 
-		RoomsModule.setRoomData(roomData);
+		roomsModule.setRoomData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
 		await wrapper.vm.$nextTick();

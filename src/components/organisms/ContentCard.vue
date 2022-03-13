@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
@@ -142,9 +142,9 @@ export default {
 		},
 		linkHandler() {
 			if (!this.isChecked) {
-				ContentModule.selectElement(this.resource.ref.id);
+				contentModule.selectElement(this.resource.ref.id);
 			} else {
-				ContentModule.unselectElement(this.resource.ref.id);
+				contentModule.unselectElement(this.resource.ref.id);
 			}
 		},
 	},

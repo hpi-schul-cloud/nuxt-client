@@ -1,6 +1,5 @@
 import TheFooter from "./TheFooter";
-import FilePathsModule from "@/store/filePaths";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule, filePathsModule } from "@/store";
 
 describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
@@ -10,7 +9,7 @@ describe("@components/legacy/TheFooter", () => {
 	};
 
 	it("Terms of use link is set correctly", () => {
-		FilePathsModule.setSpecificFiles("https://dummy-url.org/");
+		filePathsModule.setSpecificFiles("https://dummy-url.org/");
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
 				mocks: {
@@ -24,7 +23,7 @@ describe("@components/legacy/TheFooter", () => {
 		);
 	});
 	it("Env-Variable sets the status page link correctly", () => {
-		EnvConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
+		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
 				mocks: {

@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/rooms";
+import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomModal from "./RoomModal.vue";
@@ -79,7 +79,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should change name on blur", async () => {
-		const storeRoomUpdateMock = jest.spyOn(RoomsModule, "update");
+		const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
@@ -104,7 +104,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should change name on enter", async () => {
-		const storeRoomUpdateMock = jest.spyOn(RoomsModule, "update");
+		const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },

@@ -1,6 +1,5 @@
 import GeneralSettings from "./GeneralSettings";
-import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schools";
+import { envConfigModule, schoolsModule } from "@/store";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -110,15 +109,15 @@ const mockData = {
 
 describe("GeneralSettings", () => {
 	beforeEach(() => {
-		SchoolsModule.setSchool(school);
-		SchoolsModule.setFederalState(federalState);
+		schoolsModule.setSchool(school);
+		schoolsModule.setFederalState(federalState);
 	});
 
 	it(...isValidComponent(GeneralSettings));
 
 	describe("env-config", () => {
 		it("should display select element with available languages", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				I18N__AVAILABLE_LANGUAGES: "de,en,es",
 			});
 			const wrapper = mount(GeneralSettings, {
@@ -256,7 +255,7 @@ describe("GeneralSettings", () => {
 
 	describe("events", () => {
 		it("update button should trigger save method", async () => {
-			const updateSpy = jest.spyOn(SchoolsModule, "update");
+			const updateSpy = jest.spyOn(schoolsModule, "update");
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -272,7 +271,7 @@ describe("GeneralSettings", () => {
 		});
 
 		it("update works without county", async () => {
-			const updateSpy = jest.spyOn(SchoolsModule, "update");
+			const updateSpy = jest.spyOn(schoolsModule, "update");
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -284,7 +283,7 @@ describe("GeneralSettings", () => {
 				localSchool: { ...mockData.localSchool, county: null },
 			};
 			await wrapper.setData(localMockData);
-			SchoolsModule.setSchool({ ...school, county: null });
+			schoolsModule.setSchool({ ...school, county: null });
 
 			const buttonElement = wrapper.find(searchStrings.saveButton);
 			buttonElement.trigger("click");

@@ -1,5 +1,5 @@
 import { FilePaths } from "./filePaths";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 
 const specificFiles = {
 	privacyExemplary:
@@ -96,7 +96,7 @@ describe("filePaths module", () => {
 		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
 			const filePathsModule = new FilePaths({});
 			const mockURL = "http://mock.url/";
-			EnvConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
+			envConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
 			await filePathsModule.init();
 			expect(filePathsModule.getDocumentBaseDir).toBe(
 				`${mockURL}${requiredVars.SC_THEME}/`

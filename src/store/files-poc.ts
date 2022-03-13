@@ -1,13 +1,6 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
-import AuthModule from "./auth";
+import { authModule } from "@/store";
 import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
 import {
@@ -19,8 +12,6 @@ import {
 @Module({
 	name: "files-poc",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class FilesPOCModule extends VuexModule {
@@ -40,7 +31,7 @@ export class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			const schoolId = AuthModule.getUser?.schoolId as string;
+			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await this.fileStorageApi.filesStorageControllerList(
 				schoolId,
 				schoolId,
@@ -62,7 +53,7 @@ export class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			const schoolId = AuthModule.getUser?.schoolId as string;
+			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await this.fileStorageApi.filesStorageControllerUpload(
 				schoolId,
 				schoolId,
@@ -148,5 +139,3 @@ export class FilesPOCModule extends VuexModule {
 		return this._fileStorageApi;
 	}
 }
-
-export default getModule(FilesPOCModule);

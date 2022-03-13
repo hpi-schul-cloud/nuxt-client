@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import FilesPOCModule from "@/store/files-poc";
+import { filesPOCModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 export default {
@@ -37,8 +37,8 @@ export default {
 		};
 	},
 	computed: {
-		loadingState: () => FilesPOCModule.getStatus,
-		files: () => FilesPOCModule.getFiles,
+		loadingState: () => filesPOCModule.getStatus,
+		files: () => filesPOCModule.getFiles,
 		isLoading() {
 			return this.loadingState === "pending";
 		},
@@ -51,17 +51,17 @@ export default {
 		},
 	},
 	mounted() {
-		FilesPOCModule.fetchFiles();
+		filesPOCModule.fetchFiles();
 	},
 	methods: {
 		upload() {
 			const { file } = this;
 			if (file) {
-				FilesPOCModule.upload(file);
+				filesPOCModule.upload(file);
 			}
 		},
 		download(file) {
-			FilesPOCModule.download(file);
+			filesPOCModule.download(file);
 		},
 	},
 	head() {

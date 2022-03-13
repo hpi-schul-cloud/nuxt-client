@@ -1,4 +1,4 @@
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export default {
 	props: {
@@ -9,7 +9,7 @@ export default {
 	},
 	computed: {
 		userPermissions() {
-			return AuthModule.getUserPermissions;
+			return authModule.getUserPermissions;
 		},
 		$_hasPermission() {
 			return this.$_userHasPermission(this.permission);

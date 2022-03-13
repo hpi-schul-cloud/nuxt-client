@@ -44,8 +44,7 @@
 </template>
 
 <script>
-import FinishedTaskModule from "@/store/finished-tasks";
-import TaskModule from "@/store/tasks";
+import { taskModule, finishedTaskModule } from "@/store";
 import TaskItemStudent from "@components/molecules/TaskItemStudent";
 import TaskItemTeacher from "@components/molecules/TaskItemTeacher";
 
@@ -79,9 +78,9 @@ export default {
 		},
 	},
 	computed: {
-		currentTaskStatus: () => TaskModule.getStatus,
-		finishedTasksStatus: () => FinishedTaskModule.getStatus,
-		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
+		currentTaskStatus: () => taskModule.getStatus,
+		finishedTasksStatus: () => finishedTaskModule.getStatus,
+		finishedTasksIsInitialized: () => finishedTaskModule.getIsInitialized,
 		status: function () {
 			return this.type === "current"
 				? this.currentTaskStatus
@@ -108,7 +107,7 @@ export default {
 	methods: {
 		loadMore(entries) {
 			if (entries[0].isIntersecting && this.status !== "pending") {
-				FinishedTaskModule.fetchFinishedTasks();
+				finishedTaskModule.fetchFinishedTasks();
 			}
 		},
 		isLastTaskItem: function (index) {

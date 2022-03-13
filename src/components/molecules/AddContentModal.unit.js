@@ -1,6 +1,6 @@
 import AddContentModal from "@components/molecules/AddContentModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 
 const testProps = {
 	showCopyModal: true,
@@ -153,7 +153,7 @@ describe("@components/molecules/AddContentModal", () => {
 
 	it("create lessonsOptions", async () => {
 		const wrapper = getWrapper(testProps);
-		ContentModule.setLessons(lessons);
+		contentModule.setLessons(lessons);
 		const lo = wrapper.vm.lessonsOptions;
 		expect(lo).toHaveLength(1);
 		expect(lo[0]._id).toBe(lessonsMock[0]._id);

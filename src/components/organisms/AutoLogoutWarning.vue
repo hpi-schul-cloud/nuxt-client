@@ -24,7 +24,7 @@
 
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
-import AutoLogoutModule from "@/store/autoLogout";
+import { autoLogoutModule } from "@/store";
 
 const toast = {
 	error401: -1,
@@ -62,16 +62,16 @@ export default {
 			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
 		},
 		active() {
-			return AutoLogoutModule.getActive;
+			return autoLogoutModule.getActive;
 		},
 		error() {
-			return AutoLogoutModule.getError;
+			return autoLogoutModule.getError;
 		},
 		remainingTimeInSeconds() {
-			return AutoLogoutModule.getRemainingTimeInSeconds;
+			return autoLogoutModule.getRemainingTimeInSeconds;
 		},
 		toastValue() {
-			return AutoLogoutModule.getToastValue;
+			return autoLogoutModule.getToastValue;
 		},
 	},
 	watch: {
@@ -80,11 +80,11 @@ export default {
 		},
 	},
 	created(ctx) {
-		AutoLogoutModule.init();
+		autoLogoutModule.init();
 	},
 	methods: {
 		extendSession() {
-			AutoLogoutModule.extendSessionAction();
+			autoLogoutModule.extendSessionAction();
 		},
 		showToast(state) {
 			switch (state) {

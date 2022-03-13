@@ -5,7 +5,6 @@ import {
 	Action,
 	getModule,
 } from "vuex-module-decorators";
-import { rootStore } from "./index";
 import { $axios } from "@utils/api";
 import {
 	UserImportApiFactory,
@@ -27,8 +26,6 @@ export enum MatchedBy {
 @Module({
 	name: "importUsers",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
 export class ImportUsersModule extends VuexModule {
@@ -391,5 +388,3 @@ export class ImportUsersModule extends VuexModule {
 		return this._importUserApi;
 	}
 }
-
-export default getModule(ImportUsersModule);

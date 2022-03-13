@@ -1,7 +1,7 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import TaskModule from "@/store/tasks";
+import { taskModule } from "@/store";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
@@ -69,7 +69,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 	it("Should render empty state", () => {
 		const spy = jest
-			.spyOn(TaskModule, "draftsForTeacherIsEmpty", "get")
+			.spyOn(taskModule, "draftsForTeacherIsEmpty", "get")
 			.mockReturnValue(true);
 
 		const wrapper = mount(TasksDashboardTeacher, {

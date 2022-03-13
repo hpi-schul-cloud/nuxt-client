@@ -1,5 +1,5 @@
 import PrivacySettings from "./PrivacySettings";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 
 const generateProps = () => ({
 	permissions: {
@@ -36,7 +36,7 @@ describe("PrivacySettings", () => {
 
 	describe("env config", () => {
 		it("should display permission switches", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
@@ -53,7 +53,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(1);
 		});
 		it("should hide permission switches", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: false,
@@ -70,7 +70,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
 		});
 		it("should display non matrix features", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
@@ -86,7 +86,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(1);
 		});
 		it("should hide non matrix features", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: false,
 				ROCKETCHAT_SERVICE_ENABLED: false,
 			});
@@ -102,7 +102,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(0);
 		});
 		it("should display matrix features", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -125,7 +125,7 @@ describe("PrivacySettings", () => {
 			).toHaveLength(1);
 		});
 		it("should hide matrix switches if feature is disabled", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: false,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -149,7 +149,7 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should hide matrix switches if school settings are disabled", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: false,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -172,7 +172,7 @@ describe("PrivacySettings", () => {
 			).toHaveLength(0);
 		});
 		it("should hide school room if feature is disabled", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -195,7 +195,7 @@ describe("PrivacySettings", () => {
 			).toHaveLength(1);
 		});
 		it("should hide student room creation if feature is disabled", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: false,
@@ -220,7 +220,7 @@ describe("PrivacySettings", () => {
 	});
 	describe("default values", () => {
 		it("should be correct for permissions (1)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
@@ -252,7 +252,7 @@ describe("PrivacySettings", () => {
 			expect(learnStoreSwitch.element.checked).toBeFalse();
 		});
 		it("should be correct for permissions (2)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
@@ -285,7 +285,7 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should be correct for matrix (1)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -321,7 +321,7 @@ describe("PrivacySettings", () => {
 			expect(messengerStudentRoomCreateSwitch.element.checked).toBeTrue();
 		});
 		it("should be correct for matrix (2)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
@@ -357,7 +357,7 @@ describe("PrivacySettings", () => {
 			expect(messengerStudentRoomCreateSwitch.element.checked).toBeFalse();
 		});
 		it("should be correct for non matrix features (1)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
@@ -387,7 +387,7 @@ describe("PrivacySettings", () => {
 			expect(videoconferenceSwitch.element.checked).toBeTrue();
 		});
 		it("should be correct for non matrix features (2)", () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
@@ -420,7 +420,7 @@ describe("PrivacySettings", () => {
 
 	describe("events", () => {
 		it("should emit on value change for learnstore switch", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
@@ -456,7 +456,7 @@ describe("PrivacySettings", () => {
 			);
 		});
 		it("should emit on value change for student visibility switch", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -492,7 +492,7 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for rocketChat switch", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -524,7 +524,7 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for videoConference switch", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -556,7 +556,7 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for matrix", async () => {
-			EnvConfigModule.setEnvs({
+			envConfigModule.setEnvs({
 				FEATURE_MATRIX_MESSENGER_ENABLED: true,
 				MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,

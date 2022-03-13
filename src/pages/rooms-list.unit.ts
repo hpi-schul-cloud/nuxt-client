@@ -1,4 +1,4 @@
-import RoomsModule from "@store/rooms";
+import { roomsModule } from "@store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomList from "./rooms-list.vue";
@@ -58,7 +58,7 @@ describe("@pages/rooms-list.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		RoomsModule.setAllElements(mockData as any);
+		roomsModule.setAllElements(mockData as any);
 	});
 
 	it("should fetch data", async () => {
