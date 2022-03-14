@@ -98,11 +98,12 @@
 										"
 									></v-row>
 									<v-row>
-										<div v-if="!school.inUserMigration || totalImportUsers === 0"
+										<div
+											v-if="!school.inUserMigration || totalImportUsers === 0"
 											class="text-info"
 											type="info"
 										>
-											{{ $t('pages.administration.migration.tutorialWait') }}
+											{{ $t("pages.administration.migration.tutorialWait") }}
 										</div>
 									</v-row>
 								</v-card-text>
@@ -132,7 +133,9 @@
 											color="primary"
 											@click="setSchoolInUserMigration"
 										>
-											{{ $t("pages.administration.migration.startUserMigration") }}
+											{{
+												$t("pages.administration.migration.startUserMigration")
+											}}
 										</v-btn>
 									</v-row>
 								</v-card-actions>
