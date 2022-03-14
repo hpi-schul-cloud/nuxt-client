@@ -32,7 +32,7 @@
 					)
 				}}</v-btn
 			>
-			<v-list-group v-if="schoolPolicies.length > 1" :ripple="false" class="">
+			<v-list-group v-if="schoolPolicies.length > 1" class="">
 				<template v-slot:activator>
 					<v-list-item-title>{{
 						$t("pages.administration.school.index.schoolPolicies.olderPolicies")
@@ -43,7 +43,6 @@
 						v-for="policy of schoolPolicies.slice(1)"
 						:key="policy.consentDataId"
 						class="px-0"
-						:ripple="false"
 					>
 						<school-policy-expansion-panel
 							:policy="policy"

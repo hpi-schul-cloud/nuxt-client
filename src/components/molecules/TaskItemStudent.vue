@@ -6,7 +6,6 @@
 			:href="href"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
-			:ripple="false"
 			:aria-label="`${$t('common.words.task')} ${task.name}`"
 			role="article"
 			@focus="handleFocus(true)"
