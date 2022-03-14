@@ -3,7 +3,7 @@ import RoomDashboard from "./RoomDashboard.vue";
 
 declare var createComponentMocks: Function;
 
-let mockData = {
+const mockData = {
 	roomId: "123",
 	title: "Sample Course",
 	displayColor: "black",
