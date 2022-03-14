@@ -98,14 +98,12 @@
 										"
 									></v-row>
 									<v-row>
-										<alert
-											v-if="school.inUserMigration || totalImportUsers === 0"
+										<div v-if="!school.inUserMigration || totalImportUsers === 0"
+											class="text-info"
 											type="info"
 										>
-											Please note, once the school migration process starts, it
-											can take up to 1 hour to fetch the data. After this, you
-											will be able to continue to the next step.
-										</alert>
+											{{ $t('pages.administration.migration.tutorialWait') }}
+										</div>
 									</v-row>
 								</v-card-text>
 								<v-card-actions>
@@ -125,7 +123,7 @@
 											{{
 												totalImportUsers > 0
 													? $t("pages.administration.migration.next")
-													: "waiting for data sync..."
+													: $t("pages.administration.migration.waiting")
 											}}
 										</v-btn>
 										<v-btn
@@ -134,7 +132,7 @@
 											color="primary"
 											@click="setSchoolInUserMigration"
 										>
-											Start user migration
+											{{ $t("pages.administration.migration.startUserMigration") }}
 										</v-btn>
 									</v-row>
 								</v-card-actions>
