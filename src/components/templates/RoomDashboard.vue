@@ -1,7 +1,6 @@
 <template>
 	<div class="rooms-container">
-		<div v-if="role === undefined">No content available</div>
-		<div v-else>
+		<div v-if="role === Roles.Teacher">
 			<draggable
 				v-model="roomData.elements"
 				:animation="400"
@@ -72,6 +71,66 @@
 				</div>
 			</draggable>
 		</div>
+		<div v-if="role === Roles.Student">
+			<div v-for="(item, index) of roomData.elements" :key="index">
+				<room-task-card
+					v-if="item.type === cardTypes.Task"
+					:ref="`item_${index}`"
+					:role="role"
+					:task="item.content"
+					:aria-label="
+						$t('pages.room.taskCard.aria', {
+							itemType: $t('pages.room.taskCard.label.task'),
+							itemName: item.content.name,
+						})
+					"
+					:key-drag="isDragging"
+					class="task-card"
+					@post-task="postDraftElement(item.content.id)"
+					@revert-task="revertPublishedElement(item.content.id)"
+					@move-element="moveByKeyboard"
+					@on-drag="isDragging = !isDragging"
+					@tab-pressed="isDragging = false"
+				/>
+				<room-lesson-card
+					v-if="item.type === cardTypes.Lesson"
+					:ref="`item_${index}`"
+					:role="role"
+					:lesson="item.content"
+					:room="lessonData"
+					:aria-label="
+						$t('pages.room.lessonCard.aria', {
+							itemType: $t('pages.room.lessonCard.label.lesson'),
+							itemName: item.content.name,
+						})
+					"
+					:key-drag="isDragging"
+					class="lesson-card"
+					@post-lesson="postDraftElement(item.content.id)"
+					@revert-lesson="revertPublishedElement(item.content.id)"
+					@move-element="moveByKeyboard"
+					@on-drag="isDragging = !isDragging"
+					@tab-pressed="isDragging = false"
+				/>
+				<room-locked-card
+					v-if="item.type === cardTypes.Lockedtask"
+					:ref="`item_${index}`"
+					:task="item.content"
+					:room="lessonData"
+					:aria-label="
+						$t('pages.room.taskCard.aria', {
+							itemType: $t('pages.room.taskCard.label.task'),
+							itemName: item.content.name,
+						})
+					"
+					:key-drag="isDragging"
+					class="locked-card"
+					@move-element="moveByKeyboard"
+					@on-drag="isDragging = !isDragging"
+					@tab-pressed="isDragging = false"
+				/>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -81,7 +140,7 @@ import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 
 export default {
@@ -103,6 +162,7 @@ export default {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
+			Roles: ImportUserResponseRoleNamesEnum,
 		};
 	},
 	computed: {
@@ -116,7 +176,7 @@ export default {
 			return window.ontouchstart !== undefined;
 		},
 		sortable() {
-			return this.role === Roles.Teacher || false;
+			return this.role === this.Roles.Teacher || false;
 		},
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
@@ -143,6 +203,7 @@ export default {
 			await RoomModule.sortElements(idList);
 		},
 		moveByKeyboard: async function (e) {
+			if (this.role === this.Roles.Student) return;
 			const items = this.roomData.elements.map((item) => {
 				return item.content.id;
 			});
