@@ -6,7 +6,7 @@
 		@click:outside="$emit('dialog-closed', false)"
 		@keydown.esc="$emit('dialog-closed', false)"
 	>
-		<v-card :ripple="true">
+		<v-card :ripple="false">
 			<v-card-title>
 				<slot name="title"></slot>
 			</v-card-title>

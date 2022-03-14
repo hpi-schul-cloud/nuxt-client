@@ -53,7 +53,6 @@
 					$t("global.topbar.settings")
 				}}</a>
 				<button
-					v-ripple
 					class="logout-button"
 					data-testid="logout"
 					@click="sendEvent('logout')"

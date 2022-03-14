@@ -77,7 +77,6 @@
 				<v-stepper-items>
 					<v-stepper-content step="1" data-testid="migration_tutorial">
 						<v-card
-							:ripple="false"
 							elevation="2"
 							class="pa-5 mb-10"
 							color="grey lighten-5"
@@ -115,12 +114,7 @@
 						step="3"
 						data-testid="migration_summary"
 					>
-						<v-card
-							:ripple="false"
-							elevation="2"
-							class="pa-5 mb-10"
-							color="grey lighten-5"
-						>
+						<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 							<div v-if="!isLoading">
 								<div
 									v-html="
@@ -170,12 +164,7 @@
 
 					<v-stepper-content data-testid="migration_finish" step="4">
 						<div v-if="canFinishMaintenance">
-							<v-card
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey lighten-5"
-							>
+							<v-card elevation="2" class="pa-5 mb-10" color="grey lighten-5">
 								<div
 									v-html="$t('pages.administration.migration.endTransferPhase')"
 								></div>
@@ -199,7 +188,6 @@
 
 					<v-stepper-content step="5" data-testid="migration_waitForSync">
 						<v-card
-							:ripple="false"
 							elevation="2"
 							class="pa-5 mb-10"
 							color="grey lighten-5"
