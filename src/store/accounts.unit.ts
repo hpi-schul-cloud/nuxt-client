@@ -1,4 +1,4 @@
-import { AccountsModule } from "./accounts";
+import AccountsModule from "./accounts";
 
 const URL = "/v1/accounts/jwtTimer";
 let requestPath = "";

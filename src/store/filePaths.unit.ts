@@ -1,4 +1,4 @@
-import { FilePaths } from "./filePaths";
+import FilePathsModule from "./filePaths";
 import { envConfigModule } from "@/store";
 
 const specificFiles = {
@@ -74,7 +74,7 @@ const mockSetGloablFiles = (payload: string) =>
 describe("filePaths module", () => {
 	describe("actions", () => {
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const spyBaseDir = jest.fn();
 			const spySpecificFiles = jest.fn();
 			const spyGlobalFiles = jest.fn();
@@ -94,7 +94,7 @@ describe("filePaths module", () => {
 			expect(spyGlobalFiles).toHaveBeenCalled();
 		});
 		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
 			envConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
 			await filePathsModule.init();
@@ -105,7 +105,7 @@ describe("filePaths module", () => {
 	});
 	describe("mutations", () => {
 		it("setDocumentBasedir should correctly set the documentBaseDir state object ", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockPayload = {
 				baseDir: "https://mock.com/",
 				theme: "mock",
@@ -117,7 +117,7 @@ describe("filePaths module", () => {
 			);
 		});
 		it("setSpecificfiles should correctly set the specificFiles state object ", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockUrl = "https://mock.com/";
 			const mockSpecificFiles = mockSetSpecificFiles(mockUrl);
 
@@ -125,7 +125,7 @@ describe("filePaths module", () => {
 			expect(filePathsModule.getSpecificFiles).toStrictEqual(mockSpecificFiles);
 		});
 		it("setGlobalFiles should correctly set the globalFiles state object ", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockUrl = "https://mock.com/";
 			const mockGloablFiles = mockSetGloablFiles(mockUrl);
 
@@ -135,14 +135,14 @@ describe("filePaths module", () => {
 	});
 	describe("getters", () => {
 		it("getDocumentBaseDir correctly gets the documentBaseDir state object", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockBaseDir = "mockBaseDir";
 			filePathsModule.documentBaseDir = mockBaseDir;
 
 			expect(filePathsModule.getDocumentBaseDir).toBe(mockBaseDir);
 		});
 		it("getSpecificFiles correctly gets the documentBaseDir state object", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockSpecificFiles = {
 				privacyExemplary: "mockValue",
 				privacy: "mockValue",
@@ -156,7 +156,7 @@ describe("filePaths module", () => {
 			expect(filePathsModule.getSpecificFiles).toBe(mockSpecificFiles);
 		});
 		it("getGlobalFiles correctly gets the documentBaseDir state object", () => {
-			const filePathsModule = new FilePaths({});
+			const filePathsModule = new FilePathsModule({});
 			const mockGlobalFiles = {
 				BeschreibungDerSchulCloud: "mockValue",
 				TechnischerBericht2019: "mockValue",

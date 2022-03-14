@@ -1,10 +1,4 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { isCollectionHelper } from "@utils/helpers";
 import { envConfigModule } from "@/store";
@@ -84,7 +78,7 @@ const initialState = () => ({
 	namespaced: true,
 	stateFactory: true,
 })
-export class Content extends VuexModule {
+export default class ContentModule extends VuexModule {
 	resources: Resources = initialState().resources;
 	elements: Elements = initialState().elements;
 	selected: number = initialState().selected;

@@ -1,10 +1,4 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import {
 	DashboardApiFactory,
@@ -29,7 +23,7 @@ import { BusinessError } from "./types/commons";
 	namespaced: true,
 	stateFactory: true,
 })
-export class Rooms extends VuexModule {
+export default class RoomsModule extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId: string = "";
 	allElements: CourseMetadataResponse[] = [];

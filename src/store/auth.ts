@@ -10,7 +10,7 @@ import { User } from "@/store/types/auth";
 	namespaced: true,
 	stateFactory: true,
 })
-export class Auth extends VuexModule {
+export default class AuthModule extends VuexModule {
 	accesToken: string | null = "";
 	payload = null;
 	user: User | null = {

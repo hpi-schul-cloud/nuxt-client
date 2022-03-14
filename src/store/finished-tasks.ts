@@ -11,7 +11,7 @@ import { envConfigModule } from "@/store";
 	namespaced: true,
 	stateFactory: true,
 })
-export class FinishedTaskModule extends VuexModule {
+export default class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {

@@ -1,4 +1,4 @@
-import { ImportUsersModule, MatchedBy } from "@store/import-users";
+import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import * as serverApi from "@/serverApi/v3/api";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3/api";
 

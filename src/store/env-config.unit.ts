@@ -1,4 +1,4 @@
-import { EnvConfig } from "./env-config";
+import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
@@ -57,21 +57,21 @@ describe("env-config module", () => {
 	});
 	describe("actions", () => {
 		it("findEnv should make a get request to the right path", async () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
 
 			await envConfigModule.findEnvs();
 			expect(requestPath).toStrictEqual(URL);
 		});
 		it("findEnv should get envs", async () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
 
 			await envConfigModule.findEnvs();
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
 		});
 		it("findEnv should call resetBusinessError, setStatus, and setEnvs mutations", async () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
 
 			const businessErrorSpy = jest.spyOn(
@@ -92,7 +92,7 @@ describe("env-config module", () => {
 			expect(setEnvsSpy).toBeCalled();
 		});
 		it("findEnv should log errors for missing required vars", async () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			const misingRequiredVars = {
 				NOT_AUTHENTICATED_REDIRECT_URL: null,
 				JWT_SHOW_TIMEOUT_WARNING_SECONDS: null,
@@ -109,7 +109,7 @@ describe("env-config module", () => {
 		it("findEnvs should retry on error", async () => {
 			axiosInitializer(null, true);
 
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			const businessErrorSpy = jest.spyOn(
 				envConfigModule,
 				"resetBusinessError"
@@ -126,7 +126,7 @@ describe("env-config module", () => {
 		});
 		it("findEnvs should not retry afer the 10th time", async () => {
 			axiosInitializer(null, true);
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			const businessErrorSpy = jest.spyOn(
 				envConfigModule,
 				"resetBusinessError"
@@ -145,19 +145,19 @@ describe("env-config module", () => {
 	});
 	describe("mutations", () => {
 		it("setEnvs should set envs", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.SC_THEME).not.toBe("mockValue");
 			envConfigModule.setEnvs(mockEnvs);
 			expect(envConfigModule.env.SC_THEME).toBe("mockValue");
 		});
 		it("increaseLoadingErrorCount should increase loadingErrorCount value by 1", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.loadingErrorCount).toBe(0);
 			envConfigModule.increaseLoadingErrorCount();
 			expect(envConfigModule.loadingErrorCount).toBe(1);
 		});
 		it("setBusinessError should set businessError", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.businessError.message).toBe("");
 			envConfigModule.setBusinessError({
 				statusCode: "mockValue",
@@ -166,7 +166,7 @@ describe("env-config module", () => {
 			expect(envConfigModule.businessError.message).toBe("mockValue");
 		});
 		it("resetBusinessError should reset businessError", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			envConfigModule.setBusinessError({
 				statusCode: "mockValue",
 				message: "mockValue",
@@ -176,7 +176,7 @@ describe("env-config module", () => {
 			expect(envConfigModule.businessError.message).toBe("");
 		});
 		it("setStatus should set status", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.status).toBe("");
 			envConfigModule.setStatus("completed");
 			expect(envConfigModule.status).toBe("completed");
@@ -184,17 +184,17 @@ describe("env-config module", () => {
 	});
 	describe("getters", () => {
 		it("getFallbackLanguage should get 'de' if I18N__FALLBACK_LANGUAGE is not defined", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.I18N__FALLBACK_LANGUAGE).toBe("");
 			expect(envConfigModule.getFallbackLanguage).toBe("de");
 		});
 		it("getDefaultTimeZone should get 'Europe/Berlin' if I18N__DEFAULT_TIMEZONE is not defined", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.I18N__DEFAULT_TIMEZONE).toBe("");
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
 		});
 		it("getEnv should get env", () => {
-			const envConfigModule = new EnvConfig({});
+			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
 			envConfigModule.env = mockEnvs;
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);

@@ -1,4 +1,4 @@
-import { Content } from "./content";
+import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { Resource } from "./types/content";
@@ -88,7 +88,7 @@ describe("content module", () => {
 	});
 	describe("actions", () => {
 		it("selectElement action should call setSelectedElement mutation", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const selectedSpy = jest.fn();
 			contentModule.setSelectedElement = selectedSpy;
 			expect(selectedSpy).not.toBeCalled();
@@ -96,7 +96,7 @@ describe("content module", () => {
 			expect(selectedSpy).toBeCalled();
 		});
 		it("unselectElemeent action should call setSelectedElement mutation", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const selectedSpy = jest.fn();
 			contentModule.setSelectedElement = selectedSpy;
 			expect(selectedSpy).not.toBeCalled();
@@ -104,7 +104,7 @@ describe("content module", () => {
 			expect(selectedSpy).toBeCalled();
 		});
 		it("getResources should call incLoading, setLastQuery, setResources, and decLoading mutations", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -134,7 +134,7 @@ describe("content module", () => {
 			expect(setResourcesSpy).toBeCalled();
 		});
 		it("getResources should make a get request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -145,7 +145,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(ESPath);
 		});
 		it("getResources should get resources", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -157,7 +157,7 @@ describe("content module", () => {
 			expect(contentModule.resources).toStrictEqual(mockResources);
 		});
 		it("addResources should call incLoading, addResourceMutation and decLoading mutations", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const query = {
@@ -184,7 +184,7 @@ describe("content module", () => {
 			expect(addResourceSpy).toBeCalled();
 		});
 		it("addResources should make a get request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -195,7 +195,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(ESPath);
 		});
 		it("addResources should get resources", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -207,7 +207,7 @@ describe("content module", () => {
 			expect(contentModule.resources).toStrictEqual(mockResources);
 		});
 		it("getElements should call incLoading, setLastQuery, setElements and decLoading mutations", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const query = {
@@ -238,7 +238,7 @@ describe("content module", () => {
 			expect(setElementsSpy).toBeCalled();
 		});
 		it("getElements should make a get request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -249,7 +249,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(ESPath);
 		});
 		it("addElements should call incLoading, addElementsMutation and decLoading mutations", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const query = {
@@ -276,7 +276,7 @@ describe("content module", () => {
 			expect(addElementsSpy).toBeCalled();
 		});
 		it("addElements should make a get request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const query = {
 				$limit: 0,
@@ -287,7 +287,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(ESPath);
 		});
 		it("getLessons should call setLessons mutation if courseId exists", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const setLessonsSpy = jest.fn();
@@ -301,21 +301,21 @@ describe("content module", () => {
 			expect(setLessonsSpy).toBeCalled();
 		});
 		it("getLessons should make a get request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			await contentModule.getLessons("mockId");
 			expect(requestPath).toBe(lessonsPath);
 		});
 		it("getLessons should get lessons", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			await contentModule.getLessons("mockId");
 			expect(contentModule.lessons).toBe(mockLessons);
 		});
 		it("addToLesson should call setNotificationModal mutation", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const query = {
@@ -339,7 +339,7 @@ describe("content module", () => {
 			expect(setNotificationSpy).toBeCalled();
 		});
 		it("addToLesson should make a post request to the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const mockQuery = {
@@ -357,7 +357,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(`/v1/lessons/${mockQuery.lessonId}/material`);
 		});
 		it("addToLesson should call setNotificationModal with 'successModal' parameter when the call is successful", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 
 			const mockQuery = {
@@ -380,7 +380,7 @@ describe("content module", () => {
 			expect(setNoticationSpy.mock.calls[0][0]).toBe("successModal");
 		});
 		it("getResourceMetadata should call setStatus and setCurrentResource mutation", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const setStatusSpy = jest.fn();
 			const setCurrentResourceSpy = jest.fn();
 
@@ -396,14 +396,14 @@ describe("content module", () => {
 			expect(setCurrentResourceSpy).toBeCalled();
 		});
 		it("getResourceMetadata should call the right path", async () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const mockId = "mockId";
 			await contentModule.getResourceMetadata(mockId);
 			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const initSpy = jest.fn();
 
 			contentModule.initMutation = initSpy;
@@ -417,7 +417,7 @@ describe("content module", () => {
 	});
 	describe("mutations", () => {
 		it("setSelectedElements should set stateSelected value when the id matches", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockElements = {
 				total: 0,
 				limit: 0,
@@ -436,7 +436,7 @@ describe("content module", () => {
 			expect(contentModule.elements.data[0].stateSelected).toBe(true);
 		});
 		it("setSelectedElements should set selected value equals to the number of stateSelected === true elements", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockElements = {
 				total: 0,
 				limit: 0,
@@ -464,7 +464,7 @@ describe("content module", () => {
 			expect(contentModule.selected).toBe(2);
 		});
 		it("setResources should set resources value if lastQuery matches the hash", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockHash = "mockHash";
 
 			expect(contentModule.resources.data[0]).toBeUndefined();
@@ -474,7 +474,7 @@ describe("content module", () => {
 			expect(contentModule.resources.data[0].name).toBe("mockResource");
 		});
 		it("addResourcesMutation sets resources value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 
 			expect(contentModule.resources.data[0]).toBeUndefined();
 			contentModule.addResourcesMutation(mockResources);
@@ -482,7 +482,7 @@ describe("content module", () => {
 			expect(contentModule.resources.data[0].name).toBe("mockResource");
 		});
 		it("setElements should set elements value if lastQuery matches the hash", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockHash = "mockHash";
 			const mockElements = {
 				total: 0,
@@ -503,7 +503,7 @@ describe("content module", () => {
 			expect(contentModule.elements.data[0].name).toBe("mockElement");
 		});
 		it("addElementsMutation sets elements value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockElements = {
 				total: 0,
 				limit: 0,
@@ -522,7 +522,7 @@ describe("content module", () => {
 			expect(contentModule.elements.data[0].name).toBe("mockElement");
 		});
 		it("clearResources sets resources and selected to their initial values", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 
 			contentModule.resources = mockResources;
 			contentModule.selected = 123;
@@ -534,7 +534,7 @@ describe("content module", () => {
 			expect(contentModule.selected).toBe(0);
 		});
 		it("clearElements sets elements and selected to their initial values", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockElements = {
 				total: 0,
 				limit: 0,
@@ -556,7 +556,7 @@ describe("content module", () => {
 			expect(contentModule.selected).toBe(0);
 		});
 		it("clearLessons sets lessons to its initial value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.lessons = mockLessons;
 			expect(contentModule.lessons.data[0]).not.toBeUndefined();
 
@@ -565,7 +565,7 @@ describe("content module", () => {
 			expect(contentModule.selected).toBe(0);
 		});
 		it("setLastQuery sets lastQuery value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockQuery = "mockQuery";
 
 			expect(contentModule.lastQuery).toBe("");
@@ -573,7 +573,7 @@ describe("content module", () => {
 			expect(contentModule.lastQuery).toBe(mockQuery);
 		});
 		it("incLoading sets loading to true if loadingCounter is 0 and increases it by 1", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.loading).toBe(false);
 			expect(contentModule.loadingCounter).toBe(0);
 
@@ -582,7 +582,7 @@ describe("content module", () => {
 			expect(contentModule.loadingCounter).toBe(1);
 		});
 		it("decLoading sets loading to false if loadingCounter is 0 and decreases it by 1", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.loadingCounter = 1;
 			contentModule.loading = true;
 			expect(contentModule.loading).toBe(true);
@@ -593,32 +593,32 @@ describe("content module", () => {
 			expect(contentModule.loadingCounter).toBe(0);
 		});
 		it("setLessons sets lessons value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.lessons.data[0]).toBeUndefined();
 
 			contentModule.setLessons(mockLessons);
 			expect(contentModule.lessons.data[0]).toBeDefined();
 		});
 		it("initMutation sets collectionsFeatureFlag value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.collectionsFeatureFlag).toBeNull();
 			contentModule.initMutation(true);
 			expect(contentModule.collectionsFeatureFlag).toBe(true);
 		});
 		it("setCurrentResource sets currentResource value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.currentResource.name).toBe("");
 			contentModule.setCurrentResource(mockResource);
 			expect(contentModule.currentResource.name).toBe("mockResource");
 		});
 		it("setStatus sets status value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.status).toBeNull();
 			contentModule.setStatus("completed");
 			expect(contentModule.status).toBe("completed");
 		});
 		it("setNotificationModal sets notification modal value", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.notificationModal).toBeNull();
 			contentModule.setNotificationModal("mockModal");
 			expect(contentModule.notificationModal).toBe("mockModal");
@@ -626,12 +626,12 @@ describe("content module", () => {
 	});
 	describe("getters", () => {
 		it("getLessonsGetter gets lessons", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.lessons = mockLessons;
 			expect(contentModule.getLessonsGetter).toBe(mockLessons);
 		});
 		it("getElementsGetter gets elements", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			const mockElements = {
 				total: 0,
 				limit: 0,
@@ -647,38 +647,38 @@ describe("content module", () => {
 			expect(contentModule.getElementsGetter).toBe(mockElements);
 		});
 		it("getSelected gets selected", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.selected = 1;
 			expect(contentModule.getSelected).toBe(1);
 		});
 		it("getLoading gets loading", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.loading = true;
 			expect(contentModule.getLoading).toBe(true);
 		});
 		it("getResourcesGetter gets resources", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.resources = mockResources;
 			expect(contentModule.getResourcesGetter).toBe(mockResources);
 		});
 		it("getCollectionsFeatureFlag gets resources", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.collectionsFeatureFlag = true;
 			expect(contentModule.getCollectionsFeatureFlag).toBe(true);
 		});
 		it("getCurrentResource gets resources", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			expect(contentModule.getCurrentResource).not.toBe(mockResource);
 			contentModule.currentResource = mockResource;
 			expect(contentModule.getCurrentResource).toBe(mockResource);
 		});
 		it("getStatus gets resources", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.status = "completed";
 			expect(contentModule.getStatus).toBe("completed");
 		});
 		it("getNotificationModal gets notificationModal", () => {
-			const contentModule = new Content({});
+			const contentModule = new ContentModule({});
 			contentModule.notificationModal = "modalMock";
 			expect(contentModule.getNotificationModal).toBe("modalMock");
 		});

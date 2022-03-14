@@ -36,7 +36,7 @@ const globalFiles = {
 	namespaced: true,
 	stateFactory: true,
 })
-export class FilePaths extends VuexModule {
+export default class FilePathsModule extends VuexModule {
 	documentBaseDir: string = "";
 	specificFiles: SpecificFiles = {
 		privacyExemplary: "",

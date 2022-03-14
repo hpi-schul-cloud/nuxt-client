@@ -39,7 +39,7 @@ function transformSchoolClientToServer(school: any): School {
 	namespaced: true,
 	stateFactory: true,
 })
-export class Schools extends VuexModule {
+export default class SchoolsModule extends VuexModule {
 	school: School = {
 		_id: "",
 		name: "",

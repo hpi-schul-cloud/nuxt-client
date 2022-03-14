@@ -7,7 +7,7 @@ import { BusinessError, Status } from "./types/commons";
 	namespaced: true,
 	stateFactory: true,
 })
-export class AccountsModule extends VuexModule {
+export default class AccountsModule extends VuexModule {
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",

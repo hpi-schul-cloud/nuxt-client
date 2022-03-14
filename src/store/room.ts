@@ -1,10 +1,4 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import {
 	RoomsApiInterface,
@@ -18,7 +12,7 @@ import {
 	namespaced: true,
 	stateFactory: true,
 })
-export class Room extends VuexModule {
+export default class RoomModule extends VuexModule {
 	roomData: BoardResponse = {
 		roomId: "",
 		title: "",

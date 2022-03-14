@@ -1,4 +1,4 @@
-import { AutoLogoutModule } from "./autoLogout";
+import AutoLogoutModule from "./autoLogout";
 
 describe("autoLogout module", () => {
 	describe("actions", () => {

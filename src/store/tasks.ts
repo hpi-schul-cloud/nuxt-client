@@ -19,7 +19,7 @@ import {
 	namespaced: true,
 	stateFactory: true,
 })
-export class TaskModule extends VuexModule {
+export default class TaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	courseFilter: string[] = [];

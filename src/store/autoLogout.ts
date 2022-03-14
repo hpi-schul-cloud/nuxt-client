@@ -133,7 +133,7 @@ const extendSession = async (
 	namespaced: true,
 	stateFactory: true,
 })
-export class AutoLogoutModule extends VuexModule {
+export default class AutoLogoutModule extends VuexModule {
 	active: boolean = false;
 	error: boolean = false;
 	remainingTimeInSeconds: number = 3600 * 2;

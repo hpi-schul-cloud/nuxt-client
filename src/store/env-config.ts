@@ -28,7 +28,7 @@ const retryLimit: number = 10;
 	namespaced: true,
 	stateFactory: true,
 })
-export class EnvConfig extends VuexModule {
+export default class EnvConfigModule extends VuexModule {
 	env: Envs = {
 		...requiredVars,
 		...configsFromEnvironmentVars,

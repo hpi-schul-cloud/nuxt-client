@@ -1,4 +1,4 @@
-import { Room } from "./room";
+import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
@@ -41,7 +41,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.fetchContent("123");
 
 				expect(roomModule.getLoading).toBe(false);
@@ -56,7 +56,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.publishCard({ elementId: "54321", visibility: true });
 
 				expect(roomModule.getLoading).toBe(false);
@@ -74,7 +74,7 @@ describe("room module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -112,7 +112,7 @@ describe("room module", () => {
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const loadingValue = true;
 				expect(roomModule.getLoading).not.toBe(loadingValue);
 				roomModule.setLoading(loadingValue);
@@ -122,7 +122,7 @@ describe("room module", () => {
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const errorData = { message: "some error" };
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
@@ -134,7 +134,7 @@ describe("room module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -171,7 +171,7 @@ describe("room module", () => {
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 
 				expect(roomModule.getLoading).not.toStrictEqual(true);
 				roomModule.setLoading(true);
@@ -181,7 +181,7 @@ describe("room module", () => {
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const errorData = { message: "some error" };
 				expect(roomModule.getError).toStrictEqual(null);
 				roomModule.setError(errorData);

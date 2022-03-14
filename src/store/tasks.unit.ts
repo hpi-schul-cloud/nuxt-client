@@ -1,4 +1,4 @@
-import { TaskModule } from "./tasks";
+import TaskModule from "./tasks";
 import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";

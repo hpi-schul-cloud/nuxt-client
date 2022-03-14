@@ -14,7 +14,7 @@ import {
 	namespaced: true,
 	stateFactory: true,
 })
-export class FilesPOCModule extends VuexModule {
+export default class FilesPOCModule extends VuexModule {
 	files: FileRecord[] = [];
 
 	businessError: BusinessError = {

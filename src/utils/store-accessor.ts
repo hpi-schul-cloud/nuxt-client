@@ -1,56 +1,54 @@
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import { AccountsModule } from "@/store/accounts";
-import { Auth } from "@/store/auth";
-import { AutoLogoutModule } from "@/store/autoLogout";
-import { Content } from "@/store/content";
-import { EnvConfig } from "@/store/env-config";
-import { FilePaths } from "@/store/filePaths";
-import { FilesPOCModule } from "@/store/files-poc";
-import { FinishedTaskModule } from "@/store/finished-tasks";
-import { ImportUsersModule } from "@/store/import-users";
-import { NewsModule } from "@/store/news";
-import { Room } from "@/store/room";
-import { Rooms } from "@/store/rooms";
-import { Schools } from "@/store/schools";
-import { TaskModule } from "@store/tasks";
+import AccountsModule from "@/store/accounts";
+import AuthModule from "@/store/auth";
+import AutoLogoutModule from "@/store/autoLogout";
+import ContentModule from "@/store/content";
+import EnvConfigModule from "@/store/env-config";
+import FilePaths from "@/store/filePaths";
+import FilesPOCModule from "@/store/files-poc";
+import FinishedTaskModule from "@/store/finished-tasks";
+import ImportUsersModule from "@/store/import-users";
+import NewsModule from "@/store/news";
+import RoomModule from "@/store/room";
+import RoomsModule from "@/store/rooms";
+import SchoolsModule from "@/store/schools";
+import TaskModule from "@/store/tasks";
 
 let accountsModule: AccountsModule;
-let authModule: Auth;
+let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
-let contentModule: Content;
-let envConfigModule: EnvConfig;
+let contentModule: ContentModule;
+let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTaskModule: FinishedTaskModule;
 let importUsersModule: ImportUsersModule;
 let newsModule: NewsModule;
-let roomModule: Room;
-let roomsModule: Rooms;
+let roomModule: RoomModule;
+let roomsModule: RoomsModule;
 let taskModule: TaskModule;
-let schoolsModule: Schools;
+let schoolsModule: SchoolsModule;
 
-function initialiseStores(store: Store<any>): void {
-	console.dir(store);
-
+function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
-	authModule = getModule(Auth, store);
+	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
-	contentModule = getModule(Content, store);
-	envConfigModule = getModule(EnvConfig, store);
+	contentModule = getModule(ContentModule, store);
+	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTaskModule = getModule(FinishedTaskModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
-	roomModule = getModule(Room, store);
-	roomsModule = getModule(Rooms, store);
-	schoolsModule = getModule(Schools, store);
+	roomModule = getModule(RoomModule, store);
+	roomsModule = getModule(RoomsModule, store);
+	schoolsModule = getModule(SchoolsModule, store);
 	taskModule = getModule(TaskModule, store);
 }
 
 export {
-	initialiseStores,
+	initializeStores,
 	accountsModule,
 	authModule,
 	autoLogoutModule,

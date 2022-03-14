@@ -1,10 +1,4 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import {
 	UserImportApiFactory,
@@ -14,7 +8,7 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { BusinessError } from "@store/types/commons";
+import { BusinessError } from "@/store/types/commons";
 
 export enum MatchedBy {
 	Admin = "admin",
@@ -28,7 +22,7 @@ export enum MatchedBy {
 	namespaced: true,
 	stateFactory: true,
 })
-export class ImportUsersModule extends VuexModule {
+export default class ImportUsersModule extends VuexModule {
 	private importUserList: ImportUserListResponse = {
 		data: [],
 		total: 0,

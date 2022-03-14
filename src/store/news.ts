@@ -12,7 +12,7 @@ import { envConfigModule } from "@/store";
 	namespaced: true,
 	stateFactory: true,
 })
-export class NewsModule extends VuexModule {
+export default class NewsModule extends VuexModule {
 	news: News[] = [];
 	createdNews: News = {
 		id: "",
