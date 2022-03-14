@@ -320,7 +320,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("perform end maintenance", async () => {
-			const endMaintenanceMock = jest.spyOn(SchoolsModule, "endMaintenance");
+			const endMaintenanceMock = jest.spyOn(
+				SchoolsModule,
+				"migrationStartSync"
+			);
 			endMaintenanceMock.mockImplementation(async () => {
 				SchoolsModule.setSchool({
 					...SchoolsModule.getSchool,
