@@ -101,6 +101,29 @@ export class FilesPOCModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async rename(params: { fileId: string; fileName: string }): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			const response =
+				await this.fileStorageApi.filesStorageControllerPatchFilename(
+					params.fileId,
+					{
+						fileName: params.fileName,
+					}
+				);
+
+			this.replaceFile(response.data);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
 	@Mutation
 	setFiles(files: FileRecord[]) {
 		this.files = files;
@@ -109,6 +132,11 @@ export class FilesPOCModule extends VuexModule {
 	@Mutation
 	appendFile(file: FileRecord) {
 		this.files.push(file);
+	}
+
+	@Mutation
+	replaceFile(file: FileRecord) {
+		this.files = this.files.map((f) => (f.id === file.id ? file : f));
 	}
 
 	@Mutation
