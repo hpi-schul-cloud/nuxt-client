@@ -88,9 +88,6 @@
 					class="task-card"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
-					@move-element="moveByKeyboard"
-					@on-drag="isDragging = !isDragging"
-					@tab-pressed="isDragging = false"
 				/>
 				<room-lesson-card
 					v-if="item.type === cardTypes.Lesson"
@@ -108,9 +105,6 @@
 					class="lesson-card"
 					@post-lesson="postDraftElement(item.content.id)"
 					@revert-lesson="revertPublishedElement(item.content.id)"
-					@move-element="moveByKeyboard"
-					@on-drag="isDragging = !isDragging"
-					@tab-pressed="isDragging = false"
 				/>
 				<room-locked-card
 					v-if="item.type === cardTypes.Lockedtask"
@@ -125,9 +119,6 @@
 					"
 					:key-drag="isDragging"
 					class="locked-card"
-					@move-element="moveByKeyboard"
-					@on-drag="isDragging = !isDragging"
-					@tab-pressed="isDragging = false"
 				/>
 			</div>
 		</div>
@@ -202,7 +193,7 @@ export default {
 
 			await RoomModule.sortElements(idList);
 		},
-		moveByKeyboard: async function (e) {
+		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
 			const items = this.roomData.elements.map((item) => {
 				return item.content.id;
@@ -220,7 +211,6 @@ export default {
 
 			await RoomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
-			return items;
 		},
 	},
 };

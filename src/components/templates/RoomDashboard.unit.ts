@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
-import Vue from "vue";
+
 declare var createComponentMocks: Function;
 
 let mockData = {
@@ -197,25 +197,55 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.sortable).toBe(false);
 		});
 
-		it.skip("should be sorted the elements by keyboard'", async () => {
+		it("should be sorted the elements by keyboard'", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
-			const cardElement = wrapper.find(".task-card");
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
 			expect(wrapper.vm.isDragging).toBe(false);
 			cardElement.vm.$emit("on-drag");
 			expect(wrapper.vm.isDragging).toBe(true);
+			await wrapper.vm.$nextTick();
 
-			cardElement.vm.$emit("move-element", [
-				{
-					id: "1234",
-					moveIndex: 1,
-				},
-			]);
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			cardElement.vm.$emit("move-element", {
+				id: "1234",
+				moveIndex: 1,
+			});
 			expect(moveByKeyboardMock).toHaveBeenCalled();
+		});
+
+		it("should NOT be sorted the elements by keyboard for students'", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(false);
+			await wrapper.vm.$nextTick();
+
+			cardElement.vm.$emit("move-element", {
+				id: "1234",
+				moveIndex: 1,
+			});
+			expect(moveByKeyboardMock).not.toHaveBeenCalled();
+		});
+
+		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(true);
+			await wrapper.vm.$nextTick();
+
+			cardElement.vm.$emit("tab-pressed");
+			expect(wrapper.vm.isDragging).toBe(false);
 		});
 	});
 });
