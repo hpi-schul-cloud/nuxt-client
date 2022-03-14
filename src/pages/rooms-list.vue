@@ -52,9 +52,9 @@
 import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
-import { roomsModule } from "@store";
+import { roomsModule } from "@/store";
 import { mdiMagnify } from "@mdi/js";
-import { ListItemsObject } from "@store/types/rooms";
+import { ListItemsObject } from "@/store/types/rooms";
 
 export default Vue.extend({
 	components: {

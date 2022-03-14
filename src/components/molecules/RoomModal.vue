@@ -42,7 +42,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { roomsModule } from "@store";
+import { roomsModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
 

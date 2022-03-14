@@ -40,7 +40,7 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import { roomModule } from "@store";
+import { roomModule } from "@/store";
 
 export default {
 	components: {

@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import importUsers from "./importUsers.vue";
-import { MatchedBy } from "@store/import-users";
+import { MatchedBy } from "@/store/import-users";
 
 declare var createComponentMocks: Function;
 

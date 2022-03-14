@@ -3,12 +3,12 @@ import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import vCustomFab from "@components/atoms/vCustomFab";
 import Vuetify from "vuetify";
-import { TaskModule } from "@/store/tasks";
+import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 
 const mockTaskModule = jest.fn();
-jest.mock("@store/tasks", () => ({
-	...jest.requireActual("@store/tasks"),
+jest.mock("@/store/tasks", () => ({
+	...jest.requireActual("@/store/tasks"),
 	__esModule: true,
 	get default() {
 		return mockTaskModule();

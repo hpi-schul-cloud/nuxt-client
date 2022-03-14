@@ -1,9 +1,9 @@
 import authenticate from "./authenticate";
-import { Auth } from "@/store/auth";
+import AuthModule from "@/store/auth";
 
 describe("@plugins/authenticate", () => {
 	it("should log an error if jwt is undefined and page is not public", () => {
-		const authModule = new Auth({});
+		const authModule = new AuthModule({});
 		authModule.populateUser = () => {
 			throw new Error("Can not read jwt from cookies.");
 		};

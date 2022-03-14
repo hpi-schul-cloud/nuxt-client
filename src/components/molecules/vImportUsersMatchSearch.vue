@@ -217,7 +217,7 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 } from "@mdi/js";
-import { importUsersModule } from "@store";
+import { importUsersModule } from "@/store";
 
 export default {
 	components: {},

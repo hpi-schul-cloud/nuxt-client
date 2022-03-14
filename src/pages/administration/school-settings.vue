@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@store";
+import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";

@@ -246,7 +246,7 @@
 <script>
 /* eslint-disable max-lines */
 import { schoolsModule, importUsersModule } from "@/store";
-import { MatchedBy } from "@store/import-users";
+import { MatchedBy } from "@/store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,

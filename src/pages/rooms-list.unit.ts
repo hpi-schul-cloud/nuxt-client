@@ -1,4 +1,4 @@
-import { roomsModule } from "@store";
+import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomList from "./rooms-list.vue";
