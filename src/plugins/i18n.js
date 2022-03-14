@@ -5,8 +5,12 @@ import { authModule, envConfigModule } from "@/store";
 Vue.use(VueI18n);
 
 export const i18n = () => {
-	const locale = authModule.getLocale || "de"; // 'de' fallback for unit tests
-	const fallbackLocale = envConfigModule.getFallbackLanguage;
+	const locale =
+		authModule && authModule.getLocale ? authModule.getLocale : "de"; // 'de' fallback for unit tests
+	const fallbackLocale =
+		envConfigModule && envConfigModule.getFallbackLanguage
+			? envConfigModule.getFallbackLanguage
+			: "de"; // 'de' fallback for unit tests
 
 	return new VueI18n({
 		locale,
