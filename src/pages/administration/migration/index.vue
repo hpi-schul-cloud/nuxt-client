@@ -173,8 +173,8 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
-										<v-row
-											v-html="
+										<div
+                        v-html="
 												$t('pages.administration.migration.summary', {
 													instance: this.$theme.short_name,
 													source: $t(
@@ -186,7 +186,7 @@
 													usersUnmatchedCount: totalUnmatched,
 												})
 											"
-										></v-row>
+                    ></div>
 										<v-row>
 											<v-checkbox
 												v-model="isMigrationConfirm"
@@ -370,7 +370,8 @@ export default {
 		},
 	},
 	created() {
-		this.summary();
+    this.summary();
+    this.checkTotalInterval();
 	},
 	methods: {
 		isStepEditable(step) {
@@ -403,34 +404,36 @@ export default {
 					);
 				default:
 					return false;
-			}
-		},
-		async summary() {
-			if (!this.canPerformMigration) {
-				return;
-			}
-			await ImportUserModule.fetchTotal();
-			await ImportUserModule.fetchTotalMatched();
-			await ImportUserModule.fetchTotalUnmatched();
-
-			if (this.totalImportUsers === 0) {
-				console.log("here");
-				this.checkTotal = setInterval(() => {
-					ImportUserModule.fetchTotal();
-				}, 3000);
-			} else {
-				clearInterval(this.checkTotal);
-			}
-		},
-		async setSchoolInUserMigration() {
-			if (this.school.inUserMigration) {
-				return;
-			}
-			this.isLoading = true;
-			await SchoolsModule.setSchoolInUserMigration();
-			if (SchoolsModule.getError) {
-				// TODO better error handling
-				ImportUserModule.setBusinessError({
+      }
+    },
+    async summary() {
+      if (!this.canPerformMigration) {
+        return;
+      }
+      await ImportUserModule.fetchTotal();
+      await ImportUserModule.fetchTotalMatched();
+      await ImportUserModule.fetchTotalUnmatched();
+    },
+    checkTotalInterval() {
+      if (this.school.inUserMigration && this.totalImportUsers === 0) {
+        this.checkTotal = setInterval(() => {
+          ImportUserModule.fetchTotal();
+        }, 5000);
+      }
+      if (this.totalImportUsers > 0) {
+        clearInterval(this.checkTotal);
+      }
+    },
+    async setSchoolInUserMigration() {
+      if (this.school.inUserMigration) {
+        return;
+      }
+      this.isLoading = true;
+      await SchoolsModule.setSchoolInUserMigration();
+      this.checkTotalInterval();
+      if (SchoolsModule.getError) {
+        // TODO better error handling
+        ImportUserModule.setBusinessError({
 					statusCode: "500",
 					message: SchoolsModule.getError.message,
 				});
