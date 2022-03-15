@@ -3,6 +3,7 @@
 		ref="main"
 		:headline="roomData.title"
 		:full-width="true"
+		:fab-items="fab"
 		:aria-label="roomData.title"
 	>
 		<template slot="header">
@@ -33,6 +34,7 @@ import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { mdiPlus, mdiBookPlus, mdiPlaylistPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -44,6 +46,42 @@ export default {
 		return {};
 	},
 	computed: {
+		fab() {
+			if (
+				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
+				return {
+					icon: mdiPlus,
+					ariaLabel: this.$t("pages.rooms.fab.add"),
+					testId: "add-content-button",
+					actions: [
+						{
+							label: this.$t("pages.rooms.fab.add.lesson"),
+							icon: mdiBookPlus,
+							href: `/courses/${this.roomData.roomId}/topics/add`,
+							dataTestid: "fab_button_add_lesson",
+							ariaLabel: this.$t("pages.rooms.fab.add.aria.lesson"),
+						},
+						{
+							label: this.$t("pages.rooms.fab.add.task"),
+							icon: mdiPlaylistPlus,
+							href: `/homework/new?course=${this.roomData.roomId}`,
+							dataTestid: "fab_button_add_task",
+							ariaLabel: this.$t("pages.rooms.fab.add.aria.task"),
+						},
+					],
+				};
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.labels.course"),
+					href: "/courses/add",
+					ariaLabel: this.$t("pages.courses.new.title"),
+					testId: "add-course-button",
+				};
+			}
+
+			return null;
+		},
 		roomData() {
 			return RoomModule.getRoomData;
 		},
