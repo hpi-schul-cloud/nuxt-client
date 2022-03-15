@@ -174,7 +174,7 @@
 								<div v-if="!isLoading">
 									<v-card-text>
 										<div
-                        v-html="
+											v-html="
 												$t('pages.administration.migration.summary', {
 													instance: this.$theme.short_name,
 													source: $t(
@@ -186,7 +186,7 @@
 													usersUnmatchedCount: totalUnmatched,
 												})
 											"
-                    ></div>
+										></div>
 										<v-row>
 											<v-checkbox
 												v-model="isMigrationConfirm"
@@ -370,8 +370,8 @@ export default {
 		},
 	},
 	created() {
-    this.summary();
-    this.checkTotalInterval();
+		this.summary();
+		this.checkTotalInterval();
 	},
 	methods: {
 		isStepEditable(step) {
@@ -404,36 +404,36 @@ export default {
 					);
 				default:
 					return false;
-      }
-    },
-    async summary() {
-      if (!this.canPerformMigration) {
-        return;
-      }
-      await ImportUserModule.fetchTotal();
-      await ImportUserModule.fetchTotalMatched();
-      await ImportUserModule.fetchTotalUnmatched();
-    },
-    checkTotalInterval() {
-      if (this.school.inUserMigration && this.totalImportUsers === 0) {
-        this.checkTotal = setInterval(() => {
-          ImportUserModule.fetchTotal();
-        }, 5000);
-      }
-      if (this.totalImportUsers > 0) {
-        clearInterval(this.checkTotal);
-      }
-    },
-    async setSchoolInUserMigration() {
-      if (this.school.inUserMigration) {
-        return;
-      }
-      this.isLoading = true;
-      await SchoolsModule.setSchoolInUserMigration();
-      this.checkTotalInterval();
-      if (SchoolsModule.getError) {
-        // TODO better error handling
-        ImportUserModule.setBusinessError({
+			}
+		},
+		async summary() {
+			if (!this.canPerformMigration) {
+				return;
+			}
+			await ImportUserModule.fetchTotal();
+			await ImportUserModule.fetchTotalMatched();
+			await ImportUserModule.fetchTotalUnmatched();
+		},
+		checkTotalInterval() {
+			if (this.school.inUserMigration && this.totalImportUsers === 0) {
+				this.checkTotal = setInterval(() => {
+					ImportUserModule.fetchTotal();
+				}, 5000);
+			}
+			if (this.totalImportUsers > 0) {
+				clearInterval(this.checkTotal);
+			}
+		},
+		async setSchoolInUserMigration() {
+			if (this.school.inUserMigration) {
+				return;
+			}
+			this.isLoading = true;
+			await SchoolsModule.setSchoolInUserMigration();
+			this.checkTotalInterval();
+			if (SchoolsModule.getError) {
+				// TODO better error handling
+				ImportUserModule.setBusinessError({
 					statusCode: "500",
 					message: SchoolsModule.getError.message,
 				});
