@@ -3,12 +3,17 @@
 		class="mx-auto mb-4 task-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
-		:href="taskHref(task.id)"
 		tabindex="0"
 		outlined
+		@click="handleClick"
+		@keydown.enter="handleClick"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
+		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text>
-			<div class="top-row-container mb-1">
+			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
 					<v-icon size="20" :color="task.displayColor" dark>{{
 						icons.mdiFormatListChecks
@@ -25,14 +30,18 @@
 			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
-				class="text--primary mt-1 text-description"
+				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
 				v-html="task.description"
 			></div>
 		</v-card-text>
 		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
+				<div
+					v-if="roles.Teacher === role"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					tabindex="0"
+				>
 					<div class="chip-value">
 						{{
 							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
@@ -41,7 +50,11 @@
 						}}
 					</div>
 				</div>
-				<div class="grey lighten-2 chip-item pa-1 mr-1 mb-1" tabindex="0">
+				<div
+					v-if="roles.Teacher === role"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					tabindex="0"
+				>
 					<div class="chip-value">
 						{{
 							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
@@ -52,11 +65,11 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-1 overdue"
+					class="grey lighten-2 chip-item pa-1 mr-1 mb-0 overdue"
 					tabindex="0"
 				>
 					<div class="chip-value">
-						{{ $t("pages.room.taskCard.teacher.label.overdue") }}
+						{{ $t(`pages.room.taskCard.${role}.label.overdue`) }}
 					</div>
 				</div>
 			</div>
@@ -70,7 +83,7 @@
 					.join('-')}`"
 				text
 				:color="titleColor"
-				@click.prevent="action.action"
+				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -83,6 +96,7 @@ import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
 import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -99,6 +113,7 @@ export default {
 			type: String,
 			default: "",
 		},
+		keyDrag: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -108,7 +123,8 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 			},
-			defaultTitleColor: "#54616e",
+			defaultTitleColor: "--color-secondary",
+			roles: Roles,
 		};
 	},
 	computed: {
@@ -127,41 +143,41 @@ export default {
 		},
 		cardActions() {
 			const roleBasedActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
+			if (this.role === Roles.Teacher) {
 				if (this.isDraft && !this.isFinished) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishDraftCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
 				if (!this.isDraft) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
 				}
 				if (this.isFinished) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						action: () => this.restoreCard(),
 						name: this.$t("pages.room.taskCard.label.reopen"),
 					});
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role === Roles.Student) {
 				if (this.isFinished) {
-					roleBasedActions.student.push({
+					roleBasedActions[Roles.Student].push({
 						action: () => this.restoreCard(),
 						name: this.$t("pages.room.taskCard.label.reopen"),
 					});
 				}
 
 				if (!this.isFinished) {
-					roleBasedActions.student.push({
+					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
@@ -172,27 +188,27 @@ export default {
 		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
-				roleBasedMoreActions.teacher.push({
+			if (this.role === Roles.Teacher) {
+				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
 				if (!this.isDraft && !this.isFinished) {
-					roleBasedMoreActions.teacher.push({
+					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
-						name: this.$t("pages.room.taskCard.label.revert"),
+						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 			return roleBasedMoreActions;
@@ -208,8 +224,8 @@ export default {
 
 			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
-		taskHref: (id) => {
-			return `/homework/${id}`;
+		handleClick() {
+			window.location = `/homework/${this.task.id}`;
 		},
 		redirectAction(value) {
 			window.location = value;
@@ -225,6 +241,30 @@ export default {
 		},
 		restoreCard() {
 			this.$emit("restore-task");
+		},
+		onKeyPress(e) {
+			switch (e.keyCode) {
+				case 32:
+					this.$emit("on-drag");
+					break;
+				case 38:
+					if (this.keyDrag)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: -1,
+						});
+					break;
+				case 40:
+					if (this.keyDrag)
+						this.$emit("move-element", {
+							id: this.task.id,
+							moveIndex: 1,
+						});
+					break;
+
+				default:
+					break;
+			}
 		},
 	},
 };

@@ -28,11 +28,11 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
  */
 export interface BoardElementResponse {
     /**
-     * ElementType. Can be any of: \"task\", \"lesson\".
+     * the type of the element in the content. For possible types, please refer to the enum
      * @type {string}
      * @memberof BoardElementResponse
      */
-    type: string;
+    type: BoardElementResponseTypeEnum;
     /**
      * Content of the Board, either: a task or a lesson specific for the board
      * @type {object}
@@ -40,6 +40,17 @@ export interface BoardElementResponse {
      */
     content: object;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum BoardElementResponseTypeEnum {
+    Task = 'task',
+    Lockedtask = 'lockedtask',
+    Lesson = 'lesson'
+}
+
 /**
  * 
  * @export
@@ -589,6 +600,19 @@ export interface PatchGroupParams {
      * @memberof PatchGroupParams
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface PatchOrderParams
+ */
+export interface PatchOrderParams {
+    /**
+     * Array ids determining the new order
+     * @type {Array<string>}
+     * @memberof PatchOrderParams
+     */
+    elements: Array<string>;
 }
 /**
  * 
@@ -2243,6 +2267,49 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchOrderingOfElements: async (roomid: string, patchOrderParams: PatchOrderParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerPatchOrderingOfElements', 'roomid', roomid)
+            // verify required parameter 'patchOrderParams' is not null or undefined
+            assertParamExists('roomsControllerPatchOrderingOfElements', 'patchOrderParams', patchOrderParams)
+            const localVarPath = `/rooms/{roomid}/board/order`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchOrderParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2275,6 +2342,17 @@ export const RoomsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -2305,6 +2383,16 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
         roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
             return localVarFp.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2333,6 +2421,16 @@ export interface RoomsApiInterface {
      * @memberof RoomsApiInterface
      */
     roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {PatchOrderParams} patchOrderParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -2365,6 +2463,18 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
      */
     public roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
         return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {PatchOrderParams} patchOrderParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

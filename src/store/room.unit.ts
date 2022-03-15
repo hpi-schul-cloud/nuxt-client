@@ -25,17 +25,18 @@ axiosInitializer();
 
 describe("room module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			receivedRequests = [];
+		});
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
+		const mockApi = {
+			roomsControllerGetRoomBoard: jest.fn(),
+			roomsControllerPatchElementVisibility: jest.fn(),
+			roomsControllerPatchOrderingOfElements: jest.fn(),
+		};
 		describe("fetch", () => {
-			const mockApi = {
-				roomsControllerGetRoomBoard: jest.fn(),
-				roomsControllerPatchElementVisibility: jest.fn(),
-			};
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			afterEach(() => {
-				jest.clearAllMocks();
-			});
 			it("should call backend and sets state correctly", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -50,7 +51,9 @@ describe("room module", () => {
 					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
 			});
+		});
 
+		describe("publishCard", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -66,6 +69,29 @@ describe("room module", () => {
 				expect(
 					mockApi.roomsControllerPatchElementVisibility.mock.calls[0]
 				).toContain("54321");
+				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+			});
+		});
+
+		describe("sortElements", () => {
+			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+
+				const roomModule = new Room({});
+				const payload = {
+					elements: ["1234", "2345", "3456", "4567"],
+				};
+				await roomModule.sortElements(payload);
+
+				expect(roomModule.getLoading).toBe(false);
+				expect(
+					mockApi.roomsControllerPatchOrderingOfElements
+				).toHaveBeenCalled();
+				expect(
+					mockApi.roomsControllerPatchOrderingOfElements.mock.calls[0][1]
+				).toStrictEqual(payload);
 				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
@@ -127,6 +153,32 @@ describe("room module", () => {
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
 				expect(roomModule.error).toBe(errorData);
+			});
+		});
+
+		describe("setBusinessError", () => {
+			it("should set businessError", () => {
+				const roomModule = new Room({});
+				const businessErrorData = {
+					statusCode: "400",
+					message: "error",
+					error: { type: "BadRequest" },
+				};
+				expect(roomModule.getBusinessError).not.toBe(businessErrorData);
+				roomModule.setBusinessError(businessErrorData);
+				expect(roomModule.businessError).toBe(businessErrorData);
+			});
+			it("should reset businessError", () => {
+				const roomModule = new Room({});
+				roomModule.businessError = {
+					statusCode: "400",
+					message: "error",
+					error: {},
+				};
+
+				roomModule.resetBusinessError();
+				expect(roomModule.businessError.statusCode).toStrictEqual("");
+				expect(roomModule.businessError.message).toStrictEqual("");
 			});
 		});
 	});

@@ -12,7 +12,9 @@ import {
 	RoomsApiFactory,
 	BoardResponse,
 	PatchVisibilityParams,
+	PatchOrderParams,
 } from "../serverApi/v3/api";
+import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "room",
@@ -30,6 +32,11 @@ export class Room extends VuexModule {
 	};
 	loading: boolean = false;
 	error: null | {} = null;
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+		error: {},
+	};
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -76,6 +83,26 @@ export class Room extends VuexModule {
 		}
 	}
 
+	@Action
+	async sortElements(payload: PatchOrderParams): Promise<void> {
+		this.setLoading(true);
+		try {
+			await this.roomsApi.roomsControllerPatchOrderingOfElements(
+				this.roomData.roomId,
+				payload
+			);
+			await this.fetchContent(this.roomData.roomId);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+			this.setLoading(false);
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -91,6 +118,20 @@ export class Room extends VuexModule {
 		this.error = error;
 	}
 
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+			error: {},
+		};
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -101,6 +142,10 @@ export class Room extends VuexModule {
 
 	get getRoomData(): BoardResponse {
 		return this.roomData;
+	}
+
+	get getBusinessError() {
+		return this.businessError;
 	}
 }
 
