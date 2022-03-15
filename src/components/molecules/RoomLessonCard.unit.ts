@@ -19,6 +19,7 @@ const baseTestProps = {
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const hiddenTestProps = {
@@ -37,6 +38,7 @@ const hiddenTestProps = {
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -73,6 +75,19 @@ describe("@components/molecules/RoomLessonCard", () => {
 			lessonCard.trigger("click");
 
 			expect(location.pathname).toStrictEqual("/courses/456/topics/123");
+		});
+
+		it("should NOT redirect to lesson page if dragging is in progress", () => {
+			const location = window.location;
+			const wrapper = getWrapper({
+				...baseTestProps,
+				role,
+				dragInProgress: true,
+			});
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.trigger("click");
+
+			expect(location.pathname).toStrictEqual("");
 		});
 
 		it("should have correct title", () => {

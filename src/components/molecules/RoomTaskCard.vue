@@ -114,6 +114,7 @@ export default {
 			default: "",
 		},
 		keyDrag: { type: Boolean, required: true },
+		dragInProgress: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -225,7 +226,9 @@ export default {
 			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
 		handleClick() {
-			window.location = `/homework/${this.task.id}`;
+			if (!this.dragInProgress) {
+				window.location = `/homework/${this.task.id}`;
+			}
 		},
 		redirectAction(value) {
 			window.location = value;
