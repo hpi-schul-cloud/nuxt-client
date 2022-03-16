@@ -52,6 +52,7 @@
 			>{{ $t("pages.administration.school.index.authSystems.addLdap") }}</v-btn
 		>
 		<v-text-field
+			v-if="customLoginLinkEnabled"
 			id="school-login-link"
 			:value="customLoginLink"
 			class="school-login-link"
@@ -97,6 +98,7 @@ import SchoolsModule from "@/store/schools";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
+import EnvConfigModule from "@/store/env-config";
 
 export default {
 	components: {
@@ -127,14 +129,8 @@ export default {
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
-		// customLoginLinkEnabled() {
-		// 	return (
-		// 		this.$config.FEATURE_LOGIN_LINK_ENABLED === "true" ||
-		// 		this.$config.FEATURE_LOGIN_LINK_ENABLED === true
-		// 	);
-		// },
+		customLoginLinkEnabled: () => EnvConfigModule.getLoginLinkEnabled,
 		customLoginLink() {
-			console.log(this.$theme);
 			let type = "";
 			const schoolId = "";
 			if (this.systems.some((system) => system.oauthConfig))
@@ -144,7 +140,7 @@ export default {
 				type = "strategy=ldap";
 				schoolId = `&schoolId=${SchoolsModule.getSchool.id}`;
 			}
-			return `http://localhost:3100/login?${type}${schoolId}`;
+			return `${window.location.origin}/login?${type}${schoolId}`;
 		},
 	},
 	methods: {

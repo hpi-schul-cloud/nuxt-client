@@ -120,6 +120,9 @@ export class EnvConfig extends VuexModule {
 	get getSchoolPolicyEnabled() {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
 	}
+	get getLoginLinkEnabled() {
+		return this.env.FEATURE_LOGIN_LINK_ENABLED;
+	}
 	get getRocketChatEnabled() {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
