@@ -25,7 +25,8 @@ const mockActions = <M>(
 };
 
 export function createModuleMocks<M extends VuexModule>(
-	moduleClass: ConstructorOf<M>
+	moduleClass: ConstructorOf<M>,
+	getters: Partial<M> = {}
 ): M {
 	const module: Function & Mod<M, any> = moduleClass;
 
@@ -40,5 +41,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return statics as M;
+	return { ...statics, ...getters } as M;
 }
