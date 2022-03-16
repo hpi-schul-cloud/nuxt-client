@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
+
 declare var createComponentMocks: Function;
 
 const mockData = {
@@ -11,7 +12,7 @@ const mockData = {
 			type: "task",
 			content: {
 				courseName: "Mathe",
-				id: "59cce1d381297026d02cdc4b",
+				id: "1234",
 				name: "Private Aufgabe von Marla - mit Kurs, offen",
 				createdAt: "2017-09-28T11:49:39.924Z",
 				updatedAt: "2017-09-28T11:49:39.924Z",
@@ -32,8 +33,8 @@ const mockData = {
 		{
 			type: "task",
 			content: {
-				courseName: "Mathe",
-				id: "59cce4c3c6abf042248e888e",
+				courseName: "Mathe_2",
+				id: "2345",
 				name: "Private Aufgabe von Cord - mit Kurs, offen",
 				createdAt: "2017-09-28T12:02:11.432Z",
 				updatedAt: "2017-09-28T12:02:11.432Z",
@@ -54,7 +55,7 @@ const mockData = {
 		{
 			type: "lesson",
 			content: {
-				id: "59cce4c3c6abf042248e888f",
+				id: "3456",
 				name: "Test Name",
 				courseName: "Mathe",
 				createdAt: "2017-09-28T11:58:46.601Z",
@@ -65,7 +66,7 @@ const mockData = {
 		{
 			type: "lesson",
 			content: {
-				id: "59cce4c3c6abf042248e888g",
+				id: "7890",
 				name: "Test Name2",
 				courseName: "Mathe",
 				createdAt: "2017-09-28T11:58:46.601Z",
@@ -73,11 +74,27 @@ const mockData = {
 				hidden: false,
 			},
 		},
+		{
+			type: "lockedtask",
+			content: {
+				id: "8901",
+				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+				allowed: false,
+			},
+		},
+		{
+			type: "lockedtask",
+			content: {
+				id: "9012",
+				name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+				allowed: false,
+			},
+		},
 	],
 };
 
-const getWrapper: any = (props: object, options?: object) => {
-	return mount(RoomDashboard, {
+const getWrapper = (props: object, options?: object) => {
+	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -88,36 +105,147 @@ const getWrapper: any = (props: object, options?: object) => {
 };
 
 describe("@components/templates/RoomDashboard.vue", () => {
-	beforeEach(() => {});
+	describe("common features", () => {
+		it("should have props", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 
-	it("should have props", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.roomData).toStrictEqual(mockData);
+			expect(wrapper.vm.role).toStrictEqual("teacher");
+		});
 
-		expect(wrapper.vm.roomData).toStrictEqual(mockData);
-		expect(wrapper.vm.role).toStrictEqual("teacher");
+		it("should list task cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			const taskCards = wrapper.findAll(".task-card");
+			expect(taskCards).toHaveLength(2);
+		});
+
+		it("should list lesson cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+
+			const lessonCards = wrapper.findAll(".lesson-card");
+			expect(lessonCards).toHaveLength(2);
+		});
+
+		it("should have lessonData object", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const expectedObject = {
+				roomId: "123",
+				displayColor: "black",
+			};
+
+			expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
+		});
+
+		it("should list locked cards", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			const taskCards = wrapper.findAll(".locked-card");
+			expect(taskCards).toHaveLength(2);
+		});
 	});
+	describe("Drag & Drop operations", () => {
+		it("should sortable value 'true' if user is a 'teacher'", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.sortable).toBe(true);
+		});
 
-	it("should list task cards", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+		it("should sortable value 'false' if user is NOT a 'teacher'", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			expect(wrapper.vm.sortable).toBe(false);
+		});
 
-		const taskCards = wrapper.findAll(".task-card");
-		expect(taskCards).toHaveLength(2);
-	});
+		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.isTouchDevice).toBe(false);
+			expect(wrapper.vm.touchDelay).toStrictEqual(20);
+		});
 
-	it("should list lesson cards", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "student" });
+		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
+			const tempOntouchstart = window.ontouchstart;
+			window.ontouchstart = () => null;
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			expect(wrapper.vm.isTouchDevice).toBe(true);
+			expect(wrapper.vm.touchDelay).toStrictEqual(200);
+			window.ontouchstart = tempOntouchstart;
+		});
 
-		const lessonCards = wrapper.findAll(".lesson-card");
-		expect(lessonCards).toHaveLength(2);
-	});
+		it("should sort elements after Drag&Drop", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
+			items.splice(1, 0, items.splice(0, 1)[0]);
 
-	it("should have lessonData object", async () => {
-		const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-		const expectedObject = {
-			roomId: "123",
-			displayColor: "black",
-		};
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
+				"Mathe"
+			);
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
+				"Mathe_2"
+			);
 
-		expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
+			const draggableElement = wrapper.find(".elements");
+			await draggableElement.vm.$emit("input", items);
+			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
+				"Mathe_2"
+			);
+			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
+				"Mathe"
+			);
+		});
+
+		it("sortable option should not true if the user is 'student'", () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			expect(wrapper.vm.sortable).toBe(false);
+		});
+
+		it("should be sorted the elements by keyboard'", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(true);
+			await wrapper.vm.$nextTick();
+
+			cardElement.vm.$emit("move-element", {
+				id: "1234",
+				moveIndex: 1,
+			});
+			expect(moveByKeyboardMock).toHaveBeenCalled();
+		});
+
+		it("should NOT be sorted the elements by keyboard for students'", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(false);
+			await wrapper.vm.$nextTick();
+
+			cardElement.vm.$emit("move-element", {
+				id: "1234",
+				moveIndex: 1,
+			});
+			expect(moveByKeyboardMock).not.toHaveBeenCalled();
+		});
+
+		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+
+			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
+			const cardElement = wrapper.findComponent({ ref: "item_1" });
+			expect(wrapper.vm.isDragging).toBe(false);
+			cardElement.vm.$emit("on-drag");
+			expect(wrapper.vm.isDragging).toBe(true);
+			await wrapper.vm.$nextTick();
+
+			cardElement.vm.$emit("tab-pressed");
+			expect(wrapper.vm.isDragging).toBe(false);
+		});
 	});
 });

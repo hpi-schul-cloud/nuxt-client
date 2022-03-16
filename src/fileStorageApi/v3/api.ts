@@ -111,6 +111,19 @@ export interface FileRecordResponse {
 	 */
 	parentType: string;
 }
+/**
+ *
+ * @export
+ * @interface RenameFileParams
+ */
+export interface RenameFileParams {
+	/**
+	 *
+	 * @type {string}
+	 * @memberof RenameFileParams
+	 */
+	fileName: string;
+}
 
 /**
  * FileApi - axios parameter creator
@@ -248,6 +261,74 @@ export const FileApiAxiosParamCreator = function (
 				...headersFromBaseOptions,
 				...options.headers,
 			};
+
+			return {
+				url: toPathString(localVarUrlObj),
+				options: localVarRequestOptions,
+			};
+		},
+		/**
+		 *
+		 * @param {string} fileRecordId
+		 * @param {RenameFileParams} renameFileParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		filesStorageControllerPatchFilename: async (
+			fileRecordId: string,
+			renameFileParams: RenameFileParams,
+			options: any = {}
+		): Promise<RequestArgs> => {
+			// verify required parameter 'fileRecordId' is not null or undefined
+			assertParamExists(
+				"filesStorageControllerPatchFilename",
+				"fileRecordId",
+				fileRecordId
+			);
+			// verify required parameter 'renameFileParams' is not null or undefined
+			assertParamExists(
+				"filesStorageControllerPatchFilename",
+				"renameFileParams",
+				renameFileParams
+			);
+			const localVarPath = `/file/rename/{fileRecordId}`.replace(
+				`{${"fileRecordId"}}`,
+				encodeURIComponent(String(fileRecordId))
+			);
+			// use dummy base URL string because the URL constructor only accepts absolute URLs.
+			const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+			let baseOptions;
+			if (configuration) {
+				baseOptions = configuration.baseOptions;
+			}
+
+			const localVarRequestOptions = {
+				method: "PATCH",
+				...baseOptions,
+				...options,
+			};
+			const localVarHeaderParameter = {} as any;
+			const localVarQueryParameter = {} as any;
+
+			// authentication bearer required
+			// http bearer authentication required
+			await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+			localVarHeaderParameter["Content-Type"] = "application/json";
+
+			setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+			let headersFromBaseOptions =
+				baseOptions && baseOptions.headers ? baseOptions.headers : {};
+			localVarRequestOptions.headers = {
+				...localVarHeaderParameter,
+				...headersFromBaseOptions,
+				...options.headers,
+			};
+			localVarRequestOptions.data = serializeDataIfNeeded(
+				renameFileParams,
+				localVarRequestOptions,
+				configuration
+			);
 
 			return {
 				url: toPathString(localVarUrlObj),
@@ -419,6 +500,36 @@ export const FileApiFp = function (configuration?: Configuration) {
 		},
 		/**
 		 *
+		 * @param {string} fileRecordId
+		 * @param {RenameFileParams} renameFileParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		async filesStorageControllerPatchFilename(
+			fileRecordId: string,
+			renameFileParams: RenameFileParams,
+			options?: any
+		): Promise<
+			(
+				axios?: AxiosInstance,
+				basePath?: string
+			) => AxiosPromise<FileRecordResponse>
+		> {
+			const localVarAxiosArgs =
+				await localVarAxiosParamCreator.filesStorageControllerPatchFilename(
+					fileRecordId,
+					renameFileParams,
+					options
+				);
+			return createRequestFunction(
+				localVarAxiosArgs,
+				globalAxios,
+				BASE_PATH,
+				configuration
+			);
+		},
+		/**
+		 *
 		 * @param {string} schoolId
 		 * @param {string} parentId
 		 * @param {'users' | 'schools' | 'courses' | 'teams' | 'dashboard' | 'tasks'} parentType
@@ -526,6 +637,26 @@ export const FileApiFactory = function (
 		},
 		/**
 		 *
+		 * @param {string} fileRecordId
+		 * @param {RenameFileParams} renameFileParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		filesStorageControllerPatchFilename(
+			fileRecordId: string,
+			renameFileParams: RenameFileParams,
+			options?: any
+		): AxiosPromise<FileRecordResponse> {
+			return localVarFp
+				.filesStorageControllerPatchFilename(
+					fileRecordId,
+					renameFileParams,
+					options
+				)
+				.then((request) => request(axios, basePath));
+		},
+		/**
+		 *
 		 * @param {string} schoolId
 		 * @param {string} parentId
 		 * @param {'users' | 'schools' | 'courses' | 'teams' | 'dashboard' | 'tasks'} parentType
@@ -604,6 +735,20 @@ export interface FileApiInterface {
 		limit?: number,
 		options?: any
 	): AxiosPromise<FileRecordListResponse>;
+
+	/**
+	 *
+	 * @param {string} fileRecordId
+	 * @param {RenameFileParams} renameFileParams
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof FileApiInterface
+	 */
+	filesStorageControllerPatchFilename(
+		fileRecordId: string,
+		renameFileParams: RenameFileParams,
+		options?: any
+	): AxiosPromise<FileRecordResponse>;
 
 	/**
 	 *
@@ -687,6 +832,28 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 				parentType,
 				skip,
 				limit,
+				options
+			)
+			.then((request) => request(this.axios, this.basePath));
+	}
+
+	/**
+	 *
+	 * @param {string} fileRecordId
+	 * @param {RenameFileParams} renameFileParams
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof FileApi
+	 */
+	public filesStorageControllerPatchFilename(
+		fileRecordId: string,
+		renameFileParams: RenameFileParams,
+		options?: any
+	) {
+		return FileApiFp(this.configuration)
+			.filesStorageControllerPatchFilename(
+				fileRecordId,
+				renameFileParams,
 				options
 			)
 			.then((request) => request(this.axios, this.basePath));

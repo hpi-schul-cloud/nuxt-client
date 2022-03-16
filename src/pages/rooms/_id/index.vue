@@ -31,6 +31,7 @@
 import { authModule, roomModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -47,8 +48,8 @@ export default {
 		},
 		dashBoardRole() {
 			const roles = authModule.getUserRoles;
-			if (roles.includes("teacher")) return "teacher";
-			if (roles.includes("student")) return "student";
+			if (roles.includes(Roles.Teacher)) return Roles.Teacher;
+			if (roles.includes(Roles.Student)) return Roles.Student;
 			return undefined;
 		},
 	},

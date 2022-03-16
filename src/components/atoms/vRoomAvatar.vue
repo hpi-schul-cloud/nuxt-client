@@ -140,6 +140,7 @@ export default {
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
+	color: var(--color-black);
 	text-align: center;
 	overflow-wrap: break-word;
 
@@ -156,6 +157,7 @@ export default {
 		margin-left: calc(var(--space-base-vuetify) * -3);
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
+		color: var(--color-black);
 	}
 }
 .group-avatar {

@@ -3,9 +3,14 @@
 		class="mx-auto mb-4 lesson-card"
 		max-width="100%"
 		:aria-label="ariaLabel"
-		:href="lessonHref(lesson.id, room.roomId)"
 		tabindex="0"
 		outlined
+		@click="handleClick"
+		@keydown.enter="handleClick"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
+		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text>
 			<div class="top-row-container mb-1">
@@ -29,7 +34,7 @@
 					.join('-')}`"
 				text
 				:color="titleColor"
-				@click.prevent="action.action"
+				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
 			>
@@ -40,6 +45,7 @@
 <script>
 import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -59,6 +65,7 @@ export default {
 			type: String,
 			default: "",
 		},
+		keyDrag: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -66,7 +73,7 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 			},
-			defaultTitleColor: "#54616e",
+			defaultTitleColor: "--color-secondary",
 		};
 	},
 	computed: {
@@ -78,13 +85,13 @@ export default {
 		},
 		cardActions() {
 			const roleBasedActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
+			if (this.role === Roles.Teacher) {
 				if (this.isHidden) {
-					roleBasedActions.teacher.push({
+					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
 						action: () => this.postLesson(),
 						name: this.$t("pages.room.lessonCard.label.post"),
@@ -92,19 +99,19 @@ export default {
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role === Roles.Student) {
 				// if action is needed for the students add actions like above
 			}
 			return roleBasedActions;
 		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
-				teacher: [],
-				student: [],
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
 			};
 
-			if (this.role == "teacher") {
-				roleBasedMoreActions.teacher.push({
+			if (this.role === Roles.Teacher) {
+				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
@@ -114,15 +121,15 @@ export default {
 				});
 
 				if (!this.isHidden) {
-					roleBasedMoreActions.teacher.push({
+					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
-						name: this.$t("pages.room.taskCard.label.revert"),
+						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
 			}
 
-			if (this.role == "student") {
+			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
@@ -130,8 +137,8 @@ export default {
 		},
 	},
 	methods: {
-		lessonHref: (id, roomId) => {
-			return `/courses/${roomId}/topics/${id}`;
+		handleClick() {
+			window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
 		},
 		redirectAction(value) {
 			window.location = value;
@@ -141,6 +148,30 @@ export default {
 		},
 		revertPublishedCard() {
 			this.$emit("revert-lesson");
+		},
+		onKeyPress(e) {
+			switch (e.keyCode) {
+				case 32:
+					this.$emit("on-drag");
+					break;
+				case 38:
+					if (this.keyDrag)
+						this.$emit("move-element", {
+							id: this.lesson.id,
+							moveIndex: -1,
+						});
+					break;
+				case 40:
+					if (this.keyDrag)
+						this.$emit("move-element", {
+							id: this.lesson.id,
+							moveIndex: 1,
+						});
+					break;
+
+				default:
+					break;
+			}
 		},
 	},
 };
