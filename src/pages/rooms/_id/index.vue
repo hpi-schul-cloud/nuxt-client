@@ -61,7 +61,8 @@ export default {
 							href: `/homework/new?course=${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_task",
 							ariaLabel: this.$t("pages.rooms.fab.add.aria.task"),
-						},						{
+						},
+						{
 							label: this.$t("pages.rooms.fab.add.lesson"),
 							icon: mdiViewListOutline,
 							href: `/courses/${this.roomData.roomId}/topics/add`,
