@@ -1,18 +1,18 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
-import FooBar from "@/pages/foobar/index.vue";
+import PocVuexPage from "@/pages/poc-vuex/index.vue";
 import { provide } from "@nuxtjs/composition-api";
 import TaskModule from "@/store/tasks";
 import { taskFactory } from "@/store/task.filter.unit";
 
-describe("FooBar", () => {
-	let wrapper: Wrapper<FooBar>;
+describe("PocVuexPage", () => {
+	let wrapper: Wrapper<PocVuexPage>;
 	let taskModule: TaskModule;
 
 	beforeEach(() => {
 		taskModule = new TaskModule({});
 		taskModule.tasks = taskFactory.buildList(5);
 
-		wrapper = shallowMount(FooBar, {
+		wrapper = shallowMount(PocVuexPage, {
 			setup() {
 				provide("taskModule", taskModule);
 			},
