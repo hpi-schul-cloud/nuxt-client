@@ -58,12 +58,15 @@
 			:label="
 				$t('pages.administration.school.index.authSystems.loginLinkLabel')
 			"
+			:color="copiedStatus ? 'success' : 'primary'"
 			readonly
 			dense
+			:append-outer-icon="
+				copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy
+			"
+			@click:append-outer="copyLoginLink"
+			@blur="linkCopyFinished"
 		></v-text-field>
-		<v-btn color="secondary" class="copy-link" @click="copyLoginLink">{{
-			$t("pages.administration.school.index.authSystems.copyLink")
-		}}</v-btn>
 		<v-custom-dialog
 			v-model="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
@@ -93,6 +96,7 @@
 import SchoolsModule from "@/store/schools";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
 
 export default {
 	components: {
@@ -103,6 +107,9 @@ export default {
 			type: Array,
 			required: true,
 		},
+		copiedStatus: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -112,6 +119,8 @@ export default {
 			},
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
+			iconMdiContentCopy: mdiContentCopy,
+			iconMdiCheckCircle: mdiCheckCircle,
 		};
 	},
 	computed: {
@@ -164,6 +173,11 @@ export default {
 			copyText.setSelectionRange(0, 99999); // For mobile devices
 
 			navigator.clipboard.writeText(copyText.value);
+
+			this.copiedStatus = true;
+		},
+		linkCopyFinished() {
+			this.copiedStatus = false;
 		},
 	},
 };
