@@ -31,6 +31,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
+import { mdiMagnify } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
