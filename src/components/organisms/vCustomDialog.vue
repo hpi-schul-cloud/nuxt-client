@@ -16,6 +16,7 @@
 			<v-card-actions v-if="hasButtons">
 				<v-spacer></v-spacer>
 				<v-btn
+					data-testId="dialog-cancel"
 					class="dialog-closed"
 					depressed
 					outlined
@@ -24,6 +25,7 @@
 					{{ this.$t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn
+					data-testId="dialog-confirm"
 					class="dialog-confirmed"
 					color="primary"
 					depressed
