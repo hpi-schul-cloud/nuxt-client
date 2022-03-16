@@ -1,6 +1,8 @@
 import AddContentModal from "@components/molecules/AddContentModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
-import { contentModule } from "@/store";
+import Vuex from "vuex";
+import { contentModule, initializeStores } from "@/store";
+import ContentModule from "@/store/content";
 
 const testProps = {
 	showCopyModal: true,
@@ -121,6 +123,15 @@ function getWrapper(attributes, options) {
 }
 
 describe("@components/molecules/AddContentModal", () => {
+	beforeEach(() => {
+		const store = new Vuex.Store({
+			modules: {
+				content: ContentModule,
+			},
+		});
+		initializeStores(store);
+	});
+
 	it(...isValidComponent(AddContentModal));
 
 	it("nothing selected submit should be disabled", async () => {

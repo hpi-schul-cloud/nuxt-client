@@ -1,5 +1,7 @@
 import UserHasRole from "./UserHasRole";
-import { authModule } from "@/store";
+import Vuex from "vuex";
+import { authModule, initializeStores } from "@/store";
+import AuthModule from "@/store/auth";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -37,6 +39,15 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 };
 
 describe("@components/helpers/UserHasRole", () => {
+	beforeEach(() => {
+		const store = new Vuex.Store({
+			modules: {
+				auth: AuthModule,
+			},
+		});
+		initializeStores(store);
+	});
+
 	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
 		authModule.setUser({ roles: [{ name: "admin" }] });

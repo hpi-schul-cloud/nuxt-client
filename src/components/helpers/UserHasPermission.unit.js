@@ -1,5 +1,8 @@
+import { initializeStores } from "@/store";
+import Vuex from "vuex";
 import UserHasPermission from "./UserHasPermission";
 import { authModule } from "@/store";
+import AuthModule from "@/store/auth";
 
 /**
  * @param  { String } expectedPermission used as prop
@@ -43,6 +46,15 @@ const checkCorrectView = (
 };
 
 describe("@components/helpers/UserHasPermission", () => {
+	beforeEach(() => {
+		const store = new Vuex.Store({
+			modules: {
+				auth: AuthModule,
+			},
+		});
+		initializeStores(store);
+	});
+
 	it(...isValidComponent(UserHasPermission));
 	it("view true-slot if user has permission", () => {
 		authModule.setUser({ permissions: ["admin"] });

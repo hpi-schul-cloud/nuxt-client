@@ -1,7 +1,20 @@
 import TheFooter from "./TheFooter";
-import { envConfigModule, filePathsModule } from "@/store";
+import { envConfigModule, filePathsModule, initializeStores } from "@/store";
+import Vuex from "vuex";
+import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 describe("@components/legacy/TheFooter", () => {
+	beforeEach(() => {
+		const store = new Vuex.Store({
+			modules: {
+				filePaths: FilePathsModule,
+				"env-config": EnvConfigModule,
+			},
+		});
+		initializeStores(store);
+	});
+
 	it(...isValidComponent(TheFooter));
 
 	const $theme = {
@@ -43,7 +56,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(7);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(6);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name
 		);
