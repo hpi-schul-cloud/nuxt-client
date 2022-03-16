@@ -3,6 +3,7 @@ import AuthModule from "@/store/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
+import { User } from "@/store/types/auth";
 
 const mockData = {
 	roomId: "123",
@@ -61,6 +62,28 @@ const user = {
 	roles: [{ name: "teacher" }],
 };
 
+const mockAuthStoreDataStudentInvalid = {
+	__v: 0,
+	_id: "asdf",
+	id: "asdf",
+	firstName: "Arthur",
+	lastName: "Dent",
+	email: "arthur.dent@hitchhiker.org",
+	roles: ["student"],
+	permissions: ["ABC", "DEF"],
+};
+
+const mockAuthStoreDataTeacher = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
+	roles: ["teacher"],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+};
+
 const $route = {
 	params: {
 		id: "123",
@@ -82,7 +105,7 @@ const getWrapper: any = () => {
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
 		RoomModule.setRoomData(mockData as any);
-		AuthModule.setUser(user as any);
+		AuthModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 
 	it("should fetch data", async () => {
@@ -100,5 +123,18 @@ describe("@pages/rooms/_id/index.vue", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
+	});
+
+	it("should not show FAB if user does not have permission to create courses", () => {
+		AuthModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(false);
+	});
+
+	it("should show FAB if user has permission to create courses", () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(true);
 	});
 });

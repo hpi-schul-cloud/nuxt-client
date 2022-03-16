@@ -5,6 +5,7 @@
 		:full-width="true"
 		:fab-items="fab"
 		:aria-label="roomData.title"
+		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2 course-title">
@@ -25,6 +26,12 @@
 			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
+		<import-modal
+			v-model="importDialog.isOpen"
+			class="import-modal"
+			@update-rooms="updateRooms"
+		>
+		</import-modal>
 	</default-wireframe>
 </template>
 
@@ -33,17 +40,28 @@ import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
+import ImportModal from "@components/molecules/ImportModal";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { mdiPlus, mdiViewListOutline, mdiFormatListChecks } from "@mdi/js";
+import {
+	mdiPlus,
+	mdiViewListOutline,
+	mdiFormatListChecks,
+	mdiCloudDownload,
+} from "@mdi/js";
 
 export default {
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
+		ImportModal,
 	},
 	layout: "defaultVuetify",
 	data() {
-		return {};
+		return {
+			importDialog: {
+				isOpen: false,
+			},
+		};
 	},
 	computed: {
 		fab() {
@@ -52,6 +70,7 @@ export default {
 			) {
 				return {
 					icon: mdiPlus,
+					title: this.$t("pages.rooms.fab.add"),
 					ariaLabel: this.$t("pages.rooms.fab.add"),
 					testId: "add-content-button",
 					actions: [
@@ -60,23 +79,26 @@ export default {
 							icon: mdiFormatListChecks,
 							href: `/homework/new?course=${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_task",
-							ariaLabel: this.$t("pages.rooms.fab.add.aria.task"),
+							ariaLabel: this.$t("pages.rooms.fab.add.task"),
 						},
 						{
 							label: this.$t("pages.rooms.fab.add.lesson"),
 							icon: mdiViewListOutline,
 							href: `/courses/${this.roomData.roomId}/topics/add`,
 							dataTestid: "fab_button_add_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.add.aria.lesson"),
+							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+						},
+						{
+							label: this.$t("pages.rooms.fab.import.lesson"),
+							icon: mdiCloudDownload,
+							dataTestid: "fab_button_import_lesson",
+							ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
+							customEvent: {
+								name: "fabButtonEvent",
+								value: true,
+							},
 						},
 					],
-				};
-				return {
-					icon: mdiPlus,
-					title: this.$t("common.labels.course"),
-					href: "/courses/add",
-					ariaLabel: this.$t("pages.courses.new.title"),
-					testId: "add-course-button",
 				};
 			}
 
@@ -95,6 +117,11 @@ export default {
 	async created() {
 		const courseId = this.$route.params.id;
 		await RoomModule.fetchContent(courseId);
+	},
+	methods: {
+		fabClick() {
+			this.importDialog.isOpen = true;
+		},
 	},
 	head() {
 		return {
