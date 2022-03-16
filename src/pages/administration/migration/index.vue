@@ -370,9 +370,12 @@ export default {
 		},
 	},
 	created() {
+    if (!this.isAllowed) {
+      this.$router.push("/");
+    }
     this.summary();
     this.checkTotalInterval();
-	},
+  },
 	methods: {
 		isStepEditable(step) {
 			switch (step) {
