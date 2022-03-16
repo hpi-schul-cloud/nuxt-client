@@ -34,7 +34,7 @@ import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { mdiPlus, mdiBookPlus, mdiPlaylistPlus } from "@mdi/js";
+import { mdiPlus, mdiViewListOutline, mdiFormatListChecks } from "@mdi/js";
 
 export default {
 	components: {
@@ -56,18 +56,17 @@ export default {
 					testId: "add-content-button",
 					actions: [
 						{
-							label: this.$t("pages.rooms.fab.add.lesson"),
-							icon: mdiBookPlus,
-							href: `/courses/${this.roomData.roomId}/topics/add`,
-							dataTestid: "fab_button_add_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.add.aria.lesson"),
-						},
-						{
 							label: this.$t("pages.rooms.fab.add.task"),
-							icon: mdiPlaylistPlus,
+							icon: mdiFormatListChecks,
 							href: `/homework/new?course=${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_task",
 							ariaLabel: this.$t("pages.rooms.fab.add.aria.task"),
+						},						{
+							label: this.$t("pages.rooms.fab.add.lesson"),
+							icon: mdiViewListOutline,
+							href: `/courses/${this.roomData.roomId}/topics/add`,
+							dataTestid: "fab_button_add_lesson",
+							ariaLabel: this.$t("pages.rooms.fab.add.aria.lesson"),
 						},
 					],
 				};
