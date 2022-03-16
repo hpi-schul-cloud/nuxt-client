@@ -79,7 +79,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = {
 					elements: ["1234", "2345", "3456", "4567"],
 				};
@@ -158,7 +158,7 @@ describe("room module", () => {
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
@@ -169,7 +169,7 @@ describe("room module", () => {
 				expect(roomModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				roomModule.businessError = {
 					statusCode: "400",
 					message: "error",

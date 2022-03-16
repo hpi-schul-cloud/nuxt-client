@@ -5,7 +5,7 @@ import TaskModule from "@/store/tasks";
 import { taskFactory } from "@/store/task.filter.unit";
 
 describe("PocVuexPage", () => {
-	let wrapper: Wrapper<PocVuexPage>;
+	let wrapper: Wrapper<Vue>;
 	let taskModule: TaskModule;
 
 	beforeEach(() => {
