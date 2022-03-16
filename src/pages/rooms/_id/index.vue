@@ -29,7 +29,7 @@
 		<import-modal
 			v-model="importDialog.isOpen"
 			class="import-modal"
-			@update-rooms="updateRooms"
+			@update-room="updateRoom"
 		>
 		</import-modal>
 	</default-wireframe>
@@ -121,6 +121,9 @@ export default {
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
+		},
+		async updateRoom() {
+			await RoomsModule.fetch(courseId);
 		},
 	},
 	head() {

@@ -1,4 +1,4 @@
-import RoomModule from "@store/room";
+import RoomsModule from "@store/room";
 import AuthModule from "@/store/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
@@ -57,11 +57,6 @@ const mockData = {
 	],
 };
 
-const user = {
-	name: "abc",
-	roles: [{ name: "teacher" }],
-};
-
 const mockAuthStoreDataStudentInvalid = {
 	__v: 0,
 	_id: "asdf",
@@ -69,7 +64,7 @@ const mockAuthStoreDataStudentInvalid = {
 	firstName: "Arthur",
 	lastName: "Dent",
 	email: "arthur.dent@hitchhiker.org",
-	roles: ["student"],
+	roles: [{ name: "student" }],
 	permissions: ["ABC", "DEF"],
 };
 
@@ -80,7 +75,7 @@ const mockAuthStoreDataTeacher = {
 	firstName: "Peter",
 	lastName: "Parker",
 	email: "peter.parker@hitchhiker.org",
-	roles: ["teacher"],
+	roles: [{ name: "teacher" }],
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
@@ -104,7 +99,7 @@ const getWrapper: any = () => {
 
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
-		RoomModule.setRoomData(mockData as any);
+		RoomsModule.setRoomData(mockData as any);
 		AuthModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 
