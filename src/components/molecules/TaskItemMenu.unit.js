@@ -148,6 +148,9 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const deleteBtn = wrapper.find("#task-action-delete");
 			await deleteBtn.trigger("click");
 
+			const confirmBtn = wrapper.find(".dialog-confirmed");
+			await confirmBtn.trigger("click");
+
 			expect(deleteTaskMock).toHaveBeenCalled();
 		});
 	});
