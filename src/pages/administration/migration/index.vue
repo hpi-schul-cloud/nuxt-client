@@ -366,7 +366,8 @@ export default {
 		totalImportUsers(val) {
 			if (val > 0) {
 				clearInterval(this.checkTotal);
-			}g
+			}
+			g;
 		},
 	},
 	created() {
