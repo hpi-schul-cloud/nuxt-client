@@ -109,9 +109,6 @@ export default {
 			type: Array,
 			required: true,
 		},
-		copiedStatus: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {
@@ -123,6 +120,7 @@ export default {
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiContentCopy: mdiContentCopy,
 			iconMdiCheckCircle: mdiCheckCircle,
+			copiedStatus: false,
 		};
 	},
 	computed: {
