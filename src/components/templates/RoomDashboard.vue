@@ -50,6 +50,7 @@
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
+						@open-modal="getSharedLesson"
 					/>
 					<room-locked-card
 						v-if="item.type === cardTypes.Lockedtask"
@@ -122,6 +123,36 @@
 				/>
 			</div>
 		</div>
+		<vCustomDialog
+			ref="customDialog"
+			:is-open="lessonShare.isOpen"
+			class="room-dialog"
+			@dialog-closed="lessonShare.isOpen = false"
+		>
+			<div slot="title" class="room-title">
+				<h4>Copy code has been generated!</h4>
+			</div>
+			<template slot="content">
+				<v-divider class="mb-4"></v-divider>
+				<div class="share-info-text">
+					<p>
+						Share the following link with your students to invite them to the
+						course. Students must be logged in to use the link.
+					</p>
+				</div>
+				<div>
+					<v-text-field
+						:value="lessonShare.token"
+						label="Outlined"
+						outlined
+					></v-text-field>
+				</div>
+				<v-divider class="mb-4"></v-divider>
+				<div class="share-cancel-button">
+					<v-btn class="dialog-back-button" depressed outlined> Close </v-btn>
+				</div>
+			</template>
+		</vCustomDialog>
 	</div>
 </template>
 
@@ -129,6 +160,7 @@
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
@@ -139,6 +171,7 @@ export default {
 		RoomTaskCard,
 		RoomLessonCard,
 		RoomLockedCard,
+		vCustomDialog,
 		draggable,
 	},
 	props: {
@@ -154,6 +187,7 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
+			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
 		};
 	},
 	computed: {
@@ -212,6 +246,12 @@ export default {
 			await RoomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
+		async getSharedLesson(lessonId) {
+			const lessonData = await RoomModule.getSharedLessonData(lessonId);
+			this.lessonShare.lessonData = lessonData;
+			this.lessonShare.token = lessonData.shareToken;
+			this.lessonShare.isOpen = true;
+		},
 	},
 };
 </script>
@@ -225,5 +265,15 @@ export default {
 }
 .ghost {
 	opacity: 0;
+}
+
+.share-info-text {
+	// min-height: var(--sidebar-width);
+	font-size: var(--space-md);
+	color: var(--color-black);
+}
+
+.share-cancel-button {
+	text-align: right;
 }
 </style>

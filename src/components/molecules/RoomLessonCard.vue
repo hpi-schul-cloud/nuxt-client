@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
+import { mdiPencilOutline, mdiUndoVariant, mdiShareVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
@@ -72,6 +72,7 @@ export default {
 			icons: {
 				mdiPencilOutline,
 				mdiUndoVariant,
+				mdiShareVariant,
 			},
 			defaultTitleColor: "--color-secondary",
 		};
@@ -125,6 +126,16 @@ export default {
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
+					});
+				}
+
+				if (true) {
+					// this will be replaced by the env control.
+
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.$emit("open-modal", this.lesson.id),
+						name: "share",
 					});
 				}
 			}

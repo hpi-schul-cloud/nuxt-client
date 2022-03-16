@@ -103,6 +103,31 @@ export class Room extends VuexModule {
 		}
 	}
 
+	@Action
+	async getSharedLessonData(lessonId: string): Promise<void> {
+		// this.resetBusinessError();
+		// const params = {
+		// 	shareToken: courseCode,
+		// };
+		try {
+			const lessonResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			// this.setSharedCourseData({
+			// 	code: courseCode,
+			// 	courseName: courseName,
+			// 	status: "success",
+			// 	message: "",
+			// });
+			// debugger;
+			return lessonResult;
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
