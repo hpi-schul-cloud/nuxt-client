@@ -51,6 +51,19 @@
 			nuxt
 			>{{ $t("pages.administration.school.index.authSystems.addLdap") }}</v-btn
 		>
+		<v-text-field
+			id="school-login-link"
+			:value="customLoginLink"
+			class="school-login-link"
+			:label="
+				$t('pages.administration.school.index.authSystems.loginLinkLabel')
+			"
+			readonly
+			dense
+		></v-text-field>
+		<v-btn color="secondary" class="copy-link" @click="copyLoginLink">{{
+			$t("pages.administration.school.index.authSystems.copyLink")
+		}}</v-btn>
 		<v-custom-dialog
 			v-model="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
@@ -105,6 +118,25 @@ export default {
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
+		// customLoginLinkEnabled() {
+		// 	return (
+		// 		this.$config.FEATURE_LOGIN_LINK_ENABLED === "true" ||
+		// 		this.$config.FEATURE_LOGIN_LINK_ENABLED === true
+		// 	);
+		// },
+		customLoginLink() {
+			console.log(this.$theme);
+			let type = "";
+			const schoolId = "";
+			if (this.systems.some((system) => system.oauthConfig))
+				type = "strategy=iserv";
+			else if (this.systems.length === 0) type = "strategy=email";
+			else if (this.systems.some((system) => system.type === "ldap")) {
+				type = "strategy=ldap";
+				schoolId = `&schoolId=${SchoolsModule.getSchool.id}`;
+			}
+			return `http://localhost:3100/login?${type}${schoolId}`;
+		},
 	},
 	methods: {
 		// TODO - Discuss which systems are still gonna be editable in the future
@@ -124,6 +156,14 @@ export default {
 		removeSystem(systemId) {
 			SchoolsModule.deleteSystem(systemId);
 			// TODO show error
+		},
+		copyLoginLink() {
+			const copyText = document.getElementById("school-login-link");
+
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); // For mobile devices
+
+			navigator.clipboard.writeText(copyText.value);
 		},
 	},
 };
