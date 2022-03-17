@@ -22,6 +22,11 @@ spec:
         app: nuxtclient
       annotations:
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
       containers:
       - name: nuxtclient
         image: {{ NUXT_CLIENT_IMAGE }}-{{ SC_THEME }}:{{ NUXT_CLIENT_IMAGE_TAG }}
