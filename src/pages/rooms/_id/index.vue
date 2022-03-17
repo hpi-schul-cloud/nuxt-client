@@ -38,6 +38,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
+import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportModal from "@components/molecules/ImportModal";
@@ -68,6 +69,40 @@ export default {
 			if (
 				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
+				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+					return {
+						icon: mdiPlus,
+						title: this.$t("pages.rooms.fab.add"),
+						ariaLabel: this.$t("pages.rooms.fab.add"),
+						testId: "add-content-button",
+						actions: [
+							{
+								label: this.$t("pages.rooms.fab.add.task"),
+								icon: mdiFormatListChecks,
+								href: `/homework/new?course=${this.roomData.roomId}`,
+								dataTestid: "fab_button_add_task",
+								ariaLabel: this.$t("pages.rooms.fab.add.task"),
+							},
+							{
+								label: this.$t("pages.rooms.fab.add.lesson"),
+								icon: mdiViewListOutline,
+								href: `/courses/${this.roomData.roomId}/topics/add`,
+								dataTestid: "fab_button_add_lesson",
+								ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+							},
+							{
+								label: this.$t("pages.rooms.fab.import.lesson"),
+								icon: mdiCloudDownload,
+								dataTestid: "fab_button_import_lesson",
+								ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
+								customEvent: {
+									name: "fabButtonEvent",
+									value: true,
+								},
+							},
+						],
+					};
+				}
 				return {
 					icon: mdiPlus,
 					title: this.$t("pages.rooms.fab.add"),
@@ -87,16 +122,6 @@ export default {
 							href: `/courses/${this.roomData.roomId}/topics/add`,
 							dataTestid: "fab_button_add_lesson",
 							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
-						},
-						{
-							label: this.$t("pages.rooms.fab.import.lesson"),
-							icon: mdiCloudDownload,
-							dataTestid: "fab_button_import_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
-							customEvent: {
-								name: "fabButtonEvent",
-								value: true,
-							},
 						},
 					],
 				};
