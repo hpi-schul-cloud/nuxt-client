@@ -40,8 +40,7 @@ export default {
 		RoomDashboard,
 	},
 	layout: "defaultVuetify",
-	data() {
-	},
+	data() {},
 	computed: {
 		roomData() {
 			return RoomModule.getRoomData;

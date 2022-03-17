@@ -78,8 +78,7 @@ export default Vue.extend({
 		DefaultWireframe,
 	},
 	layout: "defaultVuetify",
-	data() {
-	},
+	data() {},
 	computed: {
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
