@@ -198,7 +198,7 @@ export default {
 			if (!this.isStudent) {
 				return {
 					icon: mdiPlus,
-					title: this.$t("common.words.task"),
+					title: this.$t("common.actions.create"),
 					href: "/homework/new",
 					ariaLabel: this.$t("components.organisms.TasksDashboardMain.addTask"),
 					testId: "addTask",

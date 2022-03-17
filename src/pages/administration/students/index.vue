@@ -367,7 +367,7 @@ export default {
 
 			return {
 				icon: mdiPlus,
-				title: this.$t("common.labels.student"),
+				title: this.$t("common.actions.create"),
 				testId: "fab_button_students_table",
 				ariaLabel: this.$t("pages.administration.students.new.title"),
 				actions: [

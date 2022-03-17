@@ -186,7 +186,7 @@ export default {
 				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					return {
 						icon: mdiPlus,
-						title: this.$t("common.labels.course"),
+						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.courses.new.title"),
 						testId: "add-course-button",
 						actions: [
@@ -212,7 +212,7 @@ export default {
 				}
 				return {
 					icon: mdiPlus,
-					title: this.$t("common.labels.course"),
+					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.courses.new.title"),
 					testId: "add-course-button",
