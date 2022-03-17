@@ -19,18 +19,18 @@
 					data-testId="dialog-cancel"
 					class="dialog-closed"
 					depressed
-					outlined
+					text
 					@click="$emit('dialog-closed', false)"
 				>
 					{{ this.$t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn
 					data-testId="dialog-confirm"
-					class="dialog-confirmed"
+					class="dialog-confirmed px-6"
 					color="primary"
 					depressed
 					@click="confirmDialog"
-					>{{ this.$t("common.actions.confirm") }}</v-btn
+					>{{ this.$t(confirmBtnTitleKey) }}</v-btn
 				>
 			</v-card-actions>
 		</v-card>
@@ -54,6 +54,10 @@ export default {
 		},
 		hasButtons: {
 			type: Boolean,
+		},
+		confirmBtnTitleKey: {
+			type: String,
+			default: "common.actions.confirm",
 		},
 	},
 	methods: {
