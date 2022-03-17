@@ -62,10 +62,8 @@
 			:color="copiedStatus ? 'success' : 'primary'"
 			readonly
 			dense
-			:append-outer-icon="
-				copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy
-			"
-			@click:append-outer="copyLoginLink"
+			:append-icon="copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy"
+			@click:append="copyLoginLink"
 			@blur="linkCopyFinished"
 		></v-text-field>
 		<v-custom-dialog
