@@ -42,7 +42,7 @@ jobs:
       - name: npm run lint:fix
         if: failure() && matrix.os == 'ubuntu-latest'
         run: npm run lint
-      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      - uses: stefanzweifel/git-auto-commit-action@v4.13.1
         # only run on one of the matrix builds
         if: failure() && matrix.os == 'ubuntu-latest'
         with:
