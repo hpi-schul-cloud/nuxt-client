@@ -134,7 +134,7 @@ import AuthModule from "@/store/auth";
 import RoomsModule from "@store/rooms";
 import EnvConfigModule from "@/store/env-config";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import { mdiMagnify, mdiPlus, mdiCloudDownload } from "@mdi/js";
+import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
 export default {
 	components: {
@@ -192,7 +192,7 @@ export default {
 						actions: [
 							{
 								label: this.$t("pages.rooms.fab.add"),
-								icon: mdiPlus,
+								icon: mdiSchool,
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.aria"),
