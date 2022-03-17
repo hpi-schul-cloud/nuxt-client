@@ -706,6 +706,7 @@
 	"pages.room.taskCard.label.edit": "Bearbeiten",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.locked.label.info": "Sie sind nicht berechtigt, die Aufgabendetails anzusehen.",
+	"pages.room.lessonShare.modal.info": "Verteile folgenden Link an deine Schüler:innen, um sie zum Kurs einzuladen. Die Schüler:innen müssen dafür angemeldet sein.",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",

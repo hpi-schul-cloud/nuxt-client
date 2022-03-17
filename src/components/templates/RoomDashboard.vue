@@ -136,20 +136,22 @@
 				<v-divider class="mb-4"></v-divider>
 				<div class="share-info-text">
 					<p>
-						Share the following link with your students to invite them to the
-						course. Students must be logged in to use the link.
+						{{ $t("pages.room.lessonShare.modal.info") }}
 					</p>
 				</div>
 				<div>
-					<v-text-field
-						:value="lessonShare.token"
-						label="Outlined"
-						outlined
-					></v-text-field>
+					<v-text-field :value="lessonShare.token" outlined></v-text-field>
 				</div>
 				<v-divider class="mb-4"></v-divider>
 				<div class="share-cancel-button">
-					<v-btn class="dialog-back-button" depressed outlined> Close </v-btn>
+					<v-btn
+						class="dialog-back-button"
+						depressed
+						outlined
+						@click="lessonShare.isOpen = false"
+					>
+						{{ $t("common.labels.close") }}
+					</v-btn>
 				</div>
 			</template>
 		</vCustomDialog>
@@ -247,9 +249,14 @@ export default {
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			const lessonData = await RoomModule.getSharedLessonData(lessonId);
-			this.lessonShare.lessonData = lessonData;
-			this.lessonShare.token = lessonData.shareToken;
+			await RoomModule.getSharedLesson(lessonId);
+			const sharedLesson = RoomModule.getSharedLessonData;
+
+			this.lessonShare.token = sharedLesson.code;
+			this.lessonShare.lessonName = sharedLesson.lessonName;
+			this.lessonShare.status = sharedLesson.status;
+			this.lessonShare.message = sharedLesson.message;
+
 			this.lessonShare.isOpen = true;
 		},
 	},

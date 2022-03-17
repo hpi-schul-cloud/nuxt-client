@@ -15,6 +15,7 @@ import {
 	PatchOrderParams,
 } from "../serverApi/v3/api";
 import { BusinessError } from "./types/commons";
+import { SharedLessonObject } from "./types/room";
 
 @Module({
 	name: "room",
@@ -36,6 +37,12 @@ export class Room extends VuexModule {
 		statusCode: "",
 		message: "",
 		error: {},
+	};
+	sharedLessonData: SharedLessonObject = {
+		code: "",
+		lessonName: "",
+		status: "",
+		message: "",
 	};
 
 	private _roomsApi?: RoomsApiInterface;
@@ -104,21 +111,15 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	async getSharedLessonData(lessonId: string): Promise<void> {
-		// this.resetBusinessError();
-		// const params = {
-		// 	shareToken: courseCode,
-		// };
+	async getSharedLesson(lessonId: string): Promise<void> {
 		try {
-			const lessonResult = await $axios.$get(`/v1/lessons/${lessonId}`);
-			// this.setSharedCourseData({
-			// 	code: courseCode,
-			// 	courseName: courseName,
-			// 	status: "success",
-			// 	message: "",
-			// });
-			// debugger;
-			return lessonResult;
+			const lessonShareResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			this.setSharedLessonData({
+				code: lessonShareResult.shareToken,
+				lessonName: lessonShareResult.name,
+				status: "",
+				message: "",
+			});
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -157,6 +158,11 @@ export class Room extends VuexModule {
 		};
 	}
 
+	@Mutation
+	setSharedLessonData(payload: SharedLessonObject): void {
+		this.sharedLessonData = payload;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -171,6 +177,10 @@ export class Room extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
+	}
+
+	get getSharedLessonData(): SharedLessonObject {
+		return this.sharedLessonData;
 	}
 }
 

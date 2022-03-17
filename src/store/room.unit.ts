@@ -95,6 +95,22 @@ describe("room module", () => {
 				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
+
+		describe("getSharedLesson", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				const roomModule = new Room({});
+				const getSharedLessonSpy = jest.spyOn(roomModule, "getSharedLesson");
+				await roomModule.getSharedLesson("123456");
+
+				expect(receivedRequests[0].path).toStrictEqual("/v1/lessons/123456");
+
+				expect(getSharedLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -179,6 +195,21 @@ describe("room module", () => {
 				roomModule.resetBusinessError();
 				expect(roomModule.businessError.statusCode).toStrictEqual("");
 				expect(roomModule.businessError.message).toStrictEqual("");
+			});
+		});
+
+		describe("setSharedLessonData", () => {
+			it("should set the state", () => {
+				const roomModule = new Room({});
+				const shareLessonData = {
+					code: "123",
+					lessonName: "Lesson_1",
+					status: "success",
+					message: "",
+				};
+
+				roomModule.setSharedLessonData(shareLessonData);
+				expect(roomModule.sharedLessonData).toStrictEqual(shareLessonData);
 			});
 		});
 	});

@@ -708,6 +708,7 @@
 	"pages.room.taskCard.label.edit": "Editar",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.locked.label.info": "No se le permite ver los detalles de la tarea.",
+	"pages.room.lessonShare.modal.info": "Comparte el siguiente enlace con tus alumnos para invitarlos al curso. Los estudiantes deben iniciar sesión para usar el enlace.",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",
