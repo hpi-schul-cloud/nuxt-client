@@ -46,6 +46,7 @@
 import { mdiPencilOutline, mdiUndoVariant, mdiShareVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -129,13 +130,11 @@ export default {
 					});
 				}
 
-				if (true) {
-					// this will be replaced by the env control.
-
+				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiShareVariant,
 						action: () => this.$emit("open-modal", this.lesson.id),
-						name: "share",
+						name: this.$t("pages.room.lessonCard.label.share"),
 					});
 				}
 			}

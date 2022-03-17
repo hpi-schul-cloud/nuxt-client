@@ -686,6 +686,7 @@
 	"pages.room.lessonCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.post": "Post",
 	"pages.room.lessonCard.label.lesson": "Topic",
+	"pages.room.lessonCard.label.share": "Share",
 	"pages.room.taskCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.task": "Task",
 	"pages.room.taskCard.label.due": "Due",

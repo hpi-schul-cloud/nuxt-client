@@ -693,6 +693,7 @@
 	"pages.room.lessonCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.lessonCard.label.post": "Publicar",
 	"pages.room.lessonCard.label.lesson": "Tema",
+	"pages.room.lessonCard.label.share": "Compartir",
 	"pages.room.taskCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.taskCard.label.task": "Tarea",
 	"pages.room.taskCard.label.due": "Entrega",
