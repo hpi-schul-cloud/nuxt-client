@@ -1,8 +1,23 @@
 <template>
 	<section>
-		<h2 class="text-h4">
+		<h2 class="text-h4 mb-10">
 			{{ $t("pages.administration.school.index.authSystems.title") }}
 		</h2>
+		<v-text-field
+			v-if="customLoginLinkEnabled"
+			id="school-login-link"
+			:value="customLoginLink"
+			class="school-login-link"
+			:label="
+				$t('pages.administration.school.index.authSystems.loginLinkLabel')
+			"
+			:color="copiedStatus ? 'success' : 'primary'"
+			readonly
+			dense
+			:append-icon="copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy"
+			@click:append="copyLoginLink"
+			@blur="linkCopyFinished"
+		></v-text-field>
 		<v-simple-table class="table-system">
 			<template v-slot:default>
 				<thead>
@@ -51,21 +66,6 @@
 			nuxt
 			>{{ $t("pages.administration.school.index.authSystems.addLdap") }}</v-btn
 		>
-		<v-text-field
-			v-if="customLoginLinkEnabled"
-			id="school-login-link"
-			:value="customLoginLink"
-			class="school-login-link"
-			:label="
-				$t('pages.administration.school.index.authSystems.loginLinkLabel')
-			"
-			:color="copiedStatus ? 'success' : 'primary'"
-			readonly
-			dense
-			:append-icon="copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy"
-			@click:append="copyLoginLink"
-			@blur="linkCopyFinished"
-		></v-text-field>
 		<v-custom-dialog
 			v-model="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
