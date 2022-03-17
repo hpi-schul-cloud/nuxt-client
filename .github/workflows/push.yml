@@ -47,7 +47,7 @@ jobs:
           build-args: |
             SC_THEME=${{ matrix.tennens }}
           context: .
-          file: ./Dockerfile.client
+          file: ./Dockerfile
           platforms: linux/amd64
           push: true
           tags: ghcr.io/${{ github.repository }}-${{ matrix.tennens }}:${{ github.sha }}

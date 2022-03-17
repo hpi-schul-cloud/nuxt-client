@@ -18,29 +18,6 @@ VARIABLE_2=VALUE_2
 ...
 ```
 
-## Templates - Hygen
-
-Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
-
-```bash{2,5,8}
-# Generate a new component with adjacent unit test
-npm run new component
-
-# Generate a new page component with adjacent unit test
-npm run new page
-
-# Generate a new layout component with adjacent unit test
-npm run new layout
-
-# Generate a new store component
-npm run new store
-```
-
-- [Hygen](http://www.hygen.io/)
-  - `_templates/new/$name` (use with `npm run new $name`)
-    - `prompt.js` (ask for options)
-    - `*.ejs.t` template file(s)
-
 ## Codeformatting - Prettier
 
 Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sollten so eingestellt werden, um möglichen Konflikten vorzubeugen, dass sie sich nicht um Formatierung kümmern.
@@ -99,7 +76,7 @@ Postcss wird verwendet um CSS zu autoprefixen.
 
 Zusätzlich verwenden wir das Plugin ["postcss color mod function"](https://github.com/jonathantneal/postcss-color-mod-function) welches es uns ermöglicht Farben einfacher zu manipulieren. Dies sollte jedoch nur in den Variablen-Dateien genutzt werden.
 
-Die Konfiguration ist unter `postcss.config.js` zu finden.
+Die Konfiguration ist unter `nuxt.config.js` zu finden.
 
 ### Babel
 
@@ -112,16 +89,6 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 ## GitHub Bots
 
-### [Mergify](https://mergify.io)
-
-Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom develop-Branch (solange keine Merge-Konflikte enstehen).
-
-Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
-
 ### [Accesslint](https://www.accesslint.com/)
 
 Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Kommentaren direkt im Pull Request darauf hin. Aktuell versteht der Bot die Vue Syntax allerding noch nicht, sodass er teils Falsche Alarme bei bspw. `:aria-label="labelVariable"` wirft, da er `:aria-label` nicht mit `aria-label` gleichsetzt. Die Hinweise sollten also eher als Hinweis für genauere Kontrolle auf Accessibility gesehen werden.
-
-### [Mergable](https://github.com/mergeability/mergeable)
-
-Mergeable nutzen wir um sicherzustellen, dass der PR einige Mindestanforderungen erfüllt. Dazu zählt beispielsweise, dass der PR Titel einem vorgegebenem Schema folgt und kein `WIP` oder `is blocked` label enthält.
