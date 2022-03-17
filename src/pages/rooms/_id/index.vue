@@ -3,6 +3,7 @@
 		ref="main"
 		:headline="roomData.title"
 		:full-width="true"
+		:breadcrumbs="breadcrumbs"
 		:aria-label="roomData.title"
 	>
 		<template slot="header">
@@ -30,6 +31,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
+import { mdiMagnify } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -41,7 +43,16 @@ export default {
 	},
 	layout: "defaultVuetify",
 	data() {
-		return {};
+		return {
+			mdiMagnify,
+			searchText: "",
+			breadcrumbs: [
+				{
+					text: this.$t("pages.courses.index.title"),
+					to: "/rooms-overview",
+				},
+			],
+		};
 	},
 	computed: {
 		roomData() {
