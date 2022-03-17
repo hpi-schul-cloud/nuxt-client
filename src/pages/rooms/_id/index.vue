@@ -41,6 +41,7 @@ export default {
 	},
 	layout: "defaultVuetify",
 	data() {
+		return {};
 	},
 	computed: {
 		roomData() {

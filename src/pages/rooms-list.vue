@@ -79,6 +79,7 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	data() {
+		return {};
 	},
 	computed: {
 		title() {
