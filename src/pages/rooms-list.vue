@@ -3,9 +3,26 @@
 		ref="main"
 		:headline="$t('pages.courses.index.courses.all')"
 		:full-width="true"
-		:breadcrumbs="breadcrumbs"
 		:aria-label="$t('pages.courses.index.courses.all')"
 	>
+		<template slot="header">
+			<h1 class="text-h3 pt-2">
+				{{ $t("pages.courses.index.courses.all") }}
+			</h1>
+			<div class="mb-5 header-div">
+				<div class="btn">
+					<v-btn
+						color="secondary"
+						outlined
+						small
+						to="/rooms-overview"
+						data-testid="go-to-active-courses"
+						>{{ $t("pages.courses.index.courses.active") }}
+					</v-btn>
+				</div>
+			</div>
+		</template>
+
 		<v-row class="justify-center search">
 			<div class="d-flex justify-space-between col-sm-8">
 				<v-text-field
@@ -53,7 +70,6 @@ import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import RoomsModule from "@store/rooms";
-import { mdiMagnify } from "@mdi/js";
 import { ListItemsObject } from "@store/types/rooms";
 
 export default Vue.extend({
@@ -63,16 +79,6 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	data() {
-		return {
-			mdiMagnify,
-			searchText: "",
-			breadcrumbs: [
-				{
-					text: this.$t("pages.courses.index.courses.active"),
-					to: "/rooms-overview",
-				},
-			],
-		};
 	},
 	computed: {
 		title() {
