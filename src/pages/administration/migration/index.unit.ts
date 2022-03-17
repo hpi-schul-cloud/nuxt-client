@@ -3,12 +3,15 @@ import { mount, shallowMount } from "@vue/test-utils";
 import migrationIndex from "@pages/administration/migration/index.vue";
 import ImportUsersModule from "@store/import-users";
 import SchoolsModule from "@store/schools";
+import EnvConfigModule from "@/store/env-config";
 
 declare var createComponentMocks: Function;
 
 const $theme = {
 	short_name: "instance name",
 };
+
+//EnvConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: true });
 
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(migrationIndex, {
@@ -128,11 +131,14 @@ const schoolMock = {
 	isTeamCreationByStudentsEnabled: false,
 };
 
+
 window.scrollTo = jest.fn();
 
 describe("User Migration / Index", () => {
-	beforeEach(() => {
+	beforeAll(() => {
 		document.body.setAttribute("data-app", "true");
+		EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
+		ImportUsersModule.setTotal(100);
 	});
 
 	it("should set page title", () => {
