@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:headline="$t('pages.courses.index.courses.all')"
+		headline=""
 		:full-width="true"
 		:aria-label="$t('pages.courses.index.courses.all')"
 	>
@@ -79,7 +79,9 @@ export default Vue.extend({
 	},
 	layout: "defaultVuetify",
 	data() {
-		return {};
+		return {
+			searchText: "",
+		};
 	},
 	computed: {
 		title() {
