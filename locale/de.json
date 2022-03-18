@@ -663,7 +663,7 @@
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse, zum Öffnen die Eingabetaste drücken",
 	"pages.rooms.headerSection.ariaLabel": "Liste der aktuellen Kurse {itemCount} Elemente",
-	"pages.rooms.fab.add": "Neuer Kurs ",
+	"pages.rooms.fab.add": "Neuer Kurs",
 	"pages.rooms.fab.import": "Kurs importieren",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Code einfügen",

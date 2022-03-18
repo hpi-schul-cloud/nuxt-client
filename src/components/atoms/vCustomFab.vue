@@ -207,10 +207,7 @@ export default {
 	left: initial;
 	align-items: end;
 	width: auto;
-}
-
-.v-fab-action {
-	width: max-content;
+	white-space: nowrap;
 }
 
 .extended-fab {
