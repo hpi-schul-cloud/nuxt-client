@@ -57,6 +57,7 @@ export default {
 			default: "",
 		},
 		keyDrag: { type: Boolean, required: true },
+		dragInProgress: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -76,10 +77,12 @@ export default {
 	},
 	methods: {
 		handleClick() {
-			this.alert = true;
-			setTimeout(() => {
-				this.alert = false;
-			}, this.alertDuration);
+			if (!this.dragInProgress) {
+				this.alert = true;
+				setTimeout(() => {
+					this.alert = false;
+				}, this.alertDuration);
+			}
 		},
 		onKeyPress(e) {
 			switch (e.keyCode) {

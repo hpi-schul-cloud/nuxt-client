@@ -16,6 +16,7 @@ const baseTestProps = {
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -65,6 +66,21 @@ describe("@components/molecules/RoomLockedCard", () => {
 		alertComponent = wrapper.findAll(".alert-locked-card");
 		expect(alertComponent).toHaveLength(1);
 		await new Promise((time) => setTimeout(time, timeDuration));
+		expect(wrapper.vm.alert).toBe(false);
+		alertComponent = wrapper.findAll(".alert-locked-card");
+		expect(alertComponent).toHaveLength(0);
+	});
+
+	it("should NOT show error message if dragging in progress", async () => {
+		let alertComponent;
+		const wrapper = getWrapper({ ...baseTestProps, dragInProgress: true });
+		const cardElement = wrapper.find(".locked-card");
+
+		expect(wrapper.vm.alert).toBe(false);
+		alertComponent = wrapper.findAll(".alert-locked-card");
+		expect(alertComponent).toHaveLength(0);
+
+		await cardElement.trigger("click");
 		expect(wrapper.vm.alert).toBe(false);
 		alertComponent = wrapper.findAll(".alert-locked-card");
 		expect(alertComponent).toHaveLength(0);
