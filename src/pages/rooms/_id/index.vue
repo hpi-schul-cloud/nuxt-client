@@ -45,7 +45,6 @@ export default {
 	data() {
 		return {
 			mdiMagnify,
-			searchText: "",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.courses.index.title"),
