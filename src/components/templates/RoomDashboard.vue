@@ -249,7 +249,7 @@ export default {
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			await RoomModule.getSharedLesson(lessonId);
+			await RoomModule.fetchSharedLesson(lessonId);
 			const sharedLesson = RoomModule.getSharedLessonData;
 
 			this.lessonShare.token = sharedLesson.code;

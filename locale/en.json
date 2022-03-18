@@ -703,6 +703,8 @@
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.locked.label.info": "You are not allowed to view the task details.",
 	"pages.room.lessonShare.modal.info": "Share the following link with your students to invite them to the course. Students must be logged in to use the link.",
+	"pages.room.lessonShare.import.step_2.text": "Insert a code to import other users' topics. Files included in the topic are placed in your course folder.",
+	"pages.room.lessonShare.import.step_1.info_2": "<b>Attention</b>: Manually replace tools user data which are included in the topic subsequently (e.g. nexBoard, Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",

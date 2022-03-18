@@ -26,12 +26,12 @@
 			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
-		<import-modal
+		<import-lesson-modal
 			v-model="importDialog.isOpen"
 			class="import-modal"
 			@update-room="updateRoom"
 		>
-		</import-modal>
+		</import-lesson-modal>
 	</default-wireframe>
 </template>
 
@@ -40,7 +40,7 @@ import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
-import ImportModal from "@components/molecules/ImportModal";
+import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	mdiPlus,
@@ -53,7 +53,7 @@ export default {
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
-		ImportModal,
+		ImportLessonModal,
 	},
 	layout: "defaultVuetify",
 	data() {

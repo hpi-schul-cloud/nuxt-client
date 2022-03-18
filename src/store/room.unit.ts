@@ -103,12 +103,15 @@ describe("room module", () => {
 
 			it("should call the backend", async () => {
 				const roomModule = new Room({});
-				const getSharedLessonSpy = jest.spyOn(roomModule, "getSharedLesson");
-				await roomModule.getSharedLesson("123456");
+				const fetchSharedLessonSpy = jest.spyOn(
+					roomModule,
+					"fetchSharedLesson"
+				);
+				await roomModule.fetchSharedLesson("123456");
 
 				expect(receivedRequests[0].path).toStrictEqual("/v1/lessons/123456");
 
-				expect(getSharedLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
+				expect(fetchSharedLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
 			});
 		});
 	});

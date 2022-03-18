@@ -16,6 +16,7 @@ import {
 } from "../serverApi/v3/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
+import { nanoid } from "nanoid";
 
 @Module({
 	name: "room",
@@ -111,15 +112,60 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	async getSharedLesson(lessonId: string): Promise<void> {
+	async fetchSharedLesson(lessonId: string): Promise<void> {
 		try {
 			const lessonShareResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			if (!lessonShareResult.shareToken) {
+				lessonShareResult.shareToken = nanoid(9);
+				await $axios.$patch(
+					`/v1/lessons/${lessonShareResult._id}`,
+					lessonShareResult
+				);
+			}
 			this.setSharedLessonData({
 				code: lessonShareResult.shareToken,
 				lessonName: lessonShareResult.name,
 				status: "",
 				message: "",
 			});
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async confirmImportLesson(shareToken: string): Promise<void> {
+		try {
+			this.resetBusinessError();
+			const lesson = await $axios.$get("/v1/lessons", {
+				params: { shareToken },
+			});
+
+			if (!lesson.data.length) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-found",
+				});
+				return;
+			}
+
+			const copiedLesson = await $axios.$post("/v1/lessons/copy", {
+				lessonId: lesson.data[0]._id,
+				newCourseId: this.roomData.roomId,
+				shareToken,
+			});
+
+			if (!copiedLesson.data.length) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-created",
+				});
+				return;
+			}
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
