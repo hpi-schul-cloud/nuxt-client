@@ -4,6 +4,7 @@
 		:headline="roomData.title"
 		:full-width="true"
 		:fab-items="fab"
+		:breadcrumbs="breadcrumbs"
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
@@ -38,7 +39,9 @@
 <script>
 import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
+
 import EnvConfigModule from "@/store/env-config";
+import { mdiMagnify } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -62,6 +65,13 @@ export default {
 			importDialog: {
 				isOpen: false,
 			},
+			mdiMagnify,
+			breadcrumbs: [
+				{
+					text: this.$t("pages.courses.index.title"),
+					to: "/rooms-overview",
+				},
+			],
 		};
 	},
 	computed: {
