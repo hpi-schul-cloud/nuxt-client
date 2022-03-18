@@ -195,7 +195,7 @@ describe("@components/molecules/RoomModal", () => {
 			getSharedCourseDataMock.mockClear();
 		});
 
-		it.only("should not go to step#3 if there is a code error", async () => {
+		it("should not go to step#3 if there is a code error", async () => {
 			const wrapper: any = mount(ImportModal, {
 				...createComponentMocks({
 					i18n: true,
@@ -226,14 +226,21 @@ describe("@components/molecules/RoomModal", () => {
 					isOpen: true,
 				},
 			});
+			await wrapper.setData({
+				businessError: {
+					statusCode: "",
+					message: "",
+					error: {},
+				},
+				isImportError: false,
+				step: 3,
+			});
 
-			await wrapper.setData({ step: 3 });
-			await wrapper.vm.$nextTick();
 			const confirmButtonBefore = wrapper.find(".dialog-confirmed");
 			const errorElementBefore = wrapper.find(".import-error");
 
-			expect(errorElementBefore.exists()).toBe(false);
 			expect(confirmButtonBefore.exists()).toBe(false);
+			expect(errorElementBefore.exists()).toBe(false);
 
 			await wrapper.setData({
 				businessError: {
@@ -241,7 +248,6 @@ describe("@components/molecules/RoomModal", () => {
 					message: "import error",
 					error: {},
 				},
-				step: 3,
 				isImportError: true,
 			});
 

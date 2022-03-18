@@ -54,6 +54,7 @@
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
+						@open-modal="getSharedLesson"
 					/>
 					<room-locked-card
 						v-if="item.type === cardTypes.Lockedtask"
@@ -130,6 +131,38 @@
 				/>
 			</div>
 		</div>
+		<vCustomDialog
+			ref="customDialog"
+			:is-open="lessonShare.isOpen"
+			class="room-dialog"
+			@dialog-closed="lessonShare.isOpen = false"
+		>
+			<div slot="title" class="room-title">
+				<h4>Copy code has been generated!</h4>
+			</div>
+			<template slot="content">
+				<v-divider class="mb-4"></v-divider>
+				<div class="share-info-text">
+					<p>
+						{{ $t("pages.room.lessonShare.modal.info") }}
+					</p>
+				</div>
+				<div>
+					<v-text-field :value="lessonShare.token" outlined></v-text-field>
+				</div>
+				<v-divider class="mb-4"></v-divider>
+				<div class="share-cancel-button">
+					<v-btn
+						class="dialog-back-button"
+						depressed
+						outlined
+						@click="lessonShare.isOpen = false"
+					>
+						{{ $t("common.labels.close") }}
+					</v-btn>
+				</div>
+			</template>
+		</vCustomDialog>
 	</div>
 </template>
 
@@ -137,6 +170,7 @@
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
@@ -147,6 +181,7 @@ export default {
 		RoomTaskCard,
 		RoomLessonCard,
 		RoomLockedCard,
+		vCustomDialog,
 		draggable,
 	},
 	props: {
@@ -162,6 +197,7 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
+			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -222,6 +258,17 @@ export default {
 			await RoomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
+		async getSharedLesson(lessonId) {
+			await RoomModule.fetchSharedLesson(lessonId);
+			const sharedLesson = RoomModule.getSharedLessonData;
+
+			this.lessonShare.token = sharedLesson.code;
+			this.lessonShare.lessonName = sharedLesson.lessonName;
+			this.lessonShare.status = sharedLesson.status;
+			this.lessonShare.message = sharedLesson.message;
+
+			this.lessonShare.isOpen = true;
+		},
 		endDragging() {
 			setTimeout(() => {
 				this.dragInProgress = false;
@@ -240,5 +287,15 @@ export default {
 }
 .ghost {
 	opacity: 0;
+}
+
+.share-info-text {
+	// min-height: var(--sidebar-width);
+	font-size: var(--space-md);
+	color: var(--color-black);
+}
+
+.share-cancel-button {
+	text-align: right;
 }
 </style>
