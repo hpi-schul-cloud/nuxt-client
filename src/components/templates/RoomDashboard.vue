@@ -10,6 +10,8 @@
 				ghost-class="ghost"
 				class="elements"
 				@input="onSort"
+				@start="dragInProgress = true"
+				@end="endDragging"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
@@ -25,6 +27,7 @@
 						"
 						:key-drag="isDragging"
 						class="task-card"
+						:drag-in-progress="dragInProgress"
 						@post-task="postDraftElement(item.content.id)"
 						@revert-task="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
@@ -45,6 +48,7 @@
 						"
 						:key-drag="isDragging"
 						class="lesson-card"
+						:drag-in-progress="dragInProgress"
 						@post-lesson="postDraftElement(item.content.id)"
 						@revert-lesson="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
@@ -64,6 +68,7 @@
 						"
 						:key-drag="isDragging"
 						class="locked-card"
+						:drag-in-progress="dragInProgress"
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
@@ -86,6 +91,7 @@
 					"
 					:key-drag="isDragging"
 					class="task-card"
+					:drag-in-progress="dragInProgress"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
 				/>
@@ -103,6 +109,7 @@
 					"
 					:key-drag="isDragging"
 					class="lesson-card"
+					:drag-in-progress="dragInProgress"
 					@post-lesson="postDraftElement(item.content.id)"
 					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
@@ -119,6 +126,7 @@
 					"
 					:key-drag="isDragging"
 					class="locked-card"
+					:drag-in-progress="dragInProgress"
 				/>
 			</div>
 		</div>
@@ -154,6 +162,8 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
+			dragInProgressDelay: 100,
+			dragInProgress: false,
 		};
 	},
 	computed: {
@@ -211,6 +221,11 @@ export default {
 
 			await RoomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
+		},
+		endDragging() {
+			setTimeout(() => {
+				this.dragInProgress = false;
+			}, this.dragInProgressDelay);
 		},
 	},
 };
