@@ -10,6 +10,8 @@
 				ghost-class="ghost"
 				class="elements"
 				@input="onSort"
+				@start="dragInProgress = true"
+				@end="endDragging"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
@@ -25,6 +27,7 @@
 						"
 						:key-drag="isDragging"
 						class="task-card"
+						:drag-in-progress="dragInProgress"
 						@post-task="postDraftElement(item.content.id)"
 						@revert-task="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
@@ -45,6 +48,7 @@
 						"
 						:key-drag="isDragging"
 						class="lesson-card"
+						:drag-in-progress="dragInProgress"
 						@post-lesson="postDraftElement(item.content.id)"
 						@revert-lesson="revertPublishedElement(item.content.id)"
 						@move-element="moveByKeyboard"
@@ -65,6 +69,7 @@
 						"
 						:key-drag="isDragging"
 						class="locked-card"
+						:drag-in-progress="dragInProgress"
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
@@ -87,6 +92,7 @@
 					"
 					:key-drag="isDragging"
 					class="task-card"
+					:drag-in-progress="dragInProgress"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
 				/>
@@ -104,6 +110,7 @@
 					"
 					:key-drag="isDragging"
 					class="lesson-card"
+					:drag-in-progress="dragInProgress"
 					@post-lesson="postDraftElement(item.content.id)"
 					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
@@ -120,6 +127,7 @@
 					"
 					:key-drag="isDragging"
 					class="locked-card"
+					:drag-in-progress="dragInProgress"
 				/>
 			</div>
 		</div>
@@ -190,6 +198,8 @@ export default {
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
 			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
+			dragInProgressDelay: 100,
+			dragInProgress: false,
 		};
 	},
 	computed: {
@@ -258,6 +268,11 @@ export default {
 			this.lessonShare.message = sharedLesson.message;
 
 			this.lessonShare.isOpen = true;
+		},
+		endDragging() {
+			setTimeout(() => {
+				this.dragInProgress = false;
+			}, this.dragInProgressDelay);
 		},
 	},
 };

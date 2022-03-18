@@ -67,6 +67,7 @@ export default {
 			default: "",
 		},
 		keyDrag: { type: Boolean, required: true },
+		dragInProgress: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -148,7 +149,9 @@ export default {
 	},
 	methods: {
 		handleClick() {
-			window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
+			if (!this.dragInProgress) {
+				window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
+			}
 		},
 		redirectAction(value) {
 			window.location = value;
