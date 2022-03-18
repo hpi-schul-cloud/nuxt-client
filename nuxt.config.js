@@ -17,7 +17,7 @@ const serverMiddlewareList = [
 ];
 
 module.exports = {
-	mode: "spa",
+	ssr: false,
 	srcDir: "src/",
 	theme: "default",
 	buildModules: [
