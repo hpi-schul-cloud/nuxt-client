@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue/types/umd";
 import RoomDashboard from "./RoomDashboard.vue";
 
 declare var createComponentMocks: Function;
@@ -168,6 +169,18 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.isTouchDevice).toBe(true);
 			expect(wrapper.vm.touchDelay).toStrictEqual(200);
 			window.ontouchstart = tempOntouchstart;
+		});
+
+		it("should set 'dragInProgress' when dragging is started", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const timeDuration = wrapper.vm.dragInProgressDelay;
+			expect(wrapper.vm.dragInProgress).toBe(false);
+			const element = wrapper.find(".elements");
+			element.vm.$emit("start");
+			expect(wrapper.vm.dragInProgress).toBe(true);
+			element.vm.$emit("end");
+			await new Promise((time) => setTimeout(time, timeDuration));
+			expect(wrapper.vm.dragInProgress).toBe(false);
 		});
 
 		it("should sort elements after Drag&Drop", async () => {
