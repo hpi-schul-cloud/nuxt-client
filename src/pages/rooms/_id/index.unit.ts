@@ -4,6 +4,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
 import { User } from "@/store/types/auth";
+import EnvConfigModule from "@/store/env-config";
 
 const mockData = {
 	roomId: "123",
@@ -130,6 +131,35 @@ describe("@pages/rooms/_id/index.vue", () => {
 	it("should show FAB if user has permission to create courses", () => {
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
+		const actions = fabComponent.vm.actions.map((action: any) => {
+			return action.label;
+		});
+		const hasNewTaskAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
+		});
+		const hasNewLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
+		});
+		const hasImportLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
+		});
 		expect(fabComponent.exists()).toBe(true);
+		expect(hasNewTaskAction).toBe(true);
+		expect(hasNewLessonAction).toBe(true);
+		expect(hasImportLessonAction).toBe(false);
+	});
+
+	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
+		// @ts-ignore
+		EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		const actions = fabComponent.vm.actions.map((action: any) => {
+			return action.label;
+		});
+		const hasImportLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
+		});
+		expect(hasImportLessonAction).toBe(true);
 	});
 });
