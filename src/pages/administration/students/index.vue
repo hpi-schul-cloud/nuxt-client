@@ -369,21 +369,21 @@ export default {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
 				testId: "fab_button_students_table",
-				ariaLabel: this.$t("pages.administration.students.new.title"),
+				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
 						dataTestid: "fab_button_add_students",
-						ariaLabel: this.$t("pages.administration.students.fab.add.aria"),
+						ariaLabel: this.$t("pages.administration.students.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
 						icon: mdiCloudDownload,
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
-						ariaLabel: this.$t("pages.administration.students.fab.import.aria"),
+						ariaLabel: this.$t("pages.administration.students.fab.import"),
 					},
 				],
 			};

@@ -200,7 +200,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
 					href: "/homework/new",
-					ariaLabel: this.$t("components.organisms.TasksDashboardMain.addTask"),
+					ariaLabel: this.$t("common.actions.create"),
 					testId: "addTask",
 				};
 			}

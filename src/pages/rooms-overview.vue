@@ -187,7 +187,7 @@ export default {
 					return {
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("pages.courses.new.title"),
+						ariaLabel: this.$t("common.actions.create"),
 						testId: "add-course-button",
 						actions: [
 							{
@@ -195,7 +195,7 @@ export default {
 								icon: mdiSchool,
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.aria"),
+								ariaLabel: this.$t("pages.rooms.fab.add"),
 							},
 							{
 								label: this.$t("pages.rooms.fab.import"),
@@ -214,7 +214,7 @@ export default {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
-					ariaLabel: this.$t("pages.courses.new.title"),
+					ariaLabel: this.$t("common.actions.create"),
 					testId: "add-course-button",
 				};
 			}
