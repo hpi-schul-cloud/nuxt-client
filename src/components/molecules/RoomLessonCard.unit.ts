@@ -41,15 +41,6 @@ const hiddenTestProps = {
 	keyDrag: false,
 	dragInProgress: false,
 };
-
-// const EnvConfigModule = jest.fn(() => {
-// 	getEnv: () => {
-// 		return {
-// 			FEATURE_LESSON_SHARE: true,
-// 		};
-// 	};
-// });
-
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomLessonCard, {
 		...createComponentMocks({
