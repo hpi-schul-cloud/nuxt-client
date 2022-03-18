@@ -159,13 +159,14 @@ export class Room extends VuexModule {
 				shareToken,
 			});
 
-			if (!copiedLesson.data.length) {
+			if (!copiedLesson) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-created",
 				});
 				return;
 			}
+			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,

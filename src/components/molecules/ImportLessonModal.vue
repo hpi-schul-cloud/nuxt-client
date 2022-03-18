@@ -15,7 +15,7 @@
 						class="step"
 						@click="onClickStepper(1)"
 					>
-						{{ $t("pages.rooms.importCourse.step_1.text") }}
+						{{ $t("pages.room.lessonShare.step_1.text") }}
 					</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step
@@ -25,21 +25,12 @@
 						class="step"
 						@click="onClickStepper(2)"
 					>
-						{{ $t("pages.rooms.importCourse.step_2.text") }}
-					</v-stepper-step>
-					<v-divider></v-divider>
-					<v-stepper-step step="3" class="step">
-						{{ $t("pages.rooms.importCourse.step_3.text") }}
+						{{ $t("pages.room.lessonShare.step_2.text") }}
 					</v-stepper-step>
 				</v-stepper-header>
 			</v-stepper>
-
 			<div class="step-sections">
 				<div v-if="step === 1">
-					<!-- <p>
-						{{ $t("pages.room.lessonShare.import.step_2.text") }}
-					</p> -->
-
 					<!-- eslint-disable vue/no-v-html -->
 					<p v-html="$t('pages.room.lessonShare.import.step_1.info_2')"></p>
 				</div>
@@ -51,51 +42,23 @@
 						v-model="sharedLessonData.code"
 						outlined
 						dense
-						class="mt-1 text-field-course-code"
-						:rules="[textFieldValidation.checkEmpty]"
+						class="mt-1 text-field-lesson-code"
+						:rules="[textFieldValidation.required]"
 					></v-text-field>
-					<div v-if="businessError.message !== 'not-found'">
+					<div v-if="businessError.message === 'not-found'">
 						<v-alert dense outlined type="error" class="code-error">
-							{{ $t("pages.rooms.importCourse.codeError") }}
+							{{ $t("pages.room.lessonShare.codeError") }}
 						</v-alert>
 					</div>
 					<div v-if="businessError.message === 'not-created'">
-						<v-alert dense outlined type="error" class="code-error">
-							{{ $t("pages.rooms.importCourse.importError") }}
-						</v-alert>
-					</div>
-				</div>
-				<div v-if="step === 3">
-					{{ $t("pages.rooms.importCourse.step_3") }}
-
-					<v-text-field
-						v-model="sharedLessonData.lessonName"
-						outlined
-						dense
-						class="mt-1 text-field-course-name"
-						:disabled="isImportError"
-					></v-text-field>
-					<div v-if="businessError.message !== ''">
-						<v-alert dense outlined type="error" class="import-error">
-							{{ $t("pages.rooms.importCourse.importError") }}
+						<v-alert dense outlined type="error" class="create-error">
+							{{ $t("pages.room.lessonShare.importError") }}
 						</v-alert>
 					</div>
 				</div>
 			</div>
 			<div class="button-section mt-8">
-				<v-row v-if="isImportError && step === 3">
-					<v-col class="ml-auto cancel-confirm-button">
-						<v-btn
-							class="dialog-confirmed"
-							color="primary"
-							depressed
-							@click="cancel"
-						>
-							{{ this.$t("pages.rooms.importCourse.importErrorButton") }}
-						</v-btn>
-					</v-col>
-				</v-row>
-				<v-row v-else>
+				<v-row>
 					<v-col md="4">
 						<v-btn
 							class="dialog-back-button"
@@ -116,15 +79,13 @@
 							{{ this.$t("common.actions.cancel") }}
 						</v-btn>
 						<v-btn
+							:disabled="step === 2 && sharedLessonData.code === ''"
 							class="dialog-next"
 							color="primary"
 							depressed
 							@click="nextStep"
 						>
 							{{ nextButtonName }}
-						</v-btn>
-						<v-btn class="dialog-next" color="primary" depressed @click="fetch">
-							fetch
 						</v-btn>
 					</v-col>
 				</v-row>
@@ -155,23 +116,19 @@ export default {
 		return {
 			step: 1,
 			sharedLessonData: {
-				code: "EKhaiO2bZ",
-				lessonName: "",
-				status: "",
-				message: "",
+				code: "",
 			},
 			mdiCheck,
-			isImportError: false,
 			textFieldValidation: {
-				checkEmpty: () => "This field can not be empty.",
+				required: (value) =>
+					!!value || this.$t("pages.room.lessonShare.textValidation"),
 			},
 		};
 	},
 	computed: {
 		nextButtonName() {
-			if (this.step < 3)
-				return this.$t("pages.rooms.importCourse.btn.continue");
-			return this.$t("pages.rooms.importCourse.btn.confirm");
+			if (this.step < 2) return this.$t("pages.room.lessonShare.btn.continue");
+			return this.$t("pages.room.lessonShare.btn.confirm");
 		},
 		businessError() {
 			return RoomModule.getBusinessError;
@@ -184,28 +141,13 @@ export default {
 			}
 			if (this.step === 2) {
 				await RoomModule.confirmImportLesson(this.sharedLessonData.code);
-				await RoomModule.getSharedCourseData(this.sharedLessonData.code);
-				if (this.businessError.statusCode != "") return;
-				this.sharedLessonData = RoomModule.getCourseSharingStatus;
+				if (this.businessError.statusCode === "") {
+					this.cancel();
+				}
+				return;
 			}
 
 			this.step++;
-		},
-
-		async confirmImport() {
-			await RoomModule.confirmSharedCourseData(this.sharedLessonData);
-			if (this.businessError.statusCode !== "") {
-				this.isImportError = true;
-			}
-
-			const importedCourseId = RoomModule.getImportedCourseId;
-
-			if (importedCourseId) {
-				this.clearMessages();
-				this.step = 1;
-				this.$emit("dialog-closed", false);
-				window.location = `/courses/${importedCourseId}/edit/`;
-			}
 		},
 		cancel() {
 			this.clearMessages();
@@ -218,25 +160,16 @@ export default {
 				this.cancel();
 				return;
 			}
-			this.isImportError = false;
 			this.step--;
 		},
 		onClickStepper(step) {
-			if (this.isImportError) return;
 			this.step = step;
 		},
 		clearMessages() {
 			RoomModule.resetBusinessError();
 			this.sharedLessonData = {
 				code: "",
-				courseName: "",
-				status: "",
-				message: "",
 			};
-			this.isImportError = false;
-		},
-		async fetch() {
-			await RoomModule.confirmImportLesson(this.sharedLessonData.code);
 		},
 	},
 };
