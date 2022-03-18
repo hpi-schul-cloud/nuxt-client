@@ -64,6 +64,18 @@ describe("@components/molecules/TaskItemMenu", () => {
 			expect(wrapper.vm.editLink).toStrictEqual(`/homework/${task.id}/edit`);
 		});
 
+		it("should compute correct copy link", () => {
+			const task = tasksTeacher[0];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+
+			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy`);
+		});
+
 		it("should set isTeacher correctly", () => {
 			const task = tasksTeacher[0];
 			const wrapper = getWrapper({
@@ -116,6 +128,27 @@ describe("@components/molecules/TaskItemMenu", () => {
 			await restoreBtn.trigger("click");
 
 			expect(restoreTaskMock).toHaveBeenCalled();
+		});
+	});
+
+	describe("when deleting a task", () => {
+		it("should call deleteTask of TaskModule", async () => {
+			const deleteTaskMock = jest.spyOn(TasksModule, "deleteTask");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const deleteBtn = wrapper.find("#task-action-delete");
+			await deleteBtn.trigger("click");
+
+			expect(deleteTaskMock).toHaveBeenCalled();
 		});
 	});
 });

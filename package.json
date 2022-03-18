@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "27.6.0",
+	"version": "27.9.0",
 	"description": "The next Level of Dataport Bildungscloud",
 	"author": "Dataport Bildungscloud",
 	"private": true,
@@ -34,7 +34,8 @@
 		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
 		"test:ci": "run-s test:*:ci",
 		"test": "npm run test:unit",
-		"generate-client:server": "node generate-client.js"
+		"generate-client:server": "node generate-client.js",
+		"generate-client:filestorage": "npm run generate-client:server -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3'"
 	},
 	"gitHooks": {
 		"pre-commit": "npx lint-staged"
@@ -42,7 +43,6 @@
 	"dependencies": {
 		"@mdi/js": "^5.9.55",
 		"@nuxtjs/axios": "^5.12.3",
-		"@nuxtjs/sentry": "^5.0.3",
 		"@nuxtjs/toast": "^3.3.1",
 		"@openapitools/openapi-generator-cli": "^2.4.5",
 		"@tryghost/content-api": "^1.4.11",
@@ -51,7 +51,6 @@
 		"dayjs": "^1.9.7",
 		"echarts": "^4.9.0",
 		"font-awesome": "^4.7.0",
-		"git-rev-sync": "^3.0.1",
 		"glob": "^7.1.6",
 		"html-entities": "^1.3.3",
 		"jquery": "^3.5.1",
@@ -72,9 +71,9 @@
 		"vue-loader": "^15.9.6",
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
-		"vue-ripple-directive": "^2.0.1",
 		"vue-router": "^3.5.1",
 		"vue-swatches": "^2.1.0",
+		"vuedraggable": "^2.24.3",
 		"vuelidate": "^0.7.6",
 		"vuex": "^3.6.2",
 		"vuex-module-decorators": "^1.0.1"
@@ -89,6 +88,7 @@
 		"@nuxt/types": "^2.15.4",
 		"@nuxt/typescript-build": "^2.0.4",
 		"@nuxtjs/dotenv": "^1.4.1",
+		"@nuxtjs/proxy": "^2.1.0",
 		"@nuxtjs/vuetify": "^1.12.1",
 		"@schul-cloud/eslint-config": "^1.0.0",
 		"@schul-cloud/prettier-config": "^1.0.0",

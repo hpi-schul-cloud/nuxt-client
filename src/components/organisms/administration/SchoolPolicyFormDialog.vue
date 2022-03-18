@@ -4,7 +4,7 @@
 		max-width="550"
 		@click:outside="$emit('dialog-closed', false)"
 	>
-		<v-card :ripple="true">
+		<v-card :ripple="false">
 			<v-card-title class="dialog-title">
 				<h2 class="text-h4">
 					{{

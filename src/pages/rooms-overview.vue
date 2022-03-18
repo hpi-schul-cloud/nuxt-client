@@ -26,7 +26,6 @@
 					<v-custom-switch
 						v-if="isTouchDevice"
 						v-model="allowDragging"
-						color="secondary"
 						class="enable-disable"
 						:label="$t('pages.courses.index.courses.arrangeCourses')"
 					></v-custom-switch>

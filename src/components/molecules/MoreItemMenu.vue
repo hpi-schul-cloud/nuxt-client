@@ -1,5 +1,12 @@
 <template>
-	<v-menu bottom left offset-y attach>
+	<v-menu
+		v-if="menuItems.length"
+		v-model="showMenu"
+		bottom
+		left
+		offset-y
+		attach
+	>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
@@ -7,7 +14,6 @@
 				class="three-dot-button"
 				icon
 				v-on="on"
-				@click.prevent
 				@keydown.space.stop
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
@@ -17,13 +23,13 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				class="task-action"
-				@click.prevent="item.action"
+				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
+				@click.stop="handleClick(item)"
 			>
-				<v-list-item-title>
-					<v-icon class="task-action-icon mr-1">
-						{{ item.icon }}
-					</v-icon>
+				<v-icon class="task-action-icon mr-1">
+					{{ item.icon }}
+				</v-icon>
+				<v-list-item-title class="pl-1">
 					{{ item.name }}
 				</v-list-item-title>
 			</v-list-item>
@@ -49,7 +55,14 @@ export default {
 	data() {
 		return {
 			mdiDotsVertical,
+			showMenu: false,
 		};
+	},
+	methods: {
+		handleClick(menuItem) {
+			this.showMenu = false;
+			menuItem.action();
+		},
 	},
 };
 </script>
@@ -57,6 +70,7 @@ export default {
 <style lang="scss" scoped>
 .task-action {
 	min-height: var(--space-lg);
+	text-align: left;
 }
 
 .task-action-icon {

@@ -3,8 +3,6 @@ require("dotenv").config();
 const pkg = require("./package");
 const webpack = require("webpack");
 
-const sentryConfig = require("./sentry.config.js");
-
 const themeName = process.env.SC_THEME || "default";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
@@ -19,7 +17,7 @@ const serverMiddlewareList = [
 ];
 
 module.exports = {
-	mode: "spa",
+	ssr: false,
 	srcDir: "src/",
 	theme: "default",
 	buildModules: [
@@ -40,7 +38,7 @@ module.exports = {
 	publicRuntimeConfig: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		axios: {
-			browserBaseURL: process.env.API_URL || "http://localhost:3030/api",
+			browserBaseURL: process.env.API_URL || "http://localhost:4000/api",
 		},
 		FEATURE_MATRIX_MESSENGER_ENABLED:
 			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
@@ -126,7 +124,6 @@ module.exports = {
 		"@plugins/global",
 		"@plugins/authenticate",
 		"@plugins/user",
-		"@plugins/sentry",
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
@@ -140,15 +137,19 @@ module.exports = {
 		"@nuxtjs/dotenv",
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
-		"@nuxtjs/sentry",
 		"@nuxtjs/toast",
 		"cookie-universal-nuxt",
 		"nuxt-babel",
+		"@nuxtjs/proxy",
 	],
-	sentry: sentryConfig,
 	toast: {
 		duration: 3000,
 	},
+
+	proxy: [
+		"http://localhost:4444/api/v3/file/**/*",
+		"http://localhost:3030/api/**/*",
+	],
 
 	/*
 	 ** Build configuration

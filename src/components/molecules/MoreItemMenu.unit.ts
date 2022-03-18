@@ -52,7 +52,9 @@ describe("@components/molecules/MoreItemMenu", () => {
 		const threeDotButton = wrapper.find(".three-dot-button");
 		await threeDotButton.trigger("click");
 		const menuItemElement = wrapper.find(".task-action");
+		expect(wrapper.vm.showMenu).toBe(true);
 		await menuItemElement.trigger("click");
+		expect(wrapper.vm.showMenu).toBe(false);
 
 		expect(action).toHaveBeenCalled();
 	});
@@ -85,6 +87,6 @@ describe("@components/molecules/MoreItemMenu", () => {
 		const wrapper = getWrapper(props);
 		const threeDotButton = wrapper.find(".three-dot-button");
 
-		expect(threeDotButton.element.style.display).toStrictEqual("none");
+		expect(threeDotButton.element).toStrictEqual(undefined);
 	});
 });

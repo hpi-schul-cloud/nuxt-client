@@ -10,17 +10,12 @@ import { $axios } from "../utils/api";
 import AuthModule from "./auth";
 import { BusinessError, Status } from "./types/commons";
 import { downloadFile } from "@utils/fileHelper";
+import {
+	FileRecordResponse as FileRecord,
+	FileApiInterface,
+	FileApiFactory,
+} from "@/fileStorageApi/v3";
 
-const API_URL = "http://localhost:4444/api/v3/files-storage";
-
-type APIFile = {
-	creatorId: string;
-	id: string;
-	name: string;
-	targetId: string;
-	targetType: string;
-	type: string;
-};
 @Module({
 	name: "files-poc",
 	namespaced: true,
@@ -29,7 +24,7 @@ type APIFile = {
 	stateFactory: true,
 })
 export class FilesPOCModule extends VuexModule {
-	files: File[] = [];
+	files: FileRecord[] = [];
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -37,29 +32,22 @@ export class FilesPOCModule extends VuexModule {
 	};
 
 	status: Status = "";
+	private _fileStorageApi?: FileApiInterface;
 
 	@Action
-	async upload(file: File): Promise<void> {
+	async fetchFiles(): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
 		try {
-			const schoolId = AuthModule.getUser?.schoolId;
-
-			const formData = new FormData();
-			formData.append("file", file, file.name);
-
-			const response = await $axios.post(
-				`${API_URL}/upload/${schoolId}/schools/${schoolId}`,
-				formData
-				// {
-				// 	onUploadProgress: (...args) => {
-				// 		console.log(args);
-				// 	},
-				// }
+			const schoolId = AuthModule.getUser?.schoolId as string;
+			const response = await this.fileStorageApi.filesStorageControllerList(
+				schoolId,
+				schoolId,
+				"schools"
 			);
 
-			this.appendFile(response.data as File);
+			this.setFiles(response.data.data);
 
 			this.setStatus("completed");
 		} catch (error) {
@@ -69,16 +57,65 @@ export class FilesPOCModule extends VuexModule {
 	}
 
 	@Action
-	async download(file: APIFile): Promise<void> {
+	async upload(file: File): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
 		try {
-			const res = await $axios.get(
-				`${API_URL}/download/${file.id}/${file.name}`,
+			const schoolId = AuthModule.getUser?.schoolId as string;
+			const response = await this.fileStorageApi.filesStorageControllerUpload(
+				schoolId,
+				schoolId,
+				"schools",
+				file
+			);
+			this.appendFile(response.data);
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async download(file: FileRecord): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			const res = await this.fileStorageApi.filesStorageControllerDownload(
+				file.id,
+				file.name,
 				{ responseType: "blob" }
 			);
-			downloadFile(res.data, file.name);
+
+			downloadFile(res.data as unknown as Blob, file.name, file.type);
+
+			this.setStatus("completed");
+		} catch (error) {
+			console.log(error);
+
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
+	async rename(params: { fileId: string; fileName: string }): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			const response =
+				await this.fileStorageApi.filesStorageControllerPatchFilename(
+					params.fileId,
+					{
+						fileName: params.fileName,
+					}
+				);
+
+			this.replaceFile(response.data);
 
 			this.setStatus("completed");
 		} catch (error) {
@@ -88,8 +125,18 @@ export class FilesPOCModule extends VuexModule {
 	}
 
 	@Mutation
-	appendFile(file: File) {
+	setFiles(files: FileRecord[]) {
+		this.files = files;
+	}
+
+	@Mutation
+	appendFile(file: FileRecord) {
 		this.files.push(file);
+	}
+
+	@Mutation
+	replaceFile(file: FileRecord) {
+		this.files = this.files.map((f) => (f.id === file.id ? file : f));
 	}
 
 	@Mutation
@@ -110,7 +157,7 @@ export class FilesPOCModule extends VuexModule {
 		};
 	}
 
-	get getFiles(): File[] {
+	get getFiles(): FileRecord[] {
 		return this.files;
 	}
 
@@ -120,6 +167,13 @@ export class FilesPOCModule extends VuexModule {
 
 	get getBusinessError(): BusinessError {
 		return this.businessError;
+	}
+
+	private get fileStorageApi() {
+		if (!this._fileStorageApi) {
+			this._fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
+		}
+		return this._fileStorageApi;
 	}
 }
 

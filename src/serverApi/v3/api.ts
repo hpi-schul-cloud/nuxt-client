@@ -28,11 +28,11 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
  */
 export interface BoardElementResponse {
     /**
-     * ElementType. Can be any of: \"task\", \"lesson\".
+     * the type of the element in the content. For possible types, please refer to the enum
      * @type {string}
      * @memberof BoardElementResponse
      */
-    type: string;
+    type: BoardElementResponseTypeEnum;
     /**
      * Content of the Board, either: a task or a lesson specific for the board
      * @type {object}
@@ -40,6 +40,17 @@ export interface BoardElementResponse {
      */
     content: object;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum BoardElementResponseTypeEnum {
+    Task = 'task',
+    Lockedtask = 'lockedtask',
+    Lesson = 'lesson'
+}
+
 /**
  * 
  * @export
@@ -589,6 +600,32 @@ export interface PatchGroupParams {
      * @memberof PatchGroupParams
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface PatchOrderParams
+ */
+export interface PatchOrderParams {
+    /**
+     * Array ids determining the new order
+     * @type {Array<string>}
+     * @memberof PatchOrderParams
+     */
+    elements: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface PatchVisibilityParams
+ */
+export interface PatchVisibilityParams {
+    /**
+     * true to publish the element, false to unpublish
+     * @type {boolean}
+     * @memberof PatchVisibilityParams
+     */
+    visibility: boolean;
 }
 /**
  * 
@@ -1551,7 +1588,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 export const NewsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * * Create a news by a user in a given scope (school or team).
+         * Create a news by a user in a given scope (school or team).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1590,7 +1627,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Delete a news.
+         * Delete a news.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1627,7 +1664,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Responds with all news for a user.
+         * Responds with all news for a user.
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1685,7 +1722,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1722,7 +1759,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Update properties of a news.
+         * Update properties of a news.
          * @param {string} id 
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
@@ -1765,7 +1802,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Responds with news of a given team for a user.
+         * Responds with news of a given team for a user.
          * @param {string} teamId 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
@@ -1837,7 +1874,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = NewsApiAxiosParamCreator(configuration)
     return {
         /**
-         * * Create a news by a user in a given scope (school or team).
+         * Create a news by a user in a given scope (school or team).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1847,7 +1884,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Delete a news.
+         * Delete a news.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1857,7 +1894,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Responds with all news for a user.
+         * Responds with all news for a user.
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1871,7 +1908,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1881,7 +1918,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Update properties of a news.
+         * Update properties of a news.
          * @param {string} id 
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
@@ -1892,7 +1929,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Responds with news of a given team for a user.
+         * Responds with news of a given team for a user.
          * @param {string} teamId 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
@@ -1917,7 +1954,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = NewsApiFp(configuration)
     return {
         /**
-         * * Create a news by a user in a given scope (school or team).
+         * Create a news by a user in a given scope (school or team).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1926,7 +1963,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerCreate(createNewsParams, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Delete a news.
+         * Delete a news.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1935,7 +1972,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Responds with all news for a user.
+         * Responds with all news for a user.
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -1948,7 +1985,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1957,7 +1994,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Update properties of a news.
+         * Update properties of a news.
          * @param {string} id 
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
@@ -1967,7 +2004,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.newsControllerUpdate(id, updateNewsParams, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Responds with news of a given team for a user.
+         * Responds with news of a given team for a user.
          * @param {string} teamId 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
@@ -1990,7 +2027,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
  */
 export interface NewsApiInterface {
     /**
-     * * Create a news by a user in a given scope (school or team).
+     * Create a news by a user in a given scope (school or team).
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1999,7 +2036,7 @@ export interface NewsApiInterface {
     newsControllerCreate(createNewsParams: CreateNewsParams, options?: any): AxiosPromise<NewsResponse>;
 
     /**
-     * * Delete a news.
+     * Delete a news.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2008,7 +2045,7 @@ export interface NewsApiInterface {
     newsControllerDelete(id: string, options?: any): AxiosPromise<string>;
 
     /**
-     * * Responds with all news for a user.
+     * Responds with all news for a user.
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -2021,7 +2058,7 @@ export interface NewsApiInterface {
     newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
-     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+     * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2030,7 +2067,7 @@ export interface NewsApiInterface {
     newsControllerFindOne(id: string, options?: any): AxiosPromise<NewsResponse>;
 
     /**
-     * * Update properties of a news.
+     * Update properties of a news.
      * @param {string} id 
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
@@ -2040,7 +2077,7 @@ export interface NewsApiInterface {
     newsControllerUpdate(id: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse>;
 
     /**
-     * * Responds with news of a given team for a user.
+     * Responds with news of a given team for a user.
      * @param {string} teamId 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
@@ -2063,7 +2100,7 @@ export interface NewsApiInterface {
  */
 export class NewsApi extends BaseAPI implements NewsApiInterface {
     /**
-     * * Create a news by a user in a given scope (school or team).
+     * Create a news by a user in a given scope (school or team).
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2074,7 +2111,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Delete a news.
+     * Delete a news.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2085,7 +2122,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Responds with all news for a user.
+     * Responds with all news for a user.
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -2100,7 +2137,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+     * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2111,7 +2148,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Update properties of a news.
+     * Update properties of a news.
      * @param {string} id 
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
@@ -2123,7 +2160,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     }
 
     /**
-     * * Responds with news of a given team for a user.
+     * Responds with news of a given team for a user.
      * @param {string} teamId 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
@@ -2148,15 +2185,15 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('roomsControllerGetRoomBoard', 'id', id)
-            const localVarPath = `/rooms/{id}/board`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        roomsControllerGetRoomBoard: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerGetRoomBoard', 'roomid', roomid)
+            const localVarPath = `/rooms/{roomid}/board`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2183,6 +2220,96 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility: async (roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'roomid', roomid)
+            // verify required parameter 'elementid' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'elementid', elementid)
+            // verify required parameter 'patchVisibilityParams' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'patchVisibilityParams', patchVisibilityParams)
+            const localVarPath = `/rooms/{roomid}/elements/{elementid}/visibility`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)))
+                .replace(`{${"elementid"}}`, encodeURIComponent(String(elementid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchVisibilityParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchOrderingOfElements: async (roomid: string, patchOrderParams: PatchOrderParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerPatchOrderingOfElements', 'roomid', roomid)
+            // verify required parameter 'patchOrderParams' is not null or undefined
+            assertParamExists('roomsControllerPatchOrderingOfElements', 'patchOrderParams', patchOrderParams)
+            const localVarPath = `/rooms/{roomid}/board/order`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchOrderParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2195,12 +2322,35 @@ export const RoomsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerGetRoomBoard(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(id, options);
+        async roomsControllerGetRoomBoard(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2215,12 +2365,33 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse> {
-            return localVarFp.roomsControllerGetRoomBoard(id, options).then((request) => request(axios, basePath));
+        roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse> {
+            return localVarFp.roomsControllerGetRoomBoard(roomid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {string} elementid 
+         * @param {PatchVisibilityParams} patchVisibilityParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {PatchOrderParams} patchOrderParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2233,12 +2404,33 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
 export interface RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerGetRoomBoard(id: string, options?: any): AxiosPromise<BoardResponse>;
+    roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {PatchOrderParams} patchOrderParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -2251,13 +2443,38 @@ export interface RoomsApiInterface {
 export class RoomsApi extends BaseAPI implements RoomsApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} roomid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerGetRoomBoard(id: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(id, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerGetRoomBoard(roomid: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {string} elementid 
+     * @param {PatchVisibilityParams} patchVisibilityParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {PatchOrderParams} patchOrderParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2386,6 +2603,43 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
  */
 export const TaskApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerDelete: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('taskControllerDelete', 'id', id)
+            const localVarPath = `/tasks/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2558,6 +2812,16 @@ export const TaskApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2610,6 +2874,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerDelete(id: string, options?: any): AxiosPromise<string> {
+            return localVarFp.taskControllerDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2657,6 +2930,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
 export interface TaskApiInterface {
     /**
      * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerDelete(id: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
@@ -2702,6 +2984,17 @@ export interface TaskApiInterface {
  * @extends {BaseAPI}
  */
 export class TaskApi extends BaseAPI implements TaskApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerDelete(id: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -3045,6 +3338,39 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerSaveAllUsersMatches: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/migrate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3183,6 +3509,15 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerSaveAllUsersMatches(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSaveAllUsersMatches(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3254,6 +3589,14 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerSaveAllUsersMatches(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerSaveAllUsersMatches(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
@@ -3319,6 +3662,14 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerSaveAllUsersMatches(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -3392,6 +3743,16 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerRemoveMatch(id: string, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerRemoveMatch(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerSaveAllUsersMatches(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerSaveAllUsersMatches(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

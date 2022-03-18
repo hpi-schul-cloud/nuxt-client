@@ -14,23 +14,23 @@
 		</template>
 		<template v-for="(task, index) of tasks" v-else>
 			<template v-if="userRole === 'student'">
-				<v-task-item-student
+				<task-item-student
 					v-if="isLastTaskItem(index)"
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
 				/>
-				<v-task-item-student v-else :key="index" :task="task" role="article" />
+				<task-item-student v-else :key="index" :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
 			<template v-if="userRole === 'teacher'">
-				<v-task-item-teacher
+				<task-item-teacher
 					v-if="isLastTaskItem(index)"
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
 				/>
-				<v-task-item-teacher v-else :key="index" :task="task" role="article" />
+				<task-item-teacher v-else :key="index" :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
 		</template>
@@ -46,11 +46,11 @@
 <script>
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
-import VTaskItemStudent from "@components/molecules/vTaskItemStudent";
-import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher";
+import TaskItemStudent from "@components/molecules/TaskItemStudent";
+import TaskItemTeacher from "@components/molecules/TaskItemTeacher";
 
 export default {
-	components: { VTaskItemStudent, VTaskItemTeacher },
+	components: { TaskItemStudent, TaskItemTeacher },
 	props: {
 		tasks: {
 			type: Array,
