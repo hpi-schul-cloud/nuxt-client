@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<div>
 		<v-menu
 			bottom
 			left
@@ -105,7 +105,7 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-	</section>
+	</div>
 </template>
 
 <script>
