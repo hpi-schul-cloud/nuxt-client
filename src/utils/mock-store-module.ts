@@ -1,8 +1,20 @@
-import { ActionTree, Module as Mod, MutationTree } from "vuex";
+import { GetterTree, ActionTree, Module as Mod, MutationTree } from "vuex";
 import { VuexModule } from "vuex-module-decorators";
 
 type ConstructorOf<C> = { new (...args: any[]): C };
 type StaticsType = Record<string, any>;
+
+const mockGetters = <M>(
+	module: Function & Mod<M, any>,
+	statics: StaticsType,
+	getters: Record<string, any>
+) => {
+	Object.keys(module.getters as GetterTree<M, any>).forEach((key) => {
+		Object.defineProperty(statics, key, {
+			get: () => getters[key],
+		});
+	});
+};
 
 const mockMutations = <M>(
 	module: Function & Mod<M, any>,
@@ -32,6 +44,11 @@ export function createModuleMocks<M extends VuexModule>(
 
 	const statics: StaticsType = {};
 
+	// ------- getters -------
+	if (module.getters) {
+		mockGetters(module, statics, getters);
+	}
+
 	// -------- mutations --------
 	if (module.mutations) {
 		mockMutations(module, statics);
@@ -41,5 +58,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return { ...statics, ...getters } as M;
+	return statics as M;
 }
