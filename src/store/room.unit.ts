@@ -226,7 +226,7 @@ describe("room module", () => {
 				expect(fetchContentSpy).toHaveBeenCalled();
 			});
 
-			it("should trigger fetchContent method after copying lesson", async () => {
+			it("should catch error in catch block", async () => {
 				let received: any[] = [];
 				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
