@@ -201,4 +201,5 @@ module.exports = {
 			customProperties: true,
 		},
 	},
+	ignore: ["**/*.unit.ts", "**/*.unit.js"],
 };
