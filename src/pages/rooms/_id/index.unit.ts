@@ -1,4 +1,4 @@
-import RoomsModule from "@store/room";
+import RoomModule from "@store/room";
 import AuthModule from "@/store/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
@@ -100,7 +100,7 @@ const getWrapper: any = () => {
 
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
-		RoomsModule.setRoomData(mockData as any);
+		RoomModule.setRoomData(mockData as any);
 		AuthModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 

@@ -138,7 +138,7 @@
 			@dialog-closed="lessonShare.isOpen = false"
 		>
 			<div slot="title" class="room-title">
-				<h4>Copy code has been generated!</h4>
+				<h4>{{ $t("pages.room.lessonShare.confirm") }}</h4>
 			</div>
 			<template slot="content">
 				<v-divider class="mb-4"></v-divider>

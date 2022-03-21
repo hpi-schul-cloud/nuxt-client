@@ -702,6 +702,7 @@
 	"pages.room.taskCard.label.edit": "Edit",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.locked.label.info": "You are not allowed to view the task details.",
+	"pages.room.lessonShare.confirm": "A copy code has been generated!",
 	"pages.room.lessonShare.step_1.text": "Info",
 	"pages.room.lessonShare.step_2.text": "Paste the code",
 	"pages.room.lessonShare.modal.info": "Share the following link with your students to invite them to the course. Students must be logged in to use the link.",

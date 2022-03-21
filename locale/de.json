@@ -707,6 +707,7 @@
 	"pages.room.taskCard.label.edit": "Bearbeiten",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.locked.label.info": "Sie sind nicht berechtigt, die Aufgabendetails anzusehen.",
+	"pages.room.lessonShare.confirm": "Kopiercode wurde generiert!",
 	"pages.room.lessonShare.step_1.text": "Info",
 	"pages.room.lessonShare.step_2.text": "Code einfügen",
 	"pages.room.lessonShare.modal.info": "Verteile folgenden Link an deine Schüler:innen, um sie zum Kurs einzuladen. Die Schüler:innen müssen dafür angemeldet sein.",

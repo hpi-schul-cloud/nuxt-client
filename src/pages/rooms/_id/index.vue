@@ -3,7 +3,7 @@
 		ref="main"
 		:headline="roomData.title"
 		:full-width="true"
-		:fab-items="fab"
+		:fab-items="fabItems"
 		:breadcrumbs="breadcrumbs"
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
@@ -75,45 +75,11 @@ export default {
 		};
 	},
 	computed: {
-		fab() {
+		fabItems() {
 			if (
 				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					return {
-						icon: mdiPlus,
-						title: this.$t("pages.rooms.fab.add"),
-						ariaLabel: this.$t("pages.rooms.fab.add"),
-						testId: "add-content-button",
-						actions: [
-							{
-								label: this.$t("pages.rooms.fab.add.task"),
-								icon: mdiFormatListChecks,
-								href: `/homework/new?course=${this.roomData.roomId}`,
-								dataTestid: "fab_button_add_task",
-								ariaLabel: this.$t("pages.rooms.fab.add.task"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.add.lesson"),
-								icon: mdiViewListOutline,
-								href: `/courses/${this.roomData.roomId}/topics/add`,
-								dataTestid: "fab_button_add_lesson",
-								ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.import.lesson"),
-								icon: mdiCloudDownload,
-								dataTestid: "fab_button_import_lesson",
-								ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
-							},
-						],
-					};
-				}
-				return {
+				const items = {
 					icon: mdiPlus,
 					title: this.$t("pages.rooms.fab.add"),
 					ariaLabel: this.$t("pages.rooms.fab.add"),
@@ -135,6 +101,19 @@ export default {
 						},
 					],
 				};
+				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+					items.actions.push({
+						label: this.$t("pages.rooms.fab.import.lesson"),
+						icon: mdiCloudDownload,
+						dataTestid: "fab_button_import_lesson",
+						ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
+						customEvent: {
+							name: "fabButtonEvent",
+							value: true,
+						},
+					});
+				}
+				return items;
 			}
 
 			return null;

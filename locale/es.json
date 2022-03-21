@@ -709,6 +709,7 @@
 	"pages.room.taskCard.label.edit": "Editar",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.locked.label.info": "No se le permite ver los detalles de la tarea.",
+	"pages.room.lessonShare.confirm": "Se generó un código de copia!",
 	"pages.room.lessonShare.step_1.text": "Información",
 	"pages.room.lessonShare.step_2.text": "Pega el código",
 	"pages.room.lessonShare.import.step_2.text": "Inserta un código para importar los temas de otros usuarios. Los archivos incluidos en el tema se colocan en la carpeta del curso.",
