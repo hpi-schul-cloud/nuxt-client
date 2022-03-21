@@ -64,7 +64,7 @@
 				}}
 			</h2>
 			<template slot="content">
-				<p class="body-1 mt-2">
+				<p class="text-md mt-2">
 					{{
 						$t(
 							"pages.administration.school.index.authSystems.confirmDeleteText"
