@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
+import EnvConfigModule from "@/store/env-config";
 
 declare let createComponentMocks: Function;
 
@@ -40,7 +41,6 @@ const hiddenTestProps = {
 	keyDrag: false,
 	dragInProgress: false,
 };
-
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomLessonCard, {
 		...createComponentMocks({
@@ -155,6 +155,21 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
 				expect(revertPublishedCardMock).toHaveBeenCalled();
+			});
+
+			it("should have 'share' more action if env flag is set", async () => {
+				// @ts-ignore
+				EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+				const wrapper = getWrapper({ ...baseTestProps, role });
+
+				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
+					(item: any) => {
+						return (item.name = wrapper.vm.$i18n.t(
+							"pages.room.lessonCard.label.share"
+						));
+					}
+				);
+				expect(hasShareMenuItem).toBe(true);
 			});
 		});
 		describe("students", () => {

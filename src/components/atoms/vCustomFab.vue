@@ -207,6 +207,7 @@ export default {
 	left: initial;
 	align-items: end;
 	width: auto;
+	white-space: nowrap;
 }
 
 .extended-fab {

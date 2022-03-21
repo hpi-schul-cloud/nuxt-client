@@ -3,6 +3,8 @@ import AuthModule from "@/store/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
+import { User } from "@/store/types/auth";
+import EnvConfigModule from "@/store/env-config";
 
 const mockData = {
 	roomId: "123",
@@ -56,9 +58,26 @@ const mockData = {
 	],
 };
 
-const user = {
-	name: "abc",
+const mockAuthStoreDataStudentInvalid = {
+	__v: 0,
+	_id: "asdf",
+	id: "asdf",
+	firstName: "Arthur",
+	lastName: "Dent",
+	email: "arthur.dent@hitchhiker.org",
+	roles: [{ name: "student" }],
+	permissions: ["ABC", "DEF"],
+};
+
+const mockAuthStoreDataTeacher = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
 	roles: [{ name: "teacher" }],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
 const $route = {
@@ -82,7 +101,7 @@ const getWrapper: any = () => {
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
 		RoomModule.setRoomData(mockData as any);
-		AuthModule.setUser(user as any);
+		AuthModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 
 	it("should fetch data", async () => {
@@ -100,5 +119,47 @@ describe("@pages/rooms/_id/index.vue", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
+	});
+
+	it("should not show FAB if user does not have permission to create courses", () => {
+		AuthModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		expect(fabComponent.exists()).toBe(false);
+	});
+
+	it("should show FAB if user has permission to create courses", () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		const actions = fabComponent.vm.actions.map((action: any) => {
+			return action.label;
+		});
+		const hasNewTaskAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
+		});
+		const hasNewLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
+		});
+		const hasImportLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
+		});
+		expect(fabComponent.exists()).toBe(true);
+		expect(hasNewTaskAction).toBe(true);
+		expect(hasNewLessonAction).toBe(true);
+		expect(hasImportLessonAction).toBe(false);
+	});
+
+	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
+		// @ts-ignore
+		EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		const actions = fabComponent.vm.actions.map((action: any) => {
+			return action.label;
+		});
+		const hasImportLessonAction = actions.some((item: string) => {
+			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
+		});
+		expect(hasImportLessonAction).toBe(true);
 	});
 });
