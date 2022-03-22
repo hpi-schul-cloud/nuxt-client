@@ -43,13 +43,13 @@
 						outlined
 						dense
 						class="mt-1 text-field-lesson-code"
-						:rules="[textFieldValidation.required]"
+						:error="businessError.message === 'not-found'"
+						:error-messages="
+							businessError.message === 'not-found'
+								? $t('pages.room.lessonShare.codeError')
+								: ''
+						"
 					></v-text-field>
-					<div v-if="businessError.message === 'not-found'">
-						<v-alert dense outlined type="error" class="code-error">
-							{{ $t("pages.room.lessonShare.codeError") }}
-						</v-alert>
-					</div>
 					<div v-if="businessError.message === 'not-created'">
 						<v-alert dense outlined type="error" class="create-error">
 							{{ $t("pages.room.lessonShare.importError") }}
@@ -118,11 +118,8 @@ export default {
 			sharedLessonData: {
 				code: "",
 			},
+			valid: true,
 			mdiCheck,
-			textFieldValidation: {
-				required: (value) =>
-					!!value || this.$t("pages.room.lessonShare.textValidation"),
-			},
 		};
 	},
 	computed: {
