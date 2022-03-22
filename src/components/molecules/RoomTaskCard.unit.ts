@@ -153,12 +153,14 @@ describe("@components/molecules/RoomTaskCard", () => {
 			const wrapper = getWrapper({ ...testProps, role });
 			const descElement = wrapper.findAll(".text-description");
 
-			expect(descElement.length).toStrictEqual(0)
-			wrapper.setData({canShowDescription: true})
+			expect(descElement.length).toStrictEqual(0);
+			wrapper.setData({ canShowDescription: true });
 			await wrapper.vm.$nextTick();
 			const descElementAfter = wrapper.findAll(".text-description");
-			expect(descElementAfter).toHaveLength(1)
-			expect(descElementAfter.wrappers[0].element.innerHTML).toStrictEqual("some description here")
+			expect(descElementAfter).toHaveLength(1);
+			expect(descElementAfter.wrappers[0].element.innerHTML).toStrictEqual(
+				"some description here"
+			);
 		});
 	});
 
