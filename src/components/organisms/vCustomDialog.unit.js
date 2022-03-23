@@ -83,4 +83,78 @@ describe("component/customDialog", () => {
 		expect(closeButton).toHaveLength(0);
 		expect(confirmButton).toHaveLength(0);
 	});
+	it("should have default buttons", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+			},
+		});
+		const closeButton = wrapper.findAll(".dialog-closed");
+		const confirmButton = wrapper.findAll(".dialog-confirmed");
+		expect(closeButton).toHaveLength(1);
+		expect(confirmButton).toHaveLength(1);
+	});
+	it("should have buttons which passed as a prop", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+				buttons: ["back", "cancel", "confirm", "close", "next"],
+			},
+		});
+		const backButton = wrapper.findAll(`[data-testid="dialog-back"]`);
+		const cancelButton = wrapper.findAll(`[data-testid="dialog-cancel"]`);
+		const confirmButton = wrapper.findAll(`[data-testid="dialog-confirm"]`);
+		const closeButton = wrapper.findAll(`[data-testid="dialog-cancel"]`);
+		const nextButton = wrapper.findAll(`[data-testid="dialog-next"]`);
+
+		expect(backButton).toHaveLength(1);
+		expect(cancelButton).toHaveLength(1);
+		expect(confirmButton).toHaveLength(1);
+		expect(closeButton).toHaveLength(1);
+		expect(nextButton).toHaveLength(1);
+	});
+	it("should disable the confirm button when 'confirmBtnDisabled' passed as a prop", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+				confirmBtnDisabled: true,
+			},
+		});
+		const confirmButton = wrapper.find(`[data-testid="dialog-confirm"]`);
+		expect(confirmButton.element.disabled).toBe(true);
+	});
+	it("should change the confirm button text via passing the prop", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+				confirmBtnTitleKey: "test text",
+			},
+		});
+		const confirmButton = wrapper.find(`[data-testid="dialog-confirm"]`);
+		expect(confirmButton.element.innerHTML).toContain("test text");
+	});
 });
