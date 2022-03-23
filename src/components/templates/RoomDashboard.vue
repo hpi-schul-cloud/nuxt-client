@@ -301,8 +301,8 @@ export default {
 			this.lessonDelete.lessonData = lesson;
 			this.lessonDelete.isOpen = true;
 		},
-		deleteLesson() {
-			console.log("confirmed");
+		async deleteLesson() {
+			await RoomModule.deleteLesson(this.lessonDelete.lessonData.id);
 		},
 	},
 };
