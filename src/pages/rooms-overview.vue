@@ -191,17 +191,17 @@ export default {
 						testId: "add-course-button",
 						actions: [
 							{
-								label: this.$t("pages.rooms.fab.add"),
+								label: this.$t("pages.rooms.fab.add.course"),
 								icon: mdiSchool,
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add"),
+								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
 							{
-								label: this.$t("pages.rooms.fab.import"),
+								label: this.$t("pages.rooms.fab.import.course"),
 								icon: mdiCloudDownload,
 								dataTestid: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import"),
+								ariaLabel: this.$t("pages.rooms.fab.import.course"),
 								customEvent: {
 									name: "fabButtonEvent",
 									value: true,
