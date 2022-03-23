@@ -157,4 +157,38 @@ describe("component/customDialog", () => {
 		const confirmButton = wrapper.find(`[data-testid="dialog-confirm"]`);
 		expect(confirmButton.element.innerHTML).toContain("test text");
 	});
+	it("should disable the next button when 'nextBtnDisabled' passed as a prop", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+				nextBtnDisabled: true,
+				buttons: ["next"],
+			},
+		});
+		const nextButton = wrapper.find(`[data-testid="dialog-next"]`);
+		expect(nextButton.element.disabled).toBe(true);
+	});
+	it("should change the next button text via passing the prop", () => {
+		const wrapper = mount(customDialog, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				isOpen: true,
+				size: 480,
+				hasButtons: true,
+				nextBtnTitleKey: "test text",
+				buttons: ["next"],
+			},
+		});
+		const nextButton = wrapper.find(`[data-testid="dialog-next"]`);
+		expect(nextButton.element.innerHTML).toContain("test text");
+	});
 });

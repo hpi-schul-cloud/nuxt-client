@@ -62,8 +62,9 @@
 						data-testId="dialog-next"
 						color="primary"
 						depressed
+						:disabled="nextBtnDisabled"
 						@click="$emit('next')"
-						>{{ this.$t("common.actions.continue") }}
+						>{{ nextBtnTitleKey }}
 					</v-btn>
 				</div>
 			</v-card-actions>
@@ -94,6 +95,13 @@ export default {
 			default: "common.actions.confirm",
 		},
 		confirmBtnDisabled: {
+			type: Boolean,
+		},
+		nextBtnTitleKey: {
+			type: String,
+			default: "common.actions.continue",
+		},
+		nextBtnDisabled: {
 			type: Boolean,
 		},
 		buttons: {

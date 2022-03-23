@@ -3,7 +3,14 @@
 		ref="importDialog"
 		:is-open="isOpen"
 		class="import-dialog"
-		@dialog-closed="$emit('dialog-closed', false)"
+		has-buttons
+		:buttons="['back', 'cancel', 'next']"
+		:next-btn-title-key="nextButtonName"
+		:next-btn-disabled="step === 2 && sharedLessonData.code === ''"
+		@dialog-closed="cancel"
+		@dialog-confirmed.prevent
+		@back="stepBack"
+		@next="nextStep"
 	>
 		<template slot="content" class="import-modal-content">
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
@@ -56,39 +63,6 @@
 						</v-alert>
 					</div>
 				</div>
-			</div>
-			<div class="button-section mt-8">
-				<v-row>
-					<v-col md="4">
-						<v-btn
-							class="dialog-back-button"
-							depressed
-							outlined
-							@click="stepBack"
-						>
-							{{ $t("common.actions.back") }}
-						</v-btn>
-					</v-col>
-					<v-col md="8" class="ml-auto cancel-confirm-button">
-						<v-btn
-							class="dialog-closed"
-							depressed
-							style="background: transparent"
-							@click="cancel"
-						>
-							{{ this.$t("common.actions.cancel") }}
-						</v-btn>
-						<v-btn
-							:disabled="step === 2 && sharedLessonData.code === ''"
-							class="dialog-next"
-							color="primary"
-							depressed
-							@click="nextStep"
-						>
-							{{ nextButtonName }}
-						</v-btn>
-					</v-col>
-				</v-row>
 			</div>
 		</template>
 	</vCustomDialog>

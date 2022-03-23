@@ -76,13 +76,13 @@ describe("@components/molecules/RoomLessonModal", () => {
 
 	it("confirm and back button should increase and decrease the step value", async () => {
 		const wrapper = getWrapper({ isOpen: true });
+		const buttonNext = wrapper.find(`[data-testId="dialog-next"]`);
+		const buttonBack = wrapper.find(`[data-testId="dialog-back"]`);
 
-		const btnConfirm = wrapper.find(".dialog-next");
-		const btnBack = wrapper.find(".dialog-back-button");
-		btnConfirm.trigger("click");
+		buttonNext.trigger("click");
 		expect(wrapper.vm.step).toStrictEqual(2);
 
-		btnBack.trigger("click");
+		buttonBack.trigger("click");
 		expect(wrapper.vm.step).toStrictEqual(1);
 	});
 
@@ -113,7 +113,7 @@ describe("@components/molecules/RoomLessonModal", () => {
 				message: "not-found",
 				error: {},
 			});
-			const btnNext = wrapper.find(".dialog-next");
+			const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
 			await btnNext.trigger("click");
 
 			await wrapper.vm.$nextTick();

@@ -136,6 +136,8 @@
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
 			class="room-dialog"
+			has-buttons
+			:buttons="['close', 'back']"
 			@dialog-closed="lessonShare.isOpen = false"
 		>
 			<div slot="title" class="room-title">
@@ -151,17 +153,7 @@
 				<div>
 					<v-text-field :value="lessonShare.token" outlined></v-text-field>
 				</div>
-				<v-divider class="mb-4"></v-divider>
-				<div class="share-cancel-button">
-					<v-btn
-						class="dialog-back-button"
-						depressed
-						outlined
-						@click="lessonShare.isOpen = false"
-					>
-						{{ $t("common.labels.close") }}
-					</v-btn>
-				</div>
+				<v-divider></v-divider>
 			</template>
 		</vCustomDialog>
 		<v-custom-dialog
