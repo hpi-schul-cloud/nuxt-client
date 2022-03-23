@@ -723,6 +723,8 @@
 	"pages.room.lessonShare.importError": "Lamentablemente algo ha salido ma",
 	"pages.room.lessonShare.btn.continue": "Continuar",
 	"pages.room.lessonShare.btn.confirm": "Importar",
+	"pages.room.lessonsDelete.title": "Eliminar tema",
+	"pages.room.lessonsDelete.text": "¿Estás seguro de que deseas eliminar la tema \"{lessonTitle}\"?",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",

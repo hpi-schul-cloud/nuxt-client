@@ -55,6 +55,7 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
+						@delete-lesson="openDeleteDialog(item.content)"
 					/>
 					<room-locked-card
 						v-if="item.type === cardTypes.Lockedtask"
@@ -163,6 +164,27 @@
 				</div>
 			</template>
 		</vCustomDialog>
+		<v-custom-dialog
+			v-model="lessonDelete.isOpen"
+			data-testid="delete-dialog"
+			:size="375"
+			has-buttons
+			confirm-btn-title-key="common.actions.remove"
+			@dialog-confirmed="deleteLesson"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ $t("pages.room.lessonsDelete.title") }}
+			</h2>
+			<template slot="content">
+				<p class="text-md mt-2">
+					{{
+						$t("pages.room.lessonsDelete.text", {
+							lessonTitle: lessonDelete.lessonData.name,
+						})
+					}}
+				</p>
+			</template>
+		</v-custom-dialog>
 	</div>
 </template>
 
@@ -197,7 +219,8 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
-			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
+			lessonShare: { isOpen: false, token: "", lessonData: {} },
+			lessonDelete: { isOpen: false, lessonData: {} },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -273,6 +296,13 @@ export default {
 			setTimeout(() => {
 				this.dragInProgress = false;
 			}, this.dragInProgressDelay);
+		},
+		openDeleteDialog(lesson) {
+			this.lessonDelete.lessonData = lesson;
+			this.lessonDelete.isOpen = true;
+		},
+		deleteLesson() {
+			console.log("confirmed");
 		},
 	},
 };

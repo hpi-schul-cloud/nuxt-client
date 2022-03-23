@@ -716,6 +716,8 @@
 	"pages.room.lessonShare.importError": "Unfortunately, something went wrong",
 	"pages.room.lessonShare.btn.continue": "Continue",
 	"pages.room.lessonShare.btn.confirm": "Import",
+	"pages.room.lessonsDelete.title": "Delete Lesson",
+	"pages.room.lessonsDelete.text": "Are you sure, you want to delete lesson \"{lessonTitle}\"?",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
