@@ -17,7 +17,7 @@ const serverMiddlewareList = [
 ];
 
 module.exports = {
-	mode: "spa",
+	ssr: false,
 	srcDir: "src/",
 	theme: "default",
 	buildModules: [
@@ -201,4 +201,5 @@ module.exports = {
 			customProperties: true,
 		},
 	},
+	ignore: ["**/*.unit.ts", "**/*.unit.js"],
 };

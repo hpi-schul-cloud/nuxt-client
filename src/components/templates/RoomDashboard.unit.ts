@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue/types/umd";
 import RoomDashboard from "./RoomDashboard.vue";
 
 declare var createComponentMocks: Function;
@@ -170,6 +171,18 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			window.ontouchstart = tempOntouchstart;
 		});
 
+		it("should set 'dragInProgress' when dragging is started", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const timeDuration = wrapper.vm.dragInProgressDelay;
+			expect(wrapper.vm.dragInProgress).toBe(false);
+			const element = wrapper.find(".elements");
+			element.vm.$emit("start");
+			expect(wrapper.vm.dragInProgress).toBe(true);
+			element.vm.$emit("end");
+			await new Promise((time) => setTimeout(time, timeDuration));
+			expect(wrapper.vm.dragInProgress).toBe(false);
+		});
+
 		it("should sort elements after Drag&Drop", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
@@ -246,6 +259,30 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			cardElement.vm.$emit("tab-pressed");
 			expect(wrapper.vm.isDragging).toBe(false);
+		});
+	});
+
+	describe("Sharing Lesson", () => {
+		it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const lessonCard = wrapper.find(".lesson-card");
+
+			expect(wrapper.vm.lessonShare.isOpen).toBe(false);
+			lessonCard.vm.$emit("open-modal", "12345");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.lessonShare.isOpen).toBe(true);
+		});
+
+		it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const shareModal = wrapper.find(".room-dialog") as any;
+
+			expect(shareModal.vm.isOpen).toBe(false);
+			wrapper.vm.lessonShare.isOpen = true;
+			await wrapper.vm.$nextTick();
+			expect(shareModal.vm.isOpen).toBe(true);
 		});
 	});
 });

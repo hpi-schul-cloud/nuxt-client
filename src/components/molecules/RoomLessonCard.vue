@@ -43,9 +43,10 @@
 </template>
 
 <script>
-import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
+import { mdiPencilOutline, mdiUndoVariant, mdiShareVariant } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -66,12 +67,14 @@ export default {
 			default: "",
 		},
 		keyDrag: { type: Boolean, required: true },
+		dragInProgress: { type: Boolean, required: true },
 	},
 	data() {
 		return {
 			icons: {
 				mdiPencilOutline,
 				mdiUndoVariant,
+				mdiShareVariant,
 			},
 			defaultTitleColor: "--color-secondary",
 		};
@@ -127,6 +130,14 @@ export default {
 						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
+
+				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.$emit("open-modal", this.lesson.id),
+						name: this.$t("pages.room.lessonCard.label.share"),
+					});
+				}
 			}
 
 			if (this.role === Roles.Student) {
@@ -138,7 +149,9 @@ export default {
 	},
 	methods: {
 		handleClick() {
-			window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
+			if (!this.dragInProgress) {
+				window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
+			}
 		},
 		redirectAction(value) {
 			window.location = value;

@@ -38,3 +38,10 @@ export type RoomData = {
 		}
 	];
 };
+
+export type SharedLessonObject = {
+	code: string;
+	lessonName: string;
+	status: string;
+	message: string;
+};
