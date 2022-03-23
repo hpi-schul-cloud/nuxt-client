@@ -171,6 +171,21 @@ describe("@components/molecules/RoomLessonCard", () => {
 				);
 				expect(hasShareMenuItem).toBe(true);
 			});
+
+			it("should emit 'delete-lesson' when delete action button clicked'", async () => {
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const selectorName = `.task-action-${wrapper.vm.$i18n.t(
+					"common.actions.remove"
+				)}`;
+
+				const moreActionButton = wrapper.find(selectorName);
+				await moreActionButton.trigger("click");
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted("delete-lesson");
+				expect(emitted).toHaveLength(1);
+			});
 		});
 		describe("students", () => {
 			const role = "student";
