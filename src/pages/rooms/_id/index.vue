@@ -81,8 +81,8 @@ export default {
 			) {
 				const items = {
 					icon: mdiPlus,
-					title: this.$t("pages.rooms.fab.add"),
-					ariaLabel: this.$t("pages.rooms.fab.add"),
+					title: this.$t("common.actions.create"),
+					ariaLabel: this.$t("common.actions.create"),
 					testId: "add-content-button",
 					actions: [
 						{
