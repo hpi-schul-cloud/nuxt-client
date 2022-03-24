@@ -322,7 +322,6 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		it("should close the modal view after clicking the 'cancel' button", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 			wrapper.vm.lessonDelete.isOpen = true;
-
 			await wrapper.vm.$nextTick();
 			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
 			cancelButton.trigger("click");

@@ -64,7 +64,7 @@
 						depressed
 						:disabled="nextBtnDisabled"
 						@click="$emit('next')"
-						>{{ nextBtnTitleKey }}
+						>{{ this.$t(nextBtnTitleKey) }}
 					</v-btn>
 				</div>
 			</v-card-actions>
