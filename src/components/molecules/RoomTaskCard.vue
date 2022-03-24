@@ -30,6 +30,7 @@
 			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
+				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
 				v-html="task.description"
@@ -126,6 +127,7 @@ export default {
 			},
 			defaultTitleColor: "--color-secondary",
 			roles: Roles,
+			canShowDescription: false,
 		};
 	},
 	computed: {
