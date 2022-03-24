@@ -318,5 +318,15 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			deleteModal.vm.$emit("dialog-confirmed");
 			expect(deleteLessonMock).toHaveBeenCalled();
 		});
+
+		it("should close the modal view after clicking the 'cancel' button", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			wrapper.vm.lessonDelete.isOpen = true;
+
+			await wrapper.vm.$nextTick();
+			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
+			cancelButton.trigger("click");
+			expect(wrapper.vm.lessonDelete.isOpen).toBe(false);
+		});
 	});
 });
