@@ -1,5 +1,6 @@
 import AuthSystems from "./AuthSystems";
 import SchoolsModule from "@/store/schools";
+// import EnvConfigModule from "@/store/env-config";
 
 const generateProps = () => ({
 	systems: [
@@ -19,12 +20,49 @@ const searchStrings = {
 	editSystemButton: ".edit-system-btn",
 	deleteSystemButton: ".delete-system-btn",
 	customDialog: ".custom-dialog",
+	schoolLoginLink: ".school-login-link",
 };
 
 describe("AuthSystems", () => {
 	it(...isValidComponent(AuthSystems));
 
 	describe("displaying values", () => {
+		it("login link field should not be visible", () => {
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const loginLinkFieldVisibility = wrapper.findAll(
+				searchStrings.schoolLoginLink
+			);
+
+			expect(loginLinkFieldVisibility).toHaveLength(0);
+		});
+
+		// it("login link field should be visible", () => {
+		// 	EnvConfigModule.setEnvs({
+		// 		FEATURE_LOGIN_LINK_ENABLED: true,
+		// 	});
+
+		// 	const wrapper = mount(AuthSystems, {
+		// 		...createComponentMocks({
+		// 			i18n: true,
+		// 			vuetify: true,
+		// 		}),
+		// 		propsData: generateProps(),
+		// 	});
+
+		// 	const loginLinkFieldVisibility = wrapper.findAll(
+		// 		searchStrings.schoolLoginLink
+		// 	);
+
+		// 	expect(loginLinkFieldVisibility).toHaveLength(1);
+		// });
+
 		it("ldap button should be visible", async () => {
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
