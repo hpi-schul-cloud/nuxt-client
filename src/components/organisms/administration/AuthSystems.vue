@@ -128,7 +128,7 @@ export default {
 		customLoginLinkEnabled: () => EnvConfigModule.getLoginLinkEnabled,
 		customLoginLink() {
 			let type = "";
-			const schoolId = "";
+			let schoolId = "";
 			if (this.systems.some((system) => system.oauthConfig))
 				type = "strategy=iserv";
 			else if (this.systems.length === 0) type = "strategy=email";
