@@ -140,6 +140,42 @@ describe("AuthSystems", () => {
 					"strategy=iserv"
 				);
 			});
+
+			it("login link copy button should copy login link", () => {
+				const mockElem = {
+					value: "example_value",
+					select: () => {},
+					setSelectionRange: () => {},
+				};
+				Object.assign(navigator, {
+					clipboard: {
+						writeText: () => {},
+					},
+				});
+				Object.assign(document, {
+					getElementById: () => {
+						return mockElem;
+					},
+				});
+				const clipboardSpy = jest.spyOn(navigator.clipboard, "writeText");
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+
+				loginLinkFieldVisibility.wrappers[0].find(".v-icon").trigger("click");
+
+				expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
+			});
 		});
 
 		it("ldap button should be visible", async () => {
