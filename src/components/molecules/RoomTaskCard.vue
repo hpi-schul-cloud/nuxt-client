@@ -30,6 +30,7 @@
 			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
+				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
 				v-html="task.description"
@@ -114,6 +115,7 @@ export default {
 			default: "",
 		},
 		keyDrag: { type: Boolean, required: true },
+		dragInProgress: { type: Boolean, required: true },
 	},
 	data() {
 		return {
@@ -125,6 +127,7 @@ export default {
 			},
 			defaultTitleColor: "--color-secondary",
 			roles: Roles,
+			canShowDescription: false,
 		};
 	},
 	computed: {
@@ -225,7 +228,9 @@ export default {
 			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
 		},
 		handleClick() {
-			window.location = `/homework/${this.task.id}`;
+			if (!this.dragInProgress) {
+				window.location = `/homework/${this.task.id}`;
+			}
 		},
 		redirectAction(value) {
 			window.location = value;
