@@ -199,7 +199,7 @@ export default {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.words.task"),
-					href: "/homework/new",
+					href: `/homework/new?returnUrl=tasks`,
 					ariaLabel: this.$t("components.organisms.TasksDashboardMain.addTask"),
 					testId: "addTask",
 				};
