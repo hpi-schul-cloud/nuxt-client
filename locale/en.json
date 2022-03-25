@@ -222,6 +222,7 @@
 	"pages.account.index.user.locale.longName.de": "German",
 	"pages.account.index.user.locale.longName.en": "English",
 	"pages.account.index.user.locale.longName.es": "Spanish",
+	"pages.account.index.user.locale.longName.ua": "Ukrainian",
 	"pages.account.index.user.password": "Current Password",
 	"pages.account.index.user.teams": "Team Settings",
 	"pages.account.index.user.teams.placeholder": "Visibility for team invitations",
