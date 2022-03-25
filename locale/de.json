@@ -700,7 +700,6 @@
 	"pages.room.taskCard.label.post": "Posten",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
-	"pages.room.locked.label.info": "Sie sind nicht berechtigt, die Aufgabendetails anzusehen.",
 	"pages.room.lessonShare.confirm": "Kopiercode wurde generiert!",
 	"pages.room.lessonShare.step_1.text": "Info",
 	"pages.room.lessonShare.step_2.text": "Code einfügen",

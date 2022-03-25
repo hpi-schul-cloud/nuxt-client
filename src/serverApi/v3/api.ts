@@ -2816,7 +2816,7 @@ export const TaskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2878,7 +2878,7 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete(id: string, options?: any): AxiosPromise<string> {
+        taskControllerDelete(id: string, options?: any): AxiosPromise<boolean> {
             return localVarFp.taskControllerDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2935,7 +2935,7 @@ export interface TaskApiInterface {
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerDelete(id: string, options?: any): AxiosPromise<string>;
+    taskControllerDelete(id: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 

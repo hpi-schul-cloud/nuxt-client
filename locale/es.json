@@ -702,7 +702,6 @@
 	"pages.room.taskCard.label.post": "Publicar",
 	"pages.room.taskCard.label.edit": "Editar",
 	"pages.room.cards.label.revert": "Volver al borrador",
-	"pages.room.locked.label.info": "No se le permite ver los detalles de la tarea.",
 	"pages.room.lessonShare.confirm": "Se generó un código de copia!",
 	"pages.room.lessonShare.step_1.text": "Información",
 	"pages.room.lessonShare.step_2.text": "Pega el código",
