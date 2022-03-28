@@ -55,6 +55,7 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
+						@delete-lesson="openDeleteDialog(item.content)"
 					/>
 				</div>
 			</draggable>
@@ -102,6 +103,8 @@
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
 			class="room-dialog"
+			has-buttons
+			:buttons="['close', 'back']"
 			@dialog-closed="lessonShare.isOpen = false"
 		>
 			<div slot="title" class="room-title">
@@ -117,19 +120,30 @@
 				<div>
 					<v-text-field :value="lessonShare.token" outlined></v-text-field>
 				</div>
-				<v-divider class="mb-4"></v-divider>
-				<div class="share-cancel-button">
-					<v-btn
-						class="dialog-back-button"
-						depressed
-						outlined
-						@click="lessonShare.isOpen = false"
-					>
-						{{ $t("common.labels.close") }}
-					</v-btn>
-				</div>
+				<v-divider></v-divider>
 			</template>
 		</vCustomDialog>
+		<v-custom-dialog
+			v-model="lessonDelete.isOpen"
+			data-testid="delete-dialog"
+			:size="375"
+			has-buttons
+			confirm-btn-title-key="common.actions.remove"
+			@dialog-confirmed="deleteLesson"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ $t("pages.room.lessonsDelete.title") }}
+			</h2>
+			<template slot="content">
+				<p class="text-md mt-2">
+					{{
+						$t("pages.room.lessonsDelete.text", {
+							lessonTitle: lessonDelete.lessonData.name,
+						})
+					}}
+				</p>
+			</template>
+		</v-custom-dialog>
 	</div>
 </template>
 
@@ -162,7 +176,8 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
-			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
+			lessonShare: { isOpen: false, token: "", lessonData: {} },
+			lessonDelete: { isOpen: false, lessonData: {} },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -238,6 +253,13 @@ export default {
 			setTimeout(() => {
 				this.dragInProgress = false;
 			}, this.dragInProgressDelay);
+		},
+		openDeleteDialog(lesson) {
+			this.lessonDelete.lessonData = lesson;
+			this.lessonDelete.isOpen = true;
+		},
+		async deleteLesson() {
+			await RoomModule.deleteLesson(this.lessonDelete.lessonData.id);
 		},
 	},
 };

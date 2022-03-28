@@ -176,6 +176,28 @@ export class Room extends VuexModule {
 		}
 	}
 
+	@Action
+	async deleteLesson(lessonId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const deletedLessonData = await $axios.$delete(`/v1/lessons/${lessonId}`);
+			if (!deletedLessonData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-deleted",
+				});
+			}
+
+			await this.fetchContent(this.roomData.roomId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
