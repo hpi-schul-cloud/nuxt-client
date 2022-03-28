@@ -19,6 +19,10 @@ const axiosInitializer = () => {
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
+		$delete: async (path: string) => {
+			receivedRequests.push({ path });
+			return getRequestReturn;
+		},
 	} as NuxtAxiosInstance);
 };
 
@@ -246,6 +250,106 @@ describe("room module", () => {
 				const roomModule = new Room({});
 				await roomModule.confirmImportLesson("123456");
 
+				expect(roomModule.businessError.statusCode).toStrictEqual(404);
+				expect(roomModule.businessError.message).toStrictEqual(
+					"friendly error"
+				);
+			});
+		});
+
+		describe("deleteLesson", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				let received: any[] = [];
+				let returned: any = {};
+				(() => {
+					initializeAxios({
+						$delete: async (path: string) => {
+							received.push({ path });
+							if (path === "/v1/lessons/123456") {
+								return (returned = { _id: "123456" });
+							}
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new Room({});
+				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
+				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.deleteLesson("123456");
+
+				expect(received[0].path).toStrictEqual("/v1/lessons/123456");
+				expect(deleteLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(fetchContentSpy).toHaveBeenCalled();
+			});
+
+			it("should set businessError if server response does not contain '_id'", async () => {
+				let received: any[] = [];
+				let returned: any = {};
+
+				(() => {
+					initializeAxios({
+						$delete: async (path: string) => {
+							received.push({ path });
+							if (path === "/v1/lessons/123456") {
+								return (returned = {});
+							}
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new Room({});
+				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.deleteLesson("123456");
+
+				expect(roomModule.businessError).toStrictEqual({
+					statusCode: "400",
+					message: "not-deleted",
+				});
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(deleteLessonSpy).toHaveBeenCalled();
+			});
+
+			it("should catch error in catch block", async () => {
+				let received: any[] = [];
+				let returned: any = {};
+				const error = { statusCode: 404, message: "friendly error" };
+
+				(() => {
+					initializeAxios({
+						$delete: async (path: string) => {
+							received.push({ path });
+							if (path === "/v1/lessons/123456") {
+								return (returned = Promise.reject({ ...error }));
+							}
+						},
+					} as NuxtAxiosInstance);
+				})();
+
+				const roomModule = new Room({});
+				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.deleteLesson("123456");
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(deleteLessonSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
 				expect(roomModule.businessError.statusCode).toStrictEqual(404);
 				expect(roomModule.businessError.message).toStrictEqual(
 					"friendly error"
