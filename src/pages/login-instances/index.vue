@@ -54,7 +54,7 @@ export default {
 				},
 				{
 					icon: "HPI-Int",
-					url: this.$t("pages.loginInstances.hpi-int_link"),
+					url: this.$t("pages.loginInstances.hpi_int_link"),
 				},
 			],
 		};

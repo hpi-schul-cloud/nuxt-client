@@ -634,7 +634,7 @@
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "Wähle deine Cloud",
 	"pages.loginInstances.dbildungscloud_link": "https://dbildungscloud.de/login",
-	"pages.loginInstances.hpi-int_link": "https://international.hpi-schul-cloud.de/login",
+	"pages.loginInstances.hpi_int_link": "https://international.hpi-schul-cloud.de/login",
 	"pages.loginInstances.login": "Einloggen",
 	"pages.loginInstances.n21_link": "https://niedersachsen.cloud/login",
 	"pages.loginInstances.thr_link": "https://schulcloud-thueringen.de",
