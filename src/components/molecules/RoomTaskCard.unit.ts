@@ -26,6 +26,7 @@ const testProps = {
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const draftTestProps = {
@@ -46,6 +47,7 @@ const draftTestProps = {
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const finishedTestProps = {
@@ -66,6 +68,7 @@ const finishedTestProps = {
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const overdueTestProps = {
@@ -90,6 +93,7 @@ const overdueTestProps = {
 	ariaLabel:
 		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -127,12 +131,35 @@ describe("@components/molecules/RoomTaskCard", () => {
 			expect(location.pathname).toStrictEqual("/homework/123");
 		});
 
+		it("should NOT redirect to homework page if dragging is in progress", () => {
+			const location = window.location;
+			const wrapper = getWrapper({ ...testProps, role, dragInProgress: true });
+			const taskCard = wrapper.find(".task-card");
+			taskCard.trigger("click");
+
+			expect(location.pathname).toStrictEqual("");
+		});
+
 		it("should have correct combined title", () => {
 			const wrapper = getWrapper({ ...testProps, role });
 			const title = wrapper.find(".title-section");
 
 			expect(title.element.textContent).toContain(
 				"Aufgabe - Abgabe - 28.09.00"
+			);
+		});
+
+		it("should show or hide description area", async () => {
+			const wrapper = getWrapper({ ...testProps, role });
+			const descElement = wrapper.findAll(".text-description");
+
+			expect(descElement.length).toStrictEqual(0);
+			wrapper.setData({ canShowDescription: true });
+			await wrapper.vm.$nextTick();
+			const descElementAfter = wrapper.findAll(".text-description");
+			expect(descElementAfter).toHaveLength(1);
+			expect(descElementAfter.wrappers[0].element.innerHTML).toStrictEqual(
+				"some description here"
 			);
 		});
 	});
@@ -276,6 +303,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 					ariaLabel:
 						"task, Link, Aufgabe an Marla (Mathe) - abgeschlossen, zum Öffnen die Eingabetaste drücken",
 					keyDrag: false,
+					dragInProgress: false,
 				};
 				const wrapper = getWrapper({ ...studentTestProps, role });
 				wrapper.vm.restoreCard = restoreCardMock;

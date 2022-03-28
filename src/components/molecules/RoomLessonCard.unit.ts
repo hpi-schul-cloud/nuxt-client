@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
+import EnvConfigModule from "@/store/env-config";
 
 declare let createComponentMocks: Function;
 
@@ -19,6 +20,7 @@ const baseTestProps = {
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
 
 const hiddenTestProps = {
@@ -37,8 +39,8 @@ const hiddenTestProps = {
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
+	dragInProgress: false,
 };
-
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomLessonCard, {
 		...createComponentMocks({
@@ -73,6 +75,19 @@ describe("@components/molecules/RoomLessonCard", () => {
 			lessonCard.trigger("click");
 
 			expect(location.pathname).toStrictEqual("/courses/456/topics/123");
+		});
+
+		it("should NOT redirect to lesson page if dragging is in progress", () => {
+			const location = window.location;
+			const wrapper = getWrapper({
+				...baseTestProps,
+				role,
+				dragInProgress: true,
+			});
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.trigger("click");
+
+			expect(location.pathname).toStrictEqual("");
 		});
 
 		it("should have correct title", () => {
@@ -140,6 +155,21 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
 				expect(revertPublishedCardMock).toHaveBeenCalled();
+			});
+
+			it("should have 'share' more action if env flag is set", async () => {
+				// @ts-ignore
+				EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+				const wrapper = getWrapper({ ...baseTestProps, role });
+
+				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
+					(item: any) => {
+						return (item.name = wrapper.vm.$i18n.t(
+							"pages.room.lessonCard.label.share"
+						));
+					}
+				);
+				expect(hasShareMenuItem).toBe(true);
 			});
 		});
 		describe("students", () => {
