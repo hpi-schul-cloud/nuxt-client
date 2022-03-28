@@ -57,24 +57,6 @@
 						@open-modal="getSharedLesson"
 						@delete-lesson="openDeleteDialog(item.content)"
 					/>
-					<room-locked-card
-						v-if="item.type === cardTypes.Lockedtask"
-						:ref="`item_${index}`"
-						:task="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
-								itemName: item.content.name,
-							})
-						"
-						:key-drag="isDragging"
-						class="locked-card"
-						:drag-in-progress="dragInProgress"
-						@move-element="moveByKeyboard"
-						@on-drag="isDragging = !isDragging"
-						@tab-pressed="isDragging = false"
-					/>
 				</div>
 			</draggable>
 		</div>
@@ -114,21 +96,6 @@
 					:drag-in-progress="dragInProgress"
 					@post-lesson="postDraftElement(item.content.id)"
 					@revert-lesson="revertPublishedElement(item.content.id)"
-				/>
-				<room-locked-card
-					v-if="item.type === cardTypes.Lockedtask"
-					:ref="`item_${index}`"
-					:task="item.content"
-					:room="lessonData"
-					:aria-label="
-						$t('pages.room.taskCard.aria', {
-							itemType: $t('pages.room.taskCard.label.task'),
-							itemName: item.content.name,
-						})
-					"
-					:key-drag="isDragging"
-					class="locked-card"
-					:drag-in-progress="dragInProgress"
 				/>
 			</div>
 		</div>
@@ -183,7 +150,6 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomModule from "@store/room";
 import draggable from "vuedraggable";
@@ -194,7 +160,6 @@ export default {
 	components: {
 		RoomTaskCard,
 		RoomLessonCard,
-		RoomLockedCard,
 		vCustomDialog,
 		draggable,
 	},
