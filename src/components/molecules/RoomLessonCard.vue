@@ -43,7 +43,12 @@
 </template>
 
 <script>
-import { mdiPencilOutline, mdiUndoVariant, mdiShareVariant } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiUndoVariant,
+	mdiShareVariant,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
@@ -75,6 +80,7 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 				mdiShareVariant,
+				mdiTrashCanOutline,
 			},
 			defaultTitleColor: "--color-secondary",
 		};
@@ -138,6 +144,12 @@ export default {
 						name: this.$t("pages.room.lessonCard.label.share"),
 					});
 				}
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiTrashCanOutline,
+					action: () => this.$emit("delete-lesson"),
+					name: this.$t("common.actions.remove"),
+				});
 			}
 
 			if (this.role === Roles.Student) {
