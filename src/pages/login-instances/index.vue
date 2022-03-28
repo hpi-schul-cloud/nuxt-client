@@ -37,6 +37,10 @@ export default {
 		return {
 			tiles: [
 				{
+					icon: "dBildungscloud",
+					url: this.$t("pages.loginInstances.dbildungscloud_link"),
+				},
+				{
 					icon: "brb",
 					url: this.$t("pages.loginInstances.brb_link"),
 				},
@@ -49,16 +53,8 @@ export default {
 					url: this.$t("pages.loginInstances.thr_link"),
 				},
 				{
-					icon: "mint-ec",
-					url: this.$t("pages.loginInstances.mintec_link"),
-				},
-				{
-					icon: "dBildungscloud",
-					url: this.$t("pages.loginInstances.dbildungscloud_link"),
-				},
-				{
-					icon: "open_HPI",
-					url: this.$t("pages.loginInstances.open_hpi_link"),
+					icon: "HPI-Int",
+					url: this.$t("pages.loginInstances.hpi_int_link"),
 				},
 			],
 		};
