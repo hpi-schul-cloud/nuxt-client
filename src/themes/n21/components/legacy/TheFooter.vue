@@ -33,7 +33,7 @@ export default {
 			return new Date().getFullYear();
 		},
 		links() {
-			return [
+			const links = [
 				{
 					to: "/imprint",
 					text: "Impressum",
@@ -50,7 +50,20 @@ export default {
 					target: "_blank",
 					rel: "noopener",
 				},
+				{
+					href: "mailto:nbc-support@netz-21.de",
+					text: this.$t("components.legacy.footer.contact"),
+				},
 			];
+			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
+				links.push({
+					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
+					text: this.$t("components.legacy.footer.status"),
+					target: "_blank",
+					rel: "noopener",
+				});
+			}
+			return links;
 		},
 	},
 };
