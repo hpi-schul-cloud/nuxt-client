@@ -45,6 +45,8 @@ export class Room extends VuexModule {
 		status: "",
 		message: "",
 	};
+	courseInvitationLink: string = "";
+	courseShareToken: string = "";
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -198,6 +200,40 @@ export class Room extends VuexModule {
 		}
 	}
 
+	@Action
+	async createCourseInvitation(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const invitationData = await $axios.$post("/v1/link", {
+				target: `courses/${courseId}/addStudent`,
+			});
+			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
+			this.setCourseInvitationLink(invitationLink);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createCourseShareToken(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const result = await $axios.$get(`/v1/courses-share/${courseId}`);
+
+			this.setCourseShareToken(result.shareToken);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -232,6 +268,16 @@ export class Room extends VuexModule {
 		this.sharedLessonData = payload;
 	}
 
+	@Mutation
+	setCourseInvitationLink(payload: string): void {
+		this.courseInvitationLink = payload;
+	}
+
+	@Mutation
+	setCourseShareToken(payload: string): void {
+		this.courseShareToken = payload;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -250,6 +296,13 @@ export class Room extends VuexModule {
 
 	get getSharedLessonData(): SharedLessonObject {
 		return this.sharedLessonData;
+	}
+
+	get getCourseInvitationLink(): string {
+		return this.courseInvitationLink;
+	}
+	get getCourseShareToken(): string {
+		return this.courseShareToken;
 	}
 }
 
