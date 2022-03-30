@@ -6,6 +6,7 @@
 		left
 		offset-y
 		attach
+		:nudge-right="nudgeRight"
 	>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
@@ -50,6 +51,10 @@ export default {
 		show: {
 			type: Boolean,
 			required: true,
+		},
+		nudgeRight: {
+			type: String,
+			default: "0",
 		},
 	},
 	data() {
