@@ -119,6 +119,8 @@ export default {
 				inputText: "",
 				subText: "",
 				qrUrl: "",
+				courseInvitationLink: "",
+				courseShareToken: "",
 			},
 			icons: {
 				mdiSquareEditOutline,
@@ -133,8 +135,6 @@ export default {
 				},
 			],
 			courseId: this.$route.params.id,
-			courseInvitationLink: "",
-			courseShareToken: "",
 		};
 	},
 	computed: {
@@ -218,35 +218,31 @@ export default {
 		},
 	},
 	async created() {
-		// const courseId = this.$route.params.id;
 		await RoomModule.fetchContent(this.courseId);
 	},
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
-		async updateRoom() {
-			// await RoomModule.fetchContent(this.$route.params.id);
-		},
 		async inviteCourse() {
 			await RoomModule.createCourseInvitation(this.courseId);
-			this.courseInvitationLink = RoomModule.getCourseInvitationLink;
+			this.dialog.courseInvitationLink = RoomModule.getCourseInvitationLink;
 			this.dialog.model = "invite";
 			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
 			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
-			this.dialog.inputText = this.courseInvitationLink;
+			this.dialog.inputText = this.dialog.courseInvitationLink;
 			this.dialog.subText = "";
 			this.dialog.isOpen = true;
 		},
 		async shareCourse() {
 			await RoomModule.createCourseShareToken(this.courseId);
-			this.courseShareToken = RoomModule.getCourseShareToken;
+			this.dialog.courseShareToken = RoomModule.getCourseShareToken;
 			this.dialog.model = "share";
 			this.dialog.header = this.$t("pages.room.modal.course.share.header");
 			this.dialog.text = this.$t("pages.room.modal.course.share.text");
-			this.dialog.inputText = this.courseShareToken;
+			this.dialog.inputText = this.dialog.courseShareToken;
 			this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.courseShareToken}`;
+			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
 			this.dialog.isOpen = true;
 		},
 		closeDialog() {
@@ -265,10 +261,6 @@ export default {
 };
 </script>
 <style scoped>
-.info-text {
-	font-size: var(--space-md);
-	color: var(--color-black);
-}
 .modal-text {
 	font-size: var(--space-md);
 	color: var(--color-black);

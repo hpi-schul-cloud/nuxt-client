@@ -207,6 +207,12 @@ export class Room extends VuexModule {
 			const invitationData = await $axios.$post("/v1/link", {
 				target: `courses/${courseId}/addStudent`,
 			});
+			if (!invitationData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-generated",
+				});
+			}
 			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
 			this.setCourseInvitationLink(invitationLink);
 		} catch (error: any) {
@@ -223,7 +229,12 @@ export class Room extends VuexModule {
 		this.resetBusinessError();
 		try {
 			const result = await $axios.$get(`/v1/courses-share/${courseId}`);
-
+			if (!result.shareToken) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-generated",
+				});
+			}
 			this.setCourseShareToken(result.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
