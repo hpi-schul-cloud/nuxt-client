@@ -334,6 +334,7 @@ export default {
       return this.school.inUserMigration === undefined;
     },
     canPerformMigration() {
+      console.log('canPerformMigration', this.school);
       return this.school.inUserMigration === true && this.school.inMaintenance;
     },
     isMigrationFinished() {
@@ -382,6 +383,7 @@ export default {
 		},
 	},
 	created() {
+    console.log('created');
 		if (!this.isAllowed) {
 			this.$router.push("/");
 		}
@@ -422,14 +424,17 @@ export default {
 			}
 		},
 		async summary() {
+      console.log('summary')
 			if (!this.canPerformMigration) {
-				return;
-			}
+        console.log('summary - no')
+        return;
+      }
 			await ImportUserModule.fetchTotal();
 			await ImportUserModule.fetchTotalMatched();
 			await ImportUserModule.fetchTotalUnmatched();
 		},
 		checkTotalInterval() {
+      console.log('checkTotalInterval')
 			if (this.school.inUserMigration && this.totalImportUsers === 0) {
 				this.checkTotal = setInterval(() => {
 					ImportUserModule.fetchTotal();
