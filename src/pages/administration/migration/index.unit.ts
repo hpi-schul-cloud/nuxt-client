@@ -134,7 +134,7 @@ const schoolMock = {
 
 window.scrollTo = jest.fn();
 
-describe("User Migration / Index", () => {
+describe.only("User Migration / Index", () => {
 	beforeAll(() => {
 		document.body.setAttribute("data-app", "true");
 		EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
@@ -217,7 +217,7 @@ describe("User Migration / Index", () => {
 		expect(stepper.vm.steps[3].complete).toBe(false);
 
 		wrapper.setData({ migrationStep: 1 });
-		const btn = wrapper.find("#migration_tutorial_next");
+		const btn = wrapper.find("#migration_tutorial_skip");
 		btn.trigger("click");
 		await wrapper.vm.$nextTick();
 		expect(stepper.vm.steps[3].isActive).toBe(true);

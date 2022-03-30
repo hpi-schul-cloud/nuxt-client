@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+  <default-wireframe
 		v-if="isAllowed"
 		:headline="$t('pages.administration.migration.title')"
 		:full-width="true"
@@ -109,35 +109,44 @@
 								</v-card-text>
 								<v-card-actions>
 									<v-row align="center" justify="end">
-										<v-btn
-											v-if="school.inUserMigration !== undefined"
-											id="migration_tutorial_next"
-											:disabled="totalImportUsers === 0"
-											color="primary"
-											@click="nextStep"
-										>
-											<v-progress-circular
-												v-if="totalImportUsers === 0"
-												:size="20"
-												indeterminate
-											></v-progress-circular>
-											{{
-												totalImportUsers > 0
-													? $t("pages.administration.migration.next")
-													: $t("pages.administration.migration.waiting")
-											}}
-										</v-btn>
-										<v-btn
-											v-else
-											id="start_user_migration"
-											color="primary"
-											@click="setSchoolInUserMigration"
-										>
-											{{
-												$t("pages.administration.migration.startUserMigration")
-											}}
-										</v-btn>
-									</v-row>
+                    <v-btn
+                        v-if="isMigrationNotStarted"
+                        id="start_user_migration"
+                        color="primary"
+                        @click="setSchoolInUserMigration"
+                    >
+                      {{
+                        $t("pages.administration.migration.startUserMigration")
+                      }}
+                    </v-btn>
+                    <v-btn
+                        v-else-if="canPerformMigration"
+                        id="migration_tutorial_next"
+                        :disabled="totalImportUsers === 0"
+                        color="primary"
+                        @click="nextStep"
+                    >
+                      <v-progress-circular
+                          v-if="totalImportUsers === 0 &&  school.inUserMigration === true"
+                          :size="20"
+                          indeterminate
+                      ></v-progress-circular>
+                      {{
+                        totalImportUsers > 0 || school.inUserMigration === false
+                            ? $t("pages.administration.migration.next")
+                            : $t("pages.administration.migration.waiting")
+                      }}
+                    </v-btn>
+                    <v-btn
+                        v-else-if="isMigrationFinished"
+                        id="migration_tutorial_skip"
+                        color="primary"
+                        @click="nextStep"
+                    >
+                      {{ $t("pages.administration.migration.next") }}
+                    </v-btn>
+
+                  </v-row>
 								</v-card-actions>
 							</v-card>
 						</v-container>
@@ -318,19 +327,22 @@ export default {
 		};
 	},
 	computed: {
-		isAllowed() {
-			return EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
-		},
-		canPerformMigration() {
-			return this.school.inUserMigration === true && this.school.inMaintenance;
-		},
-		isMigrationFinished() {
-			return this.school.inUserMigration === false;
-		},
-		canFinishMaintenance() {
-			return this.isMigrationConfirm || this.isMigrationFinished;
-		},
-		isMaintenanceFinished() {
+    isAllowed() {
+      return EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
+    },
+    isMigrationNotStarted() {
+      return this.school.inUserMigration === undefined;
+    },
+    canPerformMigration() {
+      return this.school.inUserMigration === true && this.school.inMaintenance;
+    },
+    isMigrationFinished() {
+      return this.school.inUserMigration === false;
+    },
+    canFinishMaintenance() {
+      return this.isMigrationConfirm || this.isMigrationFinished;
+    },
+    isMaintenanceFinished() {
 			return !this.school.inMaintenance;
 		},
 		school() {
