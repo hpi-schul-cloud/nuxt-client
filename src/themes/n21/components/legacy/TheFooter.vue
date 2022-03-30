@@ -23,6 +23,7 @@
 <script>
 import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
+import EnvConfigModule from "@/store/env-config";
 
 export default {
 	computed: {
