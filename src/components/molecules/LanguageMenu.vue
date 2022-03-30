@@ -2,10 +2,10 @@
 	<v-list>
 		<v-list-item dense @click.stop="toggleMenu">
 			<v-list-item-icon>
-				<v-icon>{{ selectedLanguage.icon }}</v-icon>
+				<v-icon>{{ selectedItem.icon }}</v-icon>
 			</v-list-item-icon>
 			<v-list-item-content>
-				{{ selectedLanguage.name }}
+				{{ selectedItem.name }}
 			</v-list-item-content>
 			<v-list-item-action>
 				<v-icon>{{ mdiMenuDown }}</v-icon>
@@ -13,16 +13,16 @@
 		</v-list-item>
 		<template v-if="menuVisible">
 			<v-list-item
-				v-for="language in availableLanguages"
-				:key="language.locale"
+				v-for="item in availableItems"
+				:key="item.language"
 				dense
-				@click="changeLanguage(language)"
+				@click="changeLanguage(item)"
 			>
 				<v-list-item-icon>
-					<v-icon>{{ language.icon }}</v-icon>
+					<v-icon>{{ item.icon }}</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
-					{{ language.name }}
+					{{ item.name }}
 				</v-list-item-content>
 			</v-list-item>
 		</template>
@@ -43,20 +43,21 @@ export default {
 		};
 	},
 	computed: {
-		availableLanguages: {
+		availableItems: {
 			get() {
+				console.log("####", EnvConfigModule.getAvailableLanguages);
 				const languages = EnvConfigModule.getAvailableLanguages
 					.split(",")
-					.map((locale) => this.buildLanguageObject(locale))
+					.map((language) => this.buildLanguageItem(language))
 					.filter((language) => {
-						return language.locale !== this.selectedLanguage.locale;
+						return language.language !== this.selectedItem.language;
 					});
 				return languages;
 			},
 		},
-		selectedLanguage: {
+		selectedItem: {
 			get() {
-				const language = this.buildLanguageObject(
+				const language = this.buildLanguageItem(
 					AuthModule.getLocale || EnvConfigModule.getFallbackLanguage
 				);
 				return language;
@@ -67,15 +68,16 @@ export default {
 		toggleMenu() {
 			this.menuVisible = !this.menuVisible;
 		},
-		changeLanguage(language) {
-			AuthModule.updateUserLanguage(language.locale);
+		changeLanguage(item) {
+			AuthModule.updateUserLanguage(item.language);
 			window.location.reload();
 		},
-		buildLanguageObject(locale) {
-			const name = this.$t(`global.topbar.locale.longName.${locale}`);
+		buildLanguageItem(language) {
+			console.log("item");
+			const name = this.$t(`global.topbar.language.longName.${language}`);
 			const icon =
-				"$langIcon" + locale.charAt(0).toUpperCase() + locale.slice(1);
-			return { locale, name, icon };
+				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
+			return { language, name, icon };
 		},
 	},
 };
