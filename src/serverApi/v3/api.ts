@@ -704,6 +704,19 @@ export interface SchoolInfoResponse {
 /**
  * 
  * @export
+ * @interface SuccessfulResponse
+ */
+export interface SuccessfulResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SuccessfulResponse
+     */
+    successful: boolean;
+}
+/**
+ * 
+ * @export
  * @interface TargetInfoResponse
  */
 export interface TargetInfoResponse {
@@ -2816,7 +2829,7 @@ export const TaskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2878,7 +2891,7 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete(id: string, options?: any): AxiosPromise<string> {
+        taskControllerDelete(id: string, options?: any): AxiosPromise<boolean> {
             return localVarFp.taskControllerDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2935,7 +2948,7 @@ export interface TaskApiInterface {
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerDelete(id: string, options?: any): AxiosPromise<string>;
+    taskControllerDelete(id: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -3051,6 +3064,43 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {'de' | 'en' | 'es' | 'ua'} language 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerChangeLanguage: async (language: 'de' | 'en' | 'es' | 'ua', options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'language' is not null or undefined
+            assertParamExists('userControllerChangeLanguage', 'language', language)
+            const localVarPath = `/user/language/{language}`
+                .replace(`{${"language"}}`, encodeURIComponent(String(language)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3094,6 +3144,16 @@ export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {'de' | 'en' | 'es' | 'ua'} language 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerChangeLanguage(language: 'de' | 'en' | 'es' | 'ua', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(language, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3113,6 +3173,15 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {'de' | 'en' | 'es' | 'ua'} language 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerChangeLanguage(language: 'de' | 'en' | 'es' | 'ua', options?: any): AxiosPromise<SuccessfulResponse> {
+            return localVarFp.userControllerChangeLanguage(language, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3130,6 +3199,15 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 export interface UserApiInterface {
     /**
      * 
+     * @param {'de' | 'en' | 'es' | 'ua'} language 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    userControllerChangeLanguage(language: 'de' | 'en' | 'es' | 'ua', options?: any): AxiosPromise<SuccessfulResponse>;
+
+    /**
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApiInterface
@@ -3145,6 +3223,17 @@ export interface UserApiInterface {
  * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI implements UserApiInterface {
+    /**
+     * 
+     * @param {'de' | 'en' | 'es' | 'ua'} language 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerChangeLanguage(language: 'de' | 'en' | 'es' | 'ua', options?: any) {
+        return UserApiFp(this.configuration).userControllerChangeLanguage(language, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.

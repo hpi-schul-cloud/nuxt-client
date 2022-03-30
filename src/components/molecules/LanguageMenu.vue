@@ -13,7 +13,7 @@
 		</v-list-item>
 		<template v-if="menuVisible">
 			<v-list-item
-				v-for="language in otherLanguages"
+				v-for="language in availableLanguages"
 				:key="language.locale"
 				dense
 				@click="changeLanguage(language)"
@@ -28,30 +28,38 @@
 		</template>
 	</v-list>
 </template>
+
 <script>
 import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
+import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 export default {
 	data() {
 		return {
 			mdiMenuDown,
 			mdiMenuUp,
-			languages: [
-				{ locale: "de", name: "Deutsch", icon: "$langIconDe" },
-				{ locale: "en", name: "English", icon: "$langIconEn" },
-				{ locale: "es", name: "Espanol", icon: "$langIconEs" },
-				{ locale: "ua", name: "Ukrainski", icon: "$langIconUa" },
-			],
-			selectedLanguage: { locale: "de", name: "Deutsch", icon: "$langIconDe" },
 			menuVisible: false,
 		};
 	},
 	computed: {
-		otherLanguages: {
+		availableLanguages: {
 			get() {
-				return this.languages.filter(
-					(lang) => lang.locale !== this.selectedLanguage.locale
+				const languages = EnvConfigModule.getAvailableLanguages
+					.split(",")
+					.map((locale) => this.buildLanguageObject(locale))
+					.filter((language) => {
+						return language.locale !== this.selectedLanguage.locale;
+					});
+				return languages;
+			},
+		},
+		selectedLanguage: {
+			get() {
+				const language = this.buildLanguageObject(
+					AuthModule.getLocale || EnvConfigModule.getFallbackLanguage
 				);
+				return language;
 			},
 		},
 	},
@@ -60,11 +68,19 @@ export default {
 			this.menuVisible = !this.menuVisible;
 		},
 		changeLanguage(language) {
-			this.selectedLanguage = { ...language };
+			AuthModule.updateUserLanguage(language.locale);
+			window.location.reload();
+		},
+		buildLanguageObject(locale) {
+			const name = this.$t(`global.topbar.locale.longName.${locale}`);
+			const icon =
+				"$langIcon" + locale.charAt(0).toUpperCase() + locale.slice(1);
+			return { locale, name, icon };
 		},
 	},
 };
 </script>
+
 <style scoped>
 .v-list-item__icon {
 	margin-right: var(--space-xs);
