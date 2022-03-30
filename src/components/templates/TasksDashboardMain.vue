@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.tasks.title')"
 		:full-width="false"
-		:fab-items="fab"
+		:fab-items="fabItems"
 	>
 		<div slot="header">
 			<div>
@@ -194,7 +194,7 @@ export default {
 
 			return tabTwo;
 		},
-		fab() {
+		fabItems() {
 			if (!this.isStudent) {
 				return {
 					icon: mdiPlus,
