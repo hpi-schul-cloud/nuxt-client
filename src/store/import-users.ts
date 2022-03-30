@@ -320,9 +320,7 @@ export class ImportUsersModule extends VuexModule {
 					1
 				);
 			this.setTotal(response.data.total);
-			console.log("fetchTotal");
 		} catch (error: any) {
-			console.log(error);
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
@@ -348,9 +346,7 @@ export class ImportUsersModule extends VuexModule {
 					1
 				);
 			this.setTotalMatched(response.data.total);
-			console.log("fetchTotalMatched");
 		} catch (error: any) {
-			console.log(error);
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
@@ -368,9 +364,7 @@ export class ImportUsersModule extends VuexModule {
 					1
 				);
 			this.setTotalUnmatched(response.data.total);
-			console.log("fetchTotalUnmatched");
 		} catch (error: any) {
-			console.log(error);
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
