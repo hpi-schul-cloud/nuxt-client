@@ -8,17 +8,17 @@
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
-			<div>
-				<h1 class="text-h3 pt-2 course-title">
+			<div class="ma-2">
+				<div class="text-h3 pb-2 course-title">
 					{{ roomData.title }}
+				</div>
+				<div class="course-title pa-2 pb-1">
 					<more-item-menu
 						:menu-items="headlineMenuItems"
 						:show="true"
-						nudge-right="100"
+						nudge-right="75"
 					/>
-					<div style="text-align: right"></div>
-				</h1>
-				<!-- TODO: refactor styling-->
+				</div>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -35,11 +35,7 @@
 			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
-		<import-lesson-modal
-			v-model="importDialog.isOpen"
-			class="import-modal"
-			@update-room="updateRoom"
-		>
+		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
 		<v-custom-dialog
 			v-model="dialog.isOpen"
@@ -261,6 +257,11 @@ export default {
 };
 </script>
 <style scoped>
+.course-title {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
 .modal-text {
 	font-size: var(--space-md);
 	color: var(--color-black);
