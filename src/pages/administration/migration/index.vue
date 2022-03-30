@@ -1,15 +1,15 @@
 <template>
-  <default-wireframe
-		v-if="isAllowed"
-		:headline="$t('pages.administration.migration.title')"
-		:full-width="true"
-		:breadcrumbs="breadcrumbs"
-	>
-		<v-snackbar
-			v-if="businessError && businessError.statusCode !== '200'"
-			v-model="businessError"
-			:timeout="errorTimeout"
-			top
+	<default-wireframe
+      v-if="isAllowed"
+      :headline="$t('pages.administration.migration.title')"
+      :full-width="true"
+      :breadcrumbs="breadcrumbs"
+  >
+    <v-snackbar
+        v-if="businessError && businessError.statusCode !== '200'"
+        v-model="businessError"
+        :timeout="errorTimeout"
+        top
 			centered
 			color="error darken-3"
 		>
@@ -108,7 +108,7 @@
 									</v-row>
 								</v-card-text>
 								<v-card-actions>
-									<v-row align="center" justify="end">
+                  <v-row align="center" justify="end">
                     <v-btn
                         v-if="isMigrationNotStarted"
                         id="start_user_migration"
@@ -127,7 +127,10 @@
                         @click="nextStep"
                     >
                       <v-progress-circular
-                          v-if="totalImportUsers === 0 &&  school.inUserMigration === true"
+                          v-if="
+													totalImportUsers === 0 &&
+													school.inUserMigration === true
+												"
                           :size="20"
                           indeterminate
                       ></v-progress-circular>
@@ -145,7 +148,6 @@
                     >
                       {{ $t("pages.administration.migration.next") }}
                     </v-btn>
-
                   </v-row>
 								</v-card-actions>
 							</v-card>
