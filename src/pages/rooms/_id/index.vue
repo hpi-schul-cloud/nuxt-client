@@ -16,7 +16,7 @@
 					<more-item-menu
 						:menu-items="headlineMenuItems"
 						:show="true"
-						nudge-right="75"
+						nudge-right="120"
 						data-testid="title-menu"
 					/>
 				</div>
