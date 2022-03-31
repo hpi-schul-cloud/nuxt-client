@@ -50,7 +50,6 @@ export default {
 	computed: {
 		availableItems: {
 			get() {
-				console.log("####", EnvConfigModule.getAvailableLanguages);
 				const languages = EnvConfigModule.getAvailableLanguages
 					.split(",")
 					.map((language) => this.buildLanguageItem(language))
@@ -73,12 +72,11 @@ export default {
 		toggleMenu() {
 			this.menuVisible = !this.menuVisible;
 		},
-		changeLanguage(item) {
-			AuthModule.updateUserLanguage(item.language);
+		async changeLanguage(item) {
+			await AuthModule.updateUserLanguage(item.language);
 			window.location.reload();
 		},
 		buildLanguageItem(language) {
-			console.log("item");
 			const name = this.$t(`global.topbar.language.longName.${language}`);
 			const icon =
 				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
