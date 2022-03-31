@@ -76,13 +76,13 @@ describe("@components/molecules/RoomLessonModal", () => {
 
 	it("confirm and back button should increase and decrease the step value", async () => {
 		const wrapper = getWrapper({ isOpen: true });
+		const buttonNext = wrapper.find(`[data-testId="dialog-next"]`);
+		const buttonBack = wrapper.find(`[data-testId="dialog-back"]`);
 
-		const btnConfirm = wrapper.find(".dialog-next");
-		const btnBack = wrapper.find(".dialog-back-button");
-		btnConfirm.trigger("click");
+		buttonNext.trigger("click");
 		expect(wrapper.vm.step).toStrictEqual(2);
 
-		btnBack.trigger("click");
+		buttonBack.trigger("click");
 		expect(wrapper.vm.step).toStrictEqual(1);
 	});
 
@@ -105,22 +105,24 @@ describe("@components/molecules/RoomLessonModal", () => {
 
 			wrapper.setData({ step: 2 });
 			await wrapper.vm.$nextTick();
-			const errorElementBefore = wrapper.find(".code-error");
-			expect(errorElementBefore.exists()).toBe(false);
+			const textElementBefore = wrapper.find(".text-field-lesson-code");
+			expect(textElementBefore.vm.error).toBe(false);
+			expect(textElementBefore.vm.errorMessages).toStrictEqual("");
 			RoomModule.setBusinessError({
 				statusCode: "400",
 				message: "not-found",
 				error: {},
 			});
-			const btnNext = wrapper.find(".dialog-next");
+			const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
 			await btnNext.trigger("click");
 
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.businessError.message).toStrictEqual("not-found");
 			expect(wrapper.vm.businessError.statusCode).toStrictEqual("400");
-			const errorElementAfter = wrapper.find(".code-error");
-			expect(errorElementAfter.element.textContent).toContain(
+			const textElementAfter = wrapper.find(".text-field-lesson-code");
+			expect(textElementAfter.vm.error).toBe(true);
+			expect(textElementAfter.vm.errorMessages).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.room.lessonShare.codeError")
 			);
 		});
