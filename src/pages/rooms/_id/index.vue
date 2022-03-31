@@ -198,43 +198,41 @@ export default {
 			return undefined;
 		},
 		headlineMenuItems() {
-			if (this.roles.includes(Roles.Teacher)) {
-				const items = [
-					{
-						icon: this.icons.mdiSquareEditOutline,
-						action: () =>
-							(window.location.href = `/courses/${this.courseId}/edit`),
-						name: this.$t("pages.room.courseTitleMenu.editDelete"),
-						dataTestId: "title-menu-edit-delete",
-					},
-					{
-						icon: this.icons.mdiEmail,
-						action: () => this.inviteCourse(),
-						name: this.$t("pages.room.courseTitleMenu.invite"),
-						dataTestId: "title-menu-invite",
-					},
-				];
+			if (!this.roles.includes(Roles.Teacher)) return [];
+			const items = [
+				{
+					icon: this.icons.mdiSquareEditOutline,
+					action: () =>
+						(window.location.href = `/courses/${this.courseId}/edit`),
+					name: this.$t("pages.room.courseTitleMenu.editDelete"),
+					dataTestId: "title-menu-edit-delete",
+				},
+				{
+					icon: this.icons.mdiEmail,
+					action: () => this.inviteCourse(),
+					name: this.$t("pages.room.courseTitleMenu.invite"),
+					dataTestId: "title-menu-invite",
+				},
+			];
 
-				if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
-					items.push({
-						icon: this.icons.mdiContentCopy,
-						action: () =>
-							(window.location.href = `/courses/${this.courseId}/copy`),
-						name: this.$t("pages.room.courseTitleMenu.duplicate"),
-						dataTestId: "title-menu-copy",
-					});
-				}
-				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-					items.push({
-						icon: this.icons.mdiShareVariant,
-						action: () => this.shareCourse(),
-						name: this.$t("pages.room.courseTitleMenu.share"),
-						dataTestId: "title-menu-share",
-					});
-				}
-				return items;
+			if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
+				items.push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						(window.location.href = `/courses/${this.courseId}/copy`),
+					name: this.$t("pages.room.courseTitleMenu.duplicate"),
+					dataTestId: "title-menu-copy",
+				});
 			}
-			return [];
+			if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+				items.push({
+					icon: this.icons.mdiShareVariant,
+					action: () => this.shareCourse(),
+					name: this.$t("pages.room.courseTitleMenu.share"),
+					dataTestId: "title-menu-share",
+				});
+			}
+			return items;
 		},
 	},
 	async created() {
