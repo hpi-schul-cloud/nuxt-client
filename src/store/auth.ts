@@ -11,7 +11,11 @@ import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { School } from "./types/schools";
 import { User } from "@/store/types/auth";
-import { UserApiFactory, UserApiInterface } from "@/serverApi/v3";
+import {
+	ChangeLanguageParamsLanguageEnum,
+	UserApiFactory,
+	UserApiInterface,
+} from "@/serverApi/v3";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
@@ -204,13 +208,13 @@ export class Auth extends VuexModule {
 	}
 
 	@Action
-	async updateUserLanguage(language: "de" | "en" | "es" | "ua") {
+	async updateUserLanguage(language: ChangeLanguageParamsLanguageEnum) {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const response = await this.userApi.userControllerChangeLanguage(
-				language
-			);
+			const response = await this.userApi.userControllerChangeLanguage({
+				language,
+			});
 			if (response.data.successful === true) {
 				this.setLocale(language);
 			}
