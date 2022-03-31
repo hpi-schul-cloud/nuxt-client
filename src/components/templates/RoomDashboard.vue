@@ -18,6 +18,7 @@
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
 						:role="role"
+						:room="taskData"
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
@@ -187,6 +188,11 @@ export default {
 			return {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
+			};
+		},
+		taskData() {
+			return {
+				roomId: this.roomData.roomId,
 			};
 		},
 		isTouchDevice() {
