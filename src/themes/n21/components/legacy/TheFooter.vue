@@ -37,7 +37,7 @@ export default {
 			const links = [
 				{
 					to: "/imprint",
-					text: "Impressum",
+					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
 					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
