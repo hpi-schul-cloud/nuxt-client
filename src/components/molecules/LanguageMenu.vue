@@ -1,6 +1,10 @@
 <template>
 	<v-list>
-		<v-list-item dense @click.stop="toggleMenu">
+		<v-list-item
+			dense
+			:data-testid="`selected-language-${selectedItem.language}`"
+			@click.stop="toggleMenu"
+		>
 			<v-list-item-icon>
 				<v-icon>{{ selectedItem.icon }}</v-icon>
 			</v-list-item-icon>
@@ -16,6 +20,7 @@
 				v-for="item in availableItems"
 				:key="item.language"
 				dense
+				:data-testid="`available-language-${item.language}`"
 				@click="changeLanguage(item)"
 			>
 				<v-list-item-icon>
