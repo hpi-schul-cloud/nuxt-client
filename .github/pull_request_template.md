@@ -35,7 +35,7 @@ Base links to copy
 - Links to documentation / tickets if exists, or provide more details here.
 -->
 
-## Data-security <sub><sup>details [on Confluence](https://docs.hpi-schul-cloud.org/x/2S3GBg)</sup></sub>
+## Data-security <sub><sup>details [on Confluence](https://docs.dbildungscloud.de/x/2S3GBg)</sup></sub>
 
 <!--
 Please note here about:
