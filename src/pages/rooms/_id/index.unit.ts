@@ -162,4 +162,239 @@ describe("@pages/rooms/_id/index.vue", () => {
 		});
 		expect(hasImportLessonAction).toBe(true);
 	});
+
+	describe("headline menus", () => {
+		beforeEach(() => {
+			AuthModule.setUser(mockAuthStoreDataTeacher as User);
+		});
+		it("should have the menu button for teachers", () => {
+			const wrapper = getWrapper();
+			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
+
+			expect(menuButton).toHaveLength(1);
+		});
+
+		it("should not have the menu button for students", () => {
+			AuthModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			const wrapper = getWrapper();
+			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
+			expect(menuButton).toHaveLength(0);
+		});
+
+		it("should have the headline menu items", () => {
+			const wrapper = getWrapper();
+			const menuItems = wrapper.vm.headlineMenuItems;
+
+			expect(menuItems).toHaveLength(3);
+			expect(menuItems[0].name).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.editDelete")
+			);
+			expect(menuItems[1].name).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.invite")
+			);
+			expect(menuItems[2].name).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate")
+			);
+		});
+
+		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set", () => {
+			// @ts-ignore
+			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			const wrapper = getWrapper();
+			const menuItems = wrapper.vm.headlineMenuItems;
+
+			expect(menuItems[3].name).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share")
+			);
+		});
+
+		it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
+			const location = window.location;
+			const wrapper = getWrapper();
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(
+				`[data-testid=title-menu-edit-delete]`
+			);
+			await moreActionButton.trigger("click");
+
+			expect(location.href).toStrictEqual("/courses/123/edit");
+		});
+
+		it("should redirect the page when 'Copy course' menu clicked", async () => {
+			const location = window.location;
+			const wrapper = getWrapper();
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
+			await moreActionButton.trigger("click");
+
+			expect(location.href).toStrictEqual("/courses/123/copy");
+		});
+
+		it("should call inviteCourse method when 'Invite to the course' menu clicked", async () => {
+			const inviteCourseSpy = jest.fn();
+			const wrapper = getWrapper();
+			wrapper.vm.inviteCourse = inviteCourseSpy;
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
+			await moreActionButton.trigger("click");
+
+			expect(inviteCourseSpy).toHaveBeenCalled();
+		});
+
+		it("should call store action after 'Invite to the course' menu clicked", async () => {
+			const createCourseInvitationSpy = jest.fn();
+			RoomModule.createCourseInvitation = createCourseInvitationSpy;
+			const wrapper = getWrapper();
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
+			await moreActionButton.trigger("click");
+
+			expect(createCourseInvitationSpy).toHaveBeenCalled();
+			expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual("123");
+		});
+
+		it("should call shareCourse method when 'Invite to the course' menu clicked", async () => {
+			// @ts-ignore
+			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			const shareCourseSpy = jest.fn();
+			const wrapper = getWrapper();
+			wrapper.vm.shareCourse = shareCourseSpy;
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
+			await moreActionButton.trigger("click");
+
+			expect(shareCourseSpy).toHaveBeenCalled();
+		});
+
+		it("should call store action after 'Share Course' menu clicked", async () => {
+			// @ts-ignore
+			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			const createCourseShareTokenSpy = jest.fn();
+			RoomModule.createCourseShareToken = createCourseShareTokenSpy;
+			const wrapper = getWrapper();
+
+			const threeDotButton = wrapper.find(".three-dot-button");
+			await threeDotButton.trigger("click");
+			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
+			await moreActionButton.trigger("click");
+
+			expect(createCourseShareTokenSpy).toHaveBeenCalled();
+			expect(createCourseShareTokenSpy.mock.calls[0][0]).toStrictEqual("123");
+		});
+
+		describe("modal views", () => {
+			it("should open modal for inviting action", async () => {
+				const wrapper = getWrapper();
+				wrapper.setData({
+					dialog: {
+						isOpen: true,
+						model: "invite",
+						header: wrapper.vm.$i18n.t("pages.room.modal.course.invite.header"),
+						text: wrapper.vm.$i18n.t("pages.room.modal.course.invite.text"),
+						inputText: "/link/123456",
+						subText: "",
+						courseInvitationLink: "123456",
+					},
+				});
+				await wrapper.vm.$nextTick();
+
+				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
+				const titleElement = modalView.find(".dialog-header");
+				const textElement = modalView.find(".modal-text");
+				const inputElement = modalView.find(`[data-testid="modal-input"]`);
+
+				expect(modalView.vm.isOpen).toBe(true);
+				expect(titleElement.element.textContent).toContain(
+					wrapper.vm.dialog.header
+				);
+				expect(textElement.element.textContent).toContain(
+					wrapper.vm.dialog.text
+				);
+				expect(inputElement.element.value).toStrictEqual(
+					wrapper.vm.dialog.inputText
+				);
+			});
+
+			it("should open modal for sharing action", async () => {
+				const wrapper = getWrapper();
+				wrapper.setData({
+					dialog: {
+						isOpen: true,
+						model: "share",
+						header: wrapper.vm.$i18n.t("pages.room.modal.course.share.header"),
+						text: wrapper.vm.$i18n.t("pages.room.modal.course.share.text"),
+						inputText: "shareToken_123456",
+						subText: wrapper.vm.$i18n.t(
+							"pages.room.modal.course.share.subText"
+						),
+						courseShareToken: "shareToken_123456",
+						qrUrl: "/courses?import=shareToken_123456",
+					},
+				});
+
+				await wrapper.vm.$nextTick();
+				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
+				const titleElement = modalView.find(".dialog-header");
+				const textElement = modalView.find(".modal-text");
+				const subTextElement = modalView.find(".modal-sub-text");
+				const inputElement = modalView.find(`[data-testid="modal-input"]`);
+				const qrComponent = modalView.find(`[data-testid="modal-qrcode"]`);
+
+				expect(modalView.vm.isOpen).toBe(true);
+				expect(titleElement.element.textContent).toContain(
+					wrapper.vm.dialog.header
+				);
+				expect(textElement.element.textContent).toContain(
+					wrapper.vm.dialog.text
+				);
+				expect(subTextElement.element.textContent).toContain(
+					wrapper.vm.dialog.subText
+				);
+				expect(inputElement.element.value).toStrictEqual(
+					wrapper.vm.dialog.inputText
+				);
+				expect(qrComponent.vm.$options._componentTag).toStrictEqual(
+					"base-qr-code"
+				);
+				expect(qrComponent.vm.url).toStrictEqual(wrapper.vm.dialog.qrUrl);
+			});
+
+			it("should close the modal and call 'closeDialog' method", async () => {
+				const closeDialogSpy = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.closeDialog = closeDialogSpy;
+				wrapper.setData({
+					dialog: {
+						isOpen: true,
+						model: "share",
+						header: wrapper.vm.$i18n.t("pages.room.modal.course.share.header"),
+						text: wrapper.vm.$i18n.t("pages.room.modal.course.share.text"),
+						inputText: "shareToken_123456",
+						subText: wrapper.vm.$i18n.t(
+							"pages.room.modal.course.share.subText"
+						),
+						courseShareToken: "shareToken_123456",
+						qrUrl: "/courses?import=shareToken_123456",
+					},
+				});
+
+				await wrapper.vm.$nextTick();
+				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
+				const closeButton = modalView.find(`[data-testid="dialog-close"]`);
+				await closeButton.trigger("click");
+
+				expect(closeDialogSpy).toHaveBeenCalled();
+			});
+		});
+	});
 });

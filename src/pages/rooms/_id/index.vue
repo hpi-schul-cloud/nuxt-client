@@ -17,6 +17,7 @@
 						:menu-items="headlineMenuItems"
 						:show="true"
 						nudge-right="75"
+						data-testid="title-menu"
 					/>
 				</div>
 			</div>
@@ -39,7 +40,7 @@
 		</import-lesson-modal>
 		<v-custom-dialog
 			v-model="dialog.isOpen"
-			data-testid="delete-dialog"
+			data-testid="title-dialog"
 			has-buttons
 			:buttons="['close']"
 			@dialog-closed="closeDialog"
@@ -55,13 +56,21 @@
 					</p>
 				</div>
 				<div>
-					<v-text-field :value="dialog.inputText" outlined dense></v-text-field>
+					<v-text-field
+						:value="dialog.inputText"
+						outlined
+						dense
+						data-testid="modal-input"
+					></v-text-field>
 				</div>
-				<div class="modal-text mb-2">
+				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
 				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code :url="dialog.qrUrl"></base-qr-code>
+					<base-qr-code
+						:url="dialog.qrUrl"
+						data-testid="modal-qrcode"
+					></base-qr-code>
 				</div>
 				<v-divider></v-divider>
 			</template>
@@ -180,37 +189,50 @@ export default {
 		roomData() {
 			return RoomModule.getRoomData;
 		},
+		roles() {
+			return AuthModule.getUserRoles;
+		},
 		dashBoardRole() {
-			const roles = AuthModule.getUserRoles;
-			if (roles.includes(Roles.Teacher)) return Roles.Teacher;
-			if (roles.includes(Roles.Student)) return Roles.Student;
+			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
+			if (this.roles.includes(Roles.Student)) return Roles.Student;
 			return undefined;
 		},
 		headlineMenuItems() {
-			return [
-				{
-					icon: this.icons.mdiSquareEditOutline,
-					action: () =>
-						(window.location.href = `/courses/${this.courseId}/edit`),
-					name: this.$t("pages.room.courseTitleMenu.editDelete"),
-				},
-				{
-					icon: this.icons.mdiEmail,
-					action: () => this.inviteCourse(),
-					name: this.$t("pages.room.courseTitleMenu.invite"),
-				},
-				{
-					icon: this.icons.mdiShareVariant,
-					action: () => this.shareCourse(),
-					name: this.$t("pages.room.courseTitleMenu.share"),
-				},
-				{
-					icon: this.icons.mdiContentCopy,
-					action: () =>
-						(window.location.href = `/courses/${this.courseId}/copy`),
-					name: this.$t("pages.room.courseTitleMenu.duplicate"),
-				},
-			];
+			if (this.roles.includes(Roles.Teacher)) {
+				const items = [
+					{
+						icon: this.icons.mdiSquareEditOutline,
+						action: () =>
+							(window.location.href = `/courses/${this.courseId}/edit`),
+						name: this.$t("pages.room.courseTitleMenu.editDelete"),
+						dataTestId: "title-menu-edit-delete",
+					},
+					{
+						icon: this.icons.mdiEmail,
+						action: () => this.inviteCourse(),
+						name: this.$t("pages.room.courseTitleMenu.invite"),
+						dataTestId: "title-menu-invite",
+					},
+
+					{
+						icon: this.icons.mdiContentCopy,
+						action: () =>
+							(window.location.href = `/courses/${this.courseId}/copy`),
+						name: this.$t("pages.room.courseTitleMenu.duplicate"),
+						dataTestId: "title-menu-copy",
+					},
+				];
+				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+					items.push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.shareCourse(),
+						name: this.$t("pages.room.courseTitleMenu.share"),
+						dataTestId: "title-menu-share",
+					});
+				}
+				return items;
+			}
+			return [];
 		},
 	},
 	async created() {
