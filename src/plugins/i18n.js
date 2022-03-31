@@ -16,6 +16,7 @@ export const i18n = () => {
 			en: require("@locale/en.json"),
 			de: require("@locale/de.json"),
 			es: require("@locale/es.json"),
+			ua: require("@locale/ua.json"),
 		},
 	});
 };
