@@ -50,7 +50,7 @@ module.exports = {
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
 			scriptSrc: `'self' 'unsafe-eval' ${matrixMessengerEmbed}`,
 			frameSrc:
-				"'self' ${matrixMessengerEmbed} https://docs.hpi-schul-cloud.org'",
+				"'self' ${matrixMessengerEmbed} https://docs.dbildungscloud.de'",
 			// Please activate for production
 			// upgradeInsecureRequestsSrc: 'upgrade-insecure-requests',
 			// blockAllMixedContentSrc: 'block-all-mixed-content',
