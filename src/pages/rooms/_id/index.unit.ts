@@ -167,6 +167,9 @@ describe("@pages/rooms/_id/index.vue", () => {
 		beforeEach(() => {
 			AuthModule.setUser(mockAuthStoreDataTeacher as User);
 		});
+		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
+			return menuItems.some((item: object | any) => item.name === itemName);
+		};
 		it("should have the menu button for teachers", () => {
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
@@ -185,16 +188,31 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
-			expect(menuItems).toHaveLength(3);
-			expect(menuItems[0].name).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.editDelete")
-			);
-			expect(menuItems[1].name).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.invite")
-			);
-			expect(menuItems[2].name).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate")
-			);
+			expect(menuItems).toHaveLength(2);
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.editDelete"),
+					menuItems
+				)
+			).toBe(true);
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.invite"),
+					menuItems
+				)
+			).toBe(true);
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate"),
+					menuItems
+				)
+			).toBe(false);
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share"),
+					menuItems
+				)
+			).toBe(false);
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set", () => {
@@ -203,9 +221,26 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
-			expect(menuItems[3].name).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share")
-			);
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share"),
+					menuItems
+				)
+			).toBe(true);
+		});
+
+		it("should have 'Copy/Duplicate Course' menu if 'FEATURE_COURSE_COPY' flag set", () => {
+			// @ts-ignore
+			EnvConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
+			const wrapper = getWrapper();
+			const menuItems = wrapper.vm.headlineMenuItems;
+
+			expect(
+				findMenuItems(
+					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate"),
+					menuItems
+				)
+			).toBe(true);
 		});
 
 		it("should redirect the page when 'Edit/Delete' menu clicked", async () => {

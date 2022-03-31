@@ -213,15 +213,17 @@ export default {
 						name: this.$t("pages.room.courseTitleMenu.invite"),
 						dataTestId: "title-menu-invite",
 					},
+				];
 
-					{
+				if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
+					items.push({
 						icon: this.icons.mdiContentCopy,
 						action: () =>
 							(window.location.href = `/courses/${this.courseId}/copy`),
 						name: this.$t("pages.room.courseTitleMenu.duplicate"),
 						dataTestId: "title-menu-copy",
-					},
-				];
+					});
+				}
 				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					items.push({
 						icon: this.icons.mdiShareVariant,
