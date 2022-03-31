@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.tasks.title')"
 		:full-width="false"
-		:fab-items="fab"
+		:fab-items="fabItems"
 	>
 		<div slot="header">
 			<div>
@@ -194,12 +194,12 @@ export default {
 
 			return tabTwo;
 		},
-		fab() {
+		fabItems() {
 			if (!this.isStudent) {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
-					href: "/homework/new",
+					href: "/homework/new?returnUrl=tasks",
 					ariaLabel: this.$t("common.actions.create"),
 					testId: "addTask",
 				};

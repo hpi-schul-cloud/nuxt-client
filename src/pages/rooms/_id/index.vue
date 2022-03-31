@@ -156,7 +156,7 @@ export default {
 						{
 							label: this.$t("pages.rooms.fab.add.task"),
 							icon: mdiFormatListChecks,
-							href: `/homework/new?course=${this.roomData.roomId}`,
+							href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_task",
 							ariaLabel: this.$t("pages.rooms.fab.add.task"),
 						},
