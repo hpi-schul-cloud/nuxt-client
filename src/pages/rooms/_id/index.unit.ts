@@ -215,7 +215,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			).toBe(false);
 		});
 
-		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set", () => {
+		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
 			// @ts-ignore
 			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const wrapper = getWrapper();
@@ -229,7 +229,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			).toBe(true);
 		});
 
-		it("should have 'Copy/Duplicate Course' menu if 'FEATURE_COURSE_COPY' flag set", () => {
+		it("should have 'Copy/Duplicate Course' menu if 'FEATURE_COURSE_COPY' flag set to true", () => {
 			// @ts-ignore
 			EnvConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
 			const wrapper = getWrapper();
@@ -296,7 +296,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual("123");
 		});
 
-		it("should call shareCourse method when 'Invite to the course' menu clicked", async () => {
+		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			// @ts-ignore
 			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const shareCourseSpy = jest.fn();
