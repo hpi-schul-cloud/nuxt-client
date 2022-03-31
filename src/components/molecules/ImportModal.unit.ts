@@ -100,7 +100,7 @@ describe("@components/molecules/RoomModal", () => {
 		expect(textCourseName.vm.value).toStrictEqual("Mathe");
 	});
 
-	it("confirm and back button should increase and decrease the step value", async () => {
+	it("next and back button should increase and decrease the step value", async () => {
 		const testProps = {
 			isOpen: true,
 		};
@@ -111,9 +111,9 @@ describe("@components/molecules/RoomModal", () => {
 			propsData: testProps,
 		});
 
-		const btnConfirm = wrapper.find(".dialog-next");
-		const btnBack = wrapper.find(".dialog-back-button");
-		btnConfirm.trigger("click");
+		const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
+		const btnBack = wrapper.find(`[data-testId="dialog-back"]`);
+		btnNext.trigger("click");
 		expect(wrapper.vm.step).toStrictEqual(2);
 
 		btnBack.trigger("click");
@@ -152,11 +152,31 @@ describe("@components/molecules/RoomModal", () => {
 		wrapper.setData({ step: 2 });
 		await wrapper.vm.$nextTick();
 
-		const btnConfirm = wrapper.find(".dialog-next");
-		expect(btnConfirm.element.innerHTML).toContain("Weiter");
+		const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
+		expect(btnNext.element.innerHTML).toContain("Weiter");
 		wrapper.setData({ step: 3 });
 		await wrapper.vm.$nextTick();
-		expect(btnConfirm.element.innerHTML).toContain("Importieren");
+		expect(btnNext.element.innerHTML).toContain("Importieren");
+	});
+
+	it("should have correct buttons according to error occurrence", async () => {
+		const testProps = {
+			isOpen: true,
+		};
+		const wrapper: any = mount(ImportModal, {
+			...createComponentMocks({
+				i18n: true,
+			}),
+			propsData: testProps,
+		});
+
+		const buttons = ["back", "cancel", "next"];
+		const onImportErrorButton = ["confirm"];
+
+		expect(wrapper.vm.modalButtons).toStrictEqual(buttons);
+
+		await wrapper.setData({ isImportError: true, step: 3 });
+		expect(wrapper.vm.modalButtons).toStrictEqual(onImportErrorButton);
 	});
 
 	describe("error handling", () => {
@@ -175,21 +195,23 @@ describe("@components/molecules/RoomModal", () => {
 
 			wrapper.setData({ step: 2 });
 			await wrapper.vm.$nextTick();
-			const errorElementBefore = wrapper.find(".code-error");
-			expect(errorElementBefore.exists()).toBe(false);
+			const textElementBefore = wrapper.find(".text-field-course-code");
+			expect(textElementBefore.vm.error).toBe(false);
+			expect(textElementBefore.vm.errorMessages).toStrictEqual("");
 			RoomsModule.setBusinessError({
 				statusCode: "400",
 				message: "BadRequest",
 				error: {},
 			});
-			const btnNext = wrapper.find(".dialog-next");
+			const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
 			await btnNext.trigger("click");
 			expect(getSharedCourseDataMock).toHaveBeenCalled();
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.businessError.message).toStrictEqual("BadRequest");
 			expect(wrapper.vm.businessError.statusCode).toStrictEqual("400");
-			const errorElementAfter = wrapper.find(".code-error");
-			expect(errorElementAfter.element.textContent).toContain(
+			const textElementAfter = wrapper.find(".text-field-course-code");
+			expect(textElementAfter.vm.error).toBe(true);
+			expect(textElementAfter.vm.errorMessages).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.rooms.importCourse.codeError")
 			);
 			getSharedCourseDataMock.mockClear();
@@ -208,7 +230,7 @@ describe("@components/molecules/RoomModal", () => {
 			wrapper.setData({ step: 2 });
 			await wrapper.vm.$nextTick();
 
-			const btnNext = wrapper.find(".dialog-next");
+			const btnNext = wrapper.find(`[data-testId="dialog-next"]`);
 			await btnNext.trigger("click");
 			await wrapper.vm.$nextTick();
 
