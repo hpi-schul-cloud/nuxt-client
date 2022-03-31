@@ -230,6 +230,21 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(revertPublishedCardMock).toHaveBeenCalled();
 			});
 
+			it("should emit 'delete-task' when 'more menu' delete action button clicked'", async () => {
+				const wrapper = getWrapper({ ...testProps, role });
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const buttonClassName = `.task-action-${wrapper.vm.$i18n.t(
+					"common.actions.remove"
+				)}`;
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				const emitted = wrapper.emitted("delete-task");
+				expect(emitted).toHaveLength(1);
+			});
+
 			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked", async () => {
 				const publishDraftCardMock = jest.fn();
 				const wrapper = getWrapper({ ...draftTestProps, role });

@@ -263,11 +263,11 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 	});
 
-	describe("Deleting Lesson", () => {
-		it("should call the openDeleteDialog method", async () => {
+	describe("Deleting Items", () => {
+		it("should call the openItemDeleteDialog method when lesson should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			wrapper.vm.openDeleteDialog = openDeleteDialogMock;
+			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const lessonCard = wrapper.find(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
@@ -275,34 +275,49 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("3456");
 		});
 
-		it("lesson delete modal should be visible if 'lessonDelete.isOpen' is set true", async () => {
+		it("should call the openItemDeleteDialog method when task should be deleted", async () => {
+			const openDeleteDialogMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			const deleteModal = wrapper.find(`[data-testid="delete-dialog"]`) as any;
+			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
+			const taskCard = wrapper.find(".task-card");
+
+			taskCard.vm.$emit("delete-task");
+			expect(openDeleteDialogMock).toHaveBeenCalled();
+			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
+		});
+
+		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const deleteModal = wrapper.find(
+				`[data-testid="delete-dialog-item"]`
+			) as any;
 
 			expect(deleteModal.vm.isOpen).toBe(false);
-			wrapper.vm.lessonDelete.isOpen = true;
+			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
 			expect(deleteModal.vm.isOpen).toBe(true);
 		});
 
-		it("should call deleteLesson method after modal emits 'dialog-confirmed'", async () => {
-			const deleteLessonMock = jest.fn();
+		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
+			const deleteItemMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			wrapper.vm.deleteLesson = deleteLessonMock;
-			wrapper.vm.lessonDelete.isOpen = true;
+			wrapper.vm.deleteItem = deleteItemMock;
+			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
-			const deleteModal = wrapper.find(`[data-testid="delete-dialog"]`) as any;
+			const deleteModal = wrapper.find(
+				`[data-testid="delete-dialog-item"]`
+			) as any;
 			deleteModal.vm.$emit("dialog-confirmed");
-			expect(deleteLessonMock).toHaveBeenCalled();
+			expect(deleteItemMock).toHaveBeenCalled();
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			wrapper.vm.lessonDelete.isOpen = true;
+			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
 			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
 			cancelButton.trigger("click");
-			expect(wrapper.vm.lessonDelete.isOpen).toBe(false);
+			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
 		});
 	});
 });
