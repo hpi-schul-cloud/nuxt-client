@@ -220,7 +220,7 @@ describe("User Migration / Index", () => {
 			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: true });
 			await wrapper.vm.$nextTick();
 
-			const btnRemoved = wrapper.find("[data-testid=start_user_migrationx]");
+			const btnRemoved = wrapper.find("[data-testid=start_user_migration]");
 			expect(btnRemoved.vm).toBe(undefined);
 
 			const nextBtn2 = wrapper.find("[data-testid=migration_tutorial_next]");
