@@ -105,7 +105,7 @@
 			:is-open="lessonShare.isOpen"
 			class="room-dialog"
 			has-buttons
-			:buttons="['close', 'back']"
+			:buttons="['close']"
 			@dialog-closed="lessonShare.isOpen = false"
 		>
 			<div slot="title" class="room-title">
