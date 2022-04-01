@@ -6,6 +6,7 @@
 		left
 		offset-y
 		attach
+		:nudge-right="nudgeRight"
 	>
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
@@ -23,10 +24,11 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				:class="`task-action task-action-${item.name.split(' ').join('-')}`"
+				:class="`menu-action menu-action-${item.name.split(' ').join('-')}`"
+				:data-testid="item.dataTestId || ''"
 				@click.stop="handleClick(item)"
 			>
-				<v-icon class="task-action-icon mr-1">
+				<v-icon class="menu-action-icon mr-1">
 					{{ item.icon }}
 				</v-icon>
 				<v-list-item-title class="pl-1">
@@ -51,6 +53,10 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+		nudgeRight: {
+			type: String,
+			default: "0",
+		},
 	},
 	data() {
 		return {
@@ -68,12 +74,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.task-action {
+.menu-action {
 	min-height: var(--space-lg);
 	text-align: left;
 }
 
-.task-action-icon {
+.menu-action-icon {
 	width: var(--space-md);
 	height: var(--space-md);
 	margin-top: calc(-0.5 + var(--space-base-vuetify));
