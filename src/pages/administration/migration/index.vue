@@ -103,38 +103,38 @@
 											class="text-info"
 											type="info"
 										>
-											{{ $t("pages.administration.migration.tutorialWait") }}
+                      <b>{{ $t("pages.administration.migration.tutorialWait") }}</b>
 										</div>
 									</v-row>
 								</v-card-text>
 								<v-card-actions>
 									<v-row align="center" justify="end">
-										<v-btn
-											v-if="isMigrationNotStarted"
-											id="start_user_migration"
-											color="primary"
-											@click="setSchoolInUserMigration"
-										>
-											{{
-												$t("pages.administration.migration.startUserMigration")
-											}}
-										</v-btn>
-										<v-btn
-											v-else-if="canPerformMigration"
-											id="migration_tutorial_next"
-											:disabled="totalImportUsers === 0"
-											color="primary"
-											@click="nextStep"
-										>
-											<v-progress-circular
-												v-if="
+                    <v-btn
+                        v-if="isMigrationNotStarted"
+                        data-testid="start_user_migration"
+                        color="primary"
+                        @click="setSchoolInUserMigration"
+                    >
+                      {{
+                        $t("pages.administration.migration.startUserMigration")
+                      }}
+                    </v-btn>
+                    <v-btn
+                        v-else-if="canPerformMigration"
+                        data-testid="migration_tutorial_next"
+                        :disabled="totalImportUsers === 0"
+                        color="primary"
+                        @click="nextStep"
+                    >
+                      <v-progress-circular
+                          v-if="
 													totalImportUsers === 0 &&
 													school.inUserMigration === true
 												"
-												:size="20"
-												indeterminate
-											></v-progress-circular>
-											{{
+                          :size="20"
+                          indeterminate
+                      ></v-progress-circular>
+                      {{
 												totalImportUsers > 0 || school.inUserMigration === false
 													? $t("pages.administration.migration.next")
 													: $t("pages.administration.migration.waiting")

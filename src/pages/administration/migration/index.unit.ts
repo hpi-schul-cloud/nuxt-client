@@ -11,8 +11,6 @@ const $theme = {
 	short_name: "instance name",
 };
 
-//EnvConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: true });
-
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(migrationIndex, {
 		...createComponentMocks({
@@ -131,10 +129,9 @@ const schoolMock = {
 	isTeamCreationByStudentsEnabled: false,
 };
 
-
 window.scrollTo = jest.fn();
 
-describe.only("User Migration / Index", () => {
+describe("User Migration / Index", () => {
 	beforeAll(() => {
 		document.body.setAttribute("data-app", "true");
 		EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
@@ -166,7 +163,7 @@ describe.only("User Migration / Index", () => {
 		expect(findText.exists()).toBe(false);
 	});
 
-	it("should show info text", () => {
+	it("should show info text on step 1", () => {
 		const wrapper = getWrapperShallow();
 		const tutorial = wrapper.vm.$i18n.t(
 			"pages.administration.migration.tutorial",
@@ -178,6 +175,57 @@ describe.only("User Migration / Index", () => {
 		const findText = wrapper.find("[data-testid=migration_tutorial]");
 
 		expect(findText.element.innerHTML).toContain(tutorial);
+	});
+
+	describe("Start user migration", () => {
+		beforeEach(() => {
+			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: undefined });
+			ImportUsersModule.setTotal(0);
+		});
+		afterEach(() => {
+			SchoolsModule.setSchool(schoolMock);
+			ImportUsersModule.setTotal(100);
+		});
+		it("should show hint text that sync can take some time", () => {
+			const wrapper = getWrapperShallow();
+			const tutorialWait = wrapper.vm.$i18n.t(
+				"pages.administration.migration.tutorialWait"
+			);
+			const findText = wrapper.find("[data-testid=migration_tutorial]");
+
+			expect(findText.element.innerHTML).toContain(tutorialWait);
+		});
+		it("should not be possible to go to other steps, if migration not started", () => {
+			const wrapper = getWrapper();
+
+			const stepper = wrapper.find(".stepper");
+			expect(stepper.vm.steps[1].editable).toBe(false);
+			expect(stepper.vm.steps[1].complete).toBe(false);
+			expect(stepper.vm.steps[2].editable).toBe(false);
+			expect(stepper.vm.steps[2].complete).toBe(false);
+			expect(stepper.vm.steps[3].editable).toBe(false);
+			expect(stepper.vm.steps[3].complete).toBe(false);
+			expect(stepper.vm.steps[4].editable).toBe(false);
+			expect(stepper.vm.steps[4].complete).toBe(false);
+		});
+		it("should show button for start inUserMigration", async () => {
+			const wrapper = getWrapper();
+
+			const btn = wrapper.find("[data-testid=start_user_migration]");
+			expect(btn.vm.disabled).toBe(false);
+			const nextBtn = wrapper.find("[data-testid=migration_tutorial_next]");
+			expect(nextBtn.vm).toBe(undefined);
+
+			ImportUsersModule.setTotal(100);
+			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: true });
+			await wrapper.vm.$nextTick();
+
+			const btnRemoved = wrapper.find("[data-testid=start_user_migrationx]");
+			expect(btnRemoved.vm).toBe(undefined);
+
+			const nextBtn2 = wrapper.find("[data-testid=migration_tutorial_next]");
+			expect(nextBtn2.vm.disabled).toBe(false);
+		});
 	});
 
 	it("should be possible to click on steps 1-3", async () => {
@@ -196,6 +244,9 @@ describe.only("User Migration / Index", () => {
 
 		expect(stepper.vm.steps[3].editable).toBe(false);
 		expect(stepper.vm.steps[3].complete).toBe(false);
+
+		expect(stepper.vm.steps[4].editable).toBe(false);
+		expect(stepper.vm.steps[4].complete).toBe(false);
 	});
 
 	it("should not be possible to click on steps 2-3 when migration finished", async () => {
