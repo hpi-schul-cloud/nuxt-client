@@ -283,7 +283,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
+			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("2345");
 		});
 
 		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {

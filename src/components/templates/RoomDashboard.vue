@@ -263,9 +263,8 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await TaskModule.deleteTask(this.itemDelete.itemData.id).then(
-					RoomModule.fetchContent(this.roomData.roomId)
-				);
+				await TaskModule.deleteTask(this.itemDelete.itemData.id);
+				await RoomModule.fetchContent(this.roomData.roomId);
 				return Promise.resolve();
 			}
 			await RoomModule.deleteLesson(this.itemDelete.itemData.id);

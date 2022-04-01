@@ -100,6 +100,7 @@ import {
 	mdiFormatListChecks,
 	mdiUndoVariant,
 	mdiTrashCanOutline,
+	mdiContentCopy,
 } from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -130,6 +131,7 @@ export default {
 				mdiPencilOutline,
 				mdiUndoVariant,
 				mdiTrashCanOutline,
+				mdiContentCopy,
 			},
 			defaultTitleColor: "--color-secondary",
 			roles: Roles,
@@ -220,6 +222,12 @@ export default {
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
+				});
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () => this.redirectAction(`/homework/${this.task.id}/copy`),
+					name: this.$t("common.actions.copy"),
 				});
 			}
 
