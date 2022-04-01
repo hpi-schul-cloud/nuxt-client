@@ -4,6 +4,9 @@ import RoomTaskCard from "./RoomTaskCard.vue";
 declare var createComponentMocks: Function;
 
 const testProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -30,6 +33,9 @@ const testProps = {
 };
 
 const draftTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -51,6 +57,9 @@ const draftTestProps = {
 };
 
 const finishedTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -72,6 +81,9 @@ const finishedTestProps = {
 };
 
 const overdueTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -209,7 +221,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				expect(redirectAction).toHaveBeenCalled();
 				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
-					"/homework/123/edit"
+					"/homework/123/edit?returnUrl=rooms/456"
 				);
 			});
 

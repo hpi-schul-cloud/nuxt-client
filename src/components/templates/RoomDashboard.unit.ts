@@ -121,6 +121,15 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			expect(wrapper.vm.lessonData).toStrictEqual(expectedObject);
 		});
+
+		it("should have taskData object", async () => {
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const expectedObject = {
+				roomId: "123",
+			};
+
+			expect(wrapper.vm.taskData).toStrictEqual(expectedObject);
+		});
 	});
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {

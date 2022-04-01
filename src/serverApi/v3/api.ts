@@ -85,6 +85,31 @@ export interface BoardResponse {
 /**
  * 
  * @export
+ * @interface ChangeLanguageParams
+ */
+export interface ChangeLanguageParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangeLanguageParams
+     */
+    language: ChangeLanguageParamsLanguageEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ChangeLanguageParamsLanguageEnum {
+    De = 'de',
+    En = 'en',
+    Es = 'es',
+    Ua = 'ua'
+}
+
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -403,39 +428,39 @@ export enum ImportUserResponseRoleNamesEnum {
 export interface MoveElementParams {
     /**
      * 
-     * @type {MoveElementPosition}
+     * @type {MoveElementPositionParams}
      * @memberof MoveElementParams
      */
-    from: MoveElementPosition;
+    from: MoveElementPositionParams;
     /**
      * 
-     * @type {MoveElementPosition}
+     * @type {MoveElementPositionParams}
      * @memberof MoveElementParams
      */
-    to: MoveElementPosition;
+    to: MoveElementPositionParams;
 }
 /**
  * 
  * @export
- * @interface MoveElementPosition
+ * @interface MoveElementPositionParams
  */
-export interface MoveElementPosition {
+export interface MoveElementPositionParams {
     /**
      * 
      * @type {number}
-     * @memberof MoveElementPosition
+     * @memberof MoveElementPositionParams
      */
     x: number;
     /**
      * 
      * @type {number}
-     * @memberof MoveElementPosition
+     * @memberof MoveElementPositionParams
      */
     y: number;
     /**
      * used to identify a position within a group.
      * @type {number}
-     * @memberof MoveElementPosition
+     * @memberof MoveElementPositionParams
      */
     groupIndex?: number;
 }
@@ -630,55 +655,55 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
- * @interface ResolvedUser
+ * @interface ResolvedUserResponse
  */
-export interface ResolvedUser {
+export interface ResolvedUserResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     firstName: string;
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     lastName: string;
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     createdAt: string;
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     updatedAt: string;
     /**
      * 
-     * @type {Array<object>}
-     * @memberof ResolvedUser
+     * @type {Array<string>}
+     * @memberof ResolvedUserResponse
      */
-    roles: Array<object>;
+    roles: Array<string>;
     /**
      * 
      * @type {Array<string>}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     permissions: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof ResolvedUser
+     * @memberof ResolvedUserResponse
      */
     schoolId: string;
 }
@@ -700,6 +725,19 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SuccessfulResponse
+ */
+export interface SuccessfulResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SuccessfulResponse
+     */
+    successful: boolean;
 }
 /**
  * 
@@ -3051,6 +3089,45 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {ChangeLanguageParams} changeLanguageParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerChangeLanguage: async (changeLanguageParams: ChangeLanguageParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changeLanguageParams' is not null or undefined
+            assertParamExists('userControllerChangeLanguage', 'changeLanguageParams', changeLanguageParams)
+            const localVarPath = `/user/language`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeLanguageParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3094,10 +3171,20 @@ export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {ChangeLanguageParams} changeLanguageParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUser>> {
+        async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(changeLanguageParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3113,10 +3200,19 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {ChangeLanguageParams} changeLanguageParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerMe(options?: any): AxiosPromise<ResolvedUser> {
+        userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse> {
+            return localVarFp.userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse> {
             return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
         },
     };
@@ -3130,11 +3226,20 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 export interface UserApiInterface {
     /**
      * 
+     * @param {ChangeLanguageParams} changeLanguageParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    userControllerMe(options?: any): AxiosPromise<ResolvedUser>;
+    userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse>;
 
 }
 
@@ -3145,6 +3250,17 @@ export interface UserApiInterface {
  * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI implements UserApiInterface {
+    /**
+     * 
+     * @param {ChangeLanguageParams} changeLanguageParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any) {
+        return UserApiFp(this.configuration).userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.

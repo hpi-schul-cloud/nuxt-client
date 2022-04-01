@@ -52,8 +52,12 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:nbc-support@netz-21.de",
+					href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de",
 					text: this.$t("components.legacy.footer.contact"),
+				},
+				{
+					href: "https://github.com/hpi-schul-cloud",
+					text: this.$t("components.legacy.footer.github"),
 				},
 			];
 			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
