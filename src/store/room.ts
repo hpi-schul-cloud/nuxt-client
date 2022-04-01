@@ -205,7 +205,7 @@ export class Room extends VuexModule {
 		this.resetBusinessError();
 		try {
 			const invitationData = await $axios.$post("/v1/link", {
-				target: `courses/${courseId}/addStudent`,
+				target: `${window.location.origin}/courses/${courseId}/addStudent`,
 			});
 			if (!invitationData._id) {
 				this.setBusinessError({

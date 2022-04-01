@@ -384,9 +384,9 @@ describe("room module", () => {
 				await roomModule.createCourseInvitation("123456");
 
 				expect(received[0].path).toStrictEqual("/v1/link");
-				expect(received[1].params).toStrictEqual({
-					target: "courses/123456/addStudent",
-				});
+				expect(received[1].params.target).toContain(
+					"courses/123456/addStudent"
+				);
 				expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual(
 					"123456"
 				);
