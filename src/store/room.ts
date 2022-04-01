@@ -45,8 +45,8 @@ export class Room extends VuexModule {
 		status: "",
 		message: "",
 	};
-	courseInvitationLink: string = "";
-	courseShareToken: string = "";
+	private courseInvitationLink: string = "";
+	private courseShareToken: string = "";
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {

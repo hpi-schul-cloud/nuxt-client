@@ -678,7 +678,7 @@ describe("room module", () => {
 				const payload = "http://localhost:4000/link/123456";
 
 				roomModule.setCourseInvitationLink(payload);
-				expect(roomModule.courseInvitationLink).toStrictEqual(payload);
+				expect(roomModule.getCourseInvitationLink).toStrictEqual(payload);
 			});
 		});
 
@@ -688,7 +688,7 @@ describe("room module", () => {
 				const payload = "token_test";
 
 				roomModule.setCourseShareToken(payload);
-				expect(roomModule.courseShareToken).toStrictEqual(payload);
+				expect(roomModule.getCourseShareToken).toStrictEqual(payload);
 			});
 		});
 	});
