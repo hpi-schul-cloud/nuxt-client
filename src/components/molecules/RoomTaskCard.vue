@@ -233,7 +233,10 @@ export default {
 
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiContentCopy,
-					action: () => this.redirectAction(`/homework/${this.task.id}/copy`),
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
 					name: this.$t("common.actions.copy"),
 				});
 			}
