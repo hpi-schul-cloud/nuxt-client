@@ -84,7 +84,7 @@
 							)
 						}}
 						<a
-							href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
+							href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=113650243"
 							target="_blank"
 						>
 							{{
