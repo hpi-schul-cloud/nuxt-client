@@ -109,6 +109,10 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
+		room: {
+			type: Object,
+			default: () => {},
+		},
 		role: { type: String, required: true },
 		ariaLabel: {
 			type: String,
@@ -198,7 +202,10 @@ export default {
 			if (this.role === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
-					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
+						),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
