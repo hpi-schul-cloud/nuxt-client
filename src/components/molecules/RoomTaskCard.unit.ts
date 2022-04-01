@@ -241,7 +241,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				expect(redirectAction).toHaveBeenCalled();
 				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
-					"/homework/123/copy"
+					"/homework/123/copy?returnUrl=rooms/456"
 				);
 			});
 

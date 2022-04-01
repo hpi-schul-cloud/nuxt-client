@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue/types/umd";
 import RoomDashboard from "./RoomDashboard.vue";
+import RoomModule from "@store/room";
+import TaskModule from "@/store/tasks";
 
 declare var createComponentMocks: Function;
 
@@ -282,6 +284,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			lessonCard.vm.$emit("delete-lesson");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
 			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("3456");
+			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("lesson");
 		});
 
 		it("should call the openItemDeleteDialog method when task should be deleted", async () => {
@@ -293,6 +296,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
 			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("2345");
+			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 
 		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {
@@ -318,6 +322,50 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			) as any;
 			deleteModal.vm.$emit("dialog-confirmed");
 			expect(deleteItemMock).toHaveBeenCalled();
+		});
+
+		it("should call store methods after modal emits 'dialog-confirmed' when deleting task", async () => {
+			const deleteTaskMock = jest.fn();
+			const fetchContentMock = jest.fn();
+			const deleteLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			TaskModule.deleteTask = deleteTaskMock;
+			RoomModule.fetchContent = fetchContentMock;
+			RoomModule.deleteLesson = deleteLessonMock;
+			const taskCard = wrapper.find(".task-card");
+
+			taskCard.vm.$emit("delete-task");
+			await wrapper.vm.$nextTick();
+			const deleteModal = wrapper.find(
+				`[data-testid="delete-dialog-item"]`
+			) as any;
+			deleteModal.vm.$emit("dialog-confirmed");
+			await wrapper.vm.$nextTick();
+			expect(deleteTaskMock).toHaveBeenCalled();
+			expect(fetchContentMock).toHaveBeenCalled();
+			expect(deleteLessonMock).not.toHaveBeenCalled();
+		});
+
+		it("should call store methods after modal emits 'dialog-confirmed' when deleting lesson", async () => {
+			const deleteTaskMock = jest.fn();
+			const fetchContentMock = jest.fn();
+			const deleteLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			TaskModule.deleteTask = deleteTaskMock;
+			RoomModule.fetchContent = fetchContentMock;
+			RoomModule.deleteLesson = deleteLessonMock;
+			const lessonCard = wrapper.find(".lesson-card");
+
+			lessonCard.vm.$emit("delete-lesson");
+			await wrapper.vm.$nextTick();
+			const deleteModal = wrapper.find(
+				`[data-testid="delete-dialog-item"]`
+			) as any;
+			deleteModal.vm.$emit("dialog-confirmed");
+			await wrapper.vm.$nextTick();
+			expect(deleteTaskMock).not.toHaveBeenCalled();
+			expect(fetchContentMock).not.toHaveBeenCalled();
+			expect(deleteLessonMock).toHaveBeenCalled();
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {
