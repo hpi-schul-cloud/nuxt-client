@@ -9,6 +9,7 @@ import { rootStore } from "./index";
 import { $axios } from "@utils/api";
 import AuthModule from "./auth";
 import { Year, FederalState, School } from "./types/schools";
+import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -49,6 +50,8 @@ function transformSchoolClientToServer(school: any): School {
 	stateFactory: true,
 })
 export class Schools extends VuexModule {
+	private _importUserApi?: UserImportApiInterface;
+
 	school: School = {
 		_id: "",
 		name: "",
@@ -275,24 +278,46 @@ export class Schools extends VuexModule {
 	}
 
 	@Action
-	async endMaintenance(): Promise<void> {
+	async migrationStartSync(): Promise<void> {
 		if (!this.school.inMaintenance) {
 			return;
 		}
 		this.setLoading(true);
 		try {
-			// TODO use a new endpoint and don't send null
-			// schools/${this.school._id}/maintenance has unwanted logic about school year
-			await $axios.$patch(`/v1/schools/${this.school._id}`, {
-				inMaintenance: false,
-				inMaintenanceSince: null,
-			});
+			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
 			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 		}
+	}
+
+	@Action
+	async setSchoolInUserMigration(): Promise<void> {
+		if (this.school.inUserMigration) {
+			return;
+		}
+		this.setLoading(true);
+		try {
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration();
+			this.setSchool({
+				...this.school,
+				inUserMigration: true,
+				inMaintenance: true,
+			});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
+
+	private get importUserApi(): UserImportApiInterface {
+		if (!this._importUserApi) {
+			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
+		}
+		return this._importUserApi;
 	}
 }
 
