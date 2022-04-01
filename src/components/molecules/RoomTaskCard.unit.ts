@@ -209,7 +209,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const redirectAction = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.redirectAction = redirectAction;
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n.t(
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
 					"pages.room.taskCard.label.edit"
 				)}`;
 
@@ -249,7 +249,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n
 					.t("pages.room.cards.label.revert")
 					.split(" ")
 					.join("-")}`;
