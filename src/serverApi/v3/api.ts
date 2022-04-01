@@ -3281,6 +3281,39 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerEndSchoolInMaintenance: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/startSync`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
          * @param {string} [loginName] 
@@ -3530,6 +3563,39 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerStartSchoolInUserMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/startUserMigration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
@@ -3581,6 +3647,15 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
 export const UserImportApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserImportApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerEndSchoolInMaintenance(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerEndSchoolInMaintenance(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {string} [firstName] 
@@ -3645,6 +3720,15 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerStartSchoolInUserMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
@@ -3664,6 +3748,14 @@ export const UserImportApiFp = function(configuration?: Configuration) {
 export const UserImportApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserImportApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerEndSchoolInMaintenance(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerEndSchoolInMaintenance(options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {string} [firstName] 
@@ -3723,6 +3815,14 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerStartSchoolInUserMigration(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
@@ -3740,6 +3840,14 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
  * @interface UserImportApi
  */
 export interface UserImportApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerEndSchoolInMaintenance(options?: any): AxiosPromise<void>;
+
     /**
      * 
      * @param {string} [firstName] 
@@ -3799,6 +3907,14 @@ export interface UserImportApiInterface {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @param {string} id 
      * @param {UpdateFlagParams} updateFlagParams 
      * @param {*} [options] Override http request option.
@@ -3816,6 +3932,16 @@ export interface UserImportApiInterface {
  * @extends {BaseAPI}
  */
 export class UserImportApi extends BaseAPI implements UserImportApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerEndSchoolInMaintenance(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerEndSchoolInMaintenance(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} [firstName] 
@@ -3881,6 +4007,16 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerStartSchoolInUserMigration(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
