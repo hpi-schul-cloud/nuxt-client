@@ -306,7 +306,7 @@ import ImportUserModule from "@store/import-users";
 
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import EnvConfigModule from "@/store/env-config";
-import ImportUsers from "@components/organisms/administration/importUsers";
+import ImportUsers from "@components/organisms/administration/ImportUsers";
 export default {
 	components: { DefaultWireframe, ImportUsers },
 	layout: "defaultVuetify",
