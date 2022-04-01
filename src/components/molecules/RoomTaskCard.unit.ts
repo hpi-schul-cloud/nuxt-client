@@ -229,7 +229,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const redirectAction = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.redirectAction = redirectAction;
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n.t(
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
 					"common.actions.copy"
 				)}`;
 
@@ -266,8 +266,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
-				//change task-action to menu-action after merge of bc-1460
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n.t(
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
 					"common.actions.remove"
 				)}`;
 
