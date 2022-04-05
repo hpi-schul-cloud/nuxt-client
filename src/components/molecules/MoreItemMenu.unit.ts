@@ -42,7 +42,7 @@ describe("@components/molecules/MoreItemMenu", () => {
 		const wrapper = getWrapper(testProps);
 		const threeDotButton = wrapper.find(".three-dot-button");
 		await threeDotButton.trigger("click");
-		const menuItemElement = wrapper.find(".task-action");
+		const menuItemElement = wrapper.find(".menu-action");
 
 		expect(menuItemElement.element.textContent).toContain("Edit");
 	});
@@ -51,7 +51,7 @@ describe("@components/molecules/MoreItemMenu", () => {
 		const wrapper = getWrapper(testProps);
 		const threeDotButton = wrapper.find(".three-dot-button");
 		await threeDotButton.trigger("click");
-		const menuItemElement = wrapper.find(".task-action");
+		const menuItemElement = wrapper.find(".menu-action");
 		expect(wrapper.vm.showMenu).toBe(true);
 		await menuItemElement.trigger("click");
 		expect(wrapper.vm.showMenu).toBe(false);
@@ -63,7 +63,7 @@ describe("@components/molecules/MoreItemMenu", () => {
 		const wrapper = getWrapper(testProps);
 		const threeDotButton = wrapper.find(".three-dot-button");
 		await threeDotButton.trigger("click");
-		const menuItemIcon = wrapper.find(".task-action-icon");
+		const menuItemIcon = wrapper.find(".menu-action-icon");
 
 		expect(menuItemIcon.element.innerHTML).toContain("mdiPencilOutline");
 	});
@@ -74,7 +74,7 @@ describe("@components/molecules/MoreItemMenu", () => {
 			show: true,
 		};
 		const wrapper = getWrapper(props);
-		const actionLists = wrapper.findAll(".task-action");
+		const actionLists = wrapper.findAll(".menu-action");
 
 		expect(actionLists).toHaveLength(0);
 	});
