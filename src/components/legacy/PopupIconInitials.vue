@@ -1,14 +1,19 @@
 <template>
-	<div
-		v-outside-click="removePopup"
-		class="popup"
-		data-testid="initials"
-		@click="popup"
-	>
-		<div class="icon">{{ initials }}</div>
+	<div class="popup">
+		<base-button
+			v-outside-click="removePopup"
+			type="button"
+			class="icon-button button is-medium is-text is-icon"
+			data-testid="initials"
+			role="menu"
+			:aria-label="`Aktuelle/r Benutzer:in ${firstName} ${lastName} ${userRole}`"
+			@click="popup"
+		>
+			<div class="icon">{{ initials }}</div>
+		</base-button>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">
-				<span> {{ firstname }} {{ lastname }} ({{ role }})</span>
+				<span> {{ firstName }} {{ lastName }} ({{ userRole }})</span>
 			</div>
 			<slot />
 		</div>
@@ -18,15 +23,15 @@
 <script>
 export default {
 	props: {
-		firstname: {
+		firstName: {
 			type: String,
-			default: "",
+			default: "Unknown",
 		},
-		lastname: {
+		lastName: {
 			type: String,
-			default: "",
+			default: "Unknown",
 		},
-		role: {
+		userRole: {
 			type: String,
 			default: "",
 		},
@@ -38,7 +43,7 @@ export default {
 	},
 	computed: {
 		initials() {
-			return this.firstname.slice(0, 1) + this.lastname.slice(0, 1);
+			return this.firstName.slice(0, 1) + this.lastName.slice(0, 1);
 		},
 	},
 	methods: {
@@ -58,6 +63,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	width: 40px;
+	min-width: 40px;
 	height: 40px;
 	padding: var(--space-xs-2);
 	font-family: var(--font-accent);
