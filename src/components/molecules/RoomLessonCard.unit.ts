@@ -124,7 +124,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[0].trigger("click");
 
 				expect(redirectActionMock).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
 				expect(revertPublishedCardMock).toHaveBeenCalled();
@@ -176,7 +176,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
-				const selectorName = `.task-action-${wrapper.vm.$i18n.t(
+				const selectorName = `.menu-action-${wrapper.vm.$i18n.t(
 					"common.actions.remove"
 				)}`;
 
