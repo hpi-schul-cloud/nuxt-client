@@ -1,7 +1,6 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:headline="roomData.title"
 		:full-width="true"
 		:fab-items="fabItems"
 		:breadcrumbs="breadcrumbs"
@@ -9,9 +8,19 @@
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
-			<h1 class="text-h3 pt-2 course-title">
-				{{ roomData.title }}
-			</h1>
+			<div class="ma-2">
+				<div class="text-h3 pb-2 course-title">
+					{{ roomData.title }}
+				</div>
+				<div class="course-title pa-2 pb-1">
+					<more-item-menu
+						:menu-items="headlineMenuItems"
+						:show="true"
+						nudge-right="120"
+						data-testid="title-menu"
+					/>
+				</div>
+			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
 					<v-btn
@@ -27,12 +36,45 @@
 			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
-		<import-lesson-modal
-			v-model="importDialog.isOpen"
-			class="import-modal"
-			@update-room="updateRoom"
-		>
+		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
+		<v-custom-dialog
+			v-model="dialog.isOpen"
+			data-testid="title-dialog"
+			has-buttons
+			:buttons="['close']"
+			@dialog-closed="closeDialog"
+		>
+			<div slot="title" class="dialog-header">
+				<h4>{{ dialog.header }}</h4>
+			</div>
+			<template slot="content">
+				<v-divider class="mb-4"></v-divider>
+				<div class="modal-text">
+					<p class="text-md mt-2">
+						{{ dialog.text }}
+					</p>
+				</div>
+				<div>
+					<v-text-field
+						:value="dialog.inputText"
+						outlined
+						dense
+						data-testid="modal-input"
+					></v-text-field>
+				</div>
+				<div class="modal-text modal-sub-text mb-2">
+					{{ dialog.subText }}
+				</div>
+				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
+					<base-qr-code
+						:url="dialog.qrUrl"
+						data-testid="modal-qrcode"
+					></base-qr-code>
+				</div>
+				<v-divider></v-divider>
+			</template>
+		</v-custom-dialog>
 	</default-wireframe>
 </template>
 
@@ -41,16 +83,22 @@ import AuthModule from "@/store/auth";
 import RoomModule from "@store/room";
 
 import EnvConfigModule from "@/store/env-config";
-import { mdiMagnify } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
+import MoreItemMenu from "@components/molecules/MoreItemMenu";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import BaseQrCode from "@components/base/BaseQrCode.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	mdiPlus,
 	mdiViewListOutline,
 	mdiFormatListChecks,
 	mdiCloudDownload,
+	mdiSquareEditOutline,
+	mdiEmail,
+	mdiShareVariant,
+	mdiContentCopy,
 } from "@mdi/js";
 
 export default {
@@ -58,6 +106,9 @@ export default {
 		DefaultWireframe,
 		RoomDashboard,
 		ImportLessonModal,
+		MoreItemMenu,
+		vCustomDialog,
+		BaseQrCode,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -65,13 +116,30 @@ export default {
 			importDialog: {
 				isOpen: false,
 			},
-			mdiMagnify,
+			dialog: {
+				isOpen: false,
+				model: "",
+				header: "",
+				text: "",
+				inputText: "",
+				subText: "",
+				qrUrl: "",
+				courseInvitationLink: "",
+				courseShareToken: "",
+			},
+			icons: {
+				mdiSquareEditOutline,
+				mdiEmail,
+				mdiShareVariant,
+				mdiContentCopy,
+			},
 			breadcrumbs: [
 				{
 					text: this.$t("pages.courses.index.title"),
 					to: "/rooms-overview",
 				},
 			],
+			courseId: this.$route.params.id,
 		};
 	},
 	computed: {
@@ -88,7 +156,7 @@ export default {
 						{
 							label: this.$t("pages.rooms.fab.add.task"),
 							icon: mdiFormatListChecks,
-							href: `/homework/new?course=${this.roomData.roomId}`,
+							href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_task",
 							ariaLabel: this.$t("pages.rooms.fab.add.task"),
 						},
@@ -121,23 +189,86 @@ export default {
 		roomData() {
 			return RoomModule.getRoomData;
 		},
+		roles() {
+			return AuthModule.getUserRoles;
+		},
 		dashBoardRole() {
-			const roles = AuthModule.getUserRoles;
-			if (roles.includes(Roles.Teacher)) return Roles.Teacher;
-			if (roles.includes(Roles.Student)) return Roles.Student;
+			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
+			if (this.roles.includes(Roles.Student)) return Roles.Student;
 			return undefined;
+		},
+		headlineMenuItems() {
+			if (!this.roles.includes(Roles.Teacher)) return [];
+			const items = [
+				{
+					icon: this.icons.mdiSquareEditOutline,
+					action: () =>
+						(window.location.href = `/courses/${this.courseId}/edit`),
+					name: this.$t("pages.room.courseTitleMenu.editDelete"),
+					dataTestId: "title-menu-edit-delete",
+				},
+				{
+					icon: this.icons.mdiEmail,
+					action: () => this.inviteCourse(),
+					name: this.$t("pages.room.courseTitleMenu.invite"),
+					dataTestId: "title-menu-invite",
+				},
+			];
+
+			if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
+				items.push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						(window.location.href = `/courses/${this.courseId}/copy`),
+					name: this.$t("pages.room.courseTitleMenu.duplicate"),
+					dataTestId: "title-menu-copy",
+				});
+			}
+			if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+				items.push({
+					icon: this.icons.mdiShareVariant,
+					action: () => this.shareCourse(),
+					name: this.$t("pages.room.courseTitleMenu.share"),
+					dataTestId: "title-menu-share",
+				});
+			}
+			return items;
 		},
 	},
 	async created() {
-		const courseId = this.$route.params.id;
-		await RoomModule.fetchContent(courseId);
+		await RoomModule.fetchContent(this.courseId);
 	},
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
-		async updateRoom() {
-			await RoomsModule.fetch(courseId);
+		async inviteCourse() {
+			await RoomModule.createCourseInvitation(this.courseId);
+			this.dialog.courseInvitationLink = RoomModule.getCourseInvitationLink;
+			this.dialog.model = "invite";
+			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
+			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
+			this.dialog.inputText = this.dialog.courseInvitationLink;
+			this.dialog.subText = "";
+			this.dialog.isOpen = true;
+		},
+		async shareCourse() {
+			await RoomModule.createCourseShareToken(this.courseId);
+			this.dialog.courseShareToken = RoomModule.getCourseShareToken;
+			this.dialog.model = "share";
+			this.dialog.header = this.$t("pages.room.modal.course.share.header");
+			this.dialog.text = this.$t("pages.room.modal.course.share.text");
+			this.dialog.inputText = this.dialog.courseShareToken;
+			this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
+			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
+			this.dialog.isOpen = true;
+		},
+		closeDialog() {
+			this.dialog.model = "";
+			this.dialog.header = "";
+			this.dialog.text = "";
+			this.dialog.inputText = "";
+			this.dialog.subText = "";
 		},
 	},
 	head() {
@@ -147,3 +278,14 @@ export default {
 	},
 };
 </script>
+<style scoped>
+.course-title {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.modal-text {
+	font-size: var(--space-md);
+	color: var(--color-black);
+}
+</style>

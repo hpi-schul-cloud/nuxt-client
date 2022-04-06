@@ -3,6 +3,7 @@ import { mount, shallowMount } from "@vue/test-utils";
 import migrationIndex from "@pages/administration/migration/index.vue";
 import ImportUsersModule from "@store/import-users";
 import SchoolsModule from "@store/schools";
+import EnvConfigModule from "@/store/env-config";
 
 declare var createComponentMocks: Function;
 
@@ -131,8 +132,10 @@ const schoolMock = {
 window.scrollTo = jest.fn();
 
 describe("User Migration / Index", () => {
-	beforeEach(() => {
+	beforeAll(() => {
 		document.body.setAttribute("data-app", "true");
+		EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
+		ImportUsersModule.setTotal(100);
 	});
 
 	it("should set page title", () => {
@@ -160,7 +163,7 @@ describe("User Migration / Index", () => {
 		expect(findText.exists()).toBe(false);
 	});
 
-	it("should show info text", () => {
+	it("should show info text on step 1", () => {
 		const wrapper = getWrapperShallow();
 		const tutorial = wrapper.vm.$i18n.t(
 			"pages.administration.migration.tutorial",
@@ -172,6 +175,57 @@ describe("User Migration / Index", () => {
 		const findText = wrapper.find("[data-testid=migration_tutorial]");
 
 		expect(findText.element.innerHTML).toContain(tutorial);
+	});
+
+	describe("Start user migration", () => {
+		beforeEach(() => {
+			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: undefined });
+			ImportUsersModule.setTotal(0);
+		});
+		afterEach(() => {
+			SchoolsModule.setSchool(schoolMock);
+			ImportUsersModule.setTotal(100);
+		});
+		it("should show hint text that sync can take some time", () => {
+			const wrapper = getWrapperShallow();
+			const tutorialWait = wrapper.vm.$i18n.t(
+				"pages.administration.migration.tutorialWait"
+			);
+			const findText = wrapper.find("[data-testid=migration_tutorial]");
+
+			expect(findText.element.innerHTML).toContain(tutorialWait);
+		});
+		it("should not be possible to go to other steps, if migration not started", () => {
+			const wrapper = getWrapper();
+
+			const stepper = wrapper.find(".stepper");
+			expect(stepper.vm.steps[1].editable).toBe(false);
+			expect(stepper.vm.steps[1].complete).toBe(false);
+			expect(stepper.vm.steps[2].editable).toBe(false);
+			expect(stepper.vm.steps[2].complete).toBe(false);
+			expect(stepper.vm.steps[3].editable).toBe(false);
+			expect(stepper.vm.steps[3].complete).toBe(false);
+			expect(stepper.vm.steps[4].editable).toBe(false);
+			expect(stepper.vm.steps[4].complete).toBe(false);
+		});
+		it("should show button for start inUserMigration", async () => {
+			const wrapper = getWrapper();
+
+			const btn = wrapper.find("[data-testid=start_user_migration]");
+			expect(btn.vm.disabled).toBe(false);
+			const nextBtn = wrapper.find("[data-testid=migration_tutorial_next]");
+			expect(nextBtn.vm).toBe(undefined);
+
+			ImportUsersModule.setTotal(100);
+			SchoolsModule.setSchool({ ...schoolMock, inUserMigration: true });
+			await wrapper.vm.$nextTick();
+
+			const btnRemoved = wrapper.find("[data-testid=start_user_migration]");
+			expect(btnRemoved.vm).toBe(undefined);
+
+			const nextBtn2 = wrapper.find("[data-testid=migration_tutorial_next]");
+			expect(nextBtn2.vm.disabled).toBe(false);
+		});
 	});
 
 	it("should be possible to click on steps 1-3", async () => {
@@ -190,6 +244,9 @@ describe("User Migration / Index", () => {
 
 		expect(stepper.vm.steps[3].editable).toBe(false);
 		expect(stepper.vm.steps[3].complete).toBe(false);
+
+		expect(stepper.vm.steps[4].editable).toBe(false);
+		expect(stepper.vm.steps[4].complete).toBe(false);
 	});
 
 	it("should not be possible to click on steps 2-3 when migration finished", async () => {
@@ -211,7 +268,7 @@ describe("User Migration / Index", () => {
 		expect(stepper.vm.steps[3].complete).toBe(false);
 
 		wrapper.setData({ migrationStep: 1 });
-		const btn = wrapper.find("#migration_tutorial_next");
+		const btn = wrapper.find("#migration_tutorial_skip");
 		btn.trigger("click");
 		await wrapper.vm.$nextTick();
 		expect(stepper.vm.steps[3].isActive).toBe(true);
@@ -320,7 +377,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("perform end maintenance", async () => {
-			const endMaintenanceMock = jest.spyOn(SchoolsModule, "endMaintenance");
+			const endMaintenanceMock = jest.spyOn(
+				SchoolsModule,
+				"migrationStartSync"
+			);
 			endMaintenanceMock.mockImplementation(async () => {
 				SchoolsModule.setSchool({
 					...SchoolsModule.getSchool,
