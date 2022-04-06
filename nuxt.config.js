@@ -28,6 +28,7 @@ module.exports = {
 				/* module options */
 			},
 		],
+		"@nuxtjs/router",
 	],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
@@ -191,6 +192,7 @@ module.exports = {
 	},
 	generate: {
 		dir: "dist/nuxt",
+		routes: ["/"],
 	},
 	vuetify: {
 		customVariables: ["@styles-base/vuetify-custom.scss"],
