@@ -4,7 +4,9 @@
 			dense
 			role="menu"
 			:data-testid="`selected-language-${selectedItem.language}`"
-			:aria-label="`Ausgewählte Sprache ${selectedItem.language}`"
+			:aria-label="`${$t('global.topbar.language.selectedLanguage')} ${
+				selectedItem.language
+			}`"
 			@click.stop.prevent="toggleMenu"
 		>
 			<v-list-item-icon>
