@@ -5,7 +5,7 @@
 			role="menu"
 			:data-testid="`selected-language-${selectedItem.language}`"
 			:aria-label="`${$t('global.topbar.language.selectedLanguage')} ${
-				selectedItem.language
+				selectedItem.translatedName
 			}`"
 			@click.stop.prevent="toggleMenu"
 		>
@@ -13,7 +13,7 @@
 				<v-icon>{{ selectedItem.icon }}</v-icon>
 			</v-list-item-icon>
 			<v-list-item-content>
-				{{ selectedItem.name }}
+				{{ selectedItem.longName }}
 			</v-list-item-content>
 			<v-list-item-action>
 				<v-icon>{{ mdiMenuDown }}</v-icon>
@@ -26,14 +26,14 @@
 				dense
 				role="menuitem"
 				:data-testid="`available-language-${item.language}`"
-				:aria-label="`${selectedItem.language}`"
+				:aria-label="item.translatedName"
 				@click="changeLanguage(item)"
 			>
 				<v-list-item-icon>
 					<v-icon>{{ item.icon }}</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
-					{{ item.name }}
+					{{ item.longName }}
 				</v-list-item-content>
 			</v-list-item>
 		</template>
@@ -83,10 +83,13 @@ export default {
 			window.location.reload();
 		},
 		buildLanguageItem(language) {
-			const name = this.$t(`global.topbar.language.longName.${language}`);
+			const longName = this.$t(`global.topbar.language.longName.${language}`);
+			const translatedName = this.$t(
+				`pages.account.index.user.locale.longName.${language}`
+			);
 			const icon =
 				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
-			return { language, name, icon };
+			return { language, longName, translatedName, icon };
 		},
 	},
 };
