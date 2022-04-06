@@ -6,7 +6,9 @@
 			class="icon-button button is-medium is-text is-icon"
 			data-testid="initials"
 			role="menu"
-			:aria-label="`Aktuelle/r Benutzer:in ${firstName} ${lastName} ${userRole}`"
+			:aria-label="`${$t(
+				'global.topbar.initials.currentUser'
+			)} ${firstName} ${lastName} ${userRole}`"
 			@click="popup"
 		>
 			<div class="icon">{{ initials }}</div>
