@@ -1,9 +1,9 @@
 <template>
-	<div class="popup">
+	<div v-outside-click="removePopup" class="popup">
 		<base-button
-			v-outside-click="removePopup"
 			type="button"
-			class="icon-button button is-medium is-text is-icon"
+			class="icon-button"
+			design="text icon"
 			data-testid="initials"
 			role="menu"
 			:aria-label="`${$t(
@@ -13,7 +13,7 @@
 		>
 			<div class="icon">{{ initials }}</div>
 		</base-button>
-		<div class="popuptext" :class="{ visible }">
+		<div v-if="visible" class="popuptext" data-testid="initials-popup">
 			<div class="username">
 				<span> {{ firstName }} {{ lastName }} ({{ userRole }})</span>
 			</div>
@@ -93,7 +93,7 @@ export default {
 		top: 100%;
 		right: 0%;
 		z-index: var(--layer-top-menu);
-		display: none;
+		display: flex;
 		flex-direction: column;
 		width: 214px;
 		padding: var(--space-xs) 0;
@@ -103,10 +103,6 @@ export default {
 		background-color: var(--color-white);
 		border: 1px solid var(--color-disabled);
 		border-radius: var(--radius-sm);
-
-		&.visible {
-			display: flex;
-		}
 
 		.username {
 			min-height: 40px;
