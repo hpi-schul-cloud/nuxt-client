@@ -75,7 +75,8 @@ describe("@components/templates/LanguageMenu", () => {
 			expect(wrapper.vm.availableItems).toStrictEqual([
 				{
 					language: "en",
-					name: "English",
+					longName: "English",
+					translatedName: "Englisch",
 					icon: "$langIconEn",
 				},
 			]);
@@ -84,7 +85,8 @@ describe("@components/templates/LanguageMenu", () => {
 		it("should provide selected language item", () => {
 			expect(wrapper.vm.selectedItem).toStrictEqual({
 				language: "de",
-				name: "Deutsch",
+				longName: "Deutsch",
+				translatedName: "Deutsch",
 				icon: "$langIconDe",
 			});
 		});
