@@ -88,10 +88,6 @@ export function createRouter() {
 				component: AdminSchoolSettingsPage,
 			},
 			{
-				path: "/administration/school-settings",
-				component: AdminSchoolSettingsPage,
-			},
-			{
 				path: "/content",
 				component: ContentPage,
 			},
