@@ -90,10 +90,12 @@ export function createRouter() {
 			{
 				path: "/content",
 				component: ContentPage,
+				name: "content",
 			},
 			{
 				path: "/content/:id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})",
 				component: ContentDetailsPage,
+				name: "content-id",
 			},
 			{
 				path: "/error/proxy",
@@ -118,6 +120,7 @@ export function createRouter() {
 			{
 				path: "/news/:id([a-z0-9]{24})",
 				component: NewsDetailsPage,
+				name: "news-id",
 			},
 			{
 				path: "/news/new",
@@ -126,6 +129,7 @@ export function createRouter() {
 			{
 				path: "/news/:id([a-z0-9]{24})/edit",
 				component: NewsEditPage,
+				name: "news-id-edit",
 			},
 			{
 				path: "/poc-files",
