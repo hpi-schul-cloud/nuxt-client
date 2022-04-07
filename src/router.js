@@ -36,8 +36,6 @@ import RoomsOverviewPage from "./pages/rooms-overview";
 import RoomsListPage from "./pages/rooms-list";
 
 import TasksPage from "./pages/tasks";
-import TasksAssignedPage from "./pages/tasks/assigned";
-import TasksOpenPage from "./pages/tasks/open";
 
 import ImprintPage from "./pages/imprint";
 
@@ -152,14 +150,6 @@ export function createRouter() {
 			{
 				path: "/tasks",
 				component: TasksPage,
-			},
-			{
-				path: "/tasks/assigned",
-				component: TasksAssignedPage,
-			},
-			{
-				path: "/tasks/open",
-				component: TasksOpenPage,
 			},
 			{
 				path: "/imprint",
