@@ -53,6 +53,7 @@
 <script>
 import EnvConfigModule from "@store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
@@ -96,9 +97,13 @@ export default {
 		schoolError() {
 			return SchoolsModule.getError;
 		},
-		schoolPolicyEnabled: () => EnvConfigModule.getSchoolPolicyEnabled,
+		schoolPolicyEnabled: () =>
+			EnvConfigModule.getSchoolPolicyEnabled && this.hasSchoolEditPermission,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
+		},
+		hasSchoolEditPermission: () => {
+			return AuthModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {

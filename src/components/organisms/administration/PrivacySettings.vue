@@ -74,6 +74,7 @@
 							)
 						"
 						class="ml-1 mt-0"
+						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) => $emit('update-feature-settings', $event, 'messenger')
 						"
@@ -110,6 +111,7 @@
 							)
 						"
 						class="ml-1 mt-0"
+						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) =>
 								$emit('update-feature-settings', $event, 'messengerSchoolRoom')
@@ -137,6 +139,7 @@
 							)
 						"
 						class="ml-1 mt-0"
+						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) =>
 								$emit(
@@ -166,6 +169,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					:disabled="!hasSchoolEditPermission"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
