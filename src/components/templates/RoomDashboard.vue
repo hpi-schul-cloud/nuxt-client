@@ -34,6 +34,7 @@
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
+						@delete-task="openItemDeleteDialog(item.content, item.type)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -56,7 +57,7 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
-						@delete-lesson="openDeleteDialog(item.content)"
+						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
 					/>
 				</div>
 			</draggable>
@@ -125,21 +126,21 @@
 			</template>
 		</vCustomDialog>
 		<v-custom-dialog
-			v-model="lessonDelete.isOpen"
-			data-testid="delete-dialog"
+			v-model="itemDelete.isOpen"
+			data-testid="delete-dialog-item"
 			:size="375"
 			has-buttons
 			confirm-btn-title-key="common.actions.remove"
-			@dialog-confirmed="deleteLesson"
+			@dialog-confirmed="deleteItem"
 		>
 			<h2 slot="title" class="text-h4 my-2">
-				{{ $t("pages.room.lessonsDelete.title") }}
+				{{ $t("pages.room.itemDelete.title") }}
 			</h2>
 			<template slot="content">
 				<p class="text-md mt-2">
 					{{
-						$t("pages.room.lessonsDelete.text", {
-							lessonTitle: lessonDelete.lessonData.name,
+						$t("pages.room.itemDelete.text", {
+							itemTitle: itemDelete.itemData.name,
 						})
 					}}
 				</p>
@@ -153,6 +154,7 @@ import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomModule from "@store/room";
+import TaskModule from "@/store/tasks";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
@@ -178,7 +180,7 @@ export default {
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
 			lessonShare: { isOpen: false, token: "", lessonData: {} },
-			lessonDelete: { isOpen: false, lessonData: {} },
+			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -260,12 +262,18 @@ export default {
 				this.dragInProgress = false;
 			}, this.dragInProgressDelay);
 		},
-		openDeleteDialog(lesson) {
-			this.lessonDelete.lessonData = lesson;
-			this.lessonDelete.isOpen = true;
+		openItemDeleteDialog(itemContent, itemType) {
+			this.itemDelete.itemData = itemContent;
+			this.itemDelete.isOpen = true;
+			this.itemDelete.itemType = itemType;
 		},
-		async deleteLesson() {
-			await RoomModule.deleteLesson(this.lessonDelete.lessonData.id);
+		async deleteItem() {
+			if (this.itemDelete.itemType === this.cardTypes.Task) {
+				await TaskModule.deleteTask(this.itemDelete.itemData.id);
+				await RoomModule.fetchContent(this.roomData.roomId);
+				return Promise.resolve();
+			}
+			await RoomModule.deleteLesson(this.itemDelete.itemData.id);
 		},
 	},
 };

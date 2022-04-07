@@ -95,7 +95,13 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
-import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiFormatListChecks,
+	mdiUndoVariant,
+	mdiTrashCanOutline,
+	mdiContentCopy,
+} from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
@@ -128,6 +134,8 @@ export default {
 				mdiFormatListChecks,
 				mdiPencilOutline,
 				mdiUndoVariant,
+				mdiTrashCanOutline,
+				mdiContentCopy,
 			},
 			defaultTitleColor: "--color-secondary",
 			roles: Roles,
@@ -216,6 +224,21 @@ export default {
 						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiTrashCanOutline,
+					action: () => this.$emit("delete-task"),
+					name: this.$t("common.actions.remove"),
+				});
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
+					name: this.$t("common.actions.copy"),
+				});
 			}
 
 			if (this.role === Roles.Student) {
