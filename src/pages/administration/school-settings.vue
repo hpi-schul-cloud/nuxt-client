@@ -39,7 +39,9 @@
 			<v-row>
 				<v-col>
 					<general-settings></general-settings>
-					<school-policies v-if="schoolPolicyEnabled"></school-policies>
+					<school-policies
+						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
+					></school-policies>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
@@ -97,8 +99,7 @@ export default {
 		schoolError() {
 			return SchoolsModule.getError;
 		},
-		schoolPolicyEnabled: () =>
-			EnvConfigModule.getSchoolPolicyEnabled && this.hasSchoolEditPermission,
+		schoolPolicyEnabled: () => EnvConfigModule.getSchoolPolicyEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},
