@@ -110,6 +110,19 @@ export enum ChangeLanguageParamsLanguageEnum {
 /**
  * 
  * @export
+ * @interface ChangePasswordParams
+ */
+export interface ChangePasswordParams {
+    /**
+     * New password of the user
+     * @type {string}
+     * @memberof ChangePasswordParams
+     */
+    password: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -629,6 +642,62 @@ export interface PatchGroupParams {
 /**
  * 
  * @export
+ * @interface PatchMyAccountParams
+ */
+export interface PatchMyAccountParams {
+    /**
+     * The current user password to authorize the update action.
+     * @type {string}
+     * @memberof PatchMyAccountParams
+     */
+    passwordOld: string;
+    /**
+     * The new password for the current user.
+     * @type {string}
+     * @memberof PatchMyAccountParams
+     */
+    passwordNew?: string | null;
+    /**
+     * The new email address for the current user.
+     * @type {string}
+     * @memberof PatchMyAccountParams
+     */
+    email?: string | null;
+    /**
+     * The new first name for the current user.
+     * @type {string}
+     * @memberof PatchMyAccountParams
+     */
+    firstName?: string | null;
+    /**
+     * The new last name for the current user.
+     * @type {string}
+     * @memberof PatchMyAccountParams
+     */
+    lastName?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface PatchMyPasswordParams
+ */
+export interface PatchMyPasswordParams {
+    /**
+     * The new user password.
+     * @type {string}
+     * @memberof PatchMyPasswordParams
+     */
+    password: string;
+    /**
+     * The confirmed new user password. Must match the password field.
+     * @type {string}
+     * @memberof PatchMyPasswordParams
+     */
+    confirmPassword: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchOrderParams
  */
 export interface PatchOrderParams {
@@ -1066,6 +1135,294 @@ export enum UserMatchResponseRoleNamesEnum {
 export enum UserMatchResponseMatchedByEnum {
     Auto = 'auto',
     Admin = 'admin'
+}
+
+
+/**
+ * AccountApi - axios parameter creator
+ * @export
+ */
+export const AccountApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {ChangePasswordParams} changePasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerChangePassword: async (id: string, changePasswordParams: ChangePasswordParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('accountControllerChangePassword', 'id', id)
+            // verify required parameter 'changePasswordParams' is not null or undefined
+            assertParamExists('accountControllerChangePassword', 'changePasswordParams', changePasswordParams)
+            const localVarPath = `/account/{id}/pw`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changePasswordParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PatchMyPasswordParams} patchMyPasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerReplaceMyPassword: async (patchMyPasswordParams: PatchMyPasswordParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patchMyPasswordParams' is not null or undefined
+            assertParamExists('accountControllerReplaceMyPassword', 'patchMyPasswordParams', patchMyPasswordParams)
+            const localVarPath = `/account/me/password`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchMyPasswordParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PatchMyAccountParams} patchMyAccountParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerUpdateMyAccount: async (patchMyAccountParams: PatchMyAccountParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patchMyAccountParams' is not null or undefined
+            assertParamExists('accountControllerUpdateMyAccount', 'patchMyAccountParams', patchMyAccountParams)
+            const localVarPath = `/account/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchMyAccountParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AccountApi - functional programming interface
+ * @export
+ */
+export const AccountApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AccountApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {ChangePasswordParams} changePasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerChangePassword(id, changePasswordParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {PatchMyPasswordParams} patchMyPasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerReplaceMyPassword(patchMyPasswordParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {PatchMyAccountParams} patchMyAccountParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerUpdateMyAccount(patchMyAccountParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AccountApi - factory interface
+ * @export
+ */
+export const AccountApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AccountApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {ChangePasswordParams} changePasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): AxiosPromise<void> {
+            return localVarFp.accountControllerChangePassword(id, changePasswordParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PatchMyPasswordParams} patchMyPasswordParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): AxiosPromise<void> {
+            return localVarFp.accountControllerReplaceMyPassword(patchMyPasswordParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PatchMyAccountParams} patchMyAccountParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): AxiosPromise<void> {
+            return localVarFp.accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AccountApi - interface
+ * @export
+ * @interface AccountApi
+ */
+export interface AccountApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {ChangePasswordParams} changePasswordParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {PatchMyPasswordParams} patchMyPasswordParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {PatchMyAccountParams} patchMyAccountParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * AccountApi - object-oriented interface
+ * @export
+ * @class AccountApi
+ * @extends {BaseAPI}
+ */
+export class AccountApi extends BaseAPI implements AccountApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {ChangePasswordParams} changePasswordParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerChangePassword(id, changePasswordParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PatchMyPasswordParams} patchMyPasswordParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerReplaceMyPassword(patchMyPasswordParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PatchMyAccountParams} patchMyAccountParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 

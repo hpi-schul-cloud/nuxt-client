@@ -1,14 +1,21 @@
 <template>
-	<div
-		v-outside-click="removePopup"
-		class="popup"
-		data-testid="initials"
-		@click="popup"
-	>
-		<div class="icon">{{ initials }}</div>
-		<div class="popuptext" :class="{ visible }">
+	<div v-outside-click="removePopup" class="popup">
+		<base-button
+			type="button"
+			class="icon-button"
+			design="text icon"
+			data-testid="initials"
+			role="menu"
+			:aria-label="`${$t(
+				'global.topbar.initials.currentUser'
+			)} ${firstName} ${lastName} ${userRole}`"
+			@click="popup"
+		>
+			<div class="icon">{{ initials }}</div>
+		</base-button>
+		<div v-if="visible" class="popuptext" data-testid="initials-popup">
 			<div class="username">
-				<span> {{ firstname }} {{ lastname }} ({{ role }})</span>
+				<span> {{ firstName }} {{ lastName }} ({{ userRole }})</span>
 			</div>
 			<slot />
 		</div>
@@ -18,15 +25,15 @@
 <script>
 export default {
 	props: {
-		firstname: {
+		firstName: {
 			type: String,
-			default: "",
+			default: "Unknown",
 		},
-		lastname: {
+		lastName: {
 			type: String,
-			default: "",
+			default: "Unknown",
 		},
-		role: {
+		userRole: {
 			type: String,
 			default: "",
 		},
@@ -38,7 +45,7 @@ export default {
 	},
 	computed: {
 		initials() {
-			return this.firstname.slice(0, 1) + this.lastname.slice(0, 1);
+			return this.firstName.slice(0, 1) + this.lastName.slice(0, 1);
 		},
 	},
 	methods: {
@@ -58,6 +65,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	width: 40px;
+	min-width: 40px;
 	height: 40px;
 	padding: var(--space-xs-2);
 	font-family: var(--font-accent);
@@ -85,7 +93,7 @@ export default {
 		top: 100%;
 		right: 0%;
 		z-index: var(--layer-top-menu);
-		display: none;
+		display: flex;
 		flex-direction: column;
 		width: 214px;
 		padding: var(--space-xs) 0;
@@ -95,10 +103,6 @@ export default {
 		background-color: var(--color-white);
 		border: 1px solid var(--color-disabled);
 		border-radius: var(--radius-sm);
-
-		&.visible {
-			display: flex;
-		}
 
 		.username {
 			min-height: 40px;
