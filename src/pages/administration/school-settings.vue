@@ -39,7 +39,9 @@
 			<v-row>
 				<v-col>
 					<general-settings></general-settings>
-					<school-policies v-if="schoolPolicyEnabled"></school-policies>
+					<school-policies
+						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
+					></school-policies>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
@@ -53,6 +55,7 @@
 <script>
 import EnvConfigModule from "@store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
@@ -99,6 +102,9 @@ export default {
 		schoolPolicyEnabled: () => EnvConfigModule.getSchoolPolicyEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
+		},
+		hasSchoolEditPermission: () => {
+			return AuthModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {

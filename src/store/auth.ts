@@ -178,6 +178,7 @@ export class Auth extends VuexModule {
 		return this.accesToken || false;
 	}
 
+	// TODO - why are we using toLowerCase() on permissions here?
 	get getUserPermissions() {
 		return this.user?.permissions
 			? this.user.permissions.map((p) => p.toLowerCase())
