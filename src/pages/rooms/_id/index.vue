@@ -163,7 +163,7 @@ export default {
 						{
 							label: this.$t("pages.rooms.fab.add.lesson"),
 							icon: mdiViewListOutline,
-							href: `/courses/${this.roomData.roomId}/topics/add`,
+							href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 							dataTestid: "fab_button_add_lesson",
 							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 						},
