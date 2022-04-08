@@ -34,6 +34,25 @@
 					</v-btn>
 				</div>
 			</div>
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
+					<v-tab>
+						<span class="d-none d-sm-inline" data-testid="learnContent">{{
+							$t("pages.rooms.tabLabel.learnContent")
+						}}</span>
+					</v-tab>
+					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
+						<span class="d-none d-sm-inline" data-testid="tools">{{
+							$t("pages.rooms.tabLabel.tools")
+						}}</span>
+					</v-tab>
+					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=groups`">
+						<span class="d-none d-sm-inline" data-testid="groups">{{
+							$t("pages.rooms.tabLabel.groups")
+						}}</span>
+					</v-tab>
+				</v-tabs>
+			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
@@ -278,7 +297,10 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+@import "@variables";
+
 .course-title {
 	display: inline-block;
 	overflow: hidden;
@@ -287,5 +309,34 @@ export default {
 .modal-text {
 	font-size: var(--space-md);
 	color: var(--color-black);
+}
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+	.tabs-max-width {
+		max-width: var(--size-content-width-max);
+	}
+}
+
+// even out border
+.v-tabs {
+	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	font-family: var(--heading-font-family);
+}
+
+.v-tab {
+	font-size: var(--text-base-size);
+	text-transform: none !important;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+::v-deep .v-slide-group__prev,
+::v-deep .v-slide-group__next {
+	display: none !important;
+}
+
+.border-bottom {
+	margin-right: calc(-1 * var(--space-lg));
+	margin-left: calc(-1 * var(--space-lg));
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

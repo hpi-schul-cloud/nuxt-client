@@ -91,7 +91,7 @@ export default {
 					return;
 				}
 				if (this.item.href) {
-					window.location = this.item.href;
+					window.location = `/rooms/${this.item.id}`;
 				}
 			}
 		},
