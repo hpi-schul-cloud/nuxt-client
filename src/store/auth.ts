@@ -18,6 +18,12 @@ import {
 } from "@/serverApi/v3";
 import { BusinessError, Status } from "./types/commons";
 
+const setCookie = (cname: string, cvalue: string, exdays: number) => {
+	const d = new Date();
+	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+	let expires = "expires=" + d.toUTCString();
+	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
+};
 @Module({
 	name: "auth",
 	namespaced: true,
@@ -172,6 +178,7 @@ export class Auth extends VuexModule {
 		return this.accesToken || false;
 	}
 
+	// TODO - why are we using toLowerCase() on permissions here?
 	get getUserPermissions() {
 		return this.user?.permissions
 			? this.user.permissions.map((p) => p.toLowerCase())
@@ -217,6 +224,7 @@ export class Auth extends VuexModule {
 			});
 			if (response.data.successful === true) {
 				this.setLocale(language);
+				setCookie("USER_LANG", language, 30);
 			}
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);

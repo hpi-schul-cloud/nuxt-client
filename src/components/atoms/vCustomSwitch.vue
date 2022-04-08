@@ -7,6 +7,7 @@
 		flat
 		dense
 		:color="color"
+		v-bind="$attrs"
 		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
 </template>
