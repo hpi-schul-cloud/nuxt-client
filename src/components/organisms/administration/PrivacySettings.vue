@@ -48,7 +48,6 @@
 						)
 					"
 					class="ml-1 mt-0"
-					:disabled="!hasSchoolEditPermission"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
@@ -74,7 +73,6 @@
 							)
 						"
 						class="ml-1 mt-0"
-						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) => $emit('update-feature-settings', $event, 'messenger')
 						"
@@ -111,7 +109,6 @@
 							)
 						"
 						class="ml-1 mt-0"
-						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) =>
 								$emit('update-feature-settings', $event, 'messengerSchoolRoom')
@@ -139,7 +136,6 @@
 							)
 						"
 						class="ml-1 mt-0"
-						:disabled="!hasSchoolEditPermission"
 						@input-changed="
 							($event) =>
 								$emit(
@@ -169,7 +165,6 @@
 						)
 					"
 					class="ml-1 mt-0"
-					:disabled="!hasSchoolEditPermission"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
@@ -212,7 +207,6 @@
 
 <script>
 import EnvConfigModule from "@/store/env-config";
-import AuthModule from "@/store/auth";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 
 export default {
@@ -252,9 +246,6 @@ export default {
 			return this.permissions.student
 				? this.permissions.student.LERNSTORE_VIEW
 				: true;
-		},
-		hasSchoolEditPermission: () => {
-			return AuthModule.getUserPermissions.includes("school_edit");
 		},
 	},
 };
