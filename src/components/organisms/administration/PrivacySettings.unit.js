@@ -1,5 +1,6 @@
 import PrivacySettings from "./PrivacySettings";
 import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 const generateProps = () => ({
 	permissions: {
@@ -425,6 +426,8 @@ describe("PrivacySettings", () => {
 				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
+			AuthModule.addUserPermmission("SCHOOL_EDIT");
+
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -495,6 +498,8 @@ describe("PrivacySettings", () => {
 			EnvConfigModule.setEnvs({
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
+			AuthModule.addUserPermmission("SCHOOL_EDIT");
+
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -562,6 +567,8 @@ describe("PrivacySettings", () => {
 				MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
 				MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
 			});
+			AuthModule.addUserPermmission("SCHOOL_EDIT");
+
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
 					i18n: true,
