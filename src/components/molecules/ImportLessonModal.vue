@@ -3,7 +3,14 @@
 		ref="importDialog"
 		:is-open="isOpen"
 		class="import-dialog"
-		@dialog-closed="$emit('dialog-closed', false)"
+		has-buttons
+		:buttons="['back', 'cancel', 'next']"
+		:next-btn-title-key="nextButtonName"
+		:next-btn-disabled="step === 2 && sharedLessonData.code === ''"
+		@dialog-closed="cancel"
+		@dialog-confirmed.prevent
+		@back="stepBack"
+		@next="nextStep"
 	>
 		<template slot="content" class="import-modal-content">
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
@@ -43,52 +50,19 @@
 						outlined
 						dense
 						class="mt-1 text-field-lesson-code"
-						:rules="[textFieldValidation.required]"
+						:error="businessError.message === 'not-found'"
+						:error-messages="
+							businessError.message === 'not-found'
+								? $t('pages.room.lessonShare.codeError')
+								: ''
+						"
 					></v-text-field>
-					<div v-if="businessError.message === 'not-found'">
-						<v-alert dense outlined type="error" class="code-error">
-							{{ $t("pages.room.lessonShare.codeError") }}
-						</v-alert>
-					</div>
 					<div v-if="businessError.message === 'not-created'">
 						<v-alert dense outlined type="error" class="create-error">
 							{{ $t("pages.room.lessonShare.importError") }}
 						</v-alert>
 					</div>
 				</div>
-			</div>
-			<div class="button-section mt-8">
-				<v-row>
-					<v-col md="4">
-						<v-btn
-							class="dialog-back-button"
-							depressed
-							outlined
-							@click="stepBack"
-						>
-							{{ $t("common.actions.back") }}
-						</v-btn>
-					</v-col>
-					<v-col md="8" class="ml-auto cancel-confirm-button">
-						<v-btn
-							class="dialog-closed"
-							depressed
-							style="background: transparent"
-							@click="cancel"
-						>
-							{{ this.$t("common.actions.cancel") }}
-						</v-btn>
-						<v-btn
-							:disabled="step === 2 && sharedLessonData.code === ''"
-							class="dialog-next"
-							color="primary"
-							depressed
-							@click="nextStep"
-						>
-							{{ nextButtonName }}
-						</v-btn>
-					</v-col>
-				</v-row>
 			</div>
 		</template>
 	</vCustomDialog>
@@ -118,11 +92,8 @@ export default {
 			sharedLessonData: {
 				code: "",
 			},
+			valid: true,
 			mdiCheck,
-			textFieldValidation: {
-				required: (value) =>
-					!!value || this.$t("pages.room.lessonShare.textValidation"),
-			},
 		};
 	},
 	computed: {

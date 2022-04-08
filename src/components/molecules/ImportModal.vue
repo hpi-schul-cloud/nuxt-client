@@ -3,7 +3,17 @@
 		ref="importDialog"
 		:is-open="isOpen"
 		class="import-dialog"
-		@dialog-closed="$emit('dialog-closed', false)"
+		has-buttons
+		:buttons="modalButtons"
+		:next-btn-title-key="nextButtonName"
+		:confirm-btn-title-key="
+			isImportError && step === 3
+				? this.$t('pages.rooms.importCourse.importErrorButton')
+				: nextButtonName
+		"
+		@dialog-closed="cancel"
+		@back="stepBack"
+		@next="nextStep"
 	>
 		<template slot="content" class="import-modal-content">
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
@@ -50,12 +60,13 @@
 						outlined
 						dense
 						class="mt-1 text-field-course-code"
+						:error="businessError.message !== ''"
+						:error-messages="
+							businessError.message !== ''
+								? $t('pages.rooms.importCourse.codeError')
+								: ''
+						"
 					></v-text-field>
-					<div v-if="businessError.message !== ''">
-						<v-alert dense outlined type="error" class="code-error">
-							{{ $t("pages.rooms.importCourse.codeError") }}
-						</v-alert>
-					</div>
 				</div>
 				<div v-if="step === 3">
 					{{ $t("pages.rooms.importCourse.step_3") }}
@@ -73,50 +84,6 @@
 						</v-alert>
 					</div>
 				</div>
-			</div>
-			<div class="button-section mt-8">
-				<v-row v-if="isImportError && step === 3">
-					<v-col class="ml-auto cancel-confirm-button">
-						<v-btn
-							class="dialog-confirmed"
-							color="primary"
-							depressed
-							@click="cancel"
-						>
-							{{ this.$t("pages.rooms.importCourse.importErrorButton") }}
-						</v-btn>
-					</v-col>
-				</v-row>
-				<v-row v-else>
-					<v-col md="4">
-						<v-btn
-							class="dialog-back-button"
-							depressed
-							outlined
-							@click="stepBack"
-						>
-							{{ $t("common.actions.back") }}
-						</v-btn>
-					</v-col>
-					<v-col md="8" class="ml-auto cancel-confirm-button">
-						<v-btn
-							class="dialog-closed"
-							depressed
-							style="background: transparent"
-							@click="cancel"
-						>
-							{{ this.$t("common.actions.cancel") }}
-						</v-btn>
-						<v-btn
-							class="dialog-next"
-							color="primary"
-							depressed
-							@click="nextStep"
-						>
-							{{ nextButtonName }}
-						</v-btn>
-					</v-col>
-				</v-row>
 			</div>
 		</template>
 	</vCustomDialog>
@@ -161,6 +128,11 @@ export default {
 		},
 		businessError() {
 			return RoomsModule.getBusinessError;
+		},
+		modalButtons() {
+			return this.isImportError && this.step === 3
+				? ["confirm"]
+				: ["back", "cancel", "next"];
 		},
 	},
 	methods: {

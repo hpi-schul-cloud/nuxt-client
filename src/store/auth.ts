@@ -11,7 +11,19 @@ import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { School } from "./types/schools";
 import { User } from "@/store/types/auth";
+import {
+	ChangeLanguageParamsLanguageEnum,
+	UserApiFactory,
+	UserApiInterface,
+} from "@/serverApi/v3";
+import { BusinessError, Status } from "./types/commons";
 
+const setCookie = (cname: string, cvalue: string, exdays: number) => {
+	const d = new Date();
+	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+	let expires = "expires=" + d.toUTCString();
+	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
+};
 @Module({
 	name: "auth",
 	namespaced: true,
@@ -72,7 +84,16 @@ export class Auth extends VuexModule {
 		externallyManaged: false,
 	};
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale: string = "de";
+	locale: string = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+
+	businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+	};
+
+	status: Status = "";
+
+	_userApi?: UserApiInterface;
 
 	@Mutation
 	setUser(user: User): void {
@@ -100,6 +121,24 @@ export class Auth extends VuexModule {
 		this.user = null;
 	}
 
+	@Mutation
+	setStatus(status: Status): void {
+		this.status = status;
+	}
+
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+		};
+	}
+
 	get getLocale(): string {
 		if (this.locale) {
 			return this.locale;
@@ -110,7 +149,7 @@ export class Auth extends VuexModule {
 		if (EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
-		return "de";
+		return "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 	}
 
 	get getSchool(): School {
@@ -175,6 +214,24 @@ export class Auth extends VuexModule {
 	}
 
 	@Action
+	async updateUserLanguage(language: ChangeLanguageParamsLanguageEnum) {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			const response = await this.userApi.userControllerChangeLanguage({
+				language,
+			});
+			if (response.data.successful === true) {
+				this.setLocale(language);
+				setCookie("USER_LANG", language, 30);
+			}
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
 	logout(): void {
 		// remove jwt from cookie
 		const date = new Date();
@@ -196,6 +253,17 @@ export class Auth extends VuexModule {
 			}
 		}
 		this.clearAuthData();
+	}
+
+	private get userApi() {
+		if (!this._userApi) {
+			this._userApi = UserApiFactory(
+				undefined,
+				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				$axios
+			);
+		}
+		return this._userApi;
 	}
 }
 

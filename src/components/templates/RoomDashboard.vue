@@ -18,6 +18,7 @@
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
 						:role="role"
+						:room="taskData"
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
@@ -33,6 +34,7 @@
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
+						@delete-task="openItemDeleteDialog(item.content, item.type)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -55,24 +57,7 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
-					/>
-					<room-locked-card
-						v-if="item.type === cardTypes.Lockedtask"
-						:ref="`item_${index}`"
-						:task="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
-								itemName: item.content.name,
-							})
-						"
-						:key-drag="isDragging"
-						class="locked-card"
-						:drag-in-progress="dragInProgress"
-						@move-element="moveByKeyboard"
-						@on-drag="isDragging = !isDragging"
-						@tab-pressed="isDragging = false"
+						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
 					/>
 				</div>
 			</draggable>
@@ -114,27 +99,14 @@
 					@post-lesson="postDraftElement(item.content.id)"
 					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
-				<room-locked-card
-					v-if="item.type === cardTypes.Lockedtask"
-					:ref="`item_${index}`"
-					:task="item.content"
-					:room="lessonData"
-					:aria-label="
-						$t('pages.room.taskCard.aria', {
-							itemType: $t('pages.room.taskCard.label.task'),
-							itemName: item.content.name,
-						})
-					"
-					:key-drag="isDragging"
-					class="locked-card"
-					:drag-in-progress="dragInProgress"
-				/>
 			</div>
 		</div>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
 			class="room-dialog"
+			has-buttons
+			:buttons="['close']"
 			@dialog-closed="lessonShare.isOpen = false"
 		>
 			<div slot="title" class="room-title">
@@ -150,28 +122,39 @@
 				<div>
 					<v-text-field :value="lessonShare.token" outlined></v-text-field>
 				</div>
-				<v-divider class="mb-4"></v-divider>
-				<div class="share-cancel-button">
-					<v-btn
-						class="dialog-back-button"
-						depressed
-						outlined
-						@click="lessonShare.isOpen = false"
-					>
-						{{ $t("common.labels.close") }}
-					</v-btn>
-				</div>
+				<v-divider></v-divider>
 			</template>
 		</vCustomDialog>
+		<v-custom-dialog
+			v-model="itemDelete.isOpen"
+			data-testid="delete-dialog-item"
+			:size="375"
+			has-buttons
+			confirm-btn-title-key="common.actions.remove"
+			@dialog-confirmed="deleteItem"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ $t("pages.room.itemDelete.title") }}
+			</h2>
+			<template slot="content">
+				<p class="text-md mt-2">
+					{{
+						$t("pages.room.itemDelete.text", {
+							itemTitle: itemDelete.itemData.name,
+						})
+					}}
+				</p>
+			</template>
+		</v-custom-dialog>
 	</div>
 </template>
 
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import RoomLockedCard from "@components/molecules/RoomLockedCard.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import RoomModule from "@store/room";
+import TaskModule from "@/store/tasks";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
@@ -180,7 +163,6 @@ export default {
 	components: {
 		RoomTaskCard,
 		RoomLessonCard,
-		RoomLockedCard,
 		vCustomDialog,
 		draggable,
 	},
@@ -197,7 +179,8 @@ export default {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
-			lessonShare: { isOpen: false, token: "123456", lessonData: {} },
+			lessonShare: { isOpen: false, token: "", lessonData: {} },
+			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -207,6 +190,11 @@ export default {
 			return {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
+			};
+		},
+		taskData() {
+			return {
+				roomId: this.roomData.roomId,
 			};
 		},
 		isTouchDevice() {
@@ -273,6 +261,19 @@ export default {
 			setTimeout(() => {
 				this.dragInProgress = false;
 			}, this.dragInProgressDelay);
+		},
+		openItemDeleteDialog(itemContent, itemType) {
+			this.itemDelete.itemData = itemContent;
+			this.itemDelete.isOpen = true;
+			this.itemDelete.itemType = itemType;
+		},
+		async deleteItem() {
+			if (this.itemDelete.itemType === this.cardTypes.Task) {
+				await TaskModule.deleteTask(this.itemDelete.itemData.id);
+				await RoomModule.fetchContent(this.roomData.roomId);
+				return Promise.resolve();
+			}
+			await RoomModule.deleteLesson(this.itemDelete.itemData.id);
 		},
 	},
 };

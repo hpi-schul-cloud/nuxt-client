@@ -31,4 +31,5 @@ export type Envs = {
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
 	LEGACY_COURSE_OVERVIEW_ENABLED?: boolean;
+	FEATURE_USER_MIGRATION_ENABLED?: boolean;
 };

@@ -124,12 +124,12 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[0].trigger("click");
 
 				expect(redirectActionMock).toHaveBeenCalled();
 				expect(redirectActionMock.mock.calls[0][0]).toStrictEqual(
-					"/courses/456/topics/123/edit"
+					"/courses/456/topics/123/edit?returnUrl=rooms/456"
 				);
 			});
 
@@ -151,7 +151,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
 				expect(revertPublishedCardMock).toHaveBeenCalled();
@@ -170,6 +170,21 @@ describe("@components/molecules/RoomLessonCard", () => {
 					}
 				);
 				expect(hasShareMenuItem).toBe(true);
+			});
+
+			it("should emit 'delete-lesson' when delete action button clicked'", async () => {
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const selectorName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.actions.remove"
+				)}`;
+
+				const moreActionButton = wrapper.find(selectorName);
+				await moreActionButton.trigger("click");
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted("delete-lesson");
+				expect(emitted).toHaveLength(1);
 			});
 		});
 		describe("students", () => {

@@ -68,7 +68,7 @@
 									class="link-style"
 									style="color: var(--color-white); text-decoration: underline"
 									to="/"
-									href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=36700189"
+									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
 									:no-styles="true"
 									traget="_blank"

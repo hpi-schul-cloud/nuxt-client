@@ -7,6 +7,10 @@ import taskMissed from "@assets/icons/task-missed.vue";
 import taskMissedFilled from "@assets/icons/task-missed-filled.vue";
 import taskDraft from "@assets/icons/task-draft.vue";
 import taskFinished from "@assets/icons/task-finished.vue";
+import langIconDe from "@assets/icons/lang-icon-de.vue";
+import langIconEn from "@assets/icons/lang-icon-en.vue";
+import langIconEs from "@assets/icons/lang-icon-es.vue";
+import langIconUa from "@assets/icons/lang-icon-ua.vue";
 
 export default {
 	theme: {
@@ -51,6 +55,18 @@ export default {
 			},
 			taskFinished: {
 				component: taskFinished,
+			},
+			langIconDe: {
+				component: langIconDe,
+			},
+			langIconEn: {
+				component: langIconEn,
+			},
+			langIconEs: {
+				component: langIconEs,
+			},
+			langIconUa: {
+				component: langIconUa,
 			},
 		},
 	},
