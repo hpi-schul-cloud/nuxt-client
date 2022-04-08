@@ -129,7 +129,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 				expect(redirectActionMock).toHaveBeenCalled();
 				expect(redirectActionMock.mock.calls[0][0]).toStrictEqual(
-					"/courses/456/topics/123/edit"
+					"/courses/456/topics/123/edit?returnUrl=rooms/456"
 				);
 			});
 

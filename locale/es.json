@@ -610,8 +610,6 @@
 	"pages.tasks.subtitleTopic": "Tema",
 	"pages.tasks.subtitleAssigned": "Tareas asignadas",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
-	"pages.tasks.student.title": "Tareas abiertas",
-	"pages.tasks.teacher.subtitleAssigned": "Tareas abiertas con fecha límite",
 	"pages.tasks.teacher.subtitleNoDue": "Tareas abiertas sin fecha límite",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.tasks.teacher.open.emptyState.subtitle": "Has calificado todas las tareas. ¡Disfruta de tu tiempo libre!",
