@@ -86,7 +86,7 @@ export default {
 			if (!this.condenseLayout) {
 				if (this.item.to) {
 					this.$router.push({
-						path: this.item.to,
+						path: `/rooms/${this.item.id}`,
 					});
 					return;
 				}
