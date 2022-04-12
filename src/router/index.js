@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import { routes } from "./routes";
-// import { scrollBehavior } from "./scrollBehavior";
 
 Vue.use(Router);
 
@@ -11,7 +10,6 @@ export function createRouter() {
 		base: "/",
 		linkActiveClass: "nuxt-link-active",
 		linkExactActiveClass: "nuxt-link-exact-active",
-		// scrollBehavior,
 		routes,
 		fallback: false,
 	});

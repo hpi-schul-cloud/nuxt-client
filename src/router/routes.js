@@ -1,11 +1,9 @@
-import { RouteConfig } from "vue-router";
-
-const REGEX_ID = "";
-// const REGEX_UUID =
-// 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+const REGEX_ID = "[a-z0-9]{24}";
+const REGEX_UUID =
+	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
 
-export const routes: RouteConfig[] = [
+export const routes = [
 	{
 		path: "/content",
 		component: () => import("../pages/content/index.vue"),
@@ -117,15 +115,15 @@ export const routes: RouteConfig[] = [
 		name: "activation-activationCode",
 	},
 	{
-		path: `/content/:id(${REGEX_ID})`,
+		path: `/content/:id(${REGEX_UUID})`,
 		component: () => import("../pages/content/_id/index.vue"),
 		name: "content-id",
 	},
-	// {
-	// 	path: `/mint-ec/:article?(${REGEX_ID})`,
-	// 	component: () => import("../pages/mint-ec/_article.vue"),
-	// 	name: "mint-ec-article",
-	// },
+	{
+		path: `/mint-ec/:article?(${REGEX_ID})`,
+		component: () => import("../pages/mint-ec/_article.vue"),
+		name: "mint-ec-article",
+	},
 	{
 		path: `/news/:id(${REGEX_ID})`,
 		component: () => import("../pages/news/_id/index.vue"),
