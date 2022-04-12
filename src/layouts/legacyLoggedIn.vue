@@ -85,7 +85,7 @@ export default {
 							{
 								label: this.$t("global.topbar.actions.help"),
 								icon: "question-circle",
-								action: "/help",
+								action: "/help/articles",
 								source: "fa",
 								target: "_self",
 							},
@@ -98,7 +98,7 @@ export default {
 							{
 								label: this.$t("global.topbar.actions.contactSupport"),
 								icon: "pencil",
-								action: "/help?activeForm=team#contact-form",
+								action: "/help/contact",
 								source: "fa",
 								target: "_self",
 							},
