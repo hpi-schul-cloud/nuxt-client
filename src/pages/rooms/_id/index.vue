@@ -28,25 +28,28 @@
 						class="back-button"
 						outlined
 						small
-						:href="`/courses/${roomData.roomId}`"
-						:data-testid="`room-${roomData.roomId}`"
-						>{{ $t("pages.rooms.headerSection.legacyView") }}
+						:href="`/files/courses/${roomData.roomId}`"
+						:data-testid="`room-${roomData.roomId}-files`"
+						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab>
+						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
 						<span class="d-none d-sm-inline" data-testid="learnContent">{{
 							$t("pages.rooms.tabLabel.learnContent")
 						}}</span>
 					</v-tab>
 					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
+						<v-icon class="tab-icon mr-sm-3">fa-puzzle-piece</v-icon>
 						<span class="d-none d-sm-inline" data-testid="tools">{{
 							$t("pages.rooms.tabLabel.tools")
 						}}</span>
 					</v-tab>
 					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=groups`">
+						<v-icon class="tab-icon mr-sm-3">fa-users</v-icon>
 						<span class="d-none d-sm-inline" data-testid="groups">{{
 							$t("pages.rooms.tabLabel.groups")
 						}}</span>
@@ -315,6 +318,10 @@ export default {
 	.tabs-max-width {
 		max-width: var(--size-content-width-max);
 	}
+}
+
+.tab-icon {
+	fill: currentColor;
 }
 
 // even out border

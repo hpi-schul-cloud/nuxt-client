@@ -666,7 +666,7 @@
 	"pages.news.title": "News",
 	"pages.rooms.title": "Search course",
 	"pages.rooms.index.search.label": "Search course",
-	"pages.rooms.headerSection.legacyView": "To the classic view",
+	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.tabLabel.learnContent": "Learning content",
 	"pages.rooms.tabLabel.tools": "Tools",
 	"pages.rooms.tabLabel.groups": "Groups",

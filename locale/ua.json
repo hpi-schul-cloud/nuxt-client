@@ -706,7 +706,7 @@
 	"pages.rooms.fab.import.lesson": "Імпортувати тему",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.ariaLabel": "Список поточних {itemCount} елементів курсів",
-	"pages.rooms.headerSection.legacyView": "До класичного режиму перегляду",
+	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
 	"pages.rooms.importCourse.btn.confirm": "Імпорт",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",

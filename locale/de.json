@@ -671,7 +671,7 @@
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
 	"pages.rooms.index.search.label": "Kurs suchen",
-	"pages.rooms.headerSection.legacyView": "Zur klassischen Ansicht",
+	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
 	"pages.rooms.tabLabel.learnContent": "Lerninhalte",
 	"pages.rooms.tabLabel.tools": "Tools",
 	"pages.rooms.tabLabel.groups": "Gruppen",

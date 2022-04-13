@@ -671,7 +671,7 @@
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
 	"pages.rooms.index.search.label": "Buscar curso",
-	"pages.rooms.headerSection.legacyView": "A la vista clásica",
+	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
 	"pages.rooms.tabLabel.learnContent": "Contenidos de aprendizaje",
 	"pages.rooms.tabLabel.tools": "Herramientas",
 	"pages.rooms.tabLabel.groups": "Grupos",
