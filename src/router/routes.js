@@ -50,7 +50,7 @@ export const routes = [
 		name: "tasks",
 	},
 	{
-		path: "/TermsOfUse",
+		path: "/termsofuse",
 		component: () => import("../pages/TermsOfUse.vue"),
 		name: "TermsOfUse",
 	},
