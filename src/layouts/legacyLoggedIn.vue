@@ -85,7 +85,7 @@ export default {
 							{
 								label: this.$t("global.topbar.actions.help"),
 								icon: "question-circle",
-								action: "/help/articles",
+								action: "/help",
 								source: "fa",
 								target: "_self",
 							},

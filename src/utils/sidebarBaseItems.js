@@ -179,7 +179,7 @@ export default [
 	},
 	{
 		title: "global.sidebar.helpArea",
-		href: "/help/articles",
+		href: "/help/",
 		icon: "question-circle",
 		testId: "Hilfebereich",
 	},
