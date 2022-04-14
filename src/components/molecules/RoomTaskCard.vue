@@ -15,9 +15,7 @@
 		<v-card-text>
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
-					<v-icon size="14">{{
-						icons.mdiFormatListChecks
-					}}</v-icon>
+					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">

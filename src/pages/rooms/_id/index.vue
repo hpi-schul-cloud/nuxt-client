@@ -226,7 +226,10 @@ export default {
 					icon: this.icons.mdiSquareEditOutline,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
-					name: this.$t("common.actions.edit") + "/" + this.$t("common.actions.remove"),
+					name:
+						this.$t("common.actions.edit") +
+						"/" +
+						this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
 				{
