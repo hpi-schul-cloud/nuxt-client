@@ -750,5 +750,53 @@ describe("room module", () => {
 				expect(roomModule.getError).toStrictEqual(errorData);
 			});
 		});
+		describe("roomIsEmpty", () => {
+			it("should return false if there are any elements in the room", () => {
+				const roomModule = new Room({});
+				const testData = {
+					id: "123",
+					courseName: "Sample Course",
+					displayColor: "black",
+					elements: [
+						{
+							type: "task",
+							content: {
+								courseName: "Mathe",
+								id: "59cce1d381297026d02cdc4b",
+								name: "Private Aufgabe von Marla - mit Kurs, offen",
+								createdAt: "2017-09-28T11:49:39.924Z",
+								updatedAt: "2017-09-28T11:49:39.924Z",
+								status: {
+									submitted: 0,
+									maxSubmissions: 2,
+									graded: 0,
+									isDraft: false,
+									isSubstitutionTeacher: false,
+								},
+								availableDate: "2017-09-20T11:00:00.000Z",
+								duedate: "2300-09-28T13:00:00.000Z",
+								displayColor: "#54616e",
+								description: "",
+							},
+						},
+					],
+				};
+				roomModule.setRoomData(testData as any);
+				const result = roomModule.roomIsEmpty;
+				expect(result).toStrictEqual(false);
+			});
+			it("should return true if there are no elements in the room", () => {
+				const roomModule = new Room({});
+				const testData = {
+					id: "123",
+					courseName: "Sample Course",
+					displayColor: "black",
+					elements: [],
+				};
+				roomModule.setRoomData(testData as any);
+				const result = roomModule.roomIsEmpty;
+				expect(result).toStrictEqual(true);
+			});
+		});
 	});
 });

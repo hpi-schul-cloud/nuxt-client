@@ -315,6 +315,9 @@ export class Room extends VuexModule {
 	get getCourseShareToken(): string {
 		return this.courseShareToken;
 	}
+	get roomIsEmpty(): boolean {
+		return this.roomData.elements.length === 0;
+	}
 }
 
 export default getModule(Room);
