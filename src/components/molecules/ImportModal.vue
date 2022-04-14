@@ -124,7 +124,7 @@ export default {
 		nextButtonName() {
 			if (this.step < 3)
 				return this.$t("pages.rooms.importCourse.btn.continue");
-			return this.$t("pages.rooms.importCourse.btn.confirm");
+			return this.$t("common.actions.import");
 		},
 		businessError() {
 			return RoomsModule.getBusinessError;

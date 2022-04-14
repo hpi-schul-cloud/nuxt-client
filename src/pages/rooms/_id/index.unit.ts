@@ -191,25 +191,25 @@ describe("@pages/rooms/_id/index.vue", () => {
 			expect(menuItems).toHaveLength(2);
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.editDelete"),
+					wrapper.vm.$i18n.t("common.actions.edit") + "/" + wrapper.vm.$i18n.t("common.actions.remove"),
 					menuItems
 				)
 			).toBe(true);
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.invite"),
+					wrapper.vm.$i18n.t("common.actions.invite"),
 					menuItems
 				)
 			).toBe(true);
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate"),
+					wrapper.vm.$i18n.t("common.actions.duplicate"),
 					menuItems
 				)
 			).toBe(false);
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share"),
+					wrapper.vm.$i18n.t("common.actions.share"),
 					menuItems
 				)
 			).toBe(false);
@@ -223,7 +223,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.share"),
+					wrapper.vm.$i18n.t("common.actions.share"),
 					menuItems
 				)
 			).toBe(true);
@@ -237,7 +237,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("pages.room.courseTitleMenu.duplicate"),
+					wrapper.vm.$i18n.t("common.actions.duplicate"),
 					menuItems
 				)
 			).toBe(true);

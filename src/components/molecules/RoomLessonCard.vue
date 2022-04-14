@@ -33,7 +33,6 @@
 					.split(' ')
 					.join('-')}`"
 				text
-				:color="titleColor"
 				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn

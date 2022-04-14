@@ -14,8 +14,8 @@
 	>
 		<v-card-text>
 			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
-					<v-icon size="20" :color="task.displayColor" dark>{{
+				<div class="title-section" tabindex="0">
+					<v-icon size="14">{{
 						icons.mdiFormatListChecks
 					}}</v-icon>
 					{{ cardTitle(task.duedate) }}
@@ -27,7 +27,7 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary">{{ task.name }}</div>
+			<div class="text-h6 text--primary mb-2">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
 				v-if="canShowDescription"
@@ -40,7 +40,7 @@
 			<div class="chip-items-group">
 				<div
 					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -53,7 +53,7 @@
 				</div>
 				<div
 					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -66,7 +66,7 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0 overdue"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0 overdue"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -83,7 +83,6 @@
 					.split(' ')
 					.join('-')}`"
 				text
-				:color="titleColor"
 				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
@@ -137,7 +136,6 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--color-secondary",
 			roles: Roles,
 			canShowDescription: false,
 		};
@@ -318,7 +316,6 @@ export default {
 		text-align: left;
 	}
 	.title-section {
-		color: var(--color-primary);
 		text-align: left;
 	}
 	.dot-menu-section {
@@ -336,7 +333,7 @@ export default {
 		text-align: center;
 		border-radius: var(--radius-sm);
 		.chip-value {
-			font-size: var(--text-sm);
+			font-size: var(--text-xs);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}

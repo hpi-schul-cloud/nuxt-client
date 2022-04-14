@@ -118,7 +118,7 @@ import {
 	mdiFormatListChecks,
 	mdiCloudDownload,
 	mdiSquareEditOutline,
-	mdiEmail,
+	mdiEmailPlusOutline,
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
@@ -151,7 +151,7 @@ export default {
 			},
 			icons: {
 				mdiSquareEditOutline,
-				mdiEmail,
+				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
 			},
@@ -226,13 +226,13 @@ export default {
 					icon: this.icons.mdiSquareEditOutline,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
-					name: this.$t("pages.room.courseTitleMenu.editDelete"),
+					name: this.$t("common.actions.edit") + "/" + this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
 				{
-					icon: this.icons.mdiEmail,
+					icon: this.icons.mdiEmailPlusOutline,
 					action: () => this.inviteCourse(),
-					name: this.$t("pages.room.courseTitleMenu.invite"),
+					name: this.$t("common.actions.invite"),
 					dataTestId: "title-menu-invite",
 				},
 			];
@@ -242,7 +242,7 @@ export default {
 					icon: this.icons.mdiContentCopy,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/copy`),
-					name: this.$t("pages.room.courseTitleMenu.duplicate"),
+					name: this.$t("common.actions.duplicate"),
 					dataTestId: "title-menu-copy",
 				});
 			}
@@ -250,7 +250,7 @@ export default {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
-					name: this.$t("pages.room.courseTitleMenu.share"),
+					name: this.$t("common.actions.share"),
 					dataTestId: "title-menu-share",
 				});
 			}
