@@ -1,20 +1,20 @@
 <template>
 	<div>
 		<v-dialog
-			v-model="dialogEdit"
-			large
-			max-width="900px"
-			@click:outside="editedItem = defaultItem"
+        v-model="dialogEdit"
+        large
+        max-width="900px"
+        @click:outside="editedItem = defaultItem"
 		>
-			<v-import-users-match-search
-				v-if="dialogEdit"
-				:edited-item="editedItem"
-				:is-dialog="true"
-				@close="closeEdit"
-				@saved-match="savedMatch"
-				@deleted-match="deletedMatch"
-				@saved-flag="savedFlag"
-			></v-import-users-match-search>
+      <v-import-users-match-search
+          v-if="dialogEdit"
+          :edited-item="editedItem"
+          :is-dialog="true"
+          @close="closeEdit"
+          @saved-match="savedMatch"
+          @deleted-match="deletedMatch"
+          @saved-flag="savedFlag"
+      ></v-import-users-match-search>
 		</v-dialog>
 
 		<v-alert
@@ -216,27 +216,35 @@
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: this.$theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
-					})
-				}}
+            source: $t("pages.administration.migration.ldapSource"),
+          })
+        }}
 
-				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
-				{{
-					$t("components.organisms.importUsers.legendAdminMatched", {
-						instance: this.$theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
-					})
-				}}
-				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
-				{{
-					$t("components.organisms.importUsers.legendAutoMatched", {
-						instance: this.$theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
-					})
-				}}
-			</p>
+        <br/>
+        <v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
+        {{
+          $t("components.organisms.importUsers.legendAdminMatched", {
+            instance: this.$theme.short_name,
+            source: $t("pages.administration.migration.ldapSource"),
+          })
+        }}
+        <br/>
+        <v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
+        {{
+          $t("components.organisms.importUsers.legendAutoMatched", {
+            instance: this.$theme.short_name,
+            source: $t("pages.administration.migration.ldapSource"),
+          })
+        }}
+        <br/>
+        <v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
+        {{
+          $t("components.organisms.importUsers.legendFlag", {
+            instance: this.$theme.short_name,
+            source: $t("pages.administration.migration.ldapSource"),
+          })
+        }}
+      </p>
 			<v-divider></v-divider>
 			<br />
 		</div>
