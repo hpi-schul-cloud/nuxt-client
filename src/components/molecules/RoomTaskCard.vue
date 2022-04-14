@@ -249,9 +249,9 @@ export default {
 				? this.$t("pages.room.taskCard.label.noDueDate")
 				: `${this.$t(
 						"pages.room.taskCard.label.due"
-				  )} - ${printDateFromStringUTC(dueDate)}`;
+				  )} ${printDateFromStringUTC(dueDate)}`;
 
-			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
+			return `${this.$t("pages.room.taskCard.label.task")} – ${dueTitle}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
