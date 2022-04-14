@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
+import EnvConfigModule from "@/store/env-config";
 
 declare var createComponentMocks: Function;
 
@@ -93,7 +94,9 @@ describe("vRoomAvatar", () => {
 		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
-	it("should redirect to room page", async () => {
+	it("should redirect to room page if env-variable is set", async () => {
+		// @ts-ignore
+		EnvConfigModule.setEnvs({ ROOM_VIEW_ENABLED: true });
 		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
@@ -102,7 +105,9 @@ describe("vRoomAvatar", () => {
 		expect(location.pathname).toStrictEqual("/rooms/456");
 	});
 
-	it("should redirect to room page if keyboard event triggered", async () => {
+	it("should redirect to room page if keyboard event triggered and env-variable is set", async () => {
+		// @ts-ignore
+		EnvConfigModule.setEnvs({ ROOM_VIEW_ENABLED: true });
 		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
