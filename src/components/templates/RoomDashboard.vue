@@ -228,8 +228,8 @@ export default {
 			return {
 				image,
 				title,
-			}
-		}
+			};
+		},
 	},
 	created() {
 		if (this.isTouchDevice) {
