@@ -48,7 +48,7 @@ const federalState = {
 const generateMockStore = {
 	"env-config": {
 		getters: {
-			getAdminToggleStudentVisibilityEnabled: () => {
+			getTeacherStudentVisibilityIsConfigurable: () => {
 				return true;
 			},
 			getAdminToggleStudentLernstoreViewEnabled: () => {
