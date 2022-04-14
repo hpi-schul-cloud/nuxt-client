@@ -247,9 +247,9 @@ export default {
 		cardTitle(dueDate) {
 			const dueTitle = !dueDate
 				? this.$t("pages.room.taskCard.label.noDueDate")
-				: `${this.$t(
-						"pages.room.taskCard.label.due"
-				  )} ${printDateFromStringUTC(dueDate)}`;
+				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
+						dueDate
+				  )}`;
 
 			return `${this.$t("pages.room.taskCard.label.task")} – ${dueTitle}`;
 		},
