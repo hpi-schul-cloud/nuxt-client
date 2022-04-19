@@ -61,12 +61,6 @@
 					/>
 				</div>
 			</draggable>
-			<v-custom-empty-state
-				v-if="roomIsEmpty"
-				:image="emptyState.image"
-				:title="emptyState.title"
-				class="mt-16"
-			/>
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
@@ -106,13 +100,13 @@
 					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
 			</div>
-			<v-custom-empty-state
-				v-if="roomIsEmpty"
-				:image="emptyState.image"
-				:title="emptyState.title"
-				class="mt-16"
-			/>
 		</div>
+		<v-custom-empty-state
+			v-if="roomIsEmpty"
+			:image="emptyState.image"
+			:title="emptyState.title"
+			class="mt-16"
+		/>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
