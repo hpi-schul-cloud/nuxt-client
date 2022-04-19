@@ -26,7 +26,7 @@
 			{{ $t("pages.administration.migration.cannotStart") }}
 		</v-alert>
 
-		<v-container v-else>
+		<div v-else>
 			<v-data-table
 				v-if="canStartMigration"
 				:headers="tableHead"
@@ -239,7 +239,7 @@
 			</p>
 			<v-divider></v-divider>
 			<br />
-		</v-container>
+		</div>
 	</div>
 </template>
 
@@ -257,6 +257,7 @@ import {
 	mdiPencil,
 } from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import ImportUserModule from "@store/import-users";
 
 export default {
 	components: {
@@ -372,6 +373,9 @@ export default {
 		school() {
 			return schoolsModule.getSchool;
 		},
+		total() {
+			return ImportUserModule.getTotal;
+		},
 	},
 	watch: {
 		dialogEdit(val) {
@@ -403,6 +407,11 @@ export default {
 		},
 		searchFlagged() {
 			this.searchApi();
+		},
+		async total(val) {
+			if (val > 0) {
+				await this.searchApi();
+			}
 		},
 	},
 	methods: {

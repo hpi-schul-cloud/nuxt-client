@@ -43,9 +43,15 @@
 </template>
 
 <script>
-import { mdiPencilOutline, mdiUndoVariant } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiUndoVariant,
+	mdiShareVariant,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -73,6 +79,8 @@ export default {
 			icons: {
 				mdiPencilOutline,
 				mdiUndoVariant,
+				mdiShareVariant,
+				mdiTrashCanOutline,
 			},
 			defaultTitleColor: "--color-secondary",
 		};
@@ -116,7 +124,7 @@ export default {
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
-							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit`
+							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit?returnUrl=rooms/${this.room.roomId}`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
@@ -128,6 +136,20 @@ export default {
 						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
+
+				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.$emit("open-modal", this.lesson.id),
+						name: this.$t("pages.room.lessonCard.label.share"),
+					});
+				}
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiTrashCanOutline,
+					action: () => this.$emit("delete-lesson"),
+					name: this.$t("common.actions.remove"),
+				});
 			}
 
 			if (this.role === Roles.Student) {

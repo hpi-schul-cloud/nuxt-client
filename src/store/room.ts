@@ -8,6 +8,8 @@ import {
 	PatchOrderParams,
 } from "../serverApi/v3/api";
 import { BusinessError } from "./types/commons";
+import { SharedLessonObject } from "./types/room";
+import { nanoid } from "nanoid";
 
 @Module({
 	name: "room",
@@ -28,6 +30,14 @@ export default class RoomModule extends VuexModule {
 		message: "",
 		error: {},
 	};
+	sharedLessonData: SharedLessonObject = {
+		code: "",
+		lessonName: "",
+		status: "",
+		message: "",
+	};
+	private courseInvitationLink: string = "";
+	private courseShareToken: string = "";
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -94,6 +104,138 @@ export default class RoomModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async fetchSharedLesson(lessonId: string): Promise<void> {
+		try {
+			const lessonShareResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			if (!lessonShareResult.shareToken) {
+				lessonShareResult.shareToken = nanoid(9);
+				await $axios.$patch(
+					`/v1/lessons/${lessonShareResult._id}`,
+					lessonShareResult
+				);
+			}
+			this.setSharedLessonData({
+				code: lessonShareResult.shareToken,
+				lessonName: lessonShareResult.name,
+				status: "",
+				message: "",
+			});
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async confirmImportLesson(shareToken: string): Promise<void> {
+		try {
+			this.resetBusinessError();
+			const lesson = await $axios.$get("/v1/lessons", {
+				params: { shareToken },
+			});
+
+			if (!lesson.data.length) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-found",
+				});
+				return;
+			}
+
+			const copiedLesson = await $axios.$post("/v1/lessons/copy", {
+				lessonId: lesson.data[0]._id,
+				newCourseId: this.roomData.roomId,
+				shareToken,
+			});
+
+			if (!copiedLesson) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-created",
+				});
+				return;
+			}
+			await this.fetchContent(this.roomData.roomId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async deleteLesson(lessonId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const deletedLessonData = await $axios.$delete(`/v1/lessons/${lessonId}`);
+			if (!deletedLessonData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-deleted",
+				});
+			}
+
+			await this.fetchContent(this.roomData.roomId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createCourseInvitation(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const invitationData = await $axios.$post("/v1/link", {
+				target: `${window.location.origin}/courses/${courseId}/addStudent`,
+			});
+			if (!invitationData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-generated",
+				});
+			}
+			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
+			this.setCourseInvitationLink(invitationLink);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createCourseShareToken(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const result = await $axios.$get(`/v1/courses-share/${courseId}`);
+			if (!result.shareToken) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "not-generated",
+				});
+			}
+			this.setCourseShareToken(result.shareToken);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -123,6 +265,21 @@ export default class RoomModule extends VuexModule {
 		};
 	}
 
+	@Mutation
+	setSharedLessonData(payload: SharedLessonObject): void {
+		this.sharedLessonData = payload;
+	}
+
+	@Mutation
+	setCourseInvitationLink(payload: string): void {
+		this.courseInvitationLink = payload;
+	}
+
+	@Mutation
+	setCourseShareToken(payload: string): void {
+		this.courseShareToken = payload;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -137,5 +294,16 @@ export default class RoomModule extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
+	}
+
+	get getSharedLessonData(): SharedLessonObject {
+		return this.sharedLessonData;
+	}
+
+	get getCourseInvitationLink(): string {
+		return this.courseInvitationLink;
+	}
+	get getCourseShareToken(): string {
+		return this.courseShareToken;
 	}
 }

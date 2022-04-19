@@ -132,7 +132,7 @@ import RoomModal from "@components/molecules/RoomModal";
 import ImportModal from "@components/molecules/ImportModal";
 import { authModule, envConfigModule, roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import { mdiMagnify, mdiPlus, mdiCloudDownload } from "@mdi/js";
+import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
 export default {
 	components: {
@@ -184,22 +184,22 @@ export default {
 				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					return {
 						icon: mdiPlus,
-						title: this.$t("common.labels.course"),
-						ariaLabel: this.$t("pages.courses.new.title"),
+						title: this.$t("common.actions.create"),
+						ariaLabel: this.$t("common.actions.create"),
 						testId: "add-course-button",
 						actions: [
 							{
-								label: this.$t("pages.rooms.fab.add"),
-								icon: mdiPlus,
+								label: this.$t("pages.rooms.fab.add.course"),
+								icon: mdiSchool,
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.aria"),
+								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
 							{
-								label: this.$t("pages.rooms.fab.import"),
+								label: this.$t("pages.rooms.fab.import.course"),
 								icon: mdiCloudDownload,
 								dataTestid: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import"),
+								ariaLabel: this.$t("pages.rooms.fab.import.course"),
 								customEvent: {
 									name: "fabButtonEvent",
 									value: true,
@@ -210,9 +210,9 @@ export default {
 				}
 				return {
 					icon: mdiPlus,
-					title: this.$t("common.labels.course"),
+					title: this.$t("common.actions.create"),
 					href: "/courses/add",
-					ariaLabel: this.$t("pages.courses.new.title"),
+					ariaLabel: this.$t("common.actions.create"),
 					testId: "add-course-button",
 				};
 			}

@@ -1,8 +1,10 @@
 import SchoolsModule from "./schools";
+import ImportUsersModule from "@store/import-users";
 import { initializeAxios } from "@utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
+import * as serverApi from "@/serverApi/v3/api";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -411,76 +413,176 @@ describe("schools module", () => {
 		});
 
 		describe("endMaintenance", () => {
+			let importUserModule: ImportUsersModule;
+			let spy: any;
+			let mockApi: any;
+			let schoolsModule: SchoolsModule;
+			let setLoadingSpy: jest.SpyInstance;
+			let setErrorSpy: jest.SpyInstance;
+			let setSchoolSpy: jest.SpyInstance;
 			beforeEach(() => {
-				receivedRequests = [];
+				importUserModule = new ImportUsersModule({});
+				schoolsModule = new SchoolsModule({});
+				spy = jest.spyOn(serverApi, "UserImportApiFactory");
+				mockApi = {
+					importUserControllerEndSchoolInMaintenance: jest.fn(() => {}),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+				setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+			});
+			afterEach((done) => {
+				done();
+				spy.mockRestore();
+				setLoadingSpy.mockRestore();
+				setErrorSpy.mockRestore();
+				setSchoolSpy.mockRestore();
 			});
 			it("should not call backend if inMaintenance is false", async () => {
-				initializeAxios({
-					$patch: async (path: string) => {
-						receivedRequests.push({ path });
-						return {};
-					},
-				} as NuxtAxiosInstance);
-
-				const schoolsModule = new SchoolsModule({});
-
-				await schoolsModule.endMaintenance();
 				schoolsModule.setSchool({
 					...mockSchool,
 					inMaintenance: false,
 				});
-
-				expect(receivedRequests.length).toBe(0);
+				await schoolsModule.migrationStartSync();
+				expect(
+					mockApi.importUserControllerEndSchoolInMaintenance
+				).not.toHaveBeenCalled();
 			});
 			it("should call backend and set state correctly", async () => {
-				initializeAxios({
-					$patch: async (path: string) => {
-						receivedRequests.push({ path });
-						return {};
-					},
-				} as NuxtAxiosInstance);
-
-				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					inMaintenance: true,
 				});
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+				await schoolsModule.migrationStartSync();
 
-				await schoolsModule.endMaintenance();
-
-				expect(receivedRequests.length).toBe(1);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/schools/mockSchoolId"
-				);
 				expect(setLoadingSpy).toHaveBeenCalled();
-
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setSchoolSpy).toHaveBeenCalled();
-				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+
+				expect(
+					mockApi.importUserControllerEndSchoolInMaintenance
+				).toHaveBeenCalledTimes(1);
+				expect(setSchoolSpy).toHaveBeenCalledTimes(2);
+				expect(setSchoolSpy.mock.calls[1][0]).toStrictEqual({
+					...mockSchool,
+					inMaintenance: false,
+				});
 			});
 			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					$patch: async (path: string) => {
-						throw new Error("");
-						return;
-					},
-				} as NuxtAxiosInstance);
-
-				const schoolsModule = new SchoolsModule({});
+				const error = { statusCode: "500", message: "foo" };
+				mockApi = {
+					importUserControllerEndSchoolInMaintenance: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
 				schoolsModule.setSchool({
 					...mockSchool,
 					inMaintenance: true,
 				});
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
-				await schoolsModule.endMaintenance();
+				await schoolsModule.migrationStartSync();
 
-				expect(receivedRequests.length).toBe(0);
+				expect(
+					mockApi.importUserControllerEndSchoolInMaintenance
+				).toHaveBeenCalledTimes(1);
+
+				expect(setErrorSpy).toHaveBeenCalled();
+				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+		});
+		describe("Set school in user migration mode", () => {
+			let importUserModule: ImportUsersModule;
+			let spy: any;
+			let mockApi: any;
+			let schoolsModule: SchoolsModule;
+			let setLoadingSpy: jest.SpyInstance;
+			let setErrorSpy: jest.SpyInstance;
+			let setSchoolSpy: jest.SpyInstance;
+			beforeEach(() => {
+				importUserModule = new ImportUsersModule({});
+				schoolsModule = new SchoolsModule({});
+				spy = jest.spyOn(serverApi, "UserImportApiFactory");
+				mockApi = {
+					importUserControllerStartSchoolInUserMigration: jest.fn(() => {}),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+				setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
+			});
+			afterEach((done) => {
+				done();
+				spy.mockRestore();
+				setLoadingSpy.mockRestore();
+				setErrorSpy.mockRestore();
+				setSchoolSpy.mockRestore();
+			});
+			it("should not call backend if inUserMigration flag is not true", async () => {
+				schoolsModule.setSchool({
+					...mockSchool,
+					inUserMigration: false,
+				});
+				await schoolsModule.migrationStartSync();
+				expect(
+					mockApi.importUserControllerStartSchoolInUserMigration
+				).not.toHaveBeenCalled();
+			});
+			it("should call backend and set state", async () => {
+				schoolsModule.setSchool({
+					...mockSchool,
+					inUserMigration: false,
+					inMaintenance: true,
+				});
+
+				await schoolsModule.setSchoolInUserMigration();
+
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+
+				expect(
+					mockApi.importUserControllerStartSchoolInUserMigration
+				).toHaveBeenCalledTimes(1);
+
+				expect(setSchoolSpy).toHaveBeenCalledTimes(2);
+				expect(setSchoolSpy.mock.calls[1][0]).toStrictEqual({
+					...mockSchool,
+					inUserMigration: true,
+					inMaintenance: true,
+				});
+			});
+			it("should handle error", async () => {
+				const error = { statusCode: "500", message: "foo" };
+				mockApi = {
+					importUserControllerStartSchoolInUserMigration: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+				schoolsModule.setSchool({
+					...mockSchool,
+					inUserMigration: false,
+				});
+
+				await schoolsModule.setSchoolInUserMigration();
+
+				expect(
+					mockApi.importUserControllerStartSchoolInUserMigration
+				).toHaveBeenCalledTimes(1);
+
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();

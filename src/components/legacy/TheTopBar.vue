@@ -43,18 +43,24 @@
 
 			<popup-icon-initials
 				v-if="user"
-				:firstname="user.firstName || 'Unknown'"
-				:lastname="user.lastName || 'Unknown'"
-				:user="user.user"
-				:role="role"
+				:first-name="user.firstName || 'Unknown'"
+				:last-name="user.lastName || 'Unknown'"
+				:user-role="role"
 				class="item"
 			>
-				<a href="/account" class="account-link">{{
-					$t("global.topbar.settings")
-				}}</a>
+				<language-menu />
+				<a
+					href="/account"
+					class="account-link"
+					role="menuitem"
+					:aria-label="$t('global.topbar.settings')"
+					>{{ $t("global.topbar.settings") }}</a
+				>
 				<button
 					class="logout-button"
 					data-testid="logout"
+					role="menuitem"
+					:aria-label="$t('common.labels.logout')"
 					@click="sendEvent('logout')"
 				>
 					{{ $t("common.labels.logout") }}
@@ -78,6 +84,7 @@ import PopupIconInitials from "@components/legacy/PopupIconInitials";
 import BaseLink from "@basecomponents/BaseLink";
 import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
+import LanguageMenu from "@components/molecules/LanguageMenu.vue";
 
 export default {
 	components: {
@@ -86,6 +93,7 @@ export default {
 		BaseLink,
 		HelpDropdown,
 		MenuQrCode,
+		LanguageMenu,
 	},
 	props: {
 		actions: {
@@ -238,7 +246,8 @@ export default {
 	border-color: transparent;
 	outline: none;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		background-color: var(--hover-color);
 	}
 }

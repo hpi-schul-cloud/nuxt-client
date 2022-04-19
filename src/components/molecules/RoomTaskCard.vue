@@ -30,6 +30,7 @@
 			<div class="text-h6 text--primary">{{ task.name }}</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
+				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
 				v-html="task.description"
@@ -94,7 +95,13 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
-import { mdiPencilOutline, mdiFormatListChecks, mdiUndoVariant } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiFormatListChecks,
+	mdiUndoVariant,
+	mdiTrashCanOutline,
+	mdiContentCopy,
+} from "@mdi/js";
 import { printDateFromStringUTC } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
@@ -107,6 +114,10 @@ export default {
 			type: Object,
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
+		},
+		room: {
+			type: Object,
+			default: () => {},
 		},
 		role: { type: String, required: true },
 		ariaLabel: {
@@ -123,9 +134,12 @@ export default {
 				mdiFormatListChecks,
 				mdiPencilOutline,
 				mdiUndoVariant,
+				mdiTrashCanOutline,
+				mdiContentCopy,
 			},
 			defaultTitleColor: "--color-secondary",
 			roles: Roles,
+			canShowDescription: false,
 		};
 	},
 	computed: {
@@ -196,7 +210,10 @@ export default {
 			if (this.role === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
-					action: () => this.redirectAction(`/homework/${this.task.id}/edit`),
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
+						),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
@@ -207,6 +224,21 @@ export default {
 						name: this.$t("pages.room.cards.label.revert"),
 					});
 				}
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiTrashCanOutline,
+					action: () => this.$emit("delete-task"),
+					name: this.$t("common.actions.remove"),
+				});
+
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
+					name: this.$t("common.actions.copy"),
+				});
 			}
 
 			if (this.role === Roles.Student) {

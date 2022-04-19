@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
+import EnvConfigModule from "@/store/env-config";
 
 declare let createComponentMocks: Function;
 
@@ -40,7 +41,6 @@ const hiddenTestProps = {
 	keyDrag: false,
 	dragInProgress: false,
 };
-
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomLessonCard, {
 		...createComponentMocks({
@@ -124,12 +124,12 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[0].trigger("click");
 
 				expect(redirectActionMock).toHaveBeenCalled();
 				expect(redirectActionMock.mock.calls[0][0]).toStrictEqual(
-					"/courses/456/topics/123/edit"
+					"/courses/456/topics/123/edit?returnUrl=rooms/456"
 				);
 			});
 
@@ -151,10 +151,40 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findAll(".task-action");
+				const moreActionButton = wrapper.findAll(".menu-action");
 				await moreActionButton.wrappers[1].trigger("click");
 				await wrapper.vm.$nextTick();
 				expect(revertPublishedCardMock).toHaveBeenCalled();
+			});
+
+			it("should have 'share' more action if env flag is set", async () => {
+				// @ts-ignore
+				EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+				const wrapper = getWrapper({ ...baseTestProps, role });
+
+				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
+					(item: any) => {
+						return (item.name = wrapper.vm.$i18n.t(
+							"pages.room.lessonCard.label.share"
+						));
+					}
+				);
+				expect(hasShareMenuItem).toBe(true);
+			});
+
+			it("should emit 'delete-lesson' when delete action button clicked'", async () => {
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const selectorName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.actions.remove"
+				)}`;
+
+				const moreActionButton = wrapper.find(selectorName);
+				await moreActionButton.trigger("click");
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted("delete-lesson");
+				expect(emitted).toHaveLength(1);
 			});
 		});
 		describe("students", () => {

@@ -21,6 +21,7 @@
 							)
 						"
 						dense
+						:readonly="!hasSchoolEditPermission"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -42,6 +43,7 @@
 							)
 						"
 						persistent-hint
+						:readonly="!hasSchoolEditPermission"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -149,7 +151,7 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
@@ -192,6 +194,9 @@ export default {
 				);
 				return { name, abbreveation: lang };
 			});
+		},
+		hasSchoolEditPermission: () => {
+			return authModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {

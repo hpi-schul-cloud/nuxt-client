@@ -78,11 +78,11 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getFallbackLanguage(): string {
-		return this.env.I18N__FALLBACK_LANGUAGE || "de";
+		return this.env.I18N__FALLBACK_LANGUAGE || "de"; // TODO rely on server provided default
 	}
 
 	get getDefaultTimezone(): string {
-		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
+		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin"; // TODO rely on server provided default
 	}
 
 	get getMatrixConfig() {

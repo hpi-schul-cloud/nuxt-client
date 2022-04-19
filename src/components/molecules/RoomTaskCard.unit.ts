@@ -4,6 +4,9 @@ import RoomTaskCard from "./RoomTaskCard.vue";
 declare var createComponentMocks: Function;
 
 const testProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -30,6 +33,9 @@ const testProps = {
 };
 
 const draftTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -51,6 +57,9 @@ const draftTestProps = {
 };
 
 const finishedTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -72,6 +81,9 @@ const finishedTestProps = {
 };
 
 const overdueTestProps = {
+	room: {
+		roomId: "456",
+	},
 	task: {
 		id: "123",
 		name: "Test Name",
@@ -148,6 +160,20 @@ describe("@components/molecules/RoomTaskCard", () => {
 				"Aufgabe - Abgabe - 28.09.00"
 			);
 		});
+
+		it("should show or hide description area", async () => {
+			const wrapper = getWrapper({ ...testProps, role });
+			const descElement = wrapper.findAll(".text-description");
+
+			expect(descElement.length).toStrictEqual(0);
+			wrapper.setData({ canShowDescription: true });
+			await wrapper.vm.$nextTick();
+			const descElementAfter = wrapper.findAll(".text-description");
+			expect(descElementAfter).toHaveLength(1);
+			expect(descElementAfter.wrappers[0].element.innerHTML).toStrictEqual(
+				"some description here"
+			);
+		});
 	});
 
 	describe("user role based behaviors and actions", () => {
@@ -183,7 +209,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const redirectAction = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.redirectAction = redirectAction;
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n.t(
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
 					"pages.room.taskCard.label.edit"
 				)}`;
 
@@ -195,7 +221,27 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				expect(redirectAction).toHaveBeenCalled();
 				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
-					"/homework/123/edit"
+					"/homework/123/edit?returnUrl=rooms/456"
+				);
+			});
+
+			it("should trigger the 'redirectAction' method when 'more action' copy button is clicked", async () => {
+				const redirectAction = jest.fn();
+				const wrapper = getWrapper({ ...testProps, role });
+				wrapper.vm.redirectAction = redirectAction;
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.actions.copy"
+				)}`;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				expect(redirectAction).toHaveBeenCalled();
+				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
+					"/homework/123/copy?returnUrl=rooms/456"
 				);
 			});
 
@@ -203,7 +249,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
-				const buttonClassName = `.task-action-${wrapper.vm.$i18n
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n
 					.t("pages.room.cards.label.revert")
 					.split(" ")
 					.join("-")}`;
@@ -214,6 +260,21 @@ describe("@components/molecules/RoomTaskCard", () => {
 				await moreActionButton.trigger("click");
 
 				expect(revertPublishedCardMock).toHaveBeenCalled();
+			});
+
+			it("should emit 'delete-task' when 'more menu' delete action button clicked'", async () => {
+				const wrapper = getWrapper({ ...testProps, role });
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.actions.remove"
+				)}`;
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				const emitted = wrapper.emitted("delete-task");
+				expect(emitted).toHaveLength(1);
 			});
 
 			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked", async () => {

@@ -96,7 +96,7 @@ export default {
 							{
 								label: this.$t("global.topbar.actions.contactSupport"),
 								icon: "pencil",
-								action: "/help?activeForm=team#contact-form",
+								action: "/help/contact",
 								source: "fa",
 								target: "_self",
 							},
