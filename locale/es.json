@@ -523,6 +523,8 @@
 	"pages.administration.school.index.authSystems.addLdap": "Añadir sistema LDAP",
 	"pages.administration.school.index.authSystems.deleteAuthSystem": "Eliminar sistema LDAP",
 	"pages.administration.school.index.authSystems.confirmDeleteText": "¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
+	"pages.administration.school.index.authSystems.loginLinkLabel": "Enlace de acceso a la escuela",
+	"pages.administration.school.index.authSystems.copyLink": "Copiar enlace",
 	"pages.content._id.addToTopic": "Para ser añadido a",
 	"pages.content._id.collection.selectElements": "Selecciona los elementos que deses añadir al tema",
 	"pages.content._id.metadata.author": "Autor",

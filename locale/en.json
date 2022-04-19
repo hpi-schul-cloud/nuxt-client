@@ -525,6 +525,8 @@
 	"pages.administration.school.index.authSystems.addLdap": "Add LDAP System",
 	"pages.administration.school.index.authSystems.deleteAuthSystem": "Delete Authentification",
 	"pages.administration.school.index.authSystems.confirmDeleteText": "Are you sure you want to delete the following authentification system?",
+	"pages.administration.school.index.authSystems.loginLinkLabel": "Login-Link of your school",
+	"pages.administration.school.index.authSystems.copyLink": "Copy Link",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.collection.selectElements": "Select the items you want to add to the topic",
 	"pages.content._id.metadata.author": "Author",

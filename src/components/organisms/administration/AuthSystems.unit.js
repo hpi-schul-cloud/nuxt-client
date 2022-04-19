@@ -1,5 +1,7 @@
 import AuthSystems from "./AuthSystems";
 import SchoolsModule from "@/store/schools";
+import EnvConfigModule from "@/store/env-config";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 
 const generateProps = () => ({
 	systems: [
@@ -19,12 +21,163 @@ const searchStrings = {
 	editSystemButton: ".edit-system-btn",
 	deleteSystemButton: ".delete-system-btn",
 	customDialog: ".custom-dialog",
+	schoolLoginLink: ".school-login-link",
 };
 
 describe("AuthSystems", () => {
 	it(...isValidComponent(AuthSystems));
 
 	describe("displaying values", () => {
+		describe("login link", () => {
+			beforeEach(() => {
+				EnvConfigModule.setEnvs({
+					FEATURE_LOGIN_LINK_ENABLED: true,
+				});
+			});
+
+			it("login link field should not be visible", () => {
+				EnvConfigModule.setEnvs({
+					FEATURE_LOGIN_LINK_ENABLED: false,
+				});
+
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(0);
+			});
+
+			it("login link field should be visible", () => {
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+			});
+
+			it("login link field should render email login link", () => {
+				const props = generateProps();
+				props.systems = [];
+
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: props,
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+
+				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
+					"strategy=email"
+				);
+			});
+
+			it("login link field should render ldap login link", () => {
+				SchoolsModule.setSchool(mockSchool);
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+
+				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
+					"strategy=ldap"
+				);
+				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
+					`schoolId=${mockSchool.id}`
+				);
+			});
+
+			it("login link field should render iserv login link", () => {
+				const props = generateProps();
+				props.systems = [{ oauthConfig: {} }];
+
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: props,
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+
+				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
+					"strategy=iserv"
+				);
+			});
+
+			it("login link copy button should copy login link", () => {
+				const mockElem = {
+					value: "example_value",
+					select: () => {},
+					setSelectionRange: () => {},
+				};
+				Object.assign(navigator, {
+					clipboard: {
+						writeText: () => {},
+					},
+				});
+				Object.assign(document, {
+					getElementById: () => {
+						return mockElem;
+					},
+				});
+				const clipboardSpy = jest.spyOn(navigator.clipboard, "writeText");
+				const wrapper = mount(AuthSystems, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const loginLinkFieldVisibility = wrapper.findAll(
+					searchStrings.schoolLoginLink
+				);
+
+				expect(loginLinkFieldVisibility).toHaveLength(1);
+
+				loginLinkFieldVisibility.wrappers[0].find(".v-icon").trigger("click");
+
+				expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
+			});
+		});
+
 		it("ldap button should be visible", async () => {
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
