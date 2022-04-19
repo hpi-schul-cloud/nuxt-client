@@ -575,6 +575,8 @@
 	"pages.administration.school.index.authSystems.addLdap": "Додати систему LDAP",
 	"pages.administration.school.index.authSystems.deleteAuthSystem": "Видалити автентифікацію",
 	"pages.administration.school.index.authSystems.confirmDeleteText": "Ви дійсно хочете видалити наступну систему автентифікації?",
+	"pages.administration.school.index.authSystems.loginLinkLabel": "Посилання для входу до вашої школи",
+	"pages.administration.school.index.authSystems.copyLink": "копіювати посилання",
 	"pages.courses._id.task.deleteError": "Не вдалося видалити завдання.",
 	"pages.courses._id.task.deleteSuccess": "Завдання успішно видалено!",
 	"pages.courses._id.task.ended": "Завершено",
