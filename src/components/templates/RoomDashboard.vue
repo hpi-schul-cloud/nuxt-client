@@ -105,6 +105,7 @@
 			v-if="roomIsEmpty"
 			:image="emptyState.image"
 			:title="emptyState.title"
+			:img-height="emptyState.size"
 			class="mt-16"
 		/>
 		<vCustomDialog
@@ -219,9 +220,11 @@ export default {
 		emptyState() {
 			const image = topicsEmptyStateImage;
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
+			const size = "200px";
 			return {
 				image,
 				title,
+				size
 			};
 		},
 	},
