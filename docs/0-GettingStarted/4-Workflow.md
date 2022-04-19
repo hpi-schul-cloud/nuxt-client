@@ -6,7 +6,7 @@ Hier ist der interne Workflow zur Komponenten und Pages Entwicklung im Nuxt-Clie
 
 ## Ticket
 
-Für Inhaltliche Dinge sollen stets Tickets im [Jira (unserem Ticketsystem)](https://ticketsystem.hpi-schul-cloud.org/secure/RapidBoard.jspa?rapidView=23) erstellt werden.
+Für Inhaltliche Dinge sollen stets Tickets im [Jira (unserem Ticketsystem)](https://ticketsystem.dbildungscloud.de/secure/RapidBoard.jspa?rapidView=23) erstellt werden.
 
 Für Dinge die das Setup des Repos betreffen (Linter Regeln, neue Tools usw.) benutzen wir aktuell [Github Issues](https://github.com/hpi-schul-cloud/nuxt-client/issues), da Tools wie Greenkeeper hier sowieso solche Issues erstellen und dadurch eine Klare Trennung zwischen Inhaltlichen Todos und Organisatorischem geschaffen wird.
 
@@ -26,7 +26,7 @@ Probleme/Fragen im JIRA Ticket diskutieren (oder persönlich)
 
 ### Branch naming
 
-Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`. Für ein [Ticket aus dem Ticketsystem (VUE-40)](https://ticketsystem.hpi-schul-cloud.org/browse/VUE-40) würde der Branch so lauten: `VUE-40-Farbpalette-in-Storybook-einpflegen`. Für Github Issues gilt das Schema ebenfalls. Beispiel: `#129-postcss-autoprefixer-einbinden`.
+Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`. Für ein [Ticket aus dem Ticketsystem (VUE-40)](https://ticketsystem.dbildungscloud.de/browse/VUE-40) würde der Branch so lauten: `VUE-40-Farbpalette-in-Storybook-einpflegen`. Für Github Issues gilt das Schema ebenfalls. Beispiel: `#129-postcss-autoprefixer-einbinden`.
 
 **Ausnahme:** Für (wirklich) kleine Wording-Änderungen/Bugfixes für welche kein Ticket existiert, kann der Branch auch nach folgendem Schema benannt werden: `${AUTOR-INITIALIEN}/${Kurzbeschreibung}` (Beispiel für Autor Adrian Jost: `aj/fix schulcloud typo in courses`)
 
@@ -47,7 +47,7 @@ Sollte ein Ticket/Issue noch nicht abgeschlossen sein oder nach einem Review noc
 
 #### Pull Request Titel
 
-Der Pull Request sollte wie der Branchname benannt werden, jedoch mit `SPACE` statt `-` um die Lesbarkeit zu erhöhen. Beispiel für [VUE-40](https://ticketsystem.hpi-schul-cloud.org/browse/VUE-40): `VUE-40 - Farbpalette in Storybook einpflegen`.
+Der Pull Request sollte wie der Branchname benannt werden, jedoch mit `SPACE` statt `-` um die Lesbarkeit zu erhöhen. Beispiel für [VUE-40](https://ticketsystem.dbildungscloud.de/browse/VUE-40): `VUE-40 - Farbpalette in Storybook einpflegen`.
 
 #### Pull Request Beschreibung
 
