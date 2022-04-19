@@ -16,16 +16,16 @@ describe("@basecomponents/BaseBlockquote", () => {
 	it("renders cite", () => {
 		const { element } = shallowMount(BaseBlockquote, {
 			propsData: {
-				cite: "https://hpi-schul-cloud.de",
+				cite: "https://dbildungscloud.de",
 			},
 		});
-		expect(element.innerHTML).toContain("https://hpi-schul-cloud.de");
+		expect(element.innerHTML).toContain("https://dbildungscloud.de");
 	});
 
 	it("renders srcText", () => {
 		const { element } = shallowMount(BaseBlockquote, {
 			propsData: {
-				cite: "https://hpi-schul-cloud.de",
+				cite: "https://dbildungscloud.de",
 				srcText: "CustomSourceText",
 			},
 		});
