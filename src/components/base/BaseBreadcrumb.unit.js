@@ -6,7 +6,7 @@ describe("@components/base/BaseBreadcrumb", () => {
 	it("renders BaseLink for Links", () => {
 		const internalLink = { to: "/", text: "internal" };
 		const externalLink = {
-			href: "https://hpi-schul-cloud.de",
+			href: "https://dbildungscloud.de",
 			text: "external",
 		};
 		const textOnly = { text: "any" };

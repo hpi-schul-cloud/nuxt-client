@@ -15,7 +15,7 @@
 			>
 			<br />
 			Internet:
-			<base-link to="/"> https://hpi-schul-cloud.de </base-link>
+			<base-link to="/"> https://dbildungscloud.de </base-link>
 		</p>
 
 		<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
