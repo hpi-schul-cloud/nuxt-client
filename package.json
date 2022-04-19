@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "27.11.3",
+	"version": "27.12.0",
 	"description": "The next Level of Dataport Bildungscloud",
 	"author": "Dataport Bildungscloud",
 	"private": true,
@@ -89,6 +89,7 @@
 		"@nuxt/typescript-build": "^2.0.4",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@nuxtjs/proxy": "^2.1.0",
+		"@nuxtjs/router": "^1.7.0",
 		"@nuxtjs/vuetify": "^1.12.1",
 		"@schul-cloud/eslint-config": "^1.0.0",
 		"@schul-cloud/prettier-config": "^1.0.0",
