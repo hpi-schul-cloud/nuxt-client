@@ -224,7 +224,7 @@ export default {
 			return {
 				image,
 				title,
-				size
+				size,
 			};
 		},
 	},
