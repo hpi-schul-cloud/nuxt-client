@@ -21,7 +21,7 @@
 
 <!--
 Base links to copy
-- https://ticketsystem.hpi-schul-cloud.org/browse/SC-????
+- https://ticketsystem.dbildungscloud.de/browse/SC-????
 - https://github.com/hpi-schul-cloud/schulcloud-server/pull/????
 - https://github.com/hpi-schul-cloud/end-to-end-tests/pull/????
 - https://github.com/hpi-schul-cloud/schulcloud-client/pull/????
