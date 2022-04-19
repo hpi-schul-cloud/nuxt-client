@@ -4,10 +4,10 @@
 		Liebe Besucher*innen, liebe Nutzer*innen, liebe Erziehungsberechtigte, Diese
 		Datenschutzhinweise informieren über die Verarbeitung personenbezogener
 		Daten, die beim Aufruf der Website
-		<a href="https://dbildungscloud.de">https://dbildungscloud.de</a> von
-		jedem Besucher automatisch durch das HPI erhoben werden (Buchstabe A) sowie
-		über die Verarbeitung von Daten, die im Auftrag der teilnehmenden Schulen
-		bei Nutzung der HPI Schul-Cloud erhoben werden (Buchstabe B).<br />
+		<a href="https://dbildungscloud.de">https://dbildungscloud.de</a> von jedem
+		Besucher automatisch durch das HPI erhoben werden (Buchstabe A) sowie über
+		die Verarbeitung von Daten, die im Auftrag der teilnehmenden Schulen bei
+		Nutzung der HPI Schul-Cloud erhoben werden (Buchstabe B).<br />
 		Die HPI Schul-Cloud schafft die technische Grundlage dafür, dass Lehrende
 		und Schüler*innen in jedem Unterrichtsfach moderne digitale Lehr- und
 		Lerninhalte nutzen können. Weitere Informationen zum Projekt stehen unter:
