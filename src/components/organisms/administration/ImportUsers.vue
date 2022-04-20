@@ -236,6 +236,14 @@
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}
+				<br />
+				<v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
+				{{
+					$t("components.organisms.importUsers.legendFlag", {
+						instance: this.$theme.short_name,
+						source: $t("pages.administration.migration.ldapSource"),
+					})
+				}}
 			</p>
 			<v-divider></v-divider>
 			<br />

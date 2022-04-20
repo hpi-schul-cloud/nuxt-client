@@ -165,16 +165,11 @@ describe("User Migration / Index", () => {
 
 	it("should show info text on step 1", () => {
 		const wrapper = getWrapperShallow();
-		const tutorial = wrapper.vm.$i18n.t(
-			"pages.administration.migration.tutorial",
-			{
-				instance: $theme.short_name,
-				source: wrapper.vm.$i18n.t("pages.administration.migration.ldapSource"),
-			}
-		);
 		const findText = wrapper.find("[data-testid=migration_tutorial]");
 
-		expect(findText.element.innerHTML).toContain(tutorial);
+		expect(findText.element.innerHTML).toMatch(
+			/<iframe.*https:\/\/docs\.dbildungscloud\.de\/display\/SCDOK\/Migrationsprozess\?frameable=true.*><\/iframe>/
+		);
 	});
 
 	describe("Start user migration", () => {
