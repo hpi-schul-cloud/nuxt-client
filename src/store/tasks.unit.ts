@@ -3,6 +3,9 @@ import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
+import Vuex from "vuex";
+import FinishedTaskModule from "./finished-tasks";
+import { initializeStores } from ".";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -12,7 +15,7 @@ type FunctionPropertyNames<T> = {
 /**
  * Spy on a TaskFilter method and mock its return value.
  * The mock is valid for all instances of the TaskFilter class.
- * So make sire that you call mockRestore() othe spy instance afterwards.
+ * So make sure that you call mockRestore() on the spy instance afterwards.
  * @param method the method
  * @param result the result of the task filter
  * @returns
@@ -157,6 +160,15 @@ describe("task store", () => {
 	});
 
 	describe("deleteTask", () => {
+		beforeEach(() => {
+			const store = new Vuex.Store({
+				modules: {
+					"finished-tasks": FinishedTaskModule,
+				},
+			});
+			initializeStores(store);
+		});
+
 		it("should call api to delete a task", (done) => {
 			const mockApi = {
 				taskControllerDelete: jest.fn(),
