@@ -392,7 +392,9 @@ export default {
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
-			this.groupDialog.isOpen = false;
+			setTimeout(() => {
+				this.groupDialog.isOpen = false;
+			}, 0);
 			this.searchText = "";
 			this.dragging = true;
 		},
