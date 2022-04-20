@@ -1,6 +1,9 @@
-import AuthModule from "./auth";
-import { mockUser } from "../../tests/test-utils/mockObjects";
 import { envConfigModule, schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mockUser } from "../../tests/test-utils/mockObjects";
+import AuthModule from "./auth";
+import EnvConfigModule from "./env-config";
+import SchoolsModule from "./schools";
 
 jest.useFakeTimers();
 
@@ -67,6 +70,13 @@ describe("auth store module", () => {
 
 	describe("getters", () => {
 		describe("locale", () => {
+			beforeEach(() => {
+				setupStores({
+					schools: SchoolsModule,
+					"env-config": EnvConfigModule,
+				});
+			});
+
 			it("returns the user's language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "mock";

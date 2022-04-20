@@ -1,5 +1,7 @@
 import FilePathsModule from "./filePaths";
 import { envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "./env-config";
 
 const specificFiles = {
 	privacyExemplary:
@@ -73,6 +75,10 @@ const mockSetGloablFiles = (payload: string) =>
 
 describe("filePaths module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			setupStores({ "env-config": EnvConfigModule });
+		});
+
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
 			const filePathsModule = new FilePathsModule({});
 			const spyBaseDir = jest.fn();
@@ -87,7 +93,7 @@ describe("filePaths module", () => {
 			expect(spySpecificFiles).not.toHaveBeenCalled();
 			expect(spyGlobalFiles).not.toHaveBeenCalled();
 
-			await filePathsModule.init();
+			filePathsModule.init();
 
 			expect(spyBaseDir).toHaveBeenCalled();
 			expect(spySpecificFiles).toHaveBeenCalled();

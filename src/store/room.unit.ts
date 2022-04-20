@@ -107,7 +107,7 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchSharedLessonSpy = jest.spyOn(
 					roomModule,
 					"fetchSharedLesson"
@@ -125,7 +125,7 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const confirmImportLessonSpy = jest.spyOn(
 					roomModule,
 					"confirmImportLesson"
@@ -155,7 +155,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -189,7 +189,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -223,7 +223,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -247,7 +247,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.confirmImportLesson("123456");
 
 				expect(roomModule.businessError.statusCode).toStrictEqual(404);
@@ -275,7 +275,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -304,7 +304,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -338,7 +338,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -372,7 +372,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -407,7 +407,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -444,7 +444,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -480,7 +480,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -512,7 +512,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -549,7 +549,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -659,7 +659,7 @@ describe("room module", () => {
 
 		describe("setSharedLessonData", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const shareLessonData = {
 					code: "123",
 					lessonName: "Lesson_1",
@@ -674,7 +674,7 @@ describe("room module", () => {
 
 		describe("setCourseInvitationLink", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = "http://localhost:4000/link/123456";
 
 				roomModule.setCourseInvitationLink(payload);
@@ -684,7 +684,7 @@ describe("room module", () => {
 
 		describe("setCourseShareToken", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = "token_test";
 
 				roomModule.setCourseShareToken(payload);

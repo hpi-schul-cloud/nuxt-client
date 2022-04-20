@@ -2,6 +2,9 @@ import TasksList from "./TasksList";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import { taskModule, finishedTaskModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
@@ -26,6 +29,7 @@ describe("@components/organisms/TasksList", () => {
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
+		setupStores({ tasks: TaskModule, "finished-tasks": FinishedTaskModule });
 	});
 
 	it(...isValidComponent(TasksList));

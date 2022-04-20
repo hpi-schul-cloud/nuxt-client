@@ -1,18 +1,15 @@
-import TheFooter from "./TheFooter";
-import { envConfigModule, filePathsModule, initializeStores } from "@/store";
-import Vuex from "vuex";
-import FilePathsModule from "@/store/filePaths";
+import { envConfigModule, filePathsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TheFooter from "./TheFooter";
 
 describe("@components/legacy/TheFooter", () => {
 	beforeEach(() => {
-		const store = new Vuex.Store({
-			modules: {
-				filePaths: FilePathsModule,
-				"env-config": EnvConfigModule,
-			},
+		setupStores({
+			filePaths: FilePathsModule,
+			"env-config": EnvConfigModule,
 		});
-		initializeStores(store);
 	});
 
 	it(...isValidComponent(TheFooter));

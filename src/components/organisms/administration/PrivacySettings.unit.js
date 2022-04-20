@@ -1,5 +1,8 @@
 import PrivacySettings from "./PrivacySettings";
 import { authModule, envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 const generateProps = () => ({
 	permissions: {
@@ -31,6 +34,10 @@ const searchStrings = {
 
 describe("PrivacySettings", () => {
 	beforeAll(() => {});
+
+	beforeEach(() => {
+		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+	});
 
 	it(...isValidComponent(PrivacySettings));
 

@@ -2,6 +2,7 @@ import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 const mockEnvs: Envs = {
 	ALERT_STATUS_URL: "mockValue",
@@ -50,6 +51,7 @@ describe("env-config module", () => {
 	beforeEach(() => {
 		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+		setupStores({ "env-config": EnvConfigModule });
 	});
 	afterEach(() => {
 		consoleWarnSpy.mockRestore();

@@ -1,8 +1,8 @@
-import AddContentModal from "@components/molecules/AddContentModal";
-import { isValidComponent } from "@@/tests/unit/commonTests";
-import Vuex from "vuex";
-import { contentModule, initializeStores } from "@/store";
+import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { isValidComponent } from "@@/tests/unit/commonTests";
+import AddContentModal from "@components/molecules/AddContentModal";
 
 const testProps = {
 	showCopyModal: true,
@@ -124,12 +124,9 @@ function getWrapper(attributes, options) {
 
 describe("@components/molecules/AddContentModal", () => {
 	beforeEach(() => {
-		const store = new Vuex.Store({
-			modules: {
-				content: ContentModule,
-			},
+		setupStores({
+			content: ContentModule,
 		});
-		initializeStores(store);
 	});
 
 	it(...isValidComponent(AddContentModal));

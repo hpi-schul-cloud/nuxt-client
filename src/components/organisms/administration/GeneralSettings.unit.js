@@ -1,5 +1,9 @@
 import GeneralSettings from "./GeneralSettings";
 import { envConfigModule, schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
+import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -109,6 +113,12 @@ const mockData = {
 
 describe("GeneralSettings", () => {
 	beforeEach(() => {
+		setupStores({
+			auth: AuthModule,
+			"env-config": EnvConfigModule,
+			schools: SchoolsModule,
+		});
+
 		schoolsModule.setSchool(school);
 		schoolsModule.setFederalState(federalState);
 	});

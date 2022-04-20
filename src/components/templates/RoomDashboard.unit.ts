@@ -1,8 +1,10 @@
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue/types/umd";
 import RoomDashboard from "./RoomDashboard.vue";
-import RoomModule from "@store/room";
+import { taskModule, roomModule, envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 import TaskModule from "@/store/tasks";
+import RoomModule from "@/store/room";
+import EnvConfigModule from "@/store/env-config";
 
 declare var createComponentMocks: Function;
 
@@ -92,6 +94,15 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("@components/templates/RoomDashboard.vue", () => {
+	beforeEach(() => {
+		setupStores({
+			tasks: TaskModule,
+			room: RoomModule,
+			"env-config": EnvConfigModule,
+		});
+		// @ts-ignore
+		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+	});
 	describe("common features", () => {
 		it("should have props", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
@@ -295,7 +306,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("2345");
+			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
 			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 
@@ -329,9 +340,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			TaskModule.deleteTask = deleteTaskMock;
-			RoomModule.fetchContent = fetchContentMock;
-			RoomModule.deleteLesson = deleteLessonMock;
+			taskModule.deleteTask = deleteTaskMock;
+			roomModule.fetchContent = fetchContentMock;
+			roomModule.deleteLesson = deleteLessonMock;
 			const taskCard = wrapper.find(".task-card");
 
 			taskCard.vm.$emit("delete-task");
@@ -351,9 +362,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			TaskModule.deleteTask = deleteTaskMock;
-			RoomModule.fetchContent = fetchContentMock;
-			RoomModule.deleteLesson = deleteLessonMock;
+			taskModule.deleteTask = deleteTaskMock;
+			roomModule.fetchContent = fetchContentMock;
+			roomModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.find(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");

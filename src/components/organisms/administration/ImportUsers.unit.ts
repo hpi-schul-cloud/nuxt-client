@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
-import importUsers from "./ImportUsers.vue";
-import { MatchedBy } from "@store/import-users";
+import ImportUsers from "./ImportUsers.vue";
+import ImportUsersModule, { MatchedBy } from "@store/import-users";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
 
 declare var createComponentMocks: Function;
 
@@ -91,7 +93,7 @@ const mockData = {
 };
 
 const getWrapper: any = (data?: object, options?: object) => {
-	return mount(importUsers, {
+	return mount(ImportUsers, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -104,6 +106,7 @@ const getWrapper: any = (data?: object, options?: object) => {
 describe("@components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		setupStores({ schools: SchoolsModule, importUsers: ImportUsersModule });
 	});
 
 	it("should have correct props", () => {

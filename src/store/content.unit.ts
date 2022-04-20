@@ -2,6 +2,8 @@ import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { Resource } from "./types/content";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "./env-config";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v1/lessons";
@@ -403,6 +405,8 @@ describe("content module", () => {
 			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
+			setupStores({ "env-config": EnvConfigModule });
+
 			const contentModule = new ContentModule({});
 			const initSpy = jest.fn();
 

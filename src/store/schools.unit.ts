@@ -5,6 +5,8 @@ import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "./auth";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -30,6 +32,7 @@ describe("schools module", () => {
 				},
 				post: async (path: string) => {},
 			} as NuxtAxiosInstance);
+			setupStores({ auth: AuthModule });
 		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {
@@ -87,6 +90,35 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				authModule.setUser({
+					schoolId: "4711",
+					_id: "",
+					__v: 0,
+					firstName: "",
+					lastName: "",
+					email: "",
+					updatedAt: "",
+					birthday: "",
+					createdAt: "",
+					preferences: {},
+					roles: [],
+					emailSearchValues: [],
+					firstNameSearchValues: [],
+					lastNameSearchValues: [],
+					consent: {},
+					forcePasswordChange: false,
+					language: "",
+					fullName: "",
+					id: "",
+					avatarInitials: "",
+					avatarBackgroundColor: "",
+					age: 0,
+					displayName: "",
+					permissions: [],
+					accountId: "",
+					schoolName: "",
+					externallyManaged: false,
+				});
 
 				await schoolsModule.fetchSchool();
 

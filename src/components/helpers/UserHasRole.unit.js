@@ -1,7 +1,7 @@
-import UserHasRole from "./UserHasRole";
-import Vuex from "vuex";
-import { authModule, initializeStores } from "@/store";
+import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
+import setupStores from "@@/tests/test-utils/setupStores";
+import UserHasRole from "./UserHasRole";
 
 /**
  * @param  { String } expectedRole used as prop
@@ -40,12 +40,9 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 
 describe("@components/helpers/UserHasRole", () => {
 	beforeEach(() => {
-		const store = new Vuex.Store({
-			modules: {
-				auth: AuthModule,
-			},
+		setupStores({
+			auth: AuthModule,
 		});
-		initializeStores(store);
 	});
 
 	it(...isValidComponent(UserHasRole));

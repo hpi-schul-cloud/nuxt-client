@@ -1,11 +1,10 @@
-import TaskModule from "./tasks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import * as serverApi from "../serverApi/v3/api";
-import { taskFactory } from "./task.filter.unit";
-import { TaskFilter } from "./task.filter";
-import { Task } from "./types/tasks";
-import Vuex from "vuex";
 import FinishedTaskModule from "./finished-tasks";
-import { initializeStores } from ".";
+import { TaskFilter } from "./task.filter";
+import { taskFactory } from "./task.filter.unit";
+import TaskModule from "./tasks";
+import { Task } from "./types/tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -161,12 +160,9 @@ describe("task store", () => {
 
 	describe("deleteTask", () => {
 		beforeEach(() => {
-			const store = new Vuex.Store({
-				modules: {
-					"finished-tasks": FinishedTaskModule,
-				},
+			setupStores({
+				"finished-tasks": FinishedTaskModule,
 			});
-			initializeStores(store);
 		});
 
 		it("should call api to delete a task", (done) => {

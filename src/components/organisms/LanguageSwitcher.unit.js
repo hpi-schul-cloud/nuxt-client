@@ -1,7 +1,13 @@
 import LanguageSwitcher from "./LanguageSwitcher";
 import { authModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 
 describe("@components/organisms/LanguageSwitcher", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
+
 	it(...isValidComponent(LanguageSwitcher));
 
 	it("Changes language", () => {

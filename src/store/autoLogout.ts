@@ -215,19 +215,19 @@ export default class AutoLogoutModule extends VuexModule {
 	}
 
 	@Action
-	extendSessionAction(): void {
+	async extendSessionAction(): Promise<void> {
 		try {
 			processing = true;
 			this.setActive(false, false);
 
-			extendSession(
+			await extendSession(
 				this.remainingTimeInSeconds,
 				this.setRemainingTimeInSeconds,
 				this.active,
 				this.showWarningOnRemainingSeconds,
 				this.setActive,
 				this.defaultRemainingTimeInSeconds,
-				this.setToastValue
+				this.setToastValue.bind(this)
 			);
 		} catch (error) {
 			console.error(error);
