@@ -312,8 +312,17 @@ export class Room extends VuexModule {
 	get getCourseInvitationLink(): string {
 		return this.courseInvitationLink;
 	}
+
 	get getCourseShareToken(): string {
 		return this.courseShareToken;
+	}
+
+	get roomIsEmpty(): boolean {
+		return this.finishedLoading && this.roomData.elements.length === 0;
+	}
+
+	private get finishedLoading(): boolean {
+		return this.getLoading === false;
 	}
 }
 

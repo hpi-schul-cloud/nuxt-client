@@ -688,6 +688,8 @@
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError": "Unfortunately, we were not able to import the entire course content. We are aware of the bug and will fix it in the coming months.",
 	"pages.rooms.importCourse.importErrorButton": "Okay, understood",
+	"pages.room.teacher.emptyState": "Add learning content such as assignments or topics to the course and then sort them.",
+	"pages.room.student.emptyState": "Learning content such as topics or tasks appear here.",
 	"pages.room.lessonCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.post": "Post",
 	"pages.room.lessonCard.label.lesson": "Topic",
