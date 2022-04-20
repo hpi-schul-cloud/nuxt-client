@@ -149,6 +149,20 @@ describe("@pages/rooms/_id/index.vue", () => {
 		expect(hasImportLessonAction).toBe(false);
 	});
 
+	it("'add task' button should have correct path", async () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		const newTaskAction = fabComponent.vm.actions[0];
+		expect(newTaskAction.href).toStrictEqual("/homework/new?course=123&returnUrl=rooms/123");
+	});
+
+	it("'add lesson' button should have correct path", async () => {
+		const wrapper = getWrapper();
+		const fabComponent = wrapper.find(".wireframe-fab");
+		const newTaskAction = fabComponent.vm.actions[1];
+		expect(newTaskAction.href).toStrictEqual("/courses/123/topics/add?returnUrl=rooms/123");
+	});
+
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
 		// @ts-ignore
 		EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });

@@ -101,6 +101,14 @@
 				/>
 			</div>
 		</div>
+		<v-custom-empty-state
+			v-if="roomIsEmpty"
+			:image="emptyState.image"
+			:title="emptyState.title"
+			:img-height="emptyState.maxHeight"
+			data-testid="empty-state-item"
+			class="mt-16"
+		/>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -153,11 +161,13 @@
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import RoomModule from "@store/room";
 import TaskModule from "@/store/tasks";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
+import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
 export default {
 	components: {
@@ -165,6 +175,7 @@ export default {
 		RoomLessonCard,
 		vCustomDialog,
 		draggable,
+		vCustomEmptyState,
 	},
 	props: {
 		roomData: {
@@ -205,6 +216,17 @@ export default {
 		},
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
+		},
+		roomIsEmpty: () => RoomModule.roomIsEmpty,
+		emptyState() {
+			const image = topicsEmptyStateImage;
+			const title = this.$t(`pages.room.${this.role}.emptyState`);
+			const maxHeight = "200px";
+			return {
+				image,
+				title,
+				maxHeight,
+			};
 		},
 	},
 	created() {

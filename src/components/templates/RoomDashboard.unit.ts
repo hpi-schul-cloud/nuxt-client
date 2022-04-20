@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue/types/umd";
+import vCustomEmptyState from "../molecules/vCustomEmptyState.vue";
 import RoomDashboard from "./RoomDashboard.vue";
 import RoomModule from "@store/room";
 import TaskModule from "@/store/tasks";
@@ -80,6 +81,13 @@ const mockData = {
 	],
 };
 
+const emptyMockData = {
+	roomId: "234",
+	title: "Sample Course 2",
+	displayColor: "green",
+	elements: [],
+};
+
 const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
@@ -132,6 +140,26 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			expect(wrapper.vm.taskData).toStrictEqual(expectedObject);
 		});
+
+		it("Should render empty state for teacher", async () => {
+			const wrapper = getWrapper({ roomData: emptyMockData, role: "teacher" });
+			const emptyStateComponent = wrapper.find(
+				`[data-testid="empty-state-item"]`
+			) as any;
+			expect(emptyStateComponent.exists()).toBe(true);
+			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
+			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.teacher.emptyState"));
+		});
+
+		it("Should render empty state for students", async () => {
+			const wrapper = getWrapper({ roomData: emptyMockData, role: "student" });
+			const emptyStateComponent = wrapper.find(
+				`[data-testid="empty-state-item"]`
+			) as any;
+			expect(emptyStateComponent.exists()).toBe(true);
+			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
+			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.student.emptyState"));
+		})
 	});
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {

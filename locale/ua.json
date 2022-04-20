@@ -663,6 +663,8 @@
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.room.teacher.emptyState": "Додайте до курсу навчальний вміст, наприклад завдання чи теми, і відсортуйте їх відповідно.",
+	"pages.room.student.emptyState": "Тут з’являється навчальний вміст, наприклад теми чи завдання.",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.itemDelete.text": "Ви впевнені, що хочете видалити елемент \" {itemTitle} \"?",
 	"pages.room.itemDelete.title": "Видалити елемент",

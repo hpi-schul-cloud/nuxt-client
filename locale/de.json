@@ -700,6 +700,8 @@
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError": "Leider konnte nicht der gesamte Kursinhalt importieren werden. Der Fehler ist uns bekannt und wird in den kommenden Monaten behoben.",
 	"pages.rooms.importCourse.importErrorButton": "Okay, verstanden",
+	"pages.room.teacher.emptyState": "Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
+	"pages.room.student.emptyState": "Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.lessonCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.lessonCard.label.post": "Posten",
 	"pages.room.lessonCard.label.lesson": "Thema",
