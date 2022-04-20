@@ -89,25 +89,17 @@
 									indeterminate
 								></v-progress-linear>
 								<v-card-text>
-									<v-row
-										v-html="
-											$t('pages.administration.migration.tutorial', {
-												instance: this.$theme.short_name,
-												source: $t('pages.administration.migration.ldapSource'),
-											})
-										"
-									></v-row>
-									<v-row>
-										<div
-											v-if="!school.inUserMigration || totalImportUsers === 0"
-											class="text-info"
-											type="info"
-										>
-											<b>{{
-												$t("pages.administration.migration.tutorialWait")
-											}}</b>
-										</div>
-									</v-row>
+									<iframe
+										class="full"
+										src="https://docs.dbildungscloud.de/display/SCDOK/Migrationsprozess?frameable=true"
+									></iframe>
+									<v-alert
+										v-if="!school.inUserMigration || totalImportUsers === 0"
+										dense
+										outlined
+										type="info"
+										>{{ $t("pages.administration.migration.tutorialWait") }}
+									</v-alert>
 								</v-card-text>
 								<v-card-actions>
 									<v-row align="center" justify="end">
@@ -527,7 +519,15 @@ export default {
 .v-stepper__content {
 	padding: 0;
 }
+
 .v-card__text {
 	font-size: var(--text-md);
+}
+
+iframe.full {
+	width: 100%;
+	min-height: 800px;
+	overflow: scroll;
+	border: none;
 }
 </style>
