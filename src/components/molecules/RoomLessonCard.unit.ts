@@ -101,12 +101,14 @@ describe("@components/molecules/RoomLessonCard", () => {
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
-			it("should have one action button if lesson is hidden with correct color", () => {
+			it("should have one action button if lesson is hidden", () => {
 				const wrapper = getWrapper({ ...hiddenTestProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons.wrappers[0].vm._props.color).toContain("#54616e");
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.lessonCard.label.post")
+				);
 			});
 
 			it("should have no action button when lesson is visible", () => {
