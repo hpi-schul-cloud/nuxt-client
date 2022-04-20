@@ -106,6 +106,7 @@
 			:image="emptyState.image"
 			:title="emptyState.title"
 			:img-height="emptyState.maxHeight"
+			data-testid="empty-state-item"
 			class="mt-16"
 		/>
 		<vCustomDialog

@@ -143,14 +143,22 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("Should render empty state for teacher", async () => {
 			const wrapper = getWrapper({ roomData: emptyMockData, role: "teacher" });
-			const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+			const emptyStateComponent = wrapper.find(
+				`[data-testid="empty-state-item"]`
+			) as any;
 			expect(emptyStateComponent.exists()).toBe(true);
+			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
+			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.teacher.emptyState"));
 		});
 
 		it("Should render empty state for students", async () => {
 			const wrapper = getWrapper({ roomData: emptyMockData, role: "student" });
-			const emptyStateComponent = wrapper.findComponent(vCustomEmptyState);
+			const emptyStateComponent = wrapper.find(
+				`[data-testid="empty-state-item"]`
+			) as any;
 			expect(emptyStateComponent.exists()).toBe(true);
+			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
+			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.student.emptyState"));
 		})
 	});
 	describe("Drag & Drop operations", () => {
