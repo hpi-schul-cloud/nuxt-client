@@ -2,6 +2,7 @@ import { Room } from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import AuthModule from "@/store/auth";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -563,6 +564,83 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(createCourseShareTokenSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
+				expect(roomModule.businessError.statusCode).toStrictEqual(404);
+				expect(roomModule.businessError.message).toStrictEqual(
+					"friendly error"
+				);
+			});
+		});
+
+		describe("finishTask", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call the backend", async () => {
+				// @ts-ignore
+				AuthModule.setUser({ id: "testUser" });
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new Room({});
+				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				// TODO: correct the path
+				expect(received[0].path).toStrictEqual(
+					"http://localhost:3030/api/v1/homework/finishId"
+				);
+				expect(received[1].params).toStrictEqual({ archived: ["testUser"] });
+				expect(finishTaskSpy.mock.calls[0][0]).toStrictEqual({
+					itemId: "finishId",
+					action: "finish",
+				});
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+
+				received = [];
+				await roomModule.finishTask({ itemId: "finishId", action: "restore" });
+				expect(received[1].params).toStrictEqual({ archived: [] });
+			});
+
+			it("should catch error in catch block", async () => {
+				let received: any[] = [];
+				let returned: any = {};
+				const error = { statusCode: 404, message: "friendly error" };
+
+				(() => {
+					initializeAxios({
+						$patch: async (path: string) => {
+							received.push({ path });
+							// TODO: correct the path
+							if (path === "http://localhost:3030/api/v1/homework/finishId") {
+								return (returned = Promise.reject({ ...error }));
+							}
+						},
+					} as NuxtAxiosInstance);
+				})();
+
+				const roomModule = new Room({});
+				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(finishTaskSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).toHaveBeenCalled();
 				expect(roomModule.businessError.statusCode).toStrictEqual(404);
 				expect(roomModule.businessError.message).toStrictEqual(
