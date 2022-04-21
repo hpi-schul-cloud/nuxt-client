@@ -210,9 +210,12 @@ export default {
 	grid-template-columns: 95% 5%;
 	align-items: center;
 	.title-section {
+		font-size: var(--heading-3) !important;
+		font-weight: initial;
 		text-align: left;
 	}
 	.dot-menu-section {
+		align-self: start;
 		text-align: right;
 	}
 }

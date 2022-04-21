@@ -75,7 +75,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-1 mt-3">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
