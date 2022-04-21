@@ -17,6 +17,7 @@ import {
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 import { nanoid } from "nanoid";
+import AuthModule from "@/store/auth";
 
 @Module({
 	name: "room",
@@ -54,6 +55,20 @@ export class Room extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
+	}
+
+	@Action
+	private modifyTaskArchive(payload: object | any): Promise<Array<string>> {
+		const result = payload.archived;
+
+		if (payload.action === "finish") {
+			result.push(payload.userId);
+			return result;
+		}
+		if (payload.action === "restore") {
+			return result.filter((item: string) => item !== payload.userId);
+		}
+		return result;
 	}
 
 	@Action
@@ -236,6 +251,33 @@ export class Room extends VuexModule {
 				});
 			}
 			this.setCourseShareToken(result.shareToken);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async finishTask(payload: object | any): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const homework = await $axios.$get(
+				`http://localhost:3030/api/v1/homework/${payload.itemId}`
+			);
+			const arr = await this.modifyTaskArchive({
+				archived: homework.archived,
+				action: payload.action,
+				userId: AuthModule.getUser?.id,
+			});
+			// TODO:correct path
+			await $axios.$patch(
+				`http://localhost:3030/api/v1/homework/${payload.itemId}`,
+				{ archived: arr }
+			);
+			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
