@@ -32,4 +32,5 @@ export type Envs = {
 	SC_SHORT_TITLE: string;
 	LEGACY_COURSE_OVERVIEW_ENABLED?: boolean;
 	FEATURE_USER_MIGRATION_ENABLED?: boolean;
+	ROOM_VIEW_ENABLED?: boolean;
 };
