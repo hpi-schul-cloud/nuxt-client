@@ -1,7 +1,10 @@
-import { mount, shallowMount } from "@vue/test-utils";
-
-import migrationIndex from "@pages/administration/migration/index.vue";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import ImportUsersModule from "@/store/import-users";
+import SchoolsModule from "@/store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
+import migrationIndex from "@pages/administration/migration/index.vue";
+import { mount, shallowMount } from "@vue/test-utils";
 
 declare var createComponentMocks: Function;
 
@@ -131,6 +134,12 @@ window.scrollTo = jest.fn();
 
 describe("User Migration / Index", () => {
 	beforeAll(() => {
+		setupStores({
+			"env-config": EnvConfigModule,
+			importUsers: ImportUsersModule,
+			schools: SchoolsModule,
+		});
+
 		document.body.setAttribute("data-app", "true");
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
 		importUsersModule.setTotal(100);
@@ -163,16 +172,11 @@ describe("User Migration / Index", () => {
 
 	it("should show info text on step 1", () => {
 		const wrapper = getWrapperShallow();
-		const tutorial = wrapper.vm.$i18n.t(
-			"pages.administration.migration.tutorial",
-			{
-				instance: $theme.short_name,
-				source: wrapper.vm.$i18n.t("pages.administration.migration.ldapSource"),
-			}
-		);
 		const findText = wrapper.find("[data-testid=migration_tutorial]");
 
-		expect(findText.element.innerHTML).toContain(tutorial);
+		expect(findText.element.innerHTML).toMatch(
+			/<iframe.*https:\/\/docs\.dbildungscloud\.de\/display\/SCDOK\/Migrationsprozess\?frameable=true.*><\/iframe>/
+		);
 	});
 
 	describe("Start user migration", () => {
