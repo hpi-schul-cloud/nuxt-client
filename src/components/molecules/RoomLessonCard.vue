@@ -1,7 +1,5 @@
 <template>
-	<v-hover
-		v-slot="{ hover }"
-	>
+	<v-hover v-slot="{ hover }">
 		<v-card
 			class="mx-auto mb-4 lesson-card"
 			max-width="100%"
@@ -226,7 +224,6 @@ export default {
 }
 .v-card {
 	border-bottom: 1px solid var(--color-primary-dark);
-
 
 	&:hover {
 		border-bottom: initial;
