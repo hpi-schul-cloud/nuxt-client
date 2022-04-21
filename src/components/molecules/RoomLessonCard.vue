@@ -12,9 +12,9 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text>
-			<div class="top-row-container mb-1">
-				<div class="text-h6 title-section text--primary" tabindex="0">
+		<v-card-text class="pb-0">
+			<div class="top-row-container mb-0">
+				<div class="text-h5 title-section text--primary" tabindex="0">
 					{{ lesson.name }}
 				</div>
 				<div class="dot-menu-section">
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-0">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -209,8 +209,6 @@ export default {
 	grid-template-columns: 95% 5%;
 	align-items: center;
 	.title-section {
-		font-size: var(--heading-3) !important;
-		font-weight: initial;
 		text-align: left;
 	}
 	.dot-menu-section {
@@ -228,8 +226,5 @@ export default {
 	&:hover {
 		box-shadow: var(--shadow-m);
 	}
-}
-.v-card__text {
-	padding-bottom: var(--space-xs-4);
 }
 </style>

@@ -73,7 +73,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1 mt-3">
+		<v-card-actions class="pt-1 mt-2">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -340,7 +340,6 @@ export default {
 .action-button {
 	color: var(--color-primary);
 }
-
 .v-card {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
