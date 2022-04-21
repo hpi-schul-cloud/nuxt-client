@@ -1,44 +1,49 @@
 <template>
-	<v-card
-		class="mx-auto mb-4 lesson-card"
-		max-width="100%"
-		:aria-label="ariaLabel"
-		tabindex="0"
-		outlined
-		@click="handleClick"
-		@keydown.enter="handleClick"
-		@keydown.up.prevent="onKeyPress"
-		@keydown.down.prevent="onKeyPress"
-		@keydown.space.prevent="onKeyPress"
-		@keydown.tab="$emit('tab-pressed')"
+	<v-hover
+		v-slot="{ hover }"
 	>
-		<v-card-text class="pb-0">
-			<div class="top-row-container mb-0">
-				<div class="text-h5 title-section text--primary" tabindex="0">
-					{{ lesson.name }}
+		<v-card
+			class="mx-auto mb-4 lesson-card"
+			max-width="100%"
+			:aria-label="ariaLabel"
+			tabindex="0"
+			:flat="hover ? false : true"
+			:tile="hover ? false : true"
+			@click="handleClick"
+			@keydown.enter="handleClick"
+			@keydown.up.prevent="onKeyPress"
+			@keydown.down.prevent="onKeyPress"
+			@keydown.space.prevent="onKeyPress"
+			@keydown.tab="$emit('tab-pressed')"
+		>
+			<v-card-text class="pb-0">
+				<div class="top-row-container mb-0">
+					<div class="text-h5 title-section text--primary" tabindex="0">
+						{{ lesson.name }}
+					</div>
+					<div class="dot-menu-section">
+						<more-item-menu
+							:menu-items="moreActionsMenuItems[role]"
+							:show="true"
+						/>
+					</div>
 				</div>
-				<div class="dot-menu-section">
-					<more-item-menu
-						:menu-items="moreActionsMenuItems[role]"
-						:show="true"
-					/>
-				</div>
-			</div>
-		</v-card-text>
-		<v-card-actions class="pt-0">
-			<v-btn
-				v-for="(action, index) in cardActions[role]"
-				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
-				text
-				@click.stop="action.action"
-			>
-				{{ action.name }}</v-btn
-			>
-		</v-card-actions>
-	</v-card>
+			</v-card-text>
+			<v-card-actions class="pt-0">
+				<v-btn
+					v-for="(action, index) in cardActions[role]"
+					:key="index"
+					:class="`action-button action-button-${action.name
+						.split(' ')
+						.join('-')}`"
+					text
+					@click.stop="action.action"
+				>
+					{{ action.name }}</v-btn
+				>
+			</v-card-actions>
+		</v-card>
+	</v-hover>
 </template>
 
 <script>
@@ -220,10 +225,11 @@ export default {
 	color: var(--color-primary);
 }
 .v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+	border-bottom: 1px solid var(--color-primary-dark);
+
 
 	&:hover {
+		border-bottom: initial;
 		box-shadow: var(--shadow-m);
 	}
 }
