@@ -1,6 +1,9 @@
 import AuthSystems from "./AuthSystems";
 import { schoolsModule, envConfigModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [
@@ -24,6 +27,10 @@ const searchStrings = {
 };
 
 describe("AuthSystems", () => {
+	beforeEach(() => {
+		setupStores({ "env-config": EnvConfigModule, schools: SchoolsModule });
+	});
+
 	it(...isValidComponent(AuthSystems));
 
 	describe("displaying values", () => {

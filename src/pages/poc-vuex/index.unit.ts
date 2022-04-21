@@ -1,9 +1,9 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
 import PocVuexPage from "@/pages/poc-vuex/index.vue";
-import { provide } from "@nuxtjs/composition-api";
-import TaskModule from "@/store/tasks";
 import { taskFactory } from "@/store/task.filter.unit";
+import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { provide } from "@nuxtjs/composition-api";
+import { shallowMount } from "@vue/test-utils";
 
 describe("PocVuexPage", () => {
 	let taskModule: TaskModule;

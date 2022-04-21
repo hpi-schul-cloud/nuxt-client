@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
 
 declare let createComponentMocks: Function;
 
@@ -56,6 +58,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
+		setupStores({ "env-config": EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -159,7 +162,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 			it("should have 'share' more action if env flag is set", async () => {
 				// @ts-ignore
-				EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(

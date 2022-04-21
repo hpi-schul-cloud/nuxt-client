@@ -3,6 +3,7 @@ import ImportUsers from "./ImportUsers.vue";
 import ImportUsersModule, { MatchedBy } from "@store/import-users";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 declare var createComponentMocks: Function;
 
@@ -106,7 +107,11 @@ const getWrapper: any = (data?: object, options?: object) => {
 describe("@components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
-		setupStores({ schools: SchoolsModule, importUsers: ImportUsersModule });
+		setupStores({
+			auth: AuthModule,
+			schools: SchoolsModule,
+			importUsers: ImportUsersModule,
+		});
 	});
 
 	it("should have correct props", () => {

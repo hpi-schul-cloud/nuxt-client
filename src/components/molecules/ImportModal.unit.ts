@@ -1,5 +1,7 @@
 import { roomsModule } from "@/store";
+import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import ImportModal from "./ImportModal.vue";
 
@@ -7,6 +9,7 @@ describe("@components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({ rooms: RoomsModule });
 	});
 
 	it("should open and close on property change", async () => {

@@ -42,8 +42,6 @@
 
 <script>
 import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
-import EnvConfigModule from "@/store/env-config";
-import AuthModule from "@/store/auth";
 
 export default {
 	data() {
@@ -53,10 +51,11 @@ export default {
 			menuVisible: false,
 		};
 	},
+	inject: ["authModule", "envConfigModule"],
 	computed: {
 		availableItems: {
 			get() {
-				const languages = EnvConfigModule.getAvailableLanguages
+				const languages = this.envConfigModule.getAvailableLanguages
 					.split(",")
 					.map((language) => this.buildLanguageItem(language))
 					.filter((language) => {
@@ -68,7 +67,7 @@ export default {
 		selectedItem: {
 			get() {
 				const language = this.buildLanguageItem(
-					AuthModule.getLocale || EnvConfigModule.getFallbackLanguage
+					this.authModule.getLocale || this.envConfigModule.getFallbackLanguage
 				);
 				return language;
 			},
@@ -79,7 +78,7 @@ export default {
 			this.menuVisible = !this.menuVisible;
 		},
 		async changeLanguage(item) {
-			await AuthModule.updateUserLanguage(item.language);
+			await this.authModule.updateUserLanguage(item.language);
 			window.location.reload();
 		},
 		buildLanguageItem(language) {

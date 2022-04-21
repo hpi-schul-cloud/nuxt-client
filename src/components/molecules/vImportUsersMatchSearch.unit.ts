@@ -2,6 +2,8 @@ import { mount } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import ImportUsersModule from "@/store/import-users";
 
 declare var createComponentMocks: Function;
 
@@ -32,6 +34,7 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/molecules/RoomTaskCardTeacher", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		setupStores({ importUsers: ImportUsersModule });
 	});
 
 	it("should have correct props", () => {

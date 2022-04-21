@@ -257,7 +257,6 @@ import {
 	mdiPencil,
 } from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
-import ImportUserModule from "@store/import-users";
 
 export default {
 	components: {
@@ -374,7 +373,7 @@ export default {
 			return schoolsModule.getSchool;
 		},
 		total() {
-			return ImportUserModule.getTotal;
+			return importUsersModule.getTotal;
 		},
 	},
 	watch: {

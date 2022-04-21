@@ -5,6 +5,9 @@ import { taskModule } from "@/store";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import Vuetify from "vuetify";
 import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
@@ -36,6 +39,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
+		setupStores({ tasks: TaskModule, finishedTasks: FinishedTaskModule });
 	});
 
 	it(...isValidComponent(TasksDashboardStudent));

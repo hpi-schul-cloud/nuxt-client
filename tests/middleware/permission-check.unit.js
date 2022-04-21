@@ -1,5 +1,7 @@
 import permissionCheck from "@middleware/permission-check";
 import { authModule } from "@/store";
+import setupStores from "../test-utils/setupStores";
+import AuthModule from "@/store/auth";
 
 const mockApp = {
 	i18n: {
@@ -31,6 +33,10 @@ const getMockContext = ({
 });
 
 describe("@middleware/permission-check", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
+
 	it("exports a function", () => {
 		expect(typeof permissionCheck).toBe("function");
 	});
@@ -45,6 +51,7 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it(`grants access using advanced "AND" syntax`, async () => {
+		authModule.setUser({ permissions: ["PERMISSION_A", "PERMISSION_B"] });
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
 			route: getMockRoute({
@@ -56,6 +63,7 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it(`grants access using advanced "OR" syntax`, async () => {
+		authModule.setUser({ permissions: ["PERMISSION_A", "PERMISSION_B"] });
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
 			route: getMockRoute({

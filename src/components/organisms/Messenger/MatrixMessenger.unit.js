@@ -1,6 +1,8 @@
 import Messenger from "./MatrixMessenger";
 import { extractRoomTypeAndIdFromPath } from "./MatrixMessenger";
 import { schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
 
 const session = {
 	homeserverUrl: "https://matrix.domain",
@@ -31,6 +33,7 @@ describe("MatrixMessenger.unit", () => {
 	beforeEach(() => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
+		setupStores({ schools: SchoolsModule });
 		schoolsModule.setSchool({ features: ["messenger"] });
 	});
 	afterEach(() => {

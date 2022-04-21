@@ -1,6 +1,8 @@
-import TasksModule from "@/store/tasks";
-import FinishedTasksModule from "@/store/finished-tasks";
+import { finishedTaskModule, taskModule } from "@/store";
+import FinishedTaskModule from "@/store/finished-tasks";
+import TaskModule from "@/store/tasks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
 
 const { tasksTeacher } = mocks;
@@ -27,6 +29,10 @@ const getWrapper = (props, options) => {
 };
 
 describe("@components/molecules/TaskItemMenu", () => {
+	beforeEach(() => {
+		setupStores({ tasks: TaskModule, "finished-tasks": FinishedTaskModule });
+	});
+
 	defineWindowWidth(1264);
 
 	it(...isValidComponent(TaskItemMenu));
@@ -91,7 +97,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 
 	describe("when finishing a task", () => {
 		it("should call finishTask of TaskModule", async () => {
-			const finishTaskMock = jest.spyOn(TasksModule, "finishTask");
+			const finishTaskMock = jest.spyOn(taskModule, "finishTask");
 			const task = tasksTeacher[0];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -112,7 +118,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 
 	describe("when restoring a task", () => {
 		it("should call restoreTask of FinishedTaskModule", async () => {
-			const restoreTaskMock = jest.spyOn(FinishedTasksModule, "restoreTask");
+			const restoreTaskMock = jest.spyOn(finishedTaskModule, "restoreTask");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -133,7 +139,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 
 	describe("when deleting a task", () => {
 		it("should call deleteTask of TaskModule", async () => {
-			const deleteTaskMock = jest.spyOn(TasksModule, "deleteTask");
+			const deleteTaskMock = jest.spyOn(taskModule, "deleteTask");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,

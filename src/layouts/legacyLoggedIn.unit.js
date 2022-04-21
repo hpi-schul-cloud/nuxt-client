@@ -1,5 +1,11 @@
 import legacyLoggedIn from "./legacyLoggedIn";
 import { authModule, envConfigModule, filePathsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
+import SchoolsModule from "@/store/schools";
+import AutoLogoutModule from "@/store/autoLogout";
 
 const $route = {
 	query: {
@@ -9,21 +15,31 @@ const $route = {
 };
 
 const $router = { push: jest.fn() };
-authModule.setUser({
-	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
-	roles: [{ name: "administrator" }],
-});
-authModule.setAccessToken("asdf");
-
-filePathsModule.setSpecificFiles("https://dbildungscloud.de");
-
-envConfigModule.setEnvs({
-	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
-});
 
 describe("legacyLoggedIn", () => {
 	let wrapper;
-	beforeAll(() => {
+
+	beforeEach(() => {
+		setupStores({
+			auth: AuthModule,
+			autoLogout: AutoLogoutModule,
+			"env-config": EnvConfigModule,
+			filePaths: FilePathsModule,
+			schools: SchoolsModule,
+		});
+
+		authModule.setUser({
+			permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
+			roles: [{ name: "administrator" }],
+		});
+		authModule.setAccessToken("asdf");
+
+		filePathsModule.setSpecificFiles("https://dbildungscloud.de");
+
+		envConfigModule.setEnvs({
+			ALERT_STATUS_URL: "https://status.dbildungscloud.de",
+		});
+
 		wrapper = mount(legacyLoggedIn, {
 			...createComponentMocks({ i18n: true, $router, $route }),
 		});

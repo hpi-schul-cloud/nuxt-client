@@ -1,5 +1,9 @@
 import SchoolPage from "./school-settings";
 import { envConfigModule, schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -148,6 +152,13 @@ const mockStore = {
 		},
 	},
 };
+
+setupStores({
+	auth: AuthModule,
+	"env-config": EnvConfigModule,
+	schools: SchoolsModule,
+});
+
 const fetchYearSpy = jest
 	.spyOn(schoolsModule, "fetchCurrentYear")
 	.mockImplementation(() => {
@@ -232,7 +243,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -244,7 +254,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -258,7 +267,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -271,7 +279,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -287,7 +294,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();

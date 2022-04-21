@@ -1,6 +1,10 @@
-import { default as RoomsPage } from "./rooms-overview.vue";
+import RoomsPage from "./rooms-overview.vue";
 import { authModule, roomsModule } from "@/store";
 import flushPromises from "flush-promises";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import RoomsModule from "@/store/rooms";
+import EnvConfigModule from "@/store/env-config";
 
 const mockRoomStoreData = [
 	{
@@ -65,6 +69,12 @@ const mockAuthStoreData = {
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
+setupStores({
+	auth: AuthModule,
+	"env-config": EnvConfigModule,
+	rooms: RoomsModule,
+});
+
 const spyMocks = {
 	storeRoomAlignMock: jest
 		.spyOn(roomsModule, "align")
@@ -113,7 +123,7 @@ describe("RoomPage", () => {
 		jest.clearAllMocks();
 	});
 
-	// it(...isValidComponent(RoomsPage));
+	it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
