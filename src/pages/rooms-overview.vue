@@ -392,7 +392,10 @@ export default {
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
-			this.groupDialog.isOpen = false;
+			// This setTimeout is used for preventing being closed modal immediately while ungrouping the items.
+			setTimeout(() => {
+				this.groupDialog.isOpen = false;
+			}, 0);
 			this.searchText = "";
 			this.dragging = true;
 		},
