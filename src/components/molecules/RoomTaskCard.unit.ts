@@ -157,7 +157,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 			const title = wrapper.find(".title-section");
 
 			expect(title.element.textContent).toContain(
-				"Aufgabe - Abgabe - 28.09.00"
+				"Aufgabe – Abgabe 28.09.00"
 			);
 		});
 

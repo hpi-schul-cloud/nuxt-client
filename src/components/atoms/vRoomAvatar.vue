@@ -50,6 +50,8 @@
 	</div>
 </template>
 <script>
+import EnvConfigModule from "@store/env-config";
+
 export default {
 	props: {
 		item: {
@@ -83,14 +85,25 @@ export default {
 	},
 	methods: {
 		onClick() {
+			const showRoomView = EnvConfigModule.getEnv.ROOM_VIEW_ENABLED || false;
 			if (!this.condenseLayout) {
 				if (this.item.to) {
+					if (showRoomView) {
+						this.$router.push({
+							path: `/rooms/${this.item.id}`,
+						});
+						return;
+					}
 					this.$router.push({
 						path: this.item.to,
 					});
 					return;
 				}
 				if (this.item.href) {
+					if (showRoomView) {
+						window.location = `/rooms/${this.item.id}`;
+						return;
+					}
 					window.location = this.item.href;
 				}
 			}
