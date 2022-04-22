@@ -148,7 +148,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			) as any;
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.teacher.emptyState"));
+			expect(emptyStateComponent.vm.title).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.teacher.emptyState")
+			);
 		});
 
 		it("Should render empty state for students", async () => {
@@ -158,8 +160,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			) as any;
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(wrapper.vm.$i18n.t("pages.room.student.emptyState"));
-		})
+			expect(emptyStateComponent.vm.title).toStrictEqual(
+				wrapper.vm.$i18n.t("pages.room.student.emptyState")
+			);
+		});
 	});
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {
@@ -403,6 +407,52 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
 			cancelButton.trigger("click");
 			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
+		});
+	});
+
+	describe("Finishing and Restoring Tasks", () => {
+		it("should call finishTask action", async () => {
+			const finishTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const taskCard = wrapper.find(".task-card");
+			RoomModule.finishTask = finishTaskMock;
+
+			taskCard.vm.$emit("finish-task");
+			expect(finishTaskMock).toHaveBeenCalled();
+			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
+		});
+
+		it("should call restoreTask action", async () => {
+			const finishTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const taskCard = wrapper.find(".task-card");
+			RoomModule.finishTask = finishTaskMock;
+
+			taskCard.vm.$emit("restore-task");
+			expect(finishTaskMock).toHaveBeenCalled();
+			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
+		});
+
+		it("should call finishTask action", async () => {
+			const finishTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const taskCard = wrapper.find(".task-card");
+			RoomModule.finishTask = finishTaskMock;
+
+			taskCard.vm.$emit("finish-task");
+			expect(finishTaskMock).toHaveBeenCalled();
+			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
+		});
+
+		it("should call restoreTask action", async () => {
+			const finishTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const taskCard = wrapper.find(".task-card");
+			RoomModule.finishTask = finishTaskMock;
+
+			taskCard.vm.$emit("restore-task");
+			expect(finishTaskMock).toHaveBeenCalled();
+			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
 		});
 	});
 });

@@ -169,7 +169,7 @@ export default {
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isDraft) {
+				if (!this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
