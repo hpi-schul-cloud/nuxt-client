@@ -2,6 +2,7 @@
 	<v-hover v-slot="{ hover }">
 		<v-card
 			class="mx-auto mb-4 lesson-card"
+			:class="getStyleClasses()"
 			max-width="100%"
 			:aria-label="ariaLabel"
 			tabindex="0"
@@ -200,6 +201,12 @@ export default {
 					break;
 			}
 		},
+		getStyleClasses() {
+			if (this.isHidden) {
+				return "hidden-style";
+			}
+			return "";
+		}
 	},
 };
 </script>
