@@ -10,6 +10,7 @@ export default [
 		to: "/rooms-overview",
 		icon: "graduation-cap",
 		testId: "Course-Overview",
+		activeForUrls: ["/rooms", "/rooms-list"],
 	},
 	{
 		title: "global.sidebar.teams",

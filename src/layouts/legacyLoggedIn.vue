@@ -151,9 +151,11 @@ export default {
 			});
 
 			return sidebarItems.map((item) => {
+				const isInRoute = (activeURL) => this.$route.path.includes(activeURL);
 				const isActive =
 					this.$route.path.includes(item.href) ||
-					this.$route.path.includes(item.to);
+					this.$route.path.includes(item.to) ||
+					(item.activeForUrls && item.activeForUrls.some(isInRoute));
 				item.childActive = false;
 				if (item.children) {
 					item.children.forEach((childItem) => {
