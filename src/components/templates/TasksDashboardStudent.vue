@@ -81,7 +81,6 @@
 </template>
 
 <script>
-import { taskModule, finishedTaskModule } from "@/store";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
@@ -98,29 +97,45 @@ export default {
 			required: true,
 		},
 	},
+	inject: ["taskModule", "finishedTaskModule"],
 	computed: {
-		status: () => taskModule.getStatus,
-		openTasks: () => taskModule.getOpenTasksForStudent,
-		completedTasks: () => taskModule.getCompletedTasksForStudent,
-		openTasksForStudentIsEmpty: () => taskModule.openTasksForStudentIsEmpty,
-		completedTasksForStudentIsEmpty: () =>
-			taskModule.completedTasksForStudentIsEmpty,
-		hasTasks: () => taskModule.hasTasks,
-		finishedTasksIsEmpty: () => finishedTaskModule.tasksIsEmpty,
-		finishedTasks: () => finishedTaskModule.getTasks,
-		overdueTasks: function () {
+		status() {
+			return this.taskModule.getStatus;
+		},
+		openTasks() {
+			return this.taskModule.getOpenTasksForStudent;
+		},
+		completedTasks() {
+			return this.taskModule.getCompletedTasksForStudent;
+		},
+		openTasksForStudentIsEmpty() {
+			return this.taskModule.openTasksForStudentIsEmpty;
+		},
+		completedTasksForStudentIsEmpty() {
+			return this.taskModule.completedTasksForStudentIsEmpty;
+		},
+		hasTasks() {
+			return this.taskModule.hasTasks;
+		},
+		finishedTasksIsEmpty() {
+			return this.finishedTaskModule.tasksIsEmpty;
+		},
+		finishedTasks() {
+			return this.finishedTaskModule.getTasks;
+		},
+		overdueTasks() {
 			return this.openTasks.overdue;
 		},
-		noDueDateTasks: function () {
+		noDueDateTasks() {
 			return this.openTasks.noDueDate;
 		},
-		withDueDateTasks: function () {
+		withDueDateTasks() {
 			return this.openTasks.withDueDate;
 		},
-		submittedTasks: function () {
+		submittedTasks() {
 			return this.completedTasks.submitted;
 		},
-		gradedTasks: function () {
+		gradedTasks() {
 			return this.completedTasks.graded;
 		},
 		currentTab: {

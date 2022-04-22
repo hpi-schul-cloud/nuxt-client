@@ -1,3 +1,5 @@
+import FilePathsModule from "@/store/filePaths";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { default as ConsentPage } from "./consent.vue";
 // import mock$objects from "../../../../tests/test-utils/pageStubs";
 
@@ -81,6 +83,7 @@ describe("students/consent", () => {
 				},
 			},
 		};
+		setupStores({ filePaths: FilePathsModule });
 	});
 
 	afterEach(() => {

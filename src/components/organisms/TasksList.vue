@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { taskModule, finishedTaskModule } from "@/store";
 import TaskItemStudent from "@components/molecules/TaskItemStudent";
 import TaskItemTeacher from "@components/molecules/TaskItemTeacher";
 
@@ -77,10 +76,17 @@ export default {
 			required: false,
 		},
 	},
+	inject: ["taskModule", "finishedTaskModule"],
 	computed: {
-		currentTaskStatus: () => taskModule.getStatus,
-		finishedTasksStatus: () => finishedTaskModule.getStatus,
-		finishedTasksIsInitialized: () => finishedTaskModule.getIsInitialized,
+		currentTaskStatus() {
+			return this.taskModule.getStatus;
+		},
+		finishedTasksStatus() {
+			return this.finishedTaskModule.getStatus;
+		},
+		finishedTasksIsInitialized() {
+			return this.finishedTaskModule.getIsInitialized;
+		},
 		status: function () {
 			return this.type === "current"
 				? this.currentTaskStatus

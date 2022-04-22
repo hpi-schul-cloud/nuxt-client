@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import { taskModule, finishedTaskModule } from "@/store";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
@@ -80,22 +79,39 @@ export default {
 			required: true,
 		},
 	},
+	inject: ["taskModule", "finishedTaskModule"],
 	computed: {
-		openTasks: () => taskModule.getOpenTasksForTeacher,
-		draftTasks: () => taskModule.getDraftTasksForTeacher,
-		status: () => taskModule.getStatus,
-		hasTasks: () => taskModule.hasTasks,
-		openTasksForTeacherIsEmpty: () => taskModule.openTasksForTeacherIsEmpty,
-		draftsForTeacherIsEmpty: () => taskModule.draftsForTeacherIsEmpty,
-		finishedTasksIsEmpty: () => finishedTaskModule.tasksIsEmpty,
-		finishedTasks: () => finishedTaskModule.getTasks,
-		overdueTasks: function () {
+		openTasks() {
+			return this.taskModule.getOpenTasksForTeacher;
+		},
+		draftTasks() {
+			return this.taskModule.getDraftTasksForTeacher;
+		},
+		status() {
+			return this.taskModule.getStatus;
+		},
+		hasTasks() {
+			return this.taskModule.hasTasks;
+		},
+		openTasksForTeacherIsEmpty() {
+			return this.taskModule.openTasksForTeacherIsEmpty;
+		},
+		draftsForTeacherIsEmpty() {
+			return this.taskModule.draftsForTeacherIsEmpty;
+		},
+		finishedTasksIsEmpty() {
+			return this.finishedTaskModule.tasksIsEmpty;
+		},
+		finishedTasks() {
+			return this.finishedTaskModule.getTasks;
+		},
+		overdueTasks() {
 			return this.openTasks.overdue;
 		},
-		noDueDateTasks: function () {
+		noDueDateTasks() {
 			return this.openTasks.noDueDate;
 		},
-		withDueDateTasks: function () {
+		withDueDateTasks() {
 			return this.openTasks.withDueDate;
 		},
 		currentTab: {

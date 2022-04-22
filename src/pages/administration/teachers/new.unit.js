@@ -1,5 +1,7 @@
 import { default as NewTeacher } from "./new.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 
 describe("teachers/new", () => {
 	const createTeacherStub = jest.fn();
@@ -18,6 +20,10 @@ describe("teachers/new", () => {
 			state: () => ({}),
 		},
 	};
+
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
 
 	it(...isValidComponent(NewTeacher));
 

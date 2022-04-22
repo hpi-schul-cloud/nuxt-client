@@ -1,9 +1,8 @@
+import SchoolsModule from "@/store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
+import ImportUsersModule, { MatchedBy } from "@store/import-users";
 import { mount } from "@vue/test-utils";
 import ImportUsers from "./ImportUsers.vue";
-import ImportUsersModule, { MatchedBy } from "@store/import-users";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
 
 declare var createComponentMocks: Function;
 
@@ -108,7 +107,6 @@ describe("@components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			auth: AuthModule,
 			schools: SchoolsModule,
 			importUsers: ImportUsersModule,
 		});
@@ -142,6 +140,10 @@ describe("@components/molecules/importUsers", () => {
 	it("data table should have correct props", async () => {
 		const wrapper = getWrapper(mockData);
 
+		wrapper.vm.school.inMaintenance = true;
+		wrapper.vm.school.inUserMigration = true;
+		await wrapper.vm.$nextTick();
+
 		const dataTableElement = wrapper.find(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
@@ -151,10 +153,13 @@ describe("@components/molecules/importUsers", () => {
 	describe("should search with all columns", () => {
 		let getDataFromApiSpy: any;
 		let wrapper: any;
-		beforeEach(() => {
+		beforeEach(async () => {
 			getDataFromApiSpy = jest.fn();
 			wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+			wrapper.vm.school.inMaintenance = true;
+			wrapper.vm.school.inUserMigration = true;
+			await wrapper.vm.$nextTick();
 		});
 
 		afterEach(() => {
@@ -248,11 +253,22 @@ describe("@components/molecules/importUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		it("should sort by first name", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
+		let getDataFromApiSpy: any;
+		let wrapper: any;
+		beforeEach(async () => {
+			getDataFromApiSpy = jest.fn();
+			wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
+			wrapper.vm.school.inMaintenance = true;
+			wrapper.vm.school.inUserMigration = true;
+			await wrapper.vm.$nextTick();
+		});
 
+		afterEach(() => {
+			getDataFromApiSpy.mockClear();
+		});
+
+		it("should sort by first name", async () => {
 			const sortFirstNameElement = wrapper.find(".head_firstName");
 			sortFirstNameElement.trigger("click");
 			await wrapper.vm.$nextTick();
@@ -268,10 +284,6 @@ describe("@components/molecules/importUsers", () => {
 			getDataFromApiSpy.mockClear();
 		});
 		it("should sort by last name", async () => {
-			const getDataFromApiSpy = jest.fn();
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-
 			const sortLastNameElement = wrapper.find(".head_lastName");
 			sortLastNameElement.trigger("click");
 			await wrapper.vm.$nextTick();

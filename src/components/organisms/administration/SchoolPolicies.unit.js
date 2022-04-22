@@ -4,6 +4,8 @@ import { schoolsModule } from "@/store";
 // Utilities
 import { mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
 
 const generateMockStore = (options = {}) => ({
 	schools: {
@@ -30,7 +32,9 @@ const generateMockStore = (options = {}) => ({
 });
 
 describe("SchoolPolicies", () => {
-	beforeAll(() => {});
+	beforeEach(() => {
+		setupStores({ schools: SchoolsModule });
+	});
 
 	it(...isValidComponent(SchoolPolicies));
 

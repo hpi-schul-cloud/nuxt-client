@@ -2,6 +2,9 @@ import { default as StudentPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -46,6 +49,8 @@ describe("students/index", () => {
 
 		jest.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
+
+		setupStores({ auth: AuthModule, schools: SchoolsModule });
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
 
