@@ -203,7 +203,7 @@ export default {
 		},
 		getStyleClasses() {
 			if (this.isHidden) {
-				return "hidden-style";
+				return "hidden-lesson";
 			}
 			return "";
 		},
@@ -236,5 +236,8 @@ export default {
 		border-bottom: initial;
 		box-shadow: var(--shadow-m);
 	}
+}
+.hidden-lesson {
+	opacity: 0.6;
 }
 </style>

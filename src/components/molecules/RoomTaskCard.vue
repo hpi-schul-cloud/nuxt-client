@@ -1,6 +1,7 @@
 <template>
 	<v-card
 		class="mx-auto mb-4 task-card"
+		:class="getStyleClasses()"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
@@ -297,6 +298,12 @@ export default {
 					break;
 			}
 		},
+		getStyleClasses() {
+			if (this.isDraft && !this.isFinished) {
+				return "task-draft";
+			}
+			return "";
+		},
 	},
 };
 </script>
@@ -350,5 +357,8 @@ export default {
 }
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
+}
+.task-draft {
+	opacity: 0.6;
 }
 </style>
