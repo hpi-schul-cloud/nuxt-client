@@ -34,7 +34,10 @@
 				v-html="task.description"
 			></div>
 		</v-card-text>
-		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
+		<v-card-text
+			v-if="!isDraft && !isFinished"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
 			<div class="chip-items-group">
 				<div
 					v-if="roles.Teacher === role"
@@ -165,7 +168,7 @@ export default {
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isDraft) {
+				if (!this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -245,6 +248,9 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
+			if (this.isFinished) {
+				return this.$t("pages.room.taskCard.label.task");
+			}
 			const dueTitle = !dueDate
 				? this.$t("pages.room.taskCard.label.noDueDate")
 				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
@@ -309,12 +315,11 @@ export default {
 	display: grid;
 	grid-template-columns: 95% 5%;
 	align-items: center;
-	.icon-section {
-		overflow: none;
-		text-align: left;
-	}
 	.title-section {
 		text-align: left;
+		.v-icon {
+			padding-bottom: var(--space-xs-4);
+		}
 	}
 	.dot-menu-section {
 		text-align: right;

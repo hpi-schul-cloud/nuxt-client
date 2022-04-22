@@ -156,9 +156,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 			const wrapper = getWrapper({ ...testProps, role });
 			const title = wrapper.find(".title-section");
 
-			expect(title.element.textContent).toContain(
-				"Aufgabe – Abgabe 28.09.00"
-			);
+			expect(title.element.textContent).toContain("Aufgabe – Abgabe 28.09.00");
 		});
 
 		it("should show or hide description area", async () => {
@@ -179,14 +177,19 @@ describe("@components/molecules/RoomTaskCard", () => {
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
-			it("should have submitted and graded section if task is not a draft", () => {
-				const wrapper = getWrapper({ ...draftTestProps, role });
-				const submitSection = wrapper.findAll(".chip-value");
+			it("should not have submitted and graded section if task is a draft or finished", () => {
+				const draftWrapper = getWrapper({ ...draftTestProps, role });
+				const draftSubmitSection = draftWrapper.findAll(".chip-value");
 
-				expect(submitSection).toHaveLength(0);
+				expect(draftSubmitSection).toHaveLength(0);
+
+				const finishedWrapper = getWrapper({ ...finishedTestProps, role });
+				const finsihedSubmitSection = finishedWrapper.findAll(".chip-value");
+
+				expect(finsihedSubmitSection).toHaveLength(0);
 			});
 
-			it("should have submitted and graded section if task is not a draft", () => {
+			it("should have submitted and graded section if task is not a draft and not finished", () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				const submitSection = wrapper.findAll(".chip-value");
 
@@ -195,13 +198,33 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(submitSection.wrappers[1].element.textContent).toContain("0/1");
 			});
 
-			it("should have one action button if is a draft", () => {
+			it("should have one 'finish' action button if task is not a draft and not finished", () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
 				expect(actionButtons.wrappers[0].element.textContent).toContain(
-					"Abschließen"
+					wrapper.vm.$i18n.t("pages.room.taskCard.label.done")
+				);
+			});
+
+			it("should have one 'post' action button if task is a draft", () => {
+				const wrapper = getWrapper({ ...draftTestProps, role });
+				const actionButtons = wrapper.findAll(".action-button");
+
+				expect(actionButtons).toHaveLength(1);
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.label.post")
+				);
+			});
+
+			it("should have one 'reopen' action button if task is finished", () => {
+				const wrapper = getWrapper({ ...finishedTestProps, role });
+				const actionButtons = wrapper.findAll(".action-button");
+
+				expect(actionButtons).toHaveLength(1);
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.label.reopen")
 				);
 			});
 
