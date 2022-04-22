@@ -58,20 +58,6 @@ export class Room extends VuexModule {
 	}
 
 	@Action
-	private modifyTaskArchive(payload: object | any): Promise<Array<string>> {
-		const result = payload.archived;
-
-		if (payload.action === "finish") {
-			result.push(payload.userId);
-			return result;
-		}
-		if (payload.action === "restore") {
-			return result.filter((item: string) => item !== payload.userId);
-		}
-		return result;
-	}
-
-	@Action
 	async fetchContent(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
@@ -263,15 +249,37 @@ export class Room extends VuexModule {
 	@Action
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
+		const userId = AuthModule.getUser?.id;
 		try {
 			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
-			const arr = await this.modifyTaskArchive({
-				archived: homework.archived,
-				action: payload.action,
-				userId: AuthModule.getUser?.id,
-			});
-			// TODO:correct path
-			await $axios.$patch(`/v1/homework/${payload.itemId}`, { archived: arr });
+			if (!homework.archived) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-found",
+				});
+				return;
+			}
+			let archived = [];
+			if (payload.action === "finish") {
+				archived = homework?.archived;
+				archived.push(userId);
+			}
+			if (payload.action === "restore") {
+				archived = homework?.archived.filter((item: string) => item !== userId);
+			}
+
+			const patchedData = await $axios.$patch(
+				`/v1/homework/${payload.itemId}`,
+				{ archived }
+			);
+			if (!patchedData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-patched",
+				});
+				return;
+			}
+
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
