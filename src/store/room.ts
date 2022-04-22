@@ -264,19 +264,14 @@ export class Room extends VuexModule {
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const homework = await $axios.$get(
-				`http://localhost:3030/api/v1/homework/${payload.itemId}`
-			);
+			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
 			const arr = await this.modifyTaskArchive({
 				archived: homework.archived,
 				action: payload.action,
 				userId: AuthModule.getUser?.id,
 			});
 			// TODO:correct path
-			await $axios.$patch(
-				`http://localhost:3030/api/v1/homework/${payload.itemId}`,
-				{ archived: arr }
-			);
+			await $axios.$patch(`/v1/homework/${payload.itemId}`, { archived: arr });
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
