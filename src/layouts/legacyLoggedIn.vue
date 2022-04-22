@@ -48,7 +48,6 @@ import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
-import EnvConfigModule from "@store/env-config";
 
 export default {
 	components: {
@@ -129,8 +128,6 @@ export default {
 			return [...this.topbarBaseActions];
 		},
 		sidebarItems() {
-			const showLegacyCourse =
-				EnvConfigModule.getEnv.LEGACY_COURSE_OVERVIEW_ENABLED || false;
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
 				// Check permissions for all children
 				if ((item.children || []).length >= 1) {
@@ -167,14 +164,6 @@ export default {
 					});
 				}
 				item.active = isActive && !item.childActive;
-
-				if (item.linkType == "legacyCourse" && showLegacyCourse) {
-					item.visibility = "true";
-				}
-
-				if (item.linkType == "nuxtCourse" && !showLegacyCourse) {
-					item.visibility = "true";
-				}
 
 				return item;
 			});
