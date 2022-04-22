@@ -237,6 +237,7 @@ export default {
 	}
 }
 .hidden-lesson {
+	z-index: var(--layer-page);
 	opacity: 0.6;
 }
 </style>
