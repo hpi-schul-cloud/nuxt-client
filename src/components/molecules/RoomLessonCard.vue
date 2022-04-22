@@ -206,7 +206,7 @@ export default {
 				return "hidden-style";
 			}
 			return "";
-		}
+		},
 	},
 };
 </script>
