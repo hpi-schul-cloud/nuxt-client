@@ -89,12 +89,14 @@ export default {
 			if (!this.condenseLayout) {
 				if (this.item.to) {
 					this.$router.push({
-						path: (showRoomView ? `/rooms/${this.item.id}` : this.item.to),
+						path: showRoomView ? `/rooms/${this.item.id}` : this.item.to,
 					});
 					return;
 				}
 				if (this.item.href) {
-					window.location = (showRoomView ? `/rooms/${this.item.id}` : this.item.href);
+					window.location = showRoomView
+						? `/rooms/${this.item.id}`
+						: this.item.href;
 				}
 			}
 		},
