@@ -88,23 +88,13 @@ export default {
 			const showRoomView = EnvConfigModule.getEnv.ROOM_VIEW_ENABLED || false;
 			if (!this.condenseLayout) {
 				if (this.item.to) {
-					if (showRoomView) {
-						this.$router.push({
-							path: `/rooms/${this.item.id}`,
-						});
-						return;
-					}
 					this.$router.push({
-						path: this.item.to,
+						path: (showRoomView ? `/rooms/${this.item.id}` : this.item.to),
 					});
 					return;
 				}
 				if (this.item.href) {
-					if (showRoomView) {
-						window.location = `/rooms/${this.item.id}`;
-						return;
-					}
-					window.location = this.item.href;
+					window.location = (showRoomView ? `/rooms/${this.item.id}` : this.item.href);
 				}
 			}
 		},
