@@ -44,19 +44,5 @@ describe("legacyLoggedIn", () => {
 		expect(
 			studentAdministrationListItem.element.classList.contains("active")
 		).toBeTrue();
-
-		const courseLinkItem = wrapper.find("[data-testId='Kurse']");
-		expect(courseLinkItem.element.style.display).toStrictEqual("none");
-	});
-
-	it("should mark course link visibility if env-varable set", async () => {
-		EnvConfigModule.setEnvs({
-			LEGACY_COURSE_OVERVIEW_ENABLED: true,
-		});
-		const legacyRoute = wrapper.vm.sidebarItems.filter(
-			(item) => item.linkType === "legacyCourse"
-		);
-
-		expect(legacyRoute[0].visibility).toStrictEqual("true");
 	});
 });
