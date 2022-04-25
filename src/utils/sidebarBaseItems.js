@@ -7,19 +7,10 @@ export default [
 	},
 	{
 		title: "global.sidebar.courses",
-		href: "/courses",
-		icon: "graduation-cap",
-		testId: "Kurse",
-		linkType: "legacyCourse",
-		visibility: "false",
-	},
-	{
-		title: "global.sidebar.courses",
 		to: "/rooms-overview",
 		icon: "graduation-cap",
 		testId: "Course-Overview",
-		linkType: "nuxtCourse",
-		visibility: "false",
+		activeForUrls: ["/rooms", "/rooms-list"],
 	},
 	{
 		title: "global.sidebar.teams",
