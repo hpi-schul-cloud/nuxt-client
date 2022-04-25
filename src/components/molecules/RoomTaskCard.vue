@@ -1,6 +1,7 @@
 <template>
 	<v-card
 		class="mx-auto mb-4 task-card"
+		:class="getStyleClasses()"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
@@ -76,7 +77,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-1 mt-2">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -303,6 +304,9 @@ export default {
 					break;
 			}
 		},
+		getStyleClasses() {
+			return this.isDraft && !this.isFinished ? "task-draft" : "";
+		},
 	},
 };
 </script>
@@ -345,7 +349,6 @@ export default {
 .action-button {
 	color: var(--color-primary);
 }
-
 .v-card {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
@@ -356,5 +359,8 @@ export default {
 }
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
+}
+.task-draft {
+	opacity: 0.6;
 }
 </style>

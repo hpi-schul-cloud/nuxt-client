@@ -172,6 +172,16 @@ describe("@components/molecules/RoomTaskCard", () => {
 				"some description here"
 			);
 		});
+
+		it("should use draft UI only for unfinished task draft cards", async () => {
+			const taskDraftWrapper = getWrapper({ ...draftTestProps, role });
+			const taskDraftCard = taskDraftWrapper.find(".task-card");
+			expect(taskDraftCard.element.className).toContain("task-draft");
+
+			const regularTaskWrapper = getWrapper({ ...testProps, role });
+			const taskCard = regularTaskWrapper.find(".task-card");
+			expect(taskCard.element.className).not.toContain("task-draft");
+		});
 	});
 
 	describe("user role based behaviors and actions", () => {
