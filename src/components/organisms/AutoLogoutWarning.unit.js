@@ -1,5 +1,8 @@
-import AutoLogoutWarning from "./AutoLogoutWarning";
 import { autoLogoutModule, envConfigModule } from "@/store";
+import AutoLogoutModule from "@/store/autoLogout";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AutoLogoutWarning from "./AutoLogoutWarning";
 
 const toast = {
 	error401: -1,
@@ -50,6 +53,11 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	};
 
 	beforeAll(() => {
+		setupStores({
+			autoLogout: AutoLogoutModule,
+			"env-config": EnvConfigModule,
+		});
+
 		actions = getMockActions();
 		const mock = getMocks({ actions });
 		wrapper = mount(AutoLogoutWarning, {

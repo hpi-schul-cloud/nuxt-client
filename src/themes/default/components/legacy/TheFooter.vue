@@ -98,7 +98,7 @@ export default {
 		},
 	},
 	mounted() {
-		console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
+		// console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

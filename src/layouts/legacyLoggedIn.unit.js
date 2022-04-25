@@ -6,19 +6,25 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import SchoolsModule from "@/store/schools";
 import AutoLogoutModule from "@/store/autoLogout";
+import { mount } from "@vue/test-utils";
 
-const $route = {
-	query: {
-		id: "mockId",
-	},
-	path: "/administration/students/",
+const mountComponent = () => {
+	const wrapper = mount(legacyLoggedIn, {
+		...createComponentMocks({
+			i18n: true,
+			// $router: { push: jest.fn() },
+			$route: {
+				query: {
+					id: "mockId",
+				},
+				path: "/administration/students/",
+			},
+		}),
+	});
+	return wrapper;
 };
 
-const $router = { push: jest.fn() };
-
 describe("legacyLoggedIn", () => {
-	let wrapper;
-
 	beforeEach(() => {
 		setupStores({
 			auth: AuthModule,
@@ -35,19 +41,13 @@ describe("legacyLoggedIn", () => {
 		authModule.setAccessToken("asdf");
 
 		filePathsModule.setSpecificFiles("https://dbildungscloud.de");
-
-		envConfigModule.setEnvs({
-			ALERT_STATUS_URL: "https://status.dbildungscloud.de",
-		});
-
-		wrapper = mount(legacyLoggedIn, {
-			...createComponentMocks({ i18n: true, $router, $route }),
-		});
 	});
 
 	it(...isValidComponent(legacyLoggedIn));
 
 	it("should mark active links", () => {
+		const wrapper = mountComponent();
+
 		const administrationListItem = wrapper.find("[data-testId='Verwaltung']");
 		const studentAdministrationListItem = wrapper.find(
 			"[data-testId='Schüler:innen']"
@@ -64,9 +64,17 @@ describe("legacyLoggedIn", () => {
 	});
 
 	it("should mark course link visibility if env-varable set", async () => {
+		authModule.setUser({
+			permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
+			roles: [{ name: "administrator" }],
+		});
 		envConfigModule.setEnvs({
 			LEGACY_COURSE_OVERVIEW_ENABLED: true,
 		});
+		filePathsModule.setSpecificFiles("https://dbildungscloud.de");
+
+		const wrapper = mountComponent();
+
 		const legacyRoute = wrapper.vm.sidebarItems.filter(
 			(item) => item.linkType === "legacyCourse"
 		);

@@ -15,14 +15,14 @@ export default async ({ app, route }) => {
 				// TODO wrong use of store (not so bad)
 				// TODO temporary workaround until $cookies are accessible from TS modules
 				app.$cookies.remove("jwt");
-				await authModule.logout();
+				authModule.logout();
 				window.location = `${NOT_AUTHENTICATED_REDIRECT_URL}?redirect=${window.location}`;
 			}
 		} catch (error) {
 			console.error(error);
 			// TODO temporary workaround until $cookies are accessible from TS modules
 			app.$cookies.remove("jwt");
-			await authModule.logout();
+			authModule.logout();
 			window.location = NOT_AUTHENTICATED_REDIRECT_URL;
 		}
 	}

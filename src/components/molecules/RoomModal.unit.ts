@@ -124,7 +124,7 @@ describe("@components/molecules/RoomModal", () => {
 		titleH2.trigger("click");
 		const titleInput = wrapper.find(".room-title input");
 		titleInput.setValue("changed title");
-		titleInput.trigger("keyup.enter");
+		titleInput.trigger("blur");
 		await wrapper.vm.$nextTick();
 
 		expect(storeRoomUpdateMock).toHaveBeenCalled();

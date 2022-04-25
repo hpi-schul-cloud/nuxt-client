@@ -95,6 +95,8 @@ const getWrapper = (props: object, options?: object) => {
 
 describe("@components/templates/RoomDashboard.vue", () => {
 	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
 		setupStores({
 			tasks: TaskModule,
 			room: RoomModule,
@@ -306,7 +308,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
+			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("2345");
 			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 

@@ -70,7 +70,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 const getClassesNames = async (ctx, arr) => {
-	const { currentYear } = await authModule.getSchool;
+	const { currentYear } = authModule.getSchool;
 	await ctx.$store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,

@@ -1,5 +1,8 @@
 import i18n from "./i18n";
 import { authModule, envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -21,6 +24,10 @@ const envs = {
 };
 
 describe("i18n plugin", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+	});
+
 	it("sets locale to the locale computed in the auth store module", () => {
 		authModule.setLocale("fi");
 		envConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });

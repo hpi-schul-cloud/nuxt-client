@@ -1,9 +1,12 @@
-import { authModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
 import { User } from "@/store/types/auth";
 import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import RoomModule from "@/store/room";
 
 const mockData = {
 	roomId: "123",
@@ -99,6 +102,11 @@ const getWrapper: any = () => {
 
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
+		setupStores({
+			auth: AuthModule,
+			"env-config": EnvConfigModule,
+			room: RoomModule,
+		});
 		roomModule.setRoomData(mockData as any);
 		authModule.setUser(mockAuthStoreDataTeacher as User);
 	});
@@ -257,6 +265,8 @@ describe("@pages/rooms/_id/index.vue", () => {
 		});
 
 		it("should redirect the page when 'Copy course' menu clicked", async () => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
 			const location = window.location;
 			const wrapper = getWrapper();
 

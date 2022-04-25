@@ -232,7 +232,7 @@ export default class AuthModule extends VuexModule {
 
 		localStorage.clear();
 		// Delete matrix messenger indexedDB databases
-		if (indexedDB) {
+		if (window.indexedDB) {
 			// window.indexedDB.databases() is not available in all browsers
 			const databases = [
 				"logs",
@@ -241,10 +241,10 @@ export default class AuthModule extends VuexModule {
 			];
 
 			for (let i = 0; i < databases.length; i += 1) {
-				indexedDB.deleteDatabase(databases[i]);
+				window.indexedDB.deleteDatabase(databases[i]);
 			}
 		}
-		this.clearAuthData();
+		this.context.commit("clearAuthData");
 	}
 
 	private get userApi() {
