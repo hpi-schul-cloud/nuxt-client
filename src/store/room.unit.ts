@@ -589,7 +589,7 @@ describe("room module", () => {
 							received.push({ path });
 							received.push({ params });
 							return {
-								archived: ["asdasd"],
+								archived: ["testUserId"],
 							};
 						},
 					} as NuxtAxiosInstance);
