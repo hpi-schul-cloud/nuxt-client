@@ -707,6 +707,7 @@
 	"pages.room.lessonCard.label.share": "Compartir",
 	"pages.room.taskCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.taskCard.label.task": "Tarea",
+	"pages.room.taskCard.label.taskDone": "Tarea completada",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.noDueDate": "Sin fecha de entrega",
 	"pages.room.taskCard.label.submitted": "Entregado",

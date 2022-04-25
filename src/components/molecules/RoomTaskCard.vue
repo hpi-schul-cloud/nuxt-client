@@ -26,7 +26,9 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2">{{ task.name }}</div>
+			<div class="text-h6 text--primary mb-2 task-name">
+				{{ task.name }}
+			</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
 				v-if="canShowDescription"
@@ -175,22 +177,9 @@ export default {
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
 				}
-				if (this.isFinished) {
-					roleBasedActions[Roles.Teacher].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
 			}
 
 			if (this.role === Roles.Student) {
-				if (this.isFinished) {
-					roleBasedActions[Roles.Student].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
-
 				if (!this.isFinished) {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
@@ -244,13 +233,26 @@ export default {
 			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
+
+			if (this.isFinished) {
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("pages.room.taskCard.label.reopen"),
+				});
+				roleBasedMoreActions[Roles.Student].push({
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("pages.room.taskCard.label.reopen"),
+				});
+			}
 			return roleBasedMoreActions;
 		},
 	},
 	methods: {
 		cardTitle(dueDate) {
 			if (this.isFinished) {
-				return this.$t("pages.room.taskCard.label.task");
+				return this.$t("pages.room.taskCard.label.taskDone");
 			}
 			const dueTitle = !dueDate
 				? this.$t("pages.room.taskCard.label.noDueDate")
@@ -329,6 +331,9 @@ export default {
 		text-align: right;
 	}
 }
+.task-name {
+	line-height: var(--line-height-md);
+}
 .text-description {
 	font-size: var(--text-md);
 }
@@ -361,6 +366,12 @@ export default {
 	padding-bottom: var(--space-xs-4);
 }
 .task-draft {
-	opacity: 0.6;
+	border-color: transparent;
+	.title-section,
+	.task-name,
+	.text-description,
+	.submitted-section {
+		opacity: 0.5;
+	}
 }
 </style>

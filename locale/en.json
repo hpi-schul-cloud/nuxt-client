@@ -702,6 +702,7 @@
 	"pages.room.lessonCard.label.share": "Share",
 	"pages.room.taskCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.task": "Task",
+	"pages.room.taskCard.label.taskDone": "Task completed",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.noDueDate": "No submission date",
 	"pages.room.taskCard.label.submitted": "Submitted",

@@ -708,6 +708,7 @@
 	"pages.room.lessonCard.label.share": "Teilen",
 	"pages.room.taskCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.taskCard.label.task": "Aufgabe",
+	"pages.room.taskCard.label.taskDone": "Aufgabe abgeschlossen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.noDueDate": "Kein Abgabedatum",
 	"pages.room.taskCard.label.submitted": "Abgegeben",

@@ -699,6 +699,7 @@
 	"pages.room.taskCard.label.reopen": "Відновити завдання",
 	"pages.room.taskCard.label.submitted": "Надіслано",
 	"pages.room.taskCard.label.task": "Завдання",
+	"pages.room.taskCard.label.taskDone": "Завдання виконано",
 	"pages.room.taskCard.student.label.overdue": "Пропущені",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів), натисніть Enter, щоб відкрити",
