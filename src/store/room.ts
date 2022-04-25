@@ -17,6 +17,7 @@ import {
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 import { nanoid } from "nanoid";
+import AuthModule from "@/store/auth";
 
 @Module({
 	name: "room",
@@ -236,6 +237,50 @@ export class Room extends VuexModule {
 				});
 			}
 			this.setCourseShareToken(result.shareToken);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async finishTask(payload: object | any): Promise<void> {
+		this.resetBusinessError();
+		const userId = AuthModule.getUser?.id;
+		try {
+			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
+			if (!homework.archived) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-found",
+				});
+				return;
+			}
+			let archived = [];
+			if (payload.action === "finish") {
+				archived = homework?.archived;
+				archived.push(userId);
+			}
+			if (payload.action === "restore") {
+				archived = homework?.archived.filter((item: string) => item !== userId);
+			}
+
+			const patchedData = await $axios.$patch(
+				`/v1/homework/${payload.itemId}`,
+				{ archived }
+			);
+			if (!patchedData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-patched",
+				});
+				return;
+			}
+
+			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
