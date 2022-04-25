@@ -35,6 +35,8 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
+						@finish-task="finishTask(item.content.id)"
+						@restore-task="restoreTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -80,6 +82,8 @@
 					:drag-in-progress="dragInProgress"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
+					@finish-task="finishTask(item.content.id)"
+					@restore-task="restoreTask(item.content.id)"
 				/>
 				<room-lesson-card
 					v-if="item.type === cardTypes.Lesson"
@@ -296,6 +300,12 @@ export default {
 				return Promise.resolve();
 			}
 			await RoomModule.deleteLesson(this.itemDelete.itemData.id);
+		},
+		async finishTask(itemId) {
+			await RoomModule.finishTask({ itemId, action: "finish" });
+		},
+		async restoreTask(itemId) {
+			await RoomModule.finishTask({ itemId, action: "restore" });
 		},
 	},
 };
