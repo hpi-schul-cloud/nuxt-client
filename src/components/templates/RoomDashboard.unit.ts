@@ -411,48 +411,51 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("Finishing and Restoring Tasks", () => {
-		it("should call finishTask action", async () => {
-			const finishTaskMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			const taskCard = wrapper.find(".task-card");
-			RoomModule.finishTask = finishTaskMock;
+		describe("For teachers", () => {
+			it("should call finishTask action", async () => {
+				const finishTaskMock = jest.fn();
+				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+				const taskCard = wrapper.find(".task-card");
+				RoomModule.finishTask = finishTaskMock;
 
-			taskCard.vm.$emit("finish-task");
-			expect(finishTaskMock).toHaveBeenCalled();
-			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
+				taskCard.vm.$emit("finish-task");
+				expect(finishTaskMock).toHaveBeenCalled();
+				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
+			});
+			it("should call restoreTask action", async () => {
+				const finishTaskMock = jest.fn();
+				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+				const taskCard = wrapper.find(".task-card");
+				RoomModule.finishTask = finishTaskMock;
+
+				taskCard.vm.$emit("restore-task");
+				expect(finishTaskMock).toHaveBeenCalled();
+				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
+			});
 		});
 
-		it("should call restoreTask action", async () => {
-			const finishTaskMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			const taskCard = wrapper.find(".task-card");
-			RoomModule.finishTask = finishTaskMock;
+		describe("For students", () => {
+			it("should call finishTask action", async () => {
+				const finishTaskMock = jest.fn();
+				const wrapper = getWrapper({ roomData: mockData, role: "student" });
+				const taskCard = wrapper.find(".task-card");
+				RoomModule.finishTask = finishTaskMock;
 
-			taskCard.vm.$emit("restore-task");
-			expect(finishTaskMock).toHaveBeenCalled();
-			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
-		});
+				taskCard.vm.$emit("finish-task");
+				expect(finishTaskMock).toHaveBeenCalled();
+				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
+			});
 
-		it("should call finishTask action", async () => {
-			const finishTaskMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
-			const taskCard = wrapper.find(".task-card");
-			RoomModule.finishTask = finishTaskMock;
+			it("should call restoreTask action", async () => {
+				const finishTaskMock = jest.fn();
+				const wrapper = getWrapper({ roomData: mockData, role: "student" });
+				const taskCard = wrapper.find(".task-card");
+				RoomModule.finishTask = finishTaskMock;
 
-			taskCard.vm.$emit("finish-task");
-			expect(finishTaskMock).toHaveBeenCalled();
-			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
-		});
-
-		it("should call restoreTask action", async () => {
-			const finishTaskMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
-			const taskCard = wrapper.find(".task-card");
-			RoomModule.finishTask = finishTaskMock;
-
-			taskCard.vm.$emit("restore-task");
-			expect(finishTaskMock).toHaveBeenCalled();
-			expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
+				taskCard.vm.$emit("restore-task");
+				expect(finishTaskMock).toHaveBeenCalled();
+				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
+			});
 		});
 	});
 });
