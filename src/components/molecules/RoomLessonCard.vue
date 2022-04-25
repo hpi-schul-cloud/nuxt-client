@@ -1,10 +1,10 @@
 <template>
 	<v-card
 		class="mx-auto mb-4 lesson-card"
+		:class="getStyleClasses()"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -12,9 +12,9 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text>
-			<div class="top-row-container mb-1">
-				<div class="text-h6 title-section text--primary" tabindex="0">
+		<v-card-text class="pb-0">
+			<div class="top-row-container mb-0">
+				<div class="text-h5 title-section text--primary" tabindex="0">
 					{{ lesson.name }}
 				</div>
 				<div class="dot-menu-section">
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-0">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -33,7 +33,6 @@
 					.split(' ')
 					.join('-')}`"
 				text
-				:color="titleColor"
 				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
@@ -198,6 +197,9 @@ export default {
 					break;
 			}
 		},
+		getStyleClasses() {
+			return this.isHidden ? "hidden-lesson" : "";
+		},
 	},
 };
 </script>
@@ -213,6 +215,7 @@ export default {
 		text-align: left;
 	}
 	.dot-menu-section {
+		align-self: start;
 		text-align: right;
 	}
 }
@@ -220,14 +223,18 @@ export default {
 	color: var(--color-primary);
 }
 .v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
+	border-bottom: var(--border-width) solid var(--color-primary-dark);
+	border-radius: 0;
+	box-shadow: unset !important;
 
 	&:hover {
-		box-shadow: var(--shadow-m);
+		border-bottom: var(--border-width) solid transparent;
+		border-radius: var(--radius-sm);
+		box-shadow: var(--shadow-m) !important;
 	}
 }
-.v-card__text {
-	padding-bottom: var(--space-xs-4);
+.hidden-lesson {
+	z-index: var(--layer-page);
+	opacity: 0.6;
 }
 </style>

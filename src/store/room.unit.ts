@@ -2,6 +2,9 @@ import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import AuthModule from "@/store/auth";
+import { authModule } from ".";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -29,6 +32,9 @@ const axiosInitializer = () => {
 axiosInitializer();
 
 describe("room module", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
 	describe("actions", () => {
 		beforeEach(() => {
 			receivedRequests = [];
@@ -570,6 +576,185 @@ describe("room module", () => {
 				);
 			});
 		});
+
+		describe("finishTask", () => {
+			beforeEach(() => {
+				// @ts-ignore
+				authModule.setUser({ id: "testUser" });
+			});
+
+			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							return { _id: "returnId" };
+						},
+						$get: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return {
+								archived: ["testUserId"],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new RoomModule({});
+				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
+				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
+				expect(finishTaskSpy.mock.calls[0][0]).toStrictEqual({
+					itemId: "finishId",
+					action: "finish",
+				});
+			});
+
+			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							return { _id: "returnId" };
+						},
+						$get: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return {
+								incorrectResponse: [],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new RoomModule({});
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
+					"400"
+				);
+				expect(setBusinessErrorSpy.mock.calls[0][0].message).toStrictEqual(
+					"archived-not-found"
+				);
+			});
+
+			it("should make a 'PATCH' call to the backend with archived list", async () => {
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return { _id: "returnId" };
+						},
+						$get: async (path: string, params: {}) => {
+							return {
+								archived: ["firstId"],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new RoomModule({});
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
+				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
+				expect(received[1].params).toStrictEqual({
+					archived: ["firstId", "testUser"],
+				});
+			});
+
+			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return { someValue: "some value for error case" };
+						},
+						$get: async (path: string, params: {}) => {
+							return {
+								archived: ["firstId"],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new RoomModule({});
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
+					"400"
+				);
+				expect(setBusinessErrorSpy.mock.calls[0][0].message).toStrictEqual(
+					"archived-not-patched"
+				);
+			});
+
+			it("should catch error in catch block", async () => {
+				let received: any[] = [];
+				let returned: any = {};
+				const error = { statusCode: 404, message: "friendly error" };
+
+				(() => {
+					initializeAxios({
+						$patch: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return Promise.reject({ ...error });
+						},
+						$get: async (path: string, params: {}) => {
+							return {
+								archived: ["firstId"],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+
+				const roomModule = new RoomModule({});
+				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
+				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const resetBusinessErrorSpy = jest.spyOn(
+					roomModule,
+					"resetBusinessError"
+				);
+				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+
+				expect(resetBusinessErrorSpy).toHaveBeenCalled();
+				expect(finishTaskSpy).toHaveBeenCalled();
+				expect(setBusinessErrorSpy).toHaveBeenCalled();
+				expect(roomModule.businessError.statusCode).toStrictEqual(404);
+				expect(roomModule.businessError.message).toStrictEqual(
+					"friendly error"
+				);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -748,6 +933,54 @@ describe("room module", () => {
 				expect(roomModule.getError).toStrictEqual(null);
 				roomModule.setError(errorData);
 				expect(roomModule.getError).toStrictEqual(errorData);
+			});
+		});
+		describe("roomIsEmpty", () => {
+			it("should return false if there are any elements in the room", () => {
+				const roomModule = new RoomModule({});
+				const testData = {
+					id: "123",
+					courseName: "Sample Course",
+					displayColor: "black",
+					elements: [
+						{
+							type: "task",
+							content: {
+								courseName: "Mathe",
+								id: "59cce1d381297026d02cdc4b",
+								name: "Private Aufgabe von Marla - mit Kurs, offen",
+								createdAt: "2017-09-28T11:49:39.924Z",
+								updatedAt: "2017-09-28T11:49:39.924Z",
+								status: {
+									submitted: 0,
+									maxSubmissions: 2,
+									graded: 0,
+									isDraft: false,
+									isSubstitutionTeacher: false,
+								},
+								availableDate: "2017-09-20T11:00:00.000Z",
+								duedate: "2300-09-28T13:00:00.000Z",
+								displayColor: "#54616e",
+								description: "",
+							},
+						},
+					],
+				};
+				roomModule.setRoomData(testData as any);
+				const result = roomModule.roomIsEmpty;
+				expect(result).toStrictEqual(false);
+			});
+			it("should return true if there are no elements in the room", () => {
+				const roomModule = new RoomModule({});
+				const testData = {
+					id: "123",
+					courseName: "Sample Course",
+					displayColor: "black",
+					elements: [],
+				};
+				roomModule.setRoomData(testData as any);
+				const result = roomModule.roomIsEmpty;
+				expect(result).toStrictEqual(true);
 			});
 		});
 	});

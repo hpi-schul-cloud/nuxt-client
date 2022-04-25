@@ -99,17 +99,29 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 			expect(title.element.textContent).toContain("Test Name");
 		});
+
+		it("should use hidden lesson UI only for hidden lesson cards", async () => {
+			const hiddenLessonWrapper = getWrapper({ ...hiddenTestProps, role });
+			const hiddenLessonCard = hiddenLessonWrapper.find(".lesson-card");
+			expect(hiddenLessonCard.element.className).toContain("hidden-lesson");
+
+			const regularLessonWrapper = getWrapper({ ...baseTestProps, role });
+			const lessonCard = regularLessonWrapper.find(".lesson-card");
+			expect(lessonCard.element.className).not.toContain("hidden-lesson");
+		});
 	});
 
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
-			it("should have one action button if lesson is hidden with correct color", () => {
+			it("should have one action button if lesson is hidden", () => {
 				const wrapper = getWrapper({ ...hiddenTestProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons.wrappers[0].vm._props.color).toContain("#54616e");
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.lessonCard.label.post")
+				);
 			});
 
 			it("should have no action button when lesson is visible", () => {

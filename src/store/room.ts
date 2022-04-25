@@ -1,15 +1,16 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
+import { authModule } from "@/store";
+import { nanoid } from "nanoid";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	RoomsApiInterface,
-	RoomsApiFactory,
 	BoardResponse,
-	PatchVisibilityParams,
 	PatchOrderParams,
+	PatchVisibilityParams,
+	RoomsApiFactory,
+	RoomsApiInterface,
 } from "../serverApi/v3/api";
+import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
-import { nanoid } from "nanoid";
 
 @Module({
 	name: "room",
@@ -236,6 +237,50 @@ export default class RoomModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async finishTask(payload: object | any): Promise<void> {
+		this.resetBusinessError();
+		const userId = authModule.getUser?.id;
+		try {
+			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
+			if (!homework.archived) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-found",
+				});
+				return;
+			}
+			let archived = [];
+			if (payload.action === "finish") {
+				archived = homework?.archived;
+				archived.push(userId);
+			}
+			if (payload.action === "restore") {
+				archived = homework?.archived.filter((item: string) => item !== userId);
+			}
+
+			const patchedData = await $axios.$patch(
+				`/v1/homework/${payload.itemId}`,
+				{ archived }
+			);
+			if (!patchedData._id) {
+				this.setBusinessError({
+					statusCode: "400",
+					message: "archived-not-patched",
+				});
+				return;
+			}
+
+			await this.fetchContent(this.roomData.roomId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -303,7 +348,16 @@ export default class RoomModule extends VuexModule {
 	get getCourseInvitationLink(): string {
 		return this.courseInvitationLink;
 	}
+
 	get getCourseShareToken(): string {
 		return this.courseShareToken;
+	}
+
+	get roomIsEmpty(): boolean {
+		return this.finishedLoading && this.roomData.elements.length === 0;
+	}
+
+	private get finishedLoading(): boolean {
+		return this.getLoading === false;
 	}
 }

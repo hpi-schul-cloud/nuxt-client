@@ -35,6 +35,8 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
+						@finish-task="finishTask(item.content.id)"
+						@restore-task="restoreTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -80,6 +82,8 @@
 					:drag-in-progress="dragInProgress"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
+					@finish-task="finishTask(item.content.id)"
+					@restore-task="restoreTask(item.content.id)"
 				/>
 				<room-lesson-card
 					v-if="item.type === cardTypes.Lesson"
@@ -101,6 +105,14 @@
 				/>
 			</div>
 		</div>
+		<v-custom-empty-state
+			v-if="roomIsEmpty"
+			:image="emptyState.image"
+			:title="emptyState.title"
+			:img-height="emptyState.maxHeight"
+			data-testid="empty-state-item"
+			class="mt-16"
+		/>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -154,9 +166,11 @@ import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import { roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
+import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
 export default {
 	components: {
@@ -164,6 +178,7 @@ export default {
 		RoomLessonCard,
 		vCustomDialog,
 		draggable,
+		vCustomEmptyState,
 	},
 	props: {
 		roomData: {
@@ -204,6 +219,17 @@ export default {
 		},
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
+		},
+		roomIsEmpty: () => roomModule.roomIsEmpty,
+		emptyState() {
+			const image = topicsEmptyStateImage;
+			const title = this.$t(`pages.room.${this.role}.emptyState`);
+			const maxHeight = "200px";
+			return {
+				image,
+				title,
+				maxHeight,
+			};
 		},
 	},
 	created() {
@@ -273,6 +299,12 @@ export default {
 				return Promise.resolve();
 			}
 			await roomModule.deleteLesson(this.itemDelete.itemData.id);
+		},
+		async finishTask(itemId) {
+			await roomModule.finishTask({ itemId, action: "finish" });
+		},
+		async restoreTask(itemId) {
+			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 	},
 };
