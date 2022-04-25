@@ -299,10 +299,7 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			if (this.isDraft && !this.isFinished) {
-				return "task-draft";
-			}
-			return "";
+			return this.isDraft && !this.isFinished ? "task-draft" : "";
 		},
 	},
 };

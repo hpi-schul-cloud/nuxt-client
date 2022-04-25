@@ -198,10 +198,7 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			if (this.isHidden) {
-				return "hidden-lesson";
-			}
-			return "";
+			return this.isHidden ? "hidden-lesson" : "";
 		},
 	},
 };
@@ -226,12 +223,12 @@ export default {
 	color: var(--color-primary);
 }
 .v-card {
-	border-bottom: 1px solid var(--color-primary-dark);
+	border-bottom: var(--border-width) solid var(--color-primary-dark);
 	border-radius: 0;
 	box-shadow: unset !important;
 
 	&:hover {
-		border-bottom: 1px solid transparent;
+		border-bottom: var(--border-width) solid transparent;
 		border-radius: var(--radius-sm);
 		box-shadow: var(--shadow-m) !important;
 	}
