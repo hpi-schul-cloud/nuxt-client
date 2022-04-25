@@ -44,8 +44,5 @@ describe("legacyLoggedIn", () => {
 		expect(
 			studentAdministrationListItem.element.classList.contains("active")
 		).toBeTrue();
-
-		const courseLinkItem = wrapper.find("[data-testId='Kurse']");
-		expect(courseLinkItem.element.style.display).toStrictEqual("none");
 	});
 });
