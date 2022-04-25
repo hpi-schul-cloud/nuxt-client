@@ -77,7 +77,7 @@ const getClassesNames = async (ctx, arr) => {
 			year: currentYear,
 		},
 	});
-	const classes = ctx.$store.state["classes"].list;
+	const classes = ctx.$store.state["classes"].list || [];
 	classes
 		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
 		.forEach((cl) => {
