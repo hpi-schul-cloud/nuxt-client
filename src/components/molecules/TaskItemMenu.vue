@@ -60,8 +60,8 @@
 				>
 					<v-list-item-title>
 						<template v-if="taskIsFinished">
-							<v-icon class="task-action-icon">{{ mdiUndo }}</v-icon>
-							{{ $t("components.molecules.TaskItemMenu.restore") }}
+							<v-icon class="task-action-icon">{{ mdiUndoVariant }}</v-icon>
+							{{ $t("common.labels.restore") }}
 						</template>
 						<template v-else>
 							<v-icon class="task-action-icon"> $taskFinished </v-icon>
@@ -112,7 +112,7 @@
 import {
 	mdiDotsVertical,
 	mdiPencilOutline,
-	mdiUndo,
+	mdiUndoVariant,
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
@@ -151,7 +151,7 @@ export default {
 			confirmDeleteDialogIsOpen: false,
 			mdiDotsVertical,
 			mdiPencilOutline,
-			mdiUndo,
+			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
 		};

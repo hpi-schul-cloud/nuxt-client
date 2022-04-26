@@ -75,7 +75,7 @@ const finishedTestProps = {
 		description: "some description here",
 	},
 	ariaLabel:
-		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+		"task, Link, Aufgabe an Marla (Mathe) - abgeschlossen, zum Öffnen die Eingabetaste drücken",
 	keyDrag: false,
 	dragInProgress: false,
 };
@@ -99,6 +99,48 @@ const overdueTestProps = {
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
 		duedate: "2015-09-28T15:00:00.000Z",
+		displayColor: "#54616e",
+		description: "some description here",
+	},
+	ariaLabel:
+		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
+	dragInProgress: false,
+};
+
+const studentFinishedTestProps = {
+	task: {
+		id: "123",
+		name: "Test Name",
+		createdAt: "2017-09-28T11:58:46.601Z",
+		updatedAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			isFinished: true,
+		},
+		courseName: "Mathe",
+		availableDate: "2017-09-28T08:00:00.000Z",
+		duedate: "2300-09-28T15:00:00.000Z",
+		displayColor: "#54616e",
+		description: "some description here",
+	},
+	ariaLabel:
+		"task, Link, Aufgabe an Marla (Mathe) - abgeschlossen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
+	dragInProgress: false,
+};
+
+const studentTestProps = {
+	task: {
+		id: "123",
+		name: "Test Name",
+		createdAt: "2017-09-28T11:58:46.601Z",
+		updatedAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			isFinished: false,
+		},
+		courseName: "Mathe",
+		availableDate: "2017-09-28T08:00:00.000Z",
+		duedate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -228,14 +270,11 @@ describe("@components/molecules/RoomTaskCard", () => {
 				);
 			});
 
-			it("should have one 'reopen' action button if task is finished", () => {
+			it("should have no action button if task is finished", () => {
 				const wrapper = getWrapper({ ...finishedTestProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
-				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons.wrappers[0].element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.label.reopen")
-				);
+				expect(actionButtons).toHaveLength(0);
 			});
 
 			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
@@ -295,6 +334,22 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(revertPublishedCardMock).toHaveBeenCalled();
 			});
 
+			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
+				const restoreCardMock = jest.fn();
+				const wrapper = getWrapper({ ...finishedTestProps, role });
+				wrapper.vm.restoreCard = restoreCardMock;
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.labels.restore"
+				)}`;
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				expect(restoreCardMock).toHaveBeenCalled();
+			});
+
 			it("should emit 'delete-task' when 'more menu' delete action button clicked'", async () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
@@ -338,21 +393,6 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(finishCardMock).toHaveBeenCalled();
 			});
 
-			it("should trigger the 'restoreCard' method when 'Restore task' button is clicked", async () => {
-				const restoreCardMock = jest.fn();
-				const wrapper = getWrapper({ ...finishedTestProps, role });
-				wrapper.vm.restoreCard = restoreCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n
-					.t("pages.room.taskCard.label.reopen")
-					.split(" ")
-					.join("-")}`;
-
-				const actionButton = wrapper.find(buttonClassName);
-				await actionButton.trigger("click");
-
-				expect(restoreCardMock).toHaveBeenCalled();
-			});
-
 			it("should overdue chip is visible if the task overdued", async () => {
 				const wrapper = getWrapper({ ...overdueTestProps, role });
 				const overrdueElement = wrapper.find(".overdue");
@@ -363,47 +403,16 @@ describe("@components/molecules/RoomTaskCard", () => {
 		});
 		describe("students", () => {
 			const role = "student";
-			it("should have restore button if task is finished", async () => {
-				const restoreCardMock = jest.fn();
-				const studentTestProps = {
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							isFinished: true,
-						},
-						courseName: "Mathe",
-						availableDate: "2017-09-28T08:00:00.000Z",
-						duedate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-					ariaLabel:
-						"task, Link, Aufgabe an Marla (Mathe) - abgeschlossen, zum Öffnen die Eingabetaste drücken",
-					keyDrag: false,
-					dragInProgress: false,
-				};
-				const wrapper = getWrapper({ ...studentTestProps, role });
-				wrapper.vm.restoreCard = restoreCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n
-					.t("pages.room.taskCard.label.reopen")
-					.split(" ")
-					.join("-")}`;
+			it("should have no button if task is finished", async () => {
+				const wrapper = getWrapper({ ...studentFinishedTestProps, role });
+				const actionButtons = wrapper.findAll(".action-button");
 
-				const actionButton = wrapper.find(buttonClassName);
-				expect(actionButton.element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.label.reopen")
-				);
-
-				await actionButton.trigger("click");
-				expect(restoreCardMock).toHaveBeenCalled();
+				expect(actionButtons).toHaveLength(0);
 			});
 
 			it("should have finish button if task is not marked as finished", async () => {
 				const finishCardMock = jest.fn();
-				const wrapper = getWrapper({ ...testProps, role });
+				const wrapper = getWrapper({ ...studentTestProps, role });
 				wrapper.vm.finishCard = finishCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n
 					.t("pages.room.taskCard.label.done")
@@ -417,6 +426,22 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				await actionButton.trigger("click");
 				expect(finishCardMock).toHaveBeenCalled();
+			});
+
+			it("should trigger the 'restoreCard' method when 'more action' restore button is clicked", async () => {
+				const restoreCardMock = jest.fn();
+				const wrapper = getWrapper({ ...studentFinishedTestProps, role });
+				wrapper.vm.restoreCard = restoreCardMock;
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.labels.restore"
+				)}`;
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				expect(restoreCardMock).toHaveBeenCalled();
 			});
 		});
 	});

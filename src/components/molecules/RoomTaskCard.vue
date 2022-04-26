@@ -206,6 +206,15 @@ export default {
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
+					name: this.$t("common.actions.copy"),
+				});
+
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
@@ -219,15 +228,6 @@ export default {
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
 				});
-
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiContentCopy,
-					action: () =>
-						this.redirectAction(
-							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
-						),
-					name: this.$t("common.actions.copy"),
-				});
 			}
 
 			if (this.role === Roles.Student) {
@@ -235,15 +235,15 @@ export default {
 			}
 
 			if (this.isFinished) {
-				roleBasedMoreActions[Roles.Teacher].push({
+				roleBasedMoreActions[Roles.Teacher].splice(-1, 0, {
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
-					name: this.$t("pages.room.taskCard.label.reopen"),
+					name: this.$t("common.labels.restore"),
 				});
 				roleBasedMoreActions[Roles.Student].push({
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
-					name: this.$t("pages.room.taskCard.label.reopen"),
+					name: this.$t("common.labels.restore"),
 				});
 			}
 			return roleBasedMoreActions;
