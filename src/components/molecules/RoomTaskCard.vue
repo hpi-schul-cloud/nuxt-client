@@ -375,6 +375,5 @@ export default {
 	.title-section {
 		opacity: 0.65;
 	}
-
 }
 </style>
