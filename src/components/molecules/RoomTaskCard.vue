@@ -366,12 +366,15 @@ export default {
 	padding-bottom: var(--space-xs-4);
 }
 .task-draft {
-	border-color: transparent;
-	.title-section,
+	box-shadow: none;
 	.task-name,
 	.text-description,
 	.submitted-section {
-		opacity: 0.5;
+		opacity: 0.4;
 	}
+	.title-section {
+		opacity: 0.65;
+	}
+
 }
 </style>
