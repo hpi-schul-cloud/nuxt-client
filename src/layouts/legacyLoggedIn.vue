@@ -4,9 +4,6 @@
 		<skip-links></skip-links>
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
-				<user-has-role :role="isDemoRole">
-					<demo-banner v-if="!fullscreenMode"></demo-banner>
-				</user-has-role>
 
 				<the-top-bar
 					v-if="!isInline"
@@ -41,7 +38,6 @@ import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import UserHasRole from "@components/helpers/UserHasRole";
-import DemoBanner from "@components/legacy/DemoBanner";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
@@ -53,7 +49,6 @@ export default {
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
-		DemoBanner,
 		UserHasRole,
 		autoLogoutWarning,
 		MatrixMessenger,
@@ -187,9 +182,6 @@ export default {
 		},
 	},
 	methods: {
-		isDemoRole(roles) {
-			return roles.some((role) => role.startsWith("demo"));
-		},
 		handleTopAction(event) {
 			if (event === "logout") {
 				// TODO temporary workaround until $cookies are accessible from TS modules
