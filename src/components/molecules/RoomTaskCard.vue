@@ -26,7 +26,9 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2">{{ task.name }}</div>
+			<div class="text-h6 text--primary mb-2 task-name">
+				{{ task.name }}
+			</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
 				v-if="canShowDescription"
@@ -35,7 +37,10 @@
 				v-html="task.description"
 			></div>
 		</v-card-text>
-		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
+		<v-card-text
+			v-if="!isDraft && !isFinished"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
 			<div class="chip-items-group">
 				<div
 					v-if="roles.Teacher === role"
@@ -172,22 +177,9 @@ export default {
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
 				}
-				if (this.isFinished) {
-					roleBasedActions[Roles.Teacher].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
 			}
 
 			if (this.role === Roles.Student) {
-				if (this.isFinished) {
-					roleBasedActions[Roles.Student].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
-
 				if (!this.isFinished) {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
@@ -214,6 +206,15 @@ export default {
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
+					name: this.$t("common.actions.copy"),
+				});
+
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
@@ -227,25 +228,32 @@ export default {
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
 				});
-
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiContentCopy,
-					action: () =>
-						this.redirectAction(
-							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
-						),
-					name: this.$t("common.actions.copy"),
-				});
 			}
 
 			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
+			}
+
+			if (this.isFinished) {
+				roleBasedMoreActions[Roles.Teacher].splice(-1, 0, {
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("common.labels.restore"),
+				});
+				roleBasedMoreActions[Roles.Student].push({
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("common.labels.restore"),
+				});
 			}
 			return roleBasedMoreActions;
 		},
 	},
 	methods: {
 		cardTitle(dueDate) {
+			if (this.isFinished) {
+				return this.$t("pages.room.taskCard.label.taskDone");
+			}
 			const dueTitle = !dueDate
 				? this.$t("pages.room.taskCard.label.noDueDate")
 				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
@@ -313,16 +321,18 @@ export default {
 	display: grid;
 	grid-template-columns: 95% 5%;
 	align-items: center;
-	.icon-section {
-		overflow: none;
-		text-align: left;
-	}
 	.title-section {
 		text-align: left;
+		.v-icon {
+			padding-bottom: var(--space-xs-4);
+		}
 	}
 	.dot-menu-section {
 		text-align: right;
 	}
+}
+.task-name {
+	line-height: var(--line-height-md);
 }
 .text-description {
 	font-size: var(--text-md);
@@ -356,6 +366,14 @@ export default {
 	padding-bottom: var(--space-xs-4);
 }
 .task-draft {
-	opacity: 0.6;
+	box-shadow: none;
+	.task-name,
+	.text-description,
+	.submitted-section {
+		opacity: 0.4;
+	}
+	.title-section {
+		opacity: 0.65;
+	}
 }
 </style>

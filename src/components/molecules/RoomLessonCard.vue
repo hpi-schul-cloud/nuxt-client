@@ -212,6 +212,7 @@ export default {
 	grid-template-columns: 95% 5%;
 	align-items: center;
 	.title-section {
+		line-height: var(--line-height-md);
 		text-align: left;
 	}
 	.dot-menu-section {
@@ -234,7 +235,8 @@ export default {
 	}
 }
 .hidden-lesson {
-	z-index: var(--layer-page);
-	opacity: 0.6;
+	.title-section {
+		opacity: 0.5;
+	}
 }
 </style>

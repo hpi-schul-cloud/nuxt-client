@@ -159,6 +159,7 @@ export default {
 				},
 			],
 			courseId: this.$route.params.id,
+			tab: null,
 		};
 	},
 	computed: {
