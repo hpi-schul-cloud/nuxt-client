@@ -37,7 +37,6 @@ import { authModule, schoolsModule } from "@/store";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
-import UserHasRole from "@components/helpers/UserHasRole";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
@@ -49,7 +48,6 @@ export default {
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
-		UserHasRole,
 		autoLogoutWarning,
 		MatrixMessenger,
 		SkipLinks,
