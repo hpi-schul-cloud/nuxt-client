@@ -4,7 +4,6 @@
 		<skip-links></skip-links>
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
-
 				<the-top-bar
 					v-if="!isInline"
 					:title="pageTitle"
