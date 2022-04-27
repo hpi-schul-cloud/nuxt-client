@@ -295,11 +295,9 @@
 <script>
 import { mdiClose, mdiLoading } from "@mdi/js";
 
-import SchoolsModule from "@/store/schools";
-import ImportUserModule from "@store/import-users";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import EnvConfigModule from "@/store/env-config";
 import ImportUsers from "@components/organisms/administration/ImportUsers";
 export default {
 	components: { DefaultWireframe, ImportUsers },
@@ -324,7 +322,7 @@ export default {
 	},
 	computed: {
 		isAllowed() {
-			return EnvConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
+			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
 		},
 		isMigrationNotStarted() {
 			return this.school.inUserMigration === undefined;
@@ -342,10 +340,10 @@ export default {
 			return !this.school.inMaintenance;
 		},
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		businessError() {
-			const error = ImportUserModule.getBusinessError;
+			const error = importUsersModule.getBusinessError;
 			if (error && error.message && error.statusCode) {
 				return {
 					message: error.message,
@@ -355,13 +353,13 @@ export default {
 			return false;
 		},
 		totalMatched() {
-			return ImportUserModule.getTotalMatched;
+			return importUsersModule.getTotalMatched;
 		},
 		totalUnmatched() {
-			return ImportUserModule.getTotalUnmatched;
+			return importUsersModule.getTotalUnmatched;
 		},
 		totalImportUsers() {
-			return ImportUserModule.getTotal;
+			return importUsersModule.getTotal;
 		},
 	},
 	watch: {
@@ -419,19 +417,19 @@ export default {
 		},
 		async summary() {
 			if (this.school.id === "") {
-				await SchoolsModule.fetchSchool();
+				await schoolsModule.fetchSchool();
 			}
 			if (!this.canPerformMigration) {
 				return;
 			}
-			await ImportUserModule.fetchTotal();
-			await ImportUserModule.fetchTotalMatched();
-			await ImportUserModule.fetchTotalUnmatched();
+			await importUsersModule.fetchTotal();
+			await importUsersModule.fetchTotalMatched();
+			await importUsersModule.fetchTotalUnmatched();
 		},
 		checkTotalInterval() {
 			if (this.school.inUserMigration && this.totalImportUsers === 0) {
 				this.checkTotal = setInterval(() => {
-					ImportUserModule.fetchTotal();
+					importUsersModule.fetchTotal();
 				}, 5000);
 			}
 			if (this.totalImportUsers > 0) {
@@ -443,13 +441,13 @@ export default {
 				return;
 			}
 			this.isLoading = true;
-			await SchoolsModule.setSchoolInUserMigration();
+			await schoolsModule.setSchoolInUserMigration();
 			this.checkTotalInterval();
-			if (SchoolsModule.getError) {
+			if (schoolsModule.getError) {
 				// TODO better error handling
-				ImportUserModule.setBusinessError({
+				importUsersModule.setBusinessError({
 					statusCode: "500",
-					message: SchoolsModule.getError.message,
+					message: schoolsModule.getError.message,
 				});
 			} else {
 				this.school.inUserMigration = true;
@@ -459,10 +457,10 @@ export default {
 		},
 		async performMigration() {
 			this.isLoading = true;
-			await ImportUserModule.performMigration();
-			if (!ImportUserModule.getBusinessError) {
-				SchoolsModule.setSchool({
-					...SchoolsModule.getSchool,
+			await importUsersModule.performMigration();
+			if (!importUsersModule.getBusinessError) {
+				schoolsModule.setSchool({
+					...schoolsModule.getSchool,
 					inUserMigration: false,
 				});
 				this.school.inUserMigration = false;
@@ -475,12 +473,12 @@ export default {
 				return;
 			}
 			this.isLoading = true;
-			await SchoolsModule.migrationStartSync();
-			if (SchoolsModule.getError) {
+			await schoolsModule.migrationStartSync();
+			if (schoolsModule.getError) {
 				// TODO better error handling
-				ImportUserModule.setBusinessError({
+				importUsersModule.setBusinessError({
 					statusCode: "500",
-					message: SchoolsModule.getError.message,
+					message: schoolsModule.getError.message,
 				});
 			} else {
 				this.school.inMaintenance = false;
@@ -489,7 +487,7 @@ export default {
 			this.isLoading = false;
 		},
 		resetBusinessError() {
-			ImportUserModule.setBusinessError(null);
+			importUsersModule.setBusinessError(null);
 		},
 		scrollToTop() {
 			window.scrollTo(0, 0);

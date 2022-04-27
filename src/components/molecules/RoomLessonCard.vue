@@ -50,7 +50,7 @@ import {
 } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -136,7 +136,7 @@ export default {
 					});
 				}
 
-				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiShareVariant,
 						action: () => this.$emit("open-modal", this.lesson.id),

@@ -1,9 +1,10 @@
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue/types/umd";
-import vCustomEmptyState from "../molecules/vCustomEmptyState.vue";
-import RoomDashboard from "./RoomDashboard.vue";
-import RoomModule from "@store/room";
+import { envConfigModule, roomModule, taskModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import RoomModule from "@/store/room";
 import TaskModule from "@/store/tasks";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import RoomDashboard from "./RoomDashboard.vue";
 
 declare var createComponentMocks: Function;
 
@@ -100,6 +101,17 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("@components/templates/RoomDashboard.vue", () => {
+	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+		setupStores({
+			tasks: TaskModule,
+			room: RoomModule,
+			"env-config": EnvConfigModule,
+		});
+		// @ts-ignore
+		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+	});
 	describe("common features", () => {
 		it("should have props", async () => {
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
@@ -361,9 +373,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			TaskModule.deleteTask = deleteTaskMock;
-			RoomModule.fetchContent = fetchContentMock;
-			RoomModule.deleteLesson = deleteLessonMock;
+			taskModule.deleteTask = deleteTaskMock;
+			roomModule.fetchContent = fetchContentMock;
+			roomModule.deleteLesson = deleteLessonMock;
 			const taskCard = wrapper.find(".task-card");
 
 			taskCard.vm.$emit("delete-task");
@@ -383,9 +395,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
-			TaskModule.deleteTask = deleteTaskMock;
-			RoomModule.fetchContent = fetchContentMock;
-			RoomModule.deleteLesson = deleteLessonMock;
+			taskModule.deleteTask = deleteTaskMock;
+			roomModule.fetchContent = fetchContentMock;
+			roomModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.find(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
@@ -416,7 +428,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				const finishTaskMock = jest.fn();
 				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 				const taskCard = wrapper.find(".task-card");
-				RoomModule.finishTask = finishTaskMock;
+				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
 				expect(finishTaskMock).toHaveBeenCalled();
@@ -426,7 +438,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				const finishTaskMock = jest.fn();
 				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
 				const taskCard = wrapper.find(".task-card");
-				RoomModule.finishTask = finishTaskMock;
+				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
 				expect(finishTaskMock).toHaveBeenCalled();
@@ -439,7 +451,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				const finishTaskMock = jest.fn();
 				const wrapper = getWrapper({ roomData: mockData, role: "student" });
 				const taskCard = wrapper.find(".task-card");
-				RoomModule.finishTask = finishTaskMock;
+				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
 				expect(finishTaskMock).toHaveBeenCalled();
@@ -450,7 +462,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				const finishTaskMock = jest.fn();
 				const wrapper = getWrapper({ roomData: mockData, role: "student" });
 				const taskCard = wrapper.find(".task-card");
-				RoomModule.finishTask = finishTaskMock;
+				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
 				expect(finishTaskMock).toHaveBeenCalled();

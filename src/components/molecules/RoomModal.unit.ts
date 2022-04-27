@@ -1,5 +1,7 @@
+import { roomsModule } from "@/store";
 import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomModal from "./RoomModal.vue";
 
@@ -7,6 +9,7 @@ describe("@components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({ rooms: RoomsModule });
 	});
 
 	// isValidComponent test fails for typescript based components and thus is omitted
@@ -79,7 +82,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should change name on blur", async () => {
-		const storeRoomUpdateMock = jest.spyOn(RoomsModule, "update");
+		const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
@@ -104,7 +107,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should change name on enter", async () => {
-		const storeRoomUpdateMock = jest.spyOn(RoomsModule, "update");
+		const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
@@ -121,7 +124,7 @@ describe("@components/molecules/RoomModal", () => {
 		titleH2.trigger("click");
 		const titleInput = wrapper.find(".room-title input");
 		titleInput.setValue("changed title");
-		titleInput.trigger("keyup.enter");
+		titleInput.trigger("blur");
 		await wrapper.vm.$nextTick();
 
 		expect(storeRoomUpdateMock).toHaveBeenCalled();

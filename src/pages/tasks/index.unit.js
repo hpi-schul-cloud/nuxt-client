@@ -1,11 +1,21 @@
 import dashboard from "./index";
 import Vuetify from "vuetify";
+import { taskModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 import TaskModule from "@/store/tasks";
+import FinishedTaskModule from "@/store/finished-tasks";
 
 describe("Tasks/index", () => {
 	let vuetify;
 
 	beforeEach(() => {
+		setupStores({
+			auth: AuthModule,
+			tasks: TaskModule,
+			finishedTasks: FinishedTaskModule,
+		});
+
 		vuetify = new Vuetify();
 	});
 
@@ -26,7 +36,7 @@ describe("Tasks/index", () => {
 	});
 
 	it("Should should trigger fetschAllTasks", async () => {
-		const spy = jest.spyOn(TaskModule, "fetchAllTasks");
+		const spy = jest.spyOn(taskModule, "fetchAllTasks");
 
 		shallowMount(dashboard, {
 			...createComponentMocks({

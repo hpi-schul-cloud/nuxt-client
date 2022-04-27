@@ -1,4 +1,7 @@
+import { roomModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import ImportLessonModal from "./ImportLessonModal.vue";
 
@@ -19,6 +22,7 @@ describe("@components/molecules/RoomLessonModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({ "env-config": EnvConfigModule, room: RoomModule });
 	});
 
 	it("should open and close on property change", async () => {
@@ -108,7 +112,7 @@ describe("@components/molecules/RoomLessonModal", () => {
 			const textElementBefore = wrapper.find(".text-field-lesson-code");
 			expect(textElementBefore.vm.error).toBe(false);
 			expect(textElementBefore.vm.errorMessages).toStrictEqual("");
-			RoomModule.setBusinessError({
+			roomModule.setBusinessError({
 				statusCode: "400",
 				message: "not-found",
 				error: {},
@@ -139,7 +143,7 @@ describe("@components/molecules/RoomLessonModal", () => {
 
 			expect(errorElementBefore.exists()).toBe(false);
 
-			RoomModule.setBusinessError({
+			roomModule.setBusinessError({
 				statusCode: "400",
 				message: "not-created",
 				error: {},

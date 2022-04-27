@@ -69,7 +69,7 @@
 import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
-import RoomsModule from "@store/rooms";
+import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
 
 export default Vue.extend({
@@ -88,7 +88,7 @@ export default Vue.extend({
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 		items(): Array<ListItemsObject> {
-			return JSON.parse(JSON.stringify(RoomsModule.getAllElements)).filter(
+			return JSON.parse(JSON.stringify(roomsModule.getAllElements)).filter(
 				(item: ListItemsObject | any) =>
 					item.searchText
 						.toLowerCase()
@@ -97,7 +97,7 @@ export default Vue.extend({
 		},
 	},
 	async mounted() {
-		await RoomsModule.fetchAllElements();
+		await roomsModule.fetchAllElements();
 	},
 	head() {
 		return {

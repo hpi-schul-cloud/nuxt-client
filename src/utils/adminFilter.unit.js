@@ -4,6 +4,9 @@ import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -14,7 +17,15 @@ const CTX_MOCK = {
 	$t: (i18nMockKey) => {
 		return i18nMockKey;
 	},
+	$store: {
+		dispatch: jest.fn(),
+		state: {
+			classes: { list: [] },
+		},
+	},
 };
+
+setupStores({ auth: AuthModule, schools: SchoolsModule });
 
 const filter = studentFilter(CTX_MOCK);
 const filterDateCreatedFromTo = filter[2];

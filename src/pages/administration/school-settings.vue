@@ -53,9 +53,7 @@
 </template>
 
 <script>
-import EnvConfigModule from "@store/env-config";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
@@ -85,26 +83,26 @@ export default {
 	},
 	computed: {
 		systems() {
-			return SchoolsModule.getSystems;
+			return schoolsModule.getSystems;
 		},
 		currentYear() {
-			return SchoolsModule.getCurrentYear;
+			return schoolsModule.getCurrentYear;
 		},
 		loading() {
-			return SchoolsModule.getLoading;
+			return schoolsModule.getLoading;
 		},
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		schoolError() {
-			return SchoolsModule.getError;
+			return schoolsModule.getError;
 		},
-		schoolPolicyEnabled: () => EnvConfigModule.getSchoolPolicyEnabled,
+		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},
 		hasSchoolEditPermission: () => {
-			return AuthModule.getUserPermissions.includes("school_edit");
+			return authModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {
@@ -116,17 +114,17 @@ export default {
 				// fetch school year and systems when the school is loaded
 				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
 				if (
-					!SchoolsModule.getFederalState ||
-					!SchoolsModule.getFederalState._id ||
-					!SchoolsModule.currentYear ||
-					!SchoolsModule.currentYear._id ||
-					!SchoolsModule.systems ||
-					!SchoolsModule.systems.length ||
+					!schoolsModule.getFederalState ||
+					!schoolsModule.getFederalState._id ||
+					!schoolsModule.currentYear ||
+					!schoolsModule.currentYear._id ||
+					!schoolsModule.systems ||
+					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 				) {
-					SchoolsModule.fetchCurrentYear();
-					SchoolsModule.fetchSystems();
-					SchoolsModule.fetchFederalState();
+					schoolsModule.fetchCurrentYear();
+					schoolsModule.fetchSystems();
+					schoolsModule.fetchFederalState();
 				}
 			},
 			immediate: true,

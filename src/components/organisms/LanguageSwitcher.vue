@@ -46,7 +46,7 @@
 	</div>
 </template>
 <script>
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export default {
 	props: {
@@ -74,7 +74,7 @@ export default {
 		},
 		changeLanguage: function (lang) {
 			this.value = lang.longName;
-			AuthModule.setLocale(lang.name);
+			authModule.setLocale(lang.name);
 		},
 	},
 };

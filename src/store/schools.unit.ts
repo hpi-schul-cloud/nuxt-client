@@ -1,10 +1,12 @@
-import { Schools } from "./schools";
+import SchoolsModule from "./schools";
+import ImportUsersModule from "@store/import-users";
 import { initializeAxios } from "@utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
-import AuthModule from "./auth";
+import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
-import { ImportUsersModule } from "@store/import-users";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "./auth";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -30,18 +32,19 @@ describe("schools module", () => {
 				},
 				post: async (path: string) => {},
 			} as NuxtAxiosInstance);
+			setupStores({ auth: AuthModule });
 		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
 			it("should call backend and sets state correctly", async () => {
-				AuthModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
 				getRequestReturn = {
 					id: "id_123",
 					features: ["rocketChat", "messengerSchoolRoom"],
 				};
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -84,9 +87,38 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				authModule.setUser({
+					schoolId: "4711",
+					_id: "",
+					__v: 0,
+					firstName: "",
+					lastName: "",
+					email: "",
+					updatedAt: "",
+					birthday: "",
+					createdAt: "",
+					preferences: {},
+					roles: [],
+					emailSearchValues: [],
+					firstNameSearchValues: [],
+					lastNameSearchValues: [],
+					consent: {},
+					forcePasswordChange: false,
+					language: "",
+					fullName: "",
+					id: "",
+					avatarInitials: "",
+					avatarBackgroundColor: "",
+					age: 0,
+					displayName: "",
+					permissions: [],
+					accountId: "",
+					schoolName: "",
+					externallyManaged: false,
+				});
 
 				await schoolsModule.fetchSchool();
 
@@ -102,7 +134,7 @@ describe("schools module", () => {
 			});
 			it("should call backend and sets state correctly", async () => {
 				getRequestReturn = { data: "dummy response" };
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					federalState: "federalStateId",
@@ -133,7 +165,7 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					federalState: "federalStateId",
@@ -158,7 +190,7 @@ describe("schools module", () => {
 			it("should trigger call backend and sets state correctly", async () => {
 				axiosInitializer();
 				getRequestReturn = { data: "dummy response" };
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					currentYear: "yearId",
@@ -187,7 +219,7 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					currentYear: "yearId",
@@ -212,7 +244,7 @@ describe("schools module", () => {
 			it("should call backend and sets state correctly", async () => {
 				axiosInitializer();
 				getRequestReturn = { data: "dummy response" };
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					systems: ["mockSystemId"],
@@ -245,7 +277,7 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					systems: ["mockSystemId"],
@@ -290,7 +322,7 @@ describe("schools module", () => {
 						};
 					},
 				} as NuxtAxiosInstance);
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
@@ -326,7 +358,7 @@ describe("schools module", () => {
 						videoconference: false,
 					},
 				};
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
@@ -352,7 +384,7 @@ describe("schools module", () => {
 						return { data: "some data" };
 					},
 				} as NuxtAxiosInstance);
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{ _id: "id_1", type: "itslearning" },
 					{
@@ -397,7 +429,7 @@ describe("schools module", () => {
 						return "";
 					},
 				} as NuxtAxiosInstance);
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
@@ -416,13 +448,13 @@ describe("schools module", () => {
 			let importUserModule: ImportUsersModule;
 			let spy: any;
 			let mockApi: any;
-			let schoolsModule: Schools;
+			let schoolsModule: SchoolsModule;
 			let setLoadingSpy: jest.SpyInstance;
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
 			beforeEach(() => {
 				importUserModule = new ImportUsersModule({});
-				schoolsModule = new Schools({});
+				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
 					importUserControllerEndSchoolInMaintenance: jest.fn(() => {}),
@@ -503,13 +535,13 @@ describe("schools module", () => {
 			let importUserModule: ImportUsersModule;
 			let spy: any;
 			let mockApi: any;
-			let schoolsModule: Schools;
+			let schoolsModule: SchoolsModule;
 			let setLoadingSpy: jest.SpyInstance;
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
 			beforeEach(() => {
 				importUserModule = new ImportUsersModule({});
-				schoolsModule = new Schools({});
+				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
 					importUserControllerStartSchoolInUserMigration: jest.fn(() => {}),
@@ -594,7 +626,7 @@ describe("schools module", () => {
 	describe("mutations", () => {
 		describe("setSchool", () => {
 			it("should set the school data", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const schoolDataToBeChanged = {
 					_id: "456",
 					name: "Updated Gymnasium",
@@ -613,7 +645,7 @@ describe("schools module", () => {
 
 		describe("setFederalState", () => {
 			it("should set federalState data", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
 					__v: 0,
 					counties: [],
@@ -644,7 +676,7 @@ describe("schools module", () => {
 
 		describe("setSystems", () => {
 			it("should set systems data", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const expectedSystemState = ["systems_id_2"];
 				expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
 				schoolsModule.setSystems(expectedSystemState);
@@ -654,7 +686,7 @@ describe("schools module", () => {
 
 		describe("setLoading", () => {
 			it("should set loading data", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const loadingValue = true;
 				expect(schoolsModule.getLoading).not.toBe(loadingValue);
 				schoolsModule.setLoading(loadingValue);
@@ -665,7 +697,7 @@ describe("schools module", () => {
 	describe("getters", () => {
 		describe("getSchool", () => {
 			it("should return school state", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const expectedValue = {
 					...mockSchool,
 					name: "mockName",
@@ -678,7 +710,7 @@ describe("schools module", () => {
 
 		describe("getCurrentYear", () => {
 			it("should return current year state", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const mockYear = schoolsModule.getCurrentYear;
 				expect(schoolsModule.getCurrentYear).not.toStrictEqual({
 					...mockYear,
@@ -694,7 +726,7 @@ describe("schools module", () => {
 
 		describe("getFederalState", () => {
 			it("shoud return federalState state", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
 					__v: 0,
 					counties: [],
@@ -713,7 +745,7 @@ describe("schools module", () => {
 
 		describe("getSystems", () => {
 			it("should return systems state", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				const systems = ["system"];
 				expect(schoolsModule.getSystems).not.toStrictEqual(systems);
 				schoolsModule.setSystems(systems);
@@ -723,7 +755,7 @@ describe("schools module", () => {
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const schoolsModule = new Schools({});
+				const schoolsModule = new SchoolsModule({});
 				expect(schoolsModule.getLoading).not.toStrictEqual(true);
 				schoolsModule.setLoading(true);
 				expect(schoolsModule.getLoading).toStrictEqual(true);

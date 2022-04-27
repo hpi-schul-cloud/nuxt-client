@@ -253,8 +253,8 @@
 
 <script>
 /* eslint-disable max-lines */
-import SchoolsModule from "@/store/schools";
-import ImportUsersModule, { MatchedBy } from "@store/import-users";
+import { importUsersModule, schoolsModule } from "@/store";
+import { MatchedBy } from "@store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
@@ -265,7 +265,6 @@ import {
 	mdiPencil,
 } from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
-import ImportUserModule from "@store/import-users";
 
 export default {
 	components: {
@@ -379,10 +378,10 @@ export default {
 			return false;
 		},
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		total() {
-			return ImportUserModule.getTotal;
+			return importUsersModule.getTotal;
 		},
 	},
 	watch: {
@@ -488,12 +487,12 @@ export default {
 			this.loading = true;
 			this.editedIndex = this.importUsers.indexOf(item);
 			this.editedItem = Object.assign({}, item);
-			const importUser = await ImportUsersModule.saveFlag({
+			const importUser = await importUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
 			if (
-				!ImportUsersModule.getBusinessError &&
+				!importUsersModule.getBusinessError &&
 				importUser.flagged === !this.editedItem.flagged
 			) {
 				this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
@@ -523,27 +522,27 @@ export default {
 		async getDataFromApi() {
 			this.loading = true;
 
-			ImportUsersModule.setFirstName(this.searchFirstName);
-			ImportUsersModule.setLastName(this.searchLastName);
-			ImportUsersModule.setLoginName(this.searchLoginName);
-			ImportUsersModule.setRole(this.searchRole);
-			ImportUsersModule.setClasses(this.searchClasses);
-			ImportUsersModule.setMatch(this.searchMatchedBy);
-			ImportUsersModule.setFlagged(this.searchFlagged);
+			importUsersModule.setFirstName(this.searchFirstName);
+			importUsersModule.setLastName(this.searchLastName);
+			importUsersModule.setLoginName(this.searchLoginName);
+			importUsersModule.setRole(this.searchRole);
+			importUsersModule.setClasses(this.searchClasses);
+			importUsersModule.setMatch(this.searchMatchedBy);
+			importUsersModule.setFlagged(this.searchFlagged);
 
-			ImportUsersModule.setLimit(this.options.itemsPerPage);
-			ImportUsersModule.setSkip(
+			importUsersModule.setLimit(this.options.itemsPerPage);
+			importUsersModule.setSkip(
 				(this.options.page - 1) * this.options.itemsPerPage
 			);
 			if (this.options.sortBy) {
-				ImportUsersModule.setSortBy(this.options.sortBy[0]);
-				ImportUsersModule.setSortOrder(
+				importUsersModule.setSortBy(this.options.sortBy[0]);
+				importUsersModule.setSortOrder(
 					this.options.sortDesc[0] ? "desc" : "asc"
 				);
 			}
-			await ImportUsersModule.fetchAllImportUsers();
-			this.importUsers = ImportUsersModule.getImportUserList.data;
-			this.totalImportUsers = ImportUsersModule.getImportUserList.total;
+			await importUsersModule.fetchAllImportUsers();
+			this.importUsers = importUsersModule.getImportUserList.data;
+			this.totalImportUsers = importUsersModule.getImportUserList.total;
 
 			this.loading = false;
 		},

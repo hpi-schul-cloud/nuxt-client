@@ -1,17 +1,9 @@
-import { AccountsModule } from "./accounts";
+import { initializeAxios } from "@/utils/api";
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import AccountsModule from "./accounts";
 
 const URL = "/v1/accounts/jwtTimer";
 let requestPath = "";
-
-jest.mock("../utils/api", () => {
-	return {
-		$axios: {
-			$post: (path: string) => {
-				requestPath = path;
-			},
-		},
-	};
-});
 
 describe("accounts module", () => {
 	afterEach(() => {
@@ -19,6 +11,14 @@ describe("accounts module", () => {
 	});
 
 	describe("actions", () => {
+		beforeEach(() => {
+			initializeAxios({
+				$post: async (path: string) => {
+					requestPath = path;
+				},
+			} as NuxtAxiosInstance);
+		});
+
 		it("getTTL action should make a post request to the right path", async () => {
 			const accountsModule = new AccountsModule({});
 

@@ -1,8 +1,10 @@
-import { Room } from "./room";
+import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import AuthModule from "@/store/auth";
+import { authModule } from ".";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -30,6 +32,9 @@ const axiosInitializer = () => {
 axiosInitializer();
 
 describe("room module", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
 	describe("actions", () => {
 		beforeEach(() => {
 			receivedRequests = [];
@@ -48,7 +53,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.fetchContent("123");
 
 				expect(roomModule.getLoading).toBe(false);
@@ -65,7 +70,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.publishCard({ elementId: "54321", visibility: true });
 
 				expect(roomModule.getLoading).toBe(false);
@@ -85,7 +90,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = {
 					elements: ["1234", "2345", "3456", "4567"],
 				};
@@ -108,7 +113,7 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchSharedLessonSpy = jest.spyOn(
 					roomModule,
 					"fetchSharedLesson"
@@ -126,7 +131,7 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const confirmImportLessonSpy = jest.spyOn(
 					roomModule,
 					"confirmImportLesson"
@@ -156,7 +161,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -190,7 +195,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -224,7 +229,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				await roomModule.confirmImportLesson("123456");
 
@@ -248,7 +253,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				await roomModule.confirmImportLesson("123456");
 
 				expect(roomModule.businessError.statusCode).toStrictEqual(404);
@@ -276,7 +281,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -305,7 +310,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -339,7 +344,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const deleteLessonSpy = jest.spyOn(roomModule, "deleteLesson");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -373,7 +378,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -408,7 +413,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -445,7 +450,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseInvitationSpy = jest.spyOn(
 					roomModule,
 					"createCourseInvitation"
@@ -481,7 +486,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -513,7 +518,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -550,7 +555,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
 					roomModule,
 					"createCourseShareToken"
@@ -575,7 +580,7 @@ describe("room module", () => {
 		describe("finishTask", () => {
 			beforeEach(() => {
 				// @ts-ignore
-				AuthModule.setUser({ id: "testUser" });
+				authModule.setUser({ id: "testUser" });
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
@@ -594,7 +599,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -628,7 +633,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
 					roomModule,
@@ -662,7 +667,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
 					roomModule,
@@ -694,7 +699,7 @@ describe("room module", () => {
 						},
 					} as NuxtAxiosInstance);
 				})();
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
 					roomModule,
@@ -732,7 +737,7 @@ describe("room module", () => {
 					} as NuxtAxiosInstance);
 				})();
 
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -755,7 +760,7 @@ describe("room module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -793,7 +798,7 @@ describe("room module", () => {
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const loadingValue = true;
 				expect(roomModule.getLoading).not.toBe(loadingValue);
 				roomModule.setLoading(loadingValue);
@@ -803,7 +808,7 @@ describe("room module", () => {
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const errorData = { message: "some error" };
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
@@ -813,7 +818,7 @@ describe("room module", () => {
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
@@ -824,7 +829,7 @@ describe("room module", () => {
 				expect(roomModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				roomModule.businessError = {
 					statusCode: "400",
 					message: "error",
@@ -839,7 +844,7 @@ describe("room module", () => {
 
 		describe("setSharedLessonData", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const shareLessonData = {
 					code: "123",
 					lessonName: "Lesson_1",
@@ -854,7 +859,7 @@ describe("room module", () => {
 
 		describe("setCourseInvitationLink", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = "http://localhost:4000/link/123456";
 
 				roomModule.setCourseInvitationLink(payload);
@@ -864,7 +869,7 @@ describe("room module", () => {
 
 		describe("setCourseShareToken", () => {
 			it("should set the state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const payload = "token_test";
 
 				roomModule.setCourseShareToken(payload);
@@ -876,7 +881,7 @@ describe("room module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -913,7 +918,7 @@ describe("room module", () => {
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 
 				expect(roomModule.getLoading).not.toStrictEqual(true);
 				roomModule.setLoading(true);
@@ -923,7 +928,7 @@ describe("room module", () => {
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const errorData = { message: "some error" };
 				expect(roomModule.getError).toStrictEqual(null);
 				roomModule.setError(errorData);
@@ -932,7 +937,7 @@ describe("room module", () => {
 		});
 		describe("roomIsEmpty", () => {
 			it("should return false if there are any elements in the room", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const testData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -966,7 +971,7 @@ describe("room module", () => {
 				expect(result).toStrictEqual(false);
 			});
 			it("should return true if there are no elements in the room", () => {
-				const roomModule = new Room({});
+				const roomModule = new RoomModule({});
 				const testData = {
 					id: "123",
 					courseName: "Sample Course",

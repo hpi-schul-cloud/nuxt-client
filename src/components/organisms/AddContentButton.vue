@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
@@ -94,13 +94,13 @@ export default {
 	},
 	computed: {
 		elements() {
-			return ContentModule.getElementsGetter;
+			return contentModule.getElementsGetter;
 		},
 		selected() {
-			return ContentModule.getSelected;
+			return contentModule.getSelected;
 		},
 		addContentNotificationModal() {
-			return ContentModule.notificationModal;
+			return contentModule.notificationModal;
 		},
 		itemId() {
 			return this.resource && this.resource.properties
@@ -189,7 +189,7 @@ export default {
 			}
 		},
 		async addResource() {
-			ContentModule.setNotificationModal(null);
+			contentModule.setNotificationModal(null);
 			if (!(await this.addResourceAndClose())) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");

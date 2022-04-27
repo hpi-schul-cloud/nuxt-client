@@ -1,7 +1,10 @@
-import { default as RoomsPage } from "./rooms-overview.vue";
-import RoomsModule from "@/store/rooms";
-import AuthModule from "@/store/auth";
+import RoomsPage from "./rooms-overview.vue";
+import { authModule, roomsModule } from "@/store";
 import flushPromises from "flush-promises";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import RoomsModule from "@/store/rooms";
+import EnvConfigModule from "@/store/env-config";
 
 const mockRoomStoreData = [
 	{
@@ -66,15 +69,21 @@ const mockAuthStoreData = {
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
+setupStores({
+	auth: AuthModule,
+	"env-config": EnvConfigModule,
+	rooms: RoomsModule,
+});
+
 const spyMocks = {
 	storeRoomAlignMock: jest
-		.spyOn(RoomsModule, "align")
+		.spyOn(roomsModule, "align")
 		.mockImplementation(async () => {}),
 	storeModuleFetchMock: jest
-		.spyOn(RoomsModule, "fetch")
+		.spyOn(roomsModule, "fetch")
 		.mockImplementation(async () => {}),
 	storeModuleFetchAllMock: jest
-		.spyOn(RoomsModule, "fetchAllElements")
+		.spyOn(roomsModule, "fetchAllElements")
 		.mockImplementation(async () => {}),
 	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
 	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
@@ -107,14 +116,14 @@ describe("RoomPage", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		RoomsModule.setRoomData(mockRoomStoreData);
-		AuthModule.setUser(mockAuthStoreData);
+		roomsModule.setRoomData(mockRoomStoreData);
+		authModule.setUser(mockAuthStoreData);
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	// it(...isValidComponent(RoomsPage));
+	it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
@@ -483,7 +492,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		AuthModule.setUser({
+		authModule.setUser({
 			...mockAuthStoreData,
 			permissions: ["aksjdhf", "poikln"],
 		});
@@ -530,7 +539,7 @@ describe("RoomPage", () => {
 			},
 		];
 
-		RoomsModule.setRoomData(roomData);
+		roomsModule.setRoomData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
 		await wrapper.vm.$nextTick();

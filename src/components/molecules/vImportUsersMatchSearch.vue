@@ -217,7 +217,7 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 } from "@mdi/js";
-import ImportUsersModule from "@store/import-users";
+import { importUsersModule } from "@/store";
 
 export default {
 	components: {},
@@ -322,16 +322,16 @@ export default {
 		},
 		async getDataFromApi() {
 			this.loading = true;
-			ImportUsersModule.setUsersLimit(this.limit);
-			ImportUsersModule.setUsersSkip(this.skip);
-			if (this.searchUser !== ImportUsersModule.getUserSearch) {
+			importUsersModule.setUsersLimit(this.limit);
+			importUsersModule.setUsersSkip(this.skip);
+			if (this.searchUser !== importUsersModule.getUserSearch) {
 				this.entries = [];
-				ImportUsersModule.setUserSearch(this.searchUser);
+				importUsersModule.setUserSearch(this.searchUser);
 			}
-			ImportUsersModule.fetchAllUsers().then(() => {
-				this.total = ImportUsersModule.getUserList.total;
+			importUsersModule.fetchAllUsers().then(() => {
+				this.total = importUsersModule.getUserList.total;
 
-				this.entries = [...this.entries, ...ImportUsersModule.getUserList.data];
+				this.entries = [...this.entries, ...importUsersModule.getUserList.data];
 				this.loading = false;
 			});
 		},
@@ -343,12 +343,12 @@ export default {
 			if (!this.selectedItem) {
 				return false;
 			}
-			const importUser = await ImportUsersModule.saveMatch({
+			const importUser = await importUsersModule.saveMatch({
 				importUserId: this.editedItem.importUserId,
 				userId: this.selectedItem.userId,
 			});
 			if (
-				!ImportUsersModule.getBusinessError &&
+				!importUsersModule.getBusinessError &&
 				importUser.match &&
 				importUser.match.userId === this.selectedItem.userId
 			) {
@@ -360,11 +360,11 @@ export default {
 			if (!this.editedItem.match || !this.editedItem.match.userId) {
 				return false;
 			}
-			const importUser = await ImportUsersModule.deleteMatch(
+			const importUser = await importUsersModule.deleteMatch(
 				this.editedItem.importUserId
 			);
 			if (
-				!ImportUsersModule.getBusinessError &&
+				!importUsersModule.getBusinessError &&
 				importUser.match === undefined
 			) {
 				this.$emit("deleted-match");
@@ -372,12 +372,12 @@ export default {
 			}
 		},
 		async saveFlag() {
-			const importUser = await ImportUsersModule.saveFlag({
+			const importUser = await importUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.flagged,
 			});
 			if (
-				!ImportUsersModule.getBusinessError &&
+				!importUsersModule.getBusinessError &&
 				importUser.flagged === !this.flagged
 			) {
 				this.flagged = !this.flagged;

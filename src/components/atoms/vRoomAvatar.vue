@@ -50,7 +50,7 @@
 	</div>
 </template>
 <script>
-import EnvConfigModule from "@store/env-config";
+import { envConfigModule } from "@/store";
 
 export default {
 	props: {
@@ -85,7 +85,7 @@ export default {
 	},
 	methods: {
 		onClick() {
-			const showRoomView = EnvConfigModule.getEnv.ROOM_VIEW_ENABLED || false;
+			const showRoomView = envConfigModule.getEnv.ROOM_VIEW_ENABLED || false;
 			if (!this.condenseLayout) {
 				if (this.item.to) {
 					this.$router.push({

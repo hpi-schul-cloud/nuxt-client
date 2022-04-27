@@ -164,10 +164,9 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import { roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import RoomModule from "@store/room";
-import TaskModule from "@/store/tasks";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
@@ -221,7 +220,7 @@ export default {
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
 		},
-		roomIsEmpty: () => RoomModule.roomIsEmpty,
+		roomIsEmpty: () => roomModule.roomIsEmpty,
 		emptyState() {
 			const image = topicsEmptyStateImage;
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
@@ -240,10 +239,10 @@ export default {
 	},
 	methods: {
 		async postDraftElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: true });
+			await roomModule.publishCard({ elementId, visibility: true });
 		},
 		async revertPublishedElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: false });
+			await roomModule.publishCard({ elementId, visibility: false });
 		},
 		async onSort(items) {
 			const idList = {};
@@ -251,7 +250,7 @@ export default {
 				return item.content.id;
 			});
 
-			await RoomModule.sortElements(idList);
+			await roomModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
@@ -269,12 +268,12 @@ export default {
 				items[itemIndex],
 			];
 
-			await RoomModule.sortElements({ elements: items });
+			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			await RoomModule.fetchSharedLesson(lessonId);
-			const sharedLesson = RoomModule.getSharedLessonData;
+			await roomModule.fetchSharedLesson(lessonId);
+			const sharedLesson = roomModule.getSharedLessonData;
 
 			this.lessonShare.token = sharedLesson.code;
 			this.lessonShare.lessonName = sharedLesson.lessonName;
@@ -295,17 +294,17 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await TaskModule.deleteTask(this.itemDelete.itemData.id);
-				await RoomModule.fetchContent(this.roomData.roomId);
+				await taskModule.deleteTask(this.itemDelete.itemData.id);
+				await roomModule.fetchContent(this.roomData.roomId);
 				return Promise.resolve();
 			}
-			await RoomModule.deleteLesson(this.itemDelete.itemData.id);
+			await roomModule.deleteLesson(this.itemDelete.itemData.id);
 		},
 		async finishTask(itemId) {
-			await RoomModule.finishTask({ itemId, action: "finish" });
+			await roomModule.finishTask({ itemId, action: "finish" });
 		},
 		async restoreTask(itemId) {
-			await RoomModule.finishTask({ itemId, action: "restore" });
+			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 	},
 };

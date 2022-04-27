@@ -101,10 +101,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import RoomModule from "@store/room";
-
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -168,7 +165,7 @@ export default {
 	computed: {
 		fabItems() {
 			if (
-				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
 				const items = {
 					icon: mdiPlus,
@@ -192,7 +189,7 @@ export default {
 						},
 					],
 				};
-				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					items.actions.push({
 						label: this.$t("pages.rooms.fab.import.lesson"),
 						icon: mdiCloudDownload,
@@ -210,10 +207,10 @@ export default {
 			return null;
 		},
 		roomData() {
-			return RoomModule.getRoomData;
+			return roomModule.getRoomData;
 		},
 		roles() {
-			return AuthModule.getUserRoles;
+			return authModule.getUserRoles;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -241,7 +238,7 @@ export default {
 				},
 			];
 
-			if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_COPY) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () =>
@@ -250,7 +247,7 @@ export default {
 					dataTestId: "title-menu-copy",
 				});
 			}
-			if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
@@ -262,15 +259,15 @@ export default {
 		},
 	},
 	async created() {
-		await RoomModule.fetchContent(this.courseId);
+		await roomModule.fetchContent(this.courseId);
 	},
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
 		async inviteCourse() {
-			await RoomModule.createCourseInvitation(this.courseId);
-			this.dialog.courseInvitationLink = RoomModule.getCourseInvitationLink;
+			await roomModule.createCourseInvitation(this.courseId);
+			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
 			this.dialog.model = "invite";
 			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
 			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
@@ -279,8 +276,8 @@ export default {
 			this.dialog.isOpen = true;
 		},
 		async shareCourse() {
-			await RoomModule.createCourseShareToken(this.courseId);
-			this.dialog.courseShareToken = RoomModule.getCourseShareToken;
+			await roomModule.createCourseShareToken(this.courseId);
+			this.dialog.courseShareToken = roomModule.getCourseShareToken;
 			this.dialog.model = "share";
 			this.dialog.header = this.$t("pages.room.modal.course.share.header");
 			this.dialog.text = this.$t("pages.room.modal.course.share.text");

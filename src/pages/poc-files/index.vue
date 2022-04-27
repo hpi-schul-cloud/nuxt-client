@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import FilesPOCModule from "@/store/files-poc";
+import { filesPOCModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { mdiPencil, mdiCheck, mdiClose, mdiDownload } from "@mdi/js";
 import { $axios } from "../../utils/api";
@@ -71,8 +71,8 @@ export default {
 		};
 	},
 	computed: {
-		loadingState: () => FilesPOCModule.getStatus,
-		files: () => FilesPOCModule.getFiles,
+		loadingState: () => filesPOCModule.getStatus,
+		files: () => filesPOCModule.getFiles,
 		isLoading() {
 			return this.loadingState === "pending";
 		},
@@ -85,13 +85,13 @@ export default {
 		},
 	},
 	mounted() {
-		FilesPOCModule.fetchFiles();
+		filesPOCModule.fetchFiles();
 	},
 	methods: {
 		async upload() {
 			const { file } = this;
 			if (file) {
-				await FilesPOCModule.upload(file);
+				filesPOCModule.upload(file);
 			}
 		},
 		async download(file) {

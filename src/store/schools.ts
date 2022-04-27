@@ -1,13 +1,6 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
-import AuthModule from "./auth";
+import { authModule } from "@/store";
 import { Year, FederalState, School } from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 
@@ -45,11 +38,9 @@ function transformSchoolClientToServer(school: any): School {
 @Module({
 	name: "schools",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class Schools extends VuexModule {
+export default class SchoolsModule extends VuexModule {
 	private _importUserApi?: UserImportApiInterface;
 
 	school: School = {
@@ -171,10 +162,10 @@ export class Schools extends VuexModule {
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
 
-		if (AuthModule.getUser?.schoolId) {
+		if (authModule.getUser?.schoolId) {
 			try {
 				const school = await $axios.$get(
-					`/v1/schools/${AuthModule.getUser?.schoolId} `
+					`/v1/schools/${authModule.getUser?.schoolId} `
 				);
 
 				this.setSchool(transformSchoolServerToClient(school));
@@ -320,5 +311,3 @@ export class Schools extends VuexModule {
 		return this._importUserApi;
 	}
 }
-
-export default getModule(Schools);

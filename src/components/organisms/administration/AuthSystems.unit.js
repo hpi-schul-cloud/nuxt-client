@@ -1,7 +1,9 @@
 import AuthSystems from "./AuthSystems";
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
+import { schoolsModule, envConfigModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [
@@ -25,18 +27,22 @@ const searchStrings = {
 };
 
 describe("AuthSystems", () => {
+	beforeEach(() => {
+		setupStores({ "env-config": EnvConfigModule, schools: SchoolsModule });
+	});
+
 	it(...isValidComponent(AuthSystems));
 
 	describe("displaying values", () => {
 		describe("login link", () => {
 			beforeEach(() => {
-				EnvConfigModule.setEnvs({
+				envConfigModule.setEnvs({
 					FEATURE_LOGIN_LINK_ENABLED: true,
 				});
 			});
 
 			it("login link field should not be visible", () => {
-				EnvConfigModule.setEnvs({
+				envConfigModule.setEnvs({
 					FEATURE_LOGIN_LINK_ENABLED: false,
 				});
 
@@ -95,7 +101,7 @@ describe("AuthSystems", () => {
 			});
 
 			it("login link field should render ldap login link", () => {
-				SchoolsModule.setSchool(mockSchool);
+				schoolsModule.setSchool(mockSchool);
 				const wrapper = mount(AuthSystems, {
 					...createComponentMocks({
 						i18n: true,
@@ -301,7 +307,7 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const deleteSpy = jest.spyOn(SchoolsModule, "deleteSystem");
+			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,

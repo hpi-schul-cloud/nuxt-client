@@ -36,8 +36,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import Schools from "@/store/schools";
+import { authModule, schoolsModule } from "@/store";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -116,13 +115,13 @@ export default {
 	},
 	computed: {
 		user() {
-			return AuthModule.getUser;
+			return authModule.getUser;
 		},
 		school() {
-			return Schools.getSchool;
+			return schoolsModule.getSchool;
 		},
 		authenticated() {
-			return AuthModule.getAuthenticated;
+			return authModule.getAuthenticated;
 		},
 		topBarActions() {
 			return [...this.topbarBaseActions];
@@ -195,7 +194,7 @@ export default {
 			if (event === "logout") {
 				// TODO temporary workaround until $cookies are accessible from TS modules
 				this.$cookies.remove("jwt");
-				AuthModule.logout();
+				authModule.logout();
 				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {

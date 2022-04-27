@@ -1,4 +1,4 @@
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 const unrecoverableErrorCodes = [401, 404, 500];
 
@@ -12,9 +12,9 @@ export default async function ({ $axios, store, error }) {
 	$axios.onRequest((config) => {
 		store.commit("error/reset");
 
-		if (AuthModule.getAccessToken) {
+		if (authModule.getAccessToken) {
 			config.headers.common["Authorization"] =
-				"Bearer " + AuthModule.getAccessToken;
+				"Bearer " + authModule.getAccessToken;
 		}
 	});
 

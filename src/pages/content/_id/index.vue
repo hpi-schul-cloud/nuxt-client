@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
 import BaseSpinner from "@components/base/BaseSpinner";
@@ -28,26 +28,26 @@ export default {
 	},
 	layout({ query }) {
 		return String(query.isCollection) === "true" &&
-			ContentModule.getCollectionsFeatureFlag === true
+			contentModule.getCollectionsFeatureFlag === true
 			? "loggedInFull"
 			: "plain";
 	},
 	computed: {
 		resource() {
-			return ContentModule.getCurrentResource;
+			return contentModule.getCurrentResource;
 		},
 		collectionsFeatureFlag() {
-			return ContentModule.getCollectionsFeatureFlag;
+			return contentModule.getCollectionsFeatureFlag;
 		},
 		status() {
-			return ContentModule.getStatus;
+			return contentModule.getStatus;
 		},
 		isCollection() {
-			return ContentModule.isCollection;
+			return contentModule.isCollection;
 		},
 	},
 	async created() {
-		await ContentModule.getResourceMetadata(this.$route.params.id);
+		await contentModule.getResourceMetadata(this.$route.params.id);
 	},
 };
 </script>

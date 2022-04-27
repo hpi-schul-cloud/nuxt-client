@@ -48,6 +48,7 @@ const routes = [
 	`^/rooms/${mongoId}/?$`,
 	// `^/courses/?$`,
 	`^/poc-files/?$`,
+	`^/poc-vuex/?$`,
 ];
 
 const uuid =

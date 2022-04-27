@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 import AddContentButton from "@components/organisms/AddContentButton";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
@@ -181,13 +181,13 @@ export default {
 	},
 	computed: {
 		elements() {
-			return ContentModule.getElementsGetter;
+			return contentModule.getElementsGetter;
 		},
 		selected() {
-			return ContentModule.getSelected;
+			return contentModule.getSelected;
 		},
 		loading() {
-			return ContentModule.getLoading;
+			return contentModule.getLoading;
 		},
 		provider() {
 			const provider = getProvider(this.resource.properties);
@@ -264,9 +264,9 @@ export default {
 		async searchElements() {
 			try {
 				// Clears the previous collection elements before rendering the new ones
-				ContentModule.clearElements();
+				contentModule.clearElements();
 				// TODO wrong use of store (not so bad)
-				await ContentModule.getElements(this.query);
+				await contentModule.getElements(this.query);
 			} catch (error) {
 				this.$toast.error(
 					this.$t("pages.content.notification.lernstoreNotAvailable")
@@ -277,7 +277,7 @@ export default {
 			if (this.query.$skip < this.elements.total) {
 				this.query.$skip += this.query.$limit;
 				// TODO wrong use of store (not so bad)
-				await ContentModule.addElements(this.query);
+				await contentModule.addElements(this.query);
 			}
 		},
 		isNotStudent(roles) {

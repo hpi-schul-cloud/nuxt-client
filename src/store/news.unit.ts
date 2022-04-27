@@ -1,4 +1,4 @@
-import { NewsModule } from "./news";
+import NewsModule from "./news";
 import * as serverApi from "../serverApi/v3/api";
 
 describe("news store", () => {

@@ -1,32 +1,23 @@
+import { authModule } from "@/store";
+import { nanoid } from "nanoid";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
-import { $axios } from "../utils/api";
-import {
-	RoomsApiInterface,
-	RoomsApiFactory,
 	BoardResponse,
-	PatchVisibilityParams,
 	PatchOrderParams,
+	PatchVisibilityParams,
+	RoomsApiFactory,
+	RoomsApiInterface,
 } from "../serverApi/v3/api";
+import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
-import { nanoid } from "nanoid";
-import AuthModule from "@/store/auth";
 
 @Module({
 	name: "room",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class Room extends VuexModule {
+export default class RoomModule extends VuexModule {
 	roomData: BoardResponse = {
 		roomId: "",
 		title: "",
@@ -249,7 +240,7 @@ export class Room extends VuexModule {
 	@Action
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
-		const userId = AuthModule.getUser?.id;
+		const userId = authModule.getUser?.id;
 		try {
 			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
 			if (!homework.archived) {
@@ -370,5 +361,3 @@ export class Room extends VuexModule {
 		return this.getLoading === false;
 	}
 }
-
-export default getModule(Room);

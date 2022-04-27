@@ -155,7 +155,7 @@ global.shallowMountView = (Component, options = {}) => {
 */
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
-import authStoreModule from "@store/auth";
+import authStoreModule from "@/store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
 import globalStubs from "./stubs.js";
 import VueMeta from "vue-meta";

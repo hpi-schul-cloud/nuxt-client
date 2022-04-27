@@ -1,39 +1,55 @@
-import TasksList from "./TasksList";
+import TasksList from "./TasksList.vue";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import Vuetify from "vuetify";
 import TaskModule from "@/store/tasks";
 import FinishedTaskModule from "@/store/finished-tasks";
+import { provide } from "@nuxtjs/composition-api";
+import { mount, Wrapper } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { Task } from "@/store/types/tasks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
 describe("@components/organisms/TasksList", () => {
-	const mockStore = {
-		tasks: {
-			getters: {
-				getList: () => tasks,
-				getStatus: () => "completed",
-				hasTasks: () => true,
-				openTasks: () => openTasks,
-				overDueTasks: () => overDueTasks,
-			},
-			state: () => ({
-				list: tasks,
-				status: "completed",
+	let taskModuleMock: TaskModule;
+	let finishedTaskModuleMock: FinishedTaskModule;
+	let wrapper: Wrapper<Vue>;
+
+	const mountComponent = (attrs = {}) => {
+		const wrapper = mount(TasksList, {
+			...createComponentMocks({
+				i18n: true,
 			}),
-		},
+			setup() {
+				provide("taskModule", taskModuleMock);
+				provide("finishedTaskModule", finishedTaskModuleMock);
+			},
+			...attrs,
+		});
+
+		return wrapper;
 	};
 
-	let vuetify;
+	const taskModuleGetters: Partial<TaskModule> = {
+		getTasks: tasks as unknown as Task[],
+		getStatus: "completed",
+		hasTasks: true,
+	};
 
 	beforeEach(() => {
-		vuetify = new Vuetify();
-	});
+		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
 
-	it(...isValidComponent(TasksList));
+		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			getTasks: [],
+			tasksIsEmpty: true,
+		});
+	});
 
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
+			//@ts-ignore
 			const typeValidator = TasksList.props.type.validator;
+			//@ts-ignore
 			const roleValidator = TasksList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
@@ -59,13 +75,7 @@ describe("@components/organisms/TasksList", () => {
 
 	describe("subheader rendering", () => {
 		it("Should render no subheader if title prop is not set", () => {
-			const wrapper = mount(TasksList, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				}),
-				vuetify,
+			wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
@@ -77,16 +87,7 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should render a subheader if title prop is set", () => {
-			const spy = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("completed");
-
-			const wrapper = mount(TasksList, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				vuetify,
+			wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
@@ -96,19 +97,11 @@ describe("@components/organisms/TasksList", () => {
 
 			const subHeader = wrapper.findAll(".v-subheader");
 			expect(subHeader.exists()).toBe(true);
-
-			spy.mockRestore();
 		});
 	});
 
 	it("Should render complete task items list", () => {
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
+		wrapper = mountComponent({
 			propsData: {
 				tasks,
 				userRole: "student",
@@ -121,7 +114,9 @@ describe("@components/organisms/TasksList", () => {
 		dueDateLabels.wrappers.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
 			if (
+				//@ts-ignore
 				tasks[index].duedate === null ||
+				//@ts-ignore
 				typeof tasks[index].duedate === "undefined"
 			)
 				expect(dateLabel.text()).toBe("Kein Abgabedatum");
@@ -130,52 +125,31 @@ describe("@components/organisms/TasksList", () => {
 	});
 
 	it("Should render an empty list, if there are no tasks", () => {
-		const mockStoreEmpty = {
-			tasks: {
-				getters: {
-					getList: () => [],
-					getStatus: () => "completed",
-					hasTasks: () => false,
-					openTasks: () => [],
-					overDueTasks: () => [],
-				},
-				state: () => ({
-					list: [],
-					status: "completed",
-				}),
-			},
-		};
+		taskModuleMock = createModuleMocks(TaskModule, {
+			getTasks: [],
+			getStatus: "completed",
+			hasTasks: false,
+		});
 
-		const wrapper = mount(TasksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreEmpty,
-			}),
-			vuetify,
+		wrapper = mountComponent({
 			propsData: {
 				userRole: "student",
 			},
 		});
+
 		expect(wrapper.props("tasks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
-			const spy1 = jest
-				.spyOn(TaskModule, "hasTasks", "get")
-				.mockReturnValue(true);
-			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("pending");
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				hasTasks: true,
+				getStatus: "pending",
+			});
 
-			const wrapper = mount(TasksList, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				vuetify,
+			wrapper = mountComponent({
 				propsData: {
 					tasks: [],
 					userRole: "student",
@@ -189,33 +163,27 @@ describe("@components/organisms/TasksList", () => {
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
 			expect(wrapper.props("tasks")).toStrictEqual([]);
 			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
-
-			spy1.mockRestore();
-			spy2.mockRestore();
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
-			const wrapper = mount(TasksList, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				vuetify,
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getStatus: "pending",
+			});
+
+			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+				getIsInitialized: true,
+			});
+
+			wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
 					hasPagination: true,
 				},
-				computed: {
-					status() {
-						return "pending";
-					},
-					finishedTasksIsInitialized() {
-						return true;
-					},
-				},
 			});
 
+			//@ts-ignore
 			expect(wrapper.vm.showSpinner).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
@@ -225,29 +193,24 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should compute correct status", () => {
-			const spy1 = jest
-				.spyOn(FinishedTaskModule, "getStatus", "get")
-				.mockReturnValue("pending");
-			const spy2 = jest
-				.spyOn(TaskModule, "getStatus", "get")
-				.mockReturnValue("completed");
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getStatus: "completed",
+			});
 
-			const wrapper = mount(TasksList, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				vuetify,
+			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+				getStatus: "pending",
+			});
+
+			wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
 				},
 			});
 
+			//@ts-ignore
 			expect(wrapper.vm.status).toBe("completed");
-
-			spy1.mockRestore();
-			spy2.mockRestore();
 		});
 	});
 });

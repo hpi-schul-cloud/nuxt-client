@@ -1,9 +1,11 @@
 import { default as StudentPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import EnvConfigModule from "@/store/env-config";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -49,7 +51,13 @@ describe("students/index", () => {
 		jest.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
 
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: false });
+		setupStores({
+			auth: AuthModule,
+			"env-config": EnvConfigModule,
+			schools: SchoolsModule,
+		});
+
+		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
 
 		mockStore = {
 			classes: {
@@ -118,7 +126,7 @@ describe("students/index", () => {
 	it(...isValidComponent(StudentPage));
 
 	it("should call 'deleteUsers' action", async () => {
-		AuthModule.setUser({
+		authModule.setUser({
 			roles: [
 				{
 					name: "administrator",
@@ -168,7 +176,7 @@ describe("students/index", () => {
 		});
 	});
 
-	it("should dispatch the 'findStudents action on load'", async () => {
+	it("should dispatch the 'findStudents action on load'", () => {
 		mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -185,6 +193,9 @@ describe("students/index", () => {
 				store: mockStore,
 			}),
 		});
+		mock$objects(wrapper);
+		authModule.addUserPermmission("STUDENT_DELETE");
+
 		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
@@ -192,7 +203,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
-		await jest.runAllTimers();
+		jest.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -205,14 +216,14 @@ describe("students/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		await jest.runAllTimers();
+		jest.runAllTimers();
 
 		// delete button action is rendered in contextMenu
 		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
 		expect(deleteActionButton.exists()).toBe(true);
 		// delete button is clicked
 		await deleteActionButton.trigger("click");
-		await jest.runAllTimers();
+		jest.runAllTimers();
 
 		// delete action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -227,6 +238,8 @@ describe("students/index", () => {
 				store: mockStore,
 			}),
 		});
+		mock$objects(wrapper);
+
 		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
@@ -271,6 +284,8 @@ describe("students/index", () => {
 				store: mockStore,
 			}),
 		});
+		mock$objects(wrapper);
+
 		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
@@ -307,7 +322,7 @@ describe("students/index", () => {
 		expect(mockStore.users.actions.getQrRegistrationLinks).toHaveBeenCalled();
 	});
 
-	it("should display the same number of elements as in the mockData object", async () => {
+	it("should display the same number of elements as in the mockData object", () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -318,7 +333,7 @@ describe("students/index", () => {
 		expect(table.vm.data).toHaveLength(mockData.length);
 	});
 
-	it("should display the edit button if school is not external", async () => {
+	it("should display the edit button if school is not external", () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -329,8 +344,8 @@ describe("students/index", () => {
 		expect(editBtn.exists()).toBe(true);
 	});
 
-	it("should not display the edit button if school is external", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+	it("should not display the edit button if school is external", () => {
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -341,7 +356,7 @@ describe("students/index", () => {
 		expect(editBtn.exists()).toBe(false);
 	});
 
-	it("editBtn's to property should have the expected URL", async () => {
+	it("editBtn's to property should have the expected URL", () => {
 		const expectedURL =
 			"/administration/students/0000d231816abba584714c9e/edit";
 		const wrapper = mount(StudentPage, {
@@ -354,7 +369,8 @@ describe("students/index", () => {
 		expect(editBtn.vm.to).toStrictEqual(expectedURL);
 	});
 
-	it("should render the fab-floating component if user has SUDENT_CREATE permission", async () => {
+	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
+		authModule.addUserPermmission("STUDENT_CREATE");
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -367,8 +383,8 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", async () => {
-		AuthModule.setUser({
+	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
+		authModule.setUser({
 			roles: [
 				{
 					name: "administrator",
@@ -390,8 +406,8 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	it("should not render the fab-floating component if isExternal is true", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+	it("should not render the fab-floating component if isExternal is true", () => {
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -405,8 +421,8 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	it("should render the adminTableLegend component when school is external", async () => {
-		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
+	it("should render the adminTableLegend component when school is external", () => {
+		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -419,7 +435,7 @@ describe("students/index", () => {
 		expect(externalHint.exists()).toBe(true);
 	});
 
-	it("should not render the adminTableLegend component when school is not external", async () => {
+	it("should not render the adminTableLegend component when school is not external", () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -430,7 +446,7 @@ describe("students/index", () => {
 		expect(externalHint.exists()).toBe(false);
 	});
 
-	it("should call barSearch method when searchbar component's value change", async () => {
+	it("should call barSearch method when searchbar component's value change", () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -439,7 +455,7 @@ describe("students/index", () => {
 		});
 
 		//run all existing timers
-		await jest.runAllTimers();
+		jest.runAllTimers();
 		//reset the mock call stack
 		mockStore.users.actions.findStudents.mockClear();
 		mockStore.uiState.mutations.set.mockClear();
@@ -452,7 +468,7 @@ describe("students/index", () => {
 		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 
 		//run new timer from updating the value
-		await jest.runAllTimers();
+		jest.runAllTimers();
 
 		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
 	});
@@ -478,8 +494,8 @@ describe("students/index", () => {
 		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 	});
 
-	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
-		EnvConfigModule.setEnvs({
+	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
+		envConfigModule.setEnvs({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
@@ -489,7 +505,7 @@ describe("students/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
 		);
 		expect(
@@ -497,8 +513,8 @@ describe("students/index", () => {
 		).toBe(true);
 	});
 
-	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
-		EnvConfigModule.setEnvs({
+	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
+		envConfigModule.setEnvs({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
@@ -509,7 +525,7 @@ describe("students/index", () => {
 			}),
 		});
 
-		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
 		);
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);

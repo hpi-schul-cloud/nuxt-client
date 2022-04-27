@@ -22,6 +22,8 @@ import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import setupStores from "../test-utils/setupStores";
+import AuthModule from "@/store/auth";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -89,6 +91,10 @@ describe("@plugins/datetime", () => {
 	const timeLocalFromUTCString = dateLocalFromUTC.format("HH:mm");
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const timeLocalString = dateLocal.format("HH:mm");
+
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
 
 	it("getUtcOffset", () => {
 		const result = getUtcOffset();

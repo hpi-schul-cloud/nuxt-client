@@ -1,25 +1,17 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import TasksModule from "@/store/tasks";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { taskModule } from "@/store";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Status, Pagination } from "./types/commons";
 import { Task } from "./types/tasks";
+import { envConfigModule } from "@/store";
 
 @Module({
 	name: "finished-tasks",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class FinishedTaskModule extends VuexModule {
+export default class FinishedTaskModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
@@ -115,7 +107,7 @@ export class FinishedTaskModule extends VuexModule {
 			await this.taskApi.taskControllerRestore(taskId);
 
 			await this.refetchTasks();
-			await TasksModule.fetchAllTasks();
+			await taskModule.fetchAllTasks();
 
 			this.setStatus("completed");
 		} catch (error) {
@@ -185,12 +177,10 @@ export class FinishedTaskModule extends VuexModule {
 		if (!this._taskApi) {
 			this._taskApi = TaskApiFactory(
 				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				"/v3", //`${envConfigModule.getApiUrl}/v3`,
 				$axios
 			);
 		}
 		return this._taskApi;
 	}
 }
-
-export default getModule(FinishedTaskModule);

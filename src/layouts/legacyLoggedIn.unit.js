@@ -1,7 +1,11 @@
-import legacyLoggedIn from "./legacyLoggedIn";
+import { authModule, envConfigModule, filePathsModule } from "@/store";
 import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
+import AutoLogoutModule from "@/store/autoLogout";
 import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
+import SchoolsModule from "@/store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
+import legacyLoggedIn from "./legacyLoggedIn";
 
 const $route = {
 	query: {
@@ -11,15 +15,24 @@ const $route = {
 };
 
 const $router = { push: jest.fn() };
-AuthModule.setUser({
+
+setupStores({
+	auth: AuthModule,
+	autoLogout: AutoLogoutModule,
+	"env-config": EnvConfigModule,
+	filePaths: FilePathsModule,
+	schools: SchoolsModule,
+});
+
+authModule.setUser({
 	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
 	roles: [{ name: "administrator" }],
 });
-AuthModule.setAccessToken("asdf");
+authModule.setAccessToken("asdf");
 
-FilePathsModule.setSpecificFiles("https://dbildungscloud.de");
+filePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
-EnvConfigModule.setEnvs({
+envConfigModule.setEnvs({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 });
 

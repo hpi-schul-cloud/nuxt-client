@@ -92,11 +92,10 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schools";
+import { envConfigModule, schoolsModule } from "@/store";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
-import EnvConfigModule from "@/store/env-config";
 
 export default {
 	components: {
@@ -125,7 +124,7 @@ export default {
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
-		customLoginLinkEnabled: () => EnvConfigModule.getLoginLinkEnabled,
+		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
 		customLoginLink() {
 			let type = "";
 			let schoolId = "";
@@ -134,7 +133,7 @@ export default {
 			else if (this.systems.length === 0) type = "strategy=email";
 			else if (this.systems.some((system) => system.type === "ldap")) {
 				type = "strategy=ldap";
-				schoolId = `&schoolId=${SchoolsModule.getSchool.id}`;
+				schoolId = `&schoolId=${schoolsModule.getSchool.id}`;
 			}
 			return `${window.location.origin}/login?${type}${schoolId}`;
 		},
@@ -155,7 +154,7 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			SchoolsModule.deleteSystem(systemId);
+			schoolsModule.deleteSystem(systemId);
 			// TODO show error
 		},
 		copyLoginLink() {

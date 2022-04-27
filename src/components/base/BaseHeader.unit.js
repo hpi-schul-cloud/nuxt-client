@@ -56,11 +56,14 @@ describe("@components/base/BaseHeader", () => {
 				actions: actions,
 				source: "material",
 			},
+			mocks: {
+				$t: (msg) => msg,
+			},
 		});
 
 		const button = wrapper.findComponent(BaseButton);
 		expect(button.exists()).toBe(true);
-		await button.vm.$listeners.click();
+		await button.trigger("click");
 		expect(wrapper.vm.active).toBe(true);
 	});
 

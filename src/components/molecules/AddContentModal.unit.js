@@ -1,6 +1,8 @@
-import AddContentModal from "@components/molecules/AddContentModal";
-import { isValidComponent } from "@@/tests/unit/commonTests";
+import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { isValidComponent } from "@@/tests/unit/commonTests";
+import AddContentModal from "@components/molecules/AddContentModal";
 
 const testProps = {
 	showCopyModal: true,
@@ -121,6 +123,12 @@ function getWrapper(attributes, options) {
 }
 
 describe("@components/molecules/AddContentModal", () => {
+	beforeEach(() => {
+		setupStores({
+			content: ContentModule,
+		});
+	});
+
 	it(...isValidComponent(AddContentModal));
 
 	it("nothing selected submit should be disabled", async () => {
@@ -153,7 +161,7 @@ describe("@components/molecules/AddContentModal", () => {
 
 	it("create lessonsOptions", async () => {
 		const wrapper = getWrapper(testProps);
-		ContentModule.setLessons(lessons);
+		contentModule.setLessons(lessons);
 		const lo = wrapper.vm.lessonsOptions;
 		expect(lo).toHaveLength(1);
 		expect(lo[0]._id).toBe(lessonsMock[0]._id);

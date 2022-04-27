@@ -1,8 +1,10 @@
-import RoomsModule from "@store/rooms";
+import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomList from "./rooms-list.vue";
 import flushPromises from "flush-promises";
+import setupStores from "@@/tests/test-utils/setupStores";
+import RoomsModule from "@/store/rooms";
 
 const mockData = [
 	{
@@ -58,7 +60,8 @@ describe("@pages/rooms-list.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		RoomsModule.setAllElements(mockData as any);
+		setupStores({ rooms: RoomsModule });
+		roomsModule.setAllElements(mockData as any);
 	});
 
 	it("should fetch data", async () => {

@@ -1,6 +1,9 @@
 import SchoolPage from "./school-settings";
+import { envConfigModule, schoolsModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -149,30 +152,37 @@ const mockStore = {
 		},
 	},
 };
+
+setupStores({
+	auth: AuthModule,
+	"env-config": EnvConfigModule,
+	schools: SchoolsModule,
+});
+
 const fetchYearSpy = jest
-	.spyOn(SchoolsModule, "fetchCurrentYear")
+	.spyOn(schoolsModule, "fetchCurrentYear")
 	.mockImplementation(() => {
-		SchoolsModule.setCurrentYear(year);
+		schoolsModule.setCurrentYear(year);
 	});
 const fetchSystemsSpy = jest
-	.spyOn(SchoolsModule, "fetchSystems")
+	.spyOn(schoolsModule, "fetchSystems")
 	.mockImplementation(() => {
-		SchoolsModule.setSystems(systems);
+		schoolsModule.setSystems(systems);
 	});
 const fetchFederalStateSpy = jest
-	.spyOn(SchoolsModule, "fetchFederalState")
+	.spyOn(schoolsModule, "fetchFederalState")
 	.mockImplementation(() => {
-		SchoolsModule.setFederalState(federalState);
+		schoolsModule.setFederalState(federalState);
 	});
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
-		// SchoolsModule.setSchool(school);
-		// SchoolsModule.setFederalState(federalState);
-		SchoolsModule.setCurrentYear(null);
-		SchoolsModule.setSystems([]);
-		SchoolsModule.setFederalState(null);
-		EnvConfigModule.setEnvs(envs);
+		// schoolsModule.setSchool(school);
+		// schoolsModule.setFederalState(federalState);
+		schoolsModule.setCurrentYear(null);
+		schoolsModule.setSystems([]);
+		schoolsModule.setFederalState(null);
+		envConfigModule.setEnvs(envs);
 	});
 	it(...isValidComponent(SchoolPage));
 
@@ -213,7 +223,7 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("tests env var school policy being false", () => {
-		EnvConfigModule.setEnvs({
+		envConfigModule.setEnvs({
 			FEATURE_SCHOOL_POLICY_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
 		});
@@ -233,7 +243,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -245,7 +254,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -254,12 +262,11 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("should load skeleton while loading", () => {
-		SchoolsModule.setLoading(true);
+		schoolsModule.setLoading(true);
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -267,12 +274,11 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("error image should visible if schoolError occured", () => {
-		SchoolsModule.setError({ error: { message: "some errors" } });
+		schoolsModule.setError({ error: { message: "some errors" } });
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -288,7 +294,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();

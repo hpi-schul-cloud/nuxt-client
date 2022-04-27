@@ -118,9 +118,8 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schools";
 import { mapGetters } from "vuex";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -311,10 +310,10 @@ export default {
 			qrLinks: "getQrLinks",
 		}),
 		schoolIsExternallyManaged() {
-			return SchoolsModule.schoolIsExternallyManaged;
+			return schoolsModule.schoolIsExternallyManaged;
 		},
 		env() {
-			return EnvConfigModule.getEnv;
+			return envConfigModule.getEnv;
 		},
 		showConsent() {
 			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;

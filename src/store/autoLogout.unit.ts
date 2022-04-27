@@ -1,16 +1,23 @@
-import { AutoLogoutModule } from "./autoLogout";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AutoLogoutModule from "./autoLogout";
+import EnvConfigModule from "./env-config";
 
 describe("autoLogout module", () => {
+	beforeEach(() => {
+		setupStores({ "env-config": EnvConfigModule });
+	});
+
 	describe("actions", () => {
-		it("init should call setInit mutation", async () => {
+		it("init should call setInit mutation", () => {
 			const autoLogoutModule = new AutoLogoutModule({});
 			const spySetInit = jest.fn();
 
 			autoLogoutModule.setInit = spySetInit;
 
-			await autoLogoutModule.init();
+			autoLogoutModule.init();
 			expect(spySetInit).toHaveBeenCalled();
 		});
+
 		it("extendSession should call setActive mutation", async () => {
 			const autoLogoutModule = new AutoLogoutModule({});
 			const spySetActive = jest.fn();

@@ -28,6 +28,7 @@ module.exports = {
 				/* module options */
 			},
 		],
+		"@nuxtjs/composition-api/module",
 		["@nuxtjs/router", { path: "@/router", fileName: "index.js" }],
 	],
 	// to make ENV variables available in components, they need to be defined here
@@ -129,6 +130,7 @@ module.exports = {
 		"@plugins/datetime",
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
+		"@plugins/store-accessor",
 	],
 
 	/*

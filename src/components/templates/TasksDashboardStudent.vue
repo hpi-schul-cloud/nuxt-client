@@ -81,8 +81,6 @@
 </template>
 
 <script>
-import TaskModule from "@/store/tasks";
-import FinishedTaskModule from "@/store/finished-tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
@@ -99,29 +97,45 @@ export default {
 			required: true,
 		},
 	},
+	inject: ["taskModule", "finishedTaskModule"],
 	computed: {
-		status: () => TaskModule.getStatus,
-		openTasks: () => TaskModule.getOpenTasksForStudent,
-		completedTasks: () => TaskModule.getCompletedTasksForStudent,
-		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
-		completedTasksForStudentIsEmpty: () =>
-			TaskModule.completedTasksForStudentIsEmpty,
-		hasTasks: () => TaskModule.hasTasks,
-		finishedTasksIsEmpty: () => FinishedTaskModule.tasksIsEmpty,
-		finishedTasks: () => FinishedTaskModule.getTasks,
-		overdueTasks: function () {
+		status() {
+			return this.taskModule.getStatus;
+		},
+		openTasks() {
+			return this.taskModule.getOpenTasksForStudent;
+		},
+		completedTasks() {
+			return this.taskModule.getCompletedTasksForStudent;
+		},
+		openTasksForStudentIsEmpty() {
+			return this.taskModule.openTasksForStudentIsEmpty;
+		},
+		completedTasksForStudentIsEmpty() {
+			return this.taskModule.completedTasksForStudentIsEmpty;
+		},
+		hasTasks() {
+			return this.taskModule.hasTasks;
+		},
+		finishedTasksIsEmpty() {
+			return this.finishedTaskModule.tasksIsEmpty;
+		},
+		finishedTasks() {
+			return this.finishedTaskModule.getTasks;
+		},
+		overdueTasks() {
 			return this.openTasks.overdue;
 		},
-		noDueDateTasks: function () {
+		noDueDateTasks() {
 			return this.openTasks.noDueDate;
 		},
-		withDueDateTasks: function () {
+		withDueDateTasks() {
 			return this.openTasks.withDueDate;
 		},
-		submittedTasks: function () {
+		submittedTasks() {
 			return this.completedTasks.submitted;
 		},
-		gradedTasks: function () {
+		gradedTasks() {
 			return this.completedTasks.graded;
 		},
 		currentTab: {

@@ -1,10 +1,12 @@
-import RoomModule from "@store/room";
-import AuthModule from "@/store/auth";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import Room from "./index.vue";
 import { User } from "@/store/types/auth";
 import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import RoomModule from "@/store/room";
 
 const mockData = {
 	roomId: "123",
@@ -100,8 +102,13 @@ const getWrapper: any = () => {
 
 describe("@pages/rooms/_id/index.vue", () => {
 	beforeEach(() => {
-		RoomModule.setRoomData(mockData as any);
-		AuthModule.setUser(mockAuthStoreDataTeacher as User);
+		setupStores({
+			auth: AuthModule,
+			"env-config": EnvConfigModule,
+			room: RoomModule,
+		});
+		roomModule.setRoomData(mockData as any);
+		authModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 
 	it("should fetch data", async () => {
@@ -122,7 +129,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		AuthModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(false);
@@ -165,7 +172,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
 		// @ts-ignore
-		EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		const actions = fabComponent.vm.actions.map((action: any) => {
@@ -179,7 +186,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 	describe("headline menus", () => {
 		beforeEach(() => {
-			AuthModule.setUser(mockAuthStoreDataTeacher as User);
+			authModule.setUser(mockAuthStoreDataTeacher as User);
 		});
 		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
 			return menuItems.some((item: object | any) => item.name === itemName);
@@ -192,7 +199,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 		});
 
 		it("should not have the menu button for students", () => {
-			AuthModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
 			expect(menuButton).toHaveLength(0);
@@ -231,7 +238,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
 			// @ts-ignore
-			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -245,7 +252,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should have 'Copy/Duplicate Course' menu if 'FEATURE_COURSE_COPY' flag set to true", () => {
 			// @ts-ignore
-			EnvConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -272,6 +279,8 @@ describe("@pages/rooms/_id/index.vue", () => {
 		});
 
 		it("should redirect the page when 'Copy course' menu clicked", async () => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
 			const location = window.location;
 			const wrapper = getWrapper();
 
@@ -298,7 +307,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should call store action after 'Invite to the course' menu clicked", async () => {
 			const createCourseInvitationSpy = jest.fn();
-			RoomModule.createCourseInvitation = createCourseInvitationSpy;
+			roomModule.createCourseInvitation = createCourseInvitationSpy;
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -312,7 +321,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			// @ts-ignore
-			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -327,9 +336,9 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
 			// @ts-ignore
-			EnvConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const createCourseShareTokenSpy = jest.fn();
-			RoomModule.createCourseShareToken = createCourseShareTokenSpy;
+			roomModule.createCourseShareToken = createCourseShareTokenSpy;
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");

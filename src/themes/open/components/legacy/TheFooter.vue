@@ -48,13 +48,12 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
+import { authModule, filePathsModule } from "@/store";
 
 export default {
 	computed: {
 		school() {
-			return AuthModule.getSchool;
+			return authModule.getSchool;
 		},
 		currentYear() {
 			return new Date().getFullYear();
@@ -66,7 +65,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",

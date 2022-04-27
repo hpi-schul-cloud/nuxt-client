@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import ContentModule from "@/store/content";
+import { contentModule } from "@/store";
 import ContentSearchbar from "@components/molecules/ContentSearchbar";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
@@ -108,10 +108,10 @@ export default {
 	},
 	computed: {
 		resources() {
-			return ContentModule.getResourcesGetter;
+			return contentModule.getResourcesGetter;
 		},
 		loading() {
-			return ContentModule.getLoading;
+			return contentModule.getLoading;
 		},
 		query() {
 			const query = {
@@ -149,11 +149,11 @@ export default {
 						q: "",
 					},
 				});
-				ContentModule.clearResources();
+				contentModule.clearResources();
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
-				ContentModule.clearResources();
+				contentModule.clearResources();
 				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
@@ -182,13 +182,13 @@ export default {
 			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
 				// TODO wrong use of store (not so bad)
-				await ContentModule.addResources(this.query);
+				await contentModule.addResources(this.query);
 			}
 		},
 		async searchContent() {
 			try {
 				// TODO wrong use of store (not so bad)
-				await ContentModule.getResources(this.query);
+				await contentModule.getResources(this.query);
 			} catch (error) {
 				this.$toast.error(
 					this.$t("pages.content.notification.lernstoreNotAvailable")

@@ -1,7 +1,7 @@
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export default async ({ app, route }) => {
-	const user = AuthModule.getUser;
+	const user = authModule.getUser;
 
 	const userHasPermission = (permission) =>
 		user.permissions.includes(permission);
