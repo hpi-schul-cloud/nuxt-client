@@ -13,7 +13,7 @@
 		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text class="pb-0">
-			<div class="top-row-container mb-1">
+			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ $t("common.words.topic") }}
@@ -26,7 +26,7 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary" tabindex="0">
+			<div class="text-h6 text--primary mb-2" tabindex="0">
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
@@ -179,7 +179,7 @@ export default {
 				this.lesson.numberOfTasks === 0 ||
 				this.lesson.numberOfTasks === undefined
 			)
-				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+				return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
 			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
 		},
 	},
