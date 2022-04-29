@@ -123,7 +123,7 @@ export default {
 		},
 		topic() {
 			return this.task.description
-				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
+				? `${this.$t("common.words.topic")} ${this.task.description}`
 				: "";
 		},
 		dueDateLabel() {
