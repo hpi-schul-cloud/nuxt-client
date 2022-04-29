@@ -18,12 +18,16 @@
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ $t("common.words.topic") }}
 				</div>
+
 				<div class="dot-menu-section">
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
 						:show="true"
 					/>
 				</div>
+			</div>
+			<div class="text-h6 text--primary" tabindex="0">
+				{{ lesson.name }}
 			</div>
 		</v-card-text>
 		<v-card-text v-if="true" class="ma-0 pb-0 pt-0 submitted-section">
@@ -170,6 +174,11 @@ export default {
 		},
 		numberOfTasks() {
 			if (this.lesson.numberOfTasks === 1)
+				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+			if (
+				this.lesson.numberOfTasks === 0 ||
+				this.lesson.numberOfTasks === undefined
+			)
 				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
 			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
 		},
