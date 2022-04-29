@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		outlined
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -26,7 +27,7 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2" tabindex="0">
+			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
@@ -276,19 +277,11 @@ export default {
 }
 
 .hidden-lesson {
-	.title-section {
+	box-shadow: none;
+	.lesson-name {
 		opacity: 0.5;
 	}
-}
-
-.lesson-draft {
-	box-shadow: none;
-	.task-name,
-	.text-description,
-	.submitted-section {
-		opacity: 0.4;
-	}
-
+	.submitted-section,
 	.title-section {
 		opacity: 0.65;
 	}
