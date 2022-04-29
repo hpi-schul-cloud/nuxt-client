@@ -30,7 +30,10 @@
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
-		<v-card-text class="ma-0 pb-0 pt-0 submitted-section">
+		<v-card-text
+			v-if="lesson.numberOfTasks !== undefined"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
@@ -175,11 +178,9 @@ export default {
 		numberOfTasks() {
 			if (this.lesson.numberOfTasks === 1)
 				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
-			if (
-				this.lesson.numberOfTasks === 0 ||
-				this.lesson.numberOfTasks === undefined
-			)
-				return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
+
+			console.log(this.lesson.numberOfTasks);
+
 			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
 		},
 	},
