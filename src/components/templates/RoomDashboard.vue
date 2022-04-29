@@ -22,7 +22,7 @@
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
+								itemType: $t('common.words.tasks'),
 								itemName: item.content.name,
 							})
 						"
@@ -73,7 +73,7 @@
 					:task="item.content"
 					:aria-label="
 						$t('pages.room.taskCard.aria', {
-							itemType: $t('pages.room.taskCard.label.task'),
+							itemType: $t('common.words.tasks'),
 							itemName: item.content.name,
 						})
 					"

@@ -31,7 +31,7 @@ describe("Tasks/index", () => {
 			vuetify,
 		});
 
-		const title = wrapper.vm.$i18n.t("pages.tasks.title");
+		const title = wrapper.vm.$i18n.t("common.words.tasks");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 

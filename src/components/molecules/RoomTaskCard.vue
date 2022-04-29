@@ -260,7 +260,7 @@ export default {
 						dueDate
 				  )}`;
 
-			return `${this.$t("pages.room.taskCard.label.task")} – ${dueTitle}`;
+			return `${this.$t("common.words.task")} – ${dueTitle}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
