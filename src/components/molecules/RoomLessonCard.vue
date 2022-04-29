@@ -25,21 +25,11 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-text
-			v-if="true"
-			class="ma-0 pb-0 pt-0 submitted-section"
-		>
+		<v-card-text v-if="true" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
-				<div
-
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						test chip
-					</div>
+				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+					<div class="chip-value">test chip</div>
 				</div>
-
 			</div>
 		</v-card-text>
 
