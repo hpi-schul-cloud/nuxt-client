@@ -166,9 +166,9 @@ export default {
 
 			return roleBasedMoreActions;
 		},
-		numberOfTasks(){
-			return this.lesson.numberOfTasks +' Tasks'
-		}
+		numberOfTasks() {
+			return this.lesson.numberOfTasks + " Tasks";
+		},
 	},
 	methods: {
 		handleClick() {
@@ -212,7 +212,6 @@ export default {
 		getStyleClasses() {
 			return this.isHidden ? "hidden-lesson" : "";
 		},
-
 	},
 };
 </script>
