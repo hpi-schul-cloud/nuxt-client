@@ -370,7 +370,7 @@ export default {
 	.task-name,
 	.text-description,
 	.submitted-section {
-		opacity: 0.4;
+		opacity: 0.5;
 	}
 	.title-section {
 		opacity: 0.65;
