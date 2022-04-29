@@ -27,7 +27,7 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0" >
+			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
