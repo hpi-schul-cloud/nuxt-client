@@ -180,8 +180,6 @@ export default {
 			if (this.lesson.numberOfTasks === 1)
 				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
 
-			console.log(this.lesson.numberOfTasks);
-
 			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
 		},
 	},
