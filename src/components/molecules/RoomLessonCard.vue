@@ -13,9 +13,10 @@
 		@keydown.tab="$emit('tab-pressed')"
 	>
 		<v-card-text class="pb-0">
-			<div class="top-row-container mb-0">
-				<div class="text-h5 title-section text--primary" tabindex="0">
-					{{ lesson.name }}
+			<div class="top-row-container mb-1">
+				<div class="title-section" tabindex="0">
+					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
+					{{ $t("pages.room.lessonCard.label.lesson") }}
 				</div>
 				<div class="dot-menu-section">
 					<more-item-menu
@@ -26,7 +27,7 @@
 			</div>
 		</v-card-text>
 		<v-card-text
-			v-if="true"
+			v-if="role === 'teacher'"
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
@@ -36,14 +37,14 @@
 					tabindex="0"
 				>
 					<div class="chip-value">
-						test chip
+						{{ numberOfTasks }}
 					</div>
 				</div>
 
 			</div>
 		</v-card-text>
 
-		<v-card-actions class="pt-0">
+		<v-card-actions class="pt-1">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -175,6 +176,9 @@ export default {
 
 			return roleBasedMoreActions;
 		},
+		numberOfTasks(){
+			return this.lesson.numberOfTasks +' Tasks'
+		}
 	},
 	methods: {
 		handleClick() {
@@ -218,6 +222,7 @@ export default {
 		getStyleClasses() {
 			return this.isHidden ? "hidden-lesson" : "";
 		},
+
 	},
 };
 </script>
@@ -256,19 +261,33 @@ export default {
 	color: var(--color-primary);
 }
 .v-card {
-	border-bottom: var(--border-width) solid var(--color-primary-dark);
-	border-radius: 0;
-	box-shadow: unset !important;
+	// box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 
 	&:hover {
-		border-bottom: var(--border-width) solid transparent;
-		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-m) !important;
+		box-shadow: var(--shadow-m);
 	}
 }
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
+}
+
 .hidden-lesson {
 	.title-section {
 		opacity: 0.5;
+	}
+}
+
+.lesson-draft {
+	box-shadow: none;
+	.task-name,
+	.text-description,
+	.submitted-section {
+		opacity: 0.4;
+	}
+
+	.title-section {
+		opacity: 0.65;
 	}
 }
 </style>
