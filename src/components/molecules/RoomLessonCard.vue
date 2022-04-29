@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		outlined
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -14,9 +15,11 @@
 	>
 		<v-card-text class="pb-0">
 			<div class="top-row-container mb-0">
-				<div class="text-h5 title-section text--primary" tabindex="0">
-					{{ lesson.name }}
+				<div class="title-section" tabindex="0">
+					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
+					{{ $t("common.words.topic") }}
 				</div>
+
 				<div class="dot-menu-section">
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
@@ -24,8 +27,24 @@
 					/>
 				</div>
 			</div>
+			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
+				{{ lesson.name }}
+			</div>
 		</v-card-text>
-		<v-card-actions class="pt-0">
+		<v-card-text
+			v-if="lesson.numberOfTasks !== undefined"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
+			<div class="chip-items-group">
+				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+					<div class="chip-value">
+						{{ numberOfTasks }}
+					</div>
+				</div>
+			</div>
+		</v-card-text>
+
+		<v-card-actions class="pt-1">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -157,6 +176,12 @@ export default {
 
 			return roleBasedMoreActions;
 		},
+		numberOfTasks() {
+			if (this.lesson.numberOfTasks === 1)
+				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+
+			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
+		},
 	},
 	methods: {
 		handleClick() {
@@ -220,23 +245,43 @@ export default {
 		text-align: right;
 	}
 }
+.chip-items-group {
+	vertical-align: middle;
+	.chip-item {
+		display: inline-block;
+		width: fit-content;
+		text-align: center;
+		border-radius: var(--radius-sm);
+		.chip-value {
+			font-size: var(--text-xs);
+			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			color: rgba(0, 0, 0, 0.87);
+		}
+	}
+}
 .action-button {
 	color: var(--color-primary);
 }
 .v-card {
-	border-bottom: var(--border-width) solid var(--color-primary-dark);
-	border-radius: 0;
-	box-shadow: unset !important;
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 
 	&:hover {
-		border-bottom: var(--border-width) solid transparent;
-		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-m) !important;
+		box-shadow: var(--shadow-m);
 	}
 }
+.v-card__text {
+	padding-bottom: var(--space-xs-4);
+}
+
 .hidden-lesson {
-	.title-section {
+	box-shadow: none;
+	.lesson-name {
 		opacity: 0.5;
+	}
+	.submitted-section,
+	.title-section {
+		opacity: 0.65;
 	}
 }
 </style>

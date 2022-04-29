@@ -28,7 +28,7 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.tasks.title"),
+			title: this.$t("common.words.tasks"),
 		};
 	},
 };
