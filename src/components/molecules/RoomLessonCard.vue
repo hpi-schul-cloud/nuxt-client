@@ -25,6 +25,24 @@
 				</div>
 			</div>
 		</v-card-text>
+		<v-card-text
+			v-if="true"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
+			<div class="chip-items-group">
+				<div
+
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
+					tabindex="0"
+				>
+					<div class="chip-value">
+						test chip
+					</div>
+				</div>
+
+			</div>
+		</v-card-text>
+
 		<v-card-actions class="pt-0">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
@@ -218,6 +236,20 @@ export default {
 	.dot-menu-section {
 		align-self: start;
 		text-align: right;
+	}
+}
+.chip-items-group {
+	vertical-align: middle;
+	.chip-item {
+		display: inline-block;
+		width: fit-content;
+		text-align: center;
+		border-radius: var(--radius-sm);
+		.chip-value {
+			font-size: var(--text-xs);
+			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			color: rgba(0, 0, 0, 0.87);
+		}
 	}
 }
 .action-button {
