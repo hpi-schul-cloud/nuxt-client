@@ -29,7 +29,9 @@
 		<v-card-text v-if="true" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
-					<div class="chip-value">test chip</div>
+					<div class="chip-value">
+						{{ numberOfTasks }}
+					</div>
 				</div>
 			</div>
 		</v-card-text>
@@ -166,9 +168,11 @@ export default {
 
 			return roleBasedMoreActions;
 		},
-		numberOfTasks(){
-			return this.lesson.numberOfTasks +' Tasks'
-		}
+		numberOfTasks() {
+			if (this.lesson.numberOfTasks === 1)
+				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
+		},
 	},
 	methods: {
 		handleClick() {
@@ -212,7 +216,6 @@ export default {
 		getStyleClasses() {
 			return this.isHidden ? "hidden-lesson" : "";
 		},
-
 	},
 };
 </script>
