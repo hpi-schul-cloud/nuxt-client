@@ -22,7 +22,7 @@
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
+								itemType: $t('common.words.tasks'),
 								itemName: item.content.name,
 							})
 						"
@@ -46,7 +46,7 @@
 						:room="lessonData"
 						:aria-label="
 							$t('pages.room.lessonCard.aria', {
-								itemType: $t('pages.room.lessonCard.label.lesson'),
+								itemType: $t('common.words.topic'),
 								itemName: item.content.name,
 							})
 						"
@@ -73,7 +73,7 @@
 					:task="item.content"
 					:aria-label="
 						$t('pages.room.taskCard.aria', {
-							itemType: $t('pages.room.taskCard.label.task'),
+							itemType: $t('common.words.tasks'),
 							itemName: item.content.name,
 						})
 					"
@@ -93,7 +93,7 @@
 					:room="lessonData"
 					:aria-label="
 						$t('pages.room.lessonCard.aria', {
-							itemType: $t('pages.room.lessonCard.label.lesson'),
+							itemType: $t('common.words.topic'),
 							itemName: item.content.name,
 						})
 					"

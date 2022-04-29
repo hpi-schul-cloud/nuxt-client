@@ -18,6 +18,7 @@ const baseTestProps = {
 		createdAt: "2017-09-28T11:58:46.601Z",
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		hidden: false,
+		numberOfTasks: 23,
 	},
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
@@ -97,7 +98,9 @@ describe("@components/molecules/RoomLessonCard", () => {
 			const wrapper = getWrapper({ ...baseTestProps, role });
 			const title = wrapper.find(".title-section");
 
-			expect(title.element.textContent).toContain("Test Name");
+			expect(title.element.textContent).toContain(
+				wrapper.vm.$i18n.t("common.words.topic")
+			);
 		});
 
 		it("should use hidden lesson UI only for hidden lesson cards", async () => {
@@ -200,6 +203,64 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await wrapper.vm.$nextTick();
 				const emitted = wrapper.emitted("delete-lesson");
 				expect(emitted).toHaveLength(1);
+			});
+
+			it("should have the number of tasks in chips", async () => {
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain("23 Aufgaben");
+			});
+
+			it("should have the number of tasks in chips (1 task)", async () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+						numberOfTasks: 1,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain("1 Aufgabe");
+			});
+
+			it("should not show the chip section if 'numberOfTasks' is undefined", async () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.findAll(".chip-value");
+
+				expect(chipElement).toHaveLength(0);
 			});
 		});
 		describe("students", () => {

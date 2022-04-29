@@ -260,7 +260,7 @@ export default {
 						dueDate
 				  )}`;
 
-			return `${this.$t("pages.room.taskCard.label.task")} – ${dueTitle}`;
+			return `${this.$t("common.words.task")} – ${dueTitle}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
@@ -370,7 +370,7 @@ export default {
 	.task-name,
 	.text-description,
 	.submitted-section {
-		opacity: 0.4;
+		opacity: 0.5;
 	}
 	.title-section {
 		opacity: 0.65;

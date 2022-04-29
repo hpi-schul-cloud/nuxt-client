@@ -1,12 +1,12 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tasks.title')"
+		:headline="$t('common.words.tasks')"
 		:full-width="false"
 		:fab-items="fabItems"
 	>
 		<div slot="header">
 			<div>
-				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
 				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
