@@ -430,7 +430,6 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			authModule.addUserPermmission("SCHOOL_EDIT");
 
