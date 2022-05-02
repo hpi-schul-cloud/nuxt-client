@@ -29,7 +29,7 @@ module.exports = {
 			},
 		],
 		"@nuxtjs/composition-api/module",
-		["@nuxtjs/router", { path: "@/router", fileName: "index.js" }],
+		["@nuxtjs/router", { path: "src/router", fileName: "index.js" }],
 	],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
