@@ -1,6 +1,7 @@
 <template>
 	<v-card
 		class="mx-auto mb-4 task-card"
+		:class="getStyleClasses()"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
@@ -14,10 +15,8 @@
 	>
 		<v-card-text>
 			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0" :style="`color: ${titleColor}`">
-					<v-icon size="20" :color="task.displayColor" dark>{{
-						icons.mdiFormatListChecks
-					}}</v-icon>
+				<div class="title-section" tabindex="0">
+					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -27,7 +26,9 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary">{{ task.name }}</div>
+			<div class="text-h6 text--primary mb-2 task-name">
+				{{ task.name }}
+			</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
 				v-if="canShowDescription"
@@ -36,11 +37,14 @@
 				v-html="task.description"
 			></div>
 		</v-card-text>
-		<v-card-text v-if="!isDraft" class="ma-0 pb-0 pt-0 submitted-section">
+		<v-card-text
+			v-if="!isDraft && !isFinished"
+			class="ma-0 pb-0 pt-0 submitted-section"
+		>
 			<div class="chip-items-group">
 				<div
 					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -53,7 +57,7 @@
 				</div>
 				<div
 					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -66,7 +70,7 @@
 				</div>
 				<div
 					v-if="isOverDue"
-					class="grey lighten-2 chip-item pa-1 mr-1 mb-0 overdue"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0 overdue"
 					tabindex="0"
 				>
 					<div class="chip-value">
@@ -75,7 +79,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-1 mt-2">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -83,7 +87,6 @@
 					.split(' ')
 					.join('-')}`"
 				text
-				:color="titleColor"
 				@click.stop="action.action"
 			>
 				{{ action.name }}</v-btn
@@ -137,7 +140,6 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--color-secondary",
 			roles: Roles,
 			canShowDescription: false,
 		};
@@ -169,28 +171,15 @@ export default {
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isDraft) {
+				if (!this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
 					});
 				}
-				if (this.isFinished) {
-					roleBasedActions[Roles.Teacher].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
 			}
 
 			if (this.role === Roles.Student) {
-				if (this.isFinished) {
-					roleBasedActions[Roles.Student].push({
-						action: () => this.restoreCard(),
-						name: this.$t("pages.room.taskCard.label.reopen"),
-					});
-				}
-
 				if (!this.isFinished) {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
@@ -217,6 +206,15 @@ export default {
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
 
+				roleBasedMoreActions[Roles.Teacher].push({
+					icon: this.icons.mdiContentCopy,
+					action: () =>
+						this.redirectAction(
+							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
+						),
+					name: this.$t("common.actions.copy"),
+				});
+
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
@@ -230,32 +228,39 @@ export default {
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
 				});
-
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiContentCopy,
-					action: () =>
-						this.redirectAction(
-							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
-						),
-					name: this.$t("common.actions.copy"),
-				});
 			}
 
 			if (this.role === Roles.Student) {
 				// if more action is needed for the students add actions like above
+			}
+
+			if (this.isFinished) {
+				roleBasedMoreActions[Roles.Teacher].splice(-1, 0, {
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("common.labels.restore"),
+				});
+				roleBasedMoreActions[Roles.Student].push({
+					icon: this.icons.mdiUndoVariant,
+					action: () => this.restoreCard(),
+					name: this.$t("common.labels.restore"),
+				});
 			}
 			return roleBasedMoreActions;
 		},
 	},
 	methods: {
 		cardTitle(dueDate) {
+			if (this.isFinished) {
+				return this.$t("pages.room.taskCard.label.taskDone");
+			}
 			const dueTitle = !dueDate
 				? this.$t("pages.room.taskCard.label.noDueDate")
-				: `${this.$t(
-						"pages.room.taskCard.label.due"
-				  )} - ${printDateFromStringUTC(dueDate)}`;
+				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
+						dueDate
+				  )}`;
 
-			return `${this.$t("pages.room.taskCard.label.task")} - ${dueTitle}`;
+			return `${this.$t("common.words.task")} – ${dueTitle}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
@@ -301,6 +306,9 @@ export default {
 					break;
 			}
 		},
+		getStyleClasses() {
+			return this.isDraft && !this.isFinished ? "task-draft" : "";
+		},
 	},
 };
 </script>
@@ -313,17 +321,18 @@ export default {
 	display: grid;
 	grid-template-columns: 95% 5%;
 	align-items: center;
-	.icon-section {
-		overflow: none;
-		text-align: left;
-	}
 	.title-section {
-		color: var(--color-primary);
 		text-align: left;
+		.v-icon {
+			padding-bottom: var(--space-xs-4);
+		}
 	}
 	.dot-menu-section {
 		text-align: right;
 	}
+}
+.task-name {
+	line-height: var(--line-height-md);
 }
 .text-description {
 	font-size: var(--text-md);
@@ -336,7 +345,7 @@ export default {
 		text-align: center;
 		border-radius: var(--radius-sm);
 		.chip-value {
-			font-size: var(--text-sm);
+			font-size: var(--text-xs);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}
@@ -345,7 +354,6 @@ export default {
 .action-button {
 	color: var(--color-primary);
 }
-
 .v-card {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
@@ -356,5 +364,16 @@ export default {
 }
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
+}
+.task-draft {
+	box-shadow: none;
+	.task-name,
+	.text-description,
+	.submitted-section {
+		opacity: 0.5;
+	}
+	.title-section {
+		opacity: 0.65;
+	}
 }
 </style>

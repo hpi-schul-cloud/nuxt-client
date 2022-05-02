@@ -1,13 +1,7 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
-import EnvConfigModule from "@/store/env-config";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
+import { BusinessError } from "./types/commons";
+import { envConfigModule } from "@/store";
 
 const specificFiles = {
 	privacyExemplary:
@@ -40,11 +34,9 @@ const globalFiles = {
 @Module({
 	name: "filePaths",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class FilePaths extends VuexModule {
+export default class FilePathsModule extends VuexModule {
 	documentBaseDir: string = "";
 	specificFiles: SpecificFiles = {
 		privacyExemplary: "",
@@ -115,18 +107,16 @@ export class FilePaths extends VuexModule {
 	init() {
 		try {
 			const baseDir =
-				EnvConfigModule.getEnv.DOCUMENT_BASE_DIR ||
+				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
 				"https://s3.hidrive.strato.com/cloud-instances/";
-			const theme = EnvConfigModule.getEnv.SC_THEME;
+			const theme = envConfigModule.getEnv.SC_THEME;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			this.setDocumentBaseDir({ baseDir, theme });
 			this.setSpecificFiles(documentBaseDirThemed);
 			this.setGlobalFiles(baseDir);
 		} catch (error) {
-			this.setError(error);
+			this.setError(error as BusinessError);
 		}
 	}
 }
-
-export default getModule(FilePaths);

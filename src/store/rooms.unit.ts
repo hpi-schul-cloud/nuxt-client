@@ -1,4 +1,4 @@
-import { Rooms } from "./rooms";
+import RoomsModule from "./rooms";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
@@ -92,7 +92,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				roomsModule.fetch("mobile").then(() => {
 					expect(roomsModule.getLoading).toBe(false);
@@ -119,7 +119,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				const payload = {
 					from: { x: 1, y: 1 },
@@ -148,7 +148,7 @@ describe("rooms module", () => {
 			});
 			it("should call 'setPosition' mutation", async () => {
 				// TODO: call server will be here when server ready
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
 				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
@@ -176,7 +176,7 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				const roomsData: RoomsData = {
 					id: "dummyId",
@@ -208,7 +208,7 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				const roomsData: RoomsData = {
 					id: "dummyId",
@@ -241,7 +241,7 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				const roomsData: RoomsData = {
 					id: "dummyId",
@@ -277,7 +277,7 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				roomsModule.fetchAllElements().then(() => {
 					expect(roomsModule.getLoading).toBe(false);
@@ -303,7 +303,7 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				roomsModule.fetchAllElements().then(() => {
 					expect(roomsModule.getLoading).toBe(false);
@@ -320,7 +320,7 @@ describe("rooms module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const getSharedCourseDataSpy = jest.spyOn(
 					roomsModule,
 					"getSharedCourseData"
@@ -349,7 +349,7 @@ describe("rooms module", () => {
 					status: "success",
 					message: "",
 				};
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const getSharedCourseDataSpy = jest.spyOn(
 					roomsModule,
 					"confirmSharedCourseData"
@@ -370,7 +370,7 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const setBusinessErrorMock = jest.fn();
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				roomsModule.setBusinessError = setBusinessErrorMock;
 
 				await roomsModule.confirmSharedCourseData(sharedCourseData);
@@ -382,7 +382,7 @@ describe("rooms module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const roomsDataToBeChanged = [
 					{
 						id: "someId",
@@ -415,7 +415,7 @@ describe("rooms module", () => {
 
 		describe("setRoomDataId", () => {
 			it("should set the room data id", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const id = "sample_id";
 
 				roomsModule.setRoomDataId(id);
@@ -425,7 +425,7 @@ describe("rooms module", () => {
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const loadingValue = true;
 				expect(roomsModule.getLoading).not.toBe(loadingValue);
 				roomsModule.setLoading(loadingValue);
@@ -435,7 +435,7 @@ describe("rooms module", () => {
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).not.toBe(errorData);
 				roomsModule.setError(errorData);
@@ -445,7 +445,7 @@ describe("rooms module", () => {
 
 		describe("setPosition", () => {
 			it("should re-position the state", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const draggedObject = {
 					from: { x: 6, y: 1 },
 					item: {
@@ -475,7 +475,7 @@ describe("rooms module", () => {
 
 		describe("setAllElements", () => {
 			it("should set the all elements data", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -527,7 +527,7 @@ describe("rooms module", () => {
 
 			describe("setSharedCourseData, setImportedCourseId", () => {
 				it("should set the state", () => {
-					const roomsModule = new Rooms({});
+					const roomsModule = new RoomsModule({});
 					const sharedCourseData = {
 						code: "123",
 						courseName: "Mathe",
@@ -546,7 +546,7 @@ describe("rooms module", () => {
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
@@ -557,7 +557,7 @@ describe("rooms module", () => {
 				expect(roomsModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				roomsModule.businessError = {
 					statusCode: "400",
 					message: "error",
@@ -574,7 +574,7 @@ describe("rooms module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -622,7 +622,7 @@ describe("rooms module", () => {
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 
 				expect(roomsModule.getLoading).not.toStrictEqual(true);
 				roomsModule.setLoading(true);
@@ -632,7 +632,7 @@ describe("rooms module", () => {
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).toStrictEqual(null);
 				roomsModule.setError(errorData);
@@ -642,7 +642,7 @@ describe("rooms module", () => {
 
 		describe("getRoomsId", () => {
 			it("should return rooms id state", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const sampleId = "sample_id";
 				expect(roomsModule.getRoomsId).toStrictEqual("");
 				roomsModule.setRoomDataId(sampleId);
@@ -652,7 +652,7 @@ describe("rooms module", () => {
 
 		describe("getAllElements", () => {
 			it("should return rooms-list AllElements", () => {
-				const roomsModule = new Rooms({});
+				const roomsModule = new RoomsModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",

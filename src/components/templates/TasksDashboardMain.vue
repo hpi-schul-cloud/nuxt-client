@@ -1,12 +1,12 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tasks.title')"
+		:headline="$t('common.words.tasks')"
 		:full-width="false"
 		:fab-items="fabItems"
 	>
 		<div slot="header">
 			<div>
-				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
 				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
@@ -71,8 +71,6 @@
 </template>
 
 <script>
-import FinishedTaskModule from "@/store/finished-tasks";
-import TaskModule from "@/store/tasks";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
@@ -103,45 +101,67 @@ export default {
 			tasksEmptyStateImage,
 		};
 	},
+	inject: ["taskModule", "finishedTaskModule"],
 	computed: {
-		hasTasks: () => TaskModule.hasTasks,
-		openTasksForStudentIsEmpty: () => TaskModule.openTasksForStudentIsEmpty,
-		openTasksForTeacherIsEmpty: () => TaskModule.openTasksForTeacherIsEmpty,
-		completedTasksForStudentIsEmpty: () =>
-			TaskModule.completedTasksForStudentIsEmpty,
-		draftsForTeacherIsEmpty: () => TaskModule.draftsForTeacherIsEmpty,
-		tasksCountStudent: () => TaskModule.getTasksCountPerCourseStudent,
-		tasksCountTeacher: () => TaskModule.getTasksCountPerCourseForTeacher,
-		isSubstituteFilterEnabled: () => TaskModule.isSubstituteFilterEnabled,
-		courseFilters: () => TaskModule.getCourseFilters,
-		selectedCourseFilters: () => TaskModule.getSelectedCourseFilters,
-		finishedTasksIsInitialized: () => FinishedTaskModule.getIsInitialized,
+		hasTasks() {
+			return this.taskModule.hasTasks;
+		},
+		openTasksForStudentIsEmpty() {
+			return this.taskModule.openTasksForStudentIsEmpty;
+		},
+		openTasksForTeacherIsEmpty() {
+			return this.taskModule.openTasksForTeacherIsEmpty;
+		},
+		completedTasksForStudentIsEmpty() {
+			return this.taskModule.completedTasksForStudentIsEmpty;
+		},
+		draftsForTeacherIsEmpty() {
+			return this.taskModule.draftsForTeacherIsEmpty;
+		},
+		tasksCountStudent() {
+			return this.taskModule.getTasksCountPerCourseStudent;
+		},
+		tasksCountTeacher() {
+			return this.taskModule.getTasksCountPerCourseForTeacher;
+		},
+		isSubstituteFilterEnabled() {
+			return this.taskModule.isSubstituteFilterEnabled;
+		},
+		courseFilters() {
+			return this.taskModule.getCourseFilters;
+		},
+		selectedCourseFilters() {
+			return this.taskModule.getSelectedCourseFilters;
+		},
+		finishedTasksIsInitialized() {
+			return this.finishedTaskModule.getIsInitialized;
+		},
 		// TODO: split teacher and student sides
-		isStudent: function () {
+		isStudent() {
 			return this.role === "student";
 		},
-		isTeacher: function () {
+		isTeacher() {
 			return this.role === "teacher";
 		},
-		showCourseFilter: function () {
+		showCourseFilter() {
 			if (this.tab === 2) return false;
 
 			return this.hasTasks;
 		},
-		showSubstituteFilter: function () {
+		showSubstituteFilter() {
 			return this.isTeacher && this.tab !== 2;
 		},
-		tabOneIsEmpty: function () {
+		tabOneIsEmpty() {
 			return this.isStudent
 				? this.openTasksForStudentIsEmpty
 				: this.openTasksForTeacherIsEmpty;
 		},
-		tabTwoIsEmpty: function () {
+		tabTwoIsEmpty() {
 			return this.isStudent
 				? this.completedTasksForStudentIsEmpty
 				: this.draftsForTeacherIsEmpty;
 		},
-		isCourseFilterDisabled: function () {
+		isCourseFilterDisabled() {
 			if (this.selectedCourseFilters.length > 0) return false;
 
 			if (this.tab === 0) {
@@ -153,7 +173,7 @@ export default {
 
 			return false;
 		},
-		getSortedCoursesFilters: function () {
+		getSortedCoursesFilters() {
 			const filters = this.courseFilters.map((filter) => {
 				const count = this.getTaskCount(filter.value);
 				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
@@ -167,7 +187,7 @@ export default {
 
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
-		tabOneHeader: function () {
+		tabOneHeader() {
 			const tabOne = { icon: "$taskOpenFilled" };
 
 			tabOne.title = this.isStudent
@@ -176,7 +196,7 @@ export default {
 
 			return tabOne;
 		},
-		tabTwoHeader: function () {
+		tabTwoHeader() {
 			const tabTwo = {};
 			if (this.isStudent) {
 				tabTwo.icon = "$taskDoneFilled";
@@ -206,7 +226,7 @@ export default {
 			}
 			return null;
 		},
-		tabThreeHeader: function () {
+		tabThreeHeader() {
 			const tabThree = {
 				icon: "$taskFinished",
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
@@ -214,7 +234,7 @@ export default {
 
 			return tabThree;
 		},
-		emptyState: function () {
+		emptyState() {
 			const image = tasksEmptyStateImage;
 			let title = "";
 			let subtitle = undefined;
@@ -247,10 +267,10 @@ export default {
 	},
 	methods: {
 		setCourseFilters(courseNames) {
-			TaskModule.setCourseFilters(courseNames);
+			this.taskModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
-			TaskModule.setSubstituteFilter(enabled);
+			this.taskModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === 0) {
@@ -268,7 +288,7 @@ export default {
 			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.finishedTasksIsInitialized) {
-				FinishedTaskModule.fetchFinishedTasks();
+				this.finishedTaskModule.fetchFinishedTasks();
 			}
 		},
 	},

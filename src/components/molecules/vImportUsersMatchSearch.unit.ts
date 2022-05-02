@@ -1,7 +1,9 @@
 import { mount } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
-import ImportUsersModule from "@store/import-users";
+import { importUsersModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import ImportUsersModule from "@/store/import-users";
 
 declare var createComponentMocks: Function;
 
@@ -32,6 +34,7 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/molecules/RoomTaskCardTeacher", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		setupStores({ importUsers: ImportUsersModule });
 	});
 
 	it("should have correct props", () => {
@@ -53,7 +56,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
-		const saveFlagMock = jest.spyOn(ImportUsersModule, "saveFlag");
+		const saveFlagMock = jest.spyOn(importUsersModule, "saveFlag");
 		saveFlagMock.mockImplementation(async () => {
 			return Promise.resolve({
 				flagged: true,
@@ -102,7 +105,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			text: "Cord Carl",
 		};
 
-		const saveMatchMock = jest.spyOn(ImportUsersModule, "saveMatch");
+		const saveMatchMock = jest.spyOn(importUsersModule, "saveMatch");
 		saveMatchMock.mockImplementation(async () => {
 			return Promise.resolve({ ...testProps.editedItem, match }) as any;
 		});
@@ -147,7 +150,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 			editedItem: { ...importUser, match },
 		});
 
-		const deleteMatchMock = jest.spyOn(ImportUsersModule, "deleteMatch");
+		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");
 		deleteMatchMock.mockImplementation(async () => {
 			return Promise.resolve(importUser) as any;
 		});

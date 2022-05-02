@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
 
 declare let createComponentMocks: Function;
 
@@ -16,6 +18,7 @@ const baseTestProps = {
 		createdAt: "2017-09-28T11:58:46.601Z",
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		hidden: false,
+		numberOfTasks: 23,
 	},
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
@@ -56,6 +59,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
+		setupStores({ "env-config": EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -94,19 +98,33 @@ describe("@components/molecules/RoomLessonCard", () => {
 			const wrapper = getWrapper({ ...baseTestProps, role });
 			const title = wrapper.find(".title-section");
 
-			expect(title.element.textContent).toContain("Test Name");
+			expect(title.element.textContent).toContain(
+				wrapper.vm.$i18n.t("common.words.topic")
+			);
+		});
+
+		it("should use hidden lesson UI only for hidden lesson cards", async () => {
+			const hiddenLessonWrapper = getWrapper({ ...hiddenTestProps, role });
+			const hiddenLessonCard = hiddenLessonWrapper.find(".lesson-card");
+			expect(hiddenLessonCard.element.className).toContain("hidden-lesson");
+
+			const regularLessonWrapper = getWrapper({ ...baseTestProps, role });
+			const lessonCard = regularLessonWrapper.find(".lesson-card");
+			expect(lessonCard.element.className).not.toContain("hidden-lesson");
 		});
 	});
 
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
-			it("should have one action button if lesson is hidden with correct color", () => {
+			it("should have one action button if lesson is hidden", () => {
 				const wrapper = getWrapper({ ...hiddenTestProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
-				expect(actionButtons.wrappers[0].vm._props.color).toContain("#54616e");
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.lessonCard.label.post")
+				);
 			});
 
 			it("should have no action button when lesson is visible", () => {
@@ -159,7 +177,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 			it("should have 'share' more action if env flag is set", async () => {
 				// @ts-ignore
-				EnvConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -185,6 +203,64 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await wrapper.vm.$nextTick();
 				const emitted = wrapper.emitted("delete-lesson");
 				expect(emitted).toHaveLength(1);
+			});
+
+			it("should have the number of tasks in chips", async () => {
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain("23 Aufgaben");
+			});
+
+			it("should have the number of tasks in chips (1 task)", async () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+						numberOfTasks: 1,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain("1 Aufgabe");
+			});
+
+			it("should not show the chip section if 'numberOfTasks' is undefined", async () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.findAll(".chip-value");
+
+				expect(chipElement).toHaveLength(0);
 			});
 		});
 		describe("students", () => {

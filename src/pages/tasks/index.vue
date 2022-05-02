@@ -3,15 +3,14 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import TaskModule from "@/store/tasks";
+import { authModule, taskModule } from "@/store";
 import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 
 export default {
 	components: { TasksDashboardMain },
 	layout: "defaultVuetify",
 	computed: {
-		userRoles: () => AuthModule.getUserRoles,
+		userRoles: () => authModule.getUserRoles,
 		dashBoardRole: function () {
 			let role = undefined;
 
@@ -25,11 +24,11 @@ export default {
 		},
 	},
 	mounted() {
-		TaskModule.fetchAllTasks();
+		taskModule.fetchAllTasks();
 	},
 	head() {
 		return {
-			title: this.$t("pages.tasks.title"),
+			title: this.$t("common.words.tasks"),
 		};
 	},
 };

@@ -1,14 +1,7 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { isCollectionHelper } from "@utils/helpers";
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 import hash from "object-hash";
 import {
 	Query,
@@ -83,11 +76,9 @@ const initialState = () => ({
 @Module({
 	name: "content",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class Content extends VuexModule {
+export default class ContentModule extends VuexModule {
 	resources: Resources = initialState().resources;
 	elements: Elements = initialState().elements;
 	selected: number = initialState().selected;
@@ -373,8 +364,6 @@ export class Content extends VuexModule {
 
 	@Action
 	init() {
-		this.initMutation(EnvConfigModule.getEnv.FEATURE_ES_COLLECTIONS_ENABLED);
+		this.initMutation(envConfigModule.getEnv.FEATURE_ES_COLLECTIONS_ENABLED);
 	}
 }
-
-export default getModule(Content);

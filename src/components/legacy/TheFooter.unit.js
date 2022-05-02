@@ -1,8 +1,17 @@
-import TheFooter from "./TheFooter";
-import FilePathsModule from "@/store/filePaths";
+import { envConfigModule, filePathsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TheFooter from "./TheFooter";
 
 describe("@components/legacy/TheFooter", () => {
+	beforeEach(() => {
+		setupStores({
+			filePaths: FilePathsModule,
+			"env-config": EnvConfigModule,
+		});
+	});
+
 	it(...isValidComponent(TheFooter));
 
 	const $theme = {
@@ -10,7 +19,7 @@ describe("@components/legacy/TheFooter", () => {
 	};
 
 	it("Terms of use link is set correctly", () => {
-		FilePathsModule.setSpecificFiles("https://dummy-url.org/");
+		filePathsModule.setSpecificFiles("https://dummy-url.org/");
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
 				mocks: {
@@ -24,7 +33,7 @@ describe("@components/legacy/TheFooter", () => {
 		);
 	});
 	it("Env-Variable sets the status page link correctly", () => {
-		EnvConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
+		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
 				mocks: {
@@ -44,7 +53,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(7);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(6);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name
 		);

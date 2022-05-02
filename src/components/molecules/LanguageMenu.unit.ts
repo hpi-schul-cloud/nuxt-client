@@ -1,37 +1,24 @@
-import LanguageMenu from "./LanguageMenu";
-import Vuetify from "vuetify";
-import { EnvConfig as EnvConfigModule } from "@/store/env-config";
-import { Auth as AuthModule } from "@/store/auth";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
-
-const mockEnvConfigModule = jest.fn();
-jest.mock("@store/env-config", () => ({
-	...jest.requireActual("@store/env-config"),
-	__esModule: true,
-	get default() {
-		return mockEnvConfigModule();
-	},
-}));
-
-const mockAuthModule = jest.fn();
-jest.mock("@store/auth", () => ({
-	...jest.requireActual("@store/auth"),
-	__esModule: true,
-	get default() {
-		return mockAuthModule();
-	},
-}));
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { provide } from "@nuxtjs/composition-api";
+import { mount, Wrapper } from "@vue/test-utils";
+import LanguageMenu from "./LanguageMenu.vue";
 
 describe("@components/templates/LanguageMenu", () => {
-	let vuetify;
+	let envConfigModuleMock: EnvConfigModule;
+	let authModuleMock: AuthModule;
 
-	const mountComponent = (attrs = {}) => {
+	const mountComponent = (attrs = {}): Wrapper<Vue> => {
 		const wrapper = mount(LanguageMenu, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
-			vuetify,
+			setup() {
+				provide("envConfigModule", envConfigModuleMock);
+				provide("authModule", authModuleMock);
+			},
 			...attrs,
 		});
 
@@ -39,39 +26,29 @@ describe("@components/templates/LanguageMenu", () => {
 	};
 
 	beforeEach(() => {
-		vuetify = new Vuetify();
-
 		Object.defineProperty(window, "location", {
 			configurable: true,
 			value: { reload: jest.fn() },
 		});
 	});
 
-	it(...isValidComponent(LanguageMenu));
-
 	describe("with available languages", () => {
-		let wrapper;
-		let envConfigModuleMock;
-		let authModuleMock;
+		let wrapper: Wrapper<Vue>;
 
 		beforeEach(() => {
-			envConfigModuleMock = {
-				...createModuleMocks(EnvConfigModule),
-				getStatus: "completed",
+			envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 				getAvailableLanguages: "de,en",
-			};
-			mockEnvConfigModule.mockReturnValue(envConfigModuleMock);
+			});
 
-			authModuleMock = {
-				...createModuleMocks(AuthModule),
+			authModuleMock = createModuleMocks(AuthModule, {
 				getLocale: "de",
-			};
-			mockAuthModule.mockReturnValue(authModuleMock);
+			});
 
 			wrapper = mountComponent();
 		});
 
 		it("should provide available language items", () => {
+			//@ts-ignore
 			expect(wrapper.vm.availableItems).toStrictEqual([
 				{
 					language: "en",
@@ -83,6 +60,7 @@ describe("@components/templates/LanguageMenu", () => {
 		});
 
 		it("should provide selected language item", () => {
+			//@ts-ignore
 			expect(wrapper.vm.selectedItem).toStrictEqual({
 				language: "de",
 				longName: "Deutsch",

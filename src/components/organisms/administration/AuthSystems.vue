@@ -1,8 +1,23 @@
 <template>
 	<section>
-		<h2 class="text-h4">
+		<h2 class="text-h4 mb-10">
 			{{ $t("pages.administration.school.index.authSystems.title") }}
 		</h2>
+		<v-text-field
+			v-if="customLoginLinkEnabled"
+			id="school-login-link"
+			:value="customLoginLink"
+			class="school-login-link"
+			:label="
+				$t('pages.administration.school.index.authSystems.loginLinkLabel')
+			"
+			:color="copiedStatus ? 'success' : 'primary'"
+			readonly
+			dense
+			:append-icon="copiedStatus ? iconMdiCheckCircle : iconMdiContentCopy"
+			@click:append="copyLoginLink"
+			@blur="linkCopyFinished"
+		></v-text-field>
 		<v-simple-table class="table-system">
 			<template v-slot:default>
 				<thead>
@@ -77,9 +92,10 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schools";
+import { envConfigModule, schoolsModule } from "@/store";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
 
 export default {
 	components: {
@@ -99,11 +115,27 @@ export default {
 			},
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
+			iconMdiContentCopy: mdiContentCopy,
+			iconMdiCheckCircle: mdiCheckCircle,
+			copiedStatus: false,
 		};
 	},
 	computed: {
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
+		},
+		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+		customLoginLink() {
+			let type = "";
+			let schoolId = "";
+			if (this.systems.some((system) => system.oauthConfig))
+				type = "strategy=iserv";
+			else if (this.systems.length === 0) type = "strategy=email";
+			else if (this.systems.some((system) => system.type === "ldap")) {
+				type = "strategy=ldap";
+				schoolId = `&schoolId=${schoolsModule.getSchool.id}`;
+			}
+			return `${window.location.origin}/login?${type}${schoolId}`;
 		},
 	},
 	methods: {
@@ -122,8 +154,21 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			SchoolsModule.deleteSystem(systemId);
+			schoolsModule.deleteSystem(systemId);
 			// TODO show error
+		},
+		copyLoginLink() {
+			const copyText = document.getElementById("school-login-link");
+
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); // For mobile devices
+
+			navigator.clipboard.writeText(copyText.value);
+
+			this.copiedStatus = true;
+		},
+		linkCopyFinished() {
+			this.copiedStatus = false;
 		},
 	},
 };

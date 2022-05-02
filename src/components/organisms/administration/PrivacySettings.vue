@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 
 export default {
@@ -224,13 +224,13 @@ export default {
 		},
 	},
 	computed: {
-		matrixMessengerConfig: () => EnvConfigModule.getMatrixConfig,
+		matrixMessengerConfig: () => envConfigModule.getMatrixConfig,
 		toggleStudentLernstoreViewEnabled: () =>
-			EnvConfigModule.getAdminToggleStudentLernstoreViewEnabled,
+			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
 		toggleStudentVisibilityEnabled: () =>
-			EnvConfigModule.getTeacherStudentVisibilityIsConfigurable,
-		videoConferenceEnabled: () => EnvConfigModule.getVideoConferenceEnabled,
-		rocketChatEnabled: () => EnvConfigModule.getRocketChatEnabled,
+			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
+		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
+		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		matrixMessengerIsEnabled() {
 			return (
 				this.matrixMessengerConfig.enabled &&

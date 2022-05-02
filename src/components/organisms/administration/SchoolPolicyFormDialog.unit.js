@@ -1,3 +1,5 @@
+import SchoolsModule from "@/store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog";
 
 const mockProps = {
@@ -21,6 +23,12 @@ const searchStrings = {
 };
 
 describe("SchoolPolicyFormDialog", () => {
+	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+		setupStores({ schools: SchoolsModule });
+	});
+
 	it(...isValidComponent(SchoolPolicyFormDialog));
 
 	describe("displaying values", () => {

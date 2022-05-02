@@ -68,7 +68,7 @@
 	</vCustomDialog>
 </template>
 <script>
-import RoomModule from "@store/room";
+import { roomModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiCheck } from "@mdi/js";
 
@@ -99,10 +99,10 @@ export default {
 	computed: {
 		nextButtonName() {
 			if (this.step < 2) return this.$t("pages.room.lessonShare.btn.continue");
-			return this.$t("pages.room.lessonShare.btn.confirm");
+			return this.$t("common.actions.import");
 		},
 		businessError() {
-			return RoomModule.getBusinessError;
+			return roomModule.getBusinessError;
 		},
 	},
 	methods: {
@@ -111,7 +111,7 @@ export default {
 				return;
 			}
 			if (this.step === 2) {
-				await RoomModule.confirmImportLesson(this.sharedLessonData.code);
+				await roomModule.confirmImportLesson(this.sharedLessonData.code);
 				if (this.businessError.statusCode === "") {
 					this.cancel();
 				}
@@ -137,7 +137,7 @@ export default {
 			this.step = step;
 		},
 		clearMessages() {
-			RoomModule.resetBusinessError();
+			roomModule.resetBusinessError();
 			this.sharedLessonData = {
 				code: "",
 			};

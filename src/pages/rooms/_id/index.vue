@@ -28,11 +28,33 @@
 						class="back-button"
 						outlined
 						small
-						:href="`/courses/${roomData.roomId}`"
-						:data-testid="`room-${roomData.roomId}`"
-						>{{ $t("pages.rooms.headerSection.legacyView") }}
+						:href="`/files/courses/${roomData.roomId}`"
+						:data-testid="`room-${roomData.roomId}-files`"
+						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
 				</div>
+			</div>
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
+					<v-tab>
+						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
+						<span class="d-none d-sm-inline" data-testid="learnContent">{{
+							$t("pages.rooms.tabLabel.learnContent")
+						}}</span>
+					</v-tab>
+					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
+						<v-icon class="tab-icon mr-sm-3">fa-puzzle-piece</v-icon>
+						<span class="d-none d-sm-inline" data-testid="tools">{{
+							$t("pages.rooms.tabLabel.tools")
+						}}</span>
+					</v-tab>
+					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=groups`">
+						<v-icon class="tab-icon mr-sm-3">fa-users</v-icon>
+						<span class="d-none d-sm-inline" data-testid="groups">{{
+							$t("pages.rooms.tabLabel.groups")
+						}}</span>
+					</v-tab>
+				</v-tabs>
 			</div>
 		</template>
 		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
@@ -79,10 +101,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import RoomModule from "@store/room";
-
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -96,7 +115,7 @@ import {
 	mdiFormatListChecks,
 	mdiCloudDownload,
 	mdiSquareEditOutline,
-	mdiEmail,
+	mdiEmailPlusOutline,
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
@@ -129,7 +148,7 @@ export default {
 			},
 			icons: {
 				mdiSquareEditOutline,
-				mdiEmail,
+				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
 			},
@@ -140,12 +159,13 @@ export default {
 				},
 			],
 			courseId: this.$route.params.id,
+			tab: null,
 		};
 	},
 	computed: {
 		fabItems() {
 			if (
-				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
 				const items = {
 					icon: mdiPlus,
@@ -169,7 +189,7 @@ export default {
 						},
 					],
 				};
-				if (EnvConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					items.actions.push({
 						label: this.$t("pages.rooms.fab.import.lesson"),
 						icon: mdiCloudDownload,
@@ -187,10 +207,10 @@ export default {
 			return null;
 		},
 		roomData() {
-			return RoomModule.getRoomData;
+			return roomModule.getRoomData;
 		},
 		roles() {
-			return AuthModule.getUserRoles;
+			return authModule.getUserRoles;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -204,31 +224,34 @@ export default {
 					icon: this.icons.mdiSquareEditOutline,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
-					name: this.$t("pages.room.courseTitleMenu.editDelete"),
+					name:
+						this.$t("common.actions.edit") +
+						"/" +
+						this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
 				{
-					icon: this.icons.mdiEmail,
+					icon: this.icons.mdiEmailPlusOutline,
 					action: () => this.inviteCourse(),
-					name: this.$t("pages.room.courseTitleMenu.invite"),
+					name: this.$t("common.actions.invite"),
 					dataTestId: "title-menu-invite",
 				},
 			];
 
-			if (EnvConfigModule.getEnv.FEATURE_COURSE_COPY) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_COPY) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/copy`),
-					name: this.$t("pages.room.courseTitleMenu.duplicate"),
+					name: this.$t("common.actions.duplicate"),
 					dataTestId: "title-menu-copy",
 				});
 			}
-			if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
-					name: this.$t("pages.room.courseTitleMenu.share"),
+					name: this.$t("common.actions.share"),
 					dataTestId: "title-menu-share",
 				});
 			}
@@ -236,15 +259,15 @@ export default {
 		},
 	},
 	async created() {
-		await RoomModule.fetchContent(this.courseId);
+		await roomModule.fetchContent(this.courseId);
 	},
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
 		async inviteCourse() {
-			await RoomModule.createCourseInvitation(this.courseId);
-			this.dialog.courseInvitationLink = RoomModule.getCourseInvitationLink;
+			await roomModule.createCourseInvitation(this.courseId);
+			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
 			this.dialog.model = "invite";
 			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
 			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
@@ -253,8 +276,8 @@ export default {
 			this.dialog.isOpen = true;
 		},
 		async shareCourse() {
-			await RoomModule.createCourseShareToken(this.courseId);
-			this.dialog.courseShareToken = RoomModule.getCourseShareToken;
+			await roomModule.createCourseShareToken(this.courseId);
+			this.dialog.courseShareToken = roomModule.getCourseShareToken;
 			this.dialog.model = "share";
 			this.dialog.header = this.$t("pages.room.modal.course.share.header");
 			this.dialog.text = this.$t("pages.room.modal.course.share.text");
@@ -278,7 +301,10 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+@import "@variables";
+
 .course-title {
 	display: inline-block;
 	overflow: hidden;
@@ -287,5 +313,38 @@ export default {
 .modal-text {
 	font-size: var(--space-md);
 	color: var(--color-black);
+}
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+	.tabs-max-width {
+		max-width: var(--size-content-width-max);
+	}
+}
+
+.tab-icon {
+	fill: currentColor;
+}
+
+// even out border
+.v-tabs {
+	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	font-family: var(--heading-font-family);
+}
+
+.v-tab {
+	font-size: var(--text-base-size);
+	text-transform: none !important;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+::v-deep .v-slide-group__prev,
+::v-deep .v-slide-group__next {
+	display: none !important;
+}
+
+.border-bottom {
+	margin-right: calc(-1 * var(--space-lg));
+	margin-left: calc(-1 * var(--space-lg));
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

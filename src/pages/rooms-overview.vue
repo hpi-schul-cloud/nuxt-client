@@ -130,9 +130,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import ImportModal from "@components/molecules/ImportModal";
-import AuthModule from "@/store/auth";
-import RoomsModule from "@store/rooms";
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
@@ -181,9 +179,9 @@ export default {
 	computed: {
 		fab() {
 			if (
-				AuthModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				if (EnvConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					return {
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
@@ -222,16 +220,16 @@ export default {
 			return null;
 		},
 		loading() {
-			return RoomsModule.getLoading;
+			return roomsModule.getLoading;
 		},
 		roomsError() {
-			return RoomsModule.getError;
+			return roomsModule.getError;
 		},
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 		items() {
-			return JSON.parse(JSON.stringify(RoomsModule.getRoomsData)).filter(
+			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
 				(item) => {
 					if (item.groupElements) {
 						const groupElements = item.groupElements.filter((groupItem) => {
@@ -258,7 +256,7 @@ export default {
 		},
 	},
 	async created() {
-		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
 	methods: {
@@ -291,7 +289,7 @@ export default {
 					this.dimensions.colCount = 6;
 					break;
 			}
-			const lastItem = RoomsModule.getRoomsData.reduce((prev, current) => {
+			const lastItem = roomsModule.getRoomsData.reduce((prev, current) => {
 				return prev.yPosition > current.yPosition ? prev : current;
 			}, {});
 
@@ -386,18 +384,21 @@ export default {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: RoomsModule.roomsData
+				groupIndex: roomsModule.roomsData
 					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
-			this.groupDialog.isOpen = false;
+			// This setTimeout is used for preventing being closed modal immediately while ungrouping the items.
+			setTimeout(() => {
+				this.groupDialog.isOpen = false;
+			}, 0);
 			this.searchText = "";
 			this.dragging = true;
 		},
 		async savePosition() {
-			await RoomsModule.align(this.draggedElement);
+			await roomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
@@ -407,13 +408,13 @@ export default {
 				xPosition: pos.x,
 				yPosition: pos.y,
 			};
-			RoomsModule.update(payload);
+			roomsModule.update(payload);
 		},
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
 		async updateRooms() {
-			await RoomsModule.fetch();
+			await roomsModule.fetch();
 		},
 	},
 	head() {

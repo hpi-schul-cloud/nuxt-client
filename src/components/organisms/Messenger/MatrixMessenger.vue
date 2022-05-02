@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export function extractRoomTypeAndIdFromPath(path) {
 	const matches = RegExp("/(course|team)s/([0-9a-f]{24})").exec(path);
@@ -38,7 +38,7 @@ export default {
 			if (!this.matrixFeatureFlag) {
 				return false;
 			}
-			const school = AuthModule.getSchool;
+			const school = authModule.getSchool;
 			return school && (school.features || []).includes("messenger");
 		},
 		session() {

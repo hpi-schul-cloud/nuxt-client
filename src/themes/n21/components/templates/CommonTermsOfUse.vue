@@ -109,7 +109,7 @@
 	</div>
 </template>
 <script>
-import FilePathsModule from "@/store/filePaths";
+import { filePathsModule } from "@/store";
 
 export default {
 	props: {
@@ -120,8 +120,8 @@ export default {
 	},
 	data() {
 		return {
-			privacyLink: FilePathsModule.getSpecificFiles.privacyExemplary,
-			termsOfUseLink: FilePathsModule.getSpecificFiles.termsOfUseExemplary,
+			privacyLink: filePathsModule.getSpecificFiles.privacyExemplary,
+			termsOfUseLink: filePathsModule.getSpecificFiles.termsOfUseExemplary,
 		};
 	},
 	methods: {

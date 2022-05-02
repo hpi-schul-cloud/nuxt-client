@@ -1,4 +1,4 @@
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
@@ -70,14 +70,14 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 const getClassesNames = async (ctx, arr) => {
-	const { currentYear } = await AuthModule.getSchool;
+	const { currentYear } = authModule.getSchool;
 	await ctx.$store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,
 			year: currentYear,
 		},
 	});
-	const classes = ctx.$store.state["classes"].list;
+	const classes = ctx.$store.state["classes"].list || [];
 	classes
 		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
 		.forEach((cl) => {

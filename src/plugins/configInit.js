@@ -1,8 +1,8 @@
-import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
 
 export default async () => {
 	try {
-		await EnvConfigModule.findEnvs();
+		await envConfigModule.findEnvs();
 	} catch (error) {
 		console.error(error);
 	}

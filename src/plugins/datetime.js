@@ -4,8 +4,7 @@ import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
-import EnvConfigModule from "@/store/env-config";
-import AuthModule from "@/store/auth";
+import { authModule, envConfigModule } from "@/store";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -83,7 +82,7 @@ export const setDefaultTimezone = (defaultTimezone) => {
  */
 const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.schools?.school?.timezone;
-	instanceTimezone = EnvConfigModule.getDefaultTimezone;
+	instanceTimezone = envConfigModule.getDefaultTimezone;
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
 	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
@@ -270,6 +269,6 @@ export default ({ app, store }) => {
 	initDefaultTimezone(app, store);
 	setDefaultFormats(app);
 
-	const locale = AuthModule.getLocale || "de";
+	const locale = authModule.getLocale || "de";
 	dayjs.locale(locale);
 };

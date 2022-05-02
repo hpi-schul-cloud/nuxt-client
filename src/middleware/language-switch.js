@@ -1,6 +1,6 @@
-import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 export default async ({ app }) => {
-	const lang = AuthModule.getLocale;
+	const lang = authModule.getLocale;
 	if (lang) app.i18n.locale = lang;
 };

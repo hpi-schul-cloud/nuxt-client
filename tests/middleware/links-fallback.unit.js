@@ -1,7 +1,9 @@
 // import must be after mock
 jest.mock("@serverMiddleware/routes.js", () => [`^/news`]);
-import linksFallback from "@middleware/links-fallback";
+import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import linksFallback from "@middleware/links-fallback";
+import setupStores from "../test-utils/setupStores";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -25,9 +27,13 @@ const envs = {
 jest.useFakeTimers();
 
 describe("@middleware/linksFallback", () => {
+	beforeEach(() => {
+		setupStores({ "env-config": EnvConfigModule });
+	});
+
 	it("use nuxt when a loop is detected", async () => {
 		window.location.pathname = "/homework";
-		EnvConfigModule.setEnvs(envs);
+		envConfigModule.setEnvs(envs);
 		const promise = linksFallback({
 			route: { path: "/homework" },
 		});
@@ -38,7 +44,7 @@ describe("@middleware/linksFallback", () => {
 	});
 	it("use vue route for whitelisted regex", async () => {
 		window.location.pathname = "/news";
-		EnvConfigModule.setEnvs(envs);
+		envConfigModule.setEnvs(envs);
 		const promise = linksFallback({
 			route: { path: "/news/add" },
 		});
@@ -49,7 +55,7 @@ describe("@middleware/linksFallback", () => {
 	});
 	it("use vue when fallback disabled flag is set", async () => {
 		window.location.pathname = "/news";
-		EnvConfigModule.setEnvs({
+		envConfigModule.setEnvs({
 			...envs,
 			FALLBACK_DISABLED: true,
 		});
@@ -63,7 +69,7 @@ describe("@middleware/linksFallback", () => {
 	});
 	it("use legacy proxy for non matching routes", async () => {
 		window.location.pathname = "/news";
-		EnvConfigModule.setEnvs(envs);
+		envConfigModule.setEnvs(envs);
 		const promise = linksFallback({
 			route: { path: "/homework" },
 		});

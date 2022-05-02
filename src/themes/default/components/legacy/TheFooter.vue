@@ -41,9 +41,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
-import EnvConfigModule from "@/store/env-config";
+import { authModule, envConfigModule, filePathsModule } from "@/store";
 
 export default {
 	data() {
@@ -52,7 +50,7 @@ export default {
 	},
 	computed: {
 		school() {
-			return AuthModule.getSchool;
+			return authModule.getSchool;
 		},
 		currentYear() {
 			return new Date().getFullYear();
@@ -64,7 +62,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
@@ -84,9 +82,9 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 			];
-			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
+			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
 				links.push({
-					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
+					href: envConfigModule.getEnv.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 					target: "_blank",
 					rel: "noopener",
@@ -100,7 +98,7 @@ export default {
 		},
 	},
 	mounted() {
-		console.log(FilePathsModule.getSpecificFiles.termsOfUseSchool);
+		// console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

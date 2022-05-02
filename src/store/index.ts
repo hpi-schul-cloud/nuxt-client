@@ -1,5 +1,6 @@
-import Vuex from "vuex";
-import Vue from "vue";
+import { Store } from "vuex";
+import { initializeStores } from "@/utils/store-accessor";
 
-Vue.use(Vuex);
-export const rootStore = new Vuex.Store({});
+const initializer = (store: Store<any>) => initializeStores(store);
+export const plugins = [initializer];
+export * from "@/utils/store-accessor";

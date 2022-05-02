@@ -74,7 +74,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import NewsModule from "@/store/news";
+import { newsModule } from "@/store";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -123,7 +123,7 @@ export default Vue.extend({
 	},
 	computed: {
 		status(): string {
-			return NewsModule.getStatus;
+			return newsModule.getStatus;
 		},
 		displayAt(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {

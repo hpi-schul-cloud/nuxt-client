@@ -22,7 +22,7 @@
 						:task="item.content"
 						:aria-label="
 							$t('pages.room.taskCard.aria', {
-								itemType: $t('pages.room.taskCard.label.task'),
+								itemType: $t('common.words.tasks'),
 								itemName: item.content.name,
 							})
 						"
@@ -35,6 +35,8 @@
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
+						@finish-task="finishTask(item.content.id)"
+						@restore-task="restoreTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -44,7 +46,7 @@
 						:room="lessonData"
 						:aria-label="
 							$t('pages.room.lessonCard.aria', {
-								itemType: $t('pages.room.lessonCard.label.lesson'),
+								itemType: $t('common.words.topic'),
 								itemName: item.content.name,
 							})
 						"
@@ -71,7 +73,7 @@
 					:task="item.content"
 					:aria-label="
 						$t('pages.room.taskCard.aria', {
-							itemType: $t('pages.room.taskCard.label.task'),
+							itemType: $t('common.words.tasks'),
 							itemName: item.content.name,
 						})
 					"
@@ -80,6 +82,8 @@
 					:drag-in-progress="dragInProgress"
 					@post-task="postDraftElement(item.content.id)"
 					@revert-task="revertPublishedElement(item.content.id)"
+					@finish-task="finishTask(item.content.id)"
+					@restore-task="restoreTask(item.content.id)"
 				/>
 				<room-lesson-card
 					v-if="item.type === cardTypes.Lesson"
@@ -89,7 +93,7 @@
 					:room="lessonData"
 					:aria-label="
 						$t('pages.room.lessonCard.aria', {
-							itemType: $t('pages.room.lessonCard.label.lesson'),
+							itemType: $t('common.words.topic'),
 							itemName: item.content.name,
 						})
 					"
@@ -101,6 +105,14 @@
 				/>
 			</div>
 		</div>
+		<v-custom-empty-state
+			v-if="roomIsEmpty"
+			:image="emptyState.image"
+			:title="emptyState.title"
+			:img-height="emptyState.maxHeight"
+			data-testid="empty-state-item"
+			class="mt-16"
+		/>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -152,12 +164,13 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import { roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import RoomModule from "@store/room";
-import TaskModule from "@/store/tasks";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
+import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
 export default {
 	components: {
@@ -165,6 +178,7 @@ export default {
 		RoomLessonCard,
 		vCustomDialog,
 		draggable,
+		vCustomEmptyState,
 	},
 	props: {
 		roomData: {
@@ -206,6 +220,17 @@ export default {
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
 		},
+		roomIsEmpty: () => roomModule.roomIsEmpty,
+		emptyState() {
+			const image = topicsEmptyStateImage;
+			const title = this.$t(`pages.room.${this.role}.emptyState`);
+			const maxHeight = "200px";
+			return {
+				image,
+				title,
+				maxHeight,
+			};
+		},
 	},
 	created() {
 		if (this.isTouchDevice) {
@@ -214,10 +239,10 @@ export default {
 	},
 	methods: {
 		async postDraftElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: true });
+			await roomModule.publishCard({ elementId, visibility: true });
 		},
 		async revertPublishedElement(elementId) {
-			await RoomModule.publishCard({ elementId, visibility: false });
+			await roomModule.publishCard({ elementId, visibility: false });
 		},
 		async onSort(items) {
 			const idList = {};
@@ -225,7 +250,7 @@ export default {
 				return item.content.id;
 			});
 
-			await RoomModule.sortElements(idList);
+			await roomModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
@@ -243,12 +268,12 @@ export default {
 				items[itemIndex],
 			];
 
-			await RoomModule.sortElements({ elements: items });
+			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			await RoomModule.fetchSharedLesson(lessonId);
-			const sharedLesson = RoomModule.getSharedLessonData;
+			await roomModule.fetchSharedLesson(lessonId);
+			const sharedLesson = roomModule.getSharedLessonData;
 
 			this.lessonShare.token = sharedLesson.code;
 			this.lessonShare.lessonName = sharedLesson.lessonName;
@@ -269,11 +294,17 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await TaskModule.deleteTask(this.itemDelete.itemData.id);
-				await RoomModule.fetchContent(this.roomData.roomId);
+				await taskModule.deleteTask(this.itemDelete.itemData.id);
+				await roomModule.fetchContent(this.roomData.roomId);
 				return Promise.resolve();
 			}
-			await RoomModule.deleteLesson(this.itemDelete.itemData.id);
+			await roomModule.deleteLesson(this.itemDelete.itemData.id);
+		},
+		async finishTask(itemId) {
+			await roomModule.finishTask({ itemId, action: "finish" });
+		},
+		async restoreTask(itemId) {
+			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 	},
 };

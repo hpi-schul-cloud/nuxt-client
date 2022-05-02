@@ -1,6 +1,8 @@
 import FormNews from "./FormNews";
 import { DATETIME_FORMAT } from "@plugins/datetime";
 import dayjs from "dayjs";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
@@ -57,6 +59,10 @@ const getMocks = ({
 	});
 
 describe("@components/organisms/FormNews", () => {
+	beforeEach(() => {
+		setupStores({ "env-config": EnvConfigModule });
+	});
+
 	it("converts date correctly", async () => {
 		const mocks = getMocks();
 		const wrapper = mount(FormNews, {

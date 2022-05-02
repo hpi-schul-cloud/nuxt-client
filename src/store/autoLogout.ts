@@ -1,13 +1,5 @@
-import {
-	Module,
-	VuexModule,
-	Mutation,
-	Action,
-	getModule,
-} from "vuex-module-decorators";
-import { rootStore } from "./index";
-import EnvConfigModule from "@/store/env-config";
-import AccountsModule from "@/store/accounts";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { envConfigModule, accountsModule } from "@/store";
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
@@ -58,7 +50,7 @@ const decrementRemainingTime: any = (
 const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 	return setInterval(async () => {
 		try {
-			const res: any = await AccountsModule.getTTL();
+			const res: any = await accountsModule.getTTL();
 			if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
 				setRemainingTimeInSeconds(res.ttl);
 			} else {
@@ -87,7 +79,7 @@ const extendSession = async (
 	setToastValue: any
 ) => {
 	try {
-		await AccountsModule.resetJwtTimer();
+		await accountsModule.resetJwtTimer();
 		processing = false;
 		totalRetry = 0;
 		retry = 0;
@@ -139,11 +131,9 @@ const extendSession = async (
 @Module({
 	name: "autoLogout",
 	namespaced: true,
-	dynamic: true,
-	store: rootStore,
 	stateFactory: true,
 })
-export class AutoLogoutModule extends VuexModule {
+export default class AutoLogoutModule extends VuexModule {
 	active: boolean = false;
 	error: boolean = false;
 	remainingTimeInSeconds: number = 3600 * 2;
@@ -201,7 +191,7 @@ export class AutoLogoutModule extends VuexModule {
 	init(): void {
 		try {
 			const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-				EnvConfigModule.getEnv;
+				envConfigModule.getEnv;
 
 			this.setInit(JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS);
 
@@ -225,24 +215,22 @@ export class AutoLogoutModule extends VuexModule {
 	}
 
 	@Action
-	extendSessionAction(): void {
+	async extendSessionAction(): Promise<void> {
 		try {
 			processing = true;
 			this.setActive(false, false);
 
-			extendSession(
+			await extendSession(
 				this.remainingTimeInSeconds,
 				this.setRemainingTimeInSeconds,
 				this.active,
 				this.showWarningOnRemainingSeconds,
 				this.setActive,
 				this.defaultRemainingTimeInSeconds,
-				this.setToastValue
+				this.setToastValue.bind(this)
 			);
 		} catch (error) {
 			console.error(error);
 		}
 	}
 }
-
-export default getModule(AutoLogoutModule);

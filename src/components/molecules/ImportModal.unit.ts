@@ -1,5 +1,7 @@
+import { roomsModule } from "@/store";
 import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import ImportModal from "./ImportModal.vue";
 
@@ -7,6 +9,7 @@ describe("@components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({ rooms: RoomsModule });
 	});
 
 	it("should open and close on property change", async () => {
@@ -182,7 +185,7 @@ describe("@components/molecules/RoomModal", () => {
 	describe("error handling", () => {
 		it("should show code-error section if server sends shareToken error", async () => {
 			const getSharedCourseDataMock = jest
-				.spyOn(RoomsModule, "getSharedCourseData")
+				.spyOn(roomsModule, "getSharedCourseData")
 				.mockImplementation();
 			const wrapper: any = mount(ImportModal, {
 				...createComponentMocks({
@@ -198,7 +201,7 @@ describe("@components/molecules/RoomModal", () => {
 			const textElementBefore = wrapper.find(".text-field-course-code");
 			expect(textElementBefore.vm.error).toBe(false);
 			expect(textElementBefore.vm.errorMessages).toStrictEqual("");
-			RoomsModule.setBusinessError({
+			roomsModule.setBusinessError({
 				statusCode: "400",
 				message: "BadRequest",
 				error: {},

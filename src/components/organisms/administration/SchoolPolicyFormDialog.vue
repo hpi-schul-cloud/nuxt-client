@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schools";
+import { schoolsModule } from "@/store";
 import { mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
@@ -133,7 +133,7 @@ export default {
 	},
 	computed: {
 		school() {
-			return SchoolsModule.getSchool;
+			return schoolsModule.getSchool;
 		},
 		descriptionErrors() {
 			const errors = [];

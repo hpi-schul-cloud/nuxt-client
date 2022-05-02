@@ -1,6 +1,8 @@
-import AutoLogoutWarning from "./AutoLogoutWarning";
-import EnvConfigModule from "@/store/env-config";
+import { autoLogoutModule, envConfigModule } from "@/store";
 import AutoLogoutModule from "@/store/autoLogout";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AutoLogoutWarning from "./AutoLogoutWarning";
 
 const toast = {
 	error401: -1,
@@ -43,14 +45,19 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	let wrapper;
 
 	const showModal = () => {
-		AutoLogoutModule.context.state.active = true;
+		autoLogoutModule.context.state.active = true;
 	};
 
 	const setShowToast = (value) => {
-		AutoLogoutModule.context.state.toastValue = value;
+		autoLogoutModule.context.state.toastValue = value;
 	};
 
 	beforeAll(() => {
+		setupStores({
+			autoLogout: AutoLogoutModule,
+			"env-config": EnvConfigModule,
+		});
+
 		actions = getMockActions();
 		const mock = getMocks({ actions });
 		wrapper = mount(AutoLogoutWarning, {
@@ -62,9 +69,9 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 
 	it("should call init on store", async () => {
 		const { showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds } =
-			AutoLogoutModule.context.state;
+			autoLogoutModule.context.state;
 		const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-			EnvConfigModule.getEnv;
+			envConfigModule.getEnv;
 		expect(showWarningOnRemainingSeconds).toBe(
 			JWT_SHOW_TIMEOUT_WARNING_SECONDS
 		);
@@ -75,25 +82,25 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 		showModal();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".sloth").html()).toContain("Sloth.svg");
-		AutoLogoutModule.context.state.error = true;
+		autoLogoutModule.context.state.error = true;
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".sloth").html()).toContain("Sloth_error.svg");
 	});
 
 	it("calculate remaining time in minutes correctly", async () => {
-		AutoLogoutModule.context.state.remainingTimeInSeconds = 120;
-		expect(AutoLogoutModule.context.state.remainingTimeInSeconds).toBe(120);
+		autoLogoutModule.context.state.remainingTimeInSeconds = 120;
+		expect(autoLogoutModule.context.state.remainingTimeInSeconds).toBe(120);
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(2);
-		AutoLogoutModule.context.state.remainingTimeInSeconds = 100;
+		autoLogoutModule.context.state.remainingTimeInSeconds = 100;
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(1);
-		AutoLogoutModule.context.state.remainingTimeInSeconds = -999;
+		autoLogoutModule.context.state.remainingTimeInSeconds = -999;
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(0);
 	});
 
 	describe("Extend secession", () => {
 		it("extend secession over modal", async () => {
 			const extendSpy = jest.fn();
-			AutoLogoutModule.extendSessionAction = extendSpy;
+			autoLogoutModule.extendSessionAction = extendSpy;
 
 			showModal();
 			await wrapper.vm.$nextTick();

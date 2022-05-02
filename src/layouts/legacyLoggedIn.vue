@@ -36,8 +36,7 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import Schools from "@/store/schools";
+import { authModule, schoolsModule } from "@/store";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -48,7 +47,6 @@ import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
-import EnvConfigModule from "@store/env-config";
 
 export default {
 	components: {
@@ -98,7 +96,7 @@ export default {
 							{
 								label: this.$t("global.topbar.actions.contactSupport"),
 								icon: "pencil",
-								action: "/help?activeForm=team#contact-form",
+								action: "/help/contact",
 								source: "fa",
 								target: "_self",
 							},
@@ -117,20 +115,18 @@ export default {
 	},
 	computed: {
 		user() {
-			return AuthModule.getUser;
+			return authModule.getUser;
 		},
 		school() {
-			return Schools.getSchool;
+			return schoolsModule.getSchool;
 		},
 		authenticated() {
-			return AuthModule.getAuthenticated;
+			return authModule.getAuthenticated;
 		},
 		topBarActions() {
 			return [...this.topbarBaseActions];
 		},
 		sidebarItems() {
-			const showLegacyCourse =
-				EnvConfigModule.getEnv.LEGACY_COURSE_OVERVIEW_ENABLED || false;
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
 				// Check permissions for all children
 				if ((item.children || []).length >= 1) {
@@ -154,9 +150,11 @@ export default {
 			});
 
 			return sidebarItems.map((item) => {
+				const isInRoute = (activeURL) => this.$route.path.includes(activeURL);
 				const isActive =
 					this.$route.path.includes(item.href) ||
-					this.$route.path.includes(item.to);
+					this.$route.path.includes(item.to) ||
+					(item.activeForUrls && item.activeForUrls.some(isInRoute));
 				item.childActive = false;
 				if (item.children) {
 					item.children.forEach((childItem) => {
@@ -167,14 +165,6 @@ export default {
 					});
 				}
 				item.active = isActive && !item.childActive;
-
-				if (item.linkType == "legacyCourse" && showLegacyCourse) {
-					item.visibility = "true";
-				}
-
-				if (item.linkType == "nuxtCourse" && !showLegacyCourse) {
-					item.visibility = "true";
-				}
 
 				return item;
 			});
@@ -204,7 +194,7 @@ export default {
 			if (event === "logout") {
 				// TODO temporary workaround until $cookies are accessible from TS modules
 				this.$cookies.remove("jwt");
-				AuthModule.logout();
+				authModule.logout();
 				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {

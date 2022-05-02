@@ -1,5 +1,7 @@
+import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import externallyManagedCheck from "@middleware/externally-managed-check";
+import setupStores from "../test-utils/setupStores";
 
 const mockApp = {
 	i18n: {
@@ -17,12 +19,16 @@ const getMockContext = ({ app = mockApp, route = getMockRoute() } = {}) => ({
 });
 
 describe("@middleware/externally-managed-check", () => {
+	beforeEach(() => {
+		setupStores({ auth: AuthModule });
+	});
+
 	it("exports a function", () => {
 		expect(typeof externallyManagedCheck).toBe("function");
 	});
 
 	it("grants Access if userNotExternallyManaged is not required AND user is not externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: false });
+		authModule.setUser({ externallyManaged: false });
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: false }),
 		});
@@ -30,7 +36,7 @@ describe("@middleware/externally-managed-check", () => {
 	});
 
 	it("grants Access if userNotExternallyManaged is not required AND user is externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: true });
+		authModule.setUser({ externallyManaged: true });
 
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: false }),
@@ -39,7 +45,7 @@ describe("@middleware/externally-managed-check", () => {
 	});
 
 	it("grants Access if userNotExternallyManaged is required AND user is not externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: false });
+		authModule.setUser({ externallyManaged: false });
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
@@ -47,7 +53,7 @@ describe("@middleware/externally-managed-check", () => {
 	});
 
 	it("throws error.401 if userNotExternallyManaged is required AND user is externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: true });
+		authModule.setUser({ externallyManaged: true });
 
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: true }),
@@ -58,20 +64,20 @@ describe("@middleware/externally-managed-check", () => {
 	});
 
 	it("grants Access if userNotExternallyManaged is not defined AND user is externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: true });
+		authModule.setUser({ externallyManaged: true });
 
 		const mockContext = getMockContext();
 		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
 	it("grants Access if userNotExternallyManaged is not defined AND user is not externally managed", async () => {
-		AuthModule.setUser({ externallyManaged: false });
+		authModule.setUser({ externallyManaged: false });
 		const mockContext = getMockContext();
 		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
 	it("throws error.401 on missing user", async () => {
-		AuthModule.setUser(null);
+		authModule.setUser(null);
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
@@ -81,7 +87,7 @@ describe("@middleware/externally-managed-check", () => {
 	});
 
 	it("grants Access if userNotExternallyManaged is not defined AND user is missing", async () => {
-		AuthModule.setUser(null);
+		authModule.setUser(null);
 
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: false }),

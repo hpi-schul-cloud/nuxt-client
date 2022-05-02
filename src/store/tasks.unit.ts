@@ -1,9 +1,10 @@
-import { TaskModule } from "./tasks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import * as serverApi from "../serverApi/v3/api";
-import { taskFactory } from "./task.filter.unit";
+import FinishedTaskModule from "./finished-tasks";
 import { TaskFilter } from "./task.filter";
+import { taskFactory } from "./task.filter.unit";
+import TaskModule from "./tasks";
 import { Task } from "./types/tasks";
-import { FinishedTaskModule } from "./finished-tasks";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -13,7 +14,7 @@ type FunctionPropertyNames<T> = {
 /**
  * Spy on a TaskFilter method and mock its return value.
  * The mock is valid for all instances of the TaskFilter class.
- * So make sire that you call mockRestore() othe spy instance afterwards.
+ * So make sure that you call mockRestore() on the spy instance afterwards.
  * @param method the method
  * @param result the result of the task filter
  * @returns
@@ -158,6 +159,12 @@ describe("task store", () => {
 	});
 
 	describe("deleteTask", () => {
+		beforeEach(() => {
+			setupStores({
+				"finished-tasks": FinishedTaskModule,
+			});
+		});
+
 		it("should call api to delete a task", (done) => {
 			const mockApi = {
 				taskControllerDelete: jest.fn(),

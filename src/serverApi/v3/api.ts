@@ -24,6 +24,93 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface AccountByIdBodyParams
+ */
+export interface AccountByIdBodyParams {
+    /**
+     * The new user name for the user.
+     * @type {string}
+     * @memberof AccountByIdBodyParams
+     */
+    username?: string | null;
+    /**
+     * The new password for the user.
+     * @type {string}
+     * @memberof AccountByIdBodyParams
+     */
+    password?: string | null;
+    /**
+     * The new activation state of the user.
+     * @type {boolean}
+     * @memberof AccountByIdBodyParams
+     */
+    activated?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface AccountResponse
+ */
+export interface AccountResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountResponse
+     */
+    username: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AccountResponse
+     */
+    activated: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AccountSearchListResponse
+ */
+export interface AccountSearchListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<AccountResponse>}
+     * @memberof AccountSearchListResponse
+     */
+    data: Array<AccountResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof AccountSearchListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof AccountSearchListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof AccountSearchListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -47,7 +134,6 @@ export interface BoardElementResponse {
     */
 export enum BoardElementResponseTypeEnum {
     Task = 'task',
-    Lockedtask = 'lockedtask',
     Lesson = 'lesson'
 }
 
@@ -110,42 +196,29 @@ export enum ChangeLanguageParamsLanguageEnum {
 /**
  * 
  * @export
- * @interface ChangePasswordParams
- */
-export interface ChangePasswordParams {
-    /**
-     * New password of the user
-     * @type {string}
-     * @memberof ChangePasswordParams
-     */
-    password: string;
-}
-/**
- * 
- * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
     /**
-     * 
+     * The items for the current page.
      * @type {Array<CourseMetadataResponse>}
      * @memberof CourseMetadataListResponse
      */
     data: Array<CourseMetadataResponse>;
     /**
-     * 
+     * The total amount of items.
      * @type {number}
      * @memberof CourseMetadataListResponse
      */
     total: number;
     /**
-     * 
+     * The amount of items skipped from the start.
      * @type {number}
      * @memberof CourseMetadataListResponse
      */
     skip: number;
     /**
-     * 
+     * The page size of the response.
      * @type {number}
      * @memberof CourseMetadataListResponse
      */
@@ -219,11 +292,11 @@ export interface CreateNewsParams {
      */
     displayAt?: string;
     /**
-     * 
-     * @type {NewsTargetModel}
+     * Target model to which the News entity is related
+     * @type {string}
      * @memberof CreateNewsParams
      */
-    targetModel: NewsTargetModel;
+    targetModel: CreateNewsParamsTargetModelEnum;
     /**
      * Specific target id to which the News entity is related
      * @type {string}
@@ -231,6 +304,17 @@ export interface CreateNewsParams {
      */
     targetId: string;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateNewsParamsTargetModelEnum {
+    Schools = 'schools',
+    Courses = 'courses',
+    Teams = 'teams'
+}
+
 /**
  * 
  * @export
@@ -339,29 +423,103 @@ export interface DashboardResponse {
 /**
  * 
  * @export
+ * @interface EntityNotFoundError
+ */
+export interface EntityNotFoundError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof EntityNotFoundError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof EntityNotFoundError
+     */
+    details: object;
+}
+/**
+ * 
+ * @export
+ * @interface ForbiddenOperationError
+ */
+export interface ForbiddenOperationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ForbiddenOperationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ForbiddenOperationError
+     */
+    details: object;
+}
+/**
+ * 
+ * @export
  * @interface ImportUserListResponse
  */
 export interface ImportUserListResponse {
     /**
-     * 
+     * The items for the current page.
      * @type {Array<ImportUserResponse>}
      * @memberof ImportUserListResponse
      */
     data: Array<ImportUserResponse>;
     /**
-     * 
+     * The total amount of items.
      * @type {number}
      * @memberof ImportUserListResponse
      */
     total: number;
     /**
-     * 
+     * The amount of items skipped from the start.
      * @type {number}
      * @memberof ImportUserListResponse
      */
     skip: number;
     /**
-     * 
+     * The page size of the response.
      * @type {number}
      * @memberof ImportUserListResponse
      */
@@ -484,25 +642,25 @@ export interface MoveElementPositionParams {
  */
 export interface NewsListResponse {
     /**
-     * 
+     * The items for the current page.
      * @type {Array<NewsResponse>}
      * @memberof NewsListResponse
      */
     data: Array<NewsResponse>;
     /**
-     * 
+     * The total amount of items.
      * @type {number}
      * @memberof NewsListResponse
      */
     total: number;
     /**
-     * 
+     * The amount of items skipped from the start.
      * @type {number}
      * @memberof NewsListResponse
      */
     skip: number;
     /**
-     * 
+     * The page size of the response.
      * @type {number}
      * @memberof NewsListResponse
      */
@@ -834,25 +992,25 @@ export interface TargetInfoResponse {
  */
 export interface TaskListResponse {
     /**
-     * 
+     * The items for the current page.
      * @type {Array<TaskResponse>}
      * @memberof TaskListResponse
      */
     data: Array<TaskResponse>;
     /**
-     * 
+     * The total amount of items.
      * @type {number}
      * @memberof TaskListResponse
      */
     total: number;
     /**
-     * 
+     * The amount of items skipped from the start.
      * @type {number}
      * @memberof TaskListResponse
      */
     skip: number;
     /**
-     * 
+     * The page size of the response.
      * @type {number}
      * @memberof TaskListResponse
      */
@@ -1051,25 +1209,25 @@ export interface UserInfoResponse {
  */
 export interface UserMatchListResponse {
     /**
-     * 
+     * The items for the current page.
      * @type {Array<UserMatchResponse>}
      * @memberof UserMatchListResponse
      */
     data: Array<UserMatchResponse>;
     /**
-     * 
+     * The total amount of items.
      * @type {number}
      * @memberof UserMatchListResponse
      */
     total: number;
     /**
-     * 
+     * The amount of items skipped from the start.
      * @type {number}
      * @memberof UserMatchListResponse
      */
     skip: number;
     /**
-     * 
+     * The page size of the response.
      * @type {number}
      * @memberof UserMatchListResponse
      */
@@ -1137,6 +1295,43 @@ export enum UserMatchResponseMatchedByEnum {
     Admin = 'admin'
 }
 
+/**
+ * 
+ * @export
+ * @interface ValidationError
+ */
+export interface ValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ValidationError
+     */
+    details: object;
+}
 
 /**
  * AccountApi - axios parameter creator
@@ -1146,17 +1341,15 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {string} id 
-         * @param {ChangePasswordParams} changePasswordParams 
+         * @summary Deletes an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerChangePassword: async (id: string, changePasswordParams: ChangePasswordParams, options: any = {}): Promise<RequestArgs> => {
+        accountControllerDeleteAccountById: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('accountControllerChangePassword', 'id', id)
-            // verify required parameter 'changePasswordParams' is not null or undefined
-            assertParamExists('accountControllerChangePassword', 'changePasswordParams', changePasswordParams)
-            const localVarPath = `/account/{id}/pw`
+            assertParamExists('accountControllerDeleteAccountById', 'id', id)
+            const localVarPath = `/account/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1165,7 +1358,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1175,12 +1368,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(changePasswordParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1189,6 +1379,45 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Returns an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerFindAccountById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('accountControllerFindAccountById', 'id', id)
+            const localVarPath = `/account/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Updates the the temporary account password for the authenticated user.
          * @param {PatchMyPasswordParams} patchMyPasswordParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1228,6 +1457,109 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @param {'userId' | 'username'} type The search criteria.
+         * @param {string} value The search value.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerSearchAccounts: async (type: 'userId' | 'username', value: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'type' is not null or undefined
+            assertParamExists('accountControllerSearchAccounts', 'type', type)
+            // verify required parameter 'value' is not null or undefined
+            assertParamExists('accountControllerSearchAccounts', 'value', value)
+            const localVarPath = `/account`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Updates an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {AccountByIdBodyParams} accountByIdBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerUpdateAccountById: async (id: string, accountByIdBodyParams: AccountByIdBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('accountControllerUpdateAccountById', 'id', id)
+            // verify required parameter 'accountByIdBodyParams' is not null or undefined
+            assertParamExists('accountControllerUpdateAccountById', 'accountByIdBodyParams', accountByIdBodyParams)
+            const localVarPath = `/account/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(accountByIdBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Updates an account for the authenticated user.
          * @param {PatchMyAccountParams} patchMyAccountParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1277,17 +1609,29 @@ export const AccountApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
-         * @param {ChangePasswordParams} changePasswordParams 
+         * @summary Deletes an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerChangePassword(id, changePasswordParams, options);
+        async accountControllerDeleteAccountById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerDeleteAccountById(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Returns an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerFindAccountById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerFindAccountById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Updates the the temporary account password for the authenticated user.
          * @param {PatchMyPasswordParams} patchMyPasswordParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1298,6 +1642,33 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @param {'userId' | 'username'} type The search criteria.
+         * @param {string} value The search value.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerSearchAccounts(type, value, skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Updates an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {AccountByIdBodyParams} accountByIdBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerUpdateAccountById(id, accountByIdBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Updates an account for the authenticated user.
          * @param {PatchMyAccountParams} patchMyAccountParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1318,16 +1689,27 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {string} id 
-         * @param {ChangePasswordParams} changePasswordParams 
+         * @summary Deletes an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): AxiosPromise<void> {
-            return localVarFp.accountControllerChangePassword(id, changePasswordParams, options).then((request) => request(axios, basePath));
+        accountControllerDeleteAccountById(id: string, options?: any): AxiosPromise<AccountResponse> {
+            return localVarFp.accountControllerDeleteAccountById(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Returns an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerFindAccountById(id: string, options?: any): AxiosPromise<AccountResponse> {
+            return localVarFp.accountControllerFindAccountById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Updates the the temporary account password for the authenticated user.
          * @param {PatchMyPasswordParams} patchMyPasswordParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1337,6 +1719,31 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @param {'userId' | 'username'} type The search criteria.
+         * @param {string} value The search value.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): AxiosPromise<AccountSearchListResponse> {
+            return localVarFp.accountControllerSearchAccounts(type, value, skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Updates an account with given id. Superhero role is REQUIRED.
+         * @param {string} id The id for the account as MongoDB id.
+         * @param {AccountByIdBodyParams} accountByIdBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): AxiosPromise<AccountResponse> {
+            return localVarFp.accountControllerUpdateAccountById(id, accountByIdBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Updates an account for the authenticated user.
          * @param {PatchMyAccountParams} patchMyAccountParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1355,16 +1762,27 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 export interface AccountApiInterface {
     /**
      * 
-     * @param {string} id 
-     * @param {ChangePasswordParams} changePasswordParams 
+     * @summary Deletes an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any): AxiosPromise<void>;
+    accountControllerDeleteAccountById(id: string, options?: any): AxiosPromise<AccountResponse>;
 
     /**
      * 
+     * @summary Returns an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerFindAccountById(id: string, options?: any): AxiosPromise<AccountResponse>;
+
+    /**
+     * 
+     * @summary Updates the the temporary account password for the authenticated user.
      * @param {PatchMyPasswordParams} patchMyPasswordParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1374,6 +1792,31 @@ export interface AccountApiInterface {
 
     /**
      * 
+     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @param {'userId' | 'username'} type The search criteria.
+     * @param {string} value The search value.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): AxiosPromise<AccountSearchListResponse>;
+
+    /**
+     * 
+     * @summary Updates an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
+     * @param {AccountByIdBodyParams} accountByIdBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): AxiosPromise<AccountResponse>;
+
+    /**
+     * 
+     * @summary Updates an account for the authenticated user.
      * @param {PatchMyAccountParams} patchMyAccountParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1392,18 +1835,31 @@ export interface AccountApiInterface {
 export class AccountApi extends BaseAPI implements AccountApiInterface {
     /**
      * 
-     * @param {string} id 
-     * @param {ChangePasswordParams} changePasswordParams 
+     * @summary Deletes an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApi
      */
-    public accountControllerChangePassword(id: string, changePasswordParams: ChangePasswordParams, options?: any) {
-        return AccountApiFp(this.configuration).accountControllerChangePassword(id, changePasswordParams, options).then((request) => request(this.axios, this.basePath));
+    public accountControllerDeleteAccountById(id: string, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerDeleteAccountById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @summary Returns an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerFindAccountById(id: string, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerFindAccountById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Updates the the temporary account password for the authenticated user.
      * @param {PatchMyPasswordParams} patchMyPasswordParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1415,6 +1871,35 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
 
     /**
      * 
+     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @param {'userId' | 'username'} type The search criteria.
+     * @param {string} value The search value.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerSearchAccounts(type, value, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Updates an account with given id. Superhero role is REQUIRED.
+     * @param {string} id The id for the account as MongoDB id.
+     * @param {AccountByIdBodyParams} accountByIdBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any) {
+        return AccountApiFp(this.configuration).accountControllerUpdateAccountById(id, accountByIdBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Updates an account for the authenticated user.
      * @param {PatchMyAccountParams} patchMyAccountParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2060,7 +2545,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Responds with all news for a user.
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2068,7 +2553,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll: async (targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        newsControllerFindAll: async (targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/news`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2199,7 +2684,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Responds with news of a given team for a user.
          * @param {string} teamId 
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2207,7 +2692,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamNewsControllerFindAllForTeam: async (teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        teamNewsControllerFindAllForTeam: async (teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('teamNewsControllerFindAllForTeam', 'teamId', teamId)
             const localVarPath = `/team/{teamId}/news`
@@ -2290,7 +2775,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Responds with all news for a user.
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2298,7 +2783,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+        async newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2326,7 +2811,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
         /**
          * Responds with news of a given team for a user.
          * @param {string} teamId 
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2334,7 +2819,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2368,7 +2853,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * Responds with all news for a user.
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2376,7 +2861,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+        newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
             return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2401,7 +2886,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         /**
          * Responds with news of a given team for a user.
          * @param {string} teamId 
-         * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2409,7 +2894,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
             return localVarFp.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -2441,7 +2926,7 @@ export interface NewsApiInterface {
 
     /**
      * Responds with all news for a user.
-     * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2450,7 +2935,7 @@ export interface NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
+    newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
      * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
@@ -2474,7 +2959,7 @@ export interface NewsApiInterface {
     /**
      * Responds with news of a given team for a user.
      * @param {string} teamId 
-     * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2483,7 +2968,7 @@ export interface NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
+    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
 }
 
@@ -2518,7 +3003,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
     /**
      * Responds with all news for a user.
-     * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2527,7 +3012,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+    public newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
         return NewsApiFp(this.configuration).newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2557,7 +3042,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
     /**
      * Responds with news of a given team for a user.
      * @param {string} teamId 
-     * @param {NewsTargetModel} [targetModel] Target model to which the news are related
+     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -2566,7 +3051,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+    public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
         return NewsApiFp(this.configuration).teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
