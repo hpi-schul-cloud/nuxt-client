@@ -101,8 +101,8 @@ export default class EnvConfigModule extends VuexModule {
 		);
 	}
 
-	get getAdminToggleStudentVisibilityEnabled() {
-		return this.env.FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED;
+	get getTeacherStudentVisibilityIsConfigurable() {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
 	get getVideoConferenceEnabled() {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;

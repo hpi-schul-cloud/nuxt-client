@@ -228,7 +228,7 @@ export default {
 		toggleStudentLernstoreViewEnabled: () =>
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
 		toggleStudentVisibilityEnabled: () =>
-			envConfigModule.getAdminToggleStudentVisibilityEnabled,
+			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		matrixMessengerIsEnabled() {
