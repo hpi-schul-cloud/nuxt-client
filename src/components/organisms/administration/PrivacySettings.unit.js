@@ -46,7 +46,7 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -63,7 +63,7 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
 				FEATURE_LERNSTORE_ENABLED: true,
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: false,
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -230,7 +230,7 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -262,7 +262,7 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -430,7 +430,6 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			authModule.addUserPermmission("SCHOOL_EDIT");
 
@@ -466,7 +465,7 @@ describe("PrivacySettings", () => {
 		});
 		it("should emit on value change for student visibility switch", async () => {
 			envConfigModule.setEnvs({
-				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
