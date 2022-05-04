@@ -24,6 +24,7 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 	};
+	scopePermissions: String[] | undefined;
 	loading: boolean = false;
 	error: null | {} = null;
 	businessError: BusinessError = {
@@ -281,9 +282,22 @@ export default class RoomModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async fetchScopePermission(courseId: string, userId: string) {
+		const ret_val = await $axios.$get(
+			`/v1/courses/${courseId}/userPermissions?userId=${userId}`
+		);
+		this.setPermissionData(Object.values(ret_val[userId]));
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
+	}
+
+	@Mutation
+	setPermissionData(payload: String[]): void {
+		this.scopePermissions = payload;
 	}
 
 	@Mutation
@@ -335,6 +349,10 @@ export default class RoomModule extends VuexModule {
 
 	get getRoomData(): BoardResponse {
 		return this.roomData;
+	}
+
+	get getPermissionData(): String[] | undefined {
+		return this.scopePermissions;
 	}
 
 	get getBusinessError() {

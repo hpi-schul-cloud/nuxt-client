@@ -209,6 +209,9 @@ export default {
 		roomData() {
 			return roomModule.getRoomData;
 		},
+		scopedPermissions() {
+			return roomModule.getPermissionData;
+		},
 		roles() {
 			return authModule.getUserRoles;
 		},
@@ -218,7 +221,7 @@ export default {
 			return undefined;
 		},
 		headlineMenuItems() {
-			if (!this.roles.includes(Roles.Teacher)) return [];
+			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
 					icon: this.icons.mdiSquareEditOutline,
@@ -260,6 +263,12 @@ export default {
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
+	},
+	async scopedPermissions() {
+		await roomModule.fetchScopePermission(
+			this.courseId,
+			authModule.getUser._id
+		);
 	},
 	methods: {
 		fabClick() {
