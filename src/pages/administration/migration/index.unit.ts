@@ -136,7 +136,7 @@ describe("User Migration / Index", () => {
 	beforeAll(() => {
 		setupStores({
 			"env-config": EnvConfigModule,
-			importUsers: ImportUsersModule,
+			"import-users": ImportUsersModule,
 			schools: SchoolsModule,
 		});
 
