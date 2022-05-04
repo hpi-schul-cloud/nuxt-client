@@ -57,7 +57,7 @@
 				</v-tabs>
 			</div>
 		</template>
-		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
+		<room-dashboard :room-data-object="roomData" :role="dashBoardRole" />
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
 		<v-custom-dialog

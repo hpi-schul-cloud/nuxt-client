@@ -181,7 +181,7 @@ export default {
 		vCustomEmptyState,
 	},
 	props: {
-		roomData: {
+		roomDataObject: {
 			type: Object,
 			required: true,
 			default: () => {},
@@ -230,6 +230,9 @@ export default {
 				title,
 				maxHeight,
 			};
+		},
+		roomData() {
+			return { ...this.roomDataObject };
 		},
 	},
 	created() {
