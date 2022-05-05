@@ -755,6 +755,45 @@ describe("room module", () => {
 				);
 			});
 		});
+
+		describe("fetchScopePermission", () => {
+			beforeEach(() => {
+				// @ts-ignore
+				authModule.setUser({ id: "testUser" });
+			});
+
+			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
+				let received: any[] = [];
+				(() => {
+					initializeAxios({
+						$get: async (path: string, params: {}) => {
+							received.push({ path });
+							received.push({ params });
+							return {
+								userId: ["testScopedPermission"],
+							};
+						},
+					} as NuxtAxiosInstance);
+				})();
+				const roomModule = new RoomModule({});
+				const fetchScopePermissionSpy = jest.spyOn(
+					roomModule,
+					"fetchScopePermission"
+				);
+				await roomModule.fetchScopePermission({
+					courseId: "courseId",
+					userId: "userId",
+				});
+
+				expect(received[0].path).toStrictEqual(
+					"/v1/courses/courseId/userPermissions?userId=userId"
+				);
+				expect(fetchScopePermissionSpy.mock.calls[0][0]).toStrictEqual({
+					courseId: "courseId",
+					userId: "userId",
+				});
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -876,6 +915,17 @@ describe("room module", () => {
 				expect(roomModule.getCourseShareToken).toStrictEqual(payload);
 			});
 		});
+
+		describe("setPermissionData", () => {
+			it("should set the permission data", () => {
+				const roomModule = new RoomModule({});
+				const expectedPermissions = ["PERMISSION_ONE", "PERMISSION_TWO"];
+
+				expect(roomModule.getPermissionData).toStrictEqual([]);
+				roomModule.setPermissionData(expectedPermissions);
+				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -935,6 +985,7 @@ describe("room module", () => {
 				expect(roomModule.getError).toStrictEqual(errorData);
 			});
 		});
+
 		describe("roomIsEmpty", () => {
 			it("should return false if there are any elements in the room", () => {
 				const roomModule = new RoomModule({});
@@ -981,6 +1032,16 @@ describe("room module", () => {
 				roomModule.setRoomData(testData as any);
 				const result = roomModule.roomIsEmpty;
 				expect(result).toStrictEqual(true);
+			});
+		});
+
+		describe("getPermissionData", () => {
+			it("should return the permission data", () => {
+				const roomModule = new RoomModule({});
+				const expectedPermissions = ["THREE", "FOUR"];
+
+				roomModule.setPermissionData(expectedPermissions);
+				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
 			});
 		});
 	});
