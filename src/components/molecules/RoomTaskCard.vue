@@ -38,7 +38,7 @@
 			></div>
 		</v-card-text>
 		<v-card-text
-			v-if="!isScheduled && !isDraft && !isFinished"
+			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
@@ -158,7 +158,7 @@ export default {
 		isFinished() {
 			return this.task.status.isFinished;
 		},
-		isScheduled() {
+		isPlanned() {
 			const scheduledDate = this.task.availableDate;
 			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
@@ -169,13 +169,13 @@ export default {
 			};
 
 			if (this.role === Roles.Teacher) {
-				if (this.isScheduled || (this.isDraft && !this.isFinished)) {
+				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishDraftCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isScheduled && !this.isDraft && !this.isFinished) {
+				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -265,7 +265,7 @@ export default {
 			if (this.isDraft) {
 				titleSuffix = this.$t("pages.courses._id.courseContentDraft");
 			} else if (dueDate) {
-				titleSuffix = this.isScheduled
+				titleSuffix = this.isPlanned
 					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
 							this.task.availableDate
 					  )}`
@@ -323,7 +323,7 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			return this.isScheduled || (this.isDraft && !this.isFinished)
+			return this.isPlanned || (this.isDraft && !this.isFinished)
 				? "task-hidden"
 				: "";
 		},
