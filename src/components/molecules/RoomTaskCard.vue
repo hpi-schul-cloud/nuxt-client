@@ -38,7 +38,7 @@
 			></div>
 		</v-card-text>
 		<v-card-text
-			v-if="!isDraft && !isFinished"
+			v-if="!isScheduled && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
