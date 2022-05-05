@@ -125,11 +125,11 @@
 					color="secondary"
 					class="spinner"
 				></v-progress-circular>
-				<tree-view
+				<course-copy-result
 					:items="courseCopyItems"
 					:open-nodes="courseCopyItemsOpenNodes"
 				>
-				</tree-view>
+				</course-copy-result>
 			</template>
 		</v-custom-dialog>
 	</default-wireframe>
@@ -154,7 +154,7 @@ import {
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
-import TreeView from "@components/molecules/Treeview";
+import CourseCopyResult from "@components/molecules/CourseCopyResult";
 
 export default {
 	components: {
@@ -164,7 +164,7 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
-		TreeView,
+		CourseCopyResult,
 	},
 	layout: "defaultVuetify",
 	data() {

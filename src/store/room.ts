@@ -54,6 +54,46 @@ const serverItems = [
 			},
 		],
 	},
+	{
+		id: 7,
+		name: "Lesson 2",
+		type: "lesson",
+		status: "done",
+		children: [
+			{
+				id: 8,
+				type: "file",
+				name: "file_5.jpg",
+				status: "done",
+			},
+			{
+				id: 9,
+				type: "file",
+				name: "file_6.jpg",
+				status: "done",
+			},
+		],
+	},
+	{
+		id: 10,
+		name: "Lesson 3",
+		type: "lesson",
+		status: "partial",
+		children: [
+			{
+				id: 11,
+				type: "file",
+				name: "file_7.jpg",
+				status: "error",
+			},
+			{
+				id: 12,
+				type: "file",
+				name: "file_8.jpg",
+				status: "done",
+			},
+		],
+	},
 ];
 
 @Module({
