@@ -1,121 +1,41 @@
 <template>
-	<v-treeview :items="items" color="primary" transition open-all> </v-treeview>
+	<v-treeview :items="items" color="primary" transition :open.sync="openNodes">
+		<template v-slot:label="{ item }">
+			<div class="treeview-item" :class="setCustomClass(item.status)">
+				{{ item.name }}
+			</div>
+		</template>
+	</v-treeview>
 </template>
 
 <script>
 export default {
-	props: {},
+	props: {
+		items: {
+			type: Array,
+			required: true,
+		},
+		openNodes: {
+			type: Array,
+			required: false,
+			default: () => [],
+		},
+	},
 	data() {
-		return {
-			items: [
-				{
-					id: 1,
-					name: "Applications :",
-					children: [
-						{ id: 2, name: "Calendar : app" },
-						{ id: 3, name: "Chrome : app" },
-						{ id: 4, name: "Webstorm : app" },
-					],
-				},
-				{
-					id: 5,
-					name: "Documents :",
-					children: [
-						{
-							id: 6,
-							name: "vuetify :",
-							children: [
-								{
-									id: 7,
-									name: "src :",
-									children: [
-										{ id: 8, name: "index : ts" },
-										{ id: 9, name: "bootstrap : ts" },
-									],
-								},
-							],
-						},
-						{
-							id: 10,
-							name: "material2 :",
-							children: [
-								{
-									id: 11,
-									name: "src :",
-									children: [
-										{ id: 12, name: "v-btn : ts" },
-										{ id: 13, name: "v-card : ts" },
-										{ id: 14, name: "v-window : ts" },
-									],
-								},
-							],
-						},
-					],
-				},
-				{
-					id: 15,
-					name: "Downloads :",
-					children: [
-						{ id: 16, name: "October : pdf" },
-						{ id: 17, name: "November : pdf" },
-						{ id: 18, name: "Tutorial : html" },
-					],
-				},
-				{
-					id: 19,
-					name: "Videos :",
-					children: [
-						{
-							id: 20,
-							name: "Tutorials :",
-							children: [
-								{ id: 21, name: "Basic layouts : mp4" },
-								{ id: 22, name: "Advanced techniques : mp4" },
-								{ id: 23, name: "All about app : dir" },
-							],
-						},
-						{ id: 24, name: "Intro : mov" },
-						{ id: 25, name: "Conference introduction : avi" },
-					],
-				},
-			],
-			serverItems: [
-				{
-					type: "lesson",
-					status: "done",
-					items: [
-						{
-							type: "file",
-							name: "file_1.jpg",
-							status: "done",
-						},
-						{
-							type: "file",
-							name: "file_2.jpg",
-							status: "done",
-						},
-					],
-				},
-				{
-					type: "lesson",
-					status: "partial",
-					items: [
-						{
-							type: "file",
-							name: "file_1.jpg",
-							status: "done",
-						},
-						{
-							type: "file",
-							name: "file_2.jpg",
-							status: "error",
-						},
-					],
-				},
-			],
-		};
+		return {};
 	},
 	computed: {},
-	methods: {},
+	methods: {
+		setCustomClass(itemStatus) {
+			return itemStatus !== "done" ? "not-finished" : "";
+		},
+	},
 };
 </script>
+<style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+@import "@variables";
+.not-finished {
+	color: var(--color-danger);
+}
+</style>

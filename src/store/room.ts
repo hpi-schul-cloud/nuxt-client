@@ -12,6 +12,50 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
+const serverItems = [
+	{
+		id: 1,
+		type: "lesson",
+		name: "Lesson 1",
+		status: "done",
+		children: [
+			{
+				id: 2,
+
+				type: "file",
+				name: "file_1.jpg",
+				status: "done",
+			},
+			{
+				id: 3,
+				type: "file",
+				name: "file_2.jpg",
+				status: "done",
+			},
+		],
+	},
+	{
+		id: 4,
+		name: "Task 2",
+		type: "task",
+		status: "partial",
+		children: [
+			{
+				id: 5,
+				type: "file",
+				name: "file_1.jpg",
+				status: "done",
+			},
+			{
+				id: 6,
+				type: "file",
+				name: "file_2.jpg",
+				status: "error",
+			},
+		],
+	},
+];
+
 @Module({
 	name: "room",
 	namespaced: true,
@@ -39,6 +83,7 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
+	private courseCopyResult: Array<any> = [];
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -281,6 +326,20 @@ export default class RoomModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async triggerCopyCourse(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			Promise.resolve(this.setCourseCopyResult(serverItems));
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -325,6 +384,18 @@ export default class RoomModule extends VuexModule {
 		this.courseShareToken = payload;
 	}
 
+	@Mutation
+	setCourseCopyResult(payload: any): void {
+		const copyResult = [];
+		copyResult.push({
+			id: this.roomData.roomId,
+			name: this.roomData.title,
+			status: "done",
+			children: payload,
+		});
+		this.courseCopyResult = copyResult;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -355,6 +426,10 @@ export default class RoomModule extends VuexModule {
 
 	get roomIsEmpty(): boolean {
 		return this.finishedLoading && this.roomData.elements.length === 0;
+	}
+
+	get getCourseCopyResult(): Array<any> {
+		return this.courseCopyResult;
 	}
 
 	private get finishedLoading(): boolean {

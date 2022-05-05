@@ -32,6 +32,15 @@
 						:data-testid="`room-${roomData.roomId}-files`"
 						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
+					<v-btn
+						color="secondary"
+						class="back-button"
+						outlined
+						small
+						@click="testComponentDialog.isOpen = true"
+					>
+						Open Copy Result
+					</v-btn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -107,8 +116,9 @@
 				<h4>Test Component</h4>
 			</div>
 			<template slot="content" style="position: relative">
-				<v-divider class="mb-4"></v-divider
-				><v-progress-circular
+				<v-divider class="mb-4"></v-divider>
+				<v-progress-circular
+					v-if="testComponentDialog.loading"
 					indeterminate
 					size="72"
 					width="6"
@@ -121,7 +131,11 @@
 						margin-left: auto;
 					"
 				></v-progress-circular>
-				<tree-view> </tree-view>
+				<tree-view
+					:items="courseCopyItems"
+					:open-nodes="courseCopyItemsOpenNodes"
+				>
+				</tree-view>
 			</template>
 		</v-custom-dialog>
 	</default-wireframe>
@@ -191,7 +205,7 @@ export default {
 			tab: null,
 			testComponentDialog: {
 				isOpen: true,
-				loading: true,
+				loading: false,
 			},
 		};
 	},
@@ -290,10 +304,26 @@ export default {
 			}
 			return items;
 		},
+		courseCopyItems() {
+			return roomModule.getCourseCopyResult;
+		},
+		courseCopyItemsOpenNodes() {
+			const items = [this.courseId];
+
+			roomModule.getCourseCopyResult[0].children.forEach((item) => {
+				item.children.forEach((child) => {
+					if (child.status !== "done") items.push(item.id);
+				});
+			});
+
+			return items;
+		},
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
+		await roomModule.triggerCopyCourse(this.courseId);
 	},
+
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
