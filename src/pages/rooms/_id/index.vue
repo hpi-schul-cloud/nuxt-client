@@ -268,9 +268,6 @@ export default {
 			userId: authModule.getUser.id,
 		});
 	},
-	// async scopedPermissions() {
-
-	// },
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;

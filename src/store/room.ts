@@ -24,7 +24,7 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 	};
-	scopePermissions: String[] | undefined;
+	scopePermissions: String[] = [];
 	loading: boolean = false;
 	error: null | {} = null;
 	businessError: BusinessError = {
@@ -351,7 +351,7 @@ export default class RoomModule extends VuexModule {
 		return this.roomData;
 	}
 
-	get getPermissionData(): String[] | undefined {
+	get getPermissionData(): String[] {
 		return this.scopePermissions;
 	}
 
