@@ -210,7 +210,7 @@ export default {
 			return roomModule.getRoomData;
 		},
 		scopedPermissions() {
-			return roomModule.getPermissionData;
+			return roomModule.getPermissionData || [];
 		},
 		roles() {
 			return authModule.getUserRoles;
@@ -263,13 +263,14 @@ export default {
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
+		await roomModule.fetchScopePermission({
+			courseId: this.courseId,
+			userId: authModule.getUser.id,
+		});
 	},
-	async scopedPermissions() {
-		await roomModule.fetchScopePermission(
-			this.courseId,
-			authModule.getUser._id
-		);
-	},
+	// async scopedPermissions() {
+
+	// },
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
