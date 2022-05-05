@@ -255,26 +255,28 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
-			const taskSubtitle = `${this.$t("common.words.task")}`;
-
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
+
+			const titlePrefix = `${this.$t("common.words.task")}`;
+			let titleSuffix = "";
+
 			if (this.isDraft) {
-				return `${taskSubtitle} – ${this.$t(
-					"pages.courses._id.courseContentDraft"
-				)}`;
-			}
-			if (dueDate) {
-				return this.isScheduled
-					? `${taskSubtitle} – geplant für ${printDateFromStringUTC(
+				titleSuffix = this.$t("pages.courses._id.courseContentDraft");
+			} else if (dueDate) {
+				titleSuffix = this.isScheduled
+					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
 							this.task.availableDate
-					  )} `
-					: `${taskSubtitle} – ${this.$t(
+					  )}`
+					: `${this.$t(
 							"pages.room.taskCard.label.due"
 					  )} ${printDateFromStringUTC(dueDate)}`;
+			} else {
+				titleSuffix = this.$t("pages.room.taskCard.label.noDueDate");
 			}
-			return taskSubtitle;
+
+			return `${titlePrefix} - ${titleSuffix}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
