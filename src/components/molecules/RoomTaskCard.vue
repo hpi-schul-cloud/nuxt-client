@@ -158,6 +158,10 @@ export default {
 		isFinished() {
 			return this.task.status.isFinished;
 		},
+		isScheduled() {
+			const scheduledDate = this.task.availableDate;
+			return scheduledDate && new Date(scheduledDate) > new Date();
+		},
 		cardActions() {
 			const roleBasedActions = {
 				[Roles.Teacher]: [],
@@ -165,13 +169,13 @@ export default {
 			};
 
 			if (this.role === Roles.Teacher) {
-				if (this.isDraft && !this.isFinished) {
+				if (this.isScheduled || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishDraftCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isDraft && !this.isFinished) {
+				if (!this.isScheduled && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -251,16 +255,26 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
+			const taskSubtitle = `${this.$t("common.words.task")}`;
+
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
-			const dueTitle = !dueDate
-				? this.$t("pages.room.taskCard.label.noDueDate")
-				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
-						dueDate
-				  )}`;
-
-			return `${this.$t("common.words.task")} – ${dueTitle}`;
+			if (this.isDraft) {
+				return `${taskSubtitle} – ${this.$t(
+					"pages.courses._id.courseContentDraft"
+				)}`;
+			}
+			if (dueDate) {
+				return this.isScheduled
+					? `${taskSubtitle} – geplant für ${printDateFromStringUTC(
+							this.task.availableDate
+					  )} `
+					: `${taskSubtitle} – ${this.$t(
+							"pages.room.taskCard.label.due"
+					  )} ${printDateFromStringUTC(dueDate)}`;
+			}
+			return taskSubtitle;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
@@ -307,7 +321,9 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			return this.isDraft && !this.isFinished ? "task-draft" : "";
+			return this.isScheduled || (this.isDraft && !this.isFinished)
+				? "task-hidden"
+				: "";
 		},
 	},
 };
@@ -365,7 +381,7 @@ export default {
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
-.task-draft {
+.task-hidden {
 	box-shadow: none;
 	.task-name,
 	.text-description,
