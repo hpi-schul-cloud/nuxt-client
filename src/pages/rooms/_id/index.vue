@@ -97,6 +97,33 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
+		<!-- //// Test treeview component//// -->
+		<v-custom-dialog
+			v-model="testComponentDialog.isOpen"
+			:size="640"
+			@dialog-closed="closeDialog"
+		>
+			<div slot="title" class="dialog-header">
+				<h4>Test Component</h4>
+			</div>
+			<template slot="content" style="position: relative">
+				<v-divider class="mb-4"></v-divider
+				><v-progress-circular
+					indeterminate
+					size="72"
+					width="6"
+					color="secondary"
+					style="
+						position: absolute;
+						right: 0;
+						left: 0;
+						margin-right: auto;
+						margin-left: auto;
+					"
+				></v-progress-circular>
+				<tree-view> </tree-view>
+			</template>
+		</v-custom-dialog>
 	</default-wireframe>
 </template>
 
@@ -119,6 +146,7 @@ import {
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
+import TreeView from "@components/molecules/Treeview";
 
 export default {
 	components: {
@@ -128,6 +156,7 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
+		TreeView,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -160,6 +189,10 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
+			testComponentDialog: {
+				isOpen: true,
+				loading: true,
+			},
 		};
 	},
 	computed: {
