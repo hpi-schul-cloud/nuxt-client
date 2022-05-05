@@ -755,6 +755,10 @@ describe("room module", () => {
 				);
 			});
 		});
+
+		describe("triggerCopyCourse", () => {
+			// TODO: add 'action' tests after backend implementationå
+		});
 	});
 
 	describe("mutations", () => {
@@ -874,6 +878,70 @@ describe("room module", () => {
 
 				roomModule.setCourseShareToken(payload);
 				expect(roomModule.getCourseShareToken).toStrictEqual(payload);
+			});
+		});
+
+		describe("setCourseCopyResult", () => {
+			it("should set the state", () => {
+				const serverItems = [
+					{
+						id: 1,
+						type: "lesson",
+						name: "Lesson 1",
+						status: "done",
+						children: [
+							{
+								id: 2,
+
+								type: "file",
+								name: "file_1.jpg",
+								status: "done",
+							},
+							{
+								id: 3,
+								type: "file",
+								name: "file_2.jpg",
+								status: "done",
+							},
+						],
+					},
+					{
+						id: 4,
+						name: "Task 2",
+						type: "task",
+						status: "partial",
+						children: [
+							{
+								id: 5,
+								type: "file",
+								name: "file_3.jpg",
+								status: "done",
+							},
+							{
+								id: 6,
+								type: "file",
+								name: "file_4.jpg",
+								status: "error",
+							},
+						],
+					},
+				];
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "12345",
+					title: "Copy Test Course",
+					displayColor: "",
+					elements: [],
+				});
+
+				roomModule.setCourseCopyResult(serverItems);
+				expect(roomModule.getCourseCopyResult[0].children).toStrictEqual(
+					serverItems
+				);
+				expect(roomModule.getCourseCopyResult[0].id).toStrictEqual("12345");
+				expect(roomModule.getCourseCopyResult[0].name).toStrictEqual(
+					"Copy Test Course"
+				);
 			});
 		});
 	});

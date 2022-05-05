@@ -115,7 +115,7 @@
 			<div slot="title" class="dialog-header">
 				<h4>Test Component</h4>
 			</div>
-			<template slot="content" style="position: relative">
+			<template slot="content">
 				<v-divider class="mb-4"></v-divider>
 				<v-progress-circular
 					v-if="testComponentDialog.loading"
@@ -123,13 +123,7 @@
 					size="72"
 					width="6"
 					color="secondary"
-					style="
-						position: absolute;
-						right: 0;
-						left: 0;
-						margin-right: auto;
-						margin-left: auto;
-					"
+					class="spinner"
 				></v-progress-circular>
 				<tree-view
 					:items="courseCopyItems"
@@ -308,8 +302,9 @@ export default {
 			return roomModule.getCourseCopyResult;
 		},
 		courseCopyItemsOpenNodes() {
-			const items = [this.courseId];
+			if (!roomModule.getCourseCopyResult[0]) return [];
 
+			const items = [this.courseId];
 			roomModule.getCourseCopyResult[0].children.forEach((item) => {
 				item.children.forEach((child) => {
 					if (child.status !== "done") items.push(item.id);
@@ -409,5 +404,12 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+.spinner {
+	position: absolute;
+	right: 0;
+	left: 0;
+	margin-right: auto;
+	margin-left: auto;
 }
 </style>

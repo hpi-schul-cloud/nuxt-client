@@ -43,13 +43,13 @@ const serverItems = [
 			{
 				id: 5,
 				type: "file",
-				name: "file_1.jpg",
+				name: "file_3.jpg",
 				status: "done",
 			},
 			{
 				id: 6,
 				type: "file",
-				name: "file_2.jpg",
+				name: "file_4.jpg",
 				status: "error",
 			},
 		],
@@ -386,14 +386,14 @@ export default class RoomModule extends VuexModule {
 
 	@Mutation
 	setCourseCopyResult(payload: any): void {
-		const copyResult = [];
-		copyResult.push({
-			id: this.roomData.roomId,
-			name: this.roomData.title,
-			status: "done",
-			children: payload,
-		});
-		this.courseCopyResult = copyResult;
+		this.courseCopyResult = [
+			{
+				id: this.roomData.roomId,
+				name: this.roomData.title,
+				status: "done",
+				children: payload,
+			},
+		];
 	}
 
 	get getLoading(): boolean {
