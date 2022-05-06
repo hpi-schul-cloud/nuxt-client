@@ -105,12 +105,6 @@ export const routes = [
 		component: () => interopDefault(import("../pages/LoginInstances.page.vue")),
 		name: "login-instances",
 	},
-	// TODO - route & everything relating to it can be deleted
-	{
-		path: `/mint-ec/:article?(${REGEX_ID})`,
-		component: () => interopDefault(import("../pages/mint-ec/_article.vue")),
-		name: "mint-ec-article",
-	},
 	{
 		path: "/news",
 		component: () => interopDefault(import("../pages/NewsOverview.page.vue")),
