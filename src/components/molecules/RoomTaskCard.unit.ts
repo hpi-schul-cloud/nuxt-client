@@ -108,6 +108,59 @@ const overdueTestProps = {
 	dragInProgress: false,
 };
 
+const noDueTestProps = {
+	room: {
+		roomId: "456",
+	},
+	task: {
+		id: "123",
+		name: "Test Name",
+		createdAt: "2017-09-28T11:58:46.601Z",
+		updatedAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: false,
+			isFinished: false,
+			isSubstitutionTeacher: false,
+		},
+		courseName: "Mathe",
+		availableDate: "2017-09-28T08:00:00.000Z",
+		duedate: null,
+		displayColor: "#54616e",
+		description: "some description here",
+	},
+	ariaLabel:
+		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
+	dragInProgress: false,
+};
+
+const plannedTestProps = {
+	room: {
+		roomId: "456",
+	},
+	task: {
+		id: "123",
+		name: "Test Name",
+		createdAt: "2017-09-28T11:58:46.601Z",
+		updatedAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			isDraft: false,
+		},
+		courseName: "Mathe",
+		availableDate: "2300-09-01T08:00:00.000Z",
+		duedate: "2300-09-28T15:00:00.000Z",
+		displayColor: "#54616e",
+		description: "some description here",
+	},
+	ariaLabel:
+		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
+	dragInProgress: false,
+};
+
 const studentFinishedTestProps = {
 	task: {
 		id: "123",
@@ -194,11 +247,32 @@ describe("@components/molecules/RoomTaskCard", () => {
 			expect(location.pathname).toStrictEqual("");
 		});
 
-		it("should have correct combined title", () => {
+		it("should have correct combined title for published task with due date ", () => {
 			const wrapper = getWrapper({ ...testProps, role });
 			const title = wrapper.find(".title-section");
 
 			expect(title.element.textContent).toContain("Aufgabe – Abgabe 28.09.00");
+		});
+
+		it("should have correct combined title for published task with no due date ", () => {
+			const wrapper = getWrapper({ ...noDueTestProps, role });
+			const title = wrapper.find(".title-section");
+
+			expect(title.element.textContent).toContain("Aufgabe – Kein Abgabedatum");
+		});
+
+		it("should have correct combined title for planned task", () => {
+			const wrapper = getWrapper({ ...plannedTestProps, role });
+			const title = wrapper.find(".title-section");
+
+			expect(title.element.textContent).toContain("Aufgabe – Geplant 01.09.00");
+		});
+
+		it("should have correct combined title for draft", () => {
+			const wrapper = getWrapper({ ...draftTestProps, role });
+			const title = wrapper.find(".title-section");
+
+			expect(title.element.textContent).toContain("Aufgabe – Entwurf");
 		});
 
 		it("should show or hide description area", async () => {
@@ -215,10 +289,14 @@ describe("@components/molecules/RoomTaskCard", () => {
 			);
 		});
 
-		it("should use draft UI only for unfinished task draft cards", async () => {
+		it("should use hidden UI only for unfinished task draft cards and task planned cards", async () => {
 			const taskDraftWrapper = getWrapper({ ...draftTestProps, role });
 			const taskDraftCard = taskDraftWrapper.find(".task-card");
 			expect(taskDraftCard.element.className).toContain("task-hidden");
+
+			const plannedTaskWrapper = getWrapper({ ...plannedTestProps, role });
+			const plannedCard = plannedTaskWrapper.find(".task-card");
+			expect(plannedCard.element.className).toContain("task-hidden");
 
 			const regularTaskWrapper = getWrapper({ ...testProps, role });
 			const taskCard = regularTaskWrapper.find(".task-card");
@@ -229,7 +307,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
-			it("should not have submitted and graded section if task is a draft or finished", () => {
+			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
 				const draftWrapper = getWrapper({ ...draftTestProps, role });
 				const draftSubmitSection = draftWrapper.findAll(".chip-value");
 
@@ -239,6 +317,11 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const finsihedSubmitSection = finishedWrapper.findAll(".chip-value");
 
 				expect(finsihedSubmitSection).toHaveLength(0);
+
+				const plannedWrapper = getWrapper({ ...plannedTestProps, role });
+				const plannedSubmitSection = plannedWrapper.findAll(".chip-value");
+
+				expect(plannedSubmitSection).toHaveLength(0);
 			});
 
 			it("should have submitted and graded section if task is not a draft and not finished", () => {
@@ -262,6 +345,16 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 			it("should have one 'post' action button if task is a draft", () => {
 				const wrapper = getWrapper({ ...draftTestProps, role });
+				const actionButtons = wrapper.findAll(".action-button");
+
+				expect(actionButtons).toHaveLength(1);
+				expect(actionButtons.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.label.post")
+				);
+			});
+
+			it("should have one 'post' action button if task is planned", () => {
+				const wrapper = getWrapper({ ...plannedTestProps, role });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
@@ -365,9 +458,23 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(emitted).toHaveLength(1);
 			});
 
-			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked", async () => {
+			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked on a draft", async () => {
 				const publishDraftCardMock = jest.fn();
 				const wrapper = getWrapper({ ...draftTestProps, role });
+				wrapper.vm.publishDraftCard = publishDraftCardMock;
+				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
+					"pages.room.taskCard.label.post"
+				)}`;
+
+				const actionButton = wrapper.find(buttonClassName);
+				await actionButton.trigger("click");
+
+				expect(publishDraftCardMock).toHaveBeenCalled();
+			});
+
+			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked on a planned task", async () => {
+				const publishDraftCardMock = jest.fn();
+				const wrapper = getWrapper({ ...plannedTestProps, role });
 				wrapper.vm.publishDraftCard = publishDraftCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
 					"pages.room.taskCard.label.post"
