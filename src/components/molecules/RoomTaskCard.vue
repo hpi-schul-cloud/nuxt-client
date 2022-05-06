@@ -259,7 +259,7 @@ export default {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
 
-			const titlePrefix = `${this.$t("common.words.task")}`;
+			const titlePrefix = this.$t("common.words.task");
 			let titleSuffix = "";
 
 			if (this.isDraft) {
@@ -276,7 +276,7 @@ export default {
 				titleSuffix = this.$t("pages.room.taskCard.label.noDueDate");
 			}
 
-			return `${titlePrefix} - ${titleSuffix}`;
+			return `${titlePrefix} – ${titleSuffix}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
