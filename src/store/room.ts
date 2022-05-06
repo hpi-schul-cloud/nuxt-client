@@ -283,11 +283,14 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async fetchScopePermission(payload: object | any): Promise<void> {
+	async fetchScopePermission(payload: {
+		courseId: string;
+		userId: string;
+	}): Promise<void> {
 		const ret_val = await $axios.$get(
 			`/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`
 		);
-		this.setPermissionData(Object.values(ret_val[payload.userId]));
+		this.setPermissionData(ret_val[payload.userId]);
 	}
 
 	@Mutation
