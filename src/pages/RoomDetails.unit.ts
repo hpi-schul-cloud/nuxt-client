@@ -82,6 +82,15 @@ const mockAuthStoreDataTeacher = {
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
+const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
+
+const mockPermissionsCourseSubstitutionTeacher = [
+	"HOMEWORK_CREATE",
+	"HOMEWORK_EDIT",
+];
+
+const mockPermissionsStudent = ["BASE_VIEW"];
+
 const $route = {
 	params: {
 		id: "123",
@@ -108,6 +117,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			room: RoomModule,
 		});
 		roomModule.setRoomData(mockData as any);
+		roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		authModule.setUser(mockAuthStoreDataTeacher as User);
 	});
 
@@ -130,6 +140,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 	it("should not show FAB if user does not have permission to create courses", () => {
 		authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		roomModule.setPermissionData(mockPermissionsStudent);
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(false);
@@ -191,11 +202,12 @@ describe("@pages/rooms/_id/index.vue", () => {
 	describe("headline menus", () => {
 		beforeEach(() => {
 			authModule.setUser(mockAuthStoreDataTeacher as User);
+			roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		});
 		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
 			return menuItems.some((item: object | any) => item.name === itemName);
 		};
-		it("should have the menu button for teachers", () => {
+		it("should have the menu button for course teachers", () => {
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
 
@@ -204,6 +216,15 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should not have the menu button for students", () => {
 			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			roomModule.setPermissionData(mockPermissionsStudent);
+			const wrapper = getWrapper();
+			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
+			expect(menuButton).toHaveLength(0);
+		});
+
+		it("should not have the menu button for substitution course teachers", () => {
+			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
 			expect(menuButton).toHaveLength(0);
