@@ -73,10 +73,10 @@ export default {
 	color: var(--color-danger);
 }
 .finished {
-	color: var(--color-success-dark);
+	color: var(--color-success);
 }
 .partial {
-	color: var(--color-accent-dark);
+	color: var(--color-accent);
 }
 .spinner {
 	position: absolute;
