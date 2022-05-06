@@ -207,7 +207,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
 			return menuItems.some((item: object | any) => item.name === itemName);
 		};
-		it("should have the menu button for teachers", () => {
+		it("should have the menu button for course teachers", () => {
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
 
@@ -217,6 +217,14 @@ describe("@pages/rooms/_id/index.vue", () => {
 		it("should not have the menu button for students", () => {
 			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			roomModule.setPermissionData(mockPermissionsStudent);
+			const wrapper = getWrapper();
+			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
+			expect(menuButton).toHaveLength(0);
+		});
+
+		it("should not have the menu button for substitution course teachers", () => {
+			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
 			expect(menuButton).toHaveLength(0);
