@@ -57,7 +57,7 @@
 				</v-tabs>
 			</div>
 		</template>
-		<room-dashboard :room-data="roomData" :role="dashBoardRole" />
+		<room-dashboard :room-data-object="roomData" :role="dashBoardRole" />
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
 		<v-custom-dialog
@@ -209,6 +209,9 @@ export default {
 		roomData() {
 			return roomModule.getRoomData;
 		},
+		scopedPermissions() {
+			return roomModule.getPermissionData || [];
+		},
 		roles() {
 			return authModule.getUserRoles;
 		},
@@ -218,7 +221,7 @@ export default {
 			return undefined;
 		},
 		headlineMenuItems() {
-			if (!this.roles.includes(Roles.Teacher)) return [];
+			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
 					icon: this.icons.mdiSquareEditOutline,
@@ -260,6 +263,10 @@ export default {
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
+		await roomModule.fetchScopePermission({
+			courseId: this.courseId,
+			userId: authModule.getUser.id,
+		});
 	},
 	methods: {
 		fabClick() {
