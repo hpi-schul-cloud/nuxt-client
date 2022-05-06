@@ -14,20 +14,19 @@ import { SharedLessonObject } from "./types/room";
 
 const serverItems = [
 	{
-		id: 1,
+		id: "1",
 		type: "lesson",
 		name: "Lesson 1",
 		status: "done",
 		children: [
 			{
-				id: 2,
-
+				id: "2",
 				type: "file",
 				name: "file_1.jpg",
 				status: "done",
 			},
 			{
-				id: 3,
+				id: "3",
 				type: "file",
 				name: "file_2.jpg",
 				status: "done",
@@ -35,19 +34,19 @@ const serverItems = [
 		],
 	},
 	{
-		id: 4,
+		id: "4",
 		name: "Task 2",
 		type: "task",
 		status: "partial",
 		children: [
 			{
-				id: 5,
+				id: "5",
 				type: "file",
 				name: "file_3.jpg",
 				status: "done",
 			},
 			{
-				id: 6,
+				id: "6",
 				type: "file",
 				name: "file_4.jpg",
 				status: "error",
@@ -55,19 +54,19 @@ const serverItems = [
 		],
 	},
 	{
-		id: 7,
+		id: "7",
 		name: "Lesson 2",
 		type: "lesson",
 		status: "done",
 		children: [
 			{
-				id: 8,
+				id: "8",
 				type: "file",
 				name: "file_5.jpg",
 				status: "done",
 			},
 			{
-				id: 9,
+				id: "9",
 				type: "file",
 				name: "file_6.jpg",
 				status: "done",
@@ -75,19 +74,19 @@ const serverItems = [
 		],
 	},
 	{
-		id: 10,
+		id: "10",
 		name: "Lesson 3",
 		type: "lesson",
 		status: "partial",
 		children: [
 			{
-				id: 11,
+				id: "11",
 				type: "file",
 				name: "file_7.jpg",
 				status: "error",
 			},
 			{
-				id: 12,
+				id: "12",
 				type: "file",
 				name: "file_8.jpg",
 				status: "done",
@@ -426,11 +425,14 @@ export default class RoomModule extends VuexModule {
 
 	@Mutation
 	setCourseCopyResult(payload: any): void {
+		const courseResult = payload.every((item: any) => {
+			return item.status === "done";
+		});
 		this.courseCopyResult = [
 			{
 				id: this.roomData.roomId,
 				name: this.roomData.title,
-				status: "done",
+				status: courseResult ? "done" : "partial",
 				children: payload,
 			},
 		];

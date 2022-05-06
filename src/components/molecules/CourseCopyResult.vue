@@ -10,7 +10,7 @@
 		></v-progress-circular>
 		<v-treeview :items="items" color="primary" transition :open="openNodes">
 			<template v-slot:label="{ item }">
-				<div class="treeview-item" :class="setCustomClass(item.status)">
+				<div class="treeview-item">
 					<v-icon :class="setCustomClass(item.status)">
 						{{ setIcons(item.status) }}
 					</v-icon>
