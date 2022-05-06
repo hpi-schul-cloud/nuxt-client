@@ -458,10 +458,10 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(emitted).toHaveLength(1);
 			});
 
-			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked on a draft", async () => {
-				const publishDraftCardMock = jest.fn();
+			it("should trigger the 'publishCard' method when 'Post' button is clicked on a draft", async () => {
+				const publishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...draftTestProps, role });
-				wrapper.vm.publishDraftCard = publishDraftCardMock;
+				wrapper.vm.publishCard = publishCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
 					"pages.room.taskCard.label.post"
 				)}`;
@@ -469,13 +469,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const actionButton = wrapper.find(buttonClassName);
 				await actionButton.trigger("click");
 
-				expect(publishDraftCardMock).toHaveBeenCalled();
+				expect(publishCardMock).toHaveBeenCalled();
 			});
 
-			it("should trigger the 'publishDraftCard' method when 'Post' button is clicked on a planned task", async () => {
-				const publishDraftCardMock = jest.fn();
+			it("should trigger the 'publishCard' method when 'Post' button is clicked on a planned task", async () => {
+				const publishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...plannedTestProps, role });
-				wrapper.vm.publishDraftCard = publishDraftCardMock;
+				wrapper.vm.publishCard = publishCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
 					"pages.room.taskCard.label.post"
 				)}`;
@@ -483,7 +483,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const actionButton = wrapper.find(buttonClassName);
 				await actionButton.trigger("click");
 
-				expect(publishDraftCardMock).toHaveBeenCalled();
+				expect(publishCardMock).toHaveBeenCalled();
 			});
 
 			it("should trigger the 'finishCard' method when 'Finish' button is clicked", async () => {

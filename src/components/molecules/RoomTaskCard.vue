@@ -171,7 +171,7 @@ export default {
 			if (this.role === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
-						action: () => this.publishDraftCard(),
+						action: () => this.publishCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
@@ -286,7 +286,7 @@ export default {
 		redirectAction(value) {
 			window.location = value;
 		},
-		publishDraftCard() {
+		publishCard() {
 			this.$emit("post-task");
 		},
 		revertPublishedCard() {
