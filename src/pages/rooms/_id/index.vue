@@ -117,17 +117,10 @@
 			</div>
 			<template slot="content">
 				<v-divider class="mb-4"></v-divider>
-				<v-progress-circular
-					v-if="testComponentDialog.loading"
-					indeterminate
-					size="72"
-					width="6"
-					color="secondary"
-					class="spinner"
-				></v-progress-circular>
 				<course-copy-result
 					:items="courseCopyItems"
 					:open-nodes="courseCopyItemsOpenNodes"
+					:show-spinner="testComponentDialog.loading"
 				>
 				</course-copy-result>
 			</template>
@@ -404,12 +397,5 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
-}
-.spinner {
-	position: absolute;
-	right: 0;
-	left: 0;
-	margin-right: auto;
-	margin-left: auto;
 }
 </style>
