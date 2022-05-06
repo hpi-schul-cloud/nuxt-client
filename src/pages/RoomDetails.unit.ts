@@ -1,7 +1,7 @@
 import { authModule, envConfigModule, roomModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import Room from "./index.vue";
+import Room from "./RoomDetails.page.vue";
 import { User } from "@/store/types/auth";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -160,14 +160,18 @@ describe("@pages/rooms/_id/index.vue", () => {
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		const newTaskAction = fabComponent.vm.actions[0];
-		expect(newTaskAction.href).toStrictEqual("/homework/new?course=123&returnUrl=rooms/123");
+		expect(newTaskAction.href).toStrictEqual(
+			"/homework/new?course=123&returnUrl=rooms/123"
+		);
 	});
 
 	it("'add lesson' button should have correct path", async () => {
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
 		const newTaskAction = fabComponent.vm.actions[1];
-		expect(newTaskAction.href).toStrictEqual("/courses/123/topics/add?returnUrl=rooms/123");
+		expect(newTaskAction.href).toStrictEqual(
+			"/courses/123/topics/add?returnUrl=rooms/123"
+		);
 	});
 
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
@@ -212,27 +216,20 @@ describe("@pages/rooms/_id/index.vue", () => {
 			expect(menuItems).toHaveLength(2);
 			expect(
 				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.edit") + "/" + wrapper.vm.$i18n.t("common.actions.remove"),
+					wrapper.vm.$i18n.t("common.actions.edit") +
+						"/" +
+						wrapper.vm.$i18n.t("common.actions.remove"),
 					menuItems
 				)
 			).toBe(true);
 			expect(
-				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.invite"),
-					menuItems
-				)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.invite"), menuItems)
 			).toBe(true);
 			expect(
-				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.duplicate"),
-					menuItems
-				)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.duplicate"), menuItems)
 			).toBe(false);
 			expect(
-				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.share"),
-					menuItems
-				)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.share"), menuItems)
 			).toBe(false);
 		});
 
@@ -243,10 +240,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const menuItems = wrapper.vm.headlineMenuItems;
 
 			expect(
-				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.share"),
-					menuItems
-				)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.share"), menuItems)
 			).toBe(true);
 		});
 
@@ -257,10 +251,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const menuItems = wrapper.vm.headlineMenuItems;
 
 			expect(
-				findMenuItems(
-					wrapper.vm.$i18n.t("common.actions.duplicate"),
-					menuItems
-				)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.duplicate"), menuItems)
 			).toBe(true);
 		});
 
