@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mdiCheck, mdiMinus, mdiClose } from "@mdi/js";
+import { mdiCheckCircle, mdiAlert, mdiAlertCircle } from "@mdi/js";
 export default {
 	props: {
 		items: {
@@ -41,9 +41,9 @@ export default {
 	data() {
 		return {
 			icons: {
-				mdiCheck,
-				mdiMinus,
-				mdiClose,
+				mdiCheckCircle,
+				mdiAlert,
+				mdiAlertCircle,
 			},
 		};
 	},
@@ -57,9 +57,9 @@ export default {
 		},
 		setIcons(itemStatus) {
 			let icon = null;
-			if (itemStatus === "done") icon = this.icons.mdiCheck;
-			if (itemStatus === "error") icon = this.icons.mdiClose;
-			if (itemStatus === "partial") icon = this.icons.mdiMinus;
+			if (itemStatus === "done") icon = this.icons.mdiCheckCircle;
+			if (itemStatus === "error") icon = this.icons.mdiAlertCircle;
+			if (itemStatus === "partial") icon = this.icons.mdiAlert;
 
 			return icon;
 		},
@@ -73,10 +73,10 @@ export default {
 	color: var(--color-danger);
 }
 .finished {
-	color: var(--color-success-dark);
+	color: var(--color-success);
 }
 .partial {
-	color: var(--color-accent-dark);
+	color: var(--color-accent);
 }
 .spinner {
 	position: absolute;
