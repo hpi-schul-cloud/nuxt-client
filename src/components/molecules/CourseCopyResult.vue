@@ -8,10 +8,16 @@
 			color="secondary"
 			class="spinner"
 		></v-progress-circular>
-		<v-treeview :items="items" color="primary" transition :open="openedNodes">
+		<v-treeview
+			:expand-icon="icons.mdiChevronDown"
+			:items="items"
+			color="primary"
+			transition
+			:open="expandedNodes"
+		>
 			<template v-slot:label="{ item }">
 				<div class="treeview-item">
-					<v-icon :class="setCustomClass(item.status)">
+					<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
 						{{ setIcons(item.status) }}
 					</v-icon>
 					{{ item.name }}
@@ -22,7 +28,12 @@
 </template>
 
 <script>
-import { mdiCheckCircle, mdiAlert, mdiAlertCircle } from "@mdi/js";
+import {
+	mdiCheckCircle,
+	mdiAlert,
+	mdiAlertCircle,
+	mdiChevronDown,
+} from "@mdi/js";
 export default {
 	props: {
 		items: {
@@ -40,35 +51,31 @@ export default {
 				mdiCheckCircle,
 				mdiAlert,
 				mdiAlertCircle,
+				mdiChevronDown,
 			},
-			openedNodes: [],
+			expandedNodes: [],
 		};
 	},
 	created() {
-		this.searchOpenNodes(this.items);
+		this.searchExpandedNodes(this.items);
 	},
 	methods: {
 		setCustomClass(itemStatus) {
-			let status = null;
-			if (itemStatus === "done") status = "finished";
-			if (itemStatus === "error") status = "not-finished";
-			if (itemStatus === "partial") status = "partial";
-			return status;
+			if (itemStatus === "done") return "finished";
+			if (itemStatus === "error") return "not-finished";
+			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(itemStatus) {
-			let icon = null;
-			if (itemStatus === "done") icon = this.icons.mdiCheckCircle;
-			if (itemStatus === "error") icon = this.icons.mdiAlertCircle;
-			if (itemStatus === "partial") icon = this.icons.mdiAlert;
-
-			return icon;
+			if (itemStatus === "done") return this.icons.mdiCheckCircle;
+			if (itemStatus === "error") return this.icons.mdiAlertCircle;
+			if (itemStatus === "partial") return this.icons.mdiAlert;
 		},
-		searchOpenNodes(items) {
+		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
 				if (item.children && item.status !== "done")
-					this.openedNodes.push(item.id);
-				if (item.children) this.searchOpenNodes(item.children);
+					this.expandedNodes.push(item.id);
+				if (item.children) this.searchExpandedNodes(item.children);
 			});
 		},
 	},

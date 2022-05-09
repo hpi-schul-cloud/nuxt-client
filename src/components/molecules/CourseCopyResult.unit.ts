@@ -97,7 +97,18 @@ describe("@components/molecules/CourseCopyResult", () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
 
-		const expectedOpenedNodes = ["courseId", "4", "10"];
-		expect(wrapper.vm.openedNodes).toStrictEqual(expectedOpenedNodes);
+		const expectedExpandedNodes = ["courseId", "4", "10"];
+		expect(wrapper.vm.expandedNodes).toStrictEqual(expectedExpandedNodes);
+	});
+
+	it("should show spinner when its prop set", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+		const spinnerElementBefore = wrapper.findAll(".spinner");
+		expect(spinnerElementBefore).toHaveLength(0);
+
+		await wrapper.setProps({ showSpinner: true });
+		const spinnerElementAfter = wrapper.find(".spinner");
+		expect(spinnerElementAfter.vm.isVisible).toBe(true);
 	});
 });
