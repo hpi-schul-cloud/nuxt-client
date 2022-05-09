@@ -87,9 +87,23 @@ const serverItems = [
 			},
 			{
 				id: "12",
-				type: "file",
-				name: "file_8.jpg",
-				status: "done",
+				type: "task",
+				name: "Inside Task",
+				status: "partial",
+				children: [
+					{
+						id: "13",
+						type: "file",
+						name: "file_8.jpg",
+						status: "error",
+					},
+					{
+						id: "14",
+						type: "file",
+						name: "file_9.jpg",
+						status: "done",
+					},
+				],
 			},
 		],
 	},

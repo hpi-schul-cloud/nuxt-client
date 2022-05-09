@@ -8,7 +8,7 @@
 			color="secondary"
 			class="spinner"
 		></v-progress-circular>
-		<v-treeview :items="items" color="primary" transition :open="openNodes">
+		<v-treeview :items="items" color="primary" transition :open="openedNodes">
 			<template v-slot:label="{ item }">
 				<div class="treeview-item">
 					<v-icon :class="setCustomClass(item.status)">
@@ -28,10 +28,6 @@ export default {
 		items: {
 			type: Array,
 			required: true,
-		},
-		openNodes: {
-			type: Array,
-			required: false,
 			default: () => [],
 		},
 		showSpinner: {
@@ -45,7 +41,11 @@ export default {
 				mdiAlert,
 				mdiAlertCircle,
 			},
+			openedNodes: [],
 		};
+	},
+	created() {
+		this.searchOpenNodes(this.items);
 	},
 	methods: {
 		setCustomClass(itemStatus) {
@@ -62,6 +62,14 @@ export default {
 			if (itemStatus === "partial") icon = this.icons.mdiAlert;
 
 			return icon;
+		},
+		searchOpenNodes(items) {
+			if (!items instanceof Array) return;
+			items.forEach((item) => {
+				if (item.children && item.status !== "done")
+					this.openedNodes.push(item.id);
+				if (item.children) this.searchOpenNodes(item.children);
+			});
 		},
 	},
 };

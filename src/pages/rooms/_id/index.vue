@@ -118,8 +118,8 @@
 			<template slot="content">
 				<v-divider class="mb-4"></v-divider>
 				<course-copy-result
+					v-if="courseCopyItems.length"
 					:items="courseCopyItems"
-					:open-nodes="courseCopyItemsOpenNodes"
 					:show-spinner="testComponentDialog.loading"
 				>
 				</course-copy-result>
@@ -293,18 +293,6 @@ export default {
 		},
 		courseCopyItems() {
 			return roomModule.getCourseCopyResult;
-		},
-		courseCopyItemsOpenNodes() {
-			if (!roomModule.getCourseCopyResult[0]) return [];
-
-			const items = [this.courseId];
-			roomModule.getCourseCopyResult[0].children.forEach((item) => {
-				item.children.forEach((child) => {
-					if (child.status !== "done") items.push(item.id);
-				});
-			});
-
-			return items;
 		},
 	},
 	async created() {

@@ -1,7 +1,3 @@
-import { roomModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import RoomModule from "@/store/room";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import CourseCopyResult from "./CourseCopyResult.vue";
 
@@ -57,7 +53,6 @@ const propsData = {
 			],
 		},
 	],
-	openNodes: ["courseId", "4", "10"],
 	showSpinner: false,
 };
 
@@ -74,26 +69,35 @@ const getWrapper: any = (props: object, options?: object) => {
 
 describe("@components/molecules/CourseCopyResult", () => {
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ "env-config": EnvConfigModule, room: RoomModule });
 	});
 
 	it("should have correct props and configuration", async () => {
 		const wrapper = getWrapper(propsData);
 
 		expect(wrapper.vm.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.openNodes).toStrictEqual(propsData.openNodes);
 		expect(wrapper.vm.showSpinner).toStrictEqual(propsData.showSpinner);
 	});
 
-	it.skip("should expand and collapse nodes according to the status property", async () => {
+	it("should nodes be expanded and collapsed according to the status property inside the items", async () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
-		const nodes = wrapper.findAll(".v-treeview-node__toggle--open");
+		const openedNodes = wrapper.findAll(`[aria-expanded="true"]`);
+		const closedNodes = wrapper.findAll(`[aria-expanded="false"]`);
 
-		expect(wrapper.vm.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.openNodes).toStrictEqual(propsData.openNodes);
-		expect(wrapper.vm.showSpinner).toStrictEqual(propsData.showSpinner);
+		expect(openedNodes.wrappers[0].vm.item.name).toStrictEqual("Mathe");
+		expect(openedNodes.wrappers[1].vm.item.name).toStrictEqual("Task 2");
+		expect(openedNodes.wrappers[2].vm.item.name).toStrictEqual("Lesson 3");
+
+		expect(closedNodes.wrappers[0].vm.item.name).toStrictEqual("Lesson 1");
+		expect(closedNodes.wrappers[3].vm.item.name).toStrictEqual("Lesson 2");
+	});
+
+	it("should calculate which nodes are opened", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+
+		const expectedOpenedNodes = ["courseId", "4", "10"];
+		expect(wrapper.vm.openedNodes).toStrictEqual(expectedOpenedNodes);
 	});
 });
