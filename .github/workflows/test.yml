@@ -47,16 +47,3 @@ jobs:
         if: failure() && matrix.os == 'ubuntu-latest'
         with:
           commit_message: npm run lint
-  # build:
-  #   strategy:
-  #     matrix:
-  #       theme: [default, brb, n21, open, thr, int]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: npm ci
-  #       run: npm ci --prefer-offline
-  #     - name: npm run build:nuxt
-  #       run: npm run build:nuxt
-  #       env:
-  #         SC_THEME: ${{ matrix.theme }}
