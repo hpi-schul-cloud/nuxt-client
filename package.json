@@ -16,7 +16,7 @@
 		"new": "hygen new",
 		"lint:eslint": "eslint",
 		"lint:stylelint": "stylelint",
-		"lint:markdownlint": "markdownlint -i \"docs/Changelog.md\" -c \".markdownlint.yml\"",
+		"lint:markdownlint": "markdownlint -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --loglevel log",
 		"lint:all:eslint": "npm run lint:eslint -- --ext .js,.vue .",
 		"lint:all:stylelint": "npm run lint:stylelint -- \"**/*.{vue,sass,scss,css}\"",
