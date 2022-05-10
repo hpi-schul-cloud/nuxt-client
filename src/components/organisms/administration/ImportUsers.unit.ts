@@ -283,6 +283,7 @@ describe("@components/molecules/importUsers", () => {
 
 			getDataFromApiSpy.mockClear();
 		});
+
 		it("should sort by last name", async () => {
 			const sortLastNameElement = wrapper.find(".head_lastName");
 			sortLastNameElement.trigger("click");

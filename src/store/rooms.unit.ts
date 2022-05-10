@@ -77,10 +77,14 @@ axiosInitializer();
 
 describe("rooms module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			receivedRequests = [];
+		});
+		// afterEach(() => {
+		// 	jest.clearAllMocks();
+		// });
+
 		describe("fetch", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
 					dashboardControllerFindForUser: jest.fn(),
@@ -102,10 +106,8 @@ describe("rooms module", () => {
 				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});
 		});
+
 		describe("align", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
 			it("should call server and 'setPosition' mutation", async () => {
 				const mockApi = {
 					dashboardControllerMoveElement: jest.fn((align) => ({
@@ -142,10 +144,8 @@ describe("rooms module", () => {
 				);
 			});
 		});
+
 		describe("delete", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
 			it("should call 'setPosition' mutation", async () => {
 				// TODO: call server will be here when server ready
 				const roomsModule = new RoomsModule({});
@@ -162,10 +162,7 @@ describe("rooms module", () => {
 		});
 
 		describe("update", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			it("should call the backend", async (done) => {
+			it("should call the backend", async () => {
 				const mockApi = {
 					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
 						data: { ...groupToPatch },
@@ -176,8 +173,8 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new RoomsModule({});
 
+				const roomsModule = new RoomsModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -186,50 +183,19 @@ describe("rooms module", () => {
 					yPosition: 3,
 					displayColor: "#FF0000",
 				};
+				roomsModule.setRoomDataId(roomsData.id);
+				await roomsModule.update(roomsData);
 
-				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBe(false);
-					done();
-				});
-				expect(roomsModule.getLoading).toBe(true);
+				expect(roomsModule.getLoading).toBe(false);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
-					roomsData
+					roomsData.id,
+					roomsData.xPosition,
+					roomsData.yPosition,
+					{ title: roomsData.title }
 				);
 			});
 
-			it("should update the state", async (done) => {
-				const mockApi = {
-					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
-						data: { ...groupToPatch },
-					})),
-				};
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
-				const roomsModule = new RoomsModule({});
-
-				const roomsData: RoomsData = {
-					id: "dummyId",
-					title: "dummy title",
-					shortTitle: "dummy short title",
-					xPosition: 3,
-					yPosition: 3,
-					displayColor: "#FF0000",
-				};
-
-				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBe(false);
-					done();
-				});
-				expect(roomsModule.getLoading).toBe(true);
-				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
-					roomsData
-				);
-				expect(roomsModule.getRoomsData[3].title).toBe(roomsData.title);
-			});
-			it("handle error", async (done) => {
+			it("handle error", async () => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
 					dashboardControllerPatchGroup: jest.fn(() =>
@@ -242,7 +208,6 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 				const roomsModule = new RoomsModule({});
-
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -251,46 +216,38 @@ describe("rooms module", () => {
 					yPosition: 3,
 					displayColor: "#FF0000",
 				};
+				roomsModule.setRoomDataId(roomsData.id);
+				await roomsModule.update(roomsData);
 
-				roomsModule.update(roomsData).then(() => {
-					expect(roomsModule.getLoading).toBe(false);
-					expect(roomsModule.getError).toStrictEqual({ ...error });
-					done();
-				});
-				expect(roomsModule.getLoading).toBe(true);
+				expect(roomsModule.getLoading).toBe(false);
+				expect(roomsModule.getError).toStrictEqual({ ...error });
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
-					roomsData
+					roomsData.id,
+					roomsData.xPosition,
+					roomsData.yPosition,
+					{ title: roomsData.title }
 				);
 			});
 		});
-		describe("fetchAllElements", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
 
-			it("should call the backend", async (done) => {
-				const mockApi = {
-					courseControllerFindForUser: jest.fn((fetchCourses) => ({
-						data: { ...fetchCourses },
-					})),
-				};
+		describe("fetchAllElements", () => {
+			it("should call the backend", async () => {
+				const mockApi = { courseControllerFindForUser: jest.fn() };
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const roomsModule = new RoomsModule({});
+				await roomsModule.fetchAllElements();
 
-				roomsModule.fetchAllElements().then(() => {
-					expect(roomsModule.getLoading).toBe(false);
-					done();
-				});
-				expect(roomsModule.getLoading).toBe(true);
-				expect(mockApi.courseControllerFindForUser).toHaveBeenCalled();
-				expect(mockApi.courseControllerFindForUser.mock.calls[0]).toStrictEqual(
-					0
-				); // $skip: 0
-				expect(mockApi.courseControllerFindForUser.mock.calls[1]).toStrictEqual(
-					100
-				); // $limit: 100
+				expect(roomsModule.getLoading).toBe(false);
+				expect(mockApi.courseControllerFindForUser).toHaveBeenCalledTimes(1);
+
+				expect(
+					mockApi.courseControllerFindForUser.mock.calls[0][0]
+				).toStrictEqual(0); // $skip: 0
+				expect(
+					mockApi.courseControllerFindForUser.mock.calls[0][1]
+				).toStrictEqual(100); // $limit: 100
 			});
 
 			it("handle error", async (done) => {
@@ -315,10 +272,6 @@ describe("rooms module", () => {
 			});
 		});
 		describe("getSharedCourseData", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				const roomsModule = new RoomsModule({});
 				const getSharedCourseDataSpy = jest.spyOn(
@@ -338,10 +291,6 @@ describe("rooms module", () => {
 		});
 
 		describe("confirmSharedCourseData", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				const sharedCourseData = {
 					code: "123",
