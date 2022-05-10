@@ -71,7 +71,6 @@ export const routes = [
 			interopDefault(import("../pages/administration/TeacherCreate.page.vue")),
 		name: "administration-teachers-new",
 	},
-	// TODO - inconclusive naming
 	{
 		path: "/content",
 		component: () =>
@@ -94,7 +93,7 @@ export const routes = [
 		component: () => interopDefault(import("../pages/Imprint.page.vue")),
 		name: "imprint",
 	},
-	// TODO - deprecated?
+	// deprecated?
 	{
 		path: "/insights",
 		component: () => interopDefault(import("../pages/Insights.page.vue")),
@@ -130,7 +129,11 @@ export const routes = [
 		component: () => interopDefault(import("../pages/POCFiles.page.vue")),
 		name: "poc-files",
 	},
-	// TODO - irritating naming, roomList -> all courses, roomOverview -> current courses
+	{
+		path: `/rooms/:id(${REGEX_ID})`,
+		component: () => interopDefault(import("../pages/RoomDetails.page.vue")),
+		name: "rooms-id",
+	},
 	{
 		path: "/rooms-list",
 		component: () => interopDefault(import("../pages/RoomList.page.vue")),
@@ -142,11 +145,6 @@ export const routes = [
 		name: "rooms-overview",
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => interopDefault(import("../pages/RoomDetails.page.vue")),
-		name: "rooms-id",
-	},
-	{
 		path: "/tasks",
 		component: () => interopDefault(import("../pages/TaskOverview.page.vue")),
 		name: "tasks",
@@ -155,6 +153,6 @@ export const routes = [
 	{
 		path: "/termsofuse",
 		component: () => interopDefault(import("../pages/TermsOfUse.vue")),
-		name: "TermsOfUse",
+		name: "termsofuse",
 	},
 ];
