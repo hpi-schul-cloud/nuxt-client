@@ -80,9 +80,6 @@ describe("rooms module", () => {
 		beforeEach(() => {
 			receivedRequests = [];
 		});
-		// afterEach(() => {
-		// 	jest.clearAllMocks();
-		// });
 
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
