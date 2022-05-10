@@ -52,11 +52,11 @@ Webpack resolves the alias and replaces the component correctly once the theme c
 import MyReplacedComponent from "@components/MyReplacedComponent";
 ```
 
-The below alias object is auto-extended by the `variation.js` script, for all theme components. Example for one open-theme component:
+The below alias object is auto-extended by the `variation.js` script, for all theme components. Example for one n21-theme component:
 
 ```json{2}
 {
-	"@components/MyReplacedComponent": "./src/themes/open/components/MyReplacedComponent.vue",
+	"@components/MyReplacedComponent": "./src/themes/n21/components/MyReplacedComponent.vue",
 	"@": "src",
 	"@@": ".",
 	"@assets": "src/assets",
@@ -69,10 +69,10 @@ The below alias object is auto-extended by the `variation.js` script, for all th
 	"@pages": "src/pages",
 	"@plugins": "src/plugins",
 	"@store": "src/store",
-	"@static": "src/themes/open/static",
-	"@theme": "src/themes/open",
-	"@styles": "src/themes/open/styles/index.scss",
+	"@static": "src/static",
+	"@theme": "src/themes/n21",
+	"@styles": "src/themes/n21/styles/index.scss",
 	"@styles-base": "src/themes/default/styles",
-	"@variables": "src/themes/open/styles/variables.scss"
+	"@variables": "src/themes/n21/styles/variables.scss"
 }
 ```
