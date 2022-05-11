@@ -38,7 +38,7 @@
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
-						{{ numberOfTasks }}
+						{{ taskChipValue }}
 					</div>
 				</div>
 			</div>
@@ -101,6 +101,11 @@ export default {
 				mdiTrashCanOutline,
 			},
 			defaultTitleColor: "--color-secondary",
+			lessonEx: {
+				numberOfPublishedTasks: 3,
+				numberOfPlannedTasks: 4,
+				numberOfDraftTasks: 2,
+			},
 		};
 	},
 	computed: {
@@ -176,11 +181,33 @@ export default {
 
 			return roleBasedMoreActions;
 		},
-		numberOfTasks() {
-			if (this.lesson.numberOfTasks === 1)
-				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+		taskChipValue() {
+			const chipValueArray = [];
 
-			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
+			if (this.lessonEx.numberOfPublishedTasks)
+				chipValueArray.push(
+					`${this.lessonEx.numberOfPublishedTasks} ${this.$t(
+						"common.words.published"
+					)}`
+				);
+			if (this.lessonEx.numberOfPlannedTasks)
+				chipValueArray.push(
+					`${this.lessonEx.numberOfPlannedTasks} ${this.$t(
+						"common.words.planned"
+					)}`
+				);
+			if (this.lessonEx.numberOfDraftTasks)
+				chipValueArray.push(
+					`${this.lessonEx.numberOfDraftTasks} ${this.$t("common.words.draft")}`
+				);
+
+			let chipStr = chipValueArray.length
+				? `${this.$t("common.words.tasks")}: `
+				: "";
+
+			chipStr += chipValueArray.join(" / ");
+
+			return chipStr;
 		},
 	},
 	methods: {
