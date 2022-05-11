@@ -1,7 +1,7 @@
 import { authModule, envConfigModule, roomModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import Room from "./index.vue";
+import Room from "./RoomDetails.page.vue";
 import { User } from "@/store/types/auth";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";

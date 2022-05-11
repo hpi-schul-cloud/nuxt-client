@@ -1,6 +1,6 @@
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { default as ConsentPage } from "./consent.vue";
+import { default as ConsentPage } from "./StudentConsent.page.vue";
 // import mock$objects from "../../../../tests/test-utils/pageStubs";
 
 const mockData = [

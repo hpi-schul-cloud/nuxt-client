@@ -1,4 +1,4 @@
-import { default as ldapActivate } from "./activate.vue";
+import { default as ldapActivate } from "./LDAPActivate.page.vue";
 
 const mockResponseData = {
 	ok: true,

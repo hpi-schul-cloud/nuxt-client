@@ -1,4 +1,4 @@
-import RoomsPage from "./rooms-overview.vue";
+import RoomOverview from "./RoomOverview.page.vue";
 import { authModule, roomsModule } from "@/store";
 import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -85,22 +85,25 @@ const spyMocks = {
 	storeModuleFetchAllMock: jest
 		.spyOn(roomsModule, "fetchAllElements")
 		.mockImplementation(async () => {}),
-	getElementNameByRefMock: jest.spyOn(RoomsPage.methods, "getElementNameByRef"),
-	openDialogMock: jest.spyOn(RoomsPage.methods, "openDialog"),
-	getDataObjectMock: jest.spyOn(RoomsPage.methods, "getDataObject"),
-	hasGroupMock: jest.spyOn(RoomsPage.methods, "hasGroup"),
-	findDataByPosMock: jest.spyOn(RoomsPage.methods, "findDataByPos"),
-	getDeviceDimsMock: jest.spyOn(RoomsPage.methods, "getDeviceDims"),
-	setDropElementMock: jest.spyOn(RoomsPage.methods, "setDropElement"),
-	setGroupElementsMock: jest.spyOn(RoomsPage.methods, "setGroupElements"),
-	addGroupElementsMock: jest.spyOn(RoomsPage.methods, "addGroupElements"),
-	savePositionMock: jest.spyOn(RoomsPage.methods, "savePosition"),
-	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
-	defaultNamingMock: jest.spyOn(RoomsPage.methods, "defaultNaming"),
+	getElementNameByRefMock: jest.spyOn(
+		RoomOverview.methods,
+		"getElementNameByRef"
+	),
+	openDialogMock: jest.spyOn(RoomOverview.methods, "openDialog"),
+	getDataObjectMock: jest.spyOn(RoomOverview.methods, "getDataObject"),
+	hasGroupMock: jest.spyOn(RoomOverview.methods, "hasGroup"),
+	findDataByPosMock: jest.spyOn(RoomOverview.methods, "findDataByPos"),
+	getDeviceDimsMock: jest.spyOn(RoomOverview.methods, "getDeviceDims"),
+	setDropElementMock: jest.spyOn(RoomOverview.methods, "setDropElement"),
+	setGroupElementsMock: jest.spyOn(RoomOverview.methods, "setGroupElements"),
+	addGroupElementsMock: jest.spyOn(RoomOverview.methods, "addGroupElements"),
+	savePositionMock: jest.spyOn(RoomOverview.methods, "savePosition"),
+	dragFromGroupMock: jest.spyOn(RoomOverview.methods, "dragFromGroup"),
+	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 };
 
 const getWrapper = (device = "desktop", options = {}) => {
-	return mount(RoomsPage, {
+	return mount(RoomOverview, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -123,7 +126,7 @@ describe("RoomPage", () => {
 		jest.clearAllMocks();
 	});
 
-	it(...isValidComponent(RoomsPage));
+	it(...isValidComponent(RoomOverview));
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
@@ -460,7 +463,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should reset search text while dragging", async () => {
-		const wrapper = mount(RoomsPage, {
+		const wrapper = mount(RoomOverview, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
