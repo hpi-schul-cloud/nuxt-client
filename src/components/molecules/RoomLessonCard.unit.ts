@@ -212,7 +212,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(chipElement.element.innerHTML).toContain("23 Aufgaben");
 			});
 
-			it("should have the number of tasks in chips (1 task)", async () => {
+			it("should have the proper string in the chip element (all the 3 numbers are available)", () => {
 				const lessonObject = {
 					room: {
 						roomId: "456",
@@ -225,7 +225,69 @@ describe("@components/molecules/RoomLessonCard", () => {
 						createdAt: "2017-09-28T11:58:46.601Z",
 						updatedAt: "2017-09-28T11:58:46.601Z",
 						hidden: false,
-						numberOfTasks: 1,
+						numberOfPublishedTasks: 3,
+						numberOfPlannedTasks: 4,
+						numberOfDraftTasks: 2,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+
+				const expectedString = "Aufgaben: 3 published / 4 planned / 2 draft"; // TODO: change the hardcoded words to lang values
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain(expectedString);
+			});
+
+			it("should have the proper string in the chip element (not all the 3 numbers are available)", () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+						numberOfPublishedTasks: 3,
+						numberOfPlannedTasks: 0,
+						numberOfDraftTasks: 2,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+
+				const expectedString = "Aufgaben: 3 published / 2 draft"; // TODO: change the hardcoded words to lang values
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain(expectedString);
+			});
+
+			it("should not show the chip section if 'numberOf' properties are '0'", async () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: false,
+						numberOfPublishedTasks: 0,
+						numberOfPlannedTasks: 0,
+						numberOfDraftTasks: 0,
 					},
 					ariaLabel:
 						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
@@ -233,12 +295,12 @@ describe("@components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 				const wrapper = getWrapper({ ...lessonObject, role });
-				const chipElement = wrapper.find(".chip-value");
+				const chipElement = wrapper.findAll(".chip-value");
 
-				expect(chipElement.element.innerHTML).toContain("1 Aufgabe");
+				expect(chipElement).toHaveLength(0);
 			});
 
-			it("should not show the chip section if 'numberOfTasks' is undefined", async () => {
+			it("should not show the chip section if 'numberOf' properties are undefined", async () => {
 				const lessonObject = {
 					room: {
 						roomId: "456",

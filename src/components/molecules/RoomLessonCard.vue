@@ -31,10 +31,7 @@
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
-		<v-card-text
-			v-if="lesson.numberOfTasks !== undefined"
-			class="ma-0 pb-0 pt-0 submitted-section"
-		>
+		<v-card-text v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
@@ -101,11 +98,6 @@ export default {
 				mdiTrashCanOutline,
 			},
 			defaultTitleColor: "--color-secondary",
-			lessonEx: {
-				numberOfPublishedTasks: 3,
-				numberOfPlannedTasks: 4,
-				numberOfDraftTasks: 2,
-			},
 		};
 	},
 	computed: {
@@ -181,24 +173,34 @@ export default {
 
 			return roleBasedMoreActions;
 		},
+		showChip() {
+			return (
+				(this.lesson.numberOfPublishedTasks !== 0 &&
+					this.lesson.numberOfPublishedTasks !== undefined) ||
+				(this.lesson.numberOfPlannedTasks !== 0 &&
+					this.lesson.numberOfPlannedTasks !== undefined) ||
+				(this.lesson.numberOfDraftTasks !== 0 &&
+					this.lesson.numberOfDraftTasks !== undefined)
+			);
+		},
 		taskChipValue() {
 			const chipValueArray = [];
 
-			if (this.lessonEx.numberOfPublishedTasks)
+			if (this.lesson.numberOfPublishedTasks)
 				chipValueArray.push(
-					`${this.lessonEx.numberOfPublishedTasks} ${this.$t(
+					`${this.lesson.numberOfPublishedTasks} ${this.$t(
 						"common.words.published"
 					)}`
 				);
-			if (this.lessonEx.numberOfPlannedTasks)
+			if (this.lesson.numberOfPlannedTasks)
 				chipValueArray.push(
-					`${this.lessonEx.numberOfPlannedTasks} ${this.$t(
+					`${this.lesson.numberOfPlannedTasks} ${this.$t(
 						"common.words.planned"
 					)}`
 				);
-			if (this.lessonEx.numberOfDraftTasks)
+			if (this.lesson.numberOfDraftTasks)
 				chipValueArray.push(
-					`${this.lessonEx.numberOfDraftTasks} ${this.$t("common.words.draft")}`
+					`${this.lesson.numberOfDraftTasks} ${this.$t("common.words.draft")}`
 				);
 
 			let chipStr = chipValueArray.length
