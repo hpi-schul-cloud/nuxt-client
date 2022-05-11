@@ -13,7 +13,6 @@
     - Write tests (Unit and Integration), including for error cases. Don't decrease coverage
     - Business logic should be implemented in the API; never trust the client
     - UI changes should be discussed & agreed with the UX-Team before staring
-    - Keep the CHANGELOG up-to-date
     - Boyscout rule: leave the code in a better state than you found it. Remove unnecessary lines. Listen to the linter.
 -->
 

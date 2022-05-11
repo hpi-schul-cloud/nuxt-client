@@ -1,7 +1,7 @@
 import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import RoomList from "./rooms-list.vue";
+import RoomList from "./RoomList.page.vue";
 import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";

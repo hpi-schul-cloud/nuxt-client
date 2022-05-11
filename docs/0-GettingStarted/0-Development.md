@@ -53,16 +53,6 @@ All Nuxt source-files can be found at `src/`.
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
-### Docs
-
-```bash
-npm run dev:docs
-```
-
-**URL**: [http://localhost:4002](http://localhost:4002)
-
-For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
-
 ### Test
 
 ### Unit Tests
