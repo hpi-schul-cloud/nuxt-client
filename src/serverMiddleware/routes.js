@@ -36,7 +36,6 @@ const routes = [
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
-	`^/mint-ec/?`,
 	`^/insights`,
 	//`^/news`,
 	`^/news/new`,

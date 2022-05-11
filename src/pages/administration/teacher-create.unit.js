@@ -1,5 +1,5 @@
-import { default as NewTeacher } from "./new.vue";
-import mock$objects from "../../../../tests/test-utils/pageStubs";
+import { default as NewTeacher } from "./TeacherCreate.page.vue";
+import mock$objects from "../../../tests/test-utils/pageStubs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 
