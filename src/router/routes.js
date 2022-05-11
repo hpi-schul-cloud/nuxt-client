@@ -154,9 +154,4 @@ export const routes = [
 		component: () => interopDefault(import("../pages/news/_id/edit.vue")),
 		name: "news-id-edit",
 	},
-	{
-		path: "/rooms/test",
-		component: () => interopDefault(import("../pages/rooms/test.vue")),
-		name: "rooms-test",
-	},
 ];
