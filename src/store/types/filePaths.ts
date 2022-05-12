@@ -1,4 +1,5 @@
 export type SpecificFiles = {
+	accessibilityStatement: URL | string;
 	privacyExemplary: URL | string;
 	privacy: URL | string;
 	termsOfUseExemplary: URL | string;

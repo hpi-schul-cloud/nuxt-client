@@ -32,6 +32,20 @@ describe("@components/legacy/TheFooter", () => {
 			"https://dummy-url.org/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf"
 		);
 	});
+	it("Link to accessibility statement is set correctly", () => {
+		filePathsModule.setSpecificFiles("https://dummy-url.org/");
+		const wrapper = shallowMount(TheFooter, {
+			...createComponentMocks({
+				mocks: {
+					$theme,
+				},
+				i18n: true,
+			}),
+		});
+		expect(wrapper.vm.links[5].href).toStrictEqual(
+			"https://dummy-url.org/Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf"
+		);
+	});
 	it("Env-Variable sets the status page link correctly", () => {
 		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
 		const wrapper = shallowMount(TheFooter, {

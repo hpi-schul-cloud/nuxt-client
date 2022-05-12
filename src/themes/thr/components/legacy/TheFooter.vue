@@ -102,8 +102,10 @@ export default {
 				});
 			}
 			links.push({
-				href: "/",
+				href: filePathsModule.getSpecificFiles.accessibilityStatement,
 				text: this.$t("components.legacy.footer.accessibility.statement"),
+				target: "_blank",
+				rel: "noopener",
 			});
 			return links;
 		},
