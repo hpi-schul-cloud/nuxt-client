@@ -101,18 +101,6 @@ export default {
 					rel: "noopener",
 				});
 			}
-			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
-				links.push({
-					href:
-						"mailto:" +
-						envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-						"?subject=" +
-						this.$t("components.legacy.footer.accessibility.report"),
-					text: this.$t("components.legacy.footer.accessibility.report"),
-					target: "_blank",
-					rel: "noopener",
-				});
-			}
 			links.push({
 				href: filePathsModule.getSpecificFiles.accessibilityStatement,
 				text: this.$t("components.legacy.footer.accessibility.statement"),
