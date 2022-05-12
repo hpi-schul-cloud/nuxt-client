@@ -18,7 +18,6 @@ const baseTestProps = {
 		createdAt: "2017-09-28T11:58:46.601Z",
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		hidden: false,
-		numberOfTasks: 23,
 	},
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
@@ -203,13 +202,6 @@ describe("@components/molecules/RoomLessonCard", () => {
 				await wrapper.vm.$nextTick();
 				const emitted = wrapper.emitted("delete-lesson");
 				expect(emitted).toHaveLength(1);
-			});
-
-			it("should have the number of tasks in chips", async () => {
-				const wrapper = getWrapper({ ...baseTestProps, role });
-				const chipElement = wrapper.find(".chip-value");
-
-				expect(chipElement.element.innerHTML).toContain("23 Aufgaben");
 			});
 
 			it("should have the proper string in the chip element (all the 3 numbers are available)", () => {
