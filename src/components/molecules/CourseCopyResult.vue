@@ -14,12 +14,21 @@
 			color="primary"
 			transition
 			:open="expandedNodes"
+			@keydown.space="onSpacePress"
 		>
+			<template v-slot:prepend="{ item }">
+				<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
+					{{ setIcons(item.status) }}
+				</v-icon>
+			</template>
 			<template v-slot:label="{ item }">
-				<div class="treeview-item">
-					<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
-						{{ setIcons(item.status) }}
-					</v-icon>
+				<div
+					class="treeview-item"
+					:class="`treeview-item-${item.status}`"
+					tabindex="0"
+					:aria-label="getAriaLabel(item)"
+					@keydown.space="onSpacePress(item.id)"
+				>
 					{{ item.name }}
 				</div>
 			</template>
@@ -77,6 +86,23 @@ export default {
 					this.expandedNodes.push(item.id);
 				if (item.children) this.searchExpandedNodes(item.children);
 			});
+		},
+		onSpacePress(itemId) {
+			if (this.expandedNodes.includes(itemId)) {
+				const index = this.expandedNodes.indexOf(itemId);
+				this.expandedNodes.splice(index, 1);
+				return;
+			}
+			this.expandedNodes.push(itemId);
+		},
+		getAriaLabel(item) {
+			if (!item.children) return `${item.name}, copying status: ${item.status}`;
+
+			if (!this.expandedNodes.includes(item.id)) {
+				return `${item.name}, copying status: ${item.status}, press space to expand`;
+			} else {
+				return `${item.name}, copying status: ${item.status}, press space to collapse`;
+			}
 		},
 	},
 };

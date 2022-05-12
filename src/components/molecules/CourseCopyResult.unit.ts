@@ -111,4 +111,39 @@ describe("@components/molecules/CourseCopyResult", () => {
 		const spinnerElementAfter = wrapper.find(".spinner");
 		expect(spinnerElementAfter.vm.isVisible).toBe(true);
 	});
+
+	it("should all items have accessibility text", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+
+		const elementsDone = wrapper.findAll(".treeview-item-done");
+		const elementsPartial = wrapper.findAll(".treeview-item-partial");
+		const elementsError = wrapper.findAll(".treeview-item-error");
+
+		expect(elementsDone.wrappers[0].element.outerHTML).toContain(
+			'aria-label="Lesson 1, copying status: done, press space to expand"'
+		);
+		expect(elementsPartial.wrappers[0].element.outerHTML).toContain(
+			'aria-label="Mathe, copying status: partial, press space to collapse"'
+		);
+		expect(elementsError.wrappers[0].element.outerHTML).toContain(
+			'aria-label="file_4.jpg, copying status: error"'
+		);
+	});
+
+	it("should expand and collapse nodes when 'space' key pressed", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+
+		const openNodesAsDefault = ["courseId", "4", "10"];
+		const openNodesAfterKeyPress = ["courseId", "4", "10", "1"];
+		expect(wrapper.vm.expandedNodes).toStrictEqual(openNodesAsDefault);
+
+		const elementsDone = wrapper.find(".treeview-item-done");
+
+		elementsDone.trigger("keydown.space");
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.expandedNodes).toStrictEqual(openNodesAfterKeyPress);
+	});
 });
