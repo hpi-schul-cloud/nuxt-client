@@ -48,21 +48,6 @@ Output Directory: `dist/nuxt`
 | ------------ | ------- | ---- |
 |              |         |      |
 
-## Vuepress Docs
-
-```bash
-npm run build:docs
-```
-
-Output Directory: `./dist/docs`
-
-### Environment-Variables (buildtime)
-
-| env-variable | default | info |
-| --- | --- | --- |
-| ALGOLIA_API_KEY | _undefined_ | only production is indexed ([docs](https://vuepress.vuejs.org/default-theme-config/#algolia-search)) |
-| ALGOLIA_NAME | _undefined_ | only production is indexed ([docs](https://vuepress.vuejs.org/default-theme-config/#algolia-search)) |
-
 ## Deployment
 
 We use Travis to auto build and deploy this project.

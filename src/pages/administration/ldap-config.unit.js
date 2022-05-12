@@ -1,4 +1,4 @@
-import { default as ldapConfig } from "./config.vue";
+import { default as ldapConfig } from "./LDAPConfig.page.vue";
 
 const mockInputData = {
 	url: "ldaps://ldap.hpi-schul-cloud.de",

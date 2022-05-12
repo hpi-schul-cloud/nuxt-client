@@ -1,4 +1,4 @@
-import SchoolPage from "./school-settings";
+import SchoolPage from "./SchoolSettings.page.vue";
 import { envConfigModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";

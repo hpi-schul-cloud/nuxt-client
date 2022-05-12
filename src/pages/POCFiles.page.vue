@@ -53,7 +53,7 @@
 import { filesPOCModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { mdiPencil, mdiCheck, mdiClose, mdiDownload } from "@mdi/js";
-import { $axios } from "../../utils/api";
+import { $axios } from "../utils/api";
 
 export default {
 	components: {
