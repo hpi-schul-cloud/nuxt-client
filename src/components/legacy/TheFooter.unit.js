@@ -61,6 +61,10 @@ describe("@components/legacy/TheFooter", () => {
 		);
 	});
 	it("check that all links are rendered in the footer", () => {
+		envConfigModule.setEnvs({
+			ACCESSIBILITY_REPORT_EMAIL: "dummy-email@org.de",
+			ALERT_STATUS_URL: "dummy-url.org",
+		});
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
 				mocks: {
@@ -69,7 +73,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(7);
+		expect(wrapper.vm.links).toHaveLength(8);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name
 		);
