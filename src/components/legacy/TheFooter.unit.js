@@ -44,6 +44,22 @@ describe("@components/legacy/TheFooter", () => {
 		});
 		expect(wrapper.vm.links[5].href).toStrictEqual("dummy-url.org");
 	});
+	it("Env-Variable sets the report accessibility email correctly", () => {
+		envConfigModule.setEnvs({
+			ACCESSIBILITY_REPORT_EMAIL: "dummy-email@org.de",
+		});
+		const wrapper = shallowMount(TheFooter, {
+			...createComponentMocks({
+				mocks: {
+					$theme,
+				},
+				i18n: true,
+			}),
+		});
+		expect(wrapper.vm.links[5].href).toStrictEqual(
+			"mailto:dummy-email@org.de?subject=Barriere melden"
+		);
+	});
 	it("check that all links are rendered in the footer", () => {
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
@@ -53,7 +69,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(6);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(7);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name
 		);
