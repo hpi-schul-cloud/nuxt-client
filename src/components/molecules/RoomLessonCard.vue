@@ -186,22 +186,31 @@ export default {
 		taskChipValue() {
 			const chipValueArray = [];
 
-			if (this.lesson.numberOfPublishedTasks)
+			if (this.lesson.numberOfPublishedTasks) {
 				chipValueArray.push(
 					`${this.lesson.numberOfPublishedTasks} ${this.$t(
 						"common.words.published"
 					)}`
 				);
-			if (this.lesson.numberOfPlannedTasks)
+			}
+
+			if (this.lesson.numberOfPlannedTasks) {
 				chipValueArray.push(
 					`${this.lesson.numberOfPlannedTasks} ${this.$t(
 						"common.words.planned"
 					)}`
 				);
-			if (this.lesson.numberOfDraftTasks)
+			}
+
+			if (this.lesson.numberOfDraftTasks) {
 				chipValueArray.push(
-					`${this.lesson.numberOfDraftTasks} ${this.$t("common.words.draft")}`
+					`${this.lesson.numberOfDraftTasks} ${
+						this.lesson.numberOfDraftTasks === 1
+							? this.$t("common.words.draft")
+							: this.$t("common.words.drafts")
+					}`
 				);
+			}
 
 			let chipStr = chipValueArray.length
 				? `${this.$t("common.words.tasks")}: `

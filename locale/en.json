@@ -73,6 +73,7 @@
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.words.and": "and",
 	"common.words.draft": "draft",
+	"common.words.drafts": "drafts",
 	"common.words.planned": "planned",
 	"common.words.privacyPolicy": "Privacy Policy",
 	"common.words.published": "published",
