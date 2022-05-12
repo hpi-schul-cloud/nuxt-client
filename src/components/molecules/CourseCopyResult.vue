@@ -96,12 +96,30 @@ export default {
 			this.expandedNodes.push(itemId);
 		},
 		getAriaLabel(item) {
-			if (!item.children) return `${item.name}, copying status: ${item.status}`;
+			if (!item.children)
+				return this.$t(
+					"components.molecules.courseCopyResult.aria.childItem.info",
+					{ itemName: item.name, itemStatus: item.status }
+				);
 
 			if (!this.expandedNodes.includes(item.id)) {
-				return `${item.name}, copying status: ${item.status}, press space to expand`;
+				return this.$t(
+					"components.molecules.courseCopyResult.aria.parentItem.info",
+					{
+						itemName: item.name,
+						itemStatus: item.status,
+						action: this.$t("common.labels.expand"),
+					}
+				);
 			} else {
-				return `${item.name}, copying status: ${item.status}, press space to collapse`;
+				return this.$t(
+					"components.molecules.courseCopyResult.aria.parentItem.info",
+					{
+						itemName: item.name,
+						itemStatus: item.status,
+						action: this.$t("common.labels.collapse"),
+					}
+				);
 			}
 		},
 	},
