@@ -207,7 +207,7 @@ export default {
 			} else {
 				tabTwo.icon = "$taskDraft";
 				tabTwo.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.drafts"
+					"common.words.drafts"
 				);
 				tabTwo.dataTestId = "draftTasks";
 			}

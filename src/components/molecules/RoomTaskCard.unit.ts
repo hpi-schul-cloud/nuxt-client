@@ -349,7 +349,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				expect(actionButtons).toHaveLength(1);
 				expect(actionButtons.wrappers[0].element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.label.post")
+					wrapper.vm.$i18n.t("common.action.publish")
 				);
 			});
 
@@ -359,7 +359,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 
 				expect(actionButtons).toHaveLength(1);
 				expect(actionButtons.wrappers[0].element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.label.post")
+					wrapper.vm.$i18n.t("common.action.publish")
 				);
 			});
 
@@ -463,7 +463,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...draftTestProps, role });
 				wrapper.vm.publishCard = publishCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
-					"pages.room.taskCard.label.post"
+					"common.action.publish"
 				)}`;
 
 				const actionButton = wrapper.find(buttonClassName);
@@ -477,7 +477,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...plannedTestProps, role });
 				wrapper.vm.publishCard = publishCardMock;
 				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
-					"pages.room.taskCard.label.post"
+					"common.action.publish"
 				)}`;
 
 				const actionButton = wrapper.find(buttonClassName);

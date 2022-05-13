@@ -122,7 +122,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 				expect(actionButtons).toHaveLength(1);
 				expect(actionButtons.wrappers[0].element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.lessonCard.label.post")
+					wrapper.vm.$i18n.t("common.action.publish")
 				);
 			});
 

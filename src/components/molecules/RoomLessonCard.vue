@@ -118,7 +118,7 @@ export default {
 					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
 						action: () => this.postLesson(),
-						name: this.$t("pages.room.lessonCard.label.post"),
+						name: this.$t("common.action.publish"),
 					});
 				}
 			}
