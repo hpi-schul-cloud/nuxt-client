@@ -82,6 +82,8 @@
 	"componente.molecules.CoursesGrid.emptystate": "Currently, there are no courses here.",
 	"components.atoms.ProfilePicture": "profile picture",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
+	"components.legacy.footer.accessibility.report": "Accessibility feedback",
+	"components.legacy.footer.accessibility.statement": "Accessibility statement",
 	"components.legacy.footer.contact": "Contact",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Imprint",
