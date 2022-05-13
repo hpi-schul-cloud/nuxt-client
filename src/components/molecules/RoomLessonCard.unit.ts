@@ -227,9 +227,14 @@ describe("@components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const expectedString =
-					"Aufgaben: 3 veröffentlicht / 4 geplant / 2 Entwürfe"; // TODO: change the hardcoded words to lang values
 				const wrapper = getWrapper({ ...lessonObject, role });
+				const expectedString = `${wrapper.vm.$i18n.t(
+					"common.words.tasks"
+				)}: 3 ${wrapper.vm.$i18n.t(
+					"common.words.published"
+				)} / 4 ${wrapper.vm.$i18n.t(
+					"common.words.planned"
+				)} / 2 ${wrapper.vm.$i18n.t("common.words.drafts")}`;
 				const chipElement = wrapper.find(".chip-value");
 
 				expect(chipElement.element.innerHTML).toContain(expectedString);
@@ -258,8 +263,12 @@ describe("@components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const expectedString = "Aufgaben: 3 veröffentlicht / 2 Entwürfe"; // TODO: change the hardcoded words to lang values
 				const wrapper = getWrapper({ ...lessonObject, role });
+				const expectedString = `${wrapper.vm.$i18n.t(
+					"common.words.tasks"
+				)}: 3 ${wrapper.vm.$i18n.t(
+					"common.words.published"
+				)} / 2 ${wrapper.vm.$i18n.t("common.words.drafts")}`;
 				const chipElement = wrapper.find(".chip-value");
 
 				expect(chipElement.element.innerHTML).toContain(expectedString);
