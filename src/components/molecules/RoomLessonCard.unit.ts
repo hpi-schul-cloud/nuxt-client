@@ -227,7 +227,8 @@ describe("@components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const expectedString = "Aufgaben: 3 published / 4 planned / 2 draft"; // TODO: change the hardcoded words to lang values
+				const expectedString =
+					"Aufgaben: 3 veröffentlicht / 4 geplant / 2 Entwürfe"; // TODO: change the hardcoded words to lang values
 				const wrapper = getWrapper({ ...lessonObject, role });
 				const chipElement = wrapper.find(".chip-value");
 
@@ -257,7 +258,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const expectedString = "Aufgaben: 3 published / 2 draft"; // TODO: change the hardcoded words to lang values
+				const expectedString = "Aufgaben: 3 veröffentlicht / 2 Entwürfe"; // TODO: change the hardcoded words to lang values
 				const wrapper = getWrapper({ ...lessonObject, role });
 				const chipElement = wrapper.find(".chip-value");
 
