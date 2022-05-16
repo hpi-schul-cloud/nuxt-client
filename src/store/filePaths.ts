@@ -4,6 +4,8 @@ import { BusinessError } from "./types/commons";
 import { envConfigModule } from "@/store";
 
 const specificFiles = {
+	accessibilityStatement:
+		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
 	privacyExemplary:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
@@ -39,6 +41,7 @@ const globalFiles = {
 export default class FilePathsModule extends VuexModule {
 	documentBaseDir: string = "";
 	specificFiles: SpecificFiles = {
+		accessibilityStatement: "",
 		privacyExemplary: "",
 		privacy: "",
 		termsOfUseExemplary: "",

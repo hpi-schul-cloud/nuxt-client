@@ -21,14 +21,12 @@
 </template>
 
 <script>
-import AuthModule from "@/store/auth";
-import FilePathsModule from "@/store/filePaths";
-import EnvConfigModule from "@/store/env-config";
+import { authModule, filePathsModule, envConfigModule } from "@/store";
 
 export default {
 	computed: {
 		school() {
-			return AuthModule.getSchool;
+			return authModule.getSchool;
 		},
 		currentYear() {
 			return new Date().getFullYear();
@@ -40,7 +38,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
@@ -60,14 +58,32 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 			];
-			if (EnvConfigModule.getEnv.ALERT_STATUS_URL) {
+			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
 				links.push({
-					href: EnvConfigModule.getEnv.ALERT_STATUS_URL,
+					href: envConfigModule.getEnv.ALERT_STATUS_URL,
 					text: this.$t("components.legacy.footer.status"),
 					target: "_blank",
 					rel: "noopener",
 				});
 			}
+			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
+				links.push({
+					href:
+						"mailto:" +
+						envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+						"?subject=" +
+						this.$t("components.legacy.footer.accessibility.report"),
+					text: this.$t("components.legacy.footer.accessibility.report"),
+					target: "_blank",
+					rel: "noopener",
+				});
+			}
+			links.push({
+				href: filePathsModule.getSpecificFiles.accessibilityStatement,
+				text: this.$t("components.legacy.footer.accessibility.statement"),
+				target: "_blank",
+				rel: "noopener",
+			});
 			return links;
 		},
 	},

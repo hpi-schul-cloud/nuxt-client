@@ -38,7 +38,7 @@
 			></div>
 		</v-card-text>
 		<v-card-text
-			v-if="!isDraft && !isFinished"
+			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
@@ -158,6 +158,10 @@ export default {
 		isFinished() {
 			return this.task.status.isFinished;
 		},
+		isPlanned() {
+			const scheduledDate = this.task.availableDate;
+			return scheduledDate && new Date(scheduledDate) > new Date();
+		},
 		cardActions() {
 			const roleBasedActions = {
 				[Roles.Teacher]: [],
@@ -165,13 +169,13 @@ export default {
 			};
 
 			if (this.role === Roles.Teacher) {
-				if (this.isDraft && !this.isFinished) {
+				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
-						action: () => this.publishDraftCard(),
+						action: () => this.publishCard(),
 						name: this.$t("pages.room.taskCard.label.post"),
 					});
 				}
-				if (!this.isDraft && !this.isFinished) {
+				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -254,13 +258,25 @@ export default {
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
-			const dueTitle = !dueDate
-				? this.$t("pages.room.taskCard.label.noDueDate")
-				: `${this.$t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
-						dueDate
-				  )}`;
 
-			return `${this.$t("common.words.task")} – ${dueTitle}`;
+			const titlePrefix = this.$t("common.words.task");
+			let titleSuffix = "";
+
+			if (this.isDraft) {
+				titleSuffix = this.$t("pages.courses._id.courseContentDraft");
+			} else if (dueDate) {
+				titleSuffix = this.isPlanned
+					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
+							this.task.availableDate
+					  )}`
+					: `${this.$t(
+							"pages.room.taskCard.label.due"
+					  )} ${printDateFromStringUTC(dueDate)}`;
+			} else {
+				titleSuffix = this.$t("pages.room.taskCard.label.noDueDate");
+			}
+
+			return `${titlePrefix} – ${titleSuffix}`;
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
@@ -270,7 +286,7 @@ export default {
 		redirectAction(value) {
 			window.location = value;
 		},
-		publishDraftCard() {
+		publishCard() {
 			this.$emit("post-task");
 		},
 		revertPublishedCard() {
@@ -307,7 +323,9 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			return this.isDraft && !this.isFinished ? "task-draft" : "";
+			return this.isPlanned || (this.isDraft && !this.isFinished)
+				? "task-hidden"
+				: "";
 		},
 	},
 };
@@ -365,7 +383,7 @@ export default {
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
-.task-draft {
+.task-hidden {
 	box-shadow: none;
 	.task-name,
 	.text-description,

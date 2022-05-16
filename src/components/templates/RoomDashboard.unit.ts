@@ -114,28 +114,28 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			expect(wrapper.vm.roomData).toStrictEqual(mockData);
 			expect(wrapper.vm.role).toStrictEqual("teacher");
 		});
 
 		it("should list task cards", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			const taskCards = wrapper.findAll(".task-card");
 			expect(taskCards).toHaveLength(2);
 		});
 
 		it("should list lesson cards", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 
 			const lessonCards = wrapper.findAll(".lesson-card");
 			expect(lessonCards).toHaveLength(2);
 		});
 
 		it("should have lessonData object", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const expectedObject = {
 				roomId: "123",
 				displayColor: "black",
@@ -145,7 +145,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should have taskData object", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const expectedObject = {
 				roomId: "123",
 			};
@@ -154,7 +154,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("Should render empty state for teacher", async () => {
-			const wrapper = getWrapper({ roomData: emptyMockData, role: "teacher" });
+			const wrapper = getWrapper({
+				roomDataObject: emptyMockData,
+				role: "teacher",
+			});
 			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			) as any;
@@ -166,7 +169,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("Should render empty state for students", async () => {
-			const wrapper = getWrapper({ roomData: emptyMockData, role: "student" });
+			const wrapper = getWrapper({
+				roomDataObject: emptyMockData,
+				role: "student",
+			});
 			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			) as any;
@@ -179,17 +185,17 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	});
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			expect(wrapper.vm.sortable).toBe(true);
 		});
 
 		it("should sortable value 'false' if user is NOT a 'teacher'", () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 			expect(wrapper.vm.sortable).toBe(false);
 		});
 
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			expect(wrapper.vm.isTouchDevice).toBe(false);
 			expect(wrapper.vm.touchDelay).toStrictEqual(20);
 		});
@@ -197,14 +203,14 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
 			const tempOntouchstart = window.ontouchstart;
 			window.ontouchstart = () => null;
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			expect(wrapper.vm.isTouchDevice).toBe(true);
 			expect(wrapper.vm.touchDelay).toStrictEqual(200);
 			window.ontouchstart = tempOntouchstart;
 		});
 
 		it("should set 'dragInProgress' when dragging is started", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const timeDuration = wrapper.vm.dragInProgressDelay;
 			expect(wrapper.vm.dragInProgress).toBe(false);
 			const element = wrapper.find(".elements");
@@ -216,7 +222,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should sort elements after Drag&Drop", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
 			items.splice(1, 0, items.splice(0, 1)[0]);
 
@@ -238,13 +244,13 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("sortable option should not true if the user is 'student'", () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 			expect(wrapper.vm.sortable).toBe(false);
 		});
 
 		it("should be sorted the elements by keyboard'", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -262,7 +268,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("should NOT be sorted the elements by keyboard for students'", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
-			const wrapper = getWrapper({ roomData: mockData, role: "student" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -280,7 +286,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -296,7 +302,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 	describe("Sharing Lesson", () => {
 		it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const lessonCard = wrapper.find(".lesson-card");
 
 			expect(wrapper.vm.lessonShare.isOpen).toBe(false);
@@ -308,7 +314,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const shareModal = wrapper.find(".room-dialog") as any;
 
 			expect(shareModal.vm.isOpen).toBe(false);
@@ -321,7 +327,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	describe("Deleting Items", () => {
 		it("should call the openItemDeleteDialog method when lesson should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const lessonCard = wrapper.find(".lesson-card");
 
@@ -333,18 +339,18 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("should call the openItemDeleteDialog method when task should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const taskCard = wrapper.find(".task-card");
 
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("2345");
+			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
 			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 
 		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const deleteModal = wrapper.find(
 				`[data-testid="delete-dialog-item"]`
 			) as any;
@@ -357,7 +363,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
 			const deleteItemMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.deleteItem = deleteItemMock;
 			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
@@ -372,7 +378,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const deleteTaskMock = jest.fn();
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			taskModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
@@ -394,7 +400,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const deleteTaskMock = jest.fn();
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			taskModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
@@ -413,7 +419,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {
-			const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
 			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
@@ -426,7 +432,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		describe("For teachers", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = jest.fn();
-				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "teacher",
+				});
 				const taskCard = wrapper.find(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
@@ -436,7 +445,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			});
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = jest.fn();
-				const wrapper = getWrapper({ roomData: mockData, role: "teacher" });
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "teacher",
+				});
 				const taskCard = wrapper.find(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
@@ -449,7 +461,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		describe("For students", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = jest.fn();
-				const wrapper = getWrapper({ roomData: mockData, role: "student" });
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "student",
+				});
 				const taskCard = wrapper.find(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
@@ -460,7 +475,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = jest.fn();
-				const wrapper = getWrapper({ roomData: mockData, role: "student" });
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "student",
+				});
 				const taskCard = wrapper.find(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
