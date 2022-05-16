@@ -242,6 +242,7 @@ export default {
 
 						@include breakpoint(desktop) {
 							display: initial;
+							margin-top: 3px;
 						}
 					}
 				}
