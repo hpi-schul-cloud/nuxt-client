@@ -18,7 +18,7 @@
 		>
 			<template v-slot:prepend="{ item }">
 				<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
-					{{ setIcons(item.status) }}
+					{{ setIcons(item) }}
 				</v-icon>
 			</template>
 			<template v-slot:label="{ item }">
@@ -38,7 +38,8 @@
 
 <script>
 import {
-	mdiCheckCircle,
+	mdiCheck,
+	mdiCheckAll,
 	mdiAlert,
 	mdiAlertCircle,
 	mdiChevronDown,
@@ -57,7 +58,8 @@ export default {
 	data() {
 		return {
 			icons: {
-				mdiCheckCircle,
+				mdiCheck,
+				mdiCheckAll,
 				mdiAlert,
 				mdiAlertCircle,
 				mdiChevronDown,
@@ -74,10 +76,11 @@ export default {
 			if (itemStatus === "error") return "not-finished";
 			if (itemStatus === "partial") return "partial";
 		},
-		setIcons(itemStatus) {
-			if (itemStatus === "done") return this.icons.mdiCheckCircle;
-			if (itemStatus === "error") return this.icons.mdiAlertCircle;
-			if (itemStatus === "partial") return this.icons.mdiAlert;
+		setIcons(item) {
+			if (item.status === "done" && !item.children) return this.icons.mdiCheck;
+			if (item.status === "done") return this.icons.mdiCheckAll;
+			if (item.status === "error") return this.icons.mdiAlertCircle;
+			if (item.status === "partial") return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
@@ -132,7 +135,7 @@ export default {
 	color: var(--color-danger);
 }
 .finished {
-	color: var(--color-success);
+	color: var(--color-secondary);
 }
 .partial {
 	color: var(--color-accent);

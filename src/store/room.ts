@@ -456,17 +456,7 @@ export default class RoomModule extends VuexModule {
 
 	@Mutation
 	setCourseCopyResult(payload: any): void {
-		const courseResult = payload.every((item: any) => {
-			return item.status === "done";
-		});
-		this.courseCopyResult = [
-			{
-				id: this.roomData.roomId,
-				name: this.roomData.title,
-				status: courseResult ? "done" : "partial",
-				children: payload,
-			},
-		];
+		this.courseCopyResult = payload;
 	}
 
 	get getLoading(): boolean {

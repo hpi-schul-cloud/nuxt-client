@@ -942,7 +942,6 @@ describe("room module", () => {
 						children: [
 							{
 								id: 2,
-
 								type: "file",
 								name: "file_1.jpg",
 								status: "done",
@@ -977,21 +976,9 @@ describe("room module", () => {
 					},
 				];
 				const roomModule = new RoomModule({});
-				roomModule.setRoomData({
-					roomId: "12345",
-					title: "Copy Test Course",
-					displayColor: "",
-					elements: [],
-				});
-
 				roomModule.setCourseCopyResult(serverItems);
-				expect(roomModule.getCourseCopyResult[0].children).toStrictEqual(
-					serverItems
-				);
-				expect(roomModule.getCourseCopyResult[0].id).toStrictEqual("12345");
-				expect(roomModule.getCourseCopyResult[0].name).toStrictEqual(
-					"Copy Test Course"
-				);
+
+				expect(roomModule.getCourseCopyResult).toStrictEqual(serverItems);
 			});
 		});
 	});
