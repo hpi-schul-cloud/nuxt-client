@@ -85,6 +85,8 @@
 	"componente.molecules.CoursesGrid.emptystate": "Actualmente no hay cursos aquí.",
 	"components.atoms.ProfilePicture": "foto del perfil",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
+	"components.legacy.footer.accessibility.report": "Accesibilidad feedback",
+	"components.legacy.footer.accessibility.statement": "Declaración de accesibilidad",
 	"components.legacy.footer.contact": "Contacto",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Impresión",

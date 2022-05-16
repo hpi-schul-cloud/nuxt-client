@@ -88,6 +88,8 @@
 	"componente.molecules.CoursesGrid.emptystate": "Aktuell gibt es hier noch keine Kurse.",
 	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.atoms.ProfilePicture": "Profilbild",
+	"components.legacy.footer.accessibility.report": "Barriere melden",
+	"components.legacy.footer.accessibility.statement": "Barrierefreiheitserklärung",
 	"components.legacy.footer.contact": "Kontakt",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Impressum",
