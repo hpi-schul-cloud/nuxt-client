@@ -230,6 +230,7 @@ export default {
 						width: 25px;
 						margin-right: 6px;
 						font-size: 20px;
+						text-align: center;
 					}
 
 					.title {
