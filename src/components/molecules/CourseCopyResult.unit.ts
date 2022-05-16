@@ -119,16 +119,35 @@ describe("@components/molecules/CourseCopyResult", () => {
 		const elementsDone = wrapper.findAll(".treeview-item-done");
 		const elementsPartial = wrapper.findAll(".treeview-item-partial");
 		const elementsError = wrapper.findAll(".treeview-item-error");
+		const textDone = wrapper.vm.$i18n.t(
+			"components.molecules.courseCopyResult.aria.parentItem.info",
+			{
+				itemName: propsData.items[0].children[0].name,
+				itemStatus: propsData.items[0].children[0].status,
+				action: wrapper.vm.$i18n.t("common.labels.expand"),
+			}
+		);
+		const textPartial = wrapper.vm.$i18n.t(
+			"components.molecules.courseCopyResult.aria.parentItem.info",
+			{
+				itemName: propsData.items[0].name,
+				itemStatus: propsData.items[0].status,
+				action: wrapper.vm.$i18n.t("common.labels.collapse"),
+			}
+		);
+		const textError = wrapper.vm.$i18n.t(
+			"components.molecules.courseCopyResult.aria.childItem.info",
+			{
+				itemName: propsData.items[0].children[1].children[1].name,
+				itemStatus: propsData.items[0].children[1].children[1].status,
+			}
+		);
 
-		expect(elementsDone.wrappers[0].element.outerHTML).toContain(
-			'aria-label="Lesson 1, copying status: done, press space to expand"'
-		);
+		expect(elementsDone.wrappers[0].element.outerHTML).toContain(textDone);
 		expect(elementsPartial.wrappers[0].element.outerHTML).toContain(
-			'aria-label="Mathe, copying status: partial, press space to collapse"'
+			textPartial
 		);
-		expect(elementsError.wrappers[0].element.outerHTML).toContain(
-			'aria-label="file_4.jpg, copying status: error"'
-		);
+		expect(elementsError.wrappers[0].element.outerHTML).toContain(textError);
 	});
 
 	it("should expand and collapse nodes when 'space' key pressed", async () => {
