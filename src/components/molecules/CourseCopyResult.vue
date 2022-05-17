@@ -102,7 +102,10 @@ export default {
 			if (!item.children)
 				return this.$t(
 					"components.molecules.courseCopyResult.aria.childItem.info",
-					{ itemName: item.name, itemStatus: item.status }
+					{
+						itemName: item.name,
+						itemStatus: this.$t(`common.labels.${item.status}`),
+					}
 				);
 
 			if (!this.expandedNodes.includes(item.id)) {
@@ -110,7 +113,7 @@ export default {
 					"components.molecules.courseCopyResult.aria.parentItem.info",
 					{
 						itemName: item.name,
-						itemStatus: item.status,
+						itemStatus: this.$t(`common.labels.${item.status}`),
 						action: this.$t("common.labels.expand"),
 					}
 				);
@@ -119,7 +122,7 @@ export default {
 					"components.molecules.courseCopyResult.aria.parentItem.info",
 					{
 						itemName: item.name,
-						itemStatus: item.status,
+						itemStatus: this.$t(`common.labels.${item.status}`),
 						action: this.$t("common.labels.collapse"),
 					}
 				);

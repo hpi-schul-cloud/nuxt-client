@@ -115,7 +115,9 @@ describe("@components/molecules/CourseCopyResult", () => {
 			"components.molecules.courseCopyResult.aria.parentItem.info",
 			{
 				itemName: propsData.items[0].name,
-				itemStatus: propsData.items[0].status,
+				itemStatus: wrapper.vm.$i18n.t(
+					`common.labels.${propsData.items[0].status}`
+				),
 				action: wrapper.vm.$i18n.t("common.labels.expand"),
 			}
 		);
@@ -123,7 +125,9 @@ describe("@components/molecules/CourseCopyResult", () => {
 			"components.molecules.courseCopyResult.aria.parentItem.info",
 			{
 				itemName: propsData.items[1].name,
-				itemStatus: propsData.items[1].status,
+				itemStatus: wrapper.vm.$i18n.t(
+					`common.labels.${propsData.items[1].status}`
+				),
 				action: wrapper.vm.$i18n.t("common.labels.collapse"),
 			}
 		);
@@ -131,7 +135,9 @@ describe("@components/molecules/CourseCopyResult", () => {
 			"components.molecules.courseCopyResult.aria.childItem.info",
 			{
 				itemName: propsData.items[1].children[1].name,
-				itemStatus: propsData.items[1].children[1].status,
+				itemStatus: wrapper.vm.$i18n.t(
+					`common.labels.${propsData.items[1].children[1].status}`
+				),
 			}
 		);
 
