@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import CourseCopyResult from "./CourseCopyResult.vue";
+import CopyResult from "./CopyResult.vue";
 
 declare let createComponentMocks: Function;
 
@@ -50,7 +50,7 @@ const propsData = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(CourseCopyResult, {
+	return mount(CopyResult, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -60,7 +60,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/CourseCopyResult", () => {
+describe("@components/molecules/CopyResult", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 	});

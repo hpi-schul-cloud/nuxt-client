@@ -117,12 +117,12 @@
 			</div>
 			<template slot="content">
 				<v-divider class="mb-4"></v-divider>
-				<course-copy-result
+				<copy-result
 					v-if="courseCopyItems.length"
 					:items="courseCopyItems"
 					:show-spinner="testComponentDialog.loading"
 				>
-				</course-copy-result>
+				</copy-result>
 			</template>
 		</v-custom-dialog>
 	</default-wireframe>
@@ -147,7 +147,7 @@ import {
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
-import CourseCopyResult from "@components/molecules/CourseCopyResult";
+import CopyResult from "@components/molecules/CopyResult";
 
 export default {
 	components: {
@@ -157,7 +157,7 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
-		CourseCopyResult,
+		CopyResult,
 	},
 	layout: "defaultVuetify",
 	data() {
