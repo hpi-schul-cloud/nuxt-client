@@ -118,6 +118,8 @@ describe("@components/molecules/CopyResult", () => {
 				itemStatus: wrapper.vm.$i18n.t(
 					`common.labels.${propsData.items[0].status}`
 				),
+				includedItems: propsData.items[0].children.length,
+
 				action: wrapper.vm.$i18n.t("common.labels.expand"),
 			}
 		);
@@ -128,6 +130,7 @@ describe("@components/molecules/CopyResult", () => {
 				itemStatus: wrapper.vm.$i18n.t(
 					`common.labels.${propsData.items[1].status}`
 				),
+				includedItems: propsData.items[1].children.length,
 				action: wrapper.vm.$i18n.t("common.labels.collapse"),
 			}
 		);
