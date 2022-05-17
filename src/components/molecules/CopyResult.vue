@@ -114,6 +114,7 @@ export default {
 					{
 						itemName: item.name,
 						itemStatus: this.$t(`common.labels.${item.status}`),
+						includedItems: item.children.length,
 						action: this.$t("common.labels.expand"),
 					}
 				);
@@ -123,6 +124,7 @@ export default {
 					{
 						itemName: item.name,
 						itemStatus: this.$t(`common.labels.${item.status}`),
+						includedItems: item.children.length,
 						action: this.$t("common.labels.collapse"),
 					}
 				);

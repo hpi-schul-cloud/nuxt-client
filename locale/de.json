@@ -398,7 +398,7 @@
 	"components.molecules.importUsersMatch.write": "Vornamen oder Nachnamen eingeben",
 	"components.molecules.importUsersMatch.notFound": "keine Konten gefunden",
 	"components.molecules.courseCopyResult.aria.childItem.info": "{itemName}, Kopierstatus: {itemStatus}",
-	"components.molecules.courseCopyResult.aria.parentItem.info": "{itemName}, Kopierstatus: {itemStatus}, zum {action} die Leertaste drücken",
+	"components.molecules.courseCopyResult.aria.parentItem.info": "{itemName}, Kopierstatus: {itemStatus}, {includedItems} artikel darin, zum {action} die Leertaste drücken",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
