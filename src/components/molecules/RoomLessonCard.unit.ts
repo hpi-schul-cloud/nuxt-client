@@ -240,6 +240,42 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(chipElement.element.innerHTML).toContain(expectedString);
 			});
 
+			it("should have the proper string in the chip element for published tasks when lesson is a draft)", () => {
+				const lessonObject = {
+					room: {
+						roomId: "456",
+						displayColor: "#54616e",
+					},
+					lesson: {
+						id: "123",
+						name: "Test Name",
+						courseName: "Mathe",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						hidden: true,
+						numberOfPublishedTasks: 3,
+						numberOfPlannedTasks: 4,
+						numberOfDraftTasks: 2,
+					},
+					ariaLabel:
+						"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
+					keyDrag: false,
+					dragInProgress: false,
+				};
+
+				const wrapper = getWrapper({ ...lessonObject, role });
+				const expectedString = `${wrapper.vm.$i18n.t(
+					"common.words.tasks"
+				)}: 3 ${wrapper.vm.$i18n.t(
+					"common.words.ready"
+				)} / 4 ${wrapper.vm.$i18n.t(
+					"common.words.planned"
+				)} / 2 ${wrapper.vm.$i18n.t("common.words.drafts")}`;
+				const chipElement = wrapper.find(".chip-value");
+
+				expect(chipElement.element.innerHTML).toContain(expectedString);
+			});
+
 			it("should have the proper string in the chip element (not all the 3 numbers are available)", () => {
 				const lessonObject = {
 					room: {

@@ -188,9 +188,11 @@ export default {
 
 			if (this.lesson.numberOfPublishedTasks) {
 				chipValueArray.push(
-					`${this.lesson.numberOfPublishedTasks} ${this.$t(
-						"common.words.published"
-					)}`
+					`${this.lesson.numberOfPublishedTasks} ${
+						this.isHidden
+							? this.$t("common.words.ready")
+							: this.$t("common.words.published")
+					}`
 				);
 			}
 
