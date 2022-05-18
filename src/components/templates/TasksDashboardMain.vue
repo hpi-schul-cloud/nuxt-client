@@ -206,9 +206,7 @@ export default {
 				tabTwo.dataTestId = "closedTasks";
 			} else {
 				tabTwo.icon = "$taskDraft";
-				tabTwo.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.drafts"
-				);
+				tabTwo.title = this.$t("common.words.drafts");
 				tabTwo.dataTestId = "draftTasks";
 			}
 
