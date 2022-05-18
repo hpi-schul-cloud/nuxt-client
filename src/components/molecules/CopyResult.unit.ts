@@ -8,41 +8,41 @@ const propsData = {
 		{
 			id: "1",
 			type: "lesson",
-			name: "Lesson 1",
+			title: "Lesson 1",
 			status: "done",
-			children: [
-				{ id: "2", type: "file", name: "file_1.jpg", status: "done" },
-				{ id: "3", type: "file", name: "file_2.jpg", status: "done" },
+			elements: [
+				{ id: "2", type: "file", title: "file_1.jpg", status: "done" },
+				{ id: "3", type: "file", title: "file_2.jpg", status: "done" },
 			],
 		},
 		{
 			id: "4",
-			name: "Task 2",
+			title: "Task 2",
 			type: "task",
 			status: "partial",
-			children: [
-				{ id: "5", type: "file", name: "file_3.jpg", status: "done" },
-				{ id: "6", type: "file", name: "file_4.jpg", status: "error" },
+			elements: [
+				{ id: "5", type: "file", title: "file_3.jpg", status: "done" },
+				{ id: "6", type: "file", title: "file_4.jpg", status: "error" },
 			],
 		},
 		{
 			id: "7",
-			name: "Lesson 2",
+			title: "Lesson 2",
 			type: "lesson",
 			status: "done",
-			children: [
-				{ id: "8", type: "file", name: "file_5.jpg", status: "done" },
-				{ id: "9", type: "file", name: "file_6.jpg", status: "done" },
+			elements: [
+				{ id: "8", type: "file", title: "file_5.jpg", status: "done" },
+				{ id: "9", type: "file", title: "file_6.jpg", status: "done" },
 			],
 		},
 		{
 			id: "10",
-			name: "Lesson 3",
+			title: "Lesson 3",
 			type: "lesson",
 			status: "partial",
-			children: [
-				{ id: "11", type: "file", name: "file_7.jpg", status: "error" },
-				{ id: "12", type: "file", name: "file_8.jpg", status: "done" },
+			elements: [
+				{ id: "11", type: "file", title: "file_7.jpg", status: "error" },
+				{ id: "12", type: "file", title: "file_8.jpg", status: "done" },
 			],
 		},
 	],
@@ -78,11 +78,11 @@ describe("@components/molecules/CopyResult", () => {
 		const openedNodes = wrapper.findAll(`[aria-expanded="true"]`);
 		const closedNodes = wrapper.findAll(`[aria-expanded="false"]`);
 
-		expect(openedNodes.wrappers[0].vm.item.name).toStrictEqual("Task 2");
-		expect(openedNodes.wrappers[1].vm.item.name).toStrictEqual("Lesson 3");
+		expect(openedNodes.wrappers[0].vm.item.title).toStrictEqual("Task 2");
+		expect(openedNodes.wrappers[1].vm.item.title).toStrictEqual("Lesson 3");
 
-		expect(closedNodes.wrappers[0].vm.item.name).toStrictEqual("Lesson 1");
-		expect(closedNodes.wrappers[3].vm.item.name).toStrictEqual("Lesson 2");
+		expect(closedNodes.wrappers[0].vm.item.title).toStrictEqual("Lesson 1");
+		expect(closedNodes.wrappers[3].vm.item.title).toStrictEqual("Lesson 2");
 	});
 
 	it("should calculate which nodes are opened", async () => {
@@ -114,11 +114,11 @@ describe("@components/molecules/CopyResult", () => {
 		const textDone = wrapper.vm.$i18n.t(
 			"components.molecules.courseCopyResult.aria.parentItem.info",
 			{
-				itemName: propsData.items[0].name,
+				itemTitle: propsData.items[0].title,
 				itemStatus: wrapper.vm.$i18n.t(
 					`common.labels.${propsData.items[0].status}`
 				),
-				includedItems: propsData.items[0].children.length,
+				includedItems: propsData.items[0].elements.length,
 
 				action: wrapper.vm.$i18n.t("common.labels.expand"),
 			}
@@ -126,20 +126,20 @@ describe("@components/molecules/CopyResult", () => {
 		const textPartial = wrapper.vm.$i18n.t(
 			"components.molecules.courseCopyResult.aria.parentItem.info",
 			{
-				itemName: propsData.items[1].name,
+				itemTitle: propsData.items[1].title,
 				itemStatus: wrapper.vm.$i18n.t(
 					`common.labels.${propsData.items[1].status}`
 				),
-				includedItems: propsData.items[1].children.length,
+				includedItems: propsData.items[1].elements.length,
 				action: wrapper.vm.$i18n.t("common.labels.collapse"),
 			}
 		);
 		const textError = wrapper.vm.$i18n.t(
 			"components.molecules.courseCopyResult.aria.childItem.info",
 			{
-				itemName: propsData.items[1].children[1].name,
+				itemTitle: propsData.items[1].elements[1].title,
 				itemStatus: wrapper.vm.$i18n.t(
-					`common.labels.${propsData.items[1].children[1].status}`
+					`common.labels.${propsData.items[1].elements[1].status}`
 				),
 			}
 		);

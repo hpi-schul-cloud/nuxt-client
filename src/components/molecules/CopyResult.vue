@@ -14,6 +14,7 @@
 			color="primary"
 			transition
 			:open="expandedNodes"
+			item-children="elements"
 			@keydown.space="onSpacePress"
 		>
 			<template v-slot:prepend="{ item }">
@@ -29,7 +30,7 @@
 					:aria-label="getAriaLabel(item)"
 					@keydown.space="onSpacePress(item.id)"
 				>
-					{{ item.name }}
+					{{ item.title }}
 				</div>
 			</template>
 		</v-treeview>
@@ -77,7 +78,7 @@ export default {
 			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(item) {
-			if (item.status === "done" && !item.children) return this.icons.mdiCheck;
+			if (item.status === "done" && !item.elements) return this.icons.mdiCheck;
 			if (item.status === "done") return this.icons.mdiCheckAll;
 			if (item.status === "error") return this.icons.mdiAlertCircle;
 			if (item.status === "partial") return this.icons.mdiAlert;
@@ -85,9 +86,9 @@ export default {
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.children && item.status !== "done")
+				if (item.elements && item.status !== "done")
 					this.expandedNodes.push(item.id);
-				if (item.children) this.searchExpandedNodes(item.children);
+				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
 		},
 		onSpacePress(itemId) {
@@ -99,11 +100,11 @@ export default {
 			this.expandedNodes.push(itemId);
 		},
 		getAriaLabel(item) {
-			if (!item.children)
+			if (!item.elements)
 				return this.$t(
 					"components.molecules.courseCopyResult.aria.childItem.info",
 					{
-						itemName: item.name,
+						itemTitle: item.title,
 						itemStatus: this.$t(`common.labels.${item.status}`),
 					}
 				);
@@ -112,9 +113,9 @@ export default {
 				return this.$t(
 					"components.molecules.courseCopyResult.aria.parentItem.info",
 					{
-						itemName: item.name,
+						itemTitle: item.title,
 						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.children.length,
+						includedItems: item.elements.length,
 						action: this.$t("common.labels.expand"),
 					}
 				);
@@ -122,9 +123,9 @@ export default {
 				return this.$t(
 					"components.molecules.courseCopyResult.aria.parentItem.info",
 					{
-						itemName: item.name,
+						itemTitle: item.title,
 						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.children.length,
+						includedItems: item.elements.length,
 						action: this.$t("common.labels.collapse"),
 					}
 				);

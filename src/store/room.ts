@@ -16,91 +16,91 @@ const serverItems = [
 	{
 		id: "1",
 		type: "lesson",
-		name: "Lesson 1",
+		title: "Lesson 1",
 		status: "done",
-		children: [
+		elements: [
 			{
 				id: "2",
 				type: "file",
-				name: "file_1.jpg",
+				title: "file_1.jpg",
 				status: "done",
 			},
 			{
 				id: "3",
 				type: "file",
-				name: "file_2.jpg",
+				title: "file_2.jpg",
 				status: "done",
 			},
 		],
 	},
 	{
 		id: "4",
-		name: "Task 2",
+		title: "Task 2",
 		type: "task",
 		status: "partial",
-		children: [
+		elements: [
 			{
 				id: "5",
 				type: "file",
-				name: "file_3.jpg",
+				title: "file_3.jpg",
 				status: "done",
 			},
 			{
 				id: "6",
 				type: "file",
-				name: "file_4.jpg",
+				title: "file_4.jpg",
 				status: "error",
 			},
 		],
 	},
 	{
 		id: "7",
-		name: "Lesson 2",
+		title: "Lesson 2",
 		type: "lesson",
 		status: "done",
-		children: [
+		elements: [
 			{
 				id: "8",
 				type: "file",
-				name: "file_5.jpg",
+				title: "file_5.jpg",
 				status: "done",
 			},
 			{
 				id: "9",
 				type: "file",
-				name: "file_6.jpg",
+				title: "file_6.jpg",
 				status: "done",
 			},
 		],
 	},
 	{
 		id: "10",
-		name: "Lesson 3",
+		title: "Lesson 3",
 		type: "lesson",
 		status: "partial",
-		children: [
+		elements: [
 			{
 				id: "11",
 				type: "file",
-				name: "file_7.jpg",
+				title: "file_7.jpg",
 				status: "error",
 			},
 			{
 				id: "12",
 				type: "task",
-				name: "Inside Task",
+				title: "Inside Task",
 				status: "partial",
-				children: [
+				elements: [
 					{
 						id: "13",
 						type: "file",
-						name: "file_8.jpg",
+						title: "file_8.jpg",
 						status: "error",
 					},
 					{
 						id: "14",
 						type: "file",
-						name: "file_9.jpg",
+						title: "file_9.jpg",
 						status: "done",
 					},
 				],
