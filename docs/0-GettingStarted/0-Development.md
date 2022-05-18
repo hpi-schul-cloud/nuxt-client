@@ -34,11 +34,6 @@ npm i
 
 ## Developing
 
-```bash
-# serve nuxt und docs in parallel
-npm run dev
-```
-
 You can find all commands inside the [package.json](https://github.com/hpi-schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
 
 ### Nuxt
@@ -52,8 +47,6 @@ npm run dev:nuxt
 All Nuxt source-files can be found at `src/`.
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
-
-### Test
 
 ### Unit Tests
 
