@@ -108,7 +108,7 @@ describe("@components/molecules/importUsers", () => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
 			schools: SchoolsModule,
-			importUsers: ImportUsersModule,
+			"import-users": ImportUsersModule,
 		});
 	});
 

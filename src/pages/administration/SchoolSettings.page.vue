@@ -106,9 +106,6 @@ export default {
 		},
 	},
 	watch: {
-		schoolError: (error) => {
-			console.error("school could not be loaded", error);
-		},
 		school: {
 			handler: function (newSchool, oldSchool) {
 				// fetch school year and systems when the school is loaded
