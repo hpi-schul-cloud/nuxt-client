@@ -1,16 +1,18 @@
 <template>
 	<aside class="sidebar" :class="{ expanded: expandedMenu }">
 		<div class="top-sidebar" @click="$emit('input')">
-			<img
-				class="logo logo-full"
-				src="@assets/img/logo/logo-image-mono.svg"
-				alt="Schulcloud Logo"
-			/>
-			<img
-				class="logo logo-small"
-				src="@assets/img/logo/logo-transparent-mono-48-48.svg"
-				alt="Schulcloud Logo"
-			/>
+			<base-link to="/" href="/" :no-styles="true">
+				<img
+					class="logo logo-full"
+					src="@assets/img/logo/logo-image-mono.svg"
+					alt="Schulcloud Logo"
+				/>
+				<img
+					class="logo logo-small"
+					src="@assets/img/logo/logo-transparent-mono-48-48.svg"
+					alt="Schulcloud Logo"
+				/>
+			</base-link>
 		</div>
 		<nav class="contents">
 			<ul data-testid="routesListTest" class="list">
