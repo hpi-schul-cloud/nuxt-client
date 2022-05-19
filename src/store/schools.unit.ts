@@ -761,5 +761,47 @@ describe("schools module", () => {
 				expect(schoolsModule.getLoading).toStrictEqual(true);
 			});
 		});
+
+		describe("getIsSynced", () => {
+			it("should return correct sync status for iserv-idm schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "iserv-idm",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for univention schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "univention",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for TSP schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "tsp-school",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+		});
 	});
 });
