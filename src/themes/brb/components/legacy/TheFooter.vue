@@ -12,12 +12,24 @@
 						:key="link.text"
 						class="footer-link"
 						v-bind="link"
-						:aria-label="link.text"
+						:aria-label="
+							$t('components.legacy.footer.ariaLabel', {
+								itemName: link.text,
+							})
+						"
 						>{{ link.text }}</base-link
 					>
 				</template>
 				<template v-else>
-					<span :key="link.text" :aria-label="link.text">{{ link.text }} </span>
+					<span
+						:key="link.text"
+						:aria-label="
+							$t('components.legacy.footer.ariaLabel', {
+								itemName: link.text,
+							})
+						"
+						>{{ link.text }}
+					</span>
 				</template>
 			</template>
 		</div>

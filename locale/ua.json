@@ -94,6 +94,7 @@
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "хв",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "хвилина | хвилини (хвилин)",
 	"components.base.BaseIcon.error": "помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
+	"components.legacy.footer.ariaLabel": "Посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"components.legacy.footer.accessibility.report": "Відгук про доступність",
 	"components.legacy.footer.accessibility.statement": "Заява про доступність",
 	"components.legacy.footer.contact": "Контакт",

@@ -9,7 +9,11 @@
 						:key="link.text"
 						class="footer-link"
 						v-bind="link"
-						:aria-label="link.text"
+						:aria-label="
+							$t('components.legacy.footer.ariaLabel', {
+								itemName: link.text,
+							})
+						"
 						>{{ link.text }}</base-link
 					>
 				</template>
@@ -23,7 +27,11 @@
 							:key="innerlink.text"
 							v-bind="innerlink"
 							class="footer-link"
-							:aria-label="innerlink.text"
+							:aria-label="
+								$t('components.legacy.footer.ariaLabel', {
+									itemName: innerlink.text,
+								})
+							"
 							>{{ innerlink.text }}</base-link
 						>
 					</template>
