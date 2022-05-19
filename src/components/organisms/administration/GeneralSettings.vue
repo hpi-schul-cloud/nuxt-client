@@ -183,10 +183,7 @@ export default {
 			return schoolsModule.getFederalState;
 		},
 		isSyncedSchool() {
-			const systems = schoolsModule.getSystems;
-			return systems.some(
-				(system) => system.type === "ldap" && system.ldapConfig.provider === ""
-			);
+			return schoolsModule.schoolIsSynced;
 		},
 		school() {
 			return schoolsModule.getSchool;

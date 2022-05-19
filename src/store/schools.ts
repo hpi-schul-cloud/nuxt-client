@@ -158,6 +158,16 @@ export default class SchoolsModule extends VuexModule {
 		return this.school.isExternal;
 	}
 
+	get schoolIsSynced(): boolean {
+		return this.systems.some(
+			(system) =>
+				(system.type === "ldap" &&
+					(system.ldapConfig.provider === "iserv-idm" ||
+						system.ldapConfig.provider === "univention")) ||
+				system.type === "tsp-school"
+		);
+	}
+
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
