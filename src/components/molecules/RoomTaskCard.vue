@@ -172,7 +172,7 @@ export default {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
-						name: this.$t("pages.room.taskCard.label.post"),
+						name: this.$t("common.action.publish"),
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
@@ -260,7 +260,7 @@ export default {
 			let titleSuffix = "";
 
 			if (this.isDraft) {
-				titleSuffix = this.$t("pages.courses._id.courseContentDraft");
+				titleSuffix = this.$t("common.words.draft");
 			} else if (dueDate) {
 				titleSuffix = this.isPlanned
 					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(

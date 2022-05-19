@@ -62,7 +62,7 @@ describe("@components/legacy/TheSidebar", () => {
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
-		expect(wrapper.findAll("base-link-stub").at(0).text()).toBe(
+		expect(wrapper.findAll("base-link-stub").at(1).text()).toBe(
 			testRoutes[0].title
 		);
 	});
