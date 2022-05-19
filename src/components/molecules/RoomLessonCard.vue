@@ -31,14 +31,11 @@
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
-		<v-card-text
-			v-if="lesson.numberOfTasks !== undefined"
-			class="ma-0 pb-0 pt-0 submitted-section"
-		>
+		<v-card-text v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section">
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
-						{{ numberOfTasks }}
+						{{ taskChipValue }}
 					</div>
 				</div>
 			</div>
@@ -121,7 +118,7 @@ export default {
 					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
 						action: () => this.postLesson(),
-						name: this.$t("pages.room.lessonCard.label.post"),
+						name: this.$t("common.action.publish"),
 					});
 				}
 			}
@@ -176,11 +173,54 @@ export default {
 
 			return roleBasedMoreActions;
 		},
-		numberOfTasks() {
-			if (this.lesson.numberOfTasks === 1)
-				return `${this.lesson.numberOfTasks} ${this.$t("common.words.task")}`;
+		showChip() {
+			return (
+				(this.lesson.numberOfPublishedTasks !== 0 &&
+					this.lesson.numberOfPublishedTasks !== undefined) ||
+				(this.lesson.numberOfPlannedTasks !== 0 &&
+					this.lesson.numberOfPlannedTasks !== undefined) ||
+				(this.lesson.numberOfDraftTasks !== 0 &&
+					this.lesson.numberOfDraftTasks !== undefined)
+			);
+		},
+		taskChipValue() {
+			const chipValueArray = [];
 
-			return `${this.lesson.numberOfTasks} ${this.$t("common.words.tasks")}`;
+			if (this.lesson.numberOfPublishedTasks) {
+				chipValueArray.push(
+					`${this.lesson.numberOfPublishedTasks} ${
+						this.isHidden
+							? this.$t("common.words.ready")
+							: this.$t("common.words.published")
+					}`
+				);
+			}
+
+			if (this.lesson.numberOfPlannedTasks) {
+				chipValueArray.push(
+					`${this.lesson.numberOfPlannedTasks} ${this.$t(
+						"common.words.planned"
+					)}`
+				);
+			}
+
+			if (this.lesson.numberOfDraftTasks) {
+				chipValueArray.push(
+					`${this.lesson.numberOfDraftTasks} ${
+						this.lesson.numberOfDraftTasks === 1
+							? this.$t("common.words.draft")
+							: this.$t("common.words.drafts")
+					}`
+				);
+			}
+
+			let chipStr = chipValueArray.length
+				? `${this.$t("common.words.tasks")}: `
+				: "";
+
+			chipStr += chipValueArray.join(" / ");
+
+			return chipStr;
 		},
 	},
 	methods: {
