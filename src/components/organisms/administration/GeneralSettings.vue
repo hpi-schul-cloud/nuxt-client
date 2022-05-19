@@ -22,6 +22,7 @@
 						"
 						dense
 						:readonly="!hasSchoolEditPermission"
+						:disabled="isSyncedSchool"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -180,6 +181,12 @@ export default {
 		availableLanguages: () => envConfigModule.getAvailableLanguages,
 		federalState() {
 			return schoolsModule.getFederalState;
+		},
+		isSyncedSchool() {
+			const systems = schoolsModule.getSystems;
+			return systems.some(
+				(system) => system.type === "ldap" && system.ldapConfig.provider === ""
+			);
 		},
 		school() {
 			return schoolsModule.getSchool;
