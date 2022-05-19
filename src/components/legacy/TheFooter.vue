@@ -13,7 +13,7 @@
 								itemName: link.text,
 							})
 						"
-						>{{ link.text }}ABC</base-link
+						>{{ link.text }}</base-link
 					>
 				</template>
 				<template v-else>
