@@ -37,6 +37,7 @@
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
+						@copy-task="copyTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -308,6 +309,9 @@ export default {
 		},
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
+		},
+		async copyTask(itemId) {
+			await roomModule.copyTask(itemId);
 		},
 	},
 };

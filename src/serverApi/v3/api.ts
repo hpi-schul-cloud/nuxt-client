@@ -196,6 +196,65 @@ export enum ChangeLanguageParamsLanguageEnum {
 /**
  * 
  * @export
+ * @interface CopyApiResponse
+ */
+export interface CopyApiResponse {
+    /**
+     * Id of copied element
+     * @type {string}
+     * @memberof CopyApiResponse
+     */
+    id?: string;
+    /**
+     * Title of copied element
+     * @type {string}
+     * @memberof CopyApiResponse
+     */
+    title: string;
+    /**
+     * Type of copied element
+     * @type {string}
+     * @memberof CopyApiResponse
+     */
+    type: CopyApiResponseTypeEnum;
+    /**
+     * Copy progress status of copied element
+     * @type {string}
+     * @memberof CopyApiResponse
+     */
+    status: CopyApiResponseStatusEnum;
+    /**
+     * List of included sub elements
+     * @type {Array<string>}
+     * @memberof CopyApiResponse
+     */
+    elements?: Array<string>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CopyApiResponseTypeEnum {
+    Task = 'task',
+    Course = 'course',
+    File = 'file',
+    Leaf = 'leaf'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CopyApiResponseStatusEnum {
+    Success = 'success',
+    Failure = 'failure',
+    NotDoing = 'not-doing',
+    NotImplemented = 'not-implemented'
+}
+
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -984,6 +1043,25 @@ export interface TargetInfoResponse {
      * @memberof TargetInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface TaskCopyApiParams
+ */
+export interface TaskCopyApiParams {
+    /**
+     * Destination course parent Id the task is copied to
+     * @type {string}
+     * @memberof TaskCopyApiParams
+     */
+    courseId: string;
+    /**
+     * Destination lesson parent Id the task is copied to
+     * @type {string}
+     * @memberof TaskCopyApiParams
+     */
+    lessonId?: string;
 }
 /**
  * 
@@ -3069,6 +3147,43 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        roomsControllerCopyCourse: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomid' is not null or undefined
+            assertParamExists('roomsControllerCopyCourse', 'roomid', roomid)
+            const localVarPath = `/rooms/{roomid}/copy`
+                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         roomsControllerGetRoomBoard: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomid' is not null or undefined
             assertParamExists('roomsControllerGetRoomBoard', 'roomid', roomid)
@@ -3206,6 +3321,16 @@ export const RoomsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async roomsControllerCopyCourse(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyCourse(roomid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async roomsControllerGetRoomBoard(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomid, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -3243,6 +3368,15 @@ export const RoomsApiFp = function(configuration?: Configuration) {
 export const RoomsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RoomsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} roomid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomsControllerCopyCourse(roomid, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {string} roomid 
@@ -3289,6 +3423,15 @@ export interface RoomsApiInterface {
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
+    roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
     roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse>;
 
     /**
@@ -3321,6 +3464,17 @@ export interface RoomsApiInterface {
  * @extends {BaseAPI}
  */
 export class RoomsApi extends BaseAPI implements RoomsApiInterface {
+    /**
+     * 
+     * @param {string} roomid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerCopyCourse(roomid: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomid, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} roomid 
@@ -3483,6 +3637,49 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
  */
 export const TaskApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} id 
+         * @param {TaskCopyApiParams} taskCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerCopyTask: async (id: string, taskCopyApiParams: TaskCopyApiParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('taskControllerCopyTask', 'id', id)
+            // verify required parameter 'taskCopyApiParams' is not null or undefined
+            assertParamExists('taskControllerCopyTask', 'taskCopyApiParams', taskCopyApiParams)
+            const localVarPath = `/tasks/{id}/copy`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCopyApiParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {string} id 
@@ -3693,6 +3890,17 @@ export const TaskApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
+         * @param {TaskCopyApiParams} taskCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCopyTask(id, taskCopyApiParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3755,6 +3963,16 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @param {string} id 
+         * @param {TaskCopyApiParams} taskCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.taskControllerCopyTask(id, taskCopyApiParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3811,6 +4029,16 @@ export interface TaskApiInterface {
     /**
      * 
      * @param {string} id 
+     * @param {TaskCopyApiParams} taskCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApiInterface
@@ -3864,6 +4092,18 @@ export interface TaskApiInterface {
  * @extends {BaseAPI}
  */
 export class TaskApi extends BaseAPI implements TaskApiInterface {
+    /**
+     * 
+     * @param {string} id 
+     * @param {TaskCopyApiParams} taskCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerCopyTask(id, taskCopyApiParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} id 
