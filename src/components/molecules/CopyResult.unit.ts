@@ -9,10 +9,11 @@ const propsData = {
 			id: "1",
 			type: "lesson",
 			title: "Lesson 1",
-			status: "done",
+			status: "success",
+			index: 0,
 			elements: [
-				{ id: "2", type: "file", title: "file_1.jpg", status: "done" },
-				{ id: "3", type: "file", title: "file_2.jpg", status: "done" },
+				{ index: 1, type: "file", title: "file_1.jpg", status: "success" },
+				{ index: 2, type: "file", title: "file_2.jpg", status: "success" },
 			],
 		},
 		{
@@ -20,19 +21,21 @@ const propsData = {
 			title: "Task 2",
 			type: "task",
 			status: "partial",
+			index: 3,
 			elements: [
-				{ id: "5", type: "file", title: "file_3.jpg", status: "done" },
-				{ id: "6", type: "file", title: "file_4.jpg", status: "error" },
+				{ index: 4, type: "file", title: "file_3.jpg", status: "success" },
+				{ index: 5, type: "file", title: "file_4.jpg", status: "failure" },
 			],
 		},
 		{
 			id: "7",
 			title: "Lesson 2",
 			type: "lesson",
-			status: "done",
+			status: "success",
+			index: 6,
 			elements: [
-				{ id: "8", type: "file", title: "file_5.jpg", status: "done" },
-				{ id: "9", type: "file", title: "file_6.jpg", status: "done" },
+				{ index: 7, type: "file", title: "file_5.jpg", status: "success" },
+				{ index: 8, type: "file", title: "file_6.jpg", status: "success" },
 			],
 		},
 		{
@@ -40,9 +43,10 @@ const propsData = {
 			title: "Lesson 3",
 			type: "lesson",
 			status: "partial",
+			index: 9,
 			elements: [
-				{ id: "11", type: "file", title: "file_7.jpg", status: "error" },
-				{ id: "12", type: "file", title: "file_8.jpg", status: "done" },
+				{ index: 10, type: "file", title: "file_7.jpg", status: "failure" },
+				{ index: 11, type: "file", title: "file_8.jpg", status: "success" },
 			],
 		},
 	],
@@ -89,7 +93,7 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
 
-		const expectedExpandedNodes = ["4", "10"];
+		const expectedExpandedNodes = [3, 9];
 		expect(wrapper.vm.expandedNodes).toStrictEqual(expectedExpandedNodes);
 	});
 
@@ -108,9 +112,9 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
 
-		const elementsDone = wrapper.findAll(".treeview-item-done");
+		const elementsDone = wrapper.findAll(".treeview-item-success");
 		const elementsPartial = wrapper.findAll(".treeview-item-partial");
-		const elementsError = wrapper.findAll(".treeview-item-error");
+		const elementsError = wrapper.findAll(".treeview-item-failure");
 		const textDone = wrapper.vm.$i18n.t(
 			"components.molecules.courseCopyResult.aria.parentItem.info",
 			{
@@ -155,11 +159,11 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
 
-		const openNodesAsDefault = ["4", "10"];
-		const openNodesAfterKeyPress = ["4", "10", "1"];
+		const openNodesAsDefault = [3, 9];
+		const openNodesAfterKeyPress = [3, 9, 0];
 		expect(wrapper.vm.expandedNodes).toStrictEqual(openNodesAsDefault);
 
-		const elementsDone = wrapper.find(".treeview-item-done");
+		const elementsDone = wrapper.find(".treeview-item-success");
 
 		elementsDone.trigger("keydown.space");
 		await wrapper.vm.$nextTick();

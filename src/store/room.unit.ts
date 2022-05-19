@@ -51,7 +51,7 @@ describe("room module", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				await roomModule.fetchContent("123");
@@ -68,7 +68,7 @@ describe("room module", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				await roomModule.publishCard({ elementId: "54321", visibility: true });
@@ -88,7 +88,7 @@ describe("room module", () => {
 			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				const payload = {
@@ -976,9 +976,9 @@ describe("room module", () => {
 					},
 				];
 				const roomModule = new RoomModule({});
-				roomModule.setCourseCopyResult(serverItems);
+				roomModule.setTaskCopyResult(serverItems);
 
-				expect(roomModule.getCourseCopyResult).toStrictEqual(serverItems);
+				expect(roomModule.getTaskCopyResult).toStrictEqual(serverItems);
 			});
 		});
 	});

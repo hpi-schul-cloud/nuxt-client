@@ -15,6 +15,7 @@
 			transition
 			:open="expandedNodes"
 			item-children="elements"
+			item-key="index"
 			@keydown.space="onSpacePress"
 		>
 			<template v-slot:prepend="{ item }">
@@ -28,7 +29,7 @@
 					:class="`treeview-item-${item.status}`"
 					tabindex="0"
 					:aria-label="getAriaLabel(item)"
-					@keydown.space="onSpacePress(item.id)"
+					@keydown.space="onSpacePress(item.index)"
 				>
 					{{ item.title }}
 				</div>
@@ -73,21 +74,22 @@ export default {
 	},
 	methods: {
 		setCustomClass(itemStatus) {
-			if (itemStatus === "done") return "finished";
-			if (itemStatus === "error") return "not-finished";
+			if (itemStatus === "success") return "finished";
+			if (itemStatus === "failure") return "not-finished";
 			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(item) {
-			if (item.status === "done" && !item.elements) return this.icons.mdiCheck;
-			if (item.status === "done") return this.icons.mdiCheckAll;
-			if (item.status === "error") return this.icons.mdiAlertCircle;
+			if (item.status === "success" && !item.elements)
+				return this.icons.mdiCheck;
+			if (item.status === "success") return this.icons.mdiCheckAll;
+			if (item.status === "failure") return this.icons.mdiAlertCircle;
 			if (item.status === "partial") return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.elements && item.status !== "done")
-					this.expandedNodes.push(item.id);
+				if (item.elements && item.status !== "success")
+					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
 		},
@@ -109,7 +111,7 @@ export default {
 					}
 				);
 
-			if (!this.expandedNodes.includes(item.id)) {
+			if (!this.expandedNodes.includes(item.index)) {
 				return this.$t(
 					"components.molecules.courseCopyResult.aria.parentItem.info",
 					{

@@ -7,6 +7,11 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	TaskApiInterface,
+	TaskApiFactory,
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -137,7 +142,12 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
-	private courseCopyResult: Array<any> = [];
+	private taskCopyResult: CopyApiResponse = {
+		id: "",
+		title: "",
+		type: CopyApiResponseTypeEnum.Task,
+		status: CopyApiResponseStatusEnum.Success,
+	};
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -145,6 +155,14 @@ export default class RoomModule extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
+	}
+
+	private _taskApi?: TaskApiInterface;
+	private get taskApi(): TaskApiInterface {
+		if (!this._taskApi) {
+			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
+		}
+		return this._taskApi;
 	}
 
 	@Action
@@ -392,10 +410,14 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async triggerCopyCourse(courseId: string): Promise<void> {
+	async copyTask(id: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			Promise.resolve(this.setCourseCopyResult(serverItems));
+			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
+				courseId: this.roomData.roomId,
+			});
+
+			this.setTaskCopyResult(copyResult.data);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -455,8 +477,8 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setCourseCopyResult(payload: any): void {
-		this.courseCopyResult = payload;
+	setTaskCopyResult(payload: CopyApiResponse | any): void {
+		this.taskCopyResult = payload;
 	}
 
 	get getLoading(): boolean {
@@ -495,8 +517,8 @@ export default class RoomModule extends VuexModule {
 		return this.finishedLoading && this.roomData.elements.length === 0;
 	}
 
-	get getCourseCopyResult(): Array<any> {
-		return this.courseCopyResult;
+	get getTaskCopyResult(): CopyApiResponse {
+		return this.taskCopyResult;
 	}
 
 	private get finishedLoading(): boolean {

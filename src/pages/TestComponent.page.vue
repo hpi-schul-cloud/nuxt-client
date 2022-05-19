@@ -17,13 +17,13 @@
 		</template>
 		<v-custom-dialog v-model="testComponentDialog.isOpen" :size="640">
 			<div slot="title" class="dialog-header">
-				<h4>Test Component</h4>
+				<h4>Copy Result</h4>
 			</div>
 			<template slot="content">
 				<v-divider class="mb-4"></v-divider>
 				<copy-result
-					v-if="courseCopyItems.length"
-					:items="courseCopyItems"
+					v-if="taskCopyObject.elements"
+					:items="copiedItems"
 					:show-spinner="testComponentDialog.loading"
 				>
 				</copy-result>
@@ -52,17 +52,50 @@ export default {
 				isOpen: true,
 				loading: false,
 			},
+			elementIndex: 0,
 		};
 	},
 	computed: {
-		courseCopyItems() {
-			return roomModule.getCourseCopyResult;
+		taskCopyObject() {
+			return roomModule.getTaskCopyResult;
+		},
+		copiedItems() {
+			const data = this.taskCopyObject;
+			return [
+				{
+					id: data.id,
+					status: data.status,
+					title: data.title,
+					type: data.type,
+					index: this.elementIndex,
+					elements: data.elements
+						? this.prepareCopiedElements(data.elements)
+						: [],
+				},
+			];
 		},
 	},
 	async created() {
-		await roomModule.triggerCopyCourse(this.courseId);
+		await roomModule.fetchContent("0000dcfbfb5c7a3f00bf21ab");
+		await roomModule.copyTask("59cce3f6c6abf042248e888d");
 	},
 
-	methods: {},
+	methods: {
+		prepareCopiedElements(items) {
+			return items.map(({ elements = [], ...rest }) => {
+				const item = { ...rest };
+				item.index = ++this.elementIndex;
+				if (item.status === "not-doing" || item.status === "not-implemented")
+					item.status = "failure";
+				if (elements.length) {
+					const isSuccess = elements.every((ele) => ele.status === "success");
+					item.status = isSuccess ? "success" : item.status;
+					item.elements = this.prepareCopiedElements(elements);
+				}
+
+				return item;
+			});
+		},
+	},
 };
 </script>
