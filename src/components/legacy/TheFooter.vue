@@ -4,9 +4,13 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
+					<base-link
+						:key="link.text"
+						class="footer-link"
+						v-bind="link"
+						:aria-label="link.text"
+						>{{ link.text }}ABC</base-link
+					>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
@@ -18,6 +22,7 @@
 							:key="innerlink.text"
 							v-bind="innerlink"
 							class="footer-link"
+							:aria-label="innerlink.text"
 							>{{ innerlink.text }}</base-link
 						>
 					</template>
