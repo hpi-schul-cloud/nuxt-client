@@ -268,7 +268,6 @@ export default {
 			userId: authModule.getUser.id,
 		});
 	},
-
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
