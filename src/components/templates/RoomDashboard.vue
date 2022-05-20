@@ -164,6 +164,8 @@
 			:is-open="copyProcess.isOpen"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
+			@dialog-edit="redirectTask"
+			@dialog-confirmed="deleteTask"
 		>
 		</copy-process>
 	</div>
@@ -331,9 +333,17 @@ export default {
 				this.copyProcess.isOpen = true;
 			}
 		},
-		onCopyProcessDialogClose() {
+		async onCopyProcessDialogClose() {
+			await roomModule.fetchContent(this.roomData.roomId);
 			this.copyProcess.isOpen = false;
 			this.copyProcess.data = {};
+		},
+		redirectTask(itemId) {
+			window.location = `/homework/${itemId}/edit?returnUrl=/rooms/${this.roomDataObject.roomId}`;
+		},
+		async deleteTask(itemId) {
+			await taskModule.deleteTask(itemId);
+			await roomModule.fetchContent(this.roomData.roomId);
 		},
 	},
 };

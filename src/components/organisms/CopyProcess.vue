@@ -4,15 +4,14 @@
 		data-testid="delete-dialog-item"
 		:size="375"
 		has-buttons
+		:buttons="['edit', 'close', 'confirm']"
 		confirm-btn-title-key="common.actions.remove"
 		@dialog-closed="$emit('dialog-closed', false)"
+		@dialog-edit="$emit('dialog-edit', data.id)"
+		@dialog-confirmed="$emit('dialog-confirmed', data.id)"
 	>
-		<h2 slot="title" class="text-h4 my-2">
-			{{ $t("pages.room.itemDelete.title") }}
-		</h2>
-		<template slot="content">
-			<p class="text-md mt-2">test</p>
-		</template>
+		<h2 slot="title" class="text-h4 my-2">Copying result of task</h2>
+		<template slot="content"> </template>
 	</v-custom-dialog>
 </template>
 
@@ -30,10 +29,47 @@ export default {
 		isOpen: {
 			type: Boolean,
 		},
+		loading: {
+			type: Boolean,
+		},
 	},
 	data() {
-		return {};
+		return {
+			elementIndex: 0,
+		};
 	},
-	methods: {},
+	computed: {
+		copiedItems() {
+			const { data } = this;
+			return [
+				{
+					id: data.id,
+					status: data.status,
+					title: data.title,
+					type: data.type,
+					index: this.elementIndex,
+					elements: data.elements
+						? this.prepareCopiedElements(data.elements)
+						: [],
+				},
+			];
+		},
+	},
+	methods: {
+		prepareCopiedElements(items) {
+			return items.map(({ elements = [], ...rest }) => {
+				const item = { ...rest };
+				item.index = ++this.elementIndex;
+				if (item.status === "not-doing" || item.status === "not-implemented")
+					item.status = "failure";
+				if (elements.length) {
+					const isSuccess = elements.every((ele) => ele.status === "success");
+					item.status = isSuccess ? "success" : item.status;
+					item.elements = this.prepareCopiedElements(elements);
+				}
+				return item;
+			});
+		},
+	},
 };
 </script>
