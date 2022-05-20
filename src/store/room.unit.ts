@@ -830,6 +830,7 @@ describe("room module", () => {
 					courseId: "testRoom",
 				});
 			});
+		});
 	});
 
 	describe("mutations", () => {
