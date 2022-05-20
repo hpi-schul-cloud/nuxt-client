@@ -179,9 +179,9 @@ describe("SchoolSettingPage", () => {
 	beforeEach(() => {
 		// schoolsModule.setSchool(school);
 		// schoolsModule.setFederalState(federalState);
-		schoolsModule.setCurrentYear(null);
+		schoolsModule.setCurrentYear(year);
 		schoolsModule.setSystems([]);
-		schoolsModule.setFederalState(null);
+		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
 	});
 	it(...isValidComponent(SchoolPage));
@@ -191,7 +191,6 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
