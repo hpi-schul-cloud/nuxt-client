@@ -4,6 +4,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 
 const specificFiles = {
+	accessibilityStatement:
+		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
 	privacyExemplary:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
@@ -150,6 +152,7 @@ describe("filePaths module", () => {
 		it("getSpecificFiles correctly gets the documentBaseDir state object", () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockSpecificFiles = {
+				accessibilityStatement: "mockValue",
 				privacyExemplary: "mockValue",
 				privacy: "mockValue",
 				termsOfUseExemplary: "mockValue",
