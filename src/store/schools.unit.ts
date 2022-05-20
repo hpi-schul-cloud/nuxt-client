@@ -802,6 +802,20 @@ describe("schools module", () => {
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
 			});
+			it("should return correct sync status for ldap general schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "general",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
 		});
 	});
 });
