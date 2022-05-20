@@ -155,4 +155,9 @@ export const routes = [
 		component: () => interopDefault(import("../pages/TermsOfUse.vue")),
 		name: "termsofuse",
 	},
+	{
+		path: "/test-component",
+		component: () => interopDefault(import("../pages/TestComponent.page.vue")),
+		name: "termsofuse",
+	},
 ];

@@ -145,7 +145,7 @@ describe("room module", () => {
 				expect(confirmImportLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
 			});
 
-			it("should set businessError if server could't find any lesson", async () => {
+			it("should set businessError if server couldn't find any lesson", async () => {
 				let received: any[] = [];
 				let returned: any = {};
 
@@ -830,7 +830,6 @@ describe("room module", () => {
 					courseId: "testRoom",
 				});
 			});
-		});
 	});
 
 	describe("mutations", () => {
@@ -989,6 +988,7 @@ describe("room module", () => {
 						},
 					],
 				};
+
 				const roomModule = new RoomModule({});
 				roomModule.setTaskCopyResult(serverItems);
 
