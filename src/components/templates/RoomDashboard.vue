@@ -159,7 +159,13 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<copy-process :data="copyData.data"> </copy-process>
+		<copy-process
+			:data="copyProcess.data"
+			:is-open="copyProcess.isOpen"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+		>
+		</copy-process>
 	</div>
 </template>
 
@@ -201,8 +207,9 @@ export default {
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
-			copyData: {
+			copyProcess: {
 				data: {},
+				isOpen: false,
 			},
 		};
 	},
@@ -318,7 +325,15 @@ export default {
 		},
 		async copyTask(itemId) {
 			await roomModule.copyTask(itemId);
-			this.copyData.data = roomModule.getTaskCopyResult;
+			const copyResult = roomModule.getTaskCopyResult;
+			if (copyResult.id !== "") {
+				this.copyProcess.data = copyResult;
+				this.copyProcess.isOpen = true;
+			}
+		},
+		onCopyProcessDialogClose() {
+			this.copyProcess.isOpen = false;
+			this.copyProcess.data = {};
 		},
 	},
 };

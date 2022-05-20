@@ -488,4 +488,58 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			});
 		});
 	});
+
+	describe("CopyTask Process Items", () => {
+		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
+			const copyTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			wrapper.vm.copyTask = copyTaskMock;
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+			// const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
+
+			expect(copyTaskMock).toHaveBeenCalled();
+		});
+
+		it("should call the 'store copyTask action' method when a task component emits 'copy-task' custom event", async () => {
+			const roomModuleCopyMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			roomModule.copyTask = roomModuleCopyMock;
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+			await wrapper.vm.$nextTick();
+
+			expect(roomModuleCopyMock).toHaveBeenCalled();
+			expect(roomModuleCopyMock.mock.calls[0][0]).toStrictEqual("1234");
+		});
+
+		it("should set 'copyProcess' data property method when a task component emits 'copy-task' custom event", async () => {
+			const roomModuleCopyMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			roomModule.copyTask = roomModuleCopyMock;
+
+			roomModule.setTaskCopyResult({
+				title: "Aufgabe",
+				type: "task",
+				status: "success",
+				id: "123",
+				elements: [{ title: "description", type: "leaf", status: "success" }],
+			});
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.copyProcess.data).toStrictEqual({
+				title: "Aufgabe",
+				type: "task",
+				status: "success",
+				id: "123",
+				elements: [{ title: "description", type: "leaf", status: "success" }],
+			});
+			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+		});
+	});
 });
