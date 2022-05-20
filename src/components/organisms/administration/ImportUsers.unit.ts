@@ -108,7 +108,7 @@ describe("@components/molecules/importUsers", () => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
 			schools: SchoolsModule,
-			importUsers: ImportUsersModule,
+			"import-users": ImportUsersModule,
 		});
 	});
 
@@ -283,6 +283,7 @@ describe("@components/molecules/importUsers", () => {
 
 			getDataFromApiSpy.mockClear();
 		});
+
 		it("should sort by last name", async () => {
 			const sortLastNameElement = wrapper.find(".head_lastName");
 			sortLastNameElement.trigger("click");

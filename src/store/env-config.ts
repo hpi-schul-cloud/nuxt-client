@@ -129,6 +129,7 @@ export default class EnvConfigModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
+
 			const envs = await $axios.$get("/v1/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
 				if (envs[key] == null) {
@@ -144,6 +145,7 @@ export default class EnvConfigModule extends VuexModule {
 			this.setBusinessError(error);
 			this.setStatus("error");
 			console.error(`Configuration could not be loaded from the server`);
+
 			if (this.loadingErrorCount < retryLimit) {
 				this.increaseLoadingErrorCount();
 				setTimeout(() => {
