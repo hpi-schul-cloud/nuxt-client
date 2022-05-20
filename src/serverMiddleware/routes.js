@@ -42,6 +42,7 @@ const routes = [
 	// `^/courses/?$`,
 	`^/poc-files/?$`,
 	`^/poc-vuex/?$`,
+	`^/test-component/?$`,
 ];
 
 const uuid =

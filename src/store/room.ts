@@ -7,10 +7,112 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	TaskApiInterface,
+	TaskApiFactory,
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
+
+const serverItems = [
+	{
+		id: "1",
+		type: "lesson",
+		title: "Lesson 1",
+		status: "done",
+		elements: [
+			{
+				id: "2",
+				type: "file",
+				title: "file_1.jpg",
+				status: "done",
+			},
+			{
+				id: "3",
+				type: "file",
+				title: "file_2.jpg",
+				status: "done",
+			},
+		],
+	},
+	{
+		id: "4",
+		title: "Task 2",
+		type: "task",
+		status: "partial",
+		elements: [
+			{
+				id: "5",
+				type: "file",
+				title: "file_3.jpg",
+				status: "done",
+			},
+			{
+				id: "6",
+				type: "file",
+				title: "file_4.jpg",
+				status: "error",
+			},
+		],
+	},
+	{
+		id: "7",
+		title: "Lesson 2",
+		type: "lesson",
+		status: "done",
+		elements: [
+			{
+				id: "8",
+				type: "file",
+				title: "file_5.jpg",
+				status: "done",
+			},
+			{
+				id: "9",
+				type: "file",
+				title: "file_6.jpg",
+				status: "done",
+			},
+		],
+	},
+	{
+		id: "10",
+		title: "Lesson 3",
+		type: "lesson",
+		status: "partial",
+		elements: [
+			{
+				id: "11",
+				type: "file",
+				title: "file_7.jpg",
+				status: "error",
+			},
+			{
+				id: "12",
+				type: "task",
+				title: "Inside Task",
+				status: "partial",
+				elements: [
+					{
+						id: "13",
+						type: "file",
+						title: "file_8.jpg",
+						status: "error",
+					},
+					{
+						id: "14",
+						type: "file",
+						title: "file_9.jpg",
+						status: "done",
+					},
+				],
+			},
+		],
+	},
+];
 
 @Module({
 	name: "room",
@@ -40,6 +142,12 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
+	private taskCopyResult: CopyApiResponse = {
+		id: "",
+		title: "",
+		type: CopyApiResponseTypeEnum.Task,
+		status: CopyApiResponseStatusEnum.Success,
+	};
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -47,6 +155,14 @@ export default class RoomModule extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
+	}
+
+	private _taskApi?: TaskApiInterface;
+	private get taskApi(): TaskApiInterface {
+		if (!this._taskApi) {
+			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
+		}
+		return this._taskApi;
 	}
 
 	@Action
@@ -293,6 +409,24 @@ export default class RoomModule extends VuexModule {
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
+	@Action
+	async copyTask(id: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
+				courseId: this.roomData.roomId,
+			});
+
+			this.setTaskCopyResult(copyResult.data);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -342,6 +476,11 @@ export default class RoomModule extends VuexModule {
 		this.courseShareToken = payload;
 	}
 
+	@Mutation
+	setTaskCopyResult(payload: CopyApiResponse | any): void {
+		this.taskCopyResult = payload;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -376,6 +515,10 @@ export default class RoomModule extends VuexModule {
 
 	get roomIsEmpty(): boolean {
 		return this.finishedLoading && this.roomData.elements.length === 0;
+	}
+
+	get getTaskCopyResult(): CopyApiResponse {
+		return this.taskCopyResult;
 	}
 
 	private get finishedLoading(): boolean {
