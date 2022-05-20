@@ -7,8 +7,8 @@
 		:buttons="['edit', 'close', 'confirm']"
 		confirm-btn-title-key="common.actions.remove"
 		@dialog-closed="$emit('dialog-closed', false)"
-		@dialog-edit="$emit('dialog-edit', data.id)"
-		@dialog-confirmed="$emit('dialog-confirmed', data.id)"
+		@dialog-edit="$emit('process-edit', data.id)"
+		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
 		<h2 slot="title" class="text-h4 my-2">Copying result of task</h2>
 		<template slot="content">
