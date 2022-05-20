@@ -32,15 +32,6 @@
 						:data-testid="`room-${roomData.roomId}-files`"
 						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
-					<v-btn
-						color="secondary"
-						class="back-button"
-						outlined
-						small
-						@click="testComponentDialog.isOpen = true"
-					>
-						Open Copy Result
-					</v-btn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -106,25 +97,6 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
-		<!-- //// Test treeview component//// -->
-		<v-custom-dialog
-			v-model="testComponentDialog.isOpen"
-			:size="640"
-			@dialog-closed="closeDialog"
-		>
-			<div slot="title" class="dialog-header">
-				<h4>Copy Result</h4>
-			</div>
-			<template slot="content">
-				<v-divider class="mb-4"></v-divider>
-				<copy-result
-					v-if="taskCopyObject.elements"
-					:items="copiedItems"
-					:show-spinner="testComponentDialog.loading"
-				>
-				</copy-result>
-			</template>
-		</v-custom-dialog>
 	</default-wireframe>
 </template>
 
@@ -147,7 +119,6 @@ import {
 	mdiShareVariant,
 	mdiContentCopy,
 } from "@mdi/js";
-import CopyResult from "@components/molecules/CopyResult";
 
 export default {
 	components: {
@@ -157,7 +128,6 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
-		CopyResult,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -190,11 +160,6 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
-			testComponentDialog: {
-				isOpen: true,
-				loading: false,
-			},
-			elementIndex: 0,
 		};
 	},
 	computed: {
@@ -295,24 +260,6 @@ export default {
 			}
 			return items;
 		},
-		taskCopyObject() {
-			return roomModule.getTaskCopyResult;
-		},
-		copiedItems() {
-			const data = this.taskCopyObject;
-			return [
-				{
-					id: data.id,
-					status: data.status,
-					title: data.title,
-					type: data.type,
-					index: this.elementIndex,
-					elements: data.elements
-						? this.prepareCopiedElements(data.elements)
-						: [],
-				},
-			];
-		},
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
@@ -320,7 +267,6 @@ export default {
 			courseId: this.courseId,
 			userId: authModule.getUser.id,
 		});
-		await roomModule.copyTask("59cce3f6c6abf042248e888d");
 	},
 
 	methods: {
@@ -354,21 +300,6 @@ export default {
 			this.dialog.text = "";
 			this.dialog.inputText = "";
 			this.dialog.subText = "";
-		},
-		prepareCopiedElements(items) {
-			return items.map(({ elements = [], ...rest }) => {
-				const item = { ...rest };
-				item.index = ++this.elementIndex;
-				if (item.status === "not-doing" || item.status === "not-implemented")
-					item.status = "failure";
-				if (elements.length) {
-					const isSuccess = elements.every((ele) => ele.status === "success");
-					item.status = isSuccess ? "success" : item.status;
-					item.elements = this.prepareCopiedElements(elements);
-				}
-
-				return item;
-			});
 		},
 	},
 	head() {
