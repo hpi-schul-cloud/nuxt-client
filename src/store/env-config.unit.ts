@@ -35,7 +35,7 @@ let requestPath: string;
 const axiosInitializer = (envs?: any, error?: boolean) => {
 	initializeAxios({
 		$get: async (path: string) => {
-			if (error) Promise.reject();
+			if (error) throw new Error();
 
 			requestPath = path;
 			return envs;
@@ -113,43 +113,43 @@ describe("env-config module", () => {
 			);
 		});
 
-		// it("findEnvs should retry on error", async () => {
-		// 	axiosInitializer(mockEnvs, true);
+		it("findEnvs should retry on error", async () => {
+			axiosInitializer(mockEnvs, true);
 
-		// 	const envConfigModule = new EnvConfigModule({});
-		// 	const businessErrorSpy = jest.spyOn(
-		// 		envConfigModule,
-		// 		"resetBusinessError"
-		// 	);
+			const envConfigModule = new EnvConfigModule({});
+			const businessErrorSpy = jest.spyOn(
+				envConfigModule,
+				"resetBusinessError"
+			);
 
-		// 	expect(envConfigModule.loadingErrorCount).toBe(0);
+			expect(envConfigModule.loadingErrorCount).toBe(0);
 
-		// 	await envConfigModule.findEnvs();
-		// 	jest.runOnlyPendingTimers();
+			await envConfigModule.findEnvs();
+			jest.runOnlyPendingTimers();
 
-		// 	expect(envConfigModule.loadingErrorCount).toBe(1);
-		// 	expect(consoleErrorSpy.mock.calls).toHaveLength(1);
-		// 	expect(businessErrorSpy.mock.calls).toHaveLength(2);
-		// });
+			expect(envConfigModule.loadingErrorCount).toBe(1);
+			expect(consoleErrorSpy.mock.calls).toHaveLength(1);
+			expect(businessErrorSpy.mock.calls).toHaveLength(2);
+		});
 
-		// it("findEnvs should not retry afer the 10th time", async () => {
-		// 	axiosInitializer(null, true);
-		// 	const envConfigModule = new EnvConfigModule({});
-		// 	const businessErrorSpy = jest.spyOn(
-		// 		envConfigModule,
-		// 		"resetBusinessError"
-		// 	);
+		it("findEnvs should not retry afer the 10th time", async () => {
+			axiosInitializer(null, true);
+			const envConfigModule = new EnvConfigModule({});
+			const businessErrorSpy = jest.spyOn(
+				envConfigModule,
+				"resetBusinessError"
+			);
 
-		// 	envConfigModule.loadingErrorCount = 10;
-		// 	expect(envConfigModule.loadingErrorCount).toBe(10);
+			envConfigModule.loadingErrorCount = 10;
+			expect(envConfigModule.loadingErrorCount).toBe(10);
 
-		// 	await envConfigModule.findEnvs();
-		// 	jest.runOnlyPendingTimers();
+			await envConfigModule.findEnvs();
+			jest.runOnlyPendingTimers();
 
-		// 	expect(envConfigModule.loadingErrorCount).toBe(10);
-		// 	expect(consoleErrorSpy.mock.calls).toHaveLength(1);
-		// 	expect(businessErrorSpy.mock.calls).toHaveLength(1);
-		// });
+			expect(envConfigModule.loadingErrorCount).toBe(10);
+			expect(consoleErrorSpy.mock.calls).toHaveLength(1);
+			expect(businessErrorSpy.mock.calls).toHaveLength(1);
+		});
 	});
 
 	describe("mutations", () => {
