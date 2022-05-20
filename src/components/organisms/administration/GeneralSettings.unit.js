@@ -48,6 +48,23 @@ const federalState = {
 	abbreviation: "BB",
 };
 
+const systems = [
+	{
+		_id: "0000d186816abba584714c91",
+		type: "ldap",
+		ldapConfig: {
+			provider: "general",
+		},
+	},
+	{
+		_id: "0000d186816abba584714c90",
+		type: "ldap",
+		ldapConfig: {
+			provider: "iserv-idm",
+		},
+	},
+];
+
 const generateMockStore = {
 	"env-config": {
 		getters: {
@@ -121,6 +138,7 @@ describe("GeneralSettings", () => {
 
 		schoolsModule.setSchool(school);
 		schoolsModule.setFederalState(federalState);
+		schoolsModule.setSystems(systems);
 	});
 
 	it(...isValidComponent(GeneralSettings));
@@ -164,6 +182,35 @@ describe("GeneralSettings", () => {
 
 			const ele = wrapper.find(searchStrings.schoolName);
 			expect(ele.vm.value).toBe("Paul-Gerhardt-Gymnasium");
+		});
+
+		it("school name should be disabled if the school is synced", async () => {
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.find(searchStrings.schoolName);
+			expect(ele.vm.disabled).toBeTrue();
+		});
+
+		it("school name should be editable if the school is not synced", async () => {
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			delete school.systems;
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.find(searchStrings.schoolName);
+			expect(ele.vm.disabled).toBeFalse();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {
