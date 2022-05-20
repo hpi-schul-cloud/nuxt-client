@@ -161,10 +161,10 @@ export default class SchoolsModule extends VuexModule {
 	get schoolIsSynced(): boolean {
 		return this.systems.some(
 			(system) =>
+				system.type === "tsp-school" ||
 				(system.type === "ldap" &&
 					(system.ldapConfig.provider === "iserv-idm" ||
-						system.ldapConfig.provider === "univention")) ||
-				system.type === "tsp-school"
+						system.ldapConfig.provider === "univention"))
 		);
 	}
 
