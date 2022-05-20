@@ -206,7 +206,7 @@ describe("GeneralSettings", () => {
 					vuetify: true,
 				}),
 			});
-			delete school.systems;
+			schoolsModule.setSystems([]);
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
