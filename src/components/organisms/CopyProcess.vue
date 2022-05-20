@@ -11,15 +11,24 @@
 		@dialog-confirmed="$emit('dialog-confirmed', data.id)"
 	>
 		<h2 slot="title" class="text-h4 my-2">Copying result of task</h2>
-		<template slot="content"> </template>
+		<template slot="content">
+			<v-divider class="mb-4"></v-divider>
+			<copy-result
+				v-if="data.elements"
+				:items="copiedItems"
+				:show-spinner="!data.elements"
+			>
+			</copy-result>
+		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import CopyResult from "@components/molecules/CopyResult";
 
 export default {
-	components: { vCustomDialog },
+	components: { vCustomDialog, CopyResult },
 	props: {
 		data: {
 			type: Object,
