@@ -816,6 +816,28 @@ describe("schools module", () => {
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
 			});
+			it("should return correct sync status for moodle schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "moodle",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
+			it("should return correct sync status for itslearning schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "itslearning",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
 		});
 	});
 });
