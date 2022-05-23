@@ -35,7 +35,7 @@ let requestPath: string;
 const axiosInitializer = (envs?: any, error?: boolean) => {
 	initializeAxios({
 		$get: async (path: string) => {
-			if (error) Promise.reject();
+			if (error) throw new Error();
 
 			requestPath = path;
 			return envs;
@@ -57,6 +57,7 @@ describe("env-config module", () => {
 		consoleWarnSpy.mockRestore();
 		consoleErrorSpy.mockRestore();
 	});
+
 	describe("actions", () => {
 		it("findEnv should make a get request to the right path", async () => {
 			const envConfigModule = new EnvConfigModule({});
@@ -65,6 +66,7 @@ describe("env-config module", () => {
 			await envConfigModule.findEnvs();
 			expect(requestPath).toStrictEqual(URL);
 		});
+
 		it("findEnv should get envs", async () => {
 			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
@@ -72,6 +74,7 @@ describe("env-config module", () => {
 			await envConfigModule.findEnvs();
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
 		});
+
 		it("findEnv should call resetBusinessError, setStatus, and setEnvs mutations", async () => {
 			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
@@ -93,6 +96,7 @@ describe("env-config module", () => {
 			expect(setStatusSpy).toBeCalled();
 			expect(setEnvsSpy).toBeCalled();
 		});
+
 		it("findEnv should log errors for missing required vars", async () => {
 			const envConfigModule = new EnvConfigModule({});
 			const misingRequiredVars = {
@@ -108,8 +112,9 @@ describe("env-config module", () => {
 				Object.keys(misingRequiredVars).length
 			);
 		});
+
 		it("findEnvs should retry on error", async () => {
-			axiosInitializer(null, true);
+			axiosInitializer(mockEnvs, true);
 
 			const envConfigModule = new EnvConfigModule({});
 			const businessErrorSpy = jest.spyOn(
@@ -126,6 +131,7 @@ describe("env-config module", () => {
 			expect(consoleErrorSpy.mock.calls).toHaveLength(1);
 			expect(businessErrorSpy.mock.calls).toHaveLength(2);
 		});
+
 		it("findEnvs should not retry afer the 10th time", async () => {
 			axiosInitializer(null, true);
 			const envConfigModule = new EnvConfigModule({});
@@ -145,6 +151,7 @@ describe("env-config module", () => {
 			expect(businessErrorSpy.mock.calls).toHaveLength(1);
 		});
 	});
+
 	describe("mutations", () => {
 		it("setEnvs should set envs", () => {
 			const envConfigModule = new EnvConfigModule({});
@@ -152,12 +159,14 @@ describe("env-config module", () => {
 			envConfigModule.setEnvs(mockEnvs);
 			expect(envConfigModule.env.SC_THEME).toBe("mockValue");
 		});
+
 		it("increaseLoadingErrorCount should increase loadingErrorCount value by 1", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.loadingErrorCount).toBe(0);
 			envConfigModule.increaseLoadingErrorCount();
 			expect(envConfigModule.loadingErrorCount).toBe(1);
 		});
+
 		it("setBusinessError should set businessError", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.businessError.message).toBe("");
@@ -167,6 +176,7 @@ describe("env-config module", () => {
 			});
 			expect(envConfigModule.businessError.message).toBe("mockValue");
 		});
+
 		it("resetBusinessError should reset businessError", () => {
 			const envConfigModule = new EnvConfigModule({});
 			envConfigModule.setBusinessError({
@@ -177,6 +187,7 @@ describe("env-config module", () => {
 			envConfigModule.resetBusinessError();
 			expect(envConfigModule.businessError.message).toBe("");
 		});
+
 		it("setStatus should set status", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.status).toBe("");
@@ -184,17 +195,20 @@ describe("env-config module", () => {
 			expect(envConfigModule.status).toBe("completed");
 		});
 	});
+
 	describe("getters", () => {
 		it("getFallbackLanguage should get 'de' if I18N__FALLBACK_LANGUAGE is not defined", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.I18N__FALLBACK_LANGUAGE).toBe("");
 			expect(envConfigModule.getFallbackLanguage).toBe("de");
 		});
+
 		it("getDefaultTimeZone should get 'Europe/Berlin' if I18N__DEFAULT_TIMEZONE is not defined", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.I18N__DEFAULT_TIMEZONE).toBe("");
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
 		});
+
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
