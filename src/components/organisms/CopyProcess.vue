@@ -2,21 +2,21 @@
 	<v-custom-dialog
 		v-model="isOpen"
 		data-testid="delete-dialog-item"
-		:size="375"
+		:size="480"
 		has-buttons
-		:buttons="['edit', 'close', 'confirm']"
+		:buttons="['close']"
 		confirm-btn-title-key="common.actions.remove"
 		@dialog-closed="$emit('dialog-closed', false)"
 		@dialog-edit="$emit('process-edit', data.id)"
 		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
-		<h2 slot="title" class="text-h4 my-2">Copying result of task</h2>
+		<h2 slot="title" class="text-h4 my-2">{{ data.title }}</h2>
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
 			<copy-result
 				v-if="data.elements"
-				:items="copiedItems"
-				:show-spinner="!data.elements"
+				:items="copiedItems.elements"
+				:show-spinner="loading"
 			>
 			</copy-result>
 		</template>
@@ -50,18 +50,37 @@ export default {
 	computed: {
 		copiedItems() {
 			const { data } = this;
-			return [
-				{
+			if (this.checkIfEveryElementsAreSuccess(this.data.elements)) {
+				return {
 					id: data.id,
 					status: data.status,
 					title: data.title,
 					type: data.type,
 					index: this.elementIndex,
-					elements: data.elements
-						? this.prepareCopiedElements(data.elements)
-						: [],
-				},
-			];
+					completed: true,
+					elements: [
+						{
+							id: data.id,
+							status: "success",
+							title: "All elements copied successfully.",
+							type: data.type,
+						},
+					],
+				};
+			}
+
+			return {
+				id: data.id,
+				status: data.status,
+				title: data.title,
+				type: data.type,
+				index: this.elementIndex,
+				elements: data.elements
+					? this.prepareCopiedElements(
+							data.elements.filter((item) => item.status !== "not-doing")
+					  )
+					: [],
+			};
 		},
 	},
 	methods: {
@@ -69,14 +88,30 @@ export default {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
 				item.index = ++this.elementIndex;
-				if (item.status === "not-doing" || item.status === "not-implemented")
-					item.status = "failure";
+				if (item.status === "not-implemented") item.status = "failure";
+				if (item.title === "files")
+					item.title = this.$t(
+						"components.molecules.copyResult.fileCopy.error"
+					);
 				if (elements.length) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
 					item.status = isSuccess ? "success" : item.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;
+			});
+		},
+		checkIfEveryElementsAreSuccess(items) {
+			if (this.data.status !== "success") return false;
+			return items.every(({ elements = [], ...rest }) => {
+				const item = { ...rest };
+				if (item.status !== "success") return false;
+				if (elements.length) {
+					if (item.status !== "success") return false;
+					return (item.elements =
+						this.checkIfEveryElementsAreSuccess(elements));
+				}
+				return item.status === "success";
 			});
 		},
 	},

@@ -30,7 +30,6 @@
 						v-if="checkButtons('edit')"
 						data-testId="dialog-edit"
 						depressed
-						outlined
 						@click="$emit('dialog-edit')"
 					>
 						{{ this.$t("common.actions.edit") }}

@@ -162,6 +162,7 @@
 		<copy-process
 			:data="copyProcess.data"
 			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
 			@process-edit="redirectTask"
