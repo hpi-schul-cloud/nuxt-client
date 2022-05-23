@@ -34,7 +34,7 @@ Base links to copy
 - Links to documentation / tickets if exists, or provide more details here.
 -->
 
-## Data-security <sub><sup>details [on Confluence](https://docs.dbildungscloud.de/x/lQITD)</sup></sub>
+## Data-security
 
 <!--
 Please note here about:
