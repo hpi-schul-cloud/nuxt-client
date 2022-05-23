@@ -18,7 +18,7 @@ import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
 const serverResponse = {
-	title: "Aufgabe",
+	title: "Task Mathematics",
 	type: "task",
 	status: "success",
 	id: "12345",
@@ -59,7 +59,7 @@ const serverResponse = {
 					id: "3",
 					type: "file",
 					title: "file_2.jpg",
-					status: "success",
+					status: "partial",
 					elements: [
 						{
 							id: "2",

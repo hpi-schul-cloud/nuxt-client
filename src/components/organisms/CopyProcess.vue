@@ -88,11 +88,12 @@ export default {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
 				item.index = ++this.elementIndex;
-				if (item.status === "not-implemented") item.status = "failure";
-				if (item.title === "files")
+				if (item.title === "files" && item.status === "not-implemented") {
 					item.title = this.$t(
 						"components.molecules.copyResult.fileCopy.error"
 					);
+				}
+				if (item.status === "not-implemented") item.status = "failure";
 				if (elements.length) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
 					item.status = isSuccess ? "success" : item.status;
@@ -107,7 +108,6 @@ export default {
 				const item = { ...rest };
 				if (item.status !== "success") return false;
 				if (elements.length) {
-					if (item.status !== "success") return false;
 					return (item.elements =
 						this.checkIfEveryElementsAreSuccess(elements));
 				}
