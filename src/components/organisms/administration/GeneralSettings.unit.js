@@ -208,7 +208,7 @@ describe("GeneralSettings", () => {
 			const localMockData = {
 				localSchool: {
 					...mockData.localSchool,
-					systems: [{ $oid: "0000d186816abba584714c91" }],
+					systems: [{ $oid: unsyncedSystem[0]._id }],
 				},
 			};
 			schoolsModule.setSystems(unsyncedSystem);
