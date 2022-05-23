@@ -51,7 +51,7 @@ describe("room module", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				await roomModule.fetchContent("123");
@@ -68,7 +68,7 @@ describe("room module", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				await roomModule.publishCard({ elementId: "54321", visibility: true });
@@ -88,7 +88,7 @@ describe("room module", () => {
 			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as serverApi.RoomsApiInterface);
+					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const roomModule = new RoomModule({});
 				const payload = {
@@ -145,7 +145,7 @@ describe("room module", () => {
 				expect(confirmImportLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
 			});
 
-			it("should set businessError if server could't find any lesson", async () => {
+			it("should set businessError if server couldn't find any lesson", async () => {
 				let received: any[] = [];
 				let returned: any = {};
 
@@ -794,6 +794,10 @@ describe("room module", () => {
 				});
 			});
 		});
+
+		describe("triggerCopyCourse", () => {
+			// TODO: add 'action' tests after backend implementationå
+		});
 	});
 
 	describe("mutations", () => {
@@ -924,6 +928,57 @@ describe("room module", () => {
 				expect(roomModule.getPermissionData).toStrictEqual([]);
 				roomModule.setPermissionData(expectedPermissions);
 				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
+			});
+		});
+
+		describe("setCourseCopyResult", () => {
+			it("should set the state", () => {
+				const serverItems = [
+					{
+						id: 1,
+						type: "lesson",
+						name: "Lesson 1",
+						status: "done",
+						children: [
+							{
+								id: 2,
+								type: "file",
+								name: "file_1.jpg",
+								status: "done",
+							},
+							{
+								id: 3,
+								type: "file",
+								name: "file_2.jpg",
+								status: "done",
+							},
+						],
+					},
+					{
+						id: 4,
+						name: "Task 2",
+						type: "task",
+						status: "partial",
+						children: [
+							{
+								id: 5,
+								type: "file",
+								name: "file_3.jpg",
+								status: "done",
+							},
+							{
+								id: 6,
+								type: "file",
+								name: "file_4.jpg",
+								status: "error",
+							},
+						],
+					},
+				];
+				const roomModule = new RoomModule({});
+				roomModule.setTaskCopyResult(serverItems);
+
+				expect(roomModule.getTaskCopyResult).toStrictEqual(serverItems);
 			});
 		});
 	});
