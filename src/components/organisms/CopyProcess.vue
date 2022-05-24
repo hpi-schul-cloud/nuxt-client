@@ -5,7 +5,6 @@
 		:size="480"
 		has-buttons
 		:buttons="['close']"
-		confirm-btn-title-key="common.actions.remove"
 		@dialog-closed="$emit('dialog-closed', false)"
 		@dialog-edit="$emit('process-edit', data.id)"
 		@dialog-confirmed="$emit('process-delete', data.id)"

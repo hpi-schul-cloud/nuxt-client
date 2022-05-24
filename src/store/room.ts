@@ -59,7 +59,7 @@ const serverResponse = {
 					id: "3",
 					type: "file",
 					title: "file_2.jpg",
-					status: "partial",
+					status: "success",
 					elements: [
 						{
 							id: "2",
