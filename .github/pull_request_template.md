@@ -20,7 +20,7 @@
 
 <!--
 Base links to copy
-- https://ticketsystem.dbildungscloud.de/browse/SC-????
+- https://ticketsystem.dbildungscloud.de/browse/BC-????
 - https://github.com/hpi-schul-cloud/schulcloud-server/pull/????
 - https://github.com/hpi-schul-cloud/end-to-end-tests/pull/????
 - https://github.com/hpi-schul-cloud/schulcloud-client/pull/????
@@ -34,7 +34,7 @@ Base links to copy
 - Links to documentation / tickets if exists, or provide more details here.
 -->
 
-## Data-security <sub><sup>details [on Confluence](https://docs.dbildungscloud.de/x/2S3GBg)</sup></sub>
+## Data-security
 
 <!--
 Please note here about:
