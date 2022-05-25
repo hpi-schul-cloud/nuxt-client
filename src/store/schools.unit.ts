@@ -74,6 +74,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				});
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
@@ -310,6 +311,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				};
 				initializeAxios({
@@ -356,6 +358,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});
