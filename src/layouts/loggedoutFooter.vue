@@ -1,9 +1,7 @@
 <template>
 	<div class="page">
 		<navigation-bar
-			:links="navbarItems"
-			:img="require('@assets/img/logo/logo-dBildungscloud.svg')"
-			:buttons="true"
+			:img="require('@assets/img/logo/logo-image-mono.svg')"
 			class="topbar"
 		/>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
@@ -15,7 +13,6 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import navbarBaseItems from "@utils/navbarBaseItems.js";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {
@@ -23,20 +20,7 @@ export default {
 		NavigationBar,
 		TheFooter,
 	},
-	data() {
-		return {
-			navbarBaseItems: navbarBaseItems,
-		};
-	},
 	computed: {
-		navbarItems() {
-			return this.navbarBaseItems.map((item) => {
-				if (item.title.includes(".")) {
-					item.title = this.$t(`${item.title}`);
-				}
-				return item;
-			});
-		},
 		isMobile() {
 			return this.$mq === "mobile";
 		},
