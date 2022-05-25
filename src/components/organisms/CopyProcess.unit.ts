@@ -20,21 +20,22 @@ const propsData = {
 	loading: false,
 };
 
-const changedPropsData = [
-	{
-		id: "12345",
-		status: "partial",
+const successPropsData = {
+	data: {
 		title: "Aufgabe",
 		type: "task",
-		index: 0,
+		status: "success",
+		id: "12345",
 		elements: [
-			{ title: "metadata", type: "leaf", status: "success", index: 1 },
-			{ title: "description", type: "leaf", status: "success", index: 2 },
-			{ title: "submissions", type: "leaf", status: "failure", index: 3 },
-			{ title: "files", type: "leaf", status: "failure", index: 4 },
+			{ title: "metadata", type: "leaf", status: "success" },
+			{ title: "description", type: "leaf", status: "success" },
+			{ title: "submissions", type: "leaf", status: "success" },
+			{ title: "files", type: "leaf", status: "success" },
 		],
 	},
-];
+	isOpen: false,
+	loading: false,
+};
 
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(CopyProcess, {
@@ -60,10 +61,75 @@ describe("@components/organisms/CopyProcess", () => {
 		expect(wrapper.vm.loading).toStrictEqual(propsData.loading);
 	});
 
-	it("should change the data to an array for using the component ", async () => {
+	it("should change the prop data to 'copiedItems' object", async () => {
 		const wrapper = getWrapper(propsData);
+
+		const changedPropsData = {
+			id: "12345",
+			status: "partial",
+			title: "Aufgabe",
+			type: "task",
+			index: 0,
+			elements: [
+				{
+					title: wrapper.vm.$i18n.t("components.molecules.copyResult.metadata"),
+					type: "leaf",
+					status: "success",
+					index: 1,
+				},
+				{
+					title: wrapper.vm.$i18n.t("common.labels.description"),
+					type: "leaf",
+					status: "success",
+					index: 2,
+				},
+				{
+					title: wrapper.vm.$i18n.t(
+						"components.molecules.copyResult.fileCopy.error"
+					),
+					type: "leaf",
+					status: "failure",
+					index: 3,
+				},
+			],
+		};
 
 		expect(wrapper.vm.data).toStrictEqual(propsData.data);
 		expect(wrapper.vm.copiedItems).toStrictEqual(changedPropsData);
+	});
+
+	it("should filter elements which have 'not-doing' status", async () => {
+		const wrapper = getWrapper(propsData);
+
+		const filterResult = wrapper.vm.copiedItems.elements.some(
+			(item: any) => item.status === "not-doing"
+		);
+
+		expect(filterResult).toBe(false);
+	});
+
+	it("should have only one success element when every items' status is 'success'", async () => {
+		const wrapper = getWrapper(successPropsData);
+
+		const successObject = {
+			id: "12345",
+			status: "success",
+			title: "Aufgabe",
+			type: "task",
+			index: 0,
+			completed: true,
+			elements: [
+				{
+					id: "12345",
+					status: "success",
+					title: wrapper.vm.$i18n.t(
+						"components.molecules.copyResult.successfullyCopied"
+					),
+					type: "task",
+				},
+			],
+		};
+
+		expect(wrapper.vm.copiedItems).toStrictEqual(successObject);
 	});
 });

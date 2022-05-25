@@ -134,6 +134,7 @@ export default {
 	color: var(--color-danger-dark);
 	white-space: pre-line;
 }
+
 .not-finished {
 	color: var(--color-danger-dark);
 }

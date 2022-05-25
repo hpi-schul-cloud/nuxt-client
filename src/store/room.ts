@@ -17,69 +17,6 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
-const serverResponse = {
-	title: "Task Mathematics",
-	type: "task",
-	status: "success",
-	id: "12345",
-	elements: [
-		{
-			title: "metadata",
-			type: "leaf",
-			status: "success",
-			elements: [
-				{
-					id: "2",
-					type: "file",
-					title: "file_1.jpg",
-					status: "success",
-				},
-				{
-					id: "3",
-					type: "file",
-					title: "file_2.jpg",
-					status: "success",
-				},
-			],
-		},
-		{ title: "description", type: "leaf", status: "success" },
-		{ title: "submissions", type: "leaf", status: "success" },
-		{
-			title: "files",
-			type: "leaf",
-			status: "success",
-			elements: [
-				{
-					id: "2",
-					type: "file",
-					title: "file_1.jpg",
-					status: "success",
-				},
-				{
-					id: "3",
-					type: "file",
-					title: "file_2.jpg",
-					status: "success",
-					elements: [
-						{
-							id: "2",
-							type: "file",
-							title: "file_1.jpg",
-							status: "success",
-						},
-						{
-							id: "3",
-							type: "file",
-							title: "file_2.jpg",
-							status: "success",
-						},
-					],
-				},
-			],
-		},
-	],
-};
-
 @Module({
 	name: "room",
 	namespaced: true,
@@ -383,8 +320,7 @@ export default class RoomModule extends VuexModule {
 				courseId: this.roomData.roomId,
 			});
 
-			this.setTaskCopyResult(copyResult.data);
-			// this.setTaskCopyResult(serverResponse);
+			this.setTaskCopyResult(copyResult.data || {});
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,

@@ -10,7 +10,9 @@
 		@dialog-edit="$emit('process-edit', data.id)"
 		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
-		<h2 slot="title" class="text-h4 my-2">Kopier-Ergebnis</h2>
+		<h2 slot="title" class="text-h4 my-2">
+			{{ $t("components.molecules.copyResult.title") }}
+		</h2>
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
 			<label class="text-md mt-2">
@@ -65,7 +67,9 @@ export default {
 						{
 							id: data.id,
 							status: "success",
-							title: "All elements copied successfully.",
+							title: this.$t(
+								"components.molecules.copyResult.successfullyCopied"
+							),
 							type: data.type,
 						},
 					],
@@ -96,6 +100,14 @@ export default {
 						"components.molecules.copyResult.fileCopy.error"
 					);
 				}
+				item.title =
+					item.title === "metadata"
+						? this.$t("components.molecules.copyResult.metadata")
+						: item.title;
+				item.title =
+					item.title === "description"
+						? this.$t("common.labels.description")
+						: item.title;
 				if (item.status === "not-implemented") item.status = "failure";
 				if (elements.length) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
