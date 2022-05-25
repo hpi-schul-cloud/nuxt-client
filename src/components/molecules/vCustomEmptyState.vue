@@ -6,6 +6,7 @@
 			fill="var(--color-primary)"
 			role="presentation"
 			class="text-center"
+			color="var(--color-primary)"
 		/>
 		<h1 class="h4 text-center mt-8" data-testid="emptyTaskMessage">
 			{{ title }}
