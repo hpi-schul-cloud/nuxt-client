@@ -322,7 +322,7 @@ export default {
 	},
 	computed: {
 		isAllowed() {
-			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
+			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true || this.school.features.ldapUniventionMigrationSchool === true;
 		},
 		isMigrationNotStarted() {
 			return this.school.inUserMigration === undefined;
