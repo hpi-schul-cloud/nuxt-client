@@ -1,25 +1,29 @@
 <template>
-	<v-custom-dialog
-		v-model="isOpen"
-		data-testid="delete-dialog-item"
-		:size="480"
-		has-buttons
-		:buttons="['close']"
-		@dialog-closed="$emit('dialog-closed', false)"
-		@dialog-edit="$emit('process-edit', data.id)"
-		@dialog-confirmed="$emit('process-delete', data.id)"
-	>
-		<h2 slot="title" class="text-h4 my-2">{{ data.title }}</h2>
-		<template slot="content">
-			<v-divider class="mb-4"></v-divider>
-			<copy-result
-				v-if="data.elements"
-				:items="copiedItems.elements"
-				:show-spinner="loading"
-			>
-			</copy-result>
-		</template>
-	</v-custom-dialog>
+    <v-custom-dialog
+        v-model="isOpen"
+        data-testid="delete-dialog-item"
+        :size="480"
+        has-buttons
+        :buttons="['close']"
+        confirm-btn-title-key="common.actions.remove"
+        @dialog-closed="$emit('dialog-closed', false)"
+        @dialog-edit="$emit('process-edit', data.id)"
+        @dialog-confirmed="$emit('process-delete', data.id)"
+    >
+        <h2 slot="title" class="text-h4 my-2">Kopier-Ergebnis</h2>
+        <template slot="content">
+            <v-divider class="mb-4"></v-divider>
+                        <label class="text-md mt-2">
+                        {{ data.title }}
+                </label>
+            <copy-result
+                v-if="data.elements"
+                :items="copiedItems.elements"
+                :show-spinner="loading"
+            >
+            </copy-result>
+        </template>
+    </v-custom-dialog>
 </template>
 
 <script>

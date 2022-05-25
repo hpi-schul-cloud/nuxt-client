@@ -131,10 +131,11 @@ export default {
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 .treeview-item-failure {
+	color: var(--color-danger-dark);
 	white-space: pre-line;
 }
 .not-finished {
-	color: var(--color-danger);
+	color: var(--color-danger-dark);
 }
 .finished {
 	color: var(--color-secondary);
