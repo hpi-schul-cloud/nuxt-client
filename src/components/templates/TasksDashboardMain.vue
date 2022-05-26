@@ -77,7 +77,7 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
-import tasksEmptyStateImage from "@assets/img/empty-state/tasks-empty-state.svg";
+//import tasksEmptyStateImage from "@assets/img/empty-state/tasks-empty-state.svg";
 
 export default {
 	components: {
@@ -98,7 +98,7 @@ export default {
 		return {
 			tab: 0, // should we save this in store?
 			mdiPlus,
-			tasksEmptyStateImage,
+			//	tasksEmptyStateImage,
 		};
 	},
 	inject: ["taskModule", "finishedTaskModule"],
@@ -233,7 +233,7 @@ export default {
 			return tabThree;
 		},
 		emptyState() {
-			const image = tasksEmptyStateImage;
+			const image = "@assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 
