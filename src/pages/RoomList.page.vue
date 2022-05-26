@@ -77,24 +77,24 @@
 import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
-import { roomsModule, authModule, envConfigModule } from "@/store";
+import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
-import ImportModal from "@components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+// import ImportModal from "@components/molecules/ImportModal.vue";
+// import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
 export default Vue.extend({
 	components: {
 		vRoomAvatar,
 		DefaultWireframe,
-		ImportModal,
+		// ImportModal,
 	},
 	layout: "defaultVuetify",
 	data() {
 		return {
 			searchText: "",
-			importDialog: {
-				isOpen: false,
-			},
+			// importDialog: {
+			// 	isOpen: false,
+			// },
 		};
 	},
 	computed: {
@@ -109,60 +109,60 @@ export default Vue.extend({
 						.includes(this.$data.searchText.toLowerCase())
 			);
 		},
-		fab() {
-			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
-			) {
-				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-					return {
-						icon: mdiPlus,
-						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("common.actions.create"),
-						testId: "add-course-button",
-						actions: [
-							{
-								label: this.$t("pages.rooms.fab.add.course"),
-								icon: mdiSchool,
-								href: "/courses/add",
-								dataTestid: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.course"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiCloudDownload,
-								dataTestid: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
-							},
-						],
-					};
-				}
-				return {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					href: "/courses/add",
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "add-course-button",
-				};
-			}
+	// 	fab() {
+	// 		if (
+	// 			authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+	// 		) {
+	// 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+	// 				return {
+	// 					icon: mdiPlus,
+	// 					title: this.$t("common.actions.create"),
+	// 					ariaLabel: this.$t("common.actions.create"),
+	// 					testId: "add-course-button",
+	// 					actions: [
+	// 						{
+	// 							label: this.$t("pages.rooms.fab.add.course"),
+	// 							icon: mdiSchool,
+	// 							href: "/courses/add",
+	// 							dataTestid: "fab_button_add_course",
+	// 							ariaLabel: this.$t("pages.rooms.fab.add.course"),
+	// 						},
+	// 						{
+	// 							label: this.$t("pages.rooms.fab.import.course"),
+	// 							icon: mdiCloudDownload,
+	// 							dataTestid: "fab_button_import_course",
+	// 							ariaLabel: this.$t("pages.rooms.fab.import.course"),
+	// 							customEvent: {
+	// 								name: "fabButtonEvent",
+	// 								value: true,
+	// 							},
+	// 						},
+	// 					],
+	// 				};
+	// 			}
+	// 			return {
+	// 				icon: mdiPlus,
+	// 				title: this.$t("common.actions.create"),
+	// 				href: "/courses/add",
+	// 				ariaLabel: this.$t("common.actions.create"),
+	// 				testId: "add-course-button",
+	// 			};
+	// 		}
 
-			return null;
-		},
+	// 		return null;
+	// 	},
 	},
 	async mounted() {
 		await roomsModule.fetchAllElements();
 	},
-	methods: {
-		fabClick() {
-			this.importDialog.isOpen = true;
-		},
-		async updateRooms() {
-			await roomsModule.fetch();
-		},
-	},
+	// methods: {
+	// 	fabClick() {
+	// 		this.importDialog.isOpen = true;
+	// 	},
+	// 	async updateRooms() {
+	// 		await roomsModule.fetch();
+	// 	},
+	// },
 	head() {
 		return {
 			title: `${this.$t("pages.courses.index.courses.all")} - ${
