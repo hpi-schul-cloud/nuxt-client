@@ -814,7 +814,7 @@ describe("schools module", () => {
 					},
 				];
 				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
 			});
 			it("should return correct sync status for moodle schools", () => {
 				const schoolsModule = new SchoolsModule({});

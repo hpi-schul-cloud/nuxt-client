@@ -57,10 +57,7 @@ const syncedSystem = [
 const unsyncedSystem = [
 	{
 		_id: "0000d186816abba584714c91",
-		type: "ldap",
-		ldapConfig: {
-			provider: "general",
-		},
+		type: "moodle",
 	},
 ];
 
