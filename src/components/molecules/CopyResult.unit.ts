@@ -116,7 +116,7 @@ describe("@components/molecules/CopyResult", () => {
 		const elementsPartial = wrapper.findAll(".treeview-item-partial");
 		const elementsError = wrapper.findAll(".treeview-item-failure");
 		const textDone = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.parentItem.info",
+			"components.molecules.copyResult.aria.parentItem.info",
 			{
 				itemTitle: propsData.items[0].title,
 				itemStatus: wrapper.vm.$i18n.t(
@@ -128,7 +128,7 @@ describe("@components/molecules/CopyResult", () => {
 			}
 		);
 		const textPartial = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.parentItem.info",
+			"components.molecules.copyResult.aria.parentItem.info",
 			{
 				itemTitle: propsData.items[1].title,
 				itemStatus: wrapper.vm.$i18n.t(
@@ -139,7 +139,7 @@ describe("@components/molecules/CopyResult", () => {
 			}
 		);
 		const textError = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.childItem.info",
+			"components.molecules.copyResult.aria.childItem.info",
 			{
 				itemTitle: propsData.items[1].elements[1].title,
 				itemStatus: wrapper.vm.$i18n.t(
