@@ -109,7 +109,7 @@ export default {
 						? this.$t("common.labels.description")
 						: item.title;
 				if (item.status === "not-implemented") item.status = "failure";
-				if (elements.length) {
+				if (elements.length > 0) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
 					item.status = isSuccess ? "success" : item.status;
 					item.elements = this.prepareCopiedElements(elements);
@@ -122,7 +122,7 @@ export default {
 			return items.every(({ elements = [], ...rest }) => {
 				const item = { ...rest };
 				if (item.status !== "success") return false;
-				if (elements.length) {
+				if (elements.length > 0) {
 					return (item.elements =
 						this.checkIfEveryElementsAreSuccess(elements));
 				}
