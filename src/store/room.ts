@@ -315,13 +315,16 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async copyTask(id: string): Promise<void> {
 		this.resetBusinessError();
+		this.setLoading(true);
 		try {
 			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
 				courseId: this.roomData.roomId,
 			});
 
 			this.setTaskCopyResult(copyResult.data || {});
+			this.setLoading(false);
 		} catch (error: any) {
+			this.setError(error);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,

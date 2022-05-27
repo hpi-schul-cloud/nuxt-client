@@ -796,15 +796,15 @@ describe("room module", () => {
 		});
 
 		describe("copyTask", () => {
-			const taskMockApi = {
-				taskControllerCopyTask: jest.fn(),
-			};
 			beforeEach(() => {
 				// @ts-ignore
 				authModule.setUser({ id: "testUser" });
 			});
 
 			it("should make a 'POST' request to the backend", async () => {
+				const taskMockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(
@@ -829,6 +829,38 @@ describe("room module", () => {
 				).toStrictEqual({
 					courseId: "testRoom",
 				});
+			});
+
+			it("handle error", async () => {
+				const error = {
+					response: { status: 418, statusText: "This is an error" },
+				};
+				const taskMockApi = {
+					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(
+						taskMockApi as unknown as serverApi.TaskApiInterface
+					);
+
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "testRoom",
+					title: "testTitle",
+					displayColor: "testColor",
+					elements: [],
+				});
+				await roomModule.copyTask("54321");
+
+				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
+				expect(roomModule.getError).toStrictEqual({ ...error });
+				expect(roomModule.getBusinessError.message).toStrictEqual(
+					error.response.statusText
+				);
+				expect(roomModule.getBusinessError.statusCode).toStrictEqual(
+					error.response.status
+				);
 			});
 		});
 	});
