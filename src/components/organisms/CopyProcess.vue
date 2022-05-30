@@ -16,15 +16,7 @@
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
 			<template v-if="loading">
-				<v-skeleton-loader type="article" />
-				<v-progress-circular
-					v-if="loading"
-					indeterminate
-					size="72"
-					width="6"
-					color="secondary"
-					class="spinner"
-				></v-progress-circular>
+				<v-skeleton-loader type="article, list-item-three-line" />
 			</template>
 			<label class="text-md mt-2">
 				{{ data.title }}
@@ -152,12 +144,3 @@ export default {
 	},
 };
 </script>
-<style scoped>
-.spinner {
-	position: absolute;
-	right: 0;
-	left: 0;
-	margin-top: auto;
-	margin-left: auto;
-}
-</style>
