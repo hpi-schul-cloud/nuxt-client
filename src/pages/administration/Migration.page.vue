@@ -380,15 +380,15 @@ export default {
 		this.checkTotalInterval();
 	},
 	methods: {
-    async isAllowed() {
-      if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
-        return true;
-      }
-      if (this.school.id === "") {
-        await schoolsModule.fetchSchool();
-      }
-      return this.school.features.ldapUniventionMigrationSchool === true;
-    },
+		async isAllowed() {
+			if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+				return true;
+			}
+			if (this.school.id === "") {
+				await schoolsModule.fetchSchool();
+			}
+			return this.school.features.ldapUniventionMigrationSchool === true;
+		},
 		isStepEditable(step) {
 			switch (step) {
 				case 1:
