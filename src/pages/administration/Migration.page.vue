@@ -321,9 +321,6 @@ export default {
 		};
 	},
 	computed: {
-		isAllowed() {
-			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
-		},
 		isMigrationNotStarted() {
 			return this.school.inUserMigration === undefined;
 		},
@@ -376,13 +373,22 @@ export default {
 		},
 	},
 	created() {
-		if (!this.isAllowed) {
+		if (!this.isAllowed()) {
 			this.$router.push("/");
 		}
 		this.summary();
 		this.checkTotalInterval();
 	},
 	methods: {
+		async isAllowed() {
+			if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+				return true;
+			}
+			if (this.school.id === "") {
+				await schoolsModule.fetchSchool();
+			}
+			return this.school.features.ldapUniventionMigrationSchool === true;
+		},
 		isStepEditable(step) {
 			switch (step) {
 				case 1:
