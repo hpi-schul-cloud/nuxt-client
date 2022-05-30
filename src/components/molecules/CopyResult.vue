@@ -68,9 +68,10 @@ export default {
 			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(item) {
+			if (item.status === "success-all") return this.icons.mdiCheckAll;
 			if (item.status === "success" && !item.elements)
 				return this.icons.mdiCheck;
-			if (item.status === "success") return this.icons.mdiCheckAll;
+			if (item.status === "success") return this.icons.mdiCheck;
 			if (item.status === "failure") return this.icons.mdiAlertCircle;
 			if (item.status === "partial") return this.icons.mdiAlert;
 		},
@@ -123,7 +124,6 @@ export default {
 	color: var(--color-danger-dark);
 	white-space: pre-line;
 }
-
 .not-finished {
 	color: var(--color-danger-dark);
 }

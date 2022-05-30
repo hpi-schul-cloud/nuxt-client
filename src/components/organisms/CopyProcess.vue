@@ -69,7 +69,7 @@ export default {
 					elements: [
 						{
 							id: data.id,
-							status: "success",
+							status: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
