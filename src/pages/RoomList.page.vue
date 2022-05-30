@@ -4,8 +4,6 @@
 		headline=""
 		:full-width="true"
 		:aria-label="$t('pages.courses.index.courses.all')"
-		:fab-items="fab"
-		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
