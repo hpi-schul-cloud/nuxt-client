@@ -1,28 +1,35 @@
 <template>
 	<v-custom-dialog
-		v-model="isOpen"
+		v-model="showModal"
 		data-testid="delete-dialog-item"
 		:size="480"
 		has-buttons
 		:buttons="['close']"
-		confirm-btn-title-key="common.actions.remove"
-		@dialog-closed="$emit('dialog-closed', false)"
+		@dialog-closed="dialogClosed"
 		@dialog-edit="$emit('process-edit', data.id)"
 		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
+
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
+			<template v-if="loading">
+				<v-skeleton-loader type="article" />
+				<v-progress-circular
+					v-if="loading"
+					indeterminate
+					size="72"
+					width="6"
+					color="secondary"
+					class="spinner"
+				></v-progress-circular>
+			</template>
 			<label class="text-md mt-2">
 				{{ data.title }}
 			</label>
-			<copy-result
-				v-if="data.elements"
-				:items="copiedItems.elements"
-				:show-spinner="loading"
-			>
+			<copy-result v-if="data.elements" :items="copiedItems.elements">
 			</copy-result>
 		</template>
 	</v-custom-dialog>
@@ -50,12 +57,16 @@ export default {
 	data() {
 		return {
 			elementIndex: 0,
+			showModal: false,
 		};
 	},
 	computed: {
 		copiedItems() {
 			const { data } = this;
-			if (this.checkIfEveryElementsAreSuccess(this.data.elements)) {
+			const elements = data.elements.filter(
+				(item) => item.status !== "not-doing"
+			);
+			if (this.checkIfEveryElementsAreSuccess(elements)) {
 				return {
 					id: data.id,
 					status: data.status,
@@ -88,6 +99,11 @@ export default {
 					  )
 					: [],
 			};
+		},
+	},
+	watch: {
+		isOpen() {
+			this.showModal = this.isOpen;
 		},
 	},
 	methods: {
@@ -129,6 +145,19 @@ export default {
 				return item.status === "success";
 			});
 		},
+		dialogClosed() {
+			this.showModal = false;
+			this.$emit("dialog-closed", false);
+		},
 	},
 };
 </script>
+<style scoped>
+.spinner {
+	position: absolute;
+	right: 0;
+	left: 0;
+	margin-top: auto;
+	margin-left: auto;
+}
+</style>

@@ -1,13 +1,5 @@
 <template>
 	<div>
-		<v-progress-circular
-			v-if="showSpinner"
-			indeterminate
-			size="72"
-			width="6"
-			color="secondary"
-			class="spinner"
-		></v-progress-circular>
 		<v-treeview
 			:expand-icon="icons.mdiChevronDown"
 			:items="items"
@@ -52,9 +44,6 @@ export default {
 			type: Array,
 			required: true,
 			default: () => [],
-		},
-		showSpinner: {
-			type: Boolean,
 		},
 	},
 	data() {
@@ -143,12 +132,5 @@ export default {
 }
 .partial {
 	color: var(--color-accent);
-}
-.spinner {
-	position: absolute;
-	right: 0;
-	left: 0;
-	margin-right: auto;
-	margin-left: auto;
 }
 </style>

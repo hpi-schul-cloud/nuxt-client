@@ -132,4 +132,16 @@ describe("@components/organisms/CopyProcess", () => {
 
 		expect(wrapper.vm.copiedItems).toStrictEqual(successObject);
 	});
+
+	it("should show spinner when its prop set", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+		const spinnerElementBefore = wrapper.findAll(".spinner");
+		expect(spinnerElementBefore).toHaveLength(0);
+
+		await wrapper.setProps({ isOpen: true, loading: true });
+
+		const spinnerElementAfter = wrapper.find(".spinner");
+		expect(spinnerElementAfter.vm.isVisible).toBe(true);
+	});
 });
