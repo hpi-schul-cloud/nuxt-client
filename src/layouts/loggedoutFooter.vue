@@ -1,8 +1,10 @@
 <template>
 	<div class="page">
 		<navigation-bar
-			:img="require('@assets/img/logo/logo-image-mono.svg')"
 			class="topbar"
+			:buttons="hasButtons"
+			:img="require('@assets/img/logo/logo-image-mono.svg')"
+			:links="navbarItems"
 		/>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<Nuxt />
@@ -13,6 +15,7 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
+import navbarBaseItems from "@/utils/navbarBaseItems";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {
@@ -20,7 +23,30 @@ export default {
 		NavigationBar,
 		TheFooter,
 	},
+	data() {
+		return {
+			navbarBaseItems: navbarBaseItems,
+		};
+	},
 	computed: {
+		hasButtons() {
+			if (process.env.SC_THEME === "default") {
+				return true;
+			}
+			return false;
+		},
+		navbarItems() {
+			let items = {};
+			if (process.env.SC_THEME === "default") {
+				items = this.navbarBaseItems.map((item) => {
+					if (item.title.includes(".")) {
+						item.title = this.$t(`${item.title}`);
+					}
+					return item;
+				});
+			}
+			return items;
+		},
 		isMobile() {
 			return this.$mq === "mobile";
 		},
