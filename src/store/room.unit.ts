@@ -795,8 +795,73 @@ describe("room module", () => {
 			});
 		});
 
-		describe("triggerCopyCourse", () => {
-			// TODO: add 'action' tests after backend implementationå
+		describe("copyTask", () => {
+			beforeEach(() => {
+				// @ts-ignore
+				authModule.setUser({ id: "testUser" });
+			});
+
+			it("should make a 'POST' request to the backend", async () => {
+				const taskMockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(
+						taskMockApi as unknown as serverApi.TaskApiInterface
+					);
+
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "testRoom",
+					title: "testTitle",
+					displayColor: "testColor",
+					elements: [],
+				});
+				await roomModule.copyTask("54321");
+
+				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
+				expect(
+					taskMockApi.taskControllerCopyTask.mock.calls[0][0]
+				).toStrictEqual("54321");
+				expect(
+					taskMockApi.taskControllerCopyTask.mock.calls[0][1]
+				).toStrictEqual({
+					courseId: "testRoom",
+				});
+			});
+
+			it("handle error", async () => {
+				const error = {
+					response: { status: 418, statusText: "This is an error" },
+				};
+				const taskMockApi = {
+					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(
+						taskMockApi as unknown as serverApi.TaskApiInterface
+					);
+
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "testRoom",
+					title: "testTitle",
+					displayColor: "testColor",
+					elements: [],
+				});
+				await roomModule.copyTask("54321");
+
+				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
+				expect(roomModule.getError).toStrictEqual({ ...error });
+				expect(roomModule.getBusinessError.message).toStrictEqual(
+					error.response.statusText
+				);
+				expect(roomModule.getBusinessError.statusCode).toStrictEqual(
+					error.response.status
+				);
+			});
 		});
 	});
 
@@ -933,48 +998,30 @@ describe("room module", () => {
 
 		describe("setCourseCopyResult", () => {
 			it("should set the state", () => {
-				const serverItems = [
-					{
-						id: 1,
-						type: "lesson",
-						name: "Lesson 1",
-						status: "done",
-						children: [
-							{
-								id: 2,
-								type: "file",
-								name: "file_1.jpg",
-								status: "done",
-							},
-							{
-								id: 3,
-								type: "file",
-								name: "file_2.jpg",
-								status: "done",
-							},
-						],
-					},
-					{
-						id: 4,
-						name: "Task 2",
-						type: "task",
-						status: "partial",
-						children: [
-							{
-								id: 5,
-								type: "file",
-								name: "file_3.jpg",
-								status: "done",
-							},
-							{
-								id: 6,
-								type: "file",
-								name: "file_4.jpg",
-								status: "error",
-							},
-						],
-					},
-				];
+				const serverItems = {
+					title: "Aufgabe",
+					type: "task",
+					status: "success",
+					id: "123",
+					elements: [
+						{
+							title: "description",
+							type: "leaf",
+							status: "success",
+						},
+						{
+							title: "submissions",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "files",
+							type: "leaf",
+							status: "not-implemented",
+						},
+					],
+				};
+
 				const roomModule = new RoomModule({});
 				roomModule.setTaskCopyResult(serverItems);
 

@@ -26,6 +26,14 @@
 					>
 						{{ this.$t("common.actions.back") }}
 					</v-btn>
+					<v-btn
+						v-if="checkButtons('edit')"
+						data-testId="dialog-edit"
+						depressed
+						@click="$emit('dialog-edit')"
+					>
+						{{ this.$t("common.actions.edit") }}
+					</v-btn>
 				</div>
 				<div class="button-section button-right">
 					<v-btn
