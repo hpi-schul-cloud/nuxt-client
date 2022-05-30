@@ -37,6 +37,7 @@
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
+						@copy-task="copyTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -158,6 +159,16 @@
 				</p>
 			</template>
 		</v-custom-dialog>
+		<copy-process
+			:data="copyProcess.data"
+			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+			@process-edit="redirectTask"
+			@process-delete="deleteTask"
+		>
+		</copy-process>
 	</div>
 </template>
 
@@ -167,6 +178,7 @@ import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import { roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
@@ -179,6 +191,7 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
+		CopyProcess,
 	},
 	props: {
 		roomDataObject: {
@@ -197,6 +210,10 @@ export default {
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
+			copyProcess: {
+				data: {},
+				isOpen: false,
+			},
 		};
 	},
 	computed: {
@@ -308,6 +325,26 @@ export default {
 		},
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
+		},
+		async copyTask(itemId) {
+			await roomModule.copyTask(itemId);
+			const copyResult = roomModule.getTaskCopyResult;
+			if (copyResult.id !== "") {
+				this.copyProcess.data = copyResult;
+				this.copyProcess.isOpen = true;
+			}
+		},
+		async onCopyProcessDialogClose() {
+			this.copyProcess.isOpen = false;
+			this.copyProcess.data = {};
+			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		redirectTask(itemId) {
+			window.location = `/homework/${itemId}/edit?returnUrl=/rooms/${this.roomDataObject.roomId}`;
+		},
+		async deleteTask(itemId) {
+			await taskModule.deleteTask(itemId);
+			await roomModule.fetchContent(this.roomData.roomId);
 		},
 	},
 };
