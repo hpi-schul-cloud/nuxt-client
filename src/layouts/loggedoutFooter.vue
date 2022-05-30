@@ -2,7 +2,7 @@
 	<div class="page">
 		<navigation-bar
 			class="topbar"
-			:buttons="hasButtons"
+			:buttons="true"
 			:img="require('@assets/img/logo/logo-image-mono.svg')"
 			:links="navbarItems"
 		/>
@@ -29,23 +29,13 @@ export default {
 		};
 	},
 	computed: {
-		hasButtons() {
-			if (process.env.SC_THEME === "default") {
-				return true;
-			}
-			return false;
-		},
 		navbarItems() {
-			let items = {};
-			if (process.env.SC_THEME === "default") {
-				items = this.navbarBaseItems.map((item) => {
-					if (item.title.includes(".")) {
-						item.title = this.$t(`${item.title}`);
-					}
-					return item;
-				});
-			}
-			return items;
+			return this.navbarBaseItems.map((item) => {
+				if (item.title.includes(".")) {
+					item.title = this.$t(`${item.title}`);
+				}
+				return item;
+			});
 		},
 		isMobile() {
 			return this.$mq === "mobile";
