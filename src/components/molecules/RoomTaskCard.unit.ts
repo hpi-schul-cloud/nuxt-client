@@ -390,10 +390,10 @@ describe("@components/molecules/RoomTaskCard", () => {
 				);
 			});
 
-			it("should trigger the 'redirectAction' method when 'more action' copy button is clicked", async () => {
-				const redirectAction = jest.fn();
+			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
+				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
-				wrapper.vm.redirectAction = redirectAction;
+				wrapper.vm.copyCard = copyCard;
 				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
 					"common.actions.copy"
 				)}`;
@@ -404,10 +404,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const moreActionButton = wrapper.find(buttonClassName);
 				await moreActionButton.trigger("click");
 
-				expect(redirectAction).toHaveBeenCalled();
-				expect(redirectAction.mock.calls[0][0]).toStrictEqual(
-					"/homework/123/copy?returnUrl=rooms/456"
-				);
+				expect(copyCard).toHaveBeenCalled();
 			});
 
 			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {

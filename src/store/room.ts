@@ -17,103 +17,6 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
-const serverItems = [
-	{
-		id: "1",
-		type: "lesson",
-		title: "Lesson 1",
-		status: "done",
-		elements: [
-			{
-				id: "2",
-				type: "file",
-				title: "file_1.jpg",
-				status: "done",
-			},
-			{
-				id: "3",
-				type: "file",
-				title: "file_2.jpg",
-				status: "done",
-			},
-		],
-	},
-	{
-		id: "4",
-		title: "Task 2",
-		type: "task",
-		status: "partial",
-		elements: [
-			{
-				id: "5",
-				type: "file",
-				title: "file_3.jpg",
-				status: "done",
-			},
-			{
-				id: "6",
-				type: "file",
-				title: "file_4.jpg",
-				status: "error",
-			},
-		],
-	},
-	{
-		id: "7",
-		title: "Lesson 2",
-		type: "lesson",
-		status: "done",
-		elements: [
-			{
-				id: "8",
-				type: "file",
-				title: "file_5.jpg",
-				status: "done",
-			},
-			{
-				id: "9",
-				type: "file",
-				title: "file_6.jpg",
-				status: "done",
-			},
-		],
-	},
-	{
-		id: "10",
-		title: "Lesson 3",
-		type: "lesson",
-		status: "partial",
-		elements: [
-			{
-				id: "11",
-				type: "file",
-				title: "file_7.jpg",
-				status: "error",
-			},
-			{
-				id: "12",
-				type: "task",
-				title: "Inside Task",
-				status: "partial",
-				elements: [
-					{
-						id: "13",
-						type: "file",
-						title: "file_8.jpg",
-						status: "error",
-					},
-					{
-						id: "14",
-						type: "file",
-						title: "file_9.jpg",
-						status: "done",
-					},
-				],
-			},
-		],
-	},
-];
-
 @Module({
 	name: "room",
 	namespaced: true,
@@ -412,13 +315,16 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async copyTask(id: string): Promise<void> {
 		this.resetBusinessError();
+		this.setLoading(true);
 		try {
 			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
 				courseId: this.roomData.roomId,
 			});
 
-			this.setTaskCopyResult(copyResult.data);
+			this.setTaskCopyResult(copyResult.data || {});
+			this.setLoading(false);
 		} catch (error: any) {
+			this.setError(error);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,

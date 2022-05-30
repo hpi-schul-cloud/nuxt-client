@@ -15,10 +15,7 @@ const school = {
 		countyId: 12051,
 		name: "Brandenburg an der Havel",
 	},
-	systems: [
-		{ $oid: "0000d186816abba584714c91" },
-		{ $oid: "0000d186816abba584714c90" },
-	],
+	systems: [{ $oid: "0000d186816abba584714c90" }],
 	updatedAt: { $date: "2020-07-27T08:21:14.719Z" },
 	createdAt: { $date: "2017-01-01T00:06:37.148Z" },
 	__v: 0,
@@ -47,6 +44,22 @@ const federalState = {
 	name: "Brandenburg",
 	abbreviation: "BB",
 };
+
+const syncedSystem = [
+	{
+		_id: "0000d186816abba584714c90",
+		type: "ldap",
+		ldapConfig: {
+			provider: "iserv-idm",
+		},
+	},
+];
+const unsyncedSystem = [
+	{
+		_id: "0000d186816abba584714c91",
+		type: "moodle",
+	},
+];
 
 const generateMockStore = {
 	"env-config": {
@@ -121,6 +134,7 @@ describe("GeneralSettings", () => {
 
 		schoolsModule.setSchool(school);
 		schoolsModule.setFederalState(federalState);
+		schoolsModule.setSystems(syncedSystem);
 	});
 
 	it(...isValidComponent(GeneralSettings));
@@ -164,6 +178,56 @@ describe("GeneralSettings", () => {
 
 			const ele = wrapper.find(searchStrings.schoolName);
 			expect(ele.vm.value).toBe("Paul-Gerhardt-Gymnasium");
+		});
+
+		it("should not be possible to edit the school name if the school is synced", async () => {
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.find(searchStrings.schoolName);
+			expect(ele.vm.disabled).toBeTrue();
+		});
+
+		it("should be possible to edit the school name if the school is not synced", async () => {
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			const localMockData = {
+				localSchool: {
+					...mockData.localSchool,
+					systems: [{ $oid: unsyncedSystem[0]._id }],
+				},
+			};
+			schoolsModule.setSystems(unsyncedSystem);
+			await wrapper.setData(localMockData);
+
+			const ele = wrapper.find(searchStrings.schoolName);
+			expect(ele.vm.disabled).toBeFalse();
+		});
+
+		it("should be possible to edit the school name if the school is not attached to a system", async () => {
+			const wrapper = mount(GeneralSettings, {
+				...createComponentMocks({
+					i18n: true,
+					store: generateMockStore,
+					vuetify: true,
+				}),
+			});
+			schoolsModule.setSystems([]);
+			await wrapper.setData(mockData);
+
+			const ele = wrapper.find(searchStrings.schoolName);
+			expect(ele.vm.disabled).toBeFalse();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {
