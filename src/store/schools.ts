@@ -11,6 +11,7 @@ const SCHOOL_FEATURES: any = [
 	"studentVisibility", // deprecated
 	"messengerSchoolRoom",
 	"messengerStudentRoomCreate",
+	"ldapUniventionMigrationSchool"
 ];
 
 function transformSchoolServerToClient(school: any): School {
@@ -68,6 +69,7 @@ export default class SchoolsModule extends VuexModule {
 			studentVisibility: false,
 			messengerSchoolRoom: false,
 			messengerStudentRoomCreate: false,
+			ldapUniventionMigrationSchool: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},

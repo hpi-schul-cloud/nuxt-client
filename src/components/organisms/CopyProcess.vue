@@ -1,12 +1,11 @@
 <template>
 	<v-custom-dialog
-		v-model="isOpen"
+		v-model="showModal"
 		data-testid="delete-dialog-item"
 		:size="480"
 		has-buttons
 		:buttons="['close']"
-		confirm-btn-title-key="common.actions.remove"
-		@dialog-closed="$emit('dialog-closed', false)"
+		@dialog-closed="dialogClosed"
 		@dialog-edit="$emit('process-edit', data.id)"
 		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
@@ -50,12 +49,16 @@ export default {
 	data() {
 		return {
 			elementIndex: 0,
+			showModal: false,
 		};
 	},
 	computed: {
 		copiedItems() {
 			const { data } = this;
-			if (this.checkIfEveryElementsAreSuccess(this.data.elements)) {
+			const elements = data.elements.filter(
+				(item) => item.status !== "not-doing"
+			);
+			if (this.checkIfEveryElementsAreSuccess(elements)) {
 				return {
 					id: data.id,
 					status: data.status,
@@ -66,7 +69,7 @@ export default {
 					elements: [
 						{
 							id: data.id,
-							status: "success",
+							status: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
@@ -88,6 +91,11 @@ export default {
 					  )
 					: [],
 			};
+		},
+	},
+	watch: {
+		isOpen() {
+			this.showModal = this.isOpen;
 		},
 	},
 	methods: {
@@ -128,6 +136,10 @@ export default {
 				}
 				return item.status === "success";
 			});
+		},
+		dialogClosed() {
+			this.showModal = false;
+			this.$emit("dialog-closed", false);
 		},
 	},
 };
