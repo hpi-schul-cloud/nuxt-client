@@ -6,7 +6,7 @@
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</base-link>
 			</div>
-			<div class="link-container">
+			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<base-link
 					v-for="(route, idx) in linksToDisplay"
 					:key="route.href"
@@ -40,6 +40,8 @@
 <script>
 import BaseButton from "../base/BaseButton";
 import BaseLink from "../base/BaseLink";
+import { envConfigModule } from "@/store";
+
 export default {
 	components: { BaseLink, BaseButton },
 	props: {
@@ -54,7 +56,7 @@ export default {
 		},
 		links: {
 			type: Array,
-			default: () => {},
+			default: () => [],
 			required: false,
 		},
 		buttons: {
@@ -69,10 +71,10 @@ export default {
 	},
 	computed: {
 		hasButtons() {
-			return process.env.SC_THEME === "default" ? true : false;
+			return envConfigModule.getEnv.SC_THEME === "default" ? true : false;
 		},
 		linksToDisplay() {
-			return process.env.SC_THEME === "default" ? this.links : [];
+			return envConfigModule.getEnv.SC_THEME === "default" ? this.links : [];
 		},
 	},
 	methods: {
