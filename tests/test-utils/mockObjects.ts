@@ -76,6 +76,7 @@ export const mockSchool: School = {
 		studentVisibility: false,
 		messengerSchoolRoom: false,
 		messengerStudentRoomCreate: false,
+		ldapUniventionMigrationSchool: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},

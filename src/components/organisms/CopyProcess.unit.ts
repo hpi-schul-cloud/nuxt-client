@@ -121,7 +121,7 @@ describe("@components/organisms/CopyProcess", () => {
 			elements: [
 				{
 					id: "12345",
-					status: "success",
+					status: "success-all",
 					title: wrapper.vm.$i18n.t(
 						"components.molecules.copyResult.successfullyCopied"
 					),
