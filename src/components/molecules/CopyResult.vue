@@ -79,9 +79,10 @@ export default {
 			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(item) {
+			if (item.status === "success-all") return this.icons.mdiCheckAll;
 			if (item.status === "success" && !item.elements)
 				return this.icons.mdiCheck;
-			if (item.status === "success") return this.icons.mdiCheckAll;
+			if (item.status === "success") return this.icons.mdiCheck;
 			if (item.status === "failure") return this.icons.mdiAlertCircle;
 			if (item.status === "partial") return this.icons.mdiAlert;
 		},
@@ -103,44 +104,39 @@ export default {
 		},
 		getAriaLabel(item) {
 			if (!item.elements)
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.childItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-					}
-				);
+				return this.$t("components.molecules.copyResult.aria.childItem.info", {
+					itemTitle: item.title,
+					itemStatus: this.$t(`common.labels.${item.status}`),
+				});
 
 			if (!this.expandedNodes.includes(item.index)) {
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.parentItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.elements.length,
-						action: this.$t("common.labels.expand"),
-					}
-				);
-			} else {
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.parentItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.elements.length,
-						action: this.$t("common.labels.collapse"),
-					}
-				);
+				return this.$t("components.molecules.copyResult.aria.parentItem.info", {
+					itemTitle: item.title,
+					itemStatus: this.$t(`common.labels.${item.status}`),
+					includedItems: item.elements.length,
+					action: this.$t("common.labels.expand"),
+				});
 			}
+
+			return this.$t("components.molecules.copyResult.aria.parentItem.info", {
+				itemTitle: item.title,
+				itemStatus: this.$t(`common.labels.${item.status}`),
+				includedItems: item.elements.length,
+				action: this.$t("common.labels.collapse"),
+			});
 		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@variables";
+@import "@styles";
+.treeview-item-failure {
+	color: var(--color-danger-dark);
+	white-space: pre-line;
+}
 .not-finished {
-	color: var(--color-danger);
+	color: var(--color-danger-dark);
 }
 .finished {
 	color: var(--color-secondary);

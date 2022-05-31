@@ -69,6 +69,7 @@ const schoolMock = {
 		studentVisibility: false,
 		messengerSchoolRoom: false,
 		messengerStudentRoomCreate: false,
+		ldapUniventionMigrationSchool: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },

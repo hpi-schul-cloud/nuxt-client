@@ -22,6 +22,7 @@
 						"
 						dense
 						:readonly="!hasSchoolEditPermission"
+						:disabled="isSyncedSchool"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -180,6 +181,9 @@ export default {
 		availableLanguages: () => envConfigModule.getAvailableLanguages,
 		federalState() {
 			return schoolsModule.getFederalState;
+		},
+		isSyncedSchool() {
+			return schoolsModule.schoolIsSynced;
 		},
 		school() {
 			return schoolsModule.getSchool;

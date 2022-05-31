@@ -77,7 +77,7 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
-import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
+import tasksEmptyStateImage from "@assets/img/empty-state/tasks-empty-state.svg";
 
 export default {
 	components: {

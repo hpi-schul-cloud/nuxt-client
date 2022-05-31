@@ -3,7 +3,6 @@
 		<base-image
 			:img-src="image"
 			:img-height="imgHeight"
-			fill="var(--color-primary)"
 			role="presentation"
 			class="text-center"
 		/>
