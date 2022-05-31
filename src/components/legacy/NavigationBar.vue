@@ -6,9 +6,9 @@
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</base-link>
 			</div>
-			<div class="link-container">
+			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<base-link
-					v-for="(route, idx) in links"
+					v-for="(route, idx) in linksToDisplay"
 					:key="route.href"
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
@@ -19,7 +19,7 @@
 				>
 					{{ route.title }}
 				</base-link>
-				<div v-if="buttons" class="buttons-container">
+				<div v-if="hasButtons" class="buttons-container">
 					<base-link href="/loginRedirect">
 						<base-button design="secondary outline">
 							<base-icon source="fa" icon="sign-in" class="icon" />
@@ -40,6 +40,8 @@
 <script>
 import BaseButton from "../base/BaseButton";
 import BaseLink from "../base/BaseLink";
+import { envConfigModule } from "@/store";
+
 export default {
 	components: { BaseLink, BaseButton },
 	props: {
@@ -54,7 +56,7 @@ export default {
 		},
 		links: {
 			type: Array,
-			default: () => {},
+			default: () => [],
 			required: false,
 		},
 		buttons: {
@@ -66,6 +68,14 @@ export default {
 		return {
 			activeLink: window.location.pathname,
 		};
+	},
+	computed: {
+		hasButtons() {
+			return envConfigModule.getEnv.SC_THEME === "default" ? true : false;
+		},
+		linksToDisplay() {
+			return envConfigModule.getEnv.SC_THEME === "default" ? this.links : [];
+		},
 	},
 	methods: {
 		setActive(idx) {
