@@ -133,15 +133,22 @@ describe("@components/organisms/CopyProcess", () => {
 		expect(wrapper.vm.copiedItems).toStrictEqual(successObject);
 	});
 
-	it("should show spinner when its prop set", async () => {
+	it("should show skeleton when its prop set", async () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
-		const spinnerElementBefore = wrapper.findAll(".spinner");
-		expect(spinnerElementBefore).toHaveLength(0);
+		// const spinnerElementBefore = wrapper.findAll(".spinner");
+		const skeletonElementBefore = wrapper.findAll(
+			`[data-testid="copy-process-skeleton"]`
+		);
+		expect(skeletonElementBefore).toHaveLength(0);
 
 		await wrapper.setProps({ isOpen: true, loading: true });
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 
-		const spinnerElementAfter = wrapper.find(".spinner");
-		expect(spinnerElementAfter.vm.isVisible).toBe(true);
+		const skeletonElementAfter = wrapper.findAll(
+			`[data-testid="copy-process-skeleton"]`
+		);
+		expect(skeletonElementAfter).toHaveLength(1);
 	});
 });

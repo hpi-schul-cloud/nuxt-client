@@ -16,7 +16,10 @@
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
 			<template v-if="loading">
-				<v-skeleton-loader type="article, list-item-three-line" />
+				<v-skeleton-loader
+					type="article, list-item-three-line"
+					data-testid="copy-process-skeleton"
+				/>
 			</template>
 			<label class="text-md mt-2">
 				{{ data.title }}

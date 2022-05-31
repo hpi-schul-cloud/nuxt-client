@@ -334,7 +334,6 @@ export default {
 			const copyResult = roomModule.getTaskCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
-				// this.copyProcess.isOpen = true;
 				this.copyProcess.loading = false;
 			}
 		},

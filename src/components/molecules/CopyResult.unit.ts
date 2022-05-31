@@ -50,7 +50,6 @@ const propsData = {
 			],
 		},
 	],
-	showSpinner: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -73,7 +72,6 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 
 		expect(wrapper.vm.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.showSpinner).toStrictEqual(propsData.showSpinner);
 	});
 
 	it("should nodes be expanded and collapsed according to the status property inside the items", async () => {
