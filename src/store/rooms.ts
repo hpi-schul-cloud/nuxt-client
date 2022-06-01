@@ -188,6 +188,10 @@ export default class RoomsModule extends VuexModule {
 		return this.allElements.length === 0;
 	}
 
+	get hasNoCurrentRooms(): boolean {
+		return this.roomsData.length === 0;
+	}
+
 	private get dashboardApi(): DashboardApiInterface {
 		if (!this._dashboardApi) {
 			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);

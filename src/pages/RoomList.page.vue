@@ -86,6 +86,7 @@ import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
 import roomsEmptyStateImage from "@assets/img/empty-state/rooms-empty-state.svg";
 import { TranslateResult } from "vue-i18n";
+import { mdiMagnify } from "@mdi/js";
 
 export default Vue.extend({
 	components: {
@@ -98,6 +99,7 @@ export default Vue.extend({
 		return {
 			searchText: "",
 			roomsEmptyStateImage,
+			mdiMagnify,
 		};
 	},
 	computed: {
