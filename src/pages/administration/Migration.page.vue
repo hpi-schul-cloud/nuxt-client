@@ -372,13 +372,15 @@ export default {
 			}
 		},
 	},
-	created() {
-		if (!this.isAllowed()) {
-			this.$router.push("/");
-		}
-		this.summary();
-		this.checkTotalInterval();
-	},
+  async created() {
+    const allowed = await this.isAllowed();
+    if (!allowed) {
+      await this.$router.push("/");
+      this.school = schoolsModule.getSchool;
+    }
+    await this.summary();
+    this.checkTotalInterval();
+  },
 	methods: {
 		async isAllowed() {
 			if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
