@@ -77,6 +77,21 @@
 						{{ $t(`pages.room.taskCard.${role}.label.overdue`) }}
 					</div>
 				</div>
+				<div
+					v-if="roles.Student === role && isGraded"
+					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
+					tabindex="0"
+				>
+					<div class="chip-value">
+						{{ $t(`pages.room.taskCard.label.graded`) }}
+					</div>
+				</div>
+				<v-custom-chip-time-remaining
+					v-if="roles.Student === role && isCloseToDueDate"
+					:type="taskState"
+					:due-date="task.duedate"
+					:shorten-date="$vuetify.breakpoint.xsOnly"
+				/>
 			</div>
 		</v-card-text>
 		<v-card-actions class="pt-1 mt-2">
@@ -105,13 +120,14 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { printDateFromStringUTC } from "@plugins/datetime";
+import { printDateFromStringUTC, fromNowToFuture } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { MoreItemMenu },
+	components: { MoreItemMenu, VCustomChipTimeRemaining },
 	props: {
 		task: {
 			type: Object,
@@ -158,9 +174,28 @@ export default {
 		isFinished() {
 			return this.task.status.isFinished;
 		},
+		isCloseToDueDate() {
+			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		},
+		isGraded() {
+			return this.task.status.graded;
+		},
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
 			return scheduledDate && new Date(scheduledDate) > new Date();
+		},
+		taskState() {
+			//const { status } = this.task;
+
+			if (this.isCloseToDueDate) return "warning";
+			//if (this.isGradedButMissed) return "gradedOverdue";
+			if (this.isOverDue) return "overdue";
+			//if (status.submitted && !status.graded) return "submitted";
+			//if (status.graded) return "graded";
+			return undefined;
 		},
 		cardActions() {
 			const roleBasedActions = {
