@@ -29,7 +29,7 @@
 			<template v-if="hasNoRooms">
 				<v-custom-empty-state
 					:image="roomsEmptyStateImage"
-					title="Du hast noch keine Kurse"
+					:title="$t('pages.rooms.allRooms.emptyState.title')"
 					class="mt-16"
 				/>
 			</template>

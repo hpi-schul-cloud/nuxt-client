@@ -142,7 +142,7 @@ describe("RoomPage", () => {
 			href: "/courses/1",
 		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
+		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {

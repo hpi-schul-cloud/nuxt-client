@@ -85,7 +85,7 @@ describe("@pages/rooms-list.vue", () => {
 		// TODO: better solution should be found
 
 		// @ts-ignore
-		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
+		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should search elements on list", async () => {
@@ -95,18 +95,18 @@ describe("@pages/rooms-list.vue", () => {
 		const searchInput = wrapper.vm.$refs["search"] as any;
 
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(4);
+		expect(wrapper.vm.rooms.length).toEqual(4);
 		searchInput.$emit("input", "math");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(1);
+		expect(wrapper.vm.rooms.length).toEqual(1);
 		searchInput.$emit("input", "");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(4);
+		expect(wrapper.vm.rooms.length).toEqual(4);
 		searchInput.$emit("input", "15");
 		// @ts-ignore
-		expect(wrapper.vm.items.length).toEqual(1);
+		expect(wrapper.vm.rooms.length).toEqual(1);
 		// @ts-ignore
-		expect(wrapper.vm.items[0]).toEqual({
+		expect(wrapper.vm.rooms[0]).toEqual({
 			id: "234",
 			title: "History",
 			shortTitle: "Hi",

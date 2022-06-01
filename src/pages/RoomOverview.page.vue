@@ -39,7 +39,7 @@
 			<template v-if="hasNoCurrentRooms">
 				<v-custom-empty-state
 					:image="roomsEmptyStateImage"
-					title="Du hast keine aktuellen Kurse"
+					:title="$t('pages.rooms.currentRooms.emptyState.title')"
 					class="mt-16"
 				/>
 			</template>
@@ -250,7 +250,7 @@ export default {
 		title() {
 			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
-		items() {
+		rooms() {
 			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
 				(item) => {
 					if (item.groupElements) {
@@ -273,7 +273,7 @@ export default {
 		},
 		sectionAriaLabel() {
 			return this.$t("pages.rooms.headerSection.ariaLabel", {
-				itemCount: this.items.length,
+				itemCount: this.rooms.length,
 			});
 		},
 	},
@@ -332,13 +332,13 @@ export default {
 			return this.findDataByPos(row, col).groupElements?.length == 0;
 		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.items.find(
+			this.groupDialog.groupData = this.rooms.find(
 				(item) => item.groupId == groupId
 			);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.items.find(
+			return this.rooms.find(
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
