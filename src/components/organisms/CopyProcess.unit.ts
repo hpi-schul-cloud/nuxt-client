@@ -136,7 +136,6 @@ describe("@components/organisms/CopyProcess", () => {
 	it("should show skeleton when its prop set", async () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
-		// const spinnerElementBefore = wrapper.findAll(".spinner");
 		const skeletonElementBefore = wrapper.findAll(
 			`[data-testid="copy-process-skeleton"]`
 		);
