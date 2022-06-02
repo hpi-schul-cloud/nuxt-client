@@ -38,7 +38,7 @@
 		<template v-else>
 			<template v-if="hasNoCurrentRooms">
 				<v-custom-empty-state
-					image="@assets/img/empty-state/content-initial.svg"
+					image="@assets/img/empty-state/rooms-empty-state.svg"
 					:title="$t('pages.rooms.currentRooms.emptyState.title')"
 					class="mt-16"
 				/>
