@@ -376,7 +376,6 @@ export default {
 		const allowed = await this.isAllowed();
 		if (!allowed) {
 			await this.$router.push("/");
-			this.school = schoolsModule.getSchool;
 		}
 		await this.summary();
 		this.checkTotalInterval();
