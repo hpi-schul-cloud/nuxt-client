@@ -2,7 +2,13 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { envConfigModule, finishedTaskModule } from "@/store";
 import { TaskFilter } from "./task.filter";
 import { $axios } from "../utils/api";
-import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
+import {
+	TaskApiFactory,
+	TaskApiInterface,
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "../serverApi/v3/api";
 import { BusinessError, Status } from "./types/commons";
 import {
 	CompletedTasksForStudent,
@@ -33,7 +39,16 @@ export default class TaskModule extends VuexModule {
 
 	status: Status = "";
 
+	loading: boolean = false;
+
 	_taskApi?: TaskApiInterface;
+
+	taskCopyResult: CopyApiResponse = {
+		id: "",
+		title: "",
+		type: CopyApiResponseTypeEnum.Task,
+		status: CopyApiResponseStatusEnum.Success,
+	};
 
 	@Action
 	async fetchAllTasks(): Promise<void> {
@@ -101,6 +116,28 @@ export default class TaskModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async copyTask(id: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		this.setLoading(true);
+		try {
+			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
+				// TODO: courseId should be in store after server implementation
+				courseId: "0000dcfbfb5c7a3f00bf21ab",
+			});
+
+			this.setTaskCopyResult(copyResult.data || {});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setTasks(tasks: Task[]): void {
 		this.tasks = tasks;
@@ -143,6 +180,15 @@ export default class TaskModule extends VuexModule {
 			statusCode: "",
 			message: "",
 		};
+	}
+
+	@Mutation
+	setLoading(loading: boolean): void {
+		this.loading = loading;
+	}
+	@Mutation
+	setTaskCopyResult(payload: CopyApiResponse | any): void {
+		this.taskCopyResult = payload;
 	}
 
 	get getTasks(): Task[] {
