@@ -329,7 +329,7 @@ export default {
 		},
 		async copyTask(itemId) {
 			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
 				return;
 			}
 			this.copyProcess.isOpen = true;
@@ -347,7 +347,7 @@ export default {
 			await roomModule.fetchContent(this.roomData.roomId);
 		},
 		redirectTask(itemId) {
-			window.location = `/homework/${itemId}/edit?returnUrl=/rooms/${this.roomDataObject.roomId}`;
+			window.location.href = `/homework/${itemId}/edit?returnUrl=rooms/${this.roomDataObject.roomId}`;
 		},
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);

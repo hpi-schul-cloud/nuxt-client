@@ -552,8 +552,8 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
 			copyProcess.vm.$emit("process-edit", "1234");
 			await wrapper.vm.$nextTick();
-			expect(location.pathname).toStrictEqual(
-				"/homework/1234/edit?returnUrl=/rooms/123"
+			expect(location.href).toStrictEqual(
+				"/homework/1234/edit?returnUrl=rooms/123"
 			);
 		});
 
@@ -606,8 +606,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
 
-			await wrapper.vm.$nextTick();
-			expect(location.pathname).toStrictEqual(
+			expect(location.href).toStrictEqual(
 				"/homework/1234/copy?returnUrl=rooms/123"
 			);
 		});
