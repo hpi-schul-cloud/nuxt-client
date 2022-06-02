@@ -375,7 +375,8 @@ export default {
 	async created() {
 		const allowed = await this.isAllowed();
 		if (!allowed) {
-			await this.$router.push("/");
+      await this.$router.push("/");
+      return;
 		}
 		await this.summary();
 		this.checkTotalInterval();
