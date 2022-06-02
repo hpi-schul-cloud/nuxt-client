@@ -38,7 +38,7 @@
 		<template v-else>
 			<template v-if="hasNoCurrentRooms">
 				<v-custom-empty-state
-					:image="roomsEmptyStateImage"
+					image="@assets/img/empty-state/content-initial.svg"
 					:title="$t('pages.rooms.currentRooms.emptyState.title')"
 					class="mt-16"
 				/>
@@ -149,7 +149,7 @@ import ImportModal from "@components/molecules/ImportModal";
 import { authModule, envConfigModule, roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
-import roomsEmptyStateImage from "@assets/img/empty-state/content-initial.svg";
+//import roomsEmptyStateImage from "@assets/img/empty-state/content-initial.svg";
 
 export default {
 	components: {
@@ -165,7 +165,7 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			roomsEmptyStateImage,
+			//		roomsEmptyStateImage,
 			device: "mobile",
 			dimensions: {
 				colCount: 2,
