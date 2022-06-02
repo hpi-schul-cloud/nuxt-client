@@ -213,6 +213,7 @@ export default {
 			copyProcess: {
 				data: {},
 				isOpen: false,
+				loading: false,
 			},
 		};
 	},
@@ -327,11 +328,13 @@ export default {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 		async copyTask(itemId) {
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = true;
 			await roomModule.copyTask(itemId);
 			const copyResult = roomModule.getTaskCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
-				this.copyProcess.isOpen = true;
+				this.copyProcess.loading = false;
 			}
 		},
 		async onCopyProcessDialogClose() {
