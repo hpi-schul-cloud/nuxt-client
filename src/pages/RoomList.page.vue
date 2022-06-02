@@ -28,7 +28,7 @@
 		<template v-else>
 			<template v-if="hasNoRooms">
 				<v-custom-empty-state
-					:image="roomsEmptyStateImage"
+					image="@assets/img/empty-state/rooms-empty-state.svg"
 					:title="$t('pages.rooms.allRooms.emptyState.title')"
 					class="mt-16"
 				/>
@@ -84,7 +84,6 @@ import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
-import roomsEmptyStateImage from "@assets/img/empty-state/rooms-empty-state.svg";
 import { TranslateResult } from "vue-i18n";
 import { mdiMagnify } from "@mdi/js";
 
@@ -98,7 +97,6 @@ export default Vue.extend({
 	data() {
 		return {
 			searchText: "",
-			roomsEmptyStateImage,
 			mdiMagnify,
 		};
 	},
