@@ -8,6 +8,7 @@
 			:open="expandedNodes"
 			item-children="elements"
 			item-key="index"
+			dense
 			@keydown.space="onSpacePress"
 		>
 			<template v-slot:prepend="{ item }">
@@ -122,7 +123,7 @@ export default {
 @import "@styles";
 .treeview-item-failure {
 	color: var(--color-danger-dark);
-	white-space: pre-line;
+	white-space: normal;
 }
 .not-finished {
 	color: var(--color-danger-dark);
