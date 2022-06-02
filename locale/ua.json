@@ -698,7 +698,7 @@
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.taskCard.student.label.submitted": "Завершено",
 	"pages.room.taskCard.label.taskDone": "Завдання виконано",
-	"pages.room.taskCard.student.label.overdue": "Пропущені",
+	"pages.room.taskCard.student.label.overdue": "Відсутня",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів), натисніть Enter, щоб відкрити",
 	"pages.rooms.fab.add": "Створити",
