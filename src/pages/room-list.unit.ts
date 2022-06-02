@@ -54,6 +54,7 @@ describe("@pages/rooms-list.vue", () => {
 			}),
 			computed: {
 				$mq: () => device,
+				isLoading: () => false,
 			},
 		});
 	};

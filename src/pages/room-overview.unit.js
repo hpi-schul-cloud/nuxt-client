@@ -111,6 +111,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 		}),
 		computed: {
 			$mq: () => device,
+			isLoading: () => false,
 		},
 	});
 };
@@ -471,6 +472,7 @@ describe("RoomPage", () => {
 			computed: {
 				$mq: () => "desktop",
 				isTouchDevice: () => false,
+				isLoading: () => false,
 			},
 		});
 
