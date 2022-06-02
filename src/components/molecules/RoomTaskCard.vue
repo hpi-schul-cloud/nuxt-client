@@ -50,7 +50,7 @@
 				</v-chip>
 
 				<v-custom-chip-time-remaining
-					v-if="roles.Student === role && isCloseToDueDate"
+					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.duedate"
 					:shorten-date="$vuetify.breakpoint.xsOnly"
@@ -82,6 +82,7 @@ import {
 	mdiUndoVariant,
 	mdiTrashCanOutline,
 	mdiContentCopy,
+	mdiTextBoxCheckOutline,
 } from "@mdi/js";
 import { printDateFromStringUTC, fromNowToFuture } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -118,6 +119,7 @@ export default {
 				mdiUndoVariant,
 				mdiTrashCanOutline,
 				mdiContentCopy,
+				mdiTextBoxCheckOutline,
 			},
 			roles: Roles,
 			canShowDescription: false,
@@ -145,6 +147,9 @@ export default {
 		},
 		isGraded() {
 			return this.task.status.graded;
+		},
+		isSubmitted() {
+			return this.task.status.submitted;
 		},
 		isSubmittedNotGraded() {
 			return this.task.status.submitted && !this.task.status.graded;
@@ -207,6 +212,13 @@ export default {
 						this.task.status.maxSubmissions
 					} ${this.$t("pages.room.taskCard.label.graded")}`,
 				});
+
+				if (this.isOverDue) {
+					roleBasedChips[Roles.Teacher].push({
+						icon: "$taskMissed",
+						name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
+					});
+				}
 			}
 
 			if (this.role === Roles.Student) {
@@ -216,27 +228,24 @@ export default {
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 					});
 				}
+
 				if (this.isGraded) {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 					});
 					roleBasedChips[Roles.Student].push({
-						icon: "$taskDoneFilled",
+						icon: this.icons.mdiTextBoxCheckOutline,
 						name: this.$t(`pages.room.taskCard.label.graded`),
 					});
 				}
-			}
 
-			if (this.isOverDue) {
-				roleBasedChips[Roles.Teacher].push({
-					icon: "$taskMissed",
-					name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
-				});
-				roleBasedChips[Roles.Student].push({
-					icon: "$taskMissed",
-					name: this.$t(`pages.room.taskCard.student.label.overdue`),
-				});
+				if (this.isOverDue && !this.isSubmitted) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskMissed",
+						name: this.$t(`pages.room.taskCard.student.label.overdue`),
+					});
+				}
 			}
 
 			return roleBasedChips;
