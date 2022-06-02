@@ -41,9 +41,9 @@
 				<v-list-item
 					v-if="isTeacher"
 					id="task-action-copy"
-					:href="copyLink"
 					class="task-action"
 					data-testId="task-copy"
+					@click.stop.prevent="copyTask"
 				>
 					<v-list-item-title>
 						<v-icon class="task-action-icon">
@@ -105,6 +105,14 @@
 				</p>
 			</template>
 		</v-custom-dialog>
+		<copy-process
+			:data="copyProcess.data"
+			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+		>
+		</copy-process>
 	</div>
 </template>
 
@@ -116,11 +124,12 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { taskModule, finishedTaskModule } from "@/store";
+import { taskModule, finishedTaskModule, roomModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import CopyProcess from "@components/organisms/CopyProcess";
 
 export default {
-	components: { vCustomDialog },
+	components: { vCustomDialog, CopyProcess },
 	props: {
 		taskId: {
 			type: String,
@@ -153,15 +162,19 @@ export default {
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
+			copyProcess: {
+				data: {},
+				isOpen: false,
+			},
 		};
 	},
 	computed: {
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
-		copyLink() {
-			return `/homework/${this.taskId}/copy`;
-		},
+		// copyLink() {
+		// 	return `/homework/${this.taskId}/copy`;
+		// },
 		isTeacher() {
 			return this.userRole === "teacher";
 		},
@@ -182,6 +195,24 @@ export default {
 		},
 		handleDelete() {
 			taskModule.deleteTask(this.taskId);
+		},
+		copyEvent() {
+			this.$emit("copy-event");
+			console.log("task-action-copy");
+		},
+		async copyTask() {
+			debugger;
+			await roomModule.copyTask(this.taskId);
+			const copyResult = roomModule.getTaskCopyResult;
+			if (copyResult.id !== "") {
+				this.copyProcess.data = copyResult;
+				this.copyProcess.isOpen = true;
+			}
+		},
+		async onCopyProcessDialogClose() {
+			this.copyProcess.isOpen = false;
+			this.copyProcess.data = {};
+			await taskModule.fetchAllTasks();
 		},
 	},
 };
