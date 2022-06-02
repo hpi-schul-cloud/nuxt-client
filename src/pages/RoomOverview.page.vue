@@ -149,7 +149,7 @@ import ImportModal from "@components/molecules/ImportModal";
 import { authModule, envConfigModule, roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
-import roomsEmptyStateImage from "@assets/img/empty-state/rooms-empty-state.svg";
+import roomsEmptyStateImage from "@assets/img/empty-state/content-initial.svg";
 
 export default {
 	components: {
