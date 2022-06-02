@@ -309,24 +309,24 @@ describe("@components/molecules/RoomTaskCard", () => {
 			const role = "teacher";
 			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
 				const draftWrapper = getWrapper({ ...draftTestProps, role });
-				const draftSubmitSection = draftWrapper.findAll(".chip-value");
+				const draftSubmitSection = draftWrapper.findAll(".v-chip");
 
 				expect(draftSubmitSection).toHaveLength(0);
 
 				const finishedWrapper = getWrapper({ ...finishedTestProps, role });
-				const finsihedSubmitSection = finishedWrapper.findAll(".chip-value");
+				const finsihedSubmitSection = finishedWrapper.findAll(".v-chip");
 
 				expect(finsihedSubmitSection).toHaveLength(0);
 
 				const plannedWrapper = getWrapper({ ...plannedTestProps, role });
-				const plannedSubmitSection = plannedWrapper.findAll(".chip-value");
+				const plannedSubmitSection = plannedWrapper.findAll(".v-chip");
 
 				expect(plannedSubmitSection).toHaveLength(0);
 			});
 
 			it("should have submitted and graded section if task is not a draft and not finished", () => {
 				const wrapper = getWrapper({ ...testProps, role });
-				const submitSection = wrapper.findAll(".chip-value");
+				const submitSection = wrapper.findAll(".v-chip");
 
 				expect(submitSection).toHaveLength(2);
 				expect(submitSection.wrappers[0].element.textContent).toContain("0/1");
@@ -546,6 +546,38 @@ describe("@components/molecules/RoomTaskCard", () => {
 				await moreActionButton.trigger("click");
 
 				expect(restoreCardMock).toHaveBeenCalled();
+			});
+
+			it("should have missed chip if task is not completed", () => {
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 0,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: "2017-09-28T08:00:00.000Z",
+						duedate: "2000-01-01T00:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const chips = wrapper.findAll(".v-chip");
+
+				expect(chips).toHaveLength(1);
+				expect(chips.wrappers[0].element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.student.label.overdue")
+				);
 			});
 		});
 	});
