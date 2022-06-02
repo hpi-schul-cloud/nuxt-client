@@ -42,53 +42,16 @@
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
-				<div
-					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{
-							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
-								"pages.room.taskCard.label.submitted"
-							)}`
-						}}
-					</div>
-				</div>
-				<div
-					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{
-							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
-								"pages.room.taskCard.label.graded"
-							)}`
-						}}
-					</div>
-				</div>
-				<div
-					v-if="isOverDue"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0 overdue"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{ $t(`pages.room.taskCard.${role}.label.overdue`) }}
-					</div>
-				</div>
-				<div
-					v-if="roles.Student === role && isGraded"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{ $t(`pages.room.taskCard.label.graded`) }}
-					</div>
-				</div>
+				<v-chip v-for="(chip, index) in chipItems[role]" :key="index" small>
+					<v-icon v-if="chip.icon" left small class="fill" :color="iconColor">
+						{{ chip.icon }}
+					</v-icon>
+					{{ chip.name }}
+				</v-chip>
+
 				<v-custom-chip-time-remaining
 					v-if="roles.Student === role && isCloseToDueDate"
-					:type="taskState"
+					type="warning"
 					:due-date="task.duedate"
 					:shorten-date="$vuetify.breakpoint.xsOnly"
 				/>
@@ -183,19 +146,16 @@ export default {
 		isGraded() {
 			return this.task.status.graded;
 		},
+		isSubmittedNotGraded() {
+			return this.task.status.submitted && !this.task.status.graded;
+		},
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
 			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
-		taskState() {
-			//const { status } = this.task;
-
-			if (this.isCloseToDueDate) return "warning";
-			//if (this.isGradedButMissed) return "gradedOverdue";
-			if (this.isOverDue) return "overdue";
-			//if (status.submitted && !status.graded) return "submitted";
-			//if (status.graded) return "graded";
-			return undefined;
+		iconColor() {
+			const defaultColor = "#000000";
+			return defaultColor;
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -228,6 +188,58 @@ export default {
 			}
 
 			return roleBasedActions;
+		},
+		chipItems() {
+			const roleBasedChips = {
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
+			};
+
+			if (this.role === Roles.Teacher) {
+				roleBasedChips[Roles.Teacher].push({
+					name: `${this.task.status.submitted}/${
+						this.task.status.maxSubmissions
+					} ${this.$t("pages.room.taskCard.teacher.label.submitted")}`,
+				});
+
+				roleBasedChips[Roles.Teacher].push({
+					name: `${this.task.status.graded}/${
+						this.task.status.maxSubmissions
+					} ${this.$t("pages.room.taskCard.label.graded")}`,
+				});
+			}
+
+			if (this.role === Roles.Student) {
+				if (this.isSubmittedNotGraded) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskDone",
+						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+					});
+				}
+				if (this.isGraded) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskDone",
+						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+					});
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskDoneFilled",
+						name: this.$t(`pages.room.taskCard.label.graded`),
+					});
+				}
+			}
+
+			if (this.isOverDue) {
+				roleBasedChips[Roles.Teacher].push({
+					icon: "$taskMissed",
+					name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
+				});
+				roleBasedChips[Roles.Student].push({
+					icon: "$taskMissed",
+					name: this.$t(`pages.room.taskCard.student.label.overdue`),
+				});
+			}
+
+			return roleBasedChips;
 		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
@@ -370,6 +382,9 @@ export default {
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 
+.fill {
+	fill: currentColor;
+}
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
@@ -392,17 +407,9 @@ export default {
 }
 .chip-items-group {
 	vertical-align: middle;
-	.chip-item {
-		display: inline-block;
-		width: fit-content;
-		text-align: center;
-		border-radius: var(--radius-sm);
-		.chip-value {
-			font-size: var(--text-xs);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: rgba(0, 0, 0, 0.87);
-		}
-	}
+}
+.v-chip {
+	margin-right: var(--space-xs);
 }
 .action-button {
 	color: var(--color-primary);
