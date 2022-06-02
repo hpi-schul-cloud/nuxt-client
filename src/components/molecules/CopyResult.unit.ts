@@ -50,7 +50,6 @@ const propsData = {
 			],
 		},
 	],
-	showSpinner: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -73,7 +72,6 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 
 		expect(wrapper.vm.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.showSpinner).toStrictEqual(propsData.showSpinner);
 	});
 
 	it("should nodes be expanded and collapsed according to the status property inside the items", async () => {
@@ -95,17 +93,6 @@ describe("@components/molecules/CopyResult", () => {
 
 		const expectedExpandedNodes = [3, 9];
 		expect(wrapper.vm.expandedNodes).toStrictEqual(expectedExpandedNodes);
-	});
-
-	it("should show spinner when its prop set", async () => {
-		const wrapper = getWrapper(propsData);
-		await wrapper.vm.$nextTick();
-		const spinnerElementBefore = wrapper.findAll(".spinner");
-		expect(spinnerElementBefore).toHaveLength(0);
-
-		await wrapper.setProps({ showSpinner: true });
-		const spinnerElementAfter = wrapper.find(".spinner");
-		expect(spinnerElementAfter.vm.isVisible).toBe(true);
 	});
 
 	it("should all items have accessibility text", async () => {
