@@ -143,8 +143,6 @@ describe("@components/organisms/CopyProcess", () => {
 		expect(skeletonElementBefore).toHaveLength(0);
 
 		await wrapper.setProps({ isOpen: true, loading: true });
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
 
 		const skeletonElementAfter = wrapper.findAll(
 			`[data-testid="copy-process-skeleton"]`
