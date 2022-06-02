@@ -119,7 +119,6 @@ export default class TaskModule extends VuexModule {
 	@Action
 	async copyTask(id: string): Promise<void> {
 		this.resetBusinessError();
-		this.setStatus("pending");
 		this.setLoading(true);
 		try {
 			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
@@ -364,6 +363,10 @@ export default class TaskModule extends VuexModule {
 		};
 
 		return tasksCount;
+	}
+
+	get getTaskCopyResult(): CopyApiResponse {
+		return this.taskCopyResult;
 	}
 
 	private get isReady(): boolean {

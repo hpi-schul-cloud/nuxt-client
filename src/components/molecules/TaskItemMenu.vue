@@ -124,7 +124,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { taskModule, finishedTaskModule, roomModule } from "@/store";
+import { taskModule, finishedTaskModule, envConfigModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import CopyProcess from "@components/organisms/CopyProcess";
 
@@ -165,6 +165,7 @@ export default {
 			copyProcess: {
 				data: {},
 				isOpen: false,
+				loading: false,
 			},
 		};
 	},
@@ -172,9 +173,9 @@ export default {
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
-		// copyLink() {
-		// 	return `/homework/${this.taskId}/copy`;
-		// },
+		copyLink() {
+			return `/homework/${this.taskId}/copy`;
+		},
 		isTeacher() {
 			return this.userRole === "teacher";
 		},
@@ -201,12 +202,17 @@ export default {
 			console.log("task-action-copy");
 		},
 		async copyTask() {
-			debugger;
-			await roomModule.copyTask(this.taskId);
-			const copyResult = roomModule.getTaskCopyResult;
+			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = true;
+			await taskModule.copyTask(this.taskId);
+			const copyResult = taskModule.getTaskCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
-				this.copyProcess.isOpen = true;
+				this.copyProcess.loading = false;
 			}
 		},
 		async onCopyProcessDialogClose() {
