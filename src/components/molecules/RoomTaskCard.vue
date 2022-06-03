@@ -64,7 +64,7 @@
 					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.duedate"
-					:shorten-date="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
 				/>
 			</div>
 		</v-card-text>
@@ -149,9 +149,10 @@ export default {
 		},
 		isCloseToDueDate() {
 			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
-			if (timeDiff === null) {
-				return false;
-			} else return timeDiff <= 24;
+			if (timeDiff !== null) {
+				return timeDiff <= 24;
+			}
+			return false;
 		},
 		isGraded() {
 			return this.task.status.graded;

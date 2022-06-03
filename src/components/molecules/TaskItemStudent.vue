@@ -34,7 +34,7 @@
 					v-if="taskState === 'warning'"
 					:type="taskState"
 					:due-date="task.duedate"
-					:shorten-date="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
 				/>
 			</v-list-item-action>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
