@@ -23,11 +23,16 @@
 			</div>
 		</template>
 		<template v-if="isLoading">
-			<v-skeleton-loader type="date-picker-days" class="px-12 mt-16" />
+			<v-skeleton-loader
+				ref="skeleton-loader"
+				type="date-picker-days"
+				class="px-12 mt-16"
+			/>
 		</template>
 		<template v-else>
 			<template v-if="hasNoRooms">
 				<v-custom-empty-state
+					ref="rooms-empty-state"
 					image="@assets/img/empty-state/rooms-empty-state.svg"
 					:title="$t('pages.rooms.allRooms.emptyState.title')"
 					class="mt-16"
@@ -84,7 +89,6 @@ import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
-import { TranslateResult } from "vue-i18n";
 import { mdiMagnify } from "@mdi/js";
 
 export default Vue.extend({
@@ -104,9 +108,6 @@ export default Vue.extend({
 		isLoading(): boolean {
 			return roomsModule.getLoading;
 		},
-		title(): TranslateResult {
-			return this.$t("common.labels.greeting", { name: this.$user.firstName });
-		},
 		rooms(): Array<ListItemsObject> {
 			return JSON.parse(JSON.stringify(roomsModule.getAllElements)).filter(
 				(room: ListItemsObject | any) =>
@@ -116,7 +117,6 @@ export default Vue.extend({
 			);
 		},
 		hasNoRooms(): boolean {
-			//	console.log(this.rooms);
 			return roomsModule.hasNoRooms;
 		},
 	},
