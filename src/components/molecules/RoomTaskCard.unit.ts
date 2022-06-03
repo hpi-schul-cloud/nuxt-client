@@ -548,7 +548,40 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(restoreCardMock).toHaveBeenCalled();
 			});
 
-			it("should have missed chip if task is not completed", () => {
+			it("should have time-remaining chip if task has due date, expires in less then 24 hours and not submitted", () => {
+				const dueDate = new Date();
+				dueDate.setHours(dueDate.getHours() + 3);
+
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 0,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: "2017-09-28T08:00:00.000Z",
+						duedate: dueDate.toISOString(),
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+
+				expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
+					true
+				);
+			});
+
+			it("should have missed chip if task has due date, is expired and not submitted", () => {
 				const localProps = {
 					...testProps,
 					task: {
@@ -572,12 +605,84 @@ describe("@components/molecules/RoomTaskCard", () => {
 					},
 				};
 				const wrapper = getWrapper({ ...localProps, role });
-				const chips = wrapper.findAll(".v-chip");
+				const chips = wrapper.find(".overdue");
 
-				expect(chips).toHaveLength(1);
-				expect(chips.wrappers[0].element.textContent).toContain(
+				expect(chips.element.textContent).toContain(
 					wrapper.vm.$i18n.t("pages.room.taskCard.student.label.overdue")
 				);
+			});
+
+			it("should have submitted chip if task is submitted", () => {
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 1,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: "2017-09-28T08:00:00.000Z",
+						duedate: "2000-01-01T00:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const chips = wrapper.find(".submitted");
+
+				expect(chips.element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.student.label.submitted")
+				);
+			});
+
+			it("should have graded chip if task is graded", () => {
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 1,
+							maxSubmissions: 1,
+							graded: 1,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: "2017-09-28T08:00:00.000Z",
+						duedate: "2000-01-01T00:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const chips = wrapper.find(".graded");
+
+				expect(chips.element.textContent).toContain(
+					wrapper.vm.$i18n.t("pages.room.taskCard.label.graded")
+				);
+			});
+
+			it("should have no chips if task is finished", () => {
+				const finishedWrapper = getWrapper({ ...finishedTestProps, role });
+				const chips = finishedWrapper.findAll(".v-chip");
+
+				expect(chips).toHaveLength(0);
+
+				expect(
+					finishedWrapper.find("[data-test-id='dueDateHintLabel']").exists()
+				).toBe(false);
 			});
 		});
 	});
