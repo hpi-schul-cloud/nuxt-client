@@ -59,7 +59,7 @@ module.exports = {
 	 ** Headers of the page
 	 */
 	head: {
-		title: "dBildungscloud - Deine digitale Lernumgebung" || pkg.name,
+		title: "dBildungscloud",
 		meta: [
 			{
 				charset: "utf-8",
