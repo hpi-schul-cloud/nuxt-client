@@ -372,11 +372,13 @@ export default {
 			}
 		},
 	},
-	created() {
-		if (!this.isAllowed()) {
-			this.$router.push("/");
+	async created() {
+		const allowed = await this.isAllowed();
+		if (!allowed) {
+			await this.$router.push("/");
+			return;
 		}
-		this.summary();
+		await this.summary();
 		this.checkTotalInterval();
 	},
 	methods: {

@@ -12,16 +12,19 @@
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
+
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
+			<template v-if="loading">
+				<v-skeleton-loader
+					type="article, list-item-three-line"
+					data-testid="copy-process-skeleton"
+				/>
+			</template>
 			<label class="text-md mt-2">
 				{{ data.title }}
 			</label>
-			<copy-result
-				v-if="data.elements"
-				:items="copiedItems.elements"
-				:show-spinner="loading"
-			>
+			<copy-result v-if="data.elements" :items="copiedItems.elements">
 			</copy-result>
 		</template>
 	</v-custom-dialog>
