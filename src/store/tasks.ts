@@ -117,13 +117,17 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async copyTask(id: string): Promise<void> {
+	async copyTask(taskId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
-			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
-				// TODO: courseId should be in store after server implementation
-				courseId: "0000dcfbfb5c7a3f00bf21ab",
+			await this.fetchAllTasks();
+			if (finishedTaskModule.isInitialized) {
+				await finishedTaskModule.refetchTasks();
+			}
+			const originalTask = this.tasks.filter((task) => task.id === taskId)[0];
+			const copyResult = await this.taskApi.taskControllerCopyTask(taskId, {
+				courseId: originalTask.courseId,
 			});
 
 			this.setTaskCopyResult(copyResult.data || {});
@@ -200,6 +204,10 @@ export default class TaskModule extends VuexModule {
 
 	get getBusinessError(): BusinessError {
 		return this.businessError;
+	}
+
+	get getLoading(): boolean {
+		return this.loading;
 	}
 
 	get getCourseFilters(): TaskCourseFilter[] {

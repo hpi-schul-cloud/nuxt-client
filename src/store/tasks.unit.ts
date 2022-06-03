@@ -156,37 +156,61 @@ describe("task store", () => {
 				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
 			});
 		});
-	});
 
-	describe("deleteTask", () => {
-		beforeEach(() => {
-			setupStores({
-				"finished-tasks": FinishedTaskModule,
+		describe("deleteTask", () => {
+			beforeEach(() => {
+				setupStores({
+					"finished-tasks": FinishedTaskModule,
+				});
+			});
+
+			it("should call api to delete a task", (done) => {
+				const mockApi = {
+					taskControllerDelete: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+
+				taskModule.deleteTask(tasks[0].id).then(() => {
+					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
 			});
 		});
 
-		it("should call api to delete a task", (done) => {
-			const mockApi = {
-				taskControllerDelete: jest.fn(),
-			};
-			const spy = jest
-				.spyOn(serverApi, "TaskApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+		describe("copyTask", () => {
+			it("should fetch correct task with courseId and copy the task", (done) => {
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-			const taskModule = new TaskModule({});
-			const tasks = taskFactory.buildList(3);
-			taskModule.setTasks(tasks);
-			const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
 
-			taskModule.deleteTask(tasks[0].id).then(() => {
-				expect(taskModule.getStatus).toBe("completed");
-				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
-				expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-				done();
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+					// expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(taskModule.getLoading).toBe(true);
+					done();
+				});
+				spy.mockRestore();
 			});
-			expect(taskModule.getStatus).toBe("pending");
-
-			spy.mockRestore();
 		});
 	});
 
@@ -352,6 +376,16 @@ describe("task store", () => {
 				const businessError = taskModule.getBusinessError;
 
 				expect(businessError).toBe(taskModule.businessError);
+			});
+		});
+
+		describe("getLoading", () => {
+			it("should return the loading state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.loading = true;
+				const loadingState = taskModule.getLoading;
+
+				expect(loadingState).toBe(taskModule.loading);
 			});
 		});
 
