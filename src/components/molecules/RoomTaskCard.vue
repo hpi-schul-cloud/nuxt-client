@@ -42,8 +42,19 @@
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
-				<v-chip v-for="(chip, index) in chipItems[role]" :key="index" small>
-					<v-icon v-if="chip.icon" left small class="fill" :color="iconColor">
+				<v-chip
+					v-for="(chip, index) in chipItems[role]"
+					:key="index"
+					:class="[chip.class]"
+					small
+				>
+					<v-icon
+						v-if="chip.icon"
+						left
+						small
+						class="fill"
+						color="rgba(0, 0, 0, 0.87)"
+					>
 						{{ chip.icon }}
 					</v-icon>
 					{{ chip.name }}
@@ -126,9 +137,6 @@ export default {
 		};
 	},
 	computed: {
-		titleColor() {
-			return this.task.displayColor || this.defaultTitleColor;
-		},
 		isDraft() {
 			return this.task.status.isDraft;
 		},
@@ -157,10 +165,6 @@ export default {
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
 			return scheduledDate && new Date(scheduledDate) > new Date();
-		},
-		iconColor() {
-			const defaultColor = "#000000";
-			return defaultColor;
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -217,6 +221,7 @@ export default {
 					roleBasedChips[Roles.Teacher].push({
 						icon: "$taskMissed",
 						name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
+						class: "overdue",
 					});
 				}
 			}
@@ -226,6 +231,7 @@ export default {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+						class: "submitted",
 					});
 				}
 
@@ -233,10 +239,12 @@ export default {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+						class: "submitted",
 					});
 					roleBasedChips[Roles.Student].push({
 						icon: this.icons.mdiTextBoxCheckOutline,
 						name: this.$t(`pages.room.taskCard.label.graded`),
+						class: "graded",
 					});
 				}
 
@@ -244,6 +252,7 @@ export default {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskMissed",
 						name: this.$t(`pages.room.taskCard.student.label.overdue`),
+						class: "overdue",
 					});
 				}
 			}
@@ -414,14 +423,14 @@ export default {
 .text-description {
 	font-size: var(--text-md);
 }
+.action-button {
+	color: var(--color-primary);
+}
 .chip-items-group {
 	vertical-align: middle;
 }
 .v-chip {
 	margin-right: var(--space-xs);
-}
-.action-button {
-	color: var(--color-primary);
 }
 .v-card {
 	box-shadow: var(--shadow-sm);
