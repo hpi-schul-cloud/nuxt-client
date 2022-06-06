@@ -129,11 +129,8 @@ export default class TaskModule extends VuexModule {
 			this.setTaskCopyResult(copyResult.data || {});
 			this.setLoading(false);
 		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
 		}
 	}
 

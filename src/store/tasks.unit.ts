@@ -201,15 +201,41 @@ describe("task store", () => {
 				const taskModule = new TaskModule({});
 				const tasks = taskFactory.buildList(3);
 				taskModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
 
 				taskModule.copyTask(tasks[0].id).then(() => {
-					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-					// expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][0]).toStrictEqual(
+						"0123456789ab"
+					);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
+						{ courseId: "course ID #1" }
+					);
 					expect(taskModule.getLoading).toBe(true);
 					done();
 				});
 				spy.mockRestore();
+			});
+
+			it("should handle an error", (done) => {
+				const task = taskFactory.build();
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
+				};
+
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(taskModule.getStatus).toBe("error");
+					expect(taskModule.businessError).toStrictEqual(error);
+					done();
+				});
+				expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
