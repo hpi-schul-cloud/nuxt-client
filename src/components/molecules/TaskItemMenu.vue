@@ -106,7 +106,8 @@
 			</template>
 		</v-custom-dialog>
 		<copy-process
-			:data="copyProcess.data"
+			v-if="copyProcess.data.id !== ''"
+			:data="copyProcess.data || {}"
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
@@ -203,16 +204,16 @@ export default {
 		},
 		async copyTask() {
 			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				window.location.href = `/homework/${this.taskId}/copy?returnUrl=/tasks`;
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = true;
+			this.copyProcess.loading = taskModule.getLoading;
 			await taskModule.copyTask(this.taskId);
 			const copyResult = taskModule.getTaskCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
-				this.copyProcess.loading = false;
+				this.copyProcess.loading = taskModule.getLoading;
 			}
 		},
 		async onCopyProcessDialogClose() {
