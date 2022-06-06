@@ -139,8 +139,13 @@ export default Vue.extend({
 	flex-wrap: nowrap;
 }
 
+::v-deep .v-skeleton-loader__date-picker-days {
+	justify-content: space-between;
+}
+
 ::v-deep .v-skeleton-loader__avatar {
 	width: 80px;
+	max-width: 80px;
 	height: 80px;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: 24px;

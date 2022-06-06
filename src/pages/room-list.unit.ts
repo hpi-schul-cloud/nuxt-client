@@ -77,7 +77,7 @@ describe("@pages/rooms-list.vue", () => {
 			wrapper.destroy();
 		});
 
-		it("should show skeleton loader", () => {
+		it("should display skeleton loader", () => {
 			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
 				true
 			);

@@ -33,11 +33,18 @@
 			</div>
 		</template>
 		<template v-if="isLoading">
-			<v-skeleton-loader type="date-picker-days" class="px-12 mt-16" />
+			<div class="rooms-container">
+				<v-skeleton-loader
+					ref="skeleton-loader"
+					type="date-picker-days"
+					class="mt-16"
+				/>
+			</div>
 		</template>
 		<template v-else>
 			<template v-if="hasNoCurrentRooms">
 				<v-custom-empty-state
+					ref="rooms-empty-state"
 					image="@assets/img/empty-state/rooms-empty-state.svg"
 					:title="$t('pages.rooms.currentRooms.emptyState.title')"
 					class="mt-16"
@@ -481,8 +488,13 @@ export default {
 	margin-top: 0 !important;
 }
 
+::v-deep .v-skeleton-loader__date-picker-days {
+	justify-content: space-between;
+}
+
 ::v-deep .v-skeleton-loader__avatar {
 	width: 80px;
+	max-width: 80px;
 	height: 80px;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: 24px;
