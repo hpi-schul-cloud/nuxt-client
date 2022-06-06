@@ -121,10 +121,6 @@ export default class TaskModule extends VuexModule {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
-			await this.fetchAllTasks();
-			if (finishedTaskModule.isInitialized) {
-				await finishedTaskModule.refetchTasks();
-			}
 			const originalTask = this.tasks.filter((task) => task.id === taskId)[0];
 			const copyResult = await this.taskApi.taskControllerCopyTask(taskId, {
 				courseId: originalTask.courseId,
