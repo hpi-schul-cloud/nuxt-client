@@ -175,7 +175,7 @@ export default {
 			return `/homework/${this.taskId}/edit`;
 		},
 		copyLink() {
-			return `/homework/${this.taskId}/copy`;
+			return `/homework/${this.taskId}/copy?returnUrl=/tasks`;
 		},
 		isTeacher() {
 			return this.userRole === "teacher";
@@ -198,13 +198,9 @@ export default {
 		handleDelete() {
 			taskModule.deleteTask(this.taskId);
 		},
-		copyEvent() {
-			this.$emit("copy-event");
-			console.log("task-action-copy");
-		},
 		async copyTask() {
 			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = `/homework/${this.taskId}/copy?returnUrl=/tasks`;
+				window.location.href = this.copyLink;
 				return;
 			}
 			this.copyProcess.isOpen = true;
