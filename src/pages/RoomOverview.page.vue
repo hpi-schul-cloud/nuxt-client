@@ -499,4 +499,20 @@ export default {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: 24px;
 }
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+	::v-deep .v-skeleton-loader__avatar {
+		max-width: 59px;
+		max-height: 59px;
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin: 24px 4px;
+	}
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	::v-deep .v-skeleton-loader__avatar {
+		max-width: 64px;
+		max-height: 64px;
+	}
+}
 </style>

@@ -23,11 +23,13 @@
 			</div>
 		</template>
 		<template v-if="isLoading">
-			<v-skeleton-loader
-				ref="skeleton-loader"
-				type="date-picker-days"
-				class="px-12 mt-16"
-			/>
+			<v-container fluid class="px-0"
+				><v-skeleton-loader
+					ref="skeleton-loader"
+					type="date-picker-days"
+					class="mt-16"
+				/>
+			</v-container>
 		</template>
 		<template v-else>
 			<template v-if="hasNoRooms">
@@ -134,6 +136,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 .search {
 	flex-wrap: nowrap;
@@ -141,6 +144,7 @@ export default Vue.extend({
 
 ::v-deep .v-skeleton-loader__date-picker-days {
 	justify-content: space-between;
+	padding: 0;
 }
 
 ::v-deep .v-skeleton-loader__avatar {
@@ -148,6 +152,20 @@ export default Vue.extend({
 	max-width: 80px;
 	height: 80px;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin: 24px;
+	margin: 12px;
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	::v-deep .v-skeleton-loader__avatar {
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin: 12px 36px;
+	}
+}
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+	::v-deep .v-skeleton-loader__avatar {
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin: 24px 48px;
+	}
 }
 </style>
