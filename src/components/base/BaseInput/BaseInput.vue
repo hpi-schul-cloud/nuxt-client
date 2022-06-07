@@ -108,6 +108,7 @@ export default {
 				if (this.validationModel.$futureTouch) {
 					clearTimeout(this.validationModel.$futureTouch);
 				}
+				// eslint-disable-next-line vue/no-mutating-props
 				this.validationModel.$futureTouch = setTimeout(
 					() => this.validationModel.$touch(),
 					validationDelay
