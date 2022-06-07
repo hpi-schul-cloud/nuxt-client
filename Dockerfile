@@ -1,4 +1,4 @@
-FROM docker.io/node:16 as git
+FROM docker.io/node:16.15.0 as git
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
@@ -6,7 +6,7 @@ COPY package.json .
 COPY .git .
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(node -p "require('./package.json').version")\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > /app/nuxtversion
 
-FROM docker.io/node:16
+FROM docker.io/node:16.15.0
 
 ENV NUXT_TELEMETRY_DISABLED=1
 ARG SC_THEME=default
