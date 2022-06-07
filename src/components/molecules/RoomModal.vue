@@ -6,6 +6,7 @@
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
 		<div slot="title" class="room-title">
+			<!-- eslint-disable vue/no-parsing-error,vue/no-mutating-props -->
 			<v-text-field
 				v-show="roomNameEditMode"
 				ref="roomNameInput"
@@ -16,6 +17,7 @@
 				@blur="onUpdateRoomName"
 				@keyup.enter="onRoomNameInputEnter"
 			></v-text-field>
+			<!-- eslint-enable vue/no-parsing-error,vue/no-mutating-props -->
 			<h2
 				v-show="!roomNameEditMode"
 				class="text-h4 my-2"

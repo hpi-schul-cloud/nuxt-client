@@ -49,7 +49,7 @@
 					>
 					</v-skeleton-loader>
 				</template>
-				<template #body.prepend>
+				<template #[`body.prepend`]>
 					<tr class="head">
 						<td class="col-2">
 							<v-text-field
@@ -168,13 +168,13 @@
 					</tr>
 				</template>
 
-				<template #item.roleNames="{ item }">
+				<template #[`item.roleNames`]="{ item }">
 					<div>
 						{{ getRoles(item.roleNames) }}
 					</div>
 				</template>
 
-				<template #item.match="{ item }">
+				<template #[`item.match`]="{ item }">
 					<div class="text-no-wrap md">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
@@ -194,7 +194,7 @@
 					</div>
 				</template>
 
-				<template #item.flagged="{ item }">
+				<template #[`item.flagged`]="{ item }">
 					<v-btn
 						icon
 						:color="item.flagged ? 'primary' : ''"
