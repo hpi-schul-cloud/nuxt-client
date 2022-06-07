@@ -1,6 +1,6 @@
 <template>
 	<base-modal v-bind="$attrs" v-on="$listeners">
-		<template v-slot:body>
+		<template #body>
 			<modal-body-info :title="title" :description="description" />
 			<base-progressbar :value="percent" :max="100" style="width: 100%" />
 		</template>

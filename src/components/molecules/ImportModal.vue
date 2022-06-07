@@ -8,7 +8,7 @@
 		:next-btn-title-key="nextButtonName"
 		:confirm-btn-title-key="
 			isImportError && step === 3
-				? this.$t('pages.rooms.importCourse.importErrorButton')
+				? $t('pages.rooms.importCourse.importErrorButton')
 				: nextButtonName
 		"
 		@dialog-closed="cancel"

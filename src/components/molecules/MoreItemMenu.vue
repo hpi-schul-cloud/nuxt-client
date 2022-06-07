@@ -8,7 +8,7 @@
 		attach
 		:nudge-right="nudgeRight"
 	>
-		<template v-slot:activator="{ on, attrs }">
+		<template #activator="{ on, attrs }">
 			<v-btn
 				v-show="show"
 				v-bind="attrs"
