@@ -1,13 +1,13 @@
 <template>
 	<base-modal v-bind="$attrs" v-on="$listeners">
-		<template v-slot:body>
+		<template #body>
 			<modal-body-info :title="title" :description="description">
-				<template v-slot:icon>
+				<template #icon>
 					<base-spinner :color="color" size="large" />
 				</template>
 			</modal-body-info>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<center-slot class="mb--md">
 				<base-button design="primary" @click="$emit('update:active', false)">
 					{{ btnText }}

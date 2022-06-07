@@ -1,12 +1,12 @@
 <template>
 	<base-card :class="data ? 'insights-card' : 'insights-card chart-card'">
-		<template v-slot:header>
+		<template #header>
 			<div class="insights-card__header">
 				{{ title }}
 			</div>
 			<div class="insights-card__separator" />
 		</template>
-		<template v-slot:content>
+		<template #content>
 			<div class="insights-card__content">
 				<slot name="content">
 					<template v-if="data && data.current">
@@ -28,7 +28,7 @@
 				</slot>
 			</div>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<div class="insights-card__footer">
 				<slot name="footer" />
 			</div>
