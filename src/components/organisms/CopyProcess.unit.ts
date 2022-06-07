@@ -121,7 +121,7 @@ describe("@components/organisms/CopyProcess", () => {
 			elements: [
 				{
 					id: "12345",
-					status: "success",
+					status: "success-all",
 					title: wrapper.vm.$i18n.t(
 						"components.molecules.copyResult.successfullyCopied"
 					),
@@ -131,5 +131,21 @@ describe("@components/organisms/CopyProcess", () => {
 		};
 
 		expect(wrapper.vm.copiedItems).toStrictEqual(successObject);
+	});
+
+	it("should show skeleton when its prop set", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+		const skeletonElementBefore = wrapper.findAll(
+			`[data-testid="copy-process-skeleton"]`
+		);
+		expect(skeletonElementBefore).toHaveLength(0);
+
+		await wrapper.setProps({ isOpen: true, loading: true });
+
+		const skeletonElementAfter = wrapper.findAll(
+			`[data-testid="copy-process-skeleton"]`
+		);
+		expect(skeletonElementAfter).toHaveLength(1);
 	});
 });

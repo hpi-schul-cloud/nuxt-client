@@ -1,13 +1,5 @@
 <template>
 	<div>
-		<v-progress-circular
-			v-if="showSpinner"
-			indeterminate
-			size="72"
-			width="6"
-			color="secondary"
-			class="spinner"
-		></v-progress-circular>
 		<v-treeview
 			:expand-icon="icons.mdiChevronDown"
 			:items="items"
@@ -16,6 +8,7 @@
 			:open="expandedNodes"
 			item-children="elements"
 			item-key="index"
+			dense
 			@keydown.space="onSpacePress"
 		>
 			<template v-slot:prepend="{ item }">
@@ -53,9 +46,6 @@ export default {
 			required: true,
 			default: () => [],
 		},
-		showSpinner: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {
@@ -79,9 +69,10 @@ export default {
 			if (itemStatus === "partial") return "partial";
 		},
 		setIcons(item) {
+			if (item.status === "success-all") return this.icons.mdiCheckAll;
 			if (item.status === "success" && !item.elements)
 				return this.icons.mdiCheck;
-			if (item.status === "success") return this.icons.mdiCheckAll;
+			if (item.status === "success") return this.icons.mdiCheck;
 			if (item.status === "failure") return this.icons.mdiAlertCircle;
 			if (item.status === "partial") return this.icons.mdiAlert;
 		},
@@ -132,9 +123,8 @@ export default {
 @import "@styles";
 .treeview-item-failure {
 	color: var(--color-danger-dark);
-	white-space: pre-line;
+	white-space: normal;
 }
-
 .not-finished {
 	color: var(--color-danger-dark);
 }
@@ -143,12 +133,5 @@ export default {
 }
 .partial {
 	color: var(--color-accent);
-}
-.spinner {
-	position: absolute;
-	right: 0;
-	left: 0;
-	margin-right: auto;
-	margin-left: auto;
 }
 </style>

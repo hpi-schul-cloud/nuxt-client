@@ -44,7 +44,7 @@ module.exports = {
 		// Default Content-Security-Policy Header for every site
 		// Use 'strict-dynamic' 'nonce-<nonceValue>' (nonceValue auto generated) to create a whitelist
 		corsDefault: {
-			defaultSrc: `'self' data: blob: wss://hpi-schul-cloud.de wss://scchat.hpi-schul-cloud.de http://localhost:3030 https://api.hpi-schul-cloud.de https://scchat.hpi-schul-cloud.de https://s3.hidrive.strato.com https://libreoffice.hpi-schul-cloud.de https://docs.hpi-schul-cloud.de https://edtrio.hpi-schul-cloud.de https://etherpad.hpi-schul-cloud.de https://blog.hpi-schul-cloud.de https://sc-content-resources.hpi-schul-cloud.de https://open.hpi.de https://upload.wikimedia.org ${matrixMessengerEmbed} ${matrixMessengerHomeserver} ${matrixMessengerDiscoverUri}`,
+			defaultSrc: `'self' data: blob: wss://dbildungscloud.de wss://scchat.dbildungscloud.de http://localhost:3030 https://api.dbildungscloud.de https://scchat.dbildungscloud.de https://s3.hidrive.strato.com https://libreoffice.dbildungscloud.de https://docs.dbildungscloud.de https://etherpad.dbildungscloud.de https://blog.dbildungscloud.de https://sc-content-resources.hpi-schul-cloud.de https://open.hpi.de https://upload.wikimedia.org ${matrixMessengerEmbed} ${matrixMessengerHomeserver} ${matrixMessengerDiscoverUri}`,
 			fontSrc: `'self' data: ${matrixMessengerEmbed}`,
 			styleSrc: `'self' 'unsafe-inline' ${matrixMessengerEmbed}`,
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",

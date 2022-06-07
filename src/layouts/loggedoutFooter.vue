@@ -1,10 +1,10 @@
 <template>
 	<div class="page">
 		<navigation-bar
-			:links="navbarItems"
-			:img="require('@assets/img/logo/logo-dBildungscloud.svg')"
-			:buttons="true"
 			class="topbar"
+			:buttons="true"
+			:img="require('@assets/img/logo/logo-image-mono.svg')"
+			:links="navbarItems"
 		/>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<Nuxt />
@@ -15,7 +15,7 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import navbarBaseItems from "@utils/navbarBaseItems.js";
+import navbarBaseItems from "@/utils/navbarBaseItems";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {

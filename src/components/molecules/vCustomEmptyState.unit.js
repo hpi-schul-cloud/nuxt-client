@@ -7,7 +7,7 @@ let wrapper;
 
 const title = "Test title";
 const subtitle = "Test subtitle";
-const image = "@assets/img/empty-state/Task_Empty_State.svg";
+const image = "@assets/img/empty-state/tasks-empty-state.svg";
 
 describe("@components/molecules/vCustomEmptyState", () => {
 	beforeEach(() => {
