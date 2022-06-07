@@ -649,5 +649,79 @@ describe("rooms module", () => {
 				expect(roomsModule.getAllElements).toStrictEqual(expectedData);
 			});
 		});
+
+		describe("hasNoRooms", () => {
+			it("should return true if rooms is empty", () => {
+				const roomsModule = new RoomsModule({});
+
+				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+				roomsModule.setAllElements([]);
+				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+			});
+
+			it("should return false if rooms is not empty", () => {
+				const itemsToBeSet = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+					},
+				];
+
+				const roomsModule = new RoomsModule({});
+
+				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+				roomsModule.setAllElements(itemsToBeSet);
+				expect(roomsModule.hasNoRooms).toStrictEqual(false);
+			});
+		});
+
+		describe("hasNoCurrentRooms", () => {
+			it("should return true if rooms is empty", () => {
+				const roomsModule = new RoomsModule({});
+
+				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+				roomsModule.setRoomData([]);
+				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+			});
+
+			it("should return false if rooms is not empty", () => {
+				const itemsToBeSet = [
+					{
+						id: "123",
+						title: "Mathe",
+						shortTitle: "Ma",
+						displayColor: "#54616e",
+						startDate: "2019-12-07T23:00:00.000Z",
+						untilDate: "2020-12-16T23:00:00.000Z",
+					},
+					{
+						id: "234",
+						title: "History",
+						shortTitle: "Hi",
+						displayColor: "#EF6C00",
+						startDate: "2015-07-31T22:00:00.000Z",
+						untilDate: "2018-07-30T22:00:00.000Z",
+					},
+				];
+
+				const roomsModule = new RoomsModule({});
+
+				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+				roomsModule.setRoomData(itemsToBeSet as any);
+				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(false);
+			});
+		});
 	});
 });
