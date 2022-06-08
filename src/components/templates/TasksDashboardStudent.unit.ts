@@ -63,7 +63,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should render tasks list component", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 0,
+				tab: "open",
 				emptyState,
 			},
 		});
@@ -79,7 +79,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
+				tab: "completed",
 				emptyState,
 			},
 		});
@@ -91,7 +91,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should trigger event to update tab property", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
+				tab: "completed",
 				emptyState,
 			},
 		});

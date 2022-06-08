@@ -9,6 +9,10 @@ import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
+const $route = {
+	hash: "",
+};
+
 describe("@components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
@@ -18,6 +22,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
+				$route,
 			}),
 			setup() {
 				provide("taskModule", taskModuleMock);
@@ -175,25 +180,25 @@ describe("@components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
-			wrapper.setData({ tab: 0 });
+			wrapper.setData({ tab: "open" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
-			wrapper.setData({ tab: 1 });
+			wrapper.setData({ tab: "drafts" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
-			wrapper.setData({ tab: 2 });
+			wrapper.setData({ tab: "finished" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
 
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", () => {
-			wrapper.setData({ tab: 0 });
+			wrapper.setData({ tab: "open" });
 			const switchEl = wrapper.find(".v-input--switch");
 			switchEl.vm.$emit("input-changed");
 			expect(taskModuleMock.setSubstituteFilter).toHaveBeenCalled();
@@ -248,9 +253,10 @@ describe("@components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			wrapper.setData({ tab: "open" });
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
-			wrapper.setData({ tab: 1 });
+			wrapper.setData({ tab: "completed" });
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
 		});

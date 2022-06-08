@@ -64,7 +64,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render tasks list component, with second panel expanded per default", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 0,
+				tab: "current",
 				emptyState,
 			},
 		});
@@ -89,7 +89,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
+				tab: "drafts",
 				emptyState,
 			},
 		});
@@ -101,7 +101,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should trigger event to update tab property", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
+				tab: "drafts",
 				emptyState,
 			},
 		});
