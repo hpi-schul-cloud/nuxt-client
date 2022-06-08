@@ -33,7 +33,7 @@
 				}}</v-btn
 			>
 			<v-list-group v-if="schoolPolicies.length > 1" class="">
-				<template v-slot:activator>
+				<template #activator>
 					<v-list-item-title>{{
 						$t("pages.administration.school.index.schoolPolicies.olderPolicies")
 					}}</v-list-item-title>

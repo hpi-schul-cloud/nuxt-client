@@ -7,10 +7,10 @@
 			:nuxt="true"
 			class="custom-breadcrumb px-0 py-0"
 		>
-			<template v-slot:divider>
+			<template #divider>
 				<v-icon>{{ mdiChevronLeft }}</v-icon>
 			</template>
-			<template v-slot:item="{ item }">
+			<template #item="{ item }">
 				<v-breadcrumbs-item
 					:href="item.href"
 					:to="item.to"

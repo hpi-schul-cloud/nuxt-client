@@ -24,7 +24,7 @@
 						outlined
 						@click="$emit('back')"
 					>
-						{{ this.$t("common.actions.back") }}
+						{{ $t("common.actions.back") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('edit')"
@@ -32,7 +32,7 @@
 						depressed
 						@click="$emit('dialog-edit')"
 					>
-						{{ this.$t("common.actions.edit") }}
+						{{ $t("common.actions.edit") }}
 					</v-btn>
 				</div>
 				<div class="button-section button-right">
@@ -44,7 +44,7 @@
 						text
 						@click="$emit('dialog-closed', false)"
 					>
-						{{ this.$t("common.actions.cancel") }}
+						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('confirm')"
@@ -54,7 +54,7 @@
 						depressed
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
-						>{{ this.$t(confirmBtnTitleKey) }}
+						>{{ $t(confirmBtnTitleKey) }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
@@ -63,7 +63,7 @@
 						outlined
 						@click="$emit('dialog-closed', false)"
 					>
-						{{ this.$t("common.labels.close") }}
+						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
@@ -72,7 +72,7 @@
 						depressed
 						:disabled="nextBtnDisabled"
 						@click="$emit('next')"
-						>{{ this.$t(nextBtnTitleKey) }}
+						>{{ $t(nextBtnTitleKey) }}
 					</v-btn>
 				</div>
 			</v-card-actions>

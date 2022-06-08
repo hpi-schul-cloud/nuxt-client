@@ -5,15 +5,15 @@
 		class="modal-container"
 		v-on="$listeners"
 	>
-		<template v-slot:header></template>
-		<template v-slot:body>
+		<template #header></template>
+		<template #body>
 			<modal-body-info :title="title" :description="description">
-				<template v-slot:icon>
+				<template #icon>
 					<slot name="icon" />
 				</template>
 			</modal-body-info>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<center-slot class="mb--md">
 				<base-button class="btn" :design="design" @click="close">{{
 					btn

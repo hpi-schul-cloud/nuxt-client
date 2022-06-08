@@ -175,7 +175,7 @@
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import { roomModule, taskModule } from "@/store";
+import { roomModule, taskModule, envConfigModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import CopyProcess from "@components/organisms/CopyProcess";
@@ -328,6 +328,10 @@ export default {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 		async copyTask(itemId) {
+			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				return;
+			}
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = true;
 			await roomModule.copyTask(itemId);
@@ -343,7 +347,7 @@ export default {
 			await roomModule.fetchContent(this.roomData.roomId);
 		},
 		redirectTask(itemId) {
-			window.location = `/homework/${itemId}/edit?returnUrl=/rooms/${this.roomDataObject.roomId}`;
+			window.location.href = `/homework/${itemId}/edit?returnUrl=rooms/${this.roomDataObject.roomId}`;
 		},
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
