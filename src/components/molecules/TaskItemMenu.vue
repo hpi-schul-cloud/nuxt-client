@@ -7,7 +7,7 @@
 			attach
 			@update:return-value="toggleMenu(false)"
 		>
-			<template v-slot:activator="{ on, attrs, value }">
+			<template #activator="{ on, attrs, value }">
 				<v-btn
 					v-show="show"
 					id="task-menu-btn"

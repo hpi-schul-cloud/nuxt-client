@@ -41,7 +41,7 @@
 					pageText: '{0}-{1} von {2}',
 				}"
 			>
-				<template v-slot:loading>
+				<template #loading>
 					<v-skeleton-loader
 						class="mx-auto"
 						width="100%"
@@ -49,7 +49,7 @@
 					>
 					</v-skeleton-loader>
 				</template>
-				<template v-slot:body.prepend>
+				<template #[`body.prepend`]>
 					<tr class="head">
 						<td class="col-2">
 							<v-text-field
@@ -168,13 +168,13 @@
 					</tr>
 				</template>
 
-				<template v-slot:item.roleNames="{ item }">
+				<template #[`item.roleNames`]="{ item }">
 					<div>
 						{{ getRoles(item.roleNames) }}
 					</div>
 				</template>
 
-				<template v-slot:item.match="{ item }">
+				<template #[`item.match`]="{ item }">
 					<div class="text-no-wrap md">
 						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
@@ -194,7 +194,7 @@
 					</div>
 				</template>
 
-				<template v-slot:item.flagged="{ item }">
+				<template #[`item.flagged`]="{ item }">
 					<v-btn
 						icon
 						:color="item.flagged ? 'primary' : ''"
@@ -215,7 +215,7 @@
 				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
-						instance: this.$theme.short_name,
+						instance: $theme.short_name,
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}
@@ -224,7 +224,7 @@
 				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
-						instance: this.$theme.short_name,
+						instance: $theme.short_name,
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}
@@ -232,7 +232,7 @@
 				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
-						instance: this.$theme.short_name,
+						instance: $theme.short_name,
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}
@@ -240,7 +240,7 @@
 				<v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
-						instance: this.$theme.short_name,
+						instance: $theme.short_name,
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}

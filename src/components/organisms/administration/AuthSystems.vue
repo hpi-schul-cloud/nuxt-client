@@ -19,7 +19,7 @@
 			@blur="linkCopyFinished"
 		></v-text-field>
 		<v-simple-table class="table-system">
-			<template v-slot:default>
+			<template #default>
 				<thead>
 					<tr>
 						<th class="text-left">

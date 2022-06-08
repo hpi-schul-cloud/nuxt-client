@@ -1,11 +1,11 @@
 <template>
 	<default-modal-footer class="actions">
-		<template v-slot:left>
+		<template #left>
 			<div class="slot-container">
 				<slot name="left"></slot>
 			</div>
 		</template>
-		<template v-slot:right>
+		<template #right>
 			<slot name="right"></slot>
 		</template>
 	</default-modal-footer>

@@ -1,9 +1,9 @@
 <template>
 	<div ref="dialog" data-testid="dialog">
 		<base-modal :active="isActive" @update:active="clickOutside">
-			<template v-slot:body>
+			<template #body>
 				<modal-body-info :title="message">
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon
 							v-if="icon"
 							:source="iconSource"
@@ -15,7 +15,7 @@
 					</template>
 				</modal-body-info>
 			</template>
-			<template v-slot:footerRight>
+			<template #footerRight>
 				<base-button
 					:design="invertedDesign ? actionDesign : 'text'"
 					data-testid="btn-dialog-cancel"

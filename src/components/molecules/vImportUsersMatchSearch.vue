@@ -5,7 +5,7 @@
 				<v-toolbar-title>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: this.$theme.short_name,
+							instance: $theme.short_name,
 							source: $t("pages.administration.migration.ldapSource"),
 						})
 					}}
@@ -21,7 +21,7 @@
 			<v-card-text class="mt-5">
 				{{
 					$t("components.molecules.importUsersMatch.subtitle", {
-						instance: this.$theme.short_name,
+						instance: $theme.short_name,
 						source: $t("pages.administration.migration.ldapSource"),
 					})
 				}}
@@ -61,7 +61,7 @@
 						</v-list-item>
 					</v-col>
 					<v-col class="md-6">
-						<v-card-title>{{ this.$theme.short_name }}</v-card-title>
+						<v-card-title>{{ $theme.short_name }}</v-card-title>
 						<v-list-item>
 							<v-list-item-content v-if="selectedItem">
 								<v-list-item-title>
@@ -129,7 +129,7 @@
 							rounded
 							small-chips
 						>
-							<template v-slot:selection="{ attr, on, item, selected }">
+							<template #selection="{ attr, on, item, selected }">
 								<v-chip
 									v-bind="attr"
 									:input-value="selected"
@@ -140,7 +140,7 @@
 									<span>{{ `${item.firstName} ${item.lastName}` }}</span>
 								</v-chip>
 							</template>
-							<template v-slot:item="{ item }">
+							<template #item="{ item }">
 								<v-list-item-content max-width="450px">
 									<v-list-item-title>
 										{{ item.firstName }} {{ item.lastName }}
@@ -157,7 +157,7 @@
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</template>
-							<template v-slot:append-item>
+							<template #append-item>
 								<div v-intersect="endIntersect" class="pa-2"></div>
 							</template>
 						</v-autocomplete>

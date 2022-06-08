@@ -7,7 +7,7 @@
 			design="secondary"
 			@update:active="buttonHandler"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon
 					source="custom"
 					:icon="activated ? 'mail-check' : 'mail-error'"
