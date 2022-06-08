@@ -216,8 +216,33 @@ describe("task store", () => {
 				spy.mockRestore();
 			});
 
+			it("should copy the task without courseId parameter", (done) => {
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3, { courseId: "" });
+				taskModule.setTasks(tasks);
+
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][0]).toStrictEqual(
+						"0123456789ab"
+					);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
+						{}
+					);
+					expect(taskModule.getLoading).toBe(true);
+					done();
+				});
+				spy.mockRestore();
+			});
+
 			it("should handle an error", (done) => {
-				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
 					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
@@ -316,6 +341,48 @@ describe("task store", () => {
 					statusCode: "",
 					message: "",
 				});
+			});
+		});
+
+		describe("setLoading", () => {
+			it("should set the loading status in state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.setLoading(true);
+
+				expect(taskModule.loading).toBe(true);
+			});
+		});
+
+		describe("setTaskCopyResult", () => {
+			it("should set the copy result in state", () => {
+				const copyResultMock = {
+					title: "Aufgabe",
+					type: "task",
+					status: "success",
+					id: "123",
+					elements: [
+						{
+							title: "description",
+							type: "leaf",
+							status: "success",
+						},
+						{
+							title: "submissions",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "files",
+							type: "leaf",
+							status: "not-implemented",
+						},
+					],
+				};
+
+				const taskModule = new TaskModule({});
+				taskModule.setTaskCopyResult(copyResultMock);
+
+				expect(taskModule.getTaskCopyResult).toStrictEqual(copyResultMock);
 			});
 		});
 	});

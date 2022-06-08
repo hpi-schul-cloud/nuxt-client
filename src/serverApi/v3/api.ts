@@ -1056,7 +1056,7 @@ export interface TaskCopyApiParams {
      * @type {string}
      * @memberof TaskCopyApiParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * Destination lesson parent Id the task is copied to
      * @type {string}

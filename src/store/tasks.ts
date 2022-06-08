@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { envConfigModule, finishedTaskModule } from "@/store";
+import { finishedTaskModule } from "@/store";
 import { TaskFilter } from "./task.filter";
 import { $axios } from "../utils/api";
 import {
@@ -122,9 +122,16 @@ export default class TaskModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const originalTask = this.tasks.filter((task) => task.id === taskId)[0];
-			const copyResult = await this.taskApi.taskControllerCopyTask(taskId, {
-				courseId: originalTask.courseId,
-			});
+			const taskCopyParams =
+				originalTask.courseId && originalTask.courseId !== ""
+					? {
+							courseId: originalTask.courseId,
+					  }
+					: {};
+			const copyResult = await this.taskApi.taskControllerCopyTask(
+				taskId,
+				taskCopyParams
+			);
 
 			this.setTaskCopyResult(copyResult.data || {});
 			this.setLoading(false);
