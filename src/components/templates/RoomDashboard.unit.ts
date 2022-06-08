@@ -490,6 +490,10 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("CopyTask Process", () => {
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+		});
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
 			const copyTaskMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -548,8 +552,8 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
 			copyProcess.vm.$emit("process-edit", "1234");
 			await wrapper.vm.$nextTick();
-			expect(location.pathname).toStrictEqual(
-				"/homework/1234/edit?returnUrl=/rooms/123"
+			expect(location.href).toStrictEqual(
+				"/homework/1234/edit?returnUrl=rooms/123"
 			);
 		});
 
@@ -590,6 +594,21 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			expect(wrapper.vm.copyProcess.data).toStrictEqual({});
 			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+		});
+
+		it("should redirect to legacy client if FEATURE_TASK_COPY_ENABLED flag is not set true", async () => {
+			const location = window.location;
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+
+			expect(location.href).toStrictEqual(
+				"/homework/1234/copy?returnUrl=rooms/123"
+			);
 		});
 	});
 });
