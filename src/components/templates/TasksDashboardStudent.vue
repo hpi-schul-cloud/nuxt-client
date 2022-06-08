@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-student">
 		<v-tabs-items v-model="currentTab">
-			<v-tab-item>
+			<v-tab-item value="open">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
@@ -36,7 +36,7 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
+			<v-tab-item value="completed">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="gradedTasks.length"
@@ -61,13 +61,13 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
+			<v-tab-item value="finished">
 				<tasks-list
 					class="pb-16"
 					:tasks="finishedTasks"
 					user-role="student"
 					type="finished"
-					:has-pagination="tab === 2"
+					:has-pagination="tab === 'finished'"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"
@@ -89,7 +89,7 @@ export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
 	props: {
 		tab: {
-			type: Number,
+			type: String,
 			required: true,
 		},
 		emptyState: {
