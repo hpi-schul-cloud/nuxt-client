@@ -49,7 +49,7 @@ describe("@components/molecules/TaskItemStudent", () => {
 		expect(dueDateLabel.text()).toBe("Abgabe 11.06.00 16:00");
 	});
 
-	it("Should render hint label, if task is close to due date", () => {
+	it("Should render hint label, if task is close to due date and not submitted", () => {
 		const current = new Date();
 		current.setHours(current.getHours() + 1);
 		const closeToDueDate = current.toISOString();
@@ -63,6 +63,7 @@ describe("@components/molecules/TaskItemStudent", () => {
 			createdAt: "2017-09-28T11:49:39.924Z",
 			status: {
 				isFinished: false,
+				submitted: 0,
 			},
 		};
 
@@ -70,6 +71,31 @@ describe("@components/molecules/TaskItemStudent", () => {
 
 		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
 			true
+		);
+	});
+
+	it("Should not render hint label, if task is close to due date and submitted", () => {
+		const current = new Date();
+		current.setHours(current.getHours() + 1);
+		const closeToDueDate = current.toISOString();
+
+		const taskCloseToDueDate = {
+			id: "59cce2c61113d1132c98dc02",
+			_id: "59cce2c61113d1132c98dc02",
+			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+			duedate: closeToDueDate,
+			courseName: "Mathe",
+			createdAt: "2017-09-28T11:49:39.924Z",
+			status: {
+				isFinished: false,
+				submitted: 1,
+			},
+		};
+
+		const wrapper = getWrapper({ task: taskCloseToDueDate });
+
+		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
+			false
 		);
 	});
 
