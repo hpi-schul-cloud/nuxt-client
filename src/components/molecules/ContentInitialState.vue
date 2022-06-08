@@ -4,7 +4,7 @@
 		:alt="$t('pages.content.init_state.img_alt')"
 		:title="$t('pages.content.init_state.title')"
 	>
-		<template v-slot:description>
+		<template #description>
 			<div class="initial-state-description">
 				<!-- eslint-disable vue/no-v-html -->
 				<span v-html="$t('pages.content.init_state.message')" />

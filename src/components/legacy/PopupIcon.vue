@@ -39,6 +39,7 @@ export default {
 		};
 	},
 	mounted() {
+		// eslint-disable-next-line vue/no-mutating-props
 		this.shouldExpandToLeft =
 			this.$refs.popupContent.getBoundingClientRect().right >
 			window.innerWidth + 10;

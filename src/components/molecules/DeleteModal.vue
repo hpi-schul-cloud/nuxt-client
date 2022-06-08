@@ -1,12 +1,12 @@
 <template>
 	<base-modal :active.sync="showDeleteModal" @onBackdropClick="closeModal">
-		<template v-slot:header></template>
-		<template v-slot:body>
+		<template #header></template>
+		<template #body>
 			<modal-body-info
 				:title="confirmationText"
 				:description="$t('pages.courses._id.modal.description')"
 			>
-				<template v-slot:icon>
+				<template #icon>
 					<base-icon
 						source="material"
 						icon="report_problem"
@@ -15,7 +15,7 @@
 				</template>
 			</modal-body-info>
 		</template>
-		<template v-slot:footerRight>
+		<template #footerRight>
 			<base-button design="text" @click="closeModal">
 				{{ $t("common.actions.cancel") }}
 			</base-button>
