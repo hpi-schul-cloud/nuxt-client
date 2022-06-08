@@ -2,7 +2,7 @@
 	<div>
 		<div class="border"></div>
 		<default-modal-footer>
-			<template v-slot:right>
+			<template #right>
 				<slot name="right"></slot>
 			</template>
 		</default-modal-footer>

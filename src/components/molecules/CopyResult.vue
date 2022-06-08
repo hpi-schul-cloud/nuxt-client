@@ -11,12 +11,12 @@
 			dense
 			@keydown.space="onSpacePress"
 		>
-			<template v-slot:prepend="{ item }">
+			<template #prepend="{ item }">
 				<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
 					{{ setIcons(item) }}
 				</v-icon>
 			</template>
-			<template v-slot:label="{ item }">
+			<template #label="{ item }">
 				<div
 					class="treeview-item"
 					:class="`treeview-item-${item.status}`"

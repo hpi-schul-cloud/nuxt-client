@@ -1,17 +1,17 @@
 <template>
 	<base-modal :active="true" @onBackdropClick="$emit('cancel')">
-		<template v-slot:header> Filter: {{ title | entities }} </template>
-		<template v-slot:body>
+		<template #header> Filter: {{ title | entities }} </template>
+		<template #body>
 			<slot />
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<modal-footer>
-				<template v-slot:left>
+				<template #left>
 					<base-button class="btn-left" design="text" @click="$emit('remove')">
 						{{ labelRemove }}
 					</base-button>
 				</template>
-				<template v-slot:right>
+				<template #right>
 					<base-button design="text" @click="$emit('cancel')">
 						{{ labelCancel }}
 					</base-button>
