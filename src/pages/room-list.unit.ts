@@ -59,7 +59,7 @@ const mockData = [
 ];
 
 describe("@pages/rooms-list.vue", () => {
-	let wrapper: Wrapper<RoomList>;
+	let wrapper: Wrapper<Vue>;
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
