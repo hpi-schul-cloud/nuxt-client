@@ -185,7 +185,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
-			wrapper.setData({ tab: "open" });
+			wrapper.setData({ tab: "current" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
@@ -203,7 +203,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", () => {
-			wrapper.setData({ tab: "open" });
+			wrapper.setData({ tab: "current" });
 			const switchEl = wrapper.find(".v-input--switch");
 			switchEl.vm.$emit("input-changed");
 			expect(taskModuleMock.setSubstituteFilter).toHaveBeenCalled();
