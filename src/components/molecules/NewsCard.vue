@@ -1,13 +1,13 @@
 <template>
 	<base-card class="mt--md news-card">
-		<template v-slot:header>
+		<template #header>
 			<div :style="{ backgroundColor: article.color }">
 				<div class="news-card__heading">
 					<h4 style="margin: 0">{{ article.title }}</h4>
 				</div>
 			</div>
 		</template>
-		<template v-slot:default>
+		<template #default>
 			<div class="news-card__content">
 				<span>{{ fromNow(article.createdAt) }}</span>
 				<div class="mt--md">

@@ -5,7 +5,7 @@
 		hide-default-footer
 		no-data-text=""
 	>
-		<template v-slot:default="props">
+		<template #default="props">
 			<v-container>
 				<v-row align="center">
 					<v-col

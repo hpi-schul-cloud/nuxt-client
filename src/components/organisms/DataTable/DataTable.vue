@@ -12,7 +12,7 @@
 		@update:selection="handleTableSelectionUpdate"
 		v-on="proxyListeners"
 	>
-		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
+		<template v-for="(cmp, name) in $scopedSlots" #[name]="props">
 			<slot :name="name" v-bind="props">
 				<component :is="cmp.context" :key="name" />
 			</slot>

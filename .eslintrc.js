@@ -1,6 +1,6 @@
 module.exports = {
 	root: true,
-	extends: ["@schul-cloud/eslint-config/javascriptVue"],
+	extends: ["@hpi-schul-cloud/eslint-config/javascriptVue"],
 	rules: {
 		"vue/require-direct-export": "off",
 	},
@@ -16,7 +16,7 @@ module.exports = {
 		},
 		{
 			files: ["**/*.unit.js"],
-			extends: ["@schul-cloud/eslint-config/javascriptJest"],
+			extends: ["@hpi-schul-cloud/eslint-config/javascriptJest"],
 			globals: {
 				mount: false,
 				shallowMount: false,

@@ -23,6 +23,7 @@ describe("@components/base/BaseBreadcrumb", () => {
 				const linkElement = link.to
 					? element.querySelector(`[to="${link.to}"]`)
 					: element.querySelector(`[href="${link.href}"]`);
+				// eslint-disable-next-line jest/no-conditional-expect
 				expect(linkElement.textContent).toContain(link.text);
 			}
 		});

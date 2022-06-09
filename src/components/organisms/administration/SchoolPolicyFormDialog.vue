@@ -1,9 +1,10 @@
 <template>
+	<!-- eslint-disable vue/no-parsing-error,vue/no-mutating-props -->
 	<v-dialog
 		v-model="isOpen"
 		max-width="550"
 		@click:outside="$emit('dialog-closed', false)"
-	>
+		><!-- eslint-enable vue/no-parsing-error,vue/no-mutating-props -->
 		<v-card :ripple="false">
 			<v-card-title class="dialog-title">
 				<h2 class="text-h4">

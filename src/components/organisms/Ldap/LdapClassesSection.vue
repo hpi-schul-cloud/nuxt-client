@@ -27,7 +27,7 @@
 			datatest-id="ldapDataClassesclassPath"
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="account_tree" />
 			</template>
 		</base-input>
@@ -46,7 +46,7 @@
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="class" />
 			</template>
 		</base-input>
@@ -64,7 +64,7 @@
 				$emit('input', { ...value, participantAttribute: $event })
 			"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="gruppen" />
 			</template>
 		</base-input>
