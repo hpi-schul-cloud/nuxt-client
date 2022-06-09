@@ -63,11 +63,13 @@
 				v-if="isStudent"
 				:tab.sync="tab"
 				:empty-state="emptyState"
+				:tab-routes="tabRoutes"
 			/>
 			<tasks-dashboard-teacher
 				v-else
 				:tab.sync="tab"
 				:empty-state="emptyState"
+				:tab-routes="tabRoutes"
 			/>
 		</div>
 	</default-wireframe>
