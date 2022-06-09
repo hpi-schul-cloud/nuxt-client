@@ -32,7 +32,7 @@
 			</v-container>
 		</template>
 		<template v-else>
-			<template v-if="hasNoRooms">
+			<template v-if="!hasRooms">
 				<v-custom-empty-state
 					ref="rooms-empty-state"
 					image="@assets/img/empty-state/rooms-empty-state.svg"
@@ -118,8 +118,8 @@ export default Vue.extend({
 						.includes(this.$data.searchText.toLowerCase())
 			);
 		},
-		hasNoRooms(): boolean {
-			return roomsModule.hasNoRooms;
+		hasRooms(): boolean {
+			return roomsModule.hasRooms;
 		},
 	},
 	async mounted() {

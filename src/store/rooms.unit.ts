@@ -650,13 +650,13 @@ describe("rooms module", () => {
 			});
 		});
 
-		describe("hasNoRooms", () => {
+		describe("hasRooms", () => {
 			it("should return true if rooms is empty", () => {
 				const roomsModule = new RoomsModule({});
 
-				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+				expect(roomsModule.hasRooms).toStrictEqual(false);
 				roomsModule.setAllElements([]);
-				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+				expect(roomsModule.hasRooms).toStrictEqual(false);
 			});
 
 			it("should return false if rooms is not empty", () => {
@@ -681,19 +681,19 @@ describe("rooms module", () => {
 
 				const roomsModule = new RoomsModule({});
 
-				expect(roomsModule.hasNoRooms).toStrictEqual(true);
+				expect(roomsModule.hasRooms).toStrictEqual(false);
 				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.hasNoRooms).toStrictEqual(false);
+				expect(roomsModule.hasRooms).toStrictEqual(true);
 			});
 		});
 
-		describe("hasNoCurrentRooms", () => {
+		describe("hasCurrentRooms", () => {
 			it("should return true if rooms is empty", () => {
 				const roomsModule = new RoomsModule({});
 
-				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData([]);
-				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 			});
 
 			it("should return false if rooms is not empty", () => {
@@ -718,9 +718,9 @@ describe("rooms module", () => {
 
 				const roomsModule = new RoomsModule({});
 
-				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(true);
+				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData(itemsToBeSet as any);
-				expect(roomsModule.hasNoCurrentRooms).toStrictEqual(false);
+				expect(roomsModule.hasCurrentRooms).toStrictEqual(true);
 			});
 		});
 	});

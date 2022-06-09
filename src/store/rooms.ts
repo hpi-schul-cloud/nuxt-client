@@ -184,12 +184,12 @@ export default class RoomsModule extends VuexModule {
 		return this.businessError;
 	}
 
-	get hasNoRooms(): boolean {
-		return this.allElements.length === 0;
+	get hasRooms(): boolean {
+		return this.allElements.length > 0;
 	}
 
-	get hasNoCurrentRooms(): boolean {
-		return this.roomsData.length === 0;
+	get hasCurrentRooms(): boolean {
+		return this.roomsData.length > 0;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {

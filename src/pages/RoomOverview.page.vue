@@ -42,7 +42,7 @@
 			</div>
 		</template>
 		<template v-else>
-			<template v-if="hasNoCurrentRooms">
+			<template v-if="!hasCurrentRooms">
 				<v-custom-empty-state
 					ref="rooms-empty-state"
 					image="@assets/img/empty-state/rooms-empty-state.svg"
@@ -246,8 +246,8 @@ export default {
 		isLoading() {
 			return roomsModule.getLoading;
 		},
-		hasNoCurrentRooms() {
-			return roomsModule.hasNoCurrentRooms;
+		hasCurrentRooms() {
+			return roomsModule.hasCurrentRooms;
 		},
 		roomsError() {
 			return roomsModule.getError;

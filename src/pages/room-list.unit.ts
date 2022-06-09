@@ -112,7 +112,7 @@ describe("@pages/rooms-list.vue", () => {
 			it("should display empty state", () => {
 				wrapper = getWrapper({
 					isLoading: () => false,
-					hasNoRooms: () => true,
+					hasRooms: () => false,
 				});
 
 				expect(
@@ -127,7 +127,7 @@ describe("@pages/rooms-list.vue", () => {
 			it("should search elements on list", async () => {
 				wrapper = getWrapper({
 					isLoading: () => false,
-					hasNoRooms: () => false,
+					hasRooms: () => true,
 				});
 				await flushPromises();
 
