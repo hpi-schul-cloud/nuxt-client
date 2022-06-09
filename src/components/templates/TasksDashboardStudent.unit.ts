@@ -51,6 +51,8 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		subtitle: undefined,
 	};
 
+	const tabRoutes = ["open", "completed", "finished"];
+
 	beforeEach(() => {
 		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
 
@@ -63,8 +65,9 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should render tasks list component", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: "open",
+				tab: tabRoutes[0],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -79,8 +82,9 @@ describe("@components/templates/TasksDashboardStudent", () => {
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: "completed",
+				tab: tabRoutes[1],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -91,14 +95,15 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should trigger event to update tab property", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: "completed",
+				tab: tabRoutes[1],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ currentTab: 0 });
+		await wrapper.setData({ currentTab: tabRoutes[0] });
 
 		expect(wrapper.emitted("update:tab")).toHaveLength(1);
-		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([0]);
+		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([tabRoutes[0]]);
 	});
 });

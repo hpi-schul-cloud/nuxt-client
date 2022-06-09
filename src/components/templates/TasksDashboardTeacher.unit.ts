@@ -13,6 +13,8 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
 
+const tabRoutes = ["current", "drafts", "finished"];
+
 describe("@components/templates/TasksDashboardTeacher", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
@@ -64,8 +66,9 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render tasks list component, with second panel expanded per default", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: "current",
+				tab: tabRoutes[0],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -89,8 +92,9 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: "drafts",
+				tab: tabRoutes[1],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -101,14 +105,15 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should trigger event to update tab property", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: "drafts",
+				tab: tabRoutes[1],
 				emptyState,
+				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ currentTab: 0 });
+		await wrapper.setData({ currentTab: tabRoutes[0] });
 
 		expect(wrapper.emitted("update:tab")).toHaveLength(1);
-		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([0]);
+		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([tabRoutes[0]]);
 	});
 });
