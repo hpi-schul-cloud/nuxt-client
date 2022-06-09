@@ -10,8 +10,12 @@ import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const $route = {
-	hash: "",
+	query: {
+		tab: "",
+	},
 };
+
+const $router = { replace: jest.fn() };
 
 describe("@components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
@@ -22,6 +26,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
+				$router,
 				$route,
 			}),
 			setup() {

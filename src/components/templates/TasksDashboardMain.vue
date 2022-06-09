@@ -19,13 +19,13 @@
 				<div v-else class="substitute-filter-placeholder"></div>
 				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width" grow>
-						<v-tab :to="tabOneHeader.route">
+						<v-tab :href="tabOneHeader.route">
 							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="openTasks">{{
 								tabOneHeader.title
 							}}</span>
 						</v-tab>
-						<v-tab :to="tabTwoHeader.route">
+						<v-tab :href="tabTwoHeader.route">
 							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 							<span
 								class="d-none d-sm-inline"
@@ -33,7 +33,10 @@
 								>{{ tabTwoHeader.title }}</span
 							>
 						</v-tab>
-						<v-tab :to="tabThreeHeader.route" @change="onOpenFinishedTasksTab">
+						<v-tab
+							:href="tabThreeHeader.route"
+							@change="onOpenFinishedTasksTab"
+						>
 							<v-icon class="tab-icon mr-sm-3">{{
 								tabThreeHeader.icon
 							}}</v-icon>
@@ -290,15 +293,15 @@ export default {
 			};
 		},
 	},
-	created() {
-		this.$watch(
-			() => this.$route.hash,
-			(toHash) => {
-				if (toHash === "") {
-					this.tab = this.tabRoutes[0];
-				}
+	watch: {
+		tab(tab, oldTab) {
+			if (oldTab !== "") {
+				this.$router.replace({ query: { ...this.$route.query, tab } });
 			}
-		);
+		},
+	},
+	created() {
+		this.initTabState();
 	},
 	methods: {
 		setCourseFilters(courseNames) {
@@ -324,6 +327,16 @@ export default {
 			// we should probably find a better solution :D
 			if (!this.finishedTasksIsInitialized) {
 				this.finishedTaskModule.fetchFinishedTasks();
+			}
+		},
+		initTabState() {
+			if (this.tabRoutes.includes(this.$route.query.tab)) {
+				if (this.$route.query.tab == this.tabRoutes[2]) {
+					this.onOpenFinishedTasksTab();
+				}
+				this.tab = this.$route.query.tab;
+			} else {
+				this.tab = this.tabRoutes[0];
 			}
 		},
 	},
