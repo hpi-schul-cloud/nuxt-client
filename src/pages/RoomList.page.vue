@@ -97,6 +97,7 @@ import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
+import ImportModal from "@components/molecules/ImportModal.vue";
 import { authModule, envConfigModule, roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
 import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
@@ -106,6 +107,7 @@ export default Vue.extend({
 		vRoomAvatar,
 		DefaultWireframe,
 		vCustomEmptyState,
+		ImportModal,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -182,6 +184,10 @@ export default Vue.extend({
 	methods: {
 		fabClick() {
 			this.$data.importDialog.isOpen = true;
+		},
+		async updateRooms() {
+			// @ts-ignore
+			await roomsModule.fetch();
 		},
 	},
 	head() {
