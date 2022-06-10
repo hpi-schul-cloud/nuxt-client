@@ -199,14 +199,7 @@ export default {
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabRoutes() {
-			if (this.isTeacher) {
-				return roleBasedRoutes[Roles.Teacher];
-			}
-			if (this.isStudent) {
-				return roleBasedRoutes[Roles.Student];
-			}
-
-			return null;
+			return roleBasedRoutes[this.role];
 		},
 		tabOneHeader() {
 			const tabOne = { icon: "$taskOpenFilled" };
