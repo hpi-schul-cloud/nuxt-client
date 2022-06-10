@@ -210,7 +210,7 @@ describe("task store", () => {
 					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
 						{ courseId: "course ID #1" }
 					);
-					expect(taskModule.getLoading).toBe(true);
+					expect(taskModule.getLoading).toBe(false);
 					done();
 				});
 				spy.mockRestore();
@@ -236,7 +236,7 @@ describe("task store", () => {
 					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
 						{}
 					);
-					expect(taskModule.getLoading).toBe(true);
+					expect(taskModule.getLoading).toBe(false);
 					done();
 				});
 				spy.mockRestore();
@@ -258,6 +258,7 @@ describe("task store", () => {
 				taskModule.copyTask(tasks[0].id).then(() => {
 					expect(taskModule.getStatus).toBe("error");
 					expect(taskModule.businessError).toStrictEqual(error);
+					expect(taskModule.getLoading).toBe(false);
 					done();
 				});
 				expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);

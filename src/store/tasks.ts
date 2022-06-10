@@ -138,6 +138,7 @@ export default class TaskModule extends VuexModule {
 		} catch (error: any) {
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
+			this.setLoading(false);
 		}
 	}
 
