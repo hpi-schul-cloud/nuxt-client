@@ -202,32 +202,16 @@ export default {
 			return roleBasedRoutes[this.role];
 		},
 		tabOneHeader() {
-			const tabOne = { icon: "$taskOpenFilled" };
-
-		return {
+			return {
 				icon: "$taskOpenFilled",
 				route: `#${this.tabRoutes[0]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.open")
 					: this.$t("components.organisms.TasksDashboardMain.tab.current"),
 			};
-
-			return tabOne;
 		},
 		tabTwoHeader() {
-			const tabTwo = {};
-			if (this.isStudent) {
-				tabTwo.icon = "$taskDoneFilled";
-				tabTwo.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.completed"
-				);
-				tabTwo.dataTestId = "closedTasks";
-				tabTwo.route = `#${this.tabRoutes[1]}`;
-			} else {
-				tabTwo.icon = "$taskDraft";
-				tabTwo.title = this.$t("common.words.drafts");
-				tabTwo.dataTestId = "draftTasks";
-				return {
+			return {
 				icon: this.isStudent ? "$taskDoneFilled" : "$taskDraft",
 				route: `#${this.tabRoutes[1]}`,
 				title: this.isStudent
@@ -235,10 +219,6 @@ export default {
 					: this.$t("common.words.drafts"),
 				dataTestId: this.isStudent ? "closedTasks" : "draftTasks",
 			};
-			
-			}
-
-			return tabTwo;
 		},
 		tabThreeHeader() {
 			return {
@@ -327,7 +307,7 @@ export default {
 			}
 		},
 		initTabState() {
-		        if (!this.tabRoutes.includes(this.$route.query.tab)) {
+			if (!this.tabRoutes.includes(this.$route.query.tab)) {
 				this.tab = this.tabRoutes[0];
 				return;
 			}
