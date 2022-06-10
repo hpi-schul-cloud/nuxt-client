@@ -241,13 +241,11 @@ export default {
 			return tabTwo;
 		},
 		tabThreeHeader() {
-			const tabThree = {
+			return {
 				icon: "$taskFinished",
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
 				route: `#${this.tabRoutes[2]}`,
 			};
-
-			return tabThree;
 		},
 		fabItems() {
 			if (!this.isStudent) {
