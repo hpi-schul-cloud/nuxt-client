@@ -82,14 +82,12 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
-import tasksEmptyStateImage from "@assets/img/empty-state/tasks-empty-state.svg";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
 	[Roles.Student]: ["open", "completed", "finished"],
 };
-
 
 export default {
 	components: {
