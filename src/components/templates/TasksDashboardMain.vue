@@ -204,17 +204,13 @@ export default {
 		tabOneHeader() {
 			const tabOne = { icon: "$taskOpenFilled" };
 
-			if (this.isStudent) {
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.open"
-				);
-				tabOne.route = `#${this.tabRoutes[0]}`;
-			} else {
-				tabOne.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.current"
-				);
-				tabOne.route = `#${this.tabRoutes[0]}`;
-			}
+		return {
+				icon: "$taskOpenFilled",
+				route: `#${this.tabRoutes[0]}`,
+				title: this.isStudent
+					? this.$t("components.organisms.TasksDashboardMain.tab.open")
+					: this.$t("components.organisms.TasksDashboardMain.tab.current"),
+			};
 
 			return tabOne;
 		},
