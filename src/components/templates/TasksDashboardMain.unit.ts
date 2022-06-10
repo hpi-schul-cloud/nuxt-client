@@ -207,6 +207,13 @@ describe("@components/templates/TasksDashboardMain", () => {
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
 
+		it("should reflect active tab in the URL", async () => {
+			wrapper.setData({ tab: "finished" });
+			await wrapper.vm.$nextTick();
+			//@ts-ignore
+			expect($router.replace).toHaveBeenCalled();
+		});
+
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", () => {
 			wrapper.setData({ tab: "current" });
 			const switchEl = wrapper.find(".v-input--switch");
