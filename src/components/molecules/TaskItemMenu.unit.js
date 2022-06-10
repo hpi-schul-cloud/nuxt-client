@@ -1,4 +1,5 @@
-import { finishedTaskModule, taskModule } from "@/store";
+import { finishedTaskModule, taskModule, envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -30,7 +31,11 @@ const getWrapper = (props, options) => {
 
 describe("@components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
-		setupStores({ tasks: TaskModule, "finished-tasks": FinishedTaskModule });
+		setupStores({
+			tasks: TaskModule,
+			"finished-tasks": FinishedTaskModule,
+			"env-config": EnvConfigModule,
+		});
 	});
 
 	defineWindowWidth(1264);
@@ -79,7 +84,9 @@ describe("@components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy`);
+			expect(wrapper.vm.copyLink).toStrictEqual(
+				`/homework/${task.id}/copy?returnUrl=/tasks`
+			);
 		});
 
 		it("should set isTeacher correctly", () => {
@@ -158,6 +165,55 @@ describe("@components/molecules/TaskItemMenu", () => {
 			await confirmBtn.trigger("click");
 
 			expect(deleteTaskMock).toHaveBeenCalled();
+		});
+	});
+
+	describe("when copying a task", () => {
+		it("should call copyTask store method if 'FEATURE_TASK_COPY_ENABLED' flag is set to true", async () => {
+			const copyTaskStoreMock = jest.spyOn(taskModule, "copyTask");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(copyTaskStoreMock).toHaveBeenCalled();
+		});
+
+		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
+			const copyTaskStoreMock = jest.spyOn(taskModule, "copyTask");
+			const { location } = window;
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(location.href).toStrictEqual(
+				"/homework/59cce2c61113d1132c98dc06/copy?returnUrl=/tasks"
+			);
+
+			expect(copyTaskStoreMock).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -224,7 +224,7 @@ export interface CopyApiResponse {
      */
     status: CopyApiResponseStatusEnum;
     /**
-     * List of included sub elements
+     * List of included sub elements with recursive type structure
      * @type {Array<string>}
      * @memberof CopyApiResponse
      */
@@ -249,7 +249,8 @@ export enum CopyApiResponseStatusEnum {
     Success = 'success',
     Failure = 'failure',
     NotDoing = 'not-doing',
-    NotImplemented = 'not-implemented'
+    NotImplemented = 'not-implemented',
+    Partial = 'partial'
 }
 
 /**
@@ -1055,7 +1056,7 @@ export interface TaskCopyApiParams {
      * @type {string}
      * @memberof TaskCopyApiParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * Destination lesson parent Id the task is copied to
      * @type {string}
@@ -1130,6 +1131,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     courseName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    courseId: string;
     /**
      * 
      * @type {string}
@@ -1535,7 +1542,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1720,7 +1727,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1797,7 +1804,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1870,7 +1877,7 @@ export interface AccountApiInterface {
 
     /**
      * 
-     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
      * @param {'userId' | 'username'} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1949,7 +1956,7 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
 
     /**
      * 
-     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
      * @param {'userId' | 'username'} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
