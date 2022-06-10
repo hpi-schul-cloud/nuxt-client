@@ -187,7 +187,7 @@ export default Vue.extend({
 		},
 		async updateRooms() {
 			// @ts-ignore
-			await roomsModule.fetch();
+			await roomsModule.fetchAllElements();
 		},
 	},
 	head() {
