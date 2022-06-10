@@ -4,6 +4,8 @@
 		headline=""
 		:full-width="true"
 		:aria-label="$t('pages.courses.index.courses.all')"
+		:fab-items="fab"
+		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
@@ -81,6 +83,12 @@
 				</v-row>
 			</template>
 		</template>
+		<import-modal
+			v-model="importDialog.isOpen"
+			class="import-modal"
+			@update-rooms="updateRooms"
+		>
+		</import-modal>
 	</default-wireframe>
 </template>
 
@@ -89,9 +97,9 @@ import Vue from "vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
-import { roomsModule } from "@/store";
+import { authModule, envConfigModule, roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
 export default Vue.extend({
 	components: {
@@ -103,10 +111,56 @@ export default Vue.extend({
 	data() {
 		return {
 			searchText: "",
+			importDialog: {
+				isOpen: false,
+			},
 			mdiMagnify,
 		};
 	},
 	computed: {
+		fab() {
+			if (
+				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
+				// @ts-ignore
+				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+					return {
+						icon: mdiPlus,
+						title: this.$t("common.actions.create"),
+						ariaLabel: this.$t("common.actions.create"),
+						testId: "add-course-button",
+						actions: [
+							{
+								label: this.$t("pages.rooms.fab.add.course"),
+								icon: mdiSchool,
+								href: "/courses/add",
+								dataTestid: "fab_button_add_course",
+								ariaLabel: this.$t("pages.rooms.fab.add.course"),
+							},
+							{
+								label: this.$t("pages.rooms.fab.import.course"),
+								icon: mdiCloudDownload,
+								dataTestid: "fab_button_import_course",
+								ariaLabel: this.$t("pages.rooms.fab.import.course"),
+								customEvent: {
+									name: "fabButtonEvent",
+									value: true,
+								},
+							},
+						],
+					};
+				}
+				return {
+					icon: mdiPlus,
+					title: this.$t("common.actions.create"),
+					href: "/courses/add",
+					ariaLabel: this.$t("common.actions.create"),
+					testId: "add-course-button",
+				};
+			}
+
+			return null;
+		},
 		isLoading(): boolean {
 			return roomsModule.getLoading;
 		},
@@ -124,6 +178,12 @@ export default Vue.extend({
 	},
 	async mounted() {
 		await roomsModule.fetchAllElements();
+	},
+	methods: {
+		fabClick() {
+			// @ts-ignore
+			this.importDialog.isOpen = true;
+		},
 	},
 	head() {
 		return {
