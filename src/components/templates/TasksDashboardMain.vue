@@ -327,14 +327,15 @@ export default {
 			}
 		},
 		initTabState() {
-			if (this.tabRoutes.includes(this.$route.query.tab)) {
-				if (this.$route.query.tab == this.tabRoutes[2]) {
-					this.onOpenFinishedTasksTab();
-				}
-				this.tab = this.$route.query.tab;
-			} else {
+		        if (!this.tabRoutes.includes(this.$route.query.tab)) {
 				this.tab = this.tabRoutes[0];
+				return;
 			}
+
+			if (this.$route.query.tab == this.tabRoutes[2]) {
+				this.onOpenFinishedTasksTab();
+			}
+			this.tab = this.$route.query.tab;
 		},
 	},
 };
