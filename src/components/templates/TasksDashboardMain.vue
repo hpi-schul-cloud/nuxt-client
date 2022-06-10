@@ -227,7 +227,15 @@ export default {
 				tabTwo.icon = "$taskDraft";
 				tabTwo.title = this.$t("common.words.drafts");
 				tabTwo.dataTestId = "draftTasks";
-				tabTwo.route = `#${this.tabRoutes[1]}`;
+				return {
+				icon: this.isStudent ? "$taskDoneFilled" : "$taskDraft",
+				route: `#${this.tabRoutes[1]}`,
+				title: this.isStudent
+					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
+					: this.$t("common.words.drafts"),
+				dataTestId: this.isStudent ? "closedTasks" : "draftTasks",
+			};
+			
 			}
 
 			return tabTwo;
