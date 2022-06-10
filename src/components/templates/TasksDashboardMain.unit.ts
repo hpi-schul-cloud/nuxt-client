@@ -11,7 +11,7 @@ import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const $route = {
 	query: {
-		tab: "",
+		tab: "drafts",
 	},
 };
 
@@ -182,6 +182,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 		it("should render add task button", () => {
 			const fab = wrapper.findComponent(vCustomFab);
 			expect(fab.exists()).toBe(true);
+		});
+
+		it("should initially open drafts tab from the URL query", async () => {
+			//@ts-ignore
+			expect(wrapper.vm.tab).toStrictEqual("drafts");
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
