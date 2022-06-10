@@ -181,8 +181,7 @@ export default Vue.extend({
 	},
 	methods: {
 		fabClick() {
-			// @ts-ignore
-			this.importDialog.isOpen = true;
+			this.$data.importDialog.isOpen = true;
 		},
 	},
 	head() {
