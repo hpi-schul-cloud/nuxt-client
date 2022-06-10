@@ -102,7 +102,7 @@ const spyMocks = {
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 };
 
-const getWrapper = (device = "desktop", options = {}) => {
+const getWrapper = (device = "desktop", isLoading = false, options = {}) => {
 	return mount(RoomOverview, {
 		...createComponentMocks({
 			i18n: true,
@@ -111,6 +111,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 		}),
 		computed: {
 			$mq: () => device,
+			isLoading: () => isLoading,
 		},
 	});
 };
@@ -122,11 +123,31 @@ describe("RoomPage", () => {
 		roomsModule.setRoomData(mockRoomStoreData);
 		authModule.setUser(mockAuthStoreData);
 	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it(...isValidComponent(RoomOverview));
+
+	it("should display loading skeleton while loading", () => {
+		const wrapper = getWrapper("desktop", true);
+		expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
+			true
+		);
+		wrapper.destroy();
+	});
+
+	it("should display empty state when rooms data is empty", () => {
+		roomsModule.setRoomData([]);
+		const wrapper = getWrapper();
+
+		expect(wrapper.findComponent({ ref: "rooms-empty-state" }).exists()).toBe(
+			true
+		);
+
+		wrapper.destroy();
+	});
 
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
@@ -142,7 +163,7 @@ describe("RoomPage", () => {
 			href: "/courses/1",
 		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
-		expect(wrapper.vm.items[0]).toStrictEqual(expectedItem);
+		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -471,6 +492,7 @@ describe("RoomPage", () => {
 			computed: {
 				$mq: () => "desktop",
 				isTouchDevice: () => false,
+				isLoading: () => false,
 			},
 		});
 

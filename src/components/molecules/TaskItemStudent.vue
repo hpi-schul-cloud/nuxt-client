@@ -103,9 +103,9 @@ export default {
 		taskState() {
 			const { status } = this.task;
 
-			if (this.isCloseToDueDate) return "warning";
+			if (this.isCloseToDueDate && !status.submitted) return "warning";
 			if (this.isGradedButMissed) return "gradedOverdue";
-			if (this.isOverDue) return "overdue";
+			if (this.isOverDue && !status.submitted) return "overdue";
 			if (status.submitted && !status.graded) return "submitted";
 			if (status.graded) return "graded";
 			return undefined;

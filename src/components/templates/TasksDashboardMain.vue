@@ -90,6 +90,7 @@ const roleBasedRoutes = {
 	[Roles.Student]: ["open", "completed", "finished"],
 };
 
+
 export default {
 	components: {
 		DefaultWireframe,
@@ -109,7 +110,6 @@ export default {
 		return {
 			tab: "", // should we save this in store?
 			mdiPlus,
-			tasksEmptyStateImage,
 		};
 	},
 	inject: ["taskModule", "finishedTaskModule"],
@@ -240,7 +240,7 @@ export default {
 			return null;
 		},
 		emptyState() {
-			const image = tasksEmptyStateImage;
+			const image = "@assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 

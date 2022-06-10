@@ -30,10 +30,10 @@
 
 						<slot name="footer">
 							<modal-footer>
-								<template v-slot:left>
+								<template #left>
 									<slot name="footer-left"></slot>
 								</template>
-								<template v-slot:right>
+								<template #right>
 									<slot name="footerRight"></slot>
 								</template>
 							</modal-footer>

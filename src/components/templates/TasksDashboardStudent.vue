@@ -12,10 +12,10 @@
 					:is-empty="openTasksForStudentIsEmpty"
 					:expanded-default="1"
 				>
-					<template v-slot:panelOne>
+					<template #panelOne>
 						<tasks-list :tasks="noDueDateTasks" user-role="student" />
 					</template>
-					<template v-slot:panelTwo>
+					<template #panelTwo>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
@@ -47,10 +47,10 @@
 					:is-empty="completedTasksForStudentIsEmpty"
 					:expanded-default="0"
 				>
-					<template v-slot:panelOne>
+					<template #panelOne>
 						<tasks-list :tasks="gradedTasks" user-role="student" />
 					</template>
-					<template v-slot:panelTwo>
+					<template #panelTwo>
 						<tasks-list :tasks="submittedTasks" user-role="student" />
 					</template>
 				</v-custom-double-panels>
