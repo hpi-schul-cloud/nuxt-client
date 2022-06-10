@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const SVG_PREFIXES = ["@assets/img/", "/_nuxt/src/assets/img/"];
+const SVG_PREFIXES = ["@assets/img/", "/_nuxt/src/assets/img/", "/_nuxt/img/"];
 const SVG_SUFFIX = ".svg";
 export default {
 	inheritAttrs: false,
