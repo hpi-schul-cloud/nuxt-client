@@ -9,6 +9,14 @@ import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
+const $route = {
+	query: {
+		tab: "drafts",
+	},
+};
+
+const $router = { replace: jest.fn() };
+
 describe("@components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
@@ -18,6 +26,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
+				$router,
+				$route,
 			}),
 			setup() {
 				provide("taskModule", taskModuleMock);
@@ -174,26 +184,38 @@ describe("@components/templates/TasksDashboardMain", () => {
 			expect(fab.exists()).toBe(true);
 		});
 
+		it("should initially open drafts tab from the URL query", async () => {
+			//@ts-ignore
+			expect(wrapper.vm.tab).toStrictEqual("drafts");
+		});
+
 		it("should show substituteFilter on 1st tab", async () => {
-			wrapper.setData({ tab: 0 });
+			wrapper.setData({ tab: "current" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
-			wrapper.setData({ tab: 1 });
+			wrapper.setData({ tab: "drafts" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
-			wrapper.setData({ tab: 2 });
+			wrapper.setData({ tab: "finished" });
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
 
+		it("should reflect active tab in the URL", async () => {
+			wrapper.setData({ tab: "finished" });
+			await wrapper.vm.$nextTick();
+			//@ts-ignore
+			expect($router.replace).toHaveBeenCalled();
+		});
+
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", () => {
-			wrapper.setData({ tab: 0 });
+			wrapper.setData({ tab: "current" });
 			const switchEl = wrapper.find(".v-input--switch");
 			switchEl.vm.$emit("input-changed");
 			expect(taskModuleMock.setSubstituteFilter).toHaveBeenCalled();
@@ -248,9 +270,10 @@ describe("@components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			wrapper.setData({ tab: "open" });
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
-			wrapper.setData({ tab: 1 });
+			wrapper.setData({ tab: "completed" });
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
 		});
