@@ -1,11 +1,7 @@
 <template>
-	<default-wireframe
-		ref="main"
-		headline=""
-		:full-width="true"
-		:fab-items="fab"
-		:aria-label="sectionAriaLabel"
-		@fabButtonEvent="fabClick"
+	<room-wrapper
+		:header-aria-label="sectionAriaLabel"
+		:has-rooms="hasCurrentRooms"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
@@ -32,98 +28,77 @@
 				</div>
 			</div>
 		</template>
-		<template v-if="isLoading">
+		<template slot="page-content">
 			<div class="rooms-container">
-				<v-skeleton-loader
-					ref="skeleton-loader"
-					type="date-picker-days"
-					class="mt-16"
-				/>
-			</div>
-		</template>
-		<template v-else>
-			<template v-if="!hasCurrentRooms">
-				<v-custom-empty-state
-					ref="rooms-empty-state"
-					image="@assets/img/empty-state/rooms-empty-state.svg"
-					:title="$t('pages.rooms.currentRooms.emptyState.title')"
-					class="mt-16"
-				/>
-			</template>
-			<template v-else>
-				<div class="rooms-container">
-					<v-text-field
-						ref="search"
-						v-model="searchText"
-						class="room-search"
-						solo
-						rounded
-						:label="$t('pages.rooms.index.search.label')"
-						:append-icon="mdiMagnify"
-						:aria-label="$t('common.labels.search')"
-						data-testid="search-field"
-					>
-					</v-text-field>
+				<v-text-field
+					ref="search"
+					v-model="searchText"
+					class="room-search"
+					solo
+					rounded
+					:label="$t('pages.rooms.index.search.label')"
+					:append-icon="mdiMagnify"
+					:aria-label="$t('common.labels.search')"
+					data-testid="search-field"
+				>
+				</v-text-field>
+				<div
+					v-for="(row, rowIndex) in dimensions.rowCount"
+					:key="rowIndex"
+					class="room-overview-row"
+				>
 					<div
-						v-for="(row, rowIndex) in dimensions.rowCount"
-						:key="rowIndex"
-						class="room-overview-row"
+						v-for="(col, colIndex) in dimensions.colCount"
+						:key="colIndex"
+						class="room-overview-col"
+						:style="{ width: dimensions.cellWidth }"
 					>
-						<div
-							v-for="(col, colIndex) in dimensions.colCount"
-							:key="colIndex"
-							class="room-overview-col"
-							:style="{ width: dimensions.cellWidth }"
-						>
-							<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-								<vRoomEmptyAvatar
-									v-if="isEmptyGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
-									:size="dimensions.cellWidth"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
-								></vRoomEmptyAvatar>
+						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
+							<vRoomEmptyAvatar
+								v-if="isEmptyGroup(rowIndex, colIndex)"
+								:ref="`${rowIndex}-${colIndex}`"
+								:size="dimensions.cellWidth"
+								@drop="setDropElement({ x: colIndex, y: rowIndex })"
+							></vRoomEmptyAvatar>
 
-								<vRoomGroupAvatar
-									v-else-if="hasGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
-									class="room-group-avatar"
-									:data="getDataObject(rowIndex, colIndex)"
-									:size="dimensions.cellWidth"
-									:device="device"
-									:draggable="allowDragging"
-									@clicked="
-										openDialog(getDataObject(rowIndex, colIndex).groupId)
-									"
-									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
-								>
-								</vRoomGroupAvatar>
-								<vRoomAvatar
-									v-else
-									:ref="`${rowIndex}-${colIndex}`"
-									class="room-avatar"
-									:item="getDataObject(rowIndex, colIndex)"
-									:size="dimensions.cellWidth"
-									:show-badge="true"
-									:draggable="allowDragging"
-									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-								></vRoomAvatar>
-							</template>
-							<template v-else>
-								<vRoomEmptyAvatar
-									:ref="`${rowIndex}-${colIndex}`"
-									:size="dimensions.cellWidth"
-									:show-outline="dragging"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
-								></vRoomEmptyAvatar>
-							</template>
-						</div>
+							<vRoomGroupAvatar
+								v-else-if="hasGroup(rowIndex, colIndex)"
+								:ref="`${rowIndex}-${colIndex}`"
+								class="room-group-avatar"
+								:data="getDataObject(rowIndex, colIndex)"
+								:size="dimensions.cellWidth"
+								:device="device"
+								:draggable="allowDragging"
+								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
+								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend="onDragend"
+								@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+							>
+							</vRoomGroupAvatar>
+							<vRoomAvatar
+								v-else
+								:ref="`${rowIndex}-${colIndex}`"
+								class="room-avatar"
+								:item="getDataObject(rowIndex, colIndex)"
+								:size="dimensions.cellWidth"
+								:show-badge="true"
+								:draggable="allowDragging"
+								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend="onDragend"
+								@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+							></vRoomAvatar>
+						</template>
+						<template v-else>
+							<vRoomEmptyAvatar
+								:ref="`${rowIndex}-${colIndex}`"
+								:size="dimensions.cellWidth"
+								:show-outline="dragging"
+								@drop="setDropElement({ x: colIndex, y: rowIndex })"
+							></vRoomEmptyAvatar>
+						</template>
 					</div>
 				</div>
-			</template>
+			</div>
 		</template>
 		<room-modal
 			ref="roomModal"
@@ -136,37 +111,27 @@
 			@drag-from-group="dragFromGroup"
 		>
 		</room-modal>
-		<import-modal
-			v-model="importDialog.isOpen"
-			class="import-modal"
-			@update-rooms="updateRooms"
-		>
-		</import-modal>
-	</default-wireframe>
+	</room-wrapper>
 </template>
 
 <script>
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
+import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
-import ImportModal from "@components/molecules/ImportModal";
-import { authModule, envConfigModule, roomsModule } from "@/store";
+import { roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import { mdiMagnify, mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import { mdiMagnify } from "@mdi/js";
 
 export default {
 	components: {
-		DefaultWireframe,
+		RoomWrapper,
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
 		vCustomSwitch,
-		ImportModal,
-		vCustomEmptyState,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -187,73 +152,18 @@ export default {
 				item: {},
 				to: null,
 			},
-			importDialog: {
-				isOpen: false,
-			},
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
-			mdiPlus,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
 		};
 	},
 	computed: {
-		fab() {
-			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
-			) {
-				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-					return {
-						icon: mdiPlus,
-						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("common.actions.create"),
-						testId: "add-course-button",
-						actions: [
-							{
-								label: this.$t("pages.rooms.fab.add.course"),
-								icon: mdiSchool,
-								href: "/courses/add",
-								dataTestid: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.course"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiCloudDownload,
-								dataTestid: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
-							},
-						],
-					};
-				}
-				return {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					href: "/courses/add",
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "add-course-button",
-				};
-			}
-
-			return null;
-		},
-		isLoading() {
-			return roomsModule.getLoading;
-		},
 		hasCurrentRooms() {
 			return roomsModule.hasCurrentRooms;
-		},
-		roomsError() {
-			return roomsModule.getError;
-		},
-		title() {
-			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 		rooms() {
 			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
@@ -437,12 +347,6 @@ export default {
 			};
 			roomsModule.update(payload);
 		},
-		fabClick() {
-			this.importDialog.isOpen = true;
-		},
-		async updateRooms() {
-			await roomsModule.fetch();
-		},
 	},
 	head() {
 		return {
@@ -455,7 +359,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 .rooms-container {
 	max-width: 600px;
@@ -486,33 +389,5 @@ export default {
 ::v-deep .v-input {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;
-}
-
-::v-deep .v-skeleton-loader__date-picker-days {
-	justify-content: space-between;
-}
-
-::v-deep .v-skeleton-loader__avatar {
-	width: 80px;
-	max-width: 80px;
-	height: 80px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin: 24px;
-}
-
-@media #{map-get($display-breakpoints, 'xs-only')} {
-	::v-deep .v-skeleton-loader__avatar {
-		max-width: 59px;
-		max-height: 59px;
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		margin: 24px 4px;
-	}
-}
-
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
-	::v-deep .v-skeleton-loader__avatar {
-		max-width: 64px;
-		max-height: 64px;
-	}
 }
 </style>
