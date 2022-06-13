@@ -6,18 +6,16 @@
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
 		<div slot="title" class="room-title">
-			<!-- eslint-disable vue/no-parsing-error,vue/no-mutating-props -->
 			<v-text-field
 				v-show="roomNameEditMode"
 				ref="roomNameInput"
-				v-model="groupData.title"
+				v-model="data.title"
 				dense
 				:aria-label="$t('common.labels.title')"
 				:append-icon="mdiKeyboardReturn"
 				@blur="onUpdateRoomName"
 				@keyup.enter="onRoomNameInputEnter"
 			></v-text-field>
-			<!-- eslint-enable vue/no-parsing-error,vue/no-mutating-props -->
 			<h2
 				v-show="!roomNameEditMode"
 				class="text-h4 my-2"
@@ -25,7 +23,7 @@
 				@click="onEditRoom"
 				@focus="onEditRoom"
 			>
-				{{ groupData.title }}
+				{{ data.title }}
 				<v-icon>{{ mdiPencil }}</v-icon>
 			</h2>
 		</div>
@@ -85,6 +83,7 @@ export default Vue.extend({
 			roomNameEditMode: false,
 			mdiPencil,
 			mdiKeyboardReturn,
+			data: { ...this.groupData },
 		};
 	},
 	methods: {
@@ -96,7 +95,7 @@ export default Vue.extend({
 			}
 		},
 		onUpdateRoomName() {
-			roomsModule.update(this.groupData);
+			roomsModule.update(this.data);
 			this.roomNameEditMode = false;
 		},
 		/*

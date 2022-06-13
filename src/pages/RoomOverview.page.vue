@@ -126,6 +126,7 @@
 			</template>
 		</template>
 		<room-modal
+			v-if="groupDialog.groupData.groupId"
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
 			aria-describedby="folder open"
