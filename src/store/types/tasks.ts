@@ -12,6 +12,7 @@ export type Task = {
 	description?: string;
 	availableDate?: string;
 	duedate?: string;
+	courseId: string;
 	courseName: string;
 	displayColor?: string;
 	status: TaskStatus;
