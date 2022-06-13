@@ -344,7 +344,7 @@
 	"pages.administration.ldapEdit.validation.path": "Por favor, utilice un formato de ruta LDAP",
 	"pages.administration.ldapEdit.validation.url": "Por favor, utilice un formato de URL válido",
 	"pages.administration.migration.back": "Paso anterior",
-	"pages.administration.migration.cannotStart": "La migración no puede comenzar. La escuela no está en modo de migración ni en fase de traslado.",
+	"pages.administration.migration.cannotStart": "La migración no puede comenzar. La escuela no está en modo de migración ni en fase de transferencia.",
 	"pages.administration.migration.confirm": "Esto confirma que se ha comprobado o realizado la asignación de las cuentas de usuario locales y que se puede realizar la migración.",
 	"pages.administration.migration.confirmMaintenance": "Esto confirma que la fase de transferencia puede ser completada y que los usuarios deben conectarse con sus nuevos datos de acceso.",
 	"pages.administration.migration.endTransferPhase": "<p>La migración de las cuentas de usuario se ha realizado con éxito.</p><p>Una vez finalizada la fase de transferencia y la subsiguiente sincronización, el inicio de sesión se activa con los nuevos accesos desde el Schulportal.</p><p>Estado actual:</p><p>✅ Transferencia de los datos de acceso del portal escolar a las cuentas de usuario seleccionadas de la Schul-Cloud.<br />❌ Creación de nuevas cuentas de usuario<br />✅ Las cuentas de usuario no conectadas pueden eliminarse si es necesario (póngase en contacto con el servicio de asistencia)</p>",
