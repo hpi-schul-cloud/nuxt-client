@@ -1,5 +1,3 @@
-<!-- eslint-disable max-lines -->
-
 <template>
 	<div class="resource">
 		<base-link
