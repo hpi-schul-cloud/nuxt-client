@@ -83,12 +83,6 @@ describe("@pages/room-list.vue", () => {
 			wrapper.destroy();
 		});
 
-		it("should display skeleton loader", () => {
-			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
-				true
-			);
-		});
-
 		it("should fetch data", async () => {
 			await flushPromises();
 
@@ -114,21 +108,6 @@ describe("@pages/room-list.vue", () => {
 	});
 
 	describe("when data is loaded", () => {
-		describe("when data is empty", () => {
-			it("should display empty state", () => {
-				wrapper = getWrapper({
-					isLoading: () => false,
-					hasRooms: () => false,
-				});
-
-				expect(
-					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
-				).toBe(true);
-
-				wrapper.destroy();
-			});
-		});
-
 		describe("when data is not empty", () => {
 			it("should search elements on list", async () => {
 				wrapper = getWrapper({

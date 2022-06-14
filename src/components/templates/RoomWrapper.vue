@@ -19,18 +19,16 @@
 				/>
 			</v-container>
 		</template>
+		<template v-if="!isLoading && !hasRooms">
+			<v-custom-empty-state
+				ref="rooms-empty-state"
+				image="@assets/img/empty-state/rooms-empty-state.svg"
+				:title="$t('pages.rooms.allRooms.emptyState.title')"
+				class="mt-16"
+			/>
+		</template>
 		<template v-else>
-			<template v-if="!hasRooms">
-				<v-custom-empty-state
-					ref="rooms-empty-state"
-					image="@assets/img/empty-state/rooms-empty-state.svg"
-					:title="$t('pages.rooms.allRooms.emptyState.title')"
-					class="mt-16"
-				/>
-			</template>
-			<template v-else>
-				<slot name="page-content"></slot>
-			</template>
+			<slot name="page-content"></slot>
 		</template>
 		<import-modal
 			v-model="importDialog.isOpen"

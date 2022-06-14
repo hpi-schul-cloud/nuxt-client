@@ -130,25 +130,6 @@ describe("RoomPage", () => {
 
 	it(...isValidComponent(RoomOverview));
 
-	it("should display loading skeleton while loading", () => {
-		const wrapper = getWrapper("desktop", true);
-		expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
-			true
-		);
-		wrapper.destroy();
-	});
-
-	it("should display empty state when rooms data is empty", () => {
-		roomsModule.setRoomData([]);
-		const wrapper = getWrapper();
-
-		expect(wrapper.findComponent({ ref: "rooms-empty-state" }).exists()).toBe(
-			true
-		);
-
-		wrapper.destroy();
-	});
-
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();
@@ -516,22 +497,6 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
 	});
 
-	it("should not show FAB if user does not have permission to create courses", () => {
-		authModule.setUser({
-			...mockAuthStoreData,
-			permissions: ["aksjdhf", "poikln"],
-		});
-		const wrapper = getWrapper();
-		const fabComponent = wrapper.find(".wireframe-fab");
-		expect(fabComponent.exists()).toBe(false);
-	});
-
-	it("should show FAB if user has permission to create courses", () => {
-		const wrapper = getWrapper();
-		const fabComponent = wrapper.find(".wireframe-fab");
-		expect(fabComponent.exists()).toBe(true);
-	});
-
 	it("should set rowCount while loading", async () => {
 		const roomData = [
 			{
@@ -575,28 +540,5 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$refs["8-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
-	});
-
-	it("should open the import-modal", async () => {
-		const wrapper = getWrapper();
-
-		const importModalComponent = wrapper.find(".import-modal");
-		expect(importModalComponent.vm.isOpen).toBe(false);
-
-		await wrapper.setData({ importDialog: { isOpen: true } });
-		expect(importModalComponent.vm.isOpen).toBe(true);
-	});
-
-	it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-		const updateRoomsMock = jest.fn();
-		const wrapper = getWrapper();
-		wrapper.vm.updateRooms = updateRoomsMock;
-		await wrapper.setData({ importDialog: { isOpen: true } });
-
-		const importModalComponent = wrapper.find(".import-modal");
-		await importModalComponent.vm.$emit("update-rooms");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		expect(updateRoomsMock).toHaveBeenCalled();
 	});
 });
