@@ -1,10 +1,9 @@
 <template>
-	<!-- eslint-disable vue/no-parsing-error,vue/no-mutating-props -->
 	<v-dialog
-		v-model="isOpen"
+		v-model="showModal"
 		max-width="550"
 		@click:outside="$emit('dialog-closed', false)"
-		><!-- eslint-enable vue/no-parsing-error,vue/no-mutating-props -->
+	>
 		<v-card :ripple="false">
 			<v-card-title class="dialog-title">
 				<h2 class="text-h4">
@@ -130,6 +129,7 @@ export default {
 			),
 			description: "",
 			file: null,
+			showModal: this.isOpen,
 		};
 	},
 	computed: {
@@ -145,6 +145,11 @@ export default {
 				errors.push(this.$t("common.validation.tooLong"));
 
 			return errors;
+		},
+	},
+	watch: {
+		isOpen() {
+			this.showModal = this.isOpen;
 		},
 	},
 	methods: {
