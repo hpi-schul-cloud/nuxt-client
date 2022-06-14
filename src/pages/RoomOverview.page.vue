@@ -99,18 +99,18 @@
 					</div>
 				</div>
 			</div>
+			<room-modal
+				ref="roomModal"
+				v-model="groupDialog.isOpen"
+				aria-describedby="folder open"
+				:group-data="groupDialog.groupData"
+				:avatar-size="dimensions.cellWidth"
+				:draggable="allowDragging"
+				tabindex="0"
+				@drag-from-group="dragFromGroup"
+			>
+			</room-modal>
 		</template>
-		<room-modal
-			ref="roomModal"
-			v-model="groupDialog.isOpen"
-			aria-describedby="folder open"
-			:group-data="groupDialog.groupData"
-			:avatar-size="dimensions.cellWidth"
-			:draggable="allowDragging"
-			tabindex="0"
-			@drag-from-group="dragFromGroup"
-		>
-		</room-modal>
 	</room-wrapper>
 </template>
 

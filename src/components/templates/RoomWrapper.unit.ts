@@ -1,4 +1,4 @@
-import { authModule, roomsModule } from "@/store";
+import { authModule, roomsModule, envConfigModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
@@ -133,8 +133,79 @@ describe("@templates/RoomWrapper.vue", () => {
 				wrapper.destroy();
 			});
 		});
+	});
 
-		it("should not show FAB if user does not have permission to create courses", () => {
+	describe("when user has course create permission", () => {
+		beforeEach(() => {
+			authModule.setUser({
+				...mockAuthStoreData,
+				updatedAt: "",
+				birthday: "",
+				createdAt: "",
+				preferences: {},
+				schoolId: "",
+				emailSearchValues: [],
+				firstNameSearchValues: [],
+				lastNameSearchValues: [],
+				consent: {},
+				forcePasswordChange: false,
+				language: "",
+				fullName: "",
+				avatarInitials: "",
+				avatarBackgroundColor: "",
+				age: 0,
+				displayName: "",
+				accountId: "",
+				schoolName: "",
+				externallyManaged: false,
+			});
+		});
+
+		it("should display fab", () => {
+			const wrapper = getWrapper();
+
+			const fabComponent = wrapper.find(".wireframe-fab");
+			expect(fabComponent.exists()).toBe(true);
+		});
+
+		it("should open the import-modal", async () => {
+			//@ts-ignore
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			const wrapper = getWrapper();
+
+			const importModalComponent = wrapper.find(".import-modal");
+			//@ts-ignore
+			expect(importModalComponent.vm.isOpen).toBe(false);
+
+			const fab = wrapper.find(".wireframe-fab");
+			await fab.trigger("click");
+
+			const importBtn = wrapper.find(
+				'[data-testid="fab_button_import_course"]'
+			);
+			await importBtn.trigger("click");
+
+			//@ts-ignore
+			expect(importModalComponent.vm.isOpen).toBe(true);
+		});
+
+		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
+			const updateRoomsMock = jest.fn();
+			const wrapper = getWrapper();
+			//@ts-ignore
+			wrapper.vm.updateRooms = updateRoomsMock;
+			await wrapper.setData({ importDialog: { isOpen: true } });
+
+			const importModalComponent = wrapper.find(".import-modal");
+			await importModalComponent.vm.$emit("update-rooms");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(updateRoomsMock).toHaveBeenCalled();
+		});
+	});
+
+	describe("when user does not have course create permission", () => {
+		it("should not display fab", () => {
 			authModule.setUser({
 				...mockAuthStoreData,
 				permissions: ["aksjdhf", "poikln"],
@@ -166,61 +237,5 @@ describe("@templates/RoomWrapper.vue", () => {
 
 			wrapper.destroy();
 		});
-
-		it("should show FAB if user has permission to create courses", () => {
-			authModule.setUser({
-				...mockAuthStoreData,
-				updatedAt: "",
-				birthday: "",
-				createdAt: "",
-				preferences: {},
-				schoolId: "",
-				emailSearchValues: [],
-				firstNameSearchValues: [],
-				lastNameSearchValues: [],
-				consent: {},
-				forcePasswordChange: false,
-				language: "",
-				fullName: "",
-				avatarInitials: "",
-				avatarBackgroundColor: "",
-				age: 0,
-				displayName: "",
-				accountId: "",
-				schoolName: "",
-				externallyManaged: false,
-			});
-
-			const wrapper = getWrapper();
-
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.exists()).toBe(true);
-		});
-	});
-
-	it("should open the import-modal", async () => {
-		const wrapper = getWrapper();
-
-		const importModalComponent = wrapper.find(".import-modal");
-		//@ts-ignore
-		expect(importModalComponent.vm.isOpen).toBe(false);
-
-		await wrapper.setData({ importDialog: { isOpen: true } });
-		//@ts-ignore
-		expect(importModalComponent.vm.isOpen).toBe(true);
-	});
-
-	it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-		const updateRoomsMock = jest.fn();
-		const wrapper = getWrapper();
-		//@ts-ignore
-		wrapper.vm.updateRooms = updateRoomsMock;
-		await wrapper.setData({ importDialog: { isOpen: true } });
-
-		const importModalComponent = wrapper.find(".import-modal");
-		await importModalComponent.vm.$emit("update-rooms");
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
-		expect(updateRoomsMock).toHaveBeenCalled();
 	});
 });
