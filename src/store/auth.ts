@@ -1,15 +1,14 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
-import { envConfigModule } from "@/store";
-import { schoolsModule } from "@/store";
-import { School } from "./types/schools";
-import { User } from "@/store/types/auth";
 import {
 	ChangeLanguageParamsLanguageEnum,
 	UserApiFactory,
 	UserApiInterface,
 } from "@/serverApi/v3";
+import { envConfigModule, schoolsModule } from "@/store";
+import { User } from "@/store/types/auth";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
+import { School } from "./types/schools";
 
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
@@ -225,11 +224,6 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	logout(): void {
-		// remove jwt from cookie
-		const date = new Date();
-		date.setTime(date.getTime() + -1 * 24 * 60 * 60 * 1000);
-		document.cookie = `jwt=; expires=${date.toUTCString()}; path=/`;
-
 		localStorage.clear();
 		// Delete matrix messenger indexedDB databases
 		if (window.indexedDB) {
