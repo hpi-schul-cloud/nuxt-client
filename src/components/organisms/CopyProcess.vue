@@ -58,15 +58,15 @@ export default {
 	computed: {
 		copiedItems() {
 			const { data } = this;
+			if (!data.id) return [];
+			// debugger;
 			const elements = data.elements.filter(
 				(item) => item.status !== "not-doing"
 			);
+			// debugger;
 			if (this.checkIfEveryElementsAreSuccess(elements)) {
 				return {
-					id: data.id,
-					status: data.status,
-					title: data.title,
-					type: data.type,
+					...data,
 					index: this.elementIndex,
 					completed: true,
 					elements: [
@@ -83,16 +83,9 @@ export default {
 			}
 
 			return {
-				id: data.id,
-				status: data.status,
-				title: data.title,
-				type: data.type,
+				...data,
 				index: this.elementIndex,
-				elements: data.elements
-					? this.prepareCopiedElements(
-							data.elements.filter((item) => item.status !== "not-doing")
-					  )
-					: [],
+				elements: data.elements ? this.prepareCopiedElements(elements) : [],
 			};
 		},
 	},
@@ -102,27 +95,40 @@ export default {
 		},
 	},
 	methods: {
+		getItemTitleAndStatus(title, status) {
+			if (title === "files" && status === "not-implemented") {
+				return {
+					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+					status: "failure",
+				};
+			}
+			if (status === "not-implemented")
+				return { title: title, status: "failure" };
+
+			const titleObj = {
+				metadata: this.$t("components.molecules.copyResult.metadata"),
+				description: this.$t("common.labels.description"),
+			};
+
+			return {
+				title: titleObj[title],
+				status: status,
+			};
+		},
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
 				item.index = ++this.elementIndex;
-				if (item.title === "files" && item.status === "not-implemented") {
-					item.title = this.$t(
-						"components.molecules.copyResult.fileCopy.error"
-					);
-				}
-				item.title =
-					item.title === "metadata"
-						? this.$t("components.molecules.copyResult.metadata")
-						: item.title;
-				item.title =
-					item.title === "description"
-						? this.$t("common.labels.description")
-						: item.title;
-				if (item.status === "not-implemented") item.status = "failure";
+				const titleAndStatus = this.getItemTitleAndStatus(
+					item.title,
+					item.status
+				);
+
+				item.title = titleAndStatus.title;
+				item.status = titleAndStatus.status;
 				if (elements.length > 0) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
-					item.status = isSuccess ? "success" : item.status;
+					item.status = isSuccess ? "success" : titleAndStatus.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;
