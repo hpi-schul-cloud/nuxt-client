@@ -111,24 +111,6 @@
 			>
 			</room-modal>
 		</template>
-		<room-modal
-			v-if="groupDialog.groupData.groupId"
-			ref="roomModal"
-			v-model="groupDialog.isOpen"
-			aria-describedby="folder open"
-			:group-data="groupDialog.groupData"
-			:avatar-size="dimensions.cellWidth"
-			:draggable="allowDragging"
-			tabindex="0"
-			@drag-from-group="dragFromGroup"
-		>
-		</room-modal>
-		<import-modal
-			v-model="importDialog.isOpen"
-			class="import-modal"
-			@update-rooms="updateRooms"
-		>
-		</import-modal>
 	</room-wrapper>
 </template>
 
