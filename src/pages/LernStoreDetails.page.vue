@@ -8,6 +8,12 @@
 			<lernstore-detail-view v-else :resource="resource" />
 		</span>
 		<base-spinner v-else />
+		<v-progress-circular
+			indeterminate
+			color="secondary"
+			:size="100"
+			:width="3"
+		></v-progress-circular>
 	</span>
 </template>
 
