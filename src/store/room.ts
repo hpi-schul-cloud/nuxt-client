@@ -52,6 +52,13 @@ export default class RoomModule extends VuexModule {
 		status: CopyApiResponseStatusEnum.Success,
 	};
 
+	private roomCopyResult: CopyApiResponse = {
+		id: "",
+		title: "",
+		type: CopyApiResponseTypeEnum.Task,
+		status: CopyApiResponseStatusEnum.Success,
+	};
+
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
 		if (!this._roomsApi) {
@@ -333,6 +340,27 @@ export default class RoomModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async copyRoom(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+		try {
+			const copyResult = await this.roomsApi.roomsControllerCopyCourse(
+				courseId
+			);
+
+			this.setRoomCopyResult(copyResult.data || {});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -387,6 +415,11 @@ export default class RoomModule extends VuexModule {
 		this.taskCopyResult = payload;
 	}
 
+	@Mutation
+	setRoomCopyResult(payload: CopyApiResponse | any): void {
+		this.roomCopyResult = payload;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -425,6 +458,10 @@ export default class RoomModule extends VuexModule {
 
 	get getTaskCopyResult(): CopyApiResponse {
 		return this.taskCopyResult;
+	}
+
+	get getRoomCopyResult(): CopyApiResponse {
+		return this.roomCopyResult;
 	}
 
 	private get finishedLoading(): boolean {
