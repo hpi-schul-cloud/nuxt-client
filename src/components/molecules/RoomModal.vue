@@ -83,8 +83,20 @@ export default Vue.extend({
 			roomNameEditMode: false,
 			mdiPencil,
 			mdiKeyboardReturn,
-			data: { ...this.groupData },
+			data: {
+				id: "",
+				title: "",
+				shortTitle: "",
+				displayColor: "",
+				xPosition: -1,
+				yPosition: -1,
+			},
 		};
+	},
+	watch: {
+		groupData() {
+			this.data = { ...this.groupData };
+		},
 	},
 	methods: {
 		async onEditRoom() {
