@@ -5,6 +5,8 @@ import RoomList from "./RoomList.page.vue";
 import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 
 const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {
@@ -58,13 +60,17 @@ const mockData = [
 	},
 ];
 
-describe("@pages/rooms-list.vue", () => {
+describe("@pages/room-list.vue", () => {
 	let wrapper: Wrapper<Vue>;
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ rooms: RoomsModule });
+		setupStores({
+			rooms: RoomsModule,
+			auth: AuthModule,
+			"env-config": EnvConfigModule,
+		});
 		roomsModule.setAllElements(mockData as any);
 	});
 
@@ -75,12 +81,6 @@ describe("@pages/rooms-list.vue", () => {
 
 		afterEach(() => {
 			wrapper.destroy();
-		});
-
-		it("should display skeleton loader", () => {
-			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
-				true
-			);
 		});
 
 		it("should fetch data", async () => {
@@ -108,21 +108,6 @@ describe("@pages/rooms-list.vue", () => {
 	});
 
 	describe("when data is loaded", () => {
-		describe("when data is empty", () => {
-			it("should display empty state", () => {
-				wrapper = getWrapper({
-					isLoading: () => false,
-					hasRooms: () => false,
-				});
-
-				expect(
-					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
-				).toBe(true);
-
-				wrapper.destroy();
-			});
-		});
-
 		describe("when data is not empty", () => {
 			it("should search elements on list", async () => {
 				wrapper = getWrapper({
