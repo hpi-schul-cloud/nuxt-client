@@ -156,37 +156,113 @@ describe("task store", () => {
 				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
 			});
 		});
-	});
 
-	describe("deleteTask", () => {
-		beforeEach(() => {
-			setupStores({
-				"finished-tasks": FinishedTaskModule,
+		describe("deleteTask", () => {
+			beforeEach(() => {
+				setupStores({
+					"finished-tasks": FinishedTaskModule,
+				});
+			});
+
+			it("should call api to delete a task", (done) => {
+				const mockApi = {
+					taskControllerDelete: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+
+				taskModule.deleteTask(tasks[0].id).then(() => {
+					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
 			});
 		});
 
-		it("should call api to delete a task", (done) => {
-			const mockApi = {
-				taskControllerDelete: jest.fn(),
-			};
-			const spy = jest
-				.spyOn(serverApi, "TaskApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+		describe("copyTask", () => {
+			it("should fetch correct task with courseId and copy the task", (done) => {
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-			const taskModule = new TaskModule({});
-			const tasks = taskFactory.buildList(3);
-			taskModule.setTasks(tasks);
-			const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
 
-			taskModule.deleteTask(tasks[0].id).then(() => {
-				expect(taskModule.getStatus).toBe("completed");
-				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
-				expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-				done();
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][0]).toStrictEqual(
+						"0123456789ab"
+					);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
+						{ courseId: "course ID #1" }
+					);
+					expect(taskModule.getLoading).toBe(false);
+					done();
+				});
+				spy.mockRestore();
 			});
-			expect(taskModule.getStatus).toBe("pending");
 
-			spy.mockRestore();
+			it("should copy the task without courseId parameter", (done) => {
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3, { courseId: "" });
+				taskModule.setTasks(tasks);
+
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][0]).toStrictEqual(
+						"0123456789ab"
+					);
+					expect(mockApi.taskControllerCopyTask.mock.calls[0][1]).toStrictEqual(
+						{}
+					);
+					expect(taskModule.getLoading).toBe(false);
+					done();
+				});
+				spy.mockRestore();
+			});
+
+			it("should handle an error", (done) => {
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
+				};
+
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+
+				taskModule.copyTask(tasks[0].id).then(() => {
+					expect(taskModule.getStatus).toBe("error");
+					expect(taskModule.businessError).toStrictEqual(error);
+					expect(taskModule.getLoading).toBe(false);
+					done();
+				});
+				expect(mockApi.taskControllerCopyTask).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 
@@ -266,6 +342,48 @@ describe("task store", () => {
 					statusCode: "",
 					message: "",
 				});
+			});
+		});
+
+		describe("setLoading", () => {
+			it("should set the loading status in state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.setLoading(true);
+
+				expect(taskModule.loading).toBe(true);
+			});
+		});
+
+		describe("setTaskCopyResult", () => {
+			it("should set the copy result in state", () => {
+				const copyResultMock = {
+					title: "Aufgabe",
+					type: "task",
+					status: "success",
+					id: "123",
+					elements: [
+						{
+							title: "description",
+							type: "leaf",
+							status: "success",
+						},
+						{
+							title: "submissions",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "files",
+							type: "leaf",
+							status: "not-implemented",
+						},
+					],
+				};
+
+				const taskModule = new TaskModule({});
+				taskModule.setTaskCopyResult(copyResultMock);
+
+				expect(taskModule.getTaskCopyResult).toStrictEqual(copyResultMock);
 			});
 		});
 	});
@@ -352,6 +470,16 @@ describe("task store", () => {
 				const businessError = taskModule.getBusinessError;
 
 				expect(businessError).toBe(taskModule.businessError);
+			});
+		});
+
+		describe("getLoading", () => {
+			it("should return the loading state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.loading = true;
+				const loadingState = taskModule.getLoading;
+
+				expect(loadingState).toBe(taskModule.loading);
 			});
 		});
 
