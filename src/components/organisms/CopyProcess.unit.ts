@@ -148,4 +148,28 @@ describe("@components/organisms/CopyProcess", () => {
 		);
 		expect(skeletonElementAfter).toHaveLength(1);
 	});
+
+	it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+		const method = wrapper.vm.getItemTitleAndStatus;
+
+		expect(method("files", "not-implemented").status).toStrictEqual("failure");
+		expect(method("files", "not-implemented").title).toStrictEqual(
+			wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+		);
+
+		expect(method("any", "not-implemented").status).toStrictEqual("failure");
+		expect(method("any", "not-implemented").title).toStrictEqual("any");
+
+		expect(method("metadata", "success").status).toStrictEqual("success");
+		expect(method("metadata", "success").title).toStrictEqual(
+			wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+		);
+
+		expect(method("description", "success").status).toStrictEqual("success");
+		expect(method("description", "success").title).toStrictEqual(
+			wrapper.vm.$i18n.t("common.labels.description")
+		);
+	});
 });
