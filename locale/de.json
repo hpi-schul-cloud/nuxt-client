@@ -92,7 +92,6 @@
 	"common.words.tasks": "Aufgaben",
 	"common.words.topic": "Thema",
 	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
-	"components.atoms.ProfilePicture": "Profilbild",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"components.legacy.footer.accessibility.report": "Barriere melden",
 	"components.legacy.footer.accessibility.statement": "Barrierefreiheitserklärung",

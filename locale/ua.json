@@ -92,7 +92,6 @@
 	"common.words.tasks": "Завдання",
 	"common.words.topic": "Тема",
 	"componente.molecules.CoursesGrid.emptystate": "Наразі тут курсів немає.",
-	"components.atoms.ProfilePicture": "аватар профілю",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "година | години (годин)",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "год",
