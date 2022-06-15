@@ -224,7 +224,14 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	logout(): void {
-		localStorage.clear();
+		const localStorageKeys = [
+			"i18next_res_de-translation",
+			"homepageVersion",
+			"SC-Alerts",
+			"i18next_res_en-translation",
+		];
+		localStorageKeys.map((item) => localStorage.removeItem(item));
+
 		// Delete matrix messenger indexedDB databases
 		if (window.indexedDB) {
 			// window.indexedDB.databases() is not available in all browsers
