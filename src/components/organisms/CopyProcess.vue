@@ -59,11 +59,9 @@ export default {
 		copiedItems() {
 			const { data } = this;
 			if (!data.id) return [];
-			// debugger;
 			const elements = data.elements.filter(
 				(item) => item.status !== "not-doing"
 			);
-			// debugger;
 			if (this.checkIfEveryElementsAreSuccess(elements)) {
 				return {
 					...data,
