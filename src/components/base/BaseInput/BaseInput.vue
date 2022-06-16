@@ -9,7 +9,7 @@
 		@blur="handleBlur($event)"
 		@focus="handleFocus($event)"
 	>
-		<template v-for="(cmp, name) in $slots" v-slot:[name]>
+		<template v-for="(cmp, name) in $slots" #[name]>
 			<slot :name="name">
 				<component :is="cmp.context" :key="name" />
 			</slot>
@@ -75,8 +75,9 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			validationObject: null,
+		};
 	},
 	computed: {
 		component() {
@@ -100,16 +101,17 @@ export default {
 					`$attrs ${JSON.stringify(this.$attrs)}`
 			);
 		}
+		this.validationObject = this.validationModel;
 	},
 	methods: {
 		handleInput(event) {
-			if (this.validationModel) {
-				this.validationModel.$reset();
-				if (this.validationModel.$futureTouch) {
-					clearTimeout(this.validationModel.$futureTouch);
+			if (this.validationObject) {
+				this.validationObject.$reset();
+				if (this.validationObject.$futureTouch) {
+					clearTimeout(this.validationObject.$futureTouch);
 				}
-				this.validationModel.$futureTouch = setTimeout(
-					() => this.validationModel.$touch(),
+				this.validationObject.$futureTouch = setTimeout(
+					() => this.validationObject.$touch(),
 					validationDelay
 				);
 			}

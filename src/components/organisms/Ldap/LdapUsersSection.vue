@@ -20,7 +20,7 @@
 			datatest-id="ldapDataUsersUserPath"
 			@update:vmodel="$emit('input', { ...value, userPath: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="account_tree" />
 			</template>
 		</base-input>
@@ -38,7 +38,7 @@
 			datatest-id="ldapDataUsersFirstName"
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="user" />
 			</template>
 		</base-input>
@@ -53,7 +53,7 @@
 			datatest-id="ldapDataUsersFamilyName"
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="user" />
 			</template>
 		</base-input>
@@ -68,7 +68,7 @@
 			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="material" icon="email" />
 			</template>
 		</base-input>
@@ -84,7 +84,7 @@
 			datatest-id="ldapDataUsersUid"
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="uid" />
 			</template>
 		</base-input>
@@ -100,7 +100,7 @@
 			datatest-id="ldapDataUsersUuid"
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
 		>
-			<template v-slot:icon>
+			<template #icon>
 				<base-icon source="custom" icon="uuid" />
 			</template>
 		</base-input>

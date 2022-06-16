@@ -1,6 +1,6 @@
 <template>
 	<v-dialog
-		v-model="isOpen"
+		v-model="showModal"
 		max-width="550"
 		@click:outside="$emit('dialog-closed', false)"
 	>
@@ -129,6 +129,7 @@ export default {
 			),
 			description: "",
 			file: null,
+			showModal: this.isOpen,
 		};
 	},
 	computed: {
@@ -144,6 +145,11 @@ export default {
 				errors.push(this.$t("common.validation.tooLong"));
 
 			return errors;
+		},
+	},
+	watch: {
+		isOpen() {
+			this.showModal = this.isOpen;
 		},
 	},
 	methods: {

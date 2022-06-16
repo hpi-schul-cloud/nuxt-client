@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">
@@ -28,7 +27,7 @@
 						>
 							<template
 								v-for="(cmp, name) in dataHeadSlots"
-								v-slot:[name]="columnProps"
+								#[name]="columnProps"
 							>
 								<slot :name="name" v-bind="columnProps" />
 							</template>
@@ -49,7 +48,7 @@
 						>
 							<template
 								v-for="(cmp, name) in dataRowSlots"
-								v-slot:[name]="columnProps"
+								#[name]="columnProps"
 							>
 								<slot :name="name" v-bind="columnProps" />
 							</template>

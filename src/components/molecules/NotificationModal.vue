@@ -1,15 +1,15 @@
 <template>
 	<base-modal :active="showNotificationModal">
-		<template v-slot:body>
+		<template #body>
 			<modal-body-info :title="msg" :description="description">
-				<template v-if="isSuccess" v-slot:icon>
+				<template v-if="isSuccess" #icon>
 					<base-icon
 						source="material"
 						icon="check_circle"
 						:style="{ color: 'var(--color-success)' }"
 					/>
 				</template>
-				<template v-else v-slot:icon>
+				<template v-else #icon>
 					<base-icon
 						source="material"
 						icon="error"
@@ -18,7 +18,7 @@
 				</template>
 			</modal-body-info>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<modal-footer-confirm
 				:is-error="!isSuccess"
 				text="Ok"

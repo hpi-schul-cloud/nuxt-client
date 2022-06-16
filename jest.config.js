@@ -28,6 +28,7 @@ module.exports = {
 	collectCoverageFrom: [
 		// Include
 		"<rootDir>/src/components/**/*.{js,vue}",
+		// "<rootDir>/src/pages/**/*.{js,vue}",
 		"<rootDir>/src/middleware/**/*.js",
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.js",

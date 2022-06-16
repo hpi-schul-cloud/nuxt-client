@@ -39,8 +39,8 @@
 						</base-button>
 					</span>
 					<info-box class="info-box" :active.sync="infoBoxActive">
-						<template v-slot:header>Registrierungen abschließen</template>
-						<template v-slot:body>
+						<template #header>Registrierungen abschließen</template>
+						<template #body>
 							<div v-if="showExternalText" class="content">
 								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-1")

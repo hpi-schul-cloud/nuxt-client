@@ -8,14 +8,14 @@
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"
-			:label="this.$t('components.organisms.Pagination.recordsPerPage')"
+			:label="$t('components.organisms.Pagination.recordsPerPage')"
 			:label-hidden="true"
 			@select="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
 				{{
-					this.$t("components.organisms.Pagination.currentPage", {
+					$t("components.organisms.Pagination.currentPage", {
 						start: total > 0 ? currentPage * perPage - perPage + 1 : 0,
 						end:
 							perPage > total
