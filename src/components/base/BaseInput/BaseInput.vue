@@ -75,8 +75,9 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			validationObject: null,
+		};
 	},
 	computed: {
 		component() {
@@ -100,17 +101,17 @@ export default {
 					`$attrs ${JSON.stringify(this.$attrs)}`
 			);
 		}
+		this.validationObject = this.validationModel;
 	},
 	methods: {
 		handleInput(event) {
-			if (this.validationModel) {
-				this.validationModel.$reset();
-				if (this.validationModel.$futureTouch) {
-					clearTimeout(this.validationModel.$futureTouch);
+			if (this.validationObject) {
+				this.validationObject.$reset();
+				if (this.validationObject.$futureTouch) {
+					clearTimeout(this.validationObject.$futureTouch);
 				}
-				// eslint-disable-next-line vue/no-mutating-props
-				this.validationModel.$futureTouch = setTimeout(
-					() => this.validationModel.$touch(),
+				this.validationObject.$futureTouch = setTimeout(
+					() => this.validationObject.$touch(),
 					validationDelay
 				);
 			}
