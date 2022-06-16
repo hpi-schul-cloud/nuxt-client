@@ -94,6 +94,14 @@ export default {
 	},
 	methods: {
 		getItemTitleAndStatus(title, status) {
+			const titleObj = {
+				metadata: this.$t("components.molecules.copyResult.metadata"),
+				description: this.$t("common.labels.description"),
+				tasks: this.$t("common.words.tasks"),
+				lessons: this.$t("common.words.topics"),
+				coursegroups: this.$t("common.words.courseGroups"),
+				times: this.$t("common.words.times"),
+			};
 			if (title === "files" && status === "not-implemented") {
 				return {
 					title: this.$t("components.molecules.copyResult.fileCopy.error"),
@@ -101,12 +109,7 @@ export default {
 				};
 			}
 			if (status === "not-implemented")
-				return { title: title, status: "failure" };
-
-			const titleObj = {
-				metadata: this.$t("components.molecules.copyResult.metadata"),
-				description: this.$t("common.labels.description"),
-			};
+				return { title: titleObj[title] || title, status: "failure" };
 
 			return {
 				title: titleObj[title],
@@ -116,14 +119,15 @@ export default {
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
-				item.index = ++this.elementIndex;
 				const titleAndStatus = this.getItemTitleAndStatus(
 					item.title,
 					item.status
 				);
 
+				item.index = ++this.elementIndex;
 				item.title = titleAndStatus.title;
 				item.status = titleAndStatus.status;
+
 				if (elements.length > 0) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
 					item.status = isSuccess ? "success" : titleAndStatus.status;

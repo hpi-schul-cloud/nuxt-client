@@ -31,7 +31,7 @@ export default {
 		},
 		timeout: {
 			type: Number,
-			default: 15000,
+			default: 5000,
 		},
 		text: {
 			type: String,
