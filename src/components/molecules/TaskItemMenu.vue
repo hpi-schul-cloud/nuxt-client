@@ -206,7 +206,7 @@ export default {
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = taskModule.getLoading;
 			await taskModule.copyTask(this.taskId);
-			const copyResult = taskModule.getTaskCopyResult;
+			const copyResult = taskModule.getCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = taskModule.getLoading;

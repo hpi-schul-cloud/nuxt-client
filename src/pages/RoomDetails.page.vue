@@ -326,7 +326,7 @@ export default {
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = roomModule.getLoading;
 			await roomModule.copyRoom(this.courseId);
-			const copyResult = roomModule.getRoomCopyResult;
+			const copyResult = roomModule.getCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = roomModule.getLoading;

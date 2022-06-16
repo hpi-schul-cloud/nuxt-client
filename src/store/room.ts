@@ -45,14 +45,7 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
-	private taskCopyResult: CopyApiResponse = {
-		id: "",
-		title: "",
-		type: CopyApiResponseTypeEnum.Task,
-		status: CopyApiResponseStatusEnum.Success,
-	};
-
-	private roomCopyResult: CopyApiResponse = {
+	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
 		type: CopyApiResponseTypeEnum.Task,
@@ -328,7 +321,7 @@ export default class RoomModule extends VuexModule {
 				courseId: this.roomData.roomId,
 			});
 
-			this.setTaskCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data || {});
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -349,7 +342,7 @@ export default class RoomModule extends VuexModule {
 				courseId
 			);
 
-			this.setRoomCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data || {});
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -411,13 +404,8 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setTaskCopyResult(payload: CopyApiResponse | any): void {
-		this.taskCopyResult = payload;
-	}
-
-	@Mutation
-	setRoomCopyResult(payload: CopyApiResponse | any): void {
-		this.roomCopyResult = payload;
+	setCopyResult(payload: CopyApiResponse | any): void {
+		this.copyResult = payload;
 	}
 
 	get getLoading(): boolean {
@@ -456,12 +444,8 @@ export default class RoomModule extends VuexModule {
 		return this.finishedLoading && this.roomData.elements.length === 0;
 	}
 
-	get getTaskCopyResult(): CopyApiResponse {
-		return this.taskCopyResult;
-	}
-
-	get getRoomCopyResult(): CopyApiResponse {
-		return this.roomCopyResult;
+	get getCopyResult(): CopyApiResponse {
+		return this.copyResult;
 	}
 
 	private get finishedLoading(): boolean {
