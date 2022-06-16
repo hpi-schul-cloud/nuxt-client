@@ -8,7 +8,6 @@ describe("@components/molecules/ContentEmptyState", () => {
 
 	it(...isValidComponent(ContentEmptyState));
 
-	// eslint-disable-next-line jest/no-commented-out-tests
 	it("Renders an image", () => {
 		expect(wrapper.find(".img-container").exists()).toBe(true);
 	});

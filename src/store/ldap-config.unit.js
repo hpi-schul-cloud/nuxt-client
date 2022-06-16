@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-focused-tests */
 import { mutations, actions } from "../../src/store/ldap-config";
 import { unchangedPassword } from "../utils/ldapConstants";
 

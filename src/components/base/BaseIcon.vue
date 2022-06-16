@@ -13,7 +13,7 @@
 		:class="['icon', 'fa', `fa-${icon}`]"
 		:style="{ color: fillColor }"
 	></i>
-	<!-- eslint-disable -->
+	<!-- eslint-disable vue/no-v-html -->
 	<span
 		v-else
 		class="icon"
