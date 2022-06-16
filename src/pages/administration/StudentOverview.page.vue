@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
 		:headline="$t('pages.administration.students.index.title')"
@@ -116,6 +115,7 @@
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import { mapGetters } from "vuex";
 import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";

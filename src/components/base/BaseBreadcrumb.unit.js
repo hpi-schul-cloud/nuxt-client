@@ -19,13 +19,11 @@ describe("@components/base/BaseBreadcrumb", () => {
 		});
 
 		links.forEach((link, index) => {
-			if (links.length - 1 !== index) {
-				const linkElement = link.to
-					? element.querySelector(`[to="${link.to}"]`)
-					: element.querySelector(`[href="${link.href}"]`);
-				// eslint-disable-next-line jest/no-conditional-expect
-				expect(linkElement.textContent).toContain(link.text);
-			}
+			if (links.length - 1 === index) return;
+			const linkElement = link.to
+				? element.querySelector(`[to="${link.to}"]`)
+				: element.querySelector(`[href="${link.href}"]`);
+			expect(linkElement.textContent).toContain(link.text);
 		});
 	});
 
