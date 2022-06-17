@@ -260,9 +260,10 @@ export default {
 			if (envConfigModule.getEnv.FEATURE_COURSE_COPY) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
-					// action: () =>
-					// 	(window.location.href = `/courses/${this.courseId}/copy`),
-					action: () => this.copyRoom(),
+					action: () =>
+						envConfigModule.getEnv.FEATURE_COURSE_COPY_ENABLED
+							? this.copyRoom()
+							: (window.location.href = `/courses/${this.courseId}/copy`),
 					name: this.$t("common.actions.duplicate"),
 					dataTestId: "title-menu-copy",
 				});
@@ -318,10 +319,6 @@ export default {
 			this.dialog.subText = "";
 		},
 		async copyRoom() {
-			// if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-			// 	window.location.href = this.copyLink;
-			// 	return;
-			// }
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = roomModule.getLoading;
 			await roomModule.copyRoom(this.courseId);
