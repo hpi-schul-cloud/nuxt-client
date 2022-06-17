@@ -106,11 +106,6 @@
 			@dialog-closed="onCopyProcessDialogClose"
 		>
 		</copy-process>
-		<snackbar
-			:show="snackbar"
-			text="sample text sample text sample text sample text sample text sample text sample text "
-			color="var(--color-success)"
-		/>
 	</default-wireframe>
 </template>
 
@@ -123,7 +118,6 @@ import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyProcess from "@components/organisms/CopyProcess";
-import Snackbar from "@components/molecules/Snackbar";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	mdiPlus,
@@ -145,7 +139,6 @@ export default {
 		vCustomDialog,
 		BaseQrCode,
 		CopyProcess,
-		Snackbar,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -183,7 +176,6 @@ export default {
 				isOpen: false,
 				loading: false,
 			},
-			snackbar: false,
 		};
 	},
 	computed: {
@@ -334,17 +326,30 @@ export default {
 			this.copyProcess.loading = roomModule.getLoading;
 			await roomModule.copyRoom(this.courseId);
 			const copyResult = roomModule.getCopyResult;
+			const businessError = roomModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.organisms.FormNews.errors.create"),
+					status: "error",
+				});
+				return;
+			}
+
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = roomModule.getLoading;
 			}
 		},
 		async onCopyProcessDialogClose() {
-			this.snackbar = true;
-			await roomModule.fetchContent(this.copyProcess.data.id);
+			if (this.copyProcess.data.id === "") return;
+			this.$notifier({
+				text: this.$t("pages.room.copy.course.message.created"),
+				status: "success",
+			});
+			this.$router.push(`/rooms/${this.copyProcess.data.id}`);
 			this.courseId = this.copyProcess.data.id;
 			this.copyProcess.isOpen = false;
-			//this.$router.push(`/rooms/${this.copyProcess.data.id}`);
 			this.copyProcess.data = {};
 		},
 	},

@@ -4,16 +4,19 @@
 			<v-main id="main-content">
 				<Nuxt />
 			</v-main>
+			<snackbar />
 		</v-app>
 	</legacy-logged-in>
 </template>
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
+import Snackbar from "@components/molecules/SnackBar";
 
 export default {
 	components: {
 		LegacyLoggedIn,
+		Snackbar,
 	},
 };
 </script>

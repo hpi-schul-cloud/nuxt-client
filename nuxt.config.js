@@ -131,6 +131,7 @@ module.exports = {
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
 		"@plugins/store-accessor",
+		"@plugins/notifier.ts",
 	],
 
 	/*
