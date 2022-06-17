@@ -342,7 +342,7 @@ export default class RoomModule extends VuexModule {
 				courseId
 			);
 
-			this.setCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
