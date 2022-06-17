@@ -37,7 +37,7 @@
 					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
+			<div v-if="!condenseLayout" class="justify-center mt-1 mb-1 sub-title">
 				{{ item.title }}
 			</div>
 			<div
@@ -151,7 +151,7 @@ export default {
 
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-md),
+		$line-height: var(--line-height-lg),
 		$lines-to-show: 2
 	);
 }
