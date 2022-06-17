@@ -214,7 +214,7 @@ export default {
 				route: `#${this.tabRoutes[1]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
-					: this.$t("common.words.drafts"),
+					: this.$t("common.words.draftHeader"),
 				dataTestId: this.isStudent ? "closedTasks" : "draftTasks",
 			};
 		},
