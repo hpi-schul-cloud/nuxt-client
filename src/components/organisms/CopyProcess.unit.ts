@@ -171,10 +171,5 @@ describe("@components/organisms/CopyProcess", () => {
 		expect(method("description", "success").title).toStrictEqual(
 			wrapper.vm.$i18n.t("common.labels.description")
 		);
-
-		expect(method("description", "success").status).toStrictEqual("success");
-		expect(method("description", "success").title).toStrictEqual(
-			wrapper.vm.$i18n.t("common.labels.description")
-		);
 	});
 });
