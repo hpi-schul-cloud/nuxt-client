@@ -172,4 +172,67 @@ describe("@components/organisms/CopyProcess", () => {
 			wrapper.vm.$i18n.t("common.labels.description")
 		);
 	});
+
+	it.only("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
+		const parameterData = {
+			data: {
+				id: "12345",
+				type: "board",
+				status: "success",
+				title: "some title",
+				elements: [
+					{
+						id: "12345",
+						type: "task",
+						status: "success",
+						title: "some title",
+						elements: [
+							{
+								type: "leaf",
+								status: "success",
+								title: "some title",
+							},
+							{
+								id: "12345",
+								type: "submissions",
+								status: "not-doing",
+								title: "some title",
+							},
+						],
+					},
+				],
+			},
+		};
+
+		const wrapper = getWrapper(parameterData);
+		await wrapper.vm.$nextTick();
+
+		const expectedData = {
+			data: {
+				id: "12345",
+				type: "board",
+				status: "success",
+				title: "some title",
+				elements: [
+					{
+						id: "12345",
+						type: "task",
+						status: "success",
+						title: "some title",
+						elements: [
+							{
+								type: "leaf",
+								status: "success",
+								title: "some title",
+							},
+						],
+					},
+				],
+			},
+		};
+
+		const cleanUpResult = wrapper.vm.cleanupCopyStatus(parameterData);
+
+		expect(cleanUpResult).toStrictEqual(expectedData);
+	});
 });
