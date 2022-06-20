@@ -124,8 +124,8 @@ export default {
 			};
 			const typeObj = {
 				board: this.$t("common.labels.room"),
-				lesson: `Lesson - ${item.title}`,
-				task: `Task - ${item.title}`,
+				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
+				task: `${this.$t("common.words.task")} - ${item.title}`,
 			};
 			if (item.title === "files" && item.status === "not-implemented") {
 				return {
@@ -134,7 +134,11 @@ export default {
 				};
 			}
 			if (item.status === "not-implemented")
-				return { title: titleObj[item.title] || item.title, status: "failure" };
+				return {
+					title:
+						item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
+					status: "failure",
+				};
 
 			return {
 				title: item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
@@ -175,19 +179,6 @@ export default {
 			});
 		},
 		cleanupCopyStatus,
-
-		// filterNotDoingElements(items) {
-		// 	return items.filter(({ elements = [], ...rest }) => {
-		// 		const item = { ...rest };
-		// 		debugger;
-		// 		if (item.status == "not-doing") return false;
-		// 		if (elements.length > 0)
-		// 			item.elements = this.filterNotDoingElements(elements);
-
-		// 		return item.status === "not-doing" ? false : true;
-		// 	});
-		// },
-
 		dialogClosed() {
 			this.showModal = false;
 			this.$emit("dialog-closed", false);

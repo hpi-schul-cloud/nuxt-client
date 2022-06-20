@@ -155,23 +155,33 @@ describe("@components/organisms/CopyProcess", () => {
 		const method = wrapper.vm.getItemTitleAndStatus;
 
 		expect(
-			method({ title: "files", status: "not-implemented" }).status
+			method({ type: "file", title: "files", status: "not-implemented" }).status
 		).toStrictEqual("failure");
 		expect(
-			method({ title: "files", status: "not-implemented" }).title
+			method({ type: "file", title: "files", status: "not-implemented" }).title
 		).toStrictEqual(
 			wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
 		);
 
 		expect(
-			method({ title: "any", status: "not-implemented" }).status
+			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
+				.status
 		).toStrictEqual("failure");
 		expect(
-			method({ title: "any", status: "not-implemented" }).title
-		).toStrictEqual("any");
+			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
+				.title
+		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`);
 
 		expect(
-			method({ title: "metadata", status: "success" }).status
+			method({ type: "task", title: "task-1", status: "not-implemented" })
+				.status
+		).toStrictEqual("failure");
+		expect(
+			method({ type: "task", title: "task-1", status: "not-implemented" }).title
+		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
+
+		expect(
+			method({ type: "leaf", title: "metadata", status: "success" }).status
 		).toStrictEqual("success");
 		expect(
 			method({ type: "leaf", title: "metadata", status: "success" }).title
@@ -180,7 +190,7 @@ describe("@components/organisms/CopyProcess", () => {
 		);
 
 		expect(
-			method({ title: "description", status: "success" }).status
+			method({ type: "leaf", title: "description", status: "success" }).status
 		).toStrictEqual("success");
 		expect(
 			method({ type: "leaf", title: "description", status: "success" }).title
