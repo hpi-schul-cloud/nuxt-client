@@ -37,7 +37,7 @@
 					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div v-if="!condenseLayout" class="justify-center mt-1 mb-1 sub-title">
+			<div v-if="!condenseLayout" class="justify-center mt-2 mb-7 sub-title">
 				{{ item.title }}
 			</div>
 			<div
