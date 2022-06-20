@@ -31,8 +31,26 @@
 </template>
 
 <script>
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResult from "@components/molecules/CopyResult";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+
+const cleanupCopyStatus = (element) => {
+	if (element.status === "not-doing" && element.elements === undefined) {
+		return undefined;
+	}
+
+	const result = {
+		...element,
+	};
+
+	if (Array.isArray(result.elements)) {
+		result.elements = result.elements
+			.map(cleanupCopyStatus)
+			.filter((el) => el !== undefined);
+	}
+
+	return result;
+};
 
 export default {
 	components: { vCustomDialog, CopyResult },
@@ -58,40 +76,32 @@ export default {
 	computed: {
 		copiedItems() {
 			const { data } = this;
-			const elements = data.elements.filter(
-				(item) => item.status !== "not-doing"
-			);
-			if (this.checkIfEveryElementsAreSuccess(elements)) {
+			if (!data.id) return [];
+			const result = this.cleanupCopyStatus(JSON.parse(JSON.stringify(data)));
+
+			if (this.checkIfEveryElementsAreSuccess(result.elements)) {
 				return {
-					id: data.id,
-					status: data.status,
-					title: data.title,
-					type: data.type,
+					...result,
 					index: this.elementIndex,
 					completed: true,
 					elements: [
 						{
-							id: data.id,
+							id: result.id,
 							status: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
-							type: data.type,
+							type: result.type,
 						},
 					],
 				};
 			}
 
 			return {
-				id: data.id,
-				status: data.status,
-				title: data.title,
-				type: data.type,
+				...result,
 				index: this.elementIndex,
-				elements: data.elements
-					? this.prepareCopiedElements(
-							data.elements.filter((item) => item.status !== "not-doing")
-					  )
+				elements: result.elements
+					? this.prepareCopiedElements(result.elements)
 					: [],
 			};
 		},
@@ -102,27 +112,55 @@ export default {
 		},
 	},
 	methods: {
+		getItemTitleAndStatus(item) {
+			const titleObj = {
+				metadata: this.$t("components.molecules.copyResult.metadata"),
+				description: this.$t("common.labels.description"),
+				tasks: this.$t("common.words.tasks"),
+				lessons: this.$t("common.words.topics"),
+				coursegroups: this.$t("common.words.courseGroups"),
+				times: this.$t("common.words.times"),
+				submissions: "submissions",
+			};
+			const typeObj = {
+				board: this.$t("common.labels.room"),
+				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
+				task: `${this.$t("common.words.task")} - ${item.title}`,
+			};
+			if (item.title === "files" && item.status === "not-implemented") {
+				return {
+					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+					status: "failure",
+				};
+			}
+			if (item.status === "not-implemented")
+				return {
+					title:
+						item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
+					status: "failure",
+				};
+
+			return {
+				title: item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
+				status: item.status,
+			};
+		},
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
+				const titleAndStatus = this.getItemTitleAndStatus({
+					title: item.title,
+					status: item.status,
+					type: item.type,
+				});
+
 				item.index = ++this.elementIndex;
-				if (item.title === "files" && item.status === "not-implemented") {
-					item.title = this.$t(
-						"components.molecules.copyResult.fileCopy.error"
-					);
-				}
-				item.title =
-					item.title === "metadata"
-						? this.$t("components.molecules.copyResult.metadata")
-						: item.title;
-				item.title =
-					item.title === "description"
-						? this.$t("common.labels.description")
-						: item.title;
-				if (item.status === "not-implemented") item.status = "failure";
+				item.title = titleAndStatus.title;
+				item.status = titleAndStatus.status;
+
 				if (elements.length > 0) {
 					const isSuccess = elements.every((ele) => ele.status === "success");
-					item.status = isSuccess ? "success" : item.status;
+					item.status = isSuccess ? "success" : titleAndStatus.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;
@@ -140,6 +178,7 @@ export default {
 				return item.status === "success";
 			});
 		},
+		cleanupCopyStatus,
 		dialogClosed() {
 			this.showModal = false;
 			this.$emit("dialog-closed", false);
