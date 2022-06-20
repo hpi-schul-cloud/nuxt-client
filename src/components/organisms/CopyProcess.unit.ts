@@ -154,23 +154,37 @@ describe("@components/organisms/CopyProcess", () => {
 		await wrapper.vm.$nextTick();
 		const method = wrapper.vm.getItemTitleAndStatus;
 
-		expect(method("files", "not-implemented").status).toStrictEqual("failure");
-		expect(method("files", "not-implemented").title).toStrictEqual(
+		expect(
+			method({ title: "files", status: "not-implemented" }).status
+		).toStrictEqual("failure");
+		expect(
+			method({ title: "files", status: "not-implemented" }).title
+		).toStrictEqual(
 			wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
 		);
 
-		expect(method("any", "not-implemented").status).toStrictEqual("failure");
-		expect(method("any", "not-implemented").title).toStrictEqual("any");
+		expect(
+			method({ title: "any", status: "not-implemented" }).status
+		).toStrictEqual("failure");
+		expect(
+			method({ title: "any", status: "not-implemented" }).title
+		).toStrictEqual("any");
 
-		expect(method("metadata", "success").status).toStrictEqual("success");
-		expect(method("metadata", "success").title).toStrictEqual(
+		expect(
+			method({ title: "metadata", status: "success" }).status
+		).toStrictEqual("success");
+		expect(
+			method({ type: "leaf", title: "metadata", status: "success" }).title
+		).toStrictEqual(
 			wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
 		);
 
-		expect(method("description", "success").status).toStrictEqual("success");
-		expect(method("description", "success").title).toStrictEqual(
-			wrapper.vm.$i18n.t("common.labels.description")
-		);
+		expect(
+			method({ title: "description", status: "success" }).status
+		).toStrictEqual("success");
+		expect(
+			method({ type: "leaf", title: "description", status: "success" }).title
+		).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
 	});
 
 	it("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
