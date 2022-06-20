@@ -34,6 +34,24 @@
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 
+const cleanupCopyStatus = (element) => {
+	if (element.status === "not-doing" && element.elements === undefined) {
+		return undefined;
+	}
+
+	const result = {
+		...element,
+	};
+
+	if (Array.isArray(result.elements)) {
+		result.elements = result.elements
+			.map(cleanupCopyStatus)
+			.filter((el) => el !== undefined);
+	}
+
+	return result;
+};
+
 export default {
 	components: { vCustomDialog, CopyResult },
 	props: {
@@ -156,23 +174,7 @@ export default {
 				return item.status === "success";
 			});
 		},
-		cleanupCopyStatus(element) {
-			if (element.status === "not-doing" && element.elements === undefined) {
-				return undefined;
-			}
-
-			const result = {
-				...element,
-			};
-
-			if (Array.isArray(result.elements)) {
-				result.elements = result.elements
-					.map(this.cleanupCopyStatus.bind(this))
-					.filter((el) => el !== undefined);
-			}
-
-			return result;
-		},
+		cleanupCopyStatus,
 
 		// filterNotDoingElements(items) {
 		// 	return items.filter(({ elements = [], ...rest }) => {
