@@ -59,33 +59,32 @@ export default {
 		copiedItems() {
 			const { data } = this;
 			if (!data.id) return [];
-			const elements = this.filterNotDoingElements(data.elements);
-			// const elements = data.elements.filter(
-			// 	(item) => item.status !== "not-doing"
-			// );
-			// debugger;
-			if (this.checkIfEveryElementsAreSuccess(elements)) {
+			const result = this.cleanupCopyStatus(JSON.parse(JSON.stringify(data)));
+
+			if (this.checkIfEveryElementsAreSuccess(result.elements)) {
 				return {
-					...data,
+					...result,
 					index: this.elementIndex,
 					completed: true,
 					elements: [
 						{
-							id: data.id,
+							id: result.id,
 							status: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
-							type: data.type,
+							type: result.type,
 						},
 					],
 				};
 			}
 
 			return {
-				...data,
+				...result,
 				index: this.elementIndex,
-				elements: data.elements ? this.prepareCopiedElements(elements) : [],
+				elements: result.elements
+					? this.prepareCopiedElements(result.elements)
+					: [],
 			};
 		},
 	},
@@ -157,17 +156,38 @@ export default {
 				return item.status === "success";
 			});
 		},
-		filterNotDoingElements(items) {
-			return items.filter(({ elements = [], ...rest }) => {
-				const item = { ...rest };
-				debugger;
-				if (item.status == "not-doing") return false;
-				if (elements.length > 0)
-					item.elements = this.filterNotDoingElements(elements);
 
-				return item.status === "not-doing" ? false : true;
-			});
+		cleanupCopyStatus(element) {
+			const result = {
+				...element,
+			};
+
+			result.elements = element.elements.reduce((res, el) => {
+				if (el.status !== "not-doing" || el.elements) {
+					if (Array.isArray(el.elements)) {
+						el.elements = el.elements.map(this.cleanupCopyStatus);
+					}
+
+					res.push({ ...el });
+				}
+
+				return res;
+			}, []);
+
+			return result;
 		},
+
+		// filterNotDoingElements(items) {
+		// 	return items.filter(({ elements = [], ...rest }) => {
+		// 		const item = { ...rest };
+		// 		debugger;
+		// 		if (item.status == "not-doing") return false;
+		// 		if (elements.length > 0)
+		// 			item.elements = this.filterNotDoingElements(elements);
+
+		// 		return item.status === "not-doing" ? false : true;
+		// 	});
+		// },
 
 		dialogClosed() {
 			this.showModal = false;
