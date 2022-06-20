@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResult from "@components/molecules/CopyResult";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 
 export default {
 	components: { vCustomDialog, CopyResult },
@@ -156,24 +156,19 @@ export default {
 				return item.status === "success";
 			});
 		},
-
 		cleanupCopyStatus(element) {
+			if (element.status === "not-doing" && element.elements === undefined) {
+				return undefined;
+			}
+
 			const result = {
 				...element,
 			};
 
 			if (Array.isArray(result.elements)) {
-				result.elements = result.elements.reduce((res, el) => {
-					if (el.status !== "not-doing" || el.elements) {
-						if (Array.isArray(el.elements)) {
-							el.elements = this.cleanupCopyStatus(el.elements);
-						}
-
-						res.push({ ...el });
-					}
-
-					return res;
-				}, []);
+				result.elements = result.elements
+					.map(this.cleanupCopyStatus.bind(this))
+					.filter((el) => el !== undefined);
 			}
 
 			return result;

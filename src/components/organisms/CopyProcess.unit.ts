@@ -173,66 +173,24 @@ describe("@components/organisms/CopyProcess", () => {
 		);
 	});
 
-	it.only("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
-		const parameterData = {
-			data: {
-				id: "12345",
-				type: "board",
-				status: "success",
-				title: "some title",
-				elements: [
-					{
-						id: "12345",
-						type: "task",
-						status: "success",
-						title: "some title",
-						elements: [
-							{
-								type: "leaf",
-								status: "success",
-								title: "some title",
-							},
-							{
-								id: "12345",
-								type: "submissions",
-								status: "not-doing",
-								title: "some title",
-							},
-						],
-					},
-				],
-			},
-		};
-
-		const wrapper = getWrapper(parameterData);
+	it("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
+		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
 
 		const expectedData = {
-			data: {
-				id: "12345",
-				type: "board",
-				status: "success",
-				title: "some title",
-				elements: [
-					{
-						id: "12345",
-						type: "task",
-						status: "success",
-						title: "some title",
-						elements: [
-							{
-								type: "leaf",
-								status: "success",
-								title: "some title",
-							},
-						],
-					},
-				],
-			},
+			title: "Aufgabe",
+			type: "task",
+			status: "partial",
+			id: "12345",
+			elements: [
+				{ title: "metadata", type: "leaf", status: "success" },
+				{ title: "description", type: "leaf", status: "success" },
+				{ title: "files", type: "leaf", status: "not-implemented" },
+			],
 		};
 
-		const cleanUpResult = wrapper.vm.cleanupCopyStatus(parameterData);
+		const cleanUpMethod = wrapper.vm.cleanupCopyStatus;
 
-		expect(cleanUpResult).toStrictEqual(expectedData);
+		expect(cleanUpMethod(propsData.data)).toStrictEqual(expectedData);
 	});
 });
