@@ -59,9 +59,11 @@ export default {
 		copiedItems() {
 			const { data } = this;
 			if (!data.id) return [];
-			const elements = data.elements.filter(
-				(item) => item.status !== "not-doing"
-			);
+			const elements = this.filterNotDoingElements(data.elements);
+			// const elements = data.elements.filter(
+			// 	(item) => item.status !== "not-doing"
+			// );
+			// debugger;
 			if (this.checkIfEveryElementsAreSuccess(elements)) {
 				return {
 					...data,
@@ -93,7 +95,7 @@ export default {
 		},
 	},
 	methods: {
-		getItemTitleAndStatus(title, status) {
+		getItemTitleAndStatus(item) {
 			const titleObj = {
 				metadata: this.$t("components.molecules.copyResult.metadata"),
 				description: this.$t("common.labels.description"),
@@ -101,28 +103,35 @@ export default {
 				lessons: this.$t("common.words.topics"),
 				coursegroups: this.$t("common.words.courseGroups"),
 				times: this.$t("common.words.times"),
+				submissions: "submissions",
 			};
-			if (title === "files" && status === "not-implemented") {
+			const typeObj = {
+				board: this.$t("common.labels.room"),
+				lesson: `Lesson - ${item.title}`,
+				task: `Task - ${item.title}`,
+			};
+			if (item.title === "files" && item.status === "not-implemented") {
 				return {
 					title: this.$t("components.molecules.copyResult.fileCopy.error"),
 					status: "failure",
 				};
 			}
-			if (status === "not-implemented")
-				return { title: titleObj[title] || title, status: "failure" };
+			if (item.status === "not-implemented")
+				return { title: titleObj[item.title] || item.title, status: "failure" };
 
 			return {
-				title: titleObj[title],
-				status: status,
+				title: item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
+				status: item.status,
 			};
 		},
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
-				const titleAndStatus = this.getItemTitleAndStatus(
-					item.title,
-					item.status
-				);
+				const titleAndStatus = this.getItemTitleAndStatus({
+					title: item.title,
+					status: item.status,
+					type: item.type,
+				});
 
 				item.index = ++this.elementIndex;
 				item.title = titleAndStatus.title;
@@ -148,6 +157,18 @@ export default {
 				return item.status === "success";
 			});
 		},
+		filterNotDoingElements(items) {
+			return items.filter(({ elements = [], ...rest }) => {
+				const item = { ...rest };
+				debugger;
+				if (item.status == "not-doing") return false;
+				if (elements.length > 0)
+					item.elements = this.filterNotDoingElements(elements);
+
+				return item.status === "not-doing" ? false : true;
+			});
+		},
+
 		dialogClosed() {
 			this.showModal = false;
 			this.$emit("dialog-closed", false);

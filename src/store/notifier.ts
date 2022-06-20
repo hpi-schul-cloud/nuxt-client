@@ -6,7 +6,7 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 	stateFactory: true,
 })
 export default class NotifierModule extends VuexModule {
-	notifier: any = {};
+	notifier: object = {};
 
 	@Action
 	show(payload: {}) {
