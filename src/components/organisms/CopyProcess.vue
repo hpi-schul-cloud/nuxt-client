@@ -162,17 +162,19 @@ export default {
 				...element,
 			};
 
-			result.elements = element.elements.reduce((res, el) => {
-				if (el.status !== "not-doing" || el.elements) {
-					if (Array.isArray(el.elements)) {
-						el.elements = el.elements.map(this.cleanupCopyStatus);
+			if (Array.isArray(result.elements)) {
+				result.elements = result.elements.reduce((res, el) => {
+					if (el.status !== "not-doing" || el.elements) {
+						if (Array.isArray(el.elements)) {
+							el.elements = this.cleanupCopyStatus(el.elements);
+						}
+
+						res.push({ ...el });
 					}
 
-					res.push({ ...el });
-				}
-
-				return res;
-			}, []);
+					return res;
+				}, []);
+			}
 
 			return result;
 		},
