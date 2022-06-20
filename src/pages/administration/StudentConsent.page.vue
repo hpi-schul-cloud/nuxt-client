@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -274,6 +273,7 @@
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import { filePathsModule } from "@/store";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";

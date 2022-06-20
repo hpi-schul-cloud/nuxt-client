@@ -137,7 +137,6 @@ export default async function (req, res, next) {
 					}
 				}
 				if (cspString) {
-					// eslint-disable-next-line max-len
 					res.setHeader("Content-Security-Policy", cspString);
 				} else {
 					console.log("Content-Security-Policy header string not found");

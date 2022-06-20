@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
 		:breadcrumbs="breadcrumbs"
@@ -103,6 +102,7 @@
 	</default-wireframe>
 </template>
 <script>
+/* eslint-disable max-lines */
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
