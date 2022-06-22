@@ -448,6 +448,10 @@ export default class RoomModule extends VuexModule {
 		return this.copyResult;
 	}
 
+	get getRoomId(): string {
+		return this.roomData.roomId;
+	}
+
 	private get finishedLoading(): boolean {
 		return this.getLoading === false;
 	}

@@ -33,6 +33,7 @@
 <script>
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import { copyModule } from "@/store";
 
 const cleanupCopyStatus = (element) => {
 	if (element.status === "not-doing" && element.elements === undefined) {
@@ -78,8 +79,10 @@ export default {
 			const { data } = this;
 			if (!data.id) return [];
 			const result = this.cleanupCopyStatus(JSON.parse(JSON.stringify(data)));
+			// debugger;
 
-			if (this.checkIfEveryElementsAreSuccess(result.elements)) {
+			// if (this.checkIfEveryElementsAreSuccess(result.elements)) {
+			if (copyModule.isSuccess) {
 				return {
 					...result,
 					index: this.elementIndex,

@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule, copyModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -321,9 +321,10 @@ export default {
 		async copyRoom() {
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = roomModule.getLoading;
-			await roomModule.copyRoom(this.courseId);
-			const copyResult = roomModule.getCopyResult;
-			const businessError = roomModule.getBusinessError;
+			copyModule && console.log("");
+			await copyModule.copyRoom(this.courseId);
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
 
 			if (businessError.statusCode !== "") {
 				this.$notifier({
@@ -335,7 +336,7 @@ export default {
 
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
-				this.copyProcess.loading = roomModule.getLoading;
+				this.copyProcess.loading = copyModule.getLoading;
 			}
 		},
 		async onCopyProcessDialogClose() {
