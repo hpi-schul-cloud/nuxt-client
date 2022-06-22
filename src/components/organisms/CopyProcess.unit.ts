@@ -148,4 +148,73 @@ describe("@components/organisms/CopyProcess", () => {
 		);
 		expect(skeletonElementAfter).toHaveLength(1);
 	});
+
+	it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+		const method = wrapper.vm.getItemTitleAndStatus;
+
+		expect(
+			method({ type: "file", title: "files", status: "not-implemented" }).status
+		).toStrictEqual("failure");
+		expect(
+			method({ type: "file", title: "files", status: "not-implemented" }).title
+		).toStrictEqual(
+			wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+		);
+
+		expect(
+			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
+				.status
+		).toStrictEqual("failure");
+		expect(
+			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
+				.title
+		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`);
+
+		expect(
+			method({ type: "task", title: "task-1", status: "not-implemented" })
+				.status
+		).toStrictEqual("failure");
+		expect(
+			method({ type: "task", title: "task-1", status: "not-implemented" }).title
+		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
+
+		expect(
+			method({ type: "leaf", title: "metadata", status: "success" }).status
+		).toStrictEqual("success");
+		expect(
+			method({ type: "leaf", title: "metadata", status: "success" }).title
+		).toStrictEqual(
+			wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+		);
+
+		expect(
+			method({ type: "leaf", title: "description", status: "success" }).status
+		).toStrictEqual("success");
+		expect(
+			method({ type: "leaf", title: "description", status: "success" }).title
+		).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
+	});
+
+	it("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
+		const wrapper = getWrapper(propsData);
+		await wrapper.vm.$nextTick();
+
+		const expectedData = {
+			title: "Aufgabe",
+			type: "task",
+			status: "partial",
+			id: "12345",
+			elements: [
+				{ title: "metadata", type: "leaf", status: "success" },
+				{ title: "description", type: "leaf", status: "success" },
+				{ title: "files", type: "leaf", status: "not-implemented" },
+			],
+		};
+
+		const cleanUpMethod = wrapper.vm.cleanupCopyStatus;
+
+		expect(cleanUpMethod(propsData.data)).toStrictEqual(expectedData);
+	});
 });

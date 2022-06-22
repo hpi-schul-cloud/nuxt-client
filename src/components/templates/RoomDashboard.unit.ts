@@ -523,7 +523,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			roomModule.copyTask = roomModuleCopyMock;
 
-			roomModule.setTaskCopyResult({
+			roomModule.setCopyResult({
 				title: "Aufgabe",
 				type: "task",
 				status: "success",
@@ -576,7 +576,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		it("should empty 'copyProcess' data property method when CopyProcess component emits 'dialog-closed'", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			roomModule.setTaskCopyResult({
+			roomModule.setCopyResult({
 				title: "Aufgabe",
 				type: "task",
 				status: "success",

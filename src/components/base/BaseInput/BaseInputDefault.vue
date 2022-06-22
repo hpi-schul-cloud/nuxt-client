@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<div class="wrapper">
 		<div

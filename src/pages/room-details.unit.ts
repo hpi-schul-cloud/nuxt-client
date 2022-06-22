@@ -290,18 +290,40 @@ describe("@pages/rooms/_id/index.vue", () => {
 			expect(location.href).toStrictEqual("/courses/123/edit");
 		});
 
-		it("should redirect the page when 'Copy course' menu clicked", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
-			const location = window.location;
-			const wrapper = getWrapper();
+		describe("testing FEATURE_COURSE_COPY_ENABLED feature flag", () => {
+			it("should redirect the page when 'Copy course' menu clicked", async () => {
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
+				const location = window.location;
+				const copyRoom = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.copyRoom = copyRoom;
 
-			const threeDotButton = wrapper.find(".three-dot-button");
-			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
-			await moreActionButton.trigger("click");
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
+				await moreActionButton.trigger("click");
 
-			expect(location.href).toStrictEqual("/courses/123/copy");
+				expect(location.href).toStrictEqual("/courses/123/copy");
+			});
+
+			it("should call the copyRoom method when 'Copy course' menu clicked", async () => {
+				// @ts-ignore
+				envConfigModule.setEnvs({
+					FEATURE_COURSE_COPY: true,
+					FEATURE_COURSE_COPY_ENABLED: true,
+				});
+				const copyRoom = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.copyRoom = copyRoom;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
+				await moreActionButton.trigger("click");
+
+				expect(copyRoom).toHaveBeenCalled();
+			});
 		});
 
 		it("should call inviteCourse method when 'Invite to the course' menu clicked", async () => {

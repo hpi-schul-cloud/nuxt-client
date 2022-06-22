@@ -335,7 +335,7 @@ export default {
 			this.copyProcess.isOpen = true;
 			this.copyProcess.loading = true;
 			await roomModule.copyTask(itemId);
-			const copyResult = roomModule.getTaskCopyResult;
+			const copyResult = roomModule.getCopyResult;
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = false;
