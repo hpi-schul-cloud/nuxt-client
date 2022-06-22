@@ -237,7 +237,9 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Task = 'task',
+    Lesson = 'lesson',
     Course = 'course',
+    Board = 'board',
     File = 'file',
     Leaf = 'leaf'
 }
