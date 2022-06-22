@@ -26,14 +26,12 @@ const checkIfEveryElementsAreSuccess = (
 	});
 };
 
-const cleanupCopyStatus = (element: any): any => {
-	if (element.status === "not-doing" && element.elements === undefined) {
+const cleanupCopyStatus = (item: any): any => {
+	if (item.status === "not-doing" && item.elements === undefined) {
 		return undefined;
 	}
 
-	const result = {
-		...element,
-	};
+	const result = { ...item };
 
 	if (Array.isArray(result.elements)) {
 		result.elements = result.elements
@@ -50,20 +48,26 @@ const cleanupCopyStatus = (element: any): any => {
 	stateFactory: true,
 })
 export default class CopyModule extends VuexModule {
-	// private roomId: string = roomModule.getRoomId || "asda";
 	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
-		type: CopyApiResponseTypeEnum.Task,
+		type: CopyApiResponseTypeEnum.Board,
 		status: CopyApiResponseStatusEnum.Success,
 	};
-	loading: boolean = false;
-	error: null | {} = null;
-	businessError: BusinessError = {
+	private filteredResult: CopyApiResponse = {
+		id: "",
+		title: "",
+		type: CopyApiResponseTypeEnum.Board,
+		status: CopyApiResponseStatusEnum.Success,
+	};
+	private businessError: BusinessError = {
 		statusCode: "",
 		message: "",
 		error: {},
 	};
+	private loading: boolean = false;
+	private error: null | {} = null;
+	isSuccess: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -124,17 +128,34 @@ export default class CopyModule extends VuexModule {
 		}
 	}
 
-	isSuccess: boolean = false;
-	result: any = {};
-
 	@Mutation
 	setIsSuccess(payload: CopyApiResponse | any) {
-		this.result = cleanupCopyStatus(JSON.parse(JSON.stringify(payload)));
+		this.filteredResult = cleanupCopyStatus(
+			JSON.parse(JSON.stringify(payload))
+		);
 		this.isSuccess = checkIfEveryElementsAreSuccess(payload);
 	}
 
 	get getIsSuccess(): boolean {
 		return this.loading;
+	}
+	get getFilteredResult(): CopyApiResponse {
+		return this.filteredResult;
+	}
+
+	get getIdAndTitle(): string | any {
+		return {
+			id: this.copyResult.id,
+			title: this.copyResult.title,
+		};
+	}
+
+	get getResponseTypes(): object {
+		return CopyApiResponseTypeEnum;
+	}
+
+	get getResponseStatus(): object {
+		return CopyApiResponseStatusEnum;
 	}
 
 	////----------------------------------------------------------------
@@ -166,6 +187,18 @@ export default class CopyModule extends VuexModule {
 	@Mutation
 	setCopyResult(payload: CopyApiResponse | any): void {
 		this.copyResult = payload;
+	}
+
+	@Mutation
+	resetCopyResult(): void {
+		const emptyData = {
+			id: "",
+			title: "",
+			type: CopyApiResponseTypeEnum.Board,
+			status: CopyApiResponseStatusEnum.Success,
+		};
+		this.copyResult = emptyData;
+		this.filteredResult = emptyData;
 	}
 
 	get getLoading(): boolean {
