@@ -6,8 +6,6 @@
 		has-buttons
 		:buttons="['close']"
 		@dialog-closed="dialogClosed"
-		@dialog-edit="$emit('process-edit', data.id)"
-		@dialog-confirmed="$emit('process-delete', data.id)"
 	>
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
@@ -22,9 +20,9 @@
 				/>
 			</template>
 			<label class="text-md mt-2">
-				{{ data.title }}
+				{{ copiedItemTitle }}
 			</label>
-			<copy-result v-if="data.elements" :items="copiedItems.elements">
+			<copy-result v-if="copiedItems.elements" :items="copiedItems.elements">
 			</copy-result>
 		</template>
 	</v-custom-dialog>
@@ -35,32 +33,9 @@ import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@/store";
 
-const cleanupCopyStatus = (element) => {
-	if (element.status === "not-doing" && element.elements === undefined) {
-		return undefined;
-	}
-
-	const result = {
-		...element,
-	};
-
-	if (Array.isArray(result.elements)) {
-		result.elements = result.elements
-			.map(cleanupCopyStatus)
-			.filter((el) => el !== undefined);
-	}
-
-	return result;
-};
-
 export default {
 	components: { vCustomDialog, CopyResult },
 	props: {
-		data: {
-			type: Object,
-			required: true,
-			default: () => {},
-		},
 		isOpen: {
 			type: Boolean,
 		},
@@ -76,12 +51,10 @@ export default {
 	},
 	computed: {
 		copiedItems() {
-			const { data } = this;
-			if (!data.id) return [];
-			const result = this.cleanupCopyStatus(JSON.parse(JSON.stringify(data)));
-			// debugger;
+			if (this.copiedItemId === "") return [];
 
-			// if (this.checkIfEveryElementsAreSuccess(result.elements)) {
+			const result = copyModule.getFilteredResult;
+
 			if (copyModule.isSuccess) {
 				return {
 					...result,
@@ -108,6 +81,18 @@ export default {
 					: [],
 			};
 		},
+		copiedItemTitle() {
+			return copyModule.getIdAndTitle.title || "";
+		},
+		copiedItemId() {
+			return copyModule.getIdAndTitle.id || "";
+		},
+		types() {
+			return copyModule.getResponseTypes;
+		},
+		status() {
+			return copyModule.getResponseStatus;
+		},
 	},
 	watch: {
 		isOpen() {
@@ -130,21 +115,30 @@ export default {
 				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
 				task: `${this.$t("common.words.task")} - ${item.title}`,
 			};
-			if (item.title === "files" && item.status === "not-implemented") {
+			if (
+				item.title === "files" &&
+				item.status === this.status.NotImplemented
+			) {
 				return {
 					title: this.$t("components.molecules.copyResult.fileCopy.error"),
 					status: "failure",
 				};
 			}
-			if (item.status === "not-implemented")
+			if (item.status === this.status.NotImplemented) {
 				return {
 					title:
-						item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
-					status: "failure",
+						item.type === this.types.Leaf
+							? titleObj[item.title]
+							: typeObj[item.type],
+					status: this.status.Failure,
 				};
+			}
 
 			return {
-				title: item.type === "leaf" ? titleObj[item.title] : typeObj[item.type],
+				title:
+					item.type === this.types.Leaf
+						? titleObj[item.title]
+						: typeObj[item.type],
 				status: item.status,
 			};
 		},
@@ -162,26 +156,15 @@ export default {
 				item.status = titleAndStatus.status;
 
 				if (elements.length > 0) {
-					const isSuccess = elements.every((ele) => ele.status === "success");
-					item.status = isSuccess ? "success" : titleAndStatus.status;
+					const isSuccess = elements.every(
+						(ele) => ele.status === this.types.success
+					);
+					item.status = isSuccess ? this.types.success : titleAndStatus.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;
 			});
 		},
-		checkIfEveryElementsAreSuccess(items) {
-			if (this.data.status !== "success") return false;
-			return items.every(({ elements = [], ...rest }) => {
-				const item = { ...rest };
-				if (item.status !== "success") return false;
-				if (elements.length > 0) {
-					return (item.elements =
-						this.checkIfEveryElementsAreSuccess(elements));
-				}
-				return item.status === "success";
-			});
-		},
-		cleanupCopyStatus,
 		dialogClosed() {
 			this.showModal = false;
 			this.$emit("dialog-closed", false);
