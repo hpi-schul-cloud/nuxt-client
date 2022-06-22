@@ -86,15 +86,24 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copyTask(id: string): Promise<void> {
+	async copyTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
-			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
-				courseId: roomModule.getRoomId,
-			});
+			const taskCopyParams =
+				payload.courseId && payload.courseId !== ""
+					? {
+							courseId: payload.courseId,
+					  }
+					: {};
+
+			const copyResult = await this.taskApi.taskControllerCopyTask(
+				payload.id,
+				taskCopyParams
+			);
 
 			this.setCopyResult(copyResult.data || {});
+			this.setIsSuccess(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -133,7 +142,7 @@ export default class CopyModule extends VuexModule {
 		this.filteredResult = cleanupCopyStatus(
 			JSON.parse(JSON.stringify(payload))
 		);
-		this.isSuccess = checkIfEveryElementsAreSuccess(payload);
+		this.isSuccess = checkIfEveryElementsAreSuccess(this.filteredResult);
 	}
 
 	get getIsSuccess(): boolean {
