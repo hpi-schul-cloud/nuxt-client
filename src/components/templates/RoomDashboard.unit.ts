@@ -89,11 +89,16 @@ const emptyMockData = {
 	elements: [],
 };
 
+const $notifier = jest.fn();
+
 const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
+			mocks: {
+				$notifier,
+			},
 		}),
 		propsData: props,
 		...options,
