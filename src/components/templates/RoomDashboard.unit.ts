@@ -611,4 +611,61 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			);
 		});
 	});
+
+	describe("CopyLesson Process", () => {
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+		});
+		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
+			const copyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			wrapper.vm.copyLesson = copyLessonMock;
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+
+			expect(copyLessonMock).toHaveBeenCalled();
+		});
+
+		it("should call the 'store copyLesson action' method when a lesson component emits 'copy-lesson' custom event", async () => {
+			const roomModuleCopyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			roomModule.copyLesson = roomModuleCopyLessonMock;
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			expect(roomModuleCopyLessonMock).toHaveBeenCalled();
+			expect(roomModuleCopyLessonMock.mock.calls[0][0]).toStrictEqual("3456");
+		});
+
+		it("should set 'copyProcess' data property method when a lesson component emits 'copy-lesson' custom event", async () => {
+			const roomModuleCopyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			roomModule.copyLesson = roomModuleCopyLessonMock;
+
+			roomModule.setCopyResult({
+				title: "Thema",
+				type: "lesson",
+				status: "success",
+				id: "123",
+				elements: [{ title: "description", type: "leaf", status: "success" }],
+			});
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.copyProcess.data).toStrictEqual({
+				title: "Thema",
+				type: "lesson",
+				status: "success",
+				id: "123",
+				elements: [{ title: "description", type: "leaf", status: "success" }],
+			});
+			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+		});
+	});
 });

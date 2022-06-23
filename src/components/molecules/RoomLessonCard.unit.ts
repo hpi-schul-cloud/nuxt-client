@@ -161,6 +161,38 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(postLessonMock).toHaveBeenCalled();
 			});
 
+			it("should have 'copy' more action if env flag is set", async () => {
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+				const wrapper = getWrapper({ ...baseTestProps, role });
+
+				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
+					(item: any) => {
+						return (item.name = wrapper.vm.$i18n.t("common.actions.copy"));
+					}
+				);
+				expect(hasCopyMenuItem).toBe(true);
+			});
+
+			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+				const copyCard = jest.fn();
+				const wrapper = getWrapper({ ...baseTestProps, role });
+				wrapper.vm.copyCard = copyCard;
+				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+					"common.actions.copy"
+				)}`;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+
+				const moreActionButton = wrapper.find(buttonClassName);
+				await moreActionButton.trigger("click");
+
+				expect(copyCard).toHaveBeenCalled();
+			});
+
 			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
