@@ -10,7 +10,7 @@
 				}"
 				:no-style="true"
 			>
-				<template #content>
+				<template v:slot:content>
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
@@ -54,7 +54,7 @@
 				</template>
 			</base-link>
 			<user-has-role :role="isNotStudent">
-				<template #footer>
+				<template v:slot:footer>
 					<div v-show="!isCollection()" class="footer">
 						<div class="footer__separator"></div>
 						<div class="footer__content">
