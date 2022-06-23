@@ -106,8 +106,6 @@
 			</template>
 		</v-custom-dialog>
 		<copy-process
-			v-if="copyProcess.data.id !== ''"
-			:data="copyProcess.data || {}"
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
@@ -125,7 +123,12 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { taskModule, finishedTaskModule, envConfigModule } from "@/store";
+import {
+	taskModule,
+	finishedTaskModule,
+	envConfigModule,
+	copyModule,
+} from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import CopyProcess from "@components/organisms/CopyProcess";
 
@@ -143,6 +146,10 @@ export default {
 		taskTitle: {
 			type: String,
 			required: false,
+			default: "",
+		},
+		courseId: {
+			type: String,
 			default: "",
 		},
 		show: {
@@ -164,7 +171,7 @@ export default {
 			mdiTrashCanOutline,
 			mdiContentCopy,
 			copyProcess: {
-				data: {},
+				id: "",
 				isOpen: false,
 				loading: false,
 			},
@@ -204,17 +211,27 @@ export default {
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = taskModule.getLoading;
-			await taskModule.copyTask(this.taskId);
-			const copyResult = taskModule.getCopyResult;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.organisms.FormNews.errors.create"),
+					status: "error",
+				});
+				return;
+			}
+
 			if (copyResult.id !== "") {
-				this.copyProcess.data = copyResult;
-				this.copyProcess.loading = taskModule.getLoading;
+				this.copyProcess.id = copyResult;
+				this.copyProcess.loading = copyModule.getLoading;
 			}
 		},
 		async onCopyProcessDialogClose() {
 			this.copyProcess.isOpen = false;
-			this.copyProcess.data = {};
+			this.copyProcess.id = "";
 			await taskModule.fetchAllTasks();
 		},
 	},

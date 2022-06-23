@@ -68,6 +68,7 @@
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
 					:task-title="task.name"
+					:course-id="task.courseId"
 					user-role="teacher"
 					@toggled-menu="toggleMenu"
 					@focus-changed="handleFocus"
