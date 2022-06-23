@@ -334,6 +334,30 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
+	async copyLesson(lessonId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+		try {
+			const copyResult = await this.roomsApi.roomsControllerCopyLesson(
+				lessonId,
+				{
+					courseId: this.roomData.roomId,
+				}
+			);
+
+			this.setCopyResult(copyResult.data || {});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
 	async copyRoom(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);

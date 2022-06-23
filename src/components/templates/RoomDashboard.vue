@@ -61,6 +61,7 @@
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
 						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
+						@copy-lesson="copyLesson(item.content.id)"
 					/>
 				</div>
 			</draggable>
@@ -342,6 +343,11 @@ export default {
 			}
 		},
 		async onCopyProcessDialogClose() {
+			this.$notifier({
+				// TODO
+				text: this.$t("pages.room.copy.course.message.created"),
+				status: "success",
+			});
 			this.copyProcess.isOpen = false;
 			this.copyProcess.data = {};
 			await roomModule.fetchContent(this.roomData.roomId);
@@ -352,6 +358,19 @@ export default {
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		async copyLesson(itemId) {
+			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = true;
+			await roomModule.copyLesson(itemId);
+			const copyResult = roomModule.getCopyResult;
+			if (copyResult.id !== "") {
+				this.copyProcess.data = copyResult;
+				this.copyProcess.loading = false;
+			}
 		},
 	},
 };

@@ -236,10 +236,14 @@ export interface CopyApiResponse {
     * @enum {string}
     */
 export enum CopyApiResponseTypeEnum {
-    Task = 'task',
+    Board = 'board',
     Course = 'course',
     File = 'file',
-    Leaf = 'leaf'
+    Leaf = 'leaf',
+    Lesson = 'lesson',
+    Content = 'content',
+    Material = 'material',
+    Task = 'task'
 }
 /**
     * @export
@@ -651,6 +655,19 @@ export enum ImportUserResponseRoleNamesEnum {
     Admin = 'admin'
 }
 
+/**
+ * 
+ * @export
+ * @interface LessonCopyApiParams
+ */
+export interface LessonCopyApiParams {
+    /**
+     * Destination course parent Id the lesson is copied to
+     * @type {string}
+     * @memberof LessonCopyApiParams
+     */
+    courseId?: string;
+}
 /**
  * 
  * @export
@@ -3187,6 +3204,49 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerCopyLesson: async (lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonid' is not null or undefined
+            assertParamExists('roomsControllerCopyLesson', 'lessonid', lessonid)
+            // verify required parameter 'lessonCopyApiParams' is not null or undefined
+            assertParamExists('roomsControllerCopyLesson', 'lessonCopyApiParams', lessonCopyApiParams)
+            const localVarPath = `/rooms/lessons/{lessonid}/copy`
+                .replace(`{${"lessonid"}}`, encodeURIComponent(String(lessonid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(lessonCopyApiParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3334,6 +3394,17 @@ export const RoomsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3386,6 +3457,16 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3431,6 +3512,16 @@ export interface RoomsApiInterface {
      * @memberof RoomsApiInterface
      */
     roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @param {string} lessonid 
+     * @param {LessonCopyApiParams} lessonCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -3480,6 +3571,18 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
      */
     public roomsControllerCopyCourse(roomid: string, options?: any) {
         return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} lessonid 
+     * @param {LessonCopyApiParams} lessonCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
