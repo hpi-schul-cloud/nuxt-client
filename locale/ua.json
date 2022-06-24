@@ -692,6 +692,7 @@
 	"pages.room.modal.course.share.subText": "Крім того, ви можете показати своїм колегам-викладачам такий QR-код.",
 	"pages.room.modal.course.share.text": "Поширте такий код іншим колегам, щоб вони могли імпортувати курс як копію. Старі подання учня автоматично вилучаються для щойно скопійованого курсу.",
 	"pages.room.copy.course.message.created": "Ця кімната створена.",
+	"pages.room.copy.lesson.message.created": "Lesson successful copied.",
 	"pages.room.taskCard.aria": "{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
