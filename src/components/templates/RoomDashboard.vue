@@ -343,11 +343,6 @@ export default {
 			}
 		},
 		async onCopyProcessDialogClose() {
-			this.$notifier({
-				// TODO
-				text: this.$t("pages.room.copy.course.message.created"),
-				status: "success",
-			});
 			this.copyProcess.isOpen = false;
 			this.copyProcess.data = {};
 			await roomModule.fetchContent(this.roomData.roomId);
@@ -370,6 +365,11 @@ export default {
 			if (copyResult.id !== "") {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = false;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.lesson.message.created"),
+					status: "success",
+				});
 			}
 		},
 	},
