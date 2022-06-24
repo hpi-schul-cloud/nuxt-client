@@ -67,7 +67,7 @@ export default class CopyModule extends VuexModule {
 	};
 	private loading: boolean = false;
 	private error: null | {} = null;
-	isSuccess: boolean = false;
+	private isSuccess: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -102,11 +102,12 @@ export default class CopyModule extends VuexModule {
 				taskCopyParams
 			);
 
-			this.setCopyResult(copyResult.data || {});
-			this.setIsSuccess(copyResult.data);
+			this.setCopyResult(copyResult.data);
+			this.setFilteredResult(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
+			this.setLoading(false);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
@@ -125,10 +126,11 @@ export default class CopyModule extends VuexModule {
 			);
 
 			this.setCopyResult(copyResult.data);
-			this.setIsSuccess(copyResult.data);
+			this.setFilteredResult(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
+			this.setLoading(false);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
@@ -138,7 +140,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setIsSuccess(payload: CopyApiResponse | any) {
+	setFilteredResult(payload: CopyApiResponse | any) {
 		this.filteredResult = cleanupCopyStatus(
 			JSON.parse(JSON.stringify(payload))
 		);
@@ -186,8 +188,12 @@ export default class CopyModule extends VuexModule {
 		this.filteredResult = emptyData;
 	}
 
+	get getCopyResult(): CopyApiResponse {
+		return this.copyResult;
+	}
+
 	get getIsSuccess(): boolean {
-		return this.loading;
+		return this.isSuccess;
 	}
 	get getFilteredResult(): CopyApiResponse {
 		return this.filteredResult;
@@ -218,9 +224,5 @@ export default class CopyModule extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
-	}
-
-	get getCopyResult(): CopyApiResponse {
-		return this.copyResult;
 	}
 }

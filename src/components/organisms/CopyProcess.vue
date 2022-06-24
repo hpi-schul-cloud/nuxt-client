@@ -1,7 +1,7 @@
 <template>
 	<v-custom-dialog
 		v-model="showModal"
-		data-testid="delete-dialog-item"
+		data-testid="copy-dialog"
 		:size="480"
 		has-buttons
 		:buttons="['close']"
@@ -13,17 +13,21 @@
 
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
-			<template v-if="loading">
+			<div v-if="loading">
 				<v-skeleton-loader
 					type="article, list-item-three-line"
 					data-testid="copy-process-skeleton"
 				/>
-			</template>
-			<label class="text-md mt-2">
-				{{ copiedItemTitle }}
-			</label>
-			<copy-result v-if="copiedItems.elements" :items="copiedItems.elements">
-			</copy-result>
+			</div>
+			<div v-else>
+				<label class="text-md mt-2">
+					{{ copiedItemTitle }}
+				</label>
+				<copy-result
+					v-if="copiedItems.elements"
+					:items="copiedItems.elements"
+				/>
+			</div>
 		</template>
 	</v-custom-dialog>
 </template>
