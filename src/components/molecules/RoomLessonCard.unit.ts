@@ -174,6 +174,19 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(hasCopyMenuItem).toBe(true);
 			});
 
+			it("should not have 'copy' more action if copying lessons is not enabled", async () => {
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: false });
+				const wrapper = getWrapper({ ...baseTestProps, role });
+
+				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
+					(item: any) => {
+						return item.name === wrapper.vm.$i18n.t("common.actions.copy");
+					}
+				);
+				expect(hasCopyMenuItem).toBe(false);
+			});
+
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
 				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
