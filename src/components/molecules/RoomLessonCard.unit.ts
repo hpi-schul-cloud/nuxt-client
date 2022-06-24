@@ -161,14 +161,14 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(postLessonMock).toHaveBeenCalled();
 			});
 
-			it("should have 'copy' more action if env flag is set", async () => {
+			it("should have 'copy' more action if copying lessons is enabled", async () => {
 				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
 					(item: any) => {
-						return (item.name = wrapper.vm.$i18n.t("common.actions.copy"));
+						return item.name === wrapper.vm.$i18n.t("common.actions.copy");
 					}
 				);
 				expect(hasCopyMenuItem).toBe(true);
@@ -213,9 +213,10 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
 					(item: any) => {
-						return (item.name = wrapper.vm.$i18n.t(
-							"pages.room.lessonCard.label.share"
-						));
+						return (
+							item.name ===
+							wrapper.vm.$i18n.t("pages.room.lessonCard.label.share")
+						);
 					}
 				);
 				expect(hasShareMenuItem).toBe(true);
