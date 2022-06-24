@@ -145,30 +145,6 @@ export default class CopyModule extends VuexModule {
 		this.isSuccess = checkIfEveryElementsAreSuccess(this.filteredResult);
 	}
 
-	get getIsSuccess(): boolean {
-		return this.loading;
-	}
-	get getFilteredResult(): CopyApiResponse {
-		return this.filteredResult;
-	}
-
-	get getIdAndTitle(): string | any {
-		return {
-			id: this.copyResult.id,
-			title: this.copyResult.title,
-		};
-	}
-
-	get getResponseTypes(): object {
-		return CopyApiResponseTypeEnum;
-	}
-
-	get getResponseStatus(): object {
-		return CopyApiResponseStatusEnum;
-	}
-
-	////----------------------------------------------------------------
-
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
@@ -208,6 +184,28 @@ export default class CopyModule extends VuexModule {
 		};
 		this.copyResult = emptyData;
 		this.filteredResult = emptyData;
+	}
+
+	get getIsSuccess(): boolean {
+		return this.loading;
+	}
+	get getFilteredResult(): CopyApiResponse {
+		return this.filteredResult;
+	}
+
+	get getIdAndTitle(): string | any {
+		return {
+			id: this.copyResult.id,
+			title: this.copyResult.title,
+		};
+	}
+
+	get getResponseTypes(): object {
+		return CopyApiResponseTypeEnum;
+	}
+
+	get getResponseStatus(): object {
+		return CopyApiResponseStatusEnum;
 	}
 
 	get getLoading(): boolean {
