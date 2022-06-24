@@ -241,8 +241,6 @@ export enum CopyApiResponseTypeEnum {
     File = 'file',
     Leaf = 'leaf',
     Lesson = 'lesson',
-    Content = 'content',
-    Material = 'material',
     Task = 'task'
 }
 /**
