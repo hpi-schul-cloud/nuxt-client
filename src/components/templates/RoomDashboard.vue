@@ -179,7 +179,10 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum,
+	CopyApiResponseStatusEnum,
+} from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
@@ -360,7 +363,7 @@ export default {
 			this.copyProcess.loading = true;
 			await roomModule.copyLesson(itemId);
 			const copyResult = roomModule.getCopyResult;
-			if (copyResult.id !== "") {
+			if (copyResult.status === CopyApiResponseStatusEnum.Success) {
 				this.copyProcess.data = copyResult;
 				this.copyProcess.loading = false;
 
