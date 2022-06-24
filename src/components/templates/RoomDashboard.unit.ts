@@ -672,5 +672,25 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			});
 			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
 		});
+
+		it("should show a notification when a lesson component emited 'copy-lesson' custom event", async () => {
+			const roomModuleCopyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			roomModule.copyLesson = roomModuleCopyLessonMock;
+
+			roomModule.setCopyResult({
+				title: "Thema",
+				type: "lesson",
+				status: "success",
+				id: "123",
+				elements: [{ title: "description", type: "leaf", status: "success" }],
+			});
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			expect($notifier).toHaveBeenCalled();
+		});
 	});
 });
