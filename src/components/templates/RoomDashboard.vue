@@ -166,8 +166,6 @@
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
-			@process-edit="redirectTask"
-			@process-delete="deleteTask"
 		>
 		</copy-process>
 	</div>
