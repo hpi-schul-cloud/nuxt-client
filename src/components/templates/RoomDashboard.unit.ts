@@ -550,34 +550,6 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
 		});
 
-		it("should redirect to the task edit page when the CopyProcess component emits 'process-edit' custom event", async () => {
-			const location = window.location;
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-
-			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
-			copyProcess.vm.$emit("process-edit", "1234");
-			await wrapper.vm.$nextTick();
-			expect(location.href).toStrictEqual(
-				"/homework/1234/edit?returnUrl=rooms/123"
-			);
-		});
-
-		it("should call the 'deleteTask' method and when the CopyProcess component emits 'process-delete' custom event", async () => {
-			const deleteTaskMock = jest.fn();
-			const fetchContentMock = jest.fn();
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-
-			taskModule.deleteTask = deleteTaskMock;
-			roomModule.fetchContent = fetchContentMock;
-
-			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
-			copyProcess.vm.$emit("process-delete", "1234");
-			await wrapper.vm.$nextTick();
-			expect(deleteTaskMock).toHaveBeenCalled();
-			expect(deleteTaskMock.mock.calls[0][0]).toStrictEqual("1234");
-			expect(fetchContentMock).toHaveBeenCalled();
-		});
-
 		it("should empty 'copyProcess' data property method when CopyProcess component emits 'dialog-closed'", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
