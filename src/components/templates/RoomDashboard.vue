@@ -61,6 +61,7 @@
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
 						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
+						@copy-lesson="copyLesson(item.content.id)"
 					/>
 				</div>
 			</draggable>
@@ -165,8 +166,6 @@
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
-			@process-edit="redirectTask"
-			@process-delete="deleteTask"
 		>
 		</copy-process>
 	</div>
@@ -180,7 +179,10 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum,
+	CopyApiResponseStatusEnum,
+} from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
@@ -352,6 +354,24 @@ export default {
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		async copyLesson(itemId) {
+			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = true;
+			await roomModule.copyLesson(itemId);
+			const copyResult = roomModule.getCopyResult;
+			if (copyResult.status === CopyApiResponseStatusEnum.Success) {
+				this.copyProcess.data = copyResult;
+				this.copyProcess.loading = false;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.lesson.message.created"),
+					status: "success",
+				});
+			}
 		},
 	},
 };
