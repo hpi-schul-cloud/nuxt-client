@@ -86,10 +86,10 @@ export default {
 			};
 		},
 		copiedItemTitle() {
-			return copyModule.getIdAndTitle.title || "";
+			return copyModule.getTitle || "";
 		},
 		copiedItemId() {
-			return copyModule.getIdAndTitle.id || "";
+			return copyModule.getId || "";
 		},
 		types() {
 			return copyModule.getResponseTypes;

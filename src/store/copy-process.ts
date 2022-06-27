@@ -199,11 +199,12 @@ export default class CopyModule extends VuexModule {
 		return this.filteredResult;
 	}
 
-	get getIdAndTitle(): string | any {
-		return {
-			id: this.copyResult.id,
-			title: this.copyResult.title,
-		};
+	get getTitle(): string | any {
+		return this.copyResult.title || "";
+	}
+
+	get getId(): string | any {
+		return this.copyResult.title || "";
 	}
 
 	get getResponseTypes(): object {

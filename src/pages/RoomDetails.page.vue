@@ -170,7 +170,6 @@ export default {
 			courseId: this.$route.params.id,
 			tab: null,
 			copyProcess: {
-				data: {},
 				id: "",
 				isOpen: false,
 				loading: false,
