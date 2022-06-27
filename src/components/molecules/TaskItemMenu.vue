@@ -106,6 +106,7 @@
 			</template>
 		</v-custom-dialog>
 		<copy-process
+			v-if="isTeacher"
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
