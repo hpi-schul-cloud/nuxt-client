@@ -163,6 +163,7 @@
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
 	"components.organisms.TasksDashboardMain.tab.current": "Aktuell",
 	"components.organisms.TasksDashboardMain.tab.finished": "Abgeschlossen",
+	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.filter.substitute": "Aufgaben aus Vertretungen",
 	"components.organisms.LegacyFooter.contact": "Kontakt",
 	"components.organisms.LegacyFooter.job-offer": "Stellenausschreibungen",

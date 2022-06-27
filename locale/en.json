@@ -162,6 +162,7 @@
 	"components.organisms.TasksDashboardMain.tab.open": "Open",
 	"components.organisms.TasksDashboardMain.tab.current": "Current",
 	"components.organisms.TasksDashboardMain.tab.finished": "Finished",
+	"components.organisms.TasksDashboardMain.tab.drafts": "Drafts",
 	"components.organisms.TasksDashboardMain.filter.substitute": "Tasks from substitutes",
 	"components.organisms.LegacyFooter.contact": "Contact",
 	"components.organisms.LegacyFooter.job-offer": "Job advertisements",
