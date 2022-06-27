@@ -204,7 +204,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	get getId(): string | any {
-		return this.copyResult.title || "";
+		return this.copyResult.id || "";
 	}
 
 	get getResponseTypes(): object {
