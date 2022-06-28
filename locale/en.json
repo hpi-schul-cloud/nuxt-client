@@ -734,6 +734,7 @@
 	"pages.room.modal.course.share.text": "Distribute the following code to other colleagues so that they can import the course as a copy. Old student submissions are automatically removed for the newly copied course.",
 	"pages.room.modal.course.share.subText": "Alternatively, you can show your teacher colleagues the following QR code.",
 	"pages.room.copy.course.message.created": "This room created.",
+	"pages.room.copy.lesson.message.created": "Topic successfully copied.",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
