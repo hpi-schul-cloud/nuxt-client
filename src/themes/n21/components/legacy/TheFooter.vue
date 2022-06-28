@@ -66,7 +66,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:nbc-support@netz-21.de",
+					href: "mailto:nbc-support@netz-21.de?subject=Niedersächsische%20Bildungscloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 			];

@@ -381,9 +381,9 @@ describe("task store", () => {
 				};
 
 				const taskModule = new TaskModule({});
-				taskModule.setTaskCopyResult(copyResultMock);
+				taskModule.setCopyResult(copyResultMock);
 
-				expect(taskModule.getTaskCopyResult).toStrictEqual(copyResultMock);
+				expect(taskModule.getCopyResult).toStrictEqual(copyResultMock);
 			});
 		});
 	});

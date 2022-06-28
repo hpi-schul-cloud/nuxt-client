@@ -76,7 +76,6 @@ import { required } from "vuelidate/lib/validators";
 import { ldapPathValidationRegex } from "@utils/ldapConstants";
 
 export default {
-	// eslint-disable-next-line vue/require-prop-types
 	props: {
 		value: {
 			type: Object,

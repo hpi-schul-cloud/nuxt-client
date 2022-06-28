@@ -63,6 +63,7 @@ import {
 	mdiUndoVariant,
 	mdiShareVariant,
 	mdiTrashCanOutline,
+	mdiContentCopy,
 } from "@mdi/js";
 import MoreItemMenu from "./MoreItemMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -96,6 +97,7 @@ export default {
 				mdiUndoVariant,
 				mdiShareVariant,
 				mdiTrashCanOutline,
+				mdiContentCopy,
 			},
 			defaultTitleColor: "--color-secondary",
 		};
@@ -143,6 +145,14 @@ export default {
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
 				});
+
+				if (envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiContentCopy,
+						action: () => this.copyCard(),
+						name: this.$t("common.actions.copy"),
+					});
+				}
 
 				if (!this.isHidden) {
 					roleBasedMoreActions[Roles.Teacher].push({
@@ -234,6 +244,9 @@ export default {
 		},
 		postLesson() {
 			this.$emit("post-lesson");
+		},
+		copyCard() {
+			this.$emit("copy-lesson");
 		},
 		revertPublishedCard() {
 			this.$emit("revert-lesson");

@@ -863,6 +863,72 @@ describe("room module", () => {
 				);
 			});
 		});
+
+		describe("copyRoom", () => {
+			beforeEach(() => {
+				// @ts-ignore
+				authModule.setUser({ id: "testUser" });
+			});
+
+			it("should make a 'POST' request to the backend", async () => {
+				const roomCopyMockApi = {
+					roomsControllerCopyCourse: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+					);
+
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "testRoom",
+					title: "testTitle",
+					displayColor: "testColor",
+					elements: [],
+				});
+				await roomModule.copyRoom("54321");
+
+				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
+				expect(
+					roomCopyMockApi.roomsControllerCopyCourse.mock.calls[0][0]
+				).toStrictEqual("54321");
+			});
+
+			it("handle error", async () => {
+				const error = {
+					response: { status: 418, statusText: "This is an error" },
+				};
+				const roomCopyMockApi = {
+					roomsControllerCopyCourse: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+					);
+
+				const roomModule = new RoomModule({});
+				roomModule.setRoomData({
+					roomId: "testRoom",
+					title: "testTitle",
+					displayColor: "testColor",
+					elements: [],
+				});
+				await roomModule.copyRoom("54321");
+
+				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
+				expect(roomModule.getError).toStrictEqual({ ...error });
+				expect(roomModule.getBusinessError.message).toStrictEqual(
+					error.response.statusText
+				);
+				expect(roomModule.getBusinessError.statusCode).toStrictEqual(
+					error.response.status
+				);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -996,7 +1062,7 @@ describe("room module", () => {
 			});
 		});
 
-		describe("setCourseCopyResult", () => {
+		describe("setCopyResult", () => {
 			it("should set the state", () => {
 				const serverItems = {
 					title: "Aufgabe",
@@ -1023,9 +1089,9 @@ describe("room module", () => {
 				};
 
 				const roomModule = new RoomModule({});
-				roomModule.setTaskCopyResult(serverItems);
+				roomModule.setCopyResult(serverItems);
 
-				expect(roomModule.getTaskCopyResult).toStrictEqual(serverItems);
+				expect(roomModule.getCopyResult).toStrictEqual(serverItems);
 			});
 		});
 	});

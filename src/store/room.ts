@@ -45,7 +45,7 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
-	private taskCopyResult: CopyApiResponse = {
+	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
 		type: CopyApiResponseTypeEnum.Task,
@@ -321,7 +321,52 @@ export default class RoomModule extends VuexModule {
 				courseId: this.roomData.roomId,
 			});
 
-			this.setTaskCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data || {});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async copyLesson(lessonId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+		try {
+			const copyResult = await this.roomsApi.roomsControllerCopyLesson(
+				lessonId,
+				{
+					courseId: this.roomData.roomId,
+				}
+			);
+
+			this.setCopyResult(copyResult.data || {});
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async copyRoom(courseId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+		try {
+			const copyResult = await this.roomsApi.roomsControllerCopyCourse(
+				courseId
+			);
+
+			this.setCopyResult(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -383,8 +428,8 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setTaskCopyResult(payload: CopyApiResponse | any): void {
-		this.taskCopyResult = payload;
+	setCopyResult(payload: CopyApiResponse | any): void {
+		this.copyResult = payload;
 	}
 
 	get getLoading(): boolean {
@@ -423,8 +468,8 @@ export default class RoomModule extends VuexModule {
 		return this.finishedLoading && this.roomData.elements.length === 0;
 	}
 
-	get getTaskCopyResult(): CopyApiResponse {
-		return this.taskCopyResult;
+	get getCopyResult(): CopyApiResponse {
+		return this.copyResult;
 	}
 
 	private get finishedLoading(): boolean {

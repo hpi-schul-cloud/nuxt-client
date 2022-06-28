@@ -178,6 +178,7 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
+										<!-- eslint-disable vue/no-v-html -->
 										<div
 											v-html="
 												$t('pages.administration.migration.summary', {
@@ -293,6 +294,7 @@
 	</default-wireframe>
 </template>
 <script>
+/* eslint-disable max-lines */
 import { mdiClose, mdiLoading } from "@mdi/js";
 
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";

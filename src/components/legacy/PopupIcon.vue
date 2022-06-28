@@ -7,7 +7,7 @@
 		<div
 			ref="popupContent"
 			class="popup-content"
-			:class="{ visible, 'expand-to-left': shouldExpandToLeft }"
+			:class="{ visible, 'expand-to-left': expandToLeft }"
 		>
 			<slot></slot>
 		</div>
@@ -29,18 +29,15 @@ export default {
 			type: String,
 			default: "var(--color-secondary-dark)",
 		},
-		shouldExpandToLeft: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {
 			visible: false,
+			expandToLeft: false,
 		};
 	},
 	mounted() {
-		// eslint-disable-next-line vue/no-mutating-props
-		this.shouldExpandToLeft =
+		this.expandToLeft =
 			this.$refs.popupContent.getBoundingClientRect().right >
 			window.innerWidth + 10;
 	},

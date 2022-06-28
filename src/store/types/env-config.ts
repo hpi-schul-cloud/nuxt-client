@@ -34,4 +34,7 @@ export type Envs = {
 	FEATURE_USER_MIGRATION_ENABLED?: boolean;
 	ROOM_VIEW_ENABLED?: boolean;
 	FEATURE_TASK_COPY_ENABLED?: boolean;
+	FEATURE_COURSE_COPY?: boolean;
+	FEATURE_COURSE_COPY_ENABLED?: boolean;
+	FEATURE_LESSON_COPY_ENABLED?: boolean;
 };

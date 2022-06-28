@@ -43,7 +43,7 @@ export default class TaskModule extends VuexModule {
 
 	_taskApi?: TaskApiInterface;
 
-	taskCopyResult: CopyApiResponse = {
+	copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
 		type: CopyApiResponseTypeEnum.Task,
@@ -133,7 +133,7 @@ export default class TaskModule extends VuexModule {
 				taskCopyParams
 			);
 
-			this.setTaskCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data || {});
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setBusinessError(error as BusinessError);
@@ -191,8 +191,8 @@ export default class TaskModule extends VuexModule {
 		this.loading = loading;
 	}
 	@Mutation
-	setTaskCopyResult(payload: CopyApiResponse | any): void {
-		this.taskCopyResult = payload;
+	setCopyResult(payload: CopyApiResponse | any): void {
+		this.copyResult = payload;
 	}
 
 	get getTasks(): Task[] {
@@ -374,8 +374,8 @@ export default class TaskModule extends VuexModule {
 		return tasksCount;
 	}
 
-	get getTaskCopyResult(): CopyApiResponse {
-		return this.taskCopyResult;
+	get getCopyResult(): CopyApiResponse {
+		return this.copyResult;
 	}
 
 	private get isReady(): boolean {
