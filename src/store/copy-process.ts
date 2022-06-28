@@ -1,4 +1,3 @@
-import { roomModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	RoomsApiFactory,
@@ -199,11 +198,11 @@ export default class CopyModule extends VuexModule {
 		return this.filteredResult;
 	}
 
-	get getTitle(): string | any {
+	get getTitle(): string {
 		return this.copyResult.title || "";
 	}
 
-	get getId(): string | any {
+	get getId(): string {
 		return this.copyResult.id || "";
 	}
 

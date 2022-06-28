@@ -540,7 +540,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
 			await wrapper.vm.$nextTick();
-      
+
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
 			await wrapper.vm.$nextTick();
