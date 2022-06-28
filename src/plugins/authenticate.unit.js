@@ -1,7 +1,7 @@
-import authenticate from "./authenticate";
 import AuthModule from "@/store/auth";
-import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import authenticate from "./authenticate";
 
 describe("@plugins/authenticate", () => {
 	beforeEach(() => {
@@ -23,23 +23,6 @@ describe("@plugins/authenticate", () => {
 		authenticate(mockContext);
 		// const errors = consoleError.mock.calls.map((e) => e.toString());
 		expect(consoleError).toHaveBeenCalled();
-	});
-
-	it("dispatches logout action if jwt is undefined and page is not public", () => {
-		const logoutSpy = jest.fn();
-		window.location.pathname = "/";
-		// let calls = 0;
-		const mockContext = {
-			route: { meta: [] },
-			app: {
-				$cookies: {
-					get: () => undefined,
-					remove: logoutSpy,
-				},
-			},
-		};
-		authenticate(mockContext);
-		expect(logoutSpy).toHaveBeenCalled();
 	});
 
 	it("skip logout action on public pages", () => {

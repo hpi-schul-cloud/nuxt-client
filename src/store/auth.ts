@@ -239,7 +239,7 @@ export default class AuthModule extends VuexModule {
 			}
 		}
 		this.context.commit("clearAuthData");
-		(window as any).$nuxt.$router.push({ path: "/logout" });
+		window.location.assign("/logout");
 	}
 
 	private get userApi() {
