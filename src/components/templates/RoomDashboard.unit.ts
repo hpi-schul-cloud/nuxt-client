@@ -586,9 +586,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("should call the 'store copyLesson action' method when a lesson component emits 'copy-lesson' custom event", async () => {
 			const spy = jest.spyOn(copyModule, "copyLesson");
-			const roomModuleCopyLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyLesson = roomModuleCopyLessonMock;
 
 			const lessonCard = wrapper.find(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
