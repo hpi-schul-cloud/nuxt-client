@@ -203,7 +203,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 		});
 
 		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
-			const copyTaskStoreMock = jest.spyOn(taskModule, "copyTask");
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
 			const { location } = window;
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
