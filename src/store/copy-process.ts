@@ -138,6 +138,35 @@ export default class CopyModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async copyLesson(payload: object | any): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+		try {
+			const lessonCopyParams =
+				payload.courseId && payload.courseId !== ""
+					? {
+							courseId: payload.courseId,
+					  }
+					: {};
+			const copyResult = await this.roomsApi.roomsControllerCopyLesson(
+				payload.id,
+				lessonCopyParams
+			);
+
+			this.setCopyResult(copyResult.data || {});
+			this.setFilteredResult(copyResult.data);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
 	@Mutation
 	setFilteredResult(payload: CopyApiResponse | any) {
 		this.filteredResult = cleanupCopyStatus(

@@ -180,7 +180,7 @@ import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
 import {
 	ImportUserResponseRoleNamesEnum,
-	CopyApiResponseStatusEnum,
+	// CopyApiResponseStatusEnum,
 } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
@@ -369,12 +369,25 @@ export default {
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = true;
-			await roomModule.copyLesson(itemId);
-			const copyResult = roomModule.getCopyResult;
-			if (copyResult.status === CopyApiResponseStatusEnum.Success) {
-				this.copyProcess.data = copyResult;
-				this.copyProcess.loading = false;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyLesson({
+				id: itemId,
+				courseId: this.roomData.roomId,
+			});
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.organisms.FormNews.errors.create"),
+					status: "error",
+				});
+				return;
+			}
+
+			if (copyResult.id !== "") {
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
 
 				this.$notifier({
 					text: this.$t("pages.room.copy.lesson.message.created"),

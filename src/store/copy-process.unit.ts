@@ -163,6 +163,68 @@ describe("copy module", () => {
 				);
 			});
 		});
+
+		describe("copyLesson", () => {
+			it("should make a 'POST' request to the backend", async () => {
+				const roomCopyMockApi = {
+					roomsControllerCopyLesson: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+
+				await copyModule.copyLesson({
+					id: "lessonId",
+					courseId: "testCourseId",
+				});
+
+				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
+				expect(
+					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][0]
+				).toStrictEqual("lessonId");
+				expect(
+					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][1]
+				).toStrictEqual({
+					courseId: "testCourseId",
+				});
+			});
+
+			it("handle error", async () => {
+				const error = {
+					response: { status: 418, statusText: "This is an error" },
+				};
+				const roomCopyMockApi = {
+					roomsControllerCopyLesson: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				jest
+					.spyOn(serverApi, "RoomsApiFactory")
+					.mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+
+				await copyModule.copyLesson({
+					id: "lessonId",
+					courseId: "testCourseId",
+				});
+
+				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
+				expect(copyModule.getError).toStrictEqual({ ...error });
+				expect(copyModule.getBusinessError.message).toStrictEqual(
+					error.response.statusText
+				);
+				expect(copyModule.getBusinessError.statusCode).toStrictEqual(
+					error.response.status
+				);
+			});
+		});
 	});
 
 	describe("mutations", () => {
