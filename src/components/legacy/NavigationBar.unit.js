@@ -9,7 +9,7 @@ const navbarLinks = [
 		href: "https://blog.hpi-schul-cloud.de/",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.steps",
+		title: "Erste Schritte",
 		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 	},
 	{

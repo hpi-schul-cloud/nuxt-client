@@ -29,7 +29,7 @@ export default {
 	components: {
 		InstanceTile,
 	},
-	layout: "loggedoutFullLayout",
+	layout: "loggedoutFooter",
 	meta: {
 		isPublic: true,
 	},

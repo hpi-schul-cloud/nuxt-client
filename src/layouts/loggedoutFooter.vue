@@ -1,7 +1,6 @@
 <template>
-	<div class="page">
+	<div>
 		<navigation-bar
-			class="topbar"
 			:buttons="true"
 			:img="require('@assets/img/logo/logo-image-mono.svg')"
 			:links="navbarItems"
@@ -9,7 +8,7 @@
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<Nuxt />
 		</div>
-		<the-footer v-if="!fullscreenMode" class="footer" />
+		<the-footer />
 	</div>
 </template>
 
@@ -25,7 +24,7 @@ export default {
 	},
 	data() {
 		return {
-			navbarBaseItems: navbarBaseItems,
+			navbarBaseItems,
 		};
 	},
 	computed: {
@@ -46,25 +45,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-.page {
-	display: grid;
-	grid-template-areas:
-		"top"
-		"content"
-		"footer";
-	grid-template-rows: auto 1fr auto;
-	grid-template-columns: 1fr;
-	max-width: 100%;
-	min-height: 100vh;
-}
-
-.topbar {
-	grid-area: top;
-}
-
-.footer {
-	grid-area: footer;
-}
 
 .small-wrapper {
 	grid-area: content;
@@ -88,6 +68,23 @@ export default {
 @media (min-width: 768px) {
 	.wrapper {
 		width: 720px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 992px) {
+	.wrapper {
+		width: 960px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 1140px;
 		max-width: 100%;
 	}
 }
