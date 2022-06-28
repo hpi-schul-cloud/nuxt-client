@@ -182,7 +182,6 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				authModule.logout();
-				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;
