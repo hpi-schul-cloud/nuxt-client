@@ -39,6 +39,20 @@ import {
 	mdiAlertCircle,
 	mdiChevronDown,
 } from "@mdi/js";
+
+const StatusEnum = {
+	Success: "success",
+	Failure: "failure",
+	Partial: "partial",
+	SuccessAll: "success-all",
+};
+
+const ClassEnum = {
+	Finished: "finished",
+	NotFinished: "not-finished",
+	Partial: "partial",
+};
+
 export default {
 	props: {
 		items: {
@@ -56,6 +70,7 @@ export default {
 				mdiAlertCircle,
 				mdiChevronDown,
 			},
+
 			expandedNodes: [],
 		};
 	},
@@ -64,22 +79,22 @@ export default {
 	},
 	methods: {
 		setCustomClass(itemStatus) {
-			if (itemStatus === "success") return "finished";
-			if (itemStatus === "failure") return "not-finished";
-			if (itemStatus === "partial") return "partial";
+			if (itemStatus === StatusEnum.Success) return ClassEnum.Finished;
+			if (itemStatus === StatusEnum.Failure) return ClassEnum.NotFinished;
+			if (itemStatus === StatusEnum.Partial) return ClassEnum.Partial;
 		},
 		setIcons(item) {
-			if (item.status === "success-all") return this.icons.mdiCheckAll;
-			if (item.status === "success" && !item.elements)
+			if (item.status === StatusEnum.SuccessAll) return this.icons.mdiCheckAll;
+			if (item.status === StatusEnum.Success && !item.elements)
 				return this.icons.mdiCheck;
-			if (item.status === "success") return this.icons.mdiCheck;
-			if (item.status === "failure") return this.icons.mdiAlertCircle;
-			if (item.status === "partial") return this.icons.mdiAlert;
+			if (item.status === StatusEnum.Success) return this.icons.mdiCheck;
+			if (item.status === StatusEnum.Failure) return this.icons.mdiAlertCircle;
+			if (item.status === StatusEnum.Partial) return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.elements && item.status !== "success")
+				if (item.elements && item.status !== StatusEnum.Success)
 					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
@@ -93,11 +108,12 @@ export default {
 			this.expandedNodes.push(itemId);
 		},
 		getAriaLabel(item) {
-			if (!item.elements)
+			if (!item.elements) {
 				return this.$t("components.molecules.copyResult.aria.childItem.info", {
 					itemTitle: item.title,
 					itemStatus: this.$t(`common.labels.${item.status}`),
 				});
+			}
 
 			if (!this.expandedNodes.includes(item.index)) {
 				return this.$t("components.molecules.copyResult.aria.parentItem.info", {
