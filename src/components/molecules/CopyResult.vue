@@ -41,16 +41,16 @@ import {
 } from "@mdi/js";
 
 const StatusEnum = {
-	Success: "success",
-	Failure: "failure",
-	Partial: "partial",
-	SuccessAll: "success-all",
+	SUCCESS: "success",
+	FAILURE: "failure",
+	PARTIAL: "partial",
+	SUCCESS_ALL: "success-all",
 };
 
 const ClassEnum = {
-	Finished: "finished",
-	NotFinished: "not-finished",
-	Partial: "partial",
+	FINISHED: "finished",
+	NOT_FINISHED: "not-finished",
+	PARTIAL: "partial",
 };
 
 export default {
@@ -79,22 +79,22 @@ export default {
 	},
 	methods: {
 		setCustomClass(itemStatus) {
-			if (itemStatus === StatusEnum.Success) return ClassEnum.Finished;
-			if (itemStatus === StatusEnum.Failure) return ClassEnum.NotFinished;
-			if (itemStatus === StatusEnum.Partial) return ClassEnum.Partial;
+			if (itemStatus === StatusEnum.SUCCESS) return ClassEnum.FINISHED;
+			if (itemStatus === StatusEnum.FAILURE) return ClassEnum.NOT_FINISHED;
+			if (itemStatus === StatusEnum.PARTIAL) return ClassEnum.PARTIAL;
 		},
 		setIcons(item) {
-			if (item.status === StatusEnum.SuccessAll) return this.icons.mdiCheckAll;
-			if (item.status === StatusEnum.Success && !item.elements)
+			if (item.status === StatusEnum.SUCCESS_ALL) return this.icons.mdiCheckAll;
+			if (item.status === StatusEnum.SUCCESS && !item.elements)
 				return this.icons.mdiCheck;
-			if (item.status === StatusEnum.Success) return this.icons.mdiCheck;
-			if (item.status === StatusEnum.Failure) return this.icons.mdiAlertCircle;
-			if (item.status === StatusEnum.Partial) return this.icons.mdiAlert;
+			if (item.status === StatusEnum.SUCCESS) return this.icons.mdiCheck;
+			if (item.status === StatusEnum.FAILURE) return this.icons.mdiAlertCircle;
+			if (item.status === StatusEnum.PARTIAL) return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.elements && item.status !== StatusEnum.Success)
+				if (item.elements && item.status !== StatusEnum.SUCCESS)
 					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
