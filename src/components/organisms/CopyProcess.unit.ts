@@ -192,6 +192,7 @@ describe("@components/organisms/CopyProcess", () => {
 	describe("methods section", () => {
 		it("should call 'dialogClosed' method when 'close' button is clicked", async () => {
 			const closeMockFunction = jest.fn();
+			const resetCopyResultSpy = jest.spyOn(copyModule, "resetCopyResult");
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			wrapper.vm.dialogClosed = closeMockFunction;
 			await wrapper.setData({ showModal: true });
@@ -200,6 +201,17 @@ describe("@components/organisms/CopyProcess", () => {
 			closeButton.trigger("click");
 
 			expect(closeMockFunction).toHaveBeenCalled();
+		});
+
+		it("should call 'resetCopyResult' store method when 'close' button is clicked", async () => {
+			const resetCopyResultSpy = jest.spyOn(copyModule, "resetCopyResult");
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			await wrapper.setData({ showModal: true });
+
+			const closeButton = wrapper.find(`[data-testid="dialog-close"]`);
+			closeButton.trigger("click");
+
+			expect(resetCopyResultSpy).toHaveBeenCalled();
 		});
 
 		it("'getItemTitleAndStatus' method should return a correct title and status", async () => {

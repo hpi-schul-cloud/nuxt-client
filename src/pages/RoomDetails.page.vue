@@ -346,7 +346,6 @@ export default {
 			this.courseId = this.copyProcess.id;
 			this.copyProcess.isOpen = false;
 			this.copyProcess.id = "";
-			copyModule.resetCopyResult();
 		},
 	},
 	head() {
