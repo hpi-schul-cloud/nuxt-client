@@ -105,7 +105,7 @@ export default {
 	},
 	methods: {
 		getItemTitleAndStatus(item) {
-			const titleObj = {
+			const titleObject = {
 				metadata: this.$t("components.molecules.copyResult.metadata"),
 				description: this.$t("common.labels.description"),
 				tasks: this.$t("common.words.tasks"),
@@ -114,7 +114,7 @@ export default {
 				times: this.$t("common.words.times"),
 				submissions: "submissions",
 			};
-			const typeObj = {
+			const typeObject = {
 				board: this.$t("common.labels.room"),
 				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
 				task: `${this.$t("common.words.task")} - ${item.title}`,
@@ -132,8 +132,8 @@ export default {
 				return {
 					title:
 						item.type === this.types.Leaf
-							? titleObj[item.title]
-							: typeObj[item.type],
+							? titleObject[item.title]
+							: typeObject[item.type],
 					status: this.status.Failure,
 				};
 			}
@@ -141,8 +141,8 @@ export default {
 			return {
 				title:
 					item.type === this.types.Leaf
-						? titleObj[item.title]
-						: typeObj[item.type],
+						? titleObject[item.title]
+						: typeObject[item.type],
 				status: item.status,
 			};
 		},
