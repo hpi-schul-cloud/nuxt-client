@@ -25,7 +25,7 @@ const checkIfEveryElementsAreSuccess = (
 	});
 };
 
-const cleanupCopyStatus = (item: any): any => {
+const cleanupCopyStatus = (item: any): void | any => {
 	if (
 		item.status === CopyApiResponseStatusEnum.NotDoing &&
 		item.elements === undefined
@@ -42,6 +42,11 @@ const cleanupCopyStatus = (item: any): any => {
 	}
 
 	return result;
+};
+
+type CopyParams = {
+	id: string;
+	courseId: string;
 };
 
 @Module({
@@ -88,7 +93,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copyTask(payload: object | any): Promise<void> {
+	async copyTask(payload: CopyParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
@@ -142,7 +147,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copyLesson(payload: object | any): Promise<void> {
+	async copyLesson(payload: CopyParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
