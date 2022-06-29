@@ -55,7 +55,7 @@ const serverResponseCourseCopy = {
 					title: "Aufgabe an Marla (Mathe) - offen",
 					type: "task",
 					status: "success",
-					id: "62b469b9fb5991ae9f28e6fc",
+					id: "567890",
 					elements: [
 						{ title: "metadata", type: "leaf", status: "success" },
 						{ title: "description", type: "leaf", status: "success" },
@@ -141,17 +141,22 @@ describe("@components/organisms/CopyProcess", () => {
 
 		it("'copiedItems' should return the cleanedup object", () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const status = wrapper.vm.status;
+			const types = wrapper.vm.types;
+
 			const expectedCopiedItems = {
 				title: "Success-Title",
-				type: "task",
-				status: "success",
+				type: types.Task,
+				status: status.Success,
 				id: "success-id-123",
 				elements: [
 					{
 						id: "success-id-123",
 						status: "success-all",
-						title: "Alle Elemente wurden erfolgreich kopiert.",
-						type: "task",
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.successfullyCopied"
+						),
+						type: types.Task,
 					},
 				],
 				index: 0,
@@ -217,53 +222,84 @@ describe("@components/organisms/CopyProcess", () => {
 		it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			await wrapper.vm.$nextTick();
+			const status = wrapper.vm.status;
+			const types = wrapper.vm.types;
+
 			const method = wrapper.vm.getItemTitleAndStatus;
 
 			expect(
-				method({ type: "file", title: "files", status: "not-implemented" })
-					.status
+				method({
+					type: types.File,
+					title: "files",
+					status: status.NotImplemented,
+				}).status
 			).toStrictEqual("failure");
 			expect(
-				method({ type: "file", title: "files", status: "not-implemented" })
-					.title
+				method({
+					type: types.File,
+					title: "files",
+					status: status.NotImplemented,
+				}).title
 			).toStrictEqual(
 				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
 			);
 
 			expect(
-				method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
-					.status
-			).toStrictEqual("failure");
+				method({
+					type: types.Lesson,
+					title: "lesson-1",
+					status: status.NotImplemented,
+				}).status
+			).toStrictEqual(status.Failure);
 			expect(
-				method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
-					.title
+				method({
+					type: types.Lesson,
+					title: "lesson-1",
+					status: status.NotImplemented,
+				}).title
 			).toStrictEqual(
 				`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`
 			);
 
 			expect(
-				method({ type: "task", title: "task-1", status: "not-implemented" })
-					.status
-			).toStrictEqual("failure");
+				method({
+					type: types.Task,
+					title: "task-1",
+					status: status.NotImplemented,
+				}).status
+			).toStrictEqual(status.Failure);
 			expect(
-				method({ type: "task", title: "task-1", status: "not-implemented" })
-					.title
+				method({
+					type: types.Task,
+					title: "task-1",
+					status: status.NotImplemented,
+				}).title
 			).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
 
 			expect(
-				method({ type: "leaf", title: "metadata", status: "success" }).status
-			).toStrictEqual("success");
+				method({ type: types.Leaf, title: "metadata", status: status.Success })
+					.status
+			).toStrictEqual(status.Success);
 			expect(
-				method({ type: "leaf", title: "metadata", status: "success" }).title
+				method({ type: types.Leaf, title: "metadata", status: status.Success })
+					.title
 			).toStrictEqual(
 				wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
 			);
 
 			expect(
-				method({ type: "leaf", title: "description", status: "success" }).status
-			).toStrictEqual("success");
+				method({
+					type: types.Leaf,
+					title: "description",
+					status: status.Success,
+				}).status
+			).toStrictEqual(status.Success);
 			expect(
-				method({ type: "leaf", title: "description", status: "success" }).title
+				method({
+					type: types.Leaf,
+					title: "description",
+					status: status.Success,
+				}).title
 			).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
 		});
 
@@ -271,83 +307,85 @@ describe("@components/organisms/CopyProcess", () => {
 			copyModule.setCopyResult(serverResponseCourseCopy);
 			copyModule.setFilteredResult(serverResponseCourseCopy);
 			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const status = wrapper.vm.status;
+			const types = wrapper.vm.types;
+			const i18n = wrapper.vm.$i18n;
 
 			const expectedData = {
 				title: "Mathe",
-				type: "course",
-				status: "partial",
+				type: types.Course,
+				status: status.Partial,
 				id: "456",
 				elements: [
 					{
-						title: "Allgemeine Informationen",
-						type: "leaf",
-						status: "success",
+						title: i18n.t("components.molecules.copyResult.metadata"),
+						type: types.Leaf,
+						status: status.Success,
 						index: 1,
 					},
 					{
-						title: "Times",
-						type: "leaf",
-						status: "failure",
+						title: i18n.t("common.words.times"),
+						type: types.Leaf,
+						status: status.Failure,
 						index: 2,
 					},
 					{
-						title:
-							"Datei: Wir können keine Dateien kopieren. Wir arbeiten an diesem Problem...",
-						type: "file",
-						status: "failure",
+						title: i18n.t("components.molecules.copyResult.fileCopy.error"),
+						type: types.File,
+						status: status.Failure,
 						index: 3,
 					},
 					{
-						title: "Kursgruppen",
-						type: "leaf",
-						status: "failure",
+						title: i18n.t("common.words.courseGroups"),
+						type: types.Leaf,
+						status: status.Failure,
 						index: 4,
 					},
 					{
-						title: "Raum",
-						type: "board",
-						status: "failure",
+						title: i18n.t("common.labels.room"),
+						type: types.Board,
+						status: status.Failure,
 						id: "boardId",
 						index: 5,
 						elements: [
 							{
 								title: "Aufgabe - Aufgabe an Marla (Mathe) ",
-								type: "task",
-								status: "success",
+								type: types.Task,
+								status: status.Success,
 								id: "---",
 								index: 6,
 								elements: [
 									{
-										title: "Allgemeine Informationen",
-										type: "leaf",
-										status: "success",
+										title: i18n.t("components.molecules.copyResult.metadata"),
+										type: types.Leaf,
+										status: status.Success,
 										index: 7,
 									},
 									{
-										title: "Beschreibung",
-										type: "leaf",
-										status: "success",
+										title: i18n.t("common.labels.description"),
+										type: types.Leaf,
+										status: status.Success,
 										index: 8,
 									},
 								],
 							},
 							{
 								title: "Aufgabe - Aufgabe an Marla (Mathe) - offen",
-								type: "task",
-								status: "success",
-								id: "62b469b9fb5991ae9f28e6fc",
+								type: types.Task,
+								status: status.Success,
+								id: "567890",
 								index: 9,
 								elements: [
 									{
-										title: "Allgemeine Informationen",
-										type: "leaf",
-										status: "success",
+										title: i18n.t("components.molecules.copyResult.metadata"),
+										type: types.Leaf,
+										status: status.Success,
 										index: 10,
 									},
 									{
-										title: "Beschreibung",
-										type: "leaf",
-										status: "success",
+										title: i18n.t("common.labels.description"),
+										type: types.Leaf,
+										status: status.Success,
 										index: 11,
 									},
 								],
@@ -362,20 +400,20 @@ describe("@components/organisms/CopyProcess", () => {
 
 			expect(copiedItems).toStrictEqual(expectedData);
 			expect(copiedItems.elements[0].title).toStrictEqual(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+				i18n.t("components.molecules.copyResult.metadata")
 			);
 			expect(copiedItems.elements[1].title).toStrictEqual(
 				wrapper.vm.$i18n.t("common.words.times")
 			);
-			expect(copiedItems.elements[1].status).toStrictEqual("failure");
+			expect(copiedItems.elements[1].status).toStrictEqual(status.Failure);
 			expect(copiedItems.elements[2].title).toStrictEqual(
 				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
 			);
-			expect(copiedItems.elements[2].status).toStrictEqual("failure");
+			expect(copiedItems.elements[2].status).toStrictEqual(status.Failure);
 			expect(copiedItems.elements[3].title).toStrictEqual(
 				wrapper.vm.$i18n.t("common.words.courseGroups")
 			);
-			expect(copiedItems.elements[3].status).toStrictEqual("failure");
+			expect(copiedItems.elements[3].status).toStrictEqual(status.Failure);
 			expect(copiedItems.elements[4].elements[0].elements).toHaveLength(2);
 		});
 	});
