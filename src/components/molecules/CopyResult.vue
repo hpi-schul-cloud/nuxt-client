@@ -85,8 +85,6 @@ export default {
 		},
 		setIcons(item) {
 			if (item.status === StatusEnum.SUCCESS_ALL) return this.icons.mdiCheckAll;
-			if (item.status === StatusEnum.SUCCESS && !item.elements)
-				return this.icons.mdiCheck;
 			if (item.status === StatusEnum.SUCCESS) return this.icons.mdiCheck;
 			if (item.status === StatusEnum.FAILURE) return this.icons.mdiAlertCircle;
 			if (item.status === StatusEnum.PARTIAL) return this.icons.mdiAlert;
