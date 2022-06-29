@@ -14,19 +14,22 @@ import { BusinessError } from "./types/commons";
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
 ): boolean => {
-	if (data.status !== "success") return false;
+	if (data.status !== CopyApiResponseStatusEnum.Success) return false;
 	return data.elements.every(({ elements = [], ...rest }) => {
 		const item = { ...rest };
-		if (item.status !== "success") return false;
+		if (item.status !== CopyApiResponseStatusEnum.Success) return false;
 		if (elements.length > 0) {
 			return (item.elements = checkIfEveryElementsAreSuccess(elements));
 		}
-		return item.status === "success";
+		return item.status === CopyApiResponseStatusEnum.Success;
 	});
 };
 
 const cleanupCopyStatus = (item: any): any => {
-	if (item.status === "not-doing" && item.elements === undefined) {
+	if (
+		item.status === CopyApiResponseStatusEnum.NotDoing &&
+		item.elements === undefined
+	) {
 		return undefined;
 	}
 
