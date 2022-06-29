@@ -226,7 +226,7 @@ export default {
 			}
 
 			if (copyResult.id !== "") {
-				this.copyProcess.id = copyResult;
+				this.copyProcess.id = copyResult.id;
 				this.copyProcess.loading = copyModule.getLoading;
 			}
 		},
