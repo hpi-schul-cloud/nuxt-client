@@ -178,10 +178,7 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
-import {
-	ImportUserResponseRoleNamesEnum,
-	// CopyApiResponseStatusEnum,
-} from "@/serverApi/v3";
+import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
