@@ -44,7 +44,7 @@ const cleanupCopyStatus = (item: any): void | any => {
 	return result;
 };
 
-type CopyParams = {
+export type CopyParams = {
 	id: string;
 	courseId: string;
 };
@@ -162,11 +162,12 @@ export default class CopyModule extends VuexModule {
 				lessonCopyParams
 			);
 
-			this.setCopyResult(copyResult.data || {});
+			this.setCopyResult(copyResult.data);
 			this.setFilteredResult(copyResult.data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
+			this.setLoading(false);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
@@ -255,11 +256,11 @@ export default class CopyModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 
-	get getBusinessError() {
+	get getBusinessError(): BusinessError {
 		return this.businessError;
 	}
 }

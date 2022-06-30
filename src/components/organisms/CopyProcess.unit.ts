@@ -123,7 +123,7 @@ describe("@components/organisms/CopyProcess", () => {
 				Leaf: "leaf",
 			};
 
-			expect(wrapper.vm.types).toStrictEqual(expectedTypes);
+			expect(wrapper.vm.typesEnum).toStrictEqual(expectedTypes);
 		});
 
 		it("'status' should return the types object", () => {
@@ -136,13 +136,13 @@ describe("@components/organisms/CopyProcess", () => {
 				Partial: "partial",
 			};
 
-			expect(wrapper.vm.status).toStrictEqual(expectedStatus);
+			expect(wrapper.vm.statusEnum).toStrictEqual(expectedStatus);
 		});
 
 		it("'copiedItems' should return the cleanedup object", () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
-			const status = wrapper.vm.status;
-			const types = wrapper.vm.types;
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
 
 			const expectedCopiedItems = {
 				title: "Success-Title",
@@ -222,8 +222,8 @@ describe("@components/organisms/CopyProcess", () => {
 		it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			await wrapper.vm.$nextTick();
-			const status = wrapper.vm.status;
-			const types = wrapper.vm.types;
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
 
 			const method = wrapper.vm.getItemTitleAndStatus;
 
@@ -307,8 +307,8 @@ describe("@components/organisms/CopyProcess", () => {
 			copyModule.setCopyResult(serverResponseCourseCopy);
 			copyModule.setFilteredResult(serverResponseCourseCopy);
 			const wrapper = getWrapper({ isOpen: true, loading: false });
-			const status = wrapper.vm.status;
-			const types = wrapper.vm.types;
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
 			const i18n = wrapper.vm.$i18n;
 
 			const expectedData = {

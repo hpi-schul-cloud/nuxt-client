@@ -91,10 +91,10 @@ export default {
 		copiedItemId() {
 			return copyModule?.getId || "";
 		},
-		types() {
+		typesEnum() {
 			return copyModule.getResponseTypes;
 		},
-		status() {
+		statusEnum() {
 			return copyModule.getResponseStatus;
 		},
 	},
@@ -121,26 +121,26 @@ export default {
 			};
 			if (
 				item.title === "files" &&
-				item.status === this.status.NotImplemented
+				item.status === this.statusEnum.NotImplemented
 			) {
 				return {
 					title: this.$t("components.molecules.copyResult.fileCopy.error"),
 					status: "failure",
 				};
 			}
-			if (item.status === this.status.NotImplemented) {
+			if (item.status === this.statusEnum.NotImplemented) {
 				return {
 					title:
-						item.type === this.types.Leaf
+						item.type === this.typesEnum.Leaf
 							? titleObject[item.title]
 							: typeObject[item.type],
-					status: this.status.Failure,
+					status: this.statusEnum.Failure,
 				};
 			}
 
 			return {
 				title:
-					item.type === this.types.Leaf
+					item.type === this.typesEnum.Leaf
 						? titleObject[item.title]
 						: typeObject[item.type],
 				status: item.status,
@@ -161,9 +161,11 @@ export default {
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
-						(ele) => ele.status === this.types.success
+						(ele) => ele.status === this.typesEnum.Success
 					);
-					item.status = isSuccess ? this.types.success : titleAndStatus.status;
+					item.status = isSuccess
+						? this.typesEnum.Success
+						: titleAndStatus.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;

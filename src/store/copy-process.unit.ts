@@ -1,5 +1,8 @@
 import CopyModule from "./copy-process";
 import * as serverApi from "../serverApi/v3/api";
+import { CopyParams } from "./copy-process";
+const StatusEnum = serverApi.CopyApiResponseStatusEnum;
+const TypeEnum = serverApi.CopyApiResponseTypeEnum;
 
 const serverData = {
 	title: "Aufgabe",
@@ -72,7 +75,10 @@ describe("copy module", () => {
 					);
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyTask({ id: "taskId", courseId: "testCourseId" });
+				await copyModule.copyTask({
+					id: "taskId",
+					courseId: "testCourseId",
+				} as CopyParams);
 
 				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
 				expect(
@@ -100,7 +106,10 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyTask({ id: "taskId", courseId: "testCourseId" });
+				await copyModule.copyTask({
+					id: "taskId",
+					courseId: "testCourseId",
+				} as CopyParams);
 
 				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
 				expect(copyModule.getError).toStrictEqual({ ...error });
@@ -180,7 +189,7 @@ describe("copy module", () => {
 				await copyModule.copyLesson({
 					id: "lessonId",
 					courseId: "testCourseId",
-				});
+				} as CopyParams);
 
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
 				expect(
@@ -213,7 +222,7 @@ describe("copy module", () => {
 				await copyModule.copyLesson({
 					id: "lessonId",
 					courseId: "testCourseId",
-				});
+				} as CopyParams);
 
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
 				expect(copyModule.getError).toStrictEqual({ ...error });
@@ -292,8 +301,8 @@ describe("copy module", () => {
 				const emptyData = {
 					id: "",
 					title: "",
-					type: "board",
-					status: "success",
+					type: TypeEnum.Board,
+					status: StatusEnum.Success,
 				};
 
 				copyModule.resetCopyResult();
@@ -306,19 +315,19 @@ describe("copy module", () => {
 			it("should set filteredResult", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: "task",
-					status: "success",
+					type: TypeEnum.Task,
+					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
 							title: "description",
-							type: "leaf",
-							status: "success",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
 						},
 						{
 							title: "files",
-							type: "leaf",
-							status: "not-implemented",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.NotImplemented,
 						},
 					],
 				};
@@ -333,24 +342,24 @@ describe("copy module", () => {
 			it("should set the state with all-success data", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: "task",
-					status: "success",
+					type: TypeEnum.Task,
+					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
 							title: "description",
-							type: "leaf",
-							status: "success",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
 						},
 						{
 							title: "submissions",
-							type: "leaf",
-							status: "success",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
 						},
 						{
 							title: "files",
-							type: "leaf",
-							status: "success",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
 						},
 					],
 				};
