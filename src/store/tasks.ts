@@ -41,6 +41,8 @@ export default class TaskModule extends VuexModule {
 
 	loading: boolean = false;
 
+	tab: string = "";
+
 	_taskApi?: TaskApiInterface;
 
 	copyResult: CopyApiResponse = {
@@ -153,6 +155,11 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Mutation
+	setActiveTab(tab: string): void {
+		this.tab = tab;
+	}
+
+	@Mutation
 	setSubstituteFilter(enabled: boolean): void {
 		this.substituteFilter = enabled;
 
@@ -209,6 +216,10 @@ export default class TaskModule extends VuexModule {
 
 	get getLoading(): boolean {
 		return this.loading;
+	}
+
+	get getActiveTab(): string {
+		return this.tab;
 	}
 
 	get getCourseFilters(): TaskCourseFilter[] {
