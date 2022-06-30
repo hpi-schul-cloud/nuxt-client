@@ -410,6 +410,7 @@
 	"components.molecules.copyResult.fileCopy.error": "Archivo: No podemos copiar archivos. Estamos trabajando en este tema...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, estado de la copia: {itemStatus}",
 	"components.molecules.copyResult.aria.parentItem.info": "{itemTitle}, estado de la copia: {itemStatus}, {includedItems} artículos en él, presione la barra espaciadora para {action}",
+	"components.molecules.copyResult.error": "Error durante la copia",
 	"pages.administration.printQr.emptyUser": "L@s usuari@s seleccionad@s ya han sido registrad@s",
 	"pages.administration.printQr.error": "No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",

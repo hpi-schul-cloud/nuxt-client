@@ -325,7 +325,7 @@ export default {
 
 			if (businessError.statusCode !== "") {
 				this.$notifier({
-					text: this.$t("components.organisms.FormNews.errors.create"),
+					text: this.$t("components.molecules.copyResult.error"),
 					status: "error",
 				});
 				return;
