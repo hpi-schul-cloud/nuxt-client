@@ -162,7 +162,7 @@ export default {
 		ContentEduSharingFooter,
 		UserHasRole,
 	},
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	mixins: [contentMeta, infiniteScrolling],
 	props: {
 		resource: {

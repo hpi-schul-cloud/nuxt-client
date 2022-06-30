@@ -187,7 +187,7 @@ export default {
 		AddContentButton,
 		UserHasRole,
 	},
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	mixins: [contentMeta],
 	props: {
 		resource: {
