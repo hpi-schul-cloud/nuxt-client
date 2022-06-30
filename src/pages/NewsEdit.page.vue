@@ -1,43 +1,48 @@
 <template>
-	<div>
-		<div v-if="news">
-			<base-breadcrumb
-				:inputs="[
-					{
-						to: { name: 'news' },
-						text: $t('pages.news.title'),
-					},
-					{
-						to: { name: 'news-id', params: { id: $route.params.id } },
-						text: news.title,
-					},
-					{
-						text: $t('pages.news._id.edit.title'),
-					},
-				]"
-			/>
-			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
-
-			<form-news
-				v-if="news"
-				:news="news"
-				@save="save"
-				@delete="deleteHandler"
-				@cancel="cancelHandler"
-			>
-			</form-news>
+	<default-wireframe
+		:headline="$t('pages.news._id.edit.title')"
+		:breadcrumbs="[
+			{
+				href: { name: 'news' },
+				text: $t('pages.news.title'),
+			},
+			{
+				href: { name: 'news-id', params: { id: $route.params.id } },
+				text: news.title,
+			},
+			{
+				text: $t('pages.news._id.edit.title'),
+				disabled: true,
+			},
+		]"
+		:full-width="false"
+	>
+		<div>
+			<div v-if="news">
+				<form-news
+					v-if="news"
+					:news="news"
+					@save="save"
+					@delete="deleteHandler"
+					@cancel="cancelHandler"
+				>
+				</form-news>
+			</div>
 		</div>
-	</div>
+	</default-wireframe>
 </template>
 
 <script>
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@components/organisms/FormNews";
 import { newsModule } from "@/store";
 
 export default {
 	components: {
+		DefaultWireframe,
 		FormNews,
 	},
+	layout: "defaultVuetify",
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
