@@ -40,6 +40,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		hasTasks: true,
 		openTasksForTeacherIsEmpty: false,
 		draftsForTeacherIsEmpty: true,
+		getActiveTab: tabRoutes[0],
 		getOpenTasksForTeacher: {
 			overdue: overDueTasksTeacher,
 			withDueDate: dueDateTasksTeacher,
@@ -66,7 +67,6 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render tasks list component, with second panel expanded per default", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[0],
 				emptyState,
 				tabRoutes,
 			},
@@ -87,12 +87,12 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render empty state", () => {
 		taskModuleMock = createModuleMocks(TaskModule, {
 			...taskModuleGetters,
+			getActiveTab: tabRoutes[1],
 			draftsForTeacherIsEmpty: true,
 		});
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[1],
 				emptyState,
 				tabRoutes,
 			},
@@ -102,18 +102,16 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should trigger event to update tab property", async () => {
+	it("Should update store when tab changes", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[1],
 				emptyState,
 				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ currentTab: tabRoutes[0] });
+		await wrapper.setData({ tab: tabRoutes[1] });
 
-		expect(wrapper.emitted("update:tab")).toHaveLength(1);
-		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([tabRoutes[0]]);
+		expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 });
