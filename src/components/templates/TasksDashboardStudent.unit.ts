@@ -32,6 +32,8 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		return wrapper;
 	};
 
+	const tabRoutes = ["open", "completed", "finished"];
+
 	const taskModuleGetters: Partial<TaskModule> = {
 		getOpenTasksForStudent: {
 			overdue: overDueTasks,
@@ -40,6 +42,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		} as unknown as OpenTasksForStudent,
 		getStatus: "completed",
 		hasTasks: true,
+		getActiveTab: tabRoutes[0],
 		getCompletedTasksForStudent: { submitted: [], graded: [] },
 		openTasksForStudentIsEmpty: false,
 		completedTasksForStudentIsEmpty: true,
@@ -50,8 +53,6 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		image: "<svg></svg>",
 		subtitle: undefined,
 	};
-
-	const tabRoutes = ["open", "completed", "finished"];
 
 	beforeEach(() => {
 		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
@@ -65,7 +66,6 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should render tasks list component", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[0],
 				emptyState,
 				tabRoutes,
 			},
@@ -77,12 +77,12 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	it("Should render empty state", () => {
 		taskModuleMock = createModuleMocks(TaskModule, {
 			...taskModuleGetters,
+			getActiveTab: tabRoutes[1],
 			completedTasksForStudentIsEmpty: true,
 		});
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[1],
 				emptyState,
 				tabRoutes,
 			},
@@ -92,18 +92,16 @@ describe("@components/templates/TasksDashboardStudent", () => {
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should trigger event to update tab property", async () => {
+	it("Should update store when tab changes", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: tabRoutes[1],
 				emptyState,
 				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ currentTab: tabRoutes[0] });
+		await wrapper.setData({ tab: tabRoutes[0] });
 
-		expect(wrapper.emitted("update:tab")).toHaveLength(1);
-		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([tabRoutes[0]]);
+		expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 });

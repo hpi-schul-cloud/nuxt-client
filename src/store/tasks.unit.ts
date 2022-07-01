@@ -238,6 +238,15 @@ describe("task store", () => {
 			});
 		});
 
+		describe("setActiveTab", () => {
+			it("should set the active tab in state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.setActiveTab("drafts");
+
+				expect(taskModule.tab).toBe("drafts");
+			});
+		});
+
 		describe("setBusinessError", () => {
 			it("should set the business error in state", () => {
 				const taskModule = new TaskModule({});
@@ -296,6 +305,16 @@ describe("task store", () => {
 				const status = taskModule.getStatus;
 
 				expect(status).toBe(taskModule.status);
+			});
+		});
+
+		describe("getActiveTab", () => {
+			it("should return the active tab", () => {
+				const taskModule = new TaskModule({});
+				taskModule.tab = "drafts";
+				const activeTab = taskModule.getActiveTab;
+
+				expect(activeTab).toBe(taskModule.tab);
 			});
 		});
 

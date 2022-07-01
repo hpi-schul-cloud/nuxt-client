@@ -61,13 +61,11 @@
 			<div v-else class="course-filter-placeholder"></div>
 			<tasks-dashboard-student
 				v-if="isStudent"
-				:tab.sync="tab"
 				:empty-state="emptyState"
 				:tab-routes="tabRoutes"
 			/>
 			<tasks-dashboard-teacher
 				v-else
-				:tab.sync="tab"
 				:empty-state="emptyState"
 				:tab-routes="tabRoutes"
 			/>
@@ -106,7 +104,6 @@ export default {
 	},
 	data() {
 		return {
-			tab: "", // should we save this in store?
 			mdiPlus,
 		};
 	},
@@ -138,6 +135,14 @@ export default {
 		},
 		courseFilters() {
 			return this.taskModule.getCourseFilters;
+		},
+		tab: {
+			get() {
+				return this.taskModule.getActiveTab;
+			},
+			set(newTab) {
+				this.setActiveTab(newTab);
+			},
 		},
 		selectedCourseFilters() {
 			return this.taskModule.getSelectedCourseFilters;
@@ -306,14 +311,18 @@ export default {
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {
-				this.tab = this.tabRoutes[0];
+				this.setActiveTab(this.tabRoutes[0]);
 				return;
 			}
 
 			if (this.$route.query.tab == this.tabRoutes[2]) {
 				this.onOpenFinishedTasksTab();
 			}
-			this.tab = this.$route.query.tab;
+
+			this.setActiveTab(this.$route.query.tab);
+		},
+		setActiveTab(tab) {
+			this.taskModule.setActiveTab(tab);
 		},
 	},
 };

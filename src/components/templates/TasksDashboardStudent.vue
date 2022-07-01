@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-student">
-		<v-tabs-items v-model="currentTab">
+		<v-tabs-items v-model="tab">
 			<v-tab-item :value="tabRoutes[0]">
 				<v-custom-double-panels
 					class="pb-16"
@@ -88,10 +88,6 @@ import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
 	props: {
-		tab: {
-			type: String,
-			required: true,
-		},
 		emptyState: {
 			type: Object,
 			required: true,
@@ -142,12 +138,12 @@ export default {
 		gradedTasks() {
 			return this.completedTasks.graded;
 		},
-		currentTab: {
+		tab: {
 			get() {
-				return this.tab;
+				return this.taskModule.getActiveTab;
 			},
 			set(newTab) {
-				this.$emit("update:tab", newTab);
+				this.taskModule.setActiveTab(newTab);
 			},
 		},
 	},
