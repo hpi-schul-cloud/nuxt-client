@@ -537,6 +537,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
+			const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
 			await wrapper.vm.$nextTick();
@@ -550,6 +551,8 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+			expect(fetchContentSpy).toHaveBeenCalled();
+			expect(fetchContentSpy.mock.calls[0][0]).toStrictEqual("123");
 		});
 
 		it("should redirect to legacy client if FEATURE_TASK_COPY_ENABLED flag is not set true", async () => {

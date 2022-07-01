@@ -2,7 +2,6 @@ import { mount } from "@vue/test-utils";
 import { copyModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import CopyModule from "@/store/copy-process";
-
 import CopyProcess from "./CopyProcess.vue";
 
 declare let createComponentMocks: Function;
@@ -344,7 +343,7 @@ describe("@components/organisms/CopyProcess", () => {
 					{
 						title: i18n.t("common.labels.room"),
 						type: types.Board,
-						status: status.Failure,
+						status: status.Success,
 						id: "boardId",
 						index: 5,
 						elements: [

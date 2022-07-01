@@ -202,6 +202,35 @@ describe("@components/molecules/TaskItemMenu", () => {
 			});
 		});
 
+		it("should call 'fetchAllTasks' store action when 'CopyProcess' modal is closed ", async () => {
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+			const fetchAllTasksMock = jest.spyOn(taskModule, "fetchAllTasks");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(copyTaskStoreMock).toHaveBeenCalled();
+
+			const copyProcessModal = wrapper.find("[data-testid='copy-process']");
+			copyProcessModal.vm.$emit("dialog-closed", false);
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+			expect(wrapper.vm.copyProcess.id).toBe("");
+			expect(fetchAllTasksMock).toHaveBeenCalled();
+		});
+
 		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
 			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
 			const { location } = window;

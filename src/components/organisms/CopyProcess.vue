@@ -33,6 +33,22 @@
 </template>
 
 <script>
+export const StatusEnum = {
+	SUCCESS: "success",
+	FAILURE: "failure",
+	NOT_DOING: "not-doing",
+	NOT_IMPLEMENTED: "not-implemented",
+	PARTIAL: "partial",
+};
+
+export const TypesEnum = {
+	BOARD: "board",
+	COURSE: "course",
+	FILE: "file",
+	LEAF: "leaf",
+	LESSON: "lesson",
+	TASK: "task",
+};
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@/store";
@@ -121,26 +137,26 @@ export default {
 			};
 			if (
 				item.title === "files" &&
-				item.status === this.statusEnum.NotImplemented
+				item.status === StatusEnum.NOT_IMPLEMENTED
 			) {
 				return {
 					title: this.$t("components.molecules.copyResult.fileCopy.error"),
 					status: "failure",
 				};
 			}
-			if (item.status === this.statusEnum.NotImplemented) {
+			if (item.status === StatusEnum.NOT_IMPLEMENTED) {
 				return {
 					title:
-						item.type === this.typesEnum.Leaf
+						item.type === TypesEnum.LEAF
 							? titleObject[item.title]
 							: typeObject[item.type],
-					status: this.statusEnum.Failure,
+					status: StatusEnum.FAILURE,
 				};
 			}
 
 			return {
 				title:
-					item.type === this.typesEnum.Leaf
+					item.type === TypesEnum.LEAF
 						? titleObject[item.title]
 						: typeObject[item.type],
 				status: item.status,
@@ -161,11 +177,11 @@ export default {
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
-						(ele) => ele.status === this.typesEnum.Success
+						(ele) =>
+							ele.status === StatusEnum.SUCCESS ||
+							ele.status === StatusEnum.PARTIAL
 					);
-					item.status = isSuccess
-						? this.typesEnum.Success
-						: titleAndStatus.status;
+					item.status = isSuccess ? StatusEnum.SUCCESS : titleAndStatus.status;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;

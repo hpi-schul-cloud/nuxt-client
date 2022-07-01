@@ -14,7 +14,6 @@ import { BusinessError } from "./types/commons";
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
 ): boolean => {
-	if (data.status !== CopyApiResponseStatusEnum.Success) return false;
 	return data.elements.every(({ elements = [], ...rest }) => {
 		const item = { ...rest };
 		if (item.status !== CopyApiResponseStatusEnum.Success) return false;
