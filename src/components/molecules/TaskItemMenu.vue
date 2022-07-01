@@ -216,6 +216,7 @@ export default {
 			this.copyProcess.isOpen = false;
 			this.copyProcess.data = {};
 			await taskModule.fetchAllTasks();
+			taskModule.setActiveTab("drafts");
 		},
 	},
 };

@@ -67,6 +67,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				submitted: [],
 				graded: [],
 			},
+			getActiveTab: "open",
 			openTasksForStudentIsEmpty: true,
 			completedTasksForStudentIsEmpty: true,
 			hasTasks: false,
@@ -104,6 +105,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 		it("should not render add task button", () => {
 			const fab = wrapper.findComponent(vCustomFab);
 			expect(fab.exists()).toBe(false);
+		});
+
+		it("should open tab from store state", async () => {
+			//@ts-ignore
+			expect(wrapper.vm.tab).toStrictEqual("open");
 		});
 
 		it("should hide substituteFilter", async () => {
@@ -146,6 +152,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getDraftTasksForTeacher: [],
 			getStatus: "completed",
 			hasTasks: false,
+			getActiveTab: "current",
 			openTasksForTeacherIsEmpty: true,
 			draftsForTeacherIsEmpty: true,
 		};
@@ -184,38 +191,77 @@ describe("@components/templates/TasksDashboardMain", () => {
 			expect(fab.exists()).toBe(true);
 		});
 
-		it("should initially open drafts tab from the URL query", async () => {
+		it("should open tab from store state", async () => {
 			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("drafts");
+			expect(wrapper.vm.tab).toStrictEqual("current");
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
-			wrapper.setData({ tab: "current" });
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getActiveTab: "current",
+			});
+
+			wrapper = mountComponent({
+				propsData: {
+					role: "teacher",
+				},
+			});
+
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
-			wrapper.setData({ tab: "drafts" });
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getActiveTab: "drafts",
+			});
+
+			wrapper = mountComponent({
+				propsData: {
+					role: "teacher",
+				},
+			});
+
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
-			wrapper.setData({ tab: "finished" });
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getActiveTab: "finished",
+			});
+
+			wrapper = mountComponent({
+				propsData: {
+					role: "teacher",
+				},
+			});
+
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
 
-		it("should reflect active tab in the URL", async () => {
-			wrapper.setData({ tab: "finished" });
-			await wrapper.vm.$nextTick();
-			//@ts-ignore
-			expect($router.replace).toHaveBeenCalled();
+		it("Should update state when tab changes", async () => {
+			taskModuleMock = createModuleMocks(TaskModule, {
+				...taskModuleGetters,
+				getActiveTab: "finished",
+			});
+
+			wrapper = mountComponent({
+				propsData: {
+					role: "teacher",
+				},
+			});
+
+			await wrapper.setData({ tab: "drafts" });
+
+			expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
 		});
 
-		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", () => {
-			wrapper.setData({ tab: "current" });
+		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", async () => {
 			const switchEl = wrapper.find(".v-input--switch");
 			switchEl.vm.$emit("input-changed");
 			expect(taskModuleMock.setSubstituteFilter).toHaveBeenCalled();
@@ -256,6 +302,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 					graded: [],
 				},
 				hasTasks: false,
+				getActiveTab: "open",
 
 				// make tab 2 report as not empty
 				openTasksForStudentIsEmpty: true,
@@ -270,10 +317,38 @@ describe("@components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			wrapper.setData({ tab: "open" });
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
-			wrapper.setData({ tab: "completed" });
+		});
+
+		it("should enable filter when active tab is not empty and no course is selected", () => {
+			taskModuleMock = createModuleMocks(TaskModule, {
+				getStatus: "completed",
+				getOpenTasksForStudent: {
+					overdue: [],
+					noDueDate: [],
+					withDueDate: [],
+				},
+				getCompletedTasksForStudent: {
+					submitted: [],
+					graded: [],
+				},
+				hasTasks: false,
+				getActiveTab: "completed",
+
+				// make tab 2 report as not empty
+				openTasksForStudentIsEmpty: true,
+				completedTasksForStudentIsEmpty: false,
+				getCourseFilters: [],
+				getSelectedCourseFilters: [],
+			});
+
+			const wrapper = mountComponent({
+				propsData: {
+					role: "student",
+				},
+			});
+
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
 		});
