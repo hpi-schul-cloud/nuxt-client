@@ -1,8 +1,5 @@
 import { mount } from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 
 declare var createComponentMocks: Function;
 
@@ -16,7 +13,7 @@ const mockData = {
 	startDate: "2019-12-07T23:00:00.000Z",
 	untilDate: "2020-12-16T23:00:00.000Z",
 	titleDate: "2019/20",
-	href: "/courses/456",
+	href: "/rooms/456",
 };
 
 const propsData = {
@@ -39,7 +36,6 @@ const getWrapper = (props: object, options?: object) => {
 
 describe("vRoomAvatar", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
 		window.location.pathname = "";
 	});
 	it("should display the title", () => {
@@ -97,9 +93,7 @@ describe("vRoomAvatar", () => {
 		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
 	});
 
-	it("should redirect to room page if env-variable is set", async () => {
-		// @ts-ignore
-		envConfigModule.setEnvs({ ROOM_VIEW_ENABLED: true });
+	it("should redirect to room page", async () => {
 		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
@@ -108,9 +102,7 @@ describe("vRoomAvatar", () => {
 		expect(location.pathname).toStrictEqual("/rooms/456");
 	});
 
-	it("should redirect to room page if keyboard event triggered and env-variable is set", async () => {
-		// @ts-ignore
-		envConfigModule.setEnvs({ ROOM_VIEW_ENABLED: true });
+	it("should redirect to room page if keyboard event triggered", async () => {
 		const location = window.location;
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".v-avatar");
@@ -119,7 +111,7 @@ describe("vRoomAvatar", () => {
 		expect(location.pathname).toStrictEqual("/rooms/456");
 	});
 
-	it("should not redirect to course page if condenseLayout props is true", async () => {
+	it("should not redirect to room page if condenseLayout props is true", async () => {
 		const location = window.location;
 		const wrapper = getWrapper({
 			item: mockData,
