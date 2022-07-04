@@ -94,7 +94,7 @@ export default {
 			this.showModal = true;
 		},
 	},
-	layout: "loggedout",
+	layout: "loggedoutFooter",
 };
 </script>
 

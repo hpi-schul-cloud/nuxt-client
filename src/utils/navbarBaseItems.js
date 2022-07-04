@@ -1,16 +1,16 @@
 export default [
 	{
-		title: "layouts.loggedoutFullWidth.steps",
+		title: "global.topbar.loggedOut.actions.steps",
 		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 		target: "_blank",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.blog",
+		title: "global.topbar.loggedOut.actions.blog",
 		href: "https://blog.hpi-schul-cloud.de/",
 		target: "_blank",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.faq",
+		title: "global.topbar.loggedOut.actions.faq",
 		href: "https://blog.hpi-schul-cloud.de/faqs",
 		target: "_blank",
 	},
