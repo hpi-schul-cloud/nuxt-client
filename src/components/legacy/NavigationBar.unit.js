@@ -5,15 +5,15 @@ import EnvConfigModule from "@/store/env-config";
 
 const navbarLinks = [
 	{
-		title: "Blog",
+		title: "global.topbar.loggedOut.actions.blog",
 		href: "https://blog.hpi-schul-cloud.de/",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.steps",
+		title: "global.topbar.loggedOut.actions.steps",
 		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 	},
 	{
-		title: "FAQ",
+		title: "global.topbar.loggedOut.actions.faq",
 		href: "https://blog.hpi-schul-cloud.de/faqs",
 	},
 ];

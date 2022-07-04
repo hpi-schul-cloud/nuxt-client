@@ -125,7 +125,6 @@ export default {
 	}
 
 	@include breakpoint(desktop) {
-		width: calc(7 * var(--sidebar-sub-item-height));
 		height: var(--topbar-height);
 		> a > img {
 			height: var(--topbar-height);

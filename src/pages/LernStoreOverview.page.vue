@@ -96,7 +96,7 @@ export default {
 		ContentEduSharingFooter,
 	},
 	mixins: [infiniteScrolling],
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	data() {
 		return {
 			searchQuery: "",
