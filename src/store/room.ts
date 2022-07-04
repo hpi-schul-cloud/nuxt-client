@@ -7,11 +7,6 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
-	TaskApiInterface,
-	TaskApiFactory,
-	CopyApiResponse,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -45,12 +40,6 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
-	private copyResult: CopyApiResponse = {
-		id: "",
-		title: "",
-		type: CopyApiResponseTypeEnum.Task,
-		status: CopyApiResponseStatusEnum.Success,
-	};
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -58,14 +47,6 @@ export default class RoomModule extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
-	}
-
-	private _taskApi?: TaskApiInterface;
-	private get taskApi(): TaskApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		}
-		return this._taskApi;
 	}
 
 	@Action
@@ -312,72 +293,6 @@ export default class RoomModule extends VuexModule {
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
-	@Action
-	async copyTask(id: string): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const copyResult = await this.taskApi.taskControllerCopyTask(id, {
-				courseId: this.roomData.roomId,
-			});
-
-			this.setCopyResult(copyResult.data || {});
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
-	async copyLesson(lessonId: string): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const copyResult = await this.roomsApi.roomsControllerCopyLesson(
-				lessonId,
-				{
-					courseId: this.roomData.roomId,
-				}
-			);
-
-			this.setCopyResult(copyResult.data || {});
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
-	async copyRoom(courseId: string): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const copyResult = await this.roomsApi.roomsControllerCopyCourse(
-				courseId
-			);
-
-			this.setCopyResult(copyResult.data);
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
 	@Mutation
 	setRoomData(payload: BoardResponse): void {
 		this.roomData = payload;
@@ -427,11 +342,6 @@ export default class RoomModule extends VuexModule {
 		this.courseShareToken = payload;
 	}
 
-	@Mutation
-	setCopyResult(payload: CopyApiResponse | any): void {
-		this.copyResult = payload;
-	}
-
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -468,8 +378,8 @@ export default class RoomModule extends VuexModule {
 		return this.finishedLoading && this.roomData.elements.length === 0;
 	}
 
-	get getCopyResult(): CopyApiResponse {
-		return this.copyResult;
+	get getRoomId(): string {
+		return this.roomData.roomId;
 	}
 
 	private get finishedLoading(): boolean {

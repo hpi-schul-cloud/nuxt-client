@@ -139,6 +139,7 @@
 	"components.molecules.copyResult.fileCopy.error": "Файл: ми не можемо копіювати файли. Ми працюємо над цим питанням...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, статус копіювання: {itemStatus}",
 	"components.molecules.copyResult.aria.parentItem.info": "{itemTitle}, статус копіювання: {itemStatus}, {includedItems} предмети в ньому, натисніть пробіл, щоб {action}",
+	"components.molecules.copyResult.error": "Помилка під час копіювання",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",
 	"components.molecules.importUsersMatch.search": "Пошук користувача",
 	"components.molecules.importUsersMatch.subtitle": "Das webbschule-Konto wird später in die {instance} importiert. Wenn Sie das Konto mit einem bestehenden {instance} Konto verknüpfen möchten, so dass die Benutzerdaten erhalten bleiben, wählen Sie hier das {instance} Konto aus. Andernfalls wird dieses als neues Konto angeleg.",

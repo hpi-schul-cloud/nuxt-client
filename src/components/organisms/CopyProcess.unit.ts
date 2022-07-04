@@ -1,40 +1,69 @@
 import { mount } from "@vue/test-utils";
+import { copyModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import CopyModule from "@/store/copy-process";
 import CopyProcess from "./CopyProcess.vue";
 
 declare let createComponentMocks: Function;
 
-const propsData = {
-	data: {
-		title: "Aufgabe",
-		type: "task",
-		status: "partial",
-		id: "12345",
-		elements: [
-			{ title: "metadata", type: "leaf", status: "success" },
-			{ title: "description", type: "leaf", status: "success" },
-			{ title: "submissions", type: "leaf", status: "not-doing" },
-			{ title: "files", type: "leaf", status: "not-implemented" },
-		],
-	},
-	isOpen: false,
-	loading: false,
+const serverResponseAllSuccess = {
+	title: "Success-Title",
+	type: "task",
+	status: "success",
+	id: "success-id-123",
+	elements: [
+		{ title: "metadata", type: "leaf", status: "success" },
+		{ title: "description", type: "leaf", status: "success" },
+		{ title: "submissions", type: "leaf", status: "not-doing" },
+	],
 };
 
-const successPropsData = {
-	data: {
-		title: "Aufgabe",
-		type: "task",
-		status: "success",
-		id: "12345",
-		elements: [
-			{ title: "metadata", type: "leaf", status: "success" },
-			{ title: "description", type: "leaf", status: "success" },
-			{ title: "submissions", type: "leaf", status: "success" },
-			{ title: "files", type: "leaf", status: "success" },
-		],
-	},
-	isOpen: false,
-	loading: false,
+const serverResponseCourseCopy = {
+	title: "Mathe",
+	type: "course",
+	status: "partial",
+	id: "456",
+	elements: [
+		{ title: "metadata", type: "leaf", status: "success" },
+		{ title: "teachers", type: "leaf", status: "not-doing" },
+		{ title: "substitutionTeachers", type: "leaf", status: "not-doing" },
+		{ title: "students", type: "leaf", status: "not-doing" },
+		{ title: "classes", type: "leaf", status: "not-doing" },
+		{ title: "ltiTools", type: "leaf", status: "not-doing" },
+		{ title: "times", type: "leaf", status: "not-implemented" },
+		{ title: "files", type: "file", status: "not-implemented" },
+		{ title: "coursegroups", type: "leaf", status: "not-implemented" },
+		{
+			title: "board",
+			type: "board",
+			status: "failure",
+			id: "boardId",
+			elements: [
+				{
+					title: "Aufgabe an Marla (Mathe) ",
+					type: "task",
+					status: "success",
+					id: "---",
+					elements: [
+						{ title: "metadata", type: "leaf", status: "success" },
+						{ title: "description", type: "leaf", status: "success" },
+						{ title: "submissions", type: "leaf", status: "not-doing" },
+					],
+				},
+				{
+					title: "Aufgabe an Marla (Mathe) - offen",
+					type: "task",
+					status: "success",
+					id: "567890",
+					elements: [
+						{ title: "metadata", type: "leaf", status: "success" },
+						{ title: "description", type: "leaf", status: "success" },
+						{ title: "submissions", type: "leaf", status: "not-doing" },
+					],
+				},
+			],
+		},
+	],
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -51,170 +80,340 @@ const getWrapper: any = (props: object, options?: object) => {
 describe("@components/organisms/CopyProcess", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
+		setupStores({
+			"copy-process": CopyModule,
+		});
+	});
+	describe("configurations", () => {
+		it("should have correct props and configuration", async () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+
+			expect(wrapper.vm.isOpen).toBe(true);
+			expect(wrapper.vm.loading).toBe(false);
+		});
 	});
 
-	it("should have correct props and configuration", async () => {
-		const wrapper = getWrapper(propsData);
+	describe("computed properties", () => {
+		beforeEach(() => {
+			copyModule.setCopyResult(serverResponseAllSuccess);
+			copyModule.setFilteredResult(serverResponseAllSuccess);
+		});
 
-		expect(wrapper.vm.data).toStrictEqual(propsData.data);
-		expect(wrapper.vm.isOpen).toStrictEqual(propsData.isOpen);
-		expect(wrapper.vm.loading).toStrictEqual(propsData.loading);
+		it("'copiedItemTitle' should be the correct title", () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+
+			expect(wrapper.vm.copiedItemTitle).toStrictEqual("Success-Title");
+		});
+
+		it("'copiedItemId' should be the correct id", () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+
+			expect(wrapper.vm.copiedItemId).toStrictEqual("success-id-123");
+		});
+
+		it("'types' should return the types object", () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const expectedTypes = {
+				Task: "task",
+				Lesson: "lesson",
+				Course: "course",
+				Board: "board",
+				File: "file",
+				Leaf: "leaf",
+			};
+
+			expect(wrapper.vm.typesEnum).toStrictEqual(expectedTypes);
+		});
+
+		it("'status' should return the types object", () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const expectedStatus = {
+				Success: "success",
+				Failure: "failure",
+				NotDoing: "not-doing",
+				NotImplemented: "not-implemented",
+				Partial: "partial",
+			};
+
+			expect(wrapper.vm.statusEnum).toStrictEqual(expectedStatus);
+		});
+
+		it("'copiedItems' should return the cleanedup object", () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
+
+			const expectedCopiedItems = {
+				title: "Success-Title",
+				type: types.Task,
+				status: status.Success,
+				id: "success-id-123",
+				elements: [
+					{
+						id: "success-id-123",
+						status: "success-all",
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.successfullyCopied"
+						),
+						type: types.Task,
+					},
+				],
+				index: 0,
+				completed: true,
+			};
+
+			expect(wrapper.vm.copiedItems).toStrictEqual(expectedCopiedItems);
+		});
 	});
 
-	it("should change the prop data to 'copiedItems' object", async () => {
-		const wrapper = getWrapper(propsData);
+	describe("html section", () => {
+		it("should show skeleton when its prop set", async () => {
+			const wrapper = getWrapper({});
+			const skeletonElementBefore = wrapper.findAll(
+				`[data-testid="copy-process-skeleton"]`
+			);
+			expect(skeletonElementBefore).toHaveLength(0);
 
-		const changedPropsData = {
-			id: "12345",
-			status: "partial",
-			title: "Aufgabe",
-			type: "task",
-			index: 0,
-			elements: [
-				{
-					title: wrapper.vm.$i18n.t("components.molecules.copyResult.metadata"),
-					type: "leaf",
-					status: "success",
-					index: 1,
-				},
-				{
-					title: wrapper.vm.$i18n.t("common.labels.description"),
-					type: "leaf",
-					status: "success",
-					index: 2,
-				},
-				{
-					title: wrapper.vm.$i18n.t(
-						"components.molecules.copyResult.fileCopy.error"
-					),
-					type: "leaf",
-					status: "failure",
-					index: 3,
-				},
-			],
-		};
+			await wrapper.setProps({ isOpen: true, loading: true });
 
-		expect(wrapper.vm.data).toStrictEqual(propsData.data);
-		expect(wrapper.vm.copiedItems).toStrictEqual(changedPropsData);
+			const skeletonElementAfter = wrapper.findAll(
+				`[data-testid="copy-process-skeleton"]`
+			);
+			expect(skeletonElementAfter).toHaveLength(1);
+		});
 	});
 
-	it("should filter elements which have 'not-doing' status", async () => {
-		const wrapper = getWrapper(propsData);
+	describe("watch section", () => {
+		it("should watch 'isOpen' prop anc change 'showModal' property", async () => {
+			const wrapper = getWrapper({ isOpen: false, loading: false });
+			expect(wrapper.vm.showModal).toBe(false);
 
-		const filterResult = wrapper.vm.copiedItems.elements.some(
-			(item: any) => item.status === "not-doing"
-		);
-
-		expect(filterResult).toBe(false);
+			await wrapper.setProps({ isOpen: true });
+			expect(wrapper.vm.showModal).toBe(true);
+		});
 	});
 
-	it("should have only one success element when every items' status is 'success'", async () => {
-		const wrapper = getWrapper(successPropsData);
+	describe("methods section", () => {
+		it("should call 'dialogClosed' method when 'close' button is clicked", async () => {
+			const closeMockFunction = jest.fn();
+			const resetCopyResultSpy = jest.spyOn(copyModule, "resetCopyResult");
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			wrapper.vm.dialogClosed = closeMockFunction;
+			await wrapper.setData({ showModal: true });
 
-		const successObject = {
-			id: "12345",
-			status: "success",
-			title: "Aufgabe",
-			type: "task",
-			index: 0,
-			completed: true,
-			elements: [
-				{
-					id: "12345",
-					status: "success-all",
-					title: wrapper.vm.$i18n.t(
-						"components.molecules.copyResult.successfullyCopied"
-					),
-					type: "task",
-				},
-			],
-		};
+			const closeButton = wrapper.find(`[data-testid="dialog-close"]`);
+			closeButton.trigger("click");
 
-		expect(wrapper.vm.copiedItems).toStrictEqual(successObject);
-	});
+			expect(closeMockFunction).toHaveBeenCalled();
+		});
 
-	it("should show skeleton when its prop set", async () => {
-		const wrapper = getWrapper(propsData);
-		await wrapper.vm.$nextTick();
-		const skeletonElementBefore = wrapper.findAll(
-			`[data-testid="copy-process-skeleton"]`
-		);
-		expect(skeletonElementBefore).toHaveLength(0);
+		it("should call 'resetCopyResult' store method when 'close' button is clicked", async () => {
+			const resetCopyResultSpy = jest.spyOn(copyModule, "resetCopyResult");
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			await wrapper.setData({ showModal: true });
 
-		await wrapper.setProps({ isOpen: true, loading: true });
+			const closeButton = wrapper.find(`[data-testid="dialog-close"]`);
+			closeButton.trigger("click");
 
-		const skeletonElementAfter = wrapper.findAll(
-			`[data-testid="copy-process-skeleton"]`
-		);
-		expect(skeletonElementAfter).toHaveLength(1);
-	});
+			expect(resetCopyResultSpy).toHaveBeenCalled();
+		});
 
-	it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
-		const wrapper = getWrapper(propsData);
-		await wrapper.vm.$nextTick();
-		const method = wrapper.vm.getItemTitleAndStatus;
+		it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			await wrapper.vm.$nextTick();
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
 
-		expect(
-			method({ type: "file", title: "files", status: "not-implemented" }).status
-		).toStrictEqual("failure");
-		expect(
-			method({ type: "file", title: "files", status: "not-implemented" }).title
-		).toStrictEqual(
-			wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
-		);
+			const method = wrapper.vm.getItemTitleAndStatus;
 
-		expect(
-			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
-				.status
-		).toStrictEqual("failure");
-		expect(
-			method({ type: "lesson", title: "lesson-1", status: "not-implemented" })
-				.title
-		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`);
+			expect(
+				method({
+					type: types.File,
+					title: "files",
+					status: status.NotImplemented,
+				}).status
+			).toStrictEqual("failure");
+			expect(
+				method({
+					type: types.File,
+					title: "files",
+					status: status.NotImplemented,
+				}).title
+			).toStrictEqual(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+			);
 
-		expect(
-			method({ type: "task", title: "task-1", status: "not-implemented" })
-				.status
-		).toStrictEqual("failure");
-		expect(
-			method({ type: "task", title: "task-1", status: "not-implemented" }).title
-		).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
+			expect(
+				method({
+					type: types.Lesson,
+					title: "lesson-1",
+					status: status.NotImplemented,
+				}).status
+			).toStrictEqual(status.Failure);
+			expect(
+				method({
+					type: types.Lesson,
+					title: "lesson-1",
+					status: status.NotImplemented,
+				}).title
+			).toStrictEqual(
+				`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`
+			);
 
-		expect(
-			method({ type: "leaf", title: "metadata", status: "success" }).status
-		).toStrictEqual("success");
-		expect(
-			method({ type: "leaf", title: "metadata", status: "success" }).title
-		).toStrictEqual(
-			wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
-		);
+			expect(
+				method({
+					type: types.Task,
+					title: "task-1",
+					status: status.NotImplemented,
+				}).status
+			).toStrictEqual(status.Failure);
+			expect(
+				method({
+					type: types.Task,
+					title: "task-1",
+					status: status.NotImplemented,
+				}).title
+			).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
 
-		expect(
-			method({ type: "leaf", title: "description", status: "success" }).status
-		).toStrictEqual("success");
-		expect(
-			method({ type: "leaf", title: "description", status: "success" }).title
-		).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
-	});
+			expect(
+				method({ type: types.Leaf, title: "metadata", status: status.Success })
+					.status
+			).toStrictEqual(status.Success);
+			expect(
+				method({ type: types.Leaf, title: "metadata", status: status.Success })
+					.title
+			).toStrictEqual(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+			);
 
-	it("cleanupCopyStatus method should filter the 'not-doing' status", async () => {
-		const wrapper = getWrapper(propsData);
-		await wrapper.vm.$nextTick();
+			expect(
+				method({
+					type: types.Leaf,
+					title: "description",
+					status: status.Success,
+				}).status
+			).toStrictEqual(status.Success);
+			expect(
+				method({
+					type: types.Leaf,
+					title: "description",
+					status: status.Success,
+				}).title
+			).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
+		});
 
-		const expectedData = {
-			title: "Aufgabe",
-			type: "task",
-			status: "partial",
-			id: "12345",
-			elements: [
-				{ title: "metadata", type: "leaf", status: "success" },
-				{ title: "description", type: "leaf", status: "success" },
-				{ title: "files", type: "leaf", status: "not-implemented" },
-			],
-		};
+		it("'prepareCopiedElements' method should prepare the data  ", async () => {
+			copyModule.setCopyResult(serverResponseCourseCopy);
+			copyModule.setFilteredResult(serverResponseCourseCopy);
+			const wrapper = getWrapper({ isOpen: true, loading: false });
+			const status = wrapper.vm.statusEnum;
+			const types = wrapper.vm.typesEnum;
+			const i18n = wrapper.vm.$i18n;
 
-		const cleanUpMethod = wrapper.vm.cleanupCopyStatus;
+			const expectedData = {
+				title: "Mathe",
+				type: types.Course,
+				status: status.Partial,
+				id: "456",
+				elements: [
+					{
+						title: i18n.t("components.molecules.copyResult.metadata"),
+						type: types.Leaf,
+						status: status.Success,
+						index: 1,
+					},
+					{
+						title: i18n.t("common.words.times"),
+						type: types.Leaf,
+						status: status.Failure,
+						index: 2,
+					},
+					{
+						title: i18n.t("components.molecules.copyResult.fileCopy.error"),
+						type: types.File,
+						status: status.Failure,
+						index: 3,
+					},
+					{
+						title: i18n.t("common.words.courseGroups"),
+						type: types.Leaf,
+						status: status.Failure,
+						index: 4,
+					},
+					{
+						title: i18n.t("common.labels.room"),
+						type: types.Board,
+						status: status.Success,
+						id: "boardId",
+						index: 5,
+						elements: [
+							{
+								title: "Aufgabe - Aufgabe an Marla (Mathe) ",
+								type: types.Task,
+								status: status.Success,
+								id: "---",
+								index: 6,
+								elements: [
+									{
+										title: i18n.t("components.molecules.copyResult.metadata"),
+										type: types.Leaf,
+										status: status.Success,
+										index: 7,
+									},
+									{
+										title: i18n.t("common.labels.description"),
+										type: types.Leaf,
+										status: status.Success,
+										index: 8,
+									},
+								],
+							},
+							{
+								title: "Aufgabe - Aufgabe an Marla (Mathe) - offen",
+								type: types.Task,
+								status: status.Success,
+								id: "567890",
+								index: 9,
+								elements: [
+									{
+										title: i18n.t("components.molecules.copyResult.metadata"),
+										type: types.Leaf,
+										status: status.Success,
+										index: 10,
+									},
+									{
+										title: i18n.t("common.labels.description"),
+										type: types.Leaf,
+										status: status.Success,
+										index: 11,
+									},
+								],
+							},
+						],
+					},
+				],
+				index: 0,
+			};
 
-		expect(cleanUpMethod(propsData.data)).toStrictEqual(expectedData);
+			const copiedItems = wrapper.vm.copiedItems;
+
+			expect(copiedItems).toStrictEqual(expectedData);
+			expect(copiedItems.elements[0].title).toStrictEqual(
+				i18n.t("components.molecules.copyResult.metadata")
+			);
+			expect(copiedItems.elements[1].title).toStrictEqual(
+				wrapper.vm.$i18n.t("common.words.times")
+			);
+			expect(copiedItems.elements[1].status).toStrictEqual(status.Failure);
+			expect(copiedItems.elements[2].title).toStrictEqual(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+			);
+			expect(copiedItems.elements[2].status).toStrictEqual(status.Failure);
+			expect(copiedItems.elements[3].title).toStrictEqual(
+				wrapper.vm.$i18n.t("common.words.courseGroups")
+			);
+			expect(copiedItems.elements[3].status).toStrictEqual(status.Failure);
+			expect(copiedItems.elements[4].elements[0].elements).toHaveLength(2);
+		});
 	});
 });
