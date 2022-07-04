@@ -29,8 +29,8 @@ export default {
 	layout({ query }) {
 		return String(query.isCollection) === "true" &&
 			contentModule.getCollectionsFeatureFlag === true
-			? "defaultVuetify"
-			: "loggedoutFooter";
+			? "loggedInFull"
+			: "plain";
 	},
 	computed: {
 		resource() {

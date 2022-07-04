@@ -63,7 +63,6 @@ export default {
 
 .title {
 	margin-bottom: var(--space-xl-3);
-	font-size: var(--heading-4) !important;
 	text-align: center;
 }
 

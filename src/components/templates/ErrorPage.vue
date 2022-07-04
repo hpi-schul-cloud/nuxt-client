@@ -7,13 +7,7 @@
 			fill="var(--color-primary)"
 			role="presentation"
 		/>
-		<img
-			v-else
-			role="presentation"
-			alt=""
-			src="@assets/img/pc_repair.png"
-			class="error-img"
-		/>
+		<img v-else role="presentation" alt="" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
 			<template v-if="error.message">
@@ -51,9 +45,5 @@ export default {
 }
 h1.error-msg {
 	margin-bottom: var(--space-lg);
-}
-
-.error-img {
-	margin-top: var(--space-xl-4);
 }
 </style>

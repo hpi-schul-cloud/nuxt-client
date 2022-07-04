@@ -14,7 +14,7 @@ export default {
 	components: {
 		ErrorPage,
 	},
-	layout: "loggedoutFooter",
+	layout: "loggedout",
 	meta: {
 		isPublic: true,
 	},

@@ -1,7 +1,7 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
-		<skip-links />
+		<skip-links></skip-links>
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<the-top-bar
