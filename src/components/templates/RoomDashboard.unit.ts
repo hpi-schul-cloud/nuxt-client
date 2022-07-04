@@ -1,7 +1,8 @@
-import { envConfigModule, roomModule, taskModule } from "@/store";
+import { envConfigModule, roomModule, taskModule, copyModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TaskModule from "@/store/tasks";
+import CopyModule from "@/store/copy-process";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
@@ -113,6 +114,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			tasks: TaskModule,
 			room: RoomModule,
 			"env-config": EnvConfigModule,
+			"copy-process": CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
@@ -511,55 +513,34 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the 'store copyTask action' method when a task component emits 'copy-task' custom event", async () => {
-			const roomModuleCopyMock = jest.fn();
+			const spy = jest.spyOn(copyModule, "copyTask");
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyTask = roomModuleCopyMock;
 
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
-			await wrapper.vm.$nextTick();
 
-			expect(roomModuleCopyMock).toHaveBeenCalled();
-			expect(roomModuleCopyMock.mock.calls[0][0]).toStrictEqual("1234");
+			expect(spy).toHaveBeenCalled();
+			expect(spy.mock.calls[0][0]).toStrictEqual({
+				id: "1234",
+				courseId: "123",
+			});
 		});
 
-		it("should set 'copyProcess' data property method when a task component emits 'copy-task' custom event", async () => {
-			const roomModuleCopyMock = jest.fn();
+		it("should set 'isOpen' true  when a task component emits 'copy-task' custom event", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyTask = roomModuleCopyMock;
-
-			roomModule.setCopyResult({
-				title: "Aufgabe",
-				type: "task",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
+			await wrapper.vm.$nextTick();
 
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
-			await wrapper.vm.$nextTick();
 
-			expect(wrapper.vm.copyProcess.data).toStrictEqual({
-				title: "Aufgabe",
-				type: "task",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
 			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
 		});
 
-		it("should empty 'copyProcess' data property method when CopyProcess component emits 'dialog-closed'", async () => {
+		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
+			const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-
-			roomModule.setCopyResult({
-				title: "Aufgabe",
-				type: "task",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
+			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
+			await wrapper.vm.$nextTick();
 
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
@@ -569,8 +550,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			copyProcess.vm.$emit("dialog-closed", false);
 			await wrapper.vm.$nextTick();
 
-			expect(wrapper.vm.copyProcess.data).toStrictEqual({});
 			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+			expect(fetchContentSpy).toHaveBeenCalled();
+			expect(fetchContentSpy.mock.calls[0][0]).toStrictEqual("123");
 		});
 
 		it("should redirect to legacy client if FEATURE_TASK_COPY_ENABLED flag is not set true", async () => {
@@ -606,57 +588,64 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should call the 'store copyLesson action' method when a lesson component emits 'copy-lesson' custom event", async () => {
-			const roomModuleCopyLessonMock = jest.fn();
+			const spy = jest.spyOn(copyModule, "copyLesson");
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyLesson = roomModuleCopyLessonMock;
 
 			const lessonCard = wrapper.find(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
 			await wrapper.vm.$nextTick();
 
-			expect(roomModuleCopyLessonMock).toHaveBeenCalled();
-			expect(roomModuleCopyLessonMock.mock.calls[0][0]).toStrictEqual("3456");
+			expect(spy).toHaveBeenCalled();
+			expect(spy.mock.calls[0][0]).toStrictEqual({
+				id: "3456",
+				courseId: "123",
+			});
 		});
 
-		it("should set 'copyProcess' data property method when a lesson component emits 'copy-lesson' custom event", async () => {
-			const roomModuleCopyLessonMock = jest.fn();
+		it("should set 'isOpen' true  when a task component emits 'copy-lesson' custom event", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyLesson = roomModuleCopyLessonMock;
+			await wrapper.vm.$nextTick();
 
-			roomModule.setCopyResult({
-				title: "Thema",
-				type: "lesson",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+		});
+
+		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
+			await wrapper.vm.$nextTick();
 
 			const lessonCard = wrapper.find(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
 			await wrapper.vm.$nextTick();
 
-			expect(wrapper.vm.copyProcess.data).toStrictEqual({
-				title: "Thema",
-				type: "lesson",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
-			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
+			copyProcess.vm.$emit("dialog-closed", false);
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
 		});
 
 		it("should show a notification when a lesson component emited 'copy-lesson' custom event", async () => {
 			const roomModuleCopyLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			roomModule.copyLesson = roomModuleCopyLessonMock;
-
-			roomModule.setCopyResult({
-				title: "Thema",
-				type: "lesson",
-				status: "success",
-				id: "123",
-				elements: [{ title: "description", type: "leaf", status: "success" }],
-			});
+			copyModule.copyLesson = roomModuleCopyLessonMock.mockImplementation(
+				() => {
+					copyModule.setCopyResult({
+						title: "Thema",
+						type: "lesson",
+						status: "success",
+						id: "123",
+						elements: [
+							{ title: "description", type: "leaf", status: "success" },
+						],
+					});
+				}
+			);
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
 
 			const lessonCard = wrapper.find(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
