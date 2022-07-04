@@ -98,8 +98,6 @@
 			</template>
 		</v-custom-dialog>
 		<copy-process
-			v-if="copyProcess.data.id !== ''"
-			:data="copyProcess.data || {}"
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
@@ -110,7 +108,7 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule, copyModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -172,7 +170,7 @@ export default {
 			courseId: this.$route.params.id,
 			tab: null,
 			copyProcess: {
-				data: {},
+				id: "",
 				isOpen: false,
 				loading: false,
 			},
@@ -320,34 +318,34 @@ export default {
 		},
 		async copyRoom() {
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = roomModule.getLoading;
-			await roomModule.copyRoom(this.courseId);
-			const copyResult = roomModule.getCopyResult;
-			const businessError = roomModule.getBusinessError;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyRoom(this.courseId);
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
 
 			if (businessError.statusCode !== "") {
 				this.$notifier({
-					text: this.$t("components.organisms.FormNews.errors.create"),
+					text: this.$t("components.molecules.copyResult.error"),
 					status: "error",
 				});
 				return;
 			}
 
 			if (copyResult.id !== "") {
-				this.copyProcess.data = copyResult;
-				this.copyProcess.loading = roomModule.getLoading;
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
 			}
 		},
 		async onCopyProcessDialogClose() {
-			if (this.copyProcess.data.id === "") return;
+			if (this.copyProcess.id === "") return;
 			this.$notifier({
 				text: this.$t("pages.room.copy.course.message.created"),
 				status: "success",
 			});
-			this.$router.push(`/rooms/${this.copyProcess.data.id}`);
-			this.courseId = this.copyProcess.data.id;
+			this.$router.push(`/rooms/${this.copyProcess.id}`);
+			this.courseId = this.copyProcess.id;
 			this.copyProcess.isOpen = false;
-			this.copyProcess.data = {};
+			this.copyProcess.id = "";
 		},
 	},
 	head() {
