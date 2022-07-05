@@ -148,7 +148,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 		await wrapper.setData({ checked: true });
 
 		let errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataClassesPath'] .info.error"
+			"div[data-testid='ldapDataClassesPath'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalse();
@@ -161,7 +161,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 
 		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataClassesPath'] .info.error"
+			"div[data-testid='ldapDataClassesPath'] .base-input-info.base-input-error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
