@@ -30,7 +30,7 @@ export default {
 		return String(query.isCollection) === "true" &&
 			contentModule.getCollectionsFeatureFlag === true
 			? "defaultVuetify"
-			: "loggedoutFooter";
+			: "plain";
 	},
 	computed: {
 		resource() {

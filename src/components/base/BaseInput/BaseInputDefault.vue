@@ -237,7 +237,7 @@ export default {
 			border-bottom: var(--border-width) solid;
 		}
 	}
-	&.error {
+	&.base-input-error {
 		border-bottom-color: var(--color-danger);
 	}
 	&.disabled {
