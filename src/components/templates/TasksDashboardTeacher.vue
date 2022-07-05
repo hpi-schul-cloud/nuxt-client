@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<v-tabs-items v-model="currentTab">
+		<v-tabs-items v-model="tab">
 			<v-tab-item :value="tabRoutes[0]" class="padding-bottom">
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
@@ -70,10 +70,6 @@ import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 export default {
 	components: { vCustomEmptyState, TasksList, vCustomDoublePanels },
 	props: {
-		tab: {
-			type: String,
-			required: true,
-		},
 		emptyState: {
 			type: Object,
 			required: true,
@@ -118,12 +114,12 @@ export default {
 		withDueDateTasks() {
 			return this.openTasks.withDueDate;
 		},
-		currentTab: {
+		tab: {
 			get() {
-				return this.tab;
+				return this.taskModule.getActiveTab;
 			},
 			set(newTab) {
-				this.$emit("update:tab", newTab);
+				this.taskModule.setActiveTab(newTab);
 			},
 		},
 	},

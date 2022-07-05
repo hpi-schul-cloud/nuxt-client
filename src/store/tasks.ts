@@ -2,13 +2,7 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { finishedTaskModule } from "@/store";
 import { TaskFilter } from "./task.filter";
 import { $axios } from "../utils/api";
-import {
-	TaskApiFactory,
-	TaskApiInterface,
-	CopyApiResponse,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-} from "../serverApi/v3/api";
+import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Status } from "./types/commons";
 import {
 	CompletedTasksForStudent,
@@ -41,14 +35,9 @@ export default class TaskModule extends VuexModule {
 
 	loading: boolean = false;
 
-	_taskApi?: TaskApiInterface;
+	tab: string = "";
 
-	copyResult: CopyApiResponse = {
-		id: "",
-		title: "",
-		type: CopyApiResponseTypeEnum.Task,
-		status: CopyApiResponseStatusEnum.Success,
-	};
+	_taskApi?: TaskApiInterface;
 
 	@Action
 	async fetchAllTasks(): Promise<void> {
@@ -116,32 +105,6 @@ export default class TaskModule extends VuexModule {
 		}
 	}
 
-	@Action
-	async copyTask(taskId: string): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const originalTask = this.tasks.filter((task) => task.id === taskId)[0];
-			const taskCopyParams =
-				originalTask.courseId && originalTask.courseId !== ""
-					? {
-							courseId: originalTask.courseId,
-					  }
-					: {};
-			const copyResult = await this.taskApi.taskControllerCopyTask(
-				taskId,
-				taskCopyParams
-			);
-
-			this.setCopyResult(copyResult.data || {});
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setBusinessError(error as BusinessError);
-			this.setStatus("error");
-			this.setLoading(false);
-		}
-	}
-
 	@Mutation
 	setTasks(tasks: Task[]): void {
 		this.tasks = tasks;
@@ -150,6 +113,11 @@ export default class TaskModule extends VuexModule {
 	@Mutation
 	setCourseFilters(courseNames: string[]): void {
 		this.courseFilter = courseNames;
+	}
+
+	@Mutation
+	setActiveTab(tab: string): void {
+		this.tab = tab;
 	}
 
 	@Mutation
@@ -186,15 +154,6 @@ export default class TaskModule extends VuexModule {
 		};
 	}
 
-	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
-	@Mutation
-	setCopyResult(payload: CopyApiResponse | any): void {
-		this.copyResult = payload;
-	}
-
 	get getTasks(): Task[] {
 		return this.tasks;
 	}
@@ -211,6 +170,10 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
+	get getActiveTab(): string {
+		return this.tab;
+	}
+  
 	get getCourseFilters(): TaskCourseFilter[] {
 		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(
 			this.substituteFilter
@@ -372,10 +335,6 @@ export default class TaskModule extends VuexModule {
 		};
 
 		return tasksCount;
-	}
-
-	get getCopyResult(): CopyApiResponse {
-		return this.copyResult;
 	}
 
 	private get isReady(): boolean {

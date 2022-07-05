@@ -411,6 +411,7 @@
 	"components.molecules.copyResult.fileCopy.error": "Datei: Wir können keine Dateien kopieren. Wir arbeiten an diesem Problem...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, Kopierstatus: {itemStatus}",
 	"components.molecules.copyResult.aria.parentItem.info": "{itemTitle}, Kopierstatus: {itemStatus}, {includedItems} Artikel darin, zum {action} die Leertaste drücken",
+	"components.molecules.copyResult.error": "Fehler beim Kopieren",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
