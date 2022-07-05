@@ -187,7 +187,6 @@ export default {
 		AddContentButton,
 		UserHasRole,
 	},
-	layout: "default",
 	mixins: [contentMeta],
 	props: {
 		resource: {
