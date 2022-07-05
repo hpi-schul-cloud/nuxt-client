@@ -111,7 +111,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesStudent'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
@@ -162,7 +162,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 		});
 
 		let errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesStudent'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalse();
@@ -175,7 +175,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 
 		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesStudent'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});

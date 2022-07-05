@@ -107,7 +107,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
@@ -158,7 +158,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 		});
 
 		let errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalse();
@@ -175,7 +175,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 
 		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});

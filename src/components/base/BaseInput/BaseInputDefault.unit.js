@@ -137,8 +137,8 @@ describe("@components/base/BaseInputDefault", () => {
 			expect(baseInputDefault.vm.hasError).toBe(true);
 
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
-			expect(wrapper.find(".error").exists()).toBe(true);
-			expect(wrapper.findAll(".error").at(1).text()).toBe("error");
+			expect(wrapper.find(".base-input-error").exists()).toBe(true);
+			expect(wrapper.findAll(".base-input-error").at(1).text()).toBe("error");
 		});
 	});
 
