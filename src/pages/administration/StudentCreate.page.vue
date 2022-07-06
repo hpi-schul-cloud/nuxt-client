@@ -63,15 +63,15 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					to: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
-					href: "/administration/students",
+					to: "/administration/students",
 				},
 				{
 					text: this.$t("pages.administration.students.new.title"),
-					href: "/administration/students/new",
+					to: "/administration/students/new",
 					disabled: true,
 				},
 			],

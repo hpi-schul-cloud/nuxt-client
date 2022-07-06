@@ -47,11 +47,11 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					to: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.teachers.index.title"),
-					href: "/administration/teachers",
+					to: "/administration/teachers",
 				},
 				{
 					text: this.$t("pages.administration.teachers.new.title"),

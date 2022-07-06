@@ -186,29 +186,6 @@ describe("SchoolSettingPage", () => {
 	});
 	it(...isValidComponent(SchoolPage));
 
-	it("breadcrumbs should be visible", () => {
-		const wrapper = mount(SchoolPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-		});
-
-		const breadcrumbs = wrapper.find(".v-breadcrumbs");
-
-		expect(breadcrumbs.exists()).toBeTrue();
-		expect(wrapper.vm.$data.breadcrumbs[0].href).toStrictEqual(
-			"/administration/"
-		);
-		expect(wrapper.vm.$data.breadcrumbs[0].text).toStrictEqual(
-			"Administration"
-		);
-		expect(wrapper.vm.$data.breadcrumbs[1].disabled).toBeTrue();
-		expect(wrapper.vm.$data.breadcrumbs[1].text).toStrictEqual(
-			"Schule verwalten"
-		);
-	});
-
 	it("tests env var school policy being true", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({

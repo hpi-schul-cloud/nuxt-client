@@ -1,24 +1,24 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.news._id.edit.title')"
-		:breadcrumbs="[
-			{
-				href: { name: 'news' },
-				text: $t('pages.news.title'),
-			},
-			{
-				href: { name: 'news-id', params: { id: $route.params.id } },
-				text: news.title,
-			},
-			{
-				text: $t('pages.news._id.edit.title'),
-				disabled: true,
-			},
-		]"
-		:full-width="false"
-	>
-		<div>
-			<div v-if="news">
+	<div v-if="news">
+		<default-wireframe
+			:headline="$t('pages.news._id.edit.title')"
+			:breadcrumbs="[
+				{
+					to: { name: 'news' },
+					text: $t('pages.news.title'),
+				},
+				{
+					to: { name: 'news-id', params: { id: $route.params.id } },
+					text: news.title,
+				},
+				{
+					text: $t('pages.news._id.edit.title'),
+					disabled: true,
+				},
+			]"
+			:full-width="false"
+		>
+			<div>
 				<form-news
 					v-if="news"
 					:news="news"
@@ -28,8 +28,8 @@
 				>
 				</form-news>
 			</div>
-		</div>
-	</default-wireframe>
+		</default-wireframe>
+	</div>
 </template>
 
 <script>

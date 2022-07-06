@@ -3,7 +3,7 @@
 		:headline="$t('pages.news.new.title')"
 		:breadcrumbs="[
 			{
-				href: '/news',
+				to: '/news',
 				text: $t('pages.news.title'),
 			},
 			{
