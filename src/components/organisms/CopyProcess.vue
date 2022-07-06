@@ -128,8 +128,10 @@ export default {
 				metadata: this.$t("components.molecules.copyResult.metadata"),
 				description: this.$t("common.labels.description"),
 				coursegroups: this.$t("common.words.courseGroups"),
-				submissions: "submissions", // TODO: add lang key here
-				times: this.$t("common.words.times"), // TODO: add correct translations here
+				submissions: this.$t(
+					"components.molecules.copyResult.label.submissions"
+				),
+				times: this.$t("common.words.times"),
 
 				tasks: this.$t("common.words.tasks"), // group folder - not used yet
 				lessons: this.$t("common.words.topics"), // group folder - not used yet
@@ -138,9 +140,13 @@ export default {
 				course: this.$t("common.labels.room"),
 				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
 				task: `${this.$t("common.words.task")} - ${item.title}`,
-				"lesson-content": "Lesson Content", // TODO: add lang key here
-				"lesson-content-group": "Lesson Content Group", // TODO: add lang key here
-				"file-group": "Files", // TODO: add lang key here
+				"lesson-content": this.$t(
+					"components.molecules.copyResult.label.lessonContent"
+				),
+				"lesson-content-group": this.$t(
+					"components.molecules.copyResult.label.lessonContentGroup"
+				),
+				"file-group": this.$t("components.molecules.copyResult.label.files"),
 			};
 
 			const feStatus = {

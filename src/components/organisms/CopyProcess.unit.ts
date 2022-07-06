@@ -248,7 +248,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.Success,
 						})
 					).toStrictEqual({
-						title: "Files",
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.files"
+						),
 						feStatus: wrapper.vm.statusEnum.Success,
 					});
 				});
@@ -404,7 +406,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual({
-						title: "submissions", // TODO: add lang key here
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.submissions"
+						),
 						feStatus: wrapper.vm.statusEnum.Failure,
 					});
 				});
@@ -499,7 +503,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual({
-						title: "Lesson Content", // TODO: add lang key here
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContent"
+						),
 						feStatus: wrapper.vm.statusEnum.Failure,
 					});
 				});
@@ -513,7 +519,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.Success,
 						})
 					).toStrictEqual({
-						title: "Lesson Content", // TODO: add lang key here
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContent"
+						),
 						feStatus: wrapper.vm.statusEnum.Success,
 					});
 				});
@@ -529,7 +537,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual({
-						title: "Lesson Content Group", // TODO: add lang key here
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContentGroup"
+						),
 						feStatus: wrapper.vm.statusEnum.Failure,
 					});
 				});
@@ -543,7 +553,9 @@ describe("@components/organisms/CopyProcess", () => {
 							status: wrapper.vm.statusEnum.Success,
 						})
 					).toStrictEqual({
-						title: "Lesson Content Group", // TODO: add lang key here
+						title: wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContentGroup"
+						),
 						feStatus: wrapper.vm.statusEnum.Success,
 					});
 				});
