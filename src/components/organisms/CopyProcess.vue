@@ -48,6 +48,9 @@ export const TypesEnum = {
 	LEAF: "leaf",
 	LESSON: "lesson",
 	TASK: "task",
+	FILE_GROUP: "file-group",
+	LESSON_CONTENT: "lesson-content",
+	LESSON_CONTENT_GROUP: "lesson-content-group",
 };
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
@@ -83,7 +86,7 @@ export default {
 					elements: [
 						{
 							id: result.id,
-							status: "success-all",
+							feStatus: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
@@ -121,45 +124,53 @@ export default {
 	},
 	methods: {
 		getItemTitleAndStatus(item) {
-			const titleObject = {
+			const titles = {
 				metadata: this.$t("components.molecules.copyResult.metadata"),
 				description: this.$t("common.labels.description"),
-				tasks: this.$t("common.words.tasks"),
-				lessons: this.$t("common.words.topics"),
 				coursegroups: this.$t("common.words.courseGroups"),
-				times: this.$t("common.words.times"),
-				submissions: "submissions",
-			};
-			const typeObject = {
+				submissions: "submissions", // TODO: add lang key here
+				times: this.$t("common.words.times"), // TODO: add correct translations here
+
+				tasks: this.$t("common.words.tasks"), // group folder - not used yet
+				lessons: this.$t("common.words.topics"), // group folder - not used yet
+
 				board: this.$t("common.labels.room"),
+				course: this.$t("common.labels.room"),
 				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
 				task: `${this.$t("common.words.task")} - ${item.title}`,
+				"lesson-content": "Lesson Content", // TODO: add lang key here
+				"lesson-content-group": "Lesson Content Group", // TODO: add lang key here
+				"file-group": "Files", // TODO: add lang key here
 			};
-			if (
-				item.title === "files" &&
-				item.status === StatusEnum.NOT_IMPLEMENTED
-			) {
-				return {
-					title: this.$t("components.molecules.copyResult.fileCopy.error"),
-					status: "failure",
-				};
-			}
-			if (item.status === StatusEnum.NOT_IMPLEMENTED) {
+
+			const feStatus = {
+				success: "success",
+				partial: "partial",
+				failure: "failure",
+				"not-doing": "failure",
+				"not-implemented": "failure",
+			};
+
+			if (item.type === TypesEnum.FILE_GROUP) {
 				return {
 					title:
-						item.type === TypesEnum.LEAF
-							? titleObject[item.title]
-							: typeObject[item.type],
-					status: StatusEnum.FAILURE,
+						item.status === StatusEnum.NOT_IMPLEMENTED
+							? this.$t("components.molecules.copyResult.fileCopy.error")
+							: titles[item.type],
+					feStatus: feStatus[item.status],
+				};
+			}
+
+			if (item.type === TypesEnum.FILE) {
+				return {
+					title: item.title,
+					feStatus: feStatus[item.status],
 				};
 			}
 
 			return {
-				title:
-					item.type === TypesEnum.LEAF
-						? titleObject[item.title]
-						: typeObject[item.type],
-				status: item.status,
+				title: titles[item.type === TypesEnum.LEAF ? item.title : item.type],
+				feStatus: feStatus[item.status],
 			};
 		},
 		prepareCopiedElements(items) {
@@ -173,15 +184,15 @@ export default {
 
 				item.index = ++this.elementIndex;
 				item.title = titleAndStatus.title;
-				item.status = titleAndStatus.status;
+				item.feStatus = titleAndStatus.feStatus;
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
-						(ele) =>
-							ele.status === StatusEnum.SUCCESS ||
-							ele.status === StatusEnum.PARTIAL
+						(ele) => ele.status === StatusEnum.SUCCESS
 					);
-					item.status = isSuccess ? StatusEnum.SUCCESS : titleAndStatus.status;
+					item.feStatus = isSuccess
+						? StatusEnum.SUCCESS
+						: titleAndStatus.feStatus;
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;

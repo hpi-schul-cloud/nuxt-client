@@ -239,9 +239,12 @@ export enum CopyApiResponseTypeEnum {
     Board = 'board',
     Course = 'course',
     File = 'file',
+    FileGroup = 'file-group',
     Leaf = 'leaf',
     Lesson = 'lesson',
-    Task = 'task'
+    Task = 'task',
+    LessonContent = 'lesson-content',
+    LessonContentGroup = 'lesson-content-group'
 }
 /**
     * @export
