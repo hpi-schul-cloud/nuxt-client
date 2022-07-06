@@ -55,9 +55,11 @@ export default {
 		opacity: 0;
 		transform: scale(0.1);
 	}
+
 	50% {
 		opacity: 1;
 	}
+
 	100% {
 		opacity: 0;
 		transform: scale(1.1);

@@ -96,6 +96,7 @@ export default {
 		border-top: 1px solid var(--color-white);
 		border-bottom: 1px solid var(--color-white);
 	}
+
 	&.selected {
 		color: var(--color-on-tertiary-light);
 		background-color: var(--color-secondary-light);
@@ -106,6 +107,7 @@ export default {
 	td {
 		padding: 0;
 		vertical-align: middle;
+
 		.text-content {
 			max-width: 200px;
 			padding: var(--space-xs);
@@ -113,10 +115,12 @@ export default {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
+
 		.select {
 			margin-bottom: 0;
 		}
 	}
+
 	a.is-text {
 		color: var(--color-secondary);
 	}

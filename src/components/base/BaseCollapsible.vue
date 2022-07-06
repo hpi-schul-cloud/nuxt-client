@@ -32,6 +32,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .collapsible {
 	width: 100%;
 	padding: var(--space-sm) var(--space-md);
@@ -41,6 +42,7 @@ export default {
 	border: none;
 	outline: none;
 }
+
 .active,
 .collapsible:hover {
 	background-color: var(--color-gray-light);
@@ -57,6 +59,7 @@ export default {
 .fade-leave-active {
 	transition: opacity var(--duration-transition-medium);
 }
+
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;

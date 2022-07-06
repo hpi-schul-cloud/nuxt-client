@@ -348,6 +348,7 @@ $tablet-portrait-width: 768px;
 			box-shadow: var(--shadow-sm);
 		}
 	}
+
 	.content {
 		position: relative;
 		grid-area: content;
@@ -460,6 +461,7 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
+
 			.content-link {
 				color: var(--color-secondary);
 				text-decoration: underline;
@@ -487,20 +489,25 @@ $tablet-portrait-width: 768px;
 				display: flex;
 				align-items: flex-start;
 				margin-bottom: var(--space-lg);
+
 				.meta-icon {
 					margin-right: var(--space-md);
 					font-size: var(--text-lg);
+
 					.icon {
 						max-height: var(--text-lg);
 					}
 				}
+
 				.link {
 					margin-right: var(--space-xs);
 					color: var(--color-secondary);
 				}
+
 				.tertiary-color {
 					color: var(--color-black);
 					text-decoration: none;
+
 					:hover {
 						color: var(--color-black);
 					}

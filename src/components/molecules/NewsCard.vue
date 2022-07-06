@@ -45,13 +45,16 @@ export default {
 
 .news-card {
 	padding: 0 !important;
+
 	&__heading {
 		padding: var(--space-md);
+
 		h4 {
 			color: var(--color-white);
 			text-shadow: 1px 0 5px rgba(0, 0, 0, 0.6);
 		}
 	}
+
 	&__content {
 		padding: var(--space-md);
 	}

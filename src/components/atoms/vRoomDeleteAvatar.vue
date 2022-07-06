@@ -41,6 +41,7 @@ export default {
 	height: 50px;
 	background: var(--color-danger);
 }
+
 .hovered-delete-avatar {
 	position: absolute;
 	top: 0;

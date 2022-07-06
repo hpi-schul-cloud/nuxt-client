@@ -73,17 +73,21 @@ $mobile: 750px; // css variables do not work with media queries
 	&:last-of-type {
 		margin-right: 0;
 	}
+
 	&.is-deletable {
 		padding-right: var(--space-xs-2);
 	}
+
 	&:hover {
 		box-shadow: 0 0 0 1px var(--color-secondary);
 	}
+
 	&:focus {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--color-white),
 			0 0 0 6px var(--color-secondary-dark);
 	}
+
 	.btn-delete {
 		display: flex;
 		align-items: center;
@@ -106,6 +110,7 @@ $mobile: 750px; // css variables do not work with media queries
 			color: var(--color-white);
 			background: var(--color-secondary-dark);
 		}
+
 		&:focus {
 			outline: none;
 			box-shadow: 0 0 0 3px var(--color-white),
@@ -127,10 +132,12 @@ $mobile: 750px; // css variables do not work with media queries
 		flex-direction: column;
 		flex-wrap: nowrap;
 	}
+
 	.chip {
 		justify-content: space-between;
 		margin-right: 0;
 		margin-bottom: var(--space-sm);
+
 		span.label {
 			overflow: hidden;
 			text-overflow: ellipsis;

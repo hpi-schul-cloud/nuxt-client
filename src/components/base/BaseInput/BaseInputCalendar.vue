@@ -87,9 +87,11 @@ export default {
 			var(--border-radius) - var(--border-width)
 		);
 		border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
+
 		&::placeholder {
 			color: var(--color-gray);
 		}
+
 		&:focus {
 			outline: none;
 		}

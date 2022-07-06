@@ -124,6 +124,7 @@ export default {
 	p {
 		padding: 8px 0 8px var(--space-md);
 		margin-bottom: 0;
+
 		&:hover {
 			background-color: var(--color-gray-light);
 		}
@@ -134,6 +135,7 @@ export default {
 		box-shadow: 1px 2px 5px 0 rgba(0, 0, 0, 0.75);
 	}
 }
+
 .flag-icon {
 	margin-top: calc(-4 * var(--border-width));
 }

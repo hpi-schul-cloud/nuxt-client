@@ -399,10 +399,12 @@ export default {
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+
 .rooms-container {
 	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 }
+
 .ghost {
 	opacity: 0;
 }

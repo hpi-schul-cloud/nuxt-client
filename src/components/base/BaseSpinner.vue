@@ -82,6 +82,7 @@ export default {
 		0% {
 			transform: rotate(0deg);
 		}
+
 		100% {
 			transform: rotate(270deg);
 		}
@@ -91,10 +92,12 @@ export default {
 		0% {
 			stroke-dashoffset: var(--spinner-circumference);
 		}
+
 		50% {
 			stroke-dashoffset: var(--spinner-quarter-circumference);
 			transform: rotate(135deg);
 		}
+
 		100% {
 			stroke-dashoffset: var(--spinner-circumference);
 			transform: rotate(450deg);

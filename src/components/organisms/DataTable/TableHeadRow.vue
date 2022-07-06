@@ -252,11 +252,14 @@ export default {
 
 .table__row {
 	font-weight: var(--font-weight-bold);
+
 	th {
 		border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary);
+
 		&.is-current-sort {
 			opacity: 1;
 		}
+
 		.th-wrap {
 			display: flex;
 			align-items: center;
@@ -265,19 +268,23 @@ export default {
 			padding: var(--space-xs);
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
+
 			svg {
 				font-size: calc(1.5 * var(--text-lg));
 				color: var(--color-secondary);
 			}
 		}
+
 		.select-wrap {
 			padding: var(--space-xs);
+
 			.select {
 				margin-bottom: 0;
 			}
 		}
 	}
 }
+
 .info-box {
 	position: absolute;
 	right: 0%;
@@ -292,20 +299,24 @@ export default {
 		max-width: 50%;
 		margin-right: var(--space-xl);
 	}
+
 	.content {
 		max-height: 35vh;
 		overflow-y: scroll;
 		font-weight: var(--font-weight-normal);
 	}
+
 	button:not(.is-none):focus {
 		z-index: var(--layer-fab);
 		outline: none;
 		box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
 	}
 }
+
 .th-slot {
 	position: relative;
 }
+
 .info-slot {
 	position: absolute;
 	top: -20%;

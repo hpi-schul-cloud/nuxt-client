@@ -94,12 +94,14 @@ export default {
 		margin-left: var(--space-xs-3);
 	}
 }
+
 .image {
 	height: calc(var(--text-md) + var(--text-lg));
 	object-fit: contain;
 	margin-right: var(--space-sm);
 	border-radius: var(--radius-sm);
 }
+
 .card-action {
 	display: flex;
 }

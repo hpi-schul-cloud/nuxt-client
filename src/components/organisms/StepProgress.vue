@@ -81,6 +81,7 @@ ul.progressbar {
 	position: relative;
 	float: left;
 	text-align: center;
+
 	&::before {
 		display: flex;
 		align-items: center;
@@ -110,10 +111,12 @@ ul.progressbar {
 		background: var(--color-gray);
 	}
 }
+
 .progressbar li.active {
 	&::after {
 		background: var(--color-gray);
 	}
+
 	&::before {
 		color: var(--color-dark-gray);
 		text-decoration: underline;
@@ -122,6 +125,7 @@ ul.progressbar {
 		border-style: solid;
 	}
 }
+
 .progressbar li.done {
 	&::before {
 		color: var(--color-white);
@@ -130,6 +134,7 @@ ul.progressbar {
 		border-style: solid;
 		border-radius: var(--radius-round);
 	}
+
 	&::after {
 		color: var(--color-var(--color-white));
 		background: var(--color-gray);

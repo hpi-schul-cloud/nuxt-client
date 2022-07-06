@@ -593,17 +593,21 @@ a.action-button {
 	&.row-highlighted:hover {
 		background-color: var(--color-white);
 	}
+
 	&.row-selected {
 		color: var(--color-white);
+
 		&:hover {
 			background-color: var(--color-secondary-dark);
 			box-shadow: none;
 		}
 	}
 }
+
 .list {
 	padding: var(--space-lg);
 }
+
 .th-slot {
 	display: flex;
 	flex-direction: row;
@@ -632,6 +636,7 @@ button:not(.is-none):focus {
 	outline: none;
 	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
 }
+
 .search-section {
 	max-width: 100%;
 	margin-top: var(--space-xs);

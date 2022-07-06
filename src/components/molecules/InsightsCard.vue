@@ -64,9 +64,11 @@ export default {
 	height: 7rem;
 	margin: var(--space-sm);
 	color: var(--color-gray-dark);
+
 	&__header {
 		font-size: var(--text-xs);
 	}
+
 	&__separator {
 		width: 15%;
 		height: 0.2rem;
@@ -74,13 +76,16 @@ export default {
 		border: 0.1rem solid var(--color-primary);
 		border-radius: var(--radius-round);
 	}
+
 	&__content {
 		display: flex;
 		align-items: center;
 		justify-content: space-evenly;
+
 		&-total {
 			font-size: var(--space-xl);
 		}
+
 		&-diff {
 			display: flex;
 			flex-direction: column;
@@ -89,11 +94,13 @@ export default {
 			font-size: var(--text-lg);
 		}
 	}
+
 	&__footer {
 		width: 100%;
 		font-size: var(--text-sm);
 		text-align: right;
 	}
+
 	.arrow-up {
 		width: 20px;
 		height: 20px;
@@ -109,6 +116,7 @@ export default {
 			border-width: 3px 3px 0 0;
 		}
 	}
+
 	.arrow-down {
 		width: 20px;
 		height: 20px;

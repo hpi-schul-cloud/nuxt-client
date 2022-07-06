@@ -67,9 +67,11 @@ fieldset {
 	margin: 0;
 	border: none;
 }
+
 .label {
 	margin-bottom: var(--space-xs);
 }
+
 .input-radio {
 	display: block;
 	margin-bottom: var(--space-xs);

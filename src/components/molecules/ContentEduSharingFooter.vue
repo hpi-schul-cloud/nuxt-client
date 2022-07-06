@@ -29,6 +29,7 @@
 		margin-right: var(--space-sm);
 		font-size: var(--text-sm);
 	}
+
 	&__logo {
 		width: 100px;
 		height: 40px;

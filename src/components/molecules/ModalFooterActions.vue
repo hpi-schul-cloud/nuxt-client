@@ -26,10 +26,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .actions {
 	padding: 0;
 	background-color: var(--color-secondary);
 }
+
 .slot-container {
 	padding: var(--space-sm) var(--space-md);
 

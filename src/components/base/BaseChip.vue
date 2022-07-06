@@ -62,17 +62,21 @@ $highlight-color: var(--color-primary);
 	background-color: $highlight-color;
 	border: 1px solid $highlight-color;
 }
+
 .default {
 	color: $default-color;
 	background-color: var(--color-white);
 	border: 1px solid $default-color;
 }
+
 .medium {
 	padding: var(--space-xs-2) var(--space-lg);
 }
+
 .small {
 	padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4);
 }
+
 .large {
 	padding: var(--space-xs) var(--space-xl);
 }
@@ -82,10 +86,12 @@ button {
 		// increase border size to increase visiblity
 		box-shadow: var(--shadow-s);
 	}
+
 	&:focus {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px $default-color;
 	}
+
 	&.selected:focus {
 		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px $highlight-color;
 	}

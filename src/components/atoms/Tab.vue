@@ -40,6 +40,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
+
 .tab-content {
 	width: 100%;
 	overflow-wrap: normal;

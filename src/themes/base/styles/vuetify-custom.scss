@@ -38,8 +38,10 @@ $btn-text-transform: none;
 $btn-font-weight: var(--font-weight-bold);
 $btn-letter-spacing: 0.044em;
 $btn-focus-opacity: 0;
+
 .v-btn {
 	font-family: var(--font-accent);
+
 	&.v-size--small,
 	&.v-size--default,
 	&.v-size--large,

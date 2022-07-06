@@ -68,15 +68,18 @@ h1:first-of-type {
 .header-container {
 	margin-top: var(--space-xl-2);
 	margin-bottom: var(--space-md);
+
 	.header-top {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: var(--space-sm);
+
 		.header-title {
 			font-size: var(--heading-2);
 		}
 	}
+
 	.ctx-menu {
 		position: relative;
 	}

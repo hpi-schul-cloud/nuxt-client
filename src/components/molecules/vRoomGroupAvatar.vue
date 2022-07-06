@@ -123,6 +123,7 @@ export default {
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
@@ -144,13 +145,16 @@ export default {
 		font-size: 14px;
 	}
 }
+
 .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }
+
 .avatar-badge {
 	max-width: 100%;
 }
+
 .dragging {
 	opacity: 0.5;
 }

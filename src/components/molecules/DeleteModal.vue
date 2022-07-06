@@ -64,6 +64,7 @@ export default {
 <style lang="scss" scoped>
 .delete-btn {
 	background-color: var(--color-danger) !important;
+
 	&:hover {
 		background-color: var(--color-danger-dark) !important;
 	}

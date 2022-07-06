@@ -39,14 +39,17 @@ img:hover {
 .borderradius {
 	border-radius: var(--radius-round);
 }
+
 .small {
 	width: 64px;
 	height: 64px;
 }
+
 .medium {
 	width: 128px;
 	height: 128px;
 }
+
 .large {
 	width: 256px;
 	height: 256px;

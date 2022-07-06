@@ -70,6 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .tab-icon {
 	margin-right: var(--space-xs-4);
 	animation: fadeEffect var(--duration-transition-medium) ease-in-out;
@@ -97,9 +98,11 @@ ul.tabs {
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
+
 		.li-content {
 			display: inline-flex;
 			align-items: center;
+
 			.tab-button {
 				display: flex;
 				align-items: center;
@@ -120,18 +123,22 @@ ul.tabs {
 				}
 			}
 		}
+
 		&.span {
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 		}
+
 		&.is-active {
 			position: relative;
 			color: var(--color-secondary);
+
 			.tab-button,
 			.tab-icon {
 				font-weight: var(--font-weight-bold);
 				color: var(--color-secondary);
 				transition: var(--duration-transition-medium) ease-in;
 			}
+
 			&::after {
 				position: absolute;
 				top: calc(2.85 * (var(--space-md)));
@@ -152,6 +159,7 @@ ul.tabs {
 				}
 			}
 		}
+
 		&:not(.is-active) {
 			span {
 				display: none;
@@ -161,8 +169,10 @@ ul.tabs {
 				}
 			}
 		}
+
 		&:hover:not(.is-active) {
 			color: var(--color-gray-dark);
+
 			.tab-button {
 				color: var(--color-gray-dark);
 			}
@@ -188,10 +198,12 @@ ul.tabs {
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
 }
+
 .focus {
 	outline: 2px solid var(--color-secondary);
 	outline-offset: 3px;

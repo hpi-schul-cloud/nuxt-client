@@ -598,34 +598,43 @@ export default {
 	float: right;
 	margin-left: var(--space-sm);
 }
+
 .centered {
 	text-align: center;
 }
+
 #progressbar {
 	display: inline-block;
 	margin-top: var(--space-md);
 }
+
 #consent-checkbox {
 	display: flex;
 	margin-bottom: var(--space-md);
 }
+
 .print-title {
 	color: var(--color-primary);
 	border: none;
 }
+
 .warning {
 	color: var(--color-danger);
 }
+
 ::v-deep .link {
 	color: var(--color-primary);
 	text-decoration: none;
 }
+
 ::v-deep .table {
 	margin-top: var(--space-lg);
+
 	.table__row {
 		height: 3rem;
 	}
 }
+
 ::v-deep .toolbelt {
 	display: none;
 }
@@ -633,9 +642,11 @@ export default {
 ::v-deep .calendar-input {
 	max-width: 5em;
 	margin-bottom: 0;
+
 	.info-line {
 		display: none;
 	}
+
 	.input-line {
 		.icon-behind {
 			display: none;
@@ -647,6 +658,7 @@ export default {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);
+
 	.input-line {
 		.icon-behind {
 			display: none;

@@ -166,6 +166,7 @@ textarea {
 	&::placeholder {
 		color: var(--color-gray);
 	}
+
 	&.disabled {
 		color: var(--color-disabled-dark);
 	}

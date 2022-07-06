@@ -241,9 +241,11 @@ export default {
 .subtitle-text {
 	margin-top: var(--space-xl);
 }
+
 .section {
 	margin: var(--space-xl-2);
 }
+
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
@@ -251,35 +253,42 @@ export default {
 	margin-right: var(--space-xl);
 	margin-left: var(--space-lg);
 }
+
 .icon-text {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	margin-top: var(--space-xl-2);
 }
+
 .icon-text-unit {
 	margin-top: var(--space-sm);
 	margin-right: var(--space-lg);
 	font-weight: var(--font-weight-bold);
 	white-space: nowrap;
 }
+
 .category-title {
 	margin: var(--space-xl-2) 0 var(--space-lg) 0;
 	font-weight: var(--font-weight-bold);
 }
+
 table {
 	width: 100%;
 	border-collapse: collapse;
 }
+
 td {
 	min-width: 200px;
 	padding: var(--space-sm);
 	margin-bottom: var(--space-md);
 	white-space: normal;
 }
+
 tr:nth-child(odd) {
 	background: #ebeef0;
 }
+
 .errors-container {
 	display: flex;
 	flex-direction: column;

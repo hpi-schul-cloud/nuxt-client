@@ -133,6 +133,7 @@ export default {
 	width: 25%;
 	text-align: left;
 }
+
 .button-right {
 	display: inline-block;
 	width: 75%;
