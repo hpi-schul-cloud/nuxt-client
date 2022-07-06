@@ -550,7 +550,7 @@ describe("@components/organisms/CopyProcess", () => {
 			});
 		});
 
-		it.skip("'prepareCopiedElements' method should prepare the data  ", async () => {
+		it("'prepareCopiedElements' method should prepare the data  ", async () => {
 			copyModule.setCopyResult(serverResponseCourseCopy);
 			copyModule.setFilteredResult(serverResponseCourseCopy);
 			const wrapper = getWrapper({ isOpen: true, loading: false });
@@ -595,7 +595,7 @@ describe("@components/organisms/CopyProcess", () => {
 					{
 						title: i18n.t("common.labels.room"),
 						type: types.Board,
-						status: status.NotImplemented,
+						status: status.Failure,
 						feStatus: status.Success,
 						id: "boardId",
 						index: 5,
@@ -657,22 +657,6 @@ describe("@components/organisms/CopyProcess", () => {
 			const copiedItems = wrapper.vm.copiedItems;
 
 			expect(copiedItems).toStrictEqual(expectedData);
-			expect(copiedItems.elements[0].title).toStrictEqual(
-				i18n.t("components.molecules.copyResult.metadata")
-			);
-			expect(copiedItems.elements[1].title).toStrictEqual(
-				wrapper.vm.$i18n.t("common.words.times")
-			);
-			expect(copiedItems.elements[1].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[2].title).toStrictEqual(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
-			);
-			expect(copiedItems.elements[2].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[3].title).toStrictEqual(
-				wrapper.vm.$i18n.t("common.words.courseGroups")
-			);
-			expect(copiedItems.elements[3].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[4].elements[0].elements).toHaveLength(2);
 		});
 	});
 });
