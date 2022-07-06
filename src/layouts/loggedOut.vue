@@ -24,19 +24,34 @@ export default {
 		NavigationBar,
 		TheFooter,
 	},
+	inject: ["envConfigModule"],
 	data() {
 		return {
 			navbarBaseItems,
 		};
 	},
 	computed: {
+		ghostBaseUrl() {
+			return this.envConfigModule.getGhostBaseUrl;
+		},
 		navbarItems() {
-			return this.navbarBaseItems.map((item) => {
-				if (item.title.includes(".")) {
-					item.title = this.$t(`${item.title}`);
-				}
-				return item;
-			});
+			return [
+				{
+					title: this.$t("global.topbar.loggedOut.actions.steps"),
+					href: `${this.ghostBaseUrl}/erste-schritte/`,
+					target: "_blank",
+				},
+				{
+					title: this.$t("global.topbar.loggedOut.actions.blog"),
+					href: `${this.ghostBaseUrl}/`,
+					target: "_blank",
+				},
+				{
+					title: this.$t("global.topbar.loggedOut.actions.faq"),
+					href: `${this.ghostBaseUrl}/faqs/`,
+					target: "_blank",
+				},
+			];
 		},
 		isMobile() {
 			return this.$mq === "mobile";
