@@ -1,52 +1,75 @@
 import NavigationBar from "./NavigationBar";
-import BaseLink from "@components/base/BaseLink";
+import { envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+
+const navbarLinks = [
+	{
+		title: "global.topbar.loggedOut.actions.blog",
+		href: "https://blog.hpi-schul-cloud.de/",
+	},
+	{
+		title: "global.topbar.loggedOut.actions.steps",
+		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
+	},
+	{
+		title: "global.topbar.loggedOut.actions.faq",
+		href: "https://blog.hpi-schul-cloud.de/faqs",
+	},
+];
+
+const getWrapper = () => {
+	return mount(NavigationBar, {
+		...createComponentMocks({ i18n: true }),
+		propsData: {
+			links: navbarLinks,
+			img: "@assets/img/logo/logo-dBildungscloud.svg",
+			buttons: true,
+		},
+	});
+};
 
 describe("@components/legacy/NavigationBar", () => {
-	const navbarLinks = [
-		{
-			title: "Blog",
-			href: "https://blog.hpi-schul-cloud.de/",
-		},
-		{
-			title: "layouts.loggedoutFullWidth.steps",
-			href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
-		},
-		{
-			title: "FAQ",
-			href: "https://blog.hpi-schul-cloud.de/faqs",
-		},
-	];
+	beforeEach(() => {
+		setupStores({
+			"env-config": EnvConfigModule,
+		});
+	});
 
 	it(...isValidComponent(NavigationBar));
 
-	it("links get rendered", () => {
-		const wrapper = mount(NavigationBar, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				links: navbarLinks,
-				img: "@assets/img/logo/logo-dBildungscloud.svg",
-				buttons: true,
-			},
-		});
+	it("renders logo, links and buttons for default theme", () => {
+		const wrapper = getWrapper();
 
-		expect(wrapper.props().links).toHaveLength(3);
-	});
-
-	it("logo get rendered", () => {
-		const wrapper = mount(NavigationBar, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				links: navbarLinks,
-				img: "@assets/img/logo/logo-dBildungscloud.svg",
-				buttons: true,
-			},
-		});
-
-		expect(wrapper.findComponent(BaseLink).exists()).toBe(true);
-		expect(wrapper.props().img).toBe(
-			"@assets/img/logo/logo-dBildungscloud.svg"
+		expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
+		expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(
+			wrapper.props().img
 		);
+
 		expect(wrapper.find(".link-container").exists()).toBe(true);
+		expect(wrapper.vm.linksToDisplay).toHaveLength(3);
+
 		expect(wrapper.find(".buttons-container").exists()).toBe(true);
+		expect(wrapper.vm.hasButtons).toBe(true);
 	});
+
+	it.each(["n21", "brb", "int"])(
+		"does render logo but not links and Buttons for %s theme",
+		(theme) => {
+			envConfigModule.setEnvs({ SC_THEME: theme });
+
+			const wrapper = getWrapper();
+
+			expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
+			expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(
+				wrapper.props().img
+			);
+
+			expect(wrapper.find(".link-container").exists()).toBe(false);
+			expect(wrapper.vm.linksToDisplay).toHaveLength(0);
+
+			expect(wrapper.find(".buttons-container").exists()).toBe(false);
+			expect(wrapper.vm.hasButtons).toBe(false);
+		}
+	);
 });

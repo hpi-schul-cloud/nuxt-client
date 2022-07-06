@@ -5,10 +5,10 @@
 			:active="showCopyModal"
 			@onBackdropClick="closeModal"
 		>
-			<template v-slot:header>{{
+			<template #header>{{
 				$t("components.molecules.AddContentModal")
 			}}</template>
-			<template v-slot:body>
+			<template #body>
 				<div class="content-modal__body">
 					<base-select
 						v-model="selectedCourse"
@@ -48,9 +48,9 @@
 					</transition>
 				</div>
 			</template>
-			<template v-slot:footer>
+			<template #footer>
 				<modal-footer>
-					<template v-slot:right>
+					<template #right>
 						<base-button design="text" @click="closeModal">{{
 							$t("common.actions.cancel")
 						}}</base-button>

@@ -44,6 +44,7 @@ export type School = {
 		studentVisibility: boolean;
 		messengerSchoolRoom: boolean;
 		messengerStudentRoomCreate: boolean;
+		ldapUniventionMigrationSchool: boolean;
 	};
 	enableStudentTeamCreation: boolean;
 	permissions: {};

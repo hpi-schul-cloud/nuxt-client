@@ -11,6 +11,7 @@ const SCHOOL_FEATURES: any = [
 	"studentVisibility", // deprecated
 	"messengerSchoolRoom",
 	"messengerStudentRoomCreate",
+	"ldapUniventionMigrationSchool"
 ];
 
 function transformSchoolServerToClient(school: any): School {
@@ -68,6 +69,7 @@ export default class SchoolsModule extends VuexModule {
 			studentVisibility: false,
 			messengerSchoolRoom: false,
 			messengerStudentRoomCreate: false,
+			ldapUniventionMigrationSchool: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},
@@ -156,6 +158,17 @@ export default class SchoolsModule extends VuexModule {
 
 	get schoolIsExternallyManaged(): boolean {
 		return this.school.isExternal;
+	}
+
+	get schoolIsSynced(): boolean {
+		return this.systems.some(
+			(system) =>
+				system.type === "tsp-school" ||
+				(system.type === "ldap" &&
+					(system.ldapConfig.provider === "iserv-idm" ||
+						system.ldapConfig.provider === "univention" ||
+						system.ldapConfig.provider === "general"))
+		);
 	}
 
 	@Action

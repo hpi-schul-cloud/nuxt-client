@@ -50,7 +50,6 @@ const propsData = {
 			],
 		},
 	],
-	showSpinner: false,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -73,7 +72,6 @@ describe("@components/molecules/CopyResult", () => {
 		const wrapper = getWrapper(propsData);
 
 		expect(wrapper.vm.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.showSpinner).toStrictEqual(propsData.showSpinner);
 	});
 
 	it("should nodes be expanded and collapsed according to the status property inside the items", async () => {
@@ -97,17 +95,6 @@ describe("@components/molecules/CopyResult", () => {
 		expect(wrapper.vm.expandedNodes).toStrictEqual(expectedExpandedNodes);
 	});
 
-	it("should show spinner when its prop set", async () => {
-		const wrapper = getWrapper(propsData);
-		await wrapper.vm.$nextTick();
-		const spinnerElementBefore = wrapper.findAll(".spinner");
-		expect(spinnerElementBefore).toHaveLength(0);
-
-		await wrapper.setProps({ showSpinner: true });
-		const spinnerElementAfter = wrapper.find(".spinner");
-		expect(spinnerElementAfter.vm.isVisible).toBe(true);
-	});
-
 	it("should all items have accessibility text", async () => {
 		const wrapper = getWrapper(propsData);
 		await wrapper.vm.$nextTick();
@@ -116,7 +103,7 @@ describe("@components/molecules/CopyResult", () => {
 		const elementsPartial = wrapper.findAll(".treeview-item-partial");
 		const elementsError = wrapper.findAll(".treeview-item-failure");
 		const textDone = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.parentItem.info",
+			"components.molecules.copyResult.aria.parentItem.info",
 			{
 				itemTitle: propsData.items[0].title,
 				itemStatus: wrapper.vm.$i18n.t(
@@ -128,7 +115,7 @@ describe("@components/molecules/CopyResult", () => {
 			}
 		);
 		const textPartial = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.parentItem.info",
+			"components.molecules.copyResult.aria.parentItem.info",
 			{
 				itemTitle: propsData.items[1].title,
 				itemStatus: wrapper.vm.$i18n.t(
@@ -139,7 +126,7 @@ describe("@components/molecules/CopyResult", () => {
 			}
 		);
 		const textError = wrapper.vm.$i18n.t(
-			"components.molecules.courseCopyResult.aria.childItem.info",
+			"components.molecules.copyResult.aria.childItem.info",
 			{
 				itemTitle: propsData.items[1].elements[1].title,
 				itemStatus: wrapper.vm.$i18n.t(

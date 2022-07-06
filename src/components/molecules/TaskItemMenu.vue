@@ -7,7 +7,7 @@
 			attach
 			@update:return-value="toggleMenu(false)"
 		>
-			<template v-slot:activator="{ on, attrs, value }">
+			<template #activator="{ on, attrs, value }">
 				<v-btn
 					v-show="show"
 					id="task-menu-btn"
@@ -41,9 +41,9 @@
 				<v-list-item
 					v-if="isTeacher"
 					id="task-action-copy"
-					:href="copyLink"
 					class="task-action"
 					data-testId="task-copy"
+					@click.stop.prevent="copyTask"
 				>
 					<v-list-item-title>
 						<v-icon class="task-action-icon">
@@ -105,6 +105,14 @@
 				</p>
 			</template>
 		</v-custom-dialog>
+		<copy-process
+			v-if="isTeacher"
+			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+		>
+		</copy-process>
 	</div>
 </template>
 
@@ -116,11 +124,17 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { taskModule, finishedTaskModule } from "@/store";
+import {
+	taskModule,
+	finishedTaskModule,
+	envConfigModule,
+	copyModule,
+} from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import CopyProcess from "@components/organisms/CopyProcess";
 
 export default {
-	components: { vCustomDialog },
+	components: { vCustomDialog, CopyProcess },
 	props: {
 		taskId: {
 			type: String,
@@ -133,6 +147,10 @@ export default {
 		taskTitle: {
 			type: String,
 			required: false,
+			default: "",
+		},
+		courseId: {
+			type: String,
 			default: "",
 		},
 		show: {
@@ -153,6 +171,11 @@ export default {
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
+			copyProcess: {
+				id: "",
+				isOpen: false,
+				loading: false,
+			},
 		};
 	},
 	computed: {
@@ -160,7 +183,7 @@ export default {
 			return `/homework/${this.taskId}/edit`;
 		},
 		copyLink() {
-			return `/homework/${this.taskId}/copy`;
+			return `/homework/${this.taskId}/copy?returnUrl=/tasks`;
 		},
 		isTeacher() {
 			return this.userRole === "teacher";
@@ -182,6 +205,36 @@ export default {
 		},
 		handleDelete() {
 			taskModule.deleteTask(this.taskId);
+		},
+		async copyTask() {
+			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+				window.location.href = this.copyLink;
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.molecules.copyResult.error"),
+					status: "error",
+				});
+				return;
+			}
+
+			if (copyResult.id !== "") {
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
+			}
+		},
+		async onCopyProcessDialogClose() {
+			this.copyProcess.isOpen = false;
+			this.copyProcess.id = "";
+			await taskModule.fetchAllTasks();
+			taskModule.setActiveTab("drafts");
 		},
 	},
 };

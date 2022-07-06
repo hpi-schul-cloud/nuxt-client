@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-student">
-		<v-tabs-items v-model="currentTab">
-			<v-tab-item>
+		<v-tabs-items v-model="tab">
+			<v-tab-item :value="tabRoutes[0]">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
@@ -12,10 +12,10 @@
 					:is-empty="openTasksForStudentIsEmpty"
 					:expanded-default="1"
 				>
-					<template v-slot:panelOne>
+					<template #panelOne>
 						<tasks-list :tasks="noDueDateTasks" user-role="student" />
 					</template>
-					<template v-slot:panelTwo>
+					<template #panelTwo>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
@@ -36,7 +36,7 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
+			<v-tab-item :value="tabRoutes[1]">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="gradedTasks.length"
@@ -47,10 +47,10 @@
 					:is-empty="completedTasksForStudentIsEmpty"
 					:expanded-default="0"
 				>
-					<template v-slot:panelOne>
+					<template #panelOne>
 						<tasks-list :tasks="gradedTasks" user-role="student" />
 					</template>
-					<template v-slot:panelTwo>
+					<template #panelTwo>
 						<tasks-list :tasks="submittedTasks" user-role="student" />
 					</template>
 				</v-custom-double-panels>
@@ -61,13 +61,13 @@
 					class="mt-16"
 				/>
 			</v-tab-item>
-			<v-tab-item>
+			<v-tab-item :value="tabRoutes[2]">
 				<tasks-list
 					class="pb-16"
 					:tasks="finishedTasks"
 					user-role="student"
 					type="finished"
-					:has-pagination="tab === 2"
+					:has-pagination="tab === tabRoutes[2]"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"
@@ -88,12 +88,12 @@ import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
 	props: {
-		tab: {
-			type: Number,
-			required: true,
-		},
 		emptyState: {
 			type: Object,
+			required: true,
+		},
+		tabRoutes: {
+			type: Array,
 			required: true,
 		},
 	},
@@ -138,12 +138,12 @@ export default {
 		gradedTasks() {
 			return this.completedTasks.graded;
 		},
-		currentTab: {
+		tab: {
 			get() {
-				return this.tab;
+				return this.taskModule.getActiveTab;
 			},
 			set(newTab) {
-				this.$emit("update:tab", newTab);
+				this.taskModule.setActiveTab(newTab);
 			},
 		},
 	},

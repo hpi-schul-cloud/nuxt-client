@@ -74,6 +74,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				});
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
@@ -310,6 +311,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				};
 				initializeAxios({
@@ -356,6 +358,7 @@ describe("schools module", () => {
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
+						ldapUniventionMigrationSchool: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});
@@ -759,6 +762,84 @@ describe("schools module", () => {
 				expect(schoolsModule.getLoading).not.toStrictEqual(true);
 				schoolsModule.setLoading(true);
 				expect(schoolsModule.getLoading).toStrictEqual(true);
+			});
+		});
+
+		describe("getIsSynced", () => {
+			it("should return correct sync status for iserv-idm schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "iserv-idm",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for univention schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "univention",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for TSP schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "tsp-school",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for ldap general schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "ldap",
+						ldapConfig: {
+							provider: "general",
+						},
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+			});
+			it("should return correct sync status for moodle schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "moodle",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
+			it("should return correct sync status for itslearning schools", () => {
+				const schoolsModule = new SchoolsModule({});
+				const systems = [
+					{
+						_id: "id_1",
+						type: "itslearning",
+					},
+				];
+				schoolsModule.setSystems(systems);
+				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
 			});
 		});
 	});

@@ -42,41 +42,30 @@
 			class="ma-0 pb-0 pt-0 submitted-section"
 		>
 			<div class="chip-items-group">
-				<div
-					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
+				<v-chip
+					v-for="(chip, index) in chipItems[role]"
+					:key="index"
+					:class="[chip.class]"
+					small
 				>
-					<div class="chip-value">
-						{{
-							`${task.status.submitted}/${task.status.maxSubmissions} ${$t(
-								"pages.room.taskCard.label.submitted"
-							)}`
-						}}
-					</div>
-				</div>
-				<div
-					v-if="roles.Teacher === role"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{
-							`${task.status.graded}/${task.status.maxSubmissions} ${$t(
-								"pages.room.taskCard.label.graded"
-							)}`
-						}}
-					</div>
-				</div>
-				<div
-					v-if="isOverDue"
-					class="grey lighten-2 chip-item px-1 mr-1 mb-0 overdue"
-					tabindex="0"
-				>
-					<div class="chip-value">
-						{{ $t(`pages.room.taskCard.${role}.label.overdue`) }}
-					</div>
-				</div>
+					<v-icon
+						v-if="chip.icon"
+						left
+						small
+						class="fill"
+						color="rgba(0, 0, 0, 0.87)"
+					>
+						{{ chip.icon }}
+					</v-icon>
+					{{ chip.name }}
+				</v-chip>
+
+				<v-custom-chip-time-remaining
+					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
+					type="warning"
+					:due-date="task.duedate"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
+				/>
 			</div>
 		</v-card-text>
 		<v-card-actions class="pt-1 mt-2">
@@ -104,14 +93,16 @@ import {
 	mdiUndoVariant,
 	mdiTrashCanOutline,
 	mdiContentCopy,
+	mdiTextBoxCheckOutline,
 } from "@mdi/js";
-import { printDateFromStringUTC } from "@plugins/datetime";
+import { printDateFromStringUTC, fromNowToFuture } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { MoreItemMenu },
+	components: { MoreItemMenu, VCustomChipTimeRemaining },
 	props: {
 		task: {
 			type: Object,
@@ -139,15 +130,13 @@ export default {
 				mdiUndoVariant,
 				mdiTrashCanOutline,
 				mdiContentCopy,
+				mdiTextBoxCheckOutline,
 			},
 			roles: Roles,
 			canShowDescription: false,
 		};
 	},
 	computed: {
-		titleColor() {
-			return this.task.displayColor || this.defaultTitleColor;
-		},
 		isDraft() {
 			return this.task.status.isDraft;
 		},
@@ -157,6 +146,22 @@ export default {
 		},
 		isFinished() {
 			return this.task.status.isFinished;
+		},
+		isCloseToDueDate() {
+			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			if (timeDiff !== null) {
+				return timeDiff <= 24;
+			}
+			return false;
+		},
+		isGraded() {
+			return this.task.status.graded;
+		},
+		isSubmitted() {
+			return this.task.status.submitted;
+		},
+		isSubmittedNotGraded() {
+			return this.task.status.submitted && !this.task.status.graded;
 		},
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
@@ -194,6 +199,67 @@ export default {
 
 			return roleBasedActions;
 		},
+		chipItems() {
+			const roleBasedChips = {
+				[Roles.Teacher]: [],
+				[Roles.Student]: [],
+			};
+
+			if (this.role === Roles.Teacher) {
+				roleBasedChips[Roles.Teacher].push({
+					name: `${this.task.status.submitted}/${
+						this.task.status.maxSubmissions
+					} ${this.$t("pages.room.taskCard.teacher.label.submitted")}`,
+				});
+
+				roleBasedChips[Roles.Teacher].push({
+					name: `${this.task.status.graded}/${
+						this.task.status.maxSubmissions
+					} ${this.$t("pages.room.taskCard.label.graded")}`,
+				});
+
+				if (this.isOverDue) {
+					roleBasedChips[Roles.Teacher].push({
+						icon: "$taskMissed",
+						name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
+						class: "overdue",
+					});
+				}
+			}
+
+			if (this.role === Roles.Student) {
+				if (this.isSubmittedNotGraded) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskDone",
+						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+						class: "submitted",
+					});
+				}
+
+				if (this.isGraded) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskDone",
+						name: this.$t(`pages.room.taskCard.student.label.submitted`),
+						class: "submitted",
+					});
+					roleBasedChips[Roles.Student].push({
+						icon: this.icons.mdiTextBoxCheckOutline,
+						name: this.$t(`pages.room.taskCard.label.graded`),
+						class: "graded",
+					});
+				}
+
+				if (this.isOverDue && !this.isSubmitted) {
+					roleBasedChips[Roles.Student].push({
+						icon: "$taskMissed",
+						name: this.$t(`pages.room.taskCard.student.label.overdue`),
+						class: "overdue",
+					});
+				}
+			}
+
+			return roleBasedChips;
+		},
 		moreActionsMenuItems() {
 			const roleBasedMoreActions = {
 				[Roles.Teacher]: [],
@@ -212,10 +278,7 @@ export default {
 
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiContentCopy,
-					action: () =>
-						this.redirectAction(
-							`/homework/${this.task.id}/copy?returnUrl=rooms/${this.room.roomId}`
-						),
+					action: () => this.copyCard(),
 					name: this.$t("common.actions.copy"),
 				});
 
@@ -298,6 +361,9 @@ export default {
 		restoreCard() {
 			this.$emit("restore-task");
 		},
+		copyCard() {
+			this.$emit("copy-task");
+		},
 		onKeyPress(e) {
 			switch (e.keyCode) {
 				case 32:
@@ -335,6 +401,9 @@ export default {
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 
+.fill {
+	fill: currentColor;
+}
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
@@ -355,22 +424,14 @@ export default {
 .text-description {
 	font-size: var(--text-md);
 }
-.chip-items-group {
-	vertical-align: middle;
-	.chip-item {
-		display: inline-block;
-		width: fit-content;
-		text-align: center;
-		border-radius: var(--radius-sm);
-		.chip-value {
-			font-size: var(--text-xs);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			color: rgba(0, 0, 0, 0.87);
-		}
-	}
-}
 .action-button {
 	color: var(--color-primary);
+}
+.chip-items-group {
+	vertical-align: middle;
+}
+.v-chip {
+	margin-right: var(--space-xs);
 }
 .v-card {
 	box-shadow: var(--shadow-sm);

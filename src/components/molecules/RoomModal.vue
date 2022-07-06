@@ -9,7 +9,7 @@
 			<v-text-field
 				v-show="roomNameEditMode"
 				ref="roomNameInput"
-				v-model="groupData.title"
+				v-model="data.title"
 				dense
 				:aria-label="$t('common.labels.title')"
 				:append-icon="mdiKeyboardReturn"
@@ -23,7 +23,7 @@
 				@click="onEditRoom"
 				@focus="onEditRoom"
 			>
-				{{ groupData.title }}
+				{{ data.title }}
 				<v-icon>{{ mdiPencil }}</v-icon>
 			</h2>
 		</div>
@@ -83,7 +83,20 @@ export default Vue.extend({
 			roomNameEditMode: false,
 			mdiPencil,
 			mdiKeyboardReturn,
+			data: {
+				id: "",
+				title: "",
+				shortTitle: "",
+				displayColor: "",
+				xPosition: -1,
+				yPosition: -1,
+			},
 		};
+	},
+	watch: {
+		groupData() {
+			this.data = { ...this.groupData };
+		},
 	},
 	methods: {
 		async onEditRoom() {
@@ -94,7 +107,7 @@ export default Vue.extend({
 			}
 		},
 		onUpdateRoomName() {
-			roomsModule.update(this.groupData);
+			roomsModule.update(this.data);
 			this.roomNameEditMode = false;
 		},
 		/*

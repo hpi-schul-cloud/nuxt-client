@@ -14,6 +14,8 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskModule from "@/store/tasks";
+import NotifierModule from "@/store/notifier";
+import CopyModule from "@/store/copy-process";
 
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
@@ -29,6 +31,8 @@ let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let taskModule: TaskModule;
 let schoolsModule: SchoolsModule;
+let notifierModule: NotifierModule;
+let copyModule: CopyModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -45,6 +49,8 @@ function initializeStores(store: Store<any>): void {
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	taskModule = getModule(TaskModule, store);
+	notifierModule = getModule(NotifierModule, store);
+	copyModule = getModule(CopyModule, store);
 }
 
 export {
@@ -63,4 +69,6 @@ export {
 	roomsModule,
 	schoolsModule,
 	taskModule,
+	notifierModule,
+	copyModule,
 };

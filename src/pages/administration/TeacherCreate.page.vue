@@ -5,7 +5,7 @@
 		:full-width="false"
 	>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
-			<template v-slot:inputs>
+			<template #inputs>
 				<base-input
 					v-model="sendRegistration"
 					type="checkbox"
@@ -14,7 +14,7 @@
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
 				/>
 			</template>
-			<template v-slot:errors>
+			<template #errors>
 				<info-message
 					v-if="error"
 					:message="$t('pages.administration.students.new.error')"

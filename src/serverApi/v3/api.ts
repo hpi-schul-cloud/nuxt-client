@@ -224,7 +224,7 @@ export interface CopyApiResponse {
      */
     status: CopyApiResponseStatusEnum;
     /**
-     * List of included sub elements
+     * List of included sub elements with recursive type structure
      * @type {Array<string>}
      * @memberof CopyApiResponse
      */
@@ -236,10 +236,12 @@ export interface CopyApiResponse {
     * @enum {string}
     */
 export enum CopyApiResponseTypeEnum {
-    Task = 'task',
+    Board = 'board',
     Course = 'course',
     File = 'file',
-    Leaf = 'leaf'
+    Leaf = 'leaf',
+    Lesson = 'lesson',
+    Task = 'task'
 }
 /**
     * @export
@@ -249,7 +251,8 @@ export enum CopyApiResponseStatusEnum {
     Success = 'success',
     Failure = 'failure',
     NotDoing = 'not-doing',
-    NotImplemented = 'not-implemented'
+    NotImplemented = 'not-implemented',
+    Partial = 'partial'
 }
 
 /**
@@ -650,6 +653,19 @@ export enum ImportUserResponseRoleNamesEnum {
     Admin = 'admin'
 }
 
+/**
+ * 
+ * @export
+ * @interface LessonCopyApiParams
+ */
+export interface LessonCopyApiParams {
+    /**
+     * Destination course parent Id the lesson is copied to
+     * @type {string}
+     * @memberof LessonCopyApiParams
+     */
+    courseId?: string;
+}
 /**
  * 
  * @export
@@ -1055,7 +1071,7 @@ export interface TaskCopyApiParams {
      * @type {string}
      * @memberof TaskCopyApiParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * Destination lesson parent Id the task is copied to
      * @type {string}
@@ -1135,6 +1151,12 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
+    courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
     description?: string;
     /**
      * 
@@ -1203,6 +1225,43 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isFinished: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface TeamPermissionsBody
+ */
+export interface TeamPermissionsBody {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamPermissionsBody
+     */
+    read: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamPermissionsBody
+     */
+    write: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamPermissionsBody
+     */
+    create: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamPermissionsBody
+     */
+    _delete: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeamPermissionsBody
+     */
+    share: boolean;
 }
 /**
  * 
@@ -1535,7 +1594,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1720,7 +1779,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1797,7 +1856,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+         * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
          * @param {'userId' | 'username'} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1870,7 +1929,7 @@ export interface AccountApiInterface {
 
     /**
      * 
-     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
      * @param {'userId' | 'username'} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1949,7 +2008,7 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
 
     /**
      * 
-     * @summary Returns all accounts which satisfies the given criteria. Superhero role is REQUIRED.
+     * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
      * @param {'userId' | 'username'} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1985,6 +2044,146 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      */
     public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any) {
         return AccountApiFp(this.configuration).accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CollaborativeStorageApi - axios parameter creator
+ * @export
+ */
+export const CollaborativeStorageApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Updates the CRUD Permissions(+Share) for a specific Role in a Team
+         * @param {string} teamId 
+         * @param {string} roleId 
+         * @param {TeamPermissionsBody} teamPermissionsBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeStorageControllerUpdateTeamPermissionsForRole: async (teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'teamId' is not null or undefined
+            assertParamExists('collaborativeStorageControllerUpdateTeamPermissionsForRole', 'teamId', teamId)
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('collaborativeStorageControllerUpdateTeamPermissionsForRole', 'roleId', roleId)
+            // verify required parameter 'teamPermissionsBody' is not null or undefined
+            assertParamExists('collaborativeStorageControllerUpdateTeamPermissionsForRole', 'teamPermissionsBody', teamPermissionsBody)
+            const localVarPath = `/collaborative-storage/team/{teamId}/role/{roleId}/permissions`
+                .replace(`{${"teamId"}}`, encodeURIComponent(String(teamId)))
+                .replace(`{${"roleId"}}`, encodeURIComponent(String(roleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(teamPermissionsBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CollaborativeStorageApi - functional programming interface
+ * @export
+ */
+export const CollaborativeStorageApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CollaborativeStorageApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Updates the CRUD Permissions(+Share) for a specific Role in a Team
+         * @param {string} teamId 
+         * @param {string} roleId 
+         * @param {TeamPermissionsBody} teamPermissionsBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CollaborativeStorageApi - factory interface
+ * @export
+ */
+export const CollaborativeStorageApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CollaborativeStorageApiFp(configuration)
+    return {
+        /**
+         * Updates the CRUD Permissions(+Share) for a specific Role in a Team
+         * @param {string} teamId 
+         * @param {string} roleId 
+         * @param {TeamPermissionsBody} teamPermissionsBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): AxiosPromise<void> {
+            return localVarFp.collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CollaborativeStorageApi - interface
+ * @export
+ * @interface CollaborativeStorageApi
+ */
+export interface CollaborativeStorageApiInterface {
+    /**
+     * Updates the CRUD Permissions(+Share) for a specific Role in a Team
+     * @param {string} teamId 
+     * @param {string} roleId 
+     * @param {TeamPermissionsBody} teamPermissionsBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeStorageApiInterface
+     */
+    collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * CollaborativeStorageApi - object-oriented interface
+ * @export
+ * @class CollaborativeStorageApi
+ * @extends {BaseAPI}
+ */
+export class CollaborativeStorageApi extends BaseAPI implements CollaborativeStorageApiInterface {
+    /**
+     * Updates the CRUD Permissions(+Share) for a specific Role in a Team
+     * @param {string} teamId 
+     * @param {string} roleId 
+     * @param {TeamPermissionsBody} teamPermissionsBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeStorageApi
+     */
+    public collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any) {
+        return CollaborativeStorageApiFp(this.configuration).collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3180,6 +3379,49 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerCopyLesson: async (lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonid' is not null or undefined
+            assertParamExists('roomsControllerCopyLesson', 'lessonid', lessonid)
+            // verify required parameter 'lessonCopyApiParams' is not null or undefined
+            assertParamExists('roomsControllerCopyLesson', 'lessonCopyApiParams', lessonCopyApiParams)
+            const localVarPath = `/rooms/lessons/{lessonid}/copy`
+                .replace(`{${"lessonid"}}`, encodeURIComponent(String(lessonid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(lessonCopyApiParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3327,6 +3569,17 @@ export const RoomsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3379,6 +3632,16 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @param {string} lessonid 
+         * @param {LessonCopyApiParams} lessonCopyApiParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} roomid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3424,6 +3687,16 @@ export interface RoomsApiInterface {
      * @memberof RoomsApiInterface
      */
     roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @param {string} lessonid 
+     * @param {LessonCopyApiParams} lessonCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApiInterface
+     */
+    roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -3473,6 +3746,18 @@ export class RoomsApi extends BaseAPI implements RoomsApiInterface {
      */
     public roomsControllerCopyCourse(roomid: string, options?: any) {
         return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} lessonid 
+     * @param {LessonCopyApiParams} lessonCopyApiParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomsApi
+     */
+    public roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3627,6 +3912,139 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
      */
     public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any) {
         return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SystemApi - axios parameter creator
+ * @export
+ */
+export const SystemApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Finds all systems.
+         * @param {string} [type] The type of the system.
+         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerFind: async (type?: string, onlyOauth?: boolean, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/system`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (onlyOauth !== undefined) {
+                localVarQueryParameter['onlyOauth'] = onlyOauth;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SystemApi - functional programming interface
+ * @export
+ */
+export const SystemApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SystemApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Finds all systems.
+         * @param {string} [type] The type of the system.
+         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SystemApi - factory interface
+ * @export
+ */
+export const SystemApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SystemApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Finds all systems.
+         * @param {string} [type] The type of the system.
+         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object> {
+            return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SystemApi - interface
+ * @export
+ * @interface SystemApi
+ */
+export interface SystemApiInterface {
+    /**
+     * 
+     * @summary Finds all systems.
+     * @param {string} [type] The type of the system.
+     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemApiInterface
+     */
+    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object>;
+
+}
+
+/**
+ * SystemApi - object-oriented interface
+ * @export
+ * @class SystemApi
+ * @extends {BaseAPI}
+ */
+export class SystemApi extends BaseAPI implements SystemApiInterface {
+    /**
+     * 
+     * @summary Finds all systems.
+     * @param {string} [type] The type of the system.
+     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemApi
+     */
+    public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
+        return SystemApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

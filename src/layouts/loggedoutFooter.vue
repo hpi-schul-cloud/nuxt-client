@@ -1,21 +1,22 @@
 <template>
 	<div class="page">
-		<navigation-bar
-			:links="navbarItems"
-			:img="require('@assets/img/logo/logo-dBildungscloud.svg')"
-			:buttons="true"
-			class="topbar"
-		/>
+		<div class="topbar">
+			<navigation-bar
+				:buttons="true"
+				:img="require('@assets/img/logo/logo-image-mono.svg')"
+				:links="navbarItems"
+			/>
+		</div>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<Nuxt />
 		</div>
-		<the-footer v-if="!fullscreenMode" class="footer" />
+		<the-footer class="footer" />
 	</div>
 </template>
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import navbarBaseItems from "@utils/navbarBaseItems.js";
+import navbarBaseItems from "@/utils/navbarBaseItems";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {
@@ -25,7 +26,7 @@ export default {
 	},
 	data() {
 		return {
-			navbarBaseItems: navbarBaseItems,
+			navbarBaseItems,
 		};
 	},
 	computed: {
@@ -46,14 +47,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .page {
 	display: grid;
 	grid-template-areas:
-		"top"
-		"content"
-		"footer";
+		"side top"
+		"side content"
+		"side footer";
 	grid-template-rows: auto 1fr auto;
-	grid-template-columns: 1fr;
+	grid-template-columns: 0 1fr;
 	max-width: 100%;
 	min-height: 100vh;
 }
@@ -68,11 +70,13 @@ export default {
 
 .small-wrapper {
 	grid-area: content;
+	min-height: 100vh;
 	padding: var(--space-md);
 }
 
 .wrapper {
 	grid-area: content;
+	min-height: calc(100vh - var(--topbar-height));
 	padding-right: calc(15 * var(--border-width));
 	padding-left: calc(15 * var(--border-width));
 	margin: var(--space-lg) auto;
@@ -88,6 +92,23 @@ export default {
 @media (min-width: 768px) {
 	.wrapper {
 		width: 720px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 992px) {
+	.wrapper {
+		width: 960px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 1140px;
 		max-width: 100%;
 	}
 }

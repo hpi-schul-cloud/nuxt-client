@@ -34,7 +34,7 @@
 					v-if="taskState === 'warning'"
 					:type="taskState"
 					:due-date="task.duedate"
-					:shorten-date="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
 				/>
 			</v-list-item-action>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
@@ -103,9 +103,9 @@ export default {
 		taskState() {
 			const { status } = this.task;
 
-			if (this.isCloseToDueDate) return "warning";
+			if (this.isCloseToDueDate && !status.submitted) return "warning";
 			if (this.isGradedButMissed) return "gradedOverdue";
-			if (this.isOverDue) return "overdue";
+			if (this.isOverDue && !status.submitted) return "overdue";
 			if (status.submitted && !status.graded) return "submitted";
 			if (status.graded) return "graded";
 			return undefined;

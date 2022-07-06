@@ -1,13 +1,5 @@
 <template>
 	<div>
-		<v-progress-circular
-			v-if="showSpinner"
-			indeterminate
-			size="72"
-			width="6"
-			color="secondary"
-			class="spinner"
-		></v-progress-circular>
 		<v-treeview
 			:expand-icon="icons.mdiChevronDown"
 			:items="items"
@@ -16,14 +8,15 @@
 			:open="expandedNodes"
 			item-children="elements"
 			item-key="index"
+			dense
 			@keydown.space="onSpacePress"
 		>
-			<template v-slot:prepend="{ item }">
+			<template #prepend="{ item }">
 				<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
 					{{ setIcons(item) }}
 				</v-icon>
 			</template>
-			<template v-slot:label="{ item }">
+			<template #label="{ item }">
 				<div
 					class="treeview-item"
 					:class="`treeview-item-${item.status}`"
@@ -46,15 +39,26 @@ import {
 	mdiAlertCircle,
 	mdiChevronDown,
 } from "@mdi/js";
+
+const StatusEnum = {
+	SUCCESS: "success",
+	FAILURE: "failure",
+	PARTIAL: "partial",
+	SUCCESS_ALL: "success-all",
+};
+
+const ClassEnum = {
+	FINISHED: "finished",
+	NOT_FINISHED: "not-finished",
+	PARTIAL: "partial",
+};
+
 export default {
 	props: {
 		items: {
 			type: Array,
 			required: true,
 			default: () => [],
-		},
-		showSpinner: {
-			type: Boolean,
 		},
 	},
 	data() {
@@ -66,6 +70,7 @@ export default {
 				mdiAlertCircle,
 				mdiChevronDown,
 			},
+
 			expandedNodes: [],
 		};
 	},
@@ -74,21 +79,20 @@ export default {
 	},
 	methods: {
 		setCustomClass(itemStatus) {
-			if (itemStatus === "success") return "finished";
-			if (itemStatus === "failure") return "not-finished";
-			if (itemStatus === "partial") return "partial";
+			if (itemStatus === StatusEnum.SUCCESS) return ClassEnum.FINISHED;
+			if (itemStatus === StatusEnum.FAILURE) return ClassEnum.NOT_FINISHED;
+			if (itemStatus === StatusEnum.PARTIAL) return ClassEnum.PARTIAL;
 		},
 		setIcons(item) {
-			if (item.status === "success" && !item.elements)
-				return this.icons.mdiCheck;
-			if (item.status === "success") return this.icons.mdiCheckAll;
-			if (item.status === "failure") return this.icons.mdiAlertCircle;
-			if (item.status === "partial") return this.icons.mdiAlert;
+			if (item.status === StatusEnum.SUCCESS_ALL) return this.icons.mdiCheckAll;
+			if (item.status === StatusEnum.SUCCESS) return this.icons.mdiCheck;
+			if (item.status === StatusEnum.FAILURE) return this.icons.mdiAlertCircle;
+			if (item.status === StatusEnum.PARTIAL) return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.elements && item.status !== "success")
+				if (item.elements && item.status !== StatusEnum.SUCCESS)
 					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
@@ -102,57 +106,46 @@ export default {
 			this.expandedNodes.push(itemId);
 		},
 		getAriaLabel(item) {
-			if (!item.elements)
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.childItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-					}
-				);
+			if (!item.elements) {
+				return this.$t("components.molecules.copyResult.aria.childItem.info", {
+					itemTitle: item.title,
+					itemStatus: this.$t(`common.labels.${item.status}`),
+				});
+			}
 
 			if (!this.expandedNodes.includes(item.index)) {
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.parentItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.elements.length,
-						action: this.$t("common.labels.expand"),
-					}
-				);
-			} else {
-				return this.$t(
-					"components.molecules.courseCopyResult.aria.parentItem.info",
-					{
-						itemTitle: item.title,
-						itemStatus: this.$t(`common.labels.${item.status}`),
-						includedItems: item.elements.length,
-						action: this.$t("common.labels.collapse"),
-					}
-				);
+				return this.$t("components.molecules.copyResult.aria.parentItem.info", {
+					itemTitle: item.title,
+					itemStatus: this.$t(`common.labels.${item.status}`),
+					includedItems: item.elements.length,
+					action: this.$t("common.labels.expand"),
+				});
 			}
+
+			return this.$t("components.molecules.copyResult.aria.parentItem.info", {
+				itemTitle: item.title,
+				itemStatus: this.$t(`common.labels.${item.status}`),
+				includedItems: item.elements.length,
+				action: this.$t("common.labels.collapse"),
+			});
 		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@variables";
+@import "@styles";
+.treeview-item-failure {
+	color: var(--color-danger-dark);
+	white-space: normal;
+}
 .not-finished {
-	color: var(--color-danger);
+	color: var(--color-danger-dark);
 }
 .finished {
 	color: var(--color-secondary);
 }
 .partial {
 	color: var(--color-accent);
-}
-.spinner {
-	position: absolute;
-	right: 0;
-	left: 0;
-	margin-right: auto;
-	margin-left: auto;
 }
 </style>

@@ -59,7 +59,7 @@ module.exports = {
 	 ** Headers of the page
 	 */
 	head: {
-		title: pkg.name,
+		title: "dBildungscloud",
 		meta: [
 			{
 				charset: "utf-8",
@@ -131,6 +131,7 @@ module.exports = {
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
 		"@plugins/store-accessor",
+		"@plugins/notifier.ts",
 	],
 
 	/*

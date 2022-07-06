@@ -4,6 +4,7 @@ import { Task } from "./types/tasks";
 type TaskParams = {
 	name?: string;
 	courseName?: string;
+	courseId?: string;
 	duedate?: string;
 	status?: {
 		submitted?: number;
@@ -22,6 +23,8 @@ class TaskFactory {
 			name: params.name || `task #${this.sequence++}`,
 			courseName:
 				params.courseName !== undefined ? params.courseName : "course #1",
+			courseId:
+				params.courseId !== undefined ? params.courseId : "course ID #1",
 			duedate: params.duedate,
 			status: {
 				submitted: params.status?.submitted || 0,

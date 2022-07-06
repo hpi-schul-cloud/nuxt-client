@@ -11,7 +11,7 @@
 		:direction="speedDialDirection"
 		:data-testid="dataTestId"
 	>
-		<template v-slot:activator>
+		<template #activator>
 			<v-btn
 				id="fab"
 				v-model="isSpeedDialExpanded"

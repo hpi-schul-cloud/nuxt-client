@@ -14,7 +14,7 @@
 			color="error darken-3"
 		>
 			{{ $t("pages.administration.migration.error") }}
-			<template v-slot:action="{ attrs }">
+			<template #action="{ attrs }">
 				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
 					<v-icon>{{ mdiClose }}</v-icon>
 				</v-btn>
@@ -178,10 +178,11 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
+										<!-- eslint-disable vue/no-v-html -->
 										<div
 											v-html="
 												$t('pages.administration.migration.summary', {
-													instance: this.$theme.short_name,
+													instance: $theme.short_name,
 													source: $t(
 														'pages.administration.migration.ldapSource'
 													),
@@ -293,6 +294,7 @@
 	</default-wireframe>
 </template>
 <script>
+/* eslint-disable max-lines */
 import { mdiClose, mdiLoading } from "@mdi/js";
 
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
@@ -321,9 +323,6 @@ export default {
 		};
 	},
 	computed: {
-		isAllowed() {
-			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true;
-		},
 		isMigrationNotStarted() {
 			return this.school.inUserMigration === undefined;
 		},
@@ -375,14 +374,25 @@ export default {
 			}
 		},
 	},
-	created() {
-		if (!this.isAllowed) {
-			this.$router.push("/");
+	async created() {
+		const allowed = await this.isAllowed();
+		if (!allowed) {
+			await this.$router.push("/");
+			return;
 		}
-		this.summary();
+		await this.summary();
 		this.checkTotalInterval();
 	},
 	methods: {
+		async isAllowed() {
+			if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+				return true;
+			}
+			if (this.school.id === "") {
+				await schoolsModule.fetchSchool();
+			}
+			return this.school.features.ldapUniventionMigrationSchool === true;
+		},
 		isStepEditable(step) {
 			switch (step) {
 				case 1:

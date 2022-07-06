@@ -156,37 +156,37 @@ describe("task store", () => {
 				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
 			});
 		});
-	});
 
-	describe("deleteTask", () => {
-		beforeEach(() => {
-			setupStores({
-				"finished-tasks": FinishedTaskModule,
+		describe("deleteTask", () => {
+			beforeEach(() => {
+				setupStores({
+					"finished-tasks": FinishedTaskModule,
+				});
 			});
-		});
 
-		it("should call api to delete a task", (done) => {
-			const mockApi = {
-				taskControllerDelete: jest.fn(),
-			};
-			const spy = jest
-				.spyOn(serverApi, "TaskApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+			it("should call api to delete a task", (done) => {
+				const mockApi = {
+					taskControllerDelete: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-			const taskModule = new TaskModule({});
-			const tasks = taskFactory.buildList(3);
-			taskModule.setTasks(tasks);
-			const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+				const taskModule = new TaskModule({});
+				const tasks = taskFactory.buildList(3);
+				taskModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
 
-			taskModule.deleteTask(tasks[0].id).then(() => {
-				expect(taskModule.getStatus).toBe("completed");
-				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
-				expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
-				done();
+				taskModule.deleteTask(tasks[0].id).then(() => {
+					expect(taskModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+					done();
+				});
+				expect(taskModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
 			});
-			expect(taskModule.getStatus).toBe("pending");
-
-			spy.mockRestore();
 		});
 	});
 
@@ -235,6 +235,15 @@ describe("task store", () => {
 				taskModule.setStatus("completed");
 
 				expect(taskModule.status).toBe("completed");
+			});
+		});
+
+		describe("setActiveTab", () => {
+			it("should set the active tab in state", () => {
+				const taskModule = new TaskModule({});
+				taskModule.setActiveTab("drafts");
+
+				expect(taskModule.tab).toBe("drafts");
 			});
 		});
 
@@ -296,6 +305,16 @@ describe("task store", () => {
 				const status = taskModule.getStatus;
 
 				expect(status).toBe(taskModule.status);
+			});
+		});
+
+		describe("getActiveTab", () => {
+			it("should return the active tab", () => {
+				const taskModule = new TaskModule({});
+				taskModule.tab = "drafts";
+				const activeTab = taskModule.getActiveTab;
+
+				expect(activeTab).toBe(taskModule.tab);
 			});
 		});
 

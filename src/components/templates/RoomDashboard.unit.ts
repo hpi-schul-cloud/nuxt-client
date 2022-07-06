@@ -1,7 +1,8 @@
-import { envConfigModule, roomModule, taskModule } from "@/store";
+import { envConfigModule, roomModule, taskModule, copyModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TaskModule from "@/store/tasks";
+import CopyModule from "@/store/copy-process";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
@@ -89,11 +90,16 @@ const emptyMockData = {
 	elements: [],
 };
 
+const $notifier = jest.fn();
+
 const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
+			mocks: {
+				$notifier,
+			},
 		}),
 		propsData: props,
 		...options,
@@ -108,6 +114,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			tasks: TaskModule,
 			room: RoomModule,
 			"env-config": EnvConfigModule,
+			"copy-process": CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
@@ -486,6 +493,165 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				expect(finishTaskMock).toHaveBeenCalled();
 				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
 			});
+		});
+	});
+
+	describe("CopyTask Process", () => {
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+		});
+		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
+			const copyTaskMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			wrapper.vm.copyTask = copyTaskMock;
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+
+			expect(copyTaskMock).toHaveBeenCalled();
+		});
+
+		it("should call the 'store copyTask action' method when a task component emits 'copy-task' custom event", async () => {
+			const spy = jest.spyOn(copyModule, "copyTask");
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+
+			expect(spy).toHaveBeenCalled();
+			expect(spy.mock.calls[0][0]).toStrictEqual({
+				id: "1234",
+				courseId: "123",
+			});
+		});
+
+		it("should set 'isOpen' true  when a task component emits 'copy-task' custom event", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			await wrapper.vm.$nextTick();
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+		});
+
+		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
+			const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
+			await wrapper.vm.$nextTick();
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+			await wrapper.vm.$nextTick();
+
+			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
+			copyProcess.vm.$emit("dialog-closed", false);
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+			expect(fetchContentSpy).toHaveBeenCalled();
+			expect(fetchContentSpy.mock.calls[0][0]).toStrictEqual("123");
+		});
+
+		it("should redirect to legacy client if FEATURE_TASK_COPY_ENABLED flag is not set true", async () => {
+			const location = window.location;
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
+
+			const taskCard = wrapper.find(".task-card");
+			taskCard.vm.$emit("copy-task");
+
+			expect(location.href).toStrictEqual(
+				"/homework/1234/copy?returnUrl=rooms/123"
+			);
+		});
+	});
+
+	describe("CopyLesson Process", () => {
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+		});
+		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
+			const copyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			wrapper.vm.copyLesson = copyLessonMock;
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+
+			expect(copyLessonMock).toHaveBeenCalled();
+		});
+
+		it("should call the 'store copyLesson action' method when a lesson component emits 'copy-lesson' custom event", async () => {
+			const spy = jest.spyOn(copyModule, "copyLesson");
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			expect(spy).toHaveBeenCalled();
+			expect(spy.mock.calls[0][0]).toStrictEqual({
+				id: "3456",
+				courseId: "123",
+			});
+		});
+
+		it("should set 'isOpen' true  when a task component emits 'copy-lesson' custom event", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			await wrapper.vm.$nextTick();
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
+		});
+
+		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
+			await wrapper.vm.$nextTick();
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
+			copyProcess.vm.$emit("dialog-closed", false);
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+		});
+
+		it("should show a notification when a lesson component emited 'copy-lesson' custom event", async () => {
+			const roomModuleCopyLessonMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			copyModule.copyLesson = roomModuleCopyLessonMock.mockImplementation(
+				() => {
+					copyModule.setCopyResult({
+						title: "Thema",
+						type: "lesson",
+						status: "success",
+						id: "123",
+						elements: [
+							{ title: "description", type: "leaf", status: "success" },
+						],
+					});
+				}
+			);
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
+			await wrapper.vm.$nextTick();
+
+			expect($notifier).toHaveBeenCalled();
 		});
 	});
 });

@@ -37,7 +37,7 @@
 					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div v-if="!condenseLayout" class="justify-center mt-1 sub-title">
+			<div v-if="!condenseLayout" class="justify-center mt-2 mb-7 sub-title">
 				{{ item.title }}
 			</div>
 			<div
@@ -50,8 +50,6 @@
 	</div>
 </template>
 <script>
-import { envConfigModule } from "@/store";
-
 export default {
 	props: {
 		item: {
@@ -85,18 +83,15 @@ export default {
 	},
 	methods: {
 		onClick() {
-			const showRoomView = envConfigModule.getEnv.ROOM_VIEW_ENABLED || false;
 			if (!this.condenseLayout) {
 				if (this.item.to) {
 					this.$router.push({
-						path: showRoomView ? `/rooms/${this.item.id}` : this.item.to,
+						path: `/rooms/${this.item.id}`,
 					});
 					return;
 				}
 				if (this.item.href) {
-					window.location = showRoomView
-						? `/rooms/${this.item.id}`
-						: this.item.href;
+					window.location = `/rooms/${this.item.id}`;
 				}
 			}
 		},
@@ -151,7 +146,7 @@ export default {
 
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-md),
+		$line-height: var(--line-height-lg),
 		$lines-to-show: 2
 	);
 }

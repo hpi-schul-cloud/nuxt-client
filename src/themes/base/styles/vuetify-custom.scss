@@ -1,5 +1,6 @@
 $body-font-family: var(--font-primary);
 $heading-font-family: var(--font-accent);
+$line-height-root: var(--line-height-md);
 
 // headings
 $headings: (
@@ -62,3 +63,7 @@ $data-table-regular-row-font-size: 1rem;
 
 // card
 $card-text-letter-spacing: normal;
+
+// treeview
+$treeview-node-margin: 0;
+$treeview-node-padding: 0;

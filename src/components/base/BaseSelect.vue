@@ -21,7 +21,7 @@
 			@remove="$emit('remove', $event)"
 			@search-change="$emit('search-change', $event)"
 		>
-			<template v-slot:tag="slotProps">
+			<template #tag="slotProps">
 				<slot name="tag" :option="slotProps.option" />
 			</template>
 		</multi-select>

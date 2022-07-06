@@ -66,7 +66,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de",
+					href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de?subject=Schul-Cloud%20Brandenburg%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{

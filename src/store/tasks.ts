@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { envConfigModule, finishedTaskModule } from "@/store";
+import { finishedTaskModule } from "@/store";
 import { TaskFilter } from "./task.filter";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
@@ -32,6 +32,10 @@ export default class TaskModule extends VuexModule {
 	};
 
 	status: Status = "";
+
+	loading: boolean = false;
+
+	tab: string = "";
 
 	_taskApi?: TaskApiInterface;
 
@@ -112,6 +116,11 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Mutation
+	setActiveTab(tab: string): void {
+		this.tab = tab;
+	}
+
+	@Mutation
 	setSubstituteFilter(enabled: boolean): void {
 		this.substituteFilter = enabled;
 
@@ -157,6 +166,14 @@ export default class TaskModule extends VuexModule {
 		return this.businessError;
 	}
 
+	get getLoading(): boolean {
+		return this.loading;
+	}
+
+	get getActiveTab(): string {
+		return this.tab;
+	}
+  
 	get getCourseFilters(): TaskCourseFilter[] {
 		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(
 			this.substituteFilter

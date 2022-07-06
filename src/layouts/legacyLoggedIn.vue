@@ -1,7 +1,7 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
-		<skip-links></skip-links>
+		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<the-top-bar
@@ -181,10 +181,7 @@ export default {
 	methods: {
 		handleTopAction(event) {
 			if (event === "logout") {
-				// TODO temporary workaround until $cookies are accessible from TS modules
-				this.$cookies.remove("jwt");
 				authModule.logout();
-				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;

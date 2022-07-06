@@ -1,280 +1,310 @@
-<!-- eslint-disable max-lines -->
 <template>
-	<section class="section">
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.students.consent.title") }}
-		</h1>
-		<i18n path="pages.administration.students.consent.info" tag="p">
-			<template v-slot:dataProtection>
-				<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
-					$t("common.words.privacyPolicy")
-				}}</a>
-			</template>
-			<template v-slot:terms>
-				<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{
-					$t("components.legacy.footer.terms")
-				}}</a>
-			</template>
-			<template v-slot:handout>
-				<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
-					$t("pages.administration.students.consent.handout")
-				}}</a>
-			</template>
-		</i18n>
-		<div class="mt--lg">
-			<step-progress
-				id="progressbar"
-				:steps="progressSteps"
-				:current-step="currentStep"
-				data-testid="step_progress"
-			/>
-		</div>
-
-		<section v-if="currentStep === 0">
-			<h4>{{ $t("pages.administration.students.consent.steps.complete") }}</h4>
-			{{ $t("pages.administration.students.consent.steps.complete.info") }}
-
-			<backend-data-table
-				:columns="tableColumns"
-				:data="tableData"
-				track-by="_id"
-				:sort-by.sync="sortBy"
-				:sort-order.sync="sortOrder"
-				data-testid="consent_table_1"
-				@update:sort="onUpdateSort"
-			>
-				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input
-						:error="birthdayWarning && !slotProps.data ? inputError : null"
-						class="date base-input"
-						:vmodel="inputDateFromDeUTC(slotProps.data)"
-						type="date"
-						label=""
-						data-testid="birthday-input"
-						:birth-date="true"
-						@input="
-							inputDate({
-								id: tableData[slotProps.rowindex]._id,
-								birthDate: inputDateFormat($event),
-							})
-						"
-					/>
+	<default-wireframe
+		ref="main"
+		:full-width="true"
+		:breadcrumbs="breadcrumbs"
+		:aria-label="$t('pages.administration.students.consent.title')"
+	>
+		<template slot="header">
+			<h1 class="mb--md h3">
+				{{ $t("pages.administration.students.consent.title") }}
+			</h1>
+			<i18n path="pages.administration.students.consent.info" tag="p">
+				<template #dataProtection>
+					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
+						$t("common.words.privacyPolicy")
+					}}</a>
 				</template>
-				<template v-slot:datacolumn-password="slotProps">
-					<base-input
-						:vmodel="slotProps.data"
-						type="text"
-						label=""
-						data-testid="password-input"
-						class="base-input"
-						@input="
-							inputPass({
-								id: tableData[slotProps.rowindex]._id,
-								pass: $event,
-							})
-						"
-					/>
+				<template #terms>
+					<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{
+						$t("components.legacy.footer.terms")
+					}}</a>
 				</template>
-			</backend-data-table>
-
-			<p v-if="birthdayWarning" class="warning" data-testid="error-text">
-				<base-icon source="material" icon="report_problem" />
-				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
-			</p>
-
-			<base-button design="secondary" data-testid="button-next" @click="next">{{
-				$t("pages.administration.students.consent.steps.complete.next")
-			}}</base-button>
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
-		</section>
-
-		<section v-if="currentStep === 1">
-			<h4>{{ $t("pages.administration.students.consent.steps.register") }}</h4>
-			{{ $t("pages.administration.students.consent.steps.register.info") }}
-			<backend-data-table
-				:columns="tableColumns"
-				:data="tableData"
-				track-by="id"
-				:paginated="false"
-				:sort-by.sync="sortBy"
-				:sort-order.sync="sortOrder"
-				data-testid="consent_table_2"
-				@update:sort="onUpdateSort"
-			>
-				<template v-slot:datacolumn-birthday="slotProps">
-					<div class="text-content">
-						{{ printDateFromDeUTC(slotProps.data) }}
-					</div>
+				<template #handout>
+					<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
+						$t("pages.administration.students.consent.handout")
+					}}</a>
 				</template>
-			</backend-data-table>
-
-			<div id="consent-checkbox">
-				<base-input
-					v-model="check"
-					type="checkbox"
-					name="switch"
-					label=""
-					data-testid="check-confirm"
-				>
-				</base-input>
-				<label @click="check = !check">
-					<i18n
-						path="pages.administration.students.consent.steps.register.confirm"
-					>
-						<template v-slot:analogConsent>
-							<a class="link" :href="fileLinks.analogConsent" target="_">{{
-								$t(
-									"pages.administration.students.consent.steps.register.analog-consent"
-								)
-							}}</a>
-						</template>
-					</i18n>
-				</label>
+			</i18n>
+		</template>
+		<section class="section">
+			<div class="mt--lg">
+				<step-progress
+					id="progressbar"
+					:steps="progressSteps"
+					:current-step="currentStep"
+					data-testid="step_progress"
+				/>
 			</div>
 
-			<p v-if="checkWarning" class="warning" data-testid="confirm-error">
-				<base-icon source="material" icon="report_problem" />
-				{{
-					$t(
-						"pages.administration.students.consent.steps.register.confirm.warn"
-					)
-				}}
-			</p>
-
-			<base-button
-				design="secondary"
-				data-testid="button-next-2"
-				@click="register"
-				>{{
-					$t("pages.administration.students.consent.steps.register.next")
-				}}</base-button
-			>
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
-		</section>
-
-		<section v-if="currentStep === 2">
-			<h4>{{ $t("pages.administration.students.consent.steps.download") }}</h4>
-			{{ $t("pages.administration.students.consent.steps.download.info") }}
-			<backend-data-table
-				:columns="tableColumns"
-				:data="tableData"
-				track-by="_id"
-				:paginated="false"
-				:sort-by.sync="sortBy"
-				:sort-order.sync="sortOrder"
-				data-testid="consent_table_3"
-				@update:sort="onUpdateSort"
-			>
-				<template v-slot:datacolumn-birthday="slotProps">
-					{{ printDateFromDeUTC(slotProps.data) }}
-				</template>
-			</backend-data-table>
-			<p>
-				{{
-					$t("pages.administration.students.consent.steps.download.explanation")
-				}}
-			</p>
-
-			<base-button design="secondary" @click="download">{{
-				$t("pages.administration.students.consent.steps.download.next")
-			}}</base-button>
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
-		</section>
-
-		<section v-if="currentStep === 3">
-			<base-content-container>
-				<h4 class="centered">
-					{{ $t("pages.administration.students.consent.steps.success") }}
+			<section v-if="currentStep === 0">
+				<h4>
+					{{ $t("pages.administration.students.consent.steps.complete") }}
 				</h4>
-				<img
-					class="mb--md"
-					:src="image"
-					:alt="
-						$t('pages.administration.students.consent.steps.success.image.alt')
-					"
-				/>
-
-				<base-button design="secondary outline" @click="success">{{
-					$t("pages.administration.students.consent.steps.success.back")
-				}}</base-button>
-			</base-content-container>
-		</section>
-
-		<base-modal :active.sync="cancelWarning">
-			<template v-slot:header></template>
-			<template v-slot:body>
-				<modal-body-info
-					:title="
-						$t('pages.administration.students.consent.cancel.modal.title')
-					"
-				>
-					<template v-slot:icon>
-						<base-icon
-							class="warning"
-							source="material"
-							icon="report_problem"
-						/>
-					</template>
-				</modal-body-info>
-				<span v-if="currentStep === 2">
-					{{
-						$t(
-							"pages.administration.students.consent.cancel.modal.download.info"
-						)
-					}}
-				</span>
-				<span v-else>
-					{{ $t("pages.administration.students.consent.cancel.modal.info") }}
-				</span>
-			</template>
-			<template v-slot:footerRight>
-				<base-button design="danger text" @click="cancel">
-					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
-				</base-button>
-				<base-button v-if="currentStep === 2" design="danger" @click="download">
-					{{
-						$t(
-							"pages.administration.students.consent.cancel.modal.download.continue"
-						)
-					}}
-				</base-button>
-				<base-button v-else design="danger" @click="cancelWarning = false">
-					{{
-						$t("pages.administration.students.consent.cancel.modal.continue")
-					}}
-				</base-button>
-			</template>
-		</base-modal>
-
-		<div hidden>
-			<div id="tableStudentsForPrint">
-				<h3 class="print-title">
-					{{ this.$t("pages.administration.students.consent.print.title") }}
-				</h3>
-				<p>
-					{{ printPageInfo }}
-				</p>
+				{{ $t("pages.administration.students.consent.steps.complete.info") }}
 
 				<backend-data-table
-					:columns="tableColumnsForPrint"
+					:columns="tableColumns"
+					:data="tableData"
+					track-by="_id"
+					:sort-by.sync="sortBy"
+					:sort-order.sync="sortOrder"
+					data-testid="consent_table_1"
+					@update:sort="onUpdateSort"
+				>
+					<template #datacolumn-birthday="slotProps">
+						<base-input
+							:error="birthdayWarning && !slotProps.data ? inputError : null"
+							class="date base-input"
+							:vmodel="inputDateFromDeUTC(slotProps.data)"
+							type="date"
+							label=""
+							data-testid="birthday-input"
+							:birth-date="true"
+							@input="
+								inputDate({
+									id: tableData[slotProps.rowindex]._id,
+									birthDate: inputDateFormat($event),
+								})
+							"
+						/>
+					</template>
+					<template #datacolumn-password="slotProps">
+						<base-input
+							:vmodel="slotProps.data"
+							type="text"
+							label=""
+							data-testid="password-input"
+							class="base-input"
+							@input="
+								inputPass({
+									id: tableData[slotProps.rowindex]._id,
+									pass: $event,
+								})
+							"
+						/>
+					</template>
+				</backend-data-table>
+
+				<p v-if="birthdayWarning" class="warning" data-testid="error-text">
+					<base-icon source="material" icon="report_problem" />
+					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
+				</p>
+
+				<base-button
+					design="secondary"
+					data-testid="button-next"
+					@click="next"
+					>{{
+						$t("pages.administration.students.consent.steps.complete.next")
+					}}</base-button
+				>
+				<base-button design="text" @click="cancelWarning = true">{{
+					$t("common.actions.cancel")
+				}}</base-button>
+			</section>
+
+			<section v-if="currentStep === 1">
+				<h4>
+					{{ $t("pages.administration.students.consent.steps.register") }}
+				</h4>
+				{{ $t("pages.administration.students.consent.steps.register.info") }}
+				<backend-data-table
+					:columns="tableColumns"
+					:data="tableData"
+					track-by="id"
+					:paginated="false"
+					:sort-by.sync="sortBy"
+					:sort-order.sync="sortOrder"
+					data-testid="consent_table_2"
+					@update:sort="onUpdateSort"
+				>
+					<template #datacolumn-birthday="slotProps">
+						<div class="text-content">
+							{{ printDateFromDeUTC(slotProps.data) }}
+						</div>
+					</template>
+				</backend-data-table>
+
+				<div id="consent-checkbox">
+					<base-input
+						v-model="check"
+						type="checkbox"
+						name="switch"
+						label=""
+						data-testid="check-confirm"
+					>
+					</base-input>
+					<label @click="check = !check">
+						<i18n
+							path="pages.administration.students.consent.steps.register.confirm"
+						>
+							<template #analogConsent>
+								<a class="link" :href="fileLinks.analogConsent" target="_">{{
+									$t(
+										"pages.administration.students.consent.steps.register.analog-consent"
+									)
+								}}</a>
+							</template>
+						</i18n>
+					</label>
+				</div>
+
+				<p v-if="checkWarning" class="warning" data-testid="confirm-error">
+					<base-icon source="material" icon="report_problem" />
+					{{
+						$t(
+							"pages.administration.students.consent.steps.register.confirm.warn"
+						)
+					}}
+				</p>
+
+				<base-button
+					design="secondary"
+					data-testid="button-next-2"
+					@click="register"
+					>{{
+						$t("pages.administration.students.consent.steps.register.next")
+					}}</base-button
+				>
+				<base-button design="text" @click="cancelWarning = true">{{
+					$t("common.actions.cancel")
+				}}</base-button>
+			</section>
+
+			<section v-if="currentStep === 2">
+				<h4>
+					{{ $t("pages.administration.students.consent.steps.download") }}
+				</h4>
+				{{ $t("pages.administration.students.consent.steps.download.info") }}
+				<backend-data-table
+					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
 					:paginated="false"
-				/>
+					:sort-by.sync="sortBy"
+					:sort-order.sync="sortOrder"
+					data-testid="consent_table_3"
+					@update:sort="onUpdateSort"
+				>
+					<template #datacolumn-birthday="slotProps">
+						{{ printDateFromDeUTC(slotProps.data) }}
+					</template>
+				</backend-data-table>
+				<p>
+					{{
+						$t(
+							"pages.administration.students.consent.steps.download.explanation"
+						)
+					}}
+				</p>
+
+				<base-button design="secondary" @click="download">{{
+					$t("pages.administration.students.consent.steps.download.next")
+				}}</base-button>
+				<base-button design="text" @click="cancelWarning = true">{{
+					$t("common.actions.cancel")
+				}}</base-button>
+			</section>
+
+			<section v-if="currentStep === 3">
+				<base-content-container>
+					<h4 class="centered">
+						{{ $t("pages.administration.students.consent.steps.success") }}
+					</h4>
+					<img
+						class="mb--md"
+						:src="image"
+						:alt="
+							$t(
+								'pages.administration.students.consent.steps.success.image.alt'
+							)
+						"
+					/>
+
+					<base-button design="secondary outline" @click="success">{{
+						$t("pages.administration.students.consent.steps.success.back")
+					}}</base-button>
+				</base-content-container>
+			</section>
+
+			<base-modal :active.sync="cancelWarning">
+				<template #header></template>
+				<template #body>
+					<modal-body-info
+						:title="
+							$t('pages.administration.students.consent.cancel.modal.title')
+						"
+					>
+						<template #icon>
+							<base-icon
+								class="warning"
+								source="material"
+								icon="report_problem"
+							/>
+						</template>
+					</modal-body-info>
+					<span v-if="currentStep === 2">
+						{{
+							$t(
+								"pages.administration.students.consent.cancel.modal.download.info"
+							)
+						}}
+					</span>
+					<span v-else>
+						{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+					</span>
+				</template>
+				<template #footerRight>
+					<base-button design="danger text" @click="cancel">
+						{{
+							$t("pages.administration.students.consent.cancel.modal.confirm")
+						}}
+					</base-button>
+					<base-button
+						v-if="currentStep === 2"
+						design="danger"
+						@click="download"
+					>
+						{{
+							$t(
+								"pages.administration.students.consent.cancel.modal.download.continue"
+							)
+						}}
+					</base-button>
+					<base-button v-else design="danger" @click="cancelWarning = false">
+						{{
+							$t("pages.administration.students.consent.cancel.modal.continue")
+						}}
+					</base-button>
+				</template>
+			</base-modal>
+
+			<div hidden>
+				<div id="tableStudentsForPrint">
+					<h3 class="print-title">
+						{{ $t("pages.administration.students.consent.print.title") }}
+					</h3>
+					<p>
+						{{ printPageInfo }}
+					</p>
+
+					<backend-data-table
+						:columns="tableColumnsForPrint"
+						:data="tableData"
+						track-by="_id"
+						:paginated="false"
+					/>
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</default-wireframe>
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import { filePathsModule } from "@/store";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
@@ -287,6 +317,7 @@ import {
 
 export default {
 	components: {
+		DefaultWireframe,
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
@@ -294,21 +325,21 @@ export default {
 	meta: {
 		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	data() {
 		return {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
-					to: "/administration/students",
+					href: "/administration/students",
 				},
 				{
 					text: this.$t("pages.administration.students.consent.title"),
+					disabled: true,
 				},
 			],
 			tableColumns: [

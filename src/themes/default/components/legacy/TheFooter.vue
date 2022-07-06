@@ -87,7 +87,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:support@dbildungscloud.de",
+					href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{

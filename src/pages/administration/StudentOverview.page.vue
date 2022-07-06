@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
 		:headline="$t('pages.administration.students.index.title')"
@@ -27,9 +26,7 @@
 			data-testid="searchbar"
 			@update:vmodel="barSearch"
 		>
-			<template v-slot:icon>
-				<base-icon source="material" icon="search"
-			/></template>
+			<template #icon> <base-icon source="material" icon="search" /></template>
 		</base-input>
 
 		<data-filter
@@ -59,18 +56,18 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
-			<template v-slot:datacolumn-birthday="{ data }">
+			<template #datacolumn-birthday="{ data }">
 				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
 			</template>
-			<template v-slot:datacolumn-classes="{ data }">
+			<template #datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:headcolumn-consent> </template>
-			<template v-slot:columnlabel-consent></template>
-			<template v-slot:datacolumn-createdAt="{ data }">
+			<template #headcolumn-consent> </template>
+			<template #columnlabel-consent></template>
+			<template #datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
-			<template v-slot:datacolumn-consentStatus="{ data: status }">
+			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
 						v-if="status === 'ok'"
@@ -93,7 +90,7 @@
 					/>
 				</span>
 			</template>
-			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
+			<template #datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
 					:class="{
 						'action-button': true,
@@ -118,6 +115,7 @@
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import { mapGetters } from "vuex";
 import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";

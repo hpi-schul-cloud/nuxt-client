@@ -1,6 +1,13 @@
-import { finishedTaskModule, taskModule } from "@/store";
+import {
+	finishedTaskModule,
+	taskModule,
+	envConfigModule,
+	copyModule,
+} from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
+import CopyModule from "@/store/copy-process";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
@@ -30,7 +37,13 @@ const getWrapper = (props, options) => {
 
 describe("@components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
-		setupStores({ tasks: TaskModule, "finished-tasks": FinishedTaskModule });
+		document.body.setAttribute("data-app", "true");
+		setupStores({
+			tasks: TaskModule,
+			"finished-tasks": FinishedTaskModule,
+			"env-config": EnvConfigModule,
+			"copy-process": CopyModule,
+		});
 	});
 
 	defineWindowWidth(1264);
@@ -79,7 +92,9 @@ describe("@components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy`);
+			expect(wrapper.vm.copyLink).toStrictEqual(
+				`/homework/${task.id}/copy?returnUrl=/tasks`
+			);
 		});
 
 		it("should set isTeacher correctly", () => {
@@ -158,6 +173,88 @@ describe("@components/molecules/TaskItemMenu", () => {
 			await confirmBtn.trigger("click");
 
 			expect(deleteTaskMock).toHaveBeenCalled();
+		});
+	});
+
+	describe("when copying a task", () => {
+		it("should call copyTask store method if 'FEATURE_TASK_COPY_ENABLED' flag is set to true", async () => {
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(copyTaskStoreMock).toHaveBeenCalled();
+			expect(copyTaskStoreMock.mock.calls[0][0]).toStrictEqual({
+				id: "59cce2c61113d1132c98dc06",
+				courseId: "",
+			});
+		});
+
+		it("should call 'fetchAllTasks' store action when 'CopyProcess' modal is closed ", async () => {
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+			const fetchAllTasksMock = jest.spyOn(taskModule, "fetchAllTasks");
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(copyTaskStoreMock).toHaveBeenCalled();
+
+			const copyProcessModal = wrapper.find("[data-testid='copy-process']");
+			copyProcessModal.vm.$emit("dialog-closed", false);
+
+			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
+			expect(wrapper.vm.copyProcess.id).toBe("");
+			expect(fetchAllTasksMock).toHaveBeenCalled();
+		});
+
+		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+			const { location } = window;
+			const task = tasksTeacher[1];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				show: false,
+				userRole: "teacher",
+			});
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const copyBtn = wrapper.find("#task-action-copy");
+			await copyBtn.trigger("click");
+
+			expect(location.href).toStrictEqual(
+				"/homework/59cce2c61113d1132c98dc06/copy?returnUrl=/tasks"
+			);
+
+			expect(copyTaskStoreMock).not.toHaveBeenCalled();
 		});
 	});
 });

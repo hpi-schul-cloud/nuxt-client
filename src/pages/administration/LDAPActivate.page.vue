@@ -128,12 +128,12 @@
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>
-			<template v-slot:header></template>
-			<template v-slot:body>
+			<template #header></template>
+			<template #body>
 				<modal-body-info
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
-					<template v-slot:icon>
+					<template #icon>
 						<base-icon
 							source="material"
 							icon="check_circle"
@@ -142,7 +142,7 @@
 					</template>
 				</modal-body-info>
 			</template>
-			<template v-slot:footer>
+			<template #footer>
 				<modal-footer-confirm
 					backgroundcolor="var(--color-success)"
 					:text="$t('pages.administration.ldap.activate.ok')"

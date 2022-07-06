@@ -19,13 +19,13 @@
 				<div v-else class="substitute-filter-placeholder"></div>
 				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width" grow>
-						<v-tab>
+						<v-tab :href="tabOneHeader.route">
 							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline" data-testid="openTasks">{{
 								tabOneHeader.title
 							}}</span>
 						</v-tab>
-						<v-tab>
+						<v-tab :href="tabTwoHeader.route">
 							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 							<span
 								class="d-none d-sm-inline"
@@ -33,7 +33,10 @@
 								>{{ tabTwoHeader.title }}</span
 							>
 						</v-tab>
-						<v-tab @click="onOpenFinishedTasksTab">
+						<v-tab
+							:href="tabThreeHeader.route"
+							@change="onOpenFinishedTasksTab"
+						>
 							<v-icon class="tab-icon mr-sm-3">{{
 								tabThreeHeader.icon
 							}}</v-icon>
@@ -58,13 +61,13 @@
 			<div v-else class="course-filter-placeholder"></div>
 			<tasks-dashboard-student
 				v-if="isStudent"
-				:tab.sync="tab"
 				:empty-state="emptyState"
+				:tab-routes="tabRoutes"
 			/>
 			<tasks-dashboard-teacher
 				v-else
-				:tab.sync="tab"
 				:empty-state="emptyState"
+				:tab-routes="tabRoutes"
 			/>
 		</div>
 	</default-wireframe>
@@ -77,7 +80,12 @@ import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
-import tasksEmptyStateImage from "@assets/img/empty-state/Task_Empty_State.svg";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+
+const roleBasedRoutes = {
+	[Roles.Teacher]: ["current", "drafts", "finished"],
+	[Roles.Student]: ["open", "completed", "finished"],
+};
 
 export default {
 	components: {
@@ -96,9 +104,7 @@ export default {
 	},
 	data() {
 		return {
-			tab: 0, // should we save this in store?
 			mdiPlus,
-			tasksEmptyStateImage,
 		};
 	},
 	inject: ["taskModule", "finishedTaskModule"],
@@ -130,6 +136,14 @@ export default {
 		courseFilters() {
 			return this.taskModule.getCourseFilters;
 		},
+		tab: {
+			get() {
+				return this.taskModule.getActiveTab;
+			},
+			set(newTab) {
+				this.setActiveTab(newTab);
+			},
+		},
 		selectedCourseFilters() {
 			return this.taskModule.getSelectedCourseFilters;
 		},
@@ -138,18 +152,18 @@ export default {
 		},
 		// TODO: split teacher and student sides
 		isStudent() {
-			return this.role === "student";
+			return this.role === Roles.Student;
 		},
 		isTeacher() {
-			return this.role === "teacher";
+			return this.role === Roles.Teacher;
 		},
 		showCourseFilter() {
-			if (this.tab === 2) return false;
+			if (this.tab === this.tabRoutes[2]) return false;
 
 			return this.hasTasks;
 		},
 		showSubstituteFilter() {
-			return this.isTeacher && this.tab !== 2;
+			return this.isTeacher && this.tab !== this.tabRoutes[2];
 		},
 		tabOneIsEmpty() {
 			return this.isStudent
@@ -164,10 +178,10 @@ export default {
 		isCourseFilterDisabled() {
 			if (this.selectedCourseFilters.length > 0) return false;
 
-			if (this.tab === 0) {
+			if (this.tab === this.tabRoutes[0]) {
 				return this.tabOneIsEmpty;
 			}
-			if (this.tab === 1) {
+			if (this.tab === this.tabRoutes[1]) {
 				return this.tabTwoIsEmpty;
 			}
 
@@ -187,30 +201,34 @@ export default {
 
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
+		tabRoutes() {
+			return roleBasedRoutes[this.role];
+		},
 		tabOneHeader() {
-			const tabOne = { icon: "$taskOpenFilled" };
-
-			tabOne.title = this.isStudent
-				? this.$t("components.organisms.TasksDashboardMain.tab.open")
-				: this.$t("components.organisms.TasksDashboardMain.tab.current");
-
-			return tabOne;
+			return {
+				icon: "$taskOpenFilled",
+				route: `#${this.tabRoutes[0]}`,
+				title: this.isStudent
+					? this.$t("components.organisms.TasksDashboardMain.tab.open")
+					: this.$t("components.organisms.TasksDashboardMain.tab.current"),
+			};
 		},
 		tabTwoHeader() {
-			const tabTwo = {};
-			if (this.isStudent) {
-				tabTwo.icon = "$taskDoneFilled";
-				tabTwo.title = this.$t(
-					"components.organisms.TasksDashboardMain.tab.completed"
-				);
-				tabTwo.dataTestId = "closedTasks";
-			} else {
-				tabTwo.icon = "$taskDraft";
-				tabTwo.title = this.$t("common.words.drafts");
-				tabTwo.dataTestId = "draftTasks";
-			}
-
-			return tabTwo;
+			return {
+				icon: this.isStudent ? "$taskDoneFilled" : "$taskDraft",
+				route: `#${this.tabRoutes[1]}`,
+				title: this.isStudent
+					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
+					: this.$t("components.organisms.TasksDashboardMain.tab.drafts"),
+				dataTestId: this.isStudent ? "closedTasks" : "draftTasks",
+			};
+		},
+		tabThreeHeader() {
+			return {
+				icon: "$taskFinished",
+				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
+				route: `#${this.tabRoutes[2]}`,
+			};
 		},
 		fabItems() {
 			if (!this.isStudent) {
@@ -224,34 +242,26 @@ export default {
 			}
 			return null;
 		},
-		tabThreeHeader() {
-			const tabThree = {
-				icon: "$taskFinished",
-				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
-			};
-
-			return tabThree;
-		},
 		emptyState() {
-			const image = tasksEmptyStateImage;
+			const image = "@assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 
 			if (this.hasFilterSelected) {
 				title = this.$t("pages.tasks.emptyStateOnFilter.title");
 			} else {
-				if (this.tab === 0) {
+				if (this.tab === this.tabRoutes[0]) {
 					title = this.$t(`pages.tasks.${this.role}.open.emptyState.title`);
 					subtitle = this.$t(
 						`pages.tasks.${this.role}.open.emptyState.subtitle`
 					);
 				}
-				if (this.tab === 1) {
+				if (this.tab === this.tabRoutes[1]) {
 					title = this.isStudent
 						? this.$t("pages.tasks.student.completed.emptyState.title")
 						: this.$t("pages.tasks.teacher.drafts.emptyState.title");
 				}
-				if (this.tab === 2) {
+				if (this.tab === this.tabRoutes[2]) {
 					title = this.$t("pages.tasks.finished.emptyState.title");
 				}
 			}
@@ -263,6 +273,16 @@ export default {
 			};
 		},
 	},
+	watch: {
+		tab(tab, oldTab) {
+			if (oldTab !== "") {
+				this.$router.replace({ query: { ...this.$route.query, tab } });
+			}
+		},
+	},
+	created() {
+		this.initTabState();
+	},
 	methods: {
 		setCourseFilters(courseNames) {
 			this.taskModule.setCourseFilters(courseNames);
@@ -271,12 +291,12 @@ export default {
 			this.taskModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
-			if (this.tab === 0) {
+			if (this.tab === this.tabRoutes[0]) {
 				return this.isStudent
 					? this.tasksCountStudent.open[courseName]
 					: this.tasksCountTeacher.open[courseName];
 			}
-			if (this.tab === 1) {
+			if (this.tab === this.tabRoutes[1]) {
 				return this.isStudent
 					? this.tasksCountStudent.completed[courseName]
 					: this.tasksCountTeacher.drafts[courseName];
@@ -288,6 +308,21 @@ export default {
 			if (!this.finishedTasksIsInitialized) {
 				this.finishedTaskModule.fetchFinishedTasks();
 			}
+		},
+		initTabState() {
+			if (!this.tabRoutes.includes(this.$route.query.tab)) {
+				this.setActiveTab(this.tabRoutes[0]);
+				return;
+			}
+
+			if (this.$route.query.tab == this.tabRoutes[2]) {
+				this.onOpenFinishedTasksTab();
+			}
+
+			this.setActiveTab(this.$route.query.tab);
+		},
+		setActiveTab(tab) {
+			this.taskModule.setActiveTab(tab);
 		},
 	},
 };

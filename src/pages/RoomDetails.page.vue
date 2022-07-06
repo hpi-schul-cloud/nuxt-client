@@ -97,17 +97,25 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
+		<copy-process
+			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+		>
+		</copy-process>
 	</default-wireframe>
 </template>
 
 <script>
-import { authModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule, copyModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
+import CopyProcess from "@components/organisms/CopyProcess";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	mdiPlus,
@@ -128,6 +136,7 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
+		CopyProcess,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -160,6 +169,11 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
+			copyProcess: {
+				id: "",
+				isOpen: false,
+				loading: false,
+			},
 		};
 	},
 	computed: {
@@ -245,7 +259,9 @@ export default {
 				items.push({
 					icon: this.icons.mdiContentCopy,
 					action: () =>
-						(window.location.href = `/courses/${this.courseId}/copy`),
+						envConfigModule.getEnv.FEATURE_COURSE_COPY_ENABLED
+							? this.copyRoom()
+							: (window.location.href = `/courses/${this.courseId}/copy`),
 					name: this.$t("common.actions.duplicate"),
 					dataTestId: "title-menu-copy",
 				});
@@ -299,6 +315,37 @@ export default {
 			this.dialog.text = "";
 			this.dialog.inputText = "";
 			this.dialog.subText = "";
+		},
+		async copyRoom() {
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyRoom(this.courseId);
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.molecules.copyResult.error"),
+					status: "error",
+				});
+				return;
+			}
+
+			if (copyResult.id !== "") {
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
+			}
+		},
+		async onCopyProcessDialogClose() {
+			if (this.copyProcess.id === "") return;
+			this.$notifier({
+				text: this.$t("pages.room.copy.course.message.created"),
+				status: "success",
+			});
+			this.$router.push(`/rooms/${this.copyProcess.id}`);
+			this.courseId = this.copyProcess.id;
+			this.copyProcess.isOpen = false;
+			this.copyProcess.id = "";
 		},
 	},
 	head() {

@@ -29,7 +29,7 @@ export default {
 	layout({ query }) {
 		return String(query.isCollection) === "true" &&
 			contentModule.getCollectionsFeatureFlag === true
-			? "loggedInFull"
+			? "defaultVuetify"
 			: "plain";
 	},
 	computed: {

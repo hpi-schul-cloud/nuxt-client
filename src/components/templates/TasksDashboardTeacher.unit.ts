@@ -13,6 +13,8 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
 
+const tabRoutes = ["current", "drafts", "finished"];
+
 describe("@components/templates/TasksDashboardTeacher", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
@@ -38,6 +40,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		hasTasks: true,
 		openTasksForTeacherIsEmpty: false,
 		draftsForTeacherIsEmpty: true,
+		getActiveTab: tabRoutes[0],
 		getOpenTasksForTeacher: {
 			overdue: overDueTasksTeacher,
 			withDueDate: dueDateTasksTeacher,
@@ -64,8 +67,8 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render tasks list component, with second panel expanded per default", () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 0,
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -84,13 +87,14 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	it("Should render empty state", () => {
 		taskModuleMock = createModuleMocks(TaskModule, {
 			...taskModuleGetters,
+			getActiveTab: tabRoutes[1],
 			draftsForTeacherIsEmpty: true,
 		});
 
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
 				emptyState,
+				tabRoutes,
 			},
 		});
 
@@ -98,17 +102,16 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should trigger event to update tab property", async () => {
+	it("Should update store when tab changes", async () => {
 		wrapper = mountComponent({
 			propsData: {
-				tab: 1,
 				emptyState,
+				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ currentTab: 0 });
+		await wrapper.setData({ tab: tabRoutes[1] });
 
-		expect(wrapper.emitted("update:tab")).toHaveLength(1);
-		expect(wrapper.emitted("update:tab")?.at(0)).toStrictEqual([0]);
+		expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 });

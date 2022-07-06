@@ -5,7 +5,7 @@
 		:full-width="false"
 	>
 		<form-create-user @create-user="createStudent">
-			<template v-slot:inputs>
+			<template #inputs>
 				<v-text-field
 					v-model="date"
 					:label="$t('common.labels.birthdate')"
@@ -23,7 +23,7 @@
 					data-testid="input_create-student_send-registration"
 				/>
 			</template>
-			<template v-slot:errors>
+			<template #errors>
 				<info-message
 					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"

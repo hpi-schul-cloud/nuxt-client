@@ -37,6 +37,7 @@
 						@delete-task="openItemDeleteDialog(item.content, item.type)"
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
+						@copy-task="copyTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -60,6 +61,7 @@
 						@tab-pressed="isDragging = false"
 						@open-modal="getSharedLesson"
 						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
+						@copy-lesson="copyLesson(item.content.id)"
 					/>
 				</div>
 			</draggable>
@@ -158,15 +160,23 @@
 				</p>
 			</template>
 		</v-custom-dialog>
+		<copy-process
+			:is-open="copyProcess.isOpen"
+			:loading="copyProcess.loading"
+			data-testid="copy-process"
+			@dialog-closed="onCopyProcessDialogClose"
+		>
+		</copy-process>
 	</div>
 </template>
 
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import { roomModule, taskModule } from "@/store";
+import { roomModule, taskModule, envConfigModule, copyModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
@@ -179,6 +189,7 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
+		CopyProcess,
 	},
 	props: {
 		roomDataObject: {
@@ -197,6 +208,11 @@ export default {
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
+			copyProcess: {
+				id: "",
+				isOpen: false,
+				loading: false,
+			},
 		};
 	},
 	computed: {
@@ -308,6 +324,73 @@ export default {
 		},
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
+		},
+		async copyTask(itemId) {
+			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyTask({ id: itemId, courseId: this.roomData.roomId });
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.molecules.copyResult.error"),
+					status: "error",
+				});
+				return;
+			}
+
+			if (copyResult.id !== "") {
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
+			}
+		},
+		async onCopyProcessDialogClose() {
+			this.copyProcess.isOpen = false;
+			this.copyProcess.id = "";
+			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		redirectTask(itemId) {
+			window.location.href = `/homework/${itemId}/edit?returnUrl=rooms/${this.roomDataObject.roomId}`;
+		},
+		async deleteTask(itemId) {
+			await taskModule.deleteTask(itemId);
+			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		async copyLesson(itemId) {
+			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+				return;
+			}
+			this.copyProcess.isOpen = true;
+			this.copyProcess.loading = copyModule.getLoading;
+			await copyModule.copyLesson({
+				id: itemId,
+				courseId: this.roomData.roomId,
+			});
+			const copyResult = copyModule.getCopyResult;
+			const businessError = copyModule.getBusinessError;
+
+			if (businessError.statusCode !== "") {
+				this.$notifier({
+					text: this.$t("components.molecules.copyResult.error"),
+					status: "error",
+				});
+				return;
+			}
+
+			if (copyResult.id !== "") {
+				this.copyProcess.id = copyResult.id;
+				this.copyProcess.loading = copyModule.getLoading;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.lesson.message.created"),
+					status: "success",
+				});
+			}
 		},
 	},
 };

@@ -1,5 +1,3 @@
-<!-- eslint-disable max-lines -->
-
 <template>
 	<div class="resource">
 		<div ref="icons" class="icons">
@@ -163,6 +161,7 @@
 </template>
 
 <script>
+/* eslint-disable max-lines */
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -188,7 +187,7 @@ export default {
 		AddContentButton,
 		UserHasRole,
 	},
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	mixins: [contentMeta],
 	props: {
 		resource: {
