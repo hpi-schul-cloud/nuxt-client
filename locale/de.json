@@ -407,6 +407,7 @@
 	"components.molecules.importUsersMatch.notFound": "keine Konten gefunden",
 	"components.molecules.copyResult.title": "Kopier-Ergebnis",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
+	"components.molecules.copyResult.title.submissions": "Abgaben",
 	"components.molecules.copyResult.successfullyCopied": "Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.fileCopy.error": "Datei: Wir können keine Dateien kopieren. Wir arbeiten an diesem Problem...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, Kopierstatus: {itemStatus}",

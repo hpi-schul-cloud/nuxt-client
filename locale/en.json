@@ -405,6 +405,7 @@
 	"components.molecules.importUsersMatch.notFound": "no accounts found",
 	"components.molecules.copyResult.title": "Copy result",
 	"components.molecules.copyResult.metadata": "General Information",
+	"components.molecules.copyResult.title.submissions": "Submissions",
 	"components.molecules.copyResult.successfullyCopied": "All elements were successfully copied.",
 	"components.molecules.copyResult.fileCopy.error": "File: We are not able to copy files. We are working on this issue...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, copying status: {itemStatus}",
