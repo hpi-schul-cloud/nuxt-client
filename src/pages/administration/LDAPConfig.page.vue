@@ -68,20 +68,18 @@
 					class="ml--sm"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
-					>{{
-						$t("pages.administration.ldap.index.buttons.reset")
-					}}</base-button
 				>
+					{{ $t("pages.administration.ldap.index.buttons.reset") }}
+				</base-button>
 				<base-button
 					design="secondary"
 					class="ml--sm"
 					data-testid="ldapVerifyButton"
 					:disabled="status === 'pending'"
 					@click="validateHandler"
-					>{{
-						$t("pages.administration.ldap.index.buttons.verify")
-					}}</base-button
 				>
+					{{ $t("pages.administration.ldap.index.buttons.verify") }}
+				</base-button>
 			</div>
 		</section>
 	</default-wireframe>
