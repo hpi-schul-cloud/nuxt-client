@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<div class="topbar">
+		<div class="topbar" data-testid="logged-out-top-bar">
 			<navigation-bar
 				:buttons="true"
 				:img="require('@assets/img/logo/logo-image-mono.svg')"
@@ -16,7 +16,6 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import navbarBaseItems from "@/utils/navbarBaseItems";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {
@@ -25,11 +24,6 @@ export default {
 		TheFooter,
 	},
 	inject: ["envConfigModule"],
-	data() {
-		return {
-			navbarBaseItems,
-		};
-	},
 	computed: {
 		ghostBaseUrl() {
 			return this.envConfigModule.getGhostBaseUrl;
