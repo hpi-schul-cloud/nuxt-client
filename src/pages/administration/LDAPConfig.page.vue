@@ -1,90 +1,94 @@
 <template>
-	<section class="section">
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.ldap.title") }}
-		</h1>
+	<default-wireframe
+		:headline="$t('pages.administration.ldap.title')"
+		:breadcrumbs="breadcrumbs"
+		:full-width="false"
+	>
+		<section class="section">
+			<p class="subtitle-text">
+				{{ $t("pages.administration.ldap.subtitle.one") }}
+			</p>
+			<p class="subtitle-text">
+				{{ $t("pages.administration.ldap.subtitle.two") }}
+			</p>
+			<div class="help-section">
+				{{ $t("pages.administration.ldap.subtitle.help") }}
+				<base-link
+					class="link-style"
+					to="/"
+					href="https://docs.dbildungscloud.de/x/PgBVAw"
+					target="_blank"
+					:no-styles="true"
+					traget="_blank"
+				>
+					{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
+				</base-link>
+			</div>
 
-		<p class="subtitle-text">
-			{{ $t("pages.administration.ldap.subtitle.one") }}
-		</p>
-		<p class="subtitle-text">
-			{{ $t("pages.administration.ldap.subtitle.two") }}
-		</p>
-		<div class="help-section">
-			{{ $t("pages.administration.ldap.subtitle.help") }}
-			<base-link
-				class="link-style"
-				to="/"
-				href="https://docs.dbildungscloud.de/x/PgBVAw"
-				target="_blank"
-				:no-styles="true"
-				traget="_blank"
-			>
-				{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
-			</base-link>
-		</div>
-
-		<div class="form-container">
-			<connection-section
-				v-model="systemData"
-				:validate="triggerValidation"
-				data-testid="ldapConnectionSection"
-				@update:errors="updateValidationData"
-			/>
-			<users-section
-				v-model="systemData"
-				:validate="triggerValidation"
-				data-testid="ldapUsersSection"
-				@update:errors="updateValidationData"
-			/>
-			<roles-section
-				v-model="systemData"
-				:validate="triggerValidation"
-				data-testid="ldapRolesSection"
-				@update:errors="updateValidationData"
-			/>
-			<classes-section
-				v-model="systemData"
-				:validate="triggerValidation"
-				data-testid="ldapClassesSection"
-				@update:errors="updateValidationData"
-				@update:inputs="clearClassesSectionData"
-			/>
-		</div>
-		<div class="errors-container">
-			<info-message
-				v-if="validationError"
-				:message="validationError"
-				type="bc-error"
-			/>
-			<span v-for="(error, index) in verificationErrors" :key="index">
-				<info-message :message="error" type="bc-error" />
-			</span>
-		</div>
-		<div class="buttons-container">
-			<base-button
-				design="text"
-				class="ml--sm"
-				data-testid="ldapResetInputsButton"
-				@click="clearInputsHandler"
-				>{{ $t("pages.administration.ldap.index.buttons.reset") }}</base-button
-			>
-			<base-button
-				design="secondary"
-				class="ml--sm"
-				data-testid="ldapVerifyButton"
-				:disabled="status === 'pending'"
-				@click="validateHandler"
-				>{{ $t("pages.administration.ldap.index.buttons.verify") }}</base-button
-			>
-		</div>
-	</section>
+			<div class="form-container">
+				<connection-section
+					v-model="systemData"
+					:validate="triggerValidation"
+					data-testid="ldapConnectionSection"
+					@update:errors="updateValidationData"
+				/>
+				<users-section
+					v-model="systemData"
+					:validate="triggerValidation"
+					data-testid="ldapUsersSection"
+					@update:errors="updateValidationData"
+				/>
+				<roles-section
+					v-model="systemData"
+					:validate="triggerValidation"
+					data-testid="ldapRolesSection"
+					@update:errors="updateValidationData"
+				/>
+				<classes-section
+					v-model="systemData"
+					:validate="triggerValidation"
+					data-testid="ldapClassesSection"
+					@update:errors="updateValidationData"
+					@update:inputs="clearClassesSectionData"
+				/>
+			</div>
+			<div class="errors-container">
+				<info-message
+					v-if="validationError"
+					:message="validationError"
+					type="bc-error"
+				/>
+				<span v-for="(error, index) in verificationErrors" :key="index">
+					<info-message :message="error" type="bc-error" />
+				</span>
+			</div>
+			<div class="buttons-container">
+				<base-button
+					design="text"
+					class="ml--sm"
+					data-testid="ldapResetInputsButton"
+					@click="clearInputsHandler"
+				>
+					{{ $t("pages.administration.ldap.index.buttons.reset") }}
+				</base-button>
+				<base-button
+					design="secondary"
+					class="ml--sm"
+					data-testid="ldapVerifyButton"
+					:disabled="status === 'pending'"
+					@click="validateHandler"
+				>
+					{{ $t("pages.administration.ldap.index.buttons.verify") }}
+				</base-button>
+			</div>
+		</section>
+	</default-wireframe>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
@@ -93,6 +97,7 @@ import InfoMessage from "@components/atoms/InfoMessage";
 
 export default {
 	components: {
+		DefaultWireframe,
 		RolesSection,
 		ConnectionSection,
 		UsersSection,
@@ -102,16 +107,17 @@ export default {
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
+	layout: "defaultVuetify",
 	data() {
 		return {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.ldap.index.title"),
+					disabled: true,
 				},
 			],
 			isInvalidData: {

@@ -64,7 +64,6 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
@@ -73,6 +72,7 @@ export default {
 				{
 					text: this.$t("pages.administration.students.new.title"),
 					to: "/administration/students/new",
+					disabled: true,
 				},
 			],
 		};
