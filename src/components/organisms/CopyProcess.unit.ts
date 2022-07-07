@@ -277,617 +277,285 @@ describe("@components/organisms/CopyProcess", () => {
 			});
 
 			describe("when type is 'board'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
+				it("should return correct title when status is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Board,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
 				});
 
-				it("should return correct title and status when status is 'partial'", () => {
+				it("should return correct titlewhen status is 'partial'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Board,
 							status: wrapper.vm.statusEnum.Partial,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Partial,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
 				});
 			});
 
 			describe("when type is 'course'", () => {
 				it("should return correct title and status when status is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Course,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
 				});
 
-				it("should return correct title and status when status is 'partial'", () => {
+				it("should return correct title when status is 'partial'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Course,
 							status: wrapper.vm.statusEnum.Partial,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Partial,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
 				});
 			});
 
 			describe("when type is 'leaf'", () => {
-				it("should return correct title and status when title is 'metadata'", () => {
+				it("should return correct title when title is 'metadata'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Leaf,
 							title: "metadata",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.metadata"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(
+						wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+					);
 				});
 
-				it("should return correct title and status when title is 'description'", () => {
+				it("should return correct title when title is 'description'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Leaf,
 							title: "description",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.description"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
 				});
 
-				it("should return correct title and status when title is 'coursegroups'", () => {
+				it("should return correct title when title is 'coursegroups'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Leaf,
 							title: "coursegroups",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.words.courseGroups"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.courseGroups"));
 				});
 
-				it("should return correct title and status when title is 'submissions'", () => {
+				it("should return correct title when title is 'submissions'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Leaf,
 							title: "submissions",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.label.submissions"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+						)
+					);
 				});
 
-				it("should return correct title and status when title is 'times'", () => {
+				it("should return correct title when title is 'times'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Leaf,
 							title: "times",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.words.times"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.times"));
 				});
 			});
 
 			describe("when type is 'lesson'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
+				it("should return correct title is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Lesson,
 							title: "test-lesson",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`,
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`
+					);
 				});
 
-				it("should return correct title and status when status is 'success'", () => {
+				it("should return correct title when status is 'success'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Lesson,
 							title: "test-lesson",
 							status: wrapper.vm.statusEnum.Success,
 						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`,
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`
+					);
 				});
 			});
 
 			describe("when type is 'task'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
+				it("should return correct title when status is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Task,
 							title: "test-task",
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.task")} - test-task`,
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.task")} - test-task`
+					);
 				});
 
 				it("should return correct title and status when status is 'success'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.Task,
 							title: "test-task",
 							status: wrapper.vm.statusEnum.Success,
 						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.task")} - test-task`,
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.task")} - test-task`
+					);
 				});
 			});
 
 			describe("when type is 'lesson-content'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
+				it("should return correct title when status is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.LessonContent,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.label.lessonContent"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+						)
+					);
 				});
 
-				it("should return correct title and status when status is 'success'", () => {
+				it("should return correct title when status is 'success'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.LessonContent,
 							status: wrapper.vm.statusEnum.Success,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.label.lessonContent"
-						),
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
+						)
+					);
 				});
 			});
 
 			describe("when type is 'lesson-content-group'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
+				it("should return correct title when status is 'not-implemented'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.LessonContentGroup,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.label.lessonContentGroup"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
+						)
+					);
 				});
 
-				it("should return correct title and status when status is 'success'", () => {
+				it("should return correct title when status is 'success'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
+					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
 							type: wrapper.vm.typesEnum.LessonContentGroup,
 							status: wrapper.vm.statusEnum.Success,
 						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.label.lessonContentGroup"
-						),
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
+						)
+					);
 				});
 			});
 		});
 
-		describe.skip("getItemTitleAndStatus method", () => {
-			describe("when type is 'file-group'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.FileGroup,
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.fileCopy.error"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.FileGroup,
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.files"
-						),
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
+		describe("getItemStatus method", () => {
+			it("should return correct feStatus when status is 'success'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Success)).toStrictEqual(
+					wrapper.vm.statusEnum.Success
+				);
 			});
 
-			describe("when type is 'file'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.File,
-							title: "file-title",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: "file-title",
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.File,
-							title: "file-title",
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: "file-title",
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
+			it("should return correct feStatus when status is 'partial'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Partial)).toStrictEqual(
+					wrapper.vm.statusEnum.Partial
+				);
 			});
 
-			describe("when type is 'board'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Board,
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'partial'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Board,
-							status: wrapper.vm.statusEnum.Partial,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Partial,
-					});
-				});
+			it("should return correct feStatus when status is 'failure'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Failure)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
 			});
 
-			describe("when type is 'course'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Course,
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'partial'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Course,
-							status: wrapper.vm.statusEnum.Partial,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.room"),
-						feStatus: wrapper.vm.statusEnum.Partial,
-					});
-				});
+			it("should return correct feStatus when status is 'not-doing'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.NotDoing)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
 			});
 
-			describe("when type is 'leaf'", () => {
-				it("should return correct title and status when title is 'metadata'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "metadata",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.metadata"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when title is 'description'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "description",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.labels.description"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when title is 'coursegroups'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "coursegroups",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.words.courseGroups"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when title is 'submissions'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "submissions",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.submissions"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when title is 'times'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "times",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t("common.words.times"),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-			});
-
-			describe("when type is 'lesson'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Lesson,
-							title: "test-lesson",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`,
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Lesson,
-							title: "test-lesson",
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`,
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
-			});
-
-			describe("when type is 'task'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Task,
-							title: "test-task",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.task")} - test-task`,
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Task,
-							title: "test-task",
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: `${wrapper.vm.$i18n.t("common.words.task")} - test-task`,
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
-			});
-
-			describe("when type is 'lesson-content'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.LessonContent,
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContent"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.LessonContent,
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContent"
-						),
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
-			});
-
-			describe("when type is 'lesson-content-group'", () => {
-				it("should return correct title and status when status is 'not-implemented'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.LessonContentGroup,
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContentGroup"
-						),
-						feStatus: wrapper.vm.statusEnum.Failure,
-					});
-				});
-
-				it("should return correct title and status when status is 'success'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitleAndStatus;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.LessonContentGroup,
-							status: wrapper.vm.statusEnum.Success,
-						})
-					).toStrictEqual({
-						title: wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContentGroup"
-						),
-						feStatus: wrapper.vm.statusEnum.Success,
-					});
-				});
+			it("should return correct feStatus when status is 'not-implemented'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.NotImplemented)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
 			});
 		});
 
@@ -936,7 +604,7 @@ describe("@components/organisms/CopyProcess", () => {
 					{
 						title: i18n.t("common.labels.room"),
 						type: types.Board,
-						status: status.Failure,
+						status: status.Success,
 						feStatus: status.Success,
 						id: "boardId",
 						index: 5,

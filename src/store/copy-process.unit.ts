@@ -370,6 +370,142 @@ describe("copy module", () => {
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
 				expect(copyModule.getIsSuccess).toBe(true);
 			});
+
+			it("should set the state with 'not-doing' elements", () => {
+				const payload = {
+					title: "test course",
+					type: "course",
+					status: "partial",
+					id: "12345",
+					elements: [
+						{
+							title: "metadata",
+							type: "leaf",
+							status: "success",
+						},
+						{
+							title: "teachers",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "substitutionTeachers",
+							type: "leaf",
+							status: "not-doing",
+						},
+					],
+				};
+				const expectedData = {
+					title: "test course",
+					type: TypeEnum.Course,
+					status: StatusEnum.Success,
+					id: "12345",
+					elements: [
+						{
+							title: "metadata",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
+						},
+					],
+				};
+
+				const copyModule = new CopyModule({});
+				copyModule.setFilteredResult(payload);
+
+				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
+				expect(copyModule.getIsSuccess).toBe(true);
+			});
+
+			it("should set the state with 'not-doing' elements", () => {
+				const payload = {
+					title: "test course",
+					type: "course",
+					status: "partial",
+					id: "12345",
+					elements: [
+						{
+							title: "metadata",
+							type: "leaf",
+							status: "success",
+						},
+						{
+							title: "teachers",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "substitutionTeachers",
+							type: "leaf",
+							status: "not-doing",
+						},
+						{
+							title: "board",
+							type: "board",
+							status: "partial",
+							id: "345",
+							elements: [
+								{
+									title: "Task 1",
+									type: "task",
+									status: "partial",
+									id: "567",
+									elements: [
+										{
+											title: "metadata",
+											type: "leaf",
+											status: "success",
+										},
+										{
+											title: "submissions",
+											type: "leaf",
+											status: "not-doing",
+										},
+									],
+								},
+							],
+						},
+					],
+				};
+				const expectedData = {
+					title: "test course",
+					type: TypeEnum.Course,
+					status: StatusEnum.Success,
+					id: "12345",
+					elements: [
+						{
+							title: "metadata",
+							type: TypeEnum.Leaf,
+							status: StatusEnum.Success,
+						},
+						{
+							title: "board",
+							type: TypeEnum.Board,
+							status: StatusEnum.Success,
+							id: "345",
+							elements: [
+								{
+									title: "Task 1",
+									type: TypeEnum.Task,
+									status: StatusEnum.Success,
+									id: "567",
+									elements: [
+										{
+											title: "metadata",
+											type: TypeEnum.Leaf,
+											status: StatusEnum.Success,
+										},
+									],
+								},
+							],
+						},
+					],
+				};
+
+				const copyModule = new CopyModule({});
+				copyModule.setFilteredResult(payload);
+
+				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
+			});
 		});
 	});
 
