@@ -125,41 +125,43 @@ export default {
 	methods: {
 		getItemTitle(item) {
 			const titles = {
-				metadata: this.$t("components.molecules.copyResult.metadata"),
-				description: this.$t("common.labels.description"),
-				coursegroups: this.$t("common.words.courseGroups"),
-				submissions: this.$t(
-					"components.molecules.copyResult.label.submissions"
-				),
-				times: this.$t("common.words.times"),
-
-				tasks: this.$t("common.words.tasks"), // group folder - not used yet
-				lessons: this.$t("common.words.topics"), // group folder - not used yet
-
-				board: this.$t("common.labels.room"),
-				course: this.$t("common.labels.room"),
-				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
-				task: `${this.$t("common.words.task")} - ${item.title}`,
-				"lesson-content": this.$t(
+				BOARD: this.$t("common.labels.room"),
+				CONTENT: "Content",
+				COURSE: this.$t("common.labels.room"),
+				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
+				FILE: this.$t("components.molecules.copyResult.label.file"),
+				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
+				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
+				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
+				LESSON_CONTENT: this.$t(
 					"components.molecules.copyResult.label.lessonContent"
 				),
-				"lesson-content-group": this.$t(
+				LESSON_CONTENT_GROUP: this.$t(
 					"components.molecules.copyResult.label.lessonContentGroup"
 				),
-				"file-group": this.$t("components.molecules.copyResult.label.files"),
+				LTITOOL_GROUP: this.$t(
+					"components.molecules.copyResult.label.ltiToolsGroup"
+				),
+				METADATA: this.$t("components.molecules.copyResult.metadata"),
+				SUBMISSION_GROUP: this.$t(
+					"components.molecules.copyResult.label.submissions"
+				),
+				TASK: `${this.$t("common.words.task")} - ${item.title}`,
+				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
+				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 			};
 
-			if (item.type === TypesEnum.FILE_GROUP) {
-				return item.status === StatusEnum.NOT_IMPLEMENTED
+			if (item.type === this.typesEnum.FileGroup) {
+				return item.status === this.statusEnum.NotImplemented
 					? this.$t("components.molecules.copyResult.fileCopy.error")
 					: titles[item.type];
 			}
 
-			if (item.type === TypesEnum.FILE) {
+			if (item.type === this.typesEnum.File) {
 				return item.title;
 			}
 
-			return titles[item.type === TypesEnum.LEAF ? item.title : item.type];
+			return titles[item.type];
 		},
 		getItemStatus(status) {
 			const feStatus = {

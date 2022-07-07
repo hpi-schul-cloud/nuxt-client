@@ -6,23 +6,16 @@ const TypeEnum = serverApi.CopyApiResponseTypeEnum;
 
 const serverData = {
 	title: "Aufgabe",
-	type: "task",
+	type: "TASK",
 	status: "success",
 	id: "123",
 	elements: [
 		{
-			title: "description",
-			type: "leaf",
-			status: "success",
-		},
-		{
-			title: "submissions",
-			type: "leaf",
+			type: "SUBMISSION_GROUP",
 			status: "not-doing",
 		},
 		{
-			title: "files",
-			type: "leaf",
+			type: "FILE",
 			status: "not-implemented",
 		},
 	],
@@ -30,23 +23,16 @@ const serverData = {
 
 const serverSuccessData = {
 	title: "Aufgabe",
-	type: "task",
+	type: "TASK",
 	status: "success",
 	id: "123",
 	elements: [
 		{
-			title: "description",
-			type: "leaf",
+			type: "SUBMISSION_GROUP",
 			status: "success",
 		},
 		{
-			title: "submissions",
-			type: "leaf",
-			status: "success",
-		},
-		{
-			title: "files",
-			type: "leaf",
+			type: "FILE_GROUP",
 			status: "success",
 		},
 	],
@@ -320,19 +306,14 @@ describe("copy module", () => {
 					id: "123",
 					elements: [
 						{
-							title: "description",
-							type: TypeEnum.Leaf,
-							status: StatusEnum.Success,
-						},
-						{
-							title: "files",
-							type: TypeEnum.Leaf,
+							type: TypeEnum.File,
 							status: StatusEnum.NotImplemented,
 						},
 					],
 				};
 
 				const copyModule = new CopyModule({});
+				copyModule.resetCopyResult();
 				copyModule.setFilteredResult(serverData);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
@@ -347,18 +328,11 @@ describe("copy module", () => {
 					id: "123",
 					elements: [
 						{
-							title: "description",
-							type: TypeEnum.Leaf,
+							type: TypeEnum.SubmissionGroup,
 							status: StatusEnum.Success,
 						},
 						{
-							title: "submissions",
-							type: TypeEnum.Leaf,
-							status: StatusEnum.Success,
-						},
-						{
-							title: "files",
-							type: TypeEnum.Leaf,
+							type: TypeEnum.FileGroup,
 							status: StatusEnum.Success,
 						},
 					],
@@ -371,40 +345,35 @@ describe("copy module", () => {
 				expect(copyModule.getIsSuccess).toBe(true);
 			});
 
-			it("should set the state with 'not-doing' elements", () => {
+			it("should set the state with filtering 'not-doing' elements", () => {
 				const payload = {
 					title: "test course",
-					type: "course",
+					type: "COURSE",
 					status: "partial",
 					id: "12345",
 					elements: [
 						{
-							title: "metadata",
-							type: "leaf",
+							type: "METADATA",
 							status: "success",
 						},
-						{
-							title: "teachers",
-							type: "leaf",
-							status: "not-doing",
-						},
-						{
-							title: "substitutionTeachers",
-							type: "leaf",
-							status: "not-doing",
-						},
+
+						{ type: "USER_GROUP", status: "not-doing" },
+						{ type: "FILE_GROUP", status: "not-implemented" },
 					],
 				};
 				const expectedData = {
 					title: "test course",
 					type: TypeEnum.Course,
-					status: StatusEnum.Success,
+					status: StatusEnum.Partial,
 					id: "12345",
 					elements: [
 						{
-							title: "metadata",
-							type: TypeEnum.Leaf,
+							type: TypeEnum.Metadata,
 							status: StatusEnum.Success,
+						},
+						{
+							type: TypeEnum.FileGroup,
+							status: StatusEnum.NotImplemented,
 						},
 					],
 				};
@@ -413,51 +382,38 @@ describe("copy module", () => {
 				copyModule.setFilteredResult(payload);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
-				expect(copyModule.getIsSuccess).toBe(true);
 			});
 
-			it("should set the state with 'not-doing' elements", () => {
+			it("should set the state and change the statusses 'success'", () => {
 				const payload = {
 					title: "test course",
-					type: "course",
+					type: "COURSE",
 					status: "partial",
 					id: "12345",
 					elements: [
 						{
-							title: "metadata",
-							type: "leaf",
+							type: "METADATA",
 							status: "success",
 						},
-						{
-							title: "teachers",
-							type: "leaf",
-							status: "not-doing",
-						},
-						{
-							title: "substitutionTeachers",
-							type: "leaf",
-							status: "not-doing",
-						},
+
 						{
 							title: "board",
-							type: "board",
+							type: "BOARD",
 							status: "partial",
 							id: "345",
 							elements: [
 								{
 									title: "Task 1",
-									type: "task",
+									type: "TASK",
 									status: "partial",
 									id: "567",
 									elements: [
 										{
-											title: "metadata",
-											type: "leaf",
+											type: "METADATA",
 											status: "success",
 										},
 										{
-											title: "submissions",
-											type: "leaf",
+											type: "SUBMISSION_GROUP",
 											status: "not-doing",
 										},
 									],
@@ -473,8 +429,7 @@ describe("copy module", () => {
 					id: "12345",
 					elements: [
 						{
-							title: "metadata",
-							type: TypeEnum.Leaf,
+							type: TypeEnum.Metadata,
 							status: StatusEnum.Success,
 						},
 						{
@@ -490,8 +445,7 @@ describe("copy module", () => {
 									id: "567",
 									elements: [
 										{
-											title: "metadata",
-											type: TypeEnum.Leaf,
+											type: TypeEnum.Metadata,
 											status: StatusEnum.Success,
 										},
 									],
@@ -502,9 +456,12 @@ describe("copy module", () => {
 				};
 
 				const copyModule = new CopyModule({});
+				expect(copyModule.getIsSuccess).toBe(false);
+
 				copyModule.setFilteredResult(payload);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
+				expect(copyModule.getIsSuccess).toBe(true);
 			});
 		});
 	});

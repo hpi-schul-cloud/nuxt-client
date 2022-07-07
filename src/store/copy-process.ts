@@ -69,6 +69,7 @@ export type CopyParams = {
 	id: string;
 	courseId: string;
 };
+
 @Module({
 	name: "copy-process",
 	namespaced: true,

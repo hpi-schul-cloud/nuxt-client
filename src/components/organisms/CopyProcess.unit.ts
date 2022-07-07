@@ -8,57 +8,55 @@ declare let createComponentMocks: Function;
 
 const serverResponseAllSuccess = {
 	title: "Success-Title",
-	type: "task",
+	type: "TASK",
 	status: "success",
 	id: "success-id-123",
 	elements: [
-		{ title: "metadata", type: "leaf", status: "success" },
-		{ title: "description", type: "leaf", status: "success" },
-		{ title: "submissions", type: "leaf", status: "not-doing" },
+		{ type: "METADATA", status: "success" },
+		{ type: "SUBMISSION_GROUP", status: "not-doing" },
 	],
 };
 
 const serverResponseCourseCopy = {
 	title: "Mathe",
-	type: "course",
+	type: "COURSE",
 	status: "partial",
 	id: "456",
 	elements: [
-		{ title: "metadata", type: "leaf", status: "success" },
-		{ title: "teachers", type: "leaf", status: "not-doing" },
-		{ title: "substitutionTeachers", type: "leaf", status: "not-doing" },
-		{ title: "students", type: "leaf", status: "not-doing" },
-		{ title: "classes", type: "leaf", status: "not-doing" },
-		{ title: "ltiTools", type: "leaf", status: "not-doing" },
-		{ title: "times", type: "leaf", status: "not-implemented" },
-		{ title: "files", type: "file-group", status: "not-implemented" },
-		{ title: "coursegroups", type: "leaf", status: "not-implemented" },
+		{ type: "METADATA", status: "success" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "FILE_GROUP", status: "not-implemented" },
 		{
-			title: "board",
-			type: "board",
+			type: "COURSEGROUP_GROUP",
+			status: "not-implemented",
+		},
+		{
+			type: "BOARD",
 			status: "failure",
 			id: "boardId",
 			elements: [
 				{
 					title: "Aufgabe an Marla (Mathe) ",
-					type: "task",
+					type: "TASK",
 					status: "success",
 					id: "---",
 					elements: [
-						{ title: "metadata", type: "leaf", status: "success" },
-						{ title: "description", type: "leaf", status: "success" },
-						{ title: "submissions", type: "leaf", status: "not-doing" },
+						{ type: "METADATA", status: "success" },
+						{ type: "SUBMISSION_GROUP", status: "not-doing" },
 					],
 				},
 				{
 					title: "Aufgabe an Marla (Mathe) - offen",
-					type: "task",
+					type: "TASK",
 					status: "success",
 					id: "567890",
 					elements: [
-						{ title: "metadata", type: "leaf", status: "success" },
-						{ title: "description", type: "leaf", status: "success" },
-						{ title: "submissions", type: "leaf", status: "not-doing" },
+						{ type: "METADATA", status: "success" },
+						{ type: "SUBMISSION_GROUP", status: "not-doing" },
 					],
 				},
 			],
@@ -114,15 +112,22 @@ describe("@components/organisms/CopyProcess", () => {
 		it("'types' should return the types object", () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			const expectedTypes = {
-				Board: "board",
-				Course: "course",
-				File: "file",
-				FileGroup: "file-group",
-				Leaf: "leaf",
-				Lesson: "lesson",
-				Task: "task",
-				LessonContent: "lesson-content",
-				LessonContentGroup: "lesson-content-group",
+				Board: "BOARD",
+				Content: "CONTENT",
+				Course: "COURSE",
+				CoursegroupGroup: "COURSEGROUP_GROUP",
+				File: "FILE",
+				FileGroup: "FILE_GROUP",
+				Leaf: "LEAF",
+				Lesson: "LESSON",
+				LessonContent: "LESSON_CONTENT",
+				LessonContentGroup: "LESSON_CONTENT_GROUP",
+				LtitoolGroup: "LTITOOL_GROUP",
+				Metadata: "METADATA",
+				SubmissionGroup: "SUBMISSION_GROUP",
+				Task: "TASK",
+				TimeGroup: "TIME_GROUP",
+				UserGroup: "USER_GROUP",
 			};
 
 			expect(wrapper.vm.typesEnum).toStrictEqual(expectedTypes);
@@ -330,8 +335,7 @@ describe("@components/organisms/CopyProcess", () => {
 					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "metadata",
+							type: wrapper.vm.typesEnum.Metadata,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual(
@@ -339,25 +343,12 @@ describe("@components/organisms/CopyProcess", () => {
 					);
 				});
 
-				it("should return correct title when title is 'description'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitle;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "description",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
-				});
-
 				it("should return correct title when title is 'coursegroups'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
 					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "coursegroups",
+							type: wrapper.vm.typesEnum.CoursegroupGroup,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual(wrapper.vm.$i18n.t("common.words.courseGroups"));
@@ -368,8 +359,7 @@ describe("@components/organisms/CopyProcess", () => {
 					const method = wrapper.vm.getItemTitle;
 					expect(
 						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "submissions",
+							type: wrapper.vm.typesEnum.SubmissionGroup,
 							status: wrapper.vm.statusEnum.NotImplemented,
 						})
 					).toStrictEqual(
@@ -377,18 +367,6 @@ describe("@components/organisms/CopyProcess", () => {
 							"components.molecules.copyResult.label.submissions"
 						)
 					);
-				});
-
-				it("should return correct title when title is 'times'", () => {
-					const wrapper = getWrapper({ isOpen: true, loading: false });
-					const method = wrapper.vm.getItemTitle;
-					expect(
-						method({
-							type: wrapper.vm.typesEnum.Leaf,
-							title: "times",
-							status: wrapper.vm.statusEnum.NotImplemented,
-						})
-					).toStrictEqual(wrapper.vm.$i18n.t("common.words.times"));
 				});
 			});
 
@@ -575,31 +553,25 @@ describe("@components/organisms/CopyProcess", () => {
 				elements: [
 					{
 						title: i18n.t("components.molecules.copyResult.metadata"),
-						type: types.Leaf,
+						type: types.Metadata,
 						status: status.Success,
 						feStatus: status.Success,
 						index: 1,
 					},
-					{
-						title: i18n.t("common.words.times"),
-						type: types.Leaf,
-						status: status.NotImplemented,
-						feStatus: status.Failure,
-						index: 2,
-					},
+
 					{
 						title: i18n.t("components.molecules.copyResult.fileCopy.error"),
 						type: types.FileGroup,
 						status: status.NotImplemented,
 						feStatus: status.Failure,
-						index: 3,
+						index: 2,
 					},
 					{
 						title: i18n.t("common.words.courseGroups"),
-						type: types.Leaf,
+						type: types.CoursegroupGroup,
 						status: status.NotImplemented,
 						feStatus: status.Failure,
-						index: 4,
+						index: 3,
 					},
 					{
 						title: i18n.t("common.labels.room"),
@@ -607,7 +579,7 @@ describe("@components/organisms/CopyProcess", () => {
 						status: status.Success,
 						feStatus: status.Success,
 						id: "boardId",
-						index: 5,
+						index: 4,
 						elements: [
 							{
 								title: "Aufgabe - Aufgabe an Marla (Mathe) ",
@@ -615,21 +587,14 @@ describe("@components/organisms/CopyProcess", () => {
 								status: status.Success,
 								feStatus: status.Success,
 								id: "---",
-								index: 6,
+								index: 5,
 								elements: [
 									{
 										title: i18n.t("components.molecules.copyResult.metadata"),
-										type: types.Leaf,
+										type: types.Metadata,
 										status: status.Success,
 										feStatus: status.Success,
-										index: 7,
-									},
-									{
-										title: i18n.t("common.labels.description"),
-										type: types.Leaf,
-										status: status.Success,
-										feStatus: status.Success,
-										index: 8,
+										index: 6,
 									},
 								],
 							},
@@ -639,21 +604,14 @@ describe("@components/organisms/CopyProcess", () => {
 								status: status.Success,
 								feStatus: status.Success,
 								id: "567890",
-								index: 9,
+								index: 7,
 								elements: [
 									{
 										title: i18n.t("components.molecules.copyResult.metadata"),
-										type: types.Leaf,
+										type: types.Metadata,
 										status: status.Success,
 										feStatus: status.Success,
-										index: 10,
-									},
-									{
-										title: i18n.t("common.labels.description"),
-										type: types.Leaf,
-										status: status.Success,
-										feStatus: status.Success,
-										index: 11,
+										index: 8,
 									},
 								],
 							},
