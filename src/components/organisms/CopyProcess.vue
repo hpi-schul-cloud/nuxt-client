@@ -123,7 +123,7 @@ export default {
 		},
 	},
 	methods: {
-		getItemTitleAndStatus(item) {
+		getItemTitle(item) {
 			const titles = {
 				metadata: this.$t("components.molecules.copyResult.metadata"),
 				description: this.$t("common.labels.description"),
@@ -149,6 +149,19 @@ export default {
 				"file-group": this.$t("components.molecules.copyResult.label.files"),
 			};
 
+			if (item.type === TypesEnum.FILE_GROUP) {
+				return item.status === StatusEnum.NOT_IMPLEMENTED
+					? this.$t("components.molecules.copyResult.fileCopy.error")
+					: titles[item.type];
+			}
+
+			if (item.type === TypesEnum.FILE) {
+				return item.title;
+			}
+
+			return titles[item.type === TypesEnum.LEAF ? item.title : item.type];
+		},
+		getItemStatus(status) {
 			const feStatus = {
 				success: "success",
 				partial: "partial",
@@ -157,40 +170,20 @@ export default {
 				"not-implemented": "failure",
 			};
 
-			if (item.type === TypesEnum.FILE_GROUP) {
-				return {
-					title:
-						item.status === StatusEnum.NOT_IMPLEMENTED
-							? this.$t("components.molecules.copyResult.fileCopy.error")
-							: titles[item.type],
-					feStatus: feStatus[item.status],
-				};
-			}
-
-			if (item.type === TypesEnum.FILE) {
-				return {
-					title: item.title,
-					feStatus: feStatus[item.status],
-				};
-			}
-
-			return {
-				title: titles[item.type === TypesEnum.LEAF ? item.title : item.type],
-				feStatus: feStatus[item.status],
-			};
+			return feStatus[status];
 		},
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
-				const titleAndStatus = this.getItemTitleAndStatus({
+				const title = this.getItemTitle({
 					title: item.title,
 					status: item.status,
 					type: item.type,
 				});
 
 				item.index = ++this.elementIndex;
-				item.title = titleAndStatus.title;
-				item.feStatus = titleAndStatus.feStatus;
+				item.title = title;
+				item.feStatus = this.getItemStatus(item.status);
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
@@ -198,7 +191,7 @@ export default {
 					);
 					item.feStatus = isSuccess
 						? StatusEnum.SUCCESS
-						: titleAndStatus.feStatus;
+						: this.getItemStatus(item.status);
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;
