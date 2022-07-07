@@ -3,7 +3,7 @@
 		<div
 			:class="{
 				top: true,
-				error: hasError,
+				'base-input-error': hasError,
 				disabled: !!disabled,
 			}"
 		>
@@ -11,13 +11,13 @@
 				<transition name="fade">
 					<label
 						v-show="showLabel"
-						:class="{ label: true, info: true }"
+						:class="{ label: true, 'base-input-info': true }"
 						:for="`input-${$uid}`"
 					>
 						{{ label }}
 					</label>
 				</transition>
-				<span v-if="!!hint" class="hint info">
+				<span v-if="!!hint" class="hint base-input-info">
 					{{ hint }}
 				</span>
 			</div>
@@ -83,7 +83,11 @@
 		<div class="bottom-line" style="border-color: transparent" />
 		<span
 			v-if="hasError || !!info"
-			:class="{ info: true, help: !hasError, error: hasError }"
+			:class="{
+				'base-input-info': true,
+				help: !hasError,
+				'base-input-error': hasError,
+			}"
 		>
 			{{ error || validationError || info }}
 		</span>
@@ -233,7 +237,7 @@ export default {
 			border-bottom: var(--border-width) solid;
 		}
 	}
-	&.error {
+	&.base-input-error {
 		border-bottom-color: var(--color-danger);
 	}
 	&.disabled {
@@ -309,13 +313,13 @@ export default {
 	}
 }
 
-.info {
+.base-input-info {
 	display: block;
 	font-size: var(--text-xs);
 	color: var(--color-gray);
 }
 
-.info.error {
+.base-input-info.base-input-error {
 	color: var(--color-danger);
 }
 
