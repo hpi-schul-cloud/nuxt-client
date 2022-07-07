@@ -1,18 +1,6 @@
 <template>
 	<div v-if="news">
 		<section class="section">
-			<base-breadcrumb
-				:inputs="[
-					{
-						to: { name: 'news' },
-						text: 'News',
-					},
-					{
-						to: { name: 'news-id', params: { id: news._id } },
-						text: news.title,
-					},
-				]"
-			/>
 			<div class="text-sm">
 				{{ fromNow(news.displayAt) }} von {{ news.creator.firstName }}
 				{{ news.creator.lastName }}

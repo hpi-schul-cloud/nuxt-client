@@ -18,7 +18,7 @@ function getMock(options = {}) {
 	});
 }
 
-describe("@components/molecules/BaseTextarea", () => {
+describe("@components/molecules/TextEditor", () => {
 	it(...isValidComponent(TextEditor));
 
 	// TODO:

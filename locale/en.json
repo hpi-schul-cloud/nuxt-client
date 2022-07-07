@@ -93,7 +93,6 @@
 	"common.words.topics": "Topics",
 	"common.words.times": "Times",
 	"common.words.courseGroups": "Course Groups",
-	"components.atoms.ProfilePicture": "profile picture",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}, press enter to open",
 	"components.legacy.footer.accessibility.report": "Accessibility feedback",

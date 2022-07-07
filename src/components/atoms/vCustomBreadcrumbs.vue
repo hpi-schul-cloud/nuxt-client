@@ -4,7 +4,6 @@
 		<v-breadcrumbs
 			color="secondary"
 			:items="breadcrumbs"
-			:nuxt="true"
 			class="custom-breadcrumb px-0 py-0"
 		>
 			<template #divider>
@@ -15,6 +14,7 @@
 					:href="item.href"
 					:to="item.to"
 					:disabled="item.disabled"
+					:exact="true"
 					class="breadcrumbs-item"
 				>
 					{{ item.text }}
