@@ -164,11 +164,13 @@ export default {
 	border-radius: var(--radius-xs);
 	opacity: 0.9;
 }
+
 .content-card {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
+
 .img-container {
 	position: relative;
 	height: 200px;
@@ -186,7 +188,6 @@ export default {
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
-	/*z-index: 10;*/
 	z-index: calc(var(--layer-page) + 1);
 	padding: 6px 4px 2px;
 	// stylelint-enable
@@ -195,6 +196,7 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
+
 	&__img {
 		&-thumbnail {
 			width: 100%;
@@ -204,6 +206,7 @@ export default {
 			opacity: 0.8;
 			object-fit: cover;
 		}
+
 		&-background-gradient {
 			position: absolute;
 			z-index: var(--layer-page);
@@ -217,6 +220,7 @@ export default {
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
+
 		&-icon {
 			position: absolute;
 			top: 50%;
@@ -227,6 +231,7 @@ export default {
 			opacity: 0.9;
 			transform: translate(-50%, -50%);
 		}
+
 		&-checkbox {
 			position: absolute;
 			top: 5%;
@@ -236,6 +241,7 @@ export default {
 			cursor: pointer;
 		}
 	}
+
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
@@ -247,6 +253,7 @@ export default {
 			$lines-to-show: 3
 		);
 	}
+
 	&__description {
 		padding: 0 var(--space-xs);
 		margin-bottom: var(--space-xs);
@@ -258,15 +265,18 @@ export default {
 		);
 	}
 }
+
 .footer {
 	display: flex;
 	flex-direction: column;
 	height: 13%;
 	padding: 0 var(--space-xs);
+
 	&__separator {
 		margin: 0 var(--space-xs-4);
 		border-top: 1px solid var(--color-gray);
 	}
+
 	&__content {
 		display: flex;
 		align-items: center;
@@ -279,9 +289,11 @@ export default {
 			color: var(--color-secondary);
 		}
 	}
+
 	&_more {
 		position: relative;
 	}
+
 	&__icon-container {
 		position: relative;
 		display: flex;

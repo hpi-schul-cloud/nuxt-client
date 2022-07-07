@@ -154,6 +154,7 @@ label {
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
+
 	svg {
 		border-radius: var(--radius-xs);
 	}
@@ -172,6 +173,7 @@ input:focus + .icon-wrapper svg {
 		font-size: 2em;
 		// stylelint-enable
 	}
+
 	input:checked + .icon-wrapper {
 		color: var(--color-success);
 	}
