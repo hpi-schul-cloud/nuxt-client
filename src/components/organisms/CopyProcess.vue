@@ -33,25 +33,6 @@
 </template>
 
 <script>
-export const StatusEnum = {
-	SUCCESS: "success",
-	FAILURE: "failure",
-	NOT_DOING: "not-doing",
-	NOT_IMPLEMENTED: "not-implemented",
-	PARTIAL: "partial",
-};
-
-export const TypesEnum = {
-	BOARD: "board",
-	COURSE: "course",
-	FILE: "file",
-	LEAF: "leaf",
-	LESSON: "lesson",
-	TASK: "task",
-	FILE_GROUP: "file-group",
-	LESSON_CONTENT: "lesson-content",
-	LESSON_CONTENT_GROUP: "lesson-content-group",
-};
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@/store";
@@ -126,7 +107,7 @@ export default {
 		getItemTitle(item) {
 			const titles = {
 				BOARD: this.$t("common.labels.room"),
-				CONTENT: "Content",
+				CONTENT: this.$t("components.molecules.copyResult.label.content"),
 				COURSE: this.$t("common.labels.room"),
 				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
 				FILE: this.$t("components.molecules.copyResult.label.file"),
@@ -189,10 +170,10 @@ export default {
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
-						(ele) => ele.status === StatusEnum.SUCCESS
+						(ele) => ele.status === this.statusEnum.Success
 					);
 					item.feStatus = isSuccess
-						? StatusEnum.SUCCESS
+						? this.statusEnum.Success
 						: this.getItemStatus(item.status);
 					item.elements = this.prepareCopiedElements(elements);
 				}

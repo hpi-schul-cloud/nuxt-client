@@ -413,6 +413,7 @@
 	"components.molecules.copyResult.label.ltiToolsGroup": "Grupo de herramientas LTI",
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
+	"components.molecules.copyResult.label.content": "Contenido",
 	"components.molecules.copyResult.successfullyCopied": "Todos los elementos se copiaron con éxito.",
 	"components.molecules.copyResult.fileCopy.error": "Archivo: No podemos copiar archivos. Estamos trabajando en este tema...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, estado de la copia: {itemStatus}",

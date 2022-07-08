@@ -415,6 +415,7 @@
 	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
+	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.successfullyCopied": "Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.fileCopy.error": "Datei: Wir können keine Dateien kopieren. Wir arbeiten an diesem Problem...",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, Kopierstatus: {itemStatus}",
