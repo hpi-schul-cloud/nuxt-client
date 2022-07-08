@@ -32,12 +32,19 @@
 	</v-custom-dialog>
 </template>
 
-<script>
-import CopyResult from "@components/molecules/CopyResult";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+<script lang="ts">
+import {
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "@/serverApi/v3";
 import { copyModule } from "@/store";
+import CopyResult from "@components/molecules/CopyResult.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import Vue from "vue";
+import { TranslateResult } from "vue-i18n";
 
-export default {
+const Component = Vue.extend({
 	components: { vCustomDialog, CopyResult },
 	props: {
 		isOpen: {
@@ -91,9 +98,6 @@ export default {
 		copiedItemId() {
 			return copyModule?.getId || "";
 		},
-		typesEnum() {
-			return copyModule.getResponseTypes;
-		},
 		statusEnum() {
 			return copyModule.getResponseStatus;
 		},
@@ -104,8 +108,8 @@ export default {
 		},
 	},
 	methods: {
-		getItemTitle(item) {
-			const titles = {
+		getItemTitle(item: CopyApiResponse): TranslateResult {
+			const titles: Record<CopyApiResponseTypeEnum, TranslateResult> = {
 				BOARD: this.$t("common.labels.room"),
 				CONTENT: this.$t("components.molecules.copyResult.label.content"),
 				COURSE: this.$t("common.labels.room"),
@@ -132,19 +136,19 @@ export default {
 				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 			};
 
-			if (item.type === this.typesEnum.FileGroup) {
-				return item.status === this.statusEnum.NotImplemented
+			if (item.type === CopyApiResponseTypeEnum.FileGroup) {
+				return item.status === CopyApiResponseStatusEnum.NotImplemented
 					? this.$t("components.molecules.copyResult.fileCopy.error")
 					: titles[item.type];
 			}
 
-			if (item.type === this.typesEnum.File) {
+			if (item.type === CopyApiResponseTypeEnum.File && item.title) {
 				return item.title;
 			}
 
 			return titles[item.type];
 		},
-		getItemStatus(status) {
+		getItemStatus(status: CopyApiResponseStatusEnum) {
 			const feStatus = {
 				success: "success",
 				partial: "partial",
@@ -155,7 +159,7 @@ export default {
 
 			return feStatus[status];
 		},
-		prepareCopiedElements(items) {
+		prepareCopiedElements(items: CopyApiResponse[]) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
 				const title = this.getItemTitle({
@@ -186,5 +190,5 @@ export default {
 			copyModule.resetCopyResult();
 		},
 	},
-};
+});
 </script>

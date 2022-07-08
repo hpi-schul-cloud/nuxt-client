@@ -1,12 +1,12 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	RoomsApiFactory,
-	RoomsApiInterface,
-	TaskApiInterface,
-	TaskApiFactory,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
+	RoomsApiFactory,
+	RoomsApiInterface,
+	TaskApiFactory,
+	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -265,10 +265,6 @@ export default class CopyModule extends VuexModule {
 
 	get getId(): string {
 		return this.copyResult.id || "";
-	}
-
-	get getResponseTypes(): object {
-		return CopyApiResponseTypeEnum;
 	}
 
 	get getResponseStatus(): object {
