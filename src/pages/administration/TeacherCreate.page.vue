@@ -48,7 +48,6 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.teachers.index.title"),
@@ -56,6 +55,7 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.teachers.new.title"),
+					disabled: true,
 				},
 			],
 		};

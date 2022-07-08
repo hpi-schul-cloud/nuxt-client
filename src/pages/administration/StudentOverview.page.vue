@@ -263,7 +263,11 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
+					to: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+					disabled: true,
 				},
 			],
 			icons: [
