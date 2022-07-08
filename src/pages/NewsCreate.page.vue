@@ -1,32 +1,38 @@
 <template>
-	<div>
-		<base-breadcrumb
-			:inputs="[
-				{
-					to: { name: 'news' },
-					text: $t('pages.news.title'),
-				},
-				{
-					text: $t('pages.news.new.title'),
-				},
-			]"
-		/>
-		<h1 :aria-label="$t('pages.news.new.title')"></h1>
-		<form-news @save="create" @cancel="cancelHandler"> </form-news>
-	</div>
+	<default-wireframe
+		:headline="$t('pages.news.new.title')"
+		:breadcrumbs="[
+			{
+				to: '/news',
+				text: $t('pages.news.title'),
+			},
+			{
+				text: $t('pages.news.new.title'),
+				disabled: true,
+			},
+		]"
+		:full-width="false"
+	>
+		<div>
+			<form-news @save="create" @cancel="cancelHandler"> </form-news>
+		</div>
+	</default-wireframe>
 </template>
 
 <script>
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@components/organisms/FormNews";
 import { newsModule } from "@/store";
 
 export default {
 	components: {
+		DefaultWireframe,
 		FormNews,
 	},
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
+	layout: "defaultVuetify",
 	computed: {
 		news: () => newsModule.getNews,
 		status: () => newsModule.getStatus,

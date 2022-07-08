@@ -187,7 +187,6 @@ export default {
 		AddContentButton,
 		UserHasRole,
 	},
-	layout: "defaultVuetify",
 	mixins: [contentMeta],
 	props: {
 		resource: {
