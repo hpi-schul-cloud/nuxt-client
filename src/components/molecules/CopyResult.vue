@@ -1,5 +1,9 @@
 <template>
-	<div>
+	<div v-if="succesAll">
+		<v-icon data-testid="copy-status-success-all">mdiCheckAll</v-icon>
+		{{ $t("components.molecules.copyResult.successfullyCopied") }}
+	</div>
+	<div v-else>
 		<v-treeview
 			:expand-icon="icons.mdiChevronDown"
 			:items="items"
@@ -21,17 +25,21 @@
 					class="treeview-item"
 					:class="`treeview-item-${item.feStatus}`"
 					tabindex="0"
-					:aria-label="getAriaLabel(item)"
+					:ariaLabel="getAriaLabel(item)"
 					@keydown.space="onSpacePress(item.index)"
 				>
-					{{ item.title }}
+					{{ getItemTitle(item) }}
 				</div>
 			</template>
 		</v-treeview>
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import {
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "@/serverApi/v3";
 import {
 	mdiCheck,
 	mdiCheckAll,
@@ -39,13 +47,10 @@ import {
 	mdiAlertCircle,
 	mdiChevronDown,
 } from "@mdi/js";
-
-const StatusEnum = {
-	SUCCESS: "success",
-	FAILURE: "failure",
-	PARTIAL: "partial",
-	SUCCESS_ALL: "success-all",
-};
+import { defineComponent } from "@nuxtjs/composition-api";
+import type { PropType } from "vue";
+import { TranslateResult } from "vue-i18n";
+import { PreparedCopyApiResponse } from "@/store/copy-process";
 
 const ClassEnum = {
 	FINISHED: "finished",
@@ -53,15 +58,18 @@ const ClassEnum = {
 	PARTIAL: "partial",
 };
 
-export default {
+export default defineComponent({
 	props: {
 		items: {
-			type: Array,
+			type: Array, // () => Array<PreparedCopyApiResponse>(), // () => Array<PreparedCopyApiResponse>(),
+			// type: Array as PropType<PreparedCopyApiResponse[]>,
 			required: true,
-			default: () => [],
+		},
+		succesAll: {
+			type: Boolean,
 		},
 	},
-	data() {
+	data(): { icons: any; expandedNodes: number[] } {
 		return {
 			icons: {
 				mdiCheck,
@@ -75,31 +83,34 @@ export default {
 		};
 	},
 	created() {
-		this.searchExpandedNodes(this.items);
+		this.searchExpandedNodes(this.items as PreparedCopyApiResponse[]);
 	},
+
 	methods: {
-		setCustomClass(itemStatus) {
-			if (itemStatus === StatusEnum.SUCCESS) return ClassEnum.FINISHED;
-			if (itemStatus === StatusEnum.FAILURE) return ClassEnum.NOT_FINISHED;
-			if (itemStatus === StatusEnum.PARTIAL) return ClassEnum.PARTIAL;
+		setCustomClass(itemStatus: CopyApiResponseStatusEnum) {
+			if (itemStatus === CopyApiResponseStatusEnum.Success)
+				return ClassEnum.FINISHED;
+			if (itemStatus === CopyApiResponseStatusEnum.Failure)
+				return ClassEnum.NOT_FINISHED;
+			if (itemStatus === CopyApiResponseStatusEnum.Partial)
+				return ClassEnum.PARTIAL;
 		},
-		setIcons(item) {
-			if (item.feStatus === StatusEnum.SUCCESS_ALL)
-				return this.icons.mdiCheckAll;
-			if (item.feStatus === StatusEnum.SUCCESS) return this.icons.mdiCheck;
-			if (item.feStatus === StatusEnum.FAILURE)
+		setIcons(item: PreparedCopyApiResponse) {
+			if (item.feStatus === CopyApiResponseStatusEnum.Success)
+				return this.icons.mdiCheck;
+			if (item.feStatus === CopyApiResponseStatusEnum.Failure)
 				return this.icons.mdiAlertCircle;
-			if (item.feStatus === StatusEnum.PARTIAL) return this.icons.mdiAlert;
+			if (item.feStatus === CopyApiResponseStatusEnum.Partial)
+				return this.icons.mdiAlert;
 		},
-		searchExpandedNodes(items) {
-			if (!items instanceof Array) return;
+		searchExpandedNodes(items: PreparedCopyApiResponse[]) {
 			items.forEach((item) => {
-				if (item.elements && item.feStatus !== StatusEnum.SUCCESS)
+				if (item.elements && item.status !== CopyApiResponseStatusEnum.Success)
 					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
 		},
-		onSpacePress(itemId) {
+		onSpacePress(itemId: number) {
 			if (this.expandedNodes.includes(itemId)) {
 				const index = this.expandedNodes.indexOf(itemId);
 				this.expandedNodes.splice(index, 1);
@@ -107,7 +118,47 @@ export default {
 			}
 			this.expandedNodes.push(itemId);
 		},
-		getAriaLabel(item) {
+		getItemTitle(item: PreparedCopyApiResponse): TranslateResult {
+			const titles: Record<CopyApiResponseTypeEnum, TranslateResult> = {
+				BOARD: this.$t("common.labels.room"),
+				CONTENT: this.$t("components.molecules.copyResult.label.content"),
+				COURSE: this.$t("common.labels.room"),
+				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
+				FILE: this.$t("components.molecules.copyResult.label.file"),
+				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
+				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
+				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
+				LESSON_CONTENT: this.$t(
+					"components.molecules.copyResult.label.lessonContent"
+				),
+				LESSON_CONTENT_GROUP: this.$t(
+					"components.molecules.copyResult.label.lessonContentGroup"
+				),
+				LTITOOL_GROUP: this.$t(
+					"components.molecules.copyResult.label.ltiToolsGroup"
+				),
+				METADATA: this.$t("components.molecules.copyResult.metadata"),
+				SUBMISSION_GROUP: this.$t(
+					"components.molecules.copyResult.label.submissions"
+				),
+				TASK: `${this.$t("common.words.task")} - ${item.title}`,
+				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
+				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
+			};
+
+			if (item.type === CopyApiResponseTypeEnum.FileGroup) {
+				return item.status === CopyApiResponseStatusEnum.NotImplemented
+					? this.$t("components.molecules.copyResult.fileCopy.error")
+					: titles[item.type];
+			}
+
+			if (item.type === CopyApiResponseTypeEnum.File && item.title) {
+				return item.title;
+			}
+
+			return titles[item.type];
+		},
+		getAriaLabel(item: PreparedCopyApiResponse) {
 			if (!item.elements) {
 				return this.$t("components.molecules.copyResult.aria.childItem.info", {
 					itemTitle: item.title,
@@ -132,7 +183,7 @@ export default {
 			});
 		},
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";

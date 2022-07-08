@@ -24,8 +24,9 @@
 					{{ copiedItemTitle }}
 				</label>
 				<copy-result
-					v-if="copiedItems.elements"
-					:items="copiedItems.elements"
+					v-if="copiedItems"
+					:items="copiedItems"
+					:success-all="isSuccessAll"
 				/>
 			</div>
 		</template>
@@ -33,18 +34,14 @@
 </template>
 
 <script lang="ts">
-import {
-	CopyApiResponse,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-} from "@/serverApi/v3";
+import { CopyApiResponse, CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { copyModule } from "@/store";
+import { PreparedCopyApiResponse } from "@/store/copy-process";
 import CopyResult from "@components/molecules/CopyResult.vue";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import Vue from "vue";
-import { TranslateResult } from "vue-i18n";
+import { defineComponent } from "@nuxtjs/composition-api";
 
-const Component = Vue.extend({
+export default defineComponent({
 	components: { vCustomDialog, CopyResult },
 	props: {
 		isOpen: {
@@ -61,36 +58,13 @@ const Component = Vue.extend({
 		};
 	},
 	computed: {
-		copiedItems() {
+		copiedItems(): PreparedCopyApiResponse[] {
 			if (this.copiedItemId === "") return [];
-
 			const result = copyModule.getFilteredResult;
-
-			if (copyModule.isSuccess) {
-				return {
-					...result,
-					index: this.elementIndex,
-					completed: true,
-					elements: [
-						{
-							id: result.id,
-							feStatus: "success-all",
-							title: this.$t(
-								"components.molecules.copyResult.successfullyCopied"
-							),
-							type: result.type,
-						},
-					],
-				};
-			}
-
-			return {
-				...result,
-				index: this.elementIndex,
-				elements: result.elements
-					? this.prepareCopiedElements(result.elements)
-					: [],
-			};
+			return result.elements ? this.prepareCopiedElements(result.elements) : [];
+		},
+		isSuccessAll(): boolean {
+			return copyModule.getIsSuccess;
 		},
 		copiedItemTitle() {
 			return copyModule?.getTitle || "";
@@ -108,80 +82,38 @@ const Component = Vue.extend({
 		},
 	},
 	methods: {
-		getItemTitle(item: CopyApiResponse): TranslateResult {
-			const titles: Record<CopyApiResponseTypeEnum, TranslateResult> = {
-				BOARD: this.$t("common.labels.room"),
-				CONTENT: this.$t("components.molecules.copyResult.label.content"),
-				COURSE: this.$t("common.labels.room"),
-				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
-				FILE: this.$t("components.molecules.copyResult.label.file"),
-				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
-				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
-				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
-				LESSON_CONTENT: this.$t(
-					"components.molecules.copyResult.label.lessonContent"
-				),
-				LESSON_CONTENT_GROUP: this.$t(
-					"components.molecules.copyResult.label.lessonContentGroup"
-				),
-				LTITOOL_GROUP: this.$t(
-					"components.molecules.copyResult.label.ltiToolsGroup"
-				),
-				METADATA: this.$t("components.molecules.copyResult.metadata"),
-				SUBMISSION_GROUP: this.$t(
-					"components.molecules.copyResult.label.submissions"
-				),
-				TASK: `${this.$t("common.words.task")} - ${item.title}`,
-				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
-				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
-			};
-
-			if (item.type === CopyApiResponseTypeEnum.FileGroup) {
-				return item.status === CopyApiResponseStatusEnum.NotImplemented
-					? this.$t("components.molecules.copyResult.fileCopy.error")
-					: titles[item.type];
+		mapUnusedStatus(
+			status: CopyApiResponseStatusEnum
+		): CopyApiResponseStatusEnum {
+			if (
+				status === CopyApiResponseStatusEnum.NotDoing ||
+				status === CopyApiResponseStatusEnum.NotImplemented
+			) {
+				return CopyApiResponseStatusEnum.Failure;
 			}
-
-			if (item.type === CopyApiResponseTypeEnum.File && item.title) {
-				return item.title;
-			}
-
-			return titles[item.type];
+			return status;
 		},
-		getItemStatus(status: CopyApiResponseStatusEnum) {
-			const feStatus = {
-				success: "success",
-				partial: "partial",
-				failure: "failure",
-				"not-doing": "failure",
-				"not-implemented": "failure",
-			};
-
-			return feStatus[status];
-		},
-		prepareCopiedElements(items: CopyApiResponse[]) {
-			return items.map(({ elements = [], ...rest }) => {
-				const item = { ...rest };
-				const title = this.getItemTitle({
-					title: item.title,
-					status: item.status,
-					type: item.type,
-				});
-
-				item.index = ++this.elementIndex;
-				item.title = title;
-				item.feStatus = this.getItemStatus(item.status);
-
-				if (elements.length > 0) {
-					const isSuccess = elements.every(
-						(ele) => ele.status === this.statusEnum.Success
+		prepareCopiedElements(items: CopyApiResponse[]): PreparedCopyApiResponse[] {
+			return items.map((item): PreparedCopyApiResponse => {
+				let feStatus = this.mapUnusedStatus(item.status);
+				let elements: PreparedCopyApiResponse[] = [];
+				if (item.elements && item.elements.length > 0) {
+					const isSuccess = item.elements.every(
+						(ele) => ele.status === CopyApiResponseStatusEnum.Success
 					);
-					item.feStatus = isSuccess
-						? this.statusEnum.Success
-						: this.getItemStatus(item.status);
-					item.elements = this.prepareCopiedElements(elements);
+					feStatus = isSuccess
+						? CopyApiResponseStatusEnum.Success
+						: this.mapUnusedStatus(item.status);
+					elements = this.prepareCopiedElements(item.elements);
 				}
-				return item;
+
+				return {
+					...item,
+					title: item.title,
+					index: ++this.elementIndex,
+					feStatus,
+					elements,
+				};
 			});
 		},
 		dialogClosed() {

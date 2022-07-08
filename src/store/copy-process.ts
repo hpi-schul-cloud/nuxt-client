@@ -11,6 +11,15 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
+export interface PreparedCopyApiResponse {
+	title?: string;
+	type: CopyApiResponseTypeEnum;
+	status: CopyApiResponseStatusEnum;
+	elements: Array<PreparedCopyApiResponse>;
+	index: number;
+	feStatus: CopyApiResponseStatusEnum;
+}
+
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
 ): boolean => {
@@ -75,7 +84,7 @@ export type CopyParams = {
 	namespaced: true,
 	stateFactory: true,
 })
-export default class CopyModule extends VuexModule {
+class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
