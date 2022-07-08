@@ -1,5 +1,6 @@
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
+import { urlValidationRegex } from "@/utils/ldapConstants";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -47,8 +48,8 @@ describe("loggedOutLayout", () => {
 			.wrappers.map((el: Wrapper<Vue>) => el.element as HTMLLinkElement);
 
 		expect(links.length).toBe(3);
-		expect(
-			links[0].href.startsWith("https://works-like-charm.com")
-		).toBeTruthy();
+		expect(new URL(links[0].href).host).toEqual("works-like-charm.com");
+		expect(new URL(links[1].href).host).toEqual("works-like-charm.com");
+		expect(new URL(links[2].href).host).toEqual("works-like-charm.com");
 	});
 });
