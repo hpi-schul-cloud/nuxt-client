@@ -1,24 +1,15 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	RoomsApiFactory,
+	RoomsApiInterface,
+	TaskApiInterface,
+	TaskApiFactory,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
-	RoomsApiFactory,
-	RoomsApiInterface,
-	TaskApiFactory,
-	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
-
-export interface PreparedCopyApiResponse {
-	title?: string;
-	type: CopyApiResponseTypeEnum;
-	status: CopyApiResponseStatusEnum;
-	elements: Array<PreparedCopyApiResponse>;
-	index: number;
-	feStatus: CopyApiResponseStatusEnum;
-}
 
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
@@ -84,7 +75,7 @@ export type CopyParams = {
 	namespaced: true,
 	stateFactory: true,
 })
-class CopyModule extends VuexModule {
+export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
@@ -274,6 +265,10 @@ class CopyModule extends VuexModule {
 
 	get getId(): string {
 		return this.copyResult.id || "";
+	}
+
+	get getResponseTypes(): object {
+		return CopyApiResponseTypeEnum;
 	}
 
 	get getResponseStatus(): object {

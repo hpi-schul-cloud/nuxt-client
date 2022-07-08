@@ -225,10 +225,10 @@ export interface CopyApiResponse {
     status: CopyApiResponseStatusEnum;
     /**
      * List of included sub elements with recursive type structure
-     * @type {Array<CopyApiResponse>}
+     * @type {Array<string>}
      * @memberof CopyApiResponse
      */
-    elements?: Array<CopyApiResponse>;
+    elements?: Array<string>;
 }
 
 /**
