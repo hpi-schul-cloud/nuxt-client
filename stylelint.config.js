@@ -1,19 +1,19 @@
 module.exports = {
 	extends: [
-		// Use the Standard config as the base
+		// Use standard scss config as the base, includes stylelint-scss plugin
 		// https://github.com/stylelint/stylelint-config-standard
-		"stylelint-config-standard",
+		"stylelint-config-standard-scss",
 		// Enforce a standard order for CSS properties
 		// https://github.com/stormwarning/stylelint-config-recess-order
 		"stylelint-config-recess-order",
 		// Override rules that would interfere with Prettier
 		// https://github.com/shannonmoeller/stylelint-config-prettier
 		"stylelint-config-prettier",
+		"stylelint-config-standard-vue/scss",
 	],
 	plugins: [
-		// Bring in some extra rules for SCSS
-		"stylelint-scss",
-		"stylelint-declaration-use-variable",
+		// enforce variable usage
+		"stylelint-declaration-strict-value",
 	],
 	// Rule lists:
 	// - https://stylelint.io/user-guide/rules/
@@ -31,10 +31,9 @@ module.exports = {
 		// Limit the number of universal selectors in a selector,
 		// to avoid very slow selectors
 		"selector-max-universal": 1,
-		// enforce variable usage
-		"sh-waqar/declaration-use-variable": [
+		"scale-unlimited/declaration-strict-value": [
 			[
-				"/color/",
+				"/color$/",
 				"font-family",
 				"font-size",
 				"font-weight",
@@ -43,24 +42,22 @@ module.exports = {
 				"/margin/",
 				"z-index",
 				"border-radius",
-				{
-					ignoreValues: [
-						"transparent",
-						"inherit",
-						"initial",
-						"0",
-						"100%",
-						"/100v/",
-						"auto",
-						"0 auto",
-						"none",
-					],
-				},
 			],
+			{
+				ignoreValues: [
+					"transparent",
+					"inherit",
+					"initial",
+					"0",
+					"100%",
+					"/100v/",
+					"auto",
+					"0 auto",
+					"none",
+				],
+			},
 		],
-		// ===
 		// PRETTIER
-		// ===
 		// HACK: to compensate for https://github.com/shannonmoeller/stylelint-config-prettier/issues/4
 		// Modifying setting from Standard: https://github.com/stylelint/stylelint-config-standard/blob/7b76d7d0060f2e13a331806a09c2096c7536b0a6/index.js#L6
 		"at-rule-empty-line-before": [
@@ -71,9 +68,7 @@ module.exports = {
 				ignoreAtRules: ["else"],
 			},
 		],
-		// ===
 		// SCSS
-		// ===
 		"scss/dollar-variable-colon-space-after": "always",
 		"scss/dollar-variable-colon-space-before": "never",
 		"scss/dollar-variable-no-missing-interpolation": true,
