@@ -404,35 +404,45 @@ export default {
 .fill {
 	fill: currentColor;
 }
+
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
 	align-items: center;
+
 	.title-section {
 		text-align: left;
+
 		.v-icon {
 			padding-bottom: var(--space-xs-4);
 		}
 	}
+
 	.dot-menu-section {
 		text-align: right;
 	}
 }
+
 .task-name {
 	line-height: var(--line-height-md);
 }
+
 .text-description {
 	font-size: var(--text-md);
 }
+
 .action-button {
 	color: var(--color-primary);
 }
+
 .chip-items-group {
 	vertical-align: middle;
 }
+
 .v-chip {
 	margin-right: var(--space-xs);
 }
+
 .v-card {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
@@ -441,16 +451,20 @@ export default {
 		box-shadow: var(--shadow-m);
 	}
 }
+
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
+
 .task-hidden {
 	box-shadow: none;
+
 	.task-name,
 	.text-description,
 	.submitted-section {
 		opacity: 0.5;
 	}
+
 	.title-section {
 		opacity: 0.65;
 	}

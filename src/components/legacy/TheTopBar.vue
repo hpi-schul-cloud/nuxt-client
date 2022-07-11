@@ -216,6 +216,7 @@ export default {
 				display: initial;
 			}
 		}
+
 		.school-name {
 			display: none;
 
@@ -251,6 +252,7 @@ export default {
 		background-color: var(--hover-color);
 	}
 }
+
 .school-logo {
 	max-height: 100%;
 	margin-left: 1rem;

@@ -59,14 +59,17 @@ export default {
 	border: 2px dashed;
 	border-color: var(--color-secondary);
 }
+
 .hovered-avatar {
 	border: 2px solid;
 	border-color: var(--color-secondary);
 }
+
 .avatar-component-empty {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 1em;
 }
+
 .sub-title {
 	display: flex;
 	flex-direction: row;

@@ -179,10 +179,12 @@ export default {
 .modal {
 	width: 100%;
 }
+
 .content-modal {
 	&__body {
 		min-height: 300px;
 		color: var(--color-black) !important;
+
 		&--select {
 			margin-top: var(--space-xl);
 		}
@@ -193,6 +195,7 @@ export default {
 .fade-leave-active {
 	transition: opacity var(--duration-transition-slow);
 }
+
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;

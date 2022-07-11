@@ -33,22 +33,6 @@
 </template>
 
 <script>
-export const StatusEnum = {
-	SUCCESS: "success",
-	FAILURE: "failure",
-	NOT_DOING: "not-doing",
-	NOT_IMPLEMENTED: "not-implemented",
-	PARTIAL: "partial",
-};
-
-export const TypesEnum = {
-	BOARD: "board",
-	COURSE: "course",
-	FILE: "file",
-	LEAF: "leaf",
-	LESSON: "lesson",
-	TASK: "task",
-};
 import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@/store";
@@ -83,7 +67,7 @@ export default {
 					elements: [
 						{
 							id: result.id,
-							status: "success-all",
+							feStatus: "success-all",
 							title: this.$t(
 								"components.molecules.copyResult.successfullyCopied"
 							),
@@ -120,68 +104,77 @@ export default {
 		},
 	},
 	methods: {
-		getItemTitleAndStatus(item) {
-			const titleObject = {
-				metadata: this.$t("components.molecules.copyResult.metadata"),
-				description: this.$t("common.labels.description"),
-				tasks: this.$t("common.words.tasks"),
-				lessons: this.$t("common.words.topics"),
-				coursegroups: this.$t("common.words.courseGroups"),
-				times: this.$t("common.words.times"),
-				submissions: "submissions",
+		getItemTitle(item) {
+			const titles = {
+				BOARD: this.$t("common.labels.room"),
+				CONTENT: this.$t("components.molecules.copyResult.label.content"),
+				COURSE: this.$t("common.labels.room"),
+				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
+				FILE: this.$t("components.molecules.copyResult.label.file"),
+				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
+				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
+				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
+				LESSON_CONTENT: this.$t(
+					"components.molecules.copyResult.label.lessonContent"
+				),
+				LESSON_CONTENT_GROUP: this.$t(
+					"components.molecules.copyResult.label.lessonContentGroup"
+				),
+				LTITOOL_GROUP: this.$t(
+					"components.molecules.copyResult.label.ltiToolsGroup"
+				),
+				METADATA: this.$t("components.molecules.copyResult.metadata"),
+				SUBMISSION_GROUP: this.$t(
+					"components.molecules.copyResult.label.submissions"
+				),
+				TASK: `${this.$t("common.words.task")} - ${item.title}`,
+				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
+				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 			};
-			const typeObject = {
-				board: this.$t("common.labels.room"),
-				lesson: `${this.$t("common.words.topics")} - ${item.title}`,
-				task: `${this.$t("common.words.task")} - ${item.title}`,
-			};
-			if (
-				item.title === "files" &&
-				item.status === StatusEnum.NOT_IMPLEMENTED
-			) {
-				return {
-					title: this.$t("components.molecules.copyResult.fileCopy.error"),
-					status: "failure",
-				};
-			}
-			if (item.status === StatusEnum.NOT_IMPLEMENTED) {
-				return {
-					title:
-						item.type === TypesEnum.LEAF
-							? titleObject[item.title]
-							: typeObject[item.type],
-					status: StatusEnum.FAILURE,
-				};
+
+			if (item.type === this.typesEnum.FileGroup) {
+				return item.status === this.statusEnum.NotImplemented
+					? this.$t("components.molecules.copyResult.fileCopy.error")
+					: titles[item.type];
 			}
 
-			return {
-				title:
-					item.type === TypesEnum.LEAF
-						? titleObject[item.title]
-						: typeObject[item.type],
-				status: item.status,
+			if (item.type === this.typesEnum.File) {
+				return item.title;
+			}
+
+			return titles[item.type];
+		},
+		getItemStatus(status) {
+			const feStatus = {
+				success: "success",
+				partial: "partial",
+				failure: "failure",
+				"not-doing": "failure",
+				"not-implemented": "failure",
 			};
+
+			return feStatus[status];
 		},
 		prepareCopiedElements(items) {
 			return items.map(({ elements = [], ...rest }) => {
 				const item = { ...rest };
-				const titleAndStatus = this.getItemTitleAndStatus({
+				const title = this.getItemTitle({
 					title: item.title,
 					status: item.status,
 					type: item.type,
 				});
 
 				item.index = ++this.elementIndex;
-				item.title = titleAndStatus.title;
-				item.status = titleAndStatus.status;
+				item.title = title;
+				item.feStatus = this.getItemStatus(item.status);
 
 				if (elements.length > 0) {
 					const isSuccess = elements.every(
-						(ele) =>
-							ele.status === StatusEnum.SUCCESS ||
-							ele.status === StatusEnum.PARTIAL
+						(ele) => ele.status === this.statusEnum.Success
 					);
-					item.status = isSuccess ? StatusEnum.SUCCESS : titleAndStatus.status;
+					item.feStatus = isSuccess
+						? this.statusEnum.Success
+						: this.getItemStatus(item.status);
 					item.elements = this.prepareCopiedElements(elements);
 				}
 				return item;

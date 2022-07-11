@@ -360,6 +360,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .rooms-container {
 	max-width: 600px;
 	margin: 0 auto;
@@ -374,10 +375,12 @@ export default {
 	display: flex;
 	align-items: center;
 	width: 100%;
+
 	.btn {
 		display: inline-block;
 		flex: 1;
 	}
+
 	.toggle-div {
 		display: inline-block;
 	}
@@ -386,6 +389,7 @@ export default {
 ::v-deep .v-messages {
 	display: none;
 }
+
 ::v-deep .v-input {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;

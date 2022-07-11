@@ -23,6 +23,7 @@
 	@-moz-document url-prefix() {
 		position: relative;
 		overflow: hidden;
+
 		&::before {
 			position: absolute;
 			right: 0;
@@ -33,6 +34,7 @@
 			content: "";
 			background: $excerpt-bg;
 		}
+
 		&::after {
 			position: absolute;
 			z-index: var(--layer-page);

@@ -254,6 +254,7 @@ export default {
 	color: var(--color-primary);
 	text-decoration: none;
 }
+
 .subtitle-text {
 	margin-bottom: var(--space-xl);
 }
@@ -269,6 +270,7 @@ export default {
 		margin: 0 var(--space-xl-4);
 	}
 }
+
 .buttons-container {
 	display: flex;
 	justify-content: flex-end;
@@ -278,6 +280,7 @@ export default {
 		margin: var(--space-xl-2) var(--space-xl-4);
 	}
 }
+
 .errors-container {
 	display: flex;
 	flex-direction: column;

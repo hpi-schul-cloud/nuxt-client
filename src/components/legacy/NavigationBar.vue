@@ -106,6 +106,7 @@ export default {
 	backdrop-filter: blur(5px);
 	box-shadow: var(--shadow-sm);
 }
+
 .nav-container {
 	@include breakpoint(tablet) {
 		margin: 0 calc(3.5 * var(--space-md));
@@ -116,9 +117,11 @@ export default {
 		margin: auto;
 	}
 }
+
 .logo-container {
 	@include breakpoint(tablet) {
 		height: calc(45 * var(--border-width));
+
 		> a > img {
 			height: var(--space-xl-2);
 		}
@@ -126,11 +129,13 @@ export default {
 
 	@include breakpoint(desktop) {
 		height: var(--topbar-height);
+
 		> a > img {
 			height: var(--topbar-height);
 		}
 	}
 }
+
 .link-container {
 	display: flex;
 	flex-flow: row wrap;
@@ -147,6 +152,7 @@ export default {
 		justify-content: right;
 		padding-bottom: 0;
 	}
+
 	> a {
 		padding: calc(9 * var(--border-width));
 		margin-right: 0;
@@ -157,6 +163,7 @@ export default {
 		}
 	}
 }
+
 .icon {
 	font-size: var(--radius-lg);
 }
@@ -166,6 +173,7 @@ export default {
 		width: 540px;
 		max-width: 100%;
 	}
+
 	.link-container > a,
 	.buttons-container > button {
 		margin-right: var(--space-xs);
@@ -201,6 +209,7 @@ export default {
 		max-width: 100%;
 	}
 }
+
 .li {
 	align-items: center;
 	justify-content: center;
@@ -216,16 +225,19 @@ export default {
 	@include breakpoint(desktop) {
 		font-size: var(--text-md);
 	}
+
 	&:hover {
 		background-color: var(--color-gray-light);
 		border-radius: var(--radius-sm);
 	}
 }
+
 a.active {
 	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	background-color: var(--color-accent);
 	border-radius: var(--radius-sm);
+
 	&:hover {
 		color: var(--color-white);
 		background-color: var(--color-accent);

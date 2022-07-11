@@ -12,14 +12,14 @@
 			@keydown.space="onSpacePress"
 		>
 			<template #prepend="{ item }">
-				<v-icon :class="setCustomClass(item.status)" :data-testid="item.id">
+				<v-icon :class="setCustomClass(item.feStatus)" :data-testid="item.id">
 					{{ setIcons(item) }}
 				</v-icon>
 			</template>
 			<template #label="{ item }">
 				<div
 					class="treeview-item"
-					:class="`treeview-item-${item.status}`"
+					:class="`treeview-item-${item.feStatus}`"
 					tabindex="0"
 					:aria-label="getAriaLabel(item)"
 					@keydown.space="onSpacePress(item.index)"
@@ -84,15 +84,17 @@ export default {
 			if (itemStatus === StatusEnum.PARTIAL) return ClassEnum.PARTIAL;
 		},
 		setIcons(item) {
-			if (item.status === StatusEnum.SUCCESS_ALL) return this.icons.mdiCheckAll;
-			if (item.status === StatusEnum.SUCCESS) return this.icons.mdiCheck;
-			if (item.status === StatusEnum.FAILURE) return this.icons.mdiAlertCircle;
-			if (item.status === StatusEnum.PARTIAL) return this.icons.mdiAlert;
+			if (item.feStatus === StatusEnum.SUCCESS_ALL)
+				return this.icons.mdiCheckAll;
+			if (item.feStatus === StatusEnum.SUCCESS) return this.icons.mdiCheck;
+			if (item.feStatus === StatusEnum.FAILURE)
+				return this.icons.mdiAlertCircle;
+			if (item.feStatus === StatusEnum.PARTIAL) return this.icons.mdiAlert;
 		},
 		searchExpandedNodes(items) {
 			if (!items instanceof Array) return;
 			items.forEach((item) => {
-				if (item.elements && item.status !== StatusEnum.SUCCESS)
+				if (item.elements && item.feStatus !== StatusEnum.SUCCESS)
 					this.expandedNodes.push(item.index);
 				if (item.elements) this.searchExpandedNodes(item.elements);
 			});
@@ -109,14 +111,14 @@ export default {
 			if (!item.elements) {
 				return this.$t("components.molecules.copyResult.aria.childItem.info", {
 					itemTitle: item.title,
-					itemStatus: this.$t(`common.labels.${item.status}`),
+					itemStatus: this.$t(`common.labels.${item.feStatus}`),
 				});
 			}
 
 			if (!this.expandedNodes.includes(item.index)) {
 				return this.$t("components.molecules.copyResult.aria.parentItem.info", {
 					itemTitle: item.title,
-					itemStatus: this.$t(`common.labels.${item.status}`),
+					itemStatus: this.$t(`common.labels.${item.feStatus}`),
 					includedItems: item.elements.length,
 					action: this.$t("common.labels.expand"),
 				});
@@ -124,7 +126,7 @@ export default {
 
 			return this.$t("components.molecules.copyResult.aria.parentItem.info", {
 				itemTitle: item.title,
-				itemStatus: this.$t(`common.labels.${item.status}`),
+				itemStatus: this.$t(`common.labels.${item.feStatus}`),
 				includedItems: item.elements.length,
 				action: this.$t("common.labels.collapse"),
 			});
@@ -135,16 +137,20 @@ export default {
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+
 .treeview-item-failure {
 	color: var(--color-danger-dark);
 	white-space: normal;
 }
+
 .not-finished {
 	color: var(--color-danger-dark);
 }
+
 .finished {
 	color: var(--color-secondary);
 }
+
 .partial {
 	color: var(--color-accent);
 }

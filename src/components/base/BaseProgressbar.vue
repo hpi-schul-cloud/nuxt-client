@@ -40,6 +40,7 @@ progress::-moz-progress-bar {
 	border: 0;
 	border-radius: var(--radius-round);
 }
+
 progress::-webkit-progress-value {
 	background-color: $color-done;
 	border-radius: var(--radius-round);

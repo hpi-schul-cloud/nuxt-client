@@ -47,10 +47,12 @@ export default {
 		text-align: center;
 	}
 }
+
 .content {
 	padding: var(--space-md);
 	text-align: left;
 }
+
 .actions {
 	text-align: right;
 
