@@ -27,6 +27,6 @@ export default {
 </script>
 <style scoped>
 .initial-state-description {
-	text-align: left;
+  text-align: left;
 }
 </style>

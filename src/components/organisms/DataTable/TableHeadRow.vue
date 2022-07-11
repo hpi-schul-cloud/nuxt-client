@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-secondary)"
+					style="color: var(--color-secondary);"
 				/>
 			</div>
 		</th>
@@ -31,11 +31,11 @@
 					<span class="info-slot">
 						<base-button
 							class="info-button"
-							style="background-color: transparent"
+							style="background-color: transparent;"
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<base-icon source="material" icon="info" style="margin: 0" />
+							<base-icon source="material" icon="info" style="margin: 0;" />
 						</base-button>
 					</span>
 					<info-box class="info-box" :active.sync="infoBoxActive">
@@ -66,7 +66,7 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--color-white); text-decoration: underline"
+									style="color: var(--color-white); text-decoration: underline;"
 									to="/"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
@@ -95,9 +95,9 @@
 									<base-link
 										class="link-style"
 										style="
-											color: var(--color-white);
-											text-decoration: underline;
-										"
+                      color: var(--color-white);
+                      text-decoration: underline;
+"
 										to="/"
 										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
 										target="_blank"

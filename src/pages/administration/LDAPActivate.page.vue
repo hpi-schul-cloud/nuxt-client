@@ -137,7 +137,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>

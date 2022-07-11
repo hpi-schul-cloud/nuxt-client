@@ -529,17 +529,17 @@ export default {
 </script>
 <style scoped>
 .v-stepper__content {
-	padding: 0;
+  padding: 0;
 }
 
 .v-card__text {
-	font-size: var(--text-md);
+  font-size: var(--text-md);
 }
 
 iframe.full {
-	width: 100%;
-	min-height: 800px;
-	overflow: scroll;
-	border: none;
+  width: 100%;
+  min-height: 800px;
+  overflow: scroll;
+  border: none;
 }
 </style>

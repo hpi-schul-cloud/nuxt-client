@@ -33,23 +33,23 @@ export default {
 </script>
 <style scoped>
 .delete-avatar {
-	position: absolute;
-	top: 0;
-	right: 40%;
-	left: 40%;
-	width: 200px;
-	height: 50px;
-	background: var(--color-danger);
+  position: absolute;
+  top: 0;
+  right: 40%;
+  left: 40%;
+  width: 200px;
+  height: 50px;
+  background: var(--color-danger);
 }
 
 .hovered-delete-avatar {
-	position: absolute;
-	top: 0;
-	right: 40%;
-	left: 40%;
-	width: 250px;
-	height: 75px;
-	background: var(--color-danger);
-	border: 1px solid;
+  position: absolute;
+  top: 0;
+  right: 40%;
+  left: 40%;
+  width: 250px;
+  height: 75px;
+  background: var(--color-danger);
+  border: 1px solid;
 }
 </style>

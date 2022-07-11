@@ -130,13 +130,13 @@ export default {
 </script>
 <style scoped>
 .button-left {
-	width: 25%;
-	text-align: left;
+  width: 25%;
+  text-align: left;
 }
 
 .button-right {
-	display: inline-block;
-	width: 75%;
-	text-align: right;
+  display: inline-block;
+  width: 75%;
+  text-align: right;
 }
 </style>

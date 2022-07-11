@@ -7,7 +7,7 @@
 	$excerpt-bg: transparent
 ) {
 	display: block; /* Fallback for non-webkit */
-	display: -webkit-box;
+	display: box;
 	max-height: calc(
 		#{$font-size} * #{$line-height} * #{$lines-to-show}
 	); /* Fallback for non-webkit */

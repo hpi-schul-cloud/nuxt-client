@@ -8,7 +8,7 @@
 	>
 		<mask
 			id="mask0_60_1224"
-			style="mask-type: alpha"
+			style="mask-type: alpha;"
 			maskUnits="userSpaceOnUse"
 			x="3"
 			y="3"
@@ -23,7 +23,7 @@
 		<g mask="url(#mask0_60_1224)">
 			<mask
 				id="mask1_60_1224"
-				style="mask-type: alpha"
+				style="mask-type: alpha;"
 				maskUnits="userSpaceOnUse"
 				x="-6"
 				y="3"
@@ -42,7 +42,7 @@
 				/>
 				<mask
 					id="mask2_60_1224"
-					style="mask-type: alpha"
+					style="mask-type: alpha;"
 					maskUnits="userSpaceOnUse"
 					x="-6"
 					y="3"

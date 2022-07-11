@@ -20,7 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="margin-bottom: 0; color: var(--color-white)"
+									style="margin-bottom: 0; color: var(--color-white);"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />

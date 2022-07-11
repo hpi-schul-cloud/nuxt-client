@@ -298,7 +298,7 @@ export default {
 
 <style>
 #main-content.content {
-	overflow-x: inherit;
+  overflow-x: inherit;
 }
 </style>
 <style lang="scss" scoped>
