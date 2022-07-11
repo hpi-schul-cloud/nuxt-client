@@ -8,57 +8,55 @@ declare let createComponentMocks: Function;
 
 const serverResponseAllSuccess = {
 	title: "Success-Title",
-	type: "task",
+	type: "TASK",
 	status: "success",
 	id: "success-id-123",
 	elements: [
-		{ title: "metadata", type: "leaf", status: "success" },
-		{ title: "description", type: "leaf", status: "success" },
-		{ title: "submissions", type: "leaf", status: "not-doing" },
+		{ type: "METADATA", status: "success" },
+		{ type: "SUBMISSION_GROUP", status: "not-doing" },
 	],
 };
 
 const serverResponseCourseCopy = {
 	title: "Mathe",
-	type: "course",
+	type: "COURSE",
 	status: "partial",
 	id: "456",
 	elements: [
-		{ title: "metadata", type: "leaf", status: "success" },
-		{ title: "teachers", type: "leaf", status: "not-doing" },
-		{ title: "substitutionTeachers", type: "leaf", status: "not-doing" },
-		{ title: "students", type: "leaf", status: "not-doing" },
-		{ title: "classes", type: "leaf", status: "not-doing" },
-		{ title: "ltiTools", type: "leaf", status: "not-doing" },
-		{ title: "times", type: "leaf", status: "not-implemented" },
-		{ title: "files", type: "file", status: "not-implemented" },
-		{ title: "coursegroups", type: "leaf", status: "not-implemented" },
+		{ type: "METADATA", status: "success" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "LEAF", status: "not-doing" },
+		{ type: "FILE_GROUP", status: "not-implemented" },
 		{
-			title: "board",
-			type: "board",
+			type: "COURSEGROUP_GROUP",
+			status: "not-implemented",
+		},
+		{
+			type: "BOARD",
 			status: "failure",
 			id: "boardId",
 			elements: [
 				{
 					title: "Aufgabe an Marla (Mathe) ",
-					type: "task",
+					type: "TASK",
 					status: "success",
 					id: "---",
 					elements: [
-						{ title: "metadata", type: "leaf", status: "success" },
-						{ title: "description", type: "leaf", status: "success" },
-						{ title: "submissions", type: "leaf", status: "not-doing" },
+						{ type: "METADATA", status: "success" },
+						{ type: "SUBMISSION_GROUP", status: "not-doing" },
 					],
 				},
 				{
 					title: "Aufgabe an Marla (Mathe) - offen",
-					type: "task",
+					type: "TASK",
 					status: "success",
 					id: "567890",
 					elements: [
-						{ title: "metadata", type: "leaf", status: "success" },
-						{ title: "description", type: "leaf", status: "success" },
-						{ title: "submissions", type: "leaf", status: "not-doing" },
+						{ type: "METADATA", status: "success" },
+						{ type: "SUBMISSION_GROUP", status: "not-doing" },
 					],
 				},
 			],
@@ -111,21 +109,31 @@ describe("@components/organisms/CopyProcess", () => {
 			expect(wrapper.vm.copiedItemId).toStrictEqual("success-id-123");
 		});
 
-		it("'types' should return the types object", () => {
+		it("'typesEnum' should return the types object", () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			const expectedTypes = {
-				Task: "task",
-				Lesson: "lesson",
-				Course: "course",
-				Board: "board",
-				File: "file",
-				Leaf: "leaf",
+				Board: "BOARD",
+				Content: "CONTENT",
+				Course: "COURSE",
+				CoursegroupGroup: "COURSEGROUP_GROUP",
+				File: "FILE",
+				FileGroup: "FILE_GROUP",
+				Leaf: "LEAF",
+				Lesson: "LESSON",
+				LessonContent: "LESSON_CONTENT",
+				LessonContentGroup: "LESSON_CONTENT_GROUP",
+				LtitoolGroup: "LTITOOL_GROUP",
+				Metadata: "METADATA",
+				SubmissionGroup: "SUBMISSION_GROUP",
+				Task: "TASK",
+				TimeGroup: "TIME_GROUP",
+				UserGroup: "USER_GROUP",
 			};
 
 			expect(wrapper.vm.typesEnum).toStrictEqual(expectedTypes);
 		});
 
-		it("'status' should return the types object", () => {
+		it("'statusEnum' should return the types object", () => {
 			const wrapper = getWrapper({ isOpen: true, loading: false });
 			const expectedStatus = {
 				Success: "success",
@@ -151,7 +159,7 @@ describe("@components/organisms/CopyProcess", () => {
 				elements: [
 					{
 						id: "success-id-123",
-						status: "success-all",
+						feStatus: "success-all",
 						title: wrapper.vm.$i18n.t(
 							"components.molecules.copyResult.successfullyCopied"
 						),
@@ -218,88 +226,244 @@ describe("@components/organisms/CopyProcess", () => {
 			expect(resetCopyResultSpy).toHaveBeenCalled();
 		});
 
-		it("'getItemTitleAndStatus' method should return a correct title and status", async () => {
-			const wrapper = getWrapper({ isOpen: true, loading: false });
-			await wrapper.vm.$nextTick();
-			const status = wrapper.vm.statusEnum;
-			const types = wrapper.vm.typesEnum;
+		describe("getItemTitle method", () => {
+			describe("should return the correct title", () => {
+				it("when type is 'BOARD'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.Board,
+						})
+					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
+				});
 
-			const method = wrapper.vm.getItemTitleAndStatus;
+				it("when type is 'CONTENT'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.Content,
+						})
+					).toStrictEqual(
+						wrapper.vm.$i18n.t("components.molecules.copyResult.label.content")
+					);
+				});
 
-			expect(
-				method({
-					type: types.File,
-					title: "files",
-					status: status.NotImplemented,
-				}).status
-			).toStrictEqual("failure");
-			expect(
-				method({
-					type: types.File,
-					title: "files",
-					status: status.NotImplemented,
-				}).title
-			).toStrictEqual(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
-			);
+				it("when type is 'COURSE'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(method({ type: wrapper.vm.typesEnum.Course })).toStrictEqual(
+						wrapper.vm.$i18n.t("common.labels.room")
+					);
+				});
 
-			expect(
-				method({
-					type: types.Lesson,
-					title: "lesson-1",
-					status: status.NotImplemented,
-				}).status
-			).toStrictEqual(status.Failure);
-			expect(
-				method({
-					type: types.Lesson,
-					title: "lesson-1",
-					status: status.NotImplemented,
-				}).title
-			).toStrictEqual(
-				`${wrapper.vm.$i18n.t("common.words.topics")} - lesson-1`
-			);
+				it("when type is 'COURSEGROUP_GROUP", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.CoursegroupGroup })
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.courseGroups"));
+				});
 
-			expect(
-				method({
-					type: types.Task,
-					title: "task-1",
-					status: status.NotImplemented,
-				}).status
-			).toStrictEqual(status.Failure);
-			expect(
-				method({
-					type: types.Task,
-					title: "task-1",
-					status: status.NotImplemented,
-				}).title
-			).toStrictEqual(`${wrapper.vm.$i18n.t("common.words.task")} - task-1`);
+				it("when type is 'FILE'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.File,
+							title: "file-title",
+						})
+					).toStrictEqual("file-title");
+				});
 
-			expect(
-				method({ type: types.Leaf, title: "metadata", status: status.Success })
-					.status
-			).toStrictEqual(status.Success);
-			expect(
-				method({ type: types.Leaf, title: "metadata", status: status.Success })
-					.title
-			).toStrictEqual(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
-			);
+				describe("when type is 'FILE_GROUP'", () => {
+					it("when status is 'not-implemented'", () => {
+						const wrapper = getWrapper({ isOpen: true, loading: false });
+						const method = wrapper.vm.getItemTitle;
+						expect(
+							method({
+								type: wrapper.vm.typesEnum.FileGroup,
+								status: wrapper.vm.statusEnum.NotImplemented,
+							})
+						).toStrictEqual(
+							wrapper.vm.$i18n.t(
+								"components.molecules.copyResult.fileCopy.error"
+							)
+						);
+					});
 
-			expect(
-				method({
-					type: types.Leaf,
-					title: "description",
-					status: status.Success,
-				}).status
-			).toStrictEqual(status.Success);
-			expect(
-				method({
-					type: types.Leaf,
-					title: "description",
-					status: status.Success,
-				}).title
-			).toStrictEqual(wrapper.vm.$i18n.t("common.labels.description"));
+					it("when status is 'success'", () => {
+						const wrapper = getWrapper({ isOpen: true, loading: false });
+						const method = wrapper.vm.getItemTitle;
+						expect(
+							method({
+								type: wrapper.vm.typesEnum.FileGroup,
+								status: wrapper.vm.statusEnum.Success,
+							})
+						).toStrictEqual(
+							wrapper.vm.$i18n.t("components.molecules.copyResult.label.files")
+						);
+					});
+				});
+
+				it("when type is 'LEAF'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(method({ type: wrapper.vm.typesEnum.Leaf })).toStrictEqual(
+						wrapper.vm.$i18n.t("components.molecules.copyResult.label.leaf")
+					);
+				});
+
+				it("when type is 'LESSON'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.Lesson,
+							title: "test-lesson",
+							status: wrapper.vm.statusEnum.NotImplemented,
+						})
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.topics")} - test-lesson`
+					);
+				});
+
+				it("when type is 'LESSON_CONTENT'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.LessonContent })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContent"
+						)
+					);
+				});
+
+				it("when type is 'LESSON_CONTENT_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.LessonContentGroup })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lessonContentGroup"
+						)
+					);
+				});
+
+				it("when type is 'LTITOOL_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.LtitoolGroup })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.ltiToolsGroup"
+						)
+					);
+				});
+
+				it("when type is 'METADATA'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(method({ type: wrapper.vm.typesEnum.Metadata })).toStrictEqual(
+						wrapper.vm.$i18n.t("components.molecules.copyResult.metadata")
+					);
+				});
+
+				it("when type is 'SUBMISSION_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.SubmissionGroup })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.submissions"
+						)
+					);
+				});
+
+				it("when type is 'TASK'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.Task,
+							title: "test-task",
+						})
+					).toStrictEqual(
+						`${wrapper.vm.$i18n.t("common.words.task")} - test-task`
+					);
+				});
+
+				it("when type is 'TIME_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.TimeGroup })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.timeGroup"
+						)
+					);
+				});
+
+				it("when type is 'USER_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({ type: wrapper.vm.typesEnum.UserGroup })
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.userGroup"
+						)
+					);
+				});
+			});
+		});
+
+		describe("getItemStatus method", () => {
+			it("should return correct feStatus when status is 'success'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Success)).toStrictEqual(
+					wrapper.vm.statusEnum.Success
+				);
+			});
+
+			it("should return correct feStatus when status is 'partial'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Partial)).toStrictEqual(
+					wrapper.vm.statusEnum.Partial
+				);
+			});
+
+			it("should return correct feStatus when status is 'failure'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.Failure)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
+			});
+
+			it("should return correct feStatus when status is 'not-doing'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.NotDoing)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
+			});
+
+			it("should return correct feStatus when status is 'not-implemented'", () => {
+				const wrapper = getWrapper({ isOpen: true, loading: false });
+				const method = wrapper.vm.getItemStatus;
+				expect(method(wrapper.vm.statusEnum.NotImplemented)).toStrictEqual(
+					wrapper.vm.statusEnum.Failure
+				);
+			});
 		});
 
 		it("'prepareCopiedElements' method should prepare the data  ", async () => {
@@ -318,53 +482,48 @@ describe("@components/organisms/CopyProcess", () => {
 				elements: [
 					{
 						title: i18n.t("components.molecules.copyResult.metadata"),
-						type: types.Leaf,
+						type: types.Metadata,
 						status: status.Success,
+						feStatus: status.Success,
 						index: 1,
 					},
+
 					{
-						title: i18n.t("common.words.times"),
-						type: types.Leaf,
-						status: status.Failure,
+						title: i18n.t("components.molecules.copyResult.fileCopy.error"),
+						type: types.FileGroup,
+						status: status.NotImplemented,
+						feStatus: status.Failure,
 						index: 2,
 					},
 					{
-						title: i18n.t("components.molecules.copyResult.fileCopy.error"),
-						type: types.File,
-						status: status.Failure,
-						index: 3,
-					},
-					{
 						title: i18n.t("common.words.courseGroups"),
-						type: types.Leaf,
-						status: status.Failure,
-						index: 4,
+						type: types.CoursegroupGroup,
+						status: status.NotImplemented,
+						feStatus: status.Failure,
+						index: 3,
 					},
 					{
 						title: i18n.t("common.labels.room"),
 						type: types.Board,
 						status: status.Success,
+						feStatus: status.Success,
 						id: "boardId",
-						index: 5,
+						index: 4,
 						elements: [
 							{
 								title: "Aufgabe - Aufgabe an Marla (Mathe) ",
 								type: types.Task,
 								status: status.Success,
+								feStatus: status.Success,
 								id: "---",
-								index: 6,
+								index: 5,
 								elements: [
 									{
 										title: i18n.t("components.molecules.copyResult.metadata"),
-										type: types.Leaf,
+										type: types.Metadata,
 										status: status.Success,
-										index: 7,
-									},
-									{
-										title: i18n.t("common.labels.description"),
-										type: types.Leaf,
-										status: status.Success,
-										index: 8,
+										feStatus: status.Success,
+										index: 6,
 									},
 								],
 							},
@@ -372,20 +531,16 @@ describe("@components/organisms/CopyProcess", () => {
 								title: "Aufgabe - Aufgabe an Marla (Mathe) - offen",
 								type: types.Task,
 								status: status.Success,
+								feStatus: status.Success,
 								id: "567890",
-								index: 9,
+								index: 7,
 								elements: [
 									{
 										title: i18n.t("components.molecules.copyResult.metadata"),
-										type: types.Leaf,
+										type: types.Metadata,
 										status: status.Success,
-										index: 10,
-									},
-									{
-										title: i18n.t("common.labels.description"),
-										type: types.Leaf,
-										status: status.Success,
-										index: 11,
+										feStatus: status.Success,
+										index: 8,
 									},
 								],
 							},
@@ -398,22 +553,6 @@ describe("@components/organisms/CopyProcess", () => {
 			const copiedItems = wrapper.vm.copiedItems;
 
 			expect(copiedItems).toStrictEqual(expectedData);
-			expect(copiedItems.elements[0].title).toStrictEqual(
-				i18n.t("components.molecules.copyResult.metadata")
-			);
-			expect(copiedItems.elements[1].title).toStrictEqual(
-				wrapper.vm.$i18n.t("common.words.times")
-			);
-			expect(copiedItems.elements[1].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[2].title).toStrictEqual(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
-			);
-			expect(copiedItems.elements[2].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[3].title).toStrictEqual(
-				wrapper.vm.$i18n.t("common.words.courseGroups")
-			);
-			expect(copiedItems.elements[3].status).toStrictEqual(status.Failure);
-			expect(copiedItems.elements[4].elements[0].elements).toHaveLength(2);
 		});
 	});
 });

@@ -14,7 +14,7 @@ import { BusinessError } from "./types/commons";
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
 ): boolean => {
-	return data.elements.every(({ elements = [], ...rest }) => {
+	return data.every(({ elements = [], ...rest }) => {
 		const item = { ...rest };
 		if (item.status !== CopyApiResponseStatusEnum.Success) return false;
 		if (elements.length > 0) {
@@ -36,8 +36,30 @@ const cleanupCopyStatus = (item: any): void | any => {
 
 	if (Array.isArray(result.elements)) {
 		result.elements = result.elements
+			.map((item: any) => {
+				if (item.elements) {
+					const isSuccess = item.elements.every(
+						(ele: any) => ele.status === "success"
+					);
+					return {
+						...item,
+						status: isSuccess ? "success" : item.status,
+					};
+				}
+				return item;
+			})
 			.map(cleanupCopyStatus)
 			.filter((el: any) => el !== undefined);
+	}
+
+	if (result.elements) {
+		const isParentSuccess = result.elements.every(
+			(ele: any) => ele.status === "success"
+		);
+		return {
+			...result,
+			status: isParentSuccess ? "success" : result.status,
+		};
 	}
 
 	return result;
@@ -180,7 +202,9 @@ export default class CopyModule extends VuexModule {
 		this.filteredResult = cleanupCopyStatus(
 			JSON.parse(JSON.stringify(payload))
 		);
-		this.isSuccess = checkIfEveryElementsAreSuccess(this.filteredResult);
+		this.isSuccess = checkIfEveryElementsAreSuccess(
+			this.filteredResult.elements
+		);
 	}
 
 	@Mutation

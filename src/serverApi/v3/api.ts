@@ -210,7 +210,7 @@ export interface CopyApiResponse {
      * @type {string}
      * @memberof CopyApiResponse
      */
-    title: string;
+    title?: string;
     /**
      * Type of copied element
      * @type {string}
@@ -236,12 +236,22 @@ export interface CopyApiResponse {
     * @enum {string}
     */
 export enum CopyApiResponseTypeEnum {
-    Board = 'board',
-    Course = 'course',
-    File = 'file',
-    Leaf = 'leaf',
-    Lesson = 'lesson',
-    Task = 'task'
+    Board = 'BOARD',
+    Content = 'CONTENT',
+    Course = 'COURSE',
+    CoursegroupGroup = 'COURSEGROUP_GROUP',
+    File = 'FILE',
+    FileGroup = 'FILE_GROUP',
+    Leaf = 'LEAF',
+    Lesson = 'LESSON',
+    LessonContent = 'LESSON_CONTENT',
+    LessonContentGroup = 'LESSON_CONTENT_GROUP',
+    LtitoolGroup = 'LTITOOL_GROUP',
+    Metadata = 'METADATA',
+    SubmissionGroup = 'SUBMISSION_GROUP',
+    Task = 'TASK',
+    TimeGroup = 'TIME_GROUP',
+    UserGroup = 'USER_GROUP'
 }
 /**
     * @export
