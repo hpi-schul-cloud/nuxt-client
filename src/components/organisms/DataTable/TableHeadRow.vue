@@ -95,8 +95,8 @@
 									<base-link
 										class="link-style"
 										style="
-                      color: var(--color-white);
-                      text-decoration: underline;
+  color: var(--color-white);
+  text-decoration: underline;
 "
 										to="/"
 										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
