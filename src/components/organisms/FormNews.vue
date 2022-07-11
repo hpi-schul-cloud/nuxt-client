@@ -235,6 +235,7 @@ export default Vue.extend({
 .fade-leave-active {
 	transition: opacity 1s;
 }
+
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;

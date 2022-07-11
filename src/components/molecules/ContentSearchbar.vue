@@ -135,9 +135,11 @@ export default {
 			&:focus {
 				border-bottom: 2px var(--color-gray-light) solid;
 			}
+
 			&::placeholder {
 				color: var(--color-gray);
 			}
+
 			&:hover {
 				border-bottom: 2px var(--color-black) solid;
 			}

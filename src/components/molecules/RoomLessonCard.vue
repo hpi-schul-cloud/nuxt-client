@@ -285,26 +285,32 @@ export default {
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
 	align-items: center;
+
 	.title-section {
 		line-height: var(--line-height-md);
 		text-align: left;
 	}
+
 	.dot-menu-section {
 		align-self: start;
 		text-align: right;
 	}
 }
+
 .chip-items-group {
 	vertical-align: middle;
+
 	.chip-item {
 		display: inline-block;
 		width: fit-content;
 		text-align: center;
 		border-radius: var(--radius-sm);
+
 		.chip-value {
 			font-size: var(--text-xs);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -312,9 +318,11 @@ export default {
 		}
 	}
 }
+
 .action-button {
 	color: var(--color-primary);
 }
+
 .v-card {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
@@ -323,15 +331,18 @@ export default {
 		box-shadow: var(--shadow-m);
 	}
 }
+
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
 
 .hidden-lesson {
 	box-shadow: none;
+
 	.lesson-name {
 		opacity: 0.5;
 	}
+
 	.submitted-section,
 	.title-section {
 		opacity: 0.65;

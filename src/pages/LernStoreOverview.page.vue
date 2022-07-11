@@ -236,6 +236,7 @@ export default {
 		color: var(--color-secondary);
 		cursor: pointer;
 	}
+
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -243,9 +244,11 @@ export default {
 		width: 100%;
 		height: 100%;
 	}
+
 	&__container_child {
 		width: 100%;
 	}
+
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
@@ -253,19 +256,24 @@ export default {
 		transition: margin 0.7s;
 		transform: scale(1);
 	}
+
 	&__total {
 		width: 100%;
 	}
+
 	&__no-results {
 		margin-top: var(--space-md);
 	}
+
 	&__spinner {
 		margin: var(--space-lg) 0;
 	}
+
 	&__footer {
 		align-self: flex-end;
 		padding-bottom: var(--space-sm);
 	}
+
 	.spinner {
 		align-self: center;
 	}
@@ -287,6 +295,7 @@ export default {
 .fade-leave-active {
 	transition: opacity var(--duration-transition-slow);
 }
+
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;

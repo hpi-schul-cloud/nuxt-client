@@ -39,18 +39,23 @@ export default {
 	align-items: top;
 	font-size: var(--text-sm);
 }
+
 .info-message.bc-error {
 	color: var(--color-danger);
 }
+
 .info-message.bc-success {
 	color: var(--color-success);
 }
+
 .info-message.bc-warning {
 	color: var(--color-warning);
 }
+
 .info-message.bc-info {
 	color: var(--color-info);
 }
+
 .info-message .icon {
 	flex: 0 0 20px;
 	width: 20px;

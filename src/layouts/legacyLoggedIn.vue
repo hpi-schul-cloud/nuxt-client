@@ -220,12 +220,15 @@ export default {
 		grid-template-columns: var(--sidebar-width) 1fr;
 	}
 }
+
 .topbar {
 	grid-area: top;
 }
+
 .sidebar {
 	grid-area: side;
 }
+
 .footer {
 	grid-area: footer;
 }

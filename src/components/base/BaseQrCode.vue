@@ -36,6 +36,7 @@ export default {
 .qrcode {
 	min-width: 200px;
 	min-height: 200px;
+
 	img {
 		max-width: none;
 	}

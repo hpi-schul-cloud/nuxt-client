@@ -32,15 +32,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .wrapper {
 	min-width: var(--size-content-width-min);
 	margin: 0 auto;
+
 	&.small {
 		max-width: calc(0.5 * var(--size-content-width-max));
 	}
+
 	&.medium {
 		max-width: var(--size-content-width-max);
 	}
+
 	&.large {
 		max-width: calc(1.5 * var(--size-content-width-max));
 	}

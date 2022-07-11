@@ -111,6 +111,7 @@ export default {
 	margin-bottom: var(--space-xs);
 	font-size: var(--text-lg);
 }
+
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
@@ -118,19 +119,23 @@ export default {
 	color: var(--color-secondary-dark);
 	text-align: center;
 }
+
 .top-line {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
+
 .footer-link {
 	color: var(--color-primary);
 	border: none;
+
 	&:focus,
 	&:hover {
 		color: var(--color-primary-dark);
 		text-decoration: underline;
 	}
+
 	&:visited {
 		color: var(--color-primary);
 	}

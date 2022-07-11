@@ -20,6 +20,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .icon {
 	width: 100% !important;
 	height: 100% !important;

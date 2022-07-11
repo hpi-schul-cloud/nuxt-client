@@ -228,12 +228,14 @@ export default {
 	padding-bottom: var(--space-xs-2);
 	border-bottom: 1px solid var(--color-gray);
 }
+
 .editor__content {
 	outline: none;
 
 	::v-deep [contenteditable="true"] {
 		padding: var(--space-lg);
 		outline: none;
+
 		&:focus {
 			border-bottom: 1px solid var(--color-primary);
 		}

@@ -119,6 +119,7 @@ export default {
 .container.container-max-width {
 	max-width: var(--size-content-width-max);
 }
+
 .container.container-full-width {
 	max-width: none;
 	margin: 0;
@@ -136,6 +137,7 @@ export default {
 		height: 24px;
 	}
 }
+
 .sticky {
 	position: sticky;
 	top: 0;

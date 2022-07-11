@@ -379,19 +379,23 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 thead,
 tbody {
 	font-size: var(--text-md);
 }
+
 .table-content-wrapper {
 	overflow-x: auto;
 }
+
 .toolbelt {
 	display: flex;
 	align-items: center;
 	// min-height to prevent table jumping if toolbelt appears/disappears
 	min-height: 58px;
 }
+
 .table {
 	width: 100%;
 	margin-bottom: var(--space-sm);

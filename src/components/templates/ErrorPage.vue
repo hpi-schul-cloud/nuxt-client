@@ -49,6 +49,7 @@ export default {
 .text-centered {
 	text-align: center;
 }
+
 h1.error-msg {
 	margin-bottom: var(--space-lg);
 }

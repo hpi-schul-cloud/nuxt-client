@@ -58,10 +58,12 @@ export default {
 		border-top-left-radius: var(--radius-sm);
 		border-top-right-radius: var(--radius-sm);
 	}
+
 	&:last-child {
 		border: none;
 		border-radius: var(--radius-sm);
 	}
+
 	&:hover {
 		background-color: var(--hover-color);
 	}
@@ -70,6 +72,7 @@ export default {
 		display: flex;
 		align-items: center;
 	}
+
 	.link {
 		padding-left: var(--space-sm); // space in legacy client 8px;
 		&:hover,

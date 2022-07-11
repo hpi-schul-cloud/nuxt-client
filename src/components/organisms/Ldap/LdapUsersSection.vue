@@ -165,9 +165,11 @@ export default {
 	margin-top: var(--space-xl-3);
 	margin-bottom: var(--space-xl-2);
 }
+
 .users-container {
 	margin-bottom: var(--space-xl-4);
 }
+
 .title-class {
 	margin-bottom: var(--space-xl-2);
 }

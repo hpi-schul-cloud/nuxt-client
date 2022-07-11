@@ -137,16 +137,20 @@ export default {
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
+
 .treeview-item-failure {
 	color: var(--color-danger-dark);
 	white-space: normal;
 }
+
 .not-finished {
 	color: var(--color-danger-dark);
 }
+
 .finished {
 	color: var(--color-secondary);
 }
+
 .partial {
 	color: var(--color-accent);
 }

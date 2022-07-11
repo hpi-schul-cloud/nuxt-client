@@ -200,17 +200,21 @@ export default {
 .v-dialog--active {
 	overflow-y: hidden !important;
 }
+
 .cancel-confirm-button {
 	text-align: right;
 }
+
 .step-sections {
 	min-height: var(--sidebar-width);
 	font-size: var(--space-md);
 	color: var(--color-black);
 }
+
 .step {
 	cursor: pointer;
 }
+
 .v-icon__svg {
 	width: 90%;
 	height: 90%;

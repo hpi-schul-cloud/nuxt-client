@@ -99,10 +99,12 @@ export default {
 	margin-right: var(--space-xs);
 	margin-left: var(--space-xs);
 }
+
 .v-list-item__action {
 	margin-top: var(--space-xs);
 	margin-bottom: var(--space-xs);
 }
+
 .v-list-item:focus {
 	outline: none;
 }

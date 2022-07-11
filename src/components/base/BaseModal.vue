@@ -138,6 +138,7 @@ export default {
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
+
 	&--large {
 		min-height: 80%;
 

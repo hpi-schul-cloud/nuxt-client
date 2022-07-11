@@ -42,6 +42,7 @@ export default {
 		flex-direction: column;
 		align-items: normal;
 		padding: 0;
+
 		> *:not(:first-child) {
 			margin-left: 0;
 		}
