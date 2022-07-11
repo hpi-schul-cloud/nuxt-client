@@ -95,6 +95,7 @@ input:checked + .radio {
 
 input:focus + .radio {
 	outline: none;
+
 	&.user-is-tabbing {
 		outline: 2px solid #4d90fe;
 		outline-offset: 0.1em;

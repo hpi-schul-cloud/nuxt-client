@@ -552,9 +552,11 @@ export default {
 
 <style lang="scss" scoped>
 $rounded: 50%;
+
 tr.head td {
 	border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) !important;
 }
+
 .v-btn--round {
 	border-radius: $rounded !important;
 }

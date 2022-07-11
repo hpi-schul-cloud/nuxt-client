@@ -212,9 +212,11 @@ export default {
 		.label {
 			color: var(--color-primary);
 		}
+
 		.help {
 			visibility: visible;
 		}
+
 		.visible {
 			fill: var(--color-primary);
 		}
@@ -233,17 +235,21 @@ export default {
 	&:hover:not(.disabled) {
 		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
+
 		~ .bottom-line {
 			border-bottom: var(--border-width) solid;
 		}
 	}
+
 	&.base-input-error {
 		border-bottom-color: var(--color-danger);
 	}
+
 	&.disabled {
 		color: var(--color-disabled-dark);
 		border-bottom-color: var(--color-disabled-dark);
 	}
+
 	.info-line {
 		display: flex;
 		align-items: center;
@@ -254,6 +260,7 @@ export default {
 			justify-content: flex-end;
 		}
 	}
+
 	.input-line {
 		display: flex;
 		align-items: center;
@@ -268,11 +275,13 @@ export default {
 			&.icon-before {
 				margin-right: var(--space-xs-2);
 			}
+
 			&.icon-behind {
 				margin-left: var(--space-xs);
 				font-size: var(--text-lg);
 			}
 		}
+
 		.core {
 			flex: 1;
 			height: min-content;
@@ -286,11 +295,14 @@ export default {
 				cursor: text;
 				background: transparent;
 				border: none;
+
 				&:focus {
 					outline: none;
 				}
+
 				&:disabled {
 					background-color: transparent;
+
 					&::placeholder {
 						color: var(--color-disabled-dark);
 					}
@@ -303,9 +315,11 @@ export default {
 .pwd-toggle {
 	color: var(--color-gray);
 	border-radius: var(--radius-round);
+
 	&:hover {
 		color: var(--color-gray-dark);
 	}
+
 	&:focus {
 		color: var(--color-gray-dark);
 		outline: none;
@@ -326,6 +340,7 @@ export default {
 .fade-enter-active {
 	transition: opacity var(--duration-transition-medium);
 }
+
 .fade-enter {
 	opacity: 0;
 }

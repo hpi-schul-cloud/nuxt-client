@@ -364,6 +364,7 @@ export default {
 	overflow: hidden;
 	white-space: nowrap;
 }
+
 .modal-text {
 	font-size: var(--space-md);
 	color: var(--color-black);

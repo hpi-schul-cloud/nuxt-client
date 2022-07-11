@@ -86,6 +86,7 @@ export default {
 	height: 1em;
 	vertical-align: baseline;
 }
+
 .fa {
 	width: 1em;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

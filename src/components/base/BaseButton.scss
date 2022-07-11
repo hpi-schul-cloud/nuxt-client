@@ -15,45 +15,57 @@ a:not(.is-none) {
 	&.is-outline {
 		--button-background: var(--color-secondary);
 	}
+
 	&.is-text {
 		--button-background: var(--color-secondary);
 	}
+
 	&.is-primary,
 	&.is-hero-cta {
 		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
+
 		&:hover {
 			--button-background: var(--color-primary-dark);
 		}
 	}
+
 	&.is-secondary {
 		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
+
 		&:hover {
 			--button-background: var(--color-primary-dark);
 		}
 	}
+
 	&.is-success {
 		--button-background: var(--color-success);
 		--button-text-color: var(--color-white);
+
 		&:hover {
 			--button-background: var(--color-success-dark);
 		}
 	}
+
 	&.is-danger {
 		--button-background: var(--color-danger);
 		--button-text-color: var(--color-white);
+
 		&:hover {
 			--button-background: var(--color-danger-dark);
 		}
 	}
+
 	&.is-info {
 		--button-background: var(--color-info);
 		--button-text-color: var(--color-white);
+
 		&:hover {
 			--button-background: var(--color-info-dark);
 		}
 	}
+
 	&.is-fancy {
 		--button-background: linear-gradient(
 			45deg,
@@ -72,9 +84,11 @@ a:not(.is-none) {
 			);
 		}
 	}
+
 	&.is-floating-action-button {
 		--button-background: #{$floating-action-button-color};
 	}
+
 	&.is-icon {
 		--button-padding: var(--space-xs);
 
@@ -83,12 +97,15 @@ a:not(.is-none) {
 		height: 40px;
 		padding: var(--button-padding);
 		border-radius: var(--radius-round);
+
 		&.is-small {
 			--button-padding: var(--space-xs-3);
 		}
+
 		&.is-large {
 			--button-padding: var(--space-sm);
 		}
+
 		&.is-hero-cta,
 		&.is-fancy {
 			width: 56px;
@@ -99,6 +116,7 @@ a:not(.is-none) {
 	&:disabled {
 		--button-background: var(--color-disabled);
 		--button-text-color: var(--color-disabled-dark);
+
 		&.is-outline,
 		&.is-text {
 			--button-background: var(--color-disabled-dark);
@@ -108,6 +126,7 @@ a:not(.is-none) {
 	/* SIZES */
 	--button-padding: var(--space-xs) var(--space-sm) var(--space-xs-2)
 		var(--space-sm);
+
 	&.is-small {
 		--button-padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4)
 			var(--space-sm);
@@ -182,13 +201,16 @@ a:not(.is-none) {
 		cursor: default;
 	}
 }
+
 .is-hero-cta,
 .is-fancy {
 	box-shadow: var(--shadow-xl);
+
 	&:focus {
 		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-primary);
 	}
 }
+
 .is-none {
 	--button-text-color: inherit;
 
@@ -198,6 +220,7 @@ a:not(.is-none) {
 	font-weight: initial;
 	background: transparent;
 	border: 0;
+
 	&:focus {
 		box-shadow: 0 0 0 3px inherit;
 	}

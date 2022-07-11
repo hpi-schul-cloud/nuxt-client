@@ -39,6 +39,7 @@ export default {
 .icon {
 	font-size: var(--sidebar-item-height);
 }
+
 .body-container {
 	display: flex;
 	flex-direction: column;
@@ -50,6 +51,7 @@ export default {
 	.modal-title {
 		margin: 0;
 	}
+
 	.modal-description {
 		margin-top: var(--space-md);
 	}

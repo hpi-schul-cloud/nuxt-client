@@ -230,9 +230,11 @@ export default {
 	background-color: var(--color-white);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-m);
+
 	> :hover {
 		background-color: var(--color-gray-light);
 	}
+
 	&__button {
 		display: flex;
 		align-items: center;
@@ -246,16 +248,19 @@ export default {
 			margin: var(--space-md) !important;
 			color: var(--color-secondary);
 		}
+
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
 			color: var(--color-black);
 			text-align: left;
 			white-space: normal;
+
 			&.no-icon {
 				margin: var(--space-md);
 			}
 		}
+
 		&-close:not(:focus) {
 			@include visually-hidden;
 		}
@@ -266,18 +271,22 @@ export default {
 .fade-leave-active {
 	transition: transform var(--transition-duration) ease-in-out;
 	transform: scaleY(1);
+
 	> * {
 		opacity: 1;
 		transition: opacity calc(0.5 * var(--transition-duration)) ease-in-out
 			calc(0.5 * var(--transition-duration));
 	}
 }
+
 .fade-enter {
 	transform: scaleY(0);
+
 	> * {
 		opacity: 0;
 	}
 }
+
 .fade-leave-to {
 	opacity: 0;
 	transition: opacity var(--transition-duration) ease-in-out;

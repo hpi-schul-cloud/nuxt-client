@@ -72,9 +72,11 @@ fieldset {
 	margin: 0;
 	border: none;
 }
+
 .label {
 	margin-bottom: var(--space-xs);
 }
+
 .input-checkbox {
 	margin-bottom: var(--space-xs);
 	margin-left: var(--space-sm);

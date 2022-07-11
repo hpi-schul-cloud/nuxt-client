@@ -334,6 +334,7 @@ export default {
 .substitute-filter-placeholder {
 	min-height: 46px;
 }
+
 .content-max-width {
 	max-width: var(--size-content-width-max);
 }

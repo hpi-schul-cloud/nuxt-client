@@ -154,14 +154,17 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 }
+
 .chart-card {
 	width: 100%;
 	height: 100%;
 }
+
 .echarts {
 	width: 40rem;
 	height: 20rem;
 }
+
 .content-subtitles {
 	display: flex;
 	align-items: center;

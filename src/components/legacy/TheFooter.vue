@@ -134,6 +134,7 @@ export default {
 	color: var(--color-secondary-dark);
 	text-align: center;
 }
+
 .top-line {
 	display: flex;
 	align-items: center;
@@ -145,6 +146,7 @@ export default {
 		margin: 0;
 	}
 }
+
 .bottom-line {
 	margin-top: var(--space-xs);
 
@@ -157,14 +159,17 @@ export default {
 		vertical-align: middle;
 	}
 }
+
 .footer-link {
 	color: var(--color-primary);
 	border: none;
+
 	&:focus,
 	&:hover {
 		color: var(--color-primary-dark);
 		text-decoration: underline;
 	}
+
 	&:visited {
 		color: var(--color-primary);
 	}
