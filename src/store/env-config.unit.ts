@@ -1,8 +1,8 @@
+import setupStores from "@@/tests/test-utils/setupStores";
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { initializeAxios } from "../utils/api";
 import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
-import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
-import setupStores from "@@/tests/test-utils/setupStores";
 
 const mockEnvs: Envs = {
 	ALERT_STATUS_URL: "mockValue",
@@ -27,6 +27,7 @@ const mockEnvs: Envs = {
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",
 	SC_SHORT_TITLE: "mockValue",
+	GHOST_BASE_URL: "mockValue",
 };
 
 const URL = "/v1/config/app/public";

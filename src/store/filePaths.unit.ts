@@ -1,7 +1,7 @@
-import FilePathsModule from "./filePaths";
 import { envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
+import FilePathsModule from "./filePaths";
 
 const specificFiles = {
 	accessibilityStatement:
@@ -61,6 +61,7 @@ const envs = {
 	DOCUMENT_BASE_DIR: "",
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
+	GHOST_BASE_URL: "",
 };
 
 const mockSetSpecificFiles = (payload: string) =>

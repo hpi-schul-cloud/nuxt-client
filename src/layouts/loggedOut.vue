@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<div class="topbar">
+		<div class="topbar" data-testid="logged-out-top-bar">
 			<navigation-bar
 				:buttons="true"
 				:img="require('@assets/img/logo/logo-image-mono.svg')"
@@ -16,7 +16,6 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import navbarBaseItems from "@/utils/navbarBaseItems";
 import TheFooter from "@components/legacy/TheFooter";
 
 export default {
@@ -24,19 +23,29 @@ export default {
 		NavigationBar,
 		TheFooter,
 	},
-	data() {
-		return {
-			navbarBaseItems,
-		};
-	},
+	inject: ["envConfigModule"],
 	computed: {
+		ghostBaseUrl() {
+			return this.envConfigModule.getGhostBaseUrl;
+		},
 		navbarItems() {
-			return this.navbarBaseItems.map((item) => {
-				if (item.title.includes(".")) {
-					item.title = this.$t(`${item.title}`);
-				}
-				return item;
-			});
+			return [
+				{
+					title: this.$t("global.topbar.loggedOut.actions.steps"),
+					href: `${this.ghostBaseUrl}/erste-schritte/`,
+					target: "_blank",
+				},
+				{
+					title: this.$t("global.topbar.loggedOut.actions.blog"),
+					href: `${this.ghostBaseUrl}/`,
+					target: "_blank",
+				},
+				{
+					title: this.$t("global.topbar.loggedOut.actions.faq"),
+					href: `${this.ghostBaseUrl}/faqs/`,
+					target: "_blank",
+				},
+			];
 		},
 		isMobile() {
 			return this.$mq === "mobile";

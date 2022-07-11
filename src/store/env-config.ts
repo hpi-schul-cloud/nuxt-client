@@ -1,8 +1,8 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { contentModule, filePathsModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 import { Envs } from "./types/env-config";
-import { contentModule, filePathsModule } from "@/store";
 
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -41,6 +41,7 @@ export default class EnvConfigModule extends VuexModule {
 		DOCUMENT_BASE_DIR: "",
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
+		GHOST_BASE_URL: "",
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";
@@ -118,6 +119,9 @@ export default class EnvConfigModule extends VuexModule {
 	}
 	get getAvailableLanguages() {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
+	}
+	get getGhostBaseUrl() {
+		return this.env.GHOST_BASE_URL;
 	}
 
 	get getEnv(): Envs {
