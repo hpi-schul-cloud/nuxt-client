@@ -8,8 +8,8 @@ module.exports = {
 		"stylelint-config-recess-order",
 		// Override rules that would interfere with Prettier
 		// https://github.com/shannonmoeller/stylelint-config-prettier
-		"stylelint-config-prettier",
 		"stylelint-config-standard-vue/scss",
+		"stylelint-config-prettier",
 	],
 	plugins: [
 		// enforce variable usage

@@ -274,8 +274,7 @@ export default {
 
 	> * {
 		opacity: 1;
-		transition:
-			opacity calc(0.5 * var(--transition-duration)) ease-in-out
+		transition: opacity calc(0.5 * var(--transition-duration)) ease-in-out
 			calc(0.5 * var(--transition-duration));
 	}
 }

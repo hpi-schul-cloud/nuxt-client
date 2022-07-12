@@ -8,6 +8,7 @@ $breakpoints: (
 @mixin breakpoint($breakpoint) {
 	@if map-has-key($breakpoints, $breakpoint) {
 		// Get the breakpoint value.
+		/* stylelint-disable-next-line */
 		$breakpoint-value: map-get($breakpoints, $breakpoint);
 
 		// Write the media query.

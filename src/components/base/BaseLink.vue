@@ -142,6 +142,7 @@ export default {
 }
 
 .link {
+	/* stylelint-disable-next-line */
 	@extend .default-link;
 
 	display: inline;

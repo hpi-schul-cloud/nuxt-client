@@ -8,7 +8,7 @@
 	>
 		<mask
 			id="mask0_60_1214"
-			style="mask-type: alpha;"
+			style="mask-type: alpha"
 			maskUnits="userSpaceOnUse"
 			x="3"
 			y="3"

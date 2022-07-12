@@ -73,7 +73,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	cursor: pointer;
-	user-select: none;
+	-webkit-user-select: none;
 	background-color: var(--color-secondary);
 	border: none;
 	border-radius: var(--radius-round);

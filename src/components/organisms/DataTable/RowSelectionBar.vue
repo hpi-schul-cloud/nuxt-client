@@ -11,24 +11,11 @@
 					>{{ numberOfSelectedItems }}
 					{{ $t("pages.administration.selected") }}
 				</span>
-				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
-					({{ $t("pages.administration.or") }}
-					<base-button
-						design="none"
-						class="select-all-rows"
-						@click="$emit('update:allRowsOfAllPagesSelected', true)"
-					>
-						{{ $t("pages.administration.all") }} {{ totalNumberOfItems }}
-						{{ $t("pages.administration.select") }}
-					</base-button>
-					)
-				</span>
-				-->
 			</div>
 			<div
 				v-if="actions && actions.length"
 				class="actions"
-				style="position: relative;"
+				style="position: relative"
 			>
 				<base-button
 					class="context-menu-open"

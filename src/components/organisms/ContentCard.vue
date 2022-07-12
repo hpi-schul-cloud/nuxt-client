@@ -20,7 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="margin-bottom: 0; color: var(--color-white);"
+									style="margin-bottom: 0; color: var(--color-white)"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -148,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@utils/multiline-ellipsis";
 
 .card-tag {
 	position: absolute;
@@ -212,11 +212,13 @@ export default {
 			z-index: var(--layer-page);
 			width: 100%;
 			height: 100%;
+			/* stylelint-disable */
 			background: linear-gradient(
 				180deg,
 				rgba(0, 0, 0, 0.9) 0%,
 				rgba(0, 0, 0, 0) 50%
 			);
+			/* stylelint-enable */
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
@@ -227,6 +229,7 @@ export default {
 			left: 50%;
 			z-index: var(--layer-page);
 			font-size: var(--space-xl-3) !important;
+			/* stylelint-disable-next-line */
 			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
 			opacity: 0.9;
 			transform: translate(-50%, -50%);

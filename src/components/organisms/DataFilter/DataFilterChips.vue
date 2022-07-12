@@ -25,7 +25,7 @@
 				<base-icon
 					icon="close"
 					source="material"
-					style="font-size: var(--text-sm);"
+					style="font-size: var(--text-sm)"
 				/>
 			</base-button>
 		</div>
@@ -84,8 +84,7 @@ $mobile: 750px; // css variables do not work with media queries
 
 	&:focus {
 		outline: none;
-		box-shadow:
-			0 0 0 3px var(--color-white),
+		box-shadow: 0 0 0 3px var(--color-white),
 			0 0 0 6px var(--color-secondary-dark);
 	}
 
@@ -114,8 +113,7 @@ $mobile: 750px; // css variables do not work with media queries
 
 		&:focus {
 			outline: none;
-			box-shadow:
-				0 0 0 3px var(--color-white),
+			box-shadow: 0 0 0 3px var(--color-white),
 				0 0 0 6px var(--color-secondary-dark);
 		}
 	}

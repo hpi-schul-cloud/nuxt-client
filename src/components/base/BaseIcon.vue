@@ -79,7 +79,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .icon {
 	display: inline-block;
 	width: 1em;
@@ -92,7 +92,7 @@ export default {
 	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	font-size: calc(1em + 4px);
 	line-height: 100%;
-	vertical-align: middle;
+	vertical-align: middle; // should this be default?
 }
 
 .custom {
@@ -100,7 +100,7 @@ export default {
 	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	font-size: calc(1em + 4px);
 	line-height: 100%;
-	vertical-align: middle;
+	vertical-align: middle; // should this be default?
 }
 
 .material {
