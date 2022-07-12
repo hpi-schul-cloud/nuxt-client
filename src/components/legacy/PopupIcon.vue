@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
+/* stylelint-disable scale-unlimited/declaration-strict-value */
 @import "@styles";
 
 .popup {
@@ -103,9 +103,10 @@ export default {
 	.popup-content::before {
 		position: absolute;
 		top: calc(-2 * var(--outer-arrow-size));
-		right: calc(
-			var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
-		);
+		right:
+			calc(
+				var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+			);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
 		border-color: transparent transparent var(--color-gray-light) transparent;
@@ -114,17 +115,19 @@ export default {
 
 		@include breakpoint(tablet) {
 			right: initial;
-			left: calc(
-				var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
-			);
+			left:
+				calc(
+					var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+				);
 		}
 	}
 
 	.expand-to-left::before {
 		@include breakpoint(tablet) {
-			right: calc(
-				var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
-			);
+			right:
+				calc(
+					var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+				);
 			left: initial;
 		}
 	}

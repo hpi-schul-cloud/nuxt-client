@@ -95,8 +95,8 @@
 									<base-link
 										class="link-style"
 										style="
-  color: var(--color-white);
-  text-decoration: underline;
+											color: var(--color-white);
+											text-decoration: underline;
 "
 										to="/"
 										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
@@ -270,6 +270,7 @@ export default {
 			font-weight: var(--font-weight-normal);
 
 			svg {
+				/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 				font-size: calc(1.5 * var(--text-lg));
 				color: var(--color-secondary);
 			}
@@ -288,6 +289,7 @@ export default {
 .info-box {
 	position: absolute;
 	right: 0%;
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	z-index: calc(var(--layer-fab) + 1);
 	min-width: 320px;
 	margin-top: var(--space-xl-2);

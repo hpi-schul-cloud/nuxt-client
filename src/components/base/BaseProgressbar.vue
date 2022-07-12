@@ -34,6 +34,7 @@ progress {
 	border-radius: var(--radius-round);
 	appearance: none;
 }
+
 // TODO check if we can remove browser prefixes with postcss
 progress::-moz-progress-bar {
 	background-color: $color-done;

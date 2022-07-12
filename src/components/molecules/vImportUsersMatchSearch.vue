@@ -389,6 +389,6 @@ export default {
 </script>
 <style scoped>
 .v-dialog--active {
-  overflow-y: hidden !important;
+	overflow-y: hidden !important;
 }
 </style>

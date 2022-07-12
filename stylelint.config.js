@@ -19,6 +19,15 @@ module.exports = {
 	// - https://stylelint.io/user-guide/rules/
 	// - https://github.com/kristerkari/stylelint-scss#list-of-rules
 	rules: {
+		indentation: "tab",
+		"value-no-vendor-prefix": null,
+		"property-no-vendor-prefix": null,
+		"alpha-value-notation": "number",
+		"function-url-quotes": "never",
+		"declaration-block-no-redundant-longhand-properties": [
+			true,
+			{ ignoreShorthands: ["grid-template", "flex-flow"] },
+		],
 		"unicode-bom": "never",
 		// Allow newlines inside class attribute values
 		"string-no-newline": null,
@@ -55,6 +64,18 @@ module.exports = {
 					"0 auto",
 					"none",
 				],
+				ignoreFunctions: {
+					color: false,
+					"font-family": false,
+					"font-size": false,
+					"font-weight": false,
+					"line-height": false,
+					padding: false,
+					margin: false,
+					"z-index": false,
+					"border-radius": false,
+				},
+				disableFix: true,
 			},
 		],
 		// PRETTIER

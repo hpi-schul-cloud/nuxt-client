@@ -622,6 +622,7 @@ a.action-button {
 .info-box {
 	position: absolute;
 	right: 0%;
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	z-index: calc(var(--layer-fab) + 1);
 	max-width: 100%;
 	margin-top: var(--space-md);

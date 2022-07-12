@@ -62,6 +62,6 @@ export default {
 
 <style lang="scss" scoped>
 .school-policy-expansion-panel {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.12); // TODO - find vuetify name for this
+	border-bottom: 1px solid rgb(0 0 0 / 0.12); // TODO - find vuetify name for this
 }
 </style>

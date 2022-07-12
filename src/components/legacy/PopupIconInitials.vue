@@ -73,7 +73,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	cursor: pointer;
-	-webkit-user-select: none;
+	user-select: none;
 	background-color: var(--color-secondary);
 	border: none;
 	border-radius: var(--radius-round);
@@ -106,7 +106,7 @@ export default {
 
 		.username {
 			min-height: 40px;
-			/* stylelint-disable sh-waqar/declaration-use-variable */
+			/* stylelint-disable scale-unlimited/declaration-strict-value */
 			padding: 10px 15px;
 			margin-bottom: 5px;
 			/* stylelint-enable */

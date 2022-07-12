@@ -339,25 +339,26 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get($display-breakpoints, "md-and-up")} {
 	.tabs-max-width {
 		max-width: var(--size-content-width-max);
 	}
 }
 
 .tab-icon {
-	fill: currentColor;
+	fill: currentcolor;
 }
+
 // even out border
 .v-tabs {
-	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	margin-bottom: -2px; // stylelint-disable scale-unlimited/declaration-strict-value
 	font-family: var(--heading-font-family);
 }
 
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	border-bottom: 2px solid rgb(0 0 0 / 0.12);
 }
 
 ::v-deep .v-slide-group__prev,
@@ -368,6 +369,6 @@ export default {
 .border-bottom {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	border-bottom: 2px solid rgb(0 0 0 / 0.12);
 }
 </style>

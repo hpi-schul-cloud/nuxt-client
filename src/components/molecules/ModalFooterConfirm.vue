@@ -64,7 +64,8 @@ export default {
 	background: var(--color-success);
 	border: none;
 	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-	transition: all var(--duration-transition-medium)
+	transition:
+		all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,

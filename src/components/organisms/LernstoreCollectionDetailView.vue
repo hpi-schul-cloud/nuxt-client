@@ -298,7 +298,7 @@ export default {
 
 <style>
 #main-content.content {
-  overflow-x: inherit;
+	overflow-x: inherit;
 }
 </style>
 <style lang="scss" scoped>
@@ -335,7 +335,6 @@ $tablet-portrait-width: 768px;
 			display: grid;
 			grid-template-areas: "cards buttons";
 			grid-template-columns: 4fr 1fr;
-			// grid-auto-rows: minmax(200px, auto);
 			column-gap: 20px;
 
 			.buttons {

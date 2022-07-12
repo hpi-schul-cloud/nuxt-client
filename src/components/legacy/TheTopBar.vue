@@ -144,7 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
+/* stylelint-disable scale-unlimited/declaration-strict-value */
 @import "@styles";
 
 .topbar {

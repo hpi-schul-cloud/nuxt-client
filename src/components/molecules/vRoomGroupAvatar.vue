@@ -120,7 +120,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@utils/multiline-ellipsis";
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 
@@ -137,17 +137,17 @@ export default {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs-only')} {
+@media #{map-get($display-breakpoints, "xs-only")} {
 	.sub-title {
 		margin-right: calc(var(--space-base-vuetify) * -3);
 		margin-left: calc(var(--space-base-vuetify) * -3);
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 		font-size: 14px;
 	}
 }
 
 .card-component {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	border-radius: 0.5em;
 }
 

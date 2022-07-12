@@ -159,10 +159,10 @@ export default {
 
 <style lang="scss" scoped>
 .fill {
-	fill: currentColor;
+	fill: currentcolor;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
+// stylelint-disable scale-unlimited/declaration-strict-value
 .context-menu-btn {
 	min-width: 45px;
 }

@@ -212,7 +212,7 @@ export default {
 
 .extended-fab {
 	width: 120px !important;
-	padding: 0 12px 0 8px; // stylelint-disable sh-waqar/declaration-use-variable
+	padding: 0 12px 0 8px; // stylelint-disable scale-unlimited/declaration-strict-value
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 

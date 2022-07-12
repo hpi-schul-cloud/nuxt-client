@@ -161,7 +161,7 @@ label {
 }
 
 input:focus + .icon-wrapper svg {
-	box-shadow: 0 0 0 3px currentColor;
+	box-shadow: 0 0 0 3px currentcolor;
 }
 
 // SWITCH
@@ -179,6 +179,7 @@ input:focus + .icon-wrapper svg {
 	}
 
 	.label {
+		/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 		margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
 	}
 }

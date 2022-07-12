@@ -79,7 +79,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .icon {
 	display: inline-block;
 	width: 1em;
@@ -89,25 +89,24 @@ export default {
 
 .fa {
 	width: 1em;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	font-size: calc(1em + 4px);
 	line-height: 100%;
-	vertical-align: middle; // should this be default?
+	vertical-align: middle;
 }
 
 .custom {
 	width: 1em;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	font-size: calc(1em + 4px);
 	line-height: 100%;
-	vertical-align: middle; // should this be default?
+	vertical-align: middle;
 }
 
 .material {
-	// remove material icon margin
 	width: calc(1em + 4px);
 	height: calc(1em + 4px);
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	margin: -4px 0;
 }
 </style>

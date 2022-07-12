@@ -121,5 +121,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "./BaseButton.scss";
+@import "./BaseButton";
 </style>

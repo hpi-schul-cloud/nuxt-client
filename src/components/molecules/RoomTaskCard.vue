@@ -402,7 +402,7 @@ export default {
 @import "@styles";
 
 .fill {
-	fill: currentColor;
+	fill: currentcolor;
 }
 
 .top-row-container {

@@ -391,7 +391,7 @@ export default {
 }
 
 ::v-deep .v-input {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	margin-top: 0 !important;
 }
 </style>

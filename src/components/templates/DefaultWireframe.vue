@@ -129,10 +129,10 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	border-bottom: 2px solid rgb(0 0 0 / 0.12);
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map-get($display-breakpoints, "sm-and-up")} {
 	.breadcrumbs-placeholder {
 		height: 24px;
 	}
@@ -145,14 +145,14 @@ export default {
 	background-color: var(--color-white);
 }
 
-@media #{map-get($display-breakpoints, 'lg-and-up')} {
+@media #{map-get($display-breakpoints, "lg-and-up")} {
 	.wireframe-fab {
 		position: relative;
 		top: 0;
 	}
 }
 
-@media #{map-get($display-breakpoints, 'md-and-down')} {
+@media #{map-get($display-breakpoints, "md-and-down")} {
 	.wireframe-fab {
 		position: fixed !important;
 	}
@@ -167,7 +167,7 @@ $fab-wrapper-height: 80px;
 	align-items: center;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
-	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
+	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line scale-unlimited/declaration-strict-value
 	pointer-events: none;
 
 	* {

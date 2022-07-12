@@ -143,20 +143,20 @@ export default Vue.extend({
 	width: 80px;
 	max-width: 80px;
 	height: 80px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 	margin: 12px;
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-up')} {
+@media #{map-get($display-breakpoints, "sm-and-up")} {
 	::v-deep .v-skeleton-loader__avatar {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 		margin: 12px 36px;
 	}
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get($display-breakpoints, "md-and-up")} {
 	::v-deep .v-skeleton-loader__avatar {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		/* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
 		margin: 24px 48px;
 	}
 }

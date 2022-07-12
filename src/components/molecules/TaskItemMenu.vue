@@ -241,7 +241,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// stylelint-disable sh-waqar/declaration-use-variable
+// stylelint-disable scale-unlimited/declaration-strict-value
 .task-action {
 	min-height: 25px;
 }
@@ -252,6 +252,6 @@ export default {
 	margin-top: -2px;
 	margin-right: 4px;
 	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
+	color: rgb(0 0 0 / 0.87);
 }
 </style>

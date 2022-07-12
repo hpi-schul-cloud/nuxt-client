@@ -418,7 +418,7 @@ $tablet-portrait-width: 768px;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
 		background-color: var(--color-white);
-		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
+		box-shadow: -8px 0 17px -7px rgb(0 0 0 / 0.75);
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;

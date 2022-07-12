@@ -96,16 +96,16 @@ export default {
 
 <style scoped>
 .v-list-item__icon {
-  margin-right: var(--space-xs);
-  margin-left: var(--space-xs);
+	margin-right: var(--space-xs);
+	margin-left: var(--space-xs);
 }
 
 .v-list-item__action {
-  margin-top: var(--space-xs);
-  margin-bottom: var(--space-xs);
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
 }
 
 .v-list-item:focus {
-  outline: none;
+	outline: none;
 }
 </style>
