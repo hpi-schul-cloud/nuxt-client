@@ -9,7 +9,6 @@ const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"; // NODE_ENV=production for all travis build
 
 const serverMiddlewareList = [
-	"@serverMiddleware/nuxtversion",
 	"@serverMiddleware/proxy",
 	"@serverMiddleware/csp/cors",
 	"@serverMiddleware/csp/security_headers",
