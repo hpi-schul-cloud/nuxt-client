@@ -231,10 +231,16 @@ describe("@pages/rooms/_id/index.vue", () => {
 		});
 
 		it("should have the headline menu items", () => {
+			// @ts-ignore
+			envConfigModule.setEnvs({
+				FEATURE_COURSE_COPY: true,
+				FEATURE_COURSE_COPY_ENABLED: true,
+				FEATURE_COURSE_SHARE: true,
+			});
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
-			expect(menuItems).toHaveLength(2);
+			expect(menuItems).toHaveLength(4);
 			expect(
 				findMenuItems(
 					wrapper.vm.$i18n.t("common.actions.edit") +
@@ -247,11 +253,11 @@ describe("@pages/rooms/_id/index.vue", () => {
 				findMenuItems(wrapper.vm.$i18n.t("common.actions.invite"), menuItems)
 			).toBe(true);
 			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.duplicate"), menuItems)
-			).toBe(false);
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
+			).toBe(true);
 			expect(
 				findMenuItems(wrapper.vm.$i18n.t("common.actions.share"), menuItems)
-			).toBe(false);
+			).toBe(true);
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
@@ -265,14 +271,14 @@ describe("@pages/rooms/_id/index.vue", () => {
 			).toBe(true);
 		});
 
-		it("should have 'Copy/Duplicate Course' menu if 'FEATURE_COURSE_COPY' flag set to true", () => {
+		it("should have 'Copy Course' menu if 'FEATURE_COURSE_COPY' flag set to true", () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
 			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.duplicate"), menuItems)
+				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
 			).toBe(true);
 		});
 
