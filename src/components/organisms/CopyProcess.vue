@@ -114,9 +114,9 @@ export default {
 				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
 				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
 				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
-				LESSON_CONTENT: this.$t(
+				LESSON_CONTENT: `${this.$t(
 					"components.molecules.copyResult.label.lessonContent"
-				),
+				)} - ${item.title}`,
 				LESSON_CONTENT_GROUP: this.$t(
 					"components.molecules.copyResult.label.lessonContentGroup"
 				),
