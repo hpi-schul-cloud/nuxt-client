@@ -262,7 +262,7 @@ export default {
 						envConfigModule.getEnv.FEATURE_COURSE_COPY_ENABLED
 							? this.copyRoom()
 							: (window.location.href = `/courses/${this.courseId}/copy`),
-					name: this.$t("common.actions.duplicate"),
+					name: this.$t("common.actions.copy"),
 					dataTestId: "title-menu-copy",
 				});
 			}
