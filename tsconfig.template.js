@@ -1,6 +1,6 @@
 module.exports = {
 	compilerOptions: {
-		target: "ES5",
+		target: "ES6",
 		module: "ESNext",
 		moduleResolution: "Node",
 		lib: ["ESNext", "ESNext.AsyncIterable", "DOM"],
