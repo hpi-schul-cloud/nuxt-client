@@ -6,6 +6,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		outlined
+		data-testid="content-card-task"
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -13,7 +14,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text>
+		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
@@ -23,6 +24,7 @@
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
 						:show="true"
+						data-testid="content-card-task-menu"
 					/>
 				</div>
 			</div>
@@ -40,6 +42,7 @@
 		<v-card-text
 			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
+			data-testid="content-card-task-info"
 		>
 			<div class="chip-items-group">
 				<v-chip
@@ -68,7 +71,7 @@
 				/>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1 mt-2">
+		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
@@ -274,12 +277,14 @@ export default {
 							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
+					dataTestId: "content-card-task-menu-edit",
 				});
 
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.copyCard(),
 					name: this.$t("common.actions.copy"),
+					dataTestId: "content-card-task-menu-copy",
 				});
 
 				if (!this.isDraft && !this.isFinished) {
@@ -287,6 +292,7 @@ export default {
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
+						dataTestId: "content-card-task-menu-revert",
 					});
 				}
 
@@ -294,6 +300,7 @@ export default {
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
+					dataTestId: "content-card-task-menu-remove",
 				});
 			}
 
@@ -306,11 +313,13 @@ export default {
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
+					dataTestId: "content-card-task-menu-restore",
 				});
 				roleBasedMoreActions[Roles.Student].push({
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
+					dataTestId: "content-card-task-menu-restore",
 				});
 			}
 			return roleBasedMoreActions;
