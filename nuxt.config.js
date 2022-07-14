@@ -178,12 +178,7 @@ module.exports = {
 				});
 			}
 		},
-		postcss: {
-			plugins: [require("postcss-color-mod-function")()],
-			preset: {
-				autoprefixer: {},
-			},
-		},
+		postcss: null,
 		extractCSS: true,
 		vendor: ["vue-i18n", "jquery"],
 		plugins: [
