@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import ImpressumView from "../views/ImpressumView.vue";
+import ImpressumView from "../pages/ImpressumView.vue";
+import HomeView from "../pages/HomeView.vue";
 
 const routes: Array<RouteRecordRaw> = [
+	{
+		path: "/",
+		name: "home",
+		component: HomeView,
+	},
 	{
 		path: "/imp",
 		name: "imp",
