@@ -6,6 +6,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		outlined
+		data-testid="content-card-task"
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -13,7 +14,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text>
+		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
@@ -40,6 +41,7 @@
 		<v-card-text
 			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
+			data-testid="content-card-task-info"
 		>
 			<div class="chip-items-group">
 				<v-chip
@@ -68,7 +70,7 @@
 				/>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1 mt-2">
+		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"

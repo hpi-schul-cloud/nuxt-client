@@ -6,6 +6,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		outlined
+		data-testid="content-card-lesson"
 		@click="handleClick"
 		@keydown.enter="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -13,7 +14,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text class="pb-0">
+		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
@@ -31,7 +32,11 @@
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
-		<v-card-text v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section">
+		<v-card-text
+			v-if="showChip"
+			class="ma-0 pb-0 pt-0 submitted-section"
+			data-testid="content-card-lesson-info"
+		>
 			<div class="chip-items-group">
 				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
@@ -41,7 +46,7 @@
 			</div>
 		</v-card-text>
 
-		<v-card-actions class="pt-1">
+		<v-card-actions class="pt-1" data-testid="content-card-lesson-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
