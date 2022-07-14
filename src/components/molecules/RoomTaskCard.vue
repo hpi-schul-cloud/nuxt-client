@@ -24,6 +24,7 @@
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
 						:show="true"
+						data-testid="content-card-task-menu"
 					/>
 				</div>
 			</div>
@@ -276,12 +277,14 @@ export default {
 							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
+					dataTestId: "content-card-task-menu-edit",
 				});
 
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.copyCard(),
 					name: this.$t("common.actions.copy"),
+					dataTestId: "content-card-task-menu-copy",
 				});
 
 				if (!this.isDraft && !this.isFinished) {
@@ -289,6 +292,7 @@ export default {
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
+						dataTestId: "content-card-task-menu-revert",
 					});
 				}
 
@@ -296,6 +300,7 @@ export default {
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
+					dataTestId: "content-card-task-menu-remove",
 				});
 			}
 
@@ -308,11 +313,13 @@ export default {
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
+					dataTestId: "content-card-task-menu-restore",
 				});
 				roleBasedMoreActions[Roles.Student].push({
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
+					dataTestId: "content-card-task-menu-restore",
 				});
 			}
 			return roleBasedMoreActions;

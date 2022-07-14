@@ -25,6 +25,7 @@
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
 						:show="true"
+						data-testid="content-card-lesson-menu"
 					/>
 				</div>
 			</div>
@@ -149,6 +150,7 @@ export default {
 							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit?returnUrl=rooms/${this.room.roomId}`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
+					dataTestId: "content-card-lesson-menu-edit",
 				});
 
 				if (envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
@@ -156,6 +158,7 @@ export default {
 						icon: this.icons.mdiContentCopy,
 						action: () => this.copyCard(),
 						name: this.$t("common.actions.copy"),
+						dataTestId: "content-card-lesson-menu-copy",
 					});
 				}
 
@@ -164,6 +167,7 @@ export default {
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
+						dataTestId: "content-card-lesson-menu-revert",
 					});
 				}
 
@@ -172,6 +176,7 @@ export default {
 						icon: this.icons.mdiShareVariant,
 						action: () => this.$emit("open-modal", this.lesson.id),
 						name: this.$t("pages.room.lessonCard.label.share"),
+						dataTestId: "content-card-lesson-menu-share",
 					});
 				}
 
@@ -179,6 +184,7 @@ export default {
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-lesson"),
 					name: this.$t("common.actions.remove"),
+					dataTestId: "content-card-lesson-menu-remove",
 				});
 			}
 
