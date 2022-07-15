@@ -339,7 +339,7 @@ export default {
 		async onCopyProcessDialogClose() {
 			if (this.copyProcess.id === "") return;
 			this.$notifier({
-				text: this.$t("pages.room.copy.course.message.created"),
+				text: this.$t("pages.room.copy.course.message.copied"),
 				status: "success",
 			});
 			this.$router.push(`/rooms/${this.copyProcess.id}`);

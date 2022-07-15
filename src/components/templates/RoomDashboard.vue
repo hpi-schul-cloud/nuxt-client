@@ -387,7 +387,7 @@ export default {
 				this.copyProcess.loading = copyModule.getLoading;
 
 				this.$notifier({
-					text: this.$t("pages.room.copy.lesson.message.created"),
+					text: this.$t("pages.room.copy.lesson.message.copied"),
 					status: "success",
 				});
 			}

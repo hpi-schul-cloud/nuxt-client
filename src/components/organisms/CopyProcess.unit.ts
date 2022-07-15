@@ -337,11 +337,7 @@ describe("@components/organisms/CopyProcess", () => {
 							type: wrapper.vm.typesEnum.LessonContent,
 							title: "lesson-content",
 						})
-					).toStrictEqual(
-						`${wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContent"
-						)} - lesson-content`
-					);
+					).toStrictEqual("lesson-content");
 				});
 
 				it("when type is 'LESSON_CONTENT_GROUP'", () => {
