@@ -1,7 +1,7 @@
 <template><impressum /></template>
 
-<script>
-import Impressum from "../components/impressumNew.vue";
+<script lang="ts">
+import Impressum from "../components/ImpressumNew.vue";
 export default {
 	components: {
 		Impressum,

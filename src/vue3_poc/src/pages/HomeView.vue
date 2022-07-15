@@ -27,7 +27,7 @@ import { useStore } from "../store";
 export default {
 	setup() {
 		const store = useStore();
-		const persistentValue: string = "Composition api page";
+		const persistentValue = "Composition api page";
 		const reactiveValue: object = ref("Reactive value");
 		const counter = ref(0);
 		const increase = (): void => {
