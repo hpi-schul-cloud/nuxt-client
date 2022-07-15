@@ -10,6 +10,9 @@
   - currently beta version is available
   - has some errors when installing with vue-cli <https://next.vuetifyjs.com/en/getting-started/installation/#vite>
 - [ ] axios integration
-- [ ] jest integration
+- [ ] jest/vitest integration
   - [ ] unit tests for components
   - [ ] unit tests for pinia
+- [ ] eslint configuration
+- [ ] prettier configuration
+- [ ] stylelint configuration?
