@@ -17,11 +17,11 @@ In order to prevent conflicts with the configuration in the Nuxt client it is re
   - currently beta version is available
   - has some errors when installing with vue-cli <https://next.vuetifyjs.com/en/getting-started/installation/#vite>
 - [ ] axios integration
-- [ ] jest/vitest integration
-  - [ ] unit tests for components
-  - [ ] unit tests for pinia
 - [x] vitest integration
   - [x] unit tests for components
+  - [ ] unit tests for pinia
+- [ ] jest integration
+  - [ ] unit tests for components
   - [ ] unit tests for pinia
 - [x] eslint configuration
 - [x] prettier configuration
