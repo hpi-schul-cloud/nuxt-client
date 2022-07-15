@@ -2,7 +2,7 @@
 
 ## Important note
 
-In order to prevent conflicts with the configuration in the Nuxt client it is recommended to open this project in its own workspace. This affects for instance ESLint and the Vitest plugin.
+In order to prevent conflicts with the configuration in the Nuxt client it is recommended to open this project in its own workspace. This affects for instance the Vitest plugin (see below).
 
 ## Checklist
 
@@ -121,6 +121,20 @@ import { defineConfig } from "vitest/config";
 // …
 test: {
 	environment: "jsdom";
+}
+```
+
+Note: When the project is opened inside the parent Nuxt project the Vitest it plugin is unable to detect Vitest properly. If enable the Vitest plugin manually in the main VSCode settings there will be conflicts with the Jest plugin used in the Nuxt project.
+
+`settings.json`
+
+```json
+{
+	"vitest.enable": true,
+	"vitest.include": [
+		"vue3_poc/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"
+	]
+	//...
 }
 ```
 
