@@ -1,5 +1,7 @@
 {
-  "singleQuote": false,
-  "semi": true,
-  "vueIndentScriptAndStyle": true
+	"singleQuote": false,
+	"semi": true,
+	"vueIndentScriptAndStyle": true,
+	"useTabs": true,
+	"trailingComma": "es5"
 }
