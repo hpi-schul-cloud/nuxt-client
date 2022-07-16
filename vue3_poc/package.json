@@ -7,6 +7,7 @@
 		"build-only": "vite build",
 		"lint:markup": "vue-tsc --noEmit",
 		"lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
+		"lint:style": "stylelint src/**/*.{css,scss,vue}",
 		"preview": "vite preview --port 4173",
 		"test:unit": "vitest --environment jsdom"
 	},
@@ -26,6 +27,9 @@
 		"eslint-plugin-vue": "^9.2.0",
 		"jsdom": "^20.0.0",
 		"prettier": "^2.7.1",
+		"stylelint": "^14.9.1",
+		"stylelint-config-recommended": "^8.0.0",
+		"stylelint-config-standard": "^26.0.0",
 		"typescript": "^4.7.4",
 		"vite": "^3.0.0",
 		"vitest": "^0.18.0",
