@@ -19,13 +19,16 @@ In order to prevent conflicts with the configuration in the Nuxt client it is re
 - [ ] axios integration
 - [x] vitest integration
   - [x] unit tests for components
+    - [ ] fix mounting components
   - [ ] unit tests for pinia
 - [ ] jest integration
   - [ ] unit tests for components
   - [ ] unit tests for pinia
 - [x] eslint configuration
 - [x] prettier configuration
+  - [ ] fix (missing) dangling commas in arrays and objects
 - [ ] stylelint configuration?
+  - [ ] fix erros with tabs in styles (.vue and .css)
 
 This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
