@@ -1,9 +1,9 @@
 <template>
-	<router-view />
+  <router-view />
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+  import { defineComponent } from "vue";
 
-export default defineComponent({});
+  export default defineComponent({});
 </script>
