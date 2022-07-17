@@ -128,6 +128,7 @@ export default {
 					"components.molecules.copyResult.label.submissions"
 				),
 				TASK: `${this.$t("common.words.task")} - ${item.title}`,
+				TASK_GROUP: this.$t("components.molecules.copyResult.label.taskGroup"),
 				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
 				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 			};
