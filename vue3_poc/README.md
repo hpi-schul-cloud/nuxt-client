@@ -8,7 +8,7 @@ In order to prevent conflicts with the configuration in the Nuxt client it is re
 
 - [x] vite installation
 - [x] using existing component as it is (impressum.vue)
-- [x] using composition api with ts (@pages/Homeview.vue)
+- [x] using composition api with ts (@/pages/Homeview.vue)
 - [x] router implementation (@src/router/index.ts)
 - [x] pinia implementation (@src/store/index.ts)
 - [x] using pinia in component (@pages/HomeView.vue)
@@ -17,18 +17,13 @@ In order to prevent conflicts with the configuration in the Nuxt client it is re
   - currently beta version is available
   - has some errors when installing with vue-cli <https://next.vuetifyjs.com/en/getting-started/installation/#vite>
 - [ ] axios integration
-- [x] vitest integration
+- [x] jest integration
   - [x] unit tests for components
-    - [ ] fix mounting components
-  - [ ] unit tests for pinia
-- [ ] jest integration
-  - [ ] unit tests for components
-  - [ ] unit tests for pinia
+  - [x] unit tests for pinia
 - [x] eslint configuration
 - [x] prettier configuration
-  - [ ] fix (missing) dangling commas in arrays and objects
-- [ ] stylelint configuration?
-  - [ ] fix erros with tabs in styles (.vue and .css)
+- [x] stylelint configuration?
+  - [ ] fix linter errors
 
 This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
@@ -77,13 +72,21 @@ npm run test:unit
 
 ## Additional findings
 
-### Initialize project
+### Initialize a new project
 
 In order to get the latest version of the project setup it's recommended to use:
 
 ```sh
 npm init vue@latest
 ```
+
+### Guide
+
+A good guide for building a project using Vue3, Vite and Typescript can be found here:
+
+[https://miyauchi.dev/posts/vite-vue3-typescript/](https://miyauchi.dev/posts/vite-vue3-typescript/)
+
+[https://github.com/TomokiMiyauci/vite-vue3-template](https://github.com/TomokiMiyauci/vite-vue3-template)
 
 ### Set dev server port
 
@@ -98,100 +101,33 @@ export default defineConfig({
 });
 ```
 
-### Fix import of .vue files
+### Jest vs Vitest
 
-`src/shims-vue.d.ts`
+We should stick with Jest for now because:
 
-```ts
-/* eslint-disable */
-declare module "*.vue" {
-	import type { DefineComponent } from "vue";
-	const component: DefineComponent<{}, {}, any>;
-	export default component;
-}
-```
+- Vitest is not ready for production
+- Vitest is not 100% compatible with Jest, e.g. `vi.fn()`
+- migration of existing tests is a lot of work
 
-### Vitest
+### Jest
 
-Install Vitest extension (VSCode): [https://github.com/vitest-dev/vscode](https://github.com/vitest-dev/vscode)
+A guide for adding Jest can be found here:
 
-Fix error running tests: “document not found”:
-
-`vite.config.ts`
-
-```ts
-import { defineConfig } from "vitest/config";
-// …
-test: {
-	environment: "jsdom";
-}
-```
-
-Note: When the project is opened inside the parent Nuxt project the Vitest it plugin is unable to detect Vitest properly. If enable the Vitest plugin manually in the main VSCode settings there will be conflicts with the Jest plugin used in the Nuxt project.
-
-`settings.json`
-
-```json
-{
-	"vitest.enable": true,
-	"vitest.include": [
-		"vue3_poc/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"
-	]
-	//...
-}
-```
-
-Additional information:
-
-[https://vitest.dev/config/#configuration](https://vitest.dev/config/#configuration)
-
-[https://github.com/kwai-explore/vscode-vitest-runner/issues/1](https://github.com/kwai-explore/vscode-vitest-runner/issues/1)
-
-### ESlint and Prettier
-
-install libraries:
+[https://dev.to/vuesomedev/add-testing-to-vite-4b75](https://dev.to/vuesomedev/add-testing-to-vite-4b75)
 
 ```sh
-npm install --save-dev eslint eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue prettier @vue/eslint-config-typescript @typescript-eslint/eslint-plugin @typescript-eslint/parser
-
+npm install --save-dev jest @types/jest ts-jest vue-jest@next @vue/test-utils@next ts-node
 ```
 
-`.eslintrc.js`
-
-```js
-module.exports = {
-	root: true,
-	env: {
-		node: true,
-	},
-	extends: [
-		"plugin:vue/vue3-essential",
-		"eslint:recommended",
-		"@vue/typescript/recommended",
-		"plugin:prettier/recommended",
-	],
-	parserOptions: {
-		ecmaVersion: 2020,
-	},
-	rules: {
-		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-		"no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-	},
-};
-```
-
-Enable autoformatting:
-
-`.vscode/settings.json`
+`tsconfig.json`
 
 ```json
 {
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	}
+	"types": ["@types/jest" /* ... */]
 }
 ```
+
+    	"types": ["vite/client", ],
 
 ### Env Variables
 
@@ -199,8 +135,10 @@ Vite exposes env variables on the special import.meta.env object.
 
 [https://vitejs.dev/guide/env-and-mode.html#env-variableshttps://vitejs.dev/guide/env-and-mode.html#env-variables](https://vitejs.dev/guide/env-and-mode.html#env-variableshttps://vitejs.dev/guide/env-and-mode.html#env-variables)
 
-`env.d.ts`
+`tsconfig.json`
 
-```ts
-/// <reference types="vite/client" />
+```json
+{
+	"types": ["vite/client" /* ... */]
+}
 ```
