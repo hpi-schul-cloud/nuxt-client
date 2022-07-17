@@ -37,22 +37,22 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: "Dataport AöR",
-			};
-		},
-	};
+export default {
+	data() {
+		return {
+			title: "Dataport AöR",
+		};
+	},
+};
 </script>
 
 <style lang="scss" scoped>
-	.impressum-container {
-		display: flex;
-		justify-content: center;
-	}
+.impressum-container {
+	display: flex;
+	justify-content: center;
+}
 
-	.impressum-max-width {
-		max-width: 720px;
-	}
+.impressum-max-width {
+	max-width: 720px;
+}
 </style>

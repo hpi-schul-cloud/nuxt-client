@@ -17,5 +17,16 @@
 		"ecmaVersion": 2021
 	},
 	"plugins": [],
-	"rules": {}
+	"rules": {
+		// note you must disable the base rule as it can report incorrect errors
+		"indent": "off",
+		"@typescript-eslint/indent": ["error", "tab"],
+		"comma-dangle": [
+			"error",
+			{
+				"arrays": "always-multiline",
+				"objects": "always-multiline"
+			}
+		]
+	}
 }
