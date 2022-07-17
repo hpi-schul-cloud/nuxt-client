@@ -123,8 +123,6 @@ npm install --save-dev jest @types/jest ts-jest vue-jest@next @vue/test-utils@ne
 }
 ```
 
-    	"types": ["vite/client", ],
-
 ### Env Variables
 
 Vite exposes env variables on the special import.meta.env object.
