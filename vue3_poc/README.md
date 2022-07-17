@@ -1,9 +1,5 @@
 # Vue 3 + Vite
 
-## Important note
-
-In order to prevent conflicts with the configuration in the Nuxt client it is recommended to open this project in its own workspace. This affects for instance the Vitest plugin (see below).
-
 ## Checklist
 
 - [x] vite installation
