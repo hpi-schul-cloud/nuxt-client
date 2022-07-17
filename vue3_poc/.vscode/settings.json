@@ -1,0 +1,15 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	},
+	"files.eol": "\n",
+	"files.encoding": "utf8",
+	"files.trimTrailingWhitespace": true,
+	"[markdown]": {
+		"files.trimTrailingWhitespace": false
+	},
+	"files.insertFinalNewline": true,
+	"prettier.useTabs": true
+}
