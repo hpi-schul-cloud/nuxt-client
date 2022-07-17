@@ -18,9 +18,6 @@
 	},
 	"plugins": [],
 	"rules": {
-		// note you must disable the base rule as it can report incorrect errors
-		"indent": "off",
-		"@typescript-eslint/indent": ["error", "tab"],
 		"comma-dangle": [
 			"error",
 			{
