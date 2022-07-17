@@ -14,7 +14,7 @@
 			<br />
 			<div>
 				<button @click="increaseCounter">
-					Counter in the store {{ storeCounter }}
+					Counter in the store {{ store.counter }}
 				</button>
 			</div>
 		</div>
@@ -23,10 +23,10 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import { useStore } from "../store";
+import { useCounterStore } from "@/store/counter";
 export default {
 	setup() {
-		const store = useStore();
+		const store = useCounterStore();
 		const persistentValue = "Composition api page";
 		const reactiveValue: object = ref("Reactive value");
 		const counter = ref(0);
@@ -34,9 +34,8 @@ export default {
 			counter.value++;
 		};
 
-		// const storeCounter = ref(store.getCounter);
 		const increaseCounter = (): void => {
-			store.setCounter();
+			store.increment();
 		};
 
 		return {
@@ -46,7 +45,6 @@ export default {
 			counter,
 			store,
 			increaseCounter,
-			storeCounter: store.getCounter,
 		};
 	},
 };
