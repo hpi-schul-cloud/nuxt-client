@@ -152,6 +152,6 @@ export default {
 }
 
 .partial {
-	color: var(--color-accent);
+	color: var(--color-warning);
 }
 </style>
