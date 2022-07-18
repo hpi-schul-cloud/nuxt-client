@@ -334,12 +334,11 @@ describe("@components/organisms/CopyProcess", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
 					const method = wrapper.vm.getItemTitle;
 					expect(
-						method({ type: wrapper.vm.typesEnum.LessonContent })
-					).toStrictEqual(
-						wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContent"
-						)
-					);
+						method({
+							type: wrapper.vm.typesEnum.LessonContent,
+							title: "lesson-content",
+						})
+					).toStrictEqual("lesson-content");
 				});
 
 				it("when type is 'LESSON_CONTENT_GROUP'", () => {
