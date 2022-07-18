@@ -9,7 +9,8 @@
 - [x] pinia implementation (@src/store/index.ts)
 - [x] using pinia in component (@pages/HomeView.vue)
 - [x] typescript integration
-- [ ] vuetify@3 integration
+- [x] vuetify@3 integration
+  - [ ] define vuetify components globally in jest tests
   - currently beta version is available
   - has some errors when installing with vue-cli <https://next.vuetifyjs.com/en/getting-started/installation/#vite>
 - [ ] axios integration
@@ -21,6 +22,7 @@
 - [x] stylelint configuration?
   - [ ] fix linter errors
 - [ ] generalize imports using index.ts files
+- [ ] pinned dependencies
 
 This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 

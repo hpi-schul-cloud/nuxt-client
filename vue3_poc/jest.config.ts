@@ -6,6 +6,9 @@ const config: Config.InitialOptions = {
 		"^.+\\.ts$": "ts-jest",
 		"^.+\\.vue$": "vue-jest",
 	},
+	moduleNameMapper: {
+		"\\.(svg)$": "<rootDir>/src/mocks/file-mock.ts",
+	},
 	testPathIgnorePatterns: ["/node_modules/"],
 };
 
