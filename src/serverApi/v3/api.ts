@@ -250,6 +250,7 @@ export enum CopyApiResponseTypeEnum {
     Metadata = 'METADATA',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
+    TaskGroup = 'TASK_GROUP',
     TimeGroup = 'TIME_GROUP',
     UserGroup = 'USER_GROUP'
 }
