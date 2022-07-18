@@ -99,11 +99,7 @@ export default defineConfig({
 
 ### Jest vs Vitest
 
-We should stick with Jest for now because:
-
-- Vitest is not ready for production
-- Vitest is not 100% compatible with Jest, e.g. `vi.fn()`
-- migration of existing tests is a lot of work
+See [https://docs.dbildungscloud.de/display/DBH/Jest+vs+Vitest](https://docs.dbildungscloud.de/display/DBH/Jest+vs+Vitest)
 
 ### Jest
 
