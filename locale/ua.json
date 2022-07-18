@@ -135,7 +135,6 @@
 	"components.molecules.copyResult.title": "Копія-Результат",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
-	"components.molecules.copyResult.label.taskGroup": "Група задач",
 	"components.molecules.copyResult.label.lessonContent": "Зміст уроку",
 	"components.molecules.copyResult.label.lessonContentGroup": "Група змісту уроку",
 	"components.molecules.copyResult.label.file": "Файл",
