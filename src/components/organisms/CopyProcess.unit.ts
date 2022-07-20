@@ -119,6 +119,8 @@ describe("@components/organisms/CopyProcess", () => {
 				File: "FILE",
 				FileGroup: "FILE_GROUP",
 				Leaf: "LEAF",
+				LearnMaterial: "LEARN_MATERIAL",
+				LearnMaterialGroup: "LEARN_MATERIAL_GROUP",
 				Lesson: "LESSON",
 				LessonContent: "LESSON_CONTENT",
 				LessonContentGroup: "LESSON_CONTENT_GROUP",

@@ -135,6 +135,8 @@
 	"components.molecules.copyResult.title": "Копія-Результат",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
+	"components.molecules.copyResult.label.learnMaterial": "Learning store матеріал",
+	"components.molecules.copyResult.label.learnMaterialGroup": "Learning store контент",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
 	"components.molecules.copyResult.label.file": "Файл",
 	"components.molecules.copyResult.label.files": "Файли",

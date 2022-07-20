@@ -113,6 +113,12 @@ export default {
 				FILE: this.$t("components.molecules.copyResult.label.file"),
 				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
 				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
+				LEARN_MATERIAL: this.$t(
+					"components.molecules.copyResult.label.learnMaterial"
+				),
+				LEARN_MATERIAL_GROUP: this.$t(
+					"components.molecules.copyResult.label.learnMaterialGroup"
+				),
 				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
 				LESSON_CONTENT: item.title,
 				LESSON_CONTENT_GROUP: this.$t(
