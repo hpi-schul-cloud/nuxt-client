@@ -119,8 +119,8 @@ describe("@components/organisms/CopyProcess", () => {
 				File: "FILE",
 				FileGroup: "FILE_GROUP",
 				Leaf: "LEAF",
-				LearnMaterial: "LEARN_MATERIAL",
-				LearnMaterialGroup: "LEARN_MATERIAL_GROUP",
+				LernstoreMaterial: "LERNSTORE_MATERIAL",
+				LernstoreMaterialGroup: "LERNSTORE_MATERIAL_GROUP",
 				Lesson: "LESSON",
 				LessonContent: "LESSON_CONTENT",
 				LessonContentGroup: "LESSON_CONTENT_GROUP",
@@ -318,6 +318,33 @@ describe("@components/organisms/CopyProcess", () => {
 					);
 				});
 
+				it("when type is 'LERNSTORE_MATERIAL'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.LernstoreMaterial,
+							title: "test-lesson-material",
+							status: wrapper.vm.statusEnum.Success,
+						})
+					).toStrictEqual("test-lesson-material");
+				});
+
+				it("when type is 'LERNSTORE_MATERIAL_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.LernstoreMaterialGroup,
+							status: wrapper.vm.statusEnum.Success,
+						})
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lernstoreMaterialGroup"
+						)
+					);
+				});
+
 				it("when type is 'LESSON'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
 					const method = wrapper.vm.getItemTitle;
@@ -398,6 +425,16 @@ describe("@components/organisms/CopyProcess", () => {
 					).toStrictEqual(
 						`${wrapper.vm.$i18n.t("common.words.task")} - test-task`
 					);
+				});
+
+				it("when type is 'TASK_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.TaskGroup,
+						})
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.tasks"));
 				});
 
 				it("when type is 'TIME_GROUP'", () => {
