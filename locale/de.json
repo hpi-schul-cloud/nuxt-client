@@ -406,6 +406,7 @@
 	"components.molecules.copyResult.title": "Kopier-Ergebnis",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
+	"components.molecules.copyResult.label.lernstoreMaterialGroup": "Lern-Materialien",
 	"components.molecules.copyResult.label.lessonContentGroup": "Unterrichtsinhalte",
 	"components.molecules.copyResult.label.file": "Datei",
 	"components.molecules.copyResult.label.files": "Dateien",
