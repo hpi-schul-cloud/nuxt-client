@@ -76,7 +76,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 
@@ -88,7 +87,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 
@@ -102,7 +100,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: true,
 				userRole: "teacher",
 			});
 
@@ -117,7 +114,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 
@@ -138,7 +134,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 
@@ -159,7 +154,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 
@@ -183,7 +177,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 			// @ts-ignore
@@ -209,7 +202,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 			// @ts-ignore
@@ -238,7 +230,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
-				show: false,
 				userRole: "teacher",
 			});
 			// @ts-ignore

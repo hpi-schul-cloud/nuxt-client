@@ -224,8 +224,6 @@ describe("@components/molecules/TaskItemTeacher", () => {
 
 	describe("when menu is used", () => {
 		describe("mouse events", () => {
-			it.todo("should show menu btn on hover");
-
 			it("should open menu on btn click", async () => {
 				const wrapper = getWrapper({
 					task: drafts[1],
@@ -234,7 +232,6 @@ describe("@components/molecules/TaskItemTeacher", () => {
 				const menuBtn = wrapper.find(".v-btn");
 				await menuBtn.trigger("click");
 
-				expect(wrapper.vm.showMenu).toBe(true);
 				expect(wrapper.vm.isMenuActive).toBe(true);
 				expect(wrapper.find(".menuable__content__active").exists()).toBe(true);
 			});

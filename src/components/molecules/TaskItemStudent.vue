@@ -39,7 +39,6 @@
 			</v-list-item-action>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
 				<task-item-menu
-					:show="showMenu"
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
 					user-role="student"
@@ -135,14 +134,6 @@ export default {
 			return !dueDate
 				? this.$t("pages.tasks.labels.noDueDate")
 				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
-		},
-		showMenu() {
-			return (
-				this.$vuetify.breakpoint.mobile ||
-				this.isHovering ||
-				this.isActive ||
-				this.isMenuActive
-			);
 		},
 	},
 	methods: {
