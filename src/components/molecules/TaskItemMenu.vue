@@ -9,7 +9,6 @@
 		>
 			<template #activator="{ on, attrs, value }">
 				<v-btn
-					v-show="show"
 					id="task-menu-btn"
 					v-bind="attrs"
 					icon
@@ -152,10 +151,6 @@ export default {
 		courseId: {
 			type: String,
 			default: "",
-		},
-		show: {
-			type: Boolean,
-			required: true,
 		},
 		userRole: {
 			type: String,

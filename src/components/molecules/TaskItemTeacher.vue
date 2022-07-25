@@ -64,7 +64,6 @@
 			</section>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
 				<task-item-menu
-					:show="showMenu"
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
 					:task-title="task.name"
@@ -151,14 +150,6 @@ export default {
 			return this.task.description
 				? `${this.$t("common.words.topic")} ${this.task.description}`
 				: "";
-		},
-		showMenu() {
-			return (
-				this.$vuetify.breakpoint.mobile ||
-				this.isHovering ||
-				this.isActive ||
-				this.isMenuActive
-			);
 		},
 	},
 	methods: {
