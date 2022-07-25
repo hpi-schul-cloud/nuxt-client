@@ -39,7 +39,7 @@
 					<v-tab>
 						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
 						<span class="d-none d-sm-inline" data-testid="learnContent">{{
-							$t("pages.rooms.tabLabel.learnContent")
+							$t("common.words.learnContent")
 						}}</span>
 					</v-tab>
 					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
