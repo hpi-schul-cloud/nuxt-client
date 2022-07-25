@@ -106,7 +106,7 @@ export default {
 	methods: {
 		getItemTitle(item) {
 			const titles = {
-				BOARD: this.$t("common.labels.room"),
+				BOARD: this.$t("common.words.learnContent"),
 				CONTENT: this.$t("components.molecules.copyResult.label.content"),
 				COURSE: this.$t("common.labels.room"),
 				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
