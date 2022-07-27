@@ -61,7 +61,7 @@ export default {
   watch: {
     notifierData() {
       this.show = true;
-
+      if (this.timeout === 0) return;
       // todo improve timeout to cancel old one
       setTimeout(() => {
         this.show = false;
@@ -73,6 +73,7 @@ export default {
       notifierModule.show({
         text: "Test aus created",
         status: "success",
+        timeout: 0,
       });
     }, 500);
   },
