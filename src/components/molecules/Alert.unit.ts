@@ -1,13 +1,13 @@
 import { mount } from "@vue/test-utils";
-import Snackbar from "./Snackbar.vue";
+import Alert from "./Alert.vue";
 import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule from "@/store/notifier";
+import NotifierModule, { AlertPayload } from "@/store/notifier";
 
 declare var createComponentMocks: Function;
 
 const getWrapper: any = (device = "desktop", options?: object) => {
-	return mount(Snackbar, {
+	return mount(Alert, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
@@ -19,7 +19,7 @@ const getWrapper: any = (device = "desktop", options?: object) => {
 	});
 };
 
-describe("Snackbar", () => {
+describe("Alert", () => {
 	beforeEach(() => {
 		setupStores({
 			notifier: NotifierModule,
@@ -36,26 +36,17 @@ describe("Snackbar", () => {
 
 	it("should set computed properties", async () => {
 		const wrapper = getWrapper();
-		const data = {
+		const data: AlertPayload = {
 			text: "hello world",
 			status: "success",
-			position: ["bottom", "left"],
 			timeout: 3000,
-			vertical: true,
-			multiline: true,
-			closeButtonColor: "black",
 		};
 		notifierModule.setNotifier(data);
 		await wrapper.vm.$nextTick();
 
 		expect(wrapper.vm.show).toBe(true);
 		expect(wrapper.vm.notifierData).toStrictEqual(data);
-		expect(wrapper.vm.statusColor).toStrictEqual("var(--color-success)");
-		expect(wrapper.vm.position).toStrictEqual(["bottom", "left"]);
 		expect(wrapper.vm.timeout).toStrictEqual(3000);
-		expect(wrapper.vm.vertical).toStrictEqual(true);
-		expect(wrapper.vm.multiline).toStrictEqual(true);
-		expect(wrapper.vm.closeButtonColor).toStrictEqual("black");
 	});
 
 	it("should set position 'bottom, center' as default if the device is mobile", async () => {

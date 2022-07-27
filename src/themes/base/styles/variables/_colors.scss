@@ -30,7 +30,7 @@ $darken: 25%;
 	--color-success: #13ba98;
 	--color-success-light: color-mod(var(--color-success) tint(#{$brighten}));
 	--color-success-dark: color-mod(var(--color-success) shade(#{$darken}));
-	--color-warning: #ffd611;
+	--color-warning: #ff8311;
 	--color-warning-light: color-mod(var(--color-warning) tint(#{$brighten}));
 	--color-warning-dark: color-mod(var(--color-warning) shade(#{$darken}));
 	--color-danger: #ff1134;
