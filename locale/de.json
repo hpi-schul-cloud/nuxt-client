@@ -650,6 +650,7 @@
 	"components.molecules.TaskItemMenu.finish": "Abschließen",
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",
 	"components.molecules.TaskItemMenu.confirmDelete.text": "Bist du dir sicher, dass du die Aufgabe \"{taskTitle}\" löschen möchtest?",
+	"components.molecules.TaskItemMenu.labels.createdAt": "Erstellt am",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.labels.noCoursesAvailable": "Es gibt keinen Kurs mit diesem Namen.",

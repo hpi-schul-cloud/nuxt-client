@@ -672,6 +672,7 @@
 	"components.molecules.TaskItemMenu.finish": "Terminar",
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
 	"components.molecules.TaskItemMenu.confirmDelete.text": "¿Estás seguro de que deseas eliminar la tarea \"{taskTitle}\"?",
+	"components.molecules.TaskItemMenu.labels.createdAt": "Creado en",
 	"pages.impressum.title": "Impresión",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "¿En qué provincia le gustaría iniciar sesión?",

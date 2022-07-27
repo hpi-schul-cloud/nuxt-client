@@ -19,12 +19,7 @@
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						courseName
 					}}</span>
-					<template v-if="isPlanned">
-						{{ `&nbsp;– ${plannedLabel}` }}
-					</template>
-					<template v-else>
-						{{ `&nbsp;– ${dueDateLabel}` }}
-					</template>
+					{{ `&nbsp;– ${taskLabel}` }}
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
@@ -125,17 +120,25 @@ export default {
 			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
 		},
-		dueDateLabel() {
-			const dueDate = this.task.duedate;
+		taskLabel() {
+			const { createdAt, dueDate, availableDate } = this.task;
 
+			if (this.isDraft) {
+				return `${this.$t(
+					"components.molecules.TaskItemMenu.labels.createdAt"
+				)} ${dateFromUTC(createdAt)}`;
+			}
+
+			if (this.isPlanned) {
+				return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
+					availableDate
+				)}`;
+			}
+
+			// TODO: do we really need a label for no submission date?
 			return !dueDate
 				? this.$t("pages.tasks.labels.noDueDate")
 				: `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`;
-		},
-		plannedLabel() {
-			return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
-				this.task.availableDate
-			)}`;
 		},
 		courseName() {
 			const { isSubstitutionTeacher } = this.task.status;
