@@ -370,6 +370,8 @@ export default {
 					text: this.$t("pages.room.copy.lesson.message.copied"),
 					status: "success",
 				});
+
+				await roomModule.fetchContent(this.roomData.roomId);
 			}
 		},
 	},

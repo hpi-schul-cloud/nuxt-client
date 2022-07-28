@@ -404,7 +404,7 @@
 	"components.molecules.importUsersMatch.search": "Benutzerkonto suchen",
 	"components.molecules.importUsersMatch.write": "Vornamen oder Nachnamen eingeben",
 	"components.molecules.importUsersMatch.notFound": "keine Konten gefunden",
-	"components.molecules.copyResult.title": "Kopier-Ergebnis",
+	"components.molecules.copyResult.title": "Die folgenden Inhalte konnten leider nicht kopiert werden",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.lernstoreMaterialGroup": "Lern-Materialien",
