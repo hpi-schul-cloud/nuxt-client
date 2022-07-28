@@ -19,7 +19,9 @@
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						courseName
 					}}</span>
-					{{ `&nbsp;– ${taskLabel}` }}
+					<template v-if="taskLabel">
+						{{ `&nbsp;– ${taskLabel}` }}
+					</template>
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
@@ -121,7 +123,7 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		taskLabel() {
-			const { createdAt, dueDate, availableDate } = this.task;
+			const { createdAt, duedate, availableDate } = this.task;
 
 			if (this.isDraft) {
 				return `${this.$t(
@@ -135,10 +137,11 @@ export default {
 				)}`;
 			}
 
-			// TODO: do we really need a label for no submission date?
-			return !dueDate
-				? this.$t("pages.tasks.labels.noDueDate")
-				: `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`;
+			if (duedate) {
+				return `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`;
+			}
+
+			return undefined;
 		},
 		courseName() {
 			const { isSubstitutionTeacher } = this.task.status;

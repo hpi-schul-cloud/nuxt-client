@@ -749,7 +749,6 @@
 	"pages.tasks.labels.filter": "Фільтрувати за курсом",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
 	"pages.tasks.labels.noCoursesAvailable": "Курсів з такою назвою не існує.",
-	"pages.tasks.labels.noDueDate": "Без дати подання",
 	"pages.tasks.labels.overdue": "Пропущені",
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title": "Наразі у вас немає виконаних завдань.",

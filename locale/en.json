@@ -647,7 +647,6 @@
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",
-	"pages.tasks.labels.noDueDate": "No submission date",
 	"pages.tasks.labels.overdue": "Missed",
 	"pages.tasks.labels.filter": "Filter by course",
 	"pages.tasks.labels.noCourse": "No course assigned",
