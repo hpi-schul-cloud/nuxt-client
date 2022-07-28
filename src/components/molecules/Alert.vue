@@ -12,8 +12,9 @@
 			max-width="400"
 			min-width="200"
 			text
+			:close-icon="mdiClose"
+			border="left"
 		>
-			<div :class="[status]" class="alert_accent"></div>
 			<div class="alert_text mr-2">
 				{{ text }}
 			</div>
@@ -54,7 +55,7 @@ export default {
 		icon() {
 			if (this.status === "success") return mdiCheckCircle;
 			if (this.status === "warning") return mdiAlert;
-			if (this.status === "danger") return mdiAlert;
+			if (this.status === "error") return mdiAlert;
 			if (this.status === "info") return mdiInformation;
 			return undefined;
 		},
@@ -98,28 +99,12 @@ export default {
 	background-color: var(--color-white) !important;
 }
 
+::v-deep .v-btn__content .v-icon,
 .alert_text {
-	color: var(--color-black);
+	color: var(--color-black) !important;
 }
 
-.alert_accent {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	width: 5px;
-	background-color: transparent;
-
-	&.success {
-		background-color: var(--color-success-dark);
-	}
-
-	&.warning {
-		background-color: var(--color-warning-dark);
-	}
-
-	&.danger {
-		background-color: var(--color-danger-dark);
-	}
+::v-deep .v-alert__border {
+	opacity: 1;
 }
 </style>

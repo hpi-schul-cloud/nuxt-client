@@ -1,6 +1,6 @@
 export interface AlertPayload {
 	text: string;
-	status: "success" | "danger" | "warning" | "info";
+	status: "success" | "error" | "warning" | "info";
 	/**
 	 * Timeout in ms before the Alert is closed.
 	 *
