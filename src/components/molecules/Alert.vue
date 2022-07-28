@@ -77,8 +77,7 @@ export default {
 @import "@variables";
 
 .alert_wrapper {
-	position: absolute;
-	top: 0;
+	position: fixed;
 	right: 0;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
