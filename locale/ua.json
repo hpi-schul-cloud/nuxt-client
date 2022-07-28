@@ -160,7 +160,7 @@
 	"components.molecules.TaskItemMenu.confirmDelete.text": "Ви впевнені, що хочете видалити завдання \" {taskTitle} \"?",
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
 	"components.molecules.TaskItemMenu.finish": "Завершити",
-	"components.molecules.TaskItemMenu.labels.createdAt": "створено при",
+	"components.molecules.TaskItemMenu.labels.createdAt": "Створено при",
 	"components.molecules.TaskItemTeacher.graded": "Оцінено",
 	"components.molecules.TaskItemTeacher.status": "{submitted}/{max} надіслано, {graded} оцінено",
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
