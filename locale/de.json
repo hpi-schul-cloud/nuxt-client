@@ -745,6 +745,7 @@
 	"pages.room.modal.course.share.text": "Verteile folgenden Code an andere Kolleg:innen, damit sie sich den Kurs als Kopie importieren können. Alte Abgaben von Schüler:innen werden für den neu kopierten Kurs automatisch entfernt.",
 	"pages.room.modal.course.share.subText": "Alternativ kannst du deinen Kolleg:innen auch folgenden QR-Code zeigen.",
 	"pages.room.copy.course.message.copied": "Kurs erfolgreich kopiert.",
+	"pages.room.copy.course.message.partiallyCopied": "Der Kurs konnte nicht vollständig kopiert werden.",
 	"pages.room.copy.lesson.message.copied": "Thema erfolgreich kopiert.",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"utils.adminFilter.class.title": "Klasse(n)",
