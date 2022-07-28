@@ -69,6 +69,22 @@ describe("@components/molecules/TaskItemTeacher", () => {
 				expect(wrapper.vm.courseName).toStrictEqual("Ohne Kurszuordnung");
 			});
 
+			it("should show createdAt date in label", () => {
+				const wrapper = getWrapper({
+					task: drafts[2],
+				});
+
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+
+				expect(taskLabel.exists()).toBe(true);
+				expect(taskLabel.text()).toMatch(
+					/Ohne Kurszuordnung - Erstellt am 28.09.17/i
+				);
+				expect(wrapper.vm.taskLabel).toStrictEqual(
+					"Ohne Kurszuordnung - Erstellt am 28.09.17"
+				);
+			});
+
 			describe("when teacher is a subtitution teacher", () => {
 				const wrapper = getWrapper({
 					task: drafts[1],
