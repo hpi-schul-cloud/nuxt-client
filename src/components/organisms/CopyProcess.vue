@@ -10,7 +10,6 @@
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
-
 		<template slot="content">
 			<v-divider class="mb-4"></v-divider>
 			<div v-if="loading">

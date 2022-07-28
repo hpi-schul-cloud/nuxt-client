@@ -202,6 +202,12 @@ export default class CopyModule extends VuexModule {
 		this.filteredResult = cleanupCopyStatus(
 			JSON.parse(JSON.stringify(payload))
 		);
+
+		if (this.filteredResult.status === "partial") {
+			this.filteredResult.elements = this.filteredResult.elements?.filter(
+				(item) => item.status !== "success"
+			);
+		}
 		this.isSuccess = checkIfEveryElementsAreSuccess(
 			this.filteredResult.elements
 		);
