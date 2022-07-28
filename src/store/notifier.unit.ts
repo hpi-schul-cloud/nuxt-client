@@ -1,4 +1,5 @@
 import NotifierModule from "./notifier";
+import { AlertPayload } from "@store/types/alert-payload";
 
 describe("notifier store", () => {
 	describe("actions", () => {
@@ -6,14 +7,10 @@ describe("notifier store", () => {
 			it("should call 'setNotifier' mutation", () => {
 				const notifierModule = new NotifierModule({});
 				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
-				const payload = {
+				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
-					position: ["top", "left"],
 					timeout: 5000,
-					vertical: true,
-					multiline: true,
-					closeButtonColor: "black",
 				};
 				notifierModule.show(payload);
 
@@ -26,10 +23,9 @@ describe("notifier store", () => {
 		describe("setNotifier", () => {
 			it("should set the payload in state", () => {
 				const notifierModule = new NotifierModule({});
-				const payload = {
+				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
-					position: ["top", "left"],
 					timeout: 5000,
 				};
 				notifierModule.setNotifier(payload);

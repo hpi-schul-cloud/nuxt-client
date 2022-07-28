@@ -1,8 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mount, Wrapper } from "@vue/test-utils";
 import Alert from "./Alert.vue";
 import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule, { AlertPayload } from "@/store/notifier";
+import NotifierModule from "@/store/notifier";
+import Vue from "vue";
+import { AlertPayload } from "@store/types/alert-payload";
 
 declare var createComponentMocks: Function;
 
@@ -34,25 +36,49 @@ describe("Alert", () => {
 		expect(wrapper.vm.show).toBe(true);
 	});
 
-	it("should set computed properties", async () => {
+	it("should be visible when set", async () => {
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
 			text: "hello world",
 			status: "success",
 			timeout: 3000,
 		};
-		notifierModule.setNotifier(data);
+		notifierModule.show(data);
 		await wrapper.vm.$nextTick();
 
 		expect(wrapper.vm.show).toBe(true);
 		expect(wrapper.vm.notifierData).toStrictEqual(data);
-		expect(wrapper.vm.timeout).toStrictEqual(3000);
 	});
 
-	it("should set position 'bottom, center' as default if the device is mobile", async () => {
-		const wrapper = getWrapper("mobile");
-		await wrapper.vm.$nextTick();
+	it("should disappear after some time when no timeout is given", async (done) => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+		const data: AlertPayload = {
+			text: "hello world",
+			status: "success",
+		};
+		notifierModule.show(data);
 
-		expect(wrapper.vm.position).toStrictEqual(["bottom", "center"]);
+		await Vue.nextTick();
+		expect(wrapper.vm.show).toBe(true);
+
+		jest.runAllTimers();
+
+		await Vue.nextTick();
+		expect(wrapper.vm.show).toBe(false);
+	});
+
+	it("should set position-class 'alert_wrapper-mobile' as default if the device is mobile", async () => {
+		const wrapper: Wrapper<Vue> = getWrapper("mobile");
+		await wrapper.vm.$nextTick();
+		const result = wrapper.find(".alert_wrapper-mobile");
+		expect(result.element).toBeTruthy();
+	});
+
+	it("should set position-class 'alert_wrapper' as default if the device is desktop or tablet", async () => {
+		const wrapper: Wrapper<Vue> = getWrapper("desktop");
+		await wrapper.vm.$nextTick();
+		const result = wrapper.get(".alert_wrapper");
+		expect(result.element).toBeTruthy();
 	});
 });

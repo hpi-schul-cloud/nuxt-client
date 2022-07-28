@@ -1,15 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-
-export interface AlertPayload {
-	text: string;
-	status?: "success" | "danger" | "warning" | "info";
-	/**
-	 * Timeout in ms before the Alert is closed.
-	 *
-	 * Use 0 to not close the Alert automatically.
-	 */
-	timeout?: number;
-}
+import { AlertPayload } from "@store/types/alert-payload";
 
 @Module({
 	name: "notifier",
