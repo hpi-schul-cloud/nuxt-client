@@ -69,16 +69,6 @@ export default {
 			}, this.notifierData.timeout || DEFAULT_TIMEOUT);
 		},
 	},
-	created() {
-		// setTimeout(() => {
-		// 	// WIP
-		// 	notifierModule.show({
-		// 		text: "Mein content",
-		// 		status: "success",
-		// 		timeout: 0,
-		// 	});
-		// }, 500);
-	},
 };
 </script>
 
