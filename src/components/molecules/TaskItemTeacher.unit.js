@@ -162,8 +162,8 @@ describe("@components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toMatch(/Geplant 28.09.00/i);
-			expect(wrapper.vm.plannedLabel).toStrictEqual(`Geplant 28.09.00`);
+			expect(taskLabel.text()).toStrictEqual("Deutsch - Geplant 28.09.00");
+			expect(wrapper.vm.taskLabel).toStrictEqual("Deutsch - Geplant 28.09.00");
 		});
 	});
 
@@ -176,8 +176,8 @@ describe("@components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toMatch(/Kein Abgabedatum/i);
-			expect(wrapper.vm.dueDateLabel).toStrictEqual(`Kein Abgabedatum`);
+			expect(taskLabel.text()).toMatch(/Mathe/i);
+			expect(wrapper.vm.taskLabel).toStrictEqual("Mathe");
 		});
 	});
 
@@ -190,8 +190,10 @@ describe("@components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toMatch(/Abgabe 11.06.00/i);
-			expect(wrapper.vm.dueDateLabel).toStrictEqual(`Abgabe 11.06.00`);
+			expect(taskLabel.text()).toMatch(/Vertretung Mathe - Abgabe 11.06.00/i);
+			expect(wrapper.vm.taskLabel).toStrictEqual(
+				`Vertretung Mathe - Abgabe 11.06.00`
+			);
 		});
 	});
 

@@ -17,11 +17,8 @@
 			<v-list-item-content>
 				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">{{
-						courseName
+						taskLabel
 					}}</span>
-					<template v-if="taskLabel">
-						{{ `&nbsp;– ${taskLabel}` }}
-					</template>
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
@@ -125,23 +122,31 @@ export default {
 		taskLabel() {
 			const { createdAt, duedate, availableDate } = this.task;
 
+			const labelText = `${this.courseName}`;
+
 			if (this.isDraft) {
-				return `${this.$t(
-					"components.molecules.TaskItemMenu.labels.createdAt"
-				)} ${dateFromUTC(createdAt)}`;
+				return labelText.concat(
+					` - ${this.$t(
+						"components.molecules.TaskItemMenu.labels.createdAt"
+					)} ${dateFromUTC(createdAt)}`
+				);
 			}
 
 			if (this.isPlanned) {
-				return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
-					availableDate
-				)}`;
+				return labelText.concat(
+					` - ${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
+						availableDate
+					)}`
+				);
 			}
 
 			if (duedate) {
-				return `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`;
+				return labelText.concat(
+					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`
+				);
 			}
 
-			return undefined;
+			return labelText;
 		},
 		courseName() {
 			const { isSubstitutionTeacher } = this.task.status;
