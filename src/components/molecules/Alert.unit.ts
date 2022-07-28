@@ -31,7 +31,7 @@ describe("Alert", () => {
 	it("should watch 'notifierData' and set 'show' to true", async () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.show).toBe(false);
-		notifierModule.setNotifier({ text: "some text" });
+		notifierModule.setNotifier({ text: "some text", status: "success" });
 		await wrapper.vm.$nextTick();
 
 		expect(wrapper.vm.show).toBe(true);
