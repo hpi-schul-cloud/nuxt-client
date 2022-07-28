@@ -70,14 +70,14 @@ export default {
 		},
 	},
 	created() {
-		setTimeout(() => {
-			// WIP
-			notifierModule.show({
-				text: "Mein content",
-				status: "success",
-				timeout: 0,
-			});
-		}, 500);
+		// setTimeout(() => {
+		// 	// WIP
+		// 	notifierModule.show({
+		// 		text: "Mein content",
+		// 		status: "success",
+		// 		timeout: 0,
+		// 	});
+		// }, 500);
 	},
 };
 </script>

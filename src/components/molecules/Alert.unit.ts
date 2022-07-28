@@ -27,6 +27,7 @@ describe("Alert", () => {
 			notifier: NotifierModule,
 		});
 	});
+
 	it("should watch 'notifierData' and set 'show' to true", async () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.show).toBe(false);
@@ -50,7 +51,7 @@ describe("Alert", () => {
 		expect(wrapper.vm.notifierData).toStrictEqual(data);
 	});
 
-	it("should disappear after some time when no timeout is given", async (done) => {
+	it("should disappear after some time when no timeout is given", async () => {
 		jest.useFakeTimers();
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
@@ -59,13 +60,30 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await Vue.nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.show).toBe(true);
+		jest.advanceTimersByTime(5000);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.show).toBe(false);
+	});
+
+	it("should not disappear after any time when timeout is 0", async () => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+		const data: AlertPayload = {
+			text: "hello world",
+			status: "success",
+			timeout: 0,
+		};
+		notifierModule.show(data);
+
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.show).toBe(true);
 
 		jest.runAllTimers();
 
-		await Vue.nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.show).toBe(true);
 	});
 
 	it("should set position-class 'alert_wrapper-mobile' as default if the device is mobile", async () => {
