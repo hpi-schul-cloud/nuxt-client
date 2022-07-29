@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ 'alert_wrapper_mobile': isMobile, alert_wrapper: !isMobile }">
+	<div :class="{ alert_wrapper_mobile: isMobile, alert_wrapper: !isMobile }">
 		<v-alert
 			v-model="show"
 			:icon="icon"
