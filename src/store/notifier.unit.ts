@@ -10,7 +10,41 @@ describe("notifier store", () => {
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
+					autoClose: true,
 					timeout: 5000,
+				};
+				notifierModule.show(payload);
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+			});
+
+			it("should add default values", () => {
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+				};
+				notifierModule.show(payload);
+
+				const payloadWithDefaults: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payloadWithDefaults);
+			});
+
+			it("should pass payload if optional params are set", () => {
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: false,
+					timeout: 10000,
 				};
 				notifierModule.show(payload);
 
@@ -26,6 +60,7 @@ describe("notifier store", () => {
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
+					autoClose: true,
 					timeout: 5000,
 				};
 				notifierModule.setNotifier(payload);

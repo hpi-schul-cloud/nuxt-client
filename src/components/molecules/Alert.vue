@@ -1,11 +1,11 @@
 <template>
-	<div :class="{ alert_wrapper_mobile: isMobile, alert_wrapper: !isMobile }">
+	<div
+		:class="{ 'alert-wrapper-mobile': isMobile, 'alert-wrapper': !isMobile }"
+	>
 		<v-alert
 			v-model="show"
 			:icon="icon"
-			:transition="
-				isMobile ? 'scale-transition' : 'scroll-x-reverse-transition'
-			"
+			:transition="transition"
 			:type="status"
 			class="alert"
 			dismissible
@@ -50,6 +50,9 @@ export default {
 		text() {
 			return this.notifierData?.text;
 		},
+		transition() {
+			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
+		},
 		icon() {
 			if (this.status === "success") return mdiCheckCircle;
 			if (this.status === "warning") return mdiAlert;
@@ -61,7 +64,7 @@ export default {
 	watch: {
 		notifierData() {
 			this.show = true;
-			if (this.notifierData.timeout === 0) return;
+			if (this.notifierData.autoClose === false) return;
 			clearTimeout(this.timeoutId);
 			this.timeoutId = setTimeout(() => {
 				this.show = false;
@@ -74,14 +77,14 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
-.alert_wrapper {
+.alert-wrapper {
 	position: fixed;
 	right: 0;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
 }
 
-.alert_wrapper_mobile {
+.alert-wrapper-mobile {
 	position: fixed;
 	right: 0;
 	bottom: 5vh;
