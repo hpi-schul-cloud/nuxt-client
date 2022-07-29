@@ -86,14 +86,14 @@ describe("Alert", () => {
 		expect(wrapper.vm.show).toBe(true);
 	});
 
-	it("should set position-class 'alert_wrapper_mobile' as default if the device is mobile", async () => {
+	it("should set mobile position-class as default if the device is mobile", async () => {
 		const wrapper: Wrapper<Vue> = getWrapper("mobile");
 		await wrapper.vm.$nextTick();
 		const result = wrapper.find(".alert_wrapper_mobile");
 		expect(result.element).toBeTruthy();
 	});
 
-	it("should set position-class 'alert_wrapper' as default if the device is desktop or tablet", async () => {
+	it("should set desktop position-class as default if the device is desktop or tablet", async () => {
 		const wrapper: Wrapper<Vue> = getWrapper("desktop");
 		await wrapper.vm.$nextTick();
 		const result = wrapper.get(".alert_wrapper");
