@@ -1,11 +1,11 @@
 <template>
-	<div :class="{ 'alert_wrapper-mobile': isMobile, alert_wrapper: !isMobile }">
+	<div
+		:class="{ 'alert-wrapper-mobile': isMobile, 'alert-wrapper': !isMobile }"
+	>
 		<v-alert
 			v-model="show"
 			:icon="icon"
-			:transition="
-				isMobile ? 'scale-transition' : 'scroll-x-reverse-transition'
-			"
+			:transition="transition"
 			:type="status"
 			class="alert"
 			dismissible
@@ -25,8 +25,6 @@
 <script>
 import { notifierModule } from "@/store";
 import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
-
-const DEFAULT_TIMEOUT = 5000;
 
 export default {
 	data() {
@@ -52,6 +50,9 @@ export default {
 		text() {
 			return this.notifierData?.text;
 		},
+		transition() {
+			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
+		},
 		icon() {
 			if (this.status === "success") return mdiCheckCircle;
 			if (this.status === "warning") return mdiAlert;
@@ -63,11 +64,11 @@ export default {
 	watch: {
 		notifierData() {
 			this.show = true;
-			if (this.notifierData.timeout === 0) return;
+			if (this.notifierData.autoClose === false) return;
 			clearTimeout(this.timeoutId);
 			this.timeoutId = setTimeout(() => {
 				this.show = false;
-			}, this.notifierData.timeout || DEFAULT_TIMEOUT);
+			}, this.notifierData.timeout);
 		},
 	},
 };
@@ -76,14 +77,14 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
-.alert_wrapper {
+.alert-wrapper {
 	position: fixed;
 	right: 0;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
 }
 
-.alert_wrapper-mobile {
+.alert-wrapper-mobile {
 	position: fixed;
 	right: 0;
 	bottom: 5vh;
