@@ -180,6 +180,10 @@ export const printDateTimeFromStringUTC = (date) => {
 	return dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
 };
 
+export const printTimeFromStringUTC = (date) => {
+	return dayjs(date).tz().format(DATETIME_FORMAT.time);
+};
+
 /**
  * Returns formated date string based on a given dayjs object
  * @param {String} date
@@ -262,6 +266,15 @@ export const fromNowToFuture = (date, unit) => {
  */
 export const currentDate = () => {
 	return dayjs.tz();
+};
+
+export const isToday = (date) => {
+	const today = new Date();
+	return (
+		date.getDate() == today.getDate() &&
+		date.getMonth() == today.getMonth() &&
+		date.getFullYear() == today.getFullYear()
+	);
 };
 
 export default ({ app, store }) => {

@@ -72,7 +72,11 @@
 </template>
 
 <script>
-import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
+import {
+	printDateFromStringUTC as dateFromUTC,
+	isToday,
+	printTimeFromStringUTC,
+} from "@plugins/datetime";
 import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 // TODO - different requiredKeys for finished and other tasks?
@@ -125,6 +129,14 @@ export default {
 			const labelText = `${this.courseName}`;
 
 			if (this.isDraft) {
+				if (isToday(new Date(createdAt))) {
+					return labelText.concat(
+						` - ${this.$t(
+							"components.molecules.TaskItemMenu.labels.createdAt"
+						)} ${printTimeFromStringUTC(createdAt)}`
+					);
+				}
+
 				return labelText.concat(
 					` - ${this.$t(
 						"components.molecules.TaskItemMenu.labels.createdAt"
