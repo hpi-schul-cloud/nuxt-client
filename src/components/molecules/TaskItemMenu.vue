@@ -223,6 +223,11 @@ export default {
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
 				this.copyProcess.loading = copyModule.getLoading;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.task.message.copied"),
+					status: "success",
+				});
 			}
 		},
 		async onCopyProcessDialogClose() {
