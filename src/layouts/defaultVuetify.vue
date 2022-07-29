@@ -11,7 +11,7 @@
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import Snackbar from "@components/molecules/Snackbar";
+import Snackbar from "@components/molecules/Alert";
 
 export default {
 	components: {

@@ -323,6 +323,7 @@ export default {
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
+			// TODO - individualize error messages per copy case
 			if (businessError.statusCode !== "") {
 				this.$notifier({
 					text: this.$t("components.molecules.copyResult.error"),
@@ -334,14 +335,24 @@ export default {
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
 				this.copyProcess.loading = copyModule.getLoading;
+
+				const copyResultStatus = copyModule.getCopyResult.status;
+				if (copyResultStatus === "success") {
+					this.$notifier({
+						text: this.$t("pages.room.copy.course.message.copied"),
+						status: "success",
+					});
+				} else {
+					this.$notifier({
+						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
+						status: "warning",
+					});
+				}
 			}
 		},
 		async onCopyProcessDialogClose() {
 			if (this.copyProcess.id === "") return;
-			this.$notifier({
-				text: this.$t("pages.room.copy.course.message.copied"),
-				status: "success",
-			});
+
 			this.$router.push(`/rooms/${this.copyProcess.id}`);
 			this.courseId = this.copyProcess.id;
 			this.copyProcess.isOpen = false;
