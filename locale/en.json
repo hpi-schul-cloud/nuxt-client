@@ -643,7 +643,7 @@
 	"components.molecules.TaskItemMenu.finish": "Finish",
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Delete Task",
 	"components.molecules.TaskItemMenu.confirmDelete.text": "Are you sure, you want to delete task \"{taskTitle}\"?",
-	"components.molecules.TaskItemMenu.labels.createdAt": "Created at",
+	"components.molecules.TaskItemMenu.labels.createdAt": "Created on",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",
