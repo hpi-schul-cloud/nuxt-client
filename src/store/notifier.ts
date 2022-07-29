@@ -8,6 +8,7 @@ import { AlertPayload } from "@store/types/alert-payload";
 })
 export default class NotifierModule extends VuexModule {
 	notifier: AlertPayload | undefined = undefined;
+	private defaultTimeout = 5000;
 
 	get getNotifier(): AlertPayload | undefined {
 		return this.notifier;
@@ -15,7 +16,11 @@ export default class NotifierModule extends VuexModule {
 
 	@Action
 	show(payload: AlertPayload) {
-		this.setNotifier(payload);
+		let alertData: AlertPayload = {
+			...payload,
+			timeout: payload.timeout || this.defaultTimeout,
+		};
+		this.setNotifier(alertData);
 	}
 
 	@Mutation

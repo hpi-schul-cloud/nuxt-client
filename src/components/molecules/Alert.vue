@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ 'alert_wrapper-mobile': isMobile, alert_wrapper: !isMobile }">
+	<div :class="{ 'alert_wrapper_mobile': isMobile, alert_wrapper: !isMobile }">
 		<v-alert
 			v-model="show"
 			:icon="icon"
@@ -25,8 +25,6 @@
 <script>
 import { notifierModule } from "@/store";
 import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
-
-const DEFAULT_TIMEOUT = 5000;
 
 export default {
 	data() {
@@ -67,7 +65,7 @@ export default {
 			clearTimeout(this.timeoutId);
 			this.timeoutId = setTimeout(() => {
 				this.show = false;
-			}, this.notifierData.timeout || DEFAULT_TIMEOUT);
+			}, this.notifierData.timeout);
 		},
 	},
 };
@@ -83,7 +81,7 @@ export default {
 	overflow: visible;
 }
 
-.alert_wrapper-mobile {
+.alert_wrapper_mobile {
 	position: fixed;
 	right: 0;
 	bottom: 5vh;
