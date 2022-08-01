@@ -7,7 +7,7 @@
 		:buttons="['close']"
 		@dialog-closed="dialogClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2">
+		<h2 slot="title" class="text-h4 my-2 word-break">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">
@@ -54,31 +54,10 @@ export default {
 			if (this.copiedItemId === "") return [];
 
 			const result = copyModule.getFilteredResult;
-
-			if (copyModule.isSuccess) {
-				return {
-					...result,
-					index: this.elementIndex,
-					completed: true,
-					elements: [
-						{
-							id: result.id,
-							feStatus: "success-all",
-							title: this.$t(
-								"components.molecules.copyResult.successfullyCopied"
-							),
-							type: result.type,
-						},
-					],
-				};
-			}
-
 			return {
 				...result,
 				index: this.elementIndex,
-				elements: result.elements
-					? this.prepareCopiedElements(result.elements)
-					: [],
+				elements: result ? this.prepareCopiedElements(result) : [],
 			};
 		},
 		copiedItemTitle() {
@@ -187,3 +166,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.word-break {
+	word-break: break-word;
+}
+</style>

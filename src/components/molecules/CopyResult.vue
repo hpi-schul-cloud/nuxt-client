@@ -144,14 +144,17 @@ export default {
 }
 
 .not-finished {
+	margin-right: var(--space-xs-3);
 	color: var(--color-danger-dark);
 }
 
 .finished {
+	margin-right: var(--space-xs-3);
 	color: var(--color-secondary);
 }
 
 .partial {
+	margin-right: var(--space-xs-3);
 	color: var(--color-warning);
 }
 </style>

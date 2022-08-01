@@ -82,12 +82,7 @@ export default class CopyModule extends VuexModule {
 		type: CopyApiResponseTypeEnum.Board,
 		status: CopyApiResponseStatusEnum.Success,
 	};
-	private filteredResult: CopyApiResponse = {
-		id: "",
-		title: "",
-		type: CopyApiResponseTypeEnum.Board,
-		status: CopyApiResponseStatusEnum.Success,
-	};
+	private filteredResult: [] | {} = [];
 	private businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -199,18 +194,30 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	setFilteredResult(payload: CopyApiResponse | any) {
-		this.filteredResult = cleanupCopyStatus(
-			JSON.parse(JSON.stringify(payload))
-		);
-
-		if (this.filteredResult.status === "partial") {
-			this.filteredResult.elements = this.filteredResult.elements?.filter(
-				(item) => item.status !== "success"
-			);
+		if (payload.status === "success") {
+			this.filteredResult = [];
+			this.isSuccess == true;
+			return;
 		}
-		this.isSuccess = checkIfEveryElementsAreSuccess(
-			this.filteredResult.elements
-		);
+
+		if (payload.status === "partial") {
+			let filtered: any[] = [];
+
+			const filterF = (elements: any) => {
+				elements.forEach((element: any) => {
+					if (element.status !== "success") {
+						if (element.elements) {
+							filterF(element.elements);
+						} else {
+							filtered.push(element);
+						}
+					}
+				});
+			};
+			filterF(payload.elements);
+
+			this.filteredResult = filtered;
+		}
 	}
 
 	@Mutation
@@ -261,7 +268,8 @@ export default class CopyModule extends VuexModule {
 	get getIsSuccess(): boolean {
 		return this.isSuccess;
 	}
-	get getFilteredResult(): CopyApiResponse {
+
+	get getFilteredResult(): {} | [] {
 		return this.filteredResult;
 	}
 
