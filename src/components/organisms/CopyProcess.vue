@@ -19,9 +19,6 @@
 				/>
 			</div>
 			<div v-else>
-				<label class="text-md mt-2">
-					{{ copiedItemTitle }}
-				</label>
 				<copy-result
 					v-if="copiedItems.elements"
 					:items="copiedItems.elements"
