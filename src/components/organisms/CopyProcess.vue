@@ -19,22 +19,349 @@
 				/>
 			</div>
 			<div v-else>
-				<copy-result
-					v-if="copiedItems.elements"
-					:items="copiedItems.elements"
-				/>
+				<!--				<copy-result-->
+				<!--					v-if="copiedItems.elements"-->
+				<!--					:items="copiedItems.elements"-->
+				<!--				/>-->
 			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
-import CopyResult from "@components/molecules/CopyResult";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@/store";
+//
+// /**
+//  *
+//  * @type CopyApiResponse[]
+//  */
+
+const mockData = {
+	id: "asdklöjfasdklf",
+	status: "partial",
+	elements: [
+		{
+			type: "METADATA",
+			status: "success",
+		},
+		{
+			type: "USER_GROUP",
+			status: "not-doing",
+		},
+		{
+			type: "LTITOOL_GROUP",
+			status: "not-doing",
+		},
+		{
+			type: "TIME_GROUP",
+			status: "not-doing",
+		},
+		{
+			type: "FILE_GROUP",
+			status: "not-implemented",
+		},
+		{
+			type: "COURSEGROUP_GROUP",
+			status: "not-implemented",
+		},
+		{
+			title: "taskgroup",
+			type: "TASK_GROUP",
+			status: "failure",
+			id: "62e7a94e2c74e087967d3727",
+			elements: [
+				{
+					type: "METADATA",
+					status: "success",
+				},
+				{
+					title: "task in group",
+					type: "TASK",
+					status: "failure",
+					id: "62e7a94e2c74e087967d3237",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+			],
+		},
+		{
+			title: "board",
+			type: "BOARD",
+			status: "partial",
+			id: "62e7a94e2c74e087967d3737",
+			elements: [
+				{
+					title: "Thema (3)",
+					type: "LESSON",
+					status: "partial",
+					id: "62e7a94e2c74e087967d3723",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "LESSON_CONTENT_GROUP",
+							status: "partial",
+							elements: [
+								{
+									title: "Text",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+								{
+									title: "Sieb des Blabla",
+									type: "LESSON_CONTENT",
+									status: "partial",
+								},
+								{
+									title: "Lernmaterial",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+							],
+						},
+					],
+				},
+				{
+					title: "Thema (2)",
+					type: "LESSON",
+					status: "partial",
+					id: "62e7a94e2c74e087967d3724",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "LESSON_CONTENT_GROUP",
+							status: "partial",
+							elements: [
+								{
+									title: "Text",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+								{
+									title: "Geogebra",
+									type: "LESSON_CONTENT",
+									status: "partial",
+								},
+								{
+									title: "Lernmaterial",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+							],
+						},
+					],
+				},
+				{
+					title: "Thema (1)",
+					type: "LESSON",
+					status: "partial",
+					id: "62e7a94e2c74e087967d3725",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "LESSON_CONTENT_GROUP",
+							status: "partial",
+							elements: [
+								{
+									title: "Text",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+								{
+									title: "Geogebra",
+									type: "LESSON_CONTENT",
+									status: "partial",
+								},
+								{
+									title: "Lernmaterial",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+							],
+						},
+					],
+				},
+				{
+					title: "Thema",
+					type: "LESSON",
+					status: "partial",
+					id: "62e7a94e2c74e087967d3726",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "LESSON_CONTENT_GROUP",
+							status: "partial",
+							elements: [
+								{
+									title: "Text",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+								{
+									title: "Sieb des Blabla",
+									type: "LESSON_CONTENT",
+									status: "partial",
+								},
+								{
+									title: "Lernmaterial",
+									type: "LESSON_CONTENT",
+									status: "success",
+								},
+							],
+						},
+					],
+				},
+				{
+					title: "task 20",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d3727",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+				{
+					title: "task 20 (1)",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d3728",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+				{
+					title: "task 17",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d3729",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+				{
+					title: "Not a draft",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d372a",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+				{
+					title: "Test",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d372b",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+				{
+					title: "terterte",
+					type: "TASK",
+					status: "success",
+					id: "62e7a94e2c74e087967d372c",
+					elements: [
+						{
+							type: "METADATA",
+							status: "success",
+						},
+						{
+							type: "CONTENT",
+							status: "success",
+						},
+						{
+							type: "SUBMISSION_GROUP",
+							status: "not-doing",
+						},
+					],
+				},
+			],
+		},
+	],
+};
 
 export default {
-	components: { vCustomDialog, CopyResult },
+	components: { vCustomDialog },
 	props: {
 		isOpen: {
 			type: Boolean,
@@ -46,19 +373,12 @@ export default {
 	data() {
 		return {
 			elementIndex: 0,
-			showModal: false,
+			showModal: true,
 		};
 	},
 	computed: {
 		copiedItems() {
-			if (this.copiedItemId === "") return [];
-
-			const result = copyModule.getFilteredResult;
-			return {
-				...result,
-				index: this.elementIndex,
-				elements: result ? this.prepareCopiedElements(result) : [],
-			};
+			return copyModule.getFilteredResult;
 		},
 		copiedItemTitle() {
 			return copyModule?.getTitle || "";
@@ -77,6 +397,9 @@ export default {
 		isOpen() {
 			this.showModal = this.isOpen;
 		},
+	},
+	created() {
+		copyModule.setFilteredResult(mockData);
 	},
 	methods: {
 		getItemTitle(item) {

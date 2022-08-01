@@ -1,15 +1,16 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	RoomsApiFactory,
-	RoomsApiInterface,
-	TaskApiInterface,
-	TaskApiFactory,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
+	RoomsApiFactory,
+	RoomsApiInterface,
+	TaskApiFactory,
+	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
+import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
 
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
@@ -82,7 +83,7 @@ export default class CopyModule extends VuexModule {
 		type: CopyApiResponseTypeEnum.Board,
 		status: CopyApiResponseStatusEnum.Success,
 	};
-	private filteredResult: [] | {} = [];
+	private filteredResult: CopyResultItem[] | {} = [];
 	private businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -193,31 +194,94 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setFilteredResult(payload: CopyApiResponse | any) {
-		if (payload.status === "success") {
-			this.filteredResult = [];
-			this.isSuccess == true;
-			return;
+	setFilteredResult(payload: CopyApiResponse): CopyResultItem[] {
+		if (payload.status === CopyApiResponseStatusEnum.Success) {
+			return [];
+		}
+		if (payload.elements === undefined) {
+			return [];
 		}
 
-		if (payload.status === "partial") {
-			let filtered: any[] = [];
+		/**
+		 * Checks if element is relevant for frontend visualization
+		 */
+		const isHandledStatus: (status: CopyApiResponseStatusEnum) => boolean = (
+			status
+		) => {
+			if (status === CopyApiResponseStatusEnum.Success) return false;
+			if (status === CopyApiResponseStatusEnum.NotImplemented) return false;
+			if (status === CopyApiResponseStatusEnum.NotDoing) return false;
+			return true;
+		};
+		/**
+		 * Finds Elements which represent a Headline in the FeedbackModal Structure
+		 */
+		const isParentCopyApiResponseType: (
+			type: CopyApiResponseTypeEnum
+		) => boolean = (status) => {
+			if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
+			if (status === CopyApiResponseTypeEnum.Lesson) return true;
+			return false;
+		};
+		/**
+		 * Finds Elements which represent an element in the FeedbackModal Structure
+		 */
+		const isLeafCopyApiResponseType: (
+			type: CopyApiResponseTypeEnum
+		) => boolean = (status: CopyApiResponseTypeEnum) => {
+			if (status === CopyApiResponseTypeEnum.Task) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContent) return true;
+			return false;
+		};
 
-			const filterF = (elements: any) => {
-				elements.forEach((element: any) => {
-					if (element.status !== "success") {
-						if (element.elements) {
-							filterF(element.elements);
-						} else {
-							filtered.push(element);
-						}
-					}
+		/**
+		 * Traverses the Tree and checks for Valid Parents of Leaves
+		 *
+		 * On Parent:
+		 *  * Create a CopyResultItem and check for Leafs lower on the tree
+		 *
+		 * On Leaf:
+		 *  * Append found leaf to the last known Parent
+		 */
+		const getItemsFromBranch: (
+			element: CopyApiResponse,
+			item: CopyResultItem[]
+		) => CopyResultItem[] = (element, items = []) => {
+			if (isParentCopyApiResponseType(element.type)) {
+				items.push({
+					title: element.title || "",
+					elements: [],
+					elementId: element.id || "",
 				});
-			};
-			filterF(payload.elements);
+				element.elements?.forEach(
+					(e) => (items = [...getItemsFromBranch(e, items)])
+				);
+				return items;
+			}
 
-			this.filteredResult = filtered;
-		}
+			if (isLeafCopyApiResponseType(element.type)) {
+				const parentItem = items[items.length - 1]; // get last inserted parent-node
+				parentItem.elements = [
+					...parentItem.elements,
+					{ type: element.type, title: element.title || "" },
+				];
+				return items;
+			}
+
+			element.elements?.forEach(
+				(e) => (items = [...getItemsFromBranch(e, items)])
+			);
+
+			return items;
+		};
+
+		const result: CopyResultItem[] = payload.elements
+			.filter((e) => isHandledStatus(e.type))
+			.reduce<CopyResultItem[]>((acc, curr) => {
+				acc = [...acc, ...getItemsFromBranch(curr, acc)];
+				return acc;
+			}, []);
+		return result;
 	}
 
 	@Mutation
@@ -258,7 +322,7 @@ export default class CopyModule extends VuexModule {
 			status: CopyApiResponseStatusEnum.Success,
 		};
 		this.copyResult = emptyData;
-		this.filteredResult = emptyData;
+		// this.filteredResult = emptyData; // WIP fix types to array
 	}
 
 	get getCopyResult(): CopyApiResponse {
