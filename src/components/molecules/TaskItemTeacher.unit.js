@@ -78,10 +78,10 @@ describe("@components/molecules/TaskItemTeacher", () => {
 
 				expect(taskLabel.exists()).toBe(true);
 				expect(taskLabel.text()).toMatch(
-					/Ohne Kurszuordnung - Erstellt am 28.09.17/i
+					/Ohne Kurszuordnung - Erstellt 28.09.17/i
 				);
 				expect(wrapper.vm.taskLabel).toStrictEqual(
-					"Ohne Kurszuordnung - Erstellt am 28.09.17"
+					"Ohne Kurszuordnung - Erstellt 28.09.17"
 				);
 			});
 
