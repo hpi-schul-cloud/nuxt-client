@@ -129,7 +129,7 @@ export default {
 			const labelText = `${this.courseName}`;
 
 			if (this.isDraft) {
-				if (isToday(new Date(createdAt))) {
+				if (isToday(createdAt)) {
 					return labelText.concat(
 						` - ${this.$t(
 							"components.molecules.TaskItemMenu.labels.createdAt"

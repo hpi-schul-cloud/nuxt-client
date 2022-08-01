@@ -269,11 +269,12 @@ export const currentDate = () => {
 };
 
 export const isToday = (date) => {
+	const dateObject = typeof date === Date ? date : new Date(date);
 	const today = new Date();
 	return (
-		date.getDate() == today.getDate() &&
-		date.getMonth() == today.getMonth() &&
-		date.getFullYear() == today.getFullYear()
+		dateObject.getDate() === today.getDate() &&
+		dateObject.getMonth() === today.getMonth() &&
+		dateObject.getFullYear() === today.getFullYear()
 	);
 };
 
