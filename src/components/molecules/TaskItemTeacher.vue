@@ -17,14 +17,8 @@
 			<v-list-item-content>
 				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">{{
-						courseName
+						taskLabel
 					}}</span>
-					<template v-if="isPlanned">
-						{{ `&nbsp;– ${plannedLabel}` }}
-					</template>
-					<template v-else>
-						{{ `&nbsp;– ${dueDateLabel}` }}
-					</template>
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
@@ -78,7 +72,11 @@
 </template>
 
 <script>
-import { printDateFromStringUTC as dateFromUTC } from "@plugins/datetime";
+import {
+	printDateFromStringUTC as dateFromUTC,
+	isToday,
+	printTimeFromStringUTC,
+} from "@plugins/datetime";
 import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 // TODO - different requiredKeys for finished and other tasks?
@@ -125,17 +123,42 @@ export default {
 			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
 		},
-		dueDateLabel() {
-			const dueDate = this.task.duedate;
+		taskLabel() {
+			const { createdAt, duedate, availableDate } = this.task;
 
-			return !dueDate
-				? this.$t("pages.tasks.labels.noDueDate")
-				: `${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`;
-		},
-		plannedLabel() {
-			return `${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
-				this.task.availableDate
-			)}`;
+			const labelText = `${this.courseName}`;
+
+			if (this.isDraft) {
+				if (isToday(createdAt)) {
+					return labelText.concat(
+						` - ${this.$t(
+							"components.molecules.TaskItemMenu.labels.createdAt"
+						)} ${printTimeFromStringUTC(createdAt)}`
+					);
+				}
+
+				return labelText.concat(
+					` - ${this.$t(
+						"components.molecules.TaskItemMenu.labels.createdAt"
+					)} ${dateFromUTC(createdAt)}`
+				);
+			}
+
+			if (this.isPlanned) {
+				return labelText.concat(
+					` - ${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(
+						availableDate
+					)}`
+				);
+			}
+
+			if (duedate) {
+				return labelText.concat(
+					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`
+				);
+			}
+
+			return labelText;
 		},
 		courseName() {
 			const { isSubstitutionTeacher } = this.task.status;
