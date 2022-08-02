@@ -276,7 +276,7 @@ export default class CopyModule extends VuexModule {
 		};
 
 		const result: CopyResultItem[] = payload.elements
-			.filter((e) => isHandledStatus(e.type))
+			.filter((e) => isHandledStatus(e.status))
 			.reduce<CopyResultItem[]>((acc, curr) => {
 				acc = [...acc, ...getItemsFromBranch(curr, acc)];
 				return acc;
