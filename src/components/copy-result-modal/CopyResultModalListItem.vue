@@ -69,15 +69,15 @@ export default {
 			if (type === CopyApiResponseTypeEnum.LESSON)
 				return this.$t("common.words.topics");
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA)
-				return "i18n geogebra";
+				return "Geogebra";
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD)
-				return "i18n etherpad";
+				return "Etherpad";
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_TEXT)
 				return "i18n text";
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_NEXBOARD)
-				return "i18n nexboard";
+				return "Nexboard";
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_LERNSTORE)
-				return "i18n lernstore";
+				return this.$t("common.words.lernstore");
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_TASK)
 				return this.$t("common.words.task");
 			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_GROUP)

@@ -7,7 +7,7 @@
 		:buttons="['close']"
 		@dialog-closed="modalClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 ">
+		<h2 slot="title" class="text-h4 my-2 d-block">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">
@@ -15,12 +15,25 @@
 				<!-- Platz für die Notifications für fehlende Geogebras, files o.Ä. --->
 				<div v-if="hasFailedGeogebraElement">
 					<!-- Geogebra notification component-->
+					<v-alert type="info" :icon="mdiInformation" text border="left">
+						<div class="alert_text mr-2">
+							i18n Geogebra elemente können nicht kopiert werden
+						</div>
+					</v-alert>
 				</div>
 				<div v-if="hasFailedEtherpadElement">
-					<!-- Etherpad notification component-->
+					<v-alert type="info" :icon="mdiInformation" text border="left">
+						<div class="alert_text mr-2">
+							i18n Etherpad elemente können nicht kopiert werden
+						</div>
+					</v-alert>
 				</div>
 				<div v-if="hasFailedFileElement">
-					<!-- File notification component-->
+					<v-alert type="info" :icon="mdiInformation" text border="left">
+						<div class="alert_text mr-2">
+							i18n File elemente können nicht kopiert werden
+						</div>
+					</v-alert>
 				</div>
 
 				<copy-result-modal-list :items="items"></copy-result-modal-list>
@@ -33,6 +46,8 @@
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { copyModule } from "@utils/store-accessor";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { mdiInformation } from "@mdi/js";
 
 const mockData = {
 	id: "asdklöjfasdklf",
@@ -218,6 +233,7 @@ export default {
 	data() {
 		return {
 			isDialogOpen: true,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -225,24 +241,28 @@ export default {
 			return copyModule.getFilteredResult;
 		},
 		hasFailedGeogebraElement() {
-			return this.findElementByType(this.items, "geogebra"); // hasser um notifications oberhalb der liste anzuzeigen -> e.g. "Geogebra Inhalte werden nur als Hülle angelegt"
+			return this.findElementByType(
+				this.items,
+				CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA
+			); // hasser um notifications oberhalb der liste anzuzeigen -> e.g. "Geogebra Inhalte werden nur als Hülle angelegt"
 		},
 		hasFailedEtherpadElement() {
-			return this.findElementByType(this.items, "etherpad"); // ^ ...
+			return this.findElementByType(
+				this.items,
+				CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD
+			); // ^ ...
 		},
 		hasFailedFileElement() {
-			return this.findElementByType(this.items, "file"); // ^ ...
+			return this.findElementByType(this.items, CopyApiResponseTypeEnum.FILE); // ^ ...
 		},
 	},
 	watch: {
 		isOpen() {
-			console.log("watcher on isOpen", this.isOpen);
 			this.isDialogOpen = this.isOpen;
 		},
 	},
 	created() {
 		// WIP
-		console.log("created modal compoentn");
 		copyModule.setFilteredResult(mockData);
 	},
 	methods: {
@@ -253,8 +273,7 @@ export default {
 				if (found) return;
 				item.elements.find((e) => e.type === type) ? (found = true) : null;
 			});
-			return false;
-			// return found;
+			return found;
 		},
 		modalClosed() {
 			copyModule.resetCopyResult();
@@ -264,4 +283,13 @@ export default {
 };
 </script>
 
-<!--<style scoped></style>-->
+<style scoped>
+::v-deep .v-btn__content .v-icon,
+.alert_text {
+	color: var(--color-black) !important;
+}
+
+::v-deep .v-alert__border {
+	opacity: 1;
+}
+</style>
