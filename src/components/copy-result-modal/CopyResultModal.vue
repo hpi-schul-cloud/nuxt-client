@@ -7,7 +7,8 @@
 		:buttons="['close']"
 		@dialog-closed="modalClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 d-block">
+
+		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">

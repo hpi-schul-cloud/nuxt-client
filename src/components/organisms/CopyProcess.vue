@@ -103,21 +103,21 @@ export default {
 		// 		TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
 		// 		USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 		// 	};
-    //
+		//
 		// 	if (item.type === this.typesEnum.FileGroup) {
 		// 		return item.status === this.statusEnum.NotImplemented
 		// 			? this.$t("components.molecules.copyResult.fileCopy.error")
 		// 			: titles[item.type];
 		// 	}
-    //
+		//
 		// 	// return titles[item.type];
 		// 	return "";
 		// },
 
 		dialogClosed() {
 			// this.showModal = false;
-      this.$emit("dialog-closed", false);
-      copyModule.resetCopyResult();
+			this.$emit("dialog-closed", false);
+			copyModule.resetCopyResult();
 		},
 	},
 };

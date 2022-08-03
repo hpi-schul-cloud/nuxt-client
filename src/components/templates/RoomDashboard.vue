@@ -183,7 +183,10 @@ import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import draggable from "vuedraggable";
-import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
