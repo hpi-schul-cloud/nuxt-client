@@ -11,7 +11,9 @@
 		<ul class="mb-4 pl-1">
 			<li v-for="(e, index) of elements" :key="index" class="list-none">
 				<v-icon x-small class="mr-1"> {{ mdiMenuRight }} </v-icon>
-				<span class="black--text">{{ getElementTypeName(e.type) + " - " + e.title }}</span>
+				<span class="black--text">{{
+					getElementTypeName(e.type) + " - " + e.title
+				}}</span>
 			</li>
 		</ul>
 	</div>
@@ -32,7 +34,7 @@ export default {
 	},
 	data() {
 		return {
-      mdiChevronLeft,
+			mdiChevronLeft,
 			mdiMenuRight,
 		};
 	},
