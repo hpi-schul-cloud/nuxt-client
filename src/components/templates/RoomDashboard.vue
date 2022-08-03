@@ -160,27 +160,32 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<copy-process
+		<!--		<copy-process-->
+		<!--					:is-open="copyProcess.isOpen"-->
+		<!--					:loading="copyProcess.loading"-->
+		<!--			data-testid="copy-process"-->
+		<!--			@dialog-closed="onCopyProcessDialogClose"-->
+		<!--		>-->
+		<!--		</copy-process>-->
+		<copy-result-modal
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
-			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
-		>
-		</copy-process>
+		></copy-result-modal>
+		<!--		      data-testid="copy-process"-->
 	</div>
 </template>
 
 <script>
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import { roomModule, taskModule, envConfigModule, copyModule } from "@/store";
+import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import CopyProcess from "@components/organisms/CopyProcess";
 import draggable from "vuedraggable";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
-import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
+import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
 export default {
 	components: {
@@ -189,7 +194,8 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
-		CopyProcess,
+		CopyResultModal,
+		// CopyProcess,
 	},
 	props: {
 		roomDataObject: {
@@ -210,7 +216,7 @@ export default {
 			dragInProgress: false,
 			copyProcess: {
 				id: "",
-				isOpen: false,
+				isOpen: true, // WIP set to false
 				loading: false,
 			},
 		};

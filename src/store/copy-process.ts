@@ -80,10 +80,10 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
-		type: CopyApiResponseTypeEnum.Board,
+		type: CopyApiResponseTypeEnum.BOARD,
 		status: CopyApiResponseStatusEnum.Success,
 	};
-	private filteredResult: CopyResultItem[] | {} = [];
+	private filteredResult: CopyResultItem[] = [];
 	private businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -194,12 +194,14 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setFilteredResult(payload: CopyApiResponse): CopyResultItem[] {
+	setFilteredResult(payload: CopyApiResponse): void {
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
-			return [];
+			this.filteredResult = [];
+			return;
 		}
 		if (payload.elements === undefined) {
-			return [];
+			this.filteredResult = [];
+			return;
 		}
 
 		/**
@@ -216,21 +218,32 @@ export default class CopyModule extends VuexModule {
 		/**
 		 * Finds Elements which represent a Headline in the FeedbackModal Structure
 		 */
-		const isParentCopyApiResponseType: (
-			type: CopyApiResponseTypeEnum
-		) => boolean = (status) => {
-			if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
-			if (status === CopyApiResponseTypeEnum.Lesson) return true;
+		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
+			status
+		) => {
+			if (status === CopyApiResponseTypeEnum.TASK_GROUP) return true;
+			if (status === CopyApiResponseTypeEnum.LESSON) return true;
+			if (status === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL_GROUP)
+				return true;
 			return false;
 		};
 		/**
 		 * Finds Elements which represent an element in the FeedbackModal Structure
 		 */
-		const isLeafCopyApiResponseType: (
-			type: CopyApiResponseTypeEnum
-		) => boolean = (status: CopyApiResponseTypeEnum) => {
-			if (status === CopyApiResponseTypeEnum.Task) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContent) return true;
+		const isDesiredLeaf: (type: CopyApiResponseTypeEnum) => boolean = (
+			status: CopyApiResponseTypeEnum
+		) => {
+			if (status === CopyApiResponseTypeEnum.TASK) return true;
+			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD)
+				return true;
+			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA)
+				return true;
+			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_NEXBOARD)
+				return true;
+			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_TASK) return true;
+			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_LERNSTORE)
+				return true;
+			if (status === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL) return true;
 			return false;
 		};
 
@@ -247,7 +260,7 @@ export default class CopyModule extends VuexModule {
 			element: CopyApiResponse,
 			item: CopyResultItem[]
 		) => CopyResultItem[] = (element, items = []) => {
-			if (isParentCopyApiResponseType(element.type)) {
+			if (isDesiredParent(element.type)) {
 				items.push({
 					title: element.title || "",
 					elements: [],
@@ -259,7 +272,7 @@ export default class CopyModule extends VuexModule {
 				return items;
 			}
 
-			if (isLeafCopyApiResponseType(element.type)) {
+			if (isDesiredLeaf(element.type)) {
 				const parentItem = items[items.length - 1]; // get last inserted parent-node
 				parentItem.elements = [
 					...parentItem.elements,
@@ -271,7 +284,6 @@ export default class CopyModule extends VuexModule {
 			element.elements?.forEach(
 				(e) => (items = [...getItemsFromBranch(e, items)])
 			);
-
 			return items;
 		};
 
@@ -281,7 +293,8 @@ export default class CopyModule extends VuexModule {
 				acc = [...acc, ...getItemsFromBranch(curr, acc)];
 				return acc;
 			}, []);
-		return result;
+		console.log("Mapped items", result);
+		this.filteredResult = result;
 	}
 
 	@Mutation
@@ -315,14 +328,14 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	resetCopyResult(): void {
-		const emptyData = {
-			id: "",
-			title: "",
-			type: CopyApiResponseTypeEnum.Board,
-			status: CopyApiResponseStatusEnum.Success,
-		};
-		this.copyResult = emptyData;
-		// this.filteredResult = emptyData; // WIP fix types to array
+		// const emptyData = { WIP
+		// 	id: "",
+		// 	title: "",
+		// 	type: CopyApiResponseTypeEnum.Board,
+		// 	status: CopyApiResponseStatusEnum.Success,
+		// };
+		// this.copyResult = emptyData;
+		this.filteredResult = [];
 	}
 
 	get getCopyResult(): CopyApiResponse {
@@ -333,7 +346,7 @@ export default class CopyModule extends VuexModule {
 		return this.isSuccess;
 	}
 
-	get getFilteredResult(): {} | [] {
+	get getFilteredResult(): CopyResultItem[] {
 		return this.filteredResult;
 	}
 

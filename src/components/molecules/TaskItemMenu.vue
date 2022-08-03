@@ -104,36 +104,24 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<copy-process
-			v-if="isTeacher"
+		<copy-result-modal
+			v-if="isTeacher || true"
 			:is-open="copyProcess.isOpen"
 			:loading="copyProcess.loading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
-		>
-		</copy-process>
+		></copy-result-modal>
 	</div>
 </template>
 
 <script>
-import {
-	mdiDotsVertical,
-	mdiPencilOutline,
-	mdiUndoVariant,
-	mdiTrashCanOutline,
-	mdiContentCopy,
-} from "@mdi/js";
-import {
-	taskModule,
-	finishedTaskModule,
-	envConfigModule,
-	copyModule,
-} from "@/store";
+import { mdiContentCopy, mdiDotsVertical, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant, } from "@mdi/js";
+import { copyModule, envConfigModule, finishedTaskModule, taskModule, } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
-import CopyProcess from "@components/organisms/CopyProcess";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
 export default {
-	components: { vCustomDialog, CopyProcess },
+	components: { vCustomDialog, CopyResultModal },
 	props: {
 		taskId: {
 			type: String,

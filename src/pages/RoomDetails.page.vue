@@ -97,35 +97,32 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
-		<copy-process
-			:is-open="copyProcess.isOpen"
-			:loading="copyProcess.loading"
-			data-testid="copy-process"
-			@dialog-closed="onCopyProcessDialogClose"
-		>
-		</copy-process>
+		<!--    <copy-result-modal-->
+		<!--        :is-open="copyProcess.isOpen"-->
+		<!--        :loading="copyProcess.loading"-->
+		<!--        data-testid="copy-process"-->
+		<!--        @dialog-closed="onCopyProcessDialogClose"></copy-result-modal>-->
 	</default-wireframe>
 </template>
 
 <script>
-import { authModule, envConfigModule, roomModule, copyModule } from "@/store";
+import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
-import CopyProcess from "@components/organisms/CopyProcess";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
-	mdiPlus,
-	mdiViewListOutline,
-	mdiFormatListChecks,
-	mdiCloudDownload,
-	mdiSquareEditOutline,
-	mdiEmailPlusOutline,
-	mdiShareVariant,
-	mdiContentCopy,
+  mdiCloudDownload,
+  mdiContentCopy,
+  mdiEmailPlusOutline,
+  mdiFormatListChecks,
+  mdiPlus,
+  mdiShareVariant,
+  mdiSquareEditOutline,
+  mdiViewListOutline,
 } from "@mdi/js";
 
 export default {
@@ -136,7 +133,6 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
-		CopyProcess,
 	},
 	layout: "defaultVuetify",
 	data() {

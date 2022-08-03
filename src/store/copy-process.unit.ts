@@ -1,6 +1,6 @@
-import CopyModule from "./copy-process";
+import CopyModule, { CopyParams } from "./copy-process";
 import * as serverApi from "../serverApi/v3/api";
-import { CopyParams } from "./copy-process";
+
 const StatusEnum = serverApi.CopyApiResponseStatusEnum;
 const TypeEnum = serverApi.CopyApiResponseTypeEnum;
 
@@ -287,7 +287,7 @@ describe("copy module", () => {
 				const emptyData = {
 					id: "",
 					title: "",
-					type: TypeEnum.Board,
+					type: TypeEnum.BOARD,
 					status: StatusEnum.Success,
 				};
 
@@ -301,12 +301,12 @@ describe("copy module", () => {
 			it("should set filteredResult", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: TypeEnum.Task,
+					type: TypeEnum.TASK,
 					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
-							type: TypeEnum.File,
+							type: TypeEnum.FILE,
 							status: StatusEnum.NotImplemented,
 						},
 					],
@@ -323,16 +323,16 @@ describe("copy module", () => {
 			it("should set the state with all-success data", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: TypeEnum.Task,
+					type: TypeEnum.TASK,
 					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
-							type: TypeEnum.SubmissionGroup,
+							type: TypeEnum.SUBMISSION_GROUP,
 							status: StatusEnum.Success,
 						},
 						{
-							type: TypeEnum.FileGroup,
+							type: TypeEnum.FILE_GROUP,
 							status: StatusEnum.Success,
 						},
 					],
@@ -363,16 +363,16 @@ describe("copy module", () => {
 				};
 				const expectedData = {
 					title: "test course",
-					type: TypeEnum.Course,
+					type: TypeEnum.COURSE,
 					status: StatusEnum.Partial,
 					id: "12345",
 					elements: [
 						{
-							type: TypeEnum.Metadata,
+							type: TypeEnum.METADATA,
 							status: StatusEnum.Success,
 						},
 						{
-							type: TypeEnum.FileGroup,
+							type: TypeEnum.FILE_GROUP,
 							status: StatusEnum.NotImplemented,
 						},
 					],
@@ -424,28 +424,28 @@ describe("copy module", () => {
 				};
 				const expectedData = {
 					title: "test course",
-					type: TypeEnum.Course,
+					type: TypeEnum.COURSE,
 					status: StatusEnum.Success,
 					id: "12345",
 					elements: [
 						{
-							type: TypeEnum.Metadata,
+							type: TypeEnum.METADATA,
 							status: StatusEnum.Success,
 						},
 						{
 							title: "board",
-							type: TypeEnum.Board,
+							type: TypeEnum.BOARD,
 							status: StatusEnum.Success,
 							id: "345",
 							elements: [
 								{
 									title: "Task 1",
-									type: TypeEnum.Task,
+									type: TypeEnum.TASK,
 									status: StatusEnum.Success,
 									id: "567",
 									elements: [
 										{
-											type: TypeEnum.Metadata,
+											type: TypeEnum.METADATA,
 											status: StatusEnum.Success,
 										},
 									],

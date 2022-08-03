@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-for="{ item, index } in items">
+		<template v-for="(item, index) in items">
 			<copy-result-modal-list-item
 				:key="index"
 				:item="item"
@@ -22,11 +22,11 @@ export default {
 	name: "CopyResultModalList",
 	components: { CopyResultModalListItem },
 	props: {
-    items: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
+		items: {
+			type: Array,
+			required: true,
+			default: () => [],
+		},
 	},
 };
 </script>
