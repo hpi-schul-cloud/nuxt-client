@@ -142,7 +142,13 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags, } from "@utils/helpers";
+import {
+	getAuthor,
+	getDescription,
+	getMetadataAttribute,
+	getProvider,
+	getTags,
+} from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 

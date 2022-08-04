@@ -169,13 +169,13 @@ import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import {
-  getAuthor,
-  getDescription,
-  getMerlinReference,
-  getMetadataAttribute,
-  getProvider,
-  getTags,
-  isMerlinContent,
+	getAuthor,
+	getDescription,
+	getMerlinReference,
+	getMetadataAttribute,
+	getProvider,
+	getTags,
+	isMerlinContent,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 
