@@ -7,7 +7,6 @@
 		:buttons="['close']"
 		@dialog-closed="modalClosed"
 	>
-
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
@@ -245,16 +244,16 @@ export default {
 			return this.findElementByType(
 				this.items,
 				CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA
-			); // hasser um notifications oberhalb der liste anzuzeigen -> e.g. "Geogebra Inhalte werden nur als Hülle angelegt"
+			);
 		},
 		hasFailedEtherpadElement() {
 			return this.findElementByType(
 				this.items,
 				CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD
-			); // ^ ...
+			);
 		},
 		hasFailedFileElement() {
-			return this.findElementByType(this.items, CopyApiResponseTypeEnum.FILE); // ^ ...
+			return this.findElementByType(this.items, CopyApiResponseTypeEnum.FILE);
 		},
 	},
 	watch: {
@@ -268,7 +267,6 @@ export default {
 	},
 	methods: {
 		findElementByType(items, type) {
-			// returns true if any element in all breadcrumbs contain a failed element of specified type
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
