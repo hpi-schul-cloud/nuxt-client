@@ -39,7 +39,7 @@ describe("@components/molecules/TaskItemStudent", () => {
 		const wrapper = getWrapper({ task: openTasksWithoutDueDate[0] });
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
-		expect(dueDateLabel.text()).toBe("Kein Abgabedatum");
+		expect(dueDateLabel.text()).toBe("");
 	});
 
 	it("Should display due date label if task has duedate", () => {

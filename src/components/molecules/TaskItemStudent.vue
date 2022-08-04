@@ -132,7 +132,7 @@ export default {
 				: dateTimeFromUTC(dueDate);
 
 			return !dueDate
-				? this.$t("pages.tasks.labels.noDueDate")
+				? undefined
 				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
 	},
