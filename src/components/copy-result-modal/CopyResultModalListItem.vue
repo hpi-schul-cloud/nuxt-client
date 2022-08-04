@@ -4,12 +4,24 @@
 			<v-icon> {{ mdiChevronLeft }} </v-icon>
 
 			<v-breadcrumbs
-				class="pa-0"
-				:items="[{ href: itemUrl, text: item.title, disabled: false }]"
+				class="pl-0 py-0 mr-8 pr-4 truncate"
+				:items="[
+					{
+						href: itemUrl,
+						text:
+							item.title +
+							'afjökljfsdklföjasölfjasdkfljasdfklöasdjfklöasdjfasdklfjasdlföjsadflasdjfasdklöfj',
+						disabled: false,
+					},
+				]"
 			></v-breadcrumbs>
 		</div>
 		<ul class="mb-4 pl-1">
-			<li v-for="(e, index) of elements" :key="index" class="list-none">
+			<li
+				v-for="(e, index) of elements"
+				:key="index"
+				class="list-none truncate d-block"
+			>
 				<v-icon x-small class="mr-1"> {{ mdiMenuRight }} </v-icon>
 				<span class="black--text">{{
 					getElementTypeName(e.type) + " - " + e.title
@@ -107,8 +119,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .list-none {
 	list-style-type: none;
+}
+
+::v-deep > .v-breadcrumbs__item {
+	@extend .truncate !optional;
+	@extend .d-block !optional;
 }
 </style>

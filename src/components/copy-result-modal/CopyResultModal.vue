@@ -7,31 +7,27 @@
 		:buttons="['close']"
 		@dialog-closed="modalClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2">
+		<h2 slot="title" class="text-h4 my-2 whitespace">
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">
 			<div>
-				<!-- Platz für die Notifications für fehlende Geogebras, files o.Ä. --->
-				<div v-if="hasFailedGeogebraElement">
-					<!-- Geogebra notification component-->
-					<v-alert type="info" :icon="mdiInformation" text border="left">
+				<div v-if="hasNatification">
+					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
-							i18n Geogebra elemente können nicht kopiert werden
-						</div>
-					</v-alert>
-				</div>
-				<div v-if="hasFailedEtherpadElement">
-					<v-alert type="info" :icon="mdiInformation" text border="left">
-						<div class="alert_text mr-2">
-							i18n Etherpad elemente können nicht kopiert werden
-						</div>
-					</v-alert>
-				</div>
-				<div v-if="hasFailedFileElement">
-					<v-alert type="info" :icon="mdiInformation" text border="left">
-						<div class="alert_text mr-2">
-							i18n File elemente können nicht kopiert werden
+							<div v-if="hasFailedGeogebraElement">
+								<strong>Geogebra</strong> &middot; Material-IDs sind aus
+								technischen Gründen nicht kopierbar und müssen ergänzt werden.
+								i18n missing
+							</div>
+							<div v-if="hasFailedEtherpadElement">
+								<strong>Etherpad</strong> &middot; Elemente können nicht kopiert
+								werden
+							</div>
+							<div v-if="hasFailedFileElement">
+								<strong>Dateien</strong> &middot; Elemente können nicht kopiert
+								werden
+							</div>
 						</div>
 					</v-alert>
 				</div>
@@ -239,6 +235,13 @@ export default {
 	computed: {
 		items() {
 			return copyModule.getFilteredResult;
+		},
+		hasNatification() {
+			return (
+				this.hasFailedGeogebraElement ||
+				this.hasFailedEtherpadElement ||
+				this.hasFailedFileElement
+			);
 		},
 		hasFailedGeogebraElement() {
 			return this.findElementByType(
