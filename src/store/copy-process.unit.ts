@@ -287,7 +287,7 @@ describe("copy module", () => {
 				const emptyData = {
 					id: "",
 					title: "",
-					type: TypeEnum.BOARD,
+					type: TypeEnum.Board,
 					status: StatusEnum.Success,
 				};
 
@@ -301,12 +301,12 @@ describe("copy module", () => {
 			it("should set filteredResult", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: TypeEnum.TASK,
+					type: TypeEnum.Task,
 					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
-							type: TypeEnum.FILE,
+							type: TypeEnum.File,
 							status: StatusEnum.NotImplemented,
 						},
 					],
@@ -323,16 +323,16 @@ describe("copy module", () => {
 			it("should set the state with all-success data", () => {
 				const expectedData = {
 					title: "Aufgabe",
-					type: TypeEnum.TASK,
+					type: TypeEnum.Task,
 					status: StatusEnum.Success,
 					id: "123",
 					elements: [
 						{
-							type: TypeEnum.SUBMISSION_GROUP,
+							type: TypeEnum.SubmissionGroup,
 							status: StatusEnum.Success,
 						},
 						{
-							type: TypeEnum.FILE_GROUP,
+							type: TypeEnum.FileGroup,
 							status: StatusEnum.Success,
 						},
 					],
@@ -363,16 +363,16 @@ describe("copy module", () => {
 				};
 				const expectedData = {
 					title: "test course",
-					type: TypeEnum.COURSE,
+					type: TypeEnum.Course,
 					status: StatusEnum.Partial,
 					id: "12345",
 					elements: [
 						{
-							type: TypeEnum.METADATA,
+							type: TypeEnum.Metadata,
 							status: StatusEnum.Success,
 						},
 						{
-							type: TypeEnum.FILE_GROUP,
+							type: TypeEnum.FileGroup,
 							status: StatusEnum.NotImplemented,
 						},
 					],
@@ -424,28 +424,28 @@ describe("copy module", () => {
 				};
 				const expectedData = {
 					title: "test course",
-					type: TypeEnum.COURSE,
+					type: TypeEnum.Course,
 					status: StatusEnum.Success,
 					id: "12345",
 					elements: [
 						{
-							type: TypeEnum.METADATA,
+							type: TypeEnum.Metadata,
 							status: StatusEnum.Success,
 						},
 						{
 							title: "board",
-							type: TypeEnum.BOARD,
+							type: TypeEnum.Board,
 							status: StatusEnum.Success,
 							id: "345",
 							elements: [
 								{
 									title: "Task 1",
-									type: TypeEnum.TASK,
+									type: TypeEnum.Task,
 									status: StatusEnum.Success,
 									id: "567",
 									elements: [
 										{
-											type: TypeEnum.METADATA,
+											type: TypeEnum.Metadata,
 											status: StatusEnum.Success,
 										},
 									],

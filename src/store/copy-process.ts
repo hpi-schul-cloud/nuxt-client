@@ -80,7 +80,7 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse = {
 		id: "",
 		title: "",
-		type: CopyApiResponseTypeEnum.BOARD,
+		type: CopyApiResponseTypeEnum.Board,
 		status: CopyApiResponseStatusEnum.Success,
 	};
 	private filteredResult: CopyResultItem[] = [];
@@ -221,9 +221,9 @@ export default class CopyModule extends VuexModule {
 		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
 			status
 		) => {
-			if (status === CopyApiResponseTypeEnum.TASK_GROUP) return true;
-			if (status === CopyApiResponseTypeEnum.LESSON) return true;
-			if (status === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL_GROUP)
+			if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
+			if (status === CopyApiResponseTypeEnum.Lesson) return true;
+			if (status === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return true;
 			return false;
 		};
@@ -233,17 +233,15 @@ export default class CopyModule extends VuexModule {
 		const isDesiredLeaf: (type: CopyApiResponseTypeEnum) => boolean = (
 			status: CopyApiResponseTypeEnum
 		) => {
-			if (status === CopyApiResponseTypeEnum.TASK) return true;
-			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD)
+			if (status === CopyApiResponseTypeEnum.Task) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentNexboard) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentTask) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentText) return true;
+			if (status === CopyApiResponseTypeEnum.LessonContentLernstore)
 				return true;
-			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA)
-				return true;
-			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_NEXBOARD)
-				return true;
-			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_TASK) return true;
-			if (status === CopyApiResponseTypeEnum.LESSON_CONTENT_LERNSTORE)
-				return true;
-			if (status === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL) return true;
+			if (status === CopyApiResponseTypeEnum.LernstoreMaterial) return true;
 			return false;
 		};
 

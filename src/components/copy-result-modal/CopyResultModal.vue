@@ -247,17 +247,17 @@ export default {
 		hasFailedGeogebraElement() {
 			return this.findElementByType(
 				this.items,
-				CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA
+				CopyApiResponseTypeEnum.LessonContentGeogebra
 			);
 		},
 		hasFailedEtherpadElement() {
 			return this.findElementByType(
 				this.items,
-				CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD
+				CopyApiResponseTypeEnum.LessonContentEtherpad
 			);
 		},
 		hasFailedFileElement() {
-			return this.findElementByType(this.items, CopyApiResponseTypeEnum.FILE);
+			return this.findElementByType(this.items, CopyApiResponseTypeEnum.File);
 		},
 	},
 	watch: {

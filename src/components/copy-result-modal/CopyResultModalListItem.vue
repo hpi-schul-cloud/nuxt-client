@@ -58,57 +58,57 @@ export default {
 	},
 	methods: {
 		getElementTypeName(type) {
-			if (type === CopyApiResponseTypeEnum.BOARD)
+			if (type === CopyApiResponseTypeEnum.Board)
 				return this.$t("common.words.learnContent");
-			if (type === CopyApiResponseTypeEnum.CONTENT)
+			if (type === CopyApiResponseTypeEnum.Content)
 				return this.$t("components.molecules.copyResult.label.content");
-			if (type === CopyApiResponseTypeEnum.COURSE)
+			if (type === CopyApiResponseTypeEnum.Course)
 				return this.$t("common.labels.room");
-			if (type === CopyApiResponseTypeEnum.COURSEGROUP_GROUP)
+			if (type === CopyApiResponseTypeEnum.CoursegroupGroup)
 				return this.$t("common.words.courseGroups");
-			if (type === CopyApiResponseTypeEnum.FILE)
+			if (type === CopyApiResponseTypeEnum.File)
 				return this.$t("components.molecules.copyResult.label.file");
-			if (type === CopyApiResponseTypeEnum.FILE_GROUP)
+			if (type === CopyApiResponseTypeEnum.FileGroup)
 				return this.$t("components.molecules.copyResult.label.files");
-			if (type === CopyApiResponseTypeEnum.LEAF)
+			if (type === CopyApiResponseTypeEnum.Leaf)
 				return this.$t("components.molecules.copyResult.label.leaf");
-			if (type === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL)
+			if (type === CopyApiResponseTypeEnum.LernstoreMaterial)
 				return "Missing name for Lernstore Material";
-			if (type === CopyApiResponseTypeEnum.LERNSTORE_MATERIAL_GROUP)
+			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return this.$t(
 					"components.molecules.copyResult.label.lernstoreMaterialGroup"
 				);
-			if (type === CopyApiResponseTypeEnum.LESSON)
+			if (type === CopyApiResponseTypeEnum.Lesson)
 				return this.$t("common.words.topics");
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_GEOGEBRA)
+			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra)
 				return "Geogebra";
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_ETHERPAD)
+			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad)
 				return "Etherpad";
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_TEXT)
+			if (type === CopyApiResponseTypeEnum.LessonContentText)
 				return "i18n text";
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_NEXBOARD)
+			if (type === CopyApiResponseTypeEnum.LessonContentNexboard)
 				return "Nexboard";
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_LERNSTORE)
+			if (type === CopyApiResponseTypeEnum.LessonContentLernstore)
 				return this.$t("common.words.lernstore");
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_TASK)
+			if (type === CopyApiResponseTypeEnum.LessonContentTask)
 				return this.$t("common.words.task");
-			if (type === CopyApiResponseTypeEnum.LESSON_CONTENT_GROUP)
+			if (type === CopyApiResponseTypeEnum.LessonContentGroup)
 				return this.$t(
 					"components.molecules.copyResult.label.lessonContentGroup"
 				);
-			if (type === CopyApiResponseTypeEnum.LTITOOL_GROUP)
+			if (type === CopyApiResponseTypeEnum.LtitoolGroup)
 				return this.$t("components.molecules.copyResult.label.ltiToolsGroup");
-			if (type === CopyApiResponseTypeEnum.METADATA)
+			if (type === CopyApiResponseTypeEnum.Metadata)
 				return this.$t("components.molecules.copyResult.metadata");
-			if (type === CopyApiResponseTypeEnum.SUBMISSION_GROUP)
+			if (type === CopyApiResponseTypeEnum.SubmissionGroup)
 				return this.$t("components.molecules.copyResult.label.submissions");
-			if (type === CopyApiResponseTypeEnum.TASK)
+			if (type === CopyApiResponseTypeEnum.Task)
 				return this.$t("common.words.task");
-			if (type === CopyApiResponseTypeEnum.TASK_GROUP)
+			if (type === CopyApiResponseTypeEnum.TaskGroup)
 				return this.$t("common.words.tasks");
-			if (type === CopyApiResponseTypeEnum.TIME_GROUP)
+			if (type === CopyApiResponseTypeEnum.TimeGroup)
 				return this.$t("components.molecules.copyResult.label.timeGroup");
-			if (type === CopyApiResponseTypeEnum.USER_GROUP)
+			if (type === CopyApiResponseTypeEnum.UserGroup)
 				return this.$t("components.molecules.copyResult.label.userGroup");
 
 			return "unknown label";
