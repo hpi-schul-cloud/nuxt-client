@@ -7,8 +7,8 @@
 		:buttons="['close']"
 		@dialog-closed="modalClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 whitespace">
-			{{ $t("components.molecules.copyResult.title") }}
+		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
+			{{ $t("components.molecules.copyResult.title") }} {{items.length}}
 		</h2>
 		<template slot="content">
 			<div>
@@ -21,12 +21,14 @@
 								i18n missing
 							</div>
 							<div v-if="hasFailedEtherpadElement">
-								<strong>Etherpad</strong> &middot; Elemente können nicht kopiert
-								werden
+								<strong>Etherpad</strong> &middot; Inhalte werden aus
+								Datenschutzgründen nicht kopiert und müssen neu hinzugefügt
+								werden.
 							</div>
 							<div v-if="hasFailedFileElement">
-								<strong>Dateien</strong> &middot; Elemente können nicht kopiert
-								werden
+								<strong>Dateien</strong> &middot; Kursdateien werden aus
+								technischen Gründen nicht kopiert und müssen neu hinzugefügt
+								werden.
 							</div>
 						</div>
 					</v-alert>
@@ -45,196 +47,195 @@ import { copyModule } from "@utils/store-accessor";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { mdiInformation } from "@mdi/js";
 
-const mockData = {
-	id: "asdklöjfasdklf",
-	status: "partial",
-	elements: [
-		{
-			type: "METADATA",
-			status: "success",
-		},
-		{
-			type: "USER_GROUP",
-			status: "not-doing",
-		},
-		{
-			type: "LTITOOL_GROUP",
-			status: "not-doing",
-		},
-		{
-			type: "TIME_GROUP",
-			status: "not-doing",
-		},
-		{
-			type: "FILE_GROUP",
-			status: "not-implemented",
-		},
-		{
-			type: "COURSEGROUP_GROUP",
-			status: "not-implemented",
-		},
-		{
-			title: "taskgroup",
-			type: "TASK_GROUP",
-			status: "failure",
-			id: "62e7a94e2c74e087967d3727",
-			elements: [
-				{
-					type: "METADATA",
-					status: "success",
-				},
-				{
-					title: "task in group",
-					type: "TASK",
-					status: "failure",
-					id: "62e7a94e2c74e087967d3237",
-					elements: [
-						{
-							type: "METADATA",
-							status: "success",
-						},
-						{
-							type: "CONTENT",
-							status: "success",
-						},
-						{
-							type: "SUBMISSION_GROUP",
-							status: "not-doing",
-						},
-					],
-				},
-			],
-		},
-		{
-			title: "board",
-			type: "BOARD",
-			status: "partial",
-			id: "62e7a94e2c74e087967d3737",
-			elements: [
-				{
-					title: "Thema (3)",
-					type: "LESSON",
-					status: "partial",
-					id: "62e7a94e2c74e087967d3723",
-					elements: [
-						{
-							type: "METADATA",
-							status: "success",
-						},
-						{
-							type: "LESSON_CONTENT_GROUP",
-							status: "partial",
-							elements: [
-								{
-									title: "Text",
-									type: "LESSON_CONTENT_TEXT",
-									status: "success",
-								},
-								{
-									title: "Sieb des Blabla",
-									type: "LESSON_CONTENT_GEOGEBRA",
-									status: "partial",
-								},
-								{
-									title: "Lernmaterial",
-									type: "LESSON_CONTENT_ETHERPAD",
-									status: "success",
-								},
-							],
-						},
-					],
-				},
-				{
-					title: "Thema (2)",
-					type: "LESSON",
-					status: "partial",
-					id: "62e7a94e2c74e087967d3724",
-					elements: [
-						{
-							type: "METADATA",
-							status: "success",
-						},
-						{
-							type: "LESSON_CONTENT_GROUP",
-							status: "partial",
-							elements: [
-								{
-									title: "Text",
-									type: "LESSON_CONTENT_TEXT",
-									status: "success",
-								},
-								{
-									title: "Geogebra",
-									type: "LESSON_CONTENT_GEOGEBRA",
-									status: "partial",
-								},
-								{
-									title: "Lernmaterial",
-									type: "LESSON_CONTENT_NEXBOARD",
-									status: "success",
-								},
-							],
-						},
-					],
-				},
-				{
-					title: "Thema (1)",
-					type: "LESSON",
-					status: "partial",
-					id: "62e7a94e2c74e087967d3725",
-					elements: [
-						{
-							type: "METADATA",
-							status: "success",
-						},
-						{
-							type: "LESSON_CONTENT_GROUP",
-							status: "partial",
-							elements: [
-								{
-									title: "Text",
-									type: "LESSON_CONTENT_NEXBOARD",
-									status: "success",
-								},
-								{
-									title: "Geogebra",
-									type: "LESSON_CONTENT_GEOGEBRA",
-									status: "partial",
-								},
-								{
-									title: "Lernmaterial",
-									type: "LESSON_CONTENT_LERNSTORE",
-									status: "success",
-								},
-							],
-						},
-					],
-				},
-			],
-		},
-	],
-};
+// const mockData = {
+// 	id: "asdklöjfasdklf",
+// 	status: "partial",
+// 	elements: [
+// 		{
+// 			type: "METADATA",
+// 			status: "success",
+// 		},
+// 		{
+// 			type: "USER_GROUP",
+// 			status: "not-doing",
+// 		},
+// 		{
+// 			type: "LTITOOL_GROUP",
+// 			status: "not-doing",
+// 		},
+// 		{
+// 			type: "TIME_GROUP",
+// 			status: "not-doing",
+// 		},
+// 		{
+// 			type: "FILE_GROUP",
+// 			status: "not-implemented",
+// 		},
+// 		{
+// 			type: "COURSEGROUP_GROUP",
+// 			status: "not-implemented",
+// 		},
+// 		{
+// 			title: "taskgroup",
+// 			type: "TASK_GROUP",
+// 			status: "failure",
+// 			id: "62e7a94e2c74e087967d3727",
+// 			elements: [
+// 				{
+// 					type: "METADATA",
+// 					status: "success",
+// 				},
+// 				{
+// 					title: "task in group",
+// 					type: "TASK",
+// 					status: "failure",
+// 					id: "62e7a94e2c74e087967d3237",
+// 					elements: [
+// 						{
+// 							type: "METADATA",
+// 							status: "success",
+// 						},
+// 						{
+// 							type: "CONTENT",
+// 							status: "success",
+// 						},
+// 						{
+// 							type: "SUBMISSION_GROUP",
+// 							status: "not-doing",
+// 						},
+// 					],
+// 				},
+// 			],
+// 		},
+// 		{
+// 			title: "board",
+// 			type: "BOARD",
+// 			status: "partial",
+// 			id: "62e7a94e2c74e087967d3737",
+// 			elements: [
+// 				{
+// 					title: "Thema (3)",
+// 					type: "LESSON",
+// 					status: "partial",
+// 					id: "62e7a94e2c74e087967d3723",
+// 					elements: [
+// 						{
+// 							type: "METADATA",
+// 							status: "success",
+// 						},
+// 						{
+// 							type: "LESSON_CONTENT_GROUP",
+// 							status: "partial",
+// 							elements: [
+// 								{
+// 									title: "Text",
+// 									type: "LESSON_CONTENT_TEXT",
+// 									status: "success",
+// 								},
+// 								{
+// 									title: "Sieb des Blabla",
+// 									type: "LESSON_CONTENT_GEOGEBRA",
+// 									status: "partial",
+// 								},
+// 								{
+// 									title: "Lernmaterial",
+// 									type: "LESSON_CONTENT_ETHERPAD",
+// 									status: "success",
+// 								},
+// 							],
+// 						},
+// 					],
+// 				},
+// 				{
+// 					title: "Thema (2)",
+// 					type: "LESSON",
+// 					status: "partial",
+// 					id: "62e7a94e2c74e087967d3724",
+// 					elements: [
+// 						{
+// 							type: "METADATA",
+// 							status: "success",
+// 						},
+// 						{
+// 							type: "LESSON_CONTENT_GROUP",
+// 							status: "partial",
+// 							elements: [
+// 								{
+// 									title: "Text",
+// 									type: "LESSON_CONTENT_TEXT",
+// 									status: "success",
+// 								},
+// 								{
+// 									title: "Geogebra",
+// 									type: "LESSON_CONTENT_GEOGEBRA",
+// 									status: "partial",
+// 								},
+// 								{
+// 									title: "Lernmaterial",
+// 									type: "LESSON_CONTENT_NEXBOARD",
+// 									status: "success",
+// 								},
+// 							],
+// 						},
+// 					],
+// 				},
+// 				{
+// 					title: "Thema (1)",
+// 					type: "LESSON",
+// 					status: "partial",
+// 					id: "62e7a94e2c74e087967d3725",
+// 					elements: [
+// 						{
+// 							type: "METADATA",
+// 							status: "success",
+// 						},
+// 						{
+// 							type: "LESSON_CONTENT_GROUP",
+// 							status: "partial",
+// 							elements: [
+// 								{
+// 									title: "Text",
+// 									type: "LESSON_CONTENT_NEXBOARD",
+// 									status: "success",
+// 								},
+// 								{
+// 									title: "Geogebra",
+// 									type: "LESSON_CONTENT_GEOGEBRA",
+// 									status: "partial",
+// 								},
+// 								{
+// 									title: "Lernmaterial",
+// 									type: "LESSON_CONTENT_LERNSTORE",
+// 									status: "success",
+// 								},
+// 							],
+// 						},
+// 					],
+// 				},
+// 			],
+// 		},
+// 	],
+// };
 
 export default {
 	name: "CopyResultModal",
 	components: { CopyResultModalList, vCustomDialog },
-	props: {
-		isOpen: {
-			type: Boolean,
-		},
-		loading: {
-			type: Boolean,
-		},
-	},
 	data() {
 		return {
-			isDialogOpen: true,
+			isDialogOpen: false,
 			mdiInformation,
 		};
 	},
 	computed: {
 		items() {
 			return copyModule.getFilteredResult;
+		},
+		isLoading() {
+			return false;
+		},
+		isOpen() {
+      console.log(this.isLoading);
+			return this.isLoading === true || this.items.length > 0;
 		},
 		hasNatification() {
 			return (
@@ -266,7 +267,8 @@ export default {
 	},
 	created() {
 		// WIP
-		copyModule.setFilteredResult(mockData);
+		// copyModule.setFilteredResult(mockData);
+		// console.log(mockData);
 	},
 	methods: {
 		findElementByType(items, type) {
@@ -293,5 +295,9 @@ export default {
 
 ::v-deep .v-alert__border {
 	opacity: 1;
+}
+
+.wordbreak-normal {
+	word-break: normal;
 }
 </style>

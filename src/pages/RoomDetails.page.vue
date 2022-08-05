@@ -7,6 +7,8 @@
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
+		room details
+		<!--wip-->
 		<template slot="header">
 			<div class="ma-2">
 				<div class="text-h3 pb-2 course-title">
@@ -97,11 +99,9 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
-		<!--    <copy-result-modal-->
-		<!--        :is-open="copyProcess.isOpen"-->
-		<!--        :loading="copyProcess.loading"-->
-		<!--        data-testid="copy-process"-->
-		<!--        @dialog-closed="onCopyProcessDialogClose"></copy-result-modal>-->
+		<copy-result-modal
+			@dialog-closed="onCopyProcessDialogClose"
+		></copy-result-modal>
 	</default-wireframe>
 </template>
 
@@ -115,15 +115,16 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
-	mdiCloudDownload,
-	mdiContentCopy,
-	mdiEmailPlusOutline,
-	mdiFormatListChecks,
-	mdiPlus,
-	mdiShareVariant,
-	mdiSquareEditOutline,
-	mdiViewListOutline,
+  mdiCloudDownload,
+  mdiContentCopy,
+  mdiEmailPlusOutline,
+  mdiFormatListChecks,
+  mdiPlus,
+  mdiShareVariant,
+  mdiSquareEditOutline,
+  mdiViewListOutline,
 } from "@mdi/js";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
 export default {
 	components: {
@@ -133,6 +134,7 @@ export default {
 		MoreItemMenu,
 		vCustomDialog,
 		BaseQrCode,
+		CopyResultModal,
 	},
 	layout: "defaultVuetify",
 	data() {

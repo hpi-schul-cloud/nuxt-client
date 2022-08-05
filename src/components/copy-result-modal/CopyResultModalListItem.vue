@@ -8,9 +8,7 @@
 				:items="[
 					{
 						href: itemUrl,
-						text:
-							item.title +
-							'afjökljfsdklföjasölfjasdkfljasdfklöasdjfklöasdjfasdklfjasdlföjsadflasdjfasdklöfj',
+						text: item.title,
 						disabled: false,
 					},
 				]"
@@ -122,10 +120,5 @@ export default {
 <style lang="scss" scoped>
 .list-none {
 	list-style-type: none;
-}
-
-::v-deep > .v-breadcrumbs__item {
-	@extend .truncate !optional;
-	@extend .d-block !optional;
 }
 </style>
