@@ -38,7 +38,11 @@
 							<base-icon source="material" icon="info" style="margin: 0" />
 						</base-button>
 					</span>
-					<info-box class="info-box" :active.sync="infoBoxActive">
+					<info-box
+						v-if="instanceCloudConsentNecessary"
+						class="info-box"
+						:active.sync="infoBoxActive"
+					>
 						<template #header>Registrierungen abschließen</template>
 						<template #body>
 							<div v-if="showExternalText" class="content">
@@ -118,6 +122,68 @@
 									icon="warning"
 									color="var(--color-danger)"
 								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
+							</div>
+						</template>
+					</info-box>
+					<info-box v-else class="info-box" :active.sync="infoBoxActive">
+						<template #header>{{
+							$t(
+								"pages.administration.students.infobox.registrationOnly.headline"
+							)
+						}}</template>
+						<template #body>
+							<div class="content">
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-1"
+									)
+								}}
+								<br />
+								<br />
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-2"
+									)
+								}}
+								<br />
+								<br />
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-3"
+									)
+								}}
+								<br />
+								<br />
+								<ul class="list">
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-1"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-3"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-4"
+											)
+										}}
+									</li>
+								</ul>
 							</div>
 						</template>
 					</info-box>
@@ -205,6 +271,12 @@ export default {
 					selectionStateMap.get(state)
 				);
 			},
+		},
+		instanceCloudConsentNecessary() {
+			if (process.env.SC_THEME === "brb") {
+				return false;
+			}
+			return true;
 		},
 	},
 	methods: {
