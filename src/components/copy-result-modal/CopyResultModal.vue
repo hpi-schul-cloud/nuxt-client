@@ -8,7 +8,7 @@
 		@dialog-closed="modalClosed"
 	>
 		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title") }} {{items.length}}
+			{{ $t("components.molecules.copyResult.title") }} {{ items.length }}
 		</h2>
 		<template slot="content">
 			<div>
@@ -234,7 +234,7 @@ export default {
 			return false;
 		},
 		isOpen() {
-      console.log(this.isLoading);
+			console.log(this.isLoading);
 			return this.isLoading === true || this.items.length > 0;
 		},
 		hasNatification() {
