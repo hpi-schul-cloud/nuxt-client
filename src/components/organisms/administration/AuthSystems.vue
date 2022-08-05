@@ -3,19 +3,21 @@
 		<h2 class="text-h4 mb-10">
 			{{ $t("pages.administration.school.index.authSystems.title") }}
 		</h2>
-    <v-text-field
-      v-if="customLoginLinkEnabled && !hasSystems"
-      id="school-login-link-0"
-      :value="generateLoginLink()"
-      class="school-login-link"
-      :color="getCopyStatus(0) ? 'success' : 'primary'"
-      :label="$t('pages.administration.school.index.authSystems.loginLinkLabel')"
-      readonly
-      dense
-      :append-icon="getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy"
-      @click:append="copyLoginLink(0)"
-      @blur="linkCopyFinished(0)"
-    ></v-text-field>
+		<v-text-field
+			v-if="customLoginLinkEnabled && !hasSystems"
+			id="school-login-link-0"
+			:value="generateLoginLink()"
+			class="school-login-link"
+			:color="getCopyStatus(0) ? 'success' : 'primary'"
+			:label="
+				$t('pages.administration.school.index.authSystems.loginLinkLabel')
+			"
+			readonly
+			dense
+			:append-icon="getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy"
+			@click:append="copyLoginLink(0)"
+			@blur="linkCopyFinished(0)"
+		></v-text-field>
 		<v-simple-table v-if="hasSystems" class="table-system">
 			<template #default>
 				<thead>
@@ -26,9 +28,13 @@
 						<th class="text-left">
 							{{ $t("pages.administration.school.index.authSystems.type") }}
 						</th>
-            <th v-if="customLoginLinkEnabled" class="text-left">
-              {{ $t("pages.administration.school.index.authSystems.loginLinkLabel") }}
-            </th>
+						<th v-if="customLoginLinkEnabled" class="text-left">
+							{{
+								$t(
+									"pages.administration.school.index.authSystems.loginLinkLabel"
+								)
+							}}
+						</th>
 						<th class="text-left"></th>
 					</tr>
 				</thead>
@@ -36,20 +42,24 @@
 					<tr v-for="system in systems" :key="system._id">
 						<td>{{ system.alias }}</td>
 						<td>{{ system.type }}</td>
-            <td v-if="customLoginLinkEnabled">
-              <v-text-field
-                v-if="isLoginSystem(system)"
-                :id="`school-login-link-${system._id}`"
-                :value="generateLoginLink(system)"
-                class="school-login-link"
-                :color="getCopyStatus(system._id) ? 'success' : 'primary'"
-                readonly
-                dense
-                :append-icon="getCopyStatus(system._id) ? iconMdiCheckCircle : iconMdiContentCopy"
-                @click:append="copyLoginLink(system._id)"
-                @blur="linkCopyFinished"
-              ></v-text-field>
-            </td>
+						<td v-if="customLoginLinkEnabled">
+							<v-text-field
+								v-if="isLoginSystem(system)"
+								:id="`school-login-link-${system._id}`"
+								:value="generateLoginLink(system)"
+								class="school-login-link"
+								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
+								readonly
+								dense
+								:append-icon="
+									getCopyStatus(system._id)
+										? iconMdiCheckCircle
+										: iconMdiContentCopy
+								"
+								@click:append="copyLoginLink(system._id)"
+								@blur="linkCopyFinished"
+							></v-text-field>
+						</td>
 						<td>
 							<v-btn
 								v-if="isEditable(system)"
@@ -79,9 +89,9 @@
 			depressed
 			to="/administration/ldap/config"
 			nuxt
-    >
-      {{ $t("pages.administration.school.index.authSystems.addLdap") }}
-    </v-btn>
+		>
+			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
+		</v-btn>
 		<v-custom-dialog
 			v-model="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
@@ -133,14 +143,14 @@ export default {
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiContentCopy: mdiContentCopy,
 			iconMdiCheckCircle: mdiCheckCircle,
-			copiedElement: '',
+			copiedElement: "",
 		};
 	},
 	computed: {
-    hasSystems() {
-      return this.systems.length > 0;
-    },
-    customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+		hasSystems() {
+			return this.systems.length > 0;
+		},
+		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
 	},
 	methods: {
 		// TODO - Discuss which systems are still gonna be editable in the future
@@ -157,26 +167,26 @@ export default {
 				systemId,
 			};
 		},
-    isLoginSystem(system) {
-      return system.oauthConfig || system.ldapConfig;
-    },
+		isLoginSystem(system) {
+			return system.oauthConfig || system.ldapConfig;
+		},
 		removeSystem(systemId) {
 			schoolsModule.deleteSystem(systemId);
 			// TODO show error
 		},
-    generateLoginLink(system) {
-      let params = "";
+		generateLoginLink(system) {
+			let params = "";
 
-      if (!system) {
-        params = "?strategy=email";
-      } else if (system.oauthConfig) {
-        params = `?strategy=${system.oauthConfig.provider}`;
-      } else if (system.ldapConfig) {
-        params = `?strategy=ldap&schoolId=${schoolsModule.getSchool.id}`;
-      }
+			if (!system) {
+				params = "?strategy=email";
+			} else if (system.oauthConfig) {
+				params = `?strategy=${system.oauthConfig.provider}`;
+			} else if (system.ldapConfig) {
+				params = `?strategy=ldap&schoolId=${schoolsModule.getSchool.id}`;
+			}
 
-      return `${window.location.origin}/login${params}`;
-    },
+			return `${window.location.origin}/login${params}`;
+		},
 		copyLoginLink(id) {
 			const copyText = document.getElementById(`school-login-link-${id}`);
 
@@ -185,13 +195,13 @@ export default {
 
 			navigator.clipboard.writeText(copyText.value);
 
-      this.copiedElement = id;
+			this.copiedElement = id;
 		},
-    getCopyStatus(id) {
-      return this.copiedElement === id;
-    },
+		getCopyStatus(id) {
+			return this.copiedElement === id;
+		},
 		linkCopyFinished() {
-      this.copiedElement = '';
+			this.copiedElement = "";
 		},
 	},
 };
