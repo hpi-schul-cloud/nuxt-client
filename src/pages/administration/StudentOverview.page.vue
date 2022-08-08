@@ -270,26 +270,6 @@ export default {
 					disabled: true,
 				},
 			],
-			icons: [
-				{
-					icon: "doublecheck",
-					color: "var(--color-success)",
-					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.legend.icon.success"),
-				},
-				{
-					icon: "check",
-					color: "var(--color-warning)",
-					label: this.$t(
-						"utils.adminFilter.consent.label.parentsAgreementMissing"
-					),
-				},
-				{
-					icon: "clear",
-					color: "var(--color-danger)",
-					label: this.$t("utils.adminFilter.consent.label.missing"),
-				},
-			],
 			filters: studentFilter(this),
 			active: false,
 			searchQuery:
@@ -358,6 +338,34 @@ export default {
 
 			return editedColumns;
 		},
+		icons() {
+			const instanceBasedIcons = [];
+
+			instanceBasedIcons.push({
+				icon: "doublecheck",
+				color: "var(--color-success)",
+				style: "margin: -3px 3px",
+				label: this.$t("pages.administration.students.legend.icon.success"),
+			});
+
+			if (this.isConsentNecessary) {
+				instanceBasedIcons.push({
+					icon: "check",
+					color: "var(--color-warning)",
+					label: this.$t(
+						"utils.adminFilter.consent.label.parentsAgreementMissing"
+					),
+				});
+			}
+
+			instanceBasedIcons.push({
+				icon: "clear",
+				color: "var(--color-danger)",
+				label: this.$t("utils.adminFilter.consent.label.missing"),
+			});
+
+			return instanceBasedIcons;
+		},
 		fab() {
 			if (
 				this.schoolIsExternallyManaged ||
@@ -388,6 +396,12 @@ export default {
 					},
 				],
 			};
+		},
+		isConsentNecessary() {
+			if (process.env.SC_THEME === "brb") {
+				return false;
+			}
+			return true;
 		},
 	},
 	watch: {
