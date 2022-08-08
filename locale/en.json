@@ -472,6 +472,7 @@
 	"pages.administration.students.index.title": "Manage students",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
+	"pages.administration.students.infobox.headline": "Complete registrations",
 	"pages.administration.students.infobox.LDAP.helpsection": "Hilfebereich",
 	"pages.administration.students.infobox.LDAP.paragraph-1": "Deine Schule bezieht sämtliche Login-Daten aus einem Quellsystem (LDAP o.ä.). Die Nutzer können sich mit dem Usernamen und Passwort aus dem Quellsystem in der Schul-Cloud einloggen.",
 	"pages.administration.students.infobox.LDAP.paragraph-2": "Beim ersten Login wird um die Einverständniserklärung gebeten, um die Registrierung abzuschließen.",

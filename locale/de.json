@@ -479,6 +479,7 @@
 	"pages.administration.students.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
 	"pages.administration.students.index.tableActions.qr": "Registrierungslinks als QR-Code ausdrucken",
 	"pages.administration.students.index.title": "Schüler:innen verwalten",
+	"pages.administration.students.infobox.headline": "Registrierungen abschließen",
 	"pages.administration.students.infobox.LDAP.helpsection": "Hilfebereich",
 	"pages.administration.students.infobox.LDAP.paragraph-1": "Deine Schule bezieht sämtliche Login-Daten aus einem Quellsystem (LDAP o.ä.). Die Nutzer:innen können sich mit dem Usernamen und Passwort aus dem Quellsystem in der Schul-Cloud einloggen.",
 	"pages.administration.students.infobox.LDAP.paragraph-2": "Beim ersten Login wird um die Einverständniserklärung gebeten, um die Registrierung abzuschließen.",

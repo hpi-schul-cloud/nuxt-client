@@ -553,6 +553,7 @@
 	"pages.administration.students.index.tableActions.email": "Надіслати посилання на реєстрацію електронною поштою",
 	"pages.administration.students.index.tableActions.qr": "Видрукувати посилання на реєстрацію у вигляді QR-коду",
 	"pages.administration.students.index.title": "Керувати учнями",
+	"pages.administration.students.infobox.headline": "Повні реєстрації",
 	"pages.administration.students.infobox.LDAP.helpsection": "Розділ довідки",
 	"pages.administration.students.infobox.LDAP.paragraph-1": "Ваша школа отримує всі дані для входу з вихідної системи (LDAP або аналогічної). Користувачі можуть увійти в шкільну хмару за допомогою імені користувача та пароля з вихідної системи.",
 	"pages.administration.students.infobox.LDAP.paragraph-2": "Коли ви ввійдете в систему вперше, вам буде запропоновано дати свою згоду, щоб завершити реєстрацію.",

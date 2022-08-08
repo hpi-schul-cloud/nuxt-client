@@ -477,6 +477,7 @@
 	"pages.administration.students.index.title": "Administrar estudiantes",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn@s",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
+	"pages.administration.students.infobox.headline": "Completar registros",
 	"pages.administration.students.infobox.LDAP.helpsection": "Área de ayuda",
 	"pages.administration.students.infobox.LDAP.paragraph-1": "Su escuela obtiene todos los datos de acceso de un sistema de origen (LDAP o similar). L@s usuari@s pueden acceder a Schul-Cloud con el nombre de usuari@ y la contraseña del sistema de origen.",
 	"pages.administration.students.infobox.LDAP.paragraph-2": "La primera vez que se conecte, se le pedirá el formulario de consentimiento para completar el registro.",

@@ -43,7 +43,9 @@
 						class="info-box"
 						:active.sync="infoBoxActive"
 					>
-						<template #header>Registrierungen abschließen</template>
+						<template #header>{{
+							$t("pages.administration.students.infobox.headline")
+						}}</template>
 						<template #body>
 							<div v-if="showExternalText" class="content">
 								{{
