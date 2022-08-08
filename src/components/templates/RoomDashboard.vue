@@ -13,7 +13,7 @@
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
-        room dashboard
+				room dashboard
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
@@ -182,7 +182,10 @@ import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import draggable from "vuedraggable";
-import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
