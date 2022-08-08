@@ -348,7 +348,7 @@ export default {
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
 
-			if (this.instanceCloudConsentNecessary) {
+			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: "check",
 					color: "var(--color-warning)",
@@ -397,7 +397,7 @@ export default {
 				],
 			};
 		},
-		instanceCloudConsentNecessary() {
+		isConsentNecessary() {
 			if (process.env.SC_THEME === "brb") {
 				return false;
 			}

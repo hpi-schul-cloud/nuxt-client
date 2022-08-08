@@ -39,7 +39,7 @@
 						</base-button>
 					</span>
 					<info-box
-						v-if="instanceCloudConsentNecessary"
+						v-if="isConsentNecessary"
 						class="info-box"
 						:active.sync="infoBoxActive"
 					>
@@ -272,7 +272,7 @@ export default {
 				);
 			},
 		},
-		instanceCloudConsentNecessary() {
+		isConsentNecessary() {
 			if (process.env.SC_THEME === "brb") {
 				return false;
 			}
