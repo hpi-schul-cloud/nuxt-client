@@ -219,11 +219,11 @@ export default {
 
 			return null;
 		},
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
-		},
 		roomData() {
 			return roomModule.getRoomData;
+		},
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
 		},
 		scopedPermissions() {
 			return roomModule.getPermissionData || [];
