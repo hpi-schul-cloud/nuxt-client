@@ -174,7 +174,7 @@ export default {
 	},
 	computed: {
 		isCopyModalLoading() {
-			return copyModule?.getLoading;
+			return copyModule?.getLoading ?? false;
 		},
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
