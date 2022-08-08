@@ -8,7 +8,7 @@
 		@dialog-closed="modalClosed"
 	>
 		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title") }} {{items.length}}
+			{{ $t("components.molecules.copyResult.title") }} {{ items.length }}
 		</h2>
 		<template slot="content">
 			<div>
@@ -231,10 +231,10 @@ export default {
 			return copyModule.getFilteredResult;
 		},
 		isLoading() {
-			return false;
+			return copyModule.getLoading;
 		},
 		isOpen() {
-      console.log(this.isLoading);
+			// this is not a smart approach WIP - opens modal on successful processes because isLoading si true nevertheless
 			return this.isLoading === true || this.items.length > 0;
 		},
 		hasNatification() {

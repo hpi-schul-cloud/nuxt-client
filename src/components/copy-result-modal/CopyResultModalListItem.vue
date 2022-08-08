@@ -2,13 +2,12 @@
 	<div v-if="item !== undefined">
 		<div class="d-flex flex-row align-items-center">
 			<v-icon> {{ mdiChevronLeft }} </v-icon>
-
 			<v-breadcrumbs
 				class="pl-0 py-0 mr-8 pr-4 truncate"
 				:items="[
 					{
 						href: itemUrl,
-						text: item.title,
+						text: title,
 						disabled: false,
 					},
 				]"
@@ -55,9 +54,13 @@ export default {
 		elements() {
 			return this.item?.elements || [];
 		},
+		title() {
+			return this.getElementTypeName(this.item.type) + ` - ` + this.item.title
+		},
 	},
 	methods: {
 		getElementTypeName(type) {
+      console.log('look for type', type);
 			if (type === CopyApiResponseTypeEnum.Board)
 				return this.$t("common.words.learnContent");
 			if (type === CopyApiResponseTypeEnum.Content)

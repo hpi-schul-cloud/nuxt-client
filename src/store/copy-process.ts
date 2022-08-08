@@ -178,7 +178,7 @@ export default class CopyModule extends VuexModule {
 				payload.id,
 				lessonCopyParams
 			);
-
+			console.log("api result unparsed ", copyResult);
 			this.setCopyResult(copyResult.data);
 			this.setFilteredResult(copyResult.data);
 			this.setLoading(false);
@@ -195,6 +195,11 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	setFilteredResult(payload: CopyApiResponse): void {
+		console.log(
+			"before transformation",
+			payload.status,
+			JSON.stringify(payload.elements)
+		);
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
 			this.filteredResult = [];
 			return;
@@ -221,8 +226,10 @@ export default class CopyModule extends VuexModule {
 		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
 			status
 		) => {
-			if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
+			// if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
+			// if (status === CopyApiResponseTypeEnum.FileGroup) return true;
 			if (status === CopyApiResponseTypeEnum.Lesson) return true;
+			// if (status === CopyApiResponseTypeEnum.LessonContentGroup) return true;
 			if (status === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return true;
 			return false;
@@ -263,6 +270,7 @@ export default class CopyModule extends VuexModule {
 					title: element.title || "",
 					elements: [],
 					elementId: element.id || "",
+					type: element.type,
 				});
 				element.elements?.forEach(
 					(e) => (items = [...getItemsFromBranch(e, items)])
@@ -285,7 +293,7 @@ export default class CopyModule extends VuexModule {
 			return items;
 		};
 
-		const result: CopyResultItem[] = payload.elements
+		const result: CopyResultItem[] = [payload]
 			.filter((e) => isHandledStatus(e.status))
 			.reduce<CopyResultItem[]>((acc, curr) => {
 				acc = [...acc, ...getItemsFromBranch(curr, acc)];
