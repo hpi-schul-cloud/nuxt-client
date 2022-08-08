@@ -224,7 +224,7 @@ export default {
 			};
 		},
 		isCopyModalLoading() {
-			return copyModule?.getLoading;
+			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {

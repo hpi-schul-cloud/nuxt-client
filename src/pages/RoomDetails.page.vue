@@ -220,7 +220,7 @@ export default {
 			return null;
 		},
 		isCopyModalLoading() {
-			return copyModule?.getLoading;
+			return copyModule?.getLoading ?? false;
 		},
 		roomData() {
 			return roomModule.getRoomData;
