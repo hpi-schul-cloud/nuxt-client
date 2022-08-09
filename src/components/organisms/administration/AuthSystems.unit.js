@@ -7,9 +7,15 @@ import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [
-		{ _id: "1234", type: "sample system" }, // deletable: true, editable: false
-		{ _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
-		{ _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+		{ _id: "1", type: "sample system" }, // deletable: true, editable: false
+		{
+			_id: "2",
+			type: "ldap",
+			ldapConfig: { provider: "iserv-idm" },
+			oauthConfig: { provider: "iserv-idm" },
+		}, // deletable: false, editable: false
+		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
@@ -24,6 +30,10 @@ const searchStrings = {
 	deleteSystemButton: ".delete-system-btn",
 	customDialog: ".custom-dialog",
 	schoolLoginLink: ".school-login-link",
+	emailLink: "#school-login-link-0",
+	oauthAndLdapLink: "#school-login-link-2",
+	ldapLink: "#school-login-link-3",
+	oauthLink: "#school-login-link-4",
 };
 
 describe("AuthSystems", () => {
@@ -61,7 +71,8 @@ describe("AuthSystems", () => {
 				expect(loginLinkFieldVisibility).toHaveLength(0);
 			});
 
-			it("login link field should be visible", () => {
+			it("login link field should be visible for all systems", () => {
+				schoolsModule.setSchool(mockSchool);
 				const wrapper = mount(AuthSystems, {
 					...createComponentMocks({
 						i18n: true,
@@ -73,8 +84,19 @@ describe("AuthSystems", () => {
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
 				);
+				const oauthAndLdapLink = wrapper.find(searchStrings.oauthAndLdapLink);
+				const ldapLink = wrapper.find(searchStrings.ldapLink);
+				const oauthLink = wrapper.find(searchStrings.oauthLink);
 
-				expect(loginLinkFieldVisibility).toHaveLength(1);
+				expect(loginLinkFieldVisibility).toHaveLength(3);
+				expect(oauthAndLdapLink.element.value).toContain(
+					`strategy=${wrapper.props().systems[1].oauthConfig.provider}`
+				);
+				expect(ldapLink.element.value).toContain("strategy=ldap");
+				expect(ldapLink.element.value).toContain(`schoolId=${mockSchool.id}`);
+				expect(oauthLink.element.value).toContain(
+					`strategy=${wrapper.props().systems[3].oauthConfig.provider}`
+				);
 			});
 
 			it("login link field should render email login link", () => {
@@ -92,59 +114,10 @@ describe("AuthSystems", () => {
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
 				);
+				const emailLink = wrapper.find(searchStrings.emailLink);
 
 				expect(loginLinkFieldVisibility).toHaveLength(1);
-
-				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
-					"strategy=email"
-				);
-			});
-
-			it("login link field should render ldap login link", () => {
-				schoolsModule.setSchool(mockSchool);
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: generateProps(),
-				});
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-
-				expect(loginLinkFieldVisibility).toHaveLength(1);
-
-				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
-					"strategy=ldap"
-				);
-				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
-					`schoolId=${mockSchool.id}`
-				);
-			});
-
-			it("login link field should render iserv login link", () => {
-				const props = generateProps();
-				props.systems = [{ oauthConfig: {} }];
-
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: props,
-				});
-
-				const loginLinkFieldVisibility = wrapper.findAll(
-					searchStrings.schoolLoginLink
-				);
-
-				expect(loginLinkFieldVisibility).toHaveLength(1);
-
-				expect(loginLinkFieldVisibility.wrappers[0].vm.value).toContain(
-					"strategy=iserv"
-				);
+				expect(emailLink.element.value).toContain("strategy=email");
 			});
 
 			it("login link copy button should copy login link", () => {
@@ -175,11 +148,9 @@ describe("AuthSystems", () => {
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
 				);
-
-				expect(loginLinkFieldVisibility).toHaveLength(1);
-
 				loginLinkFieldVisibility.wrappers[0].find(".v-icon").trigger("click");
 
+				expect(loginLinkFieldVisibility).toHaveLength(3);
 				expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
 			});
 		});
@@ -195,9 +166,9 @@ describe("AuthSystems", () => {
 
 			const ldapButtonVisibility = wrapper.findAll(searchStrings.addLdap);
 			expect(ldapButtonVisibility).toHaveLength(1);
-			expect(ldapButtonVisibility.wrappers[0].element.text).toStrictEqual(
-				"LDAP-System hinzufügen"
-			);
+			expect(
+				ldapButtonVisibility.wrappers[0].element.text.trim()
+			).toStrictEqual("LDAP-System hinzufügen");
 			expect(ldapButtonVisibility.wrappers[0].vm.to).toStrictEqual(
 				"/administration/ldap/config"
 			);
@@ -218,7 +189,7 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			expect(tableCell).toHaveLength(9);
+			expect(tableCell).toHaveLength(wrapper.props().systems.length * 3);
 			expect(tableCell.wrappers[1].element.textContent).toStrictEqual(
 				"sample system"
 			);
@@ -349,9 +320,7 @@ describe("AuthSystems", () => {
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
 			deleteButton.trigger("click");
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
-			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual(
-				"1234"
-			);
+			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("1");
 		});
 	});
 });
