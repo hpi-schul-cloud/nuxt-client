@@ -168,26 +168,22 @@
 		<!--			@dialog-closed="onCopyProcessDialogClose"-->
 		<!--		>-->
 		<!--		</copy-process>-->
-		<copy-result-modal
-			@dialog-closed="onCopyProcessDialogClose"
-		></copy-result-modal>
+<!--		<copy-result-modal-->
+<!--			@dialog-closed="onCopyProcessDialogClose"-->
+<!--		></copy-result-modal>-->
 		<!--		      data-testid="copy-process"-->
 	</div>
 </template>
 
 <script>
-import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
-import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
 import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import draggable from "vuedraggable";
-import {
-	BoardElementResponseTypeEnum,
-	ImportUserResponseRoleNamesEnum,
-} from "@/serverApi/v3";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
+import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import draggable from "vuedraggable";
 
 export default {
 	components: {
@@ -196,7 +192,6 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
-		CopyResultModal,
 	},
 	props: {
 		roomDataObject: {
@@ -215,11 +210,6 @@ export default {
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
-			copyProcess: {
-				id: "",
-				isOpen: true,
-				loading: false,
-			},
 		};
 	},
 	computed: {
@@ -228,6 +218,9 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
+		},
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {
@@ -337,46 +330,10 @@ export default {
 				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
 				return;
 			}
-
 			await copyModule.copyTask({ id: itemId, courseId: this.roomData.roomId });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				if (copyResult.status === "success") {
-					this.$notifier({
-						text: this.$t("pages.room.copy.task.message.copied"),
-						status: "success",
-					});
-
-					await roomModule.fetchContent(this.roomData.roomId);
-				} else {
-					this.copyProcess.isOpen = true;
-					this.copyProcess.id = copyResult.id;
-					this.copyProcess.loading = copyModule.getLoading;
-
-					this.$notifier({
-						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
-						status: "warning",
-					});
-				}
-			}
 		},
 		async onCopyProcessDialogClose() {
-			this.copyProcess.isOpen = false;
-			this.copyProcess.id = "";
 			await roomModule.fetchContent(this.roomData.roomId);
-		},
-		redirectTask(itemId) {
-			window.location.href = `/homework/${itemId}/edit?returnUrl=rooms/${this.roomDataObject.roomId}`;
 		},
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
@@ -386,41 +343,10 @@ export default {
 			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
 				return;
 			}
-
 			await copyModule.copyLesson({
 				id: itemId,
 				courseId: this.roomData.roomId,
 			});
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				if (copyResult.status === "success") {
-					this.$notifier({
-						text: this.$t("pages.room.copy.lesson.message.copied"),
-						status: "success",
-					});
-
-					await roomModule.fetchContent(this.roomData.roomId);
-				} else {
-					this.copyProcess.isOpen = true;
-					this.copyProcess.id = copyResult.id;
-					this.copyProcess.loading = copyModule.getLoading;
-
-					this.$notifier({
-						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
-						status: "warning",
-					});
-				}
-			}
 		},
 	},
 };

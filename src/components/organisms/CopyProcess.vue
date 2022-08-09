@@ -117,7 +117,7 @@ export default {
 		dialogClosed() {
 			// this.showModal = false;
 			this.$emit("dialog-closed", false);
-			copyModule.resetCopyResult();
+			copyModule.reset();
 		},
 	},
 };

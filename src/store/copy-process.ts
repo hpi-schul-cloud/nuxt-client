@@ -77,18 +77,9 @@ export type CopyParams = {
 	stateFactory: true,
 })
 export default class CopyModule extends VuexModule {
-	private copyResult: CopyApiResponse = {
-		id: "",
-		title: "",
-		type: CopyApiResponseTypeEnum.Board,
-		status: CopyApiResponseStatusEnum.Success,
-	};
+	private copyResult: CopyApiResponse | undefined = undefined;
 	private filteredResult: CopyResultItem[] = [];
-	private businessError: BusinessError = {
-		statusCode: "",
-		message: "",
-		error: {},
-	};
+	private businessError: BusinessError | undefined = undefined;
 	private loading: boolean = false;
 	private error: null | {} = null;
 	private isSuccess: boolean = false;
@@ -320,31 +311,23 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	resetBusinessError(): void {
-		this.businessError = {
-			statusCode: "",
-			message: "",
-			error: {},
-		};
+		this.businessError = undefined;
 	}
 
 	@Mutation
-	setCopyResult(payload: CopyApiResponse | any): void {
+	setCopyResult(payload: CopyApiResponse): void {
 		this.copyResult = payload;
 	}
 
 	@Mutation
-	resetCopyResult(): void {
-		// const emptyData = { WIP
-		// 	id: "",
-		// 	title: "",
-		// 	type: CopyApiResponseTypeEnum.Board,
-		// 	status: CopyApiResponseStatusEnum.Success,
-		// };
-		// this.copyResult = emptyData;
+	reset(): void {
+		console.log("vuetify modal emitted dialog-closed");
 		this.filteredResult = [];
+		this.copyResult = undefined;
+		this.businessError = undefined;
 	}
 
-	get getCopyResult(): CopyApiResponse {
+	get getCopyResult(): CopyApiResponse | undefined {
 		return this.copyResult;
 	}
 
@@ -357,11 +340,11 @@ export default class CopyModule extends VuexModule {
 	}
 
 	get getTitle(): string {
-		return this.copyResult.title || "";
+		return this.copyResult?.title ?? "";
 	}
 
 	get getId(): string {
-		return this.copyResult.id || "";
+		return this.copyResult?.id ?? "";
 	}
 
 	get getResponseTypes(): object {
@@ -380,7 +363,7 @@ export default class CopyModule extends VuexModule {
 		return this.error;
 	}
 
-	get getBusinessError(): BusinessError {
+	get getBusinessError(): BusinessError | undefined {
 		return this.businessError;
 	}
 }

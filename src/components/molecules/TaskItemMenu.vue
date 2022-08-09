@@ -106,28 +106,17 @@
 		</v-custom-dialog>
 		<copy-result-modal
 			v-if="isTeacher || true"
-			:is-open="copyProcess.isOpen"
-			:loading="copyProcess.loading"
-			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
 		></copy-result-modal>
+		<!--			:is-open="copyProcess.isOpen"-->
+		<!--			:loading="isCopyModalLoading"-->
+		<!--			data-testid="copy-process"-->
 	</div>
 </template>
 
 <script>
-import {
-	mdiContentCopy,
-	mdiDotsVertical,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiUndoVariant,
-} from "@mdi/js";
-import {
-	copyModule,
-	envConfigModule,
-	finishedTaskModule,
-	taskModule,
-} from "@/store";
+import { mdiContentCopy, mdiDotsVertical, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant, } from "@mdi/js";
+import { copyModule, envConfigModule, finishedTaskModule, taskModule, } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
@@ -165,14 +154,12 @@ export default {
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
-			copyProcess: {
-				id: "",
-				isOpen: false,
-				loading: false,
-			},
 		};
 	},
 	computed: {
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
+		},
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
@@ -205,43 +192,9 @@ export default {
 				window.location.href = this.copyLink;
 				return;
 			}
-
 			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				if (copyResult.status === "success") {
-					this.$notifier({
-						text: this.$t("pages.room.copy.task.message.copied"),
-						status: "success",
-					});
-
-					taskModule.setActiveTab("drafts");
-					await taskModule.fetchAllTasks();
-				} else {
-					this.copyProcess.isOpen = true;
-					this.copyProcess.id = copyResult.id;
-					this.copyProcess.loading = copyModule.getLoading;
-
-					this.$notifier({
-						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
-						status: "warning",
-					});
-				}
-			}
 		},
 		async onCopyProcessDialogClose() {
-			this.copyProcess.isOpen = false;
-			this.copyProcess.id = "";
 			await taskModule.fetchAllTasks();
 			taskModule.setActiveTab("drafts");
 		},

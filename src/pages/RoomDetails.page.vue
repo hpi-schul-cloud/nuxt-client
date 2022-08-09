@@ -102,29 +102,32 @@
 		<copy-result-modal
 			@dialog-closed="onCopyProcessDialogClose"
 		></copy-result-modal>
+		<!--			:is-open="copyProcess.isOpen"-->
+		<!--			:loading="copyProcess.loading"-->
+		<!--			data-testid="copy-process"-->
 	</default-wireframe>
 </template>
 
 <script>
 import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
-	mdiCloudDownload,
-	mdiContentCopy,
-	mdiEmailPlusOutline,
-	mdiFormatListChecks,
-	mdiPlus,
-	mdiShareVariant,
-	mdiSquareEditOutline,
-	mdiViewListOutline,
+  mdiCloudDownload,
+  mdiContentCopy,
+  mdiEmailPlusOutline,
+  mdiFormatListChecks,
+  mdiPlus,
+  mdiShareVariant,
+  mdiSquareEditOutline,
+  mdiViewListOutline,
 } from "@mdi/js";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import DefaultWireframe from "@components/templates/DefaultWireframe";
+import RoomDashboard from "@components/templates/RoomDashboard";
 
 export default {
 	components: {
@@ -167,11 +170,7 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
-			copyProcess: {
-				id: "",
-				isOpen: false,
-				loading: false,
-			},
+			copyProcessReturnUrl: "",
 		};
 	},
 	computed: {
@@ -220,6 +219,9 @@ export default {
 		},
 		roomData() {
 			return roomModule.getRoomData;
+		},
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
 		},
 		scopedPermissions() {
 			return roomModule.getPermissionData || [];
@@ -315,46 +317,22 @@ export default {
 			this.dialog.subText = "";
 		},
 		async copyRoom() {
-			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = copyModule.getLoading;
 			await copyModule.copyRoom(this.courseId);
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
-			// TODO - individualize error messages per copy case
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
+			if (businessError?.statusCode !== undefined) {
 				return;
 			}
 
-			if (copyResult.id !== "") {
-				this.copyProcess.id = copyResult.id;
-				this.copyProcess.loading = copyModule.getLoading;
-
-				const copyResultStatus = copyModule.getCopyResult.status;
-				if (copyResultStatus === "success") {
-					this.$notifier({
-						text: this.$t("pages.room.copy.course.message.copied"),
-						status: "success",
-					});
-				} else {
-					this.$notifier({
-						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
-						status: "warning",
-					});
-				}
+			if (copyResult?.id !== undefined) {
+				this.copyProcessReturnUrl = `/rooms/${copyResult.id}`;
 			}
 		},
 		async onCopyProcessDialogClose() {
-			if (this.copyProcess.id === "") return;
-
-			this.$router.push(`/rooms/${this.copyProcess.id}`);
-			this.courseId = this.copyProcess.id;
-			this.copyProcess.isOpen = false;
-			this.copyProcess.id = "";
+			if (this.copyProcessReturnUrl === "") return;
+			await this.$router.push(this.copyProcessReturnUrl);
+			this.copyProcessReturnUrl = "";
 		},
 	},
 	head() {

@@ -291,7 +291,7 @@ describe("copy module", () => {
 					status: StatusEnum.Success,
 				};
 
-				copyModule.resetCopyResult();
+				copyModule.reset();
 				expect(copyModule.getCopyResult).toStrictEqual(emptyData);
 				expect(copyModule.getFilteredResult).toStrictEqual(emptyData);
 			});
@@ -313,7 +313,7 @@ describe("copy module", () => {
 				};
 
 				const copyModule = new CopyModule({});
-				copyModule.resetCopyResult();
+				copyModule.reset();
 				copyModule.setFilteredResult(serverData);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);

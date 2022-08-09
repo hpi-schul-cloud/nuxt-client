@@ -1,6 +1,6 @@
 <template>
 	<v-custom-dialog
-		v-model="isDialogOpen"
+		:is-open="isOpen"
 		data-testid="copy-dialog"
 		:size="480"
 		has-buttons
@@ -8,11 +8,11 @@
 		@dialog-closed="modalClosed"
 	>
 		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title") }} {{ items.length }}
+			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">
 			<div>
-				<div v-if="hasNatification">
+				<div v-if="hasNotification">
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
 							<div v-if="hasFailedGeogebraElement">
@@ -222,7 +222,6 @@ export default {
 	components: { CopyResultModalList, vCustomDialog },
 	data() {
 		return {
-			isDialogOpen: false,
 			mdiInformation,
 		};
 	},
@@ -234,10 +233,13 @@ export default {
 			return copyModule.getLoading;
 		},
 		isOpen() {
-			// this is not a smart approach WIP - opens modal on successful processes because isLoading si true nevertheless
-			return this.isLoading === true || this.items.length > 0;
+			// this is not a smart approach WIP - opens modal on successful processes because isLoading is true nevertheless
+			return this.isLoading === true || this.copyResultStatus !== undefined;
 		},
-		hasNatification() {
+		copyResultStatus() {
+			return copyModule.getCopyResult?.status;
+		},
+		hasNotification() {
 			return (
 				this.hasFailedGeogebraElement ||
 				this.hasFailedEtherpadElement ||
@@ -260,16 +262,6 @@ export default {
 			return this.findElementByType(this.items, CopyApiResponseTypeEnum.File);
 		},
 	},
-	watch: {
-		isOpen() {
-			this.isDialogOpen = this.isOpen;
-		},
-	},
-	created() {
-		// WIP
-		// copyModule.setFilteredResult(mockData);
-		// console.log(mockData);
-	},
 	methods: {
 		findElementByType(items, type) {
 			let found = false;
@@ -280,8 +272,8 @@ export default {
 			return found;
 		},
 		modalClosed() {
-			copyModule.resetCopyResult();
-			this.$emit("dialog-close", false);
+			copyModule.reset();
+			this.$emit("dialog-closed");
 		},
 	},
 };
