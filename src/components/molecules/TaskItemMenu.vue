@@ -115,8 +115,19 @@
 </template>
 
 <script>
-import { mdiContentCopy, mdiDotsVertical, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant, } from "@mdi/js";
-import { copyModule, envConfigModule, finishedTaskModule, taskModule, } from "@/store";
+import {
+	mdiContentCopy,
+	mdiDotsVertical,
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+} from "@mdi/js";
+import {
+	copyModule,
+	envConfigModule,
+	finishedTaskModule,
+	taskModule,
+} from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
