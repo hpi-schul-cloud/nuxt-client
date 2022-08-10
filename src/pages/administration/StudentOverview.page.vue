@@ -398,10 +398,7 @@ export default {
 			};
 		},
 		isConsentNecessary() {
-			if (process.env.SC_THEME === "brb") {
-				return false;
-			}
-			return true;
+			return this.env.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	watch: {

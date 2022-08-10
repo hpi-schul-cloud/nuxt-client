@@ -123,6 +123,9 @@ export default class EnvConfigModule extends VuexModule {
 	get getGhostBaseUrl() {
 		return this.env.GHOST_BASE_URL;
 	}
+	get getConsentNecessary() {
+		return this.env.FEATURE_CONSENT_NECESSARY;
+	}
 
 	get getEnv(): Envs {
 		return this.env;
