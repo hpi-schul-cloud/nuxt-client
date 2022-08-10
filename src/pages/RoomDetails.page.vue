@@ -59,7 +59,11 @@
 				</v-tabs>
 			</div>
 		</template>
-		<room-dashboard :room-data-object="roomData" :role="dashBoardRole" />
+		<room-dashboard
+			:room-data-object="roomData"
+			:role="dashBoardRole"
+			@copy-board-element="onCopyBoardElement"
+		/>
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
 		<v-custom-dialog
@@ -100,11 +104,11 @@
 			</template>
 		</v-custom-dialog>
 		<copy-result-modal
-			@dialog-closed="onCopyProcessDialogClose"
+			:is-loading="copyResultModalIsLoading"
+			:copy-result-items="copyResultModalItems"
+			:copy-result-status="copyResultModalStatus"
+			@dialog-closed="onCopyProcessDialogClosed"
 		></copy-result-modal>
-		<!--			:is-open="copyProcess.isOpen"-->
-		<!--			:loading="copyProcess.loading"-->
-		<!--			data-testid="copy-process"-->
 	</default-wireframe>
 </template>
 
@@ -220,9 +224,6 @@ export default {
 		roomData() {
 			return roomModule.getRoomData;
 		},
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
-		},
 		scopedPermissions() {
 			return roomModule.getPermissionData || [];
 		},
@@ -260,7 +261,7 @@ export default {
 					icon: this.icons.mdiContentCopy,
 					action: () =>
 						envConfigModule.getEnv.FEATURE_COURSE_COPY_ENABLED
-							? this.copyRoom()
+							? this.onCopyRoom(this.roomData.roomId)
 							: (window.location.href = `/courses/${this.courseId}/copy`),
 					name: this.$t("common.actions.copy"),
 					dataTestId: "title-menu-copy",
@@ -275,6 +276,15 @@ export default {
 				});
 			}
 			return items;
+		},
+		copyResultModalIsLoading() {
+			return copyModule.getLoading;
+		},
+		copyResultModalStatus() {
+			return copyModule.getCopyResult?.status;
+		},
+		copyResultModalItems() {
+			return copyModule.getFilteredResult;
 		},
 	},
 	async created() {
@@ -316,8 +326,8 @@ export default {
 			this.dialog.inputText = "";
 			this.dialog.subText = "";
 		},
-		async copyRoom() {
-			await copyModule.copyRoom(this.courseId);
+		async onCopyRoom(courseId) {
+			await copyModule.copy({ id: courseId, courseId, type: "course" });
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
@@ -329,7 +339,12 @@ export default {
 				this.copyProcessReturnUrl = `/rooms/${copyResult.id}`;
 			}
 		},
-		async onCopyProcessDialogClose() {
+		async onCopyBoardElement(payload) {
+			await copyModule.copy(payload);
+			await roomModule.fetchContent(payload.courseId);
+		},
+		async onCopyProcessDialogClosed() {
+			copyModule.reset();
 			if (this.copyProcessReturnUrl === "") return;
 			await this.$router.push(this.copyProcessReturnUrl);
 			this.copyProcessReturnUrl = "";

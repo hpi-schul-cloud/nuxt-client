@@ -168,9 +168,6 @@
 		<!--			@dialog-closed="onCopyProcessDialogClose"-->
 		<!--		>-->
 		<!--		</copy-process>-->
-<!--		<copy-result-modal-->
-<!--			@dialog-closed="onCopyProcessDialogClose"-->
-<!--		></copy-result-modal>-->
 		<!--		      data-testid="copy-process"-->
 	</div>
 </template>
@@ -325,28 +322,30 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async copyTask(itemId) {
+		async copyTask(taskId) {
 			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
 				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
 				return;
 			}
-			await copyModule.copyTask({ id: itemId, courseId: this.roomData.roomId });
+			this.$emit("copy-board-element", {
+				id: taskId,
+				type: "task",
+				courseId: this.roomData.roomId,
+			});
 		},
-		async onCopyProcessDialogClose() {
-			await roomModule.fetchContent(this.roomData.roomId);
+		async copyLesson(lessonId) {
+			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+				return;
+			}
+			this.$emit("copy-board-element", {
+				id: lessonId,
+				type: "lesson",
+				courseId: this.roomData.roomId,
+			});
 		},
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
-		},
-		async copyLesson(itemId) {
-			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
-				return;
-			}
-			await copyModule.copyLesson({
-				id: itemId,
-				courseId: this.roomData.roomId,
-			});
 		},
 	},
 };
@@ -366,7 +365,6 @@ export default {
 }
 
 .share-info-text {
-	// min-height: var(--sidebar-width);
 	font-size: var(--space-md);
 	color: var(--color-black);
 }

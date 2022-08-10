@@ -68,6 +68,7 @@ const cleanupCopyStatus = (item: any): void | any => {
 
 export type CopyParams = {
 	id: string;
+	type: "task" | "lesson" | "course";
 	courseId: string;
 };
 
@@ -81,7 +82,6 @@ export default class CopyModule extends VuexModule {
 	private filteredResult: CopyResultItem[] = [];
 	private businessError: BusinessError | undefined = undefined;
 	private loading: boolean = false;
-	private error: null | {} = null;
 	private isSuccess: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
@@ -101,80 +101,38 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copyTask(payload: CopyParams): Promise<void> {
+	async copy({ id, courseId, type }: CopyParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 		try {
-			const taskCopyParams =
-				payload.courseId && payload.courseId !== ""
-					? {
-							courseId: payload.courseId,
-					  }
-					: {};
+			let copyResult: CopyApiResponse | undefined = undefined;
 
-			const copyResult = await this.taskApi.taskControllerCopyTask(
-				payload.id,
-				taskCopyParams
-			);
+			if (type === "task") {
+				copyResult = await this.taskApi
+					.taskControllerCopyTask(id, { courseId })
+					.then((response) => response.data);
+			}
 
-			this.setCopyResult(copyResult.data);
-			this.setFilteredResult(copyResult.data);
+			if (type === "lesson") {
+				copyResult = await this.roomsApi
+					.roomsControllerCopyLesson(id, { courseId })
+					.then((response) => response.data);
+			}
+
+			if (type === "course") {
+				copyResult = await this.roomsApi
+					.roomsControllerCopyCourse(id)
+					.then((response) => response.data);
+			}
+
+			if (copyResult === undefined) {
+				throw new Error("CopyProcess unknown type: " + type);
+			}
+
+			this.setCopyResult(copyResult);
+			this.setFilteredResult(copyResult);
 			this.setLoading(false);
 		} catch (error: any) {
-			this.setError(error);
-			this.setLoading(false);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
-	async copyRoom(courseId: string): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const copyResult = await this.roomsApi.roomsControllerCopyCourse(
-				courseId
-			);
-
-			this.setCopyResult(copyResult.data);
-			this.setFilteredResult(copyResult.data);
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
-			this.setLoading(false);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
-	async copyLesson(payload: CopyParams): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			const lessonCopyParams =
-				payload.courseId && payload.courseId !== ""
-					? {
-							courseId: payload.courseId,
-					  }
-					: {};
-			const copyResult = await this.roomsApi.roomsControllerCopyLesson(
-				payload.id,
-				lessonCopyParams
-			);
-			console.log("api result unparsed ", copyResult);
-			this.setCopyResult(copyResult.data);
-			this.setFilteredResult(copyResult.data);
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
 			this.setLoading(false);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -300,11 +258,6 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
-		this.error = error;
-	}
-
-	@Mutation
 	setBusinessError(businessError: BusinessError): void {
 		this.businessError = businessError;
 	}
@@ -357,10 +310,6 @@ export default class CopyModule extends VuexModule {
 
 	get getLoading(): boolean {
 		return this.loading;
-	}
-
-	get getError(): object | null {
-		return this.error;
 	}
 
 	get getBusinessError(): BusinessError | undefined {

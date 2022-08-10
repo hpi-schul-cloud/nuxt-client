@@ -5,7 +5,7 @@
 		:size="480"
 		has-buttons
 		:buttons="['close']"
-		@dialog-closed="modalClosed"
+		@dialog-closed="onDialogClosed"
 	>
 		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
 			{{ $t("components.molecules.copyResult.title") }}
@@ -43,7 +43,6 @@
 <script>
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { copyModule } from "@utils/store-accessor";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { mdiInformation } from "@mdi/js";
 
@@ -220,6 +219,17 @@ import { mdiInformation } from "@mdi/js";
 export default {
 	name: "CopyResultModal",
 	components: { CopyResultModalList, vCustomDialog },
+	props: {
+		isLoading: Boolean,
+		copyResultItems: {
+			type: Array,
+			default: () => [],
+		},
+		copyResultStatus: {
+			type: String,
+			default: () => undefined,
+		},
+	},
 	data() {
 		return {
 			mdiInformation,
@@ -227,17 +237,14 @@ export default {
 	},
 	computed: {
 		items() {
-			return copyModule.getFilteredResult;
-		},
-		isLoading() {
-			return copyModule.getLoading;
+			return this.copyResultItems;
 		},
 		isOpen() {
 			// this is not a smart approach WIP - opens modal on successful processes because isLoading is true nevertheless
 			return this.isLoading === true || this.copyResultStatus !== undefined;
 		},
-		copyResultStatus() {
-			return copyModule.getCopyResult?.status;
+		status() {
+			return this.copyResultStatus;
 		},
 		hasNotification() {
 			return (
@@ -271,8 +278,8 @@ export default {
 			});
 			return found;
 		},
-		modalClosed() {
-			copyModule.reset();
+		onDialogClosed() {
+			// WIP Modal does not close properly
 			this.$emit("dialog-closed");
 		},
 	},
