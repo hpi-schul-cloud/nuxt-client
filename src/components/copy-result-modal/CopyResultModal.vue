@@ -7,11 +7,26 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
+		<h2
+			v-if="status !== 'success'"
+			slot="title"
+			class="text-h4 my-2 wordbreak-normal"
+		>
 			{{ $t("components.molecules.copyResult.title") }}
 		</h2>
 		<template slot="content">
 			<div>
+				<v-alert
+					v-if="status === 'success'"
+					type="success"
+					:icon="mdiCheckCircle"
+					text
+					border="left"
+				>
+					<div class="alert_text mr-2">
+						{{ $t("components.molecules.copyResult.successfullyCopied") }}
+					</div>
+				</v-alert>
 				<div v-if="hasNotification">
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
@@ -44,7 +59,7 @@
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { mdiInformation } from "@mdi/js";
+import { mdiCheckCircle, mdiInformation } from "@mdi/js";
 
 // const mockData = {
 // 	id: "asdklöjfasdklf",
@@ -233,6 +248,7 @@ export default {
 	data() {
 		return {
 			mdiInformation,
+			mdiCheckCircle,
 		};
 	},
 	computed: {

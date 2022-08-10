@@ -7,8 +7,6 @@
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
-		room details
-		<!--wip-->
 		<template slot="header">
 			<div class="ma-2">
 				<div class="text-h3 pb-2 course-title">
@@ -284,7 +282,7 @@ export default {
 			return copyModule.getCopyResult?.status;
 		},
 		copyResultModalItems() {
-			return copyModule.getFilteredResult;
+			return copyModule.getCopyResultFailedItems;
 		},
 	},
 	async created() {

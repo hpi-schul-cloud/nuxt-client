@@ -105,12 +105,12 @@
 			</template>
 		</v-custom-dialog>
 		<copy-result-modal
-			v-if="isTeacher || true"
+			v-if="isTeacher"
+      :is-loading="copyResultModalIsLoading"
+      :copy-result-items="copyResultModalItems"
+      :copy-result-status="copyResultModalStatus"
 			@dialog-closed="onCopyProcessDialogClose"
 		></copy-result-modal>
-		<!--			:is-open="copyProcess.isOpen"-->
-		<!--			:loading="isCopyModalLoading"-->
-		<!--			data-testid="copy-process"-->
 	</div>
 </template>
 
@@ -169,6 +169,15 @@ export default {
 		isTeacher() {
 			return this.userRole === "teacher";
 		},
+		copyResultModalIsLoading() {
+			return copyModule.getLoading;
+		},
+		copyResultModalStatus() {
+			return copyModule.getCopyResult?.status;
+		},
+		copyResultModalItems() {
+			return copyModule.getCopyResultFailedItems;
+		},
 	},
 	methods: {
 		toggleMenu(value) {
@@ -192,9 +201,14 @@ export default {
 				window.location.href = this.copyLink;
 				return;
 			}
-			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
+			await copyModule.copy({
+				id: this.taskId,
+				courseId: this.courseId,
+				type: "task",
+			});
 		},
 		async onCopyProcessDialogClose() {
+      copyModule.reset();
 			await taskModule.fetchAllTasks();
 			taskModule.setActiveTab("drafts");
 		},

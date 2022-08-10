@@ -13,7 +13,6 @@
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
-				room dashboard
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
@@ -161,14 +160,6 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<!--		<copy-process-->
-		<!--					:is-open="copyProcess.isOpen"-->
-		<!--					:loading="copyProcess.loading"-->
-		<!--			data-testid="copy-process"-->
-		<!--			@dialog-closed="onCopyProcessDialogClose"-->
-		<!--		>-->
-		<!--		</copy-process>-->
-		<!--		      data-testid="copy-process"-->
 	</div>
 </template>
 

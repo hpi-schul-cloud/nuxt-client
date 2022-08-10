@@ -12,6 +12,12 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
 
+// WIP
+// * modal in task view einbauen
+// * links
+// * tests
+// * i18n
+
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
 ): boolean => {
@@ -79,7 +85,7 @@ export type CopyParams = {
 })
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
-	private filteredResult: CopyResultItem[] = [];
+	private copyResultFailedItems: CopyResultItem[] = [];
 	private businessError: BusinessError | undefined = undefined;
 	private loading: boolean = false;
 	private isSuccess: boolean = false;
@@ -130,7 +136,7 @@ export default class CopyModule extends VuexModule {
 			}
 
 			this.setCopyResult(copyResult);
-			this.setFilteredResult(copyResult);
+			this.setCopyResultFailedItems(copyResult);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -143,18 +149,13 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setFilteredResult(payload: CopyApiResponse): void {
-		console.log(
-			"before transformation",
-			payload.status,
-			JSON.stringify(payload.elements)
-		);
+	setCopyResultFailedItems(payload: CopyApiResponse): void {
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
-			this.filteredResult = [];
+			this.copyResultFailedItems = [];
 			return;
 		}
 		if (payload.elements === undefined) {
-			this.filteredResult = [];
+			this.copyResultFailedItems = [];
 			return;
 		}
 
@@ -249,7 +250,7 @@ export default class CopyModule extends VuexModule {
 				return acc;
 			}, []);
 		console.log("Mapped items", result);
-		this.filteredResult = result;
+		this.copyResultFailedItems = result;
 	}
 
 	@Mutation
@@ -275,7 +276,7 @@ export default class CopyModule extends VuexModule {
 	@Mutation
 	reset(): void {
 		console.log("vuetify modal emitted dialog-closed");
-		this.filteredResult = [];
+		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.businessError = undefined;
 	}
@@ -288,8 +289,8 @@ export default class CopyModule extends VuexModule {
 		return this.isSuccess;
 	}
 
-	get getFilteredResult(): CopyResultItem[] {
-		return this.filteredResult;
+	get getCopyResultFailedItems(): CopyResultItem[] {
+		return this.copyResultFailedItems;
 	}
 
 	get getTitle(): string {
