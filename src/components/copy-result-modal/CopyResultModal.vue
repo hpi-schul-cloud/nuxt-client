@@ -49,7 +49,7 @@
 					</v-alert>
 				</div>
 
-				<copy-result-modal-list :items="items"></copy-result-modal-list>
+				<copy-result-modal-list :items="items" :base-url="baseUrl"></copy-result-modal-list>
 			</div>
 		</template>
 	</v-custom-dialog>
@@ -244,6 +244,10 @@ export default {
 			type: String,
 			default: () => undefined,
 		},
+		baseUrl: {
+			type: String,
+			default: () => '',
+		},
 	},
 	data() {
 		return {
@@ -256,7 +260,6 @@ export default {
 			return this.copyResultItems;
 		},
 		isOpen() {
-			// this is not a smart approach WIP - opens modal on successful processes because isLoading is true nevertheless
 			return this.isLoading === true || this.copyResultStatus !== undefined;
 		},
 		status() {

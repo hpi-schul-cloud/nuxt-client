@@ -12,9 +12,7 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
 
-// WIP
-// * modal in task view einbauen
-// * links
+// WIP Pause bis 15:45
 // * tests
 // * i18n
 
@@ -176,10 +174,7 @@ export default class CopyModule extends VuexModule {
 		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
 			status
 		) => {
-			// if (status === CopyApiResponseTypeEnum.TaskGroup) return true;
-			// if (status === CopyApiResponseTypeEnum.FileGroup) return true;
 			if (status === CopyApiResponseTypeEnum.Lesson) return true;
-			// if (status === CopyApiResponseTypeEnum.LessonContentGroup) return true;
 			if (status === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return true;
 			return false;
