@@ -104,30 +104,25 @@
 				</p>
 			</template>
 		</v-custom-dialog>
+    <!--
+     WIP
+      * This modal ist rendered within a v-for directive
+      * we need to move it up to the HOC of this page
+    -->
 		<copy-result-modal
 			v-if="isTeacher"
       :is-loading="copyResultModalIsLoading"
       :copy-result-items="copyResultModalItems"
       :copy-result-status="copyResultModalStatus"
+      base-url="asf"
 			@dialog-closed="onCopyProcessDialogClose"
 		></copy-result-modal>
 	</div>
 </template>
 
 <script>
-import {
-	mdiContentCopy,
-	mdiDotsVertical,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiUndoVariant,
-} from "@mdi/js";
-import {
-	copyModule,
-	envConfigModule,
-	finishedTaskModule,
-	taskModule,
-} from "@/store";
+import { mdiContentCopy, mdiDotsVertical, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant, } from "@mdi/js";
+import { copyModule, envConfigModule, finishedTaskModule, taskModule, } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 
