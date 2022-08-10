@@ -106,9 +106,9 @@
 		</v-custom-dialog>
 		<copy-result-modal
 			v-if="isTeacher"
-      :is-loading="copyResultModalIsLoading"
-      :copy-result-items="copyResultModalItems"
-      :copy-result-status="copyResultModalStatus"
+			:is-loading="copyResultModalIsLoading"
+			:copy-result-items="copyResultModalItems"
+			:copy-result-status="copyResultModalStatus"
 			@dialog-closed="onCopyProcessDialogClose"
 		></copy-result-modal>
 	</div>
@@ -219,7 +219,7 @@ export default {
 			});
 		},
 		async onCopyProcessDialogClose() {
-      copyModule.reset();
+			copyModule.reset();
 			await taskModule.fetchAllTasks();
 			taskModule.setActiveTab("drafts");
 		},
