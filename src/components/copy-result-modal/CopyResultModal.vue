@@ -49,7 +49,10 @@
 					</v-alert>
 				</div>
 
-				<copy-result-modal-list :items="items" :base-url="baseUrl"></copy-result-modal-list>
+				<copy-result-modal-list
+					:items="items"
+					:base-url="baseUrl"
+				></copy-result-modal-list>
 			</div>
 		</template>
 	</v-custom-dialog>
@@ -246,7 +249,7 @@ export default {
 		},
 		baseUrl: {
 			type: String,
-			default: () => '',
+			default: () => "",
 		},
 	},
 	data() {
