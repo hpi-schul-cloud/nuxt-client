@@ -6,7 +6,7 @@
 	>
 		<div slot="header">
 			<div>
-				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
+				<h1 class="text-h3">{{ $t("common.words.tasks") }} Main</h1>
 				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
@@ -70,6 +70,14 @@
 				:tab-routes="tabRoutes"
 			/>
 		</div>
+		<copy-result-modal
+			v-if="isTeacher"
+			:is-loading="copyResultModalIsLoading"
+			:copy-result-items="copyResultModalItems"
+			:copy-result-status="copyResultModalStatus"
+			base-url="TODO"
+			@dialog-closed="onCopyResultModalClose"
+		></copy-result-modal>
 	</default-wireframe>
 </template>
 
@@ -81,6 +89,8 @@ import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import { mdiPlus } from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import { copyModule, taskModule } from "@utils/store-accessor";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
@@ -94,6 +104,7 @@ export default {
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
 		vCustomSwitch,
+		CopyResultModal,
 	},
 	props: {
 		role: {
@@ -272,6 +283,15 @@ export default {
 				subtitle,
 			};
 		},
+		copyResultModalIsLoading() {
+			return copyModule.getLoading;
+		},
+		copyResultModalStatus() {
+			return copyModule.getCopyResult?.status;
+		},
+		copyResultModalItems() {
+			return copyModule.getCopyResultFailedItems;
+		},
 	},
 	watch: {
 		tab(tab, oldTab) {
@@ -308,6 +328,11 @@ export default {
 			if (!this.finishedTasksIsInitialized) {
 				this.finishedTaskModule.fetchFinishedTasks();
 			}
+		},
+		async onCopyResultModalClose() {
+			copyModule.reset();
+			taskModule.setActiveTab("drafts");
+			await taskModule.fetchAllTasks();
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {

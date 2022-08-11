@@ -175,6 +175,7 @@ export default class CopyModule extends VuexModule {
 			status
 		) => {
 			if (status === CopyApiResponseTypeEnum.Lesson) return true;
+			if (status === CopyApiResponseTypeEnum.Task) return true;
 			if (status === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return true;
 			return false;
@@ -185,7 +186,6 @@ export default class CopyModule extends VuexModule {
 		const isDesiredLeaf: (type: CopyApiResponseTypeEnum) => boolean = (
 			status: CopyApiResponseTypeEnum
 		) => {
-			if (status === CopyApiResponseTypeEnum.Task) return true;
 			if (status === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
 			if (status === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
 			if (status === CopyApiResponseTypeEnum.LessonContentNexboard) return true;

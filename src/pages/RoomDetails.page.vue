@@ -106,7 +106,7 @@
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
       :base-url="copyResultModalBaseUrl"
-			@dialog-closed="onCopyProcessDialogClosed"
+			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
 </template>
@@ -345,7 +345,7 @@ export default {
 			await copyModule.copy(payload);
 			await roomModule.fetchContent(payload.courseId);
 		},
-		async onCopyProcessDialogClosed() {
+		async onCopyResultModalClosed() {
 			copyModule.reset();
 			if (this.copyProcessReturnId === "") return;
 			await this.$router.push("rooms/" + this.copyProcessReturnId);
