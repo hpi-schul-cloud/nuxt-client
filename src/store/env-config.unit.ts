@@ -28,6 +28,7 @@ const mockEnvs: Envs = {
 	SC_TITLE: "mockValue",
 	SC_SHORT_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",
+	FEATURE_CONSENT_NECESSARY: true,
 };
 
 const URL = "/v1/config/app/public";
