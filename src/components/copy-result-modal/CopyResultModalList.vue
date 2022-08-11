@@ -4,7 +4,7 @@
 			<copy-result-modal-list-item
 				:key="index"
 				:item="item"
-        :base-url="baseUrl"
+				:base-url="baseUrl"
 			></copy-result-modal-list-item>
 		</template>
 	</div>
@@ -22,10 +22,10 @@ export default {
 			required: true,
 			default: () => [],
 		},
-    baseUrl: {
-      type: String,
-      default: () => '',
-    },
+		baseUrl: {
+			type: String,
+			default: () => "",
+		},
 	},
 };
 </script>

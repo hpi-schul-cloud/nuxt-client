@@ -105,7 +105,7 @@
 			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
-      :base-url="copyResultModalBaseUrl"
+			:base-url="copyResultModalBaseUrl"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -119,14 +119,14 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
-  mdiCloudDownload,
-  mdiContentCopy,
-  mdiEmailPlusOutline,
-  mdiFormatListChecks,
-  mdiPlus,
-  mdiShareVariant,
-  mdiSquareEditOutline,
-  mdiViewListOutline,
+	mdiCloudDownload,
+	mdiContentCopy,
+	mdiEmailPlusOutline,
+	mdiFormatListChecks,
+	mdiPlus,
+	mdiShareVariant,
+	mdiSquareEditOutline,
+	mdiViewListOutline,
 } from "@mdi/js";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
