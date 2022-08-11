@@ -13,6 +13,9 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
 // WIP Pause bis 15:45
+// * edit-link to parent course is not working
+// * move <copyResultModal> from TaskItemMenu to... parent or grandparent or...
+// * fix url composition for task-overview-page
 // * tests
 // * i18n
 
@@ -134,7 +137,7 @@ export default class CopyModule extends VuexModule {
 			}
 
 			this.setCopyResult(copyResult);
-			this.setCopyResultFailedItems(copyResult);
+			this.setCopyResultFailedItems(copyResult, courseId);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -147,7 +150,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setCopyResultFailedItems(payload: CopyApiResponse): void {
+	setCopyResultFailedItems(payload: CopyApiResponse, courseId: string): void {
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
 			this.copyResultFailedItems = [];
 			return;
@@ -201,9 +204,11 @@ export default class CopyModule extends VuexModule {
 		const getUrl = (element: CopyApiResponse): string | undefined => {
 			switch (element.type) {
 				case CopyApiResponseTypeEnum.Task:
+					return `/homework/${element.id}/edit?returnUrl=rooms/${courseId}`;
 				case CopyApiResponseTypeEnum.Lesson:
+					return `/courses/${courseId}/topics/${element.id}/edit?returnUrl=rooms/${courseId}`;
 				case CopyApiResponseTypeEnum.Course:
-					return "http://abc"; // WIP
+					return `/rooms/${element.id}/edit`; // WIP
 			}
 			return undefined;
 		};
