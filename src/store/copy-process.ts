@@ -1,3 +1,4 @@
+import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
@@ -10,7 +11,6 @@ import {
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
 
 // WIP Pause bis 15:45
 // * tests
@@ -172,28 +172,29 @@ export default class CopyModule extends VuexModule {
 		 * Finds Elements which represent a Headline in the FeedbackModal Structure
 		 */
 		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
-			status
+			type
 		) => {
-			if (status === CopyApiResponseTypeEnum.Lesson) return true;
-			if (status === CopyApiResponseTypeEnum.Task) return true;
-			if (status === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
-				return true;
+			if (type === CopyApiResponseTypeEnum.Course) return true;
+			if (type === CopyApiResponseTypeEnum.Lesson) return true;
+			if (type === CopyApiResponseTypeEnum.Task) return true;
+			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup) return true;
 			return false;
 		};
 		/**
 		 * Finds Elements which represent an element in the FeedbackModal Structure
 		 */
 		const isDesiredLeaf: (type: CopyApiResponseTypeEnum) => boolean = (
-			status: CopyApiResponseTypeEnum
+			type: CopyApiResponseTypeEnum
 		) => {
-			if (status === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContentNexboard) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContentTask) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContentText) return true;
-			if (status === CopyApiResponseTypeEnum.LessonContentLernstore)
-				return true;
-			if (status === CopyApiResponseTypeEnum.LernstoreMaterial) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentNexboard) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentTask) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentText) return true;
+			if (type === CopyApiResponseTypeEnum.LessonContentLernstore) return true;
+			if (type === CopyApiResponseTypeEnum.LernstoreMaterial) return true;
+			if (type === CopyApiResponseTypeEnum.File) return true;
+			if (type === CopyApiResponseTypeEnum.SubmissionGroup) return true;
 			return false;
 		};
 
@@ -208,21 +209,10 @@ export default class CopyModule extends VuexModule {
 		 */
 		const getItemsFromBranch: (
 			element: CopyApiResponse,
-			item: CopyResultItem[]
-		) => CopyResultItem[] = (element, items = []) => {
-			if (isDesiredParent(element.type)) {
-				items.push({
-					title: element.title || "",
-					elements: [],
-					elementId: element.id || "",
-					type: element.type,
-				});
-				element.elements?.forEach(
-					(e) => (items = [...getItemsFromBranch(e, items)])
-				);
-				return items;
-			}
-
+			parentUrl: string,
+			items: CopyResultItem[]
+		) => CopyResultItem[] = (element, parentUrl, items = []) => {
+			const currentParentUrl = this.getUrl(element) ?? parentUrl;
 			if (isDesiredLeaf(element.type)) {
 				const parentItem = items[items.length - 1]; // get last inserted parent-node
 				parentItem.elements = [
@@ -232,20 +222,43 @@ export default class CopyModule extends VuexModule {
 				return items;
 			}
 
+			if (isDesiredParent(element.type)) {
+				console.log("isDesiredParent(element.type)", element.type); // WIP
+				items.push({
+					title: element.title || "",
+					elements: [],
+					elementId: element.id || "",
+					type: element.type,
+					url: currentParentUrl,
+				});
+			}
+
 			element.elements?.forEach(
-				(e) => (items = [...getItemsFromBranch(e, items)])
+				(e) => (items = [...getItemsFromBranch(e, currentParentUrl, items)])
 			);
+			console.log("items", items); // WIP
 			return items;
 		};
 
+		const rootUrl = this.getUrl(payload);
 		const result: CopyResultItem[] = [payload]
 			.filter((e) => isHandledStatus(e.status))
 			.reduce<CopyResultItem[]>((acc, curr) => {
-				acc = [...acc, ...getItemsFromBranch(curr, acc)];
+				acc = [...acc, ...getItemsFromBranch(curr, rootUrl!, acc)];
 				return acc;
 			}, []);
-		console.log("Mapped items", result);
+		console.log("Mapped items", result); // WIP
 		this.copyResultFailedItems = result;
+	}
+
+	getUrl(element: CopyApiResponse): string | undefined {
+		switch (element.type) {
+			case CopyApiResponseTypeEnum.Task:
+			case CopyApiResponseTypeEnum.Lesson:
+			case CopyApiResponseTypeEnum.Course:
+				return "http://abc";
+		}
+		return undefined;
 	}
 
 	@Mutation
@@ -270,7 +283,7 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	reset(): void {
-		console.log("vuetify modal emitted dialog-closed");
+		console.log("vuetify modal emitted dialog-closed"); // WIP
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.businessError = undefined;
