@@ -42,6 +42,7 @@ export default class EnvConfigModule extends VuexModule {
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
 		GHOST_BASE_URL: "",
+		FEATURE_CONSENT_NECESSARY: true,
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";
@@ -122,9 +123,6 @@ export default class EnvConfigModule extends VuexModule {
 	}
 	get getGhostBaseUrl() {
 		return this.env.GHOST_BASE_URL;
-	}
-	get getConsentNecessary() {
-		return this.env.FEATURE_CONSENT_NECESSARY;
 	}
 
 	get getEnv(): Envs {

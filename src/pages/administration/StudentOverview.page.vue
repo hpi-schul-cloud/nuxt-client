@@ -294,11 +294,17 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
-		env() {
-			return envConfigModule.getEnv;
+		isConsentNecessary() {
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
+			);
 		},
 		showConsent() {
-			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
+			);
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -396,9 +402,6 @@ export default {
 					},
 				],
 			};
-		},
-		isConsentNecessary() {
-			return this.env.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	watch: {

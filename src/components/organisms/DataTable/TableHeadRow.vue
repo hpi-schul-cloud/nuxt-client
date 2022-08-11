@@ -276,7 +276,7 @@ export default {
 			},
 		},
 		isConsentNecessary() {
-			return envConfigModule.getConsentNecessary;
+			return envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	methods: {
