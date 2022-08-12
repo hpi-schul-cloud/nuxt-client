@@ -1,39 +1,52 @@
 import CopyModule, { CopyParams } from "./copy-process";
 import * as serverApi from "../serverApi/v3/api";
+import {
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "../serverApi/v3/api";
 
 const StatusEnum = serverApi.CopyApiResponseStatusEnum;
 const TypeEnum = serverApi.CopyApiResponseTypeEnum;
 
-const serverData = {
+const serverDataPartial: CopyApiResponse = {
 	title: "Aufgabe",
-	type: "TASK",
-	status: "success",
+	type: CopyApiResponseTypeEnum.Task,
+	status: CopyApiResponseStatusEnum.Partial,
 	id: "123",
 	elements: [
 		{
-			type: "SUBMISSION_GROUP",
-			status: "not-doing",
+			type: CopyApiResponseTypeEnum.SubmissionGroup,
+			status: CopyApiResponseStatusEnum.NotDoing,
 		},
 		{
-			type: "FILE",
-			status: "not-implemented",
+			type: CopyApiResponseTypeEnum.File,
+			status: CopyApiResponseStatusEnum.NotImplemented,
+		},
+		{
+			type: CopyApiResponseTypeEnum.LessonContentEtherpad,
+			status: CopyApiResponseStatusEnum.Failure,
 		},
 	],
 };
 
-const serverSuccessData = {
+const serverDataSuccess: CopyApiResponse = {
 	title: "Aufgabe",
-	type: "TASK",
-	status: "success",
+	type: CopyApiResponseTypeEnum.Task,
+	status: CopyApiResponseStatusEnum.Success,
 	id: "123",
 	elements: [
 		{
-			type: "SUBMISSION_GROUP",
-			status: "success",
+			type: CopyApiResponseTypeEnum.SubmissionGroup,
+			status: CopyApiResponseStatusEnum.NotDoing,
 		},
 		{
-			type: "FILE_GROUP",
-			status: "success",
+			type: CopyApiResponseTypeEnum.File,
+			status: CopyApiResponseStatusEnum.NotImplemented,
+		},
+		{
+			type: CopyApiResponseTypeEnum.LessonContentEtherpad,
+			status: CopyApiResponseStatusEnum.Success,
 		},
 	],
 };
@@ -49,7 +62,7 @@ describe("copy module", () => {
 			roomsControllerPatchOrderingOfElements: jest.fn(),
 		};
 
-		describe("copyTask", () => {
+		describe("copy a task", () => {
 			it("should make a 'POST' request to the backend", async () => {
 				const taskMockApi = {
 					taskControllerCopyTask: jest.fn(),
@@ -61,7 +74,7 @@ describe("copy module", () => {
 					);
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyTask({
+				await copyModule.copy({
 					id: "taskId",
 					courseId: "testCourseId",
 				} as CopyParams);
@@ -92,23 +105,23 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyTask({
+				await copyModule.copy({
 					id: "taskId",
 					courseId: "testCourseId",
-				} as CopyParams);
+					type: "task",
+				});
 
 				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-				expect(copyModule.getError).toStrictEqual({ ...error });
-				expect(copyModule.getBusinessError.message).toStrictEqual(
+				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError.statusCode).toStrictEqual(
+				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
 					error.response.status
 				);
 			});
 		});
 
-		describe("copyRoom", () => {
+		describe("copy a course", () => {
 			it("should make a 'POST' request to the backend", async () => {
 				const roomCopyMockApi = {
 					roomsControllerCopyCourse: jest.fn(),
@@ -121,12 +134,16 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyRoom("54321");
+				await copyModule.copy({
+					type: "course",
+					id: "courseId-value",
+					courseId: "courseId-value",
+				});
 
 				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
 				expect(
 					roomCopyMockApi.roomsControllerCopyCourse.mock.calls[0][0]
-				).toStrictEqual("54321");
+				).toStrictEqual("courseId-value");
 			});
 
 			it("handle error", async () => {
@@ -146,20 +163,23 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyRoom("54321");
+				await copyModule.copy({
+					type: "course",
+					id: "courseId-value",
+					courseId: "courseId-value",
+				});
 
 				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect(copyModule.getError).toStrictEqual({ ...error });
-				expect(copyModule.getBusinessError.message).toStrictEqual(
+				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError.statusCode).toStrictEqual(
+				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
 					error.response.status
 				);
 			});
 		});
 
-		describe("copyLesson", () => {
+		describe("copy a lesson", () => {
 			it("should make a 'POST' request to the backend", async () => {
 				const roomCopyMockApi = {
 					roomsControllerCopyLesson: jest.fn(),
@@ -172,15 +192,16 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyLesson({
-					id: "lessonId",
+				await copyModule.copy({
+					id: "testLessonId",
 					courseId: "testCourseId",
-				} as CopyParams);
+					type: "lesson",
+				});
 
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
 				expect(
 					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][0]
-				).toStrictEqual("lessonId");
+				).toStrictEqual("testLessonId");
 				expect(
 					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][1]
 				).toStrictEqual({
@@ -205,17 +226,17 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 
-				await copyModule.copyLesson({
-					id: "lessonId",
+				await copyModule.copy({
+					id: "testLessonId",
 					courseId: "testCourseId",
-				} as CopyParams);
+					type: "lesson",
+				});
 
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
-				expect(copyModule.getError).toStrictEqual({ ...error });
-				expect(copyModule.getBusinessError.message).toStrictEqual(
+				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError.statusCode).toStrictEqual(
+				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
 					error.response.status
 				);
 			});
@@ -230,16 +251,6 @@ describe("copy module", () => {
 				expect(copyModule.getLoading).not.toBe(loadingValue);
 				copyModule.setLoading(loadingValue);
 				expect(copyModule.getLoading).toBe(loadingValue);
-			});
-		});
-
-		describe("setError", () => {
-			it("should set error", () => {
-				const copyModule = new CopyModule({});
-				const errorData = { message: "some error" };
-				expect(copyModule.getError).not.toBe(errorData);
-				copyModule.setError(errorData);
-				expect(copyModule.getError).toBe(errorData);
 			});
 		});
 
@@ -265,35 +276,28 @@ describe("copy module", () => {
 				});
 
 				copyModule.resetBusinessError();
-				expect(copyModule.getBusinessError.statusCode).toStrictEqual("");
-				expect(copyModule.getBusinessError.message).toStrictEqual("");
+				expect(copyModule.getBusinessError!.statusCode).toStrictEqual("");
+				expect(copyModule.getBusinessError!.message).toStrictEqual("");
 			});
 		});
 
 		describe("setCopyResult", () => {
 			it("should set copyResult", () => {
 				const copyModule = new CopyModule({});
-				copyModule.setCopyResult(serverData);
+				copyModule.setCopyResult(serverDataPartial);
 
-				expect(copyModule.getCopyResult).toStrictEqual(serverData);
+				expect(copyModule.getCopyResult).toStrictEqual(serverDataPartial);
 			});
 
 			it("should reset copyResult and filteredResult", () => {
 				const copyModule = new CopyModule({});
-				copyModule.setCopyResult(serverData);
+				copyModule.setCopyResult(serverDataPartial);
 
-				expect(copyModule.getCopyResult).toStrictEqual(serverData);
-
-				const emptyData = {
-					id: "",
-					title: "",
-					type: TypeEnum.Board,
-					status: StatusEnum.Success,
-				};
+				expect(copyModule.getCopyResult).toStrictEqual(serverDataPartial);
 
 				copyModule.reset();
-				expect(copyModule.getCopyResult).toStrictEqual(emptyData);
-				expect(copyModule.getFilteredResult).toStrictEqual(emptyData);
+				expect(copyModule.getCopyResult).toStrictEqual([]);
+				expect(copyModule.getCopyResultFailedItems).toStrictEqual([]);
 			});
 		});
 
@@ -314,7 +318,10 @@ describe("copy module", () => {
 
 				const copyModule = new CopyModule({});
 				copyModule.reset();
-				copyModule.setFilteredResult(serverData);
+				copyModule.setCopyResultFailedItems({
+					payload: serverDataPartial,
+					courseId: "testCourseId",
+				});
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
 				expect(copyModule.getIsSuccess).toBe(false);
@@ -339,7 +346,7 @@ describe("copy module", () => {
 				};
 
 				const copyModule = new CopyModule({});
-				copyModule.setFilteredResult(serverSuccessData);
+				copyModule.setFilteredResult(serverDataSuccess);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
 				expect(copyModule.getIsSuccess).toBe(true);
@@ -379,7 +386,7 @@ describe("copy module", () => {
 				};
 
 				const copyModule = new CopyModule({});
-				copyModule.setFilteredResult(payload);
+				copyModule.setCopyResultFailedItems(payload);
 
 				expect(copyModule.getFilteredResult).toStrictEqual(expectedData);
 			});
@@ -470,7 +477,7 @@ describe("copy module", () => {
 		it("should have correct getters results", () => {
 			const copyModule = new CopyModule({});
 
-			copyModule.setCopyResult(serverData);
+			copyModule.setCopyResult(serverDataPartial);
 			expect(copyModule.getIsSuccess).toBe(false);
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");

@@ -68,10 +68,6 @@ export default {
 			this.showModal = this.isOpen;
 		},
 	},
-	// created() {
-	// 	// WIP
-	// 	copyModule.setFilteredResult(mockData);
-	// },
 	methods: {
 		// getItemTitle(item) {
 		// 	const titles = {

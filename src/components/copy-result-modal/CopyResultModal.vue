@@ -320,7 +320,6 @@ export default {
 			return found;
 		},
 		onDialogClosed() {
-			// WIP Modal does not close properly
 			this.$emit("dialog-closed");
 		},
 	},
