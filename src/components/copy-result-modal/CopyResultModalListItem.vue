@@ -6,7 +6,7 @@
 				class="pl-0 py-0 mr-8 pr-4 truncate"
 				:items="[
 					{
-						href: getItemUrl(item),
+						href: item.url,
 						text: title,
 						disabled: false,
 					},
@@ -60,13 +60,6 @@ export default {
 		},
 	},
 	methods: {
-		getItemUrl(item) {
-			if (item.type === CopyApiResponseTypeEnum.Lesson)
-				return `/${this.baseUrl}/topics/${item.elementId}/edit`;
-			if (item.type === CopyApiResponseTypeEnum.Task)
-				return `/homework/${item.elementId}/edit?returnUrl=${this.baseUrl}`;
-			return "";
-		},
 		getElementTypeName(type) {
 			if (type === CopyApiResponseTypeEnum.Board)
 				return this.$t("common.words.learnContent");
