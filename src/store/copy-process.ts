@@ -13,8 +13,8 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
 // WIP Pause bis 15:45
-// * edit-link to parent course is not working
-// * move <copyResultModal> from TaskItemMenu to... parent or grandparent or...
+// [x] edit-link to parent course is not working
+// [x] move <copyResultModal> from TaskItemMenu to... parent or grandparent or...
 // * fix url composition for task-overview-page
 // * tests
 // * i18n
@@ -137,7 +137,7 @@ export default class CopyModule extends VuexModule {
 			}
 
 			this.setCopyResult(copyResult);
-			this.setCopyResultFailedItems(copyResult, courseId);
+			this.setCopyResultFailedItems({ payload: copyResult, courseId });
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -150,7 +150,13 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setCopyResultFailedItems(payload: CopyApiResponse, courseId: string): void {
+	setCopyResultFailedItems({
+		payload,
+		courseId,
+	}: {
+		payload: CopyApiResponse;
+		courseId: string;
+	}): void {
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
 			this.copyResultFailedItems = [];
 			return;
@@ -160,21 +166,7 @@ export default class CopyModule extends VuexModule {
 			return;
 		}
 
-		/**
-		 * Checks if element is relevant for frontend visualization
-		 */
-		const needsHandling: (status: CopyApiResponseStatusEnum) => boolean = (
-			status
-		) => {
-			if (status === CopyApiResponseStatusEnum.Success) return false;
-			// if (status === CopyApiResponseStatusEnum.NotImplemented) return false;
-			if (status === CopyApiResponseStatusEnum.NotDoing) return false;
-			return true;
-		};
-		/**
-		 * Finds Elements which represent a Headline in the FeedbackModal Structure
-		 */
-		const isDesiredParent: (type: CopyApiResponseTypeEnum) => boolean = (
+		const isFeedbackParent: (type: CopyApiResponseTypeEnum) => boolean = (
 			type
 		) => {
 			if (type === CopyApiResponseTypeEnum.Course) return true;
@@ -183,10 +175,8 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup) return true;
 			return false;
 		};
-		/**
-		 * Finds Elements which represent an element in the FeedbackModal Structure
-		 */
-		const isDesiredLeaf: (type: CopyApiResponseTypeEnum) => boolean = (
+
+		const isFeedbackChild: (type: CopyApiResponseTypeEnum) => boolean = (
 			type: CopyApiResponseTypeEnum
 		) => {
 			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
@@ -208,7 +198,7 @@ export default class CopyModule extends VuexModule {
 				case CopyApiResponseTypeEnum.Lesson:
 					return `/courses/${courseId}/topics/${element.id}/edit?returnUrl=rooms/${courseId}`;
 				case CopyApiResponseTypeEnum.Course:
-					return `/rooms/${element.id}/edit`; // WIP
+					return `/courses/${element.id}/edit`;
 			}
 			return undefined;
 		};
@@ -225,20 +215,20 @@ export default class CopyModule extends VuexModule {
 		const getItemsFromBranch: (
 			element: CopyApiResponse,
 			parentUrl: string,
-			items?: CopyResultItem[]
-		) => CopyResultItem[] = (element, parentUrl, items = []) => {
+			parents?: CopyResultItem[]
+		) => CopyResultItem[] = (element, parentUrl, parents = []) => {
 			const currentParentUrl = getUrl(element) ?? parentUrl;
-			if (isDesiredLeaf(element.type)) {
-				const parentItem = items[items.length - 1]; // get last inserted parent-node
+			if (isFeedbackChild(element.type)) {
+				const parentItem = parents[parents.length - 1]; // get last inserted parent-node
 				parentItem.elements = [
 					...parentItem.elements,
 					{ type: element.type, title: element.title || "" },
 				];
-				return items;
+				return parents;
 			}
 
-			if (isDesiredParent(element.type)) {
-				items.push({
+			if (isFeedbackParent(element.type)) {
+				parents.push({
 					title: element.title || "",
 					elements: [],
 					elementId: element.id || "",
@@ -248,9 +238,9 @@ export default class CopyModule extends VuexModule {
 			}
 
 			element.elements?.forEach(
-				(e) => (items = [...getItemsFromBranch(e, currentParentUrl, items)])
+				(e) => (parents = [...getItemsFromBranch(e, currentParentUrl, parents)])
 			);
-			return items;
+			return parents;
 		};
 
 		const rootUrl = getUrl(payload);
