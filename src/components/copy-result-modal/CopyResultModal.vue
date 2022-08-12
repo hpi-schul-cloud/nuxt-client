@@ -53,7 +53,7 @@
 					</v-alert>
 				</div>
 
-				<div v-if="loading">
+				<div v-if="isLoading">
 					<v-skeleton-loader
 						type="article, list-item-three-line"
 						data-testid="copy-process-skeleton"
