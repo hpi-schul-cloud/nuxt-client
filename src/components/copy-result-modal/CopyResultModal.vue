@@ -45,6 +45,10 @@
 								technischen Gründen nicht kopiert und müssen neu hinzugefügt
 								werden.
 							</div>
+							<div v-if="hasFailedCourseGroup">
+								<strong>Kursgruppen</strong> &middot; Kursgruppen werden nicht
+								kopiert und müssen neu hinzugefügt werden.
+							</div>
 						</div>
 					</v-alert>
 				</div>
@@ -59,9 +63,9 @@
 </template>
 
 <script>
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { mdiCheckCircle, mdiInformation } from "@mdi/js";
 
 // const mockData = {
@@ -272,27 +276,34 @@ export default {
 			return (
 				this.hasFailedGeogebraElement ||
 				this.hasFailedEtherpadElement ||
-				this.hasFailedFileElement
+				this.hasFailedFileElement ||
+				this.hasFailedCourseGroup
 			);
 		},
 		hasFailedGeogebraElement() {
-			return this.findElementByType(
+			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentGeogebra
 			);
 		},
 		hasFailedEtherpadElement() {
-			return this.findElementByType(
+			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentEtherpad
 			);
 		},
 		hasFailedFileElement() {
-			return this.findElementByType(this.items, CopyApiResponseTypeEnum.File);
+			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
+		},
+		hasFailedCourseGroup() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.CoursegroupGroup
+			);
 		},
 	},
 	methods: {
-		findElementByType(items, type) {
+		hasElementOfType(items, type) {
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
