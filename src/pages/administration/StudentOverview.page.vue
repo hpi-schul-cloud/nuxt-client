@@ -323,6 +323,14 @@ export default {
 				);
 			}
 
+			if (!this.isConsentNecessary) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.consent")
+				);
+			}
+
 			return editedActions;
 		},
 		filteredColumns() {
