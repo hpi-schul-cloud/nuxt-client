@@ -230,6 +230,7 @@ export default {
 					icon: "check",
 					"icon-source": "material",
 					action: this.handleBulkConsent,
+					dataTestId: "consent_action",
 				},
 				{
 					label: this.$t(
