@@ -7,7 +7,7 @@
 				:items="[
 					{
 						href: item.url,
-						text: title,
+						text: breadcrumbTitle,
 						disabled: false,
 					},
 				]"
@@ -20,9 +20,7 @@
 				class="list-none truncate d-block"
 			>
 				<v-icon x-small class="mr-1"> {{ mdiMenuRight }} </v-icon>
-				<span class="black--text">{{
-					getElementTypeName(e.type) + " - " + e.title
-				}}</span>
+				<span class="black--text">{{ getElementTitle(e) }}</span>
 			</li>
 		</ul>
 	</div>
@@ -55,11 +53,16 @@ export default {
 		elements() {
 			return this.item?.elements || [];
 		},
-		title() {
-			return this.getElementTypeName(this.item.type) + ` - ` + this.item.title;
+		breadcrumbTitle() {
+			const title = this.item.title ? ` - ${this.item.title}` : "";
+			return this.getElementTypeName(this.item.type) + title;
 		},
 	},
 	methods: {
+		getElementTitle(element) {
+			const title = element.title ? " - " + element.title : "";
+			return this.getElementTypeName(element.type) + title;
+		},
 		getElementTypeName(type) {
 			if (type === CopyApiResponseTypeEnum.Board)
 				return this.$t("common.words.learnContent");

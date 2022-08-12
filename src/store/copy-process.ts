@@ -15,9 +15,11 @@ import { BusinessError } from "./types/commons";
 // WIP Pause bis 15:45
 // [x] edit-link to parent course is not working
 // [x] move <copyResultModal> from TaskItemMenu to... parent or grandparent or...
-// * fix url composition for task-overview-page
-// * tests
-// * i18n
+// [x] fix url composition for task-overview-page
+// [ ] skeleton loader
+// [ ] tests
+// [ ] i18n
+// [ ] remove old modal?!?
 
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
@@ -270,7 +272,6 @@ export default class CopyModule extends VuexModule {
 
 	@Mutation
 	reset(): void {
-		console.log("vuetify modal emitted dialog-closed"); // WIP
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.businessError = undefined;

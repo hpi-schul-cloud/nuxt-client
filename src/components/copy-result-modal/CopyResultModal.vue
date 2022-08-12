@@ -53,10 +53,18 @@
 					</v-alert>
 				</div>
 
-				<copy-result-modal-list
-					:items="items"
-					:base-url="baseUrl"
-				></copy-result-modal-list>
+				<div v-if="loading">
+					<v-skeleton-loader
+						type="article, list-item-three-line"
+						data-testid="copy-process-skeleton"
+					/>
+				</div>
+				<div v-else>
+					<copy-result-modal-list
+						:items="items"
+						:base-url="baseUrl"
+					></copy-result-modal-list>
+				</div>
 			</div>
 		</template>
 	</v-custom-dialog>
