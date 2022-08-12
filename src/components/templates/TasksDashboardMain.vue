@@ -75,7 +75,6 @@
 			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
-			base-url="TODO"
 			@dialog-closed="onCopyResultModalClose"
 		></copy-result-modal>
 	</default-wireframe>
@@ -83,14 +82,14 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import TasksDashboardTeacher from "./TasksDashboardTeacher";
-import TasksDashboardStudent from "./TasksDashboardStudent";
-import { mdiPlus } from "@mdi/js";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import { mdiPlus } from "@mdi/js";
 import { copyModule, taskModule } from "@utils/store-accessor";
+import TasksDashboardStudent from "./TasksDashboardStudent";
+import TasksDashboardTeacher from "./TasksDashboardTeacher";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
