@@ -62,6 +62,7 @@ const envs = {
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
 	GHOST_BASE_URL: "",
+	FEATURE_CONSENT_NECESSARY: true,
 };
 
 const mockSetSpecificFiles = (payload: string) =>
