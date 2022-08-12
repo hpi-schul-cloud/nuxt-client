@@ -112,12 +112,15 @@
 </template>
 
 <script>
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
+import BaseQrCode from "@components/base/BaseQrCode.vue";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import DefaultWireframe from "@components/templates/DefaultWireframe";
+import RoomDashboard from "@components/templates/RoomDashboard";
 import {
 	mdiCloudDownload,
 	mdiContentCopy,
@@ -128,9 +131,6 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
-import DefaultWireframe from "@components/templates/DefaultWireframe";
-import RoomDashboard from "@components/templates/RoomDashboard";
 
 export default {
 	components: {
@@ -348,7 +348,7 @@ export default {
 		async onCopyResultModalClosed() {
 			copyModule.reset();
 			if (this.copyProcessReturnId === "") return;
-			await this.$router.push("rooms/" + this.copyProcessReturnId);
+			await this.$router.push("/rooms/" + this.copyProcessReturnId);
 			this.copyProcessReturnId = "";
 		},
 	},
