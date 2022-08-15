@@ -8,6 +8,7 @@
 					{
 						href: item.url,
 						text: breadcrumbTitle,
+						target: '_blank',
 						disabled: false,
 					},
 				]"

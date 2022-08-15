@@ -7,12 +7,8 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<h2
-			v-if="status !== 'success'"
-			slot="title"
-			class="text-h4 my-2 wordbreak-normal"
-		>
-			{{ $t("components.molecules.copyResult.title") }}
+		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
+			{{ title }}
 		</h2>
 		<template slot="content">
 			<div>
@@ -31,23 +27,25 @@
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
 							<div v-if="hasFailedGeogebraElement">
-								<strong>Geogebra</strong> &middot; Material-IDs sind aus
-								technischen Gründen nicht kopierbar und müssen ergänzt werden.
-								i18n missing
+								<strong>Geogebra</strong> &middot;
+								{{ $t("components.molecules.copyResult.geogebraCopy.error") }}
 							</div>
 							<div v-if="hasFailedEtherpadElement">
-								<strong>Etherpad</strong> &middot; Inhalte werden aus
-								Datenschutzgründen nicht kopiert und müssen neu hinzugefügt
-								werden.
-							</div>
-							<div v-if="hasFailedFileElement">
-								<strong>Dateien</strong> &middot; Kursdateien werden aus
-								technischen Gründen nicht kopiert und müssen neu hinzugefügt
-								werden.
+								<strong>Etherpad</strong> &middot;
+								{{ $t("components.molecules.copyResult.etherpadCopy.error") }}
 							</div>
 							<div v-if="hasFailedCourseGroup">
-								<strong>Kursgruppen</strong> &middot; Kursgruppen werden nicht
-								kopiert und müssen neu hinzugefügt werden.
+								<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
+								{{
+									$t("components.molecules.copyResult.courseGroupCopy.error")
+								}}
+							</div>
+							<div v-if="hasFailedFileElement">
+								<strong>{{
+									$t("components.molecules.copyResult.label.files")
+								}}</strong>
+								&middot;
+								{{ $t("components.molecules.copyResult.fileCopy.error") }}
 							</div>
 						</div>
 					</v-alert>
@@ -308,6 +306,25 @@ export default {
 				this.items,
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
+		},
+		title() {
+			if (this.isLoading) {
+				return this.$t("components.molecules.copyResult.title.loading");
+			} else if (this.copyResultStatus !== undefined) {
+				switch (this.copyResultStatus) {
+					case "success":
+						return this.$t("components.molecules.copyResult.title.success");
+
+					case "partial":
+						return this.$t("components.molecules.copyResult.title.partial");
+
+					case "failure":
+					default:
+						return this.$t("components.molecules.copyResult.title.failure");
+				}
+			} else {
+				return this.$t("components.molecules.copyResult.title.failure");
+			}
 		},
 	},
 	methods: {
