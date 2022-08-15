@@ -240,6 +240,7 @@ export default {
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 						class: "submitted",
+						testid: "room-detail-task-chip-submitted",
 					});
 				}
 
@@ -248,11 +249,13 @@ export default {
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 						class: "submitted",
+						testid: "room-detail-task-chip-submitted",
 					});
 					roleBasedChips[Roles.Student].push({
 						icon: this.icons.mdiTextBoxCheckOutline,
 						name: this.$t(`pages.room.taskCard.label.graded`),
 						class: "graded",
+						testid: "room-detail-task-chip-graded",
 					});
 				}
 
