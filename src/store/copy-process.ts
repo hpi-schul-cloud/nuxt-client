@@ -17,9 +17,10 @@ import { BusinessError } from "./types/commons";
 // [x] move <copyResultModal> from TaskItemMenu to... parent or grandparent or...
 // [x] fix url composition for task-overview-page
 // [x] skeleton loader
-// [/] tests
-// [ ] i18n
+// [x] tests
+// [x] i18n
 // [ ] remove old modal?!?
+// [ ] timeout = failure... still handled?
 
 const checkIfEveryElementsAreSuccess = (
 	data: CopyApiResponse | any
