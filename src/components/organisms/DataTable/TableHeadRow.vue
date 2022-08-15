@@ -38,8 +38,14 @@
 							<base-icon source="material" icon="info" style="margin: 0" />
 						</base-button>
 					</span>
-					<info-box class="info-box" :active.sync="infoBoxActive">
-						<template #header>Registrierungen abschließen</template>
+					<info-box
+						v-if="isConsentNecessary"
+						class="info-box"
+						:active.sync="infoBoxActive"
+					>
+						<template #header>{{
+							$t("pages.administration.students.infobox.headline")
+						}}</template>
 						<template #body>
 							<div v-if="showExternalText" class="content">
 								{{
@@ -121,6 +127,68 @@
 							</div>
 						</template>
 					</info-box>
+					<info-box v-else class="info-box" :active.sync="infoBoxActive">
+						<template #header>{{
+							$t(
+								"pages.administration.students.infobox.registrationOnly.headline"
+							)
+						}}</template>
+						<template #body>
+							<div class="content">
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-1"
+									)
+								}}
+								<br />
+								<br />
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-2"
+									)
+								}}
+								<br />
+								<br />
+								{{
+									$t(
+										"pages.administration.students.infobox.registrationOnly.paragraph-3"
+									)
+								}}
+								<br />
+								<br />
+								<ul class="list">
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-1"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-3"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.students.infobox.registrationOnly.li-4"
+											)
+										}}
+									</li>
+								</ul>
+							</div>
+						</template>
+					</info-box>
 				</span>
 				<BaseButton
 					v-if="column.sortable"
@@ -151,6 +219,7 @@
 <script>
 import BaseButton from "@basecomponents/BaseButton";
 import InfoBox from "@components/molecules/InfoBox";
+import { envConfigModule } from "@/store";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -205,6 +274,9 @@ export default {
 					selectionStateMap.get(state)
 				);
 			},
+		},
+		isConsentNecessary() {
+			return envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	methods: {

@@ -1,4 +1,5 @@
 import NotifierModule from "./notifier";
+import { AlertPayload } from "@store/types/alert-payload";
 
 describe("notifier store", () => {
 	describe("actions", () => {
@@ -6,14 +7,44 @@ describe("notifier store", () => {
 			it("should call 'setNotifier' mutation", () => {
 				const notifierModule = new NotifierModule({});
 				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
-				const payload = {
+				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
-					position: ["top", "left"],
+					autoClose: true,
 					timeout: 5000,
-					vertical: true,
-					multiline: true,
-					closeButtonColor: "black",
+				};
+				notifierModule.show(payload);
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+			});
+
+			it("should add default values", () => {
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+				};
+				notifierModule.show(payload);
+
+				const payloadWithDefaults: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payloadWithDefaults);
+			});
+
+			it("should pass payload if optional params are set", () => {
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: false,
+					timeout: 10000,
 				};
 				notifierModule.show(payload);
 
@@ -26,10 +57,10 @@ describe("notifier store", () => {
 		describe("setNotifier", () => {
 			it("should set the payload in state", () => {
 				const notifierModule = new NotifierModule({});
-				const payload = {
+				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
-					position: ["top", "left"],
+					autoClose: true,
 					timeout: 5000,
 				};
 				notifierModule.setNotifier(payload);

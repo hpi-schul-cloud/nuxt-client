@@ -38,4 +38,5 @@ export type Envs = {
 	FEATURE_LESSON_COPY_ENABLED?: boolean;
 	GHOST_BASE_URL: string;
 	FEATURE_COURSE_SHARE?: boolean;
+	FEATURE_CONSENT_NECESSARY: boolean;
 };

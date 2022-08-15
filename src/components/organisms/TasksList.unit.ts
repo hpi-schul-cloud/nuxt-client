@@ -119,7 +119,7 @@ describe("@components/organisms/TasksList", () => {
 				//@ts-ignore
 				typeof tasks[index].duedate === "undefined"
 			)
-				expect(dateLabel.text()).toBe("Kein Abgabedatum");
+				expect(dateLabel.text()).toBe("");
 			else expect(dateLabel.text()).toContain("Abgabe ");
 		});
 	});

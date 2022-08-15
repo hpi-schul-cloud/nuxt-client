@@ -162,7 +162,7 @@
 		</v-custom-dialog>
 		<copy-process
 			:is-open="copyProcess.isOpen"
-			:loading="copyProcess.loading"
+			:loading="isCopyModalLoading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
 		>
@@ -171,16 +171,18 @@
 </template>
 
 <script>
-import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
+import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
+import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import { roomModule, taskModule, envConfigModule, copyModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import CopyProcess from "@components/organisms/CopyProcess";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
-import { BoardElementResponseTypeEnum } from "@/serverApi/v3";
-import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 
 export default {
 	components: {
@@ -211,7 +213,6 @@ export default {
 			copyProcess: {
 				id: "",
 				isOpen: false,
-				loading: false,
 			},
 		};
 	},
@@ -221,6 +222,9 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
+		},
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {
@@ -331,7 +335,6 @@ export default {
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = copyModule.getLoading;
 			await copyModule.copyTask({ id: itemId, courseId: this.roomData.roomId });
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
@@ -346,7 +349,11 @@ export default {
 
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
-				this.copyProcess.loading = copyModule.getLoading;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.task.message.copied"),
+					status: "success",
+				});
 			}
 		},
 		async onCopyProcessDialogClose() {
@@ -366,7 +373,6 @@ export default {
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = copyModule.getLoading;
 			await copyModule.copyLesson({
 				id: itemId,
 				courseId: this.roomData.roomId,
@@ -384,7 +390,6 @@ export default {
 
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
-				this.copyProcess.loading = copyModule.getLoading;
 
 				this.$notifier({
 					text: this.$t("pages.room.copy.lesson.message.copied"),

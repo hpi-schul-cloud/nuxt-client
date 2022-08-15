@@ -238,7 +238,7 @@ describe("@components/organisms/CopyProcess", () => {
 						method({
 							type: wrapper.vm.typesEnum.Board,
 						})
-					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.learnContent"));
 				});
 
 				it("when type is 'CONTENT'", () => {
@@ -542,7 +542,7 @@ describe("@components/organisms/CopyProcess", () => {
 						index: 3,
 					},
 					{
-						title: i18n.t("common.labels.room"),
+						title: i18n.t("common.words.learnContent"),
 						type: types.Board,
 						status: status.Success,
 						feStatus: status.Success,

@@ -9,7 +9,6 @@
 		>
 			<template #activator="{ on, attrs, value }">
 				<v-btn
-					v-show="show"
 					id="task-menu-btn"
 					v-bind="attrs"
 					icon
@@ -108,7 +107,7 @@
 		<copy-process
 			v-if="isTeacher"
 			:is-open="copyProcess.isOpen"
-			:loading="copyProcess.loading"
+			:loading="isCopyModalLoading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
 		>
@@ -118,20 +117,20 @@
 
 <script>
 import {
+	copyModule,
+	envConfigModule,
+	finishedTaskModule,
+	taskModule,
+} from "@/store";
+import CopyProcess from "@components/organisms/CopyProcess";
+import vCustomDialog from "@components/organisms/vCustomDialog";
+import {
+	mdiContentCopy,
 	mdiDotsVertical,
 	mdiPencilOutline,
-	mdiUndoVariant,
 	mdiTrashCanOutline,
-	mdiContentCopy,
+	mdiUndoVariant,
 } from "@mdi/js";
-import {
-	taskModule,
-	finishedTaskModule,
-	envConfigModule,
-	copyModule,
-} from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog";
-import CopyProcess from "@components/organisms/CopyProcess";
 
 export default {
 	components: { vCustomDialog, CopyProcess },
@@ -153,10 +152,6 @@ export default {
 			type: String,
 			default: "",
 		},
-		show: {
-			type: Boolean,
-			required: true,
-		},
 		userRole: {
 			type: String,
 			required: true,
@@ -174,11 +169,13 @@ export default {
 			copyProcess: {
 				id: "",
 				isOpen: false,
-				loading: false,
 			},
 		};
 	},
 	computed: {
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
+		},
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
@@ -212,7 +209,6 @@ export default {
 				return;
 			}
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = copyModule.getLoading;
 			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
@@ -227,7 +223,11 @@ export default {
 
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
-				this.copyProcess.loading = copyModule.getLoading;
+
+				this.$notifier({
+					text: this.$t("pages.room.copy.task.message.copied"),
+					status: "success",
+				});
 			}
 		},
 		async onCopyProcessDialogClose() {

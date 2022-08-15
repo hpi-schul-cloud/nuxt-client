@@ -907,6 +907,29 @@ describe("task store", () => {
 			spy2.mockRestore();
 			spy3.mockRestore();
 		});
+
+		it("should sort newly created on top", () => {
+			const taskModule = new TaskModule({});
+			const tasks = (taskModule.tasks = taskFactory.buildList(2));
+
+			const newDate = new Date();
+			newDate.setDate(newDate.getDate() - 1);
+			tasks[0].createdAt = newDate.toISOString();
+
+			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
+			const spy2 = mockTaskFilter("byCourseNames", tasks);
+			const spy3 = mockTaskFilter("byDraftForTeacher", tasks);
+
+			const result = taskModule.getDraftTasksForTeacher;
+
+			expect(
+				new Date(result[0].createdAt).getTime() >
+					new Date(result[1].createdAt).getTime()
+			).toEqual(true);
+			spy1.mockRestore();
+			spy2.mockRestore();
+			spy3.mockRestore();
+		});
 	});
 
 	describe("getTasksCountPerCourseStudent", () => {
