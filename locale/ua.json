@@ -134,7 +134,6 @@
 	"components.molecules.importUsersMatch.deleteMatch": "Видалити зв'язок",
 	"components.molecules.importUsersMatch.flag": "Позначити обліковий запис",
 	"components.molecules.importUsersMatch.notFound": "облікові записи не знайдено",
-	"components.molecules.copyResult.title": "Копія-Результат",
 	"components.molecules.copyResult.title.loading": "Виконується копіювання...",
 	"components.molecules.copyResult.title.success": "Копіювання успішне",
 	"components.molecules.copyResult.title.partial": "Копіювання успішне, за винятком:",
