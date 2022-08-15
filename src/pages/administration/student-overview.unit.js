@@ -579,26 +579,22 @@ describe("students/index", () => {
 		});
 		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);
 
-		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
-		// user row checkbox is clicked
+
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
+
 		await checkBox.trigger("click");
-		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
-		// selection row component is rendered
 		const selectionBar = wrapper.find(".row-selection-info");
 		expect(selectionBar.exists()).toBe(true);
 
-		// contextMenu is rendered
 		const openContextButton = wrapper.find(".context-menu-open");
 		expect(openContextButton.exists()).toBe(true);
-		// contextMenu is clicked
-		await openContextButton.trigger("click");
 
+		await openContextButton.trigger("click");
 		const actionBtn = wrapper.find(`[data-testid="consent_action"]`);
 		expect(actionBtn.exists()).toBe(false);
 	});
