@@ -34,47 +34,6 @@ const checkIfEveryElementsAreSuccess = (
 	});
 };
 
-const cleanupCopyStatus = (item: any): void | any => {
-	if (
-		item.status === CopyApiResponseStatusEnum.NotDoing &&
-		item.elements === undefined
-	) {
-		return undefined;
-	}
-
-	const result = { ...item };
-
-	if (Array.isArray(result.elements)) {
-		result.elements = result.elements
-			.map((item: any) => {
-				if (item.elements) {
-					const isSuccess = item.elements.every(
-						(ele: any) => ele.status === "success"
-					);
-					return {
-						...item,
-						status: isSuccess ? "success" : item.status,
-					};
-				}
-				return item;
-			})
-			.map(cleanupCopyStatus)
-			.filter((el: any) => el !== undefined);
-	}
-
-	if (result.elements) {
-		const isParentSuccess = result.elements.every(
-			(ele: any) => ele.status === "success"
-		);
-		return {
-			...result,
-			status: isParentSuccess ? "success" : result.status,
-		};
-	}
-
-	return result;
-};
-
 export type CopyParams = {
 	id: string;
 	type: "task" | "lesson" | "course";
@@ -279,10 +238,6 @@ export default class CopyModule extends VuexModule {
 
 	get getCopyResult(): CopyApiResponse | undefined {
 		return this.copyResult;
-	}
-
-	get getIsSuccess(): boolean {
-		return this.isSuccess;
 	}
 
 	get getCopyResultFailedItems(): CopyResultItem[] {

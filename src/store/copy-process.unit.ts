@@ -240,12 +240,6 @@ describe("copy module", () => {
 			});
 		});
 
-		describe("setLoading", () => {
-			it("should unset loading", () => {
-				throw new Error("Not implemented");
-			});
-		});
-
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
 				const copyModule = new CopyModule({});
@@ -267,8 +261,7 @@ describe("copy module", () => {
 					error: {},
 				});
 				copyModule.resetBusinessError();
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual("");
-				expect(copyModule.getBusinessError!.message).toStrictEqual("");
+				expect(copyModule.getBusinessError).toBeUndefined();
 			});
 		});
 
@@ -284,25 +277,31 @@ describe("copy module", () => {
 				copyModule.setCopyResult(serverDataPartial);
 				expect(copyModule.getCopyResult).toStrictEqual(serverDataPartial);
 				copyModule.reset();
-				expect(copyModule.getCopyResult).toStrictEqual([]);
+				expect(copyModule.getCopyResult).toBeUndefined();
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual([]);
 			});
 		});
 
-		describe("setFilteredResult", () => {
+		describe("setCopyResultFailedItems", () => {
 			it("should set filteredResult", () => {
-				const expectedData = {
-					title: "Aufgabe",
-					type: TypeEnum.Task,
-					status: StatusEnum.Success,
-					id: "123",
-					elements: [
-						{
-							type: TypeEnum.File,
-							status: StatusEnum.NotImplemented,
-						},
-					],
-				};
+				const expectedData = [
+					{
+						title: "Aufgabe",
+						type: TypeEnum.Task,
+						elementId: "123",
+						url: "/homework/123/edit?returnUrl=rooms/testCourseId",
+						elements: [
+							{
+								type: TypeEnum.File,
+								title: "",
+							},
+							{
+								title: "",
+								type: "LESSON_CONTENT_ETHERPAD",
+							},
+						],
+					},
+				];
 				const copyModule = new CopyModule({});
 				copyModule.reset();
 				copyModule.setCopyResultFailedItems({
@@ -310,35 +309,15 @@ describe("copy module", () => {
 					courseId: "testCourseId",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
-				expect(copyModule.getIsSuccess).toBe(false);
 			});
 
 			it("should set the state with all-success data", () => {
-				const expectedData = {
-					payload: {
-						title: "Aufgabe",
-						type: CopyApiResponseTypeEnum.Task,
-						status: CopyApiResponseStatusEnum.Success,
-						id: "123",
-						elements: [
-							{
-								type: CopyApiResponseTypeEnum.SubmissionGroup,
-								status: CopyApiResponseStatusEnum.Success,
-							},
-							{
-								type: CopyApiResponseTypeEnum.FileGroup,
-								status: CopyApiResponseStatusEnum.Success,
-							},
-						],
-					},
-				};
 				const copyModule = new CopyModule({});
 				copyModule.setCopyResultFailedItems({
 					payload: serverDataSuccess,
 					courseId: "aCourseId",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual([]);
-				expect(copyModule.getIsSuccess).toBe(true);
 			});
 
 			it("should set the state with filtering 'not-doing' elements", () => {
@@ -365,28 +344,21 @@ describe("copy module", () => {
 					},
 					courseId: "aCourseId",
 				};
-				const expectedData = {
-					title: "test course",
-					type: TypeEnum.Course,
-					status: CopyApiResponseStatusEnum.Partial,
-					id: "12345",
-					elements: [
-						{
-							type: TypeEnum.Metadata,
-							status: CopyApiResponseStatusEnum.Success,
-						},
-						{
-							type: TypeEnum.FileGroup,
-							status: CopyApiResponseStatusEnum.NotImplemented,
-						},
-					],
-				};
+				const expectedData = [
+					{
+						title: "test course",
+						type: TypeEnum.Course,
+						elementId: "12345",
+						elements: [],
+						url: "/courses/12345/edit",
+					},
+				];
 				const copyModule = new CopyModule({});
 				copyModule.setCopyResultFailedItems(payload);
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
-			it.skip("should set the state and change the statusses 'success'", () => {
+			it("should set the state and change the statusses 'success'", () => {
 				const payload = {
 					payload: {
 						title: "test course",
@@ -425,43 +397,25 @@ describe("copy module", () => {
 					},
 					courseId: "aCourseId",
 				};
-				const expectedData = {
-					title: "test course",
-					type: TypeEnum.Course,
-					status: StatusEnum.Success,
-					id: "12345",
-					elements: [
-						{
-							type: TypeEnum.Metadata,
-							status: StatusEnum.Success,
-						},
-						{
-							title: "board",
-							type: TypeEnum.Board,
-							status: StatusEnum.Success,
-							id: "345",
-							elements: [
-								{
-									title: "Task 1",
-									type: TypeEnum.Task,
-									status: StatusEnum.Success,
-									id: "567",
-									elements: [
-										{
-											type: TypeEnum.Metadata,
-											status: StatusEnum.Success,
-										},
-									],
-								},
-							],
-						},
-					],
-				};
+				const expectedData = [
+					{
+						title: "test course",
+						type: TypeEnum.Course,
+						elementId: "12345",
+						elements: [],
+						url: "/courses/12345/edit",
+					},
+					{
+						elementId: "567",
+						elements: [],
+						title: "Task 1",
+						type: TypeEnum.Task,
+						url: "/homework/567/edit?returnUrl=rooms/aCourseId",
+					},
+				];
 				const copyModule = new CopyModule({});
-				expect(copyModule.getIsSuccess).toBe(false);
 				copyModule.setCopyResultFailedItems(payload);
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
-				expect(copyModule.getIsSuccess).toBe(true);
 			});
 		});
 	});
@@ -470,7 +424,6 @@ describe("copy module", () => {
 		it("should have correct getters results", () => {
 			const copyModule = new CopyModule({});
 			copyModule.setCopyResult(serverDataPartial);
-			expect(copyModule.getIsSuccess).toBe(false);
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");
 		});
