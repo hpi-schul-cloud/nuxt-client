@@ -50,6 +50,7 @@
 					:key="index"
 					:class="[chip.class]"
 					small
+					:data-testid="[chip.testid]"
 				>
 					<v-icon
 						v-if="chip.icon"
@@ -57,6 +58,7 @@
 						small
 						class="fill"
 						color="rgba(0, 0, 0, 0.87)"
+						d
 					>
 						{{ chip.icon }}
 					</v-icon>
@@ -213,12 +215,14 @@ export default {
 					name: `${this.task.status.submitted}/${
 						this.task.status.maxSubmissions
 					} ${this.$t("pages.room.taskCard.teacher.label.submitted")}`,
+					testid: "room-detail-task-chip-submitted",
 				});
 
 				roleBasedChips[Roles.Teacher].push({
 					name: `${this.task.status.graded}/${
 						this.task.status.maxSubmissions
 					} ${this.$t("pages.room.taskCard.label.graded")}`,
+					testid: "room-detail-task-chip-graded",
 				});
 
 				if (this.isOverDue) {
