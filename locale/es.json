@@ -418,6 +418,7 @@
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
 	"components.molecules.copyResult.label.content": "Contenido",
 	"components.molecules.copyResult.successfullyCopied": "Todos los elementos se copiaron con éxito.",
+	"components.molecules.copyResult.failedCopy": "No se pudo completar el proceso de copia.",
 	"components.molecules.copyResult.fileCopy.error": "Error al copiar archivos.",
 	"components.molecules.copyResult.courseGroupCopy.error": "Por razones técnicas, los grupos y su contenido no se copian y deben agregarse nuevamente.",
 	"components.molecules.copyResult.etherpadCopy.error": "El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",

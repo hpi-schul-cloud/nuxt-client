@@ -150,6 +150,7 @@
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
 	"components.molecules.copyResult.label.content": "Вміст",
 	"components.molecules.copyResult.successfullyCopied": "Усі елементи успішно скопійовано.",
+	"components.molecules.copyResult.failedCopy": "Не вдалося завершити процес копіювання.",
 	"components.molecules.copyResult.fileCopy.error": "Помилка копіювання файлів.",
 	"components.molecules.copyResult.courseGroupCopy.error": "З технічних причин групи та їхній вміст не копіюються і повинні бути додані знову.",
 	"components.molecules.copyResult.etherpadCopy.error": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",

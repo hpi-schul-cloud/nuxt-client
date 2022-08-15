@@ -23,6 +23,17 @@
 						{{ $t("components.molecules.copyResult.successfullyCopied") }}
 					</div>
 				</v-alert>
+				<v-alert
+					v-if="status === 'failure'"
+					type="error"
+					:icon="mdiCloseCircle"
+					text
+					border="left"
+				>
+					<div class="alert_text mr-2">
+						{{ $t("components.molecules.copyResult.failedCopy") }}
+					</div>
+				</v-alert>
 				<div v-if="hasNotification">
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
@@ -72,7 +83,7 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mdiCheckCircle, mdiInformation } from "@mdi/js";
+import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
 
 export default {
 	name: "CopyResultModal",
@@ -96,6 +107,7 @@ export default {
 		return {
 			mdiInformation,
 			mdiCheckCircle,
+			mdiCloseCircle,
 		};
 	},
 	computed: {
