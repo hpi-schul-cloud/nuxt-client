@@ -318,7 +318,7 @@ export default {
 		},
 		async copyTask(taskId) {
 			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
+				window.location.href = `/homework/${taskId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
 				return;
 			}
 			this.$emit("copy-board-element", {
