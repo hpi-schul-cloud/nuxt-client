@@ -230,6 +230,7 @@ export default {
 					icon: "check",
 					"icon-source": "material",
 					action: this.handleBulkConsent,
+					dataTestId: "consent_action",
 				},
 				{
 					label: this.$t(
@@ -320,6 +321,14 @@ export default {
 					(action) =>
 						action.label !==
 						this.$t("pages.administration.students.index.tableActions.delete")
+				);
+			}
+
+			if (!this.isConsentNecessary) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.consent")
 				);
 			}
 
