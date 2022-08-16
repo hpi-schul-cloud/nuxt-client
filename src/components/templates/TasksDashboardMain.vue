@@ -331,7 +331,7 @@ export default {
 		async onCopyResultModalClose() {
 			copyModule.reset();
 			taskModule.setActiveTab("drafts");
-			await taskModule.fetchAllTasks();
+			await taskModule.fetchAllTasks(); // wip:test
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {

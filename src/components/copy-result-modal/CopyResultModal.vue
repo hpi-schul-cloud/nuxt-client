@@ -34,24 +34,24 @@
 						{{ $t("components.molecules.copyResult.failedCopy") }}
 					</div>
 				</v-alert>
-				<div v-if="hasNotification">
+				<div v-if="hasNotification" data-testid="copy-result-notifications">
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
-							<div v-if="hasFailedGeogebraElement">
+							<div v-if="hasFailedGeogebraElement" data-testid="geogebra">
 								<strong>Geogebra</strong> &middot;
 								{{ $t("components.molecules.copyResult.geogebraCopy.error") }}
 							</div>
-							<div v-if="hasFailedEtherpadElement">
+							<div v-if="hasFailedEtherpadElement" data-testid="etherpad">
 								<strong>Etherpad</strong> &middot;
 								{{ $t("components.molecules.copyResult.etherpadCopy.error") }}
 							</div>
-							<div v-if="hasFailedCourseGroup">
+							<div v-if="hasFailedCourseGroup" data-testid="coursegroups">
 								<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
 								{{
 									$t("components.molecules.copyResult.courseGroupCopy.error")
 								}}
 							</div>
-							<div v-if="hasFailedFileElement">
+							<div v-if="hasFailedFileElement" data-testid="files">
 								<strong>{{
 									$t("components.molecules.copyResult.label.files")
 								}}</strong>
