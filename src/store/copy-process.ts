@@ -51,7 +51,6 @@ export default class CopyModule extends VuexModule {
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private businessError: BusinessError | undefined = undefined;
 	private loading: boolean = false;
-	private isSuccess: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
