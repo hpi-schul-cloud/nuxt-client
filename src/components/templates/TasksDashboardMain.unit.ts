@@ -1,8 +1,10 @@
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import CopyModule from "@/store/copy-process";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { provide } from "@nuxtjs/composition-api";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
@@ -163,6 +165,10 @@ describe("@components/templates/TasksDashboardMain", () => {
 			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
+			});
+
+			setupStores({
+				"copy-process": CopyModule,
 			});
 
 			wrapper = mountComponent({
