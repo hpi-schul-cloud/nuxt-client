@@ -1,11 +1,10 @@
 <template>
 	<div>
-		<template v-for="(item, index) in items">
-			<copy-result-modal-list-item
-				:key="index"
-				:item="item"
-			></copy-result-modal-list-item>
-		</template>
+		<copy-result-modal-list-item
+			v-for="(item, index) in items"
+			:key="index"
+			:item="item"
+		></copy-result-modal-list-item>
 	</div>
 </template>
 
