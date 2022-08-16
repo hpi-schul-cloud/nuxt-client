@@ -69,10 +69,7 @@
 					/>
 				</div>
 				<div v-else>
-					<copy-result-modal-list
-						:items="items"
-						:base-url="baseUrl"
-					></copy-result-modal-list>
+					<copy-result-modal-list :items="items"></copy-result-modal-list>
 				</div>
 			</div>
 		</template>
@@ -97,10 +94,6 @@ export default {
 		copyResultStatus: {
 			type: String,
 			default: () => undefined,
-		},
-		baseUrl: {
-			type: String,
-			default: () => "",
 		},
 	},
 	data() {

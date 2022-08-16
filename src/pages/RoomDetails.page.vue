@@ -105,7 +105,6 @@
 			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
-			:base-url="copyResultModalBaseUrl"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -284,9 +283,6 @@ export default {
 		},
 		copyResultModalItems() {
 			return copyModule.getCopyResultFailedItems;
-		},
-		copyResultModalBaseUrl() {
-			return `courses/${this.copyProcessReturnId || this.courseId}`;
 		},
 	},
 	async created() {

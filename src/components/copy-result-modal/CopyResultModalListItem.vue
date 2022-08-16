@@ -39,10 +39,6 @@ export default {
 			required: true,
 			default: () => undefined,
 		},
-		baseUrl: {
-			type: String,
-			default: () => "",
-		},
 	},
 	data() {
 		return {
