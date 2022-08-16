@@ -3,7 +3,7 @@
 		<div class="d-flex flex-row align-items-center">
 			<v-icon> {{ mdiChevronLeft }} </v-icon>
 			<v-breadcrumbs
-				class="pl-0 py-0 mr-8 pr-4 truncate"
+				class="pl-0 py-0 mr-8 pr-4 truncate parent-info"
 				:items="[
 					{
 						href: item.url,
@@ -18,7 +18,7 @@
 			<li
 				v-for="(e, index) of elements"
 				:key="index"
-				class="list-none truncate d-block"
+				class="list-none truncate d-block element-info"
 			>
 				<v-icon x-small class="mr-1"> {{ mdiMenuRight }} </v-icon>
 				<span class="black--text">{{ getElementTitle(e) }}</span>
