@@ -351,24 +351,6 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-				},
-				{
-					text: this.$t("pages.administration.students.index.title"),
-					to: "/administration/students",
-				},
-				{
-					text: this.isConsentNecessary
-						? this.$t("pages.administration.students.consent.title")
-						: this.$t(
-								"pages.administration.students.consent.registrationOnly.title"
-						  ),
-					disabled: true,
-				},
-			],
 			tableColumns: [
 				{
 					field: "fullName",
@@ -445,6 +427,26 @@ export default {
 		};
 	},
 	computed: {
+		breadcrumbs() {
+			return [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+					to: "/administration/students",
+				},
+				{
+					text: this.isConsentNecessary
+						? this.$t("pages.administration.students.consent.title")
+						: this.$t(
+								"pages.administration.students.consent.registrationOnly.title"
+						  ),
+					disabled: true,
+				},
+			];
+		},
 		isConsentNecessary() {
 			return (
 				envConfigModule.getEnv &&
