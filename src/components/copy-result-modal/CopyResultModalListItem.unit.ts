@@ -1,8 +1,8 @@
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
 import CopyResultModalListItem from "@components/copy-result-modal/CopyResultModalListItem.vue";
 import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { mount } from "@vue/test-utils";
 
 const mockItem: CopyResultItem = {
 	type: CopyApiResponseTypeEnum.Lesson,
@@ -27,6 +27,7 @@ const getWrapper = (props: object) => {
 			i18n: true,
 		}),
 		propsData: props,
+		mocks: {},
 	});
 };
 describe("@components/copy-result-modal/CopyResultModalListItem", () => {
@@ -61,5 +62,95 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 
 		expect(parentInfoLink.element.textContent).toBe("Themen - Lesson Title");
 		expect(parentInfoLink.attributes("href")).toBe(mockItem.url);
+	});
+
+	it("should translate types", () => {
+		const wrapper = getWrapper({ item: mockItem });
+
+		const map = [
+			[CopyApiResponseTypeEnum.Board, "common.words.learnContent"],
+			[
+				CopyApiResponseTypeEnum.Content,
+				"components.molecules.copyResult.label.content",
+			],
+			[CopyApiResponseTypeEnum.Course, "common.labels.room"],
+			[CopyApiResponseTypeEnum.CoursegroupGroup, "common.words.courseGroups"],
+			[
+				CopyApiResponseTypeEnum.File,
+				"components.molecules.copyResult.label.file",
+			],
+			[
+				CopyApiResponseTypeEnum.FileGroup,
+				"components.molecules.copyResult.label.files",
+			],
+			[
+				CopyApiResponseTypeEnum.Leaf,
+				"components.molecules.copyResult.label.leaf",
+			],
+			[
+				CopyApiResponseTypeEnum.LernstoreMaterial,
+				"components.molecules.copyResult.label.lernstoreMaterial",
+			],
+			[
+				CopyApiResponseTypeEnum.LernstoreMaterialGroup,
+				"components.molecules.copyResult.label.lernstoreMaterialGroup",
+			],
+			[CopyApiResponseTypeEnum.Lesson, "common.words.topics"],
+			[
+				CopyApiResponseTypeEnum.LessonContentGeogebra,
+				"components.molecules.copyResult.label.geogebra",
+			],
+			[
+				CopyApiResponseTypeEnum.LessonContentEtherpad,
+				"components.molecules.copyResult.label.etherpad",
+			],
+			[
+				CopyApiResponseTypeEnum.LessonContentText,
+				"components.molecules.copyResult.label.text",
+			],
+			[
+				CopyApiResponseTypeEnum.LessonContentNexboard,
+				"components.molecules.copyResult.label.nexboard",
+			],
+			[
+				CopyApiResponseTypeEnum.LessonContentLernstore,
+				"common.words.lernstore",
+			],
+			[CopyApiResponseTypeEnum.LessonContentTask, "common.words.task"],
+			[
+				CopyApiResponseTypeEnum.LessonContentGroup,
+				"components.molecules.copyResult.label.lessonContentGroup",
+			],
+			[
+				CopyApiResponseTypeEnum.LtitoolGroup,
+				"components.molecules.copyResult.label.ltiToolsGroup",
+			],
+			[
+				CopyApiResponseTypeEnum.Metadata,
+				"components.molecules.copyResult.metadata",
+			],
+			[
+				CopyApiResponseTypeEnum.SubmissionGroup,
+				"components.molecules.copyResult.label.submissions",
+			],
+			[CopyApiResponseTypeEnum.Task, "common.words.task"],
+			[CopyApiResponseTypeEnum.TaskGroup, "common.words.tasks"],
+			[
+				CopyApiResponseTypeEnum.TimeGroup,
+				"components.molecules.copyResult.label.timeGroup",
+			],
+			[
+				CopyApiResponseTypeEnum.UserGroup,
+				"components.molecules.copyResult.label.userGroup",
+			],
+		];
+
+		map.forEach(([constant, languageConstant]) => {
+			expect(wrapper.vm.getElementTypeName(constant)).toBe(
+				wrapper.vm.$i18n.t(languageConstant)
+			);
+		});
+
+		expect(wrapper.vm.getElementTypeName("somestuff")).toBe("unknown label");
 	});
 });
