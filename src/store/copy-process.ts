@@ -12,19 +12,6 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
-const checkIfEveryElementsAreSuccess = (
-	data: CopyApiResponse | any
-): boolean => {
-	return data.every(({ elements = [], ...rest }) => {
-		const item = { ...rest };
-		if (item.status !== CopyApiResponseStatusEnum.Success) return false;
-		if (elements.length > 0) {
-			return (item.elements = checkIfEveryElementsAreSuccess(elements));
-		}
-		return item.status === CopyApiResponseStatusEnum.Success;
-	});
-};
-
 export type CopyParams = {
 	id: string;
 	type: "task" | "lesson" | "course";
@@ -240,14 +227,6 @@ export default class CopyModule extends VuexModule {
 
 	get getId(): string {
 		return this.copyResult?.id ?? "";
-	}
-
-	get getResponseTypes(): object {
-		return CopyApiResponseTypeEnum;
-	}
-
-	get getResponseStatus(): object {
-		return CopyApiResponseStatusEnum;
 	}
 
 	get getLoading(): boolean {
