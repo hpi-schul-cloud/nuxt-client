@@ -1,6 +1,8 @@
 import {
-	copyModule, envConfigModule, finishedTaskModule,
-	taskModule
+	copyModule,
+	envConfigModule,
+	finishedTaskModule,
+	taskModule,
 } from "@/store";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -40,7 +42,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			tasks: TaskModule,
 			"finished-tasks": FinishedTaskModule,
 			"env-config": EnvConfigModule,
-			"copy": CopyModule,
+			copy: CopyModule,
 		});
 	});
 
