@@ -84,13 +84,13 @@ export default {
 			if (type === CopyApiResponseTypeEnum.Lesson)
 				return this.$t("common.words.topics");
 			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra)
-				return "Geogebra";
+				return this.$t("components.molecules.copyResult.label.geogebra");
 			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad)
-				return "Etherpad";
+				return this.$t("components.molecules.copyResult.label.etherpad");
 			if (type === CopyApiResponseTypeEnum.LessonContentText)
-				return "i18n text";
+				return this.$t("components.molecules.copyResult.label.text");
 			if (type === CopyApiResponseTypeEnum.LessonContentNexboard)
-				return "Nexboard";
+				return this.$t("components.molecules.copyResult.label.nexboard");
 			if (type === CopyApiResponseTypeEnum.LessonContentLernstore)
 				return this.$t("common.words.lernstore");
 			if (type === CopyApiResponseTypeEnum.LessonContentTask)
