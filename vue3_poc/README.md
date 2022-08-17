@@ -4,10 +4,10 @@
 
 - [x] vite installation
 - [x] using existing component as it is (impressum.vue)
-- [x] using composition api with ts (@/pages/Homeview.vue)
+- [x] using composition api with ts (@/pages/HomePage.vue)
 - [x] router implementation (@src/router/index.ts)
 - [x] pinia implementation (@src/store/index.ts)
-- [x] using pinia in component (@pages/HomeView.vue)
+- [x] using pinia in component (@pages/HomePage.vue)
 - [x] typescript integration
 - [x] vuetify@3 integration
   - [ ] define vuetify components globally in jest tests

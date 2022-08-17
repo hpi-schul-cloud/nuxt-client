@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "@/pages/HomeView.vue";
-import HelloView from "@/pages/HelloView.vue";
+import HomePage from "@/pages/HomePage.vue";
+import HelloPage from "@/pages/HelloPage.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: "/",
 		name: "home",
-		component: HomeView,
+		component: HomePage,
 	},
 	{
 		path: "/hello",
 		name: "hello",
-		component: HelloView,
+		component: HelloPage,
 	},
 	{
 		path: "/imprint",
@@ -19,7 +19,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		// route level code-splitting
 		// this generates a separate chunk (About.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
-		component: () => import("../pages/ImpressumView.vue"),
+		component: () => import("../pages/ImpressumPage.vue"),
 	},
 ];
 

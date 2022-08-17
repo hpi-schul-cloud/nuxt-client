@@ -4,19 +4,26 @@
 			<h2>{{ persistentValue }}</h2>
 			<h2>{{ reactiveValue }}</h2>
 			<br />
-			<div><input v-model="reactiveValue" type="text" /></div>
+			<div>
+				<v-text-field
+					v-model="reactiveValue"
+					variant="outlined"
+					label="value"
+				/>
+			</div>
 			<br />
 			<div>
-				<button @click="increase">
+				<v-btn @click="onIncreaseCounter">
 					Counter in the component {{ counter }}
-				</button>
+				</v-btn>
 			</div>
 			<br />
 			<div>
-				<button @click="increaseCounter">
-					Counter in the store {{ store.counter }}
-				</button>
+				<v-btn @click="onIncreaseStoreCounter">
+					Counter in the store {{ storeCounter }}
+				</v-btn>
 			</div>
+			<br />
 		</div>
 	</div>
 </template>
@@ -24,27 +31,29 @@
 <script lang="ts">
 import { ref } from "vue";
 import { useCounterStore } from "@/store/counter";
+import { computed } from "@vue/reactivity";
 export default {
 	setup() {
 		const store = useCounterStore();
 		const persistentValue = "Composition api page";
 		const reactiveValue: object = ref("Reactive value");
 		const counter = ref(0);
-		const increase = (): void => {
+		const storeCounter = computed(() => store.counter);
+		const onIncreaseCounter = (): void => {
 			counter.value++;
 		};
 
-		const increaseCounter = (): void => {
+		const onIncreaseStoreCounter = (): void => {
 			store.increment();
 		};
 
 		return {
 			persistentValue,
 			reactiveValue,
-			increase,
+			onIncreaseCounter,
 			counter,
-			store,
-			increaseCounter,
+			storeCounter,
+			onIncreaseStoreCounter,
 		};
 	},
 };
