@@ -499,7 +499,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
 			const copyTaskMock = jest.fn();
@@ -554,27 +554,12 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(fetchContentSpy).toHaveBeenCalled();
 			expect(fetchContentSpy.mock.calls[0][0]).toStrictEqual("123");
 		});
-
-		it("should redirect to legacy client if FEATURE_TASK_COPY_ENABLED flag is not set true", async () => {
-			const location = window.location;
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
-
-			const taskCard = wrapper.find(".task-card");
-			taskCard.vm.$emit("copy-task");
-
-			expect(location.href).toStrictEqual(
-				"/homework/1234/copy?returnUrl=rooms/123"
-			);
-		});
 	});
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
 			const copyLessonMock = jest.fn();
