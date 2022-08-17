@@ -47,6 +47,7 @@ const getWrapper = (props?: any) => {
 		},
 	});
 };
+
 describe("@components/copy-result-modal/CopyResultModal", () => {
 	describe("basic functions", () => {
 		it("Should render component", () => {

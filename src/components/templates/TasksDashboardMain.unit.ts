@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import CopyModule from "@/store/copy-process";
 import FinishedTaskModule from "@/store/finished-tasks";
@@ -5,6 +6,7 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal.vue";
 import { provide } from "@nuxtjs/composition-api";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
@@ -19,13 +21,32 @@ const $route = {
 
 const $router = { replace: jest.fn() };
 
+const defaultTaskModuleGetters: Partial<TaskModule> = {
+	getStatus: "completed",
+	getOpenTasksForStudent: {
+		overdue: [],
+		noDueDate: [],
+		withDueDate: [],
+	},
+	getCompletedTasksForStudent: {
+		submitted: [],
+		graded: [],
+	},
+	getActiveTab: "open",
+	getTasks: [],
+	openTasksForStudentIsEmpty: true,
+	completedTasksForStudentIsEmpty: true,
+	hasTasks: false,
+};
+
 describe("@components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
+	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksDashboardMain, {
+		return mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				$router,
@@ -33,12 +54,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 			}),
 			setup() {
 				provide("taskModule", taskModuleMock);
+				provide("copyModule", copyModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
 			},
 			...attrs,
 		});
-
-		return wrapper;
 	};
 
 	describe("when mounting the component", () => {
@@ -58,25 +78,9 @@ describe("@components/templates/TasksDashboardMain", () => {
 	});
 
 	describe("when user role is student", () => {
-		const taskModuleGetters: Partial<TaskModule> = {
-			getStatus: "completed",
-			getOpenTasksForStudent: {
-				overdue: [],
-				noDueDate: [],
-				withDueDate: [],
-			},
-			getCompletedTasksForStudent: {
-				submitted: [],
-				graded: [],
-			},
-			getActiveTab: "open",
-			openTasksForStudentIsEmpty: true,
-			completedTasksForStudentIsEmpty: true,
-			hasTasks: false,
-		};
-
 		beforeEach(() => {
-			taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
+			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
+			copyModuleMock = createModuleMocks(CopyModule);
 
 			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 				getTasks: [],
@@ -122,7 +126,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		describe("with hasTasks === true", () => {
 			beforeEach(() => {
 				taskModuleMock = createModuleMocks(TaskModule, {
-					...taskModuleGetters,
+					...defaultTaskModuleGetters,
 					hasTasks: true,
 					getCourseFilters: [],
 					getSelectedCourseFilters: [],
@@ -317,7 +321,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getSelectedCourseFilters: [],
 			});
 
-			const wrapper = mountComponent({
+			wrapper = mountComponent({
 				propsData: {
 					role: "student",
 				},
@@ -349,7 +353,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getSelectedCourseFilters: [],
 			});
 
-			const wrapper = mountComponent({
+			wrapper = mountComponent({
 				propsData: {
 					role: "student",
 				},
@@ -373,6 +377,33 @@ describe("@components/templates/TasksDashboardMain", () => {
 			it.todo("course filter show filter for substitutes filters");
 
 			it.todo("course filter show substitute prefix for substitutes filters");
+		});
+	});
+
+	describe("copying tasks", () => {
+		beforeEach(() => {
+			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
+			copyModuleMock = createModuleMocks(CopyModule, { getLoading: true });
+
+			wrapper = mountComponent({
+				propsData: {
+					role: "teacher",
+				},
+				stubs: {
+					CopyResultModal: true,
+					TasksDashboardStudent: true,
+					TasksDashboardTeacher: true,
+				},
+			});
+		});
+
+		it("should fetch fresh data after copying task and closing dialog", async () => {
+			const dialog = wrapper.findComponent(CopyResultModal);
+			dialog.vm.$emit("dialog-closed");
+
+			expect(copyModuleMock.reset).toHaveBeenCalled();
+			expect(taskModuleMock.setActiveTab).toHaveBeenCalledWith("drafts");
+			expect(taskModuleMock.fetchAllTasks).toHaveBeenCalled();
 		});
 	});
 });
