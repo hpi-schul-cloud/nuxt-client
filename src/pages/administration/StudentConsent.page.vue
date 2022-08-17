@@ -3,11 +3,18 @@
 		ref="main"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
-		:aria-label="$t('pages.administration.students.consent.title')"
+		:aria-label="
+			isConsentNecessary
+				? $t('pages.administration.students.consent.title')
+				: $t('pages.administration.students.consent.registrationOnly.title')
+		"
 	>
 		<template slot="header">
-			<h1 class="mb--md h3">
+			<h1 v-if="isConsentNecessary" class="mb--md h3">
 				{{ $t("pages.administration.students.consent.title") }}
+			</h1>
+			<h1 v-else class="mb--md h3">
+				{{ $t("pages.administration.students.consent.registrationOnly.title") }}
 			</h1>
 			<i18n
 				v-if="isConsentNecessary"
@@ -112,7 +119,9 @@
 				<h4>
 					{{ $t("pages.administration.students.consent.steps.register") }}
 				</h4>
-				{{ $t("pages.administration.students.consent.steps.register.info") }}
+				<p v-if="isConsentNecessary">
+					{{ $t("pages.administration.students.consent.steps.register.info") }}
+				</p>
 				<backend-data-table
 					:columns="tableColumns"
 					:data="tableData"
@@ -197,9 +206,13 @@
 				</backend-data-table>
 				<p>
 					{{
-						$t(
-							"pages.administration.students.consent.steps.download.explanation"
-						)
+						isConsentNecessary
+							? $t(
+									"pages.administration.students.consent.steps.download.explanation"
+							  )
+							: $t(
+									"pages.administration.students.consent.registrationOnly.steps.download.explanation"
+							  )
 					}}
 				</p>
 
@@ -214,7 +227,13 @@
 			<section v-if="currentStep === 3">
 				<base-content-container>
 					<h4 class="centered">
-						{{ $t("pages.administration.students.consent.steps.success") }}
+						{{
+							isConsentNecessary
+								? $t("pages.administration.students.consent.steps.success")
+								: $t(
+										"pages.administration.students.consent.registrationOnly.steps.success"
+								  )
+						}}
 					</h4>
 					<img
 						class="mb--md"
@@ -342,7 +361,11 @@ export default {
 					to: "/administration/students",
 				},
 				{
-					text: this.$t("pages.administration.students.consent.title"),
+					text: this.isConsentNecessary
+						? this.$t("pages.administration.students.consent.title")
+						: this.$t(
+								"pages.administration.students.consent.registrationOnly.title"
+						  ),
 					disabled: true,
 				},
 			],
@@ -595,9 +618,13 @@ export default {
 	},
 	head() {
 		return {
-			title: `${this.$t("pages.administration.students.consent.title")} - ${
-				this.$theme.short_name
-			}`,
+			title: this.isConsentNecessary
+				? `${this.$t("pages.administration.students.consent.title")} - ${
+						this.$theme.short_name
+				  }`
+				: `${this.$t(
+						"pages.administration.students.consent.registrationOnly.title"
+				  )} - ${this.$theme.short_name}`,
 		};
 	},
 };
