@@ -1,6 +1,7 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "./CopyResultModal.vue";
 
 const defaultResultItems = [
@@ -188,14 +189,14 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 	});
 
 	describe("dialog-closed", () => {
-		it("should emit dialog-closed if user closed dialog", async () => {
+		it("should forward the dialog-closed event of the wrapped dialog", async () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "partial",
 			});
-			const closeButton = wrapper.find('[data-testId="dialog-close"]');
-			closeButton.trigger("click");
-			await wrapper.vm.$nextTick();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			dialog.vm.$emit("dialog-closed");
 
 			const emittedEvents = wrapper.emitted();
 			const dialogClosedEvents = emittedEvents["dialog-closed"];
