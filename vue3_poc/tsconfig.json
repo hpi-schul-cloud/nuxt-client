@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "esnext",
-		"types": ["vite/client", "@types/jest"],
+		"types": ["vite/client", "vitest/globals"],
 		"module": "esnext",
 		"moduleResolution": "node",
 		"strict": true,

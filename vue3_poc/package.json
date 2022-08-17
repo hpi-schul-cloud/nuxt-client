@@ -9,7 +9,8 @@
 		"lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
 		"lint:style": "stylelint src/**/*.{css,scss,vue}",
 		"preview": "vite preview --port 4173",
-		"test:unit": "vitest",
+		"test": "vitest run",
+		"test:watch": "vitest watch",
 		"test:cov": "vitest run --coverage"
 	},
 	"dependencies": {
