@@ -87,7 +87,6 @@ import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
-import { copyModule, taskModule } from "@utils/store-accessor";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 
@@ -117,7 +116,7 @@ export default {
 			mdiPlus,
 		};
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["taskModule", "copyModule", "finishedTaskModule"],
 	computed: {
 		hasTasks() {
 			return this.taskModule.hasTasks;
@@ -283,13 +282,13 @@ export default {
 			};
 		},
 		copyResultModalIsLoading() {
-			return copyModule.getLoading;
+			return this.copyModule.getLoading;
 		},
 		copyResultModalStatus() {
-			return copyModule.getCopyResult?.status;
+			return this.copyModule.getCopyResult?.status;
 		},
 		copyResultModalItems() {
-			return copyModule.getCopyResultFailedItems;
+			return this.copyModule.getCopyResultFailedItems;
 		},
 	},
 	watch: {
@@ -329,9 +328,9 @@ export default {
 			}
 		},
 		async onCopyResultModalClose() {
-			copyModule.reset();
-			taskModule.setActiveTab("drafts");
-			await taskModule.fetchAllTasks(); // wip:test
+			this.copyModule.reset();
+			this.taskModule.setActiveTab("drafts");
+			await this.taskModule.fetchAllTasks();
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {
