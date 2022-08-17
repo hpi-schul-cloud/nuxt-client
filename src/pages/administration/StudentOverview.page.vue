@@ -224,9 +224,13 @@ export default {
 			],
 			tableActions: [
 				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.consent"
-					),
+					label: this.isConsentNecessary
+						? this.$t(
+								"pages.administration.students.index.tableActions.consent"
+						  )
+						: this.$t(
+								"pages.administration.students.index.tableActions.registration"
+						  ),
 					icon: "check",
 					"icon-source": "material",
 					action: this.handleBulkConsent,
