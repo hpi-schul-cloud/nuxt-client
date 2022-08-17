@@ -222,7 +222,44 @@ export default {
 					label: "",
 				},
 			],
-			tableActions: [
+			tableSelection: [],
+			tableSelectionType: "inclusive",
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+					disabled: true,
+				},
+			],
+			filters: studentFilter(this),
+			active: false,
+			searchQuery:
+				(this.$uiState.get("filter", "pages.administration.students.index") &&
+					this.$uiState.get("filter", "pages.administration.students.index")
+						.searchQuery) ||
+				"",
+		};
+	},
+	layout: "defaultVuetify",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
+	computed: {
+		...mapGetters("users", {
+			students: "getList",
+			pagination: "getPagination",
+			isDeleting: "getActive",
+			deletedPercent: "getPercent",
+			qrLinks: "getQrLinks",
+		}),
+		schoolIsExternallyManaged() {
+			return schoolsModule.schoolIsExternallyManaged;
+		},
+		tableActions() {
+			return [
 				{
 					label: this.isConsentNecessary
 						? this.$t(
@@ -262,42 +299,7 @@ export default {
 					permission: "STUDENT_DELETE",
 					dataTestId: "delete_action",
 				},
-			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-				},
-				{
-					text: this.$t("pages.administration.students.index.title"),
-					disabled: true,
-				},
-			],
-			filters: studentFilter(this),
-			active: false,
-			searchQuery:
-				(this.$uiState.get("filter", "pages.administration.students.index") &&
-					this.$uiState.get("filter", "pages.administration.students.index")
-						.searchQuery) ||
-				"",
-		};
-	},
-	layout: "defaultVuetify",
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
-	computed: {
-		...mapGetters("users", {
-			students: "getList",
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
-		}),
-		schoolIsExternallyManaged() {
-			return schoolsModule.schoolIsExternallyManaged;
+			];
 		},
 		isConsentNecessary() {
 			return (
