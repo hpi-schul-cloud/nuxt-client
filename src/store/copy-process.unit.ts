@@ -31,8 +31,8 @@ const serverDataPartial: CopyApiResponse = {
 };
 
 const serverDataSuccess: CopyApiResponse = {
-	title: "Aufgabe",
-	type: CopyApiResponseTypeEnum.Task,
+	title: "Thema X",
+	type: CopyApiResponseTypeEnum.Lesson,
 	status: CopyApiResponseStatusEnum.Success,
 	id: "123",
 	elements: [
@@ -283,7 +283,19 @@ describe("copy module", () => {
 		});
 
 		describe("setCopyResultFailedItems", () => {
-			it("should set filteredResult", () => {
+			it("should set filteredResult for failed task copy", () => {
+				const serverData = {
+					title: "Aufgabe",
+					type: CopyApiResponseTypeEnum.Task,
+					status: CopyApiResponseStatusEnum.Failure,
+					id: "123",
+					elements: [
+						{
+							type: CopyApiResponseTypeEnum.File,
+							status: CopyApiResponseStatusEnum.Failure,
+						},
+					],
+				};
 				const expectedData = [
 					{
 						title: "Aufgabe",
@@ -292,12 +304,8 @@ describe("copy module", () => {
 						url: "/homework/123/edit?returnUrl=rooms/testCourseId",
 						elements: [
 							{
-								type: TypeEnum.File,
+								type: CopyApiResponseTypeEnum.File,
 								title: "",
-							},
-							{
-								title: "",
-								type: "LESSON_CONTENT_ETHERPAD",
 							},
 						],
 					},
@@ -305,8 +313,44 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				copyModule.reset();
 				copyModule.setCopyResultFailedItems({
-					payload: serverDataPartial,
+					payload: serverData,
 					courseId: "testCourseId",
+				});
+				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
+			});
+
+			it("should set filteredResult for failed lesson copy", () => {
+				const serverData = {
+					title: "Thema",
+					type: CopyApiResponseTypeEnum.Lesson,
+					status: CopyApiResponseStatusEnum.Failure,
+					id: "456",
+					elements: [
+						{
+							type: CopyApiResponseTypeEnum.LessonContentText,
+							status: CopyApiResponseStatusEnum.Failure,
+						},
+					],
+				};
+				const expectedData = [
+					{
+						title: "Thema",
+						type: CopyApiResponseTypeEnum.Lesson,
+						elementId: "456",
+						url: "/courses/testCourseIdX/topics/456/edit?returnUrl=rooms/testCourseIdX",
+						elements: [
+							{
+								title: "",
+								type: CopyApiResponseTypeEnum.LessonContentText,
+							},
+						],
+					},
+				];
+				const copyModule = new CopyModule({});
+				copyModule.reset();
+				copyModule.setCopyResultFailedItems({
+					payload: serverData,
+					courseId: "testCourseIdX",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
