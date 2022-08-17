@@ -76,7 +76,9 @@ export default {
 			if (type === CopyApiResponseTypeEnum.Leaf)
 				return this.$t("components.molecules.copyResult.label.leaf");
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterial)
-				return "Missing name for Lernstore Material";
+				return this.$t(
+					"components.molecules.copyResult.label.lernstoreMaterial"
+				);
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
 				return this.$t(
 					"components.molecules.copyResult.label.lernstoreMaterialGroup"

@@ -413,6 +413,7 @@
 	"components.molecules.copyResult.label.files": "Files",
 	"components.molecules.copyResult.label.geogebra": "GeoGebra",
 	"components.molecules.copyResult.label.leaf": "Leaf",
+	"components.molecules.copyResult.label.lernstoreMaterial": "Learning material",
 	"components.molecules.copyResult.label.lernstoreMaterialGroup": "Learning materials",
 	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
 	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools Group",
