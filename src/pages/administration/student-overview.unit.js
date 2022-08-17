@@ -531,4 +531,71 @@ describe("students/index", () => {
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);
 		expect(icons.exists()).toBe(true);
 	});
+
+	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
+		envConfigModule.setEnvs({
+			...envs,
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+			FEATURE_CONSENT_NECESSARY: false,
+		});
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);
+
+		const icons = wrapper.find(`[data-testid="legend-icons"]`);
+		expect(icons.exists()).toBe(true);
+
+		expect(wrapper.vm.icons).toStrictEqual([
+			{
+				icon: "doublecheck",
+				color: "var(--color-success)",
+				style: "margin: -3px 3px",
+				label: "Registrierung abgeschlossen",
+			},
+			{
+				icon: "clear",
+				color: "var(--color-danger)",
+				label: "Nutzer:in angelegt",
+			},
+		]);
+	});
+
+	it("should not show action button for consent if FEATURE_CONSENT_NECESSARY is false", async () => {
+		envConfigModule.setEnvs({
+			...envs,
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+			FEATURE_CONSENT_NECESSARY: false,
+		});
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);
+
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+
+		await checkBox.trigger("click");
+		expect(dataRow.vm.selected).toBe(true);
+
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+
+		await openContextButton.trigger("click");
+		const actionBtn = wrapper.find(`[data-testid="consent_action"]`);
+		expect(actionBtn.exists()).toBe(false);
+	});
 });

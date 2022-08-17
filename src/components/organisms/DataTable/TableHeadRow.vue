@@ -219,6 +219,7 @@
 <script>
 import BaseButton from "@basecomponents/BaseButton";
 import InfoBox from "@components/molecules/InfoBox";
+import { envConfigModule } from "@/store";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -275,10 +276,7 @@ export default {
 			},
 		},
 		isConsentNecessary() {
-			if (process.env.SC_THEME === "brb") {
-				return false;
-			}
-			return true;
+			return envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY;
 		},
 	},
 	methods: {

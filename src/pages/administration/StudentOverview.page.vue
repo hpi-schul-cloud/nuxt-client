@@ -230,6 +230,7 @@ export default {
 					icon: "check",
 					"icon-source": "material",
 					action: this.handleBulkConsent,
+					dataTestId: "consent_action",
 				},
 				{
 					label: this.$t(
@@ -294,11 +295,17 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
-		env() {
-			return envConfigModule.getEnv;
+		isConsentNecessary() {
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
+			);
 		},
 		showConsent() {
-			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
+			);
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -314,6 +321,14 @@ export default {
 					(action) =>
 						action.label !==
 						this.$t("pages.administration.students.index.tableActions.delete")
+				);
+			}
+
+			if (!this.isConsentNecessary) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.consent")
 				);
 			}
 
@@ -396,12 +411,6 @@ export default {
 					},
 				],
 			};
-		},
-		isConsentNecessary() {
-			if (process.env.SC_THEME === "brb") {
-				return false;
-			}
-			return true;
 		},
 	},
 	watch: {
