@@ -19,7 +19,7 @@ export type CopyParams = {
 };
 
 @Module({
-	name: "copy-process",
+	name: "copy",
 	namespaced: true,
 	stateFactory: true,
 })

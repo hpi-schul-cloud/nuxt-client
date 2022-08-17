@@ -1,13 +1,11 @@
 import {
-	finishedTaskModule,
-	taskModule,
-	envConfigModule,
-	copyModule,
+	copyModule, envConfigModule, finishedTaskModule,
+	taskModule
 } from "@/store";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
-import CopyModule from "@/store/copy-process";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
@@ -42,7 +40,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			tasks: TaskModule,
 			"finished-tasks": FinishedTaskModule,
 			"env-config": EnvConfigModule,
-			"copy-process": CopyModule,
+			"copy": CopyModule,
 		});
 	});
 

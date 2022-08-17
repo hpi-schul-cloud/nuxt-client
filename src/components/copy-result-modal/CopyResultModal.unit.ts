@@ -1,7 +1,7 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 
 const defaultResultItems = [
@@ -131,9 +131,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 				copyResultStatus: undefined,
 			});
 
-			const skeletonLoader = wrapper.find(
-				`[data-testid="copy-process-skeleton"]`
-			);
+			const skeletonLoader = wrapper.find(`[data-testid="copy-skeleton"]`);
 
 			expect(skeletonLoader.isVisible()).toBe(true);
 		});

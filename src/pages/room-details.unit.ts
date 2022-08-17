@@ -1,13 +1,13 @@
 import { authModule, envConfigModule, roomModule } from "@/store";
+import AuthModule from "@/store/auth";
+import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
+import RoomModule from "@/store/room";
+import { User } from "@/store/types/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
-import { User } from "@/store/types/auth";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import RoomModule from "@/store/room";
-import CopyModule from "@/store/copy-process";
 
 const mockData = {
 	roomId: "123",
@@ -116,7 +116,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			auth: AuthModule,
 			"env-config": EnvConfigModule,
 			room: RoomModule,
-			"copy-process": CopyModule,
+			copy: CopyModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);

@@ -67,7 +67,7 @@
 				<div v-if="isLoading">
 					<v-skeleton-loader
 						type="article, list-item-three-line"
-						data-testid="copy-process-skeleton"
+						data-testid="copy-skeleton"
 					/>
 				</div>
 				<div v-else>

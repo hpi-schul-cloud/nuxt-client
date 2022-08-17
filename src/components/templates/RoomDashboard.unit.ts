@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { envConfigModule, roomModule, taskModule } from "@/store";
-import CopyModule from "@/store/copy-process";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TaskModule from "@/store/tasks";
@@ -110,7 +110,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			tasks: TaskModule,
 			room: RoomModule,
 			"env-config": EnvConfigModule,
-			"copy-process": CopyModule,
+			copy: CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });

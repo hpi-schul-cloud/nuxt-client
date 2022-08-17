@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
-import CopyModule from "@/store/copy-process";
+import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -172,7 +172,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			});
 
 			setupStores({
-				"copy-process": CopyModule,
+				copy: CopyModule,
 			});
 
 			wrapper = mountComponent({

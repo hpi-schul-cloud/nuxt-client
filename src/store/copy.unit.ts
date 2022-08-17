@@ -4,10 +4,7 @@ import {
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
-import CopyModule, { CopyParams } from "./copy-process";
-
-const StatusEnum = serverApi.CopyApiResponseStatusEnum;
-const TypeEnum = serverApi.CopyApiResponseTypeEnum;
+import CopyModule, { CopyParams } from "./copy";
 
 const serverDataPartial: CopyApiResponse = {
 	title: "Aufgabe",
@@ -299,7 +296,7 @@ describe("copy module", () => {
 				const expectedData = [
 					{
 						title: "Aufgabe",
-						type: TypeEnum.Task,
+						type: CopyApiResponseTypeEnum.Task,
 						elementId: "123",
 						url: "/homework/123/edit?returnUrl=rooms/testCourseId",
 						elements: [
@@ -391,7 +388,7 @@ describe("copy module", () => {
 				const expectedData = [
 					{
 						title: "test course",
-						type: TypeEnum.Course,
+						type: CopyApiResponseTypeEnum.Course,
 						elementId: "12345",
 						elements: [],
 						url: "/courses/12345/edit",
@@ -444,7 +441,7 @@ describe("copy module", () => {
 				const expectedData = [
 					{
 						title: "test course",
-						type: TypeEnum.Course,
+						type: CopyApiResponseTypeEnum.Course,
 						elementId: "12345",
 						elements: [],
 						url: "/courses/12345/edit",
@@ -453,7 +450,7 @@ describe("copy module", () => {
 						elementId: "567",
 						elements: [],
 						title: "Task 1",
-						type: TypeEnum.Task,
+						type: CopyApiResponseTypeEnum.Task,
 						url: "/homework/567/edit?returnUrl=rooms/aCourseId",
 					},
 				];
