@@ -41,7 +41,7 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 		const wrapper = getWrapper({ item: mockItem });
 		const elementTitle = wrapper.find(".black--text").element.textContent;
 
-		expect(elementTitle).toBe("Geogebra - Geogebra Element Title");
+		expect(elementTitle).toBe("GeoGebra - Geogebra Element Title");
 	});
 
 	it("should render the elements with the correct element title", () => {
@@ -51,8 +51,8 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 			.wrappers.map((el) => el.element.textContent);
 
 		expect(elementTitles).toEqual([
-			"Geogebra - Geogebra Element Title",
-			"Nexboard - Nexboard Element Title",
+			"GeoGebra - Geogebra Element Title",
+			"NeXboard - Nexboard Element Title",
 		]);
 	});
 
