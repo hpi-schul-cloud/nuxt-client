@@ -471,6 +471,7 @@
 	"pages.administration.students.index.remove.confirm.message.some": "¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
 	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
 	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
+	"pages.administration.students.index.tableActions.registration": "Registro manual",
 	"pages.administration.students.index.tableActions.delete": "Eliminar",
 	"pages.administration.students.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",
 	"pages.administration.students.index.tableActions.qr": "Imprimir los enlaces de registro como código QR",

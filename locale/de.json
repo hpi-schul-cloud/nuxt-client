@@ -475,6 +475,7 @@
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
 	"pages.administration.students.index.tableActions.consent": "Analoge Einverständniserklärung",
+	"pages.administration.students.index.tableActions.registration": "Manuelle Registrierung",
 	"pages.administration.students.index.tableActions.delete": "Löschen",
 	"pages.administration.students.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
 	"pages.administration.students.index.tableActions.qr": "Registrierungslinks als QR-Code ausdrucken",

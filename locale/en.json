@@ -466,6 +466,7 @@
 	"pages.administration.students.index.remove.confirm.message.some": "Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
 	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
 	"pages.administration.students.index.tableActions.consent": "Analogue consent form",
+	"pages.administration.students.index.tableActions.registration": "Manual registration",
 	"pages.administration.students.index.tableActions.delete": "Delete",
 	"pages.administration.students.index.tableActions.email": "Send registration links by e-mail",
 	"pages.administration.students.index.tableActions.qr": "Print registration links as QR Code",

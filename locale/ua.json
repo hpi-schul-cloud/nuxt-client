@@ -549,6 +549,7 @@
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
 	"pages.administration.students.index.searchbar.placeholder": "Перегляньте студентів для",
 	"pages.administration.students.index.tableActions.consent": "Згода в аналоговій формі",
+	"pages.administration.students.index.tableActions.registration": "Ручна реєстрація",
 	"pages.administration.students.index.tableActions.delete": "Видалити",
 	"pages.administration.students.index.tableActions.email": "Надіслати посилання на реєстрацію електронною поштою",
 	"pages.administration.students.index.tableActions.qr": "Видрукувати посилання на реєстрацію у вигляді QR-коду",
