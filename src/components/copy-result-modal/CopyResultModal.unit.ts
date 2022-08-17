@@ -150,7 +150,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show -title when ", () => {
+		it("should show success-title when ", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "success",
@@ -162,7 +162,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show -title when ", () => {
+		it("should show partial-title when ", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "partial",
@@ -174,7 +174,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show -title when ", () => {
+		it("should show failure-title when ", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "failure",
@@ -203,6 +203,32 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 		});
 	});
 
-	// wip: success
-	// wip: failed
+	describe("status alerts", () => {
+		it("should render success alert  if status is success", async () => {
+			const wrapper = getWrapper({
+				isLoading: false,
+				copyResultStatus: "success",
+			});
+			const successMessage = wrapper.find('[data-testId="success-alert"]')
+				.element.textContent;
+
+			expect(successMessage).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.successfullyCopied")
+			);
+		});
+
+		it("should render error alert  if status is failure", async () => {
+			const wrapper = getWrapper({
+				isLoading: false,
+				copyResultStatus: "failure",
+			});
+
+			const failureMessage = wrapper.find('[data-testId="failure-alert"]')
+				.element.textContent;
+
+			expect(failureMessage).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.failedCopy")
+			);
+		});
+	});
 });

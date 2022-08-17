@@ -14,6 +14,7 @@
 			<div>
 				<v-alert
 					v-if="status === 'success'"
+					data-testid="success-alert"
 					type="success"
 					:icon="mdiCheckCircle"
 					text
@@ -25,6 +26,7 @@
 				</v-alert>
 				<v-alert
 					v-if="status === 'failure'"
+					data-testid="failure-alert"
 					type="error"
 					:icon="mdiCloseCircle"
 					text
