@@ -150,7 +150,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show success-title when ", () => {
+		it("should show success-title when copy was successful", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "success",
@@ -162,7 +162,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show partial-title when ", () => {
+		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "partial",
@@ -174,7 +174,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should show failure-title when ", () => {
+		it("should show failure-title when copy failed", () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "failure",
@@ -204,7 +204,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 	});
 
 	describe("status alerts", () => {
-		it("should render success alert  if status is success", async () => {
+		it("should render success alert if status is success", async () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "success",
@@ -217,7 +217,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should render error alert  if status is failure", async () => {
+		it("should render error alert if status is failure", async () => {
 			const wrapper = getWrapper({
 				isLoading: false,
 				copyResultStatus: "failure",
