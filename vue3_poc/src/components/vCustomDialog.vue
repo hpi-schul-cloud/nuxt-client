@@ -1,7 +1,7 @@
 <template>
 	<v-dialog
+		v-model="isDialogOpen"
 		ref="vDialog"
-		:value="isOpen"
 		:max-width="size"
 		@click:outside="$emit('dialog-closed', false)"
 		@keydown.esc="$emit('dialog-closed', false)"
@@ -53,7 +53,7 @@
 						color="primary"
 						depressed
 						:disabled="confirmBtnDisabled"
-						@click="confirmDialog"
+						@click="onConfirmDialog"
 					>
 						Confirm
 					</v-btn>
@@ -82,18 +82,15 @@
 	</v-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import { computed } from "@vue/reactivity";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
-	},
 	props: {
-		isOpen: {
+		modelValue: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 		size: {
 			type: Number,
@@ -121,14 +118,26 @@ export default defineComponent({
 			default: () => ["cancel", "confirm"],
 		},
 	},
-	methods: {
-		confirmDialog() {
-			this.$emit("dialog-confirmed");
-			this.$emit("dialog-closed", false);
-		},
-		checkButtons(buttonName) {
-			return this.buttons.some((button) => button == buttonName);
-		},
+	setup(props, { emit }) {
+		const isDialogOpen = computed({
+			get: () => props.modelValue,
+			set: (value) => emit("update:modelValue", value),
+		});
+
+		const onConfirmDialog = () => {
+			emit("dialog-confirmed");
+			emit("dialog-closed", false);
+		};
+
+		const checkButtons = (buttonName: string): boolean => {
+			return props.buttons.some((button) => button == buttonName);
+		};
+
+		return {
+			isDialogOpen,
+			onConfirmDialog,
+			checkButtons,
+		};
 	},
 });
 </script>
