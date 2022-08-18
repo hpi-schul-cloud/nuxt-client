@@ -162,6 +162,7 @@
 	"components.molecules.copyResult.etherpadCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.geogebraCopy.info": "Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
 	"components.molecules.copyResult.nexboardCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
+	"ccomponents.molecules.copyResult.aria.breadcrumb.info": "Посилання, {itemTitle}, натисніть enter, щоб відкрити в новій вкладці",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, статус копіювання: {itemStatus}",
 	"components.molecules.copyResult.aria.parentItem.info": "{itemTitle}, статус копіювання: {itemStatus}, {includedItems} предмети в ньому, натисніть пробіл, щоб {action}",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",

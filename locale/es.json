@@ -430,6 +430,7 @@
 	"components.molecules.copyResult.etherpadCopy.info": "El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.geogebraCopy.info": "Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
 	"components.molecules.copyResult.nexboardCopy.info": "El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
+	"components.molecules.copyResult.aria.breadcrumb.info": "Enlace, {itemTitle}, presione tecla Intro para abrir en una nueva pestaña",
 	"components.molecules.copyResult.aria.childItem.info": "{itemTitle}, estado de la copia: {itemStatus}",
 	"components.molecules.copyResult.aria.parentItem.info": "{itemTitle}, estado de la copia: {itemStatus}, {includedItems} artículos en él, presione la barra espaciadora para {action}",
 	"pages.administration.printQr.emptyUser": "L@s usuari@s seleccionad@s ya han sido registrad@s",
