@@ -115,7 +115,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			expect(courseGroupNotification.isVisible()).toBe(true);
 		});
 
-		it("should show coursegroup notification if file error element exists", () => {
+		it("should show coursegroup notification if coursegroup error element exists", () => {
 			const courseGroupNotification = setupWrapper().find(
 				`[data-testid="copy-result-notifications"] [data-testid="files"]`
 			);

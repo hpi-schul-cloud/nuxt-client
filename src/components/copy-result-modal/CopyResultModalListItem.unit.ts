@@ -143,6 +143,10 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 				CopyApiResponseTypeEnum.UserGroup,
 				"components.molecules.copyResult.label.userGroup",
 			],
+			[
+				"some-string-that-is-not-an-existing-type",
+				"components.molecules.copyResult.label.unknown",
+			],
 		];
 
 		map.forEach(([constant, languageConstant]) => {
@@ -150,7 +154,5 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 				wrapper.vm.$i18n.t(languageConstant)
 			);
 		});
-
-		expect(wrapper.vm.getElementTypeName("somestuff")).toBe("unknown label");
 	});
 });

@@ -8,20 +8,3 @@ export interface CopyResultItem {
 	type: CopyApiResponseTypeEnum;
 	url: string;
 }
-
-/*
- * Tasks (Enum.TASK):
- *  Enum.FILE_GROUP, Enum.FILE (leaf-type we need)
- *
- * Lesson (Enum.LESSON):
- *  Enum.LESSON_CONTENT_GROUP > Enum.LESSON_CONTENT (leaf-type we need), Enum.EMBEDDED_TASK
- *  Enum.LEARNSTORE_MATERIAL_GROUP > Enum.LEARNSTORE_MATERIAL (leaf-type we need)
- *  Enum.TASK_GROUP > Enum.TASK
- *
- * Kurse (Enum.COURSE):
- *  Enum.COURSE_GROUP -> not-implemented
- *
- * Board
- *  Enum.BOARD -> Merged Kinder von TASK und LESSON
- *
- */

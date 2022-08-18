@@ -6,7 +6,7 @@
 	>
 		<div slot="header">
 			<div>
-				<h1 class="text-h3">{{ $t("common.words.tasks") }} Main</h1>
+				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
 				<div v-if="showSubstituteFilter">
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"

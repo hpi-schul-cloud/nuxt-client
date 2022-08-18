@@ -147,21 +147,17 @@ export default {
 		title() {
 			if (this.isLoading) {
 				return this.$t("components.molecules.copyResult.title.loading");
-			} else if (this.copyResultStatus !== undefined) {
-				switch (this.copyResultStatus) {
-					case "success":
-						return this.$t("components.molecules.copyResult.title.success");
-
-					case "partial":
-						return this.$t("components.molecules.copyResult.title.partial");
-
-					case "failure":
-					default:
-						return this.$t("components.molecules.copyResult.title.failure");
-				}
-			} else {
-				return this.$t("components.molecules.copyResult.title.failure");
 			}
+
+			if (this.copyResultStatus === "success") {
+				return this.$t("components.molecules.copyResult.title.success");
+			}
+
+			if (this.copyResultStatus === "partial") {
+				return this.$t("components.molecules.copyResult.title.partial");
+			}
+
+			return this.$t("components.molecules.copyResult.title.failure");
 		},
 	},
 	methods: {

@@ -60,62 +60,64 @@ export default {
 			return this.getElementTypeName(element.type) + title;
 		},
 		getElementTypeName(type) {
-			if (type === CopyApiResponseTypeEnum.Board)
-				return this.$t("common.words.learnContent");
-			if (type === CopyApiResponseTypeEnum.Content)
-				return this.$t("components.molecules.copyResult.label.content");
-			if (type === CopyApiResponseTypeEnum.Course)
-				return this.$t("common.labels.room");
-			if (type === CopyApiResponseTypeEnum.CoursegroupGroup)
-				return this.$t("common.words.courseGroups");
-			if (type === CopyApiResponseTypeEnum.File)
-				return this.$t("components.molecules.copyResult.label.file");
-			if (type === CopyApiResponseTypeEnum.FileGroup)
-				return this.$t("components.molecules.copyResult.label.files");
-			if (type === CopyApiResponseTypeEnum.Leaf)
-				return this.$t("components.molecules.copyResult.label.leaf");
-			if (type === CopyApiResponseTypeEnum.LernstoreMaterial)
-				return this.$t(
-					"components.molecules.copyResult.label.lernstoreMaterial"
-				);
-			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup)
-				return this.$t(
-					"components.molecules.copyResult.label.lernstoreMaterialGroup"
-				);
-			if (type === CopyApiResponseTypeEnum.Lesson)
-				return this.$t("common.words.topics");
-			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra)
-				return this.$t("components.molecules.copyResult.label.geogebra");
-			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad)
-				return this.$t("components.molecules.copyResult.label.etherpad");
-			if (type === CopyApiResponseTypeEnum.LessonContentText)
-				return this.$t("components.molecules.copyResult.label.text");
-			if (type === CopyApiResponseTypeEnum.LessonContentNexboard)
-				return this.$t("components.molecules.copyResult.label.nexboard");
-			if (type === CopyApiResponseTypeEnum.LessonContentLernstore)
-				return this.$t("common.words.lernstore");
-			if (type === CopyApiResponseTypeEnum.LessonContentTask)
-				return this.$t("common.words.task");
-			if (type === CopyApiResponseTypeEnum.LessonContentGroup)
-				return this.$t(
-					"components.molecules.copyResult.label.lessonContentGroup"
-				);
-			if (type === CopyApiResponseTypeEnum.LtitoolGroup)
-				return this.$t("components.molecules.copyResult.label.ltiToolsGroup");
-			if (type === CopyApiResponseTypeEnum.Metadata)
-				return this.$t("components.molecules.copyResult.metadata");
-			if (type === CopyApiResponseTypeEnum.SubmissionGroup)
-				return this.$t("components.molecules.copyResult.label.submissions");
-			if (type === CopyApiResponseTypeEnum.Task)
-				return this.$t("common.words.task");
-			if (type === CopyApiResponseTypeEnum.TaskGroup)
-				return this.$t("common.words.tasks");
-			if (type === CopyApiResponseTypeEnum.TimeGroup)
-				return this.$t("components.molecules.copyResult.label.timeGroup");
-			if (type === CopyApiResponseTypeEnum.UserGroup)
-				return this.$t("components.molecules.copyResult.label.userGroup");
-
-			return "unknown label";
+			switch (type) {
+				case CopyApiResponseTypeEnum.Board:
+					return this.$t("common.words.learnContent");
+				case CopyApiResponseTypeEnum.Content:
+					return this.$t("components.molecules.copyResult.label.content");
+				case CopyApiResponseTypeEnum.Course:
+					return this.$t("common.labels.room");
+				case CopyApiResponseTypeEnum.CoursegroupGroup:
+					return this.$t("common.words.courseGroups");
+				case CopyApiResponseTypeEnum.File:
+					return this.$t("components.molecules.copyResult.label.file");
+				case CopyApiResponseTypeEnum.FileGroup:
+					return this.$t("components.molecules.copyResult.label.files");
+				case CopyApiResponseTypeEnum.Leaf:
+					return this.$t("components.molecules.copyResult.label.leaf");
+				case CopyApiResponseTypeEnum.LernstoreMaterial:
+					return this.$t(
+						"components.molecules.copyResult.label.lernstoreMaterial"
+					);
+				case CopyApiResponseTypeEnum.LernstoreMaterialGroup:
+					return this.$t(
+						"components.molecules.copyResult.label.lernstoreMaterialGroup"
+					);
+				case CopyApiResponseTypeEnum.Lesson:
+					return this.$t("common.words.topics");
+				case CopyApiResponseTypeEnum.LessonContentGeogebra:
+					return this.$t("components.molecules.copyResult.label.geogebra");
+				case CopyApiResponseTypeEnum.LessonContentEtherpad:
+					return this.$t("components.molecules.copyResult.label.etherpad");
+				case CopyApiResponseTypeEnum.LessonContentText:
+					return this.$t("components.molecules.copyResult.label.text");
+				case CopyApiResponseTypeEnum.LessonContentNexboard:
+					return this.$t("components.molecules.copyResult.label.nexboard");
+				case CopyApiResponseTypeEnum.LessonContentLernstore:
+					return this.$t("common.words.lernstore");
+				case CopyApiResponseTypeEnum.LessonContentTask:
+					return this.$t("common.words.task");
+				case CopyApiResponseTypeEnum.LessonContentGroup:
+					return this.$t(
+						"components.molecules.copyResult.label.lessonContentGroup"
+					);
+				case CopyApiResponseTypeEnum.LtitoolGroup:
+					return this.$t("components.molecules.copyResult.label.ltiToolsGroup");
+				case CopyApiResponseTypeEnum.Metadata:
+					return this.$t("components.molecules.copyResult.metadata");
+				case CopyApiResponseTypeEnum.SubmissionGroup:
+					return this.$t("components.molecules.copyResult.label.submissions");
+				case CopyApiResponseTypeEnum.Task:
+					return this.$t("common.words.task");
+				case CopyApiResponseTypeEnum.TaskGroup:
+					return this.$t("common.words.tasks");
+				case CopyApiResponseTypeEnum.TimeGroup:
+					return this.$t("components.molecules.copyResult.label.timeGroup");
+				case CopyApiResponseTypeEnum.UserGroup:
+					return this.$t("components.molecules.copyResult.label.userGroup");
+				default:
+					return this.$t("components.molecules.copyResult.label.unknown");
+			}
 		},
 	},
 };

@@ -1,9 +1,9 @@
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import CopyResultModalList from "./CopyResultModalList.vue";
 import CopyResultModalListItem from "./CopyResultModalListItem.vue";
 import { CopyResultItem } from "./types/CopyResultItem";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockItems: CopyResultItem[] = [
 	{
@@ -12,8 +12,8 @@ const mockItems: CopyResultItem[] = [
 		elementId: "mockId",
 		elements: [
 			{
-				title: "Geogebra Element Title",
-				type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+				title: "filename.example",
+				type: CopyApiResponseTypeEnum.File,
 			},
 		],
 		url: "/tasks/taskId/topics/elementId/edit?returnUrl=rooms/courseId",
