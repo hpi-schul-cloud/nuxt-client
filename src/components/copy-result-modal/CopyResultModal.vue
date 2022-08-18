@@ -39,19 +39,23 @@
 				<div v-if="hasNotification" data-testid="copy-result-notifications">
 					<v-alert type="warning" :icon="mdiInformation" text border="left">
 						<div class="alert_text mr-2">
-							<div v-if="hasFailedGeogebraElement" data-testid="geogebra">
-								<strong>Geogebra</strong> &middot;
-								{{ $t("components.molecules.copyResult.geogebraCopy.error") }}
+							<div v-if="hasPartialGeogebraElement" data-testid="geogebra">
+								<strong>{{
+									$t("components.molecules.copyResult.label.geogebra")
+								}}</strong>
+								&middot;
+								{{ $t("components.molecules.copyResult.geogebraCopy.info") }}
 							</div>
-							<div v-if="hasFailedEtherpadElement" data-testid="etherpad">
-								<strong>Etherpad</strong> &middot;
-								{{ $t("components.molecules.copyResult.etherpadCopy.error") }}
+							<div v-if="hasPartialEtherpadElement" data-testid="etherpad">
+								<strong>{{
+									$t("components.molecules.copyResult.label.etherpad")
+								}}</strong>
+								&middot;
+								{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
 							</div>
-							<div v-if="hasFailedCourseGroup" data-testid="coursegroups">
+							<div v-if="hasPartialCourseGroup" data-testid="coursegroups">
 								<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
-								{{
-									$t("components.molecules.copyResult.courseGroupCopy.error")
-								}}
+								{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
 							</div>
 							<div v-if="hasFailedFileElement" data-testid="files">
 								<strong>{{
@@ -117,19 +121,19 @@ export default {
 		},
 		hasNotification() {
 			return (
-				this.hasFailedGeogebraElement ||
-				this.hasFailedEtherpadElement ||
+				this.hasPartialGeogebraElement ||
+				this.hasPartialEtherpadElement ||
 				this.hasFailedFileElement ||
-				this.hasFailedCourseGroup
+				this.hasPartialCourseGroup
 			);
 		},
-		hasFailedGeogebraElement() {
+		hasPartialGeogebraElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentGeogebra
 			);
 		},
-		hasFailedEtherpadElement() {
+		hasPartialEtherpadElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentEtherpad
@@ -138,7 +142,7 @@ export default {
 		hasFailedFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
 		},
-		hasFailedCourseGroup() {
+		hasPartialCourseGroup() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.CoursegroupGroup
