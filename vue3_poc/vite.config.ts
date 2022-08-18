@@ -17,6 +17,9 @@ export default defineConfig({
 			inline: ["vuetify"],
 		},
 	},
+	css: {
+		devSourcemap: true,
+	},
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "src"),
