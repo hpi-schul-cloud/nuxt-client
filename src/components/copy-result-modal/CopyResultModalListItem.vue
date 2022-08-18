@@ -1,6 +1,6 @@
 <template>
 	<div v-if="item !== undefined">
-		<div class="d-flex flex-row align-items-center" :aria-label="ariaLabel">
+		<div class="d-flex flex-row align-items-center">
 			<v-icon> {{ mdiChevronLeft }} </v-icon>
 			<v-breadcrumbs
 				class="pl-0 py-0 mr-8 pr-4 truncate parent-info"
@@ -52,11 +52,6 @@ export default {
 		breadcrumbTitle() {
 			const title = this.item.title ? ` - ${this.item.title}` : "";
 			return this.getElementTypeName(this.item.type) + title;
-		},
-		ariaLabel() {
-			return this.$t("components.molecules.copyResult.aria.breadcrumb.info", {
-				itemTitle: this.breadcrumbTitle,
-			});
 		},
 	},
 	methods: {

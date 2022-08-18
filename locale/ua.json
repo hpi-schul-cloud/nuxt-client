@@ -162,7 +162,6 @@
 	"components.molecules.copyResult.etherpadCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.geogebraCopy.info": "Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
 	"components.molecules.copyResult.nexboardCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"ccomponents.molecules.copyResult.aria.breadcrumb.info": "Посилання, {itemTitle}, натисніть enter, щоб відкрити в новій вкладці",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",
 	"components.molecules.importUsersMatch.search": "Пошук користувача",
 	"components.molecules.importUsersMatch.subtitle": "Das webbschule-Konto wird später in die {instance} importiert. Wenn Sie das Konto mit einem bestehenden {instance} Konto verknüpfen möchten, so dass die Benutzerdaten erhalten bleiben, wählen Sie hier das {instance} Konto aus. Andernfalls wird dieses als neues Konto angeleg.",

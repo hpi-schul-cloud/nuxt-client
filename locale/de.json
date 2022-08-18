@@ -432,7 +432,6 @@
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info": "Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.aria.breadcrumb.info": "Link, {itemTitle}, zum Öffnen in einem neuen Tab die Eingabetaste drücken",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
