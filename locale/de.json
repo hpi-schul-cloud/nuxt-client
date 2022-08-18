@@ -450,7 +450,7 @@
 	"pages.administration.students.consent.steps.complete.warn": "Nicht alle Nutzer:innen haben gültige Geburtsdaten. Bitte ergänze fehlende Geburtsdaten zunächst.",
 	"pages.administration.students.consent.steps.download": "Zugangsdaten herunterladen",
 	"pages.administration.students.consent.steps.download.explanation": "Das sind die Passwörter für die Erstanmeldung in der Schul-Cloud.\nBeim ersten Login muss ein neues Passwort gewählt werden. Schüler, die mindestens 14 Jahre alt sind, müssen bei ihrem ersten Login die Einwilligungserklärung zusätzlich selbst erklären.",
-	"pages.administration.students.consent.steps.download.info": "Speichere und drucke die Liste aus um sie anschließend den Nutzer:innen für ihre Erstanmeldung auszuhändigen.",
+	"pages.administration.students.consent.steps.download.info": "Speichere und drucke die Liste aus, um sie anschließend den Nutzer:innen für ihre Erstanmeldung auszuhändigen.",
 	"pages.administration.students.consent.steps.download.next": "Zugangsdaten herunterladen",
 	"pages.administration.students.consent.steps.register": "Registrierung durchführen",
 	"pages.administration.students.consent.steps.register.analog-consent": "analoge Einwilligungserklärung",
