@@ -431,9 +431,7 @@ export default {
 		title() {
 			return this.isConsentNecessary
 				? this.$t("pages.administration.students.consent.title")
-				: this.$t(
-						"pages.administration.students.consent.registrationOnly.title"
-				  );
+				: this.$t("pages.administration.students.manualRegistration.title");
 		},
 		passwordHint() {
 			return this.isConsentNecessary
@@ -441,14 +439,14 @@ export default {
 						"pages.administration.students.consent.steps.download.explanation"
 				  )
 				: this.$t(
-						"pages.administration.students.consent.registrationOnly.steps.download.explanation"
+						"pages.administration.students.manualRegistration.steps.download.explanation"
 				  );
 		},
 		successMessage() {
 			return this.isConsentNecessary
 				? this.$t("pages.administration.students.consent.steps.success")
 				: this.$t(
-						"pages.administration.students.consent.registrationOnly.steps.success"
+						"pages.administration.students.manualRegistration.steps.success"
 				  );
 		},
 	},
