@@ -231,12 +231,12 @@ describe("@components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
 
-			const copyBtn = wrapper.find("#task-action-copy");
+			const copyBtn = wrapper.findAll("#task-action-copy");
 
 			expect(copyBtn).toHaveLength(0);
 		});
