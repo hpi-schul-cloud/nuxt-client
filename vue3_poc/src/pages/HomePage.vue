@@ -62,7 +62,7 @@ export default {
 			store.increment();
 		};
 
-		const dialogIsOpen = ref(true);
+		const dialogIsOpen = ref(false);
 		const onCloseDialog = () => {
 			dialogIsOpen.value = false;
 		};

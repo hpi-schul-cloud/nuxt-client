@@ -83,7 +83,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
 	model: {
 		prop: "isOpen",
 		event: "dialog-closed",
@@ -91,7 +93,7 @@ export default {
 	props: {
 		isOpen: {
 			type: Boolean,
-			required: true,
+			default: true,
 		},
 		size: {
 			type: Number,
@@ -128,7 +130,7 @@ export default {
 			return this.buttons.some((button) => button == buttonName);
 		},
 	},
-};
+});
 </script>
 <style scoped>
 .button-left {
