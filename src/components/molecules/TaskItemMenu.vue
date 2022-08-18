@@ -186,7 +186,7 @@ export default {
 			return this.userRole === "teacher";
 		},
 		copyServiceEnabled() {
-			return envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED;
+			return envConfigModule?.getEnv.FEATURE_COPY_SERVICE_ENABLED;
 		},
 	},
 	methods: {
