@@ -13,12 +13,14 @@
 		<transition name="fade">
 			<div v-if="data.title">
 				<client-only>
-				<text-editor
-					v-model="data.content"
-					class="mb--md mt--xl-3"
-					:error="errors.content"
-					:required="true"
-					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
+					<text-editor
+						v-model="data.content"
+						class="mb--md mt--xl-3"
+						:error="errors.content"
+						:required="true"
+						:placeholder="
+							$t('components.organisms.FormNews.editor.placeholder')
+						"
 				/></client-only>
 				<transition name="fade">
 					<div v-if="data.content">

@@ -1,109 +1,115 @@
 <template>
 	<div v-if="editor" class="editor">
-			<div class="menubar">
-				<base-button
-					data-testid="editor_undo"
-					:class="{ 'is-active': editor.isActive('undo') }"
-					@click="editor.chain().focus().undo().run()"
-				>
-					<base-icon source="material" icon="undo" />
-				</base-button>
+		<div class="menubar">
+			<base-button
+				data-testid="editor_undo"
+				:class="{ 'is-active': editor.isActive('undo') }"
+				@click="editor.chain().focus().undo().run()"
+			>
+				<base-icon source="material" icon="undo" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_redo"
-					:class="{ 'is-active': editor.isActive('redo') }"
-					@click="editor.chain().focus().redo().run()"
-				>
-					<base-icon source="material" icon="redo" />
-				</base-button>
+			<base-button
+				data-testid="editor_redo"
+				:class="{ 'is-active': editor.isActive('redo') }"
+				@click="editor.chain().focus().redo().run()"
+			>
+				<base-icon source="material" icon="redo" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_bold"
-					:class="{ 'is-active': editor.isActive('bold') }"
-					@click="editor.chain().focus().toggleBold().run()"
-				>
-					<base-icon source="material" icon="format_bold" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_bold"
+				:class="{ 'is-active': editor.isActive('bold') }"
+				@click="editor.chain().focus().toggleBold().run()"
+			>
+				<base-icon source="material" icon="format_bold" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_italic"
-					:class="{ 'is-active': editor.isActive('italic') }"
-					@click="editor.chain().focus().toggleItalic().run()"
-				>
-					<base-icon source="material" icon="format_italic" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_italic"
+				:class="{ 'is-active': editor.isActive('italic') }"
+				@click="editor.chain().focus().toggleItalic().run()"
+			>
+				<base-icon source="material" icon="format_italic" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_underlined"
-					:class="{ 'is-active': editor.isActive('underline') }"
-					@click="editor.chain().focus().toggleUnderline().run()"
-				>
-					<base-icon source="material" icon="format_underlined" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_underlined"
+				:class="{ 'is-active': editor.isActive('underline') }"
+				@click="editor.chain().focus().toggleUnderline().run()"
+			>
+				<base-icon source="material" icon="format_underlined" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_strikethrough"
-					:class="{ 'is-active': editor.isActive('strike') }"
-					@click="editor.chain().focus().toggleStrike().run()"
-				>
-					<base-icon source="material" icon="format_strikethrough" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_strikethrough"
+				:class="{ 'is-active': editor.isActive('strike') }"
+				@click="editor.chain().focus().toggleStrike().run()"
+			>
+				<base-icon source="material" icon="format_strikethrough" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_h1"
-					:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-					@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-				>
-					H1
-				</base-button>
-				<base-button
-					data-testid="editor_format_h2"
-					:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-					@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-				>
-					H2
-				</base-button>
-				<base-button
-					data-testid="editor_format_h3"
-					:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
-					@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-				>
-					H3
-				</base-button>
+			<base-button
+				data-testid="editor_format_h1"
+				:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+				@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+			>
+				H1
+			</base-button>
+			<base-button
+				data-testid="editor_format_h2"
+				:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+				@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+			>
+				H2
+			</base-button>
+			<base-button
+				data-testid="editor_format_h3"
+				:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
+				@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
+			>
+				H3
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_list_bulleted"
-					:class="{ 'is-active': editor.isActive('bulletList') }"
-					:disabled="isInHeading"
-					@click="editor.chain().focus().toggleBulletList().run()"
-				>
-					<base-icon source="material" icon="format_list_bulleted" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_list_bulleted"
+				:class="{ 'is-active': editor.isActive('bulletList') }"
+				:disabled="isInHeading"
+				@click="editor.chain().focus().toggleBulletList().run()"
+			>
+				<base-icon source="material" icon="format_list_bulleted" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_format_list_numbered"
-					:class="{ 'is-active': editor.isActive('orderedList') }"
-					:disabled="isInHeading"
-					@click="editor.chain().focus().toggleOrderedList().run()"
-				>
-					<base-icon source="material" icon="format_list_numbered" />
-				</base-button>
+			<base-button
+				data-testid="editor_format_list_numbered"
+				:class="{ 'is-active': editor.isActive('orderedList') }"
+				:disabled="isInHeading"
+				@click="editor.chain().focus().toggleOrderedList().run()"
+			>
+				<base-icon source="material" icon="format_list_numbered" />
+			</base-button>
 
-				<base-button
-					data-testid="editor_add_image"
-					:class="{ 'is-active': editor.isActive('undo') }"
-					@click="showImagePrompt"
-				>
-					<base-icon source="material" icon="image" />
-				</base-button>
-				<base-button
-						data-testid="editor_table"
-						:class="{ 'is-active': editor.isActive('table') }"
-						@click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"
-				>
-					T
-				</base-button>
-			</div>
+			<base-button
+				data-testid="editor_add_image"
+				:class="{ 'is-active': editor.isActive('undo') }"
+				@click="showImagePrompt"
+			>
+				<base-icon source="material" icon="image" />
+			</base-button>
+			<base-button
+				data-testid="editor_table"
+				:class="{ 'is-active': editor.isActive('table') }"
+				@click="
+					editor
+						.chain()
+						.focus()
+						.insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+						.run()
+				"
+			>
+				T
+			</base-button>
+		</div>
 
 		<editor-content
 			v-model="content"
@@ -115,15 +121,15 @@
 
 <script>
 import { Editor, EditorContent } from "@tiptap/vue-2";
-import StarterKit from '@tiptap/starter-kit'
+import StarterKit from "@tiptap/starter-kit";
 
 //import HardBreak from "@tiptap/extension-hard-break";
 
 import Heading from "@tiptap/extension-heading";
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 
 import Image from "@tiptap/extension-image";
 //import Link from "@tiptap/extension-link";
@@ -151,30 +157,30 @@ export default {
 	data() {
 		return {
 			editor: null,
-		}
+		};
 	},
 	computed: {
 		isInHeading() {
 			return (
-				this.editor.isActive('heading', { level: 2 }) ||
-				this.editor.isActive('heading', { level: 3 }) ||
-				this.editor.isActive('heading', { level: 4 })
+				this.editor.isActive("heading", { level: 2 }) ||
+				this.editor.isActive("heading", { level: 3 }) ||
+				this.editor.isActive("heading", { level: 4 })
 			);
 		},
 	},
 	watch: {
 		modelValue(value) {
 			// HTML
-			const isSame = this.editor.getHTML() === value
+			const isSame = this.editor.getHTML() === value;
 
 			// JSON
 			// const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
 			if (isSame) {
-				return
+				return;
 			}
 
-			this.editor.commands.setContent(value, false)
+			this.editor.commands.setContent(value, false);
 		},
 	},
 
@@ -194,14 +200,13 @@ export default {
 				Image,
 				//Link,
 				//Placeholder.configure( { placeholder: this.placeholder }),
-
 			],
 			onUpdate: this.editorUpdateHandler,
-		})
+		});
 	},
 
 	beforeDestroy() {
-		this.editor.destroy()
+		this.editor.destroy();
 	},
 
 	methods: {
@@ -219,7 +224,7 @@ export default {
 		showImagePrompt() {
 			const src = window.prompt("Bitte gib die URL deines Bildes hier ein:");
 			if (src !== null) {
-				this.editor.chain().focus().setImage({ src }).run()
+				this.editor.chain().focus().setImage({ src }).run();
 			}
 		},
 		isInvalid(content) {
