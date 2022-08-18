@@ -3,18 +3,11 @@
 		ref="main"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
-		:aria-label="
-			isConsentNecessary
-				? $t('pages.administration.students.consent.title')
-				: $t('pages.administration.students.consent.registrationOnly.title')
-		"
+		:aria-label="title"
 	>
 		<template slot="header">
-			<h1 v-if="isConsentNecessary" class="mb--md h3">
-				{{ $t("pages.administration.students.consent.title") }}
-			</h1>
-			<h1 v-else class="mb--md h3">
-				{{ $t("pages.administration.students.consent.registrationOnly.title") }}
+			<h1 class="mb--md h3">
+				{{ title }}
 			</h1>
 			<i18n
 				v-if="isConsentNecessary"
@@ -205,15 +198,7 @@
 					</template>
 				</backend-data-table>
 				<p>
-					{{
-						isConsentNecessary
-							? $t(
-									"pages.administration.students.consent.steps.download.explanation"
-							  )
-							: $t(
-									"pages.administration.students.consent.registrationOnly.steps.download.explanation"
-							  )
-					}}
+					{{ passwordHint }}
 				</p>
 
 				<base-button design="secondary" @click="download">{{
@@ -227,13 +212,7 @@
 			<section v-if="currentStep === 3">
 				<base-content-container>
 					<h4 class="centered">
-						{{
-							isConsentNecessary
-								? $t("pages.administration.students.consent.steps.success")
-								: $t(
-										"pages.administration.students.consent.registrationOnly.steps.success"
-								  )
-						}}
+						{{ successMessage }}
 					</h4>
 					<img
 						class="mb--md"
@@ -438,11 +417,7 @@ export default {
 					to: "/administration/students",
 				},
 				{
-					text: this.isConsentNecessary
-						? this.$t("pages.administration.students.consent.title")
-						: this.$t(
-								"pages.administration.students.consent.registrationOnly.title"
-						  ),
+					text: this.title,
 					disabled: true,
 				},
 			];
@@ -452,6 +427,29 @@ export default {
 				envConfigModule.getEnv &&
 				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
 			);
+		},
+		title() {
+			return this.isConsentNecessary
+				? this.$t("pages.administration.students.consent.title")
+				: this.$t(
+						"pages.administration.students.consent.registrationOnly.title"
+				  );
+		},
+		passwordHint() {
+			return this.isConsentNecessary
+				? this.$t(
+						"pages.administration.students.consent.steps.download.explanation"
+				  )
+				: this.$t(
+						"pages.administration.students.consent.registrationOnly.steps.download.explanation"
+				  );
+		},
+		successMessage() {
+			return this.isConsentNecessary
+				? this.$t("pages.administration.students.consent.steps.success")
+				: this.$t(
+						"pages.administration.students.consent.registrationOnly.steps.success"
+				  );
 		},
 	},
 	async created() {
@@ -620,13 +618,7 @@ export default {
 	},
 	head() {
 		return {
-			title: this.isConsentNecessary
-				? `${this.$t("pages.administration.students.consent.title")} - ${
-						this.$theme.short_name
-				  }`
-				: `${this.$t(
-						"pages.administration.students.consent.registrationOnly.title"
-				  )} - ${this.$theme.short_name}`,
+			title: `${this.title} - ${this.$theme.short_name}`,
 		};
 	},
 };
