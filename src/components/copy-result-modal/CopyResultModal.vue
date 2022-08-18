@@ -11,7 +11,7 @@
 			{{ title }}
 		</h2>
 		<template slot="content">
-			<div>
+			<div ref="copy-dialog-content">
 				<v-alert
 					v-if="status === 'success'"
 					data-testid="success-alert"
@@ -164,7 +164,20 @@ export default {
 			return this.$t("components.molecules.copyResult.title.failure");
 		},
 	},
+	watch: {
+		isLoading: function () {
+			if (this.isLoading === false) {
+				this.$nextTick(() => setTimeout(this.focusFirstLink, 100));
+			}
+		},
+	},
 	methods: {
+		focusFirstLink() {
+			const dialog = this.$refs["copy-dialog-content"];
+			if (dialog && dialog.querySelector("a")) {
+				dialog.querySelector("a").focus();
+			}
+		},
 		hasElementOfType(items, type) {
 			let found = false;
 			items.forEach((item) => {
@@ -192,5 +205,12 @@ export default {
 
 .wordbreak-normal {
 	word-break: normal;
+}
+</style>
+
+<style lang="scss">
+a.v-breadcrumbs__item:hover,
+a.v-breadcrumbs__item:focus {
+	border-bottom: 1px solid var(--color-primary);
 }
 </style>
