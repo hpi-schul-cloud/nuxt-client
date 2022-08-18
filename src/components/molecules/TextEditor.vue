@@ -1,105 +1,109 @@
 <template>
-	<div class="editor">
-		<editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
+	<div v-if="editor" class="editor">
 			<div class="menubar">
 				<base-button
 					data-testid="editor_undo"
-					design="text icon"
-					@click="commands.undo"
+					:class="{ 'is-active': editor.isActive('undo') }"
+					@click="editor.chain().focus().undo().run()"
 				>
 					<base-icon source="material" icon="undo" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_redo"
-					design="text icon"
-					@click="commands.redo"
+					:class="{ 'is-active': editor.isActive('redo') }"
+					@click="editor.chain().focus().redo().run()"
 				>
 					<base-icon source="material" icon="redo" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_bold"
-					:design="isActive.bold() ? 'icon' : 'text icon'"
-					@click="commands.bold"
+					:class="{ 'is-active': editor.isActive('bold') }"
+					@click="editor.chain().focus().toggleBold().run()"
 				>
 					<base-icon source="material" icon="format_bold" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_italic"
-					:design="isActive.italic() ? 'icon' : 'text icon'"
-					@click="commands.italic"
+					:class="{ 'is-active': editor.isActive('italic') }"
+					@click="editor.chain().focus().toggleItalic().run()"
 				>
 					<base-icon source="material" icon="format_italic" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_underlined"
-					:design="isActive.underline() ? 'icon' : 'text icon'"
-					@click="commands.underline"
+					:class="{ 'is-active': editor.isActive('underline') }"
+					@click="editor.chain().focus().toggleUnderline().run()"
 				>
 					<base-icon source="material" icon="format_underlined" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_strikethrough"
-					:design="isActive.strike() ? 'icon' : 'text icon'"
-					@click="commands.strike"
+					:class="{ 'is-active': editor.isActive('strike') }"
+					@click="editor.chain().focus().toggleStrike().run()"
 				>
 					<base-icon source="material" icon="format_strikethrough" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_h1"
-					:design="isActive.heading({ level: 2 }) ? 'icon' : 'text icon'"
-					@click="commands.heading({ level: 2 })"
+					:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
 				>
 					H1
 				</base-button>
 				<base-button
 					data-testid="editor_format_h2"
-					:design="isActive.heading({ level: 3 }) ? 'icon' : 'text icon'"
-					@click="commands.heading({ level: 3 })"
+					:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
 				>
 					H2
 				</base-button>
 				<base-button
 					data-testid="editor_format_h3"
-					:design="isActive.heading({ level: 4 }) ? 'icon' : 'text icon'"
-					@click="commands.heading({ level: 4 })"
+					:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
 				>
 					H3
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_list_bulleted"
-					:design="isActive.bullet_list() ? 'icon' : 'text icon'"
+					:class="{ 'is-active': editor.isActive('bulletList') }"
 					:disabled="isInHeading"
-					@click="commands.bullet_list"
+					@click="editor.chain().focus().toggleBulletList().run()"
 				>
 					<base-icon source="material" icon="format_list_bulleted" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_format_list_numbered"
-					:design="isActive.ordered_list() ? 'icon' : 'text icon'"
+					:class="{ 'is-active': editor.isActive('orderedList') }"
 					:disabled="isInHeading"
-					@click="commands.ordered_list"
+					@click="editor.chain().focus().toggleOrderedList().run()"
 				>
 					<base-icon source="material" icon="format_list_numbered" />
 				</base-button>
 
 				<base-button
 					data-testid="editor_add_image"
-					design="text icon"
-					:disabled="isInHeading"
-					@click="showImagePrompt(commands.image)"
+					:class="{ 'is-active': editor.isActive('undo') }"
+					@click="showImagePrompt"
 				>
 					<base-icon source="material" icon="image" />
 				</base-button>
+				<base-button
+						data-testid="editor_table"
+						:class="{ 'is-active': editor.isActive('table') }"
+						@click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"
+				>
+					T
+				</base-button>
 			</div>
-		</editor-menu-bar>
 
 		<editor-content
 			v-model="content"
@@ -110,27 +114,25 @@
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-import {
-	Bold,
-	BulletList,
-	HardBreak,
-	Heading,
-	History,
-	Image,
-	Italic,
-	Link,
-	ListItem,
-	OrderedList,
-	Strike,
-	Underline,
-	Placeholder,
-} from "tiptap-extensions";
+import { Editor, EditorContent } from "@tiptap/vue-2";
+import StarterKit from '@tiptap/starter-kit'
+
+//import HardBreak from "@tiptap/extension-hard-break";
+
+import Heading from "@tiptap/extension-heading";
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+
+import Image from "@tiptap/extension-image";
+//import Link from "@tiptap/extension-link";
+
+//import Placeholder from "@tiptap/extension-placeholder";
 
 export default {
 	components: {
 		EditorContent,
-		EditorMenuBar,
 	},
 	model: {
 		prop: "value",
@@ -148,56 +150,63 @@ export default {
 	},
 	data() {
 		return {
-			editor: new Editor({
-				extensions: [
-					new Bold(),
-					new BulletList(),
-					new HardBreak(),
-					new Heading({ levels: [2, 3, 4] }),
-					new History(),
-					new Image(),
-					new Italic(),
-					new Link(),
-					new ListItem(),
-					new OrderedList(),
-					new Strike(),
-					new Underline(),
-					new Placeholder({
-						emptyEditorClass: "is-editor-empty",
-						emptyNodeClass: "is-empty",
-						emptyNodeText: this.placeholder,
-						showOnlyWhenEditable: true,
-						showOnlyCurrent: true,
-					}),
-				],
-				content: this.value,
-				onUpdate: this.editorUpdateHandler,
-			}),
-			content: "",
-		};
+			editor: null,
+		}
 	},
 	computed: {
 		isInHeading() {
 			return (
-				this.editor.isActive.heading({ level: 2 }) ||
-				this.editor.isActive.heading({ level: 3 }) ||
-				this.editor.isActive.heading({ level: 4 })
+				this.editor.isActive('heading', { level: 2 }) ||
+				this.editor.isActive('heading', { level: 3 }) ||
+				this.editor.isActive('heading', { level: 4 })
 			);
 		},
 	},
 	watch: {
-		value(to) {
-			if (to !== this.content) {
-				this.editor.setContent(to);
+		modelValue(value) {
+			// HTML
+			const isSame = this.editor.getHTML() === value
+
+			// JSON
+			// const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+
+			if (isSame) {
+				return
 			}
+
+			this.editor.commands.setContent(value, false)
 		},
 	},
-	beforeDestroy() {
-		this.editor.destroy();
+
+	mounted() {
+		this.editor = new Editor({
+			content: this.value,
+			extensions: [
+				StarterKit,
+				//HardBreak,
+				Heading.configure({ levels: [2, 3, 4] }),
+				Table.configure({
+					resizable: true,
+				}),
+				TableRow,
+				TableHeader,
+				TableCell,
+				Image,
+				//Link,
+				//Placeholder.configure( { placeholder: this.placeholder }),
+
+			],
+			onUpdate: this.editorUpdateHandler,
+		})
 	},
+
+	beforeDestroy() {
+		this.editor.destroy()
+	},
+
 	methods: {
-		editorUpdateHandler({ getHTML }) {
-			const content = getHTML();
+		editorUpdateHandler() {
+			const content = this.editor.getHTML();
 			const error = this.isInvalid(content);
 			if (error) {
 				this.$toast.error(error);
@@ -207,10 +216,10 @@ export default {
 				this.$emit("update", content);
 			}
 		},
-		showImagePrompt(command) {
-			const src = prompt("Bitte gib die URL deines Bildes hier ein:");
+		showImagePrompt() {
+			const src = window.prompt("Bitte gib die URL deines Bildes hier ein:");
 			if (src !== null) {
-				command({ src });
+				this.editor.chain().focus().setImage({ src }).run()
 			}
 		},
 		isInvalid(content) {
