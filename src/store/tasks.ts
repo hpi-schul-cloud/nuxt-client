@@ -173,7 +173,7 @@ export default class TaskModule extends VuexModule {
 	get getActiveTab(): string {
 		return this.tab;
 	}
-  
+
 	get getCourseFilters(): TaskCourseFilter[] {
 		const filteredTasks = new TaskFilter(this.tasks).filterSubstituteForTeacher(
 			this.substituteFilter
@@ -292,7 +292,12 @@ export default class TaskModule extends VuexModule {
 		const draftTasks = new TaskFilter(this.tasks)
 			.filterSubstituteForTeacher(this.substituteFilter)
 			.byCourseNames(this.courseFilter)
-			.byDraftForTeacher(true).tasks;
+			.byDraftForTeacher(true)
+			.tasks.sort(
+				(task1, task2) =>
+					new Date(task2.createdAt).getTime() -
+					new Date(task1.createdAt).getTime()
+			);
 
 		return draftTasks;
 	}

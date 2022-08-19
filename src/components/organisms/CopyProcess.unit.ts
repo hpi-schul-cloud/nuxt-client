@@ -119,6 +119,8 @@ describe("@components/organisms/CopyProcess", () => {
 				File: "FILE",
 				FileGroup: "FILE_GROUP",
 				Leaf: "LEAF",
+				LernstoreMaterial: "LERNSTORE_MATERIAL",
+				LernstoreMaterialGroup: "LERNSTORE_MATERIAL_GROUP",
 				Lesson: "LESSON",
 				LessonContent: "LESSON_CONTENT",
 				LessonContentGroup: "LESSON_CONTENT_GROUP",
@@ -126,6 +128,7 @@ describe("@components/organisms/CopyProcess", () => {
 				Metadata: "METADATA",
 				SubmissionGroup: "SUBMISSION_GROUP",
 				Task: "TASK",
+				TaskGroup: "TASK_GROUP",
 				TimeGroup: "TIME_GROUP",
 				UserGroup: "USER_GROUP",
 			};
@@ -235,7 +238,7 @@ describe("@components/organisms/CopyProcess", () => {
 						method({
 							type: wrapper.vm.typesEnum.Board,
 						})
-					).toStrictEqual(wrapper.vm.$i18n.t("common.labels.room"));
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.learnContent"));
 				});
 
 				it("when type is 'CONTENT'", () => {
@@ -315,6 +318,33 @@ describe("@components/organisms/CopyProcess", () => {
 					);
 				});
 
+				it("when type is 'LERNSTORE_MATERIAL'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.LernstoreMaterial,
+							title: "test-lesson-material",
+							status: wrapper.vm.statusEnum.Success,
+						})
+					).toStrictEqual("test-lesson-material");
+				});
+
+				it("when type is 'LERNSTORE_MATERIAL_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.LernstoreMaterialGroup,
+							status: wrapper.vm.statusEnum.Success,
+						})
+					).toStrictEqual(
+						wrapper.vm.$i18n.t(
+							"components.molecules.copyResult.label.lernstoreMaterialGroup"
+						)
+					);
+				});
+
 				it("when type is 'LESSON'", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
 					const method = wrapper.vm.getItemTitle;
@@ -333,12 +363,11 @@ describe("@components/organisms/CopyProcess", () => {
 					const wrapper = getWrapper({ isOpen: true, loading: false });
 					const method = wrapper.vm.getItemTitle;
 					expect(
-						method({ type: wrapper.vm.typesEnum.LessonContent })
-					).toStrictEqual(
-						wrapper.vm.$i18n.t(
-							"components.molecules.copyResult.label.lessonContent"
-						)
-					);
+						method({
+							type: wrapper.vm.typesEnum.LessonContent,
+							title: "lesson-content",
+						})
+					).toStrictEqual("lesson-content");
 				});
 
 				it("when type is 'LESSON_CONTENT_GROUP'", () => {
@@ -396,6 +425,16 @@ describe("@components/organisms/CopyProcess", () => {
 					).toStrictEqual(
 						`${wrapper.vm.$i18n.t("common.words.task")} - test-task`
 					);
+				});
+
+				it("when type is 'TASK_GROUP'", () => {
+					const wrapper = getWrapper({ isOpen: true, loading: false });
+					const method = wrapper.vm.getItemTitle;
+					expect(
+						method({
+							type: wrapper.vm.typesEnum.TaskGroup,
+						})
+					).toStrictEqual(wrapper.vm.$i18n.t("common.words.tasks"));
 				});
 
 				it("when type is 'TIME_GROUP'", () => {
@@ -503,7 +542,7 @@ describe("@components/organisms/CopyProcess", () => {
 						index: 3,
 					},
 					{
-						title: i18n.t("common.labels.room"),
+						title: i18n.t("common.words.learnContent"),
 						type: types.Board,
 						status: status.Success,
 						feStatus: status.Success,

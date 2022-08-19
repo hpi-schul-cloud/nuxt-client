@@ -225,10 +225,10 @@ export interface CopyApiResponse {
     status: CopyApiResponseStatusEnum;
     /**
      * List of included sub elements with recursive type structure
-     * @type {Array<string>}
+     * @type {Array<CopyApiResponse>}
      * @memberof CopyApiResponse
      */
-    elements?: Array<string>;
+    elements?: Array<CopyApiResponse>;
 }
 
 /**
@@ -246,10 +246,13 @@ export enum CopyApiResponseTypeEnum {
     Lesson = 'LESSON',
     LessonContent = 'LESSON_CONTENT',
     LessonContentGroup = 'LESSON_CONTENT_GROUP',
+    LernstoreMaterial = 'LERNSTORE_MATERIAL',
+    LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
+    TaskGroup = 'TASK_GROUP',
     TimeGroup = 'TIME_GROUP',
     UserGroup = 'USER_GROUP'
 }

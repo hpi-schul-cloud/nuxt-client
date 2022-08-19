@@ -39,7 +39,7 @@
 					<v-tab>
 						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
 						<span class="d-none d-sm-inline" data-testid="learnContent">{{
-							$t("pages.rooms.tabLabel.learnContent")
+							$t("common.words.learnContent")
 						}}</span>
 					</v-tab>
 					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
@@ -99,7 +99,7 @@
 		</v-custom-dialog>
 		<copy-process
 			:is-open="copyProcess.isOpen"
-			:loading="copyProcess.loading"
+			:loading="isCopyModalLoading"
 			data-testid="copy-process"
 			@dialog-closed="onCopyProcessDialogClose"
 		>
@@ -108,24 +108,24 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, roomModule, copyModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import RoomDashboard from "@components/templates/RoomDashboard.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
+import BaseQrCode from "@components/base/BaseQrCode.vue";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyProcess from "@components/organisms/CopyProcess";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import RoomDashboard from "@components/templates/RoomDashboard.vue";
 import {
-	mdiPlus,
-	mdiViewListOutline,
-	mdiFormatListChecks,
 	mdiCloudDownload,
-	mdiSquareEditOutline,
-	mdiEmailPlusOutline,
-	mdiShareVariant,
 	mdiContentCopy,
+	mdiEmailPlusOutline,
+	mdiFormatListChecks,
+	mdiPlus,
+	mdiShareVariant,
+	mdiSquareEditOutline,
+	mdiViewListOutline,
 } from "@mdi/js";
 
 export default {
@@ -172,7 +172,6 @@ export default {
 			copyProcess: {
 				id: "",
 				isOpen: false,
-				loading: false,
 			},
 		};
 	},
@@ -222,6 +221,9 @@ export default {
 		},
 		roomData() {
 			return roomModule.getRoomData;
+		},
+		isCopyModalLoading() {
+			return copyModule?.getLoading ?? false;
 		},
 		scopedPermissions() {
 			return roomModule.getPermissionData || [];
@@ -318,11 +320,11 @@ export default {
 		},
 		async copyRoom() {
 			this.copyProcess.isOpen = true;
-			this.copyProcess.loading = copyModule.getLoading;
 			await copyModule.copyRoom(this.courseId);
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
+			// TODO - individualize error messages per copy case
 			if (businessError.statusCode !== "") {
 				this.$notifier({
 					text: this.$t("components.molecules.copyResult.error"),
@@ -333,15 +335,24 @@ export default {
 
 			if (copyResult.id !== "") {
 				this.copyProcess.id = copyResult.id;
-				this.copyProcess.loading = copyModule.getLoading;
+
+				const copyResultStatus = copyModule.getCopyResult.status;
+				if (copyResultStatus === "success") {
+					this.$notifier({
+						text: this.$t("pages.room.copy.course.message.copied"),
+						status: "success",
+					});
+				} else {
+					this.$notifier({
+						text: this.$t("pages.room.copy.course.message.partiallyCopied"),
+						status: "warning",
+					});
+				}
 			}
 		},
 		async onCopyProcessDialogClose() {
 			if (this.copyProcess.id === "") return;
-			this.$notifier({
-				text: this.$t("pages.room.copy.course.message.created"),
-				status: "success",
-			});
+
 			this.$router.push(`/rooms/${this.copyProcess.id}`);
 			this.courseId = this.copyProcess.id;
 			this.copyProcess.isOpen = false;

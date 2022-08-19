@@ -9,7 +9,9 @@
 			</p>
 			<div class="actions">
 				<slot name="actions" />
-				<base-button design="info" @click.self="close">Schließen</base-button>
+				<base-button design="info" @click.self="close">{{
+					$t("common.labels.close")
+				}}</base-button>
 			</div>
 		</div>
 	</div>

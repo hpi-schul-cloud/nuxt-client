@@ -106,17 +106,19 @@ export default {
 	methods: {
 		getItemTitle(item) {
 			const titles = {
-				BOARD: this.$t("common.labels.room"),
+				BOARD: this.$t("common.words.learnContent"),
 				CONTENT: this.$t("components.molecules.copyResult.label.content"),
 				COURSE: this.$t("common.labels.room"),
 				COURSEGROUP_GROUP: this.$t("common.words.courseGroups"),
 				FILE: this.$t("components.molecules.copyResult.label.file"),
 				FILE_GROUP: this.$t("components.molecules.copyResult.label.files"),
 				LEAF: this.$t("components.molecules.copyResult.label.leaf"),
-				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
-				LESSON_CONTENT: this.$t(
-					"components.molecules.copyResult.label.lessonContent"
+				LERNSTORE_MATERIAL: item.title,
+				LERNSTORE_MATERIAL_GROUP: this.$t(
+					"components.molecules.copyResult.label.lernstoreMaterialGroup"
 				),
+				LESSON: `${this.$t("common.words.topics")} - ${item.title}`,
+				LESSON_CONTENT: item.title,
 				LESSON_CONTENT_GROUP: this.$t(
 					"components.molecules.copyResult.label.lessonContentGroup"
 				),
@@ -128,6 +130,7 @@ export default {
 					"components.molecules.copyResult.label.submissions"
 				),
 				TASK: `${this.$t("common.words.task")} - ${item.title}`,
+				TASK_GROUP: this.$t("common.words.tasks"),
 				TIME_GROUP: this.$t("components.molecules.copyResult.label.timeGroup"),
 				USER_GROUP: this.$t("components.molecules.copyResult.label.userGroup"),
 			};

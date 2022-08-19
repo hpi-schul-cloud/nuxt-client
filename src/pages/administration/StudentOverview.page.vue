@@ -230,6 +230,7 @@ export default {
 					icon: "check",
 					"icon-source": "material",
 					action: this.handleBulkConsent,
+					dataTestId: "consent_action",
 				},
 				{
 					label: this.$t(
@@ -270,26 +271,6 @@ export default {
 					disabled: true,
 				},
 			],
-			icons: [
-				{
-					icon: "doublecheck",
-					color: "var(--color-success)",
-					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.legend.icon.success"),
-				},
-				{
-					icon: "check",
-					color: "var(--color-warning)",
-					label: this.$t(
-						"utils.adminFilter.consent.label.parentsAgreementMissing"
-					),
-				},
-				{
-					icon: "clear",
-					color: "var(--color-danger)",
-					label: this.$t("utils.adminFilter.consent.label.missing"),
-				},
-			],
 			filters: studentFilter(this),
 			active: false,
 			searchQuery:
@@ -314,11 +295,17 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
-		env() {
-			return envConfigModule.getEnv;
+		isConsentNecessary() {
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
+			);
 		},
 		showConsent() {
-			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
+			);
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -334,6 +321,14 @@ export default {
 					(action) =>
 						action.label !==
 						this.$t("pages.administration.students.index.tableActions.delete")
+				);
+			}
+
+			if (!this.isConsentNecessary) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.consent")
 				);
 			}
 
@@ -357,6 +352,34 @@ export default {
 			}
 
 			return editedColumns;
+		},
+		icons() {
+			const instanceBasedIcons = [];
+
+			instanceBasedIcons.push({
+				icon: "doublecheck",
+				color: "var(--color-success)",
+				style: "margin: -3px 3px",
+				label: this.$t("pages.administration.students.legend.icon.success"),
+			});
+
+			if (this.isConsentNecessary) {
+				instanceBasedIcons.push({
+					icon: "check",
+					color: "var(--color-warning)",
+					label: this.$t(
+						"utils.adminFilter.consent.label.parentsAgreementMissing"
+					),
+				});
+			}
+
+			instanceBasedIcons.push({
+				icon: "clear",
+				color: "var(--color-danger)",
+				label: this.$t("utils.adminFilter.consent.label.missing"),
+			});
+
+			return instanceBasedIcons;
 		},
 		fab() {
 			if (
