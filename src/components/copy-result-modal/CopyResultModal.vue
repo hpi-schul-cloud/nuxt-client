@@ -53,6 +53,13 @@
 								&middot;
 								{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
 							</div>
+							<div v-if="hasPartialNexboardElement" data-testid="nexboard">
+								<strong>{{
+									$t("components.molecules.copyResult.label.nexboard")
+								}}</strong>
+								&middot;
+								{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
+							</div>
 							<div v-if="hasPartialCourseGroup" data-testid="coursegroups">
 								<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
 								{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
@@ -123,6 +130,7 @@ export default {
 			return (
 				this.hasPartialGeogebraElement ||
 				this.hasPartialEtherpadElement ||
+				this.hasPartialNexboardElement ||
 				this.hasFailedFileElement ||
 				this.hasPartialCourseGroup
 			);
@@ -137,6 +145,12 @@ export default {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentEtherpad
+			);
+		},
+		hasPartialNexboardElement() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
 		},
 		hasFailedFileElement() {

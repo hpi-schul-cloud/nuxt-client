@@ -91,7 +91,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			});
 		};
 
-		it("should show geogebra notification if failed geogebra element exists", () => {
+		it("should show geogebra notification if partial geogebra element exists", () => {
 			const geogebraNotification = setupWrapper().find(
 				`[data-testid="copy-result-notifications"] [data-testid="geogebra"]`
 			);
@@ -99,12 +99,20 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			expect(geogebraNotification.isVisible()).toBe(true);
 		});
 
-		it("should show etherpad notification if failed etherpad element exists", () => {
+		it("should show etherpad notification if partial etherpad element exists", () => {
 			const etherpadNotification = setupWrapper().find(
 				`[data-testid="copy-result-notifications"] [data-testid="etherpad"]`
 			);
 
 			expect(etherpadNotification.isVisible()).toBe(true);
+		});
+
+		it("should show nexboard notification if partial nexboard element exists", () => {
+			const nexboardNotification = setupWrapper().find(
+				`[data-testid="copy-result-notifications"] [data-testid="nexboard"]`
+			);
+
+			expect(nexboardNotification.isVisible()).toBe(true);
 		});
 
 		it("should show coursegroup notification if failed coursegroup element exists", () => {
