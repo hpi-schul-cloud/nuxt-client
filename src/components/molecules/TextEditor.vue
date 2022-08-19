@@ -1,6 +1,6 @@
 <template>
 	<div v-if="editor" class="editor">
-		<div class="menubar">
+		<div class="default-menu">
 			<base-button
 				data-testid="editor_undo"
 				:class="{ 'is-active': editor.isActive('undo') }"
@@ -107,7 +107,45 @@
 						.run()
 				"
 			>
-				T
+				<base-icon source="material" icon="table_chart" />
+			</base-button>
+		</div>
+		<div v-if="showTableMenu" class="table-menu">
+			<base-button
+				data-testid="editor_table_add_column_before"
+				@click="editor.chain().focus().addColumnBefore().run()"
+			>
+				addColumnBefore
+			</base-button>
+			<base-button
+				data-testid="editor_table_add_column_after"
+				@click="editor.chain().focus().addColumnAfter().run()"
+			>
+				addColumnAfter
+			</base-button>
+			<base-button
+				data-testid="editor_table_add_row_before"
+				@click="editor.chain().focus().addRowBefore().run()"
+			>
+				addRowBefore
+			</base-button>
+			<base-button
+				data-testid="editor_table_add_row_after"
+				@click="editor.chain().focus().addRowAfter().run()"
+			>
+				addRowAfter
+			</base-button>
+			<base-button
+				data-testid="editor_table_delete_row"
+				@click="editor.chain().focus().deleteRow().run()"
+			>
+				deleteRow
+			</base-button>
+			<base-button
+				data-testid="editor_table_delete_column"
+				@click="editor.chain().focus().deleteColumn().run()"
+			>
+				deleteColumn
 			</base-button>
 		</div>
 
@@ -126,6 +164,7 @@ import StarterKit from "@tiptap/starter-kit";
 //import HardBreak from "@tiptap/extension-hard-break";
 
 import Heading from "@tiptap/extension-heading";
+import Underline from "@tiptap/extension-underline";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -167,6 +206,9 @@ export default {
 				this.editor.isActive("heading", { level: 4 })
 			);
 		},
+		showTableMenu() {
+			return this.editor.isActive("table");
+		},
 	},
 	watch: {
 		modelValue(value) {
@@ -198,6 +240,7 @@ export default {
 				TableHeader,
 				TableCell,
 				Image,
+				Underline,
 				//Link,
 				//Placeholder.configure( { placeholder: this.placeholder }),
 			],
@@ -238,8 +281,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.menubar {
+.default-menu {
 	padding-bottom: var(--space-xs-2);
+	border-bottom: 1px solid var(--color-gray);
+}
+
+.table-menu {
+	padding-bottom: var(--space-xs-2);
+	background-color: var(--color-accent);
 	border-bottom: 1px solid var(--color-gray);
 }
 
@@ -261,6 +310,19 @@ export default {
 		color: var(--color-gray);
 		pointer-events: none;
 		content: attr(data-empty-text);
+	}
+
+	::v-deep table td,
+	::v-deep table th {
+		position: relative;
+		min-width: 1em;
+		padding: var(--space-xs-2);
+		vertical-align: top;
+		border: var(--border-width-bold) solid var(--color-gray-medium);
+	}
+
+	::v-deep table th {
+		background-color: var(--color-gray-light);
 	}
 }
 </style>
