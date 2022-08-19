@@ -11,7 +11,7 @@
 			{{ title }}
 		</h2>
 		<template slot="content">
-			<div ref="copy-dialog-content">
+			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<v-alert
 					v-if="status === 'success'"
 					data-testid="success-alert"
@@ -36,44 +36,48 @@
 						{{ $t("components.molecules.copyResult.failedCopy") }}
 					</div>
 				</v-alert>
-				<div v-if="hasNotification" data-testid="copy-result-notifications">
-					<v-alert type="warning" :icon="mdiInformation" text border="left">
-						<div class="alert_text mr-2">
-							<div v-if="hasPartialGeogebraElement" data-testid="geogebra">
-								<strong>{{
-									$t("components.molecules.copyResult.label.geogebra")
-								}}</strong>
-								&middot;
-								{{ $t("components.molecules.copyResult.geogebraCopy.info") }}
-							</div>
-							<div v-if="hasPartialEtherpadElement" data-testid="etherpad">
-								<strong>{{
-									$t("components.molecules.copyResult.label.etherpad")
-								}}</strong>
-								&middot;
-								{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
-							</div>
-							<div v-if="hasPartialNexboardElement" data-testid="nexboard">
-								<strong>{{
-									$t("components.molecules.copyResult.label.nexboard")
-								}}</strong>
-								&middot;
-								{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
-							</div>
-							<div v-if="hasPartialCourseGroup" data-testid="coursegroups">
-								<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
-								{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
-							</div>
-							<div v-if="hasFailedFileElement" data-testid="files">
-								<strong>{{
-									$t("components.molecules.copyResult.label.files")
-								}}</strong>
-								&middot;
-								{{ $t("components.molecules.copyResult.fileCopy.error") }}
-							</div>
+				<v-alert
+					v-if="needsInfoText"
+					type="warning"
+					:icon="mdiInformation"
+					text
+					border="left"
+				>
+					<div class="alert_text mr-2">
+						<div v-if="hasGeogebraElement" data-testid="geogebra">
+							<strong>{{
+								$t("components.molecules.copyResult.label.geogebra")
+							}}</strong>
+							&middot;
+							{{ $t("components.molecules.copyResult.geogebraCopy.info") }}
 						</div>
-					</v-alert>
-				</div>
+						<div v-if="hasEtherpadElement" data-testid="etherpad">
+							<strong>{{
+								$t("components.molecules.copyResult.label.etherpad")
+							}}</strong>
+							&middot;
+							{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
+						</div>
+						<div v-if="hasNexboardElement" data-testid="nexboard">
+							<strong>{{
+								$t("components.molecules.copyResult.label.nexboard")
+							}}</strong>
+							&middot;
+							{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
+						</div>
+						<div v-if="hasCourseGroup" data-testid="coursegroups">
+							<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
+							{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
+						</div>
+						<div v-if="hasFileElement" data-testid="files">
+							<strong>{{
+								$t("components.molecules.copyResult.label.files")
+							}}</strong>
+							&middot;
+							{{ $t("components.molecules.copyResult.fileCopy.error") }}
+						</div>
+					</div>
+				</v-alert>
 
 				<div v-if="isLoading">
 					<v-skeleton-loader
@@ -126,37 +130,37 @@ export default {
 		status() {
 			return this.copyResultStatus;
 		},
-		hasNotification() {
+		needsInfoText() {
 			return (
-				this.hasPartialGeogebraElement ||
-				this.hasPartialEtherpadElement ||
-				this.hasPartialNexboardElement ||
-				this.hasFailedFileElement ||
-				this.hasPartialCourseGroup
+				this.hasGeogebraElement ||
+				this.hasEtherpadElement ||
+				this.hasNexboardElement ||
+				this.hasFileElement ||
+				this.hasCourseGroup
 			);
 		},
-		hasPartialGeogebraElement() {
+		hasGeogebraElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentGeogebra
 			);
 		},
-		hasPartialEtherpadElement() {
+		hasEtherpadElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentEtherpad
 			);
 		},
-		hasPartialNexboardElement() {
+		hasNexboardElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
 		},
-		hasFailedFileElement() {
+		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
 		},
-		hasPartialCourseGroup() {
+		hasCourseGroup() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.CoursegroupGroup

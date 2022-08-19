@@ -81,54 +81,88 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			expect(wrapper.vm.isOpen).toBe(false);
 		});
 	});
+	describe("status alerts", () => {
+		describe("success", () => {
+			it("should render success alert if status is success", async () => {
+				const wrapper = getWrapper({
+					isLoading: false,
+					copyResultStatus: "success",
+				});
+				const successMessage = wrapper.find('[data-testId="success-alert"]')
+					.element.textContent;
 
-	describe("hasNotification", () => {
-		const setupWrapper = () => {
-			return getWrapper({
-				isLoading: false,
-				copyResultStatus: "partial",
-				copyResultItems: defaultResultItems,
+				expect(successMessage).toContain(
+					wrapper.vm.$i18n.t(
+						"components.molecules.copyResult.successfullyCopied"
+					)
+				);
 			});
-		};
-
-		it("should show geogebra notification if partial geogebra element exists", () => {
-			const geogebraNotification = setupWrapper().find(
-				`[data-testid="copy-result-notifications"] [data-testid="geogebra"]`
-			);
-
-			expect(geogebraNotification.isVisible()).toBe(true);
 		});
 
-		it("should show etherpad notification if partial etherpad element exists", () => {
-			const etherpadNotification = setupWrapper().find(
-				`[data-testid="copy-result-notifications"] [data-testid="etherpad"]`
-			);
+		describe("failure", () => {
+			it("should render error alert if status is failure", async () => {
+				const wrapper = getWrapper({
+					isLoading: false,
+					copyResultStatus: "failure",
+				});
 
-			expect(etherpadNotification.isVisible()).toBe(true);
+				const failureMessage = wrapper.find('[data-testId="failure-alert"]')
+					.element.textContent;
+
+				expect(failureMessage).toContain(
+					wrapper.vm.$i18n.t("components.molecules.copyResult.failedCopy")
+				);
+			});
 		});
 
-		it("should show nexboard notification if partial nexboard element exists", () => {
-			const nexboardNotification = setupWrapper().find(
-				`[data-testid="copy-result-notifications"] [data-testid="nexboard"]`
-			);
+		describe("partial - needsInfoText", () => {
+			const setupWrapper = () => {
+				return getWrapper({
+					isLoading: false,
+					copyResultStatus: "partial",
+					copyResultItems: defaultResultItems,
+				});
+			};
 
-			expect(nexboardNotification.isVisible()).toBe(true);
-		});
+			it("should show geogebra notification if partial geogebra element exists", () => {
+				const geogebraNotification = setupWrapper().find(
+					`[data-testid="copy-result-notifications"] [data-testid="geogebra"]`
+				);
 
-		it("should show coursegroup notification if failed coursegroup element exists", () => {
-			const courseGroupNotification = setupWrapper().find(
-				`[data-testid="copy-result-notifications"] [data-testid="coursegroups"]`
-			);
+				expect(geogebraNotification.isVisible()).toBe(true);
+			});
 
-			expect(courseGroupNotification.isVisible()).toBe(true);
-		});
+			it("should show etherpad notification if partial etherpad element exists", () => {
+				const etherpadNotification = setupWrapper().find(
+					`[data-testid="copy-result-notifications"] [data-testid="etherpad"]`
+				);
 
-		it("should show coursegroup notification if coursegroup error element exists", () => {
-			const courseGroupNotification = setupWrapper().find(
-				`[data-testid="copy-result-notifications"] [data-testid="files"]`
-			);
+				expect(etherpadNotification.isVisible()).toBe(true);
+			});
 
-			expect(courseGroupNotification.isVisible()).toBe(true);
+			it("should show nexboard notification if partial nexboard element exists", () => {
+				const nexboardNotification = setupWrapper().find(
+					`[data-testid="copy-result-notifications"] [data-testid="nexboard"]`
+				);
+
+				expect(nexboardNotification.isVisible()).toBe(true);
+			});
+
+			it("should show coursegroup notification if coursegroup element exists", () => {
+				const courseGroupNotification = setupWrapper().find(
+					`[data-testid="copy-result-notifications"] [data-testid="coursegroups"]`
+				);
+
+				expect(courseGroupNotification.isVisible()).toBe(true);
+			});
+
+			it("should show file notification if file error element exists", () => {
+				const fileNotification = setupWrapper().find(
+					`[data-testid="copy-result-notifications"] [data-testid="files"]`
+				);
+
+				expect(fileNotification.isVisible()).toBe(true);
+			});
 		});
 	});
 
@@ -208,35 +242,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			const emittedEvents = wrapper.emitted();
 			const dialogClosedEvents = emittedEvents["dialog-closed"];
 			expect(dialogClosedEvents?.length).toBe(1);
-		});
-	});
-
-	describe("status alerts", () => {
-		it("should render success alert if status is success", async () => {
-			const wrapper = getWrapper({
-				isLoading: false,
-				copyResultStatus: "success",
-			});
-			const successMessage = wrapper.find('[data-testId="success-alert"]')
-				.element.textContent;
-
-			expect(successMessage).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.successfullyCopied")
-			);
-		});
-
-		it("should render error alert if status is failure", async () => {
-			const wrapper = getWrapper({
-				isLoading: false,
-				copyResultStatus: "failure",
-			});
-
-			const failureMessage = wrapper.find('[data-testId="failure-alert"]')
-				.element.textContent;
-
-			expect(failureMessage).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.failedCopy")
-			);
 		});
 	});
 });
