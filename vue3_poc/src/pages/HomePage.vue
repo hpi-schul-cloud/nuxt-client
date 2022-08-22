@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useCounterStore } from "@/store/counter";
 import { computed } from "@vue/reactivity";
 import vCustomDialog from "@/components/vCustomDialog.vue";
-export default {
+export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
@@ -78,7 +78,7 @@ export default {
 			onCloseDialog,
 		};
 	},
-};
+});
 </script>
 
 <style scoped>
