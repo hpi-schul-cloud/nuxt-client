@@ -257,7 +257,7 @@ export default {
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
-					action: () => onCopyRoom(this.roomData.roomId),
+					action: () => this.onCopyRoom(this.roomData.roomId),
 					name: this.$t("common.actions.copy"),
 					dataTestId: "title-menu-copy",
 				});
