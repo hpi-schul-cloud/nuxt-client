@@ -1,13 +1,13 @@
 import {
+	copyModule,
+	envConfigModule,
 	finishedTaskModule,
 	taskModule,
-	envConfigModule,
-	copyModule,
 } from "@/store";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FinishedTaskModule from "@/store/finished-tasks";
 import TaskModule from "@/store/tasks";
-import CopyModule from "@/store/copy-process";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
@@ -42,7 +42,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			tasks: TaskModule,
 			"finished-tasks": FinishedTaskModule,
 			"env-config": EnvConfigModule,
-			"copy-process": CopyModule,
+			copy: CopyModule,
 		});
 	});
 
@@ -171,8 +171,8 @@ describe("@components/molecules/TaskItemMenu", () => {
 	});
 
 	describe("when copying a task", () => {
-		it("should call copyTask store method if 'FEATURE_TASK_COPY_ENABLED' flag is set to true", async () => {
-			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+		it("should call copy store method if 'FEATURE_TASK_COPY_ENABLED' flag is set to true", async () => {
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -192,17 +192,18 @@ describe("@components/molecules/TaskItemMenu", () => {
 			expect(copyTaskStoreMock.mock.calls[0][0]).toStrictEqual({
 				id: "59cce2c61113d1132c98dc06",
 				courseId: "",
+				type: "task",
 			});
 		});
 
 		it("should call 'fetchAllTasks' store action when 'CopyProcess' modal is closed ", async () => {
-			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
-			const fetchAllTasksMock = jest.spyOn(taskModule, "fetchAllTasks");
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
 				userRole: "teacher",
+				courseId: "42",
 			});
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
@@ -213,18 +214,15 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const copyBtn = wrapper.find("#task-action-copy");
 			await copyBtn.trigger("click");
 
-			expect(copyTaskStoreMock).toHaveBeenCalled();
-
-			const copyProcessModal = wrapper.find("[data-testid='copy-process']");
-			copyProcessModal.vm.$emit("dialog-closed", false);
-
-			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
-			expect(wrapper.vm.copyProcess.id).toBe("");
-			expect(fetchAllTasksMock).toHaveBeenCalled();
+			expect(copyTaskStoreMock).toHaveBeenCalledWith({
+				id: task.id,
+				courseId: "42",
+				type: "task",
+			});
 		});
 
 		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
-			const copyTaskStoreMock = jest.spyOn(copyModule, "copyTask");
+			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
 			const { location } = window;
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({

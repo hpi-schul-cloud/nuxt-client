@@ -143,10 +143,10 @@ import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import {
+	getAuthor,
+	getDescription,
 	getMetadataAttribute,
 	getProvider,
-	getDescription,
-	getAuthor,
 	getTags,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
@@ -291,7 +291,7 @@ export default {
 						instance: this.$theme.name,
 					}),
 			  }
-			: { title: this.$t("global.sidebar.lernstore") };
+			: { title: this.$t("common.words.lernstore") };
 	},
 };
 </script>

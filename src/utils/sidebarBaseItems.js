@@ -81,7 +81,7 @@ export default [
 		testId: "Termine",
 	},
 	{
-		title: "global.sidebar.lernstore",
+		title: "common.words.lernstore",
 		to: "/content",
 		icon: "search",
 		permission: "LERNSTORE_VIEW",
