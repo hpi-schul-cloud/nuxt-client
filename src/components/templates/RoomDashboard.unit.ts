@@ -1,8 +1,9 @@
-import { envConfigModule, roomModule, taskModule, copyModule } from "@/store";
+/* eslint-disable max-lines */
+import { envConfigModule, roomModule, taskModule } from "@/store";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TaskModule from "@/store/tasks";
-import CopyModule from "@/store/copy-process";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
@@ -90,16 +91,11 @@ const emptyMockData = {
 	elements: [],
 };
 
-const $notifier = jest.fn();
-
 const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
-			mocks: {
-				$notifier,
-			},
 		}),
 		propsData: props,
 		...options,
@@ -114,7 +110,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			tasks: TaskModule,
 			room: RoomModule,
 			"env-config": EnvConfigModule,
-			"copy-process": CopyModule,
+			copy: CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
@@ -165,9 +161,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "teacher",
 			});
-			const emptyStateComponent = wrapper.find(
+			const emptyStateComponent: any = wrapper.find(
 				`[data-testid="empty-state-item"]`
-			) as any;
+			);
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
 			expect(emptyStateComponent.vm.title).toStrictEqual(
@@ -180,9 +176,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "student",
 			});
-			const emptyStateComponent = wrapper.find(
+			const emptyStateComponent: any = wrapper.find(
 				`[data-testid="empty-state-item"]`
-			) as any;
+			);
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
 			expect(emptyStateComponent.vm.title).toStrictEqual(
@@ -322,7 +318,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			const shareModal = wrapper.find(".room-dialog") as any;
+			const shareModal: any = wrapper.find(".room-dialog");
 
 			expect(shareModal.vm.isOpen).toBe(false);
 			wrapper.vm.lessonShare.isOpen = true;
@@ -358,9 +354,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			const deleteModal = wrapper.find(
+			const deleteModal: any = wrapper.find(
 				`[data-testid="delete-dialog-item"]`
-			) as any;
+			);
 
 			expect(deleteModal.vm.isOpen).toBe(false);
 			wrapper.vm.itemDelete.isOpen = true;
@@ -374,9 +370,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			wrapper.vm.deleteItem = deleteItemMock;
 			wrapper.vm.itemDelete.isOpen = true;
 			await wrapper.vm.$nextTick();
-			const deleteModal = wrapper.find(
+			const deleteModal: any = wrapper.find(
 				`[data-testid="delete-dialog-item"]`
-			) as any;
+			);
 			deleteModal.vm.$emit("dialog-confirmed");
 			expect(deleteItemMock).toHaveBeenCalled();
 		});
@@ -393,9 +389,9 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("delete-task");
 			await wrapper.vm.$nextTick();
-			const deleteModal = wrapper.find(
+			const deleteModal: any = wrapper.find(
 				`[data-testid="delete-dialog-item"]`
-			) as any;
+			);
 			deleteModal.vm.$emit("dialog-confirmed");
 			await wrapper.vm.$nextTick();
 			expect(deleteTaskMock).toHaveBeenCalled();
@@ -415,9 +411,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 
 			lessonCard.vm.$emit("delete-lesson");
 			await wrapper.vm.$nextTick();
-			const deleteModal = wrapper.find(
-				`[data-testid="delete-dialog-item"]`
-			) as any;
+			const deleteModal = wrapper.find(`[data-testid="delete-dialog-item"]`);
 			deleteModal.vm.$emit("dialog-confirmed");
 			await wrapper.vm.$nextTick();
 			expect(deleteTaskMock).not.toHaveBeenCalled();
@@ -501,6 +495,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
+
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
 			const copyTaskMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -512,47 +507,23 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(copyTaskMock).toHaveBeenCalled();
 		});
 
-		it("should call the 'store copyTask action' method when a task component emits 'copy-task' custom event", async () => {
-			const spy = jest.spyOn(copyModule, "copyTask");
+		it("should emit 'copy-board-element' with correct task-related payload", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			const taskCard = wrapper.find(".task-card");
 			taskCard.vm.$emit("copy-task");
 
-			expect(spy).toHaveBeenCalled();
-			expect(spy.mock.calls[0][0]).toStrictEqual({
-				id: "1234",
-				courseId: "123",
-			});
-		});
-
-		it("should set 'isOpen' true  when a task component emits 'copy-task' custom event", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			await wrapper.vm.$nextTick();
-
-			const taskCard = wrapper.find(".task-card");
-			taskCard.vm.$emit("copy-task");
-
-			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
-		});
-
-		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
-			const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
-			await wrapper.vm.$nextTick();
-
-			const taskCard = wrapper.find(".task-card");
-			taskCard.vm.$emit("copy-task");
-			await wrapper.vm.$nextTick();
-
-			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
-			copyProcess.vm.$emit("dialog-closed", false);
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
-			expect(fetchContentSpy).toHaveBeenCalled();
-			expect(fetchContentSpy.mock.calls[0][0]).toStrictEqual("123");
+			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
+			const copyBoardElementEvent = wrapper.emitted("copy-board-element");
+			expect(copyBoardElementEvent).toStrictEqual([
+				[
+					{
+						id: "1234",
+						type: "task",
+						courseId: "123",
+					},
+				],
+			]);
 		});
 	});
 
@@ -561,6 +532,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
+
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
 			const copyLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -572,71 +544,23 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			expect(copyLessonMock).toHaveBeenCalled();
 		});
 
-		it("should call the 'store copyLesson action' method when a lesson component emits 'copy-lesson' custom event", async () => {
-			const spy = jest.spyOn(copyModule, "copyLesson");
+		it("should emit 'copy-board-element' with correct lesson-related payload", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const lessonCard = wrapper.find(".lesson-card");
-			lessonCard.vm.$emit("copy-lesson");
-			await wrapper.vm.$nextTick();
+			const taskCard = wrapper.find(".lesson-card");
+			taskCard.vm.$emit("copy-lesson");
 
-			expect(spy).toHaveBeenCalled();
-			expect(spy.mock.calls[0][0]).toStrictEqual({
-				id: "3456",
-				courseId: "123",
-			});
-		});
-
-		it("should set 'isOpen' true  when a task component emits 'copy-lesson' custom event", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			await wrapper.vm.$nextTick();
-
-			const lessonCard = wrapper.find(".lesson-card");
-			lessonCard.vm.$emit("copy-lesson");
-
-			expect(wrapper.vm.copyProcess.isOpen).toBe(true);
-		});
-
-		it("should set 'isOpen' false when CopyProcess component emits 'dialog-closed'", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			await wrapper.setData({ copyProcess: { id: "123", isOpen: true } });
-			await wrapper.vm.$nextTick();
-
-			const lessonCard = wrapper.find(".lesson-card");
-			lessonCard.vm.$emit("copy-lesson");
-			await wrapper.vm.$nextTick();
-
-			const copyProcess = wrapper.find(`[data-testid="copy-process"]`);
-			copyProcess.vm.$emit("dialog-closed", false);
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.vm.copyProcess.isOpen).toBe(false);
-		});
-
-		it("should show a notification when a lesson component emited 'copy-lesson' custom event", async () => {
-			const roomModuleCopyLessonMock = jest.fn();
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			copyModule.copyLesson = roomModuleCopyLessonMock.mockImplementation(
-				() => {
-					copyModule.setCopyResult({
-						title: "Thema",
+			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
+			const copyBoardElementEvent = wrapper.emitted("copy-board-element");
+			expect(copyBoardElementEvent).toStrictEqual([
+				[
+					{
+						id: "3456",
 						type: "lesson",
-						status: "success",
-						id: "123",
-						elements: [
-							{ title: "description", type: "leaf", status: "success" },
-						],
-					});
-				}
-			);
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-
-			const lessonCard = wrapper.find(".lesson-card");
-			lessonCard.vm.$emit("copy-lesson");
-			await wrapper.vm.$nextTick();
-
-			expect($notifier).toHaveBeenCalled();
+						courseId: "123",
+					},
+				],
+			]);
 		});
 	});
 });
