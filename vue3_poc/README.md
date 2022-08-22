@@ -10,21 +10,17 @@
 - [x] using pinia in component (@pages/HomePage.vue)
 - [x] typescript integration
 - [x] vuetify@3 integration
-  - [ ] define vuetify components globally in jest tests
-  - currently beta version is available
-  - has some errors when installing with vue-cli <https://next.vuetifyjs.com/en/getting-started/installation/#vite>
 - [ ] axios integration
-- [x] jest integration
+- [x] vitest integration
   - [x] unit tests for components
   - [x] unit tests for pinia
+  - [x] vuetify support
 - [x] eslint configuration
 - [x] prettier configuration
 - [x] stylelint configuration?
   - [ ] fix linter errors
 - [ ] generalize imports using index.ts files
 - [ ] pinned dependencies
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 ## Recommended IDE Setup
 
@@ -66,7 +62,9 @@ npm run build
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+npm run test
+npm run test:watch
+npm run test:cov
 ```
 
 ## Additional findings
@@ -103,24 +101,6 @@ export default defineConfig({
 ### Jest vs Vitest
 
 See [https://docs.dbildungscloud.de/display/DBH/Jest+vs+Vitest](https://docs.dbildungscloud.de/display/DBH/Jest+vs+Vitest)
-
-### Jest
-
-A guide for adding Jest can be found here:
-
-[https://dev.to/vuesomedev/add-testing-to-vite-4b75](https://dev.to/vuesomedev/add-testing-to-vite-4b75)
-
-```sh
-npm install --save-dev jest @types/jest ts-jest vue-jest@next @vue/test-utils@next ts-node
-```
-
-`tsconfig.json`
-
-```json
-{
-	"types": ["@types/jest" /* ... */]
-}
-```
 
 ### Env Variables
 
