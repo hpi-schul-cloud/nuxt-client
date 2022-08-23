@@ -31,18 +31,18 @@
 	</div>
 	<v-custom-dialog
 		v-model="dialogIsOpen"
-		hasButtons
+		has-buttons
 		:buttons="['close']"
 		@dialog-closed="onCloseDialog"
 	>
-		<template v-slot:title><h4>Dialog Title</h4></template>
+		<template #title><h4>Dialog Title</h4></template>
 	</v-custom-dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useCounterStore } from "@/store/counter";
-import { computed } from "@vue/reactivity";
+import { computed } from "vue";
 import vCustomDialog from "@/components/vCustomDialog.vue";
 export default defineComponent({
 	components: {
