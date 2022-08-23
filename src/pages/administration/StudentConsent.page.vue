@@ -3,13 +3,17 @@
 		ref="main"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
-		:aria-label="$t('pages.administration.students.consent.title')"
+		:aria-label="title"
 	>
 		<template slot="header">
 			<h1 class="mb--md h3">
-				{{ $t("pages.administration.students.consent.title") }}
+				{{ title }}
 			</h1>
-			<i18n path="pages.administration.students.consent.info" tag="p">
+			<i18n
+				v-if="isConsentNecessary"
+				path="pages.administration.students.consent.info"
+				tag="p"
+			>
 				<template #dataProtection>
 					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
 						$t("common.words.privacyPolicy")
@@ -108,7 +112,9 @@
 				<h4>
 					{{ $t("pages.administration.students.consent.steps.register") }}
 				</h4>
-				{{ $t("pages.administration.students.consent.steps.register.info") }}
+				<p v-if="isConsentNecessary">
+					{{ $t("pages.administration.students.consent.steps.register.info") }}
+				</p>
 				<backend-data-table
 					:columns="tableColumns"
 					:data="tableData"
@@ -126,7 +132,7 @@
 					</template>
 				</backend-data-table>
 
-				<div id="consent-checkbox">
+				<div v-if="isConsentNecessary" id="consent-checkbox">
 					<base-input
 						v-model="check"
 						type="checkbox"
@@ -192,11 +198,7 @@
 					</template>
 				</backend-data-table>
 				<p>
-					{{
-						$t(
-							"pages.administration.students.consent.steps.download.explanation"
-						)
-					}}
+					{{ passwordHint }}
 				</p>
 
 				<base-button design="secondary" @click="download">{{
@@ -210,7 +212,7 @@
 			<section v-if="currentStep === 3">
 				<base-content-container>
 					<h4 class="centered">
-						{{ $t("pages.administration.students.consent.steps.success") }}
+						{{ successMessage }}
 					</h4>
 					<img
 						class="mb--md"
@@ -303,7 +305,7 @@
 
 <script>
 /* eslint-disable max-lines */
-import { filePathsModule } from "@/store";
+import { envConfigModule, filePathsModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
@@ -328,20 +330,6 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-				},
-				{
-					text: this.$t("pages.administration.students.index.title"),
-					to: "/administration/students",
-				},
-				{
-					text: this.$t("pages.administration.students.consent.title"),
-					disabled: true,
-				},
-			],
 			tableColumns: [
 				{
 					field: "fullName",
@@ -417,6 +405,51 @@ export default {
 			tableData: [],
 		};
 	},
+	computed: {
+		breadcrumbs() {
+			return [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+					to: "/administration/students",
+				},
+				{
+					text: this.title,
+					disabled: true,
+				},
+			];
+		},
+		isConsentNecessary() {
+			return (
+				envConfigModule.getEnv &&
+				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
+			);
+		},
+		title() {
+			return this.isConsentNecessary
+				? this.$t("pages.administration.students.consent.title")
+				: this.$t("pages.administration.students.manualRegistration.title");
+		},
+		passwordHint() {
+			return this.isConsentNecessary
+				? this.$t(
+						"pages.administration.students.consent.steps.download.explanation"
+				  )
+				: this.$t(
+						"pages.administration.students.manualRegistration.steps.download.explanation"
+				  );
+		},
+		successMessage() {
+			return this.isConsentNecessary
+				? this.$t("pages.administration.students.consent.steps.success")
+				: this.$t(
+						"pages.administration.students.manualRegistration.steps.success"
+				  );
+		},
+	},
 	async created() {
 		await this.find();
 		window.addEventListener("beforeunload", this.warningEventHandler);
@@ -470,7 +503,7 @@ export default {
 			);
 		},
 		register() {
-			if (this.check === false) {
+			if (this.isConsentNecessary && this.check === false) {
 				this.checkWarning = true;
 			} else {
 				const users = this.tableData.map((student) => {
@@ -583,9 +616,7 @@ export default {
 	},
 	head() {
 		return {
-			title: `${this.$t("pages.administration.students.consent.title")} - ${
-				this.$theme.short_name
-			}`,
+			title: `${this.title} - ${this.$theme.short_name}`,
 		};
 	},
 };

@@ -1,6 +1,8 @@
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { default as ConsentPage } from "./StudentConsent.page.vue";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 // import mock$objects from "../../../../tests/test-utils/pageStubs";
 
 const mockData = [
@@ -83,7 +85,10 @@ describe("students/consent", () => {
 				},
 			},
 		};
-		setupStores({ filePaths: FilePathsModule });
+		setupStores({
+			filePaths: FilePathsModule,
+			"env-config": EnvConfigModule,
+		});
 	});
 
 	afterEach(() => {
@@ -259,7 +264,52 @@ describe("students/consent", () => {
 		expect(table.exists()).toBe(false);
 	});
 
-	it("should not progress next step if checkBox is not checked", async () => {
+	it("confirm consent form should appear if consent is required", async () => {
+		envConfigModule.setEnvs({
+			FEATURE_CONSENT_NECESSARY: true,
+		});
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const confirmForm = wrapper.find(`[data-testid="check-confirm"]`);
+		expect(confirmForm.exists()).toBe(true);
+	});
+
+	it("confirm consent form shouldn't appear if consent is not required", async () => {
+		envConfigModule.setEnvs({
+			FEATURE_CONSENT_NECESSARY: false,
+		});
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const confirmForm = wrapper.find(`[data-testid="check-confirm"]`);
+		expect(confirmForm.exists()).toBe(false);
+	});
+
+	it("should not progress next step if checkBox is not checked and consent is required", async () => {
+		envConfigModule.setEnvs({
+			FEATURE_CONSENT_NECESSARY: true,
+		});
 		const wrapper = mount(ConsentPage, {
 			...createComponentMocks({
 				store: mockStore,
@@ -280,5 +330,33 @@ describe("students/consent", () => {
 
 		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
 		expect(confirmError.exists()).toBe(true);
+	});
+
+	it("should progress next step if consent is not required", async () => {
+		envConfigModule.setEnvs({
+			FEATURE_CONSENT_NECESSARY: false,
+		});
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+		const toastStub = jest.fn();
+		wrapper.vm.$toast = {};
+		wrapper.vm.$toast.success = toastStub;
+
+		mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const nextButton_2 = wrapper.find(`[data-testid="button-next-2"]`);
+
+		nextButton_2.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		expect(toastStub).toHaveBeenCalled();
 	});
 });
