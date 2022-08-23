@@ -124,6 +124,13 @@
 			>
 				<base-icon source="material" icon="table_chart" />
 			</base-button>
+			<base-button
+				data-testid="editor_audio"
+				:class="{ 'is-active': editor.isActive('audio') }"
+				@click="showAudioPrompt"
+			>
+				<base-icon source="material" icon="music_note" />
+			</base-button>
 
 			<!-- context-menu for tables -->
 			<base-button
@@ -187,6 +194,7 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
+import Audio from "./Audio";
 
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -268,6 +276,7 @@ export default {
 				TableCell,
 				Image,
 				Underline,
+				Audio,
 				Link,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
 				TextStyle, // keep span - seems not to work
@@ -300,6 +309,12 @@ export default {
 			const src = window.prompt("Bitte gib die URL deines Bildes hier ein:");
 			if (src !== null) {
 				this.editor.chain().focus().setImage({ src }).run();
+			}
+		},
+		showAudioPrompt() {
+			const url = window.prompt("Audio File", "http://192.168.1.136/musik.mp3");
+			if (url) {
+				this.editor.chain().focus().setAudio({ src: url }).run();
 			}
 		},
 		isInvalid(content) {
