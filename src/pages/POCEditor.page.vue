@@ -1,40 +1,42 @@
 <template>
 	<div>
-		<default-wireframe
-				headline="POC - Editor TipTap"
-				:full-width="false"
-		>
+		<default-wireframe headline="POC - Editor TipTap" :full-width="false">
 			<div>
 				<h3>Math formula render</h3>
-				<div><span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></div>
-				<div>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</div>
+				<div>
+					<span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span>
+				</div>
+				<div>
+					When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and
+					they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+				</div>
 			</div>
 			<div>
-					<h2>Editor 1</h2>
+				<h2>Editor 1</h2>
 
-						<text-editor
-								v-model="staticContent"
-								class="mb--md mt--xl-3"
-								placeholder-text="Extending tip-tap POC"
-						/>
-						<div style="border: solid 1px green"><h3>Render Editor 1</h3>
-							<div v-html="staticContent"></div>
-						</div>
-
+				<text-editor
+					v-model="staticContent"
+					class="mb--md mt--xl-3"
+					placeholder-text="Extending tip-tap POC"
+				/>
+				<div style="border: solid 1px green">
+					<h3>Render Editor 1</h3>
+					<div v-html="staticContent"></div>
 				</div>
-			<hr>
+			</div>
+			<hr />
 			<div>
 				<h2>Editor 2</h2>
 				<text-editor
-						v-model="staticContent2"
-						class="mb--md mt--xl-3"
-						placeholder-text="Extending TipTap POC"
+					v-model="staticContent2"
+					class="mb--md mt--xl-3"
+					placeholder-text="Extending TipTap POC"
 				/>
 
-				<div style="border: solid 1px green"><h3>Render Editor 2</h3>
+				<div style="border: solid 1px green">
+					<h3>Render Editor 2</h3>
 					<div v-html="staticContent2"></div>
 				</div>
-
 			</div>
 		</default-wireframe>
 	</div>
@@ -52,8 +54,8 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			staticContent2: '',
-			staticContent:`
+			staticContent2: "",
+			staticContent: `
 
 	<p>Wichtig ist, dass ihr die Zeilenlänge im Blick behaltet und eingreift</p>
 	<h2>Die ideale Zeilenlänge für ebsites (H1) Ώ😎</h2>
@@ -154,8 +156,8 @@ export default {
 	   </table>
 	</div>
 	<p><a href="http://www.gogle.com">Link</a></p>
-	<img src="/files/file?file=630348f6a37aa0001d6ad913&amp;name=katzen.jpg" alt="alt1" contenteditable="false" draggable="true">`
-		}
+	<img src="/files/file?file=630348f6a37aa0001d6ad913&amp;name=katzen.jpg" alt="alt1" contenteditable="false" draggable="true">`,
+		};
 	},
 };
 </script>

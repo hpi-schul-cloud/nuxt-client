@@ -96,10 +96,16 @@
 			>
 				<base-icon source="material" icon="image" />
 			</base-button>
-			<button :class="{ 'is-active': editor.isActive('link') }" @click="setLink">
+			<button
+				:class="{ 'is-active': editor.isActive('link') }"
+				@click="setLink"
+			>
 				setLink
 			</button>
-			<button :disabled="!editor.isActive('link')" @click="editor.chain().focus().unsetLink().run()">
+			<button
+				:disabled="!editor.isActive('link')"
+				@click="editor.chain().focus().unsetLink().run()"
+			>
 				unsetLink
 			</button>
 
@@ -276,7 +282,7 @@ export default {
 			} else {
 				//this.content = content;
 				this.$emit("update", content);
-				this.$emit('input', content)
+				this.$emit("input", content);
 			}
 			//MathJax.Hub.Typeset();
 		},
@@ -294,8 +300,8 @@ export default {
 			return error;
 		},
 		setLink() {
-			const previousUrl = this.editor.getAttributes('link').href;
-			const url = window.prompt('URL', previousUrl);
+			const previousUrl = this.editor.getAttributes("link").href;
+			const url = window.prompt("URL", previousUrl);
 
 			// cancelled
 			if (url === null) {
@@ -303,22 +309,17 @@ export default {
 			}
 
 			// empty
-			if (url === '') {
-				this.editor
-						.chain()
-						.focus()
-						.extendMarkRange('link')
-						.unsetLink()
-						.run();
+			if (url === "") {
+				this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
 				return;
 			}
 			// update link
 			this.editor
-					.chain()
-					.focus()
-					.extendMarkRange('link')
-					.setLink({ href: url })
-					.run()
+				.chain()
+				.focus()
+				.extendMarkRange("link")
+				.setLink({ href: url })
+				.run();
 		},
 	},
 };

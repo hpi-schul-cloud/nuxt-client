@@ -82,18 +82,18 @@ module.exports = {
 		],
 		script: [
 			{
-				hid: 'mathjax-config',
+				hid: "mathjax-config",
 				innnerHTML: `MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] }});`,
-				type: 'text/javascript',
-				charset: 'utf-8',
-				__dangerouslyDisableSanitizers: ['script']
+				type: "text/javascript",
+				charset: "utf-8",
+				__dangerouslyDisableSanitizers: ["script"],
 			},
 			{
-				hid: 'matjax',
+				hid: "matjax",
 				//src: 'mathjax/Mathjax.js?config=TeX-AMS_HTML'
-				src: 'https://www.tuhh.de/MathJax/MathJax.js?config=TeX-AMS_HTML-full'
-			}
-		]
+				src: "https://www.tuhh.de/MathJax/MathJax.js?config=TeX-AMS_HTML-full",
+			},
+		],
 	},
 
 	/*
