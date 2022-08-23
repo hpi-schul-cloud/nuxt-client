@@ -109,51 +109,54 @@
 			>
 				<base-icon source="material" icon="table_chart" />
 			</base-button>
-		</div>
-		<div v-if="showTableMenu" class="table-menu">
+
+			<!-- context-menu for tables -->
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_add_column_before"
 				@click="editor.chain().focus().addColumnBefore().run()"
 			>
 				addColumnBefore
 			</base-button>
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_add_column_after"
 				@click="editor.chain().focus().addColumnAfter().run()"
 			>
 				addColumnAfter
 			</base-button>
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_add_row_before"
 				@click="editor.chain().focus().addRowBefore().run()"
 			>
 				addRowBefore
 			</base-button>
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_add_row_after"
 				@click="editor.chain().focus().addRowAfter().run()"
 			>
 				addRowAfter
 			</base-button>
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_delete_row"
 				@click="editor.chain().focus().deleteRow().run()"
 			>
 				deleteRow
 			</base-button>
 			<base-button
+				v-if="showTableMenu"
 				data-testid="editor_table_delete_column"
 				@click="editor.chain().focus().deleteColumn().run()"
 			>
 				deleteColumn
 			</base-button>
+			<!-- end-context-based menu for tables -->
 		</div>
 
-		<editor-content
-			v-model="content"
-			class="editor__content"
-			:editor="editor"
-		/>
+		<editor-content class="editor__content" :editor="editor" />
 	</div>
 </template>
 
@@ -196,6 +199,8 @@ export default {
 	data() {
 		return {
 			editor: null,
+			scrollTimer: -1,
+			pageOffset: 0,
 		};
 	},
 	computed: {
@@ -260,7 +265,7 @@ export default {
 				this.$toast.error(error);
 				this.editor.commands.undo();
 			} else {
-				this.content = content;
+				//this.content = content;
 				this.$emit("update", content);
 			}
 		},
@@ -282,17 +287,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .default-menu {
+	position: sticky;
+	top: var(--sticky-header-height);
+	z-index: var(--layer-sticky-header);
+	padding-top: var(--space-xs-2);
 	padding-bottom: var(--space-xs-2);
-	border-bottom: 1px solid var(--color-gray);
-}
-
-.table-menu {
-	padding-bottom: var(--space-xs-2);
-	background-color: var(--color-accent);
+	background-color: var(--color-white);
 	border-bottom: 1px solid var(--color-gray);
 }
 
 .editor__content {
+	z-index: var(--layer-sticky-page);
 	outline: none;
 
 	::v-deep [contenteditable="true"] {
