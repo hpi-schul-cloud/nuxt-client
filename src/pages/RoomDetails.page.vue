@@ -254,13 +254,10 @@ export default {
 				},
 			];
 
-			if (envConfigModule.getEnv.FEATURE_COURSE_COPY) {
+			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
-					action: () =>
-						envConfigModule.getEnv.FEATURE_COURSE_COPY_ENABLED
-							? this.onCopyRoom(this.roomData.roomId)
-							: (window.location.href = `/courses/${this.courseId}/copy`),
+					action: () => this.onCopyRoom(this.roomData.roomId),
 					name: this.$t("common.actions.copy"),
 					dataTestId: "title-menu-copy",
 				});

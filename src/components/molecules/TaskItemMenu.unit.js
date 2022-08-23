@@ -171,7 +171,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 	});
 
 	describe("when copying a task", () => {
-		it("should call copy store method if 'FEATURE_TASK_COPY_ENABLED' flag is set to true", async () => {
+		it("should call copy store method if 'FEATURE_COPY_SERVICE_ENABLED' flag is set to true", async () => {
 			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
@@ -180,7 +180,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
@@ -206,7 +206,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 				courseId: "42",
 			});
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
@@ -221,9 +221,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			});
 		});
 
-		it("should redirect to the legacy client if 'FEATURE_TASK_COPY_ENABLED' flag is set to false", async () => {
-			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
-			const { location } = window;
+		it("should not find copy option if 'FEATURE_COPY_SERVICE_ENABLED' flag is set to false", async () => {
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -231,19 +229,14 @@ describe("@components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_COPY_ENABLED: false });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
 
-			const copyBtn = wrapper.find("#task-action-copy");
-			await copyBtn.trigger("click");
+			const copyBtn = wrapper.findAll("#task-action-copy");
 
-			expect(location.href).toStrictEqual(
-				"/homework/59cce2c61113d1132c98dc06/copy?returnUrl=/tasks"
-			);
-
-			expect(copyTaskStoreMock).not.toHaveBeenCalled();
+			expect(copyBtn).toHaveLength(0);
 		});
 	});
 });

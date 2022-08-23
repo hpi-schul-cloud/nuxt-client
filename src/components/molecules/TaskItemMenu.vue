@@ -38,7 +38,7 @@
 					</v-list-item-title>
 				</v-list-item>
 				<v-list-item
-					v-if="isTeacher"
+					v-if="isTeacher && copyServiceEnabled"
 					id="task-action-copy"
 					class="task-action"
 					data-testId="task-copy"
@@ -172,6 +172,9 @@ export default {
 		isTeacher() {
 			return this.userRole === "teacher";
 		},
+		copyServiceEnabled() {
+			return envConfigModule?.getEnv.FEATURE_COPY_SERVICE_ENABLED;
+		},
 	},
 	methods: {
 		toggleMenu(value) {
@@ -191,10 +194,6 @@ export default {
 			taskModule.deleteTask(this.taskId);
 		},
 		async copyTask() {
-			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = this.copyLink;
-				return;
-			}
 			await copyModule.copy({
 				id: this.taskId,
 				courseId: this.courseId,

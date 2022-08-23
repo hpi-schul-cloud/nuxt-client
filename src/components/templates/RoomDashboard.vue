@@ -168,7 +168,7 @@ import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
-import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
+import { copyModule, roomModule, taskModule } from "@/store";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
@@ -317,10 +317,6 @@ export default {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
 		async copyTask(taskId) {
-			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = `/homework/${taskId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
-				return;
-			}
 			this.$emit("copy-board-element", {
 				id: taskId,
 				type: "task",
@@ -328,9 +324,6 @@ export default {
 			});
 		},
 		async copyLesson(lessonId) {
-			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
-				return;
-			}
 			this.$emit("copy-board-element", {
 				id: lessonId,
 				type: "lesson",
