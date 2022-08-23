@@ -125,6 +125,11 @@ export const routes = [
 		name: "news-id-edit",
 	},
 	{
+		path: "/poc-editor",
+		component: () => interopDefault(import("../pages/POCEditor.page.vue")),
+		name: "poc-editor",
+	},
+	{
 		path: "/poc-files",
 		component: () => interopDefault(import("../pages/POCFiles.page.vue")),
 		name: "poc-files",

@@ -96,6 +96,13 @@
 			>
 				<base-icon source="material" icon="image" />
 			</base-button>
+			<button :class="{ 'is-active': editor.isActive('link') }" @click="setLink">
+				setLink
+			</button>
+			<button :disabled="!editor.isActive('link')" @click="editor.chain().focus().unsetLink().run()">
+				unsetLink
+			</button>
+
 			<base-button
 				data-testid="editor_table"
 				:class="{ 'is-active': editor.isActive('table') }"
@@ -174,9 +181,9 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 
 import Image from "@tiptap/extension-image";
-//import Link from "@tiptap/extension-link";
+import Link from "@tiptap/extension-link";
 
-//import Placeholder from "@tiptap/extension-placeholder";
+import Placeholder from "@tiptap/extension-placeholder";
 
 export default {
 	components: {
@@ -216,7 +223,7 @@ export default {
 		},
 	},
 	watch: {
-		modelValue(value) {
+		value(value) {
 			// HTML
 			const isSame = this.editor.getHTML() === value;
 
@@ -246,8 +253,8 @@ export default {
 				TableCell,
 				Image,
 				Underline,
-				//Link,
-				//Placeholder.configure( { placeholder: this.placeholder }),
+				Link,
+				Placeholder.configure({ placeholder: this.placeholder }),
 			],
 			onUpdate: this.editorUpdateHandler,
 		});
@@ -259,6 +266,8 @@ export default {
 
 	methods: {
 		editorUpdateHandler() {
+			console.log(this.editor.getJSON());
+
 			const content = this.editor.getHTML();
 			const error = this.isInvalid(content);
 			if (error) {
@@ -267,7 +276,9 @@ export default {
 			} else {
 				//this.content = content;
 				this.$emit("update", content);
+				this.$emit('input', content)
 			}
+			//MathJax.Hub.Typeset();
 		},
 		showImagePrompt() {
 			const src = window.prompt("Bitte gib die URL deines Bildes hier ein:");
@@ -281,6 +292,33 @@ export default {
 				error = this.$t("components.molecules.TextEditor.noLocalFiles");
 			}
 			return error;
+		},
+		setLink() {
+			const previousUrl = this.editor.getAttributes('link').href;
+			const url = window.prompt('URL', previousUrl);
+
+			// cancelled
+			if (url === null) {
+				return;
+			}
+
+			// empty
+			if (url === '') {
+				this.editor
+						.chain()
+						.focus()
+						.extendMarkRange('link')
+						.unsetLink()
+						.run();
+				return;
+			}
+			// update link
+			this.editor
+					.chain()
+					.focus()
+					.extendMarkRange('link')
+					.setLink({ href: url })
+					.run()
 		},
 	},
 };

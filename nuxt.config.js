@@ -80,6 +80,20 @@ module.exports = {
 				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
+		script: [
+			{
+				hid: 'mathjax-config',
+				innnerHTML: `MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] }});`,
+				type: 'text/javascript',
+				charset: 'utf-8',
+				__dangerouslyDisableSanitizers: ['script']
+			},
+			{
+				hid: 'matjax',
+				//src: 'mathjax/Mathjax.js?config=TeX-AMS_HTML'
+				src: 'https://www.tuhh.de/MathJax/MathJax.js?config=TeX-AMS_HTML-full'
+			}
+		]
 	},
 
 	/*
