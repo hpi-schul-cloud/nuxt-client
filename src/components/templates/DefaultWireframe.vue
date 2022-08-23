@@ -142,6 +142,7 @@ export default {
 	position: sticky;
 	top: 0;
 	z-index: var(--layer-sticky-header);
+	height: var(--sticky-header-height);
 	background-color: var(--color-white);
 }
 
