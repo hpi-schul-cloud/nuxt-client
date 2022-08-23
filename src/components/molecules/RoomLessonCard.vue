@@ -153,7 +153,7 @@ export default {
 					dataTestId: "content-card-lesson-menu-edit",
 				});
 
-				if (envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
+				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiContentCopy,
 						action: () => this.copyCard(),

@@ -160,13 +160,6 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<copy-process
-			:is-open="copyProcess.isOpen"
-			:loading="isCopyModalLoading"
-			data-testid="copy-process"
-			@dialog-closed="onCopyProcessDialogClose"
-		>
-		</copy-process>
 	</div>
 </template>
 
@@ -175,12 +168,11 @@ import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
-import { copyModule, envConfigModule, roomModule, taskModule } from "@/store";
+import { copyModule, roomModule, taskModule } from "@/store";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import CopyProcess from "@components/organisms/CopyProcess";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 
@@ -191,7 +183,6 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
-		CopyProcess,
 	},
 	props: {
 		roomDataObject: {
@@ -210,10 +201,6 @@ export default {
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
-			copyProcess: {
-				id: "",
-				isOpen: false,
-			},
 		};
 	},
 	computed: {
@@ -329,73 +316,23 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async copyTask(itemId) {
-			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = `/homework/${itemId}/copy?returnUrl=rooms/${this.roomDataObject.roomId}`;
-				return;
-			}
-			this.copyProcess.isOpen = true;
-			await copyModule.copyTask({ id: itemId, courseId: this.roomData.roomId });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				this.copyProcess.id = copyResult.id;
-
-				this.$notifier({
-					text: this.$t("pages.room.copy.task.message.copied"),
-					status: "success",
-				});
-			}
+		async copyTask(taskId) {
+			this.$emit("copy-board-element", {
+				id: taskId,
+				type: "task",
+				courseId: this.roomData.roomId,
+			});
 		},
-		async onCopyProcessDialogClose() {
-			this.copyProcess.isOpen = false;
-			this.copyProcess.id = "";
-			await roomModule.fetchContent(this.roomData.roomId);
-		},
-		redirectTask(itemId) {
-			window.location.href = `/homework/${itemId}/edit?returnUrl=rooms/${this.roomDataObject.roomId}`;
+		async copyLesson(lessonId) {
+			this.$emit("copy-board-element", {
+				id: lessonId,
+				type: "lesson",
+				courseId: this.roomData.roomId,
+			});
 		},
 		async deleteTask(itemId) {
 			await taskModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
-		},
-		async copyLesson(itemId) {
-			if (!envConfigModule.getEnv.FEATURE_LESSON_COPY_ENABLED) {
-				return;
-			}
-			this.copyProcess.isOpen = true;
-			await copyModule.copyLesson({
-				id: itemId,
-				courseId: this.roomData.roomId,
-			});
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				this.copyProcess.id = copyResult.id;
-
-				this.$notifier({
-					text: this.$t("pages.room.copy.lesson.message.copied"),
-					status: "success",
-				});
-			}
 		},
 	},
 };
@@ -415,7 +352,6 @@ export default {
 }
 
 .share-info-text {
-	// min-height: var(--sidebar-width);
 	font-size: var(--space-md);
 	color: var(--color-black);
 }

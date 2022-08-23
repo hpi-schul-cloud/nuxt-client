@@ -1,12 +1,13 @@
 import { authModule, envConfigModule, roomModule } from "@/store";
+import AuthModule from "@/store/auth";
+import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
+import RoomModule from "@/store/room";
+import { User } from "@/store/types/auth";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
-import { User } from "@/store/types/auth";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import RoomModule from "@/store/room";
 
 const mockData = {
 	roomId: "123",
@@ -115,6 +116,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			auth: AuthModule,
 			"env-config": EnvConfigModule,
 			room: RoomModule,
+			copy: CopyModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
@@ -233,8 +235,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 		it("should have the headline menu items", () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({
-				FEATURE_COURSE_COPY: true,
-				FEATURE_COURSE_COPY_ENABLED: true,
+				FEATURE_COPY_SERVICE_ENABLED: true,
 				FEATURE_COURSE_SHARE: true,
 			});
 			const wrapper = getWrapper();
@@ -271,17 +272,6 @@ describe("@pages/rooms/_id/index.vue", () => {
 			).toBe(true);
 		});
 
-		it("should have 'Copy Course' menu if 'FEATURE_COURSE_COPY' flag set to true", () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
-			const wrapper = getWrapper();
-			const menuItems = wrapper.vm.headlineMenuItems;
-
-			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
-			).toBe(true);
-		});
-
 		it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
 			const location = window.location;
 			const wrapper = getWrapper();
@@ -296,39 +286,33 @@ describe("@pages/rooms/_id/index.vue", () => {
 			expect(location.href).toStrictEqual("/courses/123/edit");
 		});
 
-		describe("testing FEATURE_COURSE_COPY_ENABLED feature flag", () => {
-			it("should redirect the page when 'Copy course' menu clicked", async () => {
+		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
+			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
 				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_COURSE_COPY: true });
-				const location = window.location;
-				const copyRoom = jest.fn();
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const wrapper = getWrapper();
-				wrapper.vm.copyRoom = copyRoom;
+				const menuItems = wrapper.vm.headlineMenuItems;
 
-				const threeDotButton = wrapper.find(".three-dot-button");
-				await threeDotButton.trigger("click");
-				const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
-				await moreActionButton.trigger("click");
-
-				expect(location.href).toStrictEqual("/courses/123/copy");
+				expect(
+					findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
+				).toBe(true);
 			});
 
-			it("should call the copyRoom method when 'Copy course' menu clicked", async () => {
+			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
 				// @ts-ignore
 				envConfigModule.setEnvs({
-					FEATURE_COURSE_COPY: true,
-					FEATURE_COURSE_COPY_ENABLED: true,
+					FEATURE_COPY_SERVICE_ENABLED: true,
 				});
-				const copyRoom = jest.fn();
+				const onCopyRoom = jest.fn();
 				const wrapper = getWrapper();
-				wrapper.vm.copyRoom = copyRoom;
+				wrapper.vm.onCopyRoom = onCopyRoom;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 				const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
 				await moreActionButton.trigger("click");
 
-				expect(copyRoom).toHaveBeenCalled();
+				expect(onCopyRoom).toHaveBeenCalled();
 			});
 		});
 

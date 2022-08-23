@@ -103,6 +103,7 @@ import {
 import { printDateFromStringUTC, fromNowToFuture } from "@plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
+import { envConfigModule } from "@/store";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -287,12 +288,14 @@ export default {
 					dataTestId: "content-card-task-menu-edit",
 				});
 
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiContentCopy,
-					action: () => this.copyCard(),
-					name: this.$t("common.actions.copy"),
-					dataTestId: "content-card-task-menu-copy",
-				});
+				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiContentCopy,
+						action: () => this.copyCard(),
+						name: this.$t("common.actions.copy"),
+						dataTestId: "content-card-task-menu-copy",
+					});
+				}
 
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({

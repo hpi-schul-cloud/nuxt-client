@@ -1,21 +1,21 @@
-import { Store } from "vuex";
-import { getModule } from "vuex-module-decorators";
 import AccountsModule from "@/store/accounts";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTaskModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import NewsModule from "@/store/news";
+import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskModule from "@/store/tasks";
-import NotifierModule from "@/store/notifier";
-import CopyModule from "@/store/copy-process";
+import { Store } from "vuex";
+import { getModule } from "vuex-module-decorators";
 
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
