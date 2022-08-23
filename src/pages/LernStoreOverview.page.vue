@@ -215,7 +215,7 @@ export default {
 						instance: this.$theme.name,
 					}),
 			  }
-			: { title: this.$t("global.sidebar.lernstore") };
+			: { title: this.$t("common.words.lernstore") };
 	},
 };
 </script>

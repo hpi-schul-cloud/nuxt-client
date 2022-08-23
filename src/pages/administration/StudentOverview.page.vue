@@ -222,43 +222,6 @@ export default {
 					label: "",
 				},
 			],
-			tableActions: [
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-					dataTestId: "consent_action",
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.email"
-					),
-					icon: "mail_outline",
-					"icon-source": "material",
-					action: this.handleBulkEMail,
-					dataTestId: "registration_link",
-				},
-				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
-					icon: "qrcode",
-					action: this.handleBulkQR,
-					dataTestId: "qr_code",
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.delete"
-					),
-					icon: "delete_outline",
-					"icon-source": "material",
-					action: this.handleBulkDelete,
-					permission: "STUDENT_DELETE",
-					dataTestId: "delete_action",
-				},
-			],
 			tableSelection: [],
 			tableSelectionType: "inclusive",
 			breadcrumbs: [
@@ -295,6 +258,49 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
+		tableActions() {
+			return [
+				{
+					label: this.isConsentNecessary
+						? this.$t(
+								"pages.administration.students.index.tableActions.consent"
+						  )
+						: this.$t(
+								"pages.administration.students.index.tableActions.registration"
+						  ),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+					dataTestId: "consent_action",
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
+				},
+				{
+					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+					dataTestId: "qr_code",
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+					permission: "STUDENT_DELETE",
+					dataTestId: "delete_action",
+				},
+			];
+		},
 		isConsentNecessary() {
 			return (
 				envConfigModule.getEnv &&
@@ -321,14 +327,6 @@ export default {
 					(action) =>
 						action.label !==
 						this.$t("pages.administration.students.index.tableActions.delete")
-				);
-			}
-
-			if (!this.isConsentNecessary) {
-				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.students.index.tableActions.consent")
 				);
 			}
 

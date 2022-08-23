@@ -161,9 +161,9 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(postLessonMock).toHaveBeenCalled();
 			});
 
-			it("should have 'copy' more action if copying lessons is enabled", async () => {
+			it("should have 'copy' more action if copying feature is enabled", async () => {
 				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -174,9 +174,9 @@ describe("@components/molecules/RoomLessonCard", () => {
 				expect(hasCopyMenuItem).toBe(true);
 			});
 
-			it("should not have 'copy' more action if copying lessons is not enabled", async () => {
+			it("should not have 'copy' more action if copying feature is not enabled", async () => {
 				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: false });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -189,7 +189,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
 				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_LESSON_COPY_ENABLED: true });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				wrapper.vm.copyCard = copyCard;

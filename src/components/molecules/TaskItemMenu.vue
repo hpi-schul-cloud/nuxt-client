@@ -38,7 +38,7 @@
 					</v-list-item-title>
 				</v-list-item>
 				<v-list-item
-					v-if="isTeacher"
+					v-if="isTeacher && copyServiceEnabled"
 					id="task-action-copy"
 					class="task-action"
 					data-testId="task-copy"
@@ -104,26 +104,10 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		<copy-process
-			v-if="isTeacher"
-			:is-open="copyProcess.isOpen"
-			:loading="isCopyModalLoading"
-			data-testid="copy-process"
-			@dialog-closed="onCopyProcessDialogClose"
-		>
-		</copy-process>
 	</div>
 </template>
 
 <script>
-import {
-	copyModule,
-	envConfigModule,
-	finishedTaskModule,
-	taskModule,
-} from "@/store";
-import CopyProcess from "@components/organisms/CopyProcess";
-import vCustomDialog from "@components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
 	mdiDotsVertical,
@@ -131,9 +115,16 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
+import {
+	copyModule,
+	envConfigModule,
+	finishedTaskModule,
+	taskModule,
+} from "@/store";
+import vCustomDialog from "@components/organisms/vCustomDialog";
 
 export default {
-	components: { vCustomDialog, CopyProcess },
+	components: { vCustomDialog },
 	props: {
 		taskId: {
 			type: String,
@@ -166,10 +157,6 @@ export default {
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
-			copyProcess: {
-				id: "",
-				isOpen: false,
-			},
 		};
 	},
 	computed: {
@@ -184,6 +171,9 @@ export default {
 		},
 		isTeacher() {
 			return this.userRole === "teacher";
+		},
+		copyServiceEnabled() {
+			return envConfigModule?.getEnv.FEATURE_COPY_SERVICE_ENABLED;
 		},
 	},
 	methods: {
@@ -204,37 +194,11 @@ export default {
 			taskModule.deleteTask(this.taskId);
 		},
 		async copyTask() {
-			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
-				window.location.href = this.copyLink;
-				return;
-			}
-			this.copyProcess.isOpen = true;
-			await copyModule.copyTask({ id: this.taskId, courseId: this.courseId });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError.statusCode !== "") {
-				this.$notifier({
-					text: this.$t("components.molecules.copyResult.error"),
-					status: "error",
-				});
-				return;
-			}
-
-			if (copyResult.id !== "") {
-				this.copyProcess.id = copyResult.id;
-
-				this.$notifier({
-					text: this.$t("pages.room.copy.task.message.copied"),
-					status: "success",
-				});
-			}
-		},
-		async onCopyProcessDialogClose() {
-			this.copyProcess.isOpen = false;
-			this.copyProcess.id = "";
-			await taskModule.fetchAllTasks();
-			taskModule.setActiveTab("drafts");
+			await copyModule.copy({
+				id: this.taskId,
+				courseId: this.courseId,
+				type: "task",
+			});
 		},
 	},
 };

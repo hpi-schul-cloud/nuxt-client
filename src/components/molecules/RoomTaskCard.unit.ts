@@ -1,5 +1,8 @@
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
 
 declare var createComponentMocks: Function;
 
@@ -218,6 +221,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
+		setupStores({ "env-config": EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -230,7 +234,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 		});
 
 		it("should redirect to homework page", () => {
-			const location = window.location;
+			const { location } = window;
 			const wrapper = getWrapper({ ...testProps, role });
 			const taskCard = wrapper.find(".task-card");
 			taskCard.trigger("click");
@@ -239,7 +243,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 		});
 
 		it("should NOT redirect to homework page if dragging is in progress", () => {
-			const location = window.location;
+			const { location } = window;
 			const wrapper = getWrapper({ ...testProps, role, dragInProgress: true });
 			const taskCard = wrapper.find(".task-card");
 			taskCard.trigger("click");
@@ -390,23 +394,6 @@ describe("@components/molecules/RoomTaskCard", () => {
 				);
 			});
 
-			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				const copyCard = jest.fn();
-				const wrapper = getWrapper({ ...testProps, role });
-				wrapper.vm.copyCard = copyCard;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.copy"
-				)}`;
-
-				const threeDotButton = wrapper.find(".three-dot-button");
-				await threeDotButton.trigger("click");
-
-				const moreActionButton = wrapper.find(buttonClassName);
-				await moreActionButton.trigger("click");
-
-				expect(copyCard).toHaveBeenCalled();
-			});
-
 			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
@@ -503,6 +490,47 @@ describe("@components/molecules/RoomTaskCard", () => {
 				expect(overrdueElement.element.innerHTML).toContain(
 					wrapper.vm.$i18n.t("pages.room.taskCard.teacher.label.overdue")
 				);
+			});
+
+			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
+				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
+					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
+						// @ts-ignore
+						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+						const copyCard = jest.fn();
+						const wrapper = getWrapper({ ...testProps, role });
+						wrapper.vm.copyCard = copyCard;
+						const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+							"common.actions.copy"
+						)}`;
+
+						const threeDotButton = wrapper.find(".three-dot-button");
+						await threeDotButton.trigger("click");
+
+						const moreActionButton = wrapper.find(buttonClassName);
+						await moreActionButton.trigger("click");
+
+						expect(copyCard).toHaveBeenCalled();
+					});
+				});
+
+				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
+					it("should not find the copy option in the 'more action' menu", async () => {
+						// @ts-ignore
+						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
+						const wrapper = getWrapper({ ...testProps, role });
+						const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
+							"common.actions.copy"
+						)}`;
+
+						const threeDotButton = wrapper.find(".three-dot-button");
+						await threeDotButton.trigger("click");
+
+						const moreActionButton = wrapper.findAll(buttonClassName);
+
+						expect(moreActionButton).toHaveLength(0);
+					});
+				});
 			});
 		});
 		describe("students", () => {

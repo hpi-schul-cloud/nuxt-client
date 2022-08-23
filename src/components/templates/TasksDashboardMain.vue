@@ -70,17 +70,25 @@
 				:tab-routes="tabRoutes"
 			/>
 		</div>
+		<copy-result-modal
+			v-if="isTeacher"
+			:is-loading="copyResultModalIsLoading"
+			:copy-result-items="copyResultModalItems"
+			:copy-result-status="copyResultModalStatus"
+			@dialog-closed="onCopyResultModalClose"
+		></copy-result-modal>
 	</default-wireframe>
 </template>
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import TasksDashboardTeacher from "./TasksDashboardTeacher";
-import TasksDashboardStudent from "./TasksDashboardStudent";
+import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import TasksDashboardStudent from "./TasksDashboardStudent";
+import TasksDashboardTeacher from "./TasksDashboardTeacher";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
@@ -94,6 +102,7 @@ export default {
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
 		vCustomSwitch,
+		CopyResultModal,
 	},
 	props: {
 		role: {
@@ -107,7 +116,7 @@ export default {
 			mdiPlus,
 		};
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["taskModule", "copyModule", "finishedTaskModule"],
 	computed: {
 		hasTasks() {
 			return this.taskModule.hasTasks;
@@ -272,6 +281,15 @@ export default {
 				subtitle,
 			};
 		},
+		copyResultModalIsLoading() {
+			return this.copyModule.getLoading;
+		},
+		copyResultModalStatus() {
+			return this.copyModule.getCopyResult?.status;
+		},
+		copyResultModalItems() {
+			return this.copyModule.getCopyResultFailedItems;
+		},
 	},
 	watch: {
 		tab(tab, oldTab) {
@@ -308,6 +326,11 @@ export default {
 			if (!this.finishedTasksIsInitialized) {
 				this.finishedTaskModule.fetchFinishedTasks();
 			}
+		},
+		async onCopyResultModalClose() {
+			this.copyModule.reset();
+			this.taskModule.setActiveTab("drafts");
+			await this.taskModule.fetchAllTasks();
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {
