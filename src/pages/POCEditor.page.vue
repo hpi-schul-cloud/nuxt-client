@@ -1,45 +1,49 @@
 <template>
 	<div>
-		<default-wireframe
-				headline="POC - Editor TipTap"
-				:full-width="false"
-		>
+		<default-wireframe headline="POC - Editor TipTap" :full-width="false">
 			<div>
 				<h3>Math formula render</h3>
-				<div><span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></div>
-				<div>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</div>
-				<div> Type <code>MathJax.Hub.Typeset()</code> in console, and it transforms into images. But not in editor...
-				TODO include matjax lib locally and remove tuhh.de from cors
+				<div>
+					<span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span>
+				</div>
+				<div>
+					When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and
+					they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+				</div>
+				<div>
+					Type <code>MathJax.Hub.Typeset()</code> in console, and it transforms
+					into images. But not in editor... TODO include matjax lib locally and
+					remove tuhh.de from cors
 				</div>
 			</div>
 			<div>
-					<h2>Editor 1</h2>
+				<h2>Editor 1</h2>
 
-						<text-editor
-								v-model="staticContent"
-								class="mb--md mt--xl-3"
-								placeholder-text="Extending tip-tap POC"
-								:advanced-toolbar="true"
-						/>
-						<div style="border: solid 1px green"><h3>Render Editor 1</h3>
-							<div v-html="staticContent"></div>
-						</div>
-
+				<text-editor
+					v-model="staticContent"
+					class="mb--md mt--xl-3"
+					placeholder-text="Extending tip-tap POC"
+					:advanced-toolbar="true"
+				/>
+				<div style="border: solid 1px green">
+					<h3>Render Editor 1</h3>
+					<div v-html="staticContent"></div>
 				</div>
-			<hr>
+			</div>
+			<hr />
 			<div>
 				<h2>Editor 2</h2>
 				<text-editor
-						v-model="staticContent2"
-						class="mb--md mt--xl-3"
-						placeholder-text="Extending TipTap POC"
-						:advanced-toolbar="false"
+					v-model="staticContent2"
+					class="mb--md mt--xl-3"
+					placeholder-text="Extending TipTap POC"
+					:advanced-toolbar="false"
 				/>
 
-				<div style="border: solid 1px green"><h3>Render Editor 2</h3>
+				<div style="border: solid 1px green">
+					<h3>Render Editor 2</h3>
 					<div v-html="staticContent2"></div>
 				</div>
-
 			</div>
 		</default-wireframe>
 	</div>
@@ -57,8 +61,8 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			staticContent2: '',
-			staticContent:`
+			staticContent2: "",
+			staticContent: `
 	<iframe src="https://www.google.com" style="width: 300px; height: 100px">This iframe should be converted into safe text</iframe>
 	<h2>h2 and some special chars Ώ😎</h2>
 	<p> <strong>strong</strong>. paragraph</p>
@@ -118,8 +122,8 @@ export default {
 	</p>
 	<p>AUDIO:
 		<audio src="/files/file?file=6304af4a90126d0f45e16c58&amp;name=1660204674504-audio.128.mp3" controls="true" controlslist="nodownload"></audio>
-	</p>`
-		}
+	</p>`,
+		};
 	},
 };
 </script>

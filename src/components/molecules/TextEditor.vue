@@ -110,7 +110,8 @@
 				unsetLink
 			</button>
 
-			<base-button v-if="advancedToolbar"
+			<base-button
+				v-if="advancedToolbar"
 				data-testid="editor_table"
 				:class="{ 'is-active': editor.isActive('table') }"
 				@click="
@@ -212,7 +213,7 @@ export default {
 		},
 		advancedToolbar: {
 			type: Boolean,
-		}
+		},
 	},
 	data() {
 		return {
@@ -255,7 +256,7 @@ export default {
 			extensions: [
 				StarterKit.configure({
 					blockquote: true,
-					text: true
+					text: true,
 				}),
 				HardBreak,
 				Heading.configure({ levels: [2, 3, 4] }),
