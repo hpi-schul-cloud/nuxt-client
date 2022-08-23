@@ -90,6 +90,7 @@
 			</base-button>
 
 			<base-button
+				v-if="advancedToolbar"
 				data-testid="editor_add_image"
 				:class="{ 'is-active': editor.isActive('undo') }"
 				@click="showImagePrompt"
@@ -109,7 +110,7 @@
 				unsetLink
 			</button>
 
-			<base-button
+			<base-button v-if="advancedToolbar"
 				data-testid="editor_table"
 				:class="{ 'is-active': editor.isActive('table') }"
 				@click="
@@ -177,7 +178,7 @@
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
 
-//import HardBreak from "@tiptap/extension-hard-break";
+import HardBreak from "@tiptap/extension-hard-break";
 
 import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
@@ -190,6 +191,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 
 import Placeholder from "@tiptap/extension-placeholder";
+import TextStyle from "@tiptap/extension-text-style";
 
 export default {
 	components: {
@@ -208,6 +210,9 @@ export default {
 			type: String,
 			default: "",
 		},
+		advancedToolbar: {
+			type: Boolean,
+		}
 	},
 	data() {
 		return {
@@ -248,8 +253,11 @@ export default {
 		this.editor = new Editor({
 			content: this.value,
 			extensions: [
-				StarterKit,
-				//HardBreak,
+				StarterKit.configure({
+					blockquote: true,
+					text: true
+				}),
+				HardBreak,
 				Heading.configure({ levels: [2, 3, 4] }),
 				Table.configure({
 					resizable: true,
@@ -260,7 +268,8 @@ export default {
 				Image,
 				Underline,
 				Link,
-				Placeholder.configure({ placeholder: this.placeholder }),
+				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
+				TextStyle, // keep span - seems not to work
 			],
 			onUpdate: this.editorUpdateHandler,
 		});
@@ -282,7 +291,7 @@ export default {
 			} else {
 				//this.content = content;
 				this.$emit("update", content);
-				this.$emit("input", content);
+				//this.$emit("input", content);
 			}
 			//MathJax.Hub.Typeset();
 		},

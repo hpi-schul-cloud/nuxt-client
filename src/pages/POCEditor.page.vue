@@ -1,42 +1,45 @@
 <template>
 	<div>
-		<default-wireframe headline="POC - Editor TipTap" :full-width="false">
+		<default-wireframe
+				headline="POC - Editor TipTap"
+				:full-width="false"
+		>
 			<div>
 				<h3>Math formula render</h3>
-				<div>
-					<span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span>
-				</div>
-				<div>
-					When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and
-					they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+				<div><span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></div>
+				<div>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</div>
+				<div> Type <code>MathJax.Hub.Typeset()</code> in console, and it transforms into images. But not in editor...
+				TODO include matjax lib locally and remove tuhh.de from cors
 				</div>
 			</div>
 			<div>
-				<h2>Editor 1</h2>
+					<h2>Editor 1</h2>
 
-				<text-editor
-					v-model="staticContent"
-					class="mb--md mt--xl-3"
-					placeholder-text="Extending tip-tap POC"
-				/>
-				<div style="border: solid 1px green">
-					<h3>Render Editor 1</h3>
-					<div v-html="staticContent"></div>
+						<text-editor
+								v-model="staticContent"
+								class="mb--md mt--xl-3"
+								placeholder-text="Extending tip-tap POC"
+								:advanced-toolbar="true"
+						/>
+						<div style="border: solid 1px green"><h3>Render Editor 1</h3>
+							<div v-html="staticContent"></div>
+						</div>
+
 				</div>
-			</div>
-			<hr />
+			<hr>
 			<div>
 				<h2>Editor 2</h2>
 				<text-editor
-					v-model="staticContent2"
-					class="mb--md mt--xl-3"
-					placeholder-text="Extending TipTap POC"
+						v-model="staticContent2"
+						class="mb--md mt--xl-3"
+						placeholder-text="Extending TipTap POC"
+						:advanced-toolbar="false"
 				/>
 
-				<div style="border: solid 1px green">
-					<h3>Render Editor 2</h3>
+				<div style="border: solid 1px green"><h3>Render Editor 2</h3>
 					<div v-html="staticContent2"></div>
 				</div>
+
 			</div>
 		</default-wireframe>
 	</div>
@@ -54,44 +57,35 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			staticContent2: "",
-			staticContent: `
-
-	<p>Wichtig ist, dass ihr die Zeilenlänge im Blick behaltet und eingreift</p>
-	<h2>Die ideale Zeilenlänge für ebsites (H1) Ώ😎</h2>
-	<p>Im Web werden circa. 45 – 75 Zeichen pro Zeile als ideal <strong>bezeichnet</strong>. Betrachtet diese Werte aber bitte nicht zu dogmatisch – Google spricht beispielweise von maximal 70 – 80 Zeichen je Zeile.</p>
-	<h3>Die ideale Zeilenlänge für Websites (H2)</h3>
-	<p><em>Im Web werden circa. 45 – 75 Zeichen pro Zeile als ideal bezeichnet. Betrachtet diese Werte aber bitte nicht zu dogmatisch – Google spricht beispielweise von maximal 70 – 80 Zeichen je Zeile.</em></p>
-	<p>Die ideale Zeilenlänge für Websites (H3)</p>
-	<p>Im Web <u>werden </u>circa. 45 – 75 <s>Zeichen </s>pro Zeile als ideal bezeichnet. Betrachtet diese Werte aber bitte nicht zu dogmatisch – Google spricht beispielweise von maximal 70 – 80 Zeichen je Zeile.</p>
+			staticContent2: '',
+			staticContent:`
+	<iframe src="https://www.google.com" style="width: 300px; height: 100px">This iframe should be converted into safe text</iframe>
+	<h2>h2 and some special chars Ώ😎</h2>
+	<p> <strong>strong</strong>. paragraph</p>
+	<h3>Die ideale Zeilenlänge für Websites (H3)</h3>
+	<p><em>some em here</em></p>
+	<p>Paragraph with <u>underline </u> and <s>strike trough</s>, a <sup>sup</sup>, a <sub>sub<sub> and also some <i>italic</i></p>
 	<ol>
 	   <li>
-	      <p>Im Web werden circa. 45 – 75 Zeichen pro Zeile als ideal bezeichnet.</p>
-	   </li>
-	   <li>
-	      <p>Betrachtet diese Werte aber bitte nicht zu dogmatisch –</p>
+	      unordered list element.
 	   </li>
 	</ol>
 	<ul>
 	   <li>
-	      <p>Betrachtet diese Werte aber bitte nicht zu dogmatisch –</p>
-	   </li>
-	   <li>
-	      <p>Google spricht beispielweise von maximal 70 – 80 Zeichen je Zeile. W</p>
+	      ordered list element
 	   </li>
 	</ul>
 	<blockquote>
-	   <p>Our posturings, our imagined self-importance, the delusion that we have some privileged position in the Universe, are challenged by this point of pale light. Our planet is a lonely speck in the great enveloping cosmic dark. In our obscurity, in all this vastness, there is no hint that help will come from elsewhere to save us from ourselves.</p>
+	   Blockquotes get rendered, but has no special style, therefor looks like regular paragraph
 	</blockquote>
-	<p><code>var myElement = document.getElementById("intro");</code></p>
+	<p>This should be a <span style="color: red">red span</span></p>
+	<p>Code: <code>var myElement = document.getElementById("intro");</code></p>
 	<hr contenteditable="false">
-	<p>$€¥©°ĒņŊ</p>
-	<p><span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></p>
+	<p>Funky chars: $€¥©°ĒņŊ</p>
+	<p>Math formula: <span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></p>
 	<div class="tableWrapper">
 	   <table style="min-width: 100px;">
 	      <colgroup>
-	         <col>
-	         <col>
 	         <col>
 	         <col>
 	      </colgroup>
@@ -103,12 +97,6 @@ export default {
 	            <td colspan="1" rowspan="1">
 	               <p>wieder&nbsp;</p>
 	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
-	            </td>
 	         </tr>
 	         <tr>
 	            <td colspan="1" rowspan="1">
@@ -116,48 +104,22 @@ export default {
 	            </td>
 	            <td colspan="1" rowspan="1">
 	               <p>wieder&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
-	            </td>
-	         </tr>
-	         <tr>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	         </tr>
-	         <tr>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
-	            </td>
-	            <td colspan="1" rowspan="1">
-	               <p>&nbsp;</p>
 	            </td>
 	         </tr>
 	      </tbody>
 	   </table>
 	</div>
-	<p><a href="http://www.gogle.com">Link</a></p>
-	<img src="/files/file?file=630348f6a37aa0001d6ad913&amp;name=katzen.jpg" alt="alt1" contenteditable="false" draggable="true">`,
-		};
+	<p>Some <a href="http://www.gogle.com">Link</a></p>
+	<p>IMAGE:
+		<figure class="image"><img src="/files/file?file=6304af4a90126d0f45e16c46&amp;name=1660118574955-katzen.jpg" alt="alt image attr"></figure>
+	</p>
+	<p>VIDEO:
+		<video src="/files/file?file=6304af4a90126d0f45e16c6f&amp;name=1660126664605-video.mp4" controls="true" controlslist="nodownload"></video>
+	</p>
+	<p>AUDIO:
+		<audio src="/files/file?file=6304af4a90126d0f45e16c58&amp;name=1660204674504-audio.128.mp3" controls="true" controlslist="nodownload"></audio>
+	</p>`
+		}
 	},
 };
 </script>
