@@ -3,8 +3,7 @@
 	"version": "0.0.0",
 	"scripts": {
 		"dev": "vite",
-		"build": "run-p type-check build-only",
-		"build-only": "vite build",
+		"build": "vite build",
 		"lint:markup": "vue-tsc --noEmit",
 		"lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
 		"lint:style": "stylelint src/**/*.{css,scss,vue}",
