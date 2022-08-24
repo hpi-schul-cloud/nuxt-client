@@ -1,3 +1,3 @@
-const getTheme = () => process.env.THEME || "default";
+const getTheme = () => process.env.SC_THEME || "default";
 
 export default getTheme;
