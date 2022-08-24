@@ -1,9 +1,9 @@
 import childProcess from "child_process";
 import fs from "fs";
+import getTheme from "../getTheme";
 
 export default function buildDefines() {
-	// const usedTheme = dotenv.config().parsed.THEME;
-	const usedTheme = process.env.THEME;
+	const usedTheme = getTheme();
 
 	return {
 		// "defines.env.APP_VERSION": JSON.stringify(

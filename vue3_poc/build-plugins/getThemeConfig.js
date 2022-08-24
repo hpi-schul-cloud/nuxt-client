@@ -1,5 +1,6 @@
+import getTheme from "./getTheme";
+
 export default function getThemeConfig() {
-	// const usedTheme = dotenv.config().parsed.THEME;
-	const usedTheme = process.env.THEME;
+	const usedTheme = getTheme();
 	return import(`./src/themes/${usedTheme}/config.mjs`);
 }

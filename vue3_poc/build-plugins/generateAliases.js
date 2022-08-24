@@ -1,13 +1,13 @@
 import getThemeConfig from "./getThemeConfig";
 import path from "path";
+import getTheme from "./getTheme";
 
 /**
  *
  * @returns {Promise<{find: string, replacement: string}[]>}
  */
 export default async function generateAliases(dirname) {
-	// const usedTheme = dotenv.config().parsed.THEME;
-	const usedTheme = process.env.THEME;
+	const usedTheme = getTheme();
 	const themePath = `./src/themes/${usedTheme}`;
 
 	const { replacements } = (await getThemeConfig()).default;

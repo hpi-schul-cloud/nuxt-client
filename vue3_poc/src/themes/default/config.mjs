@@ -1,13 +1,5 @@
 const config = {
-	replacements: [
-		/**
-		 * for replacing files we have two options. Either as simple string, which mirrows the cores file structure, or as find and replacement object.
-		 */
-		{
-			find: "App.vue",
-			replacement: "App.vue",
-		},
-	],
+	replacements: [],
 	defines: {
 		/**
 		 * you can use your .env file as well with "VITE_CUSTOM_VAR=value"
