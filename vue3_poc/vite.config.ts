@@ -3,14 +3,27 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vitest/config";
 import { UserConfig } from "vite";
 
+import buildDefines from "./build-plugins/buildDefines";
+import aliases from "./build-plugins/generateAliases";
+import replace from "./build-plugins/rollup/replaceFiles";
+
+import metadata from "./build-plugins/rollup/metadata";
+import getThemeDefines from "./build-plugins/getThemeDefines";
+
 // https://vitejs.dev/config/
 // https://stackoverflow.com/questions/72350551/combination-of-vue-3-vuetify-3-vue-test-utils-results-in-could-not-find-in
-export default defineConfig(({ command, mode, ssrBuild }) => {
+export default defineConfig(async () => {
+	const replacements = await aliases(__dirname);
+
 	const configBase: UserConfig = {
 		server: {
 			port: 4000,
 		},
-		plugins: [vue()],
+		plugins: [vue(), metadata(), replace(replacements)],
+		define: {
+			...buildDefines(),
+			...getThemeDefines(),
+		},
 		test: {
 			globals: true,
 			environment: "jsdom",
