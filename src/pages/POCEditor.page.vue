@@ -121,7 +121,7 @@ export default {
 		<video src="/files/file?file=6304af4a90126d0f45e16c6f&amp;name=1660126664605-video.mp4" controls="true" controlslist="nodownload"></video>
 	</p>
 	<p>AUDIO:</p>
-	<audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio>`,
+	<p><audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio></p>`,
 		};
 	},
 };

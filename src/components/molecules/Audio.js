@@ -2,7 +2,8 @@ import { Node, mergeAttributes } from "@tiptap/core";
 
 export default Node.create({
 	name: "audio",
-	group: "block",
+	inline: true,
+	group: "inline",
 	draggable: true,
 	selectable: true,
 
