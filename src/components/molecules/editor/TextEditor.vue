@@ -89,14 +89,6 @@
 				<base-icon source="material" icon="format_list_numbered" />
 			</base-button>
 
-			<base-button
-				v-if="advancedToolbar"
-				data-testid="editor_add_image"
-				:class="{ 'is-active': editor.isActive('undo') }"
-				@click="showImagePrompt"
-			>
-				<base-icon source="material" icon="image" />
-			</base-button>
 			<button
 				:class="{ 'is-active': editor.isActive('link') }"
 				@click="setLink"
@@ -110,6 +102,7 @@
 				unsetLink
 			</button>
 
+			<!-- Advanced toolbar actions -->
 			<base-button
 				v-if="advancedToolbar"
 				data-testid="editor_table"
@@ -125,12 +118,22 @@
 				<base-icon source="material" icon="table_chart" />
 			</base-button>
 			<base-button
+				v-if="advancedToolbar"
+				data-testid="editor_add_image"
+				:class="{ 'is-active': editor.isActive('undo') }"
+				@click="showImagePrompt"
+			>
+				<base-icon source="material" icon="image" />
+			</base-button>
+			<base-button
+				v-if="advancedToolbar"
 				data-testid="editor_audio"
 				:class="{ 'is-active': editor.isActive('audio') }"
 				@click="showAudioPrompt"
 			>
 				<base-icon source="material" icon="music_note" />
 			</base-button>
+			<!-- end advanced toolbar actions -->
 
 			<!-- context-menu for tables -->
 			<base-button
@@ -194,7 +197,7 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
-import Audio from "./Audio";
+import Audio from "./extensions/Audio";
 
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -268,18 +271,23 @@ export default {
 				}),
 				HardBreak,
 				Heading.configure({ levels: [2, 3, 4] }),
-				Table.configure({
-					resizable: true,
-				}),
-				TableRow,
-				TableHeader,
-				TableCell,
-				Image,
 				Underline,
-				Audio,
 				Link,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
 				TextStyle, // keep span - seems not to work
+
+				...(this.advancedToolbar
+					? [
+							Table.configure({
+								resizable: true,
+							}),
+							TableRow,
+							TableHeader,
+							TableCell,
+							Image,
+							Audio,
+					  ]
+					: []),
 			],
 			onUpdate: this.editorUpdateHandler,
 		});

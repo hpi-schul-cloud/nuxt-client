@@ -51,7 +51,7 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import TextEditor from "@components/molecules/TextEditor.vue";
+import TextEditor from "@components/molecules/editor/TextEditor.vue";
 
 export default {
 	components: {

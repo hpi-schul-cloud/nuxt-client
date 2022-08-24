@@ -79,7 +79,7 @@ import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
 import { newsModule } from "@/store";
 
-import TextEditor from "@components/molecules/TextEditor.vue";
+import TextEditor from "@components/molecules/editor/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
 import FormActions from "@components/molecules/FormActions.vue";
 
