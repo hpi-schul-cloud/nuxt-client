@@ -89,7 +89,7 @@ export default {
 	   </li>
 	</ul>
 	<blockquote>
-	   Blockquotes get rendered, but has no special style, therefor looks like regular paragraph
+	   Blockquotes get rendered with text-editor scoped style, perfect for not duplicate style this readonly mode
 	</blockquote>
 	<p>This should be a <span style="color: red">red span</span></p>
 	<p>Code: <code>var myElement = document.getElementById("intro");</code></p>

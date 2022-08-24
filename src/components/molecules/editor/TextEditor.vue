@@ -422,5 +422,36 @@ export default {
 	::v-deep table th {
 		background-color: var(--color-gray-light);
 	}
+
+	::v-deep blockquote {
+		position: relative;
+		width: 80%;
+		padding: var(--radius-lg);
+		margin: var(--radius-lg) auto;
+		color: var(--color-warning);
+		text-align: center;
+	}
+
+	::v-deep blockquote::before,
+	::v-deep blockquote::after {
+		position: absolute;
+		font-size: var(--sidebar-sub-item-height);
+		color: var(--color-warning);
+	}
+
+	::v-deep blockquote::before {
+		right: 100%;
+		bottom: calc(-1 * var(--radius-lg));
+		margin-right: calc(-1 * var(--radius-lg));
+		content: '"';
+	}
+
+	::v-deep blockquote::after {
+		top: calc(-1 * var(--radius-lg));
+		bottom: auto;
+		left: 100%;
+		margin-left: calc(-1 * var(--radius-lg));
+		content: '"';
+	}
 }
 </style>
