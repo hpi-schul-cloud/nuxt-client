@@ -104,7 +104,7 @@
 
 			<!-- Advanced toolbar actions -->
 			<base-button
-				v-if="advancedToolbar"
+				v-if="advancedFeatures"
 				data-testid="editor_table"
 				:class="{ 'is-active': editor.isActive('table') }"
 				@click="
@@ -118,7 +118,7 @@
 				<base-icon source="material" icon="table_chart" />
 			</base-button>
 			<base-button
-				v-if="advancedToolbar"
+				v-if="advancedFeatures"
 				data-testid="editor_add_image"
 				:class="{ 'is-active': editor.isActive('undo') }"
 				@click="showImagePrompt"
@@ -126,7 +126,7 @@
 				<base-icon source="material" icon="image" />
 			</base-button>
 			<base-button
-				v-if="advancedToolbar"
+				v-if="advancedFeatures"
 				data-testid="editor_audio"
 				:class="{ 'is-active': editor.isActive('audio') }"
 				@click="showAudioPrompt"
@@ -134,7 +134,7 @@
 				<base-icon source="material" icon="music_note" />
 			</base-button>
 			<base-button
-				v-if="advancedToolbar"
+				v-if="advancedFeatures"
 				data-testid="editor_video"
 				:class="{ 'is-active': editor.isActive('video') }"
 				@click="showVideoPrompt"
@@ -230,7 +230,10 @@ export default {
 			type: String,
 			default: "",
 		},
-		advancedToolbar: {
+		readonly: {
+			type: Boolean,
+		},
+		advancedFeatures: {
 			type: Boolean,
 		},
 	},
@@ -272,6 +275,7 @@ export default {
 	mounted() {
 		this.editor = new Editor({
 			content: this.value,
+			editable: !this.readonly,
 			extensions: [
 				StarterKit.configure({
 					blockquote: true,
@@ -286,7 +290,7 @@ export default {
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
 				TextStyle, // keep span - seems not to work
 
-				...(this.advancedToolbar
+				...(this.advancedFeatures
 					? [
 							Table.configure({
 								resizable: true,

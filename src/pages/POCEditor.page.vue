@@ -23,11 +23,16 @@
 					v-model="staticContent"
 					class="mb--md mt--xl-3"
 					placeholder-text="Extending tip-tap POC"
-					:advanced-toolbar="true"
+					:advanced-features="true"
 				/>
 				<div style="border: solid 1px green">
 					<h3>Render Editor 1</h3>
-					<div v-html="staticContent"></div>
+					<text-editor
+						v-model="staticContent"
+						class="mb--md mt--xl-3"
+						:readonly="true"
+						:advanced-features="true"
+					/>
 				</div>
 			</div>
 			<hr />
@@ -42,7 +47,11 @@
 
 				<div style="border: solid 1px green">
 					<h3>Render Editor 2</h3>
-					<div v-html="staticContent2"></div>
+					<text-editor
+						v-model="staticContent2"
+						class="mb--md mt--xl-3"
+						:readonly="true"
+					/>
 				</div>
 			</div>
 		</default-wireframe>
