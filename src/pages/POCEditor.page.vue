@@ -68,7 +68,7 @@ export default {
 	<p> <strong>strong</strong>. paragraph</p>
 	<h3>Die ideale Zeilenlänge für Websites (H3)</h3>
 	<p><em>some em here</em></p>
-	<p>Paragraph with <u>underline </u> and <s>strike trough</s>, a <sup>sup</sup>, a <sub>sub<sub> and also some <i>italic</i></p>
+	<p>Paragraph with <u>underline </u> and <s>strike trough</s>, a <sup>sup</sup>, a <sub>sub</sub> and also some <i>italic</i></p>
 	<ol>
 	   <li>
 	      unordered list element.
