@@ -2,6 +2,7 @@ import AccountsModule from "@/store/accounts";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
@@ -23,6 +24,7 @@ export default () => {
 		provide("authModule", getModule(AuthModule, store));
 		provide("autoLogoutModule", getModule(AutoLogoutModule, store));
 		provide("contentModule", getModule(ContentModule, store));
+		provide("copyModule", getModule(CopyModule, store));
 		provide("envConfigModule", getModule(EnvConfigModule, store));
 		provide("filePathsModule", getModule(FilePathsModule, store));
 		provide("filesPOCModule", getModule(FilesPOCModule, store));
