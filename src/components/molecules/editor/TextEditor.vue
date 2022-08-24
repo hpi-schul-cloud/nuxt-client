@@ -133,6 +133,14 @@
 			>
 				<base-icon source="material" icon="music_note" />
 			</base-button>
+			<base-button
+				v-if="advancedToolbar"
+				data-testid="editor_video"
+				:class="{ 'is-active': editor.isActive('video') }"
+				@click="showVideoPrompt"
+			>
+				<base-icon source="material" icon="movie" />
+			</base-button>
 			<!-- end advanced toolbar actions -->
 
 			<!-- context-menu for tables -->
@@ -198,6 +206,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import Audio from "./extensions/Audio";
+import Video from "./extensions/Video";
 
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -286,6 +295,7 @@ export default {
 							TableCell,
 							Image,
 							Audio,
+							Video,
 					  ]
 					: []),
 			],
@@ -323,6 +333,12 @@ export default {
 			const url = window.prompt("Audio File", "http://192.168.1.136/musik.mp3");
 			if (url) {
 				this.editor.chain().focus().setAudio({ src: url }).run();
+			}
+		},
+		showVideoPrompt() {
+			const url = window.prompt("Video File", "http://192.168.1.136/film.mp4");
+			if (url) {
+				this.editor.chain().focus().setVideo({ src: url }).run();
 			}
 		},
 		isInvalid(content) {
