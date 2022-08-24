@@ -15,7 +15,7 @@ export default function replaceFiles(replacements) {
 			const resolved = await this.resolve(source, importer, { skipSelf: true });
 
 			const foundReplace = replacements.find(
-				(replacement) => replacement.find === resolved.id
+				(replacement) => resolved?.id === replacement.find
 			);
 
 			if (foundReplace) {

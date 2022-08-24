@@ -1,5 +1,5 @@
 <template>
-	<h1>Brandenburg Theme</h1>
+	<h1>Niedersachsen Theme</h1>
 </template>
 
 <script>
