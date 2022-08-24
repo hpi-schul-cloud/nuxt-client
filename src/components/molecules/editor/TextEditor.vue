@@ -196,23 +196,22 @@
 <script>
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
-
 import HardBreak from "@tiptap/extension-hard-break";
-
 import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextStyle from "@tiptap/extension-text-style";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
+import Image from "@tiptap/extension-image";
 import Audio from "./extensions/Audio";
 import Video from "./extensions/Video";
-
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-
-import Placeholder from "@tiptap/extension-placeholder";
-import TextStyle from "@tiptap/extension-text-style";
 
 export default {
 	components: {
@@ -282,6 +281,8 @@ export default {
 				Heading.configure({ levels: [2, 3, 4] }),
 				Underline,
 				Link,
+				Subscript,
+				Superscript,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
 				TextStyle, // keep span - seems not to work
 
