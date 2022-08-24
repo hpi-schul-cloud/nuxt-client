@@ -7,6 +7,10 @@ const config = {
 			find: "App.vue",
 			replacement: "App.vue",
 		},
+		{
+			find: "styles/main.scss",
+			replacement: "styles/main.scss",
+		},
 	],
 };
 

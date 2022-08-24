@@ -5,6 +5,7 @@ import { UserConfig } from "vite";
 
 import generateAliases from "./build-plugins/generateAliases";
 import replaceFiles from "./build-plugins/rollup/replaceFiles";
+import vuetify from "vite-plugin-vuetify";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
@@ -14,7 +15,7 @@ export default defineConfig(async () => {
 		server: {
 			port: 4000,
 		},
-		plugins: [vue(), replaceFiles(replacements)],
+		plugins: [vue(), vuetify({ styles: "expose" }), replaceFiles(replacements)],
 		test: {
 			globals: true,
 			environment: "jsdom",

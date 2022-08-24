@@ -13,7 +13,7 @@
 			</div>
 			<br />
 			<div>
-				<v-btn @click="onIncreaseCounter">
+				<v-btn color="primary" @click="onIncreaseCounter">
 					Counter in the component {{ counter }}
 				</v-btn>
 			</div>
@@ -81,7 +81,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
 	display: flex;
 	justify-content: center;

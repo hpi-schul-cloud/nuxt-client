@@ -1,5 +1,6 @@
 <template>
 	<h1>Niedersachsen Theme</h1>
+	<router-view />
 </template>
 
 <script>
