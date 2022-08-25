@@ -5,7 +5,11 @@ const config = {
 		 */
 		{
 			find: "App.vue",
-			replacement: "App123.vue",
+			replacement: "App.vue",
+		},
+		{
+			find: "components/ImpressumNew.vue",
+			replacement: "ImpressumNew.vue",
 		},
 		{
 			find: "styles/main.scss",
@@ -15,7 +19,6 @@ const config = {
 };
 
 export default config;
-
 
 /**
  * Edge Cases:
