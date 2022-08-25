@@ -1,4 +1,6 @@
 import path from "path";
+import fs from "fs";
+import { exit } from "process";
 
 /**
  * @function replaceFiles
@@ -11,16 +13,17 @@ export default function replaceFiles(replacements) {
 		return null;
 	}
 
-	// maybe we can also use this place to check the existence of replacemtents
-	// (instead of in the buildStart() hook)
+	replacements.forEach((repl) => {
+		const path = repl.replacement;
+		if (!fs.existsSync(path)) {
+			console.error("replacement file does not exist: ", path);
+			exit(1);
+		}
+	});
 
 	return {
 		name: "rollup-plugin-replace-files",
 		enforce: "pre",
-		async buildStart(options) {
-			console.log("buildStart: ", options);
-			// TODO check existence of replacemtents
-		},
 		async resolveId(source, importer) {
 			const resolved = await this.resolve(source, importer, { skipSelf: true });
 
