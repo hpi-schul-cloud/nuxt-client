@@ -1,8 +1,11 @@
+import path from "path";
+
 /**
  * @function replaceFiles
  * @param {({find: string, replacement: string})[]} replacements
  * @return {({name: "rollup-plugin-replace-files", enforce: "pre", Promise<resolveId>})}
  */
+
 export default function replaceFiles(replacements) {
 	if (!replacements?.length) {
 		return null;
@@ -14,9 +17,14 @@ export default function replaceFiles(replacements) {
 		async resolveId(source, importer) {
 			const resolved = await this.resolve(source, importer, { skipSelf: true });
 
-			const foundReplace = replacements.find(
-				(replacement) => resolved?.id === replacement.find
-			);
+			const foundReplace = replacements.find((replacement) => {
+				if (resolved?.id === undefined) {
+					return false;
+				}
+				return (
+					path.normalize(resolved?.id) === path.normalize(replacement.find)
+				);
+			});
 
 			if (foundReplace) {
 				console.info(

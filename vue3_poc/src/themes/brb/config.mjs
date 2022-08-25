@@ -5,7 +5,7 @@ const config = {
 		 */
 		{
 			find: "App.vue",
-			replacement: "App.vue",
+			replacement: "App123.vue",
 		},
 		{
 			find: "styles/main.scss",
@@ -15,3 +15,13 @@ const config = {
 };
 
 export default config;
+
+
+/**
+ * Edge Cases:
+ *  1. Found "find" but cannot find "replacement" -> ERROR
+ *  2. "find" and "replacement" have different file-names -> ?
+ *  3. "find" and "replacement" have different paths -> ?
+ *  4. "find" is hit multiple times in different subtrees -> ?
+ *  5. "find" cannot be found -> ERROR
+ */
