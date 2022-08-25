@@ -201,7 +201,7 @@ import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import TextStyle from "@tiptap/extension-text-style";
+//import TextStyle from "@tiptap/extension-text-style";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 
@@ -212,6 +212,7 @@ import TableRow from "@tiptap/extension-table-row";
 import Image from "@tiptap/extension-image";
 import Audio from "./extensions/Audio";
 import Video from "./extensions/Video";
+import Math from "./extensions/Math";
 
 export default {
 	components: {
@@ -288,7 +289,7 @@ export default {
 				Subscript,
 				Superscript,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
-				TextStyle, // keep span - seems not to work
+				//TextStyle, // keep span - seems not to work
 
 				...(this.advancedFeatures
 					? [
@@ -298,9 +299,10 @@ export default {
 							TableRow,
 							TableHeader,
 							TableCell,
-							Image,
 							Audio,
 							Video,
+							Math,
+							Image,
 					  ]
 					: []),
 			],

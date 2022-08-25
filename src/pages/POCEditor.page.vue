@@ -57,7 +57,6 @@
 		</default-wireframe>
 	</div>
 </template>
-
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TextEditor from "@components/molecules/editor/TextEditor.vue";
@@ -95,7 +94,7 @@ export default {
 	<p>Code: <code>var myElement = document.getElementById("intro");</code></p>
 	<hr contenteditable="false">
 	<p>Funky chars: $€¥©°ĒņŊ</p>
-	<p>Math formula: <span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></p>
+	<p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
 	<div class="tableWrapper">
 	   <table style="min-width: 100px;">
 	      <colgroup>
