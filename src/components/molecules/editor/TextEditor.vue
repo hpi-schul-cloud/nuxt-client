@@ -1,198 +1,193 @@
 <template>
 	<div v-if="editor" class="editor">
 		<div class="default-menu">
-			<base-button
-				data-testid="editor_undo"
-				:class="{ 'is-active': editor.isActive('undo') }"
-				@click="editor.chain().focus().undo().run()"
-			>
-				<base-icon source="material" icon="undo" />
-			</base-button>
+			<div>Simple:
+				<base-button
+					data-testid="editor_undo"
+					:class="{ 'is-active': editor.isActive('undo') }"
+					@click="editor.chain().focus().undo().run()"
+				>
+					<base-icon source="material" icon="undo" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_redo"
-				:class="{ 'is-active': editor.isActive('redo') }"
-				@click="editor.chain().focus().redo().run()"
-			>
-				<base-icon source="material" icon="redo" />
-			</base-button>
+				<base-button
+					data-testid="editor_redo"
+					:class="{ 'is-active': editor.isActive('redo') }"
+					@click="editor.chain().focus().redo().run()"
+				>
+					<base-icon source="material" icon="redo" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_bold"
-				:class="{ 'is-active': editor.isActive('bold') }"
-				@click="editor.chain().focus().toggleBold().run()"
-			>
-				<base-icon source="material" icon="format_bold" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_bold"
+					:class="{ 'is-active': editor.isActive('bold') }"
+					@click="editor.chain().focus().toggleBold().run()"
+				>
+					<base-icon source="material" icon="format_bold" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_italic"
-				:class="{ 'is-active': editor.isActive('italic') }"
-				@click="editor.chain().focus().toggleItalic().run()"
-			>
-				<base-icon source="material" icon="format_italic" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_italic"
+					:class="{ 'is-active': editor.isActive('italic') }"
+					@click="editor.chain().focus().toggleItalic().run()"
+				>
+					<base-icon source="material" icon="format_italic" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_underlined"
-				:class="{ 'is-active': editor.isActive('underline') }"
-				@click="editor.chain().focus().toggleUnderline().run()"
-			>
-				<base-icon source="material" icon="format_underlined" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_underlined"
+					:class="{ 'is-active': editor.isActive('underline') }"
+					@click="editor.chain().focus().toggleUnderline().run()"
+				>
+					<base-icon source="material" icon="format_underlined" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_strikethrough"
-				:class="{ 'is-active': editor.isActive('strike') }"
-				@click="editor.chain().focus().toggleStrike().run()"
-			>
-				<base-icon source="material" icon="format_strikethrough" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_strikethrough"
+					:class="{ 'is-active': editor.isActive('strike') }"
+					@click="editor.chain().focus().toggleStrike().run()"
+				>
+					<base-icon source="material" icon="format_strikethrough" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_h1"
-				:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-				@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-			>
-				H1
-			</base-button>
-			<base-button
-				data-testid="editor_format_h2"
-				:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-				@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-			>
-				H2
-			</base-button>
-			<base-button
-				data-testid="editor_format_h3"
-				:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
-				@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-			>
-				H3
-			</base-button>
+				<base-button
+					data-testid="editor_format_h1"
+					:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+				>
+					H1
+				</base-button>
+				<base-button
+					data-testid="editor_format_h2"
+					:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+				>
+					H2
+				</base-button>
+				<base-button
+					data-testid="editor_format_h3"
+					:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
+					@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
+				>
+					H3
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_list_bulleted"
-				:class="{ 'is-active': editor.isActive('bulletList') }"
-				:disabled="isInHeading"
-				@click="editor.chain().focus().toggleBulletList().run()"
-			>
-				<base-icon source="material" icon="format_list_bulleted" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_list_bulleted"
+					:class="{ 'is-active': editor.isActive('bulletList') }"
+					:disabled="isInHeading"
+					@click="editor.chain().focus().toggleBulletList().run()"
+				>
+					<base-icon source="material" icon="format_list_bulleted" />
+				</base-button>
 
-			<base-button
-				data-testid="editor_format_list_numbered"
-				:class="{ 'is-active': editor.isActive('orderedList') }"
-				:disabled="isInHeading"
-				@click="editor.chain().focus().toggleOrderedList().run()"
-			>
-				<base-icon source="material" icon="format_list_numbered" />
-			</base-button>
+				<base-button
+					data-testid="editor_format_list_numbered"
+					:class="{ 'is-active': editor.isActive('orderedList') }"
+					:disabled="isInHeading"
+					@click="editor.chain().focus().toggleOrderedList().run()"
+				>
+					<base-icon source="material" icon="format_list_numbered" />
+				</base-button>
 
-			<button
-				:class="{ 'is-active': editor.isActive('link') }"
-				@click="setLink"
-			>
-				setLink
-			</button>
-			<button
-				:disabled="!editor.isActive('link')"
-				@click="editor.chain().focus().unsetLink().run()"
-			>
-				unsetLink
-			</button>
+				<base-button
+					:class="{ 'is-active': editor.isActive('link') }"
+					@click="setLink"
+				>
+					<base-icon source="material" icon="link" />
+				</base-button>
+				<base-button
+					:disabled="!editor.isActive('link')"
+					@click="editor.chain().focus().unsetLink().run()"
+				>
+					<base-icon source="material" icon="link_off" />
+				</base-button>
+			</div>
 
 			<!-- Advanced toolbar actions -->
-			<base-button
-				v-if="advancedFeatures"
-				data-testid="editor_table"
-				:class="{ 'is-active': editor.isActive('table') }"
-				@click="
-					editor
-						.chain()
-						.focus()
-						.insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-						.run()
-				"
-			>
-				<base-icon source="material" icon="table_chart" />
-			</base-button>
-			<base-button
-				v-if="advancedFeatures"
-				data-testid="editor_add_image"
-				:class="{ 'is-active': editor.isActive('undo') }"
-				@click="showImagePrompt"
-			>
-				<base-icon source="material" icon="image" />
-			</base-button>
-			<base-button
-				v-if="advancedFeatures"
-				data-testid="editor_audio"
-				:class="{ 'is-active': editor.isActive('audio') }"
-				@click="showAudioPrompt"
-			>
-				<base-icon source="material" icon="music_note" />
-			</base-button>
-			<base-button
-				v-if="advancedFeatures"
-				data-testid="editor_video"
-				:class="{ 'is-active': editor.isActive('video') }"
-				@click="showVideoPrompt"
-			>
-				<base-icon source="material" icon="movie" />
-			</base-button>
+			<div v-if="advancedFeatures">Advanced:
+				<base-button
+					data-testid="editor_table"
+					:class="{ 'is-active': editor.isActive('table') }"
+					@click="
+						editor
+							.chain()
+							.focus()
+							.insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+							.run()
+					"
+				>
+					<base-icon source="material" icon="table_chart" />
+				</base-button>
+				<base-button
+					data-testid="editor_add_image"
+					:class="{ 'is-active': editor.isActive('undo') }"
+					@click="showImagePrompt"
+				>
+					<base-icon source="material" icon="image" />
+				</base-button>
+				<base-button
+					data-testid="editor_audio"
+					:class="{ 'is-active': editor.isActive('audio') }"
+					@click="showAudioPrompt"
+				>
+					<base-icon source="material" icon="music_note" />
+				</base-button>
+				<base-button
+					data-testid="editor_video"
+					:class="{ 'is-active': editor.isActive('video') }"
+					@click="showVideoPrompt"
+				>
+					<base-icon source="material" icon="movie" />
+				</base-button>
+			</div>
 			<!-- end advanced toolbar actions -->
 
 			<!-- context-menu for tables -->
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_add_column_before"
-				@click="editor.chain().focus().addColumnBefore().run()"
-			>
-				addColumnBefore
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_add_column_after"
-				@click="editor.chain().focus().addColumnAfter().run()"
-			>
-				addColumnAfter
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_add_row_before"
-				@click="editor.chain().focus().addRowBefore().run()"
-			>
-				addRowBefore
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_add_row_after"
-				@click="editor.chain().focus().addRowAfter().run()"
-			>
-				addRowAfter
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_delete_row"
-				@click="editor.chain().focus().deleteRow().run()"
-			>
-				deleteRow
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_delete_column"
-				@click="editor.chain().focus().deleteColumn().run()"
-			>
-				deleteColumn
-			</base-button>
-			<base-button
-				v-if="showTableMenu"
-				data-testid="editor_table_merge_cells"
-				@click="editor.chain().focus().mergeCells().run()"
-			>
-				merge Cells
-			</base-button>
+			<div v-if="showTableMenu">Table:
+				<base-button
+					data-testid="editor_table_add_column_before"
+					@click="editor.chain().focus().addColumnBefore().run()"
+				>
+					addColumnBefore
+				</base-button>
+				<base-button
+					data-testid="editor_table_add_column_after"
+					@click="editor.chain().focus().addColumnAfter().run()"
+				>
+					addColumnAfter
+				</base-button>
+				<base-button
+					data-testid="editor_table_add_row_before"
+					@click="editor.chain().focus().addRowBefore().run()"
+				>
+					addRowBefore
+				</base-button>
+				<base-button
+					data-testid="editor_table_add_row_after"
+					@click="editor.chain().focus().addRowAfter().run()"
+				>
+					addRowAfter
+				</base-button>
+				<base-button
+					data-testid="editor_table_delete_row"
+					@click="editor.chain().focus().deleteRow().run()"
+				>
+					deleteRow
+				</base-button>
+				<base-button
+					data-testid="editor_table_delete_column"
+					@click="editor.chain().focus().deleteColumn().run()"
+				>
+					deleteColumn
+				</base-button>
+				<base-button @click="editor.chain().focus().mergeCells().run()">
+					mergeCells
+				</base-button>
+				<base-button @click="editor.chain().focus().splitCell().run()">
+					splitCell
+				</base-button>
+			</div>
 			<!-- end-context-based menu for tables -->
 		</div>
 
@@ -208,7 +203,6 @@ import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-//import TextStyle from "@tiptap/extension-text-style";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 
@@ -294,13 +288,11 @@ export default {
 				HardBreak,
 				Heading.configure({ levels: [2, 3, 4] }),
 				Underline,
-				Link,
+				Link.configure({ openOnClick: false }),
 				Subscript,
 				Superscript,
 				Span,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
-				//TextStyle, // keep span - seems not to work
-
 				...(this.advancedFeatures
 					? [
 							Table.configure({
@@ -511,5 +503,9 @@ export default {
 			margin: 0;
 		}
 	}
+}
+
+button.is-active {
+	background-color: var(--color-secondary-dark);
 }
 </style>
