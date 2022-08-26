@@ -27,12 +27,7 @@
 				/>
 				<div style="border: solid 1px green">
 					<h3>Render Editor 1</h3>
-					<text-editor
-						v-model="staticContent"
-						class="mb--md mt--xl-3"
-						:readonly="true"
-						:advanced-features="true"
-					/>
+					<div v-html="staticContent"></div>
 				</div>
 			</div>
 			<hr />
@@ -47,11 +42,7 @@
 
 				<div style="border: solid 1px green">
 					<h3>Render Editor 2</h3>
-					<text-editor
-						v-model="staticContent2"
-						class="mb--md mt--xl-3"
-						:readonly="true"
-					/>
+					<div v-html="staticContent2"></div>
 				</div>
 			</div>
 		</default-wireframe>
@@ -94,7 +85,7 @@ export default {
 	<p>Code: <code>var myElement = document.getElementById("intro");</code></p>
 	<hr contenteditable="false">
 	<p>Funky chars: $€¥©°ĒņŊ</p>
-	<p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
+<p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
 	<div class="tableWrapper">
 	   <table style="min-width: 100px;">
 	      <colgroup>

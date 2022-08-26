@@ -45,7 +45,17 @@ export default {
 		renderMathJax() {
 			this.renderContent();
 			if (window.MathJax) {
-				window.MathJax.Hub.Queue([this.$refs.mathJaxEl]);
+				window.MathJax.Hub.Config({
+					"HTML-CSS": {
+						styles: { ".math-tex": { margin: 0 } },
+						linebreaks: { automatic: true },
+					},
+				});
+				window.MathJax.Hub.Queue([
+					"Typeset",
+					window.MathJax.Hub,
+					this.$refs.mathJaxEl,
+				]);
 			}
 		},
 	},
