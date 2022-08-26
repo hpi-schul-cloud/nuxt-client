@@ -94,19 +94,23 @@ export default {
 	      </colgroup>
 	      <tbody>
 	         <tr>
-	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
+			 	<th>Firstname</th>
+				<th>Lastname</th>
+			</tr>
+			 <tr>
+	            <td>
+	               <p>Peter</p>
 	            </td>
 	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
+	               <p>Lustig</p>
 	            </td>
 	         </tr>
 	         <tr>
 	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
+	               <p>Hans</p>
 	            </td>
 	            <td colspan="1" rowspan="1">
-	               <p>wieder&nbsp;</p>
+	               <p>Dampf</p>
 	            </td>
 	         </tr>
 	      </tbody>
