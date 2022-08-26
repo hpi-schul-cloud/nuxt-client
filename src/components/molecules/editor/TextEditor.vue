@@ -186,6 +186,13 @@
 			>
 				deleteColumn
 			</base-button>
+			<base-button
+				v-if="showTableMenu"
+				data-testid="editor_table_merge_cells"
+				@click="editor.chain().focus().mergeCells().run()"
+			>
+				merge Cells
+			</base-button>
 			<!-- end-context-based menu for tables -->
 		</div>
 
@@ -412,19 +419,6 @@ export default {
 		content: attr(data-empty-text);
 	}
 
-	::v-deep table td,
-	::v-deep table th {
-		position: relative;
-		min-width: 1em;
-		padding: var(--space-xs-2);
-		vertical-align: top;
-		border: var(--border-width-bold) solid var(--color-gray-medium);
-	}
-
-	::v-deep table th {
-		background-color: var(--color-gray-light);
-	}
-
 	::v-deep blockquote {
 		position: relative;
 		width: 80%;
@@ -454,6 +448,65 @@ export default {
 		left: 100%;
 		margin-left: calc(-1 * var(--radius-lg));
 		content: '"';
+	}
+
+	:root {
+		--z-index-2: 2;
+	}
+
+	::v-deep table {
+		width: 100%;
+		margin: 0;
+		overflow: hidden;
+		table-layout: fixed;
+		border-collapse: collapse;
+
+		td,
+		th {
+			position: relative;
+			min-width: var(--radius-lg);
+			padding: var(--border-width-bold) calc(3 * var(--border-width-bold));
+			overflow: hidden;
+			vertical-align: top;
+			border: var(--border-width-bold) solid #ced4da;
+
+			> * {
+				margin-bottom: 0;
+			}
+		}
+
+		th {
+			font-weight: var(--font-weight-bold);
+			text-align: left;
+			background: #f1f3f5;
+		}
+
+		/* stylelint-disable-next-line */
+		.selectedCell::after {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: var(--z-index-2);
+			pointer-events: none;
+			content: "";
+			background: rgba(200, 200, 255, 0.4);
+		}
+
+		.column-resize-handle {
+			position: absolute;
+			top: 0;
+			right: -2px;
+			bottom: -2px;
+			width: 4px;
+			pointer-events: none;
+			background: #adf;
+		}
+
+		p {
+			margin: 0;
+		}
 	}
 }
 </style>
