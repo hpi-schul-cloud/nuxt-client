@@ -1,3 +1,18 @@
-@use "vuetify/styles" with (
-	$border-radius-root: 6px
+@use "vuetify/styles" as vuetify with (
+	// $utilities: true,
+	$border-radius-root: 16px,
+	$grid-breakpoints: ("xs": 0),
+	$typography: (
+		"h2": (
+			"size": 8.75rem,
+		)
+	),
+	$button-height: 80px,
+	$utilities: (
+		"overflow": (
+			property: overflow,
+			values: auto hidden visible inherit,
+		)
+	)
 );
+@debug vuetify.$typography;

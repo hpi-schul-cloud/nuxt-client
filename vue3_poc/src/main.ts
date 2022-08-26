@@ -7,8 +7,6 @@ import router from "./router";
 
 loadFonts();
 
-import "./assets/style.css";
-
 const app = createApp(App);
 
 app.use(createPinia());
