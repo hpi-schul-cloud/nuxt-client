@@ -12,8 +12,12 @@ const config = {
 			replacement: "ImpressumNew.vue",
 		},
 		{
-			find: "styles/main.scss",
-			replacement: "styles/main.scss",
+			find: "styles/variables.scss",
+			replacement: "styles/variables.scss",
+		},
+		{
+			find: "styles/custom-theme.ts",
+			replacement: "styles/custom-theme.ts",
 		},
 	],
 };

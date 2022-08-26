@@ -1,16 +1,17 @@
-@use "roboto-font-face.css";
+@use "roboto-font-face";
+@use "variables" as bc;
 
 @use "vuetify/styles" as vuetify with (
-	$border-radius-root: 16px,
+	$border-radius-root: bc.$border-radius,
 	$typography: (
 		"h2": (
-			"size": 2.75rem,
-		)
+			"size": bc.$h2-size,
+		),
 	),
 	$utilities: (
 		"overflow": (
 			property: overflow,
 			values: auto hidden visible inherit,
-		)
+		),
 	)
 );

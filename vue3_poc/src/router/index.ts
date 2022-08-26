@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomePage from "@/pages/HomePage.vue";
-import HelloPage from "@/pages/HelloPage.vue";
+import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
 	{
@@ -9,9 +9,9 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		component: HomePage,
 	},
 	{
-		path: "/hello",
-		name: "hello",
-		component: HelloPage,
+		path: "/vitest",
+		name: "vitest",
+		component: VitestProofOfConcept,
 	},
 	{
 		path: "/imprint",

@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
-import ImpressumNew from "./ImpressumNew.vue";
+import Impressum from "./Impressum.vue";
 
-describe("ImpressumNew", () => {
+describe("Impressum", () => {
 	it("renders properly", () => {
-		const wrapper = mount(ImpressumNew);
+		const wrapper = mount(Impressum);
 		expect(wrapper.text()).toContain("Impressum");
 	});
 });

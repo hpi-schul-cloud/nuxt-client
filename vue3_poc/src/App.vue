@@ -1,5 +1,7 @@
 <template>
-	<router-view />
+	<div class="mx-auto w-50">
+		<router-view />
+	</div>
 </template>
 
 <script>

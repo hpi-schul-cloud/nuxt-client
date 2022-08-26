@@ -2,13 +2,13 @@ import { mount } from "@vue/test-utils";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import HelloWorld from "./HelloWorld.vue";
+import VitestProofOfConcept from "./VitestProofOfConcept.vue";
 
-describe("HelloWorld", () => {
+describe("VitestProofOfConcept", () => {
 	const vuetify = createVuetify({ components, directives });
 
 	it("renders properly", () => {
-		const wrapper = mount(HelloWorld, {
+		const wrapper = mount(VitestProofOfConcept, {
 			global: {
 				plugins: [vuetify],
 			},
