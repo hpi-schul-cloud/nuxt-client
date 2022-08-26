@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div>
-			<h2>{{ persistentValue }}</h2>
+			<h2 class="text-h2">{{ persistentValue }}</h2>
 			<h2>{{ reactiveValue }}</h2>
 			<br />
 			<div>

@@ -1,13 +1,12 @@
+@use "roboto-font-face.css";
+
 @use "vuetify/styles" as vuetify with (
-	// $utilities: true,
 	$border-radius-root: 16px,
-	$grid-breakpoints: ("xs": 0),
 	$typography: (
 		"h2": (
-			"size": 8.75rem,
+			"size": 2.75rem,
 		)
 	),
-	$button-height: 80px,
 	$utilities: (
 		"overflow": (
 			property: overflow,
@@ -15,4 +14,3 @@
 		)
 	)
 );
-@debug vuetify.$typography;
