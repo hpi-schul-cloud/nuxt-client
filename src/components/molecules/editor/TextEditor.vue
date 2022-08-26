@@ -1,7 +1,8 @@
 <template>
 	<div v-if="editor" class="editor">
 		<div class="default-menu">
-			<div>Simple:
+			<div>
+				Simple:
 				<base-button
 					data-testid="editor_undo"
 					:class="{ 'is-active': editor.isActive('undo') }"
@@ -105,7 +106,8 @@
 			</div>
 
 			<!-- Advanced toolbar actions -->
-			<div v-if="advancedFeatures">Advanced:
+			<div v-if="advancedFeatures">
+				Advanced:
 				<base-button
 					data-testid="editor_table"
 					:class="{ 'is-active': editor.isActive('table') }"
@@ -144,7 +146,8 @@
 			<!-- end advanced toolbar actions -->
 
 			<!-- context-menu for tables -->
-			<div v-if="showTableMenu">Table:
+			<div v-if="showTableMenu">
+				Table:
 				<base-button
 					data-testid="editor_table_add_column_before"
 					@click="editor.chain().focus().addColumnBefore().run()"

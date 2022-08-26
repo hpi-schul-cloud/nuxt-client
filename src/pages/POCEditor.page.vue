@@ -6,9 +6,7 @@
 				<div>
 					<span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span>
 				</div>
-				<div>
-					Type <code>MathJax.Hub.Typeset()</code> in console
-				</div>
+				<div>Type <code>MathJax.Hub.Typeset()</code> in console</div>
 			</div>
 			<div>
 				<h2>Editor 1</h2>
@@ -126,6 +124,6 @@ export default {
 	},
 	mounted() {
 		MathJax.Hub.Typeset();
-	}
+	},
 };
 </script>
