@@ -221,6 +221,8 @@ import Audio from "./extensions/Audio";
 import Video from "./extensions/Video";
 import Math from "./extensions/Math";
 
+import Span from "./extensions/Span";
+
 export default {
 	components: {
 		EditorContent,
@@ -295,6 +297,7 @@ export default {
 				Link,
 				Subscript,
 				Superscript,
+				Span,
 				Placeholder.configure({ placeholder: this.placeholder }), // seems not to work
 				//TextStyle, // keep span - seems not to work
 
