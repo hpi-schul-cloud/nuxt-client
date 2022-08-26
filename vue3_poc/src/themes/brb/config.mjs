@@ -8,7 +8,7 @@ const config = {
 			replacement: "App.vue",
 		},
 		{
-			find: "components/ImpressumNew.vue",
+			find: "components/Impressum.vue",
 			replacement: "ImpressumNew.vue",
 		},
 		{
