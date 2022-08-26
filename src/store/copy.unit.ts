@@ -30,6 +30,7 @@ const serverDataPartial: CopyApiResponse = {
 const serverDataSuccess: CopyApiResponse = {
 	title: "Thema X",
 	type: CopyApiResponseTypeEnum.Lesson,
+	destinationCourseId: "aCourseId",
 	status: CopyApiResponseStatusEnum.Success,
 	id: "123",
 	elements: [
@@ -284,6 +285,7 @@ describe("copy module", () => {
 				const serverData = {
 					title: "Aufgabe",
 					type: CopyApiResponseTypeEnum.Task,
+					destinationCourseId: "testCourseId",
 					status: CopyApiResponseStatusEnum.Failure,
 					id: "123",
 					elements: [
@@ -311,7 +313,6 @@ describe("copy module", () => {
 				copyModule.reset();
 				copyModule.setCopyResultFailedItems({
 					payload: serverData,
-					courseId: "testCourseId",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
@@ -320,6 +321,7 @@ describe("copy module", () => {
 				const serverData = {
 					title: "Thema",
 					type: CopyApiResponseTypeEnum.Lesson,
+					destinationCourseId: "testCourseIdX",
 					status: CopyApiResponseStatusEnum.Failure,
 					id: "456",
 					elements: [
@@ -347,7 +349,6 @@ describe("copy module", () => {
 				copyModule.reset();
 				copyModule.setCopyResultFailedItems({
 					payload: serverData,
-					courseId: "testCourseIdX",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
@@ -356,7 +357,6 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				copyModule.setCopyResultFailedItems({
 					payload: serverDataSuccess,
-					courseId: "aCourseId",
 				});
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual([]);
 			});
@@ -383,7 +383,6 @@ describe("copy module", () => {
 							},
 						],
 					},
-					courseId: "aCourseId",
 				};
 				const expectedData = [
 					{
@@ -419,6 +418,7 @@ describe("copy module", () => {
 									{
 										title: "Task 1",
 										type: CopyApiResponseTypeEnum.Task,
+										destinationCourseId: "aCourseId",
 										status: CopyApiResponseStatusEnum.Partial,
 										id: "567",
 										elements: [
@@ -436,7 +436,6 @@ describe("copy module", () => {
 							},
 						],
 					},
-					courseId: "aCourseId",
 				};
 				const expectedData = [
 					{
