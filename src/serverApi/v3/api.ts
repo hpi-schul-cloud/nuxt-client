@@ -218,6 +218,12 @@ export interface CopyApiResponse {
      */
     type: CopyApiResponseTypeEnum;
     /**
+     * Id of destination course
+     * @type {string}
+     * @memberof CopyApiResponse
+     */
+    destinationCourseId?: string;
+    /**
      * Copy progress status of copied element
      * @type {string}
      * @memberof CopyApiResponse
