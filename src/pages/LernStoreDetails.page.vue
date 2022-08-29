@@ -1,4 +1,3 @@
-
 <template>
 	<span v-if="status === 'completed'">
 		<lernstore-collection-detail-view
@@ -7,11 +6,10 @@
 		/>
 		<lernstore-detail-view v-else :resource="resource" />
 	</span>
-	<base-spinner v-else/>
+	<base-spinner v-else />
 </template>
 
 <script>
-
 import { contentModule } from "@/store";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
@@ -53,7 +51,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 base-spinner {
 	position: absolute;
 	top: 45%;
@@ -61,5 +58,4 @@ base-spinner {
 	width: 10%;
 	height: 10%;
 }
-
 </style>

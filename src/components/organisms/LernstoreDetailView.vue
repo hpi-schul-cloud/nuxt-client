@@ -22,7 +22,8 @@
 						backgroundImage: `url(${backgroundImage})`,
 					}"
 				/>
-				<img v-if="false"
+				<img
+					v-if="false"
 					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
