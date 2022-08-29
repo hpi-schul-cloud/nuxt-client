@@ -115,3 +115,16 @@ Vite exposes env variables on the special import.meta.env object.
 	"types": ["vite/client" /* ... */]
 }
 ```
+
+## Testing
+
+- mdi icons
+  - install '@mdi/js'
+  - add to test vuetify initializer
+  - use new notation `<v-icon>mdi-home</v-icon>` or `<v-icon icon="mdi-home"/>`
+  - update activator slot for menu
+- server API not available
+  - add server api for types, enums
+- store modules
+  - no env-config for feature flags
+  - commented out code
