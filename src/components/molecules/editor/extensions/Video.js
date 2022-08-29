@@ -2,8 +2,8 @@ import { Node, mergeAttributes } from "@tiptap/core";
 
 export default Node.create({
 	name: "video",
-	inline: true,
-	group: "inline",
+	inline: false,
+	group: "block",
 	draggable: true,
 	selectable: true,
 
