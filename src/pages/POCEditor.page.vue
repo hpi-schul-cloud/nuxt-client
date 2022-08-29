@@ -15,6 +15,7 @@
 					class="mb--md mt--xl-3"
 					placeholder-text="Extending tip-tap POC"
 					:advanced-features="true"
+					@update="drawPreview"
 				/>
 				<div style="border: solid 1px green">
 					<h3>Render Editor 1</h3>
@@ -89,41 +90,48 @@ export default {
 <p>Some <a href="http://www.gogle.com">Link</a></p>
 <p>
 	<figure class="table">
-		<table>
-			<tbody>
-			<tr>
-					<th>Col 1</th>
-					<th>Col 2</th>
-					<th>Col 3</th>
-				</tr>
-				<tr>
-					<td>table td 1 1</td>
-					<td>table td 1 2</td>
-					<td rowspan="2">merged table rows</td>
-				</tr>
-				<tr>
-					<td>table td 2 1</td>
-					<td>table td 2 2</td>
-				</tr>
-			</tbody>
-		</table>
+<table>
+	<tbody>
+	<tr>
+			<th>Col 1</th>
+			<th>Col 2</th>
+			<th>Col 3</th>
+		</tr>
+		<tr>
+			<td>table td 1 1</td>
+			<td>table td 1 2</td>
+			<td rowspan="2">merged table rows</td>
+		</tr>
+		<tr>
+			<td>table td 2 1</td>
+			<td>table td 2 2</td>
+		</tr>
+	</tbody>
+</table>
 	</figure>
 </p>
 <p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
 
 <p>IMAGE:
-	<figure class="image"><img src="/files/file?file=6304af4a90126d0f45e16c46&amp;name=1660118574955-katzen.jpg" alt="alt image attr"></figure>
+	<figure class="image"><img src="http://192.168.1.136/cat.jpg" alt="alt image attr"></figure>
 </p>
-<p>VIDEO:
-	<video src="/files/file?file=6304af4a90126d0f45e16c6f&amp;name=1660126664605-video.mp4" controls="true" controlslist="nodownload"></video>
-</p>
+<p>VIDEO:</p>
+	<video src="http://192.168.1.136/film.mp4" controls="true" controlslist="nodownload"></video>
+
 <p>AUDIO:</p>
-<p><audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio></p>
+<audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio>
 `,
 		};
 	},
 	mounted() {
 		MathJax.Hub.Typeset();
+	},
+	methods: {
+		drawPreview() {
+			// TODO: add regex replace for math formula tag as editor manipulates these math tags
+			// input:  <span class="math-tex" formula="THE_FORMULA"></span>
+			// output: <span class="math-tex">THE_FORMULA</span>
+		},
 	},
 };
 </script>
