@@ -1,0 +1,8 @@
+@use "vuetify/styles" as vuetify with (
+	$border-radius-root: 1px,
+	$typography: (
+		"h2": (
+			"size": 2.75rem,
+		),
+	)
+);

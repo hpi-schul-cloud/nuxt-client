@@ -1,6 +1,7 @@
 // Styles
 import "@mdi/font/css/materialdesignicons.css";
-import "../styles/main.scss";
+import "../styles/roboto-font-face.css";
+import "../styles/vuetify.scss";
 
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
