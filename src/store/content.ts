@@ -363,6 +363,15 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
+	getResourceRenderer() {
+		//uuid: string
+		return "<div class=\"edusharing_rendering_content_wrapper\" role=\"main\">\
+	<iframe src=\"https://mv-rendering.schul-cloud.org/esrender/modules/cache/h5p/2021/04/07/14/14/15/e41c7b42-760b-401a-971d-dea7802e3420_1.0.html?ESSID=5ismef42jboiiijkesilnf23eg&token=\" style=\"width:85%;border:none\" allowfullscreen=\"allowfullscreen\" allow=\"camera *;microphone *\" frameBorder=\"0\" scrolling=\"no\"></iframe>\
+	<script src=\"https://mv-rendering.schul-cloud.org/esrender/modules/h5p/h5p-resizer.js\" charset=\"UTF-8\"></script>\
+</div>"
+	}
+
+	@Action
 	init() {
 		this.initMutation(envConfigModule.getEnv.FEATURE_ES_COLLECTIONS_ENABLED);
 	}

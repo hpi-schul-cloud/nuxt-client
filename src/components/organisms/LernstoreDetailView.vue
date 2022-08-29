@@ -22,12 +22,13 @@
 						backgroundImage: `url(${backgroundImage})`,
 					}"
 				/>
-				<img
+				<img v-if="false"
 					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
 					role="img"
 				/>
+				<span v-else></span>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -230,6 +231,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		renderer() {
+			return "<div>test123</div>";
 		},
 		isBrandenburg() {
 			return process.env.SC_THEME === "brb";
