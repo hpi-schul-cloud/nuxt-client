@@ -249,7 +249,9 @@ export default {
 	methods: {
 		handleClick() {
 			if (!this.dragInProgress) {
-				window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
+				window.location.assign(
+					`/courses/${this.room.roomId}/topics/${this.lesson.id}`
+				);
 			}
 		},
 		redirectAction(value) {

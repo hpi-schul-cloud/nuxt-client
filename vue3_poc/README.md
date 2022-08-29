@@ -128,3 +128,6 @@ Vite exposes env variables on the special import.meta.env object.
 - store modules
   - no env-config for feature flags
   - commented out code
+- test setup
+  - refactor `createComponentMocks()` and `getWrapper()`
+- we should use `window.location.assign()` for safely redirecting to another url and provide better testability
