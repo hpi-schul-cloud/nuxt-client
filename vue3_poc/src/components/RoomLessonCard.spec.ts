@@ -9,7 +9,6 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 // import { envConfigModule } from "@/store";
 
 const baseTestProps = {
-	role: "teacher",
 	room: {
 		roomId: "456",
 		displayColor: "#54616e",
@@ -28,7 +27,7 @@ const baseTestProps = {
 	dragInProgress: false,
 };
 
-describe("@/components/RoomLessonCard", () => {
+const createComponentMocks = (options = {}) => {
 	const vuetify = createVuetify({
 		components,
 		directives,
@@ -41,18 +40,46 @@ describe("@/components/RoomLessonCard", () => {
 		},
 	});
 
-	it("renders properly", () => {
-		const wrapper = mount(RoomLessonCard, {
-			global: {
-				plugins: [vuetify],
-				mocks: {
-					$t: (key: string) => key,
-				},
+	const mocks = {
+		global: {
+			plugins: [vuetify],
+			mocks: {
+				$t: (key: string) => key,
 			},
-			stubs: { MoreItemMenu: true },
-			props: baseTestProps,
+		},
+		...options,
+	};
+
+	return mocks;
+};
+
+const getWrapper = (options = {}) => {
+	const wrapper = mount(RoomLessonCard, {
+		...createComponentMocks(),
+		stubs: { MoreItemMenu: true },
+		...options,
+	});
+	return wrapper;
+};
+
+describe("@/components/RoomLessonCard", () => {
+	it("renders properly", () => {
+		const wrapper = getWrapper({
+			props: { ...baseTestProps, role: "teacher" },
 		});
 		expect(wrapper.text()).toContain("common.words.topicTest");
+	});
+
+	describe("common behaviors and actions", () => {
+		it("should have correct props", () => {
+			const wrapper = getWrapper({
+				props: { ...baseTestProps, role: "teacher" },
+			});
+
+			expect(wrapper.vm.ariaLabel).toStrictEqual(baseTestProps.ariaLabel);
+			expect(wrapper.vm.lesson).toStrictEqual(baseTestProps.lesson);
+			expect(wrapper.vm.room).toStrictEqual(baseTestProps.room);
+		});
 	});
 });
 
