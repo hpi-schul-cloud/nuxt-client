@@ -1,7 +1,7 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 
-import MathComponent from "./FormulaComponent.vue";
+import MathNodeView from "../components/MathNodeView";
 
 export default Node.create({
 	name: "math",
@@ -25,20 +25,7 @@ export default Node.create({
 	parseHTML() {
 		return [
 			{
-				tag: "span",
-				getAttrs: (element) => {
-					if (!element.hasAttribute("class")) {
-						return false;
-					}
-
-					const styleClass = element.getAttribute("class");
-
-					if (styleClass !== "math-tex") {
-						return false;
-					}
-
-					return {};
-				},
+				tag: "span[class='math-tex']",
 			},
 		];
 	},
@@ -48,6 +35,19 @@ export default Node.create({
 	},
 
 	addNodeView() {
-		return VueNodeViewRenderer(MathComponent);
+		return VueNodeViewRenderer(MathNodeView);
+	},
+
+	addCommands() {
+		return {
+			addMath:
+				(options) =>
+				({ commands }) => {
+					return commands.insertContent({
+						type: this.name,
+						attrs: options,
+					});
+				},
+		};
 	},
 });
