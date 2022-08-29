@@ -4,7 +4,6 @@
 			<div>
 				Simple:
 				<base-button
-					data-testid="editor_undo"
 					:class="{ 'is-active': editor.isActive('undo') }"
 					@click="editor.chain().focus().undo().run()"
 				>
@@ -12,7 +11,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_redo"
 					:class="{ 'is-active': editor.isActive('redo') }"
 					@click="editor.chain().focus().redo().run()"
 				>
@@ -20,7 +18,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_bold"
 					:class="{ 'is-active': editor.isActive('bold') }"
 					@click="editor.chain().focus().toggleBold().run()"
 				>
@@ -28,7 +25,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_italic"
 					:class="{ 'is-active': editor.isActive('italic') }"
 					@click="editor.chain().focus().toggleItalic().run()"
 				>
@@ -36,7 +32,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_underlined"
 					:class="{ 'is-active': editor.isActive('underline') }"
 					@click="editor.chain().focus().toggleUnderline().run()"
 				>
@@ -44,7 +39,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_strikethrough"
 					:class="{ 'is-active': editor.isActive('strike') }"
 					@click="editor.chain().focus().toggleStrike().run()"
 				>
@@ -52,21 +46,18 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_h1"
 					:class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
 					@click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
 				>
 					H1
 				</base-button>
 				<base-button
-					data-testid="editor_format_h2"
 					:class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
 					@click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
 				>
 					H2
 				</base-button>
 				<base-button
-					data-testid="editor_format_h3"
 					:class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
 					@click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
 				>
@@ -74,7 +65,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_list_bulleted"
 					:class="{ 'is-active': editor.isActive('bulletList') }"
 					:disabled="isInHeading"
 					@click="editor.chain().focus().toggleBulletList().run()"
@@ -83,7 +73,6 @@
 				</base-button>
 
 				<base-button
-					data-testid="editor_format_list_numbered"
 					:class="{ 'is-active': editor.isActive('orderedList') }"
 					:disabled="isInHeading"
 					@click="editor.chain().focus().toggleOrderedList().run()"
@@ -109,7 +98,6 @@
 			<div v-if="advancedFeatures">
 				Advanced:
 				<base-button
-					data-testid="editor_table"
 					:class="{ 'is-active': editor.isActive('table') }"
 					@click="
 						editor
@@ -122,76 +110,58 @@
 					<base-icon source="material" icon="table_chart" />
 				</base-button>
 				<base-button
-					data-testid="editor_add_image"
 					:class="{ 'is-active': editor.isActive('undo') }"
 					@click="showImagePrompt"
 				>
 					<base-icon source="material" icon="image" />
 				</base-button>
 				<base-button
-					data-testid="editor_audio"
 					:class="{ 'is-active': editor.isActive('audio') }"
 					@click="showAudioPrompt"
 				>
 					<base-icon source="material" icon="music_note" />
 				</base-button>
 				<base-button
-					data-testid="editor_video"
 					:class="{ 'is-active': editor.isActive('video') }"
 					@click="showVideoPrompt"
 				>
 					<base-icon source="material" icon="movie" />
 				</base-button>
+				<base-button
+					:class="{ 'is-active': editor.isActive('math') }"
+					@click="addMath"
+				>
+					Mathe
+				</base-button>
 			</div>
 			<!-- end advanced toolbar actions -->
 
-			<!-- context-menu for tables -->
-			<div v-if="showTableMenu">
-				Table:
-				<base-button
-					data-testid="editor_table_add_column_before"
-					@click="editor.chain().focus().addColumnBefore().run()"
-				>
-					addColumnBefore
+			<div style="display: none">
+				<base-button @click="editor.chain().focus().addColumnBefore().run()">
+					add column before
 				</base-button>
-				<base-button
-					data-testid="editor_table_add_column_after"
-					@click="editor.chain().focus().addColumnAfter().run()"
-				>
-					addColumnAfter
+				<base-button @click="editor.chain().focus().addColumnAfter().run()">
+					add column after
 				</base-button>
-				<base-button
-					data-testid="editor_table_add_row_before"
-					@click="editor.chain().focus().addRowBefore().run()"
-				>
-					addRowBefore
+				<base-button @click="editor.chain().focus().addRowBefore().run()">
+					add row before
 				</base-button>
-				<base-button
-					data-testid="editor_table_add_row_after"
-					@click="editor.chain().focus().addRowAfter().run()"
-				>
-					addRowAfter
+				<base-button @click="editor.chain().focus().addRowAfter().run()">
+					add row after
 				</base-button>
-				<base-button
-					data-testid="editor_table_delete_row"
-					@click="editor.chain().focus().deleteRow().run()"
-				>
-					deleteRow
+				<base-button @click="editor.chain().focus().deleteRow().run()">
+					delete row
 				</base-button>
-				<base-button
-					data-testid="editor_table_delete_column"
-					@click="editor.chain().focus().deleteColumn().run()"
-				>
-					deleteColumn
+				<base-button @click="editor.chain().focus().deleteColumn().run()">
+					delete column
 				</base-button>
 				<base-button @click="editor.chain().focus().mergeCells().run()">
-					mergeCells
+					merge cells
 				</base-button>
 				<base-button @click="editor.chain().focus().splitCell().run()">
-					splitCell
+					split cell
 				</base-button>
 			</div>
-			<!-- end-context-based menu for tables -->
 		</div>
 
 		<editor-content class="editor__content" :editor="editor" />
@@ -209,15 +179,16 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 
-import Table from "@tiptap/extension-table";
+import Table from "./extensions/Table";
+//import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
+
 import Image from "@tiptap/extension-image";
 import Audio from "./extensions/Audio";
 import Video from "./extensions/Video";
 import Math from "./extensions/Math";
-
 import Span from "./extensions/Span";
 
 export default {
@@ -353,6 +324,9 @@ export default {
 				this.editor.chain().focus().setVideo({ src: url }).run();
 			}
 		},
+		addMath() {
+			this.editor.chain().focus().addMath().run();
+		},
 		isInvalid(content) {
 			let error = false;
 			if (content.includes(`src="data:`)) {
@@ -450,61 +424,6 @@ export default {
 
 	:root {
 		--z-index-2: 2;
-	}
-
-	::v-deep table {
-		width: 100%;
-		margin: 0;
-		overflow: hidden;
-		table-layout: fixed;
-		border-collapse: collapse;
-
-		td,
-		th {
-			position: relative;
-			min-width: var(--radius-lg);
-			padding: var(--border-width-bold) calc(3 * var(--border-width-bold));
-			overflow: hidden;
-			vertical-align: top;
-			border: var(--border-width-bold) solid #ced4da;
-
-			> * {
-				margin-bottom: 0;
-			}
-		}
-
-		th {
-			font-weight: var(--font-weight-bold);
-			text-align: left;
-			background: #f1f3f5;
-		}
-
-		/* stylelint-disable-next-line */
-		.selectedCell::after {
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: var(--z-index-2);
-			pointer-events: none;
-			content: "";
-			background: rgba(200, 200, 255, 0.4);
-		}
-
-		.column-resize-handle {
-			position: absolute;
-			top: 0;
-			right: -2px;
-			bottom: -2px;
-			width: 4px;
-			pointer-events: none;
-			background: #adf;
-		}
-
-		p {
-			margin: 0;
-		}
 	}
 }
 
