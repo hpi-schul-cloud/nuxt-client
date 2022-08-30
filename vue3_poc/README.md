@@ -131,3 +131,27 @@ Vite exposes env variables on the special import.meta.env object.
 - test setup
   - refactor `createComponentMocks()` and `getWrapper()`
 - we should use `window.location.assign()` for safely redirecting to another url and provide better testability
+- stubbing `window.location.assign`
+  ```
+  vi.stubGlobal("location", { assign: vi.fn() });
+  ```
+- stubbing `window.ResizeObserver`
+  ```
+  	vi.stubGlobal(
+  		"ResizeObserver",
+  		vi.fn().mockImplementation(() => ({
+  			disconnect: vi.fn(),
+  			observe: vi.fn(),
+  			unobserve: vi.fn(),
+  		}))
+  	);
+  ```
+- access to wrapper elements:
+  `wrapper.wrappers[0].element` => `wrapper.at(0)?.element`
+- check for emitted events, e.g.
+  `expect(wrapper.emitted("post-lesson")).toBeDefined()`
+
+TODO:
+
+- translations
+- access store modules, e.g. envConfig

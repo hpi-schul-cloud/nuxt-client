@@ -255,7 +255,7 @@ export default {
 			}
 		},
 		redirectAction(value) {
-			window.location = value;
+			window.location.assign(value);
 		},
 		postLesson() {
 			this.$emit("post-lesson");
