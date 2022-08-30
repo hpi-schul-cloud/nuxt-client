@@ -32,7 +32,7 @@
 					role="img"
 				/>-->
 				<div>{{ rendererCode }}</div>
-				<span ></span>
+				<span></span>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -215,7 +215,7 @@ export default {
 			return getAuthor(this.resource.properties);
 		},
 		rendererCode() {
-			console.log('RenderingValue:' + ' ' + this.renderer)
+			console.log("RenderingValue:" + " " + this.renderer);
 			return getRenderer(this.renderer);
 		},
 		createdAt() {
