@@ -23,13 +23,16 @@
 					}"
 				/>-->
 				<!--<img
+				/>
+				<img
+					v-if="false"
 					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
 					role="img"
 				/>-->
 				<div>{{ rendererCode }}</div>
-
+				<span ></span>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">

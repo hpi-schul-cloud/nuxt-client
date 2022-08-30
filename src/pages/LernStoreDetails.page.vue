@@ -1,14 +1,12 @@
 <template>
-	<span>
-		<span v-if="status === 'completed'">
-			<lernstore-collection-detail-view
-				v-if="isCollection"
-				:resource="resource"
-			/>
-			<lernstore-detail-view v-else :resource="resource" />
-		</span>
-		<base-spinner v-else />
+	<span v-if="status === 'completed'">
+		<lernstore-collection-detail-view
+			v-if="isCollection"
+			:resource="resource"
+		/>
+		<lernstore-detail-view v-else :resource="resource" />
 	</span>
+	<base-spinner v-else />
 </template>
 
 <script>
@@ -55,3 +53,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+base-spinner {
+	position: absolute;
+	top: 45%;
+	left: 45%;
+	width: 10%;
+	height: 10%;
+}
+</style>
