@@ -35,6 +35,10 @@ export type Resource = {
 	type: string;
 };
 
+export type Renderer = {
+	code: string;
+}
+
 export type Resources = {
 	total: number;
 	limit: number;

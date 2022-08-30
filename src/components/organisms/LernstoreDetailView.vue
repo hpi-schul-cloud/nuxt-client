@@ -16,18 +16,20 @@
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
-				<div
+				<!--<div
 					class="preview-background"
 					:style="{
 						backgroundImage: `url(${backgroundImage})`,
 					}"
-				/>
-				<img
+				/>-->
+				<!--<img
 					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
 					role="img"
-				/>
+				/>-->
+				<div>{{ rendererCode }}</div>
+
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -176,6 +178,7 @@ import {
 	getProvider,
 	getTags,
 	isMerlinContent,
+	getRenderer,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 
@@ -193,6 +196,10 @@ export default {
 			type: Object,
 			default: () => {},
 		},
+		renderer: {
+			type: Object,
+			default: () => {},
+		},
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
@@ -203,6 +210,10 @@ export default {
 		},
 		author() {
 			return getAuthor(this.resource.properties);
+		},
+		rendererCode() {
+			console.log('RenderingValue:' + ' ' + this.renderer)
+			return getRenderer(this.renderer);
 		},
 		createdAt() {
 			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);

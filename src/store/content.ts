@@ -7,11 +7,13 @@ import {
 	Query,
 	Resource,
 	Resources,
+	Renderer,
 	Elements,
 	Lessons,
 	AddToLessonQuery,
 } from "./types/content";
 import { Status } from "./types/commons";
+import { render } from "node-sass";
 
 const initialState = () => ({
 	resources: {
@@ -69,6 +71,9 @@ const initialState = () => ({
 		title: "",
 		type: "",
 	},
+	currentRenderer: {
+		code: "",
+	},
 	status: null,
 	notificationModal: null,
 });
@@ -89,6 +94,7 @@ export default class ContentModule extends VuexModule {
 	collectionsFeatureFlag: boolean | null =
 		initialState().collectionsFeatureFlag;
 	currentResource: Resource = initialState().currentResource;
+	currentRenderer: Renderer = initialState().currentRenderer;
 	status: Status | null = initialState().status;
 	notificationModal: string | null = initialState().notificationModal;
 
@@ -191,6 +197,11 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Mutation
+	setCurrentRenderer(payload: Renderer): void {
+		this.currentRenderer = payload;
+	}
+
+	@Mutation
 	setStatus(payload: Status | null): void {
 		this.status = payload;
 	}
@@ -226,6 +237,10 @@ export default class ContentModule extends VuexModule {
 
 	get getCurrentResource() {
 		return this.currentResource;
+	}
+
+	get getCurrentRenderer() {
+		return this.currentRenderer;
 	}
 
 	get getStatus() {
@@ -359,6 +374,15 @@ export default class ContentModule extends VuexModule {
 		this.setStatus("pending");
 		const metadata = await $axios.$get(`/v1/edu-sharing/${id}`);
 		this.setCurrentResource(metadata);
+		this.setStatus("completed");
+	}
+
+	@Action
+	async getResourceRenderer(id: string) {
+		this.setStatus("pending");
+		// const renderer = await $axios.$get(`/v1/edu-sharing/renderer/${id}`);
+		const Renderer = {"code": "TestAbfrageBackend"};
+		this.setCurrentRenderer(Renderer);
 		this.setStatus("completed");
 	}
 

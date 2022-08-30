@@ -110,6 +110,9 @@ export default {
 		resources() {
 			return contentModule.getResourcesGetter;
 		},
+		renderer() {
+			return contentModule.getCurrentRenderer;
+		},
 		loading() {
 			return contentModule.getLoading;
 		},

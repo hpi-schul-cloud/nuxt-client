@@ -36,6 +36,9 @@ export default {
 		resource() {
 			return contentModule.getCurrentResource;
 		},
+		renderer() {
+			return contentModule.getCurrentRenderer;
+		},
 		collectionsFeatureFlag() {
 			return contentModule.getCollectionsFeatureFlag;
 		},
@@ -48,6 +51,7 @@ export default {
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
+		await contentModule.getResourceRenderer(this.$route.params.id);
 	},
 };
 </script>

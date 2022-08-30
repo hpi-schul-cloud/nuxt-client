@@ -99,6 +99,10 @@ export const getTitle = (resource) => {
 	return resource.title ? resource.title : "";
 };
 
+export const getRenderer = (rendererEdu) => {
+	return rendererEdu;
+};
+
 export const getUrl = (resource) => {
 	if (resource.properties && resource.properties["ccm:wwwurl"]) {
 		return getMetadataAttribute(resource.properties, "ccm:wwwurl");
