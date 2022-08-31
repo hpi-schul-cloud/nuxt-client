@@ -13,6 +13,9 @@
 			</div>
 			<br />
 			<div>
+				<sass-variables-in-components-poc></sass-variables-in-components-poc>
+			</div>
+			<div>
 				<v-btn color="primary" @click="onIncreaseCounter">
 					Counter in the component {{ counter }}
 				</v-btn>
@@ -44,8 +47,10 @@ import { defineComponent, ref } from "vue";
 import { useCounterStore } from "@/store/counter";
 import { computed } from "vue";
 import vCustomDialog from "@/components/vCustomDialog.vue";
+import SassVariablesInComponentsPoc from "@/components/SassVariablesInComponentsPoc.vue";
 export default defineComponent({
 	components: {
+		SassVariablesInComponentsPoc,
 		vCustomDialog,
 	},
 	setup() {
