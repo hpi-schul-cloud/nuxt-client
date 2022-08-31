@@ -39,6 +39,7 @@ const routes = [
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
 	// `^/courses/?$`,
+	`^/poc-editor/?$`,
 	`^/poc-files/?$`,
 	`^/poc-vuex/?$`,
 ];
