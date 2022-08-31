@@ -380,9 +380,8 @@ export default class ContentModule extends VuexModule {
 	@Action
 	async getResourceRenderer(id: string) {
 		this.setStatus("pending");
-		// const renderer = await $axios.$get(`/v1/edu-sharing/renderer/${id}`);
-		const Renderer = {"code": "TestAbfrageBackend"};
-		this.setCurrentRenderer(Renderer);
+		const renderer = await $axios.$get(`/v1/edu-sharing/renderer/${id}`);
+		this.setCurrentRenderer(renderer);
 		this.setStatus("completed");
 	}
 

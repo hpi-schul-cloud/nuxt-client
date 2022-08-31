@@ -3,8 +3,9 @@
 		<lernstore-collection-detail-view
 			v-if="isCollection"
 			:resource="resource"
+			:renderer="renderer"
 		/>
-		<lernstore-detail-view v-else :resource="resource" />
+		<lernstore-detail-view v-else :resource="resource" :renderer="renderer" />
 	</span>
 	<base-spinner v-else />
 </template>
