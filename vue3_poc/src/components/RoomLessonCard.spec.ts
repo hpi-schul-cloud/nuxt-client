@@ -449,36 +449,44 @@ describe("@/components/RoomLessonCard", () => {
 			await wrapper.trigger("keydown.enter");
 			expect(window.location.assign).toBeCalledWith("/courses/456/topics/123");
 		});
+
 		it("should emit 'on-drag' event when space key is pressed`", async () => {
 			const wrapper = getWrapper({ props: createTestProps() });
 			await wrapper.trigger("keydown.space");
 			expect(wrapper.emitted("on-drag")).toHaveLength(1);
 		});
-		// 		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
-		// 			const onKeyPressMock = jest.fn();
-		// 			const wrapper = getWrapper({ ...baseTestProps, role });
-		// 			wrapper.vm.onKeyPress = onKeyPressMock;
-		// 			await wrapper.trigger("keydown.up");
-		// 			expect(onKeyPressMock).toHaveBeenCalled();
-		// 			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(38);
-		// 			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Up");
-		// 			jest.clearAllMocks();
-		// 			await wrapper.trigger("keydown.down");
-		// 			expect(onKeyPressMock).toHaveBeenCalled();
-		// 			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(40);
-		// 			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Down");
-		// 			jest.clearAllMocks();
-		// 			await wrapper.trigger("keydown.space");
-		// 			expect(onKeyPressMock).toHaveBeenCalled();
-		// 			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(32);
-		// 			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual(" ");
-		// 			jest.clearAllMocks();
-		// 		});
-		// 		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
-		// 			const wrapper = getWrapper({ ...baseTestProps, role });
-		// 			await wrapper.trigger("keydown.tab");
-		// 			const emitted = wrapper.emitted();
-		// 			expect(emitted["tab-pressed"]).toHaveLength(1);
-		// 		});
+
+		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
+			const props = createTestProps();
+			props.keyDrag = true;
+
+			const wrapper = getWrapper({ props });
+			await wrapper.trigger("keydown.up");
+			expect(wrapper.emitted("move-element")?.at(0)).toStrictEqual([
+				{
+					id: props.lesson.id,
+					moveIndex: -1,
+				},
+			]);
+
+			await wrapper.trigger("keydown.down");
+			expect(wrapper.emitted("move-element")?.at(1)).toStrictEqual([
+				{
+					id: props.lesson.id,
+					moveIndex: 1,
+				},
+			]);
+
+			await wrapper.trigger("keydown.space");
+			expect(wrapper.emitted("on-drag")).toHaveLength(1);
+		});
+
+		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
+			const props = createTestProps();
+			const wrapper = getWrapper({ props });
+			await wrapper.trigger("keydown.tab");
+
+			expect(wrapper.emitted("tab-pressed")).toBeDefined();
+		});
 	});
 });
