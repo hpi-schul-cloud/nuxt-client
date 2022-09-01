@@ -16,23 +16,21 @@
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
-				<!--<div
-					class="preview-background"
-					:style="{
-						backgroundImage: `url(${backgroundImage})`,
-					}"
-				/>-->
-				<!--<img
-				/>
-				<img
-					v-if="false"
-					:src="backgroundImage"
-					class="preview-img"
-					:alt="$t('pages.content.preview_img.alt')"
-					role="img"
-				/>-->
-				<div>{{ rendererCode }}</div>
-				<span></span>
+				<div v-if="hasTagH5p">{{ rendererCode }}</div>
+				<div v-else>
+					<div
+						class="preview-background"
+						:style="{
+							backgroundImage: `url(${backgroundImage})`,
+						}"
+					/>
+					<img
+						:src="backgroundImage"
+						class="preview-img"
+						:alt="$t('pages.content.preview_img.alt')"
+						role="img"
+					/>
+				</div>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -229,6 +227,19 @@ export default {
 		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
+		},
+		hasTagH5p() {
+			const tags = getTags(this.resource.properties);
+			if (tags == []) {
+				return false;
+			}
+			for (const tag of tags) {
+				tag = tag.toLowerCase();
+				if (tag == "h5p") {
+					return true;
+				}
+			}
+			return false;
 		},
 		isMerlin() {
 			return isMerlinContent(this.resource);
