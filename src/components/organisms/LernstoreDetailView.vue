@@ -16,6 +16,7 @@
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
+				<!-- TODO: Implement the H5P renderer code correctly in the template.-->
 				<div v-if="hasTagH5p">{{ rendererCode }}</div>
 				<div v-else>
 					<!--TODO: center preview picture-->
