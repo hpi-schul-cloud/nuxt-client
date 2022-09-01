@@ -18,6 +18,7 @@
 				<div class="preview-background-color" />
 				<div v-if="hasTagH5p">{{ rendererCode }}</div>
 				<div v-else>
+					<!--TODO: center preview picture-->
 					<div
 						class="preview-background"
 						:style="{
@@ -213,7 +214,6 @@ export default {
 			return getAuthor(this.resource.properties);
 		},
 		rendererCode() {
-			console.log("RenderingValue:" + " " + this.renderer);
 			return getRenderer(this.renderer);
 		},
 		createdAt() {
@@ -235,6 +235,7 @@ export default {
 			}
 			for (const tag of tags) {
 				tag = tag.toLowerCase();
+				//TODO: needs unique h5p tag!
 				if (tag == "h5p") {
 					return true;
 				}

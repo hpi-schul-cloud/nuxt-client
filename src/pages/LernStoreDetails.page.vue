@@ -50,7 +50,16 @@ export default {
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
-		await contentModule.getResourceRenderer(this.$route.params.id);
+		const tags =
+			contentModule.getCurrentResource.properties["cclom:general_keyword"];
+		if (tags != undefined && tags != []) {
+			for (const tag of tags) {
+				const tagLow = tag.toLowerCase();
+				//TODO: needs unique h5p tag!
+				if (tagLow == "h5p")
+					await contentModule.getResourceRenderer(this.$route.params.id);
+			}
+		}
 	},
 };
 </script>

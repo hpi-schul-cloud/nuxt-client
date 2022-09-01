@@ -74,6 +74,7 @@ const initialState = () => ({
 	currentRenderer: {
 		code: "",
 	},
+	tags: [],
 	status: null,
 	notificationModal: null,
 });
@@ -379,10 +380,13 @@ export default class ContentModule extends VuexModule {
 
 	@Action
 	async getResourceRenderer(id: string) {
-		//const idTest = "";
 		this.setStatus("pending");
-		//const renderer = await $axios.$get(`/v1/edu-sharing/renderer/${idTest}`);
-		//this.setCurrentRenderer(renderer);
+		//TODO: Delete Test ID (add NodeID of a H5P element from edusharing.)
+		id = "";
+		if (id != undefined && id != "") {
+			const renderer = await $axios.$get(`/v1/edu-sharing/renderer/${id}`);
+			this.setCurrentRenderer(renderer);
+		}
 		this.setStatus("completed");
 	}
 
