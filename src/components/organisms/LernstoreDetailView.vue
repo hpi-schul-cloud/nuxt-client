@@ -19,7 +19,6 @@
 				<!-- TODO: Implement the H5P renderer code correctly in the template.-->
 				<div v-if="hasTagH5p">{{ rendererCode }}</div>
 				<div v-else>
-					<!--TODO: center preview picture-->
 					<div
 						class="preview-background"
 						:style="{
@@ -422,7 +421,6 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				position: absolute;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;
