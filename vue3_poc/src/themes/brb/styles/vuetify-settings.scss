@@ -1,4 +1,4 @@
-@use "vuetify/styles" as vuetify with (
+@forward "vuetify/settings" with (
 	$border-radius-root: 1px,
 	$typography: (
 		"h2": (

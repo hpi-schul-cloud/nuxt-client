@@ -12,8 +12,8 @@ const config = {
 			replacement: "ImpressumNew.vue",
 		},
 		{
-			find: "styles/vuetify.scss",
-			replacement: "styles/vuetify.scss",
+			find: "styles/vuetify-settings.scss",
+			replacement: "styles/vuetify-settings.scss",
 		},
 		{
 			find: "styles/custom-theme.ts",

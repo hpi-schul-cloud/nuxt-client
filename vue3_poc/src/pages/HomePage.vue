@@ -85,3 +85,7 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss">
+@use "@/styles/vuetify-settings.scss" as vuetify;
+@debug vuetify.$border-radius-root;
+</style>

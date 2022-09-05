@@ -8,8 +8,8 @@ const config = {
 			replacement: "App.vue",
 		},
 		{
-			find: "styles/vuetify.scss",
-			replacement: "styles/vuetify.scss",
+			find: "vuetify-settings.scss",
+			replacement: "styles/vuetify-settings.scss",
 		},
 		{
 			find: "styles/custom-theme.ts",
