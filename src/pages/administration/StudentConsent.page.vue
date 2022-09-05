@@ -15,7 +15,7 @@
 				tag="p"
 			>
 				<template #dataProtection>
-					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
+					<a class="link" :href="fileLinks.dataProtection">{{
 						$t("common.words.privacyPolicy")
 					}}</a>
 				</template>
@@ -373,7 +373,7 @@ export default {
 			fileLinks: {
 				analogConsent: filePathsModule.getSpecificFiles.analogConsent,
 				termsOfUse: filePathsModule.getSpecificFiles.termsOfUseSchool,
-				dataProtection: filePathsModule.getSpecificFiles.privacyExemplary,
+				dataProtection: '/datenschutz',
 			},
 			progressSteps: [
 				{
