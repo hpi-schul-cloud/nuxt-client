@@ -53,8 +53,8 @@ export default {
 		const { mediatype } = contentModule.getCurrentResource;
 		const { size } = contentModule.getCurrentResource;
 		//TODO: Delete (only for testing)
-		//mediatype == "file-h5p";
-		//size = 1;
+		//const mediatype = "file-h5p";
+		//const size = 1;
 		if (
 			mediatype == "file-h5p" &&
 			size > 0 &&

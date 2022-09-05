@@ -103,6 +103,15 @@ export const getRenderer = (rendererEdu) => {
 	return rendererEdu;
 };
 
+export const getRendererSrc = (rendererEdu) => {
+	const rendererArray = rendererEdu.toString().split(" ");
+	for (const part of rendererArray) {
+		if (part.startsWith("src")) {
+			return part.substr(5, part.length - 6);
+		}
+	}
+};
+
 export const getUrl = (resource) => {
 	if (resource.properties && resource.properties["ccm:wwwurl"]) {
 		return getMetadataAttribute(resource.properties, "ccm:wwwurl");

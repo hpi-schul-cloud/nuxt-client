@@ -17,7 +17,21 @@
 			<div class="preview">
 				<div class="preview-background-color" />
 				<!-- TODO: Implement the H5P renderer code correctly in the template.-->
-				<div v-if="hasMediatypeH5p && hasSize">{{ rendererCode }}</div>
+				<div
+					v-if="hasMediatypeH5p && hasSize"
+					class="edusharing_rendering_content_wrapper"
+					role="main"
+				>
+					<div>{{ getRendererIFrameSrc }}</div>
+					<iframe
+						:src="getRendererIFrameSrc"
+						style="width: 85%; border: none"
+						allowfullscreen="allowfullscreen"
+						frameBorder="0"
+						scrolling="no"
+					>
+					</iframe>
+				</div>
 				<div v-else>
 					<div
 						class="preview-background"
@@ -181,6 +195,7 @@ import {
 	getTags,
 	isMerlinContent,
 	getRenderer,
+	getRendererSrc,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 
@@ -216,6 +231,9 @@ export default {
 		rendererCode() {
 			return getRenderer(this.renderer);
 		},
+		getRendererIFrameSrc() {
+			return getRendererSrc(this.renderer);
+		},
 		createdAt() {
 			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
@@ -231,16 +249,19 @@ export default {
 		hasMediatypeH5p() {
 			const { mediatype } = this.resource;
 			//TODO: Delete (only for testing)
-			//mediatype = "file-h5p"
+			//const mediatype = "file-h5p";
 			if (mediatype == "file-h5p") {
 				return true;
 			}
 			return false;
 		},
+		renderSRC() {
+			return "https://mv-rendering.schul-cloud.org/esrender/modules/cache/h5p/2021/03/26/08/35/46/0857f50e-7bd2-40bd-a3a2-b9eca661d254_1.2.html?ESSID=on9ongc8ppqmdktc51htcm11e6&amp;token=";
+		},
 		hasSize() {
 			const { size } = this.resource;
 			//TODO: Delete (only for testing)
-			//size = 2;
+			//const size = 2;
 			if (size > 0 && size != null && size != undefined) {
 				return true;
 			}
