@@ -50,15 +50,18 @@ export default {
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
-		const tags =
-			contentModule.getCurrentResource.properties["cclom:general_keyword"];
-		if (tags != undefined && tags != []) {
-			for (const tag of tags) {
-				const tagLow = tag.toLowerCase();
-				//TODO: needs unique h5p tag!
-				if (tagLow == "h5p")
-					await contentModule.getResourceRenderer(this.$route.params.id);
-			}
+		const { mediatype } = contentModule.getCurrentResource;
+		const { size } = contentModule.getCurrentResource;
+		//TODO: Delete (only for testing)
+		//mediatype == "file-h5p";
+		//size = 1;
+		if (
+			mediatype == "file-h5p" &&
+			size > 0 &&
+			size != null &&
+			size != undefined
+		) {
+			await contentModule.getResourceRenderer(this.$route.params.id);
 		}
 	},
 };

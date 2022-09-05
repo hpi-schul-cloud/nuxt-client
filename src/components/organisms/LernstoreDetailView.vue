@@ -17,11 +17,7 @@
 			<div class="preview">
 				<div class="preview-background-color" />
 				<!-- TODO: Implement the H5P renderer code correctly in the template.-->
-				<!-- TODO: Delete (only for testing)-->
-				<div v-if="hasTagH5p">{{ rendererCode }}</div>
-				<!-- TODO: Uncommit
-				<div v-if="hasMediatypeH5p && hasSize">{{ rendererCode }}</div>-->
-				<div v-if="hasSize"></div>
+				<div v-if="hasMediatypeH5p && hasSize">{{ rendererCode }}</div>
 				<div v-else>
 					<div
 						class="preview-background"
@@ -243,20 +239,6 @@ export default {
 			const { size } = this.resource;
 			if (size > 0 && size != null && size != undefined) {
 				return true;
-			}
-			return false;
-		},
-		// TODO: Delete hasTagH5p()
-		hasTagH5p() {
-			const tags = getTags(this.resource.properties);
-			if (tags == []) {
-				return false;
-			}
-			for (const tag of tags) {
-				tag = tag.toLowerCase();
-				if (tag == "h5p") {
-					return true;
-				}
 			}
 			return false;
 		},
