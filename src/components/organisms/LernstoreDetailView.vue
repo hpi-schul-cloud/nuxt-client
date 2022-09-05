@@ -16,13 +16,11 @@
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
-				<!-- TODO: Implement the H5P renderer code correctly in the template.-->
 				<div
 					v-if="hasMediatypeH5p && hasSize"
 					class="edusharing_rendering_content_wrapper"
 					role="main"
 				>
-					<div>{{ getRendererIFrameSrc }}</div>
 					<iframe
 						:src="getRendererIFrameSrc"
 						style="width: 85%; border: none"
@@ -31,6 +29,7 @@
 						scrolling="no"
 					>
 					</iframe>
+					<script :src="getRendererScriptSrc" charset="UTF-8"></script>
 				</div>
 				<div v-else>
 					<div
@@ -196,6 +195,7 @@ import {
 	isMerlinContent,
 	getRenderer,
 	getRendererSrc,
+	getRendererScriptSrc,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 
@@ -233,6 +233,9 @@ export default {
 		},
 		getRendererIFrameSrc() {
 			return getRendererSrc(this.renderer);
+		},
+		getRendererScriptSrc() {
+			return getRendererScriptSrc(this.renderer);
 		},
 		createdAt() {
 			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);

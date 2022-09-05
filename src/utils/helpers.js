@@ -105,9 +105,24 @@ export const getRenderer = (rendererEdu) => {
 
 export const getRendererSrc = (rendererEdu) => {
 	const rendererArray = rendererEdu.toString().split(" ");
-	for (const part of rendererArray) {
-		if (part.startsWith("src")) {
-			return part.substr(5, part.length - 6);
+	for (let i = 0; i < rendererArray.length; i++) {
+		if (
+			rendererArray[i].startsWith("src") &&
+			rendererArray[i - 1].startsWith("<iframe")
+		) {
+			return rendererArray[i].substr(5, rendererArray[i].length - 6);
+		}
+	}
+};
+
+export const getRendererScriptSrc = (rendererEdu) => {
+	const rendererArray = rendererEdu.toString().split(" ");
+	for (let i = 0; i < rendererArray.length; i++) {
+		if (
+			rendererArray[i].startsWith("src") &&
+			rendererArray[i - 1].startsWith("<script")
+		) {
+			return rendererArray[i].substr(5, rendererArray[i].length - 6);
 		}
 	}
 };
