@@ -11,6 +11,8 @@
 					:href="menuItem.action"
 					:target="menuItem.target"
 					class="link"
+					:title="menuItem.label"
+					:aria-label="menuItem.label"
 				>
 					{{ menuItem.label }}
 				</base-link>
