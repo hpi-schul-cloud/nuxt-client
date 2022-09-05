@@ -230,6 +230,8 @@ export default {
 		},
 		hasMediatypeH5p() {
 			const { mediatype } = this.resource;
+			//TODO: Delete (only for testing)
+			//mediatype = "file-h5p"
 			if (mediatype == "file-h5p") {
 				return true;
 			}
@@ -237,6 +239,8 @@ export default {
 		},
 		hasSize() {
 			const { size } = this.resource;
+			//TODO: Delete (only for testing)
+			//size = 2;
 			if (size > 0 && size != null && size != undefined) {
 				return true;
 			}
