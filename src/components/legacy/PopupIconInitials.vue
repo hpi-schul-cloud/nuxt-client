@@ -6,9 +6,7 @@
 			design="text icon"
 			data-testid="initials"
 			role="menu"
-			:title="`${firstName} ${lastName} (${$t(
-				'global.topbar.roleName.administrator'
-			)})`"
+			:title="`${firstName} ${lastName} (${userRole})`"
 			:aria-label="`${$t(
 				'global.topbar.initials.currentUser'
 			)} ${firstName} ${lastName} ${userRole}`"
