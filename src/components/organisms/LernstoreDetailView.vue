@@ -1,6 +1,10 @@
 <template>
 	<div class="resource">
-		<div ref="icons" class="icons">
+		<div
+			ref="icons"
+			class="icons"
+			:style="{ 'justify-content': getIconsJustifyContent }"
+		>
 			<base-button
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
@@ -242,6 +246,13 @@ export default {
 		getRendererScriptSrc() {
 			return getRendererScriptSrc(this.renderer);
 		},
+		getIconsJustifyContent() {
+			if (this.hasMediatypeH5p && this.hasSize) {
+				return "flex-end";
+			} else {
+				return "space-between";
+			}
+		},
 		createdAt() {
 			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
@@ -391,7 +402,6 @@ $tablet-portrait-width: 768px;
 		top: 0;
 		z-index: var(--layer-modal);
 		display: flex;
-		justify-content: space-between;
 		width: 100%;
 		padding: var(--space-md);
 
