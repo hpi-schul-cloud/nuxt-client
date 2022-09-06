@@ -19,7 +19,7 @@ describe("@components/legacy/TheTopBar", () => {
 		},
 	};
 	it("Render defaults", () => {
-		const wrapper = shallowMount(TheTopBar,{
+		const wrapper = shallowMount(TheTopBar, {
 			...createComponentMocks({
 				mocks: {
 					$theme,
