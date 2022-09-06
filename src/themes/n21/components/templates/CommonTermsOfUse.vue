@@ -127,7 +127,7 @@ export default {
 	},
 	data() {
 		return {
-			privacyLink: filePathsModule.getSpecificFiles.privacyExemplary,
+			privacyLink: '/datenschutz',
 			termsOfUseLink: filePathsModule.getSpecificFiles.termsOfUseExemplary,
 		};
 	},
