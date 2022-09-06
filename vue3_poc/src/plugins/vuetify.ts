@@ -1,7 +1,7 @@
 // Styles
-import "@mdi/font/css/materialdesignicons.css";
 import "../styles/roboto-font-face.css";
 import "../styles/vuetify.scss";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
@@ -17,6 +17,13 @@ export default createVuetify({
 		defaultTheme: "customTheme",
 		themes: {
 			customTheme,
+		},
+	},
+	icons: {
+		defaultSet: "mdi",
+		aliases,
+		sets: {
+			mdi,
 		},
 	},
 });
