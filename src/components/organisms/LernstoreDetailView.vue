@@ -70,7 +70,12 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div>
+				<div v-if="hasMediatypeH5p && hasSize" class="external-content-warning">
+					<p class="text-s external-content-title">
+						{{ $t("pages.content.material.showMaterialHint") }}
+					</p>
+				</div>
+				<div v-else>
 					<base-button
 						v-if="isMerlin"
 						design="outline"

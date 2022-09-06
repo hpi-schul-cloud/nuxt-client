@@ -621,6 +621,7 @@
 	"pages.content.label.selected": "Aktiv",
 	"pages.content.material.leavePageWarningFooter": "Die Nutzung dieser Angebote unterliegt gegebenenfalls anderen rechtlichen Bedingungen. Bitte schauen Sie daher in die Datenschutzerklärung des externen Anbieters!",
 	"pages.content.material.leavePageWarningMain": "Hinweis: Beim Klicken des Links verlassen Sie das Angebot der Schul-Cloud Brandenburg.",
+	"pages.content.material.showMaterialHint": "Hinweis: Verwenden Sie die linke Seite der Anzeige, um auf den Inhalt zuzugreifen.",
 	"pages.content.material.toMaterial": "Zum Inhalt",
 	"pages.content.notification.errorMsg": "Material konnte nicht hinzugefügt werden",
 	"pages.content.notification.lernstoreNotAvailable": "Lern-Store ist nicht verfügbar",
