@@ -645,6 +645,7 @@
 	"pages.content.label.selected": "Активний",
 	"pages.content.material.leavePageWarningFooter": "Використання цих пропозицій може регулюватися іншими правовими умовами. Тому ознайомтеся з політикою конфіденційності зовнішнього постачальника!",
 	"pages.content.material.leavePageWarningMain": "Примітка. Натиснувши на посилання, ви перейдете з Schul-Cloud Brandenburg.",
+	"pages.content.material.showMaterialHint": "Примітка: Використовуйте ліву частину оголошення для доступу до вмісту.",
 	"pages.content.material.toMaterial": "Матеріал",
 	"pages.content.notification.errorMsg": "Щось пішло не так. Не вдалося додати матеріал.",
 	"pages.content.notification.lernstoreNotAvailable": "Learning Store недоступний",

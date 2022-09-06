@@ -614,6 +614,7 @@
 	"pages.content.label.selected": "Active",
 	"pages.content.material.leavePageWarningFooter": "The use of these offers may be subject to other legal conditions. Therefore, please take a look at the privacy policy of the external provider!",
 	"pages.content.material.leavePageWarningMain": "Note: Clicking the link will take you away from Schul-Cloud Brandenburg",
+	"pages.content.material.showMaterialHint": "Note: Use the left side of the display to access the content.",
 	"pages.content.material.toMaterial": "Material",
 	"pages.content.notification.errorMsg": "Something has gone wrong. Material could not be added.",
 	"pages.content.notification.lernstoreNotAvailable": "Learning Store is not available",
