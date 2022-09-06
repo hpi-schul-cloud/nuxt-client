@@ -15,7 +15,7 @@
 				tag="p"
 			>
 				<template #dataProtection>
-					<a class="link" :href="fileLinks.dataProtection">{{
+					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
 						$t("common.words.privacyPolicy")
 					}}</a>
 				</template>
