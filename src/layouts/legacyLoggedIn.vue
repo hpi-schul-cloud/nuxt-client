@@ -67,7 +67,7 @@ export default {
 				},
 				{
 					type: "popupIcon",
-					title: "Hilfe",
+					title: this.$t("global.topbar.actions.help"),
 					icon: "question",
 					component: "help-dropdown",
 					config: {

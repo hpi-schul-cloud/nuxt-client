@@ -9,6 +9,7 @@
 			:aria-label="`${$t(
 				'global.topbar.initials.currentUser'
 			)} ${firstName} ${lastName} ${userRole}`"
+			:title="`${firstName} ${lastName} (${userRole})`"
 			@click="popup"
 		>
 			<div class="icon">{{ initials }}</div>

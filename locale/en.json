@@ -226,6 +226,7 @@
 	"global.topbar.loggedOut.actions.blog": "Blog",
 	"global.topbar.loggedOut.actions.faq": "FAQ",
 	"global.topbar.loggedOut.actions.steps": "First steps",
+	"global.topbar.fullscreen": "Full screen",
 	"mixins.typeMeta.types.default": "Content",
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
