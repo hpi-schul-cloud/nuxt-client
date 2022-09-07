@@ -230,94 +230,14 @@ export default {
 		role: { type: String, default: "" },
 	},
 	computed: {
-		provider() {
-			const provider = getProvider(this.resource.properties);
-			return provider ? provider.replace(/ {2,}/g, "") : undefined;
-		},
 		author() {
 			return getAuthor(this.resource.properties);
-		},
-		rendererCode() {
-			return getRenderer(this.renderer);
-		},
-		getRendererIFrameSrc() {
-			return getRendererSrc(this.renderer);
-		},
-		getRendererScriptSrc() {
-			return getRendererScriptSrc(this.renderer);
-		},
-		getIconsJustifyContent() {
-			if (this.hasMediatypeH5p && this.hasSize) {
-				return "flex-end";
-			} else {
-				return "space-between";
-			}
-		},
-		createdAt() {
-			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
-		},
-		updatedAt() {
-			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
-		},
-		type() {
-			return this.getTypeI18nName(this.resource.mimetype);
-		},
-		hasAuthor() {
-			return this.author && this.author !== DEFAULT_AUTHOR;
-		},
-		hasMediatypeH5p() {
-			const { mediatype } = this.resource;
-			//TODO: Delete (only for testing)
-			//const mediatype = "file-h5p";
-			if (mediatype == "file-h5p") {
-				return true;
-			}
-			return false;
-		},
-		renderSRC() {
-			return "https://mv-rendering.schul-cloud.org/esrender/modules/cache/h5p/2021/03/26/08/35/46/0857f50e-7bd2-40bd-a3a2-b9eca661d254_1.2.html?ESSID=on9ongc8ppqmdktc51htcm11e6&amp;token=";
-		},
-		hasSize() {
-			const { size } = this.resource;
-			//TODO: Delete (only for testing)
-			//const size = 2;
-			if (size > 0 && size != null && size != undefined) {
-				return true;
-			}
-			return false;
-		},
-		isMerlin() {
-			return isMerlinContent(this.resource);
-		},
-		merlinTokenReference() {
-			return getMerlinReference(this.resource);
-		},
-		description() {
-			return getDescription(
-				this.resource.description,
-				this.resource.properties
-			);
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
 		},
-		isBrandenburg() {
-			return process.env.SC_THEME === "brb";
-		},
-		downloadUrl() {
-			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
-		},
-		tags() {
-			return getTags(this.resource.properties);
-		},
-		filename() {
-			return this.resource.filename;
-		},
 		closeButtonStyleSelector() {
 			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
-		},
-		isInline() {
-			return !!this.$route.query.inline;
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(
@@ -338,6 +258,83 @@ export default {
 				}
 			}
 			return "";
+		},
+		createdAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
+		},
+		description() {
+			return getDescription(
+				this.resource.description,
+				this.resource.properties
+			);
+		},
+		downloadUrl() {
+			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
+		},
+		filename() {
+			return this.resource.filename;
+		},
+		getIconsJustifyContent() {
+			if (this.hasMediatypeH5p && this.hasSize) {
+				return "flex-end";
+			} else {
+				return "space-between";
+			}
+		},
+		getRendererIFrameSrc() {
+			return getRendererSrc(this.renderer);
+		},
+		getRendererScriptSrc() {
+			return getRendererScriptSrc(this.renderer);
+		},
+		hasAuthor() {
+			return this.author && this.author !== DEFAULT_AUTHOR;
+		},
+		hasMediatypeH5p() {
+			const { mediatype } = this.resource;
+			//TODO: Delete (only for testing)
+			//const mediatype = "file-h5p";
+			if (mediatype == "file-h5p") {
+				return true;
+			}
+			return false;
+		},
+		hasSize() {
+			const { size } = this.resource;
+			//TODO: Delete (only for testing)
+			//const size = 2;
+			if (size > 0 && size != null && size != undefined) {
+				return true;
+			}
+			return false;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
+		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+		isMerlin() {
+			return isMerlinContent(this.resource);
+		},
+		merlinTokenReference() {
+			return getMerlinReference(this.resource);
+		},
+		provider() {
+			const provider = getProvider(this.resource.properties);
+			return provider ? provider.replace(/ {2,}/g, "") : undefined;
+		},
+		rendererCode() {
+			return getRenderer(this.renderer);
+		},
+		tags() {
+			return getTags(this.resource.properties);
+		},
+		type() {
+			return this.getTypeI18nName(this.resource.mimetype);
+		},
+		updatedAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 	},
 	methods: {
