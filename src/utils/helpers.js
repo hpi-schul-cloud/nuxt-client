@@ -99,10 +99,6 @@ export const getTitle = (resource) => {
 	return resource.title ? resource.title : "";
 };
 
-export const getRenderer = (rendererEdu) => {
-	return rendererEdu;
-};
-
 export const getRendererSrc = (rendererEdu) => {
 	const rendererArray = rendererEdu.toString().split(" ");
 	for (let i = 0; i < rendererArray.length; i++) {
