@@ -23714,14 +23714,12 @@
 									tm.has(s) ||
 										(tm.set(s, new Map()),
 										s.registerPostFixer((t) => nm(s, t))),
-										tm
-											.get(s)
-											.set(n, {
-												text: i,
-												isDirectHost: o,
-												keepOnFocus: r,
-												hostElement: o ? n : null,
-											}),
+										tm.get(s).set(n, {
+											text: i,
+											isDirectHost: o,
+											keepOnFocus: r,
+											hostElement: o ? n : null,
+										}),
 										e.change((t) => nm(s, t));
 								})({
 									view: e,
@@ -25689,12 +25687,10 @@
 						}
 						_setupDropMarker() {
 							const t = this.editor;
-							t.conversion
-								.for("editingDowncast")
-								.markerToHighlight({
-									model: "drop-target",
-									view: { classes: ["ck-clipboard-drop-target-range"] },
-								}),
+							t.conversion.for("editingDowncast").markerToHighlight({
+								model: "drop-target",
+								view: { classes: ["ck-clipboard-drop-target-range"] },
+							}),
 								t.conversion.for("editingDowncast").markerToElement({
 									model: "drop-target",
 									view: (e, { writer: n }) => {
@@ -25951,12 +25947,10 @@
 								n
 									.for("upcast")
 									.elementToElement({ model: "softBreak", view: "br" }),
-								n
-									.for("downcast")
-									.elementToElement({
-										model: "softBreak",
-										view: (t, { writer: e }) => e.createEmptyElement("br"),
-									}),
+								n.for("downcast").elementToElement({
+									model: "softBreak",
+									view: (t, { writer: e }) => e.createEmptyElement("br"),
+								}),
 								i.addObserver(Im),
 								t.commands.add("shiftEnter", new Dg(t)),
 								this.listenTo(
@@ -26725,18 +26719,16 @@
 									model: "paragraph",
 									view: "p",
 								}),
-								t.conversion
-									.for("upcast")
-									.elementToElement({
-										model: (t, { writer: e }) =>
-											gp.paragraphLikeElements.has(t.name)
-												? t.isEmpty
-													? null
-													: e.createElement("paragraph")
-												: null,
-										view: /.+/,
-										converterPriority: "low",
-									});
+								t.conversion.for("upcast").elementToElement({
+									model: (t, { writer: e }) =>
+										gp.paragraphLikeElements.has(t.name)
+											? t.isEmpty
+												? null
+												: e.createElement("paragraph")
+											: null,
+									view: /.+/,
+									converterPriority: "low",
+								});
 						}
 					}
 					gp.paragraphLikeElements = new Set([
@@ -26853,13 +26845,11 @@
 								});
 						}
 						_addDefaultH1Conversion(t) {
-							t.conversion
-								.for("upcast")
-								.elementToElement({
-									model: "heading1",
-									view: "h1",
-									converterPriority: o.get("low") + 1,
-								});
+							t.conversion.for("upcast").elementToElement({
+								model: "heading1",
+								view: "h1",
+								converterPriority: o.get("low") + 1,
+							});
 						}
 					}
 					var _p = __webpack_require__(128),
@@ -28180,19 +28170,15 @@
 								e = t.t,
 								n = t.conversion,
 								i = t.plugins.get("ImageUtils");
-							n
-								.for("dataDowncast")
-								.elementToStructure({
+							n.for("dataDowncast").elementToStructure({
+								model: "imageBlock",
+								view: (t, { writer: e }) => Ip(e),
+							}),
+								n.for("editingDowncast").elementToStructure({
 									model: "imageBlock",
-									view: (t, { writer: e }) => Ip(e),
+									view: (t, { writer: n }) =>
+										i.toImageWidget(Ip(n), n, e("image widget")),
 								}),
-								n
-									.for("editingDowncast")
-									.elementToStructure({
-										model: "imageBlock",
-										view: (t, { writer: n }) =>
-											i.toImageWidget(Ip(n), n, e("image widget")),
-									}),
 								n
 									.for("downcast")
 									.add(Kp(i, "imageBlock", "src"))
@@ -28317,12 +28303,10 @@
 								e = t.t,
 								n = t.conversion,
 								i = t.plugins.get("ImageUtils");
-							n
-								.for("dataDowncast")
-								.elementToElement({
-									model: "imageInline",
-									view: (t, { writer: e }) => e.createEmptyElement("img"),
-								}),
+							n.for("dataDowncast").elementToElement({
+								model: "imageInline",
+								view: (t, { writer: e }) => e.createEmptyElement("img"),
+							}),
 								n.for("editingDowncast").elementToStructure({
 									model: "imageInline",
 									view: (t, { writer: n }) =>
@@ -28343,18 +28327,16 @@
 									.add(Kp(i, "imageInline", "src"))
 									.add(Kp(i, "imageInline", "alt"))
 									.add($p(i, "imageInline")),
-								n
-									.for("upcast")
-									.elementToElement({
-										view: Mp(t, "imageInline"),
-										model: (t, { writer: e }) =>
-											e.createElement(
-												"imageInline",
-												t.hasAttribute("src")
-													? { src: t.getAttribute("src") }
-													: null
-											),
-									});
+								n.for("upcast").elementToElement({
+									view: Mp(t, "imageInline"),
+									model: (t, { writer: e }) =>
+										e.createElement(
+											"imageInline",
+											t.hasAttribute("src")
+												? { src: t.getAttribute("src") }
+												: null
+										),
+								});
 						}
 						_setupClipboardIntegration() {
 							const t = this.editor,
@@ -28720,21 +28702,17 @@
 								t.conversion
 									.for("dataDowncast")
 									.attributeToElement({ model: "linkHref", view: Df }),
-								t.conversion
-									.for("editingDowncast")
-									.attributeToElement({
-										model: "linkHref",
-										view: (t, e) => Df(Pf(t), e),
-									}),
-								t.conversion
-									.for("upcast")
-									.elementToAttribute({
-										view: { name: "a", attributes: { href: !0 } },
-										model: {
-											key: "linkHref",
-											value: (t) => t.getAttribute("href"),
-										},
-									}),
+								t.conversion.for("editingDowncast").attributeToElement({
+									model: "linkHref",
+									view: (t, e) => Df(Pf(t), e),
+								}),
+								t.conversion.for("upcast").elementToAttribute({
+									view: { name: "a", attributes: { href: !0 } },
+									model: {
+										key: "linkHref",
+										value: (t) => t.getAttribute("href"),
+									},
+								}),
 								t.commands.add("link", new Of(t)),
 								t.commands.add("unlink", new Rf(t));
 							const e = (function (t, e) {
@@ -28839,12 +28817,10 @@
 											}
 										},
 									}),
-									e.conversion
-										.for("upcast")
-										.elementToAttribute({
-											view: { name: "a", ...t._createPattern() },
-											model: { key: t.id },
-										});
+									e.conversion.for("upcast").elementToAttribute({
+										view: { name: "a", ...t._createPattern() },
+										model: { key: t.id },
+									});
 							});
 						}
 						_enableLinkOpen() {
@@ -29276,24 +29252,20 @@
 								(this._balloon = t.plugins.get(Wu)),
 								this._createToolbarLinkButton(),
 								this._enableUserBalloonInteractions(),
-								t.conversion
-									.for("editingDowncast")
-									.markerToHighlight({
-										model: Zf,
-										view: { classes: ["ck-fake-link-selection"] },
-									}),
-								t.conversion
-									.for("editingDowncast")
-									.markerToElement({
-										model: Zf,
-										view: {
-											name: "span",
-											classes: [
-												"ck-fake-link-selection",
-												"ck-fake-link-selection_collapsed",
-											],
-										},
-									});
+								t.conversion.for("editingDowncast").markerToHighlight({
+									model: Zf,
+									view: { classes: ["ck-fake-link-selection"] },
+								}),
+								t.conversion.for("editingDowncast").markerToElement({
+									model: Zf,
+									view: {
+										name: "span",
+										classes: [
+											"ck-fake-link-selection",
+											"ck-fake-link-selection_collapsed",
+										],
+									},
+								});
 						}
 						destroy() {
 							super.destroy(), this.formView.destroy();
@@ -36228,18 +36200,14 @@
 									});
 								}),
 								i.for("upcast").add(vk()),
-								i
-									.for("editingDowncast")
-									.elementToStructure({
-										model: { name: "table", attributes: ["headingRows"] },
-										view: Sk(o, { asWidget: !0 }),
-									}),
-								i
-									.for("dataDowncast")
-									.elementToStructure({
-										model: { name: "table", attributes: ["headingRows"] },
-										view: Sk(o),
-									}),
+								i.for("editingDowncast").elementToStructure({
+									model: { name: "table", attributes: ["headingRows"] },
+									view: Sk(o, { asWidget: !0 }),
+								}),
+								i.for("dataDowncast").elementToStructure({
+									model: { name: "table", attributes: ["headingRows"] },
+									view: Sk(o),
+								}),
 								i
 									.for("upcast")
 									.elementToElement({ model: "tableRow", view: "tr" }),
@@ -36254,15 +36222,13 @@
 										{ priority: "high" }
 									);
 								}),
-								i
-									.for("downcast")
-									.elementToElement({
-										model: "tableRow",
-										view: (t, { writer: e }) =>
-											t.isEmpty
-												? e.createEmptyElement("tr")
-												: e.createContainerElement("tr"),
-									}),
+								i.for("downcast").elementToElement({
+									model: "tableRow",
+									view: (t, { writer: e }) =>
+										t.isEmpty
+											? e.createEmptyElement("tr")
+											: e.createContainerElement("tr"),
+								}),
 								i
 									.for("upcast")
 									.elementToElement({ model: "tableCell", view: "td" }),
@@ -36271,47 +36237,37 @@
 									.elementToElement({ model: "tableCell", view: "th" }),
 								i.for("upcast").add(Ck("td")),
 								i.for("upcast").add(Ck("th")),
-								i
-									.for("editingDowncast")
-									.elementToElement({
-										model: "tableCell",
-										view: Tk({ asWidget: !0 }),
-									}),
+								i.for("editingDowncast").elementToElement({
+									model: "tableCell",
+									view: Tk({ asWidget: !0 }),
+								}),
 								i
 									.for("dataDowncast")
 									.elementToElement({ model: "tableCell", view: Tk() }),
-								i
-									.for("editingDowncast")
-									.elementToElement({
-										model: "paragraph",
-										view: Dk({ asWidget: !0 }),
-										converterPriority: "high",
-									}),
-								i
-									.for("dataDowncast")
-									.elementToElement({
-										model: "paragraph",
-										view: Dk(),
-										converterPriority: "high",
-									}),
+								i.for("editingDowncast").elementToElement({
+									model: "paragraph",
+									view: Dk({ asWidget: !0 }),
+									converterPriority: "high",
+								}),
+								i.for("dataDowncast").elementToElement({
+									model: "paragraph",
+									view: Dk(),
+									converterPriority: "high",
+								}),
 								i
 									.for("downcast")
 									.attributeToAttribute({ model: "colspan", view: "colspan" }),
-								i
-									.for("upcast")
-									.attributeToAttribute({
-										model: { key: "colspan", value: v_("colspan") },
-										view: "colspan",
-									}),
+								i.for("upcast").attributeToAttribute({
+									model: { key: "colspan", value: v_("colspan") },
+									view: "colspan",
+								}),
 								i
 									.for("downcast")
 									.attributeToAttribute({ model: "rowspan", view: "rowspan" }),
-								i
-									.for("upcast")
-									.attributeToAttribute({
-										model: { key: "rowspan", value: v_("rowspan") },
-										view: "rowspan",
-									}),
+								i.for("upcast").attributeToAttribute({
+									model: { key: "rowspan", value: v_("rowspan") },
+									view: "rowspan",
+								}),
 								t.data.mapper.on("modelToViewPosition", (t, e) => {
 									const n = e.modelPosition.parent,
 										i = e.modelPosition.nodeBefore;
