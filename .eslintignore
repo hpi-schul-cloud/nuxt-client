@@ -4,3 +4,4 @@
 dist
 .nuxt
 /src/serverApi/**
+/src/static/scripts/**
