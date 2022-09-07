@@ -80,6 +80,11 @@ module.exports = {
 				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
+		script: [
+			{ src: "/scripts/ckeditor5/ckeditor.js" },
+			{ src: "/scripts/ckeditor5/translations/en.js" },
+			{ src: "/scripts/ckeditor5/translations/es.js" },
+		],
 		/* script: [
 			{
 				hid: "mathjax-config",
