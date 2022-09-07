@@ -200,11 +200,11 @@ import {
 	getMerlinReference,
 	getMetadataAttribute,
 	getProvider,
-	getTags,
-	isMerlinContent,
-	getRenderer,
 	getRendererSrc,
 	getRendererScriptSrc,
+	getTags,
+	isMerlinContent,
+
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
 
@@ -323,9 +323,6 @@ export default {
 		provider() {
 			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
-		},
-		rendererCode() {
-			return getRenderer(this.renderer);
 		},
 		tags() {
 			return getTags(this.resource.properties);
