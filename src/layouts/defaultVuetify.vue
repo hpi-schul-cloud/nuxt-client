@@ -5,7 +5,7 @@
 				<Nuxt />
 			</v-main>
 			<snackbar />
-      <loading-state-dialog />
+			<loading-state-dialog />
 		</v-app>
 	</legacy-logged-in>
 </template>

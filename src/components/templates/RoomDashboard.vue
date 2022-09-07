@@ -164,7 +164,10 @@
 </template>
 
 <script>
-import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
 import { copyModule, roomModule, taskModule } from "@/store";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
