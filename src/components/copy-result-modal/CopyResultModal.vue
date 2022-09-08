@@ -143,7 +143,7 @@ export default {
 		hasTimeoutError() {
 			return (
 				this.copyResultError !== undefined &&
-				this.copyResultError?.statusCode !== "504"
+				this.copyResultError.statusCode === 504
 			);
 		},
 		isOpen() {
