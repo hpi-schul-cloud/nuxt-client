@@ -38,6 +38,7 @@
 				</v-alert>
 				<v-alert
 					v-if="hasTimeoutError"
+					data-testid="timeout-alert"
 					type="warning"
 					:icon="mdiCloseCircle"
 					text

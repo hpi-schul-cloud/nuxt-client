@@ -64,6 +64,14 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			expect(wrapper.vm.isOpen).toBe(true);
 		});
 
+		it("should open the dialog if timeout occurs", () => {
+			const wrapper = getWrapper({
+				copyResultError: { statusCode: "504", message: "" },
+			});
+
+			expect(wrapper.vm.isOpen).toBe(true);
+		});
+
 		it("should open the dialog if copy results exist", () => {
 			const wrapper = getWrapper({
 				copyResultStatus: "partial",
@@ -99,6 +107,20 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			});
 		});
 
+		describe("timeout", () => {
+			it("should render warning alert if copy result error is 405", async () => {
+				const wrapper = getWrapper({
+					copyResultError: { statusCode: "504", message: "" },
+				});
+				const timeoutMessage = wrapper.find('[data-testId="timeout-alert"]')
+					.element.textContent;
+
+				expect(timeoutMessage).toContain(
+					wrapper.vm.$i18n.t("components.molecules.copyResult.timeoutCopy")
+				);
+			});
+		});
+
 		describe("failure", () => {
 			it("should render error alert if status is failure", async () => {
 				const wrapper = getWrapper({
@@ -111,6 +133,23 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 
 				expect(failureMessage).toContain(
 					wrapper.vm.$i18n.t("components.molecules.copyResult.failedCopy")
+				);
+			});
+		});
+
+		describe("timeout", () => {
+			it("should render success alert if status is success", async () => {
+				const wrapper = getWrapper({
+					isLoading: false,
+					copyResultStatus: "success",
+				});
+				const successMessage = wrapper.find('[data-testId="success-alert"]')
+					.element.textContent;
+
+				expect(successMessage).toContain(
+					wrapper.vm.$i18n.t(
+						"components.molecules.copyResult.successfullyCopied"
+					)
 				);
 			});
 		});
@@ -184,6 +223,17 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = getWrapper({
 				isLoading: true,
 				copyResultStatus: undefined,
+			});
+			const headline = wrapper.find("h2").element.textContent;
+
+			expect(headline).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.title.loading")
+			);
+		});
+
+		it("should show loading-title during timeout", () => {
+			const wrapper = getWrapper({
+				copyResultError: { statusCode: "504", message: "" },
 			});
 			const headline = wrapper.find("h2").element.textContent;
 
