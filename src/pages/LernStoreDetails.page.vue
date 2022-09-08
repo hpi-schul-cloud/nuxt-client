@@ -7,7 +7,7 @@
 		/>
 		<lernstore-detail-view v-else :resource="resource" :renderer="renderer" />
 	</span>
-	<base-spinner v-else />
+	<base-spinner v-else class="loading" />
 </template>
 
 <script>
@@ -68,11 +68,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-base-spinner {
+@import "@styles";
+
+.loading {
 	position: absolute;
-	top: 45%;
-	left: 45%;
-	width: 10%;
-	height: 10%;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 25%;
+	height: 25%;
+	margin: auto;
 }
 </style>
