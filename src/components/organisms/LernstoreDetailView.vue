@@ -438,7 +438,7 @@ $tablet-portrait-width: 768px;
 			.h5p-iframe {
 				width: 85%;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				margin: 0.1em;
+				margin: 1.1px;
 				border: none;
 			}
 
