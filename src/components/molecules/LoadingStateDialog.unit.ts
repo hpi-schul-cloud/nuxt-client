@@ -78,4 +78,33 @@ describe("@components/molecules/LoadingModal", () => {
 			true
 		);
 	});
+
+	it("should bind the dialog to our store", () => {
+		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
+			...loadingStateModuleGetters,
+			getIsOpen: true,
+			close: () => true,
+		});
+
+		console.log(
+			"loadingStateModuleMock.getIsOpen",
+			loadingStateModuleMock.getIsOpen
+		);
+
+		const wrapper = mountComponent();
+
+		const dialog = wrapper.findComponent({ name: "v-dialog" });
+		dialog.vm.$emit("close");
+		wrapper.vm.$nextTick();
+		// dialog.value = false;
+		console.log(
+			"loadingStateModuleMock.getIsOpen",
+			loadingStateModuleMock.getIsOpen
+		);
+
+		// wrapper.vm.isActive = false;
+		// wrapper.vm.$nextTick();
+
+		expect(loadingStateModuleMock.close).toHaveBeenCalled();
+	});
 });
