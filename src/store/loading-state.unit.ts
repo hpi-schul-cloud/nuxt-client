@@ -40,6 +40,32 @@ describe("loading-state store", () => {
 
 				expect(setLoadingStateMock).toHaveBeenCalledWith(payload);
 			});
+
+			describe("getIsOpen", () => {
+				it("should initially return false", () => {
+					const loadingStateModule = new LoadingStateModule({});
+					expect(loadingStateModule.getIsOpen).toBe(false);
+				});
+
+				it("should return true after opening the dialog", () => {
+					const loadingStateModule = new LoadingStateModule({});
+					loadingStateModule.open({ text: "Test" });
+					expect(loadingStateModule.getIsOpen).toBe(true);
+				});
+			});
+
+			describe("getLoadingState", () => {
+				it("should return given loading state", () => {
+					const payload: LoadingStatePayload = {
+						text: "Test Text",
+						hasOverlay: false,
+						isPersistent: false,
+					};
+					const loadingStateModule = new LoadingStateModule({});
+					loadingStateModule.open(payload);
+					expect(loadingStateModule.getLoadingState).toEqual(payload);
+				});
+			});
 		});
 	});
 });
