@@ -19,23 +19,28 @@
 		</div>
 		<div class="content">
 			<div class="preview">
-				<div class="preview-background-color" />
-				<div
+				<iframe
 					v-if="hasMediatypeH5p && hasSize"
-					class="edusharing_rendering_content_wrapper"
-					role="main"
-				>
+					title="1615548581268-2-interactive-content-5049.h5p"
+					:src="getRendererIFrameSrc"
+					class="h5p-iframe"
+					allowfullscreen="allowfullscreen"
+					frameborder="0"
+					scrolling="no"
+				></iframe>
+				<script
+					v-if="hasMediatypeH5p && hasSize"
+					:src="getRendererScriptSrc"
+					charset="UTF-8"
+				></script>
+				<div class="preview-background-color" />
+				<!-- TODO: delete (only for testing)
 					<iframe
 						:src="getRendererIFrameSrc"
-						style="width: 85%; border: none"
-						allowfullscreen="allowfullscreen"
-						frameBorder="0"
-						scrolling="no"
 					>
 					</iframe>
-					<script :src="getRendererScriptSrc" charset="UTF-8"></script>
-				</div>
-				<div v-else>
+					<script :src="getRendererScriptSrc" charset="UTF-8"></script>-->
+				<div v-if="!hasMediatypeH5p && !hasSize">
 					<div
 						class="preview-background"
 						:style="{
@@ -430,6 +435,13 @@ $tablet-portrait-width: 768px;
 				height: 70vh;
 			}
 
+			.h5p-iframe {
+				width: 85%;
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				margin: 0.1em;
+				border: none;
+			}
+
 			.preview-background-color {
 				position: absolute;
 				top: 0;
@@ -465,6 +477,17 @@ $tablet-portrait-width: 768px;
 					min-height: auto;
 				}
 			}
+		}
+	}
+
+	.floating-buttons {
+		position: sticky;
+		bottom: 0;
+		z-index: var(--layer-page);
+		border-radius: var(--radius-md);
+
+		@media (max-width: $tablet-portrait-width) {
+			padding-bottom: var(--space-xs);
 		}
 	}
 
@@ -572,17 +595,6 @@ $tablet-portrait-width: 768px;
 						color: var(--color-black);
 					}
 				}
-			}
-		}
-
-		.floating-buttons {
-			position: sticky;
-			bottom: 0;
-			z-index: var(--layer-page);
-			border-radius: var(--radius-md);
-
-			@media (max-width: $tablet-portrait-width) {
-				padding-bottom: var(--space-xs);
 			}
 		}
 	}
