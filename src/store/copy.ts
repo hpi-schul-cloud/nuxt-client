@@ -80,7 +80,7 @@ export default class CopyModule extends VuexModule {
 		} catch (error: any) {
 			this.setLoading(false);
 			this.setBusinessError({
-				statusCode: error?.response?.status,
+				statusCode: `${error?.response?.status}`,
 				message: error?.response?.statusText,
 				...error,
 			});
