@@ -4,3 +4,4 @@
 dist
 .nuxt
 /src/serverApi/**
+/vue3_poc/ckeditor5/**
