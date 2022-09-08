@@ -37,9 +37,7 @@
 					</div>
 				</v-alert>
 				<v-alert
-					v-if="
-						copyResultError !== undefined && copyResultError.statusCode === 504
-					"
+					v-if="hasTimeoutError"
 					type="warning"
 					:icon="mdiCloseCircle"
 					text
@@ -142,12 +140,17 @@ export default {
 		items() {
 			return this.copyResultItems;
 		},
+		hasTimeoutError() {
+			return (
+				this.copyResultError !== undefined &&
+				this.copyResultError?.statusCode !== "504"
+			);
+		},
 		isOpen() {
 			return (
 				this.isLoading === true ||
 				this.copyResultStatus !== undefined ||
-				(this.copyResultError !== undefined &&
-					this.copyResultError?.statusCode !== "504")
+				this.hasTimeoutError
 			);
 		},
 		status() {
@@ -190,7 +193,7 @@ export default {
 			);
 		},
 		title() {
-			if (this.isLoading) {
+			if (this.isLoading || this.hasTimeoutError) {
 				return this.$t("components.molecules.copyResult.title.loading");
 			}
 
