@@ -159,6 +159,7 @@ import authStoreModule from "@/store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
 import globalStubs from "./stubs.js";
 import VueMeta from "vue-meta";
+import vueCompositionApi from "@vue/composition-api";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
@@ -174,6 +175,7 @@ global.createComponentMocks = ({
 	/*style,*/ mocks,
 	stubs,
 	$config,
+	compositionApi,
 }) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
@@ -273,6 +275,11 @@ global.createComponentMocks = ({
 				Vue.prototype.$dialog = dialog;
 			},
 		});
+	}
+
+	// If using `compositionApi: true`, we'll use the Vue composition API
+	if (compositionApi === true) {
+		localVue.use(vueCompositionApi);
 	}
 
 	// If using `router: true`, we'll automatically stub out
