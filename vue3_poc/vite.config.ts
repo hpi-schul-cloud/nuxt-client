@@ -16,6 +16,13 @@ export default defineConfig(async () => {
 			port: 4000,
 		},
 		plugins: [vue(), vuetify({ styles: "expose" }), replaceFiles(replacements)],
+		// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
+		optimizeDeps: {
+			include: ["ckeditor5-custom-build"],
+		},
+		build: {
+			commonjsOptions: { include: [/ckeditor5/] },
+		},
 		test: {
 			globals: true,
 			environment: "jsdom",

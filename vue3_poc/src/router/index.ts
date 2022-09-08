@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomePage from "@/pages/HomePage.vue";
 import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
+import CK5ProofOfConcept from "@/components/CK5ProofOfConcept.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
 	{
@@ -20,6 +21,11 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		// this generates a separate chunk (About.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
 		component: () => import("../pages/ImpressumPage.vue"),
+	},
+	{
+		path: "/ck5-editor",
+		name: "ck5editor",
+		component: CK5ProofOfConcept,
 	},
 ];
 
