@@ -37,6 +37,19 @@
 					</div>
 				</v-alert>
 				<v-alert
+					v-if="
+						copyResultError !== undefined && copyResultError.statusCode === 504
+					"
+					type="warning"
+					:icon="mdiCloseCircle"
+					text
+					border="left"
+				>
+					<div class="alert_text mr-2">
+						{{ $t("components.molecules.copyResult.timeoutCopy") }}
+					</div>
+				</v-alert>
+				<v-alert
 					v-if="needsInfoText"
 					type="warning"
 					:icon="mdiInformation"
@@ -98,6 +111,7 @@ import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
+import { BusinessError } from "../../store/types/commons";
 
 export default {
 	name: "CopyResultModal",
@@ -110,6 +124,10 @@ export default {
 		},
 		copyResultStatus: {
 			type: String,
+			default: () => undefined,
+		},
+		copyResultError: {
+			type: BusinessError,
 			default: () => undefined,
 		},
 	},
@@ -125,7 +143,12 @@ export default {
 			return this.copyResultItems;
 		},
 		isOpen() {
-			return this.isLoading === true || this.copyResultStatus !== undefined;
+			return (
+				this.isLoading === true ||
+				this.copyResultStatus !== undefined ||
+				(this.copyResultError !== undefined &&
+					this.copyResultError?.statusCode !== "504")
+			);
 		},
 		status() {
 			return this.copyResultStatus;
