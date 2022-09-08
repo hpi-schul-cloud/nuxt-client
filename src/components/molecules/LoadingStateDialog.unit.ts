@@ -83,27 +83,11 @@ describe("@components/molecules/LoadingModal", () => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			...loadingStateModuleGetters,
 			getIsOpen: true,
-			close: () => true,
+			close: jest.fn(),
 		});
 
-		console.log(
-			"loadingStateModuleMock.getIsOpen",
-			loadingStateModuleMock.getIsOpen
-		);
-
 		const wrapper = mountComponent();
-
-		const dialog = wrapper.findComponent({ name: "v-dialog" });
-		dialog.vm.$emit("close");
-		wrapper.vm.$nextTick();
-		// dialog.value = false;
-		console.log(
-			"loadingStateModuleMock.getIsOpen",
-			loadingStateModuleMock.getIsOpen
-		);
-
-		// wrapper.vm.isActive = false;
-		// wrapper.vm.$nextTick();
+		wrapper.setData({ isDialogOpen: false });
 
 		expect(loadingStateModuleMock.close).toHaveBeenCalled();
 	});
