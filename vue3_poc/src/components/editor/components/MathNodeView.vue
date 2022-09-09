@@ -5,7 +5,7 @@
 			<button @click="deleteFormula">delete formula</button>
 		</div>
 		<div class="content">
-			<p><strong>Edit</strong></p>
+			<p><strong>Edit with LaTex</strong></p>
 			<textarea v-model="formula" cols="50 " rows="1"></textarea>
 			<p class="preview"><strong>Preview</strong></p>
 			<div ref="preview">{{ formula }}</div>
@@ -84,18 +84,32 @@ export default {
 	.label {
 		position: absolute;
 		top: 0;
-		padding: var(--radius-sm) var(--radius-md);
+		/* stylelint-disable-next-line */
+		padding: 5px;
 		margin-left: 0;
-		font-size: var(--text-sm);
-		color: var(--color-white);
+		/* stylelint-disable-next-line */
+		font-size: 12px;
+		/* stylelint-disable-next-line */
+		color: #fff;
 		text-transform: uppercase;
-		background-color: var(--color-black);
-		border-radius: 0 0 var(--radius-md) var(--radius-md);
+		/* stylelint-disable-next-line */
+		background-color: #000;
+		/* stylelint-disable-next-line */
+		border-radius: 0 0 5px 5px;
 	}
 
 	.preview {
 		/* stylelint-disable-next-line */
 		margin: 1rem 0 0 0;
+	}
+
+	button {
+		/* stylelint-disable-next-line */
+		border: solid 2px #000;
+		/* stylelint-disable-next-line */
+		margin: 5px 10px 5px 0;
+		/* stylelint-disable-next-line */
+		padding: 3px;
 	}
 }
 </style>
