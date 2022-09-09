@@ -52,7 +52,7 @@ export default defineComponent({
 	</ul>
 </p>
 <p>symbols $₹₻≡⇒</p>
-<p>Some <a href="http://www.gogle.com">Link</a></p>
+<p>Some <a href="http://www.google.com">Link</a></p>
 <p>
 	<figure class="table">
 <table>
@@ -77,10 +77,10 @@ export default defineComponent({
 </p>
 <p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
 <p>IMAGE:
-	<figure class="image"><img src="http://192.168.1.136/cat.jpg" alt="alt image attr"></figure>
+	<figure class="image"><img src="https://icatcare.org/app/uploads/2018/10/What-is-a-cat.png" alt="alt image attr"></figure>
 </p>
 <p>VIDEO:</p>
-	<video src="http://192.168.1.136/film.mp4" controls="true" controlslist="nodownload"></video>
+	<video src="somevideo.mp4" controls="true" controlslist="nodownload"></video>
 <p>AUDIO:</p>
 <audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio>`,
 		};

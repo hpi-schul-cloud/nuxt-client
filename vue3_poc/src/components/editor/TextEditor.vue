@@ -2,7 +2,7 @@
 	<div v-if="editor" class="editor">
 		<div class="default-menu">
 			<div>
-				Simple:
+				<strong>Simple</strong><br />
 				<button
 					:class="{ 'is-active': editor.isActive('undo') }"
 					@click="editor.chain().focus().undo().run()"
@@ -21,28 +21,28 @@
 					:class="{ 'is-active': editor.isActive('bold') }"
 					@click="editor.chain().focus().toggleBold().run()"
 				>
-					format_bold
+					bold
 				</button>
 
 				<button
 					:class="{ 'is-active': editor.isActive('italic') }"
 					@click="editor.chain().focus().toggleItalic().run()"
 				>
-					format_italic
+					italic
 				</button>
 
 				<button
 					:class="{ 'is-active': editor.isActive('underline') }"
 					@click="editor.chain().focus().toggleUnderline().run()"
 				>
-					format_underlined
+					underline
 				</button>
 
 				<button
 					:class="{ 'is-active': editor.isActive('strike') }"
 					@click="editor.chain().focus().toggleStrike().run()"
 				>
-					format_strikethrough
+					strikethrough
 				</button>
 
 				<button
@@ -69,7 +69,7 @@
 					:disabled="isInHeading"
 					@click="editor.chain().focus().toggleBulletList().run()"
 				>
-					format_list_bulleted
+					list_bulleted
 				</button>
 
 				<button
@@ -77,7 +77,7 @@
 					:disabled="isInHeading"
 					@click="editor.chain().focus().toggleOrderedList().run()"
 				>
-					format_list_numbered
+					list_numbered
 				</button>
 
 				<button
@@ -96,7 +96,7 @@
 
 			<!-- Advanced toolbar actions -->
 			<div v-if="advancedFeatures">
-				Advanced:
+				<strong>Advanced</strong><br />
 				<button
 					:class="{ 'is-active': editor.isActive('table') }"
 					@click="
@@ -107,7 +107,7 @@
 							.run()
 					"
 				>
-					table_chart
+					table
 				</button>
 				<button
 					:class="{ 'is-active': editor.isActive('undo') }"
@@ -131,10 +131,39 @@
 					:class="{ 'is-active': editor.isActive('math') }"
 					@click="addMath"
 				>
-					Mathe
+					math
 				</button>
 			</div>
 			<!-- end advanced toolbar actions -->
+
+			<div v-if="editor.isActive('table')">
+				<strong>Table</strong><br />
+				<button @click="deleteTable">delete table</button>
+				<button @click="editor.chain().focus().addColumnBefore().run()">
+					add column before
+				</button>
+				<button @click="editor.chain().focus().addColumnAfter().run()">
+					add column after
+				</button>
+				<button @click="editor.chain().focus().addRowBefore().run()">
+					add row before
+				</button>
+				<button @click="editor.chain().focus().addRowAfter().run()">
+					add row after
+				</button>
+				<button @click="editor.chain().focus().deleteRow().run()">
+					delete row
+				</button>
+				<button @click="editor.chain().focus().deleteColumn().run()">
+					delete column
+				</button>
+				<button @click="editor.chain().focus().mergeCells().run()">
+					merge cells
+				</button>
+				<button @click="editor.chain().focus().splitCell().run()">
+					split cell
+				</button>
+			</div>
 
 			<div style="display: none">
 				<button @click="editor.chain().focus().addColumnBefore().run()">
@@ -239,7 +268,6 @@ export default defineComponent({
 		value(value) {
 			// HTML
 			const isSame = this.editor.getHTML() === value;
-
 			// JSON
 			// const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
@@ -352,24 +380,30 @@ export default defineComponent({
 <style lang="scss" scoped>
 .default-menu {
 	position: sticky;
-	top: var(--sticky-header-height);
-	z-index: var(--layer-sticky-header);
-	padding-top: var(--space-xs-2);
-	padding-bottom: var(--space-xs-2);
+	top: 0;
 	/* stylelint-disable-next-line */
-	background-color: var(--color-gray);
-	border-bottom: 1px solid var(--color-gray);
+	z-index: 99;
+	/* stylelint-disable-next-line */
+	padding: 1rem;
+	/* stylelint-disable-next-line */
+	background-color: #fefefe;
+	/* stylelint-disable-next-line */
+	margin-bottom: 2rem;
+	border-bottom: 2px solid #000;
 
 	button {
 		/* stylelint-disable-next-line */
 		border: solid 2px #000;
 		/* stylelint-disable-next-line */
-		margin: 5px 10px;
+		margin: 5px 10px 5px 0;
+		/* stylelint-disable-next-line */
+		padding: 3px;
 	}
 }
 
 .editor__content {
-	z-index: var(--layer-sticky-page);
+	/* stylelint-disable-next-line */
+	z-index: 1;
 	outline: none;
 
 	::v-deep [contenteditable="true"] {
@@ -389,35 +423,9 @@ export default defineComponent({
 		content: attr(data-empty-text);
 	}
 
-	::v-deep blockquote {
-		position: relative;
-		width: 80%;
-		padding: var(--radius-lg);
-		margin: var(--radius-lg) auto;
-		color: var(--color-warning);
-		text-align: center;
-	}
-
-	::v-deep blockquote::before,
-	::v-deep blockquote::after {
-		position: absolute;
-		font-size: var(--sidebar-sub-item-height);
-		color: var(--color-warning);
-	}
-
-	::v-deep blockquote::before {
-		right: 100%;
-		bottom: calc(-1 * var(--radius-lg));
-		margin-right: calc(-1 * var(--radius-lg));
-		content: '"';
-	}
-
-	::v-deep blockquote::after {
-		top: calc(-1 * var(--radius-lg));
-		bottom: auto;
-		left: 100%;
-		margin-left: calc(-1 * var(--radius-lg));
-		content: '"';
+	::v-deep img {
+		width: 100%;
+		height: auto;
 	}
 
 	::v-deep table {
