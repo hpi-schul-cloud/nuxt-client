@@ -84,6 +84,7 @@ export default defineComponent({
 </table>
 	</figure>
 </p>
+<p>Math from Latex: $$(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}$$</p>
 <p>Math formula: <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></p>
 <p>IMAGE:
 	<figure class="image"><img src="https://icatcare.org/app/uploads/2018/10/What-is-a-cat.png" alt="alt image attr"></figure>
