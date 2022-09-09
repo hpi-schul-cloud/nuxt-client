@@ -83,7 +83,6 @@ describe("@components/molecules/LoadingModal", () => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			...loadingStateModuleGetters,
 			getIsOpen: true,
-			close: jest.fn(),
 		});
 
 		const wrapper = mountComponent();
