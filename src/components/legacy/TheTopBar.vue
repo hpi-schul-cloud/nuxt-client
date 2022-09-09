@@ -17,6 +17,8 @@
 			<base-button
 				class="item fullscreen-button"
 				design="text icon"
+				:title="$t('global.topbar.actions.fullscreen')"
+				:aria-label="$t('global.topbar.actions.fullscreen')"
 				@click.native="sendEvent('fullscreen')"
 			>
 				<base-icon source="fa" icon="expand" />
@@ -27,6 +29,8 @@
 					class="item"
 					source="fa"
 					:icon="action.icon"
+					:title="action.title"
+					:aria-label="action.title"
 				>
 					<component :is="action.component" v-bind="action.config"></component>
 				</popup-icon>

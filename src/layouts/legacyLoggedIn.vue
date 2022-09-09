@@ -61,19 +61,19 @@ export default {
 			topbarBaseActions: [
 				{
 					type: "popupIcon",
-					title: "QR-Code",
+					title: this.$t("global.topbar.actions.qrCode"),
 					icon: "qrcode",
 					component: "menu-qr-code",
 				},
 				{
 					type: "popupIcon",
-					title: "Hilfe",
+					title: this.$t("global.topbar.actions.help"),
 					icon: "question",
 					component: "help-dropdown",
 					config: {
 						menuItems: [
 							{
-								label: this.$t("global.topbar.actions.help"),
+								label: this.$t("global.topbar.actions.helpSection"),
 								icon: "question-circle",
 								action: "/help",
 								source: "fa",
