@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<button @click="onClick">OpenDialog</button>
-		<button @click="onClickClose">CloseDialog</button>
-		{{ loadingState }} && {{ isDialogOpen }}
 		<v-dialog
 			v-model="isDialogOpen"
 			width="300"
@@ -39,25 +36,7 @@ export default defineComponent({
 			set: () => loadingStateModule.close(),
 		});
 
-		const onClick = async () => {
-			loadingStateModule.open({
-				text: "Import des Kurses läuft",
-				hasOverlay: false,
-			});
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			isDialogOpen.value = false;
-		};
-
-		const onClickClose = () => {
-			loadingStateModule.open({
-				text: "Import des Kurses läuft 2!",
-				hasOverlay: true,
-			});
-		};
-
 		return {
-			onClick,
-			onClickClose,
 			loadingState,
 			isDialogOpen,
 		};

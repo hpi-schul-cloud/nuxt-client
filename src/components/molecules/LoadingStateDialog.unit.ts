@@ -62,8 +62,10 @@ describe("@components/molecules/LoadingModal", () => {
 		});
 
 		const wrapper = mountComponent();
+		loadingStateModuleMock.open({ text: "Example text" });
+		const textCard = wrapper.findComponent({ name: "v-card-text" });
 
-		expect(wrapper.element.textContent).toContain("Loading...");
+		expect(textCard.element.textContent).toContain("Example text");
 	});
 
 	it("should display the progress bar", () => {
