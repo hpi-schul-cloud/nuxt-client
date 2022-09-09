@@ -33,6 +33,7 @@ export default defineComponent({
 <h2>h1</h2>
 <h3>h2</h3>
 <p>h3</p>
+<footer>I am a footer and will just be text</footer>
 <p>some
 	<strong>bold</strong>
 	<i>italic (will be not italic)</i>
@@ -88,7 +89,7 @@ export default defineComponent({
 <p>Math from Latex: $$(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}$$</p>
 <p>Math formula: <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></p>
 <p>IMAGE:
-	<figure class="image"><img src="https://icatcare.org/app/uploads/2018/10/What-is-a-cat.png" alt="alt image attr"></figure>
+	<figure onclick="javascript:alert('hello from js');" class="image"><img src="https://icatcare.org/app/uploads/2018/10/What-is-a-cat.png" alt="alt image attr"></figure>
 </p>
 <p>VIDEO:</p>
 	<video src="http://127.0.0.1:4000/video.mp4" controls="true" controlslist="nodownload"></video>
