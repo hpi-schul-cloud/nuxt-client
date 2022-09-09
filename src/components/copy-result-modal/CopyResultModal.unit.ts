@@ -233,7 +233,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 
 		it("should show loading-title during timeout", () => {
 			const wrapper = getWrapper({
-				copyResultError: { statusCode: "504", message: "" },
+				copyResultError: { statusCode: 504, message: "" },
 			});
 			const headline = wrapper.find("h2").element.textContent;
 

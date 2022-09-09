@@ -110,7 +110,6 @@ import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
-import { BusinessError } from "../../store/types/commons";
 
 export default {
 	name: "CopyResultModal",
@@ -126,7 +125,7 @@ export default {
 			default: () => undefined,
 		},
 		copyResultError: {
-			type: BusinessError,
+			type: Object,
 			default: () => undefined,
 		},
 	},
@@ -144,7 +143,7 @@ export default {
 		hasTimeoutError() {
 			return (
 				this.copyResultError !== undefined &&
-				this.copyResultError.statusCode === "504"
+				this.copyResultError.statusCode === 504
 			);
 		},
 		isOpen() {
