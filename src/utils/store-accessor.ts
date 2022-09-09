@@ -14,6 +14,7 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskModule from "@/store/tasks";
+import LoadingStateModule from "@/store/loading-state";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -33,6 +34,7 @@ let taskModule: TaskModule;
 let schoolsModule: SchoolsModule;
 let notifierModule: NotifierModule;
 let copyModule: CopyModule;
+let loadingStateModule: LoadingStateModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -51,6 +53,7 @@ function initializeStores(store: Store<any>): void {
 	taskModule = getModule(TaskModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
 }
 
 export {
@@ -71,4 +74,5 @@ export {
 	taskModule,
 	notifierModule,
 	copyModule,
+	loadingStateModule,
 };

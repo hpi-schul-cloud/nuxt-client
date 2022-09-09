@@ -5,6 +5,7 @@
 				<Nuxt />
 			</v-main>
 			<snackbar />
+			<loading-state-dialog />
 		</v-app>
 	</legacy-logged-in>
 </template>
@@ -12,9 +13,11 @@
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
 import Snackbar from "@components/molecules/Alert";
+import LoadingStateDialog from "@components/molecules/LoadingStateDialog";
 
 export default {
 	components: {
+		LoadingStateDialog,
 		LegacyLoggedIn,
 		Snackbar,
 	},
