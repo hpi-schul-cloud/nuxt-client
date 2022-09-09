@@ -37,6 +37,18 @@
 					</div>
 				</v-alert>
 				<v-alert
+					v-if="hasTimeoutError"
+					data-testid="timeout-alert"
+					type="warning"
+					:icon="mdiCloseCircle"
+					text
+					border="left"
+				>
+					<div class="alert_text mr-2">
+						{{ $t("components.molecules.copyResult.timeoutCopy") }}
+					</div>
+				</v-alert>
+				<v-alert
 					v-if="needsInfoText"
 					type="warning"
 					:icon="mdiInformation"
@@ -112,6 +124,10 @@ export default {
 			type: String,
 			default: () => undefined,
 		},
+		copyResultError: {
+			type: Object,
+			default: () => undefined,
+		},
 	},
 	data() {
 		return {
@@ -124,8 +140,18 @@ export default {
 		items() {
 			return this.copyResultItems;
 		},
+		hasTimeoutError() {
+			return (
+				this.copyResultError !== undefined &&
+				this.copyResultError.statusCode === 504
+			);
+		},
 		isOpen() {
-			return this.isLoading === true || this.copyResultStatus !== undefined;
+			return (
+				this.isLoading === true ||
+				this.copyResultStatus !== undefined ||
+				this.hasTimeoutError
+			);
 		},
 		status() {
 			return this.copyResultStatus;
@@ -167,7 +193,7 @@ export default {
 			);
 		},
 		title() {
-			if (this.isLoading) {
+			if (this.isLoading || this.hasTimeoutError) {
 				return this.$t("components.molecules.copyResult.title.loading");
 			}
 
