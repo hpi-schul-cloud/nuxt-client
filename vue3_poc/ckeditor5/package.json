@@ -17,6 +17,7 @@
     "@ckeditor/ckeditor5-image": "^35.1.0",
     "@ckeditor/ckeditor5-link": "^35.1.0",
     "@ckeditor/ckeditor5-list": "^35.1.0",
+    "@ckeditor/ckeditor5-markdown-gfm": "^35.1.0",
     "@ckeditor/ckeditor5-media-embed": "^35.1.0",
     "@ckeditor/ckeditor5-paragraph": "^35.1.0",
     "@ckeditor/ckeditor5-table": "^35.1.0",
