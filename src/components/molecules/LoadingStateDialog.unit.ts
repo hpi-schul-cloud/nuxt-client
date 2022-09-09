@@ -55,17 +55,18 @@ describe("@components/molecules/LoadingModal", () => {
 		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(false);
 	});
 
-	it("should display the text", () => {
+	it("should display the text", async () => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			...loadingStateModuleGetters,
 			getIsOpen: true,
 		});
 
 		const wrapper = mountComponent();
-		loadingStateModuleMock.open({ text: "Example text" });
-		const textCard = wrapper.findComponent({ name: "v-card-text" });
 
-		expect(textCard.element.textContent).toContain("Example text");
+		const dialogTitle = wrapper.find('[data-testid="dialog-text"]').element
+			.textContent;
+
+		expect(dialogTitle).toContain("Loading...");
 	});
 
 	it("should display the progress bar", () => {
