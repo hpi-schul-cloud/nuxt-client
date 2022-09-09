@@ -34,7 +34,7 @@ export default defineComponent({
 <p>h3</p>
 <p>some
 	<strong>bold</strong>
-	<i>italic</i>
+	<i>italic (will be not italic)</i>
 	<u>underline</u>
 	<s>strike-through</s>
 	<sub>sub</sub> and
