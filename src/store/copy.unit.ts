@@ -111,7 +111,7 @@ describe("copy module", () => {
 				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
+				expect(parseInt(copyModule.getBusinessError!.statusCode)).toStrictEqual(
 					error.response.status
 				);
 			});
@@ -163,7 +163,7 @@ describe("copy module", () => {
 				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
+				expect(parseInt(copyModule.getBusinessError!.statusCode)).toStrictEqual(
 					error.response.status
 				);
 			});
@@ -220,7 +220,7 @@ describe("copy module", () => {
 				expect(copyModule.getBusinessError!.message).toStrictEqual(
 					error.response.statusText
 				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
+				expect(parseInt(copyModule.getBusinessError!.statusCode)).toStrictEqual(
 					error.response.status
 				);
 			});
