@@ -3,7 +3,7 @@
 		<v-row class="text-center">
 			<v-col cols="12">
 				<ckeditor
-					v-model="editorData"
+					v-model="htmlInput"
 					:editor="editor"
 					:config="editorConfig"
 					@input="onEditorInput"
@@ -28,7 +28,8 @@ export default defineComponent({
 	data() {
 		return {
 			editor: Editor,
-			editorData: `<iframe src="https://www.google.com" style="width: 300px; height: 100px">This iframe should be converted into safe text</iframe>
+			markupInput: `## h1`,
+			htmlInput: `<iframe src="https://www.google.com" style="width: 300px; height: 100px">This iframe should be converted into safe text</iframe>
 <h2>h1</h2>
 <h3>h2</h3>
 <p>h3</p>
@@ -102,7 +103,7 @@ export default defineComponent({
 	},
 	methods: {
 		onEditorInput() {
-			console.log(this.editorData);
+			console.log(this.htmlInput);
 		},
 	},
 });
