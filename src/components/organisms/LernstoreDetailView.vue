@@ -21,14 +21,14 @@
 			<div class="preview">
 				<v-progress-circular
 					v-if="hasMediatypeH5p && hasSize"
-					v-show="true"
+					v-show="isIFrameLoaded"
 					class="loading"
 					:size="150"
 					indeterminate
 				></v-progress-circular>
 				<iframe
 					v-if="hasMediatypeH5p && hasSize"
-					v-show="false"
+					v-show="!isIFrameLoaded"
 					:src="getRendererIFrameSrc"
 					class="h5p-iframe"
 					allowfullscreen="allowfullscreen"
