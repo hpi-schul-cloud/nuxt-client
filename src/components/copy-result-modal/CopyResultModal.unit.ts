@@ -66,7 +66,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 
 		it("should open the dialog if timeout occurs", () => {
 			const wrapper = getWrapper({
-				copyResultError: { statusCode: "504", message: "" },
+				copyResultError: { statusCode: 504, message: "" },
 			});
 
 			expect(wrapper.vm.isOpen).toBe(true);
@@ -108,9 +108,9 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 		});
 
 		describe("timeout", () => {
-			it("should render warning alert if copy result error is 405", async () => {
+			it("should render warning if copy result error is 405", async () => {
 				const wrapper = getWrapper({
-					copyResultError: { statusCode: "504", message: "" },
+					copyResultError: { statusCode: 504, message: "" },
 				});
 				const timeoutMessage = wrapper.find('[data-testId="timeout-alert"]')
 					.element.textContent;
