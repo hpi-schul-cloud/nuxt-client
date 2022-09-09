@@ -225,26 +225,17 @@ export default defineComponent({
 	components: {
 		EditorContent,
 	},
-	model: {
-		prop: "value",
-		event: "update",
-	},
 	props: {
-		value: {
+		modelValue: {
 			type: String,
 			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: "",
-		},
-		readonly: {
-			type: Boolean,
 		},
 		advancedFeatures: {
 			type: Boolean,
 		},
 	},
+
+	emits: ["update:modelValue"],
 	data() {
 		return {
 			editor: null,
@@ -265,9 +256,11 @@ export default defineComponent({
 		},
 	},
 	watch: {
-		value(value) {
+		modelValue(value) {
 			// HTML
 			const isSame = this.editor.getHTML() === value;
+
+			console.log(JSON.stringify(this.editor.getJSON()));
 			// JSON
 			// const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
@@ -281,7 +274,7 @@ export default defineComponent({
 
 	mounted() {
 		this.editor = new Editor({
-			content: this.value,
+			content: this.modelValue,
 			editable: !this.readonly,
 			extensions: [
 				StarterKit.configure({
@@ -311,7 +304,13 @@ export default defineComponent({
 					  ]
 					: []),
 			],
-			onUpdate: this.editorUpdateHandler,
+			onUpdate: () => {
+				// HTML
+				this.$emit("update:modelValue", this.editor.getHTML());
+
+				// JSON
+				// this.$emit('update:modelValue', this.editor.getJSON())
+			},
 		});
 	},
 
