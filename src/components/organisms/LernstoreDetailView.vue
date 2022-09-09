@@ -19,14 +19,22 @@
 		</div>
 		<div class="content">
 			<div class="preview">
+				<v-progress-circular
+					v-if="hasMediatypeH5p && hasSize"
+					v-show="true"
+					class="loading"
+					:size="150"
+					indeterminate
+				></v-progress-circular>
 				<iframe
 					v-if="hasMediatypeH5p && hasSize"
-					title="1615548581268-2-interactive-content-5049.h5p"
+					v-show="false"
 					:src="getRendererIFrameSrc"
 					class="h5p-iframe"
 					allowfullscreen="allowfullscreen"
 					frameborder="0"
 					scrolling="no"
+					@load="setIsIFrameLoaded"
 				></iframe>
 				<script
 					v-if="hasMediatypeH5p && hasSize"
@@ -233,6 +241,11 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
+	data() {
+		return {
+			isIFrameLoaded: true,
+		};
+	},
 	computed: {
 		author() {
 			return getAuthor(this.resource.properties);
@@ -357,6 +370,11 @@ export default {
 				window.close();
 			}
 		},
+		setIsIFrameLoaded(event) {
+			if (event) {
+				this.isIFrameLoaded = false;
+			}
+		},
 	},
 	head() {
 		return this.isInline
@@ -440,6 +458,17 @@ $tablet-portrait-width: 768px;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				margin: 1.1px;
 				border: none;
+			}
+
+			.loading {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				margin: auto;
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				color: white;
 			}
 
 			.preview-background-color {
