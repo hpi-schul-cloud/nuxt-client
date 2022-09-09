@@ -13,6 +13,7 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
+import StatusAlertsModule from "@/store/statusAlerts";
 import TaskModule from "@/store/tasks";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import { getModule } from "vuex-module-decorators";
@@ -36,6 +37,7 @@ export default () => {
 		provide("roomModule", getModule(RoomModule, store));
 		provide("roomsModule", getModule(RoomsModule, store));
 		provide("schoolsModule", getModule(SchoolsModule, store));
+		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("taskModule", getModule(TaskModule, store));
 	});
 };

@@ -13,6 +13,7 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
+import StatusAlertsModule from "@store/statusAlerts";
 import TaskModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -31,6 +32,7 @@ let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let taskModule: TaskModule;
 let schoolsModule: SchoolsModule;
+let statusAlertsModule: StatusAlertsModule;
 let notifierModule: NotifierModule;
 let copyModule: CopyModule;
 
@@ -39,18 +41,19 @@ function initializeStores(store: Store<any>): void {
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
+	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTaskModule = getModule(FinishedTaskModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
+	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
+	statusAlertsModule = getModule(StatusAlertsModule, store);
 	taskModule = getModule(TaskModule, store);
-	notifierModule = getModule(NotifierModule, store);
-	copyModule = getModule(CopyModule, store);
 }
 
 export {
@@ -59,16 +62,17 @@ export {
 	authModule,
 	autoLogoutModule,
 	contentModule,
+	copyModule,
 	envConfigModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTaskModule,
 	importUsersModule,
 	newsModule,
+	notifierModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
+	statusAlertsModule,
 	taskModule,
-	notifierModule,
-	copyModule,
 };

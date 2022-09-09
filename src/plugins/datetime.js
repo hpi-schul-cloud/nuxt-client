@@ -261,6 +261,10 @@ export const fromNowToFuture = (date, unit) => {
 	} else return null;
 };
 
+export const timeAgo = (date) => {
+	return dayjs().to(dayjs(date));
+};
+
 /**
  * @return {dayjs} Current date based on current timezone
  */

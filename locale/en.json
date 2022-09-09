@@ -208,6 +208,7 @@
 	"global.sidebar.teacher": "Teacher",
 	"global.sidebar.teams": "Teams",
 	"global.topbar.initials.currentUser": "Current user",
+	"global.topbar.actions.alerts": "There is a problem",
 	"global.topbar.actions.contactSupport": "Send request or problem",
 	"global.topbar.actions.helpSection": "Help section",
 	"global.topbar.actions.training": "Advanced trainings",

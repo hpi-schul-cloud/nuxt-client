@@ -14,6 +14,17 @@
 				<base-icon class="menu-icon" source="fa" icon="bars" />
 			</base-button>
 			<div class="space"></div>
+			<popup-icon
+					v-if="showStatusAlerts"
+					:key="statusAlerts"
+
+					source="fa"
+					icon="exclamation-triangle"
+					:title="$t('global.topbar.actions.alerts')"
+					:aria-label="$t('global.topbar.actions.alerts')"
+			>
+				<status-alerts :status-alerts="statusAlerts"></status-alerts>
+			</popup-icon>
 			<base-button
 				class="item fullscreen-button"
 				design="text icon"
@@ -88,10 +99,13 @@ import PopupIconInitials from "@components/legacy/PopupIconInitials";
 import BaseLink from "@basecomponents/BaseLink";
 import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
+import StatusAlerts from "@components/molecules/StatusAlerts";
 import LanguageMenu from "@components/molecules/LanguageMenu.vue";
+import { statusAlertsModule } from "@/store";
 
 export default {
 	components: {
+		StatusAlerts,
 		PopupIcon,
 		PopupIconInitials,
 		BaseLink,
@@ -121,6 +135,9 @@ export default {
 				name: "",
 			}),
 		},
+		showStatusAlerts: {
+			type: Boolean,
+		},
 		user: {
 			type: Object,
 			validator: function (user) {
@@ -131,18 +148,35 @@ export default {
 	},
 	data() {
 		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			getStatusAlertsFill: () => {
+				return 'var(--color-secondary-dark)';
+			}
+		};
 	},
 	computed: {
 		role() {
 			const roleName = this.user.roles.map((r) => r.name);
 			return this.$t(`global.topbar.roleName.${roleName[0]}`);
 		},
+		statusAlerts() {
+			return statusAlertsModule.getStatusAlerts;
+		},
+	},
+	async mounted() {
+		await this.getStatusAlerts();
 	},
 	methods: {
 		sendEvent(eventName) {
 			this.$emit("action", eventName);
 		},
+		async getStatusAlerts() {
+			await statusAlertsModule.fetchStatusAlerts();
+			this.statusAlerts = statusAlertsModule.getStatusAlerts;
+		  if (this.statusAlerts.filter(alert => alert.status === 'danger').length > 0) {
+			  this.getStatusAlertsFill = 'var(--color-danger)';
+		  }
+		}
 	},
 };
 </script>
