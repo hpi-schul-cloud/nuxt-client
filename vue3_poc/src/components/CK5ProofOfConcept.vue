@@ -98,6 +98,9 @@ export default defineComponent({
 				language: "de",
 				//language: "en",
 				//language: "es",
+
+				//plugins: ["Paragraph", "Bold"],
+				//toolbar: ["bold"],
 			},
 		};
 	},
