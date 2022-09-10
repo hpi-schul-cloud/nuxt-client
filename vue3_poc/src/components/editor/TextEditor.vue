@@ -135,62 +135,6 @@
 				</button>
 			</div>
 			<!-- end advanced toolbar actions -->
-
-			<div v-if="editor.isActive('table')">
-				<strong>Table</strong><br />
-				<button @click="deleteTable">delete table</button>
-				<button @click="editor.chain().focus().addColumnBefore().run()">
-					add column before
-				</button>
-				<button @click="editor.chain().focus().addColumnAfter().run()">
-					add column after
-				</button>
-				<button @click="editor.chain().focus().addRowBefore().run()">
-					add row before
-				</button>
-				<button @click="editor.chain().focus().addRowAfter().run()">
-					add row after
-				</button>
-				<button @click="editor.chain().focus().deleteRow().run()">
-					delete row
-				</button>
-				<button @click="editor.chain().focus().deleteColumn().run()">
-					delete column
-				</button>
-				<button @click="editor.chain().focus().mergeCells().run()">
-					merge cells
-				</button>
-				<button @click="editor.chain().focus().splitCell().run()">
-					split cell
-				</button>
-			</div>
-
-			<div style="display: none">
-				<button @click="editor.chain().focus().addColumnBefore().run()">
-					add column before
-				</button>
-				<button @click="editor.chain().focus().addColumnAfter().run()">
-					add column after
-				</button>
-				<button @click="editor.chain().focus().addRowBefore().run()">
-					add row before
-				</button>
-				<button @click="editor.chain().focus().addRowAfter().run()">
-					add row after
-				</button>
-				<button @click="editor.chain().focus().deleteRow().run()">
-					delete row
-				</button>
-				<button @click="editor.chain().focus().deleteColumn().run()">
-					delete column
-				</button>
-				<button @click="editor.chain().focus().mergeCells().run()">
-					merge cells
-				</button>
-				<button @click="editor.chain().focus().splitCell().run()">
-					split cell
-				</button>
-			</div>
 		</div>
 
 		<editor-content class="editor__content" :editor="editor" />
@@ -209,7 +153,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 
-import Table from "@tiptap/extension-table";
+import Table from "./extensions/Table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
@@ -425,62 +369,6 @@ export default defineComponent({
 	::v-deep img {
 		width: 100%;
 		height: auto;
-	}
-
-	::v-deep table {
-		width: 100%;
-		/* stylelint-disable-next-line */
-		margin: 1rem 0 0 0;
-		overflow: hidden;
-		table-layout: fixed;
-		border-collapse: collapse;
-
-		td,
-		th {
-			position: relative;
-			min-width: var(--radius-lg);
-			/* stylelint-disable-next-line */
-			padding: 2px 6px;
-			overflow: hidden;
-			vertical-align: top;
-			border: 2px solid #ced4da;
-
-			> * {
-				margin-bottom: 0;
-			}
-		}
-
-		th {
-			font-weight: var(--font-weight-bold);
-			text-align: left;
-			background: #f1f3f5;
-		}
-		/* stylelint-disable-next-line */
-		.selectedCell::after {
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: var(--z-index-2);
-			pointer-events: none;
-			content: "";
-			background: rgba(200, 200, 255, 0.4);
-		}
-
-		.column-resize-handle {
-			position: absolute;
-			top: 0;
-			right: -2px;
-			bottom: -2px;
-			width: 4px;
-			pointer-events: none;
-			background: #adf;
-		}
-
-		p {
-			margin: 0;
-		}
 	}
 
 	:root {
