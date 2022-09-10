@@ -26,12 +26,14 @@ import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar.js";
 import TextTransformation from "@ckeditor/ckeditor5-typing/src/texttransformation.js";
 import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline.js";
 import Markdown from "@ckeditor/ckeditor5-markdown-gfm/src/markdown";
+import HelloWorld from "./plugins/helloworld";
 
 class Editor extends ClassicEditor {}
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
 	Markdown,
+	HelloWorld,
 	BlockQuote,
 	Bold,
 	Code,
@@ -81,6 +83,7 @@ Editor.defaultConfig = {
 			"insertTable",
 			//'mediaEmbed',
 			"|",
+			"helloworld",
 		],
 	},
 	language: "de",
