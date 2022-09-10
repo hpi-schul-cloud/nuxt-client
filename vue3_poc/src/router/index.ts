@@ -23,7 +23,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("../pages/ImpressumPage.vue"),
 	},
 	{
-		path: "/ck5-editor",
+		path: "/editor",
 		name: "ck5editor",
 		component: CK5ProofOfConcept,
 	},
