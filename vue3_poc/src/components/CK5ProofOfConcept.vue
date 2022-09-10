@@ -89,12 +89,12 @@ export default defineComponent({
 <p>Math from Latex: $$(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}$$</p>
 <p>Math formula: <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></p>
 <p>IMAGE:
-	<figure onclick="javascript:alert('hello from js');" class="image"><img src="https://icatcare.org/app/uploads/2018/10/What-is-a-cat.png" alt="alt image attr"></figure>
+	<figure onclick="javascript:alert('hello from js');" class="image"><img src="http://127.0.0.1:4000/cat.png" alt="cute kitty"></figure>
 </p>
 <p>VIDEO:</p>
 	<video src="http://127.0.0.1:4000/video.mp4" controls="true" controlslist="nodownload"></video>
 <p>AUDIO:</p>
-<audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio>`,
+<audio src="http://127.0.0.1:4000/audio.mp3" controls="true" controlslist="nodownload"></audio>`,
 			editorConfig: {
 				language: "de",
 				//language: "en",
