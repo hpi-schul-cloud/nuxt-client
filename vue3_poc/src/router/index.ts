@@ -23,7 +23,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("../pages/ImpressumPage.vue"),
 	},
 	{
-		path: "/tiptap-editor",
+		path: "/editor",
 		name: "tiptapeditor",
 		component: TiptapProofOfConcept,
 	},
