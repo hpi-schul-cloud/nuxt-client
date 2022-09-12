@@ -15,13 +15,12 @@
 			</base-button>
 			<div class="space"></div>
 			<popup-icon
-					v-if="showStatusAlerts"
-					:key="statusAlerts"
-
-					source="fa"
-					icon="exclamation-triangle"
-					:title="$t('global.topbar.actions.alerts')"
-					:aria-label="$t('global.topbar.actions.alerts')"
+				v-if="showStatusAlerts"
+				:key="statusAlerts"
+				source="fa"
+				icon="exclamation-triangle"
+				:title="$t('global.topbar.actions.alerts')"
+				:aria-label="$t('global.topbar.actions.alerts')"
 			>
 				<status-alerts :status-alerts="statusAlerts"></status-alerts>
 			</popup-icon>
@@ -150,8 +149,8 @@ export default {
 		// This solely exists to appear in the coverage report
 		return {
 			getStatusAlertsFill: () => {
-				return 'var(--color-secondary-dark)';
-			}
+				return "var(--color-secondary-dark)";
+			},
 		};
 	},
 	computed: {
@@ -173,10 +172,13 @@ export default {
 		async getStatusAlerts() {
 			await statusAlertsModule.fetchStatusAlerts();
 			this.statusAlerts = statusAlertsModule.getStatusAlerts;
-		  if (this.statusAlerts.filter(alert => alert.status === 'danger').length > 0) {
-			  this.getStatusAlertsFill = 'var(--color-danger)';
-		  }
-		}
+			if (
+				this.statusAlerts.filter((alert) => alert.status === "danger").length >
+				0
+			) {
+				this.getStatusAlertsFill = "var(--color-danger)";
+			}
+		},
 	},
 };
 </script>

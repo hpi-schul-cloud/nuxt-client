@@ -1,11 +1,19 @@
 <template>
 	<div>
 		<v-card width="400" max-height="200" class="alerts">
-			<div v-for="(item, index) in statusAlerts" :key="index" class="alert-item">
+			<div
+				v-for="(item, index) in statusAlerts"
+				:key="index"
+				class="alert-item"
+			>
 				<v-card-text class="">
 					<div class="top-row-container">
 						<div class="alert-title">
-							<base-icon :fill="`var(--color-${getIconTag(item.status).color})`" source="fa" :icon="getIconTag(item.status).icon"/>
+							<base-icon
+								:fill="`var(--color-${getIconTag(item.status).color})`"
+								source="fa"
+								:icon="getIconTag(item.status).icon"
+							/>
 							{{ item.title }}
 						</div>
 						<div class="alert-date text--primary mt-1 mb-0 pb-0 alert-date">
@@ -16,7 +24,12 @@
 						{{ getAlertText(item.text) }}
 					</div>
 					<div class="alert-link">
-						<a :href="item.url" rel="noopener" target="_blank" class="action-button">
+						<a
+							:href="item.url"
+							rel="noopener"
+							target="_blank"
+							class="action-button"
+						>
 							{{ getUrl(item.url) }}
 						</a>
 					</div>
@@ -33,24 +46,23 @@ export default {
 	props: {
 		statusAlerts: {
 			type: Array,
-			default: () => []
+			default: () => [],
 		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
-	mounted() {
-	},
+	mounted() {},
 	methods: {
 		getIconTag(status) {
 			switch (status) {
-				case 'danger':
-					return { icon: 'exclamation-circle', color: 'danger' };
-				case 'done':
-					return { icon: 'check-circle', color: 'success' };
+				case "danger":
+					return { icon: "exclamation-circle", color: "danger" };
+				case "done":
+					return { icon: "check-circle", color: "success" };
 				default:
-					return { icon: 'info-circle', color: 'info' };
+					return { icon: "info-circle", color: "info" };
 			}
 		},
 		getAlertText(text) {
@@ -60,7 +72,7 @@ export default {
 			return text;
 		},
 		getUrl(url) {
-			return url.replace(/(^\w+:|^)\/\//, '');
+			return url.replace(/(^\w+:|^)\/\//, "");
 		},
 		getDate(date) {
 			return timeAgo(date);
