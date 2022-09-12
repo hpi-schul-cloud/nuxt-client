@@ -147,11 +147,7 @@ export default {
 			);
 		},
 		isOpen() {
-			return (
-				this.isLoading === true ||
-				this.copyResultStatus !== undefined ||
-				this.hasTimeoutError
-			);
+			return this.copyResultStatus !== undefined || this.hasTimeoutError;
 		},
 		status() {
 			return this.copyResultStatus;

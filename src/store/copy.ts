@@ -73,7 +73,7 @@ export default class CopyModule extends VuexModule {
 			if (copyResult === undefined) {
 				throw new Error("CopyProcess unknown type: " + type);
 			}
-
+			await new Promise((resolve) => setTimeout(resolve, 2000)); // wip
 			this.setCopyResult(copyResult);
 			this.setCopyResultFailedItems({ payload: copyResult });
 			this.setLoading(false);

@@ -143,6 +143,7 @@ export default {
 		CopyResultModal,
 	},
 	layout: "defaultVuetify",
+	inject: ["loadingStateModule"],
 	data() {
 		return {
 			importDialog: {
@@ -326,7 +327,11 @@ export default {
 			this.dialog.subText = "";
 		},
 		async onCopyRoom(courseId) {
+			this.loadingStateModule.open({
+				text: this.$t("components.molecules.copyResult.title.loading"),
+			});
 			await copyModule.copy({ id: courseId, courseId, type: "course" });
+			this.loadingStateModule.close();
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
@@ -339,7 +344,11 @@ export default {
 			}
 		},
 		async onCopyBoardElement(payload) {
+			this.loadingStateModule.open({
+				text: this.$t("components.molecules.copyResult.title.loading"),
+			});
 			await copyModule.copy(payload);
+			this.loadingStateModule.close();
 			await roomModule.fetchContent(payload.courseId);
 		},
 		async onCopyResultModalClosed() {

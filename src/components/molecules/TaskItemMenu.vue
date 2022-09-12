@@ -109,19 +109,19 @@
 
 <script>
 import {
-	mdiContentCopy,
-	mdiDotsVertical,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiUndoVariant,
-} from "@mdi/js";
-import {
 	copyModule,
 	envConfigModule,
 	finishedTaskModule,
 	taskModule,
 } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import {
+	mdiContentCopy,
+	mdiDotsVertical,
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+} from "@mdi/js";
 
 export default {
 	components: { vCustomDialog },
@@ -149,6 +149,7 @@ export default {
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
+	inject: ["loadingStateModule"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
@@ -194,11 +195,15 @@ export default {
 			taskModule.deleteTask(this.taskId);
 		},
 		async copyTask() {
+			this.loadingStateModule.open({
+				text: this.$t("components.molecules.copyResult.title.loading"),
+			});
 			await copyModule.copy({
 				id: this.taskId,
 				courseId: this.courseId,
 				type: "task",
 			});
+			this.loadingStateModule.close();
 		},
 	},
 };
