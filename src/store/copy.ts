@@ -27,7 +27,7 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private businessError: BusinessError | undefined = undefined;
-	private loading: boolean = false;
+	private isDialogOpen: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -48,7 +48,6 @@ export default class CopyModule extends VuexModule {
 	@Action
 	async copy({ id, courseId, type }: CopyParams): Promise<void> {
 		this.resetBusinessError();
-		this.setLoading(true);
 		try {
 			let copyResult: CopyApiResponse | undefined = undefined;
 
@@ -73,12 +72,11 @@ export default class CopyModule extends VuexModule {
 			if (copyResult === undefined) {
 				throw new Error("CopyProcess unknown type: " + type);
 			}
+
 			await new Promise((resolve) => setTimeout(resolve, 2000)); // wip
 			this.setCopyResult(copyResult);
 			this.setCopyResultFailedItems({ payload: copyResult });
-			this.setLoading(false);
 		} catch (error: any) {
-			this.setLoading(false);
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
@@ -181,11 +179,6 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
-
-	@Mutation
 	setBusinessError(businessError: BusinessError): void {
 		this.businessError = businessError;
 	}
@@ -221,10 +214,6 @@ export default class CopyModule extends VuexModule {
 
 	get getId(): string {
 		return this.copyResult?.id ?? "";
-	}
-
-	get getLoading(): boolean {
-		return this.loading;
 	}
 
 	get getBusinessError(): BusinessError | undefined {

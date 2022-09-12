@@ -383,7 +383,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 	describe("copying tasks", () => {
 		beforeEach(() => {
 			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
-			copyModuleMock = createModuleMocks(CopyModule, { getLoading: true });
+			copyModuleMock = createModuleMocks(CopyModule);
 
 			wrapper = mountComponent({
 				propsData: {

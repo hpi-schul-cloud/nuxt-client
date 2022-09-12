@@ -228,16 +228,6 @@ describe("copy module", () => {
 	});
 
 	describe("mutations", () => {
-		describe("setLoading", () => {
-			it("should set loading", () => {
-				const copyModule = new CopyModule({});
-				const loadingValue = true;
-				expect(copyModule.getLoading).not.toBe(loadingValue);
-				copyModule.setLoading(loadingValue);
-				expect(copyModule.getLoading).toBe(loadingValue);
-			});
-		});
-
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
 				const copyModule = new CopyModule({});

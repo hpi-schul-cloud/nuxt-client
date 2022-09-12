@@ -102,7 +102,6 @@
 			</template>
 		</v-custom-dialog>
 		<copy-result-modal
-			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
 			:copy-result-error="copyResultError"
@@ -273,9 +272,6 @@ export default {
 				});
 			}
 			return items;
-		},
-		copyResultModalIsLoading() {
-			return copyModule.getLoading;
 		},
 		copyResultModalStatus() {
 			return copyModule.getCopyResult?.status;

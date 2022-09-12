@@ -13,30 +13,6 @@
 		<template slot="content">
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<v-alert
-					v-if="status === 'success'"
-					data-testid="success-alert"
-					type="success"
-					:icon="mdiCheckCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.successfullyCopied") }}
-					</div>
-				</v-alert>
-				<v-alert
-					v-if="status === 'failure'"
-					data-testid="failure-alert"
-					type="error"
-					:icon="mdiCloseCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.failedCopy") }}
-					</div>
-				</v-alert>
-				<v-alert
 					v-if="hasTimeoutError"
 					data-testid="timeout-alert"
 					type="warning"
@@ -91,22 +67,17 @@
 					</div>
 				</v-alert>
 
-				<div v-if="isLoading">
-					<v-skeleton-loader
-						type="article, list-item-three-line"
-						data-testid="copy-skeleton"
-					/>
-				</div>
-				<div v-else>
-					<copy-result-modal-list :items="items"></copy-result-modal-list>
-				</div>
+				<copy-result-modal-list :items="items"></copy-result-modal-list>
 			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import {
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
+} from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
@@ -115,7 +86,6 @@ export default {
 	name: "CopyResultModal",
 	components: { CopyResultModalList, vCustomDialog },
 	props: {
-		isLoading: Boolean,
 		copyResultItems: {
 			type: Array,
 			default: () => [],
@@ -129,8 +99,10 @@ export default {
 			default: () => undefined,
 		},
 	},
+	inject: ["notifierModule"],
 	data() {
 		return {
+			isOpen: false,
 			mdiInformation,
 			mdiCheckCircle,
 			mdiCloseCircle,
@@ -145,9 +117,6 @@ export default {
 				this.copyResultError !== undefined &&
 				this.copyResultError.statusCode === 504
 			);
-		},
-		isOpen() {
-			return this.copyResultStatus !== undefined || this.hasTimeoutError;
 		},
 		status() {
 			return this.copyResultStatus;
@@ -203,11 +172,22 @@ export default {
 
 			return this.$t("components.molecules.copyResult.title.failure");
 		},
+		isPartialSuccessful() {
+			return (
+				this.copyResultStatus?.status === CopyApiResponseStatusEnum.Partial
+			);
+		},
 	},
 	watch: {
 		isLoading: function () {
 			if (this.isLoading === false) {
 				this.$nextTick(() => setTimeout(this.focusFirstLink, 100));
+			}
+		},
+		copyResultStatus: function (newValue, oldValue) {
+			if (oldValue === undefined && newValue !== undefined) {
+				console.log("received result");
+				this.processFinalStatus();
 			}
 		},
 	},
@@ -228,6 +208,30 @@ export default {
 		},
 		onDialogClosed() {
 			this.$emit("dialog-closed");
+		},
+		processFinalStatus() {
+			console.log("processFinalStatus");
+			if (this.copyResultStatus.status === CopyApiResponseStatusEnum.Success) {
+				this.notifierModule.show({
+					text:
+						"AAAAArgh" +
+						this.$t("components.molecules.copyResult.successfullyCopied"),
+					status: "success",
+					timeout: 5000,
+					autoClose: false,
+				});
+			} else if (
+				this.copyResultStatus.status === CopyApiResponseStatusEnum.Failure
+			) {
+				this.notifierModule.show({
+					text: this.$t("components.molecules.copyResult.failedCopy"),
+					status: "error",
+					timeout: 5000,
+					autoClose: false,
+				});
+			} else {
+				this.isOpen = true;
+			}
 		},
 	},
 };

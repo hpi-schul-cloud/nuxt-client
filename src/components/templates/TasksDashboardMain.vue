@@ -72,7 +72,6 @@
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"
-			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
 			@dialog-closed="onCopyResultModalClose"
@@ -280,9 +279,6 @@ export default {
 				title,
 				subtitle,
 			};
-		},
-		copyResultModalIsLoading() {
-			return this.copyModule.getLoading;
 		},
 		copyResultModalStatus() {
 			return this.copyModule.getCopyResult?.status;
