@@ -20,9 +20,12 @@ describe("@components/legacy/TheTopBar", () => {
 	};
 	it("Render defaults", () => {
 		const wrapper = shallowMount(TheTopBar, {
-			mocks: {
-				$theme,
-			},
+			...createComponentMocks({
+				mocks: {
+					$theme,
+				},
+				i18n: true,
+			}),
 		});
 		expect(wrapper.find(".action").exists()).toBe(false);
 	});

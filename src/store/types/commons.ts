@@ -1,5 +1,5 @@
 export type BusinessError = {
-	statusCode: string;
+	statusCode: string | number;
 	message: string;
 	error?: object;
 };

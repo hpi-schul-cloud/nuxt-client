@@ -75,7 +75,7 @@ export default class CopyModule extends VuexModule {
 			}
 
 			this.setCopyResult(copyResult);
-			this.setCopyResultFailedItems({ payload: copyResult, courseId });
+			this.setCopyResultFailedItems({ payload: copyResult });
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -88,13 +88,7 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setCopyResultFailedItems({
-		payload,
-		courseId,
-	}: {
-		payload: CopyApiResponse;
-		courseId: string;
-	}): void {
+	setCopyResultFailedItems({ payload }: { payload: CopyApiResponse }): void {
 		if (payload.status === CopyApiResponseStatusEnum.Success) {
 			this.copyResultFailedItems = [];
 			return;
@@ -132,9 +126,9 @@ export default class CopyModule extends VuexModule {
 		const getUrl = (element: CopyApiResponse): string | undefined => {
 			switch (element.type) {
 				case CopyApiResponseTypeEnum.Task:
-					return `/homework/${element.id}/edit?returnUrl=rooms/${courseId}`;
+					return `/homework/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Lesson:
-					return `/courses/${courseId}/topics/${element.id}/edit?returnUrl=rooms/${courseId}`;
+					return `/courses/${element.destinationCourseId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
 			}
