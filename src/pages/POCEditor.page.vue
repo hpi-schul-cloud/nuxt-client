@@ -113,13 +113,13 @@ export default {
 <p>Math formula: <span class="math-tex">\\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}\\)</span></p>
 
 <p>IMAGE:
-	<figure class="image"><img src="http://192.168.1.136/cat.jpg" alt="alt image attr"></figure>
+	<figure class="image"><img src="/files/file?file=631ecaeef8c58f001f5ccedb&name=1660118574955-katzen.jpg" alt="alt image attr"></figure>
 </p>
 <p>VIDEO:</p>
-	<video src="http://192.168.1.136/film.mp4" controls="true" controlslist="nodownload"></video>
+	<video src="/files/file?file=631ecb19f8c58f001f5ccfb2" controls="true" controlslist="nodownload"></video>
 
 <p>AUDIO:</p>
-<audio src="http://192.168.1.136/musik.mp3" controls="true" controlslist="nodownload"></audio>
+<audio src="/files/file?file=631ecaeef8c58f001f5ccedb&name=1660118574955-katzen.jpg" controls="true" controlslist="nodownload"></audio>
 `,
 		};
 	},
