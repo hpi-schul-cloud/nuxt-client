@@ -1,14 +1,15 @@
 <template>
 	<div>
-		<v-card width="400" max-height="200" class="alerts">
+		<v-card width="400" max-height="200" class="alerts" data-testid="status-alerts">
 			<div
 				v-for="(item, index) in statusAlerts"
 				:key="index"
 				class="alert-item"
+				:data-testid="`alert-item${index}`"
 			>
 				<v-card-text class="">
 					<div class="top-row-container">
-						<div class="alert-title">
+						<div class="alert-title" :data-testid="`alert-title${index}`">
 							<base-icon
 								:fill="`var(--color-${getIconTag(item.status).color})`"
 								source="fa"
@@ -16,11 +17,11 @@
 							/>
 							{{ item.title }}
 						</div>
-						<div class="alert-date text--primary mt-1 mb-0 pb-0 alert-date">
+						<div class="alert-date text--primary mt-1 mb-0 pb-0" :data-testid="`alert-date${index}`">
 							{{ getDate(item.timestamp) }}
 						</div>
 					</div>
-					<div class="alert-text">
+					<div class="alert-text" :data-testid="`alert-text${index}`">
 						{{ getAlertText(item.text) }}
 					</div>
 					<div class="alert-link">
@@ -29,6 +30,7 @@
 							rel="noopener"
 							target="_blank"
 							class="action-button"
+							:data-testid="`alert-link${index}`"
 						>
 							{{ getUrl(item.url) }}
 						</a>

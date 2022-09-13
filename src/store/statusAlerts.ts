@@ -1,19 +1,7 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError, Status } from "./types/commons";
-
+import { StatusAlert } from './types/status-alert';
 import { $axios } from "../utils/api";
-
-export type StatusAlert = {
-	title: string,
-	text: string,
-	status: string,
-	origin: {
-		page: string,
-		message_id: number,
-	},
-	timestamp: string,
-	url: string,
-}
 
 @Module({
 	name: "statusAlerts",
