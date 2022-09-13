@@ -108,12 +108,7 @@
 </template>
 
 <script>
-import {
-	copyModule,
-	envConfigModule,
-	finishedTaskModule,
-	taskModule,
-} from "@/store";
+import { envConfigModule, finishedTaskModule, taskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
@@ -149,7 +144,7 @@ export default {
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	inject: ["loadingStateModule"],
+	inject: ["loadingStateModule", "copyModule"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
@@ -161,9 +156,6 @@ export default {
 		};
 	},
 	computed: {
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
-		},
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
@@ -195,6 +187,11 @@ export default {
 			taskModule.deleteTask(this.taskId);
 		},
 		async copyTask() {
+			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+				window.location.href = this.copyLink;
+				return;
+			}
+
 			this.loadingStateModule.open({
 				text: this.$t("components.molecules.copyResult.title.loading"),
 			});
@@ -204,6 +201,10 @@ export default {
 				type: "task",
 			});
 			this.loadingStateModule.close();
+			const copyResult = taskModule.getTaskCopyResult;
+			if (copyResult.id !== "") {
+				this.copyProcess.data = copyResult;
+			}
 		},
 	},
 };

@@ -27,7 +27,8 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private businessError: BusinessError | undefined = undefined;
-	private isDialogOpen: boolean = false;
+	private isCopying: boolean = false;
+	private lastResultTimestamp: number = 0;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -49,6 +50,7 @@ export default class CopyModule extends VuexModule {
 	async copy({ id, courseId, type }: CopyParams): Promise<void> {
 		this.resetBusinessError();
 		try {
+			this.setCopying(true);
 			let copyResult: CopyApiResponse | undefined = undefined;
 
 			if (type === "task") {
@@ -73,9 +75,12 @@ export default class CopyModule extends VuexModule {
 				throw new Error("CopyProcess unknown type: " + type);
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, 2000)); // wip
+			await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+			this.setCopying(false);
+
 			this.setCopyResult(copyResult);
 			this.setCopyResultFailedItems({ payload: copyResult });
+			this.setLastResultTimestamp(Date.now());
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -83,6 +88,16 @@ export default class CopyModule extends VuexModule {
 				...error,
 			});
 		}
+	}
+
+	@Mutation
+	setCopying(on: boolean) {
+		this.isCopying = on;
+	}
+
+	@Mutation
+	setLastResultTimestamp(timestamp: number) {
+		this.lastResultTimestamp = timestamp;
 	}
 
 	@Mutation
@@ -174,7 +189,10 @@ export default class CopyModule extends VuexModule {
 		};
 
 		const rootUrl = getUrl(payload);
-		const result: CopyResultItem[] = getItemsFromBranch(payload, rootUrl!);
+		const result: CopyResultItem[] = getItemsFromBranch(
+			payload,
+			rootUrl!
+		).filter((item) => item.elements.length > 0);
 		this.copyResultFailedItems = result;
 	}
 
@@ -218,5 +236,13 @@ export default class CopyModule extends VuexModule {
 
 	get getBusinessError(): BusinessError | undefined {
 		return this.businessError;
+	}
+
+	get getCopying(): boolean {
+		return this.isCopying;
+	}
+
+	get getLastResultTimestamp(): number {
+		return this.lastResultTimestamp;
 	}
 }

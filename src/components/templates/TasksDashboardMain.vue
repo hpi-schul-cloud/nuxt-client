@@ -68,12 +68,14 @@
 				v-else
 				:empty-state="emptyState"
 				:tab-routes="tabRoutes"
+				@copy-task="onCopyTask"
 			/>
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
+			:copy-result-error="copyResultError"
 			@dialog-closed="onCopyResultModalClose"
 		></copy-result-modal>
 	</default-wireframe>
@@ -115,7 +117,12 @@ export default {
 			mdiPlus,
 		};
 	},
-	inject: ["taskModule", "copyModule", "finishedTaskModule"],
+	inject: [
+		"taskModule",
+		"copyModule",
+		"finishedTaskModule",
+		"loadingStateModule",
+	],
 	computed: {
 		hasTasks() {
 			return this.taskModule.hasTasks;
@@ -286,6 +293,9 @@ export default {
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
 		},
+		copyResultError() {
+			return copyModule.getBusinessError;
+		},
 	},
 	watch: {
 		tab(tab, oldTab) {
@@ -342,6 +352,14 @@ export default {
 		},
 		setActiveTab(tab) {
 			this.taskModule.setActiveTab(tab);
+		},
+		async onCopyTask(payloads) {
+			console.log("onCopyTask", payloads);
+			this.loadingStateModule.open({
+				text: this.$t("components.molecules.copyResult.title.loading"),
+			});
+			await copyModule.copy(payloads[0]);
+			this.loadingStateModule.close();
 		},
 	},
 };

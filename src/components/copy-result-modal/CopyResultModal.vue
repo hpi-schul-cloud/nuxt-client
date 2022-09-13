@@ -8,22 +8,10 @@
 		@dialog-closed="onDialogClosed"
 	>
 		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
-			{{ title }}
+			{{ $t("components.molecules.copyResult.title.partial") }}
 		</h2>
 		<template slot="content">
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<v-alert
-					v-if="hasTimeoutError"
-					data-testid="timeout-alert"
-					type="warning"
-					:icon="mdiCloseCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.timeoutCopy") }}
-					</div>
-				</v-alert>
 				<v-alert
 					v-if="needsInfoText"
 					type="warning"
@@ -54,7 +42,8 @@
 							{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
 						</div>
 						<div v-if="hasCourseGroup" data-testid="coursegroups">
-							<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
+							<strong>{{ $t("common.words.courseGroups") }}</strong>
+							&middot;
 							{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
 						</div>
 						<div v-if="hasFileElement" data-testid="files">
@@ -99,7 +88,7 @@ export default {
 			default: () => undefined,
 		},
 	},
-	inject: ["notifierModule"],
+	inject: ["notifierModule", "copyModule"],
 	data() {
 		return {
 			isOpen: false,
@@ -117,9 +106,6 @@ export default {
 				this.copyResultError !== undefined &&
 				this.copyResultError.statusCode === 504
 			);
-		},
-		status() {
-			return this.copyResultStatus;
 		},
 		needsInfoText() {
 			return (
@@ -157,36 +143,13 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
-		title() {
-			if (this.isLoading || this.hasTimeoutError) {
-				return this.$t("components.molecules.copyResult.title.loading");
-			}
-
-			if (this.copyResultStatus === "success") {
-				return this.$t("components.molecules.copyResult.title.success");
-			}
-
-			if (this.copyResultStatus === "partial") {
-				return this.$t("components.molecules.copyResult.title.partial");
-			}
-
-			return this.$t("components.molecules.copyResult.title.failure");
-		},
-		isPartialSuccessful() {
-			return (
-				this.copyResultStatus?.status === CopyApiResponseStatusEnum.Partial
-			);
+		getLastResultTimestamp() {
+			return this.copyModule.getLastResultTimestamp;
 		},
 	},
 	watch: {
-		isLoading: function () {
-			if (this.isLoading === false) {
-				this.$nextTick(() => setTimeout(this.focusFirstLink, 100));
-			}
-		},
-		copyResultStatus: function (newValue, oldValue) {
-			if (oldValue === undefined && newValue !== undefined) {
-				console.log("received result");
+		getLastResultTimestamp: function (newValue, oldValue) {
+			if (newValue > oldValue) {
 				this.processFinalStatus();
 			}
 		},
@@ -207,27 +170,27 @@ export default {
 			return found;
 		},
 		onDialogClosed() {
+			this.isOpen = false;
 			this.$emit("dialog-closed");
 		},
 		processFinalStatus() {
-			console.log("processFinalStatus");
-			if (this.copyResultStatus.status === CopyApiResponseStatusEnum.Success) {
+			if (this.copyResultStatus === CopyApiResponseStatusEnum.Success) {
 				this.notifierModule.show({
-					text:
-						"AAAAArgh" +
-						this.$t("components.molecules.copyResult.successfullyCopied"),
+					text: this.$t("components.molecules.copyResult.successfullyCopied"),
 					status: "success",
-					timeout: 5000,
-					autoClose: false,
 				});
-			} else if (
-				this.copyResultStatus.status === CopyApiResponseStatusEnum.Failure
-			) {
+			} else if (this.copyResultStatus === CopyApiResponseStatusEnum.Failure) {
 				this.notifierModule.show({
 					text: this.$t("components.molecules.copyResult.failedCopy"),
 					status: "error",
-					timeout: 5000,
-					autoClose: false,
+				});
+			} else if (
+				this.copyResultError !== undefined &&
+				this.copyResultError.statusCode === 504
+			) {
+				this.notifierModule.show({
+					text: this.$t("components.molecules.copyResult.timeoutCopy"),
+					status: "error",
 				});
 			} else {
 				this.isOpen = true;
