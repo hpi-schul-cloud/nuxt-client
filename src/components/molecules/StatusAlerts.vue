@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<v-card width="400" max-height="200" class="alerts" data-testid="status-alerts">
+		<v-card
+			width="400"
+			max-height="200"
+			class="alerts"
+			data-testid="status-alerts"
+		>
 			<div
 				v-for="(item, index) in statusAlerts"
 				:key="index"
@@ -17,7 +22,10 @@
 							/>
 							{{ item.title }}
 						</div>
-						<div class="alert-date text--primary mt-1 mb-0 pb-0" :data-testid="`alert-date${index}`">
+						<div
+							class="alert-date text--primary mt-1 mb-0 pb-0"
+							:data-testid="`alert-date${index}`"
+						>
 							{{ getDate(item.timestamp) }}
 						</div>
 					</div>
