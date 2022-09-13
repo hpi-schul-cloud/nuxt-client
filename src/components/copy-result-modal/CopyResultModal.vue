@@ -161,11 +161,13 @@ export default {
 				dialog.querySelector("a").focus();
 			}
 		},
-		hasElementOfType(items, type) {
+		hasElementOfType(items, types) {
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
-				item.elements.find((e) => e.type === type) ? (found = true) : null;
+				item.elements.find((e) => types.includes(e.type))
+					? (found = true)
+					: null;
 			});
 			return found;
 		},

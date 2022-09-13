@@ -42,12 +42,10 @@
 					id="task-action-copy"
 					class="task-action"
 					data-testId="task-copy"
-					@click.stop.prevent="copyTask"
+					@click.stop.prevent="onCopyTask"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiContentCopy }}
-						</v-icon>
+						<v-icon class="task-action-icon"> {{ mdiContentCopy }} </v-icon>
 						{{ $t("common.actions.copy") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -186,8 +184,8 @@ export default {
 		handleDelete() {
 			taskModule.deleteTask(this.taskId);
 		},
-		async copyTask() {
-			if (!envConfigModule.getEnv.FEATURE_TASK_COPY_ENABLED) {
+		async onCopyTask() {
+			if (!this.copyServiceEnabled) {
 				window.location.href = this.copyLink;
 				return;
 			}
@@ -195,7 +193,7 @@ export default {
 			this.loadingStateModule.open({
 				text: this.$t("components.molecules.copyResult.title.loading"),
 			});
-			await copyModule.copy({
+			await this.copyModule.copy({
 				id: this.taskId,
 				courseId: this.courseId,
 				type: "task",
