@@ -410,6 +410,7 @@
 	"components.molecules.copyResult.title.partial": "Copy successful, except for:",
 	"components.molecules.copyResult.title.failure": "Error during copying",
 	"components.molecules.copyResult.metadata": "General Information",
+	"components.molecules.copyResult.information": "In the following, the missing contents can be added with the help of the quick links. The links open in a separate tab.",
 	"components.molecules.copyResult.label.content": "Content",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.file": "File",

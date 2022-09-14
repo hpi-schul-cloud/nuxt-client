@@ -56,6 +56,9 @@
 					</div>
 				</v-alert>
 
+				<div class="black--text">
+					<p>{{ $t("components.molecules.copyResult.information") }}</p>
+				</div>
 				<copy-result-modal-list :items="items"></copy-result-modal-list>
 			</div>
 		</template>
