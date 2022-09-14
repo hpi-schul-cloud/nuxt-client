@@ -185,6 +185,7 @@ export default {
 				this.notifierModule.show({
 					text: this.$t("components.molecules.copyResult.failedCopy"),
 					status: "error",
+					autoClose: false,
 				});
 			} else if (
 				this.copyResultError !== undefined &&
@@ -193,6 +194,7 @@ export default {
 				this.notifierModule.show({
 					text: this.$t("components.molecules.copyResult.timeoutCopy"),
 					status: "error",
+					autoClose: false,
 				});
 			} else {
 				this.isOpen = true;
