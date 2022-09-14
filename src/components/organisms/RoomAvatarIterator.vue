@@ -34,6 +34,7 @@
 import Vue from "vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		vRoomAvatar,

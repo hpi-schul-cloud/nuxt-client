@@ -71,6 +71,7 @@ import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		RoomWrapper,
