@@ -13,56 +13,32 @@
 
 		<template slot="content">
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<v-alert
-					v-if="needsInfoText"
-					type="warning"
-					:icon="mdiInformation"
-					text
-					border="left"
-					:aria-label="$t('components.molecules.copyResult.title.partial')"
-				>
-					<div class="alert_text mr-2">
-						<div v-if="hasGeogebraElement" data-testid="geogebra">
-							<strong>{{
-								$t("components.molecules.copyResult.label.geogebra")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.geogebraCopy.info") }}
+				<div v-if="needsInfoText">
+					<div
+						class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
+					>
+						<div class="mx-2">
+							<v-icon class="orange--text text--darken-1">{{
+								mdiAlert
+							}}</v-icon>
 						</div>
-						<div v-if="hasEtherpadElement" data-testid="etherpad">
-							<strong>{{
-								$t("components.molecules.copyResult.label.etherpad")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
-						</div>
-						<div v-if="hasNexboardElement" data-testid="nexboard">
-							<strong>{{
-								$t("components.molecules.copyResult.label.nexboard")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
-						</div>
-						<div v-if="hasCourseGroup" data-testid="coursegroups">
-							<strong>{{ $t("common.words.courseGroups") }}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
-						</div>
-						<div v-if="hasFileElement" data-testid="files">
-							<strong>{{
-								$t("components.molecules.copyResult.label.files")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.fileCopy.error") }}
+						<div>
+							<template v-for="(warning, index) in copyResultWarnings">
+								<p v-if="warning.isShow" :key="index" class="black--text mb-0">
+									<strong>{{ warning.title }}</strong>
+									&middot;
+									{{ warning.text }}
+								</p>
+							</template>
 						</div>
 					</div>
-				</v-alert>
-
-				<div class="black--text">
-					<p>{{ $t("components.molecules.copyResult.information") }}</p>
 				</div>
-				<copy-result-modal-list :items="items"></copy-result-modal-list>
 			</div>
+
+			<div class="black--text">
+				<p>{{ $t("components.molecules.copyResult.information") }}</p>
+			</div>
+			<copy-result-modal-list :items="items"></copy-result-modal-list>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -74,7 +50,12 @@ import {
 } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
+import {
+	mdiAlert,
+	mdiCheckCircle,
+	mdiCloseCircle,
+	mdiInformation,
+} from "@mdi/js";
 
 export default {
 	name: "CopyResultModal",
@@ -100,11 +81,41 @@ export default {
 			mdiInformation,
 			mdiCheckCircle,
 			mdiCloseCircle,
+			mdiAlert,
 		};
 	},
 	computed: {
 		items() {
 			return this.copyResultItems;
+		},
+		copyResultWarnings() {
+			return [
+				{
+					isShow: this.hasEtherpadElement,
+					text: this.$t("components.molecules.copyResult.geogebraCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.geogebra"),
+				},
+				{
+					isShow: this.hasEtherpadElement,
+					text: this.$t("components.molecules.copyResult.etherpadCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.etherpad"),
+				},
+				{
+					isShow: this.hasNexboardElement,
+					text: this.$t("components.molecules.copyResult.nexboardCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.nexboard"),
+				},
+				{
+					isShow: this.hasFileElement,
+					text: this.$t("components.molecules.copyResult.label.files"),
+					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+				},
+				{
+					isShow: this.hasCourseGroup,
+					text: this.$t("components.molecules.copyResult.courseGroupCopy.info"),
+					title: this.$t("common.words.courseGroups"),
+				},
+			];
 		},
 		hasTimeoutError() {
 			return (
@@ -211,24 +222,8 @@ export default {
 };
 </script>
 
-<style scoped>
-::v-deep .v-btn__content .v-icon,
-.alert_text {
-	color: var(--color-black) !important;
-}
-
-::v-deep .v-alert__border {
-	opacity: 1;
-}
-
+<style scoped lang="scss">
 .wordbreak-normal {
 	word-break: normal;
-}
-</style>
-
-<style lang="scss">
-a.v-breadcrumbs__item:hover,
-a.v-breadcrumbs__item:focus {
-	border-bottom: 1px solid var(--color-primary);
 }
 </style>
