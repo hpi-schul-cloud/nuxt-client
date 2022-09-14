@@ -91,7 +91,7 @@ export default {
 		copyResultWarnings() {
 			return [
 				{
-					isShow: this.hasEtherpadElement,
+					isShow: this.hasGeogebraElement,
 					text: this.$t("components.molecules.copyResult.geogebraCopy.info"),
 					title: this.$t("components.molecules.copyResult.label.geogebra"),
 				},
