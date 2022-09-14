@@ -199,12 +199,13 @@ export default {
 					id: this.taskId,
 					type: "task",
 				});
+			} else {
+				await copyModule.copy({
+					id: this.taskId,
+					courseId: this.courseId,
+					type: "task",
+				});
 			}
-			await copyModule.copy({
-				id: this.taskId,
-				courseId: this.courseId,
-				type: "task",
-			});
 		},
 	},
 };
