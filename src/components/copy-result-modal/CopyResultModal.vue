@@ -181,13 +181,19 @@ export default {
 					text: this.$t("components.molecules.copyResult.successfullyCopied"),
 					status: "success",
 				});
-			} else if (this.copyResultStatus === CopyApiResponseStatusEnum.Failure) {
+				return;
+			}
+
+			if (this.copyResultStatus === CopyApiResponseStatusEnum.Failure) {
 				this.notifierModule.show({
 					text: this.$t("components.molecules.copyResult.failedCopy"),
 					status: "error",
 					autoClose: false,
 				});
-			} else if (
+				return;
+			}
+
+			if (
 				this.copyResultError !== undefined &&
 				this.copyResultError.statusCode === 504
 			) {
@@ -196,9 +202,11 @@ export default {
 					status: "error",
 					autoClose: false,
 				});
-			} else {
-				this.isOpen = true;
+				return;
 			}
+
+			// show the modal
+			this.isOpen = true;
 		},
 	},
 };
