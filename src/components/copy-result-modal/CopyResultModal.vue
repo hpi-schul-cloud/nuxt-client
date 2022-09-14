@@ -7,9 +7,10 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
+		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
 			{{ $t("components.molecules.copyResult.title.partial") }}
-		</h2>
+		</div>
+
 		<template slot="content">
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<v-alert
@@ -18,6 +19,7 @@
 					:icon="mdiInformation"
 					text
 					border="left"
+					:aria-label="$t('components.molecules.copyResult.title.partial')"
 				>
 					<div class="alert_text mr-2">
 						<div v-if="hasGeogebraElement" data-testid="geogebra">
@@ -158,12 +160,6 @@ export default {
 		},
 	},
 	methods: {
-		focusFirstLink() {
-			const dialog = this.$refs["copy-dialog-content"];
-			if (dialog && dialog.querySelector("a")) {
-				dialog.querySelector("a").focus();
-			}
-		},
 		hasElementOfType(items, types) {
 			let found = false;
 			items.forEach((item) => {
