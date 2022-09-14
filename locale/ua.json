@@ -136,7 +136,7 @@
 	"components.molecules.importUsersMatch.notFound": "облікові записи не знайдено",
 	"components.molecules.copyResult.title.loading": "Виконується копіювання...",
 	"components.molecules.copyResult.title.success": "Копіювання успішне",
-	"components.molecules.copyResult.title.partial": "Копіювання успішне, за винятком:",
+	"components.molecules.copyResult.title.partial": "Важлива інформація щодо копіювання",
 	"components.molecules.copyResult.title.failure": "Помилка під час копіювання",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.information": "В подальшому за допомогою швидких посилань можна доповнити відсутню інформацію. Посилання відкриваються в окремій вкладці.",
