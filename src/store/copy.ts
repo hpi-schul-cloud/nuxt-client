@@ -15,7 +15,7 @@ import { BusinessError } from "./types/commons";
 export type CopyParams = {
 	id: string;
 	type: "task" | "lesson" | "course";
-	courseId: string;
+	courseId?: string;
 };
 
 @Module({

@@ -194,11 +194,18 @@ export default {
 			taskModule.deleteTask(this.taskId);
 		},
 		async copyTask() {
-			await copyModule.copy({
-				id: this.taskId,
-				courseId: this.courseId,
-				type: "task",
-			});
+			if (this.courseId === "") {
+				await copyModule.copy({
+					id: this.taskId,
+					type: "task",
+				});
+			} else {
+				await copyModule.copy({
+					id: this.taskId,
+					courseId: this.courseId,
+					type: "task",
+				});
+			}
 		},
 	},
 };
