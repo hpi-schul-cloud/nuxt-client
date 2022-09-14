@@ -1,4 +1,9 @@
 import TheTopBar from "./TheTopBar";
+import setupStores from "@@/tests/test-utils/setupStores";
+//import { statusAlertsModule } from "@/store";
+import StatusAlertsModule from "@/store/statusAlerts";
+import { initializeAxios } from "@utils/api";
+import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
 const mockActions = [
 	{ type: "popupIcon", icon: "house", title: "test home", component: "v-icon" },
@@ -10,7 +15,21 @@ const mockActions = [
 	},
 ];
 
+
+initializeAxios({
+	$get: async (path) => {
+		if (path === '/v1/alert') return mockStatusAlerts;
+	},
+});
+
 describe("@components/legacy/TheTopBar", () => {
+	beforeEach(() => {
+		setupStores({
+			statusAlerts: StatusAlertsModule,
+		});
+		//statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+	});
+
 	it(...isValidComponent(TheTopBar));
 	const $theme = {
 		name: "test",
@@ -69,4 +88,34 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.findAll(".top-sidebar")).toHaveLength(0);
 		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
+
+	it('render with Status Alerts', async () => {
+		const wrapper = shallowMount(TheTopBar, {
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				showStatusAlerts: true,
+			},
+			mocks: {
+				$theme,
+			},
+		});
+
+		expect(wrapper.findAll("status-alerts-stub")).toHaveLength(1);
+		//const alertsIcon = wrapper.find("[data-testid=status-alerts-icon]");
+		//expect(alertsIcon.element.innerHTML).toContain('fa-exclamation-triangle');
+	});
+	it('Should not render Status Alerts', async () => {
+		const wrapper = shallowMount(TheTopBar, {
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				showStatusAlerts: false,
+			},
+			mocks: {
+				$theme,
+			},
+		});
+
+		expect(wrapper.findAll("status-alerts-stub")).toHaveLength(0);
+	});
+
 });

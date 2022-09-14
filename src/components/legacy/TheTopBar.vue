@@ -1,6 +1,5 @@
 <template>
 	<div class="topbar">
-		<!-- ACTIONS -->
 		<div
 			v-if="!fullscreenMode"
 			class="top-main"
@@ -16,11 +15,13 @@
 			<div class="space"></div>
 			<popup-icon
 				v-if="showStatusAlerts"
-				:key="statusAlerts"
+				key="statusAlerts"
 				source="fa"
 				icon="exclamation-triangle"
 				:title="$t('global.topbar.actions.alerts')"
 				:aria-label="$t('global.topbar.actions.alerts')"
+				class="status-alerts-icon"
+				data-testid="status-alerts-icon"
 			>
 				<status-alerts :status-alerts="statusAlerts"></status-alerts>
 			</popup-icon>
@@ -151,15 +152,13 @@ export default {
 			getStatusAlertsFill: () => {
 				return "var(--color-secondary-dark)";
 			},
+			statusAlerts: [],
 		};
 	},
 	computed: {
 		role() {
 			const roleName = this.user.roles.map((r) => r.name);
 			return this.$t(`global.topbar.roleName.${roleName[0]}`);
-		},
-		statusAlerts() {
-			return statusAlertsModule.getStatusAlerts;
 		},
 	},
 	async mounted() {
@@ -172,13 +171,13 @@ export default {
 		async getStatusAlerts() {
 			await statusAlertsModule.fetchStatusAlerts();
 			this.statusAlerts = statusAlertsModule.getStatusAlerts;
-			if (
-				this.statusAlerts.filter((alert) => alert.status === "danger").length >
-				0
-			) {
+			if (this.statusAlertDanger() > 0) {
 				this.getStatusAlertsFill = "var(--color-danger)";
 			}
 		},
+		statusAlertDanger() {
+			return this.statusAlerts.filter((alert) => alert.status === "danger").length > 0;
+		}
 	},
 };
 </script>

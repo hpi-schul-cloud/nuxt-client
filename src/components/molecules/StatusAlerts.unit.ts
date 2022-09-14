@@ -39,13 +39,18 @@ describe("@components/molecules/StatusAlerts", () => {
 		const title = wrapper.find("[data-testid=alert-text0]");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].title);
 	});
-	it.todo('should show multiple alerts', () => {
+	it('should show the alert url', () => {
 		const wrapper = getWrapper(testProps);
-		const title0 = wrapper.find("[data-testid=alert-text0]");
+		const title = wrapper.find("[data-testid=alert-link0]");
+		expect(title.element.href).toContain(mockStatusAlerts[0].url);
+	});
+	it('should show multiple alerts', () => {
+		const wrapper = getWrapper(testProps);
+		const title0 = wrapper.find("[data-testid=alert-title0]");
 		expect(title0.element.textContent).toContain(mockStatusAlerts[0].title);
-		const title1 = wrapper.find("[data-testid=alert-text1]");
-		expect(title1.element.textContent).toContain(mockStatusAlerts[2].title);
-		const title2 = wrapper.find("[data-testid=alert-text2]");
+		const title1 = wrapper.find("[data-testid=alert-title1]");
+		expect(title1.element.textContent).toContain(mockStatusAlerts[1].title);
+		const title2 = wrapper.find("[data-testid=alert-title2]");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
 	});
 });
