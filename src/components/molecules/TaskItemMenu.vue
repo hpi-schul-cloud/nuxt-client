@@ -199,10 +199,6 @@ export default {
 				type: "task",
 			});
 			this.loadingStateModule.close();
-			const copyResult = taskModule.getTaskCopyResult;
-			if (copyResult.id !== "") {
-				this.copyProcess.data = copyResult;
-			}
 		},
 	},
 };
