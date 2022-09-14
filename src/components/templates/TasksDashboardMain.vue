@@ -75,7 +75,6 @@
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
 			:copy-result-error="copyResultError"
-			@dialog-closed="onCopyResultModalClose"
 		></copy-result-modal>
 	</default-wireframe>
 </template>
@@ -331,11 +330,6 @@ export default {
 			if (!this.finishedTasksIsInitialized) {
 				this.finishedTaskModule.fetchFinishedTasks();
 			}
-		},
-		async onCopyResultModalClose() {
-			this.copyModule.reset();
-			this.taskModule.setActiveTab("drafts");
-			await this.taskModule.fetchAllTasks();
 		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {

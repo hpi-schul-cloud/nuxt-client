@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { envConfigModule, finishedTaskModule, taskModule } from "@/store";
+import { envConfigModule, finishedTaskModule } from "@/store";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
@@ -142,7 +142,7 @@ export default {
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	inject: ["loadingStateModule", "copyModule"],
+	inject: ["loadingStateModule", "copyModule", "taskModule"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
@@ -199,6 +199,10 @@ export default {
 				type: "task",
 			});
 			this.loadingStateModule.close();
+
+			this.copyModule.reset();
+			this.taskModule.setActiveTab("drafts");
+			await this.taskModule.fetchAllTasks();
 		},
 	},
 };
