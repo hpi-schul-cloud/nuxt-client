@@ -176,8 +176,11 @@ export default {
 			}
 		},
 		statusAlertDanger() {
-			return this.statusAlerts.filter((alert) => alert.status === "danger").length > 0;
-		}
+			return (
+				this.statusAlerts.filter((alert) => alert.status === "danger").length >
+				0
+			);
+		},
 	},
 };
 </script>

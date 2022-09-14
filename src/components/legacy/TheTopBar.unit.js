@@ -15,10 +15,9 @@ const mockActions = [
 	},
 ];
 
-
 initializeAxios({
 	$get: async (path) => {
-		if (path === '/v1/alert') return mockStatusAlerts;
+		if (path === "/v1/alert") return mockStatusAlerts;
 	},
 });
 
@@ -89,7 +88,7 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
 
-	it('render with Status Alerts', async () => {
+	it("render with Status Alerts", async () => {
 		const wrapper = shallowMount(TheTopBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -104,7 +103,7 @@ describe("@components/legacy/TheTopBar", () => {
 		//const alertsIcon = wrapper.find("[data-testid=status-alerts-icon]");
 		//expect(alertsIcon.element.innerHTML).toContain('fa-exclamation-triangle');
 	});
-	it('Should not render Status Alerts', async () => {
+	it("Should not render Status Alerts", async () => {
 		const wrapper = shallowMount(TheTopBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -117,5 +116,4 @@ describe("@components/legacy/TheTopBar", () => {
 
 		expect(wrapper.findAll("status-alerts-stub")).toHaveLength(0);
 	});
-
 });
