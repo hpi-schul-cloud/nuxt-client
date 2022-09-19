@@ -10,7 +10,6 @@ import {
 	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
-import { BusinessError } from "./types/commons";
 
 export type CopyParams = {
 	id: string;
@@ -26,9 +25,7 @@ export type CopyParams = {
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
-	private businessError: BusinessError | undefined = undefined;
-	private isCopying: boolean = false;
-	private lastResultTimestamp: number = 0;
+	private isResultModalOpen: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -47,57 +44,45 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	async copy({ id, courseId, type }: CopyParams): Promise<void> {
-		this.resetBusinessError();
-		try {
-			this.setCopying(true);
-			let copyResult: CopyApiResponse | undefined = undefined;
+	async copy({
+		id,
+		courseId,
+		type,
+	}: CopyParams): Promise<CopyApiResponse | undefined> {
+		let copyResult: CopyApiResponse | undefined = undefined;
 
-			if (type === "task") {
-				copyResult = await this.taskApi
-					.taskControllerCopyTask(id, { courseId })
-					.then((response) => response.data);
-			}
-
-			if (type === "lesson") {
-				copyResult = await this.roomsApi
-					.roomsControllerCopyLesson(id, { courseId })
-					.then((response) => response.data);
-			}
-
-			if (type === "course") {
-				copyResult = await this.roomsApi
-					.roomsControllerCopyCourse(id)
-					.then((response) => response.data);
-			}
-
-			if (copyResult === undefined) {
-				throw new Error("CopyProcess unknown type: " + type);
-			}
-
-			await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
-			this.setCopying(false);
-
-			this.setCopyResult(copyResult);
-			this.setCopyResultFailedItems({ payload: copyResult });
-			this.setLastResultTimestamp(Date.now());
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
+		if (type === "task") {
+			copyResult = await this.taskApi
+				.taskControllerCopyTask(id, { courseId })
+				.then((response) => response.data);
 		}
+
+		if (type === "lesson") {
+			copyResult = await this.roomsApi
+				.roomsControllerCopyLesson(id, { courseId })
+				.then((response) => response.data);
+		}
+
+		if (type === "course") {
+			copyResult = await this.roomsApi
+				.roomsControllerCopyCourse(id)
+				.then((response) => response.data);
+		}
+
+		if (copyResult === undefined) {
+			throw new Error("CopyProcess unknown type: " + type);
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+
+		this.setCopyResult(copyResult);
+		this.setCopyResultFailedItems({ payload: copyResult });
+		return copyResult;
 	}
 
 	@Mutation
-	setCopying(on: boolean) {
-		this.isCopying = on;
-	}
-
-	@Mutation
-	setLastResultTimestamp(timestamp: number) {
-		this.lastResultTimestamp = timestamp;
+	setResultModalOpen(open: boolean) {
+		this.isResultModalOpen = open;
 	}
 
 	@Mutation
@@ -197,16 +182,6 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
-	setBusinessError(businessError: BusinessError): void {
-		this.businessError = businessError;
-	}
-
-	@Mutation
-	resetBusinessError(): void {
-		this.businessError = undefined;
-	}
-
-	@Mutation
 	setCopyResult(payload: CopyApiResponse): void {
 		this.copyResult = payload;
 	}
@@ -215,7 +190,7 @@ export default class CopyModule extends VuexModule {
 	reset(): void {
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
-		this.businessError = undefined;
+		this.isResultModalOpen = false;
 	}
 
 	get getCopyResult(): CopyApiResponse | undefined {
@@ -234,15 +209,7 @@ export default class CopyModule extends VuexModule {
 		return this.copyResult?.id ?? "";
 	}
 
-	get getBusinessError(): BusinessError | undefined {
-		return this.businessError;
-	}
-
-	get getCopying(): boolean {
-		return this.isCopying;
-	}
-
-	get getLastResultTimestamp(): number {
-		return this.lastResultTimestamp;
+	get getIsResultModalOpen(): boolean {
+		return this.isResultModalOpen;
 	}
 }
