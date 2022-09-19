@@ -44,10 +44,7 @@
 </template>
 
 <script>
-import {
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-} from "@/serverApi/v3";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import {
@@ -61,23 +58,17 @@ export default {
 	name: "CopyResultModal",
 	components: { CopyResultModalList, vCustomDialog },
 	props: {
+		isOpen: {
+			type: Boolean,
+		},
 		copyResultItems: {
 			type: Array,
 			default: () => [],
-		},
-		copyResultStatus: {
-			type: String,
-			default: () => undefined,
-		},
-		copyResultError: {
-			type: Object,
-			default: () => undefined,
 		},
 	},
 	inject: ["notifierModule", "copyModule"],
 	data() {
 		return {
-			isOpen: false,
 			mdiInformation,
 			mdiCheckCircle,
 			mdiCloseCircle,
@@ -159,16 +150,6 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
-		getLastResultTimestamp() {
-			return this.copyModule.getLastResultTimestamp;
-		},
-	},
-	watch: {
-		getLastResultTimestamp: function (newValue, oldValue) {
-			if (newValue > oldValue) {
-				this.processFinalStatus();
-			}
-		},
 	},
 	methods: {
 		hasElementOfType(items, types) {
@@ -182,41 +163,7 @@ export default {
 			return found;
 		},
 		onDialogClosed() {
-			this.isOpen = false;
 			this.$emit("dialog-closed");
-		},
-		processFinalStatus() {
-			if (this.copyResultStatus === CopyApiResponseStatusEnum.Success) {
-				this.notifierModule.show({
-					text: this.$t("components.molecules.copyResult.successfullyCopied"),
-					status: "success",
-				});
-				return;
-			}
-
-			if (this.copyResultStatus === CopyApiResponseStatusEnum.Failure) {
-				this.notifierModule.show({
-					text: this.$t("components.molecules.copyResult.failedCopy"),
-					status: "error",
-					autoClose: false,
-				});
-				return;
-			}
-
-			if (
-				this.copyResultError !== undefined &&
-				this.copyResultError.statusCode === 504
-			) {
-				this.notifierModule.show({
-					text: this.$t("components.molecules.copyResult.timeoutCopy"),
-					status: "error",
-					autoClose: false,
-				});
-				return;
-			}
-
-			// show the modal
-			this.isOpen = true;
 		},
 	},
 };

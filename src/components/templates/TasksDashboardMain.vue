@@ -72,9 +72,8 @@
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"
+			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
-			:copy-result-status="copyResultModalStatus"
-			:copy-result-error="copyResultError"
 		></copy-result-modal>
 	</default-wireframe>
 </template>
@@ -86,6 +85,8 @@ import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
+import { defineComponent } from "@vue/composition-api";
+
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 
@@ -94,7 +95,7 @@ const roleBasedRoutes = {
 	[Roles.Student]: ["open", "completed", "finished"],
 };
 
-export default {
+export default defineComponent({
 	components: {
 		DefaultWireframe,
 		vCustomAutocomplete,
@@ -122,6 +123,12 @@ export default {
 		"loadingStateModule",
 	],
 	computed: {
+		setup() {
+			const { copy } = useCopy();
+			return {
+				copy,
+			};
+		},
 		hasTasks() {
 			return this.taskModule.hasTasks;
 		},
@@ -285,14 +292,11 @@ export default {
 				subtitle,
 			};
 		},
-		copyResultModalStatus() {
-			return this.copyModule.getCopyResult?.status;
-		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
 		},
-		copyResultError() {
-			return this.copyModule.getBusinessError;
+		isCopyModalOpen() {
+			return this.copyModule.getIsResultModalOpen;
 		},
 	},
 	watch: {
@@ -347,7 +351,7 @@ export default {
 			this.taskModule.setActiveTab(tab);
 		},
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";

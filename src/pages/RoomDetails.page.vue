@@ -102,9 +102,8 @@
 			</template>
 		</v-custom-dialog>
 		<copy-result-modal
+			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
-			:copy-result-status="copyResultModalStatus"
-			:copy-result-error="copyResultError"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -130,8 +129,16 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
+import { defineComponent } from "@vue/composition-api";
+import { useCopy } from "../composables/copy";
 
-export default {
+export default defineComponent({
+	setup() {
+		const { copy } = useCopy();
+		return {
+			copy,
+		};
+	},
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
@@ -282,6 +289,9 @@ export default {
 		copyResultError() {
 			return copyModule.getBusinessError;
 		},
+		isCopyModalOpen() {
+			return copyModule.getIsResultModalOpen;
+		},
 	},
 	async created() {
 		await roomModule.fetchContent(this.courseId);
@@ -323,11 +333,11 @@ export default {
 			this.dialog.subText = "";
 		},
 		async onCopyRoom(courseId) {
-			this.loadingStateModule.open({
-				text: this.$t("components.molecules.copyResult.title.loading"),
-			});
-			await copyModule.copy({ id: courseId, courseId, type: "course" });
-			this.loadingStateModule.close();
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			const payload = { id: courseId, courseId, type: "course" };
+			await this.copy(payload, loadingText);
 			const copyResult = copyModule.getCopyResult;
 			const businessError = copyModule.getBusinessError;
 
@@ -340,11 +350,10 @@ export default {
 			}
 		},
 		async onCopyBoardElement(payload) {
-			this.loadingStateModule.open({
-				text: this.$t("components.molecules.copyResult.title.loading"),
-			});
-			await copyModule.copy(payload);
-			this.loadingStateModule.close();
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			await this.copy(payload, loadingText);
 			await roomModule.fetchContent(payload.courseId);
 		},
 		async onCopyResultModalClosed() {
@@ -359,7 +368,7 @@ export default {
 			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";

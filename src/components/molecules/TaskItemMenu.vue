@@ -115,8 +115,16 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
+import { defineComponent } from "@vue/composition-api";
+import { useCopy } from "../../composables/copy";
 
-export default {
+export default defineComponent({
+	setup() {
+		const { copy } = useCopy();
+		return {
+			copy,
+		};
+	},
 	components: { vCustomDialog },
 	props: {
 		taskId: {
@@ -190,22 +198,21 @@ export default {
 				return;
 			}
 
-			this.loadingStateModule.open({
-				text: this.$t("components.molecules.copyResult.title.loading"),
-			});
-			await this.copyModule.copy({
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			const payload = {
 				id: this.taskId,
 				courseId: this.courseId,
 				type: "task",
-			});
-			this.loadingStateModule.close();
-
+			};
+			await this.copy(payload, loadingText);
 			this.copyModule.reset();
 			this.taskModule.setActiveTab("drafts");
 			await this.taskModule.fetchAllTasks();
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
