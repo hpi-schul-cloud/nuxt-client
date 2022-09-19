@@ -1,30 +1,42 @@
+import NotifierModule from "@/store/notifier";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import { defineComponent } from "@vue/composition-api";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import { useNotifier } from "./notifier";
+export interface MountOptions {
+	provider?: () => void;
+}
+
+const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
+	const TestComponent = defineComponent({
+		template: `<div></div>`,
+	});
+
+	const wrapper = mount(TestComponent, {
+		setup() {
+			options.provider?.();
+			const result = composable();
+			return { result };
+		},
+	});
+
+	//@ts-ignore
+	return wrapper.vm.result;
+};
 
 describe("notifier composable", () => {
 	it("should call notifierModule.show()", () => {
-		const showMock = jest.fn();
+		const notifierModuleMock = createModuleMocks(NotifierModule);
 
-		const TestComponent = defineComponent({
-			setup() {
-				provide("notifierModule", {
-					show: showMock,
-				});
-
-				const { showNotifier } = useNotifier();
-
-				return { showNotifier };
+		const { showNotifier } = mountComposable(useNotifier, {
+			provider: () => {
+				provide("notifierModule", notifierModuleMock);
 			},
-			template: `<div></div>`,
 		});
 
-		const wrapper = mount(TestComponent, {});
+		showNotifier({ text: "message", status: "success" });
 
-		//@ts-ignore
-		wrapper.vm.showNotifier({ text: "message", status: "success" });
-
-		expect(showMock).toBeCalled();
+		expect(notifierModuleMock.show).toBeCalled();
 	});
 });
