@@ -1,12 +1,23 @@
 <template>
 	<v-container>
 		<v-row class="text-center">
+			<v-col cols="12"><h1>Two versions of same editor</h1></v-col>
+			<br />
+			<v-col cols="4">
+				<ckeditor
+					v-model="htmlInput1"
+					:editor="editor1"
+					:config="editorConfig1"
+					@input="onEditor1Input"
+				></ckeditor>
+			</v-col>
+			<br />
 			<v-col cols="12">
 				<ckeditor
-					v-model="htmlInput"
-					:editor="editor"
-					:config="editorConfig"
-					@input="onEditorInput"
+					v-model="htmlInput2"
+					:editor="editor2"
+					:config="editorConfig2"
+					@input="onEditor2Input"
 				></ckeditor>
 			</v-col>
 		</v-row>
@@ -27,87 +38,43 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			editor: Editor,
-			markupInput: `## h1`,
-			htmlInput: `<iframe src="https://www.google.com" style="width: 300px; height: 100px">This iframe should be converted into safe text</iframe>
-<h2>h1</h2>
-<h3>h2</h3>
-<p>h3</p>
-<footer>I am a footer and will just be text</footer>
-<p>some
-	<strong>bold</strong>
-	<i>italic (will be not italic)</i>
-	<u>underline</u>
-	<s>strike-through</s>
-	<sub>sub</sub> and
-	<sup>sup</sup>
-</p>
-<p>checking span
-	<span style="color:#F44336">color</span> and
-	<span style="background-color:#9C27B0">background color</span>
-</p>
-<blockquote>
-	<p>and some blockquote</p>
-</blockquote>
-<p>come code comes here:
-	<code>while (editor) { alert('does it render?') }</code>
-</p>
-<p>Line:<hr />
-</p>
-<p>
-	<ol>
-		<li>ordered list</li>
-	</ol>
-	<ul>
-		<li>unordered list</li>
-	</ul>
-</p>
-<p>symbols $₹₻≡⇒</p>
-<p>Some <a href="http://www.google.com">Link</a></p>
-<p>
-	<figure class="table">
-<table>
-	<tbody>
-	<tr>
-			<th>Col 1</th>
-			<th>Col 2</th>
-			<th>Col 3</th>
-		</tr>
-		<tr>
-			<td>table td 1 1</td>
-			<td>table td 1 2</td>
-			<td rowspan="2">merged table rows</td>
-		</tr>
-		<tr>
-			<td>table td 2 1</td>
-			<td>table td 2 2</td>
-		</tr>
-	</tbody>
-</table>
-	</figure>
-</p>
-<p>Math from Latex: $$(x = {-b \\pm \\sqrt{b^2-4ac} \\over 3a}$$</p>
-<p>Math formula: <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></p>
-<p>IMAGE:
-	<figure onclick="javascript:alert('hello from js');" class="image"><img src="http://127.0.0.1:4000/cat.png" alt="cute kitty"></figure>
-</p>
-<p>VIDEO:</p>
-	<video src="http://127.0.0.1:4000/video.mp4" controls="true" controlslist="nodownload"></video>
-<p>AUDIO:</p>
-<audio src="http://127.0.0.1:4000/audio.mp3" controls="true" controlslist="nodownload"></audio>`,
-			editorConfig: {
+			editor1: Editor,
+			editor2: Editor,
+			htmlInput1: `Super simple version`,
+			htmlInput2: `Advanced version incl math and other.<br>
+			<span class="math-tex">\\( \\sqrt{\\frac{a}{b}} \\)</span>
+			<br>`,
+			editorConfig1: {
 				language: "de",
 				//language: "en",
 				//language: "es",
 
-				//plugins: ["Paragraph", "Bold"],
-				//toolbar: ["bold"],
+				//plugins: ["Paragraph", "Bold", "List", "Math", "HelloWorld", "Image"],
+				//toolbar: ["bold", "bulletedList", "math", "helloworld"],
+				plugins: ["Essentials", "Paragraph", "Bold", "Underline", "List"],
+				toolbar: ["bold", "underline", "bulletedList"],
+			},
+			editorConfig2: {
+				//language: "de",
+				language: "en",
+				//language: "es",
+
+				//plugins: ["Paragraph", "Bold", "List", "Math", "HelloWorld", "Image"],
+				//toolbar: ["bold", "bulletedList", "math", "helloworld"],
 			},
 		};
 	},
+	mounted() {
+		console.log(Editor.builtinPlugins.map((plugin) => plugin.pluginName));
+	},
 	methods: {
-		onEditorInput() {
-			console.log(this.htmlInput);
+		onEditor1Input() {
+			// configured with html output
+			console.log(this.htmlInput1);
+		},
+		onEditor2Input() {
+			// configured with markdown output
+			console.log(this.htmlInput2);
 		},
 	},
 });
