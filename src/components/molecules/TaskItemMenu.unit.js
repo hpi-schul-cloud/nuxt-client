@@ -171,28 +171,54 @@ describe("@components/molecules/TaskItemMenu", () => {
 	});
 
 	describe("when copying a task", () => {
-		it("should call copy store method if 'FEATURE_COPY_SERVICE_ENABLED' flag is set to true", async () => {
-			const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
-			const task = tasksTeacher[1];
-			const wrapper = getWrapper({
-				taskId: task.id,
-				taskIsFinished: task.status.isFinished,
-				userRole: "teacher",
+		describe("should call copy store method if 'FEATURE_COPY_SERVICE_ENABLED' flag is set to true", () => {
+			it("should call copy store method with courseId if present", async () => {
+				const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
+				const task = tasksTeacher[1];
+				const wrapper = getWrapper({
+					taskId: task.id,
+					taskIsFinished: task.status.isFinished,
+					userRole: "teacher",
+					courseId: "18",
+				});
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+
+				const menuBtn = wrapper.find("#task-menu-btn");
+				await menuBtn.trigger("click");
+
+				const copyBtn = wrapper.find("#task-action-copy");
+				await copyBtn.trigger("click");
+
+				expect(copyTaskStoreMock).toHaveBeenCalled();
+				expect(copyTaskStoreMock.mock.calls[0][0]).toStrictEqual({
+					id: "59cce2c61113d1132c98dc06",
+					courseId: "18",
+					type: "task",
+				});
 			});
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			it("should call copy store method without courseId if NOT present", async () => {
+				const copyTaskStoreMock = jest.spyOn(copyModule, "copy");
+				const task = tasksTeacher[1];
+				const wrapper = getWrapper({
+					taskId: task.id,
+					taskIsFinished: task.status.isFinished,
+					userRole: "teacher",
+				});
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
-			const menuBtn = wrapper.find("#task-menu-btn");
-			await menuBtn.trigger("click");
+				const menuBtn = wrapper.find("#task-menu-btn");
+				await menuBtn.trigger("click");
 
-			const copyBtn = wrapper.find("#task-action-copy");
-			await copyBtn.trigger("click");
+				const copyBtn = wrapper.find("#task-action-copy");
+				await copyBtn.trigger("click");
 
-			expect(copyTaskStoreMock).toHaveBeenCalled();
-			expect(copyTaskStoreMock.mock.calls[0][0]).toStrictEqual({
-				id: "59cce2c61113d1132c98dc06",
-				courseId: "",
-				type: "task",
+				expect(copyTaskStoreMock).toHaveBeenCalled();
+				expect(copyTaskStoreMock.mock.calls[0][0]).toStrictEqual({
+					id: "59cce2c61113d1132c98dc06",
+					type: "task",
+				});
 			});
 		});
 

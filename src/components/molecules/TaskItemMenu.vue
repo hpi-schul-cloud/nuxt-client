@@ -203,7 +203,7 @@ export default defineComponent({
 			);
 			const payload = {
 				id: this.taskId,
-				courseId: this.courseId,
+				courseId: this.courseId === "" ? undefined : this.courseId,
 				type: "task",
 			};
 			await this.copy(payload, loadingText);

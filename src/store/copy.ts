@@ -14,7 +14,7 @@ import { $axios } from "../utils/api";
 export type CopyParams = {
 	id: string;
 	type: "task" | "lesson" | "course";
-	courseId: string;
+	courseId?: string;
 };
 
 @Module({

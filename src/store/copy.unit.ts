@@ -61,7 +61,7 @@ describe("copy module", () => {
 		};
 
 		describe("copy a task", () => {
-			it("should make a 'POST' request to the backend", async () => {
+			describe("should make a 'POST' request to the backend", () => {
 				const taskMockApi = {
 					taskControllerCopyTask: jest.fn(),
 				};
@@ -71,21 +71,36 @@ describe("copy module", () => {
 						taskMockApi as unknown as serverApi.TaskApiInterface
 					);
 				const copyModule = new CopyModule({});
+				it("should send with courseId", async () => {
+					await copyModule.copy({
+						id: "taskId",
+						type: "task",
+						courseId: "testCourseId",
+					} as CopyParams);
 
-				await copyModule.copy({
-					id: "taskId",
-					type: "task",
-					courseId: "testCourseId",
-				} as CopyParams);
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
+					expect(
+						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
+					).toStrictEqual("taskId");
+					expect(
+						taskMockApi.taskControllerCopyTask.mock.calls[0][1]
+					).toStrictEqual({
+						courseId: "testCourseId",
+					});
+				});
+				it("should send with NO courseId", async () => {
+					await copyModule.copy({
+						id: "taskId",
+						type: "task",
+					} as CopyParams);
 
-				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-				expect(
-					taskMockApi.taskControllerCopyTask.mock.calls[0][0]
-				).toStrictEqual("taskId");
-				expect(
-					taskMockApi.taskControllerCopyTask.mock.calls[0][1]
-				).toStrictEqual({
-					courseId: "testCourseId",
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
+					expect(
+						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
+					).toStrictEqual("taskId");
+					expect(
+						taskMockApi.taskControllerCopyTask.mock.calls[0][1].courseId
+					).toBeUndefined();
 				});
 			});
 
