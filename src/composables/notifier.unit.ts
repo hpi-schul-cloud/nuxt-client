@@ -5,10 +5,12 @@ import { useNotifier } from "./notifier";
 
 describe("notifier composable", () => {
 	it("should call notifierModule.show()", () => {
+		const showMock = jest.fn();
+
 		const TestComponent = defineComponent({
 			setup() {
 				provide("notifierModule", {
-					show: jest.fn(),
+					show: showMock,
 				});
 
 				const { showNotifier } = useNotifier();
@@ -23,6 +25,6 @@ describe("notifier composable", () => {
 		//@ts-ignore
 		wrapper.vm.showNotifier({ text: "message", status: "success" });
 
-		expect(true).toBeTruthy();
+		expect(showMock).toBeCalled();
 	});
 });
