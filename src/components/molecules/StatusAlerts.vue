@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { timeAgo } from "@plugins/datetime";
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	props: {
@@ -85,7 +85,7 @@ export default {
 			return url.replace(/(^\w+:|^)\/\//, "");
 		},
 		getDate(date) {
-			return timeAgo(date);
+			return fromNow(date, true);
 		},
 	},
 };
