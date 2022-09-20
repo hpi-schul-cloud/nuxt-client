@@ -35,8 +35,11 @@ describe("notifier composable", () => {
 			},
 		});
 
+		const notifierMessage = { text: "message", status: "success" };
+
 		showNotifier({ text: "message", status: "success" });
 
 		expect(notifierModuleMock.show).toBeCalled();
+		expect(notifierModuleMock.show).toHaveBeenCalledWith(notifierMessage);
 	});
 });
