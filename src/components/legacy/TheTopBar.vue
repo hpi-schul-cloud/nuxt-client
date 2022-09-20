@@ -14,7 +14,7 @@
 			</base-button>
 			<div class="space"></div>
 			<popup-icon
-				v-if="showStatusAlerts"
+				v-if="showStatusAlertIcon"
 				key="statusAlerts"
 				source="fa"
 				icon="exclamation-triangle"
@@ -159,6 +159,9 @@ export default {
 		role() {
 			const roleName = this.user.roles.map((r) => r.name);
 			return this.$t(`global.topbar.roleName.${roleName[0]}`);
+		},
+		showStatusAlertIcon() {
+			return this.showStatusAlerts && this.statusAlerts.length !== 0;
 		},
 	},
 	async mounted() {
