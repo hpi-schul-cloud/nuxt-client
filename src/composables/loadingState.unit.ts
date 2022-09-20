@@ -1,9 +1,9 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { defineComponent } from "@vue/composition-api";
-import { provide } from "@vue/composition-api";
+import { defineComponent, provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
-import { useLoadingState } from "./loadingState";
+import { USE_LOADING_STATE, useLoadingState } from "./loadingState";
+import { provideComposable } from "@/composables/di/inject-composable";
 
 export interface MountOptions {
 	provider?: () => void;
@@ -33,6 +33,8 @@ describe("loadingState composable", () => {
 		const { openLoadingDialog } = mountComposable(useLoadingState, {
 			provider: () => {
 				provide("loadingStateModule", loadingStateModuleMock);
+				provideComposable("useLoadingState", useLoadingState);
+				provideComposable(USE_LOADING_STATE, () => {});
 			},
 		});
 

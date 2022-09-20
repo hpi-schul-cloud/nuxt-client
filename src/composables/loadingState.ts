@@ -1,5 +1,7 @@
 import LoadingStateModule from "@/store/loading-state";
-import { inject } from "@vue/composition-api";
+import { inject, InjectionKey } from "@vue/composition-api";
+
+export const USE_LOADING_STATE: InjectionKey<typeof useLoadingState> = Symbol();
 
 export function useLoadingState() {
 	const loadingStateModule = inject<LoadingStateModule>("loadingStateModule");
