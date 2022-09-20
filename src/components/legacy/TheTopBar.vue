@@ -20,6 +20,7 @@
 				icon="exclamation-triangle"
 				:title="$t('global.topbar.actions.alerts')"
 				:aria-label="$t('global.topbar.actions.alerts')"
+				:fill="statusAlertColor"
 				class="status-alerts-icon"
 				data-testid="status-alerts-icon"
 			>
@@ -149,9 +150,6 @@ export default {
 	data() {
 		// This solely exists to appear in the coverage report
 		return {
-			getStatusAlertsFill: () => {
-				return "var(--color-secondary-dark)";
-			},
 			statusAlerts: [],
 		};
 	},
@@ -162,6 +160,12 @@ export default {
 		},
 		showStatusAlertIcon() {
 			return this.showStatusAlerts && this.statusAlerts.length !== 0;
+		},
+		statusAlertColor() {
+			const color = this.statusAlertDanger()
+				? "var(--color-danger)"
+				: "var(--color-secondary-dark)";
+			return color;
 		},
 	},
 	async mounted() {
@@ -174,14 +178,11 @@ export default {
 		async getStatusAlerts() {
 			await statusAlertsModule.fetchStatusAlerts();
 			this.statusAlerts = statusAlertsModule.getStatusAlerts;
-			if (this.statusAlertDanger() > 0) {
-				this.getStatusAlertsFill = "var(--color-danger)";
-			}
 		},
 		statusAlertDanger() {
 			return (
-				this.statusAlerts.filter((alert) => alert.status === "danger").length >
-				0
+				this.statusAlerts.filter((alert) => alert.status === "danger")
+					.length !== 0
 			);
 		},
 	},
