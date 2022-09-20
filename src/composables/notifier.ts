@@ -1,6 +1,8 @@
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { inject } from "@vue/composition-api";
+import { inject, InjectionKey } from "@vue/composition-api";
+
+export const USE_NOTIFIER: InjectionKey<typeof useNotifier> = Symbol();
 
 export function useNotifier() {
 	const notifierModule = inject<NotifierModule>("notifierModule");

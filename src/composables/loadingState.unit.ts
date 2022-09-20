@@ -1,9 +1,9 @@
 import LoadingStateModule from "@/store/loading-state";
+import { provideComposable } from "@/utils/composable-dependency-injection";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { defineComponent, provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
-import { USE_LOADING_STATE, useLoadingState } from "./loadingState";
-import { provideComposable } from "@/composables/di/inject-composable";
+import { useLoadingState, USE_LOADING_STATE } from "./loadingState";
 
 export interface MountOptions {
 	provider?: () => void;
@@ -33,16 +33,17 @@ describe("loadingState composable", () => {
 		const { openLoadingDialog } = mountComposable(useLoadingState, {
 			provider: () => {
 				provide("loadingStateModule", loadingStateModuleMock);
-				provideComposable("useLoadingState", useLoadingState);
-				provideComposable(USE_LOADING_STATE, () => {});
+				provideComposable(USE_LOADING_STATE, useLoadingState);
 			},
 		});
 
-		openLoadingDialog("test message");
+		const loadingMessage = "test message";
+
+		openLoadingDialog(loadingMessage);
 
 		expect(loadingStateModuleMock.open).toBeCalled();
 		expect(loadingStateModuleMock.open).toHaveBeenCalledWith({
-			text: "test message",
+			text: loadingMessage,
 		});
 	});
 

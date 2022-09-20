@@ -1,14 +1,20 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams } from "@/store/copy";
-import { inject } from "@vue/composition-api";
+import { injectComposable } from "@/utils/composable-dependency-injection";
+import { inject, InjectionKey } from "@vue/composition-api";
 import { useI18n } from "./i18n";
-import { useLoadingState } from "./loadingState";
-import { useNotifier } from "./notifier";
+import { USE_LOADING_STATE } from "./loadingState";
+import { USE_NOTIFIER } from "./notifier";
+
+export const USE_COPY: InjectionKey<typeof useCopy> = Symbol();
 
 export function useCopy() {
 	const copyModule = inject<CopyModule>("copyModule");
-	const { showNotifier } = useNotifier();
-	const { openLoadingDialog, closeLoadingDialog } = useLoadingState();
+	const { showNotifier } = injectComposable(USE_NOTIFIER);
+
+	const { openLoadingDialog, closeLoadingDialog } =
+		injectComposable(USE_LOADING_STATE);
+
 	const { t } = useI18n();
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
