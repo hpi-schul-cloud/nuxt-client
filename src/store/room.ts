@@ -175,13 +175,7 @@ export default class RoomModule extends VuexModule {
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const deletedLessonData = await $axios.$delete(`/v1/lessons/${lessonId}`);
-			if (!deletedLessonData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-deleted",
-				});
-			}
+			await $axios.$delete(`/v3/lessons/${lessonId}`);
 
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
