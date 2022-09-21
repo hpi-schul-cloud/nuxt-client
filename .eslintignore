@@ -4,4 +4,4 @@
 dist
 .nuxt
 /src/serverApi/**
-/src/static/scripts/**
+/src/static/ckeditor5/**
