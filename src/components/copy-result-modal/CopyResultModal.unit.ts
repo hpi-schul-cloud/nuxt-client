@@ -51,6 +51,11 @@ const getWrapper = (props?: any) => {
 };
 
 describe("@components/copy-result-modal/CopyResultModal", () => {
+	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+	});
+
 	describe("basic functions", () => {
 		it("Should render component", () => {
 			const wrapper = getWrapper();
@@ -75,9 +80,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 
 	describe("title", () => {
 		it("should show partial-title when copy was partially successful", () => {
-			// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-			document.body.setAttribute("data-app", "true");
-
 			const wrapper = getWrapper({ isOpen: true });
 
 			const headline = wrapper.find('[data-testid="dialog-title"]').text();
@@ -141,7 +143,7 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			["NeXboard", CopyApiResponseTypeEnum.LessonContentNexboard],
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
-		])("should render if there is a typed notification", (title, type) => {
+		])("should render if there is a typed notification item", (title, type) => {
 			const copyResultItems = defaultResultItems();
 			copyResultItems[0].elements = [
 				{
@@ -151,8 +153,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			];
 
 			const wrapper = getWrapper({ isOpen: true, copyResultItems });
-
-			console.log(wrapper.find('[data-testid="warning-title"]').text());
 
 			expect(wrapper.find('[data-testid="warning-title"]').text()).toContain(
 				title
