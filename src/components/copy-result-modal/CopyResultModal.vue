@@ -12,25 +12,30 @@
 		</div>
 
 		<template slot="content">
-			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div v-if="needsInfoText">
-					<div
-						class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
-					>
-						<div class="mx-2">
-							<v-icon class="orange--text text--darken-1">{{
-								mdiAlert
-							}}</v-icon>
-						</div>
-						<div>
-							<template v-for="(warning, index) in copyResultWarnings">
-								<p v-if="warning.isShow" :key="index" class="black--text mb-0">
-									<strong>{{ warning.title }}</strong>
-									&middot;
-									{{ warning.text }}
-								</p>
-							</template>
-						</div>
+			<div
+				v-if="needsInfoText"
+				ref="copy-dialog-content"
+				data-testid="copy-result-notifications"
+			>
+				<div
+					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
+				>
+					<div class="mx-2">
+						<v-icon class="orange--text text--darken-1">{{ mdiAlert }}</v-icon>
+					</div>
+					<div>
+						<template v-for="(warning, index) in copyResultWarnings">
+							<p
+								v-if="warning.isShow"
+								:key="index"
+								class="black--text mb-0"
+								data-testid="warning-title"
+							>
+								<strong>{{ warning.title }}</strong>
+								&middot;
+								{{ warning.text }}
+							</p>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -66,7 +71,6 @@ export default {
 			default: () => [],
 		},
 	},
-	inject: ["notifierModule", "copyModule"],
 	data() {
 		return {
 			mdiInformation,
