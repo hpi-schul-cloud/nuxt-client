@@ -1,20 +1,21 @@
 import LoadingStateModule from "@/store/loading-state";
-import { provideComposable } from "@/utils/composable-dependency-injection";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { defineComponent, provide } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
-import { useLoadingState, USE_LOADING_STATE } from "./loadingState";
+import { mount, Wrapper } from "@vue/test-utils";
+import { useLoadingState } from "./loadingState";
 
 export interface MountOptions {
 	provider?: () => void;
 }
+
+let wrapper: Wrapper<Vue>;
 
 const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 	const TestComponent = defineComponent({
 		template: `<div></div>`,
 	});
 
-	const wrapper = mount(TestComponent, {
+	wrapper = mount(TestComponent, {
 		setup() {
 			options.provider?.();
 			const result = composable();
@@ -27,19 +28,20 @@ const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 };
 
 describe("loadingState composable", () => {
-	it("should call loadingStateModule.open()", () => {
+	it("should call loadingStateModule.open()", async () => {
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-
-		const { openLoadingDialog } = mountComposable(useLoadingState, {
-			provider: () => {
-				provide("loadingStateModule", loadingStateModuleMock);
-				provideComposable(USE_LOADING_STATE, useLoadingState);
-			},
-		});
-
 		const loadingMessage = "test message";
+		const { isLoadingDialogOpen } = mountComposable(
+			() => useLoadingState(loadingMessage),
+			{
+				provider: () => {
+					provide("loadingStateModule", loadingStateModuleMock);
+				},
+			}
+		);
 
-		openLoadingDialog(loadingMessage);
+		isLoadingDialogOpen.value = true;
+		await wrapper.vm.$nextTick();
 
 		expect(loadingStateModuleMock.open).toBeCalled();
 		expect(loadingStateModuleMock.open).toHaveBeenCalledWith({
@@ -47,16 +49,20 @@ describe("loadingState composable", () => {
 		});
 	});
 
-	it("should call loadingStateModule.close()", () => {
+	it("should call loadingStateModule.close()", async () => {
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
-		const { closeLoadingDialog } = mountComposable(useLoadingState, {
-			provider: () => {
-				provide("loadingStateModule", loadingStateModuleMock);
-			},
-		});
+		const { isLoadingDialogOpen } = mountComposable(
+			() => useLoadingState("...loading"),
+			{
+				provider: () => {
+					provide("loadingStateModule", loadingStateModuleMock);
+				},
+			}
+		);
 
-		closeLoadingDialog();
+		isLoadingDialogOpen.value = false;
+		await wrapper.vm.$nextTick();
 
 		expect(loadingStateModuleMock.close).toBeCalled();
 	});

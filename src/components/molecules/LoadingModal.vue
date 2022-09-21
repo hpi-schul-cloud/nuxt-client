@@ -1,5 +1,5 @@
 <template>
-	<base-modal v-bind="$attrs" v-on="$listeners">
+	<base-modal v-bind="$attrs" :active="isLoadingDialogOpen" v-on="$listeners">
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>
@@ -17,8 +17,9 @@
 	</base-modal>
 </template>
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import CenterSlot from "@components/atoms/CenterSlot";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import { useLoadingState } from "../../composables/loadingState";
 export default {
 	components: {
 		ModalBodyInfo,
@@ -43,6 +44,12 @@ export default {
 				return this.$t("common.actions.cancel");
 			},
 		},
+	},
+	setup() {
+		const { isLoadingDialogOpen } = useLoadingState(this.$t());
+		return {
+			isLoadingDialogOpen,
+		};
 	},
 	data() {
 		// This solely exists to appear in the coverage report

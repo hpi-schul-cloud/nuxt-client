@@ -1,25 +1,27 @@
 import LoadingStateModule from "@/store/loading-state";
-import { inject, InjectionKey } from "@vue/composition-api";
+import { Ref, unref, watch } from "@nuxtjs/composition-api";
+import { inject, InjectionKey, ref } from "@vue/composition-api";
+
+export const UseLoadingState = typeof useLoadingState;
 
 export const USE_LOADING_STATE: InjectionKey<typeof useLoadingState> = Symbol();
 
-export function useLoadingState() {
+const isLoadingDialogOpen = ref(false);
+
+export function useLoadingState(loadingText: Ref<string> | string) {
 	const loadingStateModule = inject<LoadingStateModule>("loadingStateModule");
 
-	const openLoadingDialog = (text: string) => {
+	watch(isLoadingDialogOpen, (newValue) => {
 		if (loadingStateModule === undefined) return;
 
-		loadingStateModule.open({ text });
-	};
-
-	const closeLoadingDialog = () => {
-		if (loadingStateModule === undefined) return;
-
-		loadingStateModule.close();
-	};
+		if (newValue === true) {
+			loadingStateModule.open({ text: unref(loadingText) });
+		} else {
+			loadingStateModule.close();
+		}
+	});
 
 	return {
-		openLoadingDialog,
-		closeLoadingDialog,
+		isLoadingDialogOpen,
 	};
 }

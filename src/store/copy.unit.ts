@@ -117,18 +117,14 @@ describe("copy module", () => {
 						taskMockApi as unknown as serverApi.TaskApiInterface
 					);
 				const copyModule = new CopyModule({});
-				await copyModule.copy({
-					id: "taskId",
-					type: "task",
-					courseId: "testCourseId",
-				});
+				expect(async () => {
+					await copyModule.copy({
+						id: "taskId",
+						type: "task",
+						courseId: "testCourseId",
+					});
+				}).toThrow();
 				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
-				);
 			});
 		});
 
@@ -175,12 +171,7 @@ describe("copy module", () => {
 					courseId: "courseId-value",
 				});
 				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
-				);
+				expect("error").toBe("throw");
 			});
 		});
 
@@ -232,42 +223,12 @@ describe("copy module", () => {
 					courseId: "testCourseId",
 				});
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
-				);
+				expect("error").toBe("throw");
 			});
 		});
 	});
 
 	describe("mutations", () => {
-		describe("setBusinessError", () => {
-			it("should set businessError", () => {
-				const copyModule = new CopyModule({});
-				const businessErrorData = {
-					statusCode: "400",
-					message: "error",
-					error: { type: "BadRequest" },
-				};
-				expect(copyModule.getBusinessError).not.toBe(businessErrorData);
-				copyModule.setBusinessError(businessErrorData);
-				expect(copyModule.getBusinessError).toBe(businessErrorData);
-			});
-
-			it("should reset businessError", () => {
-				const copyModule = new CopyModule({});
-				copyModule.setBusinessError({
-					statusCode: "400",
-					message: "error",
-					error: {},
-				});
-				copyModule.resetBusinessError();
-				expect(copyModule.getBusinessError).toBeUndefined();
-			});
-		});
-
 		describe("setCopyResult", () => {
 			it("should set copyResult", () => {
 				const copyModule = new CopyModule({});

@@ -1,46 +1,41 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams } from "@/store/copy";
-import { injectComposable } from "@/utils/composable-dependency-injection";
-import { inject, InjectionKey } from "@vue/composition-api";
-import { useI18n } from "./i18n";
-import { USE_LOADING_STATE } from "./loadingState";
-import { USE_NOTIFIER } from "./notifier";
+import NotifierModule from "@/store/notifier";
+import { inject, InjectionKey, Ref } from "@vue/composition-api";
 
 export const USE_COPY: InjectionKey<typeof useCopy> = Symbol();
 
-export function useCopy() {
+export function useCopy(
+	isLoadingDialogOpen: Ref<boolean>,
+	$t: (s: string) => string
+) {
 	const copyModule = inject<CopyModule>("copyModule");
-	const { showNotifier } = injectComposable(USE_NOTIFIER);
-
-	const { openLoadingDialog, closeLoadingDialog } =
-		injectComposable(USE_LOADING_STATE);
-
-	const { t } = useI18n();
+	const notifierModule = inject<NotifierModule>("notifierModule");
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
 	const showSuccess = () =>
-		showNotifier({
-			text: t("components.molecules.copyResult.successfullyCopied"),
+		notifierModule?.show({
+			text: $t("components.molecules.copyResult.successfullyCopied"),
 			status: "success",
 		});
 
 	const showFailure = () =>
-		showNotifier({
-			text: t("components.molecules.copyResult.failedCopy"),
+		notifierModule?.show({
+			text: $t("components.molecules.copyResult.failedCopy"),
 			status: "error",
 			autoClose: false,
 		});
 
 	const showTimeout = () =>
-		showNotifier({
-			text: t("components.molecules.copyResult.timeoutCopy"),
+		notifierModule?.show({
+			text: $t("components.molecules.copyResult.timeoutCopy"),
 			status: "error",
 			autoClose: false,
 		});
 
-	const copy = async (copyParams: CopyParams, loadingText: string) => {
-		openLoadingDialog(loadingText);
+	const copy = async (copyParams: CopyParams) => {
+		isLoadingDialogOpen.value = true;
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
 			if (copyResult?.status === CopyApiResponseStatusEnum.Success) {
@@ -53,7 +48,7 @@ export function useCopy() {
 		} catch (error) {
 			showTimeout();
 		} finally {
-			closeLoadingDialog();
+			isLoadingDialogOpen.value = false;
 		}
 	};
 
