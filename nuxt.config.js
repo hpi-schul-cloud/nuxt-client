@@ -81,14 +81,14 @@ module.exports = {
 			},
 			{
 				rel: "stylesheet",
-				href: "https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css",
+				href: "/ckeditor5/katex.min.css",
 			},
 		],
 		script: [
-			{ src: "/scripts/ckeditor5/ckeditor.js" },
-			{ src: "/scripts/ckeditor5/translations/en.js" },
-			{ src: "/scripts/ckeditor5/translations/es.js" },
-			{ src: "https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" },
+			{ src: "/ckeditor5/ckeditor.js" },
+			{ src: "/ckeditor5/translations/en.js" },
+			{ src: "/ckeditor5/translations/es.js" },
+			{ src: "/ckeditor5/katex.min.js" },
 		],
 		/* script: [
 			{
