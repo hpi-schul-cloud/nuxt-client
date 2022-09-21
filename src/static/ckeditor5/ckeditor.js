@@ -19805,7 +19805,7 @@
 								});
 						}
 						_createVoiceLabel() {
-							const t = this.t,
+							const { t } = this,
 								e = new lu();
 							return (
 								(e.text = t("Rich Text Editor")),
@@ -27211,7 +27211,7 @@
 							);
 						}
 						_createLabeledInputView() {
-							const t = this.locale.t,
+							const { t } = this.locale,
 								e = new Au(this.locale, Cu);
 							return (e.label = t("Text alternative")), e;
 						}
@@ -28329,7 +28329,7 @@
 							return "ImageStyleUI";
 						}
 						get localizedDefaultStylesTitles() {
-							const t = this.editor.t;
+							const { t } = this.editor;
 							return {
 								"Wrap text": t("Wrap text"),
 								"Break text": t("Break text"),
@@ -29925,7 +29925,7 @@
 							this._focusCycler.focusFirst();
 						}
 						_createUrlInput() {
-							const t = this.locale.t,
+							const { t } = this.locale,
 								e = new Au(this.locale, Cu);
 							return (e.label = t("Link URL")), e;
 						}
@@ -31302,7 +31302,7 @@
 							return "ListUI";
 						}
 						init() {
-							const t = this.editor.t;
+							const { t } = this.editor;
 							Fb(
 								this.editor,
 								"numberedList",
@@ -37390,7 +37390,7 @@
 								}));
 						}
 						_createMathInput() {
-							const t = this.locale.t,
+							const { t } = this.locale,
 								e = new vC(this.locale, bu),
 								n = e.inputView;
 							e.infoText = t("Insert equation in TeX format.");
@@ -37419,7 +37419,7 @@
 							);
 						}
 						_createDisplayButton() {
-							const t = this.locale.t,
+							const { t } = this.locale,
 								e = new wh(this.locale);
 							return (
 								e.set({ label: t("Display mode"), withText: !0 }),
