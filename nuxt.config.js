@@ -79,16 +79,12 @@ module.exports = {
 				type: "image/png",
 				href: `/themes/${themeName}/favicon.png`,
 			},
-			{
-				rel: "stylesheet",
-				href: "/ckeditor5/katex.min.css",
-			},
 		],
 		script: [
 			{ src: "/ckeditor5/ckeditor.js" },
 			{ src: "/ckeditor5/translations/en.js" },
 			{ src: "/ckeditor5/translations/es.js" },
-			{ src: "/ckeditor5/katex.min.js" },
+			{ src: "/ckeditor5/tex-svg.js" },
 		],
 		/* script: [
 			{
