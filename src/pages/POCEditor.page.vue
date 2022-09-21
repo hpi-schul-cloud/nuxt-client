@@ -1,6 +1,10 @@
 <template>
 	<div>
 		<default-wireframe headline="POC - Editor CKEditor 5" :full-width="false">
+			<p>
+				Two versions of the <strong>same</strong> editor including custom theme
+				- wow, round corners. First one is german, second is english:
+			</p>
 			<ckeditor
 				v-model="htmlInput1"
 				:editor="editor1"
