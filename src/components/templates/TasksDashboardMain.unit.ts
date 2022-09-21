@@ -2,11 +2,11 @@
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
+import LoadingStateModule from "@/store/loading-state";
 import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal.vue";
 import { provide } from "@nuxtjs/composition-api";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
@@ -43,6 +43,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
 	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
+	let loadingStateModuleMock: LoadingStateModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -56,6 +57,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				provide("taskModule", taskModuleMock);
 				provide("copyModule", copyModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("loadingStateModule", loadingStateModuleMock);
 			},
 			...attrs,
 		});
@@ -81,6 +83,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 		beforeEach(() => {
 			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
 			copyModuleMock = createModuleMocks(CopyModule);
+			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
 			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 				getTasks: [],
@@ -165,6 +168,10 @@ describe("@components/templates/TasksDashboardMain", () => {
 
 		beforeEach(() => {
 			taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
+			copyModuleMock = createModuleMocks(CopyModule, {
+				getIsResultModalOpen: false,
+			});
+			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
 			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 				getTasks: [],
@@ -377,33 +384,6 @@ describe("@components/templates/TasksDashboardMain", () => {
 			it.todo("course filter show filter for substitutes filters");
 
 			it.todo("course filter show substitute prefix for substitutes filters");
-		});
-	});
-
-	describe("copying tasks", () => {
-		beforeEach(() => {
-			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
-			copyModuleMock = createModuleMocks(CopyModule);
-
-			wrapper = mountComponent({
-				propsData: {
-					role: "teacher",
-				},
-				stubs: {
-					CopyResultModal: true,
-					TasksDashboardStudent: true,
-					TasksDashboardTeacher: true,
-				},
-			});
-		});
-
-		it("should fetch fresh data after copying task and closing dialog", async () => {
-			const dialog = wrapper.findComponent(CopyResultModal);
-			dialog.vm.$emit("dialog-closed");
-
-			expect(copyModuleMock.reset).toHaveBeenCalled();
-			expect(taskModuleMock.setActiveTab).toHaveBeenCalledWith("drafts");
-			expect(taskModuleMock.fetchAllTasks).toHaveBeenCalled();
 		});
 	});
 });
