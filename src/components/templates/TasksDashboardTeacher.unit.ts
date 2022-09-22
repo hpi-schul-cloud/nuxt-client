@@ -9,6 +9,9 @@ import { mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import LoadingStateModule from "@/store/loading-state";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -18,6 +21,10 @@ const tabRoutes = ["current", "drafts", "finished"];
 describe("@components/templates/TasksDashboardTeacher", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
+	let copyModuleMock: CopyModule;
+	let loadingStateModuleMock: LoadingStateModule;
+	let notifierModuleMock: NotifierModule;
+
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -28,6 +35,10 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			setup() {
 				provide("taskModule", taskModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("copyModule", copyModuleMock);
+				provide("loadingStateModule", loadingStateModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});
@@ -57,11 +68,13 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 	beforeEach(() => {
 		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
-
 		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
+		copyModuleMock = createModuleMocks(CopyModule);
+		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("Should render tasks list component, with second panel expanded per default", () => {
