@@ -8,7 +8,6 @@ import { defineComponent, provide, ref } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import { useCopy } from "./copy";
 
-jest.mock("./notifier");
 jest.mock("./loadingState");
 
 export interface MountOptions {
@@ -40,15 +39,16 @@ describe("copy composable", () => {
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		const copyModuleMock = createModuleMocks(CopyModule);
 
-		const t = jest.fn().mockReturnValue("placeholder");
+		const i18n = { t: jest.fn().mockReturnValue("placeholder") };
 
 		const isLoadingDialogOpen = ref(false);
 
-		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen, t), {
+		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
 			provider: () => {
 				provide("copyModule", copyModuleMock);
 				provide("notifierModule", notifierModuleMock);
 				provide("loadingStateModule", loadingStateModuleMock);
+				provide("i18n", i18n);
 			},
 		});
 
