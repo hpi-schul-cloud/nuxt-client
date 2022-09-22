@@ -150,7 +150,7 @@ export default defineComponent({
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
-	inject: ["loadingStateModule", "copyModule", "taskModule"],
+	inject: ["taskModule"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,

@@ -3,6 +3,7 @@ import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -44,6 +45,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
 	let loadingStateModuleMock: LoadingStateModule;
+	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -58,6 +60,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 				provide("copyModule", copyModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
 				provide("loadingStateModule", loadingStateModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});
@@ -172,6 +176,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getIsResultModalOpen: false,
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
+			notifierModuleMock = createModuleMocks(NotifierModule);
 
 			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 				getTasks: [],
