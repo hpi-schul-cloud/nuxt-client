@@ -63,7 +63,7 @@ describe("copy module", () => {
 		describe("copy a task", () => {
 			describe("should make a 'POST' request to the backend", () => {
 				const taskMockApi = {
-					taskControllerCopyTask: jest.fn(),
+					taskControllerCopyTask: jest.fn(() => Promise.resolve({ data: {} })),
 				};
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -72,35 +72,29 @@ describe("copy module", () => {
 					);
 				const copyModule = new CopyModule({});
 				it("should send with courseId", async () => {
-					await copyModule.copy({
+					const payload: CopyParams = {
 						id: "taskId",
 						type: "task",
 						courseId: "testCourseId",
-					} as CopyParams);
+					};
+					await copyModule.copy(payload);
 
-					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
-					).toStrictEqual("taskId");
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][1]
-					).toStrictEqual({
-						courseId: "testCourseId",
-					});
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
+						payload
+					);
 				});
+
 				it("should send with NO courseId", async () => {
-					await copyModule.copy({
+					const payload: CopyParams = {
 						id: "taskId",
 						type: "task",
-					} as CopyParams);
+					};
 
-					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
-					).toStrictEqual("taskId");
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][1].courseId
-					).toBeUndefined();
+					await copyModule.copy(payload);
+
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
+						payload
+					);
 				});
 			});
 
@@ -138,16 +132,19 @@ describe("copy module", () => {
 					.mockReturnValue(
 						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
 					);
+
 				const copyModule = new CopyModule({});
-				await copyModule.copy({
+				const payload: CopyParams = {
 					id: "courseId-value",
 					type: "course",
 					courseId: "courseId-value",
-				});
-				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect(
-					roomCopyMockApi.roomsControllerCopyCourse.mock.calls[0][0]
-				).toStrictEqual("courseId-value");
+				};
+
+				await copyModule.copy(payload);
+
+				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalledWith(
+					payload
+				);
 			});
 
 			it("handle error", async () => {
@@ -155,9 +152,7 @@ describe("copy module", () => {
 					response: { status: 418, statusText: "This is an error" },
 				};
 				const roomCopyMockApi = {
-					roomsControllerCopyCourse: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
+					roomsControllerCopyCourse: jest.fn(() => Promise.reject(error)),
 				};
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -165,13 +160,12 @@ describe("copy module", () => {
 						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
 					);
 				const copyModule = new CopyModule({});
-				await copyModule.copy({
+				const payload: CopyParams = {
 					id: "courseId-value",
 					type: "course",
 					courseId: "courseId-value",
-				});
-				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect("error").toBe("throw");
+				};
+				expect(await copyModule.copy(payload)).rejects.toThrow("I should fail");
 			});
 		});
 
@@ -344,6 +338,10 @@ describe("copy module", () => {
 								status: CopyApiResponseStatusEnum.NotDoing,
 							},
 							{
+								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+								status: CopyApiResponseStatusEnum.Partial,
+							},
+							{
 								type: CopyApiResponseTypeEnum.FileGroup,
 								status: CopyApiResponseStatusEnum.NotImplemented,
 							},
@@ -355,7 +353,12 @@ describe("copy module", () => {
 						title: "test course",
 						type: CopyApiResponseTypeEnum.Course,
 						elementId: "12345",
-						elements: [],
+						elements: [
+							{
+								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+								status: CopyApiResponseStatusEnum.Partial,
+							},
+						],
 						url: "/courses/12345/edit",
 					},
 				];
