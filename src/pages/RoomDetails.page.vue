@@ -129,17 +129,18 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
 
 export default defineComponent({
 	setup() {
+		const i18n = inject("i18n");
 		const { isLoadingDialogOpen } = useLoadingState(
-			this.$t("components.molecules.copyResult.title.loading")
+			i18n.t("components.molecules.copyResult.title.loading")
 		);
 
-		const { copy } = useCopy(isLoadingDialogOpen, this.$t);
+		const { copy } = useCopy(isLoadingDialogOpen);
 
 		return {
 			copy,
