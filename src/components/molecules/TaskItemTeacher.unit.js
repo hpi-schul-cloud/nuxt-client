@@ -1,4 +1,9 @@
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import TaskModule from "@/store/tasks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
+import { provide } from "@vue/composition-api";
 import TaskItemTeacher from "./TaskItemTeacher";
 
 const {
@@ -18,12 +23,22 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
+let taskModuleMock;
+let copyModuleMock;
+let notifierModuleMock;
+
 const getWrapper = (props, options) => {
 	return mount(TaskItemTeacher, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
 		}),
+		setup() {
+			provide("taskModule", taskModuleMock);
+			provide("copyModule", copyModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide("i18n", { t: (key) => key });
+		},
 		propsData: props,
 		attachTo: document.body,
 		...options,
@@ -32,6 +47,13 @@ const getWrapper = (props, options) => {
 
 describe("@components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
+
+	beforeEach(() => {
+		// document.body.setAttribute("data-app", "true");
+		taskModuleMock = createModuleMocks(TaskModule);
+		copyModuleMock = createModuleMocks(CopyModule);
+		notifierModuleMock = createModuleMocks(NotifierModule);
+	});
 
 	it(...isValidComponent(TaskItemTeacher));
 
