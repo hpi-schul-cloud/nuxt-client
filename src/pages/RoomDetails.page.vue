@@ -111,7 +111,7 @@
 
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -156,7 +156,7 @@ export default defineComponent({
 		CopyResultModal,
 	},
 	layout: "defaultVuetify",
-	inject: ["loadingStateModule"],
+	inject: ["copyModule"],
 	data() {
 		return {
 			importDialog: {
@@ -287,16 +287,16 @@ export default defineComponent({
 			return items;
 		},
 		copyResultModalStatus() {
-			return copyModule.getCopyResult?.status;
+			return this.copyModule.getCopyResult?.status;
 		},
 		copyResultModalItems() {
-			return copyModule.getCopyResultFailedItems;
+			return this.copyModule.getCopyResultFailedItems;
 		},
 		copyResultError() {
-			return copyModule.getBusinessError;
+			return this.copyModule.getBusinessError;
 		},
 		isCopyModalOpen() {
-			return copyModule.getIsResultModalOpen;
+			return this.copyModule.getIsResultModalOpen;
 		},
 	},
 	async created() {
@@ -344,7 +344,7 @@ export default defineComponent({
 			);
 			const payload = { id: courseId, courseId, type: "course" };
 			await this.copy(payload, loadingText);
-			const copyResult = copyModule.getCopyResult;
+			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
 				await this.$router.push(
@@ -360,7 +360,7 @@ export default defineComponent({
 			await roomModule.fetchContent(payload.courseId);
 		},
 		async onCopyResultModalClosed() {
-			copyModule.reset();
+			this.copyModule.reset();
 		},
 	},
 	head() {
