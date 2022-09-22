@@ -7,12 +7,16 @@ import { mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
 describe("@components/organisms/TasksList", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
+	let copyModuleMock: CopyModule;
+	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -21,8 +25,11 @@ describe("@components/organisms/TasksList", () => {
 				i18n: true,
 			}),
 			setup() {
+				provide("copyModule", copyModuleMock);
 				provide("taskModule", taskModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});
@@ -37,12 +44,13 @@ describe("@components/organisms/TasksList", () => {
 	};
 
 	beforeEach(() => {
+		copyModuleMock = createModuleMocks(CopyModule);
 		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
-
 		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	describe("props", () => {
