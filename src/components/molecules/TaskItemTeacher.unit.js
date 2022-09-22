@@ -49,7 +49,6 @@ describe("@components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
 
 	beforeEach(() => {
-		// document.body.setAttribute("data-app", "true");
 		taskModuleMock = createModuleMocks(TaskModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
