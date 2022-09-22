@@ -65,6 +65,7 @@
 					user-role="teacher"
 					@toggled-menu="toggleMenu"
 					@focus-changed="handleFocus"
+					@copy-task="onCopyTask"
 				/>
 			</v-list-item-action>
 		</v-list-item>
@@ -72,12 +73,12 @@
 </template>
 
 <script>
+import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 import {
-	printDateFromStringUTC as dateFromUTC,
 	isToday,
+	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
 } from "@plugins/datetime";
-import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
 
 // TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -182,6 +183,9 @@ export default {
 		},
 		handleFocus(value) {
 			this.isActive = value;
+		},
+		onCopyTask(payload) {
+			this.$emit("copy-task", payload);
 		},
 	},
 };

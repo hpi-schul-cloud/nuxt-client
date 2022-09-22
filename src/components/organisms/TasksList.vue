@@ -29,8 +29,15 @@
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
+					@copy-task="onCopyTask"
 				/>
-				<task-item-teacher v-else :key="index" :task="task" role="article" />
+				<task-item-teacher
+					v-else
+					:key="index"
+					:task="task"
+					role="article"
+					@copy-task="onCopyTask"
+				/>
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
 		</template>
@@ -118,6 +125,9 @@ export default {
 		},
 		isLastTaskItem: function (index) {
 			return this.hasPagination && index === this.tasks.length - 1;
+		},
+		onCopyTask(payload) {
+			this.$emit("copy-task", payload);
 		},
 	},
 };

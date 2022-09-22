@@ -192,24 +192,19 @@ export default defineComponent({
 		handleDelete() {
 			taskModule.deleteTask(this.taskId);
 		},
-		async onCopyTask() {
+		onCopyTask() {
 			if (!this.copyServiceEnabled) {
 				window.location.href = this.copyLink;
 				return;
 			}
 
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
 			const payload = {
 				id: this.taskId,
 				courseId: this.courseId === "" ? undefined : this.courseId,
 				type: "task",
 			};
-			await this.copy(payload, loadingText);
-			this.copyModule.reset();
-			this.taskModule.setActiveTab("drafts");
-			await this.taskModule.fetchAllTasks();
+
+			this.$emit("copy-task", payload);
 		},
 	},
 });

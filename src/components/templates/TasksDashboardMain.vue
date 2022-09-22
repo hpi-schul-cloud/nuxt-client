@@ -74,6 +74,7 @@
 			v-if="isTeacher"
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
+			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
 </template>
@@ -85,7 +86,6 @@ import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
-import { defineComponent } from "@vue/composition-api";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -95,7 +95,7 @@ const roleBasedRoutes = {
 	[Roles.Student]: ["open", "completed", "finished"],
 };
 
-export default defineComponent({
+export default {
 	components: {
 		DefaultWireframe,
 		vCustomAutocomplete,
@@ -123,12 +123,6 @@ export default defineComponent({
 		"loadingStateModule",
 	],
 	computed: {
-		setup() {
-			const { copy } = useCopy();
-			return {
-				copy,
-			};
-		},
 		hasTasks() {
 			return this.taskModule.hasTasks;
 		},
@@ -350,8 +344,11 @@ export default defineComponent({
 		setActiveTab(tab) {
 			this.taskModule.setActiveTab(tab);
 		},
+		onCopyResultModalClosed() {
+			console.log("onCopyResultModalClosed");
+		},
 	},
-});
+};
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
