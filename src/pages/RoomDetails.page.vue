@@ -187,7 +187,6 @@ export default defineComponent({
 			],
 			courseId: this.$route.params.id,
 			tab: null,
-			copyProcessReturnId: "",
 		};
 	},
 	computed: {
@@ -346,14 +345,11 @@ export default defineComponent({
 			const payload = { id: courseId, courseId, type: "course" };
 			await this.copy(payload, loadingText);
 			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError?.statusCode !== undefined) {
-				return;
-			}
 
 			if (copyResult?.id !== undefined) {
-				this.copyProcessReturnId = copyResult.id;
+				await this.$router.push(
+					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
+				);
 			}
 		},
 		async onCopyBoardElement(payload) {
@@ -365,9 +361,6 @@ export default defineComponent({
 		},
 		async onCopyResultModalClosed() {
 			copyModule.reset();
-			if (this.copyProcessReturnId === "") return;
-			await this.$router.push("/rooms/" + this.copyProcessReturnId);
-			this.copyProcessReturnId = "";
 		},
 	},
 	head() {

@@ -186,11 +186,11 @@ export default defineComponent({
 			if (this.taskIsFinished) {
 				finishedTaskModule.restoreTask(this.taskId);
 			} else {
-				taskModule.finishTask(this.taskId);
+				this.taskModule.finishTask(this.taskId);
 			}
 		},
 		handleDelete() {
-			taskModule.deleteTask(this.taskId);
+			this.taskModule.deleteTask(this.taskId);
 		},
 		onCopyTask() {
 			if (!this.copyServiceEnabled) {
