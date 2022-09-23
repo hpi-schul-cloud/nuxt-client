@@ -157,7 +157,6 @@ export default defineComponent({
 			);
 			await this.copy(payload, loadingText);
 
-			this.copyModule.reset();
 			this.taskModule.setActiveTab("drafts");
 			await this.taskModule.fetchAllTasks();
 		},

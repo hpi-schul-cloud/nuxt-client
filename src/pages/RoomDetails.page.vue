@@ -360,7 +360,7 @@ export default defineComponent({
 			await this.copy(payload, loadingText);
 			await roomModule.fetchContent(payload.courseId);
 		},
-		async onCopyResultModalClosed() {
+		onCopyResultModalClosed() {
 			this.copyModule.reset();
 		},
 	},
