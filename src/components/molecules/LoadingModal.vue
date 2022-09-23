@@ -40,7 +40,7 @@ export default {
 		btnText: {
 			type: String,
 			default: function () {
-				return ""; //this.$t("common.actions.cancel");
+				return this.$t("common.actions.cancel");
 			},
 		},
 	},
