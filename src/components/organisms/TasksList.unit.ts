@@ -1,14 +1,15 @@
-import TasksList from "./TasksList.vue";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskModule from "@/store/tasks";
+import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import NotifierModule from "@/store/notifier";
+import TaskModule from "@/store/tasks";
 import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import { provide } from "@nuxtjs/composition-api";
+import { mount, Wrapper } from "@vue/test-utils";
+import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
+import TasksList from "./TasksList.vue";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
@@ -220,5 +221,27 @@ describe("@components/organisms/TasksList", () => {
 			//@ts-ignore
 			expect(wrapper.vm.status).toBe("completed");
 		});
+	});
+
+	it("should passthrough copy-task event", async () => {
+		wrapper = mountComponent({
+			propsData: {
+				tasks,
+				userRole: "teacher",
+			},
+		});
+
+		const payload = {
+			id: "123",
+			courseId: "c789",
+			type: "task",
+		};
+
+		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);
+		oneTaskItemTeacher.vm.$emit("copy-task", payload);
+
+		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(
+			expect.arrayContaining([payload])
+		);
 	});
 });

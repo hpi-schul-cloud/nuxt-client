@@ -136,13 +136,13 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			},
 		});
 
-		const oneTasksLists = wrapper.findComponent(TasksList);
+		const oneTasksList = wrapper.findComponent(TasksList);
 		const payload = {
 			id: "123",
 			courseId: "c789",
 			type: "task",
 		};
-		oneTasksLists.vm.$emit("copy-task", payload);
+		oneTasksList.vm.$emit("copy-task", payload);
 
 		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});

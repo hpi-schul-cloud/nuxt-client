@@ -4,6 +4,7 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { provide } from "@vue/composition-api";
+import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
 
 const {
@@ -73,6 +74,25 @@ describe("@components/molecules/TaskItemTeacher", () => {
 		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
 		expect(wrapper.attributes("href")).toStrictEqual(
 			`/homework/${tasksTeacher[0].id}`
+		);
+	});
+
+	it("should passthrough copy-task event", async () => {
+		const wrapper = getWrapper({
+			task: tasksTeacher[0],
+		});
+
+		const payload = {
+			id: "123",
+			courseId: "c789",
+			type: "task",
+		};
+
+		const oneTaskItemMenu = wrapper.findComponent(TaskItemMenu);
+		oneTaskItemMenu.vm.$emit("copy-task", payload);
+
+		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(
+			expect.arrayContaining([payload])
 		);
 	});
 
