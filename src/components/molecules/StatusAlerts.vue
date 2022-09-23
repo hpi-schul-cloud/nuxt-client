@@ -50,9 +50,12 @@
 </template>
 
 <script>
+import { defineComponent } from "@nuxtjs/composition-api";
 import { fromNow } from "@plugins/datetime";
+import { mounted } from "vue";
 
-export default {
+export default defineComponent({
+	name: "StatusAlerts",
 	props: {
 		statusAlerts: {
 			type: Array,
@@ -63,9 +66,8 @@ export default {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
-	mounted() {},
-	methods: {
-		getIconTag(status) {
+	setup() {
+		const getIconTag = (status) => {
 			switch (status) {
 				case "danger":
 					return { icon: "exclamation-circle", color: "danger" };
@@ -74,21 +76,23 @@ export default {
 				default:
 					return { icon: "info-circle", color: "info" };
 			}
-		},
-		getAlertText(text) {
+		};
+		const getAlertText = (text) => {
 			if (text.length > 200) {
 				return `${text.substring(0, 200)}...`;
 			}
 			return text;
-		},
-		getUrl(url) {
+		};
+		const getUrl = (url) => {
 			return url.replace(/(^\w+:|^)\/\//, "");
-		},
-		getDate(date) {
+		};
+		const getDate = (date) => {
 			return fromNow(date, true);
-		},
+		};
+		mounted();
+		return { getIconTag, getAlertText, getUrl, getDate };
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
