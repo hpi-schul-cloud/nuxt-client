@@ -49,7 +49,7 @@ function initializeStores(store: Store<any>): void {
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTaskModule = getModule(FinishedTaskModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
-  loadingStateModule = getModule(LoadingStateModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
@@ -71,7 +71,7 @@ export {
 	filesPOCModule,
 	finishedTaskModule,
 	importUsersModule,
-  loadingStateModule,
+	loadingStateModule,
 	newsModule,
 	notifierModule,
 	roomModule,
