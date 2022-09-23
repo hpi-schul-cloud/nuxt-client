@@ -10,7 +10,7 @@ describe("@components/molecules/LoadingModal", () => {
 
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(LoadingStateDialog, {
-			...createComponentMocks({ compositionApi: true }),
+			...createComponentMocks({}),
 			setup() {
 				provide("loadingStateModule", loadingStateModuleMock);
 			},
