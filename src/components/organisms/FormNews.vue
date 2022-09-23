@@ -80,6 +80,7 @@ import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
 import FormActions from "@components/molecules/FormActions.vue";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		TextEditor,

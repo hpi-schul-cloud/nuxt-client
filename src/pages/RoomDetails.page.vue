@@ -105,6 +105,7 @@
 			:is-loading="copyResultModalIsLoading"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-status="copyResultModalStatus"
+			:copy-result-error="copyResultError"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -280,6 +281,9 @@ export default {
 		},
 		copyResultModalItems() {
 			return copyModule.getCopyResultFailedItems;
+		},
+		copyResultError() {
+			return copyModule.getBusinessError;
 		},
 	},
 	async created() {

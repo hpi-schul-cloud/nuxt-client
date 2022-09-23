@@ -8,6 +8,7 @@ import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTaskModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
+import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
@@ -22,19 +23,20 @@ let accountsModule: AccountsModule;
 let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
 let contentModule: ContentModule;
+let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTaskModule: FinishedTaskModule;
 let importUsersModule: ImportUsersModule;
+let loadingStateModule: LoadingStateModule;
 let newsModule: NewsModule;
+let notifierModule: NotifierModule;
 let roomModule: RoomModule;
 let roomsModule: RoomsModule;
-let taskModule: TaskModule;
 let schoolsModule: SchoolsModule;
 let statusAlertsModule: StatusAlertsModule;
-let notifierModule: NotifierModule;
-let copyModule: CopyModule;
+let taskModule: TaskModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -47,6 +49,7 @@ function initializeStores(store: Store<any>): void {
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTaskModule = getModule(FinishedTaskModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
+  loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
@@ -68,6 +71,7 @@ export {
 	filesPOCModule,
 	finishedTaskModule,
 	importUsersModule,
+  loadingStateModule,
 	newsModule,
 	notifierModule,
 	roomModule,

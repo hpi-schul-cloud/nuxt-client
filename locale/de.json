@@ -431,6 +431,7 @@
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
 	"components.molecules.copyResult.successfullyCopied": "Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.failedCopy": "Der Kopiervorgang konnte nicht abgeschlossen werden.",
+	"components.molecules.copyResult.timeoutCopy": "Es könnte sein, dass der Kopiervorgang länger dauert, da größere Dateien enthalten sind. In dem Fall sollte das kopierte Element bereits vorhanden sein und die Dateien später verfügbar werden.",
 	"components.molecules.copyResult.fileCopy.error": "Fehler beim Kopieren der Dateien.",
 	"components.molecules.copyResult.courseGroupCopy.info": "Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",

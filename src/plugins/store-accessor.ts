@@ -17,6 +17,7 @@ import StatusAlertsModule from "@/store/statusAlerts";
 import TaskModule from "@/store/tasks";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import { getModule } from "vuex-module-decorators";
+import LoadingStateModule from "@store/loading-state";
 
 export default () => {
 	onGlobalSetup(() => {
@@ -39,5 +40,6 @@ export default () => {
 		provide("schoolsModule", getModule(SchoolsModule, store));
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("taskModule", getModule(TaskModule, store));
+		provide("loadingStateModule", getModule(LoadingStateModule, store));
 	});
 };
