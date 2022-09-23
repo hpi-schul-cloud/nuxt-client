@@ -3,6 +3,8 @@ import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardResponse,
+	LessonApiFactory,
+	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
@@ -47,6 +49,14 @@ export default class RoomModule extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
+	}
+
+	private _lessonApi?: LessonApiInterface;
+	private get lessonApi(): LessonApiInterface {
+		if (!this._lessonApi) {
+			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+		}
+		return this._lessonApi;
 	}
 
 	@Action
@@ -175,7 +185,7 @@ export default class RoomModule extends VuexModule {
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			await $axios.$delete(`/v3/lessons/${lessonId}`);
+			await this.lessonApi.lessonControllerDelete(lessonId);
 
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
