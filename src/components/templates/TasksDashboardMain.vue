@@ -344,9 +344,6 @@ export default {
 		setActiveTab(tab) {
 			this.taskModule.setActiveTab(tab);
 		},
-		onCopyResultModalClosed() {
-			console.log("onCopyResultModalClosed");
-		},
 	},
 };
 </script>

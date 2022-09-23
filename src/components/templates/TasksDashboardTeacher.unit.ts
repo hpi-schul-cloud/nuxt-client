@@ -1,17 +1,17 @@
-import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import TasksList from "@components/organisms/TasksList.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskModule from "@/store/tasks";
+import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
+import TaskModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
-import LoadingStateModule from "@/store/loading-state";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
+import TasksList from "@components/organisms/TasksList.vue";
+import { provide } from "@nuxtjs/composition-api";
+import { mount, Wrapper } from "@vue/test-utils";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -126,5 +126,24 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		await wrapper.setData({ tab: tabRoutes[1] });
 
 		expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
+	});
+
+	it("Should handle copy-task event", async () => {
+		wrapper = mountComponent({
+			propsData: {
+				emptyState,
+				tabRoutes,
+			},
+		});
+
+		const oneTasksLists = wrapper.findComponent(TasksList);
+		const payload = {
+			id: "123",
+			courseId: "c789",
+			type: "task",
+		};
+		oneTasksLists.vm.$emit("copy-task", payload);
+
+		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});
 });
