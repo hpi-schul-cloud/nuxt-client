@@ -52,7 +52,6 @@
 <script>
 import { defineComponent } from "@nuxtjs/composition-api";
 import { fromNow } from "@plugins/datetime";
-import { mounted } from "vue";
 
 export default defineComponent({
 	name: "StatusAlerts",
@@ -66,6 +65,7 @@ export default defineComponent({
 		// This solely exists to appear in the coverage report
 		return {};
 	},
+	mounted() {},
 	setup() {
 		const getIconTag = (status) => {
 			switch (status) {
@@ -89,7 +89,6 @@ export default defineComponent({
 		const getDate = (date) => {
 			return fromNow(date, true);
 		};
-		mounted();
 		return { getIconTag, getAlertText, getUrl, getDate };
 	},
 });
