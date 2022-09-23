@@ -196,6 +196,31 @@ export enum ChangeLanguageParamsLanguageEnum {
 /**
  * 
  * @export
+ * @interface ConsentRequestBody
+ */
+export interface ConsentRequestBody {
+    /**
+     * The Oauth2 client id.
+     * @type {Array<string>}
+     * @memberof ConsentRequestBody
+     */
+    grant_scope?: Array<string>;
+    /**
+     * Remember, if set to true, tells the oauth provider to remember this consent authorization and reuse it if the same client asks the same user for the same, or a subset of, scope.
+     * @type {boolean}
+     * @memberof ConsentRequestBody
+     */
+    remember?: boolean;
+    /**
+     * RememberFor sets how long the consent authorization should be remembered for in seconds. If set to 0, the authorization will be remembered indefinitely.
+     * @type {number}
+     * @memberof ConsentRequestBody
+     */
+    remember_for?: number;
+}
+/**
+ * 
+ * @export
  * @interface CopyApiResponse
  */
 export interface CopyApiResponse {
@@ -680,6 +705,19 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  * 
  * @export
+ * @interface IntrospectBody
+ */
+export interface IntrospectBody {
+    /**
+     * The string value of the token. For access tokens, this is the \"access_token\" value returned from the token endpoint defined in OAuth 2.0. For refresh tokens, this is the \"refresh_token\" value returned.
+     * @type {string}
+     * @memberof IntrospectBody
+     */
+    token: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonCopyApiParams
  */
 export interface LessonCopyApiParams {
@@ -689,6 +727,25 @@ export interface LessonCopyApiParams {
      * @memberof LessonCopyApiParams
      */
     courseId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LoginRequestBody
+ */
+export interface LoginRequestBody {
+    /**
+     * Remember, if set to true, tells the oauth provider to remember this consent authorization and reuse it if the same client asks the same user for the same, or a subset of, scope.
+     * @type {boolean}
+     * @memberof LoginRequestBody
+     */
+    remember?: boolean;
+    /**
+     * RememberFor sets how long the consent authorization should be remembered for in seconds. If set to 0, the authorization will be remembered indefinitely.
+     * @type {number}
+     * @memberof LoginRequestBody
+     */
+    remember_for?: number;
 }
 /**
  * 
@@ -886,6 +943,61 @@ export enum NewsTargetModel {
 /**
  * 
  * @export
+ * @interface OauthClientBody
+ */
+export interface OauthClientBody {
+    /**
+     * The Oauth2 client id.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    client_id?: string;
+    /**
+     * The Oauth2 client name.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    client_name?: string;
+    /**
+     * The Oauth2 client secret.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    client_secret?: string;
+    /**
+     * The allowed redirect urls of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientBody
+     */
+    redirect_uris?: Array<string>;
+    /**
+     * Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, private_key_jwt, and none.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    token_endpoint_auth_method?: string;
+    /**
+     * SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    subject_type?: string;
+    /**
+     * Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    scope?: string;
+    /**
+     * Thr frontchannel logout uri.
+     * @type {string}
+     * @memberof OauthClientBody
+     */
+    frontchannel_logout_uri?: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -977,6 +1089,19 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface RedirectBody
+ */
+export interface RedirectBody {
+    /**
+     * The redirect url.
+     * @type {string}
+     * @memberof RedirectBody
+     */
+    redirect_to: string;
 }
 /**
  * 
@@ -2410,18 +2535,18 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerMoveElement: async (id: string, moveElementParams: MoveElementParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('dashboardControllerMoveElement', 'id', id)
+        dashboardControllerMoveElement: async (dashboardId: string, moveElementParams: MoveElementParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'dashboardId' is not null or undefined
+            assertParamExists('dashboardControllerMoveElement', 'dashboardId', dashboardId)
             // verify required parameter 'moveElementParams' is not null or undefined
             assertParamExists('dashboardControllerMoveElement', 'moveElementParams', moveElementParams)
-            const localVarPath = `/dashboard/{id}/moveElement`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/dashboard/{dashboardId}/moveElement`
+                .replace(`{${"dashboardId"}}`, encodeURIComponent(String(dashboardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2453,24 +2578,24 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {number} x 
          * @param {number} y 
          * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerPatchGroup: async (id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('dashboardControllerPatchGroup', 'id', id)
+        dashboardControllerPatchGroup: async (dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'dashboardId' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'dashboardId', dashboardId)
             // verify required parameter 'x' is not null or undefined
             assertParamExists('dashboardControllerPatchGroup', 'x', x)
             // verify required parameter 'y' is not null or undefined
             assertParamExists('dashboardControllerPatchGroup', 'y', y)
             // verify required parameter 'patchGroupParams' is not null or undefined
             assertParamExists('dashboardControllerPatchGroup', 'patchGroupParams', patchGroupParams)
-            const localVarPath = `/dashboard/{id}/element`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/dashboard/{dashboardId}/element`
+                .replace(`{${"dashboardId"}}`, encodeURIComponent(String(dashboardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2529,26 +2654,26 @@ export const DashboardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, moveElementParams, options);
+        async dashboardControllerMoveElement(dashboardId: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(dashboardId, moveElementParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {number} x 
          * @param {number} y 
          * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options);
+        async dashboardControllerPatchGroup(dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerPatchGroup(dashboardId, x, y, patchGroupParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2571,25 +2696,25 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {MoveElementParams} moveElementParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(axios, basePath));
+        dashboardControllerMoveElement(dashboardId: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerMoveElement(dashboardId, moveElementParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} dashboardId The id of the dashboard.
          * @param {number} x 
          * @param {number} y 
          * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(axios, basePath));
+        dashboardControllerPatchGroup(dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerPatchGroup(dashboardId, x, y, patchGroupParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2610,17 +2735,17 @@ export interface DashboardApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} dashboardId The id of the dashboard.
      * @param {MoveElementParams} moveElementParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerMoveElement(dashboardId: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} dashboardId The id of the dashboard.
      * @param {number} x 
      * @param {number} y 
      * @param {PatchGroupParams} patchGroupParams 
@@ -2628,7 +2753,7 @@ export interface DashboardApiInterface {
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerPatchGroup(dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse>;
 
 }
 
@@ -2651,19 +2776,19 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} dashboardId The id of the dashboard.
      * @param {MoveElementParams} moveElementParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerMoveElement(dashboardId: string, moveElementParams: MoveElementParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(dashboardId, moveElementParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} dashboardId The id of the dashboard.
      * @param {number} x 
      * @param {number} y 
      * @param {PatchGroupParams} patchGroupParams 
@@ -2671,8 +2796,8 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerPatchGroup(dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerPatchGroup(dashboardId, x, y, patchGroupParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2683,6 +2808,565 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
  */
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {RedirectBody} redirectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerAcceptLogoutRequest: async (challenge: string, redirectBody: RedirectBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'challenge' is not null or undefined
+            assertParamExists('oauthProviderControllerAcceptLogoutRequest', 'challenge', challenge)
+            // verify required parameter 'redirectBody' is not null or undefined
+            assertParamExists('oauthProviderControllerAcceptLogoutRequest', 'redirectBody', redirectBody)
+            const localVarPath = `/oauth2/logoutRequest/{challenge}`
+                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(redirectBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerCreateOAuth2Client: async (oauthClientBody: OauthClientBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauthClientBody' is not null or undefined
+            assertParamExists('oauthProviderControllerCreateOAuth2Client', 'oauthClientBody', oauthClientBody)
+            const localVarPath = `/oauth2/clients`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerDeleteOAuth2Client: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('oauthProviderControllerDeleteOAuth2Client', 'id', id)
+            const localVarPath = `/oauth2/clients/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetConsentRequest: async (challenge: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'challenge' is not null or undefined
+            assertParamExists('oauthProviderControllerGetConsentRequest', 'challenge', challenge)
+            const localVarPath = `/oauth2/consentRequest/{challenge}`
+                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetLoginRequest: async (challenge: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'challenge' is not null or undefined
+            assertParamExists('oauthProviderControllerGetLoginRequest', 'challenge', challenge)
+            const localVarPath = `/oauth2/loginRequest/{challenge}`
+                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetOAuth2Client: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('oauthProviderControllerGetOAuth2Client', 'id', id)
+            const localVarPath = `/oauth2/clients/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetUrl: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/oauth2/baseUrl`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {IntrospectBody} introspectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerIntrospectOAuth2Token: async (introspectBody: IntrospectBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'introspectBody' is not null or undefined
+            assertParamExists('oauthProviderControllerIntrospectOAuth2Token', 'introspectBody', introspectBody)
+            const localVarPath = `/oauth2/introspect`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(introspectBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerListConsentSessions: async (userId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('oauthProviderControllerListConsentSessions', 'userId', userId)
+            const localVarPath = `/oauth2/auth/sessions/consent/{userId}`
+                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} offset The offset from where to start looking.
+         * @param {string} clientName The name of the clients to filter by.
+         * @param {string} owner The owner of the clients to filter by.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerListOAuth2Clients: async (limit: number, offset: number, clientName: string, owner: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'limit' is not null or undefined
+            assertParamExists('oauthProviderControllerListOAuth2Clients', 'limit', limit)
+            // verify required parameter 'offset' is not null or undefined
+            assertParamExists('oauthProviderControllerListOAuth2Clients', 'offset', offset)
+            // verify required parameter 'clientName' is not null or undefined
+            assertParamExists('oauthProviderControllerListOAuth2Clients', 'clientName', clientName)
+            // verify required parameter 'owner' is not null or undefined
+            assertParamExists('oauthProviderControllerListOAuth2Clients', 'owner', owner)
+            const localVarPath = `/oauth2/clients`
+                .replace(`{${"limit"}}`, encodeURIComponent(String(limit)))
+                .replace(`{${"offset"}}`, encodeURIComponent(String(offset)))
+                .replace(`{${"client_name"}}`, encodeURIComponent(String(clientName)))
+                .replace(`{${"owner"}}`, encodeURIComponent(String(owner)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {ConsentRequestBody} consentRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerPatchConsentRequest: async (challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'challenge' is not null or undefined
+            assertParamExists('oauthProviderControllerPatchConsentRequest', 'challenge', challenge)
+            // verify required parameter 'consentRequestBody' is not null or undefined
+            assertParamExists('oauthProviderControllerPatchConsentRequest', 'consentRequestBody', consentRequestBody)
+            const localVarPath = `/oauth2/consentRequest/{challenge}`
+                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(consentRequestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {LoginRequestBody} loginRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerPatchLoginRequest: async (challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'challenge' is not null or undefined
+            assertParamExists('oauthProviderControllerPatchLoginRequest', 'challenge', challenge)
+            // verify required parameter 'loginRequestBody' is not null or undefined
+            assertParamExists('oauthProviderControllerPatchLoginRequest', 'loginRequestBody', loginRequestBody)
+            const localVarPath = `/oauth2/loginRequest/{challenge}`
+                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(loginRequestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {string} client The Oauth2 client id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerRevokeConsentSession: async (userId: string, client: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('oauthProviderControllerRevokeConsentSession', 'userId', userId)
+            // verify required parameter 'client' is not null or undefined
+            assertParamExists('oauthProviderControllerRevokeConsentSession', 'client', client)
+            const localVarPath = `/oauth2/auth/sessions/consent/{userId}`
+                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (client !== undefined) {
+                localVarQueryParameter['client'] = client;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerUpdateOAuth2Client: async (id: string, oauthClientBody: OauthClientBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'id', id)
+            // verify required parameter 'oauthClientBody' is not null or undefined
+            assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'oauthClientBody', oauthClientBody)
+            const localVarPath = `/oauth2/clients/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * default route to test public access
          * @param {*} [options] Override http request option.
@@ -2723,6 +3407,155 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {RedirectBody} redirectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerAcceptLogoutRequest(challenge, redirectBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerDeleteOAuth2Client(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerGetConsentRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetConsentRequest(challenge, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerGetLoginRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetLoginRequest(challenge, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerGetOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetOAuth2Client(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerGetUrl(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetUrl(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {IntrospectBody} introspectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerIntrospectOAuth2Token(introspectBody: IntrospectBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerIntrospectOAuth2Token(introspectBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerListConsentSessions(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListConsentSessions(userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} offset The offset from where to start looking.
+         * @param {string} clientName The name of the clients to filter by.
+         * @param {string} owner The owner of the clients to filter by.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {ConsentRequestBody} consentRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {LoginRequestBody} loginRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {string} client The Oauth2 client id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerRevokeConsentSession(userId, client, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2742,6 +3575,141 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DefaultApiFp(configuration)
     return {
         /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {RedirectBody} redirectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<string> {
+            return localVarFp.oauthProviderControllerAcceptLogoutRequest(challenge, redirectBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerDeleteOAuth2Client(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerGetConsentRequest(challenge, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerGetLoginRequest(challenge, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerGetUrl(options?: any): AxiosPromise<string> {
+            return localVarFp.oauthProviderControllerGetUrl(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {IntrospectBody} introspectBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerIntrospectOAuth2Token(introspectBody: IntrospectBody, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerIntrospectOAuth2Token(introspectBody, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerListConsentSessions(userId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerListConsentSessions(userId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} offset The offset from where to start looking.
+         * @param {string} clientName The name of the clients to filter by.
+         * @param {string} owner The owner of the clients to filter by.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {ConsentRequestBody} consentRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} challenge The login challenge.
+         * @param {LoginRequestBody} loginRequestBody 
+         * @param {boolean} [accept] Accepts the login request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} userId The user id.
+         * @param {string} client The Oauth2 client id.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerRevokeConsentSession(userId, client, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id The Oauth Client Id.
+         * @param {OauthClientBody} oauthClientBody 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(axios, basePath));
+        },
+        /**
          * default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2758,6 +3726,141 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @interface DefaultApi
  */
 export interface DefaultApiInterface {
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {RedirectBody} redirectBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @param {OauthClientBody} oauthClientBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerGetUrl(options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @param {IntrospectBody} introspectBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerIntrospectOAuth2Token(introspectBody: IntrospectBody, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} userId The user id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerListConsentSessions(userId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
+     * @param {number} offset The offset from where to start looking.
+     * @param {string} clientName The name of the clients to filter by.
+     * @param {string} owner The owner of the clients to filter by.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {ConsentRequestBody} consentRequestBody 
+     * @param {boolean} [accept] Accepts the login request.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {LoginRequestBody} loginRequestBody 
+     * @param {boolean} [accept] Accepts the login request.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} userId The user id.
+     * @param {string} client The Oauth2 client id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {OauthClientBody} oauthClientBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void>;
+
     /**
      * default route to test public access
      * @param {*} [options] Override http request option.
@@ -2776,6 +3879,169 @@ export interface DefaultApiInterface {
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {RedirectBody} redirectBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerAcceptLogoutRequest(challenge, redirectBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {OauthClientBody} oauthClientBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerCreateOAuth2Client(oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerDeleteOAuth2Client(id: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerDeleteOAuth2Client(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerGetConsentRequest(challenge: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerGetConsentRequest(challenge, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerGetLoginRequest(challenge: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerGetLoginRequest(challenge, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerGetOAuth2Client(id: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerGetUrl(options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerGetUrl(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {IntrospectBody} introspectBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerIntrospectOAuth2Token(introspectBody: IntrospectBody, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerIntrospectOAuth2Token(introspectBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} userId The user id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerListConsentSessions(userId: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerListConsentSessions(userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
+     * @param {number} offset The offset from where to start looking.
+     * @param {string} clientName The name of the clients to filter by.
+     * @param {string} owner The owner of the clients to filter by.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {ConsentRequestBody} consentRequestBody 
+     * @param {boolean} [accept] Accepts the login request.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} challenge The login challenge.
+     * @param {LoginRequestBody} loginRequestBody 
+     * @param {boolean} [accept] Accepts the login request.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} userId The user id.
+     * @param {string} client The Oauth2 client id.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerRevokeConsentSession(userId, client, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id The Oauth Client Id.
+     * @param {OauthClientBody} oauthClientBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * default route to test public access
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2783,6 +4049,128 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public serverControllerGetHello(options?: any) {
         return DefaultApiFp(this.configuration).serverControllerGetHello(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * LessonApi - axios parameter creator
+ * @export
+ */
+export const LessonApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerDelete: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonId' is not null or undefined
+            assertParamExists('lessonControllerDelete', 'lessonId', lessonId)
+            const localVarPath = `/lessons/{lessonId}`
+                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * LessonApi - functional programming interface
+ * @export
+ */
+export const LessonApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = LessonApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async lessonControllerDelete(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerDelete(lessonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * LessonApi - factory interface
+ * @export
+ */
+export const LessonApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = LessonApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.lessonControllerDelete(lessonId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * LessonApi - interface
+ * @export
+ * @interface LessonApi
+ */
+export interface LessonApiInterface {
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApiInterface
+     */
+    lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * LessonApi - object-oriented interface
+ * @export
+ * @class LessonApi
+ * @extends {BaseAPI}
+ */
+export class LessonApi extends BaseAPI implements LessonApiInterface {
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApi
+     */
+    public lessonControllerDelete(lessonId: string, options?: any) {
+        return LessonApiFp(this.configuration).lessonControllerDelete(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2834,15 +4222,15 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Delete a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerDelete: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('newsControllerDelete', 'id', id)
-            const localVarPath = `/news/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        newsControllerDelete: async (newsId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'newsId' is not null or undefined
+            assertParamExists('newsControllerDelete', 'newsId', newsId)
+            const localVarPath = `/news/{newsId}`
+                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2929,15 +4317,15 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindOne: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('newsControllerFindOne', 'id', id)
-            const localVarPath = `/news/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        newsControllerFindOne: async (newsId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'newsId' is not null or undefined
+            assertParamExists('newsControllerFindOne', 'newsId', newsId)
+            const localVarPath = `/news/{newsId}`
+                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2966,18 +4354,18 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Update properties of a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerUpdate: async (id: string, updateNewsParams: UpdateNewsParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('newsControllerUpdate', 'id', id)
+        newsControllerUpdate: async (newsId: string, updateNewsParams: UpdateNewsParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'newsId' is not null or undefined
+            assertParamExists('newsControllerUpdate', 'newsId', newsId)
             // verify required parameter 'updateNewsParams' is not null or undefined
             assertParamExists('newsControllerUpdate', 'updateNewsParams', updateNewsParams)
-            const localVarPath = `/news/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/news/{newsId}`
+                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3009,7 +4397,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Responds with news of a given team for a user.
-         * @param {string} teamId 
+         * @param {string} teamId The id of the team.
          * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -3091,12 +4479,12 @@ export const NewsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Delete a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerDelete(id, options);
+        async newsControllerDelete(newsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerDelete(newsId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3115,28 +4503,28 @@ export const NewsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindOne(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindOne(id, options);
+        async newsControllerFindOne(newsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindOne(newsId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Update properties of a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerUpdate(id: string, updateNewsParams: UpdateNewsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerUpdate(id, updateNewsParams, options);
+        async newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerUpdate(newsId, updateNewsParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Responds with news of a given team for a user.
-         * @param {string} teamId 
+         * @param {string} teamId The id of the team.
          * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -3170,12 +4558,12 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * Delete a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerDelete(id: string, options?: any): AxiosPromise<string> {
-            return localVarFp.newsControllerDelete(id, options).then((request) => request(axios, basePath));
+        newsControllerDelete(newsId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.newsControllerDelete(newsId, options).then((request) => request(axios, basePath));
         },
         /**
          * Responds with all news for a user.
@@ -3192,26 +4580,26 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindOne(id: string, options?: any): AxiosPromise<NewsResponse> {
-            return localVarFp.newsControllerFindOne(id, options).then((request) => request(axios, basePath));
+        newsControllerFindOne(newsId: string, options?: any): AxiosPromise<NewsResponse> {
+            return localVarFp.newsControllerFindOne(newsId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update properties of a news.
-         * @param {string} id 
+         * @param {string} newsId The id of the news.
          * @param {UpdateNewsParams} updateNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerUpdate(id: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse> {
-            return localVarFp.newsControllerUpdate(id, updateNewsParams, options).then((request) => request(axios, basePath));
+        newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse> {
+            return localVarFp.newsControllerUpdate(newsId, updateNewsParams, options).then((request) => request(axios, basePath));
         },
         /**
          * Responds with news of a given team for a user.
-         * @param {string} teamId 
+         * @param {string} teamId The id of the team.
          * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -3243,12 +4631,12 @@ export interface NewsApiInterface {
 
     /**
      * Delete a news.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerDelete(id: string, options?: any): AxiosPromise<string>;
+    newsControllerDelete(newsId: string, options?: any): AxiosPromise<string>;
 
     /**
      * Responds with all news for a user.
@@ -3265,26 +4653,26 @@ export interface NewsApiInterface {
 
     /**
      * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerFindOne(id: string, options?: any): AxiosPromise<NewsResponse>;
+    newsControllerFindOne(newsId: string, options?: any): AxiosPromise<NewsResponse>;
 
     /**
      * Update properties of a news.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerUpdate(id: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse>;
+    newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse>;
 
     /**
      * Responds with news of a given team for a user.
-     * @param {string} teamId 
+     * @param {string} teamId The id of the team.
      * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -3318,13 +4706,13 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
     /**
      * Delete a news.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerDelete(id: string, options?: any) {
-        return NewsApiFp(this.configuration).newsControllerDelete(id, options).then((request) => request(this.axios, this.basePath));
+    public newsControllerDelete(newsId: string, options?: any) {
+        return NewsApiFp(this.configuration).newsControllerDelete(newsId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3344,30 +4732,30 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
     /**
      * Retrieve a specific news entry by id. A user may only read news of scopes he has the read permission. The news entity has school and user names populated.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerFindOne(id: string, options?: any) {
-        return NewsApiFp(this.configuration).newsControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    public newsControllerFindOne(newsId: string, options?: any) {
+        return NewsApiFp(this.configuration).newsControllerFindOne(newsId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Update properties of a news.
-     * @param {string} id 
+     * @param {string} newsId The id of the news.
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerUpdate(id: string, updateNewsParams: UpdateNewsParams, options?: any) {
-        return NewsApiFp(this.configuration).newsControllerUpdate(id, updateNewsParams, options).then((request) => request(this.axios, this.basePath));
+    public newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any) {
+        return NewsApiFp(this.configuration).newsControllerUpdate(newsId, updateNewsParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Responds with news of a given team for a user.
-     * @param {string} teamId 
+     * @param {string} teamId The id of the team.
      * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -3391,15 +4779,15 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyCourse: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomid' is not null or undefined
-            assertParamExists('roomsControllerCopyCourse', 'roomid', roomid)
-            const localVarPath = `/rooms/{roomid}/copy`
-                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+        roomsControllerCopyCourse: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomsControllerCopyCourse', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/copy`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3428,18 +4816,18 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} lessonid 
+         * @param {string} lessonId The id of the lesson.
          * @param {LessonCopyApiParams} lessonCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyLesson: async (lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'lessonid' is not null or undefined
-            assertParamExists('roomsControllerCopyLesson', 'lessonid', lessonid)
+        roomsControllerCopyLesson: async (lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonId' is not null or undefined
+            assertParamExists('roomsControllerCopyLesson', 'lessonId', lessonId)
             // verify required parameter 'lessonCopyApiParams' is not null or undefined
             assertParamExists('roomsControllerCopyLesson', 'lessonCopyApiParams', lessonCopyApiParams)
-            const localVarPath = `/rooms/lessons/{lessonid}/copy`
-                .replace(`{${"lessonid"}}`, encodeURIComponent(String(lessonid)));
+            const localVarPath = `/rooms/lessons/{lessonId}/copy`
+                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3471,15 +4859,15 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard: async (roomid: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomid' is not null or undefined
-            assertParamExists('roomsControllerGetRoomBoard', 'roomid', roomid)
-            const localVarPath = `/rooms/{roomid}/board`
-                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+        roomsControllerGetRoomBoard: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomsControllerGetRoomBoard', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/board`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3508,22 +4896,22 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} roomid 
-         * @param {string} elementid 
+         * @param {string} roomId The id of the room.
+         * @param {string} elementId The id of the element within the room.
          * @param {PatchVisibilityParams} patchVisibilityParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerPatchElementVisibility: async (roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomid' is not null or undefined
-            assertParamExists('roomsControllerPatchElementVisibility', 'roomid', roomid)
-            // verify required parameter 'elementid' is not null or undefined
-            assertParamExists('roomsControllerPatchElementVisibility', 'elementid', elementid)
+        roomsControllerPatchElementVisibility: async (roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'roomId', roomId)
+            // verify required parameter 'elementId' is not null or undefined
+            assertParamExists('roomsControllerPatchElementVisibility', 'elementId', elementId)
             // verify required parameter 'patchVisibilityParams' is not null or undefined
             assertParamExists('roomsControllerPatchElementVisibility', 'patchVisibilityParams', patchVisibilityParams)
-            const localVarPath = `/rooms/{roomid}/elements/{elementid}/visibility`
-                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)))
-                .replace(`{${"elementid"}}`, encodeURIComponent(String(elementid)));
+            const localVarPath = `/rooms/{roomId}/elements/{elementId}/visibility`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)))
+                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3555,18 +4943,18 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {PatchOrderParams} patchOrderParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerPatchOrderingOfElements: async (roomid: string, patchOrderParams: PatchOrderParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomid' is not null or undefined
-            assertParamExists('roomsControllerPatchOrderingOfElements', 'roomid', roomid)
+        roomsControllerPatchOrderingOfElements: async (roomId: string, patchOrderParams: PatchOrderParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomsControllerPatchOrderingOfElements', 'roomId', roomId)
             // verify required parameter 'patchOrderParams' is not null or undefined
             assertParamExists('roomsControllerPatchOrderingOfElements', 'patchOrderParams', patchOrderParams)
-            const localVarPath = `/rooms/{roomid}/board/order`
-                .replace(`{${"roomid"}}`, encodeURIComponent(String(roomid)));
+            const localVarPath = `/rooms/{roomId}/board/order`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3608,56 +4996,56 @@ export const RoomsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerCopyCourse(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyCourse(roomid, options);
+        async roomsControllerCopyCourse(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyCourse(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} lessonid 
+         * @param {string} lessonId The id of the lesson.
          * @param {LessonCopyApiParams} lessonCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options);
+        async roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerGetRoomBoard(roomid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomid, options);
+        async roomsControllerGetRoomBoard(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} roomid 
-         * @param {string} elementid 
+         * @param {string} roomId The id of the room.
+         * @param {string} elementId The id of the element within the room.
          * @param {PatchVisibilityParams} patchVisibilityParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options);
+        async roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {PatchOrderParams} patchOrderParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options);
+        async roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3672,52 +5060,52 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse> {
-            return localVarFp.roomsControllerCopyCourse(roomid, options).then((request) => request(axios, basePath));
+        roomsControllerCopyCourse(roomId: string, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomsControllerCopyCourse(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} lessonid 
+         * @param {string} lessonId The id of the lesson.
          * @param {LessonCopyApiParams} lessonCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
-            return localVarFp.roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(axios, basePath));
+        roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse> {
-            return localVarFp.roomsControllerGetRoomBoard(roomid, options).then((request) => request(axios, basePath));
+        roomsControllerGetRoomBoard(roomId: string, options?: any): AxiosPromise<BoardResponse> {
+            return localVarFp.roomsControllerGetRoomBoard(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} roomid 
-         * @param {string} elementid 
+         * @param {string} roomId The id of the room.
+         * @param {string} elementId The id of the element within the room.
          * @param {PatchVisibilityParams} patchVisibilityParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
-            return localVarFp.roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(axios, basePath));
+        roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} roomid 
+         * @param {string} roomId The id of the room.
          * @param {PatchOrderParams} patchOrderParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void> {
-            return localVarFp.roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(axios, basePath));
+        roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3730,52 +5118,52 @@ export const RoomsApiFactory = function (configuration?: Configuration, basePath
 export interface RoomsApiInterface {
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerCopyCourse(roomid: string, options?: any): AxiosPromise<CopyApiResponse>;
+    roomsControllerCopyCourse(roomId: string, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
-     * @param {string} lessonid 
+     * @param {string} lessonId The id of the lesson.
      * @param {LessonCopyApiParams} lessonCopyApiParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
+    roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerGetRoomBoard(roomid: string, options?: any): AxiosPromise<BoardResponse>;
+    roomsControllerGetRoomBoard(roomId: string, options?: any): AxiosPromise<BoardResponse>;
 
     /**
      * 
-     * @param {string} roomid 
-     * @param {string} elementid 
+     * @param {string} roomId The id of the room.
+     * @param {string} elementId The id of the element within the room.
      * @param {PatchVisibilityParams} patchVisibilityParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
+    roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {PatchOrderParams} patchOrderParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApiInterface
      */
-    roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void>;
+    roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -3788,61 +5176,61 @@ export interface RoomsApiInterface {
 export class RoomsApi extends BaseAPI implements RoomsApiInterface {
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerCopyCourse(roomid: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomid, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerCopyCourse(roomId: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} lessonid 
+     * @param {string} lessonId The id of the lesson.
      * @param {LessonCopyApiParams} lessonCopyApiParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerCopyLesson(lessonid: string, lessonCopyApiParams: LessonCopyApiParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerCopyLesson(lessonid, lessonCopyApiParams, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerGetRoomBoard(roomid: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomid, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerGetRoomBoard(roomId: string, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} roomid 
-     * @param {string} elementid 
+     * @param {string} roomId The id of the room.
+     * @param {string} elementId The id of the element within the room.
      * @param {PatchVisibilityParams} patchVisibilityParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerPatchElementVisibility(roomid: string, elementid: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomid, elementid, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} roomid 
+     * @param {string} roomId The id of the room.
      * @param {PatchOrderParams} patchOrderParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomsApi
      */
-    public roomsControllerPatchOrderingOfElements(roomid: string, patchOrderParams: PatchOrderParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerPatchOrderingOfElements(roomid, patchOrderParams, options).then((request) => request(this.axios, this.basePath));
+    public roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any) {
+        return RoomsApiFp(this.configuration).roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3855,15 +5243,15 @@ export const SSOApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
-         * @param {string} systemid 
+         * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthSSOControllerStartOauthAuthorizationCodeFlow: async (systemid: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'systemid' is not null or undefined
-            assertParamExists('oauthSSOControllerStartOauthAuthorizationCodeFlow', 'systemid', systemid)
-            const localVarPath = `/sso/oauth/{systemid}`
-                .replace(`{${"systemid"}}`, encodeURIComponent(String(systemid)));
+        oauthSSOControllerStartOauthAuthorizationCodeFlow: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('oauthSSOControllerStartOauthAuthorizationCodeFlow', 'systemId', systemId)
+            const localVarPath = `/sso/oauth/{systemId}`
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3898,12 +5286,12 @@ export const SSOApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} systemid 
+         * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options);
+        async oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3918,12 +5306,12 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
-         * @param {string} systemid 
+         * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object> {
-            return localVarFp.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(axios, basePath));
+        oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3936,12 +5324,12 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
 export interface SSOApiInterface {
     /**
      * 
-     * @param {string} systemid 
+     * @param {string} systemId The id of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SSOApiInterface
      */
-    oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any): AxiosPromise<object>;
+    oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -3954,13 +5342,13 @@ export interface SSOApiInterface {
 export class SSOApi extends BaseAPI implements SSOApiInterface {
     /**
      * 
-     * @param {string} systemid 
+     * @param {string} systemId The id of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SSOApi
      */
-    public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid: string, options?: any) {
-        return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemid, options).then((request) => request(this.axios, this.basePath));
+    public oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerStartOauthAuthorizationCodeFlow(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4106,18 +5494,18 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {TaskCopyApiParams} taskCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCopyTask: async (id: string, taskCopyApiParams: TaskCopyApiParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('taskControllerCopyTask', 'id', id)
+        taskControllerCopyTask: async (taskId: string, taskCopyApiParams: TaskCopyApiParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerCopyTask', 'taskId', taskId)
             // verify required parameter 'taskCopyApiParams' is not null or undefined
             assertParamExists('taskControllerCopyTask', 'taskCopyApiParams', taskCopyApiParams)
-            const localVarPath = `/tasks/{id}/copy`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/tasks/{taskId}/copy`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4149,15 +5537,15 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('taskControllerDelete', 'id', id)
-            const localVarPath = `/tasks/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        taskControllerDelete: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerDelete', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4272,15 +5660,15 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFinish: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('taskControllerFinish', 'id', id)
-            const localVarPath = `/tasks/{id}/finish`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        taskControllerFinish: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerFinish', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}/finish`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4309,15 +5697,15 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerRestore: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('taskControllerRestore', 'id', id)
-            const localVarPath = `/tasks/{id}/restore`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        taskControllerRestore: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerRestore', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}/restore`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4356,23 +5744,23 @@ export const TaskApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {TaskCopyApiParams} taskCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCopyTask(id, taskCopyApiParams, options);
+        async taskControllerCopyTask(taskId: string, taskCopyApiParams: TaskCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCopyTask(taskId, taskCopyApiParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerDelete(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(id, options);
+        async taskControllerDelete(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4399,22 +5787,22 @@ export const TaskApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerFinish(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFinish(id, options);
+        async taskControllerFinish(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFinish(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerRestore(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRestore(id, options);
+        async taskControllerRestore(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRestore(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4429,22 +5817,22 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {TaskCopyApiParams} taskCopyApiParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
-            return localVarFp.taskControllerCopyTask(id, taskCopyApiParams, options).then((request) => request(axios, basePath));
+        taskControllerCopyTask(taskId: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.taskControllerCopyTask(taskId, taskCopyApiParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete(id: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.taskControllerDelete(id, options).then((request) => request(axios, basePath));
+        taskControllerDelete(taskId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.taskControllerDelete(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4468,21 +5856,21 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFinish(id: string, options?: any): AxiosPromise<TaskResponse> {
-            return localVarFp.taskControllerFinish(id, options).then((request) => request(axios, basePath));
+        taskControllerFinish(taskId: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerFinish(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} taskId The id of the task.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerRestore(id: string, options?: any): AxiosPromise<TaskResponse> {
-            return localVarFp.taskControllerRestore(id, options).then((request) => request(axios, basePath));
+        taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerRestore(taskId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4495,22 +5883,22 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
 export interface TaskApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {TaskCopyApiParams} taskCopyApiParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
+    taskControllerCopyTask(taskId: string, taskCopyApiParams: TaskCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerDelete(id: string, options?: any): AxiosPromise<boolean>;
+    taskControllerDelete(taskId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -4534,21 +5922,21 @@ export interface TaskApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerFinish(id: string, options?: any): AxiosPromise<TaskResponse>;
+    taskControllerFinish(taskId: string, options?: any): AxiosPromise<TaskResponse>;
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerRestore(id: string, options?: any): AxiosPromise<TaskResponse>;
+    taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse>;
 
 }
 
@@ -4561,25 +5949,25 @@ export interface TaskApiInterface {
 export class TaskApi extends BaseAPI implements TaskApiInterface {
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {TaskCopyApiParams} taskCopyApiParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerCopyTask(id: string, taskCopyApiParams: TaskCopyApiParams, options?: any) {
-        return TaskApiFp(this.configuration).taskControllerCopyTask(id, taskCopyApiParams, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerCopyTask(taskId: string, taskCopyApiParams: TaskCopyApiParams, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerCopyTask(taskId, taskCopyApiParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerDelete(id: string, options?: any) {
-        return TaskApiFp(this.configuration).taskControllerDelete(id, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerDelete(taskId: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerDelete(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4608,24 +5996,24 @@ export class TaskApi extends BaseAPI implements TaskApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerFinish(id: string, options?: any) {
-        return TaskApiFp(this.configuration).taskControllerFinish(id, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerFinish(taskId: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerFinish(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerRestore(id: string, options?: any) {
-        return TaskApiFp(this.configuration).taskControllerRestore(id, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerRestore(taskId: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerRestore(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4999,15 +6387,15 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerRemoveMatch: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('importUserControllerRemoveMatch', 'id', id)
-            const localVarPath = `/user/import/{id}/match`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        importUserControllerRemoveMatch: async (importUserId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'importUserId' is not null or undefined
+            assertParamExists('importUserControllerRemoveMatch', 'importUserId', importUserId)
+            const localVarPath = `/user/import/{importUserId}/match`
+                .replace(`{${"importUserId"}}`, encodeURIComponent(String(importUserId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5069,18 +6457,18 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerSetMatch: async (id: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('importUserControllerSetMatch', 'id', id)
+        importUserControllerSetMatch: async (importUserId: string, updateMatchParams: UpdateMatchParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'importUserId' is not null or undefined
+            assertParamExists('importUserControllerSetMatch', 'importUserId', importUserId)
             // verify required parameter 'updateMatchParams' is not null or undefined
             assertParamExists('importUserControllerSetMatch', 'updateMatchParams', updateMatchParams)
-            const localVarPath = `/user/import/{id}/match`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/user/import/{importUserId}/match`
+                .replace(`{${"importUserId"}}`, encodeURIComponent(String(importUserId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5145,18 +6533,18 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateFlag: async (id: string, updateFlagParams: UpdateFlagParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('importUserControllerUpdateFlag', 'id', id)
+        importUserControllerUpdateFlag: async (importUserId: string, updateFlagParams: UpdateFlagParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'importUserId' is not null or undefined
+            assertParamExists('importUserControllerUpdateFlag', 'importUserId', importUserId)
             // verify required parameter 'updateFlagParams' is not null or undefined
             assertParamExists('importUserControllerUpdateFlag', 'updateFlagParams', updateFlagParams)
-            const localVarPath = `/user/import/{id}/flag`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/user/import/{importUserId}/flag`
+                .replace(`{${"importUserId"}}`, encodeURIComponent(String(importUserId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5239,12 +6627,12 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerRemoveMatch(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerRemoveMatch(id, options);
+        async importUserControllerRemoveMatch(importUserId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerRemoveMatch(importUserId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5258,13 +6646,13 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSetMatch(id, updateMatchParams, options);
+        async importUserControllerSetMatch(importUserId: string, updateMatchParams: UpdateMatchParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerSetMatch(importUserId, updateMatchParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5278,13 +6666,13 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateFlag(id, updateFlagParams, options);
+        async importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImportUserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerUpdateFlag(importUserId, updateFlagParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -5337,12 +6725,12 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse> {
-            return localVarFp.importUserControllerRemoveMatch(id, options).then((request) => request(axios, basePath));
+        importUserControllerRemoveMatch(importUserId: string, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerRemoveMatch(importUserId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5354,13 +6742,13 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateMatchParams} updateMatchParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
-            return localVarFp.importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(axios, basePath));
+        importUserControllerSetMatch(importUserId: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerSetMatch(importUserId, updateMatchParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5372,13 +6760,13 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {UpdateFlagParams} updateFlagParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse> {
-            return localVarFp.importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(axios, basePath));
+        importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse> {
+            return localVarFp.importUserControllerUpdateFlag(importUserId, updateFlagParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5429,12 +6817,12 @@ export interface UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerRemoveMatch(id: string, options?: any): AxiosPromise<ImportUserResponse>;
+    importUserControllerRemoveMatch(importUserId: string, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -5446,13 +6834,13 @@ export interface UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {UpdateMatchParams} updateMatchParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
+    importUserControllerSetMatch(importUserId: string, updateMatchParams: UpdateMatchParams, options?: any): AxiosPromise<ImportUserResponse>;
 
     /**
      * 
@@ -5464,13 +6852,13 @@ export interface UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {UpdateFlagParams} updateFlagParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse>;
+    importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any): AxiosPromise<ImportUserResponse>;
 
 }
 
@@ -5527,13 +6915,13 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerRemoveMatch(id: string, options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerRemoveMatch(id, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerRemoveMatch(importUserId: string, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerRemoveMatch(importUserId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5548,14 +6936,14 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {UpdateMatchParams} updateMatchParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerSetMatch(id: string, updateMatchParams: UpdateMatchParams, options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerSetMatch(id, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerSetMatch(importUserId: string, updateMatchParams: UpdateMatchParams, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerSetMatch(importUserId, updateMatchParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5570,14 +6958,14 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
      * @param {UpdateFlagParams} updateFlagParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerUpdateFlag(id: string, updateFlagParams: UpdateFlagParams, options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(id, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(importUserId, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
