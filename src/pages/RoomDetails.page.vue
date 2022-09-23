@@ -133,6 +133,7 @@ import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const i18n = inject("i18n");
