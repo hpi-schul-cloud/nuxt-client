@@ -6,6 +6,7 @@ import {
 	RouteRecordRaw,
 } from "vue-router";
 import HomePage from "@/pages/HomePage.vue";
+import TaskListPage from "@/pages/TaskListPage.vue";
 import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
 import { useAuthStore } from "@/store/auth";
 
@@ -19,6 +20,11 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		path: "/vitest",
 		name: "vitest",
 		component: VitestProofOfConcept,
+	},
+	{
+		path: "/tasks",
+		name: "tasks",
+		component: TaskListPage,
 	},
 	{
 		path: "/imprint",
