@@ -14,6 +14,16 @@ export default defineConfig(async () => {
 	const config: UserConfig = {
 		server: {
 			port: 4000,
+			proxy: {
+				"/login": {
+					target: "http://localhost:3100",
+					changeOrigin: true,
+				},
+				"/logout": {
+					target: "http://localhost:3100",
+					changeOrigin: true,
+				},
+			},
 		},
 		plugins: [vue(), vuetify({ styles: "expose" }), replaceFiles(replacements)],
 		test: {
