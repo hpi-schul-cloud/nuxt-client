@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "vue-tsc --noEmit && vite build",
 		"lint:markup": "vue-tsc --noEmit",
 		"lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
 		"lint:style": "stylelint src/**/*.{css,scss,vue}",
@@ -16,6 +16,7 @@
 		"@mdi/font": "5.9.55",
 		"pinia": "^2.0.16",
 		"roboto-fontface": "*",
+		"universal-cookie": "^4.0.4",
 		"vue": "^3.2.37",
 		"vue-router": "^4.1.2",
 		"vuetify": "^3.0.0-beta.0",
