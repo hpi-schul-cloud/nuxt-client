@@ -13,9 +13,12 @@ app.use(router);
 app.use(vuetify);
 
 // authentication using cookie from legacy client
-const cookies = new Cookies();
-const jwt = cookies.get("jwt");
-const authStore = useAuthStore();
-authStore.setAccessToken(jwt);
+// WIP remove check later
+if (!["/login", "/logout"].includes(window.location.pathname)) {
+	const cookies = new Cookies();
+	const jwt = cookies.get("jwt");
+	const authStore = useAuthStore();
+	authStore.setAccessToken(jwt);
+}
 
 app.mount("#app");
