@@ -1,26 +1,24 @@
 <template>
 	<div>
-		<transition name="fade">
-			<v-dialog
-				v-model="isDialogOpen"
-				width="300"
-				:hide-overlay="!loadingState.hasOverlay"
-				:persistent="loadingState.isPersistent"
-			>
-				<v-card class="px-2 py-3">
-					<v-card-text class="pb-0">
-						<div class="mb-2 text-center black--text" data-testid="dialog-text">
-							{{ loadingState.text }}
-						</div>
-						<v-progress-linear
-							indeterminate
-							color="primary"
-							class="mb-2"
-						></v-progress-linear>
-					</v-card-text>
-				</v-card>
-			</v-dialog>
-		</transition>
+		<v-dialog
+			v-model="isDialogOpen"
+			width="300"
+			:hide-overlay="!loadingState.hasOverlay"
+			:persistent="loadingState.isPersistent"
+		>
+			<v-card class="px-2 py-3">
+				<v-card-text class="pb-0">
+					<div class="mb-2 text-center black--text" data-testid="dialog-text">
+						{{ loadingState.text }}
+					</div>
+					<v-progress-linear
+						indeterminate
+						color="primary"
+						class="mb-2"
+					></v-progress-linear>
+				</v-card-text>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
