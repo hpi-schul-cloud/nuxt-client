@@ -4,6 +4,7 @@ import { defineConfig } from "vitest/config";
 import { UserConfig } from "vite";
 
 import generateAliases from "./build-plugins/generateAliases";
+import proxy from "./build-plugins/proxy";
 import replaceFiles from "./build-plugins/rollup/replaceFiles";
 import vuetify from "vite-plugin-vuetify";
 
@@ -15,7 +16,12 @@ export default defineConfig(async () => {
 		server: {
 			port: 4000,
 		},
-		plugins: [vue(), vuetify({ styles: "expose" }), replaceFiles(replacements)],
+		plugins: [
+			vue(),
+			vuetify({ styles: "expose" }),
+			replaceFiles(replacements),
+			proxy(),
+		],
 		test: {
 			globals: true,
 			environment: "jsdom",
