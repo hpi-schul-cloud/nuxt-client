@@ -1,15 +1,26 @@
 import Vuetify from "vuetify";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemStudent from "./TaskItemStudent";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import TaskModule from "@/store/tasks";
+import { provide } from "@vue/composition-api";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
 
 describe("@components/molecules/TaskItemStudent", () => {
 	let vuetify;
+	let taskModuleMock;
+	let copyModuleMock;
+	let notifierModuleMock;
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
+		taskModuleMock = createModuleMocks(TaskModule);
+		copyModuleMock = createModuleMocks(CopyModule);
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	const getWrapper = (props, options) => {
@@ -18,6 +29,12 @@ describe("@components/molecules/TaskItemStudent", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			setup() {
+				provide("taskModule", taskModuleMock);
+				provide("copyModule", copyModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key) => key });
+			},
 			vuetify,
 			propsData: props,
 			...options,

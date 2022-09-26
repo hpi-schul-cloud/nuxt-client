@@ -1,4 +1,10 @@
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import TaskModule from "@/store/tasks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
+import { provide } from "@vue/composition-api";
+import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
 
 const {
@@ -18,12 +24,22 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
+let taskModuleMock;
+let copyModuleMock;
+let notifierModuleMock;
+
 const getWrapper = (props, options) => {
 	return mount(TaskItemTeacher, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
 		}),
+		setup() {
+			provide("taskModule", taskModuleMock);
+			provide("copyModule", copyModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide("i18n", { t: (key) => key });
+		},
 		propsData: props,
 		attachTo: document.body,
 		...options,
@@ -32,6 +48,12 @@ const getWrapper = (props, options) => {
 
 describe("@components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
+
+	beforeEach(() => {
+		taskModuleMock = createModuleMocks(TaskModule);
+		copyModuleMock = createModuleMocks(CopyModule);
+		notifierModuleMock = createModuleMocks(NotifierModule);
+	});
 
 	it(...isValidComponent(TaskItemTeacher));
 
@@ -52,6 +74,25 @@ describe("@components/molecules/TaskItemTeacher", () => {
 		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
 		expect(wrapper.attributes("href")).toStrictEqual(
 			`/homework/${tasksTeacher[0].id}`
+		);
+	});
+
+	it("should passthrough copy-task event", async () => {
+		const wrapper = getWrapper({
+			task: tasksTeacher[0],
+		});
+
+		const payload = {
+			id: "123",
+			courseId: "c789",
+			type: "task",
+		};
+
+		const oneTaskItemMenu = wrapper.findComponent(TaskItemMenu);
+		oneTaskItemMenu.vm.$emit("copy-task", payload);
+
+		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(
+			expect.arrayContaining([payload])
 		);
 	});
 

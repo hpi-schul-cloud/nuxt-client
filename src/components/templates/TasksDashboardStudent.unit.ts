@@ -1,4 +1,7 @@
+import CopyModule from "@/store/copy";
 import FinishedTaskModule from "@/store/finished-tasks";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import TaskModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -14,7 +17,10 @@ const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
 describe("@components/templates/TasksDashboardStudent", () => {
 	let taskModuleMock: TaskModule;
+	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
+	let loadingStateModuleMock: LoadingStateModule;
+	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -24,7 +30,11 @@ describe("@components/templates/TasksDashboardStudent", () => {
 			}),
 			setup() {
 				provide("taskModule", taskModuleMock);
+				provide("copyModule", copyModuleMock);
 				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("loadingStateModule", loadingStateModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});

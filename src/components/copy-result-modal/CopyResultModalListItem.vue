@@ -1,26 +1,11 @@
 <template>
 	<div v-if="item !== undefined">
-		<div class="d-flex flex-row align-items-center">
-			<v-icon> {{ mdiChevronLeft }} </v-icon>
-			<v-breadcrumbs
-				class="pl-0 py-0 mr-8 pr-4 truncate parent-info"
-				:items="[
-					{
-						href: item.url,
-						text: breadcrumbTitle,
-						target: '_blank',
-						disabled: false,
-					},
-				]"
-			></v-breadcrumbs>
+		<div class="d-flex flex-row align-items-center black--text">
+			{{ elementTypeName }} &middot;&nbsp;
+			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>
-		<ul class="mb-4 pl-1">
-			<li
-				v-for="(e, index) of elements"
-				:key="index"
-				class="list-none truncate d-block element-info"
-			>
-				<v-icon x-small class="mr-1"> {{ mdiMenuRight }} </v-icon>
+		<ul class="ml-4 mb-4 pl-1">
+			<li v-for="(e, index) of elements" :key="index" class="element-info">
 				<span class="black--text">{{ getElementTitle(e) }}</span>
 			</li>
 		</ul>
@@ -50,13 +35,15 @@ export default {
 			return this.item?.elements || [];
 		},
 		breadcrumbTitle() {
-			const title = this.item.title ? ` - ${this.item.title}` : "";
-			return this.getElementTypeName(this.item.type) + title;
+			return this.item.title ?? "";
+		},
+		elementTypeName() {
+			return this.getElementTypeName(this.item.type);
 		},
 	},
 	methods: {
 		getElementTitle(element) {
-			const title = element.title ? " - " + element.title : "";
+			const title = element.title ? " · " + element.title : "";
 			return this.getElementTypeName(element.type) + title;
 		},
 		getElementTypeName(type) {
@@ -84,7 +71,7 @@ export default {
 						"components.molecules.copyResult.label.lernstoreMaterialGroup"
 					);
 				case CopyApiResponseTypeEnum.Lesson:
-					return this.$t("common.words.topics");
+					return this.$t("common.words.topic");
 				case CopyApiResponseTypeEnum.LessonContentGeogebra:
 					return this.$t("components.molecules.copyResult.label.geogebra");
 				case CopyApiResponseTypeEnum.LessonContentEtherpad:
@@ -125,6 +112,6 @@ export default {
 
 <style lang="scss" scoped>
 .list-none {
-	list-style-type: none;
+	list-style-type: disc;
 }
 </style>

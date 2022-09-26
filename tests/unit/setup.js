@@ -6,7 +6,16 @@ import Vuetify from "vuetify";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
+// https://vue-test-utils.vuejs.org/
+import * as vueTestUtils from "@vue/test-utils";
 import { RouterLinkStub } from "@vue/test-utils";
+import "@plugins/global";
+import { mountBaseComponents } from "@basecomponents/_globals";
+import { i18n as i18nConfig } from "@plugins/i18n.js";
+import authStoreModule from "@/store/auth";
+import { mixin as userMixin } from "@plugins/user.js";
+import globalStubs from "./stubs.js";
+import VueMeta from "vue-meta";
 
 // make object properties configurable in tests
 // so they can be mocked
@@ -18,9 +27,6 @@ Object.defineProperty = (o, p, c) =>
 // ===
 // Utility functions
 // ===
-
-// https://vue-test-utils.vuejs.org/
-import * as vueTestUtils from "@vue/test-utils";
 
 // ===
 // Configure Vue
@@ -34,9 +40,6 @@ Vue.config.productionTip = false;
 // ===
 // Register global components
 // ===
-
-import "@plugins/global";
-import { mountBaseComponents } from "@basecomponents/_globals";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 Vue.use(Vuelidate);
@@ -154,13 +157,6 @@ global.shallowMountView = (Component, options = {}) => {
 };
 */
 
-import { i18n as i18nConfig } from "@plugins/i18n.js";
-import authStoreModule from "@/store/auth";
-import { mixin as userMixin } from "@plugins/user.js";
-import globalStubs from "./stubs.js";
-import VueMeta from "vue-meta";
-import vueCompositionApi from "@vue/composition-api";
-
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
@@ -175,7 +171,6 @@ global.createComponentMocks = ({
 	/*style,*/ mocks,
 	stubs,
 	$config,
-	compositionApi,
 }) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
@@ -275,11 +270,6 @@ global.createComponentMocks = ({
 				Vue.prototype.$dialog = dialog;
 			},
 		});
-	}
-
-	// If using `compositionApi: true`, we'll use the Vue composition API
-	if (compositionApi === true) {
-		localVue.use(vueCompositionApi);
 	}
 
 	// If using `router: true`, we'll automatically stub out

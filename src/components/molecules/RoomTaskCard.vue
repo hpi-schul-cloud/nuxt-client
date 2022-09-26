@@ -8,7 +8,7 @@
 		outlined
 		data-testid="content-card-task"
 		@click="handleClick"
-		@keydown.enter="handleClick"
+		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"

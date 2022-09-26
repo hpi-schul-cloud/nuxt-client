@@ -102,10 +102,8 @@
 			</template>
 		</v-custom-dialog>
 		<copy-result-modal
-			:is-loading="copyResultModalIsLoading"
+			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
-			:copy-result-status="copyResultModalStatus"
-			:copy-result-error="copyResultError"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -113,7 +111,7 @@
 
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
@@ -131,8 +129,24 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
+import { defineComponent, inject } from "@vue/composition-api";
+import { useCopy } from "../composables/copy";
+import { useLoadingState } from "../composables/loadingState";
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		const i18n = inject("i18n");
+		const { isLoadingDialogOpen } = useLoadingState(
+			i18n.t("components.molecules.copyResult.title.loading")
+		);
+
+		const { copy } = useCopy(isLoadingDialogOpen);
+
+		return {
+			copy,
+		};
+	},
 	components: {
 		DefaultWireframe,
 		RoomDashboard,
@@ -143,6 +157,7 @@ export default {
 		CopyResultModal,
 	},
 	layout: "defaultVuetify",
+	inject: ["copyModule"],
 	data() {
 		return {
 			importDialog: {
@@ -173,7 +188,6 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
-			copyProcessReturnId: "",
 		};
 	},
 	computed: {
@@ -273,17 +287,17 @@ export default {
 			}
 			return items;
 		},
-		copyResultModalIsLoading() {
-			return copyModule.getLoading;
-		},
 		copyResultModalStatus() {
-			return copyModule.getCopyResult?.status;
+			return this.copyModule.getCopyResult?.status;
 		},
 		copyResultModalItems() {
-			return copyModule.getCopyResultFailedItems;
+			return this.copyModule.getCopyResultFailedItems;
 		},
 		copyResultError() {
-			return copyModule.getBusinessError;
+			return this.copyModule.getBusinessError;
+		},
+		isCopyModalOpen() {
+			return this.copyModule.getIsResultModalOpen;
 		},
 	},
 	async created() {
@@ -326,27 +340,28 @@ export default {
 			this.dialog.subText = "";
 		},
 		async onCopyRoom(courseId) {
-			await copyModule.copy({ id: courseId, courseId, type: "course" });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError?.statusCode !== undefined) {
-				return;
-			}
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			const payload = { id: courseId, courseId, type: "course" };
+			await this.copy(payload, loadingText);
+			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
-				this.copyProcessReturnId = copyResult.id;
+				await this.$router.push(
+					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
+				);
 			}
 		},
 		async onCopyBoardElement(payload) {
-			await copyModule.copy(payload);
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			await this.copy(payload, loadingText);
 			await roomModule.fetchContent(payload.courseId);
 		},
-		async onCopyResultModalClosed() {
-			copyModule.reset();
-			if (this.copyProcessReturnId === "") return;
-			await this.$router.push("/rooms/" + this.copyProcessReturnId);
-			this.copyProcessReturnId = "";
+		onCopyResultModalClosed() {
+			this.copyModule.reset();
 		},
 	},
 	head() {
@@ -354,7 +369,7 @@ export default {
 			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";

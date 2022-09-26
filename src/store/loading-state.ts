@@ -7,30 +7,30 @@ import { LoadingStatePayload } from "@store/types/loading-state-payload";
 	stateFactory: true,
 })
 export default class LoadingStateModule extends VuexModule {
-	private defaultPayload: Required<LoadingStatePayload> = {
+	_defaultPayload: Required<LoadingStatePayload> = {
 		hasOverlay: true,
 		isPersistent: true,
 		text: "",
 	};
 
-	private loadingState: Required<LoadingStatePayload> = {
-		...this.defaultPayload,
+	_loadingState: Required<LoadingStatePayload> = {
+		...this._defaultPayload,
 	};
 
-	private isOpen: boolean = false;
+	_isOpen: boolean = false;
 
 	get getLoadingState(): Required<LoadingStatePayload> {
-		return this.loadingState;
+		return this._loadingState;
 	}
 
 	get getIsOpen(): boolean {
-		return this.isOpen;
+		return this._isOpen;
 	}
 
 	@Action
 	open(payload: LoadingStatePayload): void {
 		const mergedPayload: Required<LoadingStatePayload> = {
-			...this.defaultPayload,
+			...this._defaultPayload,
 			...payload,
 		};
 		this.setLoadingState(mergedPayload);
@@ -44,11 +44,11 @@ export default class LoadingStateModule extends VuexModule {
 
 	@Mutation
 	setIsOpen(value: boolean): void {
-		this.isOpen = value;
+		this._isOpen = value;
 	}
 
 	@Mutation
 	setLoadingState(payload: Required<LoadingStatePayload>): void {
-		this.loadingState = payload;
+		this._loadingState = payload;
 	}
 }

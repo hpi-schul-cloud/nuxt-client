@@ -22,7 +22,6 @@ type componentMockOptions = {
 	mocks?: any;
 	stubs?: any;
 	$config?: any;
-	compositionApi?: boolean;
 };
 
 export default function createComponentMocks({
@@ -38,7 +37,6 @@ export default function createComponentMocks({
 	mocks,
 	stubs,
 	$config,
-	compositionApi,
 }: componentMockOptions) {
 	return createComponentMocksJS({
 		i18n,
@@ -53,6 +51,5 @@ export default function createComponentMocks({
 		mocks,
 		stubs,
 		$config,
-		compositionApi,
 	});
 }

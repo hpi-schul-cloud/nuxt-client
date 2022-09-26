@@ -63,7 +63,7 @@ describe("copy module", () => {
 		describe("copy a task", () => {
 			describe("should make a 'POST' request to the backend", () => {
 				const taskMockApi = {
-					taskControllerCopyTask: jest.fn(),
+					taskControllerCopyTask: jest.fn(async () => ({ data: {} })),
 				};
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -72,114 +72,57 @@ describe("copy module", () => {
 					);
 				const copyModule = new CopyModule({});
 				it("should send with courseId", async () => {
-					await copyModule.copy({
+					const payload: CopyParams = {
 						id: "taskId",
 						type: "task",
 						courseId: "testCourseId",
-					} as CopyParams);
+					};
+					await copyModule.copy(payload);
 
-					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
-					).toStrictEqual("taskId");
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][1]
-					).toStrictEqual({
-						courseId: "testCourseId",
-					});
-				});
-				it("should send with NO courseId", async () => {
-					await copyModule.copy({
-						id: "taskId",
-						type: "task",
-					} as CopyParams);
-
-					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][0]
-					).toStrictEqual("taskId");
-					expect(
-						taskMockApi.taskControllerCopyTask.mock.calls[0][1].courseId
-					).toBeUndefined();
-				});
-			});
-
-			it("handle error", async () => {
-				const error = {
-					response: { status: 418, statusText: "This is an error" },
-				};
-				const taskMockApi = {
-					taskControllerCopyTask: jest.fn(() => Promise.reject({ ...error })),
-				};
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(
-						taskMockApi as unknown as serverApi.TaskApiInterface
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
+						"taskId",
+						{ courseId: "testCourseId" }
 					);
-				const copyModule = new CopyModule({});
-				await copyModule.copy({
-					id: "taskId",
-					type: "task",
-					courseId: "testCourseId",
 				});
-				expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
-				);
+
+				it("should send with NO courseId", async () => {
+					const payload: CopyParams = {
+						id: "taskId",
+						type: "task",
+					};
+
+					await copyModule.copy(payload);
+
+					expect(taskMockApi.taskControllerCopyTask).toHaveBeenCalledWith(
+						"taskId",
+						{ courseId: undefined }
+					);
+				});
 			});
 		});
 
 		describe("copy a course", () => {
 			it("should make a 'POST' request to the backend", async () => {
 				const roomCopyMockApi = {
-					roomsControllerCopyCourse: jest.fn(),
+					roomsControllerCopyCourse: jest.fn(async () => ({ data: {} })),
 				};
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(
 						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
 					);
-				const copyModule = new CopyModule({});
-				await copyModule.copy({
-					id: "courseId-value",
-					type: "course",
-					courseId: "courseId-value",
-				});
-				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect(
-					roomCopyMockApi.roomsControllerCopyCourse.mock.calls[0][0]
-				).toStrictEqual("courseId-value");
-			});
 
-			it("handle error", async () => {
-				const error = {
-					response: { status: 418, statusText: "This is an error" },
-				};
-				const roomCopyMockApi = {
-					roomsControllerCopyCourse: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
-				};
-				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(
-						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
-					);
 				const copyModule = new CopyModule({});
-				await copyModule.copy({
+				const payload: CopyParams = {
 					id: "courseId-value",
 					type: "course",
 					courseId: "courseId-value",
-				});
-				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
+				};
+
+				await copyModule.copy(payload);
+
+				expect(roomCopyMockApi.roomsControllerCopyCourse).toHaveBeenCalledWith(
+					"courseId-value"
 				);
 			});
 		});
@@ -187,7 +130,7 @@ describe("copy module", () => {
 		describe("copy a lesson", () => {
 			it("should make a 'POST' request to the backend", async () => {
 				const roomCopyMockApi = {
-					roomsControllerCopyLesson: jest.fn(),
+					roomsControllerCopyLesson: jest.fn(async () => ({ data: {} })),
 				};
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -200,84 +143,15 @@ describe("copy module", () => {
 					type: "lesson",
 					courseId: "testCourseId",
 				});
-				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
-				expect(
-					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][0]
-				).toStrictEqual("testLessonId");
-				expect(
-					roomCopyMockApi.roomsControllerCopyLesson.mock.calls[0][1]
-				).toStrictEqual({
-					courseId: "testCourseId",
-				});
-			});
-
-			it("handle error", async () => {
-				const error = {
-					response: { status: 418, statusText: "This is an error" },
-				};
-				const roomCopyMockApi = {
-					roomsControllerCopyLesson: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
-				};
-				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(
-						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
-					);
-				const copyModule = new CopyModule({});
-				await copyModule.copy({
-					id: "testLessonId",
-					type: "lesson",
-					courseId: "testCourseId",
-				});
-				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalled();
-				expect(copyModule.getBusinessError!.message).toStrictEqual(
-					error.response.statusText
-				);
-				expect(copyModule.getBusinessError!.statusCode).toStrictEqual(
-					error.response.status
+				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalledWith(
+					"testLessonId",
+					{ courseId: "testCourseId" }
 				);
 			});
 		});
 	});
 
 	describe("mutations", () => {
-		describe("setLoading", () => {
-			it("should set loading", () => {
-				const copyModule = new CopyModule({});
-				const loadingValue = true;
-				expect(copyModule.getLoading).not.toBe(loadingValue);
-				copyModule.setLoading(loadingValue);
-				expect(copyModule.getLoading).toBe(loadingValue);
-			});
-		});
-
-		describe("setBusinessError", () => {
-			it("should set businessError", () => {
-				const copyModule = new CopyModule({});
-				const businessErrorData = {
-					statusCode: "400",
-					message: "error",
-					error: { type: "BadRequest" },
-				};
-				expect(copyModule.getBusinessError).not.toBe(businessErrorData);
-				copyModule.setBusinessError(businessErrorData);
-				expect(copyModule.getBusinessError).toBe(businessErrorData);
-			});
-
-			it("should reset businessError", () => {
-				const copyModule = new CopyModule({});
-				copyModule.setBusinessError({
-					statusCode: "400",
-					message: "error",
-					error: {},
-				});
-				copyModule.resetBusinessError();
-				expect(copyModule.getBusinessError).toBeUndefined();
-			});
-		});
-
 		describe("setCopyResult", () => {
 			it("should set copyResult", () => {
 				const copyModule = new CopyModule({});
@@ -393,6 +267,10 @@ describe("copy module", () => {
 								status: CopyApiResponseStatusEnum.NotDoing,
 							},
 							{
+								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+								status: CopyApiResponseStatusEnum.Partial,
+							},
+							{
 								type: CopyApiResponseTypeEnum.FileGroup,
 								status: CopyApiResponseStatusEnum.NotImplemented,
 							},
@@ -404,7 +282,12 @@ describe("copy module", () => {
 						title: "test course",
 						type: CopyApiResponseTypeEnum.Course,
 						elementId: "12345",
-						elements: [],
+						elements: [
+							{
+								title: "",
+								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+							},
+						],
 						url: "/courses/12345/edit",
 					},
 				];
@@ -413,7 +296,7 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
-			it("should set the state and change the statusses 'success'", () => {
+			it.skip("should set the state and change the statusses 'success'", () => {
 				const payload = {
 					payload: {
 						title: "test course",

@@ -30,6 +30,7 @@ const getWrapper = (props: object) => {
 		mocks: {},
 	});
 };
+
 describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 	it("Should render component", () => {
 		const wrapper = getWrapper({ item: mockItem });
@@ -39,28 +40,28 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 
 	it("should render the element with the correct element title", () => {
 		const wrapper = getWrapper({ item: mockItem });
-		const elementTitle = wrapper.find(".black--text").element.textContent;
+		const elementTitle = wrapper.find("ul > li").text();
 
-		expect(elementTitle).toBe("GeoGebra - Geogebra Element Title");
+		expect(elementTitle).toBe("GeoGebra · Geogebra Element Title");
 	});
 
 	it("should render the elements with the correct element title", () => {
 		const wrapper = getWrapper({ item: mockItem });
 		const elementTitles = wrapper
-			.findAll(".black--text")
-			.wrappers.map((el) => el.element.textContent);
+			.findAll("ul > li")
+			.wrappers.map((el) => el.text());
 
 		expect(elementTitles).toEqual([
-			"GeoGebra - Geogebra Element Title",
-			"NeXboard - Nexboard Element Title",
+			"GeoGebra · Geogebra Element Title",
+			"NeXboard · Nexboard Element Title",
 		]);
 	});
 
 	it("should render the correct link", () => {
 		const wrapper = getWrapper({ item: mockItem });
-		const parentInfoLink = wrapper.find(".parent-info a");
+		const parentInfoLink = wrapper.find("a");
 
-		expect(parentInfoLink.element.textContent).toBe("Themen - Lesson Title");
+		expect(parentInfoLink.text()).toBe("Lesson Title");
 		expect(parentInfoLink.attributes("href")).toBe(mockItem.url);
 	});
 
@@ -95,7 +96,7 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 				CopyApiResponseTypeEnum.LernstoreMaterialGroup,
 				"components.molecules.copyResult.label.lernstoreMaterialGroup",
 			],
-			[CopyApiResponseTypeEnum.Lesson, "common.words.topics"],
+			[CopyApiResponseTypeEnum.Lesson, "common.words.topic"],
 			[
 				CopyApiResponseTypeEnum.LessonContentGeogebra,
 				"components.molecules.copyResult.label.geogebra",
