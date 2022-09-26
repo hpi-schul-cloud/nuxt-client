@@ -53,10 +53,7 @@ const assertUserToBeLoggedIn = (
 	const pageRequiresUserToBeLoggedIn = checkPageRequiresUserToBeLoggedIn(to);
 
 	if (pageRequiresUserToBeLoggedIn && !userIsLoggedIn) {
-		// WIP remove check later
-		if (!["/login", "/logout"].includes(to.path)) {
-			window.location.assign(`/login?redirect=${to.fullPath}`);
-		}
+		window.location.assign(`/login?redirect=${to.fullPath}`);
 	} else {
 		next();
 	}
