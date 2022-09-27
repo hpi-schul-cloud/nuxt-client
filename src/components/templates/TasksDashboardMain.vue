@@ -72,10 +72,9 @@
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"
-			:is-loading="copyResultModalIsLoading"
+			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
-			:copy-result-status="copyResultModalStatus"
-			@dialog-closed="onCopyResultModalClose"
+			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
 </template>
@@ -87,6 +86,7 @@ import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
+
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 
@@ -116,7 +116,12 @@ export default {
 			mdiPlus,
 		};
 	},
-	inject: ["taskModule", "copyModule", "finishedTaskModule"],
+	inject: [
+		"taskModule",
+		"copyModule",
+		"finishedTaskModule",
+		"loadingStateModule",
+	],
 	computed: {
 		hasTasks() {
 			return this.taskModule.hasTasks;
@@ -281,14 +286,11 @@ export default {
 				subtitle,
 			};
 		},
-		copyResultModalIsLoading() {
-			return this.copyModule.getLoading;
-		},
-		copyResultModalStatus() {
-			return this.copyModule.getCopyResult?.status;
-		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
+		},
+		isCopyModalOpen() {
+			return this.copyModule.getIsResultModalOpen;
 		},
 	},
 	watch: {
@@ -327,11 +329,6 @@ export default {
 				this.finishedTaskModule.fetchFinishedTasks();
 			}
 		},
-		async onCopyResultModalClose() {
-			this.copyModule.reset();
-			this.taskModule.setActiveTab("drafts");
-			await this.taskModule.fetchAllTasks();
-		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {
 				this.setActiveTab(this.tabRoutes[0]);
@@ -346,6 +343,9 @@ export default {
 		},
 		setActiveTab(tab) {
 			this.taskModule.setActiveTab(tab);
+		},
+		onCopyResultModalClosed() {
+			this.copyModule.reset();
 		},
 	},
 };

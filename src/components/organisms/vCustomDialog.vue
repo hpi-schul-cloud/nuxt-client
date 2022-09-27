@@ -7,7 +7,7 @@
 		@keydown.esc="$emit('dialog-closed', false)"
 	>
 		<v-card :ripple="false">
-			<v-card-title>
+			<v-card-title data-testid="dialog-title">
 				<slot name="title"></slot>
 			</v-card-title>
 			<v-card-text>

@@ -1,5 +1,5 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { AlertPayload } from "@store/types/alert-payload";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "notifier",

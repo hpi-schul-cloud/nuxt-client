@@ -2,10 +2,14 @@ import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import { User } from "@/store/types/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 
@@ -99,6 +103,10 @@ const $route = {
 	path: "/rooms/",
 };
 
+let copyModuleMock: CopyModule;
+let loadingStateModuleMock: LoadingStateModule;
+let notifierModuleMock: NotifierModule;
+
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
 	return mount(Room, {
@@ -107,20 +115,35 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		}),
+		setup() {
+			provide("copyModule", copyModuleMock);
+			provide("loadingStateModule", loadingStateModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide("i18n", { t: (key: string) => key });
+		},
 	});
 };
 
-describe("@pages/rooms/_id/index.vue", () => {
+describe("@pages/RoomDetails.page.vue", () => {
 	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+
 		setupStores({
 			auth: AuthModule,
 			"env-config": EnvConfigModule,
 			room: RoomModule,
-			copy: CopyModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		authModule.setUser(mockAuthStoreDataTeacher as User);
+		copyModuleMock = createModuleMocks(CopyModule, {
+			getIsResultModalOpen: false,
+		});
+		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
+			getIsOpen: false,
+		});
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("should fetch data", async () => {
