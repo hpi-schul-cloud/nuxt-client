@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
+		hover
 		data-testid="content-card-task"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
@@ -460,15 +460,6 @@ export default {
 
 .v-chip {
 	margin-right: var(--space-xs);
-}
-
-.v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
-
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
 }
 
 .v-card__text {
