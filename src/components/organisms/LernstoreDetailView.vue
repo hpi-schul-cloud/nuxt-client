@@ -3,7 +3,7 @@
 		<div ref="icons" class="icons">
 			<base-button
 				:class="[
-					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
+					closeButtonStyleSelector ? 'close-transparent elevation-6' : 'close-icon elevation-6',
 					'icon',
 				]"
 				design="icon"

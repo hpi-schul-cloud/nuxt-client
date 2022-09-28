@@ -11,7 +11,7 @@
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					:class="[
-						'modal-container',
+						'modal-container elevation-24',
 						design,
 						{ 'modal-container--large': size === 'large' },
 					]"
