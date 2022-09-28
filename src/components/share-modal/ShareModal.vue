@@ -4,16 +4,16 @@
 		data-testid="copy-dialog"
 		:size="480"
 		has-buttons
-		:buttons="['cancel', 'next']"
+		:buttons="actionButtons"
 		@dialog-closed="onCloseDialog"
 		@next="onNext"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
-			Teilen Einstellungen
+			{{ modalTitle }}
 		</div>
 
 		<template slot="content">
-			<div>
+			<div v-if="step === 1">
 				<div
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
@@ -49,13 +49,47 @@
 					></v-switch>
 				</div>
 			</div>
+
+			<div v-else>
+				<div>
+					<v-text-field label="Link Kurskopie" :value="shareUrl" disabled>
+					</v-text-field>
+				</div>
+				<div>
+					<div class="share-options">
+						<div>
+							<v-icon large>{{ mdiEmailOutline }}</v-icon>
+						</div>
+						<div>Als Mail versenden</div>
+					</div>
+
+					<div class="share-options">
+						<div>
+							<v-icon large>{{ mdiContentCopy }}</v-icon>
+						</div>
+						<div>Link kopieren</div>
+					</div>
+
+					<div class="share-options">
+						<div>
+							<v-icon large>{{ mdiQrcode }}</v-icon>
+						</div>
+						<div>QR-Code erstellen</div>
+					</div>
+				</div>
+			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mdiInformation } from "@mdi/js";
+import {
+	mdiInformation,
+	mdiEmailOutline,
+	mdiContentCopy,
+	mdiQrcode,
+} from "@mdi/js";
 
 export default {
 	name: "ShareModal",
@@ -64,6 +98,9 @@ export default {
 	data() {
 		return {
 			mdiInformation,
+			mdiEmailOutline,
+			mdiContentCopy,
+			mdiQrcode,
 			shareOptions: {
 				schoolInternally: true,
 				expiresInSevenDays: true,
@@ -74,6 +111,18 @@ export default {
 	computed: {
 		isOpen() {
 			return this.shareCourseModule.getIsShareModalOpen;
+		},
+		step() {
+			return this.shareCourseModule.getShareUrl === undefined ? 1 : 2;
+		},
+		shareUrl() {
+			return this.shareCourseModule.getShareUrl;
+		},
+		actionButtons() {
+			return this.step === 1 ? ["cancel", "next"] : ["close"];
+		},
+		modalTitle() {
+			return this.step === 1 ? "Teilen Einstellungen " : "Teilen über";
 		},
 	},
 	watch: {
@@ -86,7 +135,7 @@ export default {
 			this.shareCourseModule.resetShareFlow();
 		},
 		onNext() {
-			this.shareCourseModule.createShareToken(this.shareOptions);
+			this.shareCourseModule.createShareUrl(this.shareOptions);
 		},
 	},
 };
@@ -95,5 +144,10 @@ export default {
 <style scoped lang="scss">
 .wordbreak-normal {
 	word-break: normal;
+}
+
+.share-options {
+	display: inline-block;
+	cursor: pointer;
 }
 </style>

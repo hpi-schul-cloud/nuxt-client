@@ -17,10 +17,12 @@ export interface SharePayload extends ShareOptions {
 export default class ShareCourseModule extends VuexModule {
 	private isShareModalOpen: boolean = false;
 	private courseId: string | undefined = undefined;
+	private shareUrl: string | undefined = undefined;
 
 	@Action
-	createShareToken(payload: SharePayload): void {
+	createShareUrl(payload: SharePayload): void {
 		console.log("--- payload", payload);
+		this.setShareUrl("http://example.com");
 	}
 
 	@Action
@@ -33,6 +35,7 @@ export default class ShareCourseModule extends VuexModule {
 	resetShareFlow(): void {
 		this.setCourseId(undefined);
 		this.setShareModalOpen(false);
+		this.setShareUrl(undefined);
 	}
 
 	@Mutation
@@ -45,7 +48,16 @@ export default class ShareCourseModule extends VuexModule {
 		this.isShareModalOpen = open;
 	}
 
+	@Mutation
+	setShareUrl(url: string | undefined): void {
+		this.shareUrl = url;
+	}
+
 	get getIsShareModalOpen(): boolean {
 		return this.isShareModalOpen;
+	}
+
+	get getShareUrl(): string | undefined {
+		return this.shareUrl;
 	}
 }
