@@ -8,6 +8,7 @@ import {
 import HomePage from "@/pages/HomePage.vue";
 import TaskListPage from "@/pages/TaskListPage.vue";
 import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
+import NotFoundPage from "@/pages/NotFoundPage.vue";
 import { useAuthStore } from "@/store/auth";
 
 const routes: Readonly<RouteRecordRaw[]> = [
@@ -33,6 +34,14 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		// this generates a separate chunk (About.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
 		component: () => import("../pages/ImpressumPage.vue"),
+	},
+	{
+		path: "/:catchAll(.*)",
+		name: "notFound",
+		component: NotFoundPage,
+		meta: {
+			requiresAuth: false,
+		},
 	},
 ];
 
