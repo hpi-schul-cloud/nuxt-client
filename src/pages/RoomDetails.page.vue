@@ -64,7 +64,7 @@
 		/>
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
-		<v-custom-dialog
+		<!-- <v-custom-dialog
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
 			has-buttons
@@ -100,7 +100,13 @@
 				</div>
 				<v-divider></v-divider>
 			</template>
-		</v-custom-dialog>
+		</v-custom-dialog> -->
+
+		<share-modal
+			:is-open="isShareModalOpen"
+			@dialog-closed="isShareModalOpen = false"
+		></share-modal>
+
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
@@ -112,11 +118,11 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
+// import BaseQrCode from "@components/base/BaseQrCode.vue";
+// import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
@@ -132,6 +138,7 @@ import {
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
+import ShareModal from "@components/share-modal/ShareModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -152,9 +159,10 @@ export default defineComponent({
 		RoomDashboard,
 		ImportLessonModal,
 		MoreItemMenu,
-		vCustomDialog,
-		BaseQrCode,
+		// vCustomDialog,
+		// BaseQrCode,
 		CopyResultModal,
+		ShareModal,
 	},
 	layout: "defaultVuetify",
 	inject: ["copyModule"],
@@ -188,6 +196,7 @@ export default defineComponent({
 			],
 			courseId: this.$route.params.id,
 			tab: null,
+			isShareModalOpen: false,
 		};
 	},
 	computed: {
@@ -322,15 +331,16 @@ export default defineComponent({
 			this.dialog.isOpen = true;
 		},
 		async shareCourse() {
-			await roomModule.createCourseShareToken(this.courseId);
-			this.dialog.courseShareToken = roomModule.getCourseShareToken;
-			this.dialog.model = "share";
-			this.dialog.header = this.$t("pages.room.modal.course.share.header");
-			this.dialog.text = this.$t("pages.room.modal.course.share.text");
-			this.dialog.inputText = this.dialog.courseShareToken;
-			this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
-			this.dialog.isOpen = true;
+			// await roomModule.createCourseShareToken(this.courseId);
+			// this.dialog.courseShareToken = roomModule.getCourseShareToken;
+			// this.dialog.model = "share";
+			// this.dialog.header = this.$t("pages.room.modal.course.share.header");
+			// this.dialog.text = this.$t("pages.room.modal.course.share.text");
+			// this.dialog.inputText = this.dialog.courseShareToken;
+			// this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
+			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
+			// this.dialog.isOpen = true;
+			this.isShareModalOpen = true;
 		},
 		closeDialog() {
 			this.dialog.model = "";
