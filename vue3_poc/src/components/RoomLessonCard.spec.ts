@@ -93,8 +93,11 @@ describe("@/components/RoomLessonCard", () => {
 			const props = createTestProps();
 			const wrapper = getWrapper({ props });
 
+			//@ts-ignore
 			expect(wrapper.vm.ariaLabel).toStrictEqual(props.ariaLabel);
+			//@ts-ignore
 			expect(wrapper.vm.lesson).toStrictEqual(props.lesson);
+			//@ts-ignore
 			expect(wrapper.vm.room).toStrictEqual(props.room);
 		});
 

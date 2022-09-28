@@ -11,8 +11,14 @@
 	<!-- <pre>{{ tasks }}</pre> -->
 </template>
 <script lang="ts">
-import { Configuration, TaskApiFactory, TaskResponse } from "@/serverApi/v3";
+import {
+	Configuration,
+	TaskApiFactory,
+	TaskListResponse,
+	TaskResponse,
+} from "@/serverApi/v3";
 import { useAuthStore } from "@/store/auth";
+import { AxiosResponse } from "axios";
 import { defineComponent, onMounted, Ref, ref } from "vue";
 
 export default defineComponent({
@@ -30,7 +36,10 @@ export default defineComponent({
 		onMounted(async () => {
 			await api
 				.taskControllerFindAll()
-				.then((response) => (tasks.value = response.data.data));
+				.then(
+					(response: AxiosResponse<TaskListResponse>) =>
+						(tasks.value = response.data.data)
+				);
 		});
 
 		return { tasks };
