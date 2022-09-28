@@ -59,12 +59,8 @@ import { mdiInformation } from "@mdi/js";
 
 export default {
 	name: "ShareModal",
+	inject: ["shareCourseModule"],
 	components: { vCustomDialog },
-	props: {
-		isOpen: {
-			type: Boolean,
-		},
-	},
 	data() {
 		return {
 			mdiInformation,
@@ -75,6 +71,11 @@ export default {
 			openDialog: false,
 		};
 	},
+	computed: {
+		isOpen() {
+			return this.shareCourseModule.getIsShareModalOpen;
+		},
+	},
 	watch: {
 		isOpen(newValue) {
 			this.openDialog = newValue;
@@ -82,10 +83,11 @@ export default {
 	},
 	methods: {
 		onCloseDialog() {
-			this.$emit("dialog-closed", false);
-			this.openDialog = false;
+			this.shareCourseModule.resetShareFlow();
 		},
-		onNext() {},
+		onNext() {
+			this.shareCourseModule.createShareToken(this.shareOptions);
+		},
 	},
 };
 </script>

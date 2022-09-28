@@ -102,10 +102,7 @@
 			</template>
 		</v-custom-dialog> -->
 
-		<share-modal
-			:is-open="isShareModalOpen"
-			@dialog-closed="isShareModalOpen = false"
-		></share-modal>
+		<share-modal></share-modal>
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -117,7 +114,12 @@
 
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { authModule, envConfigModule, roomModule } from "@/store";
+import {
+	authModule,
+	envConfigModule,
+	roomModule,
+	shareCourseModule,
+} from "@/store";
 // import BaseQrCode from "@components/base/BaseQrCode.vue";
 // import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
@@ -330,7 +332,7 @@ export default defineComponent({
 			this.dialog.subText = "";
 			this.dialog.isOpen = true;
 		},
-		async shareCourse() {
+		shareCourse() {
 			// await roomModule.createCourseShareToken(this.courseId);
 			// this.dialog.courseShareToken = roomModule.getCourseShareToken;
 			// this.dialog.model = "share";
@@ -340,7 +342,7 @@ export default defineComponent({
 			// this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
 			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
 			// this.dialog.isOpen = true;
-			this.isShareModalOpen = true;
+			shareCourseModule.startShareFlow(this.courseId);
 		},
 		closeDialog() {
 			this.dialog.model = "";
