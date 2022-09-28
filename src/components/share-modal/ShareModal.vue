@@ -8,7 +8,7 @@
 		@dialog-closed="onCloseDialog"
 		@next="onNext"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+		<div slot="title" ref="textTitle" class="text-h4 my-2">
 			{{ modalTitle }}
 		</div>
 
@@ -50,32 +50,45 @@
 				</div>
 			</div>
 
-			<div v-else>
-				<div>
-					<v-text-field label="Link Kurskopie" :value="shareUrl" disabled>
-					</v-text-field>
+			<div v-if="step === 2">
+				<div class="grey lighten-3 px-3 py-1">
+					<div class="text-xs grey--text text--darken-3">Link Kurskopie</div>
+					<div class="black--text">{{ shareUrl }}</div>
 				</div>
-				<div>
-					<div class="share-options">
-						<div>
-							<v-icon large>{{ mdiEmailOutline }}</v-icon>
-						</div>
-						<div>Als Mail versenden</div>
+				<hr class="mb-8" />
+				<div class="mb-4">
+					<div class="d-flex d-sm-flex justify-content-space-between">
+						<v-btn plain large :height="84">
+							<span class="d-flex flex-column justify-content-center">
+								<span class="mb-2">
+									<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+								>
+								<span>Als Mail versenden</span>
+							</span>
+						</v-btn>
+						<v-btn plain large :height="84" @click="onCopy(shareUrl)">
+							<span class="d-flex flex-column justify-content-center">
+								<span class="mb-2">
+									<v-icon large>{{ mdiContentCopy }}</v-icon></span
+								>
+								<span>Link kopieren</span>
+							</span>
+						</v-btn>
+						<v-btn plain large :height="84" @click="onGenerateQrCode">
+							<span class="d-flex flex-column justify-content-center">
+								<span class="mb-2">
+									<v-icon large>{{ mdiQrcode }}</v-icon></span
+								>
+								<span>QR-Code scannen</span>
+							</span>
+						</v-btn>
 					</div>
+				</div>
+			</div>
 
-					<div class="share-options">
-						<div>
-							<v-icon large>{{ mdiContentCopy }}</v-icon>
-						</div>
-						<div>Link kopieren</div>
-					</div>
-
-					<div class="share-options">
-						<div>
-							<v-icon large>{{ mdiQrcode }}</v-icon>
-						</div>
-						<div>QR-Code erstellen</div>
-					</div>
+			<div v-if="step === 3">
+				<div class="d-flex py-6 justify-content-center">
+					<base-qr-code :url="shareUrl"> </base-qr-code>
 				</div>
 			</div>
 		</template>
@@ -90,11 +103,12 @@ import {
 	mdiContentCopy,
 	mdiQrcode,
 } from "@mdi/js";
+import BaseQrCode from "@basecomponents/BaseQrCode";
 
 export default {
 	name: "ShareModal",
 	inject: ["shareCourseModule"],
-	components: { vCustomDialog },
+	components: { BaseQrCode, vCustomDialog },
 	data() {
 		return {
 			mdiInformation,
@@ -113,7 +127,11 @@ export default {
 			return this.shareCourseModule.getIsShareModalOpen;
 		},
 		step() {
-			return this.shareCourseModule.getShareUrl === undefined ? 1 : 2;
+			return this.shareCourseModule.getShareUrl === undefined
+				? 1
+				: !this.shareCourseModule.getHasQrCode
+				? 2
+				: 3;
 		},
 		shareUrl() {
 			return this.shareCourseModule.getShareUrl;
@@ -122,7 +140,11 @@ export default {
 			return this.step === 1 ? ["cancel", "next"] : ["close"];
 		},
 		modalTitle() {
-			return this.step === 1 ? "Teilen Einstellungen " : "Teilen über";
+			return this.step === 1
+				? "Teilen Einstellungen "
+				: this.step === 2
+				? "Teilen über"
+				: "QR-Code teilen";
 		},
 	},
 	watch: {
@@ -137,17 +159,13 @@ export default {
 		onNext() {
 			this.shareCourseModule.createShareUrl(this.shareOptions);
 		},
+		onCopy(shareUrl) {
+			navigator.clipboard.writeText(shareUrl);
+			this.shareCourseModule.resetShareFlow();
+		},
+		onGenerateQrCode() {
+			this.shareCourseModule.generateQrCode();
+		},
 	},
 };
 </script>
-
-<style scoped lang="scss">
-.wordbreak-normal {
-	word-break: normal;
-}
-
-.share-options {
-	display: inline-block;
-	cursor: pointer;
-}
-</style>
