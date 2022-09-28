@@ -1,5 +1,5 @@
-<template>
-	<section v-bind="$attrs" class="card elevation-2">
+<template v-slot:default="{ hover }">
+	<section v-bind="$attrs" :class="`card elevation-${hover ? 24 : 6}`">
 		<header class="customcard-header">
 			<slot name="header" />
 		</header>
@@ -21,8 +21,5 @@
 	background: #fff;
 	border-radius: var(--radius-md);
 
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
 }
 </style>
