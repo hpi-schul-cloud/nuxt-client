@@ -136,7 +136,6 @@ export default {
 	overflow: hidden;
 	background-color: var(--color-white);
 	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
 
 	&--large {

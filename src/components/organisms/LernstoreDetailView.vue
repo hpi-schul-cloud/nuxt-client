@@ -1,5 +1,5 @@
 <template>
-	<div class="resource elevation-6">
+	<div class="resource">
 		<div ref="icons" class="icons">
 			<base-button
 				:class="[
@@ -32,7 +32,7 @@
 				/>
 			</div>
 		</div>
-		<div ref="sidebar" class="sidebar">
+		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions"></div>
 				<div class="title">
