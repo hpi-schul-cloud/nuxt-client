@@ -20,6 +20,5 @@
 .card {
 	background: #fff;
 	border-radius: var(--radius-md);
-
 }
 </style>
