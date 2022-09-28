@@ -1,5 +1,5 @@
 <template>
-	<div class="header elevation-2">
+	<div class="header elevation-6">
 		<div class="nav-container">
 			<div class="logo-container">
 				<base-link :href="logoLink">

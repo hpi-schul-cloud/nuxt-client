@@ -1,5 +1,5 @@
 <template>
-	<div class="page">
+	<div class="page v-application">
 		<div class="topbar" data-testid="logged-out-top-bar">
 			<navigation-bar
 				:buttons="true"
