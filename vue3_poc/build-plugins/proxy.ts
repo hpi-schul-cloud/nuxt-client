@@ -2,8 +2,19 @@ import { Plugin } from "vite";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { Request, Response } from "http-proxy-middleware/dist/types";
 
+const legacyRoutes = [
+	"^/login",
+	"^/logout",
+	"^/styles",
+	"^/fonts",
+	"^/scripts",
+	"^/images",
+	"^/vendor-optimized",
+	"^/alerts",
+];
+
 const isLegacyClient = (path: string): boolean => {
-	return path.startsWith("/login") || path.startsWith("/logout");
+	return legacyRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 
 const isServer = (path: string): boolean => {
