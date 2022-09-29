@@ -58,6 +58,23 @@ describe("copy module", () => {
 				expect(setShareUrlMock).toHaveBeenCalledWith(undefined);
 			});
 		});
+
+		describe("generateQrCode", () => {
+			it("should call 'setHasQrCode' mutation", async () => {
+				const shareCourseModule = new ShareCourseModule({});
+
+				const setHasQrCodeMock = jest.spyOn(shareCourseModule, "setHasQrCode");
+				const setShareUrlMock = jest.spyOn(shareCourseModule, "setShareUrl");
+				const setShareModalOpenMock = jest.spyOn(
+					shareCourseModule,
+					"setShareModalOpen"
+				);
+
+				shareCourseModule.generateQrCode();
+
+				expect(setHasQrCodeMock).toHaveBeenCalledWith(true);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -71,12 +88,19 @@ describe("copy module", () => {
 
 		it("setShareUrl should set 'shareUrl' state", async () => {
 			const shareCourseModule = new ShareCourseModule({});
-
 			const payload = "https://test.url.com";
 
 			shareCourseModule.setShareUrl(payload);
 
 			expect(shareCourseModule.getShareUrl).toStrictEqual(payload);
+		});
+
+		it("setHasQrCode should set 'hasQrCode' state", async () => {
+			const shareCourseModule = new ShareCourseModule({});
+
+			shareCourseModule.setHasQrCode(true);
+
+			expect(shareCourseModule.getHasQrCode).toStrictEqual(true);
 		});
 	});
 });
