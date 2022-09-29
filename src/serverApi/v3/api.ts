@@ -221,6 +221,116 @@ export interface ConsentRequestBody {
 /**
  * 
  * @export
+ * @interface ConsentResponse
+ */
+export interface ConsentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentResponse
+     */
+    acr: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ConsentResponse
+     */
+    amr: Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof ConsentResponse
+     */
+    challenge: object;
+    /**
+     * 
+     * @type {OauthClientResponse}
+     * @memberof ConsentResponse
+     */
+    client: OauthClientResponse;
+    /**
+     * 
+     * @type {object}
+     * @memberof ConsentResponse
+     */
+    context: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentResponse
+     */
+    login_challenge: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentResponse
+     */
+    login_session_id: string;
+    /**
+     * 
+     * @type {OidcContextResponse}
+     * @memberof ConsentResponse
+     */
+    oidc_context: OidcContextResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentResponse
+     */
+    request_url: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ConsentResponse
+     */
+    requested_access_token_audience: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ConsentResponse
+     */
+    requested_scope: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConsentResponse
+     */
+    skip: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentResponse
+     */
+    subject: string;
+}
+/**
+ * 
+ * @export
+ * @interface ConsentSessionResponse
+ */
+export interface ConsentSessionResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentSessionResponse
+     */
+    client_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentSessionResponse
+     */
+    client_name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConsentSessionResponse
+     */
+    challenge: string;
+}
+/**
+ * 
+ * @export
  * @interface CopyApiResponse
  */
 export interface CopyApiResponse {
@@ -994,6 +1104,338 @@ export interface OauthClientBody {
      * @memberof OauthClientBody
      */
     frontchannel_logout_uri?: string;
+    /**
+     * The grant types of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientBody
+     */
+    grant_types?: Array<string>;
+    /**
+     * The response types of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientBody
+     */
+    response_types?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface OauthClientResponse
+ */
+export interface OauthClientResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    allowed_cors_origins: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    audience: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    authorization_code_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    authorization_code_grant_id_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    authorization_code_grant_refresh_token_lifespan: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OauthClientResponse
+     */
+    backchannel_logout_session_required: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    backchannel_logout_uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    client_credentials_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    client_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    client_name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof OauthClientResponse
+     */
+    client_secret_expires_at: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    client_uri: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    contacts: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OauthClientResponse
+     */
+    frontchannel_logout_session_required: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    frontchannel_logout_uri: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    grant_types: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    implicit_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    implicit_grant_id_token_lifespan: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof OauthClientResponse
+     */
+    jwks: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    jwks_uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    jwt_bearer_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    logo_uri: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof OauthClientResponse
+     */
+    metadata: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    owner: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    password_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    password_grant_refresh_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    policy_uri: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    post_logout_redirect_uris: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    redirect_uris: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    refresh_token_grant_access_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    refresh_token_grant_id_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    refresh_token_grant_refresh_token_lifespan: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    registration_access_token: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    registration_client_uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    request_object_signing_alg: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    request_uris: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthClientResponse
+     */
+    response_types: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    scope: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    sector_identifier_uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    subject_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    token_endpoint_auth_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    token_endpoint_auth_signing_alg: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    tos_uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    updated_at: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OauthClientResponse
+     */
+    userinfo_signed_response_alg: string;
+}
+/**
+ * 
+ * @export
+ * @interface OidcContextResponse
+ */
+export interface OidcContextResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OidcContextResponse
+     */
+    acr_values: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcContextResponse
+     */
+    display: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof OidcContextResponse
+     */
+    id_token_hint_claims: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcContextResponse
+     */
+    login_hint: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OidcContextResponse
+     */
+    ui_locales: Array<string>;
 }
 /**
  * 
@@ -1100,6 +1542,19 @@ export interface RedirectBody {
      * The redirect url.
      * @type {string}
      * @memberof RedirectBody
+     */
+    redirect_to: string;
+}
+/**
+ * 
+ * @export
+ * @interface RedirectResponse
+ */
+export interface RedirectResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RedirectResponse
      */
     redirect_to: string;
 }
@@ -2370,6 +2825,43 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerExportCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'courseId', courseId)
+            const localVarPath = `/courses/export/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2423,6 +2915,16 @@ export const CoursesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerExportCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2444,6 +2946,15 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -2463,6 +2974,15 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 export interface CoursesApiInterface {
     /**
      * 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
@@ -2480,6 +3000,17 @@ export interface CoursesApiInterface {
  * @extends {BaseAPI}
  */
 export class CoursesApi extends BaseAPI implements CoursesApiInterface {
+    /**
+     * 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerExportCourse(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -3100,15 +3631,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListConsentSessions: async (userId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('oauthProviderControllerListConsentSessions', 'userId', userId)
-            const localVarPath = `/oauth2/auth/sessions/consent/{userId}`
-                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+        oauthProviderControllerListConsentSessions: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/oauth2/auth/sessions/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3282,18 +3809,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {string} client The Oauth2 client id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerRevokeConsentSession: async (userId: string, client: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('oauthProviderControllerRevokeConsentSession', 'userId', userId)
+        oauthProviderControllerRevokeConsentSession: async (client: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'client' is not null or undefined
             assertParamExists('oauthProviderControllerRevokeConsentSession', 'client', client)
-            const localVarPath = `/oauth2/auth/sessions/consent/{userId}`
-                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+            const localVarPath = `/oauth2/auth/sessions/consent`
+                .replace(`{${"client"}}`, encodeURIComponent(String(client)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3308,10 +3832,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (client !== undefined) {
-                localVarQueryParameter['client'] = client;
-            }
 
 
     
@@ -3413,7 +3933,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerAcceptLogoutRequest(challenge, redirectBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3423,7 +3943,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3443,7 +3963,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetConsentRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerGetConsentRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetConsentRequest(challenge, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3463,7 +3983,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerGetOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetOAuth2Client(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3488,12 +4008,11 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerListConsentSessions(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListConsentSessions(userId, options);
+        async oauthProviderControllerListConsentSessions(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ConsentSessionResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListConsentSessions(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3505,7 +4024,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OauthClientResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3517,7 +4036,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3535,13 +4054,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {string} client The Oauth2 client id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerRevokeConsentSession(userId, client, options);
+        async oauthProviderControllerRevokeConsentSession(client: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerRevokeConsentSession(client, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3551,7 +4069,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3581,7 +4099,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<string> {
+        oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<RedirectResponse> {
             return localVarFp.oauthProviderControllerAcceptLogoutRequest(challenge, redirectBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3590,7 +4108,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void> {
+        oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3608,7 +4126,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<void> {
+        oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<ConsentResponse> {
             return localVarFp.oauthProviderControllerGetConsentRequest(challenge, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3626,7 +4144,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<void> {
+        oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3648,12 +4166,11 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListConsentSessions(userId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.oauthProviderControllerListConsentSessions(userId, options).then((request) => request(axios, basePath));
+        oauthProviderControllerListConsentSessions(options?: any): AxiosPromise<Array<ConsentSessionResponse>> {
+            return localVarFp.oauthProviderControllerListConsentSessions(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3664,7 +4181,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<void> {
+        oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<Array<OauthClientResponse>> {
             return localVarFp.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3675,7 +4192,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<void> {
+        oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse> {
             return localVarFp.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3691,13 +4208,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} userId The user id.
          * @param {string} client The Oauth2 client id.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): AxiosPromise<void> {
-            return localVarFp.oauthProviderControllerRevokeConsentSession(userId, client, options).then((request) => request(axios, basePath));
+        oauthProviderControllerRevokeConsentSession(client: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthProviderControllerRevokeConsentSession(client, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3706,7 +4222,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void> {
+        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3734,7 +4250,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<string>;
+    oauthProviderControllerAcceptLogoutRequest(challenge: string, redirectBody: RedirectBody, options?: any): AxiosPromise<RedirectResponse>;
 
     /**
      * 
@@ -3743,7 +4259,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void>;
+    oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse>;
 
     /**
      * 
@@ -3761,7 +4277,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<ConsentResponse>;
 
     /**
      * 
@@ -3779,7 +4295,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse>;
 
     /**
      * 
@@ -3800,12 +4316,11 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @param {string} userId The user id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerListConsentSessions(userId: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerListConsentSessions(options?: any): AxiosPromise<Array<ConsentSessionResponse>>;
 
     /**
      * 
@@ -3817,7 +4332,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<Array<OauthClientResponse>>;
 
     /**
      * 
@@ -3828,7 +4343,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<void>;
+    oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse>;
 
     /**
      * 
@@ -3843,13 +4358,12 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @param {string} userId The user id.
      * @param {string} client The Oauth2 client id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerRevokeConsentSession(client: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -3859,7 +4373,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<void>;
+    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse>;
 
     /**
      * default route to test public access
@@ -3968,13 +4482,12 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @param {string} userId The user id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public oauthProviderControllerListConsentSessions(userId: string, options?: any) {
-        return DefaultApiFp(this.configuration).oauthProviderControllerListConsentSessions(userId, options).then((request) => request(this.axios, this.basePath));
+    public oauthProviderControllerListConsentSessions(options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerListConsentSessions(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4019,14 +4532,13 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @param {string} userId The user id.
      * @param {string} client The Oauth2 client id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public oauthProviderControllerRevokeConsentSession(userId: string, client: string, options?: any) {
-        return DefaultApiFp(this.configuration).oauthProviderControllerRevokeConsentSession(userId, client, options).then((request) => request(this.axios, this.basePath));
+    public oauthProviderControllerRevokeConsentSession(client: string, options?: any) {
+        return DefaultApiFp(this.configuration).oauthProviderControllerRevokeConsentSession(client, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4112,7 +4624,7 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerDelete(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async lessonControllerDelete(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerDelete(lessonId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -4132,7 +4644,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<void> {
+        lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean> {
             return localVarFp.lessonControllerDelete(lessonId, options).then((request) => request(axios, basePath));
         },
     };
@@ -4151,7 +4663,7 @@ export interface LessonApiInterface {
      * @throws {RequiredError}
      * @memberof LessonApiInterface
      */
-    lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<void>;
+    lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean>;
 
 }
 
@@ -5243,6 +5755,80 @@ export const SSOApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerGetHydraOauthToken: async (oauthClientId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauthClientId' is not null or undefined
+            assertParamExists('oauthSSOControllerGetHydraOauthToken', 'oauthClientId', oauthClientId)
+            const localVarPath = `/sso/hydra/{oauthClientId}`
+                .replace(`{${"oauthClientId"}}`, encodeURIComponent(String(oauthClientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerRequestAuthToken: async (oauthClientId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauthClientId' is not null or undefined
+            assertParamExists('oauthSSOControllerRequestAuthToken', 'oauthClientId', oauthClientId)
+            const localVarPath = `/sso/auth/{oauthClientId}`
+                .replace(`{${"oauthClientId"}}`, encodeURIComponent(String(oauthClientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5286,6 +5872,26 @@ export const SSOApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerGetHydraOauthToken(oauthClientId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerRequestAuthToken(oauthClientId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5306,6 +5912,24 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): AxiosPromise<object> {
+            return localVarFp.oauthSSOControllerGetHydraOauthToken(oauthClientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} oauthClientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): AxiosPromise<object> {
+            return localVarFp.oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} systemId The id of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5324,6 +5948,24 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
 export interface SSOApiInterface {
     /**
      * 
+     * @param {string} oauthClientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): AxiosPromise<object>;
+
+    /**
+     * 
+     * @param {string} oauthClientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): AxiosPromise<object>;
+
+    /**
+     * 
      * @param {string} systemId The id of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5340,6 +5982,28 @@ export interface SSOApiInterface {
  * @extends {BaseAPI}
  */
 export class SSOApi extends BaseAPI implements SSOApiInterface {
+    /**
+     * 
+     * @param {string} oauthClientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerGetHydraOauthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} oauthClientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} systemId The id of the system.
