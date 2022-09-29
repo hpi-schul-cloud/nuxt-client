@@ -37,6 +37,7 @@ export default class ShareCourseModule extends VuexModule {
 		this.setCourseId(undefined);
 		this.setShareModalOpen(false);
 		this.setShareUrl(undefined);
+		this.setHasQrCode(false);
 	}
 
 	@Action
