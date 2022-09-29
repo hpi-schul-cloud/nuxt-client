@@ -34,13 +34,16 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		// this generates a separate chunk (About.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
 		component: () => import("../pages/ImpressumPage.vue"),
+		meta: {
+			requiresLogin: false,
+		},
 	},
 	{
 		path: "/:catchAll(.*)",
 		name: "notFound",
 		component: NotFoundPage,
 		meta: {
-			requiresAuth: false,
+			requiresLogin: false,
 		},
 	},
 ];
