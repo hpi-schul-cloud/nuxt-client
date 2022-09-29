@@ -26,7 +26,7 @@
 					></v-custom-fab>
 				</slot>
 			</div>
-			<div class="border"></div>
+			<div v-if="headline" class="border"></div>
 		</div>
 		<v-container
 			:class="{
