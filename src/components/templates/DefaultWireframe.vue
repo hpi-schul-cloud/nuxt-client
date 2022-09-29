@@ -26,7 +26,7 @@
 					></v-custom-fab>
 				</slot>
 			</div>
-			<div v-if="headline" class="border"></div>
+			<div v-if="showBorder" class="border"></div>
 		</div>
 		<v-container
 			:class="{
@@ -96,6 +96,11 @@ export default {
 		ariaLabel: {
 			type: String,
 			default: "",
+		},
+	},
+	computed: {
+		showBorder() {
+			return this.headline || this.$slots.default;
 		},
 	},
 };
