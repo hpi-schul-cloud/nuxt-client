@@ -77,7 +77,6 @@ export default Vue.extend({
 		RoomWrapper,
 		vRoomAvatar,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			searchText: "",

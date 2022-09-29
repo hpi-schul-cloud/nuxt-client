@@ -1,17 +1,25 @@
 <template>
 	<legacy-logged-in>
-		<base-content-container id="main-content" tag="main" class="content">
-			<Nuxt />
-		</base-content-container>
+		<v-app class="content">
+			<v-main id="main-content">
+				<Nuxt />
+			</v-main>
+			<snackbar />
+			<loading-state-dialog />
+		</v-app>
 	</legacy-logged-in>
 </template>
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
+import Snackbar from "@components/molecules/Alert";
+import LoadingStateDialog from "@components/molecules/LoadingStateDialog";
 
 export default {
 	components: {
+		LoadingStateDialog,
 		LegacyLoggedIn,
+		Snackbar,
 	},
 };
 </script>
@@ -22,11 +30,14 @@ export default {
 .content {
 	grid-area: content;
 	width: inherit;
-	min-height: 100vh;
-	padding: 0 var(--space-lg);
+	max-width: 100vw;
 
 	@include breakpoint(tablet) {
-		padding: 0 var(--space-xl-3);
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
 	}
 }
 </style>

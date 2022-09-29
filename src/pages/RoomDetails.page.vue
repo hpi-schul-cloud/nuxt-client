@@ -156,7 +156,6 @@ export default defineComponent({
 		BaseQrCode,
 		CopyResultModal,
 	},
-	layout: "defaultVuetify",
 	inject: ["copyModule"],
 	data() {
 		return {

@@ -9,7 +9,7 @@ export default {
 	components: { Impressum },
 	layout(content) {
 		const userId = content.store.getters["auth/getUser"].id;
-		return userId && userId !== "" ? "defaultVuetify" : "loggedOut";
+		return userId && userId !== "" ? "default" : "loggedOut";
 	},
 	meta: {
 		isPublic: true,

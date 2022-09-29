@@ -13,7 +13,6 @@ import DefaultWireframe from "@components/templates/DefaultWireframe";
 
 export default {
 	components: { CommonTermsOfUse, DefaultWireframe },
-	layout: "defaultVuetify",
 	computed: {
 		consentVersion() {
 			return this.$store.getters["terms-and-conditions/getConsentVersion"];

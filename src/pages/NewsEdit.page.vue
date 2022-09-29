@@ -42,7 +42,6 @@ export default {
 		DefaultWireframe,
 		FormNews,
 	},
-	layout: "defaultVuetify",
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
