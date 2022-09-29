@@ -40,8 +40,10 @@
 </template>
 
 <script>
-import { defineComponent } from "@vue/composition-api";
 import { mdiContentCopy, mdiEmailOutline, mdiQrcode } from "@mdi/js";
+import { defineComponent } from "@vue/composition-api";
+
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalResult",
 	props: {

@@ -43,8 +43,9 @@ import BaseQrCode from "@basecomponents/BaseQrCode";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
 import ShareModalResult from "@components/share-modal/ShareModalResult";
-import { computed, inject, defineComponent, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModal",
 	components: {

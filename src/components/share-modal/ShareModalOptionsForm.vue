@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import { defineComponent, watch } from "@vue/composition-api";
 import { mdiInformation } from "@mdi/js";
-import { reactive } from "@vue/composition-api";
+import { defineComponent, reactive, watch } from "@vue/composition-api";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalOptionsForm",
 	// emits: ["shareOptionsChange"],
