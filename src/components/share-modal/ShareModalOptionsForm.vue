@@ -12,6 +12,7 @@
 		<div class="d-flex justify-space-between">
 			<div>Link nur schulintern gültig</div>
 			<v-switch
+				ref="switch-school-internally"
 				v-model="shareOptions.schoolInternally"
 				color="primary"
 				value
@@ -22,6 +23,7 @@
 		<div class="d-flex justify-space-between">
 			<div>Link läuft nach 7 Tagen ab</div>
 			<v-switch
+				ref="expires-in-seven-days"
 				v-model="shareOptions.expiresInSevenDays"
 				color="primary"
 				value
@@ -39,7 +41,7 @@ import { defineComponent, reactive, watch } from "@vue/composition-api";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalOptionsForm",
-	// emits: ["shareOptionsChange"],
+	emits: ["shareOptionsChange"],
 	setup(props, { emit }) {
 		const shareOptions = reactive({
 			schoolInternally: true,

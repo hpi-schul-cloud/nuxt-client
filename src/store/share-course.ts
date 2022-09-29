@@ -22,7 +22,6 @@ export default class ShareCourseModule extends VuexModule {
 
 	@Action
 	createShareUrl(payload: SharePayload): void {
-		console.log("--- payload", payload, payload.expiresInSevenDays);
 		this.setShareUrl("http://example.com");
 	}
 

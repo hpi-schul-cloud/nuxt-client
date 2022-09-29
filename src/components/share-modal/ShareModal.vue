@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import BaseQrCode from "@basecomponents/BaseQrCode";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
 import ShareModalResult from "@components/share-modal/ShareModalResult";
@@ -51,7 +50,6 @@ export default defineComponent({
 	components: {
 		ShareModalOptionsForm,
 		ShareModalResult,
-		BaseQrCode,
 		vCustomDialog,
 	},
 	setup() {
