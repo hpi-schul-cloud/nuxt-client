@@ -58,7 +58,7 @@
 				<hr class="mb-8" />
 				<div class="mb-4">
 					<div class="d-flex d-sm-flex justify-content-space-between">
-						<v-btn plain large :height="84">
+						<v-btn plain large :height="84" @click="onMailShareUrl(shareUrl)">
 							<span class="d-flex flex-column justify-content-center">
 								<span class="mb-2">
 									<v-icon large>{{ mdiEmailOutline }}</v-icon></span
@@ -96,14 +96,14 @@
 </template>
 
 <script>
+import BaseQrCode from "@basecomponents/BaseQrCode";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import {
-	mdiInformation,
-	mdiEmailOutline,
 	mdiContentCopy,
+	mdiEmailOutline,
+	mdiInformation,
 	mdiQrcode,
 } from "@mdi/js";
-import BaseQrCode from "@basecomponents/BaseQrCode";
 
 export default {
 	name: "ShareModal",
@@ -158,6 +158,13 @@ export default {
 		},
 		onNext() {
 			this.shareCourseModule.createShareUrl(this.shareOptions);
+		},
+		onMailShareUrl(shareUrl) {
+			const subject = `Kurs zum Importieren`;
+			const body = `Link zum Kurs:${shareUrl}`;
+			window.location.href = `mailto:?subject=${subject}&body=${encodeURIComponent(
+				body
+			)}`;
 		},
 		onCopy(shareUrl) {
 			navigator.clipboard.writeText(shareUrl);
