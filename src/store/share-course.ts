@@ -17,12 +17,12 @@ export interface SharePayload extends ShareOptions {
 export default class ShareCourseModule extends VuexModule {
 	private isShareModalOpen: boolean = false;
 	private courseId: string | undefined = undefined;
-	private shareUrl: string | undefined = "https://example.com";
+	private shareUrl: string | undefined = undefined;
 	private hasQrCode: boolean = false;
 
 	@Action
 	createShareUrl(payload: SharePayload): void {
-		console.log("--- payload", payload);
+		console.log("--- payload", payload, payload.expiresInSevenDays);
 		this.setShareUrl("http://example.com");
 	}
 
@@ -43,6 +43,11 @@ export default class ShareCourseModule extends VuexModule {
 	@Action
 	generateQrCode(): void {
 		this.setHasQrCode(true);
+	}
+
+	@Action
+	clearQrCode(): void {
+		this.setHasQrCode(false);
 	}
 
 	@Mutation
