@@ -1,7 +1,7 @@
 <template>
 	<v-custom-dialog
 		:is-open="isOpen"
-		data-testid="copy-dialog"
+		data-testid="share-dialog"
 		:size="480"
 		has-buttons
 		:buttons="actionButtons"
@@ -75,7 +75,7 @@ export default defineComponent({
 		});
 		modalOptions.value.set(2, {
 			title: "Teilen über",
-			actionButtons: ["close"],
+			actionButtons: ["cancel"],
 		});
 		modalOptions.value.set(3, {
 			title: "QR-Code teilen",

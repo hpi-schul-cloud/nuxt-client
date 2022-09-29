@@ -1,10 +1,11 @@
 <template>
 	<div>
-		<div class="grey lighten-3 px-3 py-1">
-			<div class="text-xs grey--text text--darken-3">Link Kurskopie</div>
-			<div class="black--text">{{ shareUrl }}</div>
-		</div>
-		<hr class="mb-8" />
+		<v-text-field
+			filled
+			:value="shareUrl"
+			readonly
+			label="Link Kurskopie"
+		></v-text-field>
 		<div class="mb-4">
 			<div class="d-flex d-sm-flex justify-content-space-between">
 				<v-btn plain large :height="84" @click="onMailShareUrl(shareUrl)">
@@ -29,6 +30,8 @@
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
 						<span>QR-Code scannen</span>
+						<!--         WIP   move QR Code component here and remove from state and remove step 3 -->
+						<!--            WIP use native share function on smartphones and tables-->
 					</span>
 				</v-btn>
 			</div>
