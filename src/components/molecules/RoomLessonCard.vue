@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		:outlined="isHidden"
 		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
@@ -339,8 +340,6 @@ export default {
 }
 
 .hidden-lesson {
-	box-shadow: none;
-
 	.lesson-name {
 		opacity: 0.5;
 	}

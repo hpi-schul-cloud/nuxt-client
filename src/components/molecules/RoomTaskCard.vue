@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		:outlined="isDraft"
 		hover
 		data-testid="content-card-task"
 		@click="handleClick"
@@ -467,8 +468,6 @@ export default {
 }
 
 .task-hidden {
-	box-shadow: none;
-
 	.task-name,
 	.text-description,
 	.submitted-section {
