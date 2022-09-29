@@ -32,18 +32,20 @@
 						:data-testid="`room-${roomData.roomId}-files`"
 						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
-          <v-btn
-              color="secondary"
-              class="back-button"
-              outlined
-              small
-              :data-testid="`room-${roomData.roomId}-export`"
-              @click.prevent="downloadCourse({
-                courseId: roomData.roomId,
-                filename: `${roomData.title}-${Date.now().toString()}.json`
-              })"
-          >{{ "Kurs herunterladen" }}
-          </v-btn>
+					<v-btn
+						color="secondary"
+						class="back-button"
+						outlined
+						small
+						:data-testid="`room-${roomData.roomId}-export`"
+						@click.prevent="
+							downloadCourse({
+								courseId: roomData.roomId,
+								filename: `${roomData.title}-${Date.now().toString()}.json`,
+							})
+						"
+						>{{ "Kurs herunterladen" }}
+					</v-btn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -122,7 +124,10 @@
 </template>
 
 <script>
-import { CoursesApiFactory, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	CoursesApiFactory,
+	ImportUserResponseRoleNamesEnum as Roles,
+} from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
@@ -324,15 +329,19 @@ export default defineComponent({
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
-    async downloadCourse({ courseId, filename }) {
-      const response = await CoursesApiFactory(undefined, "/v3", $axios).courseControllerExportCourse(courseId, { responseType: "json" });
-      const blob = new Blob([response.data], { type: "application/json" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    },
+		async downloadCourse({ courseId, filename }) {
+			const response = await CoursesApiFactory(
+				undefined,
+				"/v3",
+				$axios
+			).courseControllerExportCourse(courseId, { responseType: "json" });
+			const blob = new Blob([response.data], { type: "application/json" });
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(blob);
+			link.download = filename;
+			link.click();
+			URL.revokeObjectURL(link.href);
+		},
 		async inviteCourse() {
 			await roomModule.createCourseInvitation(this.courseId);
 			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
