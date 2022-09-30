@@ -69,7 +69,7 @@ export default defineComponent({
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
-			title: "Teilen Einstellungen",
+			title: "Teilen-Einstellungen",
 			actionButtons: ["cancel", "next"],
 		});
 		modalOptions.value.set(2, {
