@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .grid {
 	display: grid;
 	grid-gap: var(--space-md);

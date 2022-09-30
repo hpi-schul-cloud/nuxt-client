@@ -21,8 +21,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .actions-container {
 	display: grid;
 	grid-template-areas: "primary" "secondary";

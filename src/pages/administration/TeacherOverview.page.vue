@@ -563,8 +563,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 a.action-button {
 	&.row-highlighted:hover {
 		background-color: var(--color-white);

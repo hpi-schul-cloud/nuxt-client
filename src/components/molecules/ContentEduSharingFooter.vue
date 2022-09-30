@@ -12,8 +12,6 @@
 </template>
 
 <style lang="scss">
-@import "@styles";
-
 .edusharing-footer {
 	display: flex;
 	justify-content: center;

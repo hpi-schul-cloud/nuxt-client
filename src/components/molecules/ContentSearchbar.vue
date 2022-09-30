@@ -102,8 +102,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .search {
 	display: flex;
 	align-items: center;

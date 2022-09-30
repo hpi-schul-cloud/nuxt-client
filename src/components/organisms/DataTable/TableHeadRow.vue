@@ -320,8 +320,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .table__row {
 	font-weight: var(--font-weight-bold);
 

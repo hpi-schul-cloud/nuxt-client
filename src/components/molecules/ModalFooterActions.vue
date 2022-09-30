@@ -25,8 +25,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .actions {
 	padding: 0;
 	background-color: var(--color-secondary);

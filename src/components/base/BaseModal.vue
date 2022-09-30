@@ -98,8 +98,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .line {
 	border: 1px solid black;
 }

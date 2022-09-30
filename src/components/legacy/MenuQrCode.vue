@@ -37,8 +37,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .qrcode {
 	margin: var(--space-md);
 }

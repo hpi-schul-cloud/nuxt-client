@@ -17,8 +17,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .content {
 	grid-area: content;
 	width: inherit;

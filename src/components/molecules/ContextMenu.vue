@@ -216,8 +216,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .context-menu {
 	--transition-duration: var(--duration-transition-fast);
 

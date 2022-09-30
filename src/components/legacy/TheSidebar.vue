@@ -105,9 +105,6 @@ export default {
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-
-@import "@styles";
-
 @keyframes menu-expand {
 	from {
 		transform: translateY(-100%);

@@ -158,6 +158,9 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
+		styleResources: {
+			scss: "./src/themes/" + themeName + "/styles/index.scss",
+		},
 		transpile: ["vue-echarts", "resize-detector", "vuex-module-decorators"],
 		/*
 		 ** You can extend webpack config here

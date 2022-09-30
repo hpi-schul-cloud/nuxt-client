@@ -149,8 +149,6 @@ export default {
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-@import "@styles";
-
 .topbar {
 	display: flex;
 	align-items: center;

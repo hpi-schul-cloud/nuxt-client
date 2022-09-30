@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .border {
 	margin: 0 var(--space-md);
 	border-top: 1px solid black;

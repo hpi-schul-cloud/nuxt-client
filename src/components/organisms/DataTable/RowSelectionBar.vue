@@ -114,8 +114,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .row-selection-info {
 	display: flex;
 	flex-wrap: wrap;

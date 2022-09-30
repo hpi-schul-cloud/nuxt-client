@@ -623,8 +623,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .button {
 	float: right;
 	margin-left: var(--space-sm);

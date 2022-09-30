@@ -69,8 +69,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .menu {
 	position: relative;
 	color: var(--color-secondary);

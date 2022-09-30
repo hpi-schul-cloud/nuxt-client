@@ -86,8 +86,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .header {
 	position: sticky;
 	position: -webkit-sticky;

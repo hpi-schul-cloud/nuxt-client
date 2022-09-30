@@ -236,8 +236,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .subtitle-text {
 	margin-top: var(--space-xl);
 }

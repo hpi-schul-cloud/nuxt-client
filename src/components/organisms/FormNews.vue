@@ -230,8 +230,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 1s;

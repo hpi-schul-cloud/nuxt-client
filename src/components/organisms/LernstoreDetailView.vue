@@ -303,8 +303,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 $tablet-portrait-width: 768px;
 
 .resource {

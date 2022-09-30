@@ -135,8 +135,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@styles";
-
 .text-only {
 	text-decoration: none;
 }
