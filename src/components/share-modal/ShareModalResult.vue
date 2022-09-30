@@ -4,7 +4,7 @@
 			filled
 			:value="shareUrl"
 			readonly
-			label="Link Kurskopie"
+			:label="`${$t('components.molecules.shareCourse.result.linkLabel')}`"
 		></v-text-field>
 		<div class="mb-4">
 			<div class="d-flex d-sm-flex justify-content-space-between">
@@ -13,7 +13,9 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
-						<span>Als Mail versenden</span>
+						<span>{{
+							$t("components.molecules.shareCourse.result.mailShare")
+						}}</span>
 					</span>
 				</v-btn>
 				<v-btn plain large :height="84" @click="onCopy(shareUrl)">
@@ -21,7 +23,9 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
-						<span>Link kopieren</span>
+						<span>{{
+							$t("components.molecules.shareCourse.result.copyClipboard")
+						}}</span>
 					</span>
 				</v-btn>
 				<v-btn plain large :height="84" @click="onGenerateQrCode">
@@ -29,7 +33,9 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
-						<span>QR-Code scannen</span>
+						<span>{{
+							$t("components.molecules.shareCourse.result.qrCodeScan")
+						}}</span>
 						<!--            WIP use native share function on smartphones and tables-->
 					</span>
 				</v-btn>
@@ -47,9 +53,9 @@
 </template>
 
 <script>
-import { mdiContentCopy, mdiEmailOutline, mdiQrcode } from "@mdi/js";
-import { defineComponent, ref } from "@vue/composition-api";
 import BaseQrCode from "@basecomponents/BaseQrCode";
+import { mdiContentCopy, mdiEmailOutline, mdiQrcode } from "@mdi/js";
+import { defineComponent, inject, ref } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -63,10 +69,25 @@ export default defineComponent({
 			required: true,
 		},
 	},
+	inject: ["i18n"],
 	setup(props, { emit }) {
+		const i18n = inject("i18n");
+
+		const t = (key) => {
+			const translateResult = i18n?.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const onMailShareUrl = (shareUrl) => {
-			const subject = `Kurs zum Importieren`;
-			const body = encodeURIComponent(`Link zum Kurs: ${shareUrl}`);
+			const subject = encodeURIComponent(
+				t("components.molecules.shareCourse.mail.subject")
+			);
+			const body = encodeURIComponent(
+				t("components.molecules.shareCourse.mail.body") + shareUrl
+			);
 			window.location.assign(`mailto:?subject=${subject}&body=${body}`);
 			emit("done");
 		};
