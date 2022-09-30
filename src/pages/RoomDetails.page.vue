@@ -125,6 +125,7 @@ import {
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
+import ShareModal from "@components/share-modal/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
@@ -140,7 +141,6 @@ import {
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
-import ShareModal from "@components/share-modal/ShareModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -272,12 +272,6 @@ export default defineComponent({
 						this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
-				{
-					icon: this.icons.mdiEmailPlusOutline,
-					action: () => this.inviteCourse(),
-					name: this.$t("common.actions.invite"),
-					dataTestId: "title-menu-invite",
-				},
 			];
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -288,11 +282,19 @@ export default defineComponent({
 					dataTestId: "title-menu-copy",
 				});
 			}
+
+			items.push({
+				icon: this.icons.mdiEmailPlusOutline,
+				action: () => this.inviteCourse(),
+				name: this.$t("common.actions.invite"),
+				dataTestId: "title-menu-invite",
+			});
+
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
-					name: this.$t("common.actions.share"),
+					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
 				});
 			}
