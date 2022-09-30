@@ -100,7 +100,7 @@ export default {
 	},
 	computed: {
 		showBorder() {
-			return this.headline || this.$slots.default;
+			return this.headline || this.$slots.header;
 		},
 	},
 };
