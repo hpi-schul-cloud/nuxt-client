@@ -1,7 +1,9 @@
 <template>
 	<div class="black--text">
 		<div class="d-flex justify-space-between">
-			<div>Link nur schulintern gültig</div>
+			<div class="mt-1">
+				{{ $t("components.molecules.shareCourse.options.schoolInternally") }}
+			</div>
 			<v-switch
 				ref="switch-school-internally"
 				v-model="shareOptions.schoolInternally"
@@ -12,7 +14,9 @@
 			></v-switch>
 		</div>
 		<div class="d-flex justify-space-between">
-			<div>Link läuft nach 7 Tagen ab</div>
+			<div class="mt-1">
+				{{ $t("components.molecules.shareCourse.options.expiresInSevenDays") }}
+			</div>
 			<v-switch
 				ref="expires-in-seven-days"
 				v-model="shareOptions.expiresInSevenDays"

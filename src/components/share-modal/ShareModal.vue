@@ -24,9 +24,7 @@
 						}}</v-icon>
 					</div>
 					<div class="black--text">
-						Mit dem folgenden Link kann der Kurs als Kopie von anderen
-						Lehrkräften importiert werden. Personenbezogene Daten werden dabei
-						nicht importiert.
+						{{ $t("components.molecules.shareCourse.options.infoText") }}
 					</div>
 				</div>
 				<share-modal-options-form
@@ -50,12 +48,12 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script type="">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
 import ShareModalResult from "@components/share-modal/ShareModalResult";
-import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 import { mdiInformation } from "@mdi/js";
+import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -65,7 +63,18 @@ export default defineComponent({
 		ShareModalResult,
 		vCustomDialog,
 	},
+	inject: ["i18n"],
 	setup() {
+		const i18n = inject("i18n");
+
+		const t = (key) => {
+			const translateResult = i18n?.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const shareCourseModule = inject("shareCourseModule");
 		const isOpen = computed({
 			get: () => shareCourseModule.getIsShareModalOpen,
@@ -78,11 +87,11 @@ export default defineComponent({
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
-			title: "Teilen-Einstellungen",
+			title: t("components.molecules.shareCourse.options.title"),
 			actionButtons: ["cancel", "next"],
 		});
 		modalOptions.value.set(2, {
-			title: "Teilen über",
+			title: t("components.molecules.shareCourse.result.title"),
 			actionButtons: ["cancel"],
 		});
 
