@@ -15,25 +15,37 @@
 
 		<template slot="content">
 			<div v-if="step === 1">
+				<div
+					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
+				>
+					<div class="mx-2">
+						<v-icon class="blue--text text--darken-1">{{
+							mdiInformation
+						}}</v-icon>
+					</div>
+					<div class="black--text">
+						Mit dem folgenden Link kann der Kurs als Kopie von anderen
+						Lehrkräften importiert werden. Personenbezogene Daten werden dabei
+						nicht importiert.
+					</div>
+				</div>
 				<share-modal-options-form
 					@share-options-change="onShareOptionsChange"
 				></share-modal-options-form>
-				{{ shareOptions }}
 			</div>
 
 			<div v-if="step === 2">
 				<share-modal-result
 					:share-url="shareUrl"
 					@done="onDone"
-					@generate-qr-code="onGenerateQrCode(shareOptions)"
 				></share-modal-result>
 			</div>
 
-			<div v-if="step === 3">
-				<div class="d-flex py-6 justify-content-center">
-					<base-qr-code :url="shareUrl"> </base-qr-code>
-				</div>
-			</div>
+			<!--			<div v-if="step === 3">-->
+			<!--				<div class="d-flex py-6 justify-content-center">-->
+			<!--					<base-qr-code :url="shareUrl" mirrored> </base-qr-code>-->
+			<!--				</div>-->
+			<!--			</div>-->
 		</template>
 	</v-custom-dialog>
 </template>
@@ -43,6 +55,7 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
 import ShareModalResult from "@components/share-modal/ShareModalResult";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
+import { mdiInformation } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -60,11 +73,7 @@ export default defineComponent({
 		});
 
 		const step = computed(() =>
-			shareCourseModule.getShareUrl === undefined
-				? 1
-				: !shareCourseModule.getHasQrCode
-				? 2
-				: 3
+			shareCourseModule.getShareUrl === undefined ? 1 : 2
 		);
 
 		const modalOptions = computed(() => new Map([]));
@@ -75,10 +84,6 @@ export default defineComponent({
 		modalOptions.value.set(2, {
 			title: "Teilen über",
 			actionButtons: ["cancel"],
-		});
-		modalOptions.value.set(3, {
-			title: "QR-Code teilen",
-			actionButtons: ["back", "close"],
 		});
 
 		const shareUrl = computed(() => shareCourseModule.getShareUrl);
@@ -105,9 +110,6 @@ export default defineComponent({
 		const onDone = () => {
 			shareCourseModule.resetShareFlow();
 		};
-		const onGenerateQrCode = (newValue) => {
-			shareCourseModule.generateQrCode(newValue);
-		};
 
 		const onBack = () => {
 			shareCourseModule.clearQrCode();
@@ -118,7 +120,6 @@ export default defineComponent({
 			onCloseDialog,
 			onNext,
 			onDone,
-			onGenerateQrCode,
 			onBack,
 			step,
 			actionButtons,
@@ -126,6 +127,7 @@ export default defineComponent({
 			shareUrl,
 			isOpen,
 			shareOptions,
+			mdiInformation,
 		};
 	},
 });

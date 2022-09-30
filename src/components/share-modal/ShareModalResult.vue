@@ -30,22 +30,33 @@
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
 						<span>QR-Code scannen</span>
-						<!--         WIP   move QR Code component here and remove from state and remove step 3 -->
 						<!--            WIP use native share function on smartphones and tables-->
 					</span>
 				</v-btn>
 			</div>
 		</div>
+		<v-expand-transition>
+			<div
+				v-if="isShowQrCode"
+				class="d-flex justify-content-center overflow-hidden"
+			>
+				<base-qr-code :url="shareUrl"></base-qr-code>
+			</div>
+		</v-expand-transition>
 	</div>
 </template>
 
 <script>
 import { mdiContentCopy, mdiEmailOutline, mdiQrcode } from "@mdi/js";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, ref } from "@vue/composition-api";
+import BaseQrCode from "@basecomponents/BaseQrCode";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalResult",
+	components: {
+		BaseQrCode,
+	},
 	props: {
 		shareUrl: {
 			type: String,
@@ -65,14 +76,16 @@ export default defineComponent({
 			emit("done");
 		};
 
+		const isShowQrCode = ref(false);
 		const onGenerateQrCode = () => {
-			emit("generate-qr-code");
+			isShowQrCode.value = true;
 		};
 
 		return {
 			onMailShareUrl,
 			onCopy,
 			onGenerateQrCode,
+			isShowQrCode,
 			mdiEmailOutline,
 			mdiContentCopy,
 			mdiQrcode,
