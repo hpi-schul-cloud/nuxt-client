@@ -40,6 +40,7 @@
 	</v-container>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/composition-api";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import vCustomFab from "@components/atoms/vCustomFab.vue";
 
@@ -68,7 +69,8 @@ export type Fab = {
 	href?: String;
 };
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
 	components: {
 		vCustomBreadcrumbs,
 		vCustomFab,
@@ -99,11 +101,11 @@ export default {
 		},
 	},
 	computed: {
-		showBorder() {
-			return this.headline || this.$slots.header;
+		showBorder(): boolean {
+			return !!(this.headline || this.$slots.header);
 		},
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
