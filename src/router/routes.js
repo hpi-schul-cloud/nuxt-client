@@ -155,4 +155,9 @@ export const routes = [
 		component: () => interopDefault(import("../pages/TermsOfUse.vue")),
 		name: "termsofuse",
 	},
+	{
+		path: "/poc-colors",
+		component: () => interopDefault(import("../pages/Colors.vue")),
+		name: "colors",
+	},
 ];
