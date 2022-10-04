@@ -98,7 +98,7 @@ export default {
 	}
 
 	&.selected {
-		color: var(--color-on-tertiary-light);
+		color: var(--v-white-base);
 		background-color: var(--color-secondary-light);
 		border-top: 1px solid var(--color-white);
 		border-bottom: 1px solid var(--color-white);
