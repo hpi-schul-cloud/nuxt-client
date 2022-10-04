@@ -8,13 +8,14 @@ import ShareModal from "./ShareModal.vue";
 describe("@components/share-modal/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
 
-	const mountComponent = (attrs = {}) => {
+	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ShareModal, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			setup() {
 				provide("shareCourseModule", shareCourseModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});
@@ -31,7 +32,7 @@ describe("@components/share-modal/ShareModal", () => {
 		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
 			getIsShareModalOpen: true,
 		});
-		const wrapper = mountComponent();
+		const wrapper = getWrapper();
 
 		const switches = wrapper.findAllComponents({ name: "v-switch" });
 

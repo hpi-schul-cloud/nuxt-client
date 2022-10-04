@@ -16,6 +16,7 @@
 					large
 					class="d-sm-none d-flex"
 					:height="84"
+					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
 					<span class="d-flex flex-column justify-content-center">
@@ -30,6 +31,7 @@
 					large
 					:height="84"
 					class="d-sm-flex d-none"
+					data-testid="shareMailAction"
 					@click="onMailShareUrl(shareUrl)"
 				>
 					<span class="d-flex flex-column justify-content-center">
@@ -47,6 +49,7 @@
 					large
 					:height="84"
 					class="d-sm-flex d-none"
+					data-testid="copyAction"
 					@click="onCopy(shareUrl)"
 				>
 					<span class="d-flex flex-column justify-content-center">
@@ -59,7 +62,13 @@
 					</span>
 				</v-btn>
 
-				<v-btn plain large :height="84" @click="onGenerateQrCode">
+				<v-btn
+					plain
+					large
+					:height="84"
+					data-testid="qrCodeAction"
+					@click="onShowQrCode"
+				>
 					<span class="d-flex flex-column justify-content-center">
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
@@ -67,7 +76,6 @@
 						<span>{{
 							$t("components.molecules.shareCourse.result.qrCodeScan")
 						}}</span>
-						<!--            WIP use native share function on smartphones and tables-->
 					</span>
 				</v-btn>
 			</div>
@@ -76,7 +84,7 @@
 			v-if="isShowQrCode"
 			class="d-flex justify-content-center overflow-hidden"
 		>
-			<base-qr-code :url="shareUrl"></base-qr-code>
+			<base-qr-code :url="shareUrl" data-testid="qrCode"></base-qr-code>
 		</div>
 	</div>
 </template>
@@ -138,19 +146,19 @@ export default defineComponent({
 						url: shareUrl,
 					})
 					.then(() => emit("done"))
-					.catch((error) => console.log("Error sharing", error)); // WIP
+					.catch();
 			}
 		};
 
 		const isShowQrCode = ref(false);
-		const onGenerateQrCode = () => {
+		const onShowQrCode = () => {
 			isShowQrCode.value = true;
 		};
 
 		return {
 			onMailShareUrl,
 			onCopy,
-			onGenerateQrCode,
+			onShowQrCode,
 			onShareMobilePlatflorm,
 			isShowQrCode,
 			mdiEmailOutline,
