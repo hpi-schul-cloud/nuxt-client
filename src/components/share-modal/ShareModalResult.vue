@@ -7,7 +7,10 @@
 			:label="`${$t('components.molecules.shareCourse.result.linkLabel')}`"
 		></v-text-field>
 		<div class="mb-4">
-			<div class="d-flex flex-sm-row flex-column justify-content-space-between">
+			<div
+				v-if="!isShowQrCode"
+				class="d-flex flex-sm-row flex-column justify-content-space-between"
+			>
 				<v-btn
 					plain
 					large
@@ -17,12 +20,9 @@
 				>
 					<span class="d-flex flex-column justify-content-center">
 						<span class="mb-2">
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span>{{
-							// $t("components.molecules.shareCourse.result.mailShare")
-							"Share Mobile"
-						}}</span>
+						<span>{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -72,20 +72,23 @@
 				</v-btn>
 			</div>
 		</div>
-		<v-expand-transition>
-			<div
-				v-if="isShowQrCode"
-				class="d-flex justify-content-center overflow-hidden"
-			>
-				<base-qr-code :url="shareUrl"></base-qr-code>
-			</div>
-		</v-expand-transition>
+		<div
+			v-if="isShowQrCode"
+			class="d-flex justify-content-center overflow-hidden"
+		>
+			<base-qr-code :url="shareUrl"></base-qr-code>
+		</div>
 	</div>
 </template>
 
 <script>
 import BaseQrCode from "@basecomponents/BaseQrCode";
-import { mdiContentCopy, mdiEmailOutline, mdiQrcode } from "@mdi/js";
+import {
+	mdiContentCopy,
+	mdiEmailOutline,
+	mdiQrcode,
+	mdiShareVariant,
+} from "@mdi/js";
 import { defineComponent, inject, ref } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -134,8 +137,8 @@ export default defineComponent({
 					.share({
 						url: shareUrl,
 					})
-					.then(() => console.log("Successful share"))
-					.catch((error) => console.log("Error sharing", error));
+					.then(() => emit("done"))
+					.catch((error) => console.log("Error sharing", error)); // WIP
 			}
 		};
 
@@ -153,6 +156,7 @@ export default defineComponent({
 			mdiEmailOutline,
 			mdiContentCopy,
 			mdiQrcode,
+			mdiShareVariant,
 		};
 	},
 });

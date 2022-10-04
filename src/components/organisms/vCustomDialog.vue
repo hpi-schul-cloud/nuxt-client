@@ -4,7 +4,7 @@
 		:value="isOpen"
 		:max-width="size"
 		@click:outside="$emit('dialog-closed', false)"
-		@keydown.esc="$emit('dialog-closed', false)"
+    @keydown.esc="$emit('dialog-closed', false)"
 	>
 		<v-card :ripple="false">
 			<v-card-title data-testid="dialog-title">

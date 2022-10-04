@@ -4,46 +4,42 @@
 		data-testid="share-dialog"
 		:size="480"
 		has-buttons
-		:buttons="actionButtons"
+		:buttons="isOpen ? actionButtons : []"
 		@dialog-closed="onCloseDialog"
 		@next="onNext(shareOptions)"
-		@back="onBack"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2">
 			{{ modalTitle }}
 		</div>
 
 		<template slot="content">
-			<div v-if="step === 1">
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-				>
-					<div class="mx-2">
-						<v-icon class="blue--text text--darken-1">{{
-							mdiInformation
-						}}</v-icon>
+			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
+			<v-fade-transition>
+				<div v-if="step === 1 && isOpen">
+					<div
+						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
+					>
+						<div class="mx-2">
+							<v-icon class="blue--text text--darken-1">{{
+								mdiInformation
+							}}</v-icon>
+						</div>
+						<div class="black--text">
+							{{ $t("components.molecules.shareCourse.options.infoText") }}
+						</div>
 					</div>
-					<div class="black--text">
-						{{ $t("components.molecules.shareCourse.options.infoText") }}
-					</div>
+					<share-modal-options-form
+						@share-options-change="onShareOptionsChange"
+					></share-modal-options-form>
 				</div>
-				<share-modal-options-form
-					@share-options-change="onShareOptionsChange"
-				></share-modal-options-form>
-			</div>
 
-			<div v-if="step === 2">
-				<share-modal-result
-					:share-url="shareUrl"
-					@done="onDone"
-				></share-modal-result>
-			</div>
-
-			<!--			<div v-if="step === 3">-->
-			<!--				<div class="d-flex py-6 justify-content-center">-->
-			<!--					<base-qr-code :url="shareUrl" mirrored> </base-qr-code>-->
-			<!--				</div>-->
-			<!--			</div>-->
+				<div v-if="step === 2 && isOpen">
+					<share-modal-result
+						:share-url="shareUrl"
+						@done="onDone"
+					></share-modal-result>
+				</div>
+			</v-fade-transition>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -120,16 +116,11 @@ export default defineComponent({
 			shareCourseModule.resetShareFlow();
 		};
 
-		const onBack = () => {
-			shareCourseModule.clearQrCode();
-		};
-
 		return {
 			onShareOptionsChange,
 			onCloseDialog,
 			onNext,
 			onDone,
-			onBack,
 			step,
 			actionButtons,
 			modalTitle,
