@@ -11,11 +11,11 @@ const custom = {
 				},
 				secondary: {
 					base: "#54616e",
-					lighten1: "#8A9199",
-					darken1: "#3A424B",
+					lighten1: "#8a9199",
+					darken1: "#3a424b",
 				},
 				accent: {
-					base: "#E98404",
+					base: "#e98404",
 				},
 			},
 		},
