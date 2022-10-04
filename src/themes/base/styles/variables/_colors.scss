@@ -3,41 +3,46 @@ $darken: 25%;
 
 :root {
 	/* main colors */
-	--color-primary: #9e292b;
+	--color-primary: #9e292b; // new: --v-primary-base
 	// --color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	// new: --v-primary-darken1
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
-	--color-secondary: #54616e;
-	--color-secondary-light: #617480;
-	--color-secondary-dark: #344450;
-	--color-accent: #e98404;
+	--color-secondary: #54616e; // new: --v-secondary-base
+	--color-secondary-light: #617480; // new: --v-secondary-lighten1
+	--color-secondary-dark: #344450; // new: --v-secondary-darken1
+	--color-accent: #e98404; // new: --v-accent-base
 	// --color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
-	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
+	// --color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 
 	//  shades
-	--color-black: #1b1b1b;
-	--color-gray: #aaa;
-	--color-gray-light: #eee;
+	--color-black: #1b1b1b; // new: --v-black-base
+	--color-gray: #aaa; // new: --v-gray-base
+	--color-gray-light: #eee; // new: --v-gray-lighten1
 	// --color-gray-medium: #616161;
-	--color-gray-dark: #444;
-	--color-white: #fff;
-	--color-overlay-dark: rgba(0, 0, 0, 0.5);
-	--color-overlay-light: rgb(255, 255, 255, 0.5);
+	--color-gray-dark: #444; // new: --v-gray-darken1
+	--color-white: #fff; // new: --v-white-base
+	--color-overlay-dark: rgba(0, 0, 0, 0.5); // muss weg!
+	// DONE --color-overlay-light: rgb(255, 255, 255, 0.5); // muss weg!
 
 	/* feedback */
-	--color-info: #0a7ac9;
+	--color-info: #0a7ac9; // new: --v-info-base
 	// --color-info-light: color-mod(var(--color-info) tint(#{$brighten}));
+	// new: --v-info-darken1
 	--color-info-dark: color-mod(var(--color-info) shade(#{$darken}));
-	--color-success: #13ba98;
+	--color-success: #13ba98; // new: --v-success-base
 	// --color-success-light: color-mod(var(--color-success) tint(#{$brighten}));
+	// new: --v-success-darken1
 	--color-success-dark: color-mod(var(--color-success) shade(#{$darken}));
-	--color-warning: #ff8311;
+	--color-warning: #ff8311; // new: --v-warning-base
 	// --color-warning-light: color-mod(var(--color-warning) tint(#{$brighten}));
 	// --color-warning-dark: color-mod(var(--color-warning) shade(#{$darken}));
-	--color-danger: #ff1134;
+	--color-danger: #ff1134; // new: --v-error-base
 	// --color-danger-light: color-mod(var(--color-danger) tint(#{$brighten}));
-	--color-danger-dark: color-mod(var(--color-danger) shade(#{$darken}));
-	--color-disabled: #d9d9d9;
-	--color-disabled-dark: #9e9e9e;
+	--color-danger-dark: color-mod(
+		var(--color-danger) shade(#{$darken})
+	); // new: --v-error-darken1
+	// DONE --color-disabled: #d9d9d9; // new: --v-gray-lighten2
+	// DONE --color-disabled-dark: #9e9e9e; // new: --v-gray-base
 
 	/* text colors */
 	// --color-on-primary: var(--color-white);
@@ -50,7 +55,7 @@ $darken: 25%;
 	// --color-on-accent-light: var(--color-white);
 	// --color-on-accent-dark: var(--color-white);
 	// --color-on-tertiary: var(--color-white);
-	--color-on-tertiary-light: var(--color-white); //  erbt nur von oben
+	// DONE --color-on-tertiary-light: var(--color-white); // new: --v-white-base
 	// --color-on-tertiary-dark: var(--color-white);
 	// --color-on-black: var(--color-white);
 	// --color-on-gray: var(--color-white);
@@ -75,7 +80,9 @@ $darken: 25%;
 	// --color-on-disabled-dark: var(--color-white);
 
 	/* theme */
-	--color-sidebar-active-bg: var(--color-gray-light); //  erbt nur von oben
-	--color-sidebar-menu-item: var(--color-secondary); //  erbt nur von oben
-	--color-sidebar-menu-item-active: var(--color-primary); //  erbt nur von oben
+	// DONE --color-sidebar-active-bg: var(--color-gray-light); // new: --v-gray-lighten1
+	// DONE --color-sidebar-menu-item: var(--color-secondary); // new: --v-secondary-base
+	// DONE --color-sidebar-menu-item-active: var(
+	// DONE 	--color-primary
+	// DONE ); // new: --v-primary-base
 }
