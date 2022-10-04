@@ -37,8 +37,8 @@
 								:source="route.source || 'fa'"
 								:fill="
 									route.active || route.childActive
-										? 'var(--color-sidebar-menu-item-active)'
-										: 'var(--color-sidebar-menu-item)'
+										? 'var(--v-primary-base)'
+										: 'var(--v-secondary-base)'
 								"
 								class="icon"
 							/>
@@ -65,8 +65,8 @@
 									:source="child.source || 'fa'"
 									:fill="
 										child.active
-											? 'var(--color-sidebar-menu-item-active)'
-											: 'var(--color-sidebar-menu-item)'
+											? 'var(--v-primary-base)'
+											: 'var(--v-secondary-base)'
 									"
 									class="icon"
 								/>
@@ -225,7 +225,7 @@ export default {
 					padding: 0 20px;
 					font-size: 16px;
 					line-height: 100%;
-					color: var(--color-sidebar-menu-item);
+					color: var(--v-secondary-base);
 					border-bottom: none;
 
 					.icon {
@@ -255,14 +255,14 @@ export default {
 
 				&:hover,
 				&.active {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--color-sidebar-active-bg);
+					background-color: var(--v-gray-lighten1);
 				}
 
 				&.active .list-content,
 				&.child-active .list-content {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 				}
 			}
 		}
