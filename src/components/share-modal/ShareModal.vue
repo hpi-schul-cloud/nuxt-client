@@ -24,7 +24,7 @@
 								mdiInformation
 							}}</v-icon>
 						</div>
-						<div class="black--text">
+						<div>
 							{{ $t("components.molecules.shareCourse.options.infoText") }}
 						</div>
 					</div>
