@@ -102,7 +102,7 @@ export default {
 		color: var(--color-black);
 		white-space: nowrap;
 		background-color: var(--color-white);
-		border: 1px solid var(--color-disabled);
+		border: 1px solid var(--v-gray-lighten2);
 		border-radius: var(--radius-sm);
 
 		.username {
@@ -112,7 +112,7 @@ export default {
 			margin-bottom: 5px;
 			/* stylelint-enable */
 			white-space: normal;
-			border-bottom: 1px solid var(--color-disabled);
+			border-bottom: 1px solid var(--v-gray-lighten2);
 		}
 	}
 }

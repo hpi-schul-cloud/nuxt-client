@@ -54,7 +54,7 @@ export default {
 	font-size: var(--text-md); // text size in legacy client 14px;
 	text-align: inherit;
 	background-color: var(--color-white);
-	border-bottom: 1px solid var(--color-disabled);
+	border-bottom: 1px solid var(--v-gray-lighten2);
 
 	&:first-child {
 		border-top-left-radius: var(--radius-sm);

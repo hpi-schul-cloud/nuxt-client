@@ -246,8 +246,8 @@ export default {
 	}
 
 	&.disabled {
-		color: var(--color-disabled-dark);
-		border-bottom-color: var(--color-disabled-dark);
+		color: var(--v-gray-base);
+		border-bottom-color: var(--v-gray-base);
 	}
 
 	.info-line {
@@ -304,7 +304,7 @@ export default {
 					background-color: transparent;
 
 					&::placeholder {
-						color: var(--color-disabled-dark);
+						color: var(--v-gray-base);
 					}
 				}
 			}
