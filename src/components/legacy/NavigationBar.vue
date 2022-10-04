@@ -101,7 +101,7 @@ export default {
 	line-height: var(--line-height-lg);
 	color: var(--color-black);
 	text-align: center;
-	background-color: var(--color-overlay-light);
+	background-color: var(--v-white-base);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 	box-shadow: var(--shadow-sm);
