@@ -4,12 +4,12 @@ $darken: 25%;
 :root {
 	/* main colors */
 	--color-primary: #0a9396;
-	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	// --color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
 	--color-secondary: #38677a;
 	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
 	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 	--color-accent: #e4032e;
-	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
-	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
+	// --color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	// --color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 }
