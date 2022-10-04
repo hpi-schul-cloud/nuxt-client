@@ -7,8 +7,31 @@
 			:label="`${$t('components.molecules.shareCourse.result.linkLabel')}`"
 		></v-text-field>
 		<div class="mb-4">
-			<div class="d-flex d-sm-flex justify-content-space-between">
-				<v-btn plain large :height="84" @click="onMailShareUrl(shareUrl)">
+			<div class="d-flex flex-sm-row flex-column justify-content-space-between">
+				<v-btn
+					plain
+					large
+					class="d-sm-none d-flex"
+					:height="84"
+					@click="onShareMobilePlatflorm(shareUrl)"
+				>
+					<span class="d-flex flex-column justify-content-center">
+						<span class="mb-2">
+							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+						>
+						<span>{{
+							// $t("components.molecules.shareCourse.result.mailShare")
+							"Share Mobile"
+						}}</span>
+					</span>
+				</v-btn>
+				<v-btn
+					plain
+					large
+					:height="84"
+					class="d-sm-flex d-none"
+					@click="onMailShareUrl(shareUrl)"
+				>
 					<span class="d-flex flex-column justify-content-center">
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
@@ -18,7 +41,14 @@
 						}}</span>
 					</span>
 				</v-btn>
-				<v-btn plain large :height="84" @click="onCopy(shareUrl)">
+
+				<v-btn
+					plain
+					large
+					:height="84"
+					class="d-sm-flex d-none"
+					@click="onCopy(shareUrl)"
+				>
 					<span class="d-flex flex-column justify-content-center">
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
@@ -28,6 +58,7 @@
 						}}</span>
 					</span>
 				</v-btn>
+
 				<v-btn plain large :height="84" @click="onGenerateQrCode">
 					<span class="d-flex flex-column justify-content-center">
 						<span class="mb-2">
@@ -97,6 +128,17 @@ export default defineComponent({
 			emit("done");
 		};
 
+		const onShareMobilePlatflorm = (shareUrl) => {
+			if (navigator.share) {
+				navigator
+					.share({
+						url: shareUrl,
+					})
+					.then(() => console.log("Successful share"))
+					.catch((error) => console.log("Error sharing", error));
+			}
+		};
+
 		const isShowQrCode = ref(false);
 		const onGenerateQrCode = () => {
 			isShowQrCode.value = true;
@@ -106,6 +148,7 @@ export default defineComponent({
 			onMailShareUrl,
 			onCopy,
 			onGenerateQrCode,
+			onShareMobilePlatflorm,
 			isShowQrCode,
 			mdiEmailOutline,
 			mdiContentCopy,
