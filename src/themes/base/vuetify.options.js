@@ -14,6 +14,9 @@ import langIconUa from "@assets/icons/lang-icon-ua.vue";
 
 export default {
 	theme: {
+		options: {
+			customProperties: true,
+		},
 		themes: {
 			light: {
 				primary: "#9e292b",

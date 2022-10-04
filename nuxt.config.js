@@ -201,9 +201,6 @@ module.exports = {
 		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
-		options: {
-			customProperties: true,
-		},
 	},
 	ignore: ["**/*.unit.ts", "**/*.unit.js"],
 };
