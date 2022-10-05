@@ -1,8 +1,10 @@
-import TheTopBar from "./TheTopBar";
 import setupStores from "@@/tests/test-utils/setupStores";
-//import { statusAlertsModule } from "@/store";
 import StatusAlertsModule from "@/store/statusAlerts";
-import { initializeAxios } from "@utils/api";
+import { mount } from "@vue/test-utils";
+import TheTopBar from "./TheTopBar.vue";
+//import { statusAlertsModule } from "@/store";
+//import { statusAlertsModule } from "@utils/store-accessor";
+ import { initializeAxios } from "@utils/api";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
 const mockActions = [
@@ -15,17 +17,30 @@ const mockActions = [
 	},
 ];
 
-initializeAxios({
+const axiosInitializer = initializeAxios({
 	$get: async (path) => {
 		if (path === "/v1/alert") return mockStatusAlerts;
 	},
 });
+axiosInitializer();
+
+const getWrapper = (props, options) => {
+	return mount(TheTopBar, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
+		propsData: props,
+		...options,
+	});
+};
 
 describe("@components/legacy/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
-			statusAlerts: StatusAlertsModule,
+			'status-alerts': StatusAlertsModule,
 		});
+		//document.body.setAttribute("data-app", "true");
 		//statusAlertsModule.setStatusAlerts(mockStatusAlerts);
 	});
 
@@ -89,19 +104,16 @@ describe("@components/legacy/TheTopBar", () => {
 	});
 
 	it("render with Status Alerts", async () => {
-		const wrapper = shallowMount(TheTopBar, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				showStatusAlerts: true,
-			},
-			mocks: {
-				$theme,
-			},
-		});
+		const propsData = {
+			showStatusAlerts: true,
+		};
+		const wrapper = getWrapper(propsData);
+		const alertsIcon = wrapper.find("[data-testid=status-alerts-icon]");
 
-		expect(wrapper.findAll("status-alerts-stub")).toHaveLength(1);
-		//const alertsIcon = wrapper.find("[data-testid=status-alerts-icon]");
-		//expect(alertsIcon.element.innerHTML).toContain('fa-exclamation-triangle');
+		expect(alertsIcon.element.innerHTML).toContain('fa-exclamation-triangle');
+
+		//alertsIcon.trigger("click");
+		//expect(wrapper.findAll('alert-item')).toHaveLength(mockStatusAlerts.length);
 	});
 	it("Should not render Status Alerts", async () => {
 		const wrapper = shallowMount(TheTopBar, {
