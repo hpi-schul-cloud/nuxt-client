@@ -5,6 +5,7 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
+import ShareCourseModule from "@/store/share-course";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -106,6 +107,7 @@ const $route = {
 let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
+let shareCourseModuleMock: ShareCourseModule;
 
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
@@ -120,6 +122,7 @@ const getWrapper: any = () => {
 			provide("loadingStateModule", loadingStateModuleMock);
 			provide("notifierModule", notifierModuleMock);
 			provide("i18n", { t: (key: string) => key });
+			provide("shareCourseModule", shareCourseModuleMock);
 		},
 	});
 };
@@ -144,6 +147,9 @@ describe("@pages/RoomDetails.page.vue", () => {
 			getIsOpen: false,
 		});
 		notifierModuleMock = createModuleMocks(NotifierModule);
+		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+			getIsShareModalOpen: true,
+		});
 	});
 
 	it("should fetch data", async () => {

@@ -118,7 +118,7 @@ import {
 	authModule,
 	envConfigModule,
 	roomModule,
-	shareCourseModule,
+	// shareCourseModule,
 } from "@/store";
 // import BaseQrCode from "@components/base/BaseQrCode.vue";
 // import vCustomDialog from "@components/organisms/vCustomDialog.vue";
@@ -167,7 +167,7 @@ export default defineComponent({
 		ShareModal,
 	},
 	layout: "defaultVuetify",
-	inject: ["copyModule"],
+	inject: ["copyModule", "shareCourseModule"],
 	data() {
 		return {
 			importDialog: {
@@ -344,7 +344,7 @@ export default defineComponent({
 			// this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
 			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
 			// this.dialog.isOpen = true;
-			shareCourseModule.startShareFlow(this.courseId);
+			this.shareCourseModule.startShareFlow(this.courseId);
 		},
 		closeDialog() {
 			this.dialog.model = "";
