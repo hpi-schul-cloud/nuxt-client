@@ -5,18 +5,15 @@ import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
 describe("@components/share-modal/ShareModalOptionsForm", () => {
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(ShareModalOptionsForm, {
-			...createComponentMocks({}),
+			...createComponentMocks({
+				i18n: true,
+			}),
 			setup() {},
 			...attrs,
 		});
 
 		return wrapper;
 	};
-
-	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		// document.body.setAttribute("data-app", "true");
-	});
 
 	it("should emit initial event during setup", () => {
 		const wrapper = mountComponent();
