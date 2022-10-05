@@ -124,7 +124,7 @@ export default {
 	width: 100%;
 	padding: var(--space-xs) var(--space-md);
 	color: var(--v-white-base);
-	background-color: var(--color-secondary-light);
+	background-color: var(--v-secondary-lighten1);
 }
 
 .actions {
@@ -142,12 +142,12 @@ export default {
 }
 
 .select-all-rows {
-	color: var(--color-white);
+	color: var(--v-white-base);
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 .close {
-	color: var(--color-white);
+	color: var(--v-white-base);
 }
 </style>

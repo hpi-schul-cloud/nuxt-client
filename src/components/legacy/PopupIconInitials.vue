@@ -72,15 +72,15 @@ export default {
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-white);
+	color: var(--v-white-base);
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: var(--color-secondary);
+	background-color: var(--v-secondary-base);
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--color-secondary-dark);
+		background-color: var(--v-secondary-darken1);
 	}
 }
 
@@ -99,9 +99,9 @@ export default {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: var(--color-black);
+		color: var(--v-black-base);
 		white-space: nowrap;
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 		border: 1px solid var(--v-gray-lighten2);
 		border-radius: var(--radius-sm);
 

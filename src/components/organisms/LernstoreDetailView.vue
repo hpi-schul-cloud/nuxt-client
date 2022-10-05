@@ -337,13 +337,13 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			background-color: var(--color-gray-dark);
+			background-color: var(--v-gray-darken1);
 			box-shadow: var(--shadow-sm);
 		}
 
 		.close-transparent {
-			color: var(--color-black);
-			background-color: var(--color-white);
+			color: var(--v-black-base);
+			background-color: var(--v-white-base);
 			box-shadow: var(--shadow-sm);
 		}
 	}
@@ -377,7 +377,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--color-secondary);
+				background-color: var(--v-secondary-base);
 			}
 
 			.preview-background {
@@ -417,7 +417,7 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
 		@media (max-width: $tablet-portrait-width) {
@@ -431,7 +431,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--color-danger);
+			color: var(--v-error-base);
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -462,7 +462,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--color-secondary);
+				color: var(--v-secondary-base);
 				text-decoration: underline;
 			}
 		}
@@ -500,15 +500,15 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--color-secondary);
+					color: var(--v-secondary-base);
 				}
 
 				.tertiary-color {
-					color: var(--color-black);
+					color: var(--v-black-base);
 					text-decoration: none;
 
 					:hover {
-						color: var(--color-black);
+						color: var(--v-black-base);
 					}
 				}
 			}

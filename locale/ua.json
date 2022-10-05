@@ -190,7 +190,7 @@
 	"components.organisms.AutoLogoutWarning.error.retry": "Ваш сеанс не вдалося продовжити!",
 	"components.organisms.AutoLogoutWarning.image.alt": "Лінивець",
 	"components.organisms.AutoLogoutWarning.success": "Сеанс успішно продовжено.",
-	"components.organisms.AutoLogoutWarning.warning": "Увага! Ви автоматично вийдете з системи через <span style='color: var(--color-danger)'> {remainingTime} </span>. Тепер продовжте час сеансу до двох годин.",
+	"components.organisms.AutoLogoutWarning.warning": "Увага! Ви автоматично вийдете з системи через <span style='color: var(--v-error-base)'> {remainingTime} </span>. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.AutoLogoutWarning.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"components.organisms.ContentCard.report.body": "Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email": "inhalte@hpi-schul-cloud.de",

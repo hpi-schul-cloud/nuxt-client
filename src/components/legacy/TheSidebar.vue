@@ -127,8 +127,8 @@ export default {
 	display: none;
 	height: calc(100vh - 55px);
 	overflow-y: auto;
-	background-color: var(--color-white);
-	box-shadow: 0 5px 5px var(--color-gray-light);
+	background-color: var(--v-white-base);
+	box-shadow: 0 5px 5px var(--v-gray-lighten1);
 	transition: display 2s;
 
 	&.expanded {
@@ -146,7 +146,7 @@ export default {
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--color-gray-light);
+		border-right: 1px solid var(--v-gray-lighten1);
 		border-bottom: none;
 	}
 

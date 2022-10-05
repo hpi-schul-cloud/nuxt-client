@@ -32,7 +32,7 @@ describe("@components/molecules/NotificationModal", () => {
 		);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
-				"background-color: var(--color-success)"
+				"background-color: var(--v-success-base)"
 			);
 		}, 200);
 	});
@@ -53,7 +53,7 @@ describe("@components/molecules/NotificationModal", () => {
 		);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
-				"background-color: var(--color-danger)"
+				"background-color: var(--v-error-base)"
 			);
 		}, 200);
 	});

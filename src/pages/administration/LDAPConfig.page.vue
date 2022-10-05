@@ -251,7 +251,7 @@ export default {
 @import "@styles";
 
 .link-style {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 	text-decoration: none;
 }
 

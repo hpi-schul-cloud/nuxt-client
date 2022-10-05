@@ -73,7 +73,7 @@ export default {
 
 .menu {
 	position: relative;
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 }
 
 .filter-icon {
@@ -81,6 +81,6 @@ export default {
 }
 
 .button.is-medium.is-text {
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 }
 </style>

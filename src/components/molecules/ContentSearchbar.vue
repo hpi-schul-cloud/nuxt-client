@@ -113,7 +113,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		color: var(--color-gray);
+		color: var(--v-gray-base);
 
 		input {
 			flex: 1;
@@ -133,15 +133,15 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--color-gray-light) solid;
+				border-bottom: 2px var(--v-gray-lighten1) solid;
 			}
 
 			&::placeholder {
-				color: var(--color-gray);
+				color: var(--v-gray-base);
 			}
 
 			&:hover {
-				border-bottom: 2px var(--color-black) solid;
+				border-bottom: 2px var(--v-black-base) solid;
 			}
 		}
 
@@ -151,7 +151,7 @@ export default {
 			justify-content: center;
 			height: 100%;
 			font-size: var(--heading-4);
-			color: var(--color-black);
+			color: var(--v-black-base);
 			cursor: pointer;
 
 			.icon {

@@ -142,7 +142,7 @@ export default {
 	position: sticky;
 	top: 0;
 	z-index: var(--layer-sticky-header);
-	background-color: var(--color-white);
+	background-color: var(--v-white-base);
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {

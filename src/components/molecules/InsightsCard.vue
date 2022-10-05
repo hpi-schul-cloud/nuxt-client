@@ -63,7 +63,7 @@ export default {
 	width: 15rem;
 	height: 7rem;
 	margin: var(--space-sm);
-	color: var(--color-gray-dark);
+	color: var(--v-gray-darken1);
 
 	&__header {
 		font-size: var(--text-xs);
@@ -73,7 +73,7 @@ export default {
 		width: 15%;
 		height: 0.2rem;
 		margin-top: var(--space-xs-2);
-		border: 0.1rem solid var(--color-primary);
+		border: 0.1rem solid var(--v-primary-base);
 		border-radius: var(--radius-round);
 	}
 
@@ -111,7 +111,7 @@ export default {
 			width: 100%;
 			height: 100%;
 			content: "";
-			border-color: var(--color-success);
+			border-color: var(--v-success-base);
 			border-style: solid;
 			border-width: 3px 3px 0 0;
 		}
@@ -127,7 +127,7 @@ export default {
 			width: 100%;
 			height: 100%;
 			content: "";
-			border-color: var(--color-danger);
+			border-color: var(--v-error-base);
 			border-style: solid;
 			border-width: 3px 3px 0 0;
 		}

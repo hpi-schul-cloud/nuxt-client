@@ -5,7 +5,7 @@
 				<base-icon
 					:source="menuItem.source"
 					:icon="menuItem.icon"
-					fill="var(--color-secondary-dark)"
+					fill="var(--v-secondary-darken1)"
 				/>
 				<base-link
 					:href="menuItem.action"
@@ -53,7 +53,7 @@ export default {
 	padding: var(--space-sm) var(--space-sm);
 	font-size: var(--text-md); // text size in legacy client 14px;
 	text-align: inherit;
-	background-color: var(--color-white);
+	background-color: var(--v-white-base);
 	border-bottom: 1px solid var(--v-gray-lighten2);
 
 	&:first-child {

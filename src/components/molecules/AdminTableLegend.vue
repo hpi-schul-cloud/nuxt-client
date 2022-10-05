@@ -125,11 +125,11 @@ $vertically-center: auto 0;
 
 .hint {
 	margin-top: var(--space-lg);
-	color: var(--color-gray);
+	color: var(--v-gray-base);
 }
 
 .link-style {
-	color: var(--color-black);
+	color: var(--v-black-base);
 	text-decoration: underline;
 }
 

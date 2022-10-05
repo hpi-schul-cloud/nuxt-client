@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-secondary)"
+					style="color: var(--v-secondary-base)"
 				/>
 			</div>
 		</th>
@@ -61,7 +61,7 @@
 								<base-icon
 									source="material"
 									icon="warning"
-									color="var(--color-danger)"
+									color="var(--v-error-base)"
 								/>{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
@@ -72,7 +72,7 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--color-white); text-decoration: underline"
+									style="color: var(--v-white-base); text-decoration: underline"
 									to="/"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
@@ -101,7 +101,7 @@
 									<base-link
 										class="link-style"
 										style="
-											color: var(--color-white);
+											color: var(--v-white-base);
 											text-decoration: underline;
 										"
 										to="/"
@@ -122,7 +122,7 @@
 								<base-icon
 									source="material"
 									icon="warning"
-									color="var(--color-danger)"
+									color="var(--v-error-base)"
 								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
@@ -326,7 +326,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary);
+		border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base);
 
 		&.is-current-sort {
 			opacity: 1;
@@ -343,7 +343,7 @@ export default {
 
 			svg {
 				font-size: calc(1.5 * var(--text-lg));
-				color: var(--color-secondary);
+				color: var(--v-secondary-base);
 			}
 		}
 
@@ -381,7 +381,7 @@ export default {
 	button:not(.is-none):focus {
 		z-index: var(--layer-fab);
 		outline: none;
-		box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+		box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 	}
 }
 

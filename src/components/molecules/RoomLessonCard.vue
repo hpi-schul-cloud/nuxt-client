@@ -105,7 +105,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--color-secondary",
+			defaultTitleColor: "--v-secondary-base",
 		};
 	},
 	computed: {
@@ -331,7 +331,7 @@ export default {
 }
 
 .action-button {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 }
 
 .v-card {

@@ -132,7 +132,7 @@
 	"components.organisms.AutoLogoutWarning.error.retry": "Your session could not be extended!",
 	"components.organisms.AutoLogoutWarning.image.alt": "Sloth",
 	"components.organisms.AutoLogoutWarning.success": "Session successfully extended.",
-	"components.organisms.AutoLogoutWarning.warning": "Attention: You will be logged out automatically in <span style='color: var(--color-danger)'>{remainingTime}</span>. Now extend your session to two hours.",
+	"components.organisms.AutoLogoutWarning.warning": "Attention: You will be logged out automatically in <span style='color: var(--v-error-base)'>{remainingTime}</span>. Now extend your session to two hours.",
 	"components.organisms.AutoLogoutWarning.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte@hpi-schul-cloud.de",
