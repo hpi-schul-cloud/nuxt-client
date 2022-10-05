@@ -4,7 +4,7 @@
 			v-if="show"
 			ref="context-menu"
 			v-outside-click="handleClickOutside"
-			class="context-menu elevation-6"
+			class="context-menu elevation-8"
 			:style="anchorCSS"
 			role="menu"
 		>
