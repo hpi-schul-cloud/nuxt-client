@@ -49,7 +49,7 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import { fromNow } from "@plugins/datetime";
 
@@ -67,7 +67,7 @@ export default defineComponent({
 	},
 	mounted() {},
 	setup() {
-		const getIconTag = (status) => {
+		const getIconTag = (status: string) => {
 			switch (status) {
 				case "danger":
 					return { icon: "exclamation-circle", color: "danger" };
@@ -77,16 +77,16 @@ export default defineComponent({
 					return { icon: "info-circle", color: "info" };
 			}
 		};
-		const getAlertText = (text) => {
+		const getAlertText = (text: string) => {
 			if (text.length > 200) {
 				return `${text.substring(0, 200)}...`;
 			}
 			return text;
 		};
-		const getUrl = (url) => {
+		const getUrl = (url: string) => {
 			return url.replace(/(^\w+:|^)\/\//, "");
 		};
-		const getDate = (date) => {
+		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
 		return { getIconTag, getAlertText, getUrl, getDate };
@@ -99,7 +99,12 @@ export default defineComponent({
 @import "@styles";
 
 .alerts {
+	width: auto;
 	overflow-y: auto;
+
+	@include breakpoint(tablet) {
+		width: 400px;
+	}
 }
 
 .action-button {

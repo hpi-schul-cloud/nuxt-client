@@ -37,7 +37,7 @@ describe("@components/molecules/StatusAlerts", () => {
 	it('should show alert text', () => {
 		const wrapper = getWrapper(testProps);
 		const title = wrapper.find("[data-testid=alert-text0]");
-		expect(title.element.textContent).toContain(mockStatusAlerts[0].title);
+		expect(title.element.textContent).toContain(mockStatusAlerts[0].text);
 	});
 	it('should show the alert url', () => {
 		const wrapper = getWrapper(testProps);

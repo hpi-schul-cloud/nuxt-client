@@ -22,6 +22,7 @@
 				:aria-label="$t('global.topbar.actions.alerts')"
 				:fill="statusAlertColor"
 				class="status-alerts-icon"
+				centered
 				data-testid="status-alerts-icon"
 			>
 				<status-alerts :status-alerts="statusAlerts"></status-alerts>
