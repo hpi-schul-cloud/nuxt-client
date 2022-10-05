@@ -54,6 +54,7 @@ export default class ShareCourseModule extends VuexModule {
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
 		} catch (e) {
+			console.log(e);
 			return undefined;
 		}
 	}
