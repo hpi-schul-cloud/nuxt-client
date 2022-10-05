@@ -28,7 +28,9 @@ describe("@components/share-modal/ShareModalResult", () => {
 		try {
 			getWrapper();
 		} catch (e) {
-			expect(e.message).toContain('Missing required prop: "shareUrl"');
+			if (e instanceof Error) {
+				expect(e.message).toContain('Missing required prop: "shareUrl"');
+			}
 			return;
 		}
 		fail("No error on required props");
@@ -40,7 +42,9 @@ describe("@components/share-modal/ShareModalResult", () => {
 			const wrapper = getWrapper({ propsData: { shareUrl } });
 			expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
 		} catch (e) {
-			fail(e.message);
+			if (e instanceof Error) {
+				fail(e.message);
+			}
 			return;
 		}
 	});
