@@ -64,7 +64,7 @@
 		/>
 		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
 		</import-lesson-modal>
-		<!-- <v-custom-dialog
+		<v-custom-dialog
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
 			has-buttons
@@ -92,15 +92,9 @@
 				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
-				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code
-						:url="dialog.qrUrl"
-						data-testid="modal-qrcode"
-					></base-qr-code>
-				</div>
 				<v-divider></v-divider>
 			</template>
-		</v-custom-dialog> -->
+		</v-custom-dialog>
 
 		<share-modal></share-modal>
 
@@ -114,14 +108,8 @@
 
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import {
-	authModule,
-	envConfigModule,
-	roomModule,
-	// shareCourseModule,
-} from "@/store";
-// import BaseQrCode from "@components/base/BaseQrCode.vue";
-// import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import { authModule, envConfigModule, roomModule } from "@/store";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
@@ -161,8 +149,7 @@ export default defineComponent({
 		RoomDashboard,
 		ImportLessonModal,
 		MoreItemMenu,
-		// vCustomDialog,
-		// BaseQrCode,
+		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
 	},
@@ -335,15 +322,6 @@ export default defineComponent({
 			this.dialog.isOpen = true;
 		},
 		shareCourse() {
-			// await roomModule.createCourseShareToken(this.courseId);
-			// this.dialog.courseShareToken = roomModule.getCourseShareToken;
-			// this.dialog.model = "share";
-			// this.dialog.header = this.$t("pages.room.modal.course.share.header");
-			// this.dialog.text = this.$t("pages.room.modal.course.share.text");
-			// this.dialog.inputText = this.dialog.courseShareToken;
-			// this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
-			// this.dialog.isOpen = true;
 			this.shareCourseModule.startShareFlow(this.courseId);
 		},
 		closeDialog() {
