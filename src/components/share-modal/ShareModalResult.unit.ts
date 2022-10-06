@@ -99,6 +99,7 @@ describe("@components/share-modal/ShareModalResult", () => {
 
 		expect(mockClipboard.writeText).toHaveBeenCalledWith(shareUrl);
 		expect(wrapper.emitted("done")).toHaveLength(1);
+		expect(wrapper.emitted("copied")).toHaveLength(1);
 	});
 
 	it("should follow href and emit done onMailShareUrl()", async () => {

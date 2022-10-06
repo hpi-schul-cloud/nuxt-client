@@ -95,6 +95,7 @@
 	"common.words.topics": "Temas",
 	"common.words.times": "Veces",
 	"common.words.courseGroups": "grupos de cursos",
+	"common.words.copiedToClipboard": "Copiado en la caché",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.legacy.footer.ariaLabel": "Enlace, {itemName}, presione Intro para abrir",
 	"components.legacy.footer.accessibility.report": "Accesibilidad feedback",
