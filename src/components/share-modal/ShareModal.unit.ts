@@ -4,6 +4,9 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm.vue";
+import ShareModalResult from "@components/share-modal/ShareModalResult.vue";
 
 describe("@components/share-modal/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
@@ -26,16 +29,70 @@ describe("@components/share-modal/ShareModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+
+		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+			getIsShareModalOpen: true,
+			createShareUrl: jest.fn(),
+			resetShareFlow: jest.fn(),
+		});
 	});
 
 	it("should start with step 1", () => {
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
-			getIsShareModalOpen: true,
-		});
 		const wrapper = getWrapper();
 
 		const switches = wrapper.findAllComponents({ name: "v-switch" });
 
 		expect(switches.length).toBe(2);
+	});
+
+	it("should have the correct title", () => {
+		const wrapper = getWrapper();
+		const title = wrapper.vm.$refs.textTitle as HTMLElement;
+
+		expect(title.textContent).toContain(
+			"components.molecules.shareCourse.options.title"
+		);
+	});
+
+	it("should call 'createShareUrl' store method when next button clicked", () => {
+		const wrapper = getWrapper();
+		const dialog = wrapper.findComponent(vCustomDialog);
+
+		dialog.vm.$emit("next");
+
+		expect(shareCourseModuleMock.createShareUrl).toHaveBeenCalled();
+	});
+
+	it("should call 'resetShareFlow' store method when dialog closed", () => {
+		const wrapper = getWrapper();
+		const dialog = wrapper.findComponent(vCustomDialog);
+
+		dialog.vm.$emit("dialog-closed");
+
+		expect(shareCourseModuleMock.resetShareFlow).toHaveBeenCalled();
+	});
+
+	it("should call 'resetShareFlow' store method when sub component emits 'done'", () => {
+		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+			getIsShareModalOpen: true,
+			getShareUrl: "http://example.com",
+		});
+		const wrapper = getWrapper();
+		const form = wrapper.findComponent(ShareModalResult);
+
+		form.vm.$emit("done");
+
+		expect(shareCourseModuleMock.resetShareFlow).toHaveBeenCalled();
+	});
+
+	it("should call 'onShareOptionsChange' method when sub component emits 'share-options-change'", () => {
+		const wrapper = getWrapper();
+		const form = wrapper.findComponent(ShareModalOptionsForm);
+		const payload = { schoolInternally: true, expiresInSevenDays: false };
+
+		form.vm.$emit("share-options-change", payload);
+
+		// @ts-ignore
+		expect(wrapper.vm.shareOptions).toStrictEqual(payload);
 	});
 });
