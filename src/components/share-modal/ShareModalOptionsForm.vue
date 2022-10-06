@@ -8,7 +8,6 @@
 				ref="switch-school-internally"
 				v-model="shareOptions.schoolInternally"
 				color="primary"
-				value
 				input-value="true"
 				class="ma-0"
 			></v-switch>
@@ -21,7 +20,6 @@
 				ref="expires-in-seven-days"
 				v-model="shareOptions.expiresInSevenDays"
 				color="primary"
-				value
 				input-value="true"
 				class="ma-0"
 			></v-switch>
@@ -31,7 +29,7 @@
 
 <script>
 import { defineComponent, reactive, watch } from "@vue/composition-api";
-
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalOptionsForm",
 	emits: ["shareOptionsChange"],
