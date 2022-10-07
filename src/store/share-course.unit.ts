@@ -1,6 +1,8 @@
 import ShareCourseModule, { SharePayload } from "./share-course";
 import * as serverApi from "../serverApi/v3/api";
 import { ShareTokenApiInterface } from "../serverApi/v3/api";
+import setupStores from "@@/tests/test-utils/setupStores";
+import RoomModule from "@/store/room";
 
 const sharePayload: SharePayload = {
 	id: "sampleCourseId",
@@ -14,32 +16,33 @@ const expectedServerPayload = {
 	schoolExclusive: true,
 };
 
-describe("copy module", () => {
+describe("share-course module", () => {
 	describe("actions", () => {
-		afterEach(() => {
-			jest.clearAllMocks();
+		beforeEach(() => {
+			setupStores({ roomModule: RoomModule });
 		});
 
 		describe("createShareUrl", () => {
 			describe("should make a 'POST' request to the backend", () => {
-				it("should call the backend with the correct payload", async () => {
-					const shareTokenMockApi = {
-						shareTokenControllerCreateShareToken: jest.fn(async () => ({
-							data: {
-								token: "sampleToken",
-								payload: {
-									parentType: "courses",
-									parentId: "sampleCourseId",
-								},
-								expiresAt: "2022-10-12T05:25:58.908Z",
+				const shareTokenMockApi = {
+					shareTokenControllerCreateShareToken: jest.fn(async () => ({
+						data: {
+							token: "sampleToken",
+							payload: {
+								parentType: "courses",
+								parentId: "sampleCourseId",
 							},
-						})),
-					};
-					jest
-						.spyOn(serverApi, "ShareTokenApiFactory")
-						.mockReturnValue(
-							shareTokenMockApi as unknown as ShareTokenApiInterface
-						);
+							expiresAt: "2022-10-12T05:25:58.908Z",
+						},
+					})),
+				};
+				jest
+					.spyOn(serverApi, "ShareTokenApiFactory")
+					.mockReturnValue(
+						shareTokenMockApi as unknown as ShareTokenApiInterface
+					);
+
+				it("should call the backend with the correct payload", async () => {
 					const shareModule = new ShareCourseModule({});
 					shareModule.setCourseId("sampleCourseId");
 
@@ -55,12 +58,13 @@ describe("copy module", () => {
 
 				it("should call setShareUrl mutation", async () => {
 					const shareModule = new ShareCourseModule({});
+					shareModule.setCourseId("sampleCourseId");
 					const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(sharePayload);
 					const result = setShareUrlMock.mock.calls[0][0];
 
-					expect(result).toContain("courses?import=sampleToken");
+					expect(result).toContain("rooms-overview?import=sampleToken");
 				});
 
 				it("should return undefined on error", async () => {

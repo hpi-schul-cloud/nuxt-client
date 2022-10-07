@@ -1,5 +1,6 @@
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { roomModule } from "@/store";
 import {
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
@@ -50,11 +51,11 @@ export default class ShareCourseModule extends VuexModule {
 					shareTokenPayload
 				);
 			if (!shareTokenResult) return undefined;
-			const shareUrl = `${window.location.origin}/courses?import=${shareTokenResult.data.token}`; // WIP decide which url will be used
+			const courseTitle = roomModule.getRoomData?.title || "";
+			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}&title=${courseTitle}`; // WIP decide which url will be used
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
-		} catch (e) {
-			console.log(e);
+		} catch {
 			return undefined;
 		}
 	}
