@@ -52,7 +52,6 @@ import ShareModalResult from "@components/share-modal/ShareModalResult";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 
-
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModal",
