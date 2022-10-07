@@ -110,9 +110,7 @@
 </template>
 
 <script>
-import {
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
@@ -122,14 +120,15 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
-  mdiCloudDownload,
-  mdiContentCopy, mdiDownload,
-  mdiEmailPlusOutline,
-  mdiFormatListChecks,
-  mdiPlus,
-  mdiShareVariant,
-  mdiSquareEditOutline,
-  mdiViewListOutline,
+	mdiCloudDownload,
+	mdiContentCopy,
+	mdiDownload,
+	mdiEmailPlusOutline,
+	mdiFormatListChecks,
+	mdiPlus,
+	mdiShareVariant,
+	mdiSquareEditOutline,
+	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
@@ -181,7 +180,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
-        mdiDownload,
+				mdiDownload,
 			},
 			breadcrumbs: [
 				{
@@ -269,7 +268,7 @@ export default defineComponent({
 					action: () => this.inviteCourse(),
 					name: this.$t("common.actions.invite"),
 					dataTestId: "title-menu-invite",
-				}
+				},
 			];
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -288,14 +287,14 @@ export default defineComponent({
 					dataTestId: "title-menu-share",
 				});
 			}
-      if (envConfigModule.getEnv.FEATURE_COURSE_EXPORT_ENABLED) {
-        items.push({
-          icon: this.icons.mdiDownload,
-          action: async () => await roomModule.downloadImsccCourse(),
-          name: this.$t("common.actions.download"),
-          dataTestId: "title-menu-imscc-download",
-        });
-      }
+			if (envConfigModule.getEnv.FEATURE_COURSE_EXPORT_ENABLED) {
+				items.push({
+					icon: this.icons.mdiDownload,
+					action: async () => await roomModule.downloadImsccCourse(),
+					name: this.$t("common.actions.download"),
+					dataTestId: "title-menu-imscc-download",
+				});
+			}
 			return items;
 		},
 		copyResultModalStatus() {
