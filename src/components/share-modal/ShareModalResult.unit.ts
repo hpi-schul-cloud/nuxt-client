@@ -55,27 +55,22 @@ describe("@components/share-modal/ShareModalResult", () => {
 
 		expect(wrapper.findAllComponents(BaseQrCode)).toHaveLength(0);
 
-		const qrCodeActionButton = wrapper.find("[data-testid=qrCodeAction]");
-		qrCodeActionButton.vm.$emit("click");
-		await wrapper.vm.$nextTick();
+		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
+		await actionButton.trigger("click");
 
-		const qrCodeComponents = wrapper.findAllComponents(BaseQrCode);
-
-		expect(qrCodeComponents).toHaveLength(1);
-		expect(qrCodeComponents.at(0).props("url")).toStrictEqual(shareUrl);
+		const qrCodeComponent = wrapper.findAllComponents(BaseQrCode);
+		expect(qrCodeComponent).toHaveLength(1);
+		expect(qrCodeComponent.at(0).props("url")).toStrictEqual(shareUrl);
 	});
 
 	it("should hide buttons if qrCode is visible", async () => {
 		const shareUrl = "http://example.com";
 		const wrapper = getWrapper({ propsData: { shareUrl } });
 
-		await wrapper.vm.$nextTick();
-
 		expect(wrapper.findAll("[data-testid*=Action]")).not.toHaveLength(0);
 
-		const qrCodeActionButton = wrapper.find("[data-testid=qrCodeAction]");
-		qrCodeActionButton.vm.$emit("click");
-		await wrapper.vm.$nextTick();
+		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
+		await actionButton.trigger("click");
 
 		const qrCodeComponents = wrapper.findAllComponents(BaseQrCode);
 
@@ -93,12 +88,12 @@ describe("@components/share-modal/ShareModalResult", () => {
 		const shareUrl = "http://example.com";
 		const wrapper = getWrapper({ propsData: { shareUrl } });
 
-		const copyActionButton = wrapper.find("[data-testid=copyAction]");
-		copyActionButton.vm.$emit("click");
-		await wrapper.vm.$nextTick();
+		const actionButton = wrapper.find("[data-testid=copyAction]");
+		await actionButton.trigger("click");
 
 		expect(mockClipboard.writeText).toHaveBeenCalledWith(shareUrl);
 		expect(wrapper.emitted("done")).toHaveLength(1);
+		expect(wrapper.emitted("copied")).toHaveLength(1);
 	});
 
 	it("should follow href and emit done onMailShareUrl()", async () => {
@@ -110,9 +105,8 @@ describe("@components/share-modal/ShareModalResult", () => {
 		const shareUrl = "http://example.com";
 		const wrapper = getWrapper({ propsData: { shareUrl } });
 
-		const copyActionButton = wrapper.find("[data-testid=shareMailAction]");
-		copyActionButton.vm.$emit("click");
-		await wrapper.vm.$nextTick();
+		const actionButton = wrapper.find("[data-testid=shareMailAction]");
+		await actionButton.trigger("click");
 
 		const result: string = mockLocation.assign.mock.calls[0][0];
 
@@ -128,9 +122,8 @@ describe("@components/share-modal/ShareModalResult", () => {
 		const shareUrl = "http://example.com";
 		const wrapper = getWrapper({ propsData: { shareUrl } });
 
-		const copyActionButton = wrapper.find("[data-testid=mobilePlatformAction]");
-		copyActionButton.vm.$emit("click");
-		await wrapper.vm.$nextTick();
+		const actionButton = wrapper.find("[data-testid=mobilePlatformAction]");
+		await actionButton.trigger("click");
 
 		expect(mockSharePromise).toHaveBeenCalledWith({ url: shareUrl });
 		expect(wrapper.emitted("done")).toHaveLength(1);

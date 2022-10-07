@@ -37,6 +37,7 @@
 					<share-modal-result
 						:share-url="shareUrl"
 						@done="onDone"
+						@copied="onCopy"
 					></share-modal-result>
 				</div>
 			</v-fade-transition>
@@ -59,9 +60,10 @@ export default defineComponent({
 		ShareModalResult,
 		vCustomDialog,
 	},
-	inject: ["i18n"],
+	inject: ["i18n", "notifierModule"],
 	setup() {
 		const i18n = inject("i18n");
+		const notifier = inject("notifierModule");
 
 		const t = (key) => {
 			const translateResult = i18n?.t(key);
@@ -115,6 +117,13 @@ export default defineComponent({
 		const onDone = () => {
 			shareCourseModule.resetShareFlow();
 		};
+		const onCopy = () => {
+			notifier?.show({
+				text: t("common.words.copiedToClipboard"),
+				status: "success",
+				timeout: 10000,
+			});
+		}
 
 		return {
 			onShareOptionsChange,
@@ -128,6 +137,7 @@ export default defineComponent({
 			isOpen,
 			shareOptions,
 			mdiInformation,
+			onCopy
 		};
 	},
 });

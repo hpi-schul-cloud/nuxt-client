@@ -10,6 +10,7 @@ import ShareModalResult from "@components/share-modal/ShareModalResult.vue";
 
 describe("@components/share-modal/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
+	const showMock = jest.fn();
 
 	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ShareModal, {
@@ -19,6 +20,9 @@ describe("@components/share-modal/ShareModal", () => {
 			setup() {
 				provide("shareCourseModule", shareCourseModuleMock);
 				provide("i18n", { t: (key: string) => key });
+				provide("notifierModule", {
+					show: showMock,
+				});
 			},
 			...attrs,
 		});
@@ -94,5 +98,17 @@ describe("@components/share-modal/ShareModal", () => {
 
 		// @ts-ignore
 		expect(wrapper.vm.shareOptions).toStrictEqual(payload);
+	});
+
+	it("should call 'onCopy' method when sub component emits 'copied'", async () => {
+		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+			getIsShareModalOpen: true,
+			getShareUrl: "http://example.com",
+		});
+		const wrapper = getWrapper();
+		const form = wrapper.findComponent(ShareModalResult);
+
+		form.vm.$emit("copied");
+		expect(showMock).toHaveBeenCalled();
 	});
 });

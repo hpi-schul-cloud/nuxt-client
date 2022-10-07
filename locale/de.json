@@ -96,6 +96,7 @@
 	"common.words.topics": "Themen",
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.times": "Zeiten",
+	"common.words.copiedToClipboard": "In den Zwischenspeicher kopiert",
 	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"components.legacy.footer.accessibility.report": "Barriere melden",

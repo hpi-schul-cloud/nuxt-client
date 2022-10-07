@@ -137,6 +137,7 @@ export default defineComponent({
 		const onCopy = (shareUrl) => {
 			navigator.clipboard.writeText(shareUrl);
 			emit("done");
+			emit("copied");
 		};
 
 		const onShareMobilePlatflorm = (shareUrl) => {
