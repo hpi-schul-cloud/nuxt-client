@@ -5,8 +5,8 @@
 				{{ $t("components.molecules.shareCourse.options.schoolInternally") }}
 			</div>
 			<v-switch
-				ref="switch-school-internally"
 				v-model="shareOptions.schoolInternally"
+				data-testid="schoolInternally"
 				color="primary"
 				input-value="true"
 				class="ma-0"
@@ -17,8 +17,8 @@
 				{{ $t("components.molecules.shareCourse.options.expiresInSevenDays") }}
 			</div>
 			<v-switch
-				ref="expires-in-seven-days"
 				v-model="shareOptions.expiresInSevenDays"
+				data-testid="expiresInSevenDays"
 				color="primary"
 				input-value="true"
 				class="ma-0"

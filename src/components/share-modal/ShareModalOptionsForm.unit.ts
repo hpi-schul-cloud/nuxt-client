@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
+import { mount } from "@vue/test-utils";
 
 describe("@components/share-modal/ShareModalOptionsForm", () => {
 	const mountComponent = (attrs = {}) => {
@@ -24,10 +24,10 @@ describe("@components/share-modal/ShareModalOptionsForm", () => {
 	it("should emit event on changes of SchoolInternally switch", async () => {
 		const wrapper = mountComponent();
 
-		const switchSchoolInternally = wrapper.findComponent({
-			ref: "switch-school-internally",
-		});
-		await switchSchoolInternally.vm.$emit("change", false);
+		const switchExpiresInSevenDays = wrapper.find(
+			'[data-testid="schoolInternally"]'
+		);
+		await switchExpiresInSevenDays.setChecked(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
@@ -35,10 +35,10 @@ describe("@components/share-modal/ShareModalOptionsForm", () => {
 	it("should emit event on changes of ExpiresInSevenDays switch", async () => {
 		const wrapper = mountComponent();
 
-		const switchExpiresInSevenDays = wrapper.findComponent({
-			ref: "expires-in-seven-days",
-		});
-		await switchExpiresInSevenDays.vm.$emit("change", false);
+		const switchExpiresInSevenDays = wrapper.find(
+			'[data-testid="expiresInSevenDays"]'
+		);
+		await switchExpiresInSevenDays.setChecked(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
