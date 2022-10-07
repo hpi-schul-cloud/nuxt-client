@@ -32,20 +32,6 @@
 						:data-testid="`room-${roomData.roomId}-files`"
 						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
-					<v-btn
-						color="secondary"
-						class="back-button"
-						outlined
-						small
-						:data-testid="`room-${roomData.roomId}-export`"
-						@click.prevent="
-							downloadCourse({
-								courseId: roomData.roomId,
-								filename: `${roomData.title}-${Date.now().toString()}.json`,
-							})
-						"
-						>{{ "Kurs herunterladen" }}
-					</v-btn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -125,7 +111,6 @@
 
 <script>
 import {
-	CoursesApiFactory,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
@@ -137,19 +122,18 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
-	mdiContentCopy,
-	mdiEmailPlusOutline,
-	mdiFormatListChecks,
-	mdiPlus,
-	mdiShareVariant,
-	mdiSquareEditOutline,
-	mdiViewListOutline,
+  mdiCloudDownload,
+  mdiContentCopy, mdiDownload,
+  mdiEmailPlusOutline,
+  mdiFormatListChecks,
+  mdiPlus,
+  mdiShareVariant,
+  mdiSquareEditOutline,
+  mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
-import { $axios } from "@utils/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -197,6 +181,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
+        mdiDownload,
 			},
 			breadcrumbs: [
 				{
@@ -284,7 +269,7 @@ export default defineComponent({
 					action: () => this.inviteCourse(),
 					name: this.$t("common.actions.invite"),
 					dataTestId: "title-menu-invite",
-				},
+				}
 			];
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -303,6 +288,14 @@ export default defineComponent({
 					dataTestId: "title-menu-share",
 				});
 			}
+      if (envConfigModule.getEnv.FEATURE_COURSE_EXPORT_ENABLED) {
+        items.push({
+          icon: this.icons.mdiDownload,
+          action: async () => await roomModule.downloadImsccCourse(),
+          name: this.$t("common.actions.download"),
+          dataTestId: "title-menu-imscc-download",
+        });
+      }
 			return items;
 		},
 		copyResultModalStatus() {
@@ -328,19 +321,6 @@ export default defineComponent({
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
-		},
-		async downloadCourse({ courseId, filename }) {
-			const response = await CoursesApiFactory(
-				undefined,
-				"/v3",
-				$axios
-			).courseControllerExportCourse(courseId, { responseType: "json" });
-			const blob = new Blob([response.data], { type: "application/json" });
-			const link = document.createElement("a");
-			link.href = URL.createObjectURL(blob);
-			link.download = filename;
-			link.click();
-			URL.revokeObjectURL(link.href);
 		},
 		async inviteCourse() {
 			await roomModule.createCourseInvitation(this.courseId);
