@@ -1,13 +1,13 @@
 <template>
-	<legacy-logged-in>
-		<v-app class="content">
-			<v-main id="main-content">
+	<v-app>
+		<legacy-logged-in>
+			<v-main id="main-content" class="content">
 				<Nuxt />
 			</v-main>
 			<snackbar />
 			<loading-state-dialog />
-		</v-app>
-	</legacy-logged-in>
+		</legacy-logged-in>
+	</v-app>
 </template>
 
 <script>
