@@ -5,7 +5,8 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
+		:outlined="isHidden"
+		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
@@ -334,22 +335,11 @@ export default {
 	color: var(--color-primary);
 }
 
-.v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
-
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
-}
-
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
 
 .hidden-lesson {
-	box-shadow: none;
-
 	.lesson-name {
 		opacity: 0.5;
 	}
