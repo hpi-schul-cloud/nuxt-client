@@ -1,16 +1,29 @@
 <template>
 	<v-app>
-		<v-navigation-drawer v-if="isLoggedIn" color="grey">
-			NavigationDrawer
+		<v-navigation-drawer v-if="isLoggedIn">
+			<v-list>
+				<v-list-item>
+					<v-img src="src/assets/logo-image-mono.svg"></v-img>
+				</v-list-item>
+			</v-list>
 		</v-navigation-drawer>
-		<v-app-bar flat color="blue-grey">
-			<v-app-bar-title>dBildungscloud</v-app-bar-title>
-			<v-btn v-if="isLoggedIn" @click="onLogout">Logout</v-btn>
+		<v-app-bar flat>
+			<template v-slot:append>
+				<v-btn v-if="isLoggedIn" @click="onLogout">Logout</v-btn>
+			</template>
 		</v-app-bar>
-		<v-main>
+		<v-main class="mx-6">
 			<slot />
 		</v-main>
-		<v-footer app color="blue-grey" height="200">Footer</v-footer>
+		<v-footer app height="100">
+			<v-row justify="center" no-gutters>
+				<v-btn flat to="/">Home</v-btn>
+				<v-btn flat to="/tasks">Tasks</v-btn>
+				<v-btn flat to="/composition">Composition API</v-btn>
+				<v-btn flat to="/vitest">Vuetify Welcome page</v-btn>
+				<v-btn flat to="/imprint">Imprint</v-btn>
+			</v-row>
+		</v-footer>
 	</v-app>
 </template>
 
