@@ -11,6 +11,7 @@ import langIconDe from "@assets/icons/lang-icon-de.vue";
 import langIconEn from "@assets/icons/lang-icon-en.vue";
 import langIconEs from "@assets/icons/lang-icon-es.vue";
 import langIconUa from "@assets/icons/lang-icon-ua.vue";
+import colors from "vuetify/lib/util/colors";
 
 export default {
 	theme: {
@@ -19,17 +20,29 @@ export default {
 		},
 		themes: {
 			light: {
+				primary: {
+					base: "#9e292b",
+					darken1: "#800416",
+				},
+				secondary: {
+					base: "#54616e",
+					lighten1: "#8a9199",
+					darken1: "#3a424b",
+				},
+				accent: {
+					base: "#e98404",
+				},
 				black: {
 					base: "#1b1b1b",
 				},
 				white: {
 					base: "#ffffff",
 				},
-				gray: {
-					base: "#aaaaaa",
-					lighten1: "#eeeeee",
-					lighten2: "#e0e0e0",
-					darken1: "#444444",
+				grey: {
+					base: colors.grey.base,
+					lighten1: colors.grey.lighten3,
+					lighten2: colors.grey.lighten2,
+					darken1: colors.grey.darken3,
 				},
 				info: {
 					base: "#0a7ac9",
