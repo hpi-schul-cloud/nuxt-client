@@ -227,7 +227,7 @@ export default {
 	}
 
 	&:hover {
-		background-color: var(--v-gray-lighten1);
+		background-color: var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 	}
 }

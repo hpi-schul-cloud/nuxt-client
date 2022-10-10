@@ -92,7 +92,7 @@ export default {
 	border-bottom: 1px solid var(--v-white-base);
 
 	&.highlight {
-		background-color: var(--v-gray-lighten1);
+		background-color: var(--v-grey-lighten1);
 		border-top: 1px solid var(--v-white-base);
 		border-bottom: 1px solid var(--v-white-base);
 	}

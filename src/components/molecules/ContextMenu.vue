@@ -232,7 +232,7 @@ export default {
 	box-shadow: var(--shadow-m);
 
 	> :hover {
-		background-color: var(--v-gray-lighten1);
+		background-color: var(--v-grey-lighten1);
 	}
 
 	&__button {

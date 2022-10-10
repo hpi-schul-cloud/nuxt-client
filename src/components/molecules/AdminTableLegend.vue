@@ -125,7 +125,7 @@ $vertically-center: auto 0;
 
 .hint {
 	margin-top: var(--space-lg);
-	color: var(--v-gray-base);
+	color: var(--v-grey-base);
 }
 
 .link-style {

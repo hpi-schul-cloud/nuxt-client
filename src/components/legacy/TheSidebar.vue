@@ -128,7 +128,7 @@ export default {
 	height: calc(100vh - 55px);
 	overflow-y: auto;
 	background-color: var(--v-white-base);
-	box-shadow: 0 5px 5px var(--v-gray-lighten1);
+	box-shadow: 0 5px 5px var(--v-grey-lighten1);
 	transition: display 2s;
 
 	&.expanded {
@@ -146,7 +146,7 @@ export default {
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--v-gray-lighten1);
+		border-right: 1px solid var(--v-grey-lighten1);
 		border-bottom: none;
 	}
 
@@ -257,7 +257,7 @@ export default {
 				&.active {
 					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--v-gray-lighten1);
+					background-color: var(--v-grey-lighten1);
 				}
 
 				&.active .list-content,

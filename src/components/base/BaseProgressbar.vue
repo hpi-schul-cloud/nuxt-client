@@ -23,7 +23,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$color-todo: var(--v-gray-lighten1);
+$color-todo: var(--v-grey-lighten1);
 $color-done: var(--v-primary-base);
 
 progress {

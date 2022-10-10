@@ -337,7 +337,7 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			background-color: var(--v-gray-darken1);
+			background-color: var(--v-grey-darken1);
 			box-shadow: var(--shadow-sm);
 		}
 

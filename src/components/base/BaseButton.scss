@@ -114,12 +114,12 @@ a:not(.is-none) {
 	}
 
 	&:disabled {
-		--button-background: var(--v-gray-lighten2);
-		--button-text-color: var(--v-gray-base);
+		--button-background: var(--v-grey-lighten2);
+		--button-text-color: var(--v-grey-base);
 
 		&.is-outline,
 		&.is-text {
-			--button-background: var(--v-gray-base);
+			--button-background: var(--v-grey-base);
 		}
 	}
 
@@ -191,7 +191,7 @@ a:not(.is-none) {
 		border: 1px solid transparent;
 
 		&:hover {
-			background-color: var(--v-gray-lighten1);
+			background-color: var(--v-grey-lighten1);
 			box-shadow: none;
 		}
 	}

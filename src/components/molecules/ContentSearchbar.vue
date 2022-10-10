@@ -113,7 +113,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		color: var(--v-gray-base);
+		color: var(--v-grey-base);
 
 		input {
 			flex: 1;
@@ -133,11 +133,11 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--v-gray-lighten1) solid;
+				border-bottom: 2px var(--v-grey-lighten1) solid;
 			}
 
 			&::placeholder {
-				color: var(--v-gray-base);
+				color: var(--v-grey-base);
 			}
 
 			&:hover {

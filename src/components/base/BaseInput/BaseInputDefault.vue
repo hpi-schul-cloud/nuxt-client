@@ -246,8 +246,8 @@ export default {
 	}
 
 	&.disabled {
-		color: var(--v-gray-base);
-		border-bottom-color: var(--v-gray-base);
+		color: var(--v-grey-base);
+		border-bottom-color: var(--v-grey-base);
 	}
 
 	.info-line {
@@ -304,7 +304,7 @@ export default {
 					background-color: transparent;
 
 					&::placeholder {
-						color: var(--v-gray-base);
+						color: var(--v-grey-base);
 					}
 				}
 			}
@@ -313,24 +313,24 @@ export default {
 }
 
 .pwd-toggle {
-	color: var(--v-gray-base);
+	color: var(--v-grey-base);
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: var(--v-gray-darken1);
+		color: var(--v-grey-darken1);
 	}
 
 	&:focus {
-		color: var(--v-gray-darken1);
+		color: var(--v-grey-darken1);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-gray-darken1);
+		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-grey-darken1);
 	}
 }
 
 .base-input-info {
 	display: block;
 	font-size: var(--text-xs);
-	color: var(--v-gray-base);
+	color: var(--v-grey-base);
 }
 
 .base-input-info.base-input-error {

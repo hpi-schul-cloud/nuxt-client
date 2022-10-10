@@ -95,7 +95,7 @@ ul.progressbar {
 		content: counter(step);
 		counter-increment: step;
 		background: var(--v-white-base);
-		border-color: var(--v-gray-darken1);
+		border-color: var(--v-grey-darken1);
 		border-style: dotted;
 		border-radius: var(--radius-round);
 	}
@@ -108,13 +108,13 @@ ul.progressbar {
 		width: 100%;
 		height: calc(3 * var(--border-width));
 		content: "";
-		background: var(--v-gray-base);
+		background: var(--v-grey-base);
 	}
 }
 
 .progressbar li.active {
 	&::after {
-		background: var(--v-gray-base);
+		background: var(--v-grey-base);
 	}
 
 	&::before {
@@ -137,7 +137,7 @@ ul.progressbar {
 
 	&::after {
 		color: var(--v-white-base);
-		background: var(--v-gray-base);
+		background: var(--v-grey-base);
 	}
 }
 

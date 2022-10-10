@@ -63,7 +63,7 @@ export default {
 	width: 15rem;
 	height: 7rem;
 	margin: var(--space-sm);
-	color: var(--v-gray-darken1);
+	color: var(--v-grey-darken1);
 
 	&__header {
 		font-size: var(--text-xs);

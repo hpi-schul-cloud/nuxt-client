@@ -71,7 +71,7 @@ export default {
 
 	:focus-within {
 		.icon-button {
-			background-color: var(--v-gray-lighten1);
+			background-color: var(--v-grey-lighten1);
 		}
 	}
 
@@ -82,7 +82,7 @@ export default {
 		z-index: var(--layer-popover);
 		visibility: hidden;
 		background-color: var(--v-white-base);
-		border: 1px solid var(--v-gray-lighten1);
+		border: 1px solid var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 
 		@include breakpoint(tablet) {
@@ -108,7 +108,7 @@ export default {
 		);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--v-gray-lighten1) transparent;
+		border-color: transparent transparent var(--v-grey-lighten1) transparent;
 		border-style: solid;
 		border-width: var(--outer-arrow-size);
 
