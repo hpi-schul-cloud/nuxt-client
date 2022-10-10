@@ -4,7 +4,7 @@
 			:headline="$t('pages.news._id.edit.title')"
 			:breadcrumbs="[
 				{
-					to: { name: 'news' },
+					to: '/news',
 					text: $t('pages.news.title'),
 				},
 				{
