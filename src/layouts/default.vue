@@ -2,9 +2,9 @@
 	<v-app>
 		<legacy-logged-in>
 			<v-main id="main-content" class="content">
+				<snackbar />
 				<Nuxt />
 			</v-main>
-			<snackbar />
 			<loading-state-dialog />
 		</legacy-logged-in>
 	</v-app>
