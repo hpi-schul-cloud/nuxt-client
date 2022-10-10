@@ -1,5 +1,5 @@
 <template>
-	<div class="header">
+	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
 				<base-link :href="logoLink">
@@ -104,7 +104,6 @@ export default {
 	background-color: var(--v-white-base);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
-	box-shadow: var(--shadow-sm);
 }
 
 .nav-container {

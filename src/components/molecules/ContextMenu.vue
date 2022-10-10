@@ -4,7 +4,7 @@
 			v-if="show"
 			ref="context-menu"
 			v-outside-click="handleClickOutside"
-			class="context-menu"
+			class="context-menu elevation-8"
 			:style="anchorCSS"
 			role="menu"
 		>
@@ -229,7 +229,6 @@ export default {
 	max-width: 350px;
 	background-color: var(--v-white-base);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-m);
 
 	> :hover {
 		background-color: var(--v-grey-lighten1);

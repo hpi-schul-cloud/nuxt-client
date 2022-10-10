@@ -205,7 +205,8 @@ a:not(.is-none) {
 
 .is-hero-cta,
 .is-fancy {
-	box-shadow: var(--shadow-xl);
+	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.14),
+		0 1px 10px rgba(0, 0, 0, 0.12);
 
 	&:focus {
 		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-primary-base);

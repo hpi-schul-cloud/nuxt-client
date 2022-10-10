@@ -11,7 +11,7 @@
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					:class="[
-						'modal-container',
+						'modal-container elevation-24',
 						design,
 						{ 'modal-container--large': size === 'large' },
 					]"
@@ -137,7 +137,6 @@ export default {
 	overflow: hidden;
 	background-color: var(--v-white-base);
 	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
 
 	&--large {

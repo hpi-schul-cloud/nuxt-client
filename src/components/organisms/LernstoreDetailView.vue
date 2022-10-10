@@ -3,7 +3,9 @@
 		<div ref="icons" class="icons">
 			<base-button
 				:class="[
-					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
+					closeButtonStyleSelector
+						? 'close-transparent elevation-6'
+						: 'close-icon elevation-6',
 					'icon',
 				]"
 				design="icon"
@@ -30,7 +32,7 @@
 				/>
 			</div>
 		</div>
-		<div ref="sidebar" class="sidebar">
+		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions"></div>
 				<div class="title">
@@ -314,7 +316,6 @@ $tablet-portrait-width: 768px;
 	grid-template-columns: auto 30%;
 	min-width: 100vw;
 	min-height: 100vh;
-	box-shadow: var(--shadow-md);
 
 	@media (max-width: $tablet-portrait-width) {
 		grid-template-areas:
@@ -338,13 +339,11 @@ $tablet-portrait-width: 768px;
 
 		.close-icon {
 			background-color: var(--v-grey-darken1);
-			box-shadow: var(--shadow-sm);
 		}
 
 		.close-transparent {
 			color: var(--v-black-base);
 			background-color: var(--v-white-base);
-			box-shadow: var(--shadow-sm);
 		}
 	}
 
@@ -418,7 +417,6 @@ $tablet-portrait-width: 768px;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
 		background-color: var(--v-white-base);
-		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
