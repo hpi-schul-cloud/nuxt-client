@@ -15,6 +15,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskModule from "@/store/tasks";
 import LoadingStateModule from "@/store/loading-state";
+import ShareCourseModule from "@/store/share-course";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -35,6 +36,7 @@ let schoolsModule: SchoolsModule;
 let notifierModule: NotifierModule;
 let copyModule: CopyModule;
 let loadingStateModule: LoadingStateModule;
+let shareCourseModule: ShareCourseModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -54,6 +56,7 @@ function initializeStores(store: Store<any>): void {
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
+	shareCourseModule = getModule(ShareCourseModule, store);
 }
 
 export {
@@ -75,4 +78,5 @@ export {
 	notifierModule,
 	copyModule,
 	loadingStateModule,
+	shareCourseModule,
 };
