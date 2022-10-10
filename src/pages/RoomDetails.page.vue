@@ -92,15 +92,12 @@
 				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
-				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code
-						:url="dialog.qrUrl"
-						data-testid="modal-qrcode"
-					></base-qr-code>
-				</div>
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
+
+		<share-modal></share-modal>
+
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
@@ -112,11 +109,11 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import ShareModal from "@components/share-modal/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
@@ -153,11 +150,11 @@ export default defineComponent({
 		ImportLessonModal,
 		MoreItemMenu,
 		vCustomDialog,
-		BaseQrCode,
 		CopyResultModal,
+		ShareModal,
 	},
 	layout: "defaultVuetify",
-	inject: ["copyModule"],
+	inject: ["copyModule", "shareCourseModule"],
 	data() {
 		return {
 			importDialog: {
@@ -188,6 +185,7 @@ export default defineComponent({
 			],
 			courseId: this.$route.params.id,
 			tab: null,
+			isShareModalOpen: false,
 		};
 	},
 	computed: {
@@ -261,12 +259,6 @@ export default defineComponent({
 						this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
-				{
-					icon: this.icons.mdiEmailPlusOutline,
-					action: () => this.inviteCourse(),
-					name: this.$t("common.actions.invite"),
-					dataTestId: "title-menu-invite",
-				},
 			];
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -277,11 +269,19 @@ export default defineComponent({
 					dataTestId: "title-menu-copy",
 				});
 			}
+
+			items.push({
+				icon: this.icons.mdiEmailPlusOutline,
+				action: () => this.inviteCourse(),
+				name: this.$t("common.actions.invite"),
+				dataTestId: "title-menu-invite",
+			});
+
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
-					name: this.$t("common.actions.share"),
+					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
 				});
 			}
@@ -321,16 +321,8 @@ export default defineComponent({
 			this.dialog.subText = "";
 			this.dialog.isOpen = true;
 		},
-		async shareCourse() {
-			await roomModule.createCourseShareToken(this.courseId);
-			this.dialog.courseShareToken = roomModule.getCourseShareToken;
-			this.dialog.model = "share";
-			this.dialog.header = this.$t("pages.room.modal.course.share.header");
-			this.dialog.text = this.$t("pages.room.modal.course.share.text");
-			this.dialog.inputText = this.dialog.courseShareToken;
-			this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
-			this.dialog.isOpen = true;
+		shareCourse() {
+			this.shareCourseModule.startShareFlow(this.courseId);
 		},
 		closeDialog() {
 			this.dialog.model = "";
