@@ -6,6 +6,7 @@ import {
 	RouteRecordRaw,
 } from "vue-router";
 import HomePage from "@/pages/HomePage.vue";
+import CompositionApiPage from "@/pages/CompositionApiPage.vue";
 import TaskListPage from "@/pages/TaskListPage.vue";
 import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
 import NotFoundPage from "@/pages/NotFoundPage.vue";
@@ -16,6 +17,11 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		path: "/",
 		name: "home",
 		component: HomePage,
+	},
+	{
+		path: "/composition",
+		name: "composition",
+		component: CompositionApiPage,
 	},
 	{
 		path: "/vitest",

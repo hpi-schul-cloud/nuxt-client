@@ -1,5 +1,5 @@
 // Styles
-import "../styles/roboto-font-face.css";
+import "../styles/pt-sans-font-face.css";
 import "../styles/vuetify.scss";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
