@@ -17,11 +17,13 @@ const mockActions = [
 	},
 ];
 
-const axiosInitializer = initializeAxios({
-	$get: async (path) => {
-		if (path === "/v1/alert") return mockStatusAlerts;
-	},
-});
+const axiosInitializer = () => {
+	initializeAxios({
+		$get: async (path) => {
+			if (path === "/v1/alert") return mockStatusAlerts;
+		},
+	});
+};
 axiosInitializer();
 
 const getWrapper = (props, options) => {
