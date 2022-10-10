@@ -230,10 +230,9 @@ export default class RoomModule extends VuexModule {
 				undefined,
 				'v3',
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId);
-			const blob = new Blob([response.data as unknown as BlobPart], { type: "application/zip" });
+			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
 			const link = document.createElement("a");
-			link.href = URL.createObjectURL(blob);
+			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
 			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
