@@ -8,7 +8,7 @@
 					text: $t('pages.news.title'),
 				},
 				{
-					to: { name: 'news-id', params: { id: $route.params.id } },
+					to: `/news/${$route.params.id}`,
 					text: news.title,
 				},
 				{
