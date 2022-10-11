@@ -73,20 +73,20 @@
 						v-if="status === 'ok'"
 						source="custom"
 						icon="doublecheck"
-						color="var(--color-success)"
+						color="var(--v-success-base)"
 					/>
 
 					<base-icon
 						v-else-if="status === 'parentsAgreed'"
 						source="material"
 						icon="check"
-						color="var(--color-warning)"
+						color="var(--v-warning-base)"
 					/>
 					<base-icon
 						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
-						color="var(--color-danger)"
+						color="var(--v-error-base)"
 					/>
 				</span>
 			</template>
@@ -355,7 +355,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "doublecheck",
-				color: "var(--color-success)",
+				color: "var(--v-success-base)",
 				style: "margin: -3px 3px",
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
@@ -363,7 +363,7 @@ export default {
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: "check",
-					color: "var(--color-warning)",
+					color: "var(--v-warning-base)",
 					label: this.$t(
 						"utils.adminFilter.consent.label.parentsAgreementMissing"
 					),
@@ -372,7 +372,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "clear",
-				color: "var(--color-danger)",
+				color: "var(--v-error-base)",
 				label: this.$t("utils.adminFilter.consent.label.missing"),
 			});
 
@@ -576,7 +576,7 @@ export default {
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,
 				onCancel,
@@ -615,14 +615,14 @@ export default {
 
 a.action-button {
 	&.row-highlighted:hover {
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 	}
 
 	&.row-selected {
-		color: var(--color-white);
+		color: var(--v-white-base);
 
 		&:hover {
-			background-color: var(--color-secondary-dark);
+			background-color: var(--v-secondary-darken1);
 			box-shadow: none;
 		}
 	}
@@ -658,7 +658,7 @@ a.action-button {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 }
 
 .search-section {

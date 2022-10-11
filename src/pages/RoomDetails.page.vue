@@ -374,7 +374,7 @@ export default defineComponent({
 
 .modal-text {
 	font-size: var(--space-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {

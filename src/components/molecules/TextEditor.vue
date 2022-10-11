@@ -226,7 +226,7 @@ export default {
 <style lang="scss" scoped>
 .menubar {
 	padding-bottom: var(--space-xs-2);
-	border-bottom: 1px solid var(--color-gray);
+	border-bottom: 1px solid var(--v-grey-base);
 }
 
 .editor__content {
@@ -237,14 +237,14 @@ export default {
 		outline: none;
 
 		&:focus {
-			border-bottom: 1px solid var(--color-primary);
+			border-bottom: 1px solid var(--v-primary-base);
 		}
 	}
 
 	::v-deep *.is-empty:first-child::before {
 		float: left;
 		height: 0;
-		color: var(--color-gray);
+		color: var(--v-grey-base);
 		pointer-events: none;
 		content: attr(data-empty-text);
 	}
