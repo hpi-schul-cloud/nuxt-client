@@ -26,7 +26,7 @@
 					></v-custom-fab>
 				</slot>
 			</div>
-			<div class="border"></div>
+			<div v-if="showBorder" class="border"></div>
 		</div>
 		<v-container
 			:class="{
@@ -40,6 +40,7 @@
 	</v-container>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/composition-api";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import vCustomFab from "@components/atoms/vCustomFab.vue";
 
@@ -68,7 +69,8 @@ export type Fab = {
 	href?: String;
 };
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
 	components: {
 		vCustomBreadcrumbs,
 		vCustomFab,
@@ -98,7 +100,12 @@ export default {
 			default: "",
 		},
 	},
-};
+	computed: {
+		showBorder(): boolean {
+			return !!(this.headline || this.$slots.header);
+		},
+	},
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";

@@ -327,7 +327,6 @@ export default {
 	meta: {
 		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			tableColumns: [

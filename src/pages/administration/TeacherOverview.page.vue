@@ -117,7 +117,6 @@ import ProgressModal from "@components/molecules/ProgressModal";
 import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
-	layout: "defaultVuetify",
 	components: {
 		DataFilter,
 		DefaultWireframe,
