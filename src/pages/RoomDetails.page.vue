@@ -287,7 +287,7 @@ export default defineComponent({
 					dataTestId: "title-menu-share",
 				});
 			}
-			if (envConfigModule.getEnv.FEATURE_COURSE_EXPORT_ENABLED) {
+			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiDownload,
 					action: async () => await roomModule.downloadImsccCourse(),
