@@ -107,7 +107,6 @@ export default {
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			breadcrumbs: [

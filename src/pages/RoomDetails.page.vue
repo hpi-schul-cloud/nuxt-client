@@ -153,7 +153,6 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 	},
-	layout: "defaultVuetify",
 	inject: ["copyModule", "shareCourseModule"],
 	data() {
 		return {

@@ -243,7 +243,6 @@ export default {
 				"",
 		};
 	},
-	layout: "defaultVuetify",
 	meta: {
 		requiredPermissions: ["STUDENT_LIST"],
 	},

@@ -42,7 +42,7 @@
 								"
 								class="icon"
 							/>
-							<span class="title">{{ $t(route.title) }}</span>
+							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
 					<ul v-if="route.active || route.childActive">
@@ -70,7 +70,7 @@
 									"
 									class="icon"
 								/>
-								<span class="title">{{ $t(child.title) }}</span>
+								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
 					</ul>
@@ -235,7 +235,7 @@ export default {
 						text-align: center;
 					}
 
-					.title {
+					.side-bar-title {
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {
