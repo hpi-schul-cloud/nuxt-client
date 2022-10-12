@@ -27,7 +27,7 @@ export default {
 	props: {
 		color: {
 			type: String,
-			default: "var(--color-primary)",
+			default: "var(--v-primary-base)",
 		},
 		title: {
 			type: String,

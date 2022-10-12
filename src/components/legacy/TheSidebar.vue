@@ -37,12 +37,12 @@
 								:source="route.source || 'fa'"
 								:fill="
 									route.active || route.childActive
-										? 'var(--color-sidebar-menu-item-active)'
-										: 'var(--color-sidebar-menu-item)'
+										? 'var(--v-primary-base)'
+										: 'var(--v-secondary-base)'
 								"
 								class="icon"
 							/>
-							<span class="title">{{ $t(route.title) }}</span>
+							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
 					<ul v-if="route.active || route.childActive">
@@ -65,12 +65,12 @@
 									:source="child.source || 'fa'"
 									:fill="
 										child.active
-											? 'var(--color-sidebar-menu-item-active)'
-											: 'var(--color-sidebar-menu-item)'
+											? 'var(--v-primary-base)'
+											: 'var(--v-secondary-base)'
 									"
 									class="icon"
 								/>
-								<span class="title">{{ $t(child.title) }}</span>
+								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
 					</ul>
@@ -127,8 +127,8 @@ export default {
 	display: none;
 	height: calc(100vh - 55px);
 	overflow-y: auto;
-	background-color: var(--color-white);
-	box-shadow: 0 5px 5px var(--color-gray-light);
+	background-color: var(--v-white-base);
+	box-shadow: 0 5px 5px var(--v-grey-lighten1);
 	transition: display 2s;
 
 	&.expanded {
@@ -146,7 +146,7 @@ export default {
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--color-gray-light);
+		border-right: 1px solid var(--v-grey-lighten1);
 		border-bottom: none;
 	}
 
@@ -225,7 +225,7 @@ export default {
 					padding: 0 20px;
 					font-size: 16px;
 					line-height: 100%;
-					color: var(--color-sidebar-menu-item);
+					color: var(--v-secondary-base);
 					border-bottom: none;
 
 					.icon {
@@ -235,7 +235,7 @@ export default {
 						text-align: center;
 					}
 
-					.title {
+					.side-bar-title {
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {
@@ -255,14 +255,14 @@ export default {
 
 				&:hover,
 				&.active {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--color-sidebar-active-bg);
+					background-color: var(--v-grey-lighten1);
 				}
 
 				&.active .list-content,
 				&.child-active .list-content {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 				}
 			}
 		}

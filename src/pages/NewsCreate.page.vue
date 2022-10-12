@@ -32,7 +32,6 @@ export default {
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
-	layout: "defaultVuetify",
 	computed: {
 		news: () => newsModule.getNews,
 		status: () => newsModule.getStatus,

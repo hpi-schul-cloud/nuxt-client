@@ -553,13 +553,13 @@ describe("students/index", () => {
 		expect(wrapper.vm.icons).toStrictEqual([
 			{
 				icon: "doublecheck",
-				color: "var(--color-success)",
+				color: "var(--v-success-base)",
 				style: "margin: -3px 3px",
 				label: "Registrierung abgeschlossen",
 			},
 			{
 				icon: "clear",
-				color: "var(--color-danger)",
+				color: "var(--v-error-base)",
 				label: "Nutzer:in angelegt",
 			},
 		]);

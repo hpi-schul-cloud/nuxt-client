@@ -4,11 +4,11 @@
 			:headline="$t('pages.news._id.edit.title')"
 			:breadcrumbs="[
 				{
-					to: { name: 'news' },
+					to: '/news',
 					text: $t('pages.news.title'),
 				},
 				{
-					to: { name: 'news-id', params: { id: $route.params.id } },
+					to: `/news/${$route.params.id}`,
 					text: news.title,
 				},
 				{
@@ -42,7 +42,6 @@ export default {
 		DefaultWireframe,
 		FormNews,
 	},
-	layout: "defaultVuetify",
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},

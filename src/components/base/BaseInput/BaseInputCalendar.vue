@@ -89,7 +89,7 @@ export default {
 		border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
 
 		&::placeholder {
-			color: var(--color-gray);
+			color: var(--v-grey-base);
 		}
 
 		&:focus {

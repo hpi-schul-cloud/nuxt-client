@@ -105,25 +105,16 @@ export const routes = [
 		name: "login-instances",
 	},
 	{
-		path: "/news",
-		component: () => interopDefault(import("../pages/NewsOverview.page.vue")),
-		name: "news",
-	},
-	{
 		path: "/news/new",
 		component: () => interopDefault(import("../pages/NewsCreate.page.vue")),
 		name: "news-new",
-	},
-	{
-		path: `/news/:id(${REGEX_ID})`,
-		component: () => interopDefault(import("../pages/NewsDetails.page.vue")),
-		name: "news-id",
 	},
 	{
 		path: `/news/:id(${REGEX_ID})/edit`,
 		component: () => interopDefault(import("../pages/NewsEdit.page.vue")),
 		name: "news-id-edit",
 	},
+	// can this be removed?
 	{
 		path: "/poc-files",
 		component: () => interopDefault(import("../pages/POCFiles.page.vue")),

@@ -151,11 +151,11 @@ export default {
 	border: none;
 
 	&:active {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 	}
 
 	&:hover {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 	}
 }
 </style>

@@ -77,7 +77,7 @@
 			design="primary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="compress" fill="var(--color-white)" />
+			<base-icon source="fa" icon="compress" fill="var(--v-white-base)" />
 		</base-button>
 	</div>
 </template>
@@ -243,7 +243,7 @@ export default {
 
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;
