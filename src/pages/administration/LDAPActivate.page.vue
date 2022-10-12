@@ -137,14 +137,14 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--v-success-base)"
 						/>
 					</template>
 				</modal-body-info>
 			</template>
 			<template #footer>
 				<modal-footer-confirm
-					backgroundcolor="var(--color-success)"
+					backgroundcolor="var(--v-success-base)"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
 					@click="okButtonHandler"

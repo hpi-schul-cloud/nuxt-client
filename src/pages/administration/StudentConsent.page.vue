@@ -327,7 +327,6 @@ export default {
 	meta: {
 		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			tableColumns: [
@@ -645,16 +644,16 @@ export default {
 }
 
 .print-title {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 	border: none;
 }
 
 .warning {
-	color: var(--color-danger);
+	color: var(--v-error-base);
 }
 
 ::v-deep .link {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 	text-decoration: none;
 }
 

@@ -35,8 +35,8 @@
 			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="
 				notificationModal.isSuccess
-					? 'var(--color-success)'
-					: 'var(--color-danger)'
+					? 'var(--v-success-base)'
+					: 'var(--v-error-base)'
 			"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"

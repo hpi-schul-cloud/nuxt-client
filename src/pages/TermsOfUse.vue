@@ -1,17 +1,18 @@
 <template>
-	<div>
+	<default-wireframe :full-width="false">
 		<common-terms-of-use
 			:show-school-terms="!!(consentVersion && consentVersion.schoolId)"
 			@download="download"
 		/>
-	</div>
+	</default-wireframe>
 </template>
 
 <script>
 import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
+import DefaultWireframe from "@components/templates/DefaultWireframe";
 
 export default {
-	components: { CommonTermsOfUse },
+	components: { CommonTermsOfUse, DefaultWireframe },
 	computed: {
 		consentVersion() {
 			return this.$store.getters["terms-and-conditions/getConsentVersion"];

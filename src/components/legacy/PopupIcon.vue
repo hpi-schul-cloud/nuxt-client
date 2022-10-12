@@ -27,7 +27,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "var(--color-secondary-dark)",
+			default: "var(--v-secondary-darken1)",
 		},
 		centered: {
 			type: Boolean,
@@ -74,7 +74,7 @@ export default {
 
 	:focus-within {
 		.icon-button {
-			background-color: var(--color-gray-light);
+			background-color: var(--v-grey-lighten1);
 		}
 	}
 
@@ -84,8 +84,8 @@ export default {
 		right: 0%;
 		z-index: var(--layer-popover);
 		visibility: hidden;
-		background-color: var(--color-white);
-		border: 1px solid var(--color-gray-light);
+		background-color: var(--v-white-base);
+		border: 1px solid var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 
 		@include breakpoint(tablet) {
@@ -116,7 +116,7 @@ export default {
 		);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--color-gray-light) transparent;
+		border-color: transparent transparent var(--v-grey-lighten1) transparent;
 		border-style: solid;
 		border-width: var(--outer-arrow-size);
 
@@ -143,7 +143,7 @@ export default {
 		right: var(--arrow-offset);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--color-white) transparent;
+		border-color: transparent transparent var(--v-white-base) transparent;
 		border-style: solid;
 		border-width: var(--arrow-size);
 

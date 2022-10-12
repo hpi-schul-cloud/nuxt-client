@@ -1,13 +1,23 @@
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import InsightsCard from "./InsightsCard";
 
 describe("@components/molecules/InsightsCard", () => {
+	const getWrapper = (attrs) => {
+		return mount(InsightsCard, {
+			...createComponentMocks({
+				i18n: true,
+			}),
+			...attrs,
+		});
+	};
+
 	it(...isValidComponent(InsightsCard));
 
 	it("renders title and data props if both exist", () => {
 		const testTitle = "TestTitle";
 		const testData = { current: "5", last: "2" };
 
-		const wrapper = shallowMount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				title: testTitle,
 				data: testData,
@@ -18,7 +28,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders content slot", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			slots: {
 				content: '<div class="test-class"></div>',
 			},
@@ -27,7 +37,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders footer slot", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			slots: {
 				footer: '<div class="test-class"></div>',
 			},
@@ -36,12 +46,12 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders chart-card class if !data props", () => {
-		const wrapper = shallowMount(InsightsCard);
+		const wrapper = getWrapper(InsightsCard);
 		expect(wrapper.classes("chart-card")).toBe(true);
 	});
 
 	it("does not render chart-card class if data props", () => {
-		const wrapper = shallowMount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				data: { current: "5", last: "2" },
 			},
@@ -50,7 +60,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders insights-card__content-diff class if data.current prop", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				data: { current: "5", last: "2" },
 			},
@@ -59,7 +69,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("does not render insights-card__content-diff class if !data.current prop", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				data: { last: "2" },
 			},
@@ -68,7 +78,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders arrow-down class if data.current < data.last", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				data: { current: 1, last: 2 },
 			},
@@ -77,7 +87,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders arrow-up class if data.current > data.last", () => {
-		const wrapper = mount(InsightsCard, {
+		const wrapper = getWrapper({
 			propsData: {
 				data: { current: 2, last: 1 },
 			},
@@ -86,7 +96,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("renders dau over mau % if !data.current", () => {
-		const { element } = mount(InsightsCard, {
+		const { element } = getWrapper({
 			propsData: {
 				data: { last: "12" },
 			},
@@ -95,7 +105,7 @@ describe("@components/molecules/InsightsCard", () => {
 	});
 
 	it("does not render dau over mau % if data.current", () => {
-		const { element } = mount(InsightsCard, {
+		const { element } = getWrapper({
 			propsData: {
 				data: { current: "1", last: "12" },
 			},

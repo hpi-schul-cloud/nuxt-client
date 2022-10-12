@@ -11,7 +11,7 @@
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					:class="[
-						'modal-container',
+						'modal-container elevation-24',
 						design,
 						{ 'modal-container--large': size === 'large' },
 					]"
@@ -112,11 +112,12 @@ export default {
 	display: table;
 	width: 100%;
 	height: 100%;
-	background-color: var(--color-overlay-dark);
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	background-color: rgba(0, 0, 0, 0.5);
 	transition: opacity var(--duration-transition-medium) ease;
 
 	&.white {
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 	}
 }
 
@@ -134,9 +135,8 @@ export default {
 	max-height: calc(100vh - (2 * var(--space-lg)));
 	margin: 0 auto;
 	overflow: hidden;
-	background-color: var(--color-white);
+	background-color: var(--v-white-base);
 	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
 
 	&--large {

@@ -12,7 +12,7 @@
 		<v-badge
 			class="badge-component avatar-badge"
 			bordered
-			color="var(--color-primary)"
+			color="var(--v-primary-base)"
 			icon="mdi-lock"
 			overlap
 			:value="hasNotifications"

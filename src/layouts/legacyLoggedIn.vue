@@ -81,12 +81,6 @@ export default {
 								source: "fa",
 								target: "_self",
 							},
-							// TODO: implement intro for nuxt-client
-							// {
-							// 	label: "Intro",
-							// 	icon: "map-signs",
-							// 	action: "/",
-							// },
 							{
 								label: this.$t("global.topbar.actions.contactSupport"),
 								icon: "pencil",

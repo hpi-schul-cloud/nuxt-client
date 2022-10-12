@@ -5,7 +5,8 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
+		:outlined="isHidden"
+		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
@@ -105,7 +106,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--color-secondary",
+			defaultTitleColor: "--v-secondary-base",
 		};
 	},
 	computed: {
@@ -331,16 +332,7 @@ export default {
 }
 
 .action-button {
-	color: var(--color-primary);
-}
-
-.v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
-
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
+	color: var(--v-primary-base);
 }
 
 .v-card__text {
@@ -348,8 +340,6 @@ export default {
 }
 
 .hidden-lesson {
-	box-shadow: none;
-
 	.lesson-name {
 		opacity: 0.5;
 	}

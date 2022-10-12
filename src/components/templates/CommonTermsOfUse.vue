@@ -65,11 +65,3 @@
 		Schulen statt, die das HPI als technischen Dienstleister beauftragen.
 	</div>
 </template>
-
-<script>
-export default {};
-</script>
-
-<style lang="scss" scoped>
-@import "@styles";
-</style>

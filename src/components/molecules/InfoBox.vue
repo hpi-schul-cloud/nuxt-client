@@ -40,12 +40,12 @@ export default {
 @import "@styles";
 
 .wrapper {
-	color: var(--color-white);
-	background-color: var(--color-info);
+	color: var(--v-white-base);
+	background-color: var(--v-info-base);
 	border-radius: var(--radius-lg);
 
 	h4 {
-		color: var(--color-white);
+		color: var(--v-white-base);
 		text-align: center;
 	}
 }

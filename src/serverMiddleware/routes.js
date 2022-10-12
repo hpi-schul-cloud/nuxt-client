@@ -2,18 +2,10 @@
 // everything else will be forwarded to the legacy client
 // using the ./proxy.js serverMiddleware
 
-// const id = "[a-z0-9]+";
 const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
-// const courseId = "[a-f0-9]{24}";
+
 const routes = [
-	// `^/account/?$`,
-	// `^/courses/${courseId}/?$`,
-	// `^/account/email/edit/?$`,
-	// `^/account/name/edit/?$`,
-	// `^/account/password/edit/?$`,
-	// `^/account/password/edit/?$`,
-	// `^/account/locale/edit/?$`,
 	`^/activation/${activationCode}/?$`,
 	`^/administration/students/?$`,
 	`^/administration/students/new/?$`,
@@ -26,21 +18,16 @@ const routes = [
 	`^/administration/migration`,
 	`^/tasks/?$`,
 	`^/login-instances/?`,
-	//`^/calendar/?`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
 	`^/insights`,
-	//`^/news`,
 	`^/news/new`,
-	//`^/news/${mongoId}/?$`,
 	`^/news/${mongoId}/edit`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
-	// `^/courses/?$`,
 	`^/poc-files/?$`,
-	`^/poc-vuex/?$`,
 ];
 
 const uuid =
