@@ -170,15 +170,14 @@ export default {
 		},
 	},
 	async mounted() {
-		await this.getStatusAlerts();
+		if (this.showStatusAlerts) {
+			await statusAlertsModule.fetchStatusAlerts();
+			this.statusAlerts = statusAlertsModule.getStatusAlerts();
+		}
 	},
 	methods: {
 		sendEvent(eventName) {
 			this.$emit("action", eventName);
-		},
-		async getStatusAlerts() {
-			await statusAlertsModule.fetchStatusAlerts();
-			this.statusAlerts = statusAlertsModule.getStatusAlerts;
 		},
 		statusAlertDanger() {
 			return (
