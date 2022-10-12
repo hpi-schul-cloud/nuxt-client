@@ -4,7 +4,8 @@
 
 <script type="ts">
 import ImportModal from "@/components/share-course/ImportModal.vue";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, inject } from "@vue/composition-api";
+import { useLoadingState } from "@/composables/loadingState";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -13,8 +14,16 @@ export default defineComponent({
 		ImportModal
 	},
 	setup() {
+
+    const shareCourseModule = inject("shareCourseModule");
+
+    const { isLoadingDialogOpen } = useLoadingState('Kurs importieren läuft...') // wip
 		const onImport = () => {
-			console.log('starting to import')
+      // dispatch to api
+      isLoadingDialogOpen.value = true;
+
+      // useCopy() composable to copy/ import a course
+      // name, token
 		};
 
 		return {

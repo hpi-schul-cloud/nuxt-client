@@ -18,12 +18,6 @@ export interface SharePayload extends ShareOptions {
 	id: string;
 }
 
-export interface ImportPayload {
-	name: string;
-	type: "course";
-	token: string;
-}
-
 @Module({
 	name: "share-course",
 	namespaced: true,
@@ -31,12 +25,6 @@ export interface ImportPayload {
 })
 export default class ShareCourseModule extends VuexModule {
 	private isShareModalOpen: boolean = false;
-	private isImportModalOpen: boolean = false;
-	private importOptions: ImportPayload = {
-		name: "",
-		token: "",
-		type: "course",
-	};
 	private courseId: string = "";
 	private shareUrl: string | undefined = undefined;
 	private _shareApi?: ShareTokenApiInterface;
@@ -64,7 +52,7 @@ export default class ShareCourseModule extends VuexModule {
 				);
 			if (!shareTokenResult) return undefined;
 			const courseTitle = roomModule.getRoomData?.title || "";
-			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}&title=${courseTitle}`; // WIP decide which url will be used
+			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}&title=${courseTitle}`;
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
 		} catch {
@@ -85,21 +73,6 @@ export default class ShareCourseModule extends VuexModule {
 		this.setShareUrl(undefined);
 	}
 
-	@Action
-	startImportFlow(options: ImportPayload): void {
-		this.setImportOptions(options);
-		this.setImportModalOpen(true);
-	}
-
-	@Action
-	resetImportFlow(options: ImportPayload): void {
-		this.setImportOptions({ name: "", type: "course", token: "" });
-		this.setImportModalOpen(false);
-	}
-
-	@Action
-	import(): void {}
-
 	@Mutation
 	setCourseId(id: string): void {
 		this.courseId = id;
@@ -111,35 +84,12 @@ export default class ShareCourseModule extends VuexModule {
 	}
 
 	@Mutation
-	setImportModalOpen(open: boolean): void {
-		this.isImportModalOpen = open;
-	}
-
-	@Mutation
 	setShareUrl(url: string | undefined): void {
 		this.shareUrl = url;
 	}
 
-	@Mutation
-	setImportOptions(importOptions: ImportPayload): void {
-		this.importOptions = importOptions;
-	}
-
-	@Mutation
-	setName(name: string): void {
-		this.importOptions.name = name;
-	}
-
 	get getIsShareModalOpen(): boolean {
 		return this.isShareModalOpen;
-	}
-
-	get getIsImportModalOpen(): boolean {
-		return this.isImportModalOpen;
-	}
-
-	get getName(): string {
-		return this.importOptions.name;
 	}
 
 	get getShareUrl(): string | undefined {

@@ -117,7 +117,7 @@
 
 <script>
 import ImportFlow from "@/components/share-course/ImportFlow.vue";
-import { roomsModule, shareCourseModule } from "@/store";
+import { roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
@@ -136,6 +136,7 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
+  inject: ['importCourseModule'],
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -198,7 +199,7 @@ export default {
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
-		shareCourseModule.startImportFlow({ token: "abc123", name: "Mathe" });
+		this.importCourseModule.startImportFlow({ token: "abc123", name: "Mathe" });
 	},
 	methods: {
 		getDeviceDims() {

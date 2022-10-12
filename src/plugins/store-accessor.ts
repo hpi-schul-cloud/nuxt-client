@@ -18,6 +18,7 @@ import ShareCourseModule from "@store/share-course";
 import TaskModule from "@/store/tasks";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import { getModule } from "vuex-module-decorators";
+import ImportCourseModule from "@store/import-course";
 
 export default () => {
 	onGlobalSetup(() => {
@@ -32,6 +33,7 @@ export default () => {
 		provide("filePathsModule", getModule(FilePathsModule, store));
 		provide("filesPOCModule", getModule(FilesPOCModule, store));
 		provide("finishedTaskModule", getModule(FinishedTaskModule, store));
+		provide("importCourseModule", getModule(ImportCourseModule, store));
 		provide("importUsersModule", getModule(ImportUsersModule, store));
 		provide("loadingStateModule", getModule(LoadingStateModule, store));
 		provide("newsModule", getModule(NewsModule, store));
