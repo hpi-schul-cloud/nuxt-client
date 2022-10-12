@@ -1,57 +1,54 @@
 <template>
-	<div>
-		<v-card
-			width="400"
-			max-height="200"
-			class="alerts"
-			data-testid="status-alerts"
+	<v-card
+		min-width="250"
+		max-height="200"
+		class="alerts"
+		data-testid="status-alerts"
+	>
+		<div
+			v-for="(item, index) in statusAlerts"
+			:key="index"
+			class="alert-item"
+			:data-testid="`alert-item-${index}`"
 		>
-			<div
-				v-for="(item, index) in statusAlerts"
-				:key="index"
-				class="alert-item"
-				:data-testid="`alert-item${index}`"
-			>
-				<v-card-text class="">
-					<div class="top-row-container">
-						<div class="alert-title" :data-testid="`alert-title${index}`">
-							<base-icon
-								:fill="`var(--color-${getIconTag(item.status).color})`"
-								source="fa"
-								:icon="getIconTag(item.status).icon"
-							/>
-							{{ item.title }}
-						</div>
-						<div
-							class="alert-date text--primary mt-1 mb-0 pb-0"
-							:data-testid="`alert-date${index}`"
-						>
-							{{ getDate(item.timestamp) }}
-						</div>
+			<v-card-text class="py-2">
+				<div class="top-row-container">
+					<div class="alert-title" :data-testid="`alert-title-${index}`">
+						<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
+							{{ getIconTag(item.status).icon }}
+						</v-icon>
+						{{ item.title }}
 					</div>
-					<div class="alert-text" :data-testid="`alert-text${index}`">
-						{{ getAlertText(item.text) }}
+					<div
+						class="alert-date text--primary mt-1 mb-0 pb-0"
+						:data-testid="`alert-date${index}`"
+					>
+						{{ getDate(item.timestamp) }}
 					</div>
-					<div class="alert-link">
-						<a
-							:href="item.url"
-							rel="noopener"
-							target="_blank"
-							class="action-button"
-							:data-testid="`alert-link${index}`"
-						>
-							{{ getUrl(item.url) }}
-						</a>
-					</div>
-				</v-card-text>
-			</div>
-		</v-card>
-	</div>
+				</div>
+				<div class="alert-text" :data-testid="`alert-text-${index}`">
+					{{ getAlertText(item.text) }}
+				</div>
+				<div class="alert-link">
+					<a
+						:href="item.url"
+						rel="noopener"
+						target="_blank"
+						class="action-button"
+						:data-testid="`alert-link${index}`"
+					>
+						{{ getUrl(item.url) }}
+					</a>
+				</div>
+			</v-card-text>
+		</div>
+	</v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import { fromNow } from "@plugins/datetime";
+import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 export default defineComponent({
 	name: "StatusAlerts",
@@ -61,34 +58,33 @@ export default defineComponent({
 			default: () => [],
 		},
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
-	mounted() {},
 	setup() {
 		const getIconTag = (status: string) => {
 			switch (status) {
 				case "danger":
-					return { icon: "exclamation-circle", color: "danger" };
+					return { icon: mdiAlertCircle, color: "error" };
 				case "done":
-					return { icon: "check-circle", color: "success" };
+					return { icon: mdiCheckCircle, color: "success" };
 				default:
-					return { icon: "info-circle", color: "info" };
+					return { icon: mdiInformation, color: "info" };
 			}
 		};
+
 		const getAlertText = (text: string) => {
 			if (text.length > 200) {
 				return `${text.substring(0, 200)}...`;
 			}
 			return text;
 		};
+
 		const getUrl = (url: string) => {
 			return url.replace(/(^\w+:|^)\/\//, "");
 		};
+
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
+
 		return { getIconTag, getAlertText, getUrl, getDate };
 	},
 });

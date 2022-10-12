@@ -21,7 +21,7 @@
 				:title="$t('global.topbar.actions.alerts')"
 				:aria-label="$t('global.topbar.actions.alerts')"
 				:fill="statusAlertColor"
-				class="status-alerts-icon"
+				class="item"
 				centered
 				data-testid="status-alerts-icon"
 			>
@@ -57,7 +57,6 @@
 				:src="school.logo_dataUrl"
 				:alt="school.name"
 			/>
-
 			<popup-icon-initials
 				v-if="user"
 				:first-name="user.firstName || 'Unknown'"
@@ -149,7 +148,6 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
 		return {
 			statusAlerts: [],
 		};
