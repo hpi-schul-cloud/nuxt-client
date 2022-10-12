@@ -21,7 +21,7 @@
 					</div>
 					<div
 						class="alert-date text--primary mt-1 mb-0 pb-0"
-						:data-testid="`alert-date${index}`"
+						:data-testid="`alert-date-${index}`"
 					>
 						{{ getDate(item.timestamp) }}
 					</div>
@@ -35,7 +35,7 @@
 						rel="noopener"
 						target="_blank"
 						class="action-button"
-						:data-testid="`alert-link${index}`"
+						:data-testid="`alert-link-${index}`"
 					>
 						{{ getUrl(item.url) }}
 					</a>
@@ -50,6 +50,7 @@ import { defineComponent } from "@nuxtjs/composition-api";
 import { fromNow } from "@plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "StatusAlerts",
 	props: {
