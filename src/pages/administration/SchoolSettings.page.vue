@@ -66,7 +66,6 @@ export default {
 		AuthSystems,
 		DefaultWireframe,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			breadcrumbs: [

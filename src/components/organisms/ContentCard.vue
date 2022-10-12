@@ -20,7 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="margin-bottom: 0; color: var(--color-white)"
+									style="margin-bottom: 0; color: var(--v-white-base)"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -158,8 +158,8 @@ export default {
 	padding: var(--space-xs);
 	margin: var(--space-sm);
 	font-size: var(--text-xs);
-	color: var(--color-black);
-	background: var(--color-white);
+	color: var(--v-black-base);
+	background: var(--v-white-base);
 	filter: drop-shadow(0 2px 4px black);
 	border-radius: var(--radius-xs);
 	opacity: 0.9;
@@ -174,8 +174,8 @@ export default {
 .img-container {
 	position: relative;
 	height: 200px;
-	color: var(--color-white);
-	background-color: var(--color-black);
+	color: var(--v-white-base);
+	background-color: var(--v-black-base);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
@@ -184,7 +184,7 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: var(--color-secondary);
+	background-color: var(--v-secondary-base);
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
@@ -201,7 +201,7 @@ export default {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--color-white);
+			background-color: var(--v-white-base);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -237,7 +237,7 @@ export default {
 			top: 5%;
 			left: 90%;
 			z-index: var(--layer-page);
-			color: var(--color-white);
+			color: var(--v-white-base);
 			cursor: pointer;
 		}
 	}
@@ -245,7 +245,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: var(--color-secondary);
+		color: var(--v-secondary-base);
 
 		@include excerpt(
 			$font-size: var(--heading-6),
@@ -274,7 +274,7 @@ export default {
 
 	&__separator {
 		margin: 0 var(--space-xs-4);
-		border-top: 1px solid var(--color-gray);
+		border-top: 1px solid var(--v-grey-base);
 	}
 
 	&__content {
@@ -286,7 +286,7 @@ export default {
 
 		&-icon {
 			font-size: var(--text-lg);
-			color: var(--color-secondary);
+			color: var(--v-secondary-base);
 		}
 	}
 

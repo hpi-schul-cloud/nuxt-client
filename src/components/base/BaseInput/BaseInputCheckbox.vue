@@ -54,7 +54,7 @@ export default {
 		},
 		color: {
 			type: String,
-			default: `var(--color-secondary)`,
+			default: `var(--v-secondary-base)`,
 		},
 		label: {
 			type: String,
@@ -175,7 +175,7 @@ input:focus + .icon-wrapper svg {
 	}
 
 	input:checked + .icon-wrapper {
-		color: var(--color-success);
+		color: var(--v-success-base);
 	}
 
 	.label {

@@ -91,11 +91,11 @@ ul.progressbar {
 		margin: 0 auto;
 		margin-bottom: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-black);
+		color: var(--v-black-base);
 		content: counter(step);
 		counter-increment: step;
-		background: var(--color-white);
-		border-color: var(--color-gray-dark);
+		background: var(--v-white-base);
+		border-color: var(--v-grey-darken1);
 		border-style: dotted;
 		border-radius: var(--radius-round);
 	}
@@ -108,36 +108,36 @@ ul.progressbar {
 		width: 100%;
 		height: calc(3 * var(--border-width));
 		content: "";
-		background: var(--color-gray);
+		background: var(--v-grey-base);
 	}
 }
 
 .progressbar li.active {
 	&::after {
-		background: var(--color-gray);
+		background: var(--v-grey-base);
 	}
 
 	&::before {
 		color: var(--color-dark-gray);
 		text-decoration: underline;
-		background: var(--color-white);
-		border-color: var(--color-primary);
+		background: var(--v-white-base);
+		border-color: var(--v-primary-base);
 		border-style: solid;
 	}
 }
 
 .progressbar li.done {
 	&::before {
-		color: var(--color-white);
-		background: var(--color-success);
-		border-color: var(--color-success);
+		color: var(--v-white-base);
+		background: var(--v-success-base);
+		border-color: var(--v-success-base);
 		border-style: solid;
 		border-radius: var(--radius-round);
 	}
 
 	&::after {
-		color: var(--color-var(--color-white));
-		background: var(--color-gray);
+		color: var(--v-white-base);
+		background: var(--v-grey-base);
 	}
 }
 

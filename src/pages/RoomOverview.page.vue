@@ -133,7 +133,6 @@ export default {
 		RoomModal,
 		vCustomSwitch,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			device: "mobile",

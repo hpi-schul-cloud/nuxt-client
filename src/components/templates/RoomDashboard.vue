@@ -353,7 +353,7 @@ export default {
 
 .share-info-text {
 	font-size: var(--space-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 
 .share-cancel-button {

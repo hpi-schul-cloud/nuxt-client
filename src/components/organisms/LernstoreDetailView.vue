@@ -3,7 +3,9 @@
 		<div ref="icons" class="icons">
 			<base-button
 				:class="[
-					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
+					closeButtonStyleSelector
+						? 'close-transparent elevation-6'
+						: 'close-icon elevation-6',
 					'icon',
 				]"
 				design="icon"
@@ -30,7 +32,7 @@
 				/>
 			</div>
 		</div>
-		<div ref="sidebar" class="sidebar">
+		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions"></div>
 				<div class="title">
@@ -314,7 +316,6 @@ $tablet-portrait-width: 768px;
 	grid-template-columns: auto 30%;
 	min-width: 100vw;
 	min-height: 100vh;
-	box-shadow: var(--shadow-md);
 
 	@media (max-width: $tablet-portrait-width) {
 		grid-template-areas:
@@ -337,14 +338,12 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			background-color: var(--color-gray-dark);
-			box-shadow: var(--shadow-sm);
+			background-color: var(--v-grey-darken1);
 		}
 
 		.close-transparent {
-			color: var(--color-black);
-			background-color: var(--color-white);
-			box-shadow: var(--shadow-sm);
+			color: var(--v-black-base);
+			background-color: var(--v-white-base);
 		}
 	}
 
@@ -377,7 +376,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--color-secondary);
+				background-color: var(--v-secondary-base);
 			}
 
 			.preview-background {
@@ -417,8 +416,7 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--color-white);
-		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
+		background-color: var(--v-white-base);
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
@@ -431,7 +429,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--color-danger);
+			color: var(--v-error-base);
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -462,7 +460,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--color-secondary);
+				color: var(--v-secondary-base);
 				text-decoration: underline;
 			}
 		}
@@ -500,15 +498,15 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--color-secondary);
+					color: var(--v-secondary-base);
 				}
 
 				.tertiary-color {
-					color: var(--color-black);
+					color: var(--v-black-base);
 					text-decoration: none;
 
 					:hover {
-						color: var(--color-black);
+						color: var(--v-black-base);
 					}
 				}
 			}

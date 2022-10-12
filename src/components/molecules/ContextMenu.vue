@@ -4,7 +4,7 @@
 			v-if="show"
 			ref="context-menu"
 			v-outside-click="handleClickOutside"
-			class="context-menu"
+			class="context-menu elevation-8"
 			:style="anchorCSS"
 			role="menu"
 		>
@@ -227,12 +227,11 @@ export default {
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
-	background-color: var(--color-white);
+	background-color: var(--v-white-base);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-m);
 
 	> :hover {
-		background-color: var(--color-gray-light);
+		background-color: var(--v-grey-lighten1);
 	}
 
 	&__button {
@@ -246,13 +245,13 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--color-secondary);
+			color: var(--v-secondary-base);
 		}
 
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
-			color: var(--color-black);
+			color: var(--v-black-base);
 			text-align: left;
 			white-space: normal;
 

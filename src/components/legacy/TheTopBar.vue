@@ -21,7 +21,7 @@
 				:title="$t('global.topbar.actions.alerts')"
 				:aria-label="$t('global.topbar.actions.alerts')"
 				:fill="statusAlertColor"
-				class="status-alerts-icon"
+				class="item"
 				centered
 				data-testid="status-alerts-icon"
 			>
@@ -57,7 +57,6 @@
 				:src="school.logo_dataUrl"
 				:alt="school.name"
 			/>
-
 			<popup-icon-initials
 				v-if="user"
 				:first-name="user.firstName || 'Unknown'"
@@ -90,7 +89,7 @@
 			design="primary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="compress" fill="var(--color-white)" />
+			<base-icon source="fa" icon="compress" fill="var(--v-white-base)" />
 		</base-button>
 	</div>
 </template>
@@ -149,7 +148,6 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
 		return {
 			statusAlerts: [],
 		};
@@ -285,7 +283,7 @@ export default {
 
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;

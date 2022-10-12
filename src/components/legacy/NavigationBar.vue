@@ -1,5 +1,5 @@
 <template>
-	<div class="header">
+	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
 				<base-link :href="logoLink">
@@ -99,12 +99,11 @@ export default {
 	justify-content: center;
 	width: 100%;
 	line-height: var(--line-height-lg);
-	color: var(--color-black);
+	color: var(--v-black-base);
 	text-align: center;
-	background-color: var(--color-overlay-light);
+	background-color: var(--v-white-base);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
-	box-shadow: var(--shadow-sm);
 }
 
 .nav-container {
@@ -216,7 +215,7 @@ export default {
 	padding: var(--space-xs) var(--space-md);
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 
 	@include breakpoint(tablet) {
 		display: flex;
@@ -227,20 +226,20 @@ export default {
 	}
 
 	&:hover {
-		background-color: var(--color-gray-light);
+		background-color: var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 	}
 }
 
 a.active {
 	font-weight: var(--font-weight-bold);
-	color: var(--color-white);
-	background-color: var(--color-accent);
+	color: var(--v-white-base);
+	background-color: var(--v-accent-base);
 	border-radius: var(--radius-sm);
 
 	&:hover {
-		color: var(--color-white);
-		background-color: var(--color-accent);
+		color: var(--v-white-base);
+		background-color: var(--v-accent-base);
 		border-radius: var(--radius-sm);
 	}
 }

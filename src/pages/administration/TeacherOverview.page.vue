@@ -67,13 +67,13 @@
 						v-if="status === 'ok'"
 						source="material"
 						icon="check"
-						color="var(--color-success)"
+						color="var(--v-success-base)"
 					/>
 					<base-icon
 						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
-						color="var(--color-danger)"
+						color="var(--v-error-base)"
 					/>
 				</span>
 			</template>
@@ -117,7 +117,6 @@ import ProgressModal from "@components/molecules/ProgressModal";
 import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
-	layout: "defaultVuetify",
 	components: {
 		DataFilter,
 		DefaultWireframe,
@@ -251,12 +250,12 @@ export default {
 			icons: [
 				{
 					icon: "check",
-					color: "var(--color-success)",
+					color: "var(--v-success-base)",
 					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
 					icon: "clear",
-					color: "var(--color-danger)",
+					color: "var(--v-error-base)",
 					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
@@ -529,7 +528,7 @@ export default {
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,
 				onCancel,
@@ -567,14 +566,14 @@ export default {
 
 a.action-button {
 	&.row-highlighted:hover {
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 	}
 
 	&.row-selected {
-		color: var(--color-white);
+		color: var(--v-white-base);
 
 		&:hover {
-			background-color: var(--color-secondary-dark);
+			background-color: var(--v-secondary-darken1);
 			box-shadow: none;
 		}
 	}
@@ -620,7 +619,7 @@ span {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 }
 
 .search-section {

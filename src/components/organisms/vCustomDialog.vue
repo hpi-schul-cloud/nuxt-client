@@ -10,7 +10,7 @@
 			<v-card-title data-testid="dialog-title">
 				<slot name="title"></slot>
 			</v-card-title>
-			<v-card-text>
+			<v-card-text class="text--primary">
 				<slot name="content"></slot>
 			</v-card-text>
 			<v-card-actions v-if="hasButtons">
