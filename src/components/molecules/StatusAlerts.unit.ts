@@ -7,7 +7,7 @@ declare var createComponentMocks: Function;
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
-}
+};
 
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(StatusAlerts, {
@@ -22,29 +22,34 @@ const getWrapper: any = (props: object, options?: object) => {
 
 describe("@components/molecules/StatusAlerts", () => {
 	beforeEach(() => {
-		document.body.setAttribute('data-app', "true");
+		document.body.setAttribute("data-app", "true");
 		setupStores();
 	});
+
 	it("should have correct props", () => {
 		const wrapper = getWrapper(testProps);
 		expect(wrapper.vm.statusAlerts).toStrictEqual(testProps.statusAlerts);
 	});
-	it('should show alert title', () => {
+
+	it("should show alert title", () => {
 		const wrapper = getWrapper(testProps);
 		const title = wrapper.find("[data-testid=alert-title0]");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].title);
 	});
-	it('should show alert text', () => {
+
+	it("should show alert text", () => {
 		const wrapper = getWrapper(testProps);
 		const title = wrapper.find("[data-testid=alert-text0]");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].text);
 	});
-	it('should show the alert url', () => {
+
+	it("should show the alert url", () => {
 		const wrapper = getWrapper(testProps);
 		const title = wrapper.find("[data-testid=alert-link0]");
 		expect(title.element.href).toContain(mockStatusAlerts[0].url);
 	});
-	it('should show multiple alerts', () => {
+
+	it("should show multiple alerts", () => {
 		const wrapper = getWrapper(testProps);
 		const title0 = wrapper.find("[data-testid=alert-title0]");
 		expect(title0.element.textContent).toContain(mockStatusAlerts[0].title);
