@@ -109,11 +109,11 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import ShareModal from "@components/share-modal/ShareModal.vue";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import ShareModal from "@components/share-course/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {

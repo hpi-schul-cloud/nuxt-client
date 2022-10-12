@@ -47,8 +47,8 @@
 
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
-import ShareModalResult from "@components/share-modal/ShareModalResult";
+import ShareModalOptionsForm from "@components/share-course/ShareModalOptionsForm";
+import ShareModalResult from "@components/share-course/ShareModalResult";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 

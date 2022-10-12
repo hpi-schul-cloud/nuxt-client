@@ -110,18 +110,20 @@
 				@drag-from-group="dragFromGroup"
 			>
 			</room-modal>
+			<import-flow></import-flow>
 		</template>
 	</room-wrapper>
 </template>
 
 <script>
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
+import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import { roomsModule, shareCourseModule } from "@/store";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
-import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomModal from "@components/molecules/RoomModal";
-import { roomsModule } from "@/store";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
+import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
+import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import { mdiMagnify } from "@mdi/js";
 
 export default {
@@ -132,6 +134,7 @@ export default {
 		vRoomEmptyAvatar,
 		RoomModal,
 		vCustomSwitch,
+		ImportFlow,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -195,6 +198,7 @@ export default {
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
+		shareCourseModule.startImportFlow({ token: "abc123", name: "Mathe" });
 	},
 	methods: {
 		getDeviceDims() {
