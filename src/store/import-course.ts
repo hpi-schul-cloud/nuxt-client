@@ -17,17 +17,9 @@ export default class ImportCourseModule extends VuexModule {
 
 	@Action
 	startImportFlow(options: { token: string; name: string }): void {
-		this.validateToken(options.token);
+		// this.validateToken(options.token);
 		this.setName(options.name);
 		this.setImportModalOpen(true);
-	}
-
-	@Action
-	validateToken(token: string): void {
-		//this.callApiforTokenInfo(token);
-		//here we get the type (needed?) and course Id
-
-		this.setCourseId("MyFancyCourse");
 	}
 
 	@Action

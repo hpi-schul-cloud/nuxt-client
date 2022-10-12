@@ -49,6 +49,9 @@ export default defineComponent({
 	},
 	inject: ["i18n", "notifierModule"],
 	emits: ["import"],
+	props: {
+		isOpen: { type: Boolean }
+	},
 	setup(props, { emit }) {
 		// const i18n = inject("i18n");
 
@@ -67,11 +70,6 @@ export default defineComponent({
 			set: (value) => shareCourseModule.setName(value)
 		});
 
-		const isOpen = computed({
-			get: () => shareCourseModule.getIsImportModalOpen,
-			set: () => shareCourseModule.resetImportFlow(),
-		});
-
 		const onCloseDialog = () => {
 			shareCourseModule.resetImportFlow();
 		};
@@ -84,7 +82,6 @@ export default defineComponent({
 			onCloseDialog,
 			onConfirmed,
 			title,
-			isOpen,
 			mdiInformation,
 		};
 	},

@@ -40,12 +40,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import { authModule, envConfigModule, roomsModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import { mdiCloudDownload, mdiPlus, mdiSchool } from "@mdi/js";
+import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({

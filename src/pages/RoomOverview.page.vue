@@ -110,7 +110,7 @@
 				@drag-from-group="dragFromGroup"
 			>
 			</room-modal>
-			<import-flow></import-flow>
+			<import-flow :is-active="isImportMode"></import-flow>
 		</template>
 	</room-wrapper>
 </template>
@@ -136,7 +136,7 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
-  inject: ['importCourseModule'],
+	inject: ["copyModule"],
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -195,11 +195,14 @@ export default {
 				itemCount: this.rooms.length,
 			});
 		},
+		isImportMode() {
+			console.log("isImportMode", this.$route.query.import !== undefined);
+			return this.$route.query.import !== undefined;
+		},
 	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
-		this.importCourseModule.startImportFlow({ token: "abc123", name: "Mathe" });
 	},
 	methods: {
 		getDeviceDims() {
