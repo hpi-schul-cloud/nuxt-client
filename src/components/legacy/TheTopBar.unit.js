@@ -1,10 +1,8 @@
-import setupStores from "@@/tests/test-utils/setupStores";
 import StatusAlertsModule from "@/store/statusAlerts";
 import { mount } from "@vue/test-utils";
 import TheTopBar from "./TheTopBar.vue";
-//import { statusAlertsModule } from "@/store";
-//import { statusAlertsModule } from "@utils/store-accessor";
- import { initializeAxios } from "@utils/api";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { provide } from "@nuxtjs/composition-api";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
 const mockActions = [
@@ -17,42 +15,35 @@ const mockActions = [
 	},
 ];
 
-const axiosInitializer = () => {
-	initializeAxios({
-		$get: async (path) => {
-			if (path === "/v1/alert") return mockStatusAlerts;
-		},
-	});
-};
-axiosInitializer();
-
-const getWrapper = (props, options) => {
-	return mount(TheTopBar, {
-		...createComponentMocks({
-			i18n: true,
-			vuetify: true,
-		}),
-		propsData: props,
-		...options,
-	});
-};
-
 describe("@components/legacy/TheTopBar", () => {
-	beforeEach(() => {
-		setupStores({
-			'status-alerts': StatusAlertsModule,
-		});
-		//document.body.setAttribute("data-app", "true");
-		//statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+	const statusAlertsModuleMock = createModuleMocks(StatusAlertsModule, {
+		getStatusAlerts: mockStatusAlerts,
 	});
+
+	const mountComponent = (attrs = {}) => {
+		const wrapper = mount(TheTopBar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			setup() {
+				provide("statusAlertsModule", statusAlertsModuleMock);
+			},
+			...attrs,
+		});
+
+		return wrapper;
+	};
 
 	it(...isValidComponent(TheTopBar));
+
 	const $theme = {
 		name: "test",
 		logo: {
 			app: "none",
 		},
 	};
+
 	it("Render defaults", () => {
 		const wrapper = shallowMount(TheTopBar, {
 			...createComponentMocks({
@@ -70,6 +61,7 @@ describe("@components/legacy/TheTopBar", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				actions: mockActions,
+				showStatusAlerts: false,
 				user: {
 					firstName: "Arthur",
 					lastName: "Dent",
@@ -90,44 +82,43 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
 		expect(wrapper.findAll(".item")).toHaveLength(5);
 	});
+
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {
 			propsData: {
 				fullscreenMode: true,
+				showStatusAlerts: false,
 			},
 		});
-
 		wrapper.find(".fullscreen-button").trigger("click");
 		expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
-
 		expect(wrapper.findAll(".item")).toHaveLength(0);
 		expect(wrapper.findAll(".top-sidebar")).toHaveLength(0);
 		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
 
 	it("render with Status Alerts", async () => {
-		const propsData = {
-			showStatusAlerts: true,
-		};
-		const wrapper = getWrapper(propsData);
-		const alertsIcon = wrapper.find("[data-testid=status-alerts-icon]");
+		const wrapper = mountComponent({
+			propsData: {
+				showStatusAlerts: true,
+			},
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.findAll("[data-testid=status-alerts-icon]")).toHaveLength(1);
 
-		expect(alertsIcon.element.innerHTML).toContain('fa-exclamation-triangle');
-
-		//alertsIcon.trigger("click");
-		//expect(wrapper.findAll('alert-item')).toHaveLength(mockStatusAlerts.length);
+		expect(wrapper.findAll(".alert-item")).toHaveLength(
+			mockStatusAlerts.length
+		);
 	});
+
 	it("Should not render Status Alerts", async () => {
-		const wrapper = shallowMount(TheTopBar, {
-			...createComponentMocks({ i18n: true }),
+		const wrapper = mountComponent({
 			propsData: {
 				showStatusAlerts: false,
 			},
-			mocks: {
-				$theme,
-			},
 		});
+		await wrapper.vm.$nextTick();
 
-		expect(wrapper.findAll("status-alerts-stub")).toHaveLength(0);
+		expect(wrapper.findAll("[data-testid=status-alerts-icon]")).toHaveLength(0);
 	});
 });
