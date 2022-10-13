@@ -4,7 +4,7 @@ import { StatusAlert } from "./types/status-alert";
 import { $axios } from "../utils/api";
 
 @Module({
-	name: "statusAlerts",
+	name: "status-alerts",
 	namespaced: true,
 	stateFactory: true,
 })

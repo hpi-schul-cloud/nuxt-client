@@ -1,37 +1,40 @@
-import StatusAlertsModule from './statusAlerts';
-import { StatusAlert } from './types/status-alert';
+import StatusAlertsModule from "./status-alerts";
+import { StatusAlert } from "./types/status-alert";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
-describe('statusAlerts module', () => {
-	describe('actions', () => {
+describe("status alerts module", () => {
+	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
 				$get: async (path) => {
-					if (path === '/v1/alert') return mockStatusAlerts;
+					if (path === "/v1/alert") return mockStatusAlerts;
 				},
 			} as NuxtAxiosInstance);
 			setupStores();
 		});
-		describe('fetchStatusAlerts', () => {
-			it('should call api and set the alerts corectly', async () => {
+		describe("fetchStatusAlerts", () => {
+			it("should call api and set the alerts corectly", async () => {
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setStatusAlertsSpy = jest.spyOn(statusAlertsModule, 'setStatusAlerts');
-				const setStatusSpy = jest.spyOn(statusAlertsModule, 'setStatus');
-				const resetBusinessErrorSpy = jest.spyOn(statusAlertsModule, 'resetBusinessError');
+				const setStatusAlertsSpy = jest.spyOn(
+					statusAlertsModule,
+					"setStatusAlerts"
+				);
+				const setStatusSpy = jest.spyOn(statusAlertsModule, "setStatus");
+				const resetBusinessErrorSpy = jest.spyOn(
+					statusAlertsModule,
+					"resetBusinessError"
+				);
 				await statusAlertsModule.fetchStatusAlerts();
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setStatusSpy).toBeCalledTimes(2);
-				expect(setStatusSpy.mock.calls).toEqual([
-					['pending'],
-					['completed']
-				]);
+				expect(setStatusSpy.mock.calls).toEqual([["pending"], ["completed"]]);
 				expect(setStatusAlertsSpy).toHaveBeenCalledWith(mockStatusAlerts);
 			});
-			it('should handle exception', async () => {
+			it("should handle exception", async () => {
 				initializeAxios({
 					$get: async (path: string) => {
 						throw new Error("");
@@ -39,15 +42,18 @@ describe('statusAlerts module', () => {
 					},
 				} as NuxtAxiosInstance);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setBusinessErrorSpy = jest.spyOn(statusAlertsModule, 'setBusinessError');
+				const setBusinessErrorSpy = jest.spyOn(
+					statusAlertsModule,
+					"setBusinessError"
+				);
 				await statusAlertsModule.fetchStatusAlerts();
 				expect(setBusinessErrorSpy).toHaveBeenCalled();
 			});
 		});
 	});
-	describe('mutations', () => {
-		describe('setStatusAlerts', () => {
-			it('should set the status alerts', () => {
+	describe("mutations", () => {
+		describe("setStatusAlerts", () => {
+			it("should set the status alerts", () => {
 				const statusAlertsModule = new StatusAlertsModule({});
 				expect(statusAlertsModule.statusAlerts).toEqual([]);
 				statusAlertsModule.setStatusAlerts(mockStatusAlerts as StatusAlert[]);
@@ -56,9 +62,9 @@ describe('statusAlerts module', () => {
 		});
 	});
 
-	describe('getters', () => {
-		describe('getStatusAlerts', () => {
-			it('should get the status alerts', () => {
+	describe("getters", () => {
+		describe("getStatusAlerts", () => {
+			it("should get the status alerts", () => {
 				const statusAlertsModule = new StatusAlertsModule({});
 				expect(statusAlertsModule.getStatusAlerts).toEqual([]);
 				statusAlertsModule.statusAlerts = mockStatusAlerts;
