@@ -1,8 +1,8 @@
-import TheTopBar from "./TheTopBar";
 import setupStores from "@@/tests/test-utils/setupStores";
-import StatusAlertsModule from "@/store/statusAlerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import StatusAlertsModule from "@/store/status-alerts";
 import { statusAlertsModule } from "@/store";
+import TheTopBar from "./TheTopBar";
 
 const mockActions = [
 	{ type: "popupIcon", icon: "house", title: "test home", component: "v-icon" },
@@ -14,80 +14,76 @@ const mockActions = [
 	},
 ];
 
+const getWrapper = (props, options) => {
+	return mount(TheTopBar, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
+		propsData: props,
+		attachTo: document.body,
+		...options,
+	});
+};
+
 describe("@components/legacy/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
-			statusAlerts: StatusAlertsModule,
+			"status-alerts": StatusAlertsModule,
 		});
 	});
-
-	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TheTopBar, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			...attrs,
-		});
-
-		return wrapper;
-	};
 
 	it(...isValidComponent(TheTopBar));
 
-	const $theme = {
-		name: "test",
-		logo: {
-			app: "none",
-		},
-	};
+	// TODO - is this test useful?
+	it("renders defaults", () => {
+		const wrapper = getWrapper();
 
-	it("Render defaults", () => {
-		const wrapper = shallowMount(TheTopBar, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
 		expect(wrapper.find(".action").exists()).toBe(false);
 	});
 
-	it("Render with links and buttons", () => {
-		const wrapper = shallowMount(TheTopBar, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				actions: mockActions,
-				showStatusAlerts: false,
-				user: {
-					firstName: "Arthur",
-					lastName: "Dent",
-					roles: [{ name: "administrator" }],
-				},
-				school: {
-					name: "dummy school",
-				},
+	it("renders with links and buttons", () => {
+		const wrapper = getWrapper({
+			actions: mockActions,
+			user: {
+				firstName: "Arthur",
+				lastName: "Dent",
+				roles: [{ name: "administrator" }],
 			},
-			mocks: {
-				$theme,
+			school: {
+				name: "dummy school",
 			},
 		});
-		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
-		expect(wrapper.findAll("popup-icon-stub")).toHaveLength(2);
-		expect(wrapper.findAll("button")).toHaveLength(1);
-		wrapper.find("button").trigger("click");
-		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
+
 		expect(wrapper.findAll(".item")).toHaveLength(5);
+		// expect(wrapper.findAll("popup-icon-stub")).toHaveLength(2);
+	});
+
+	it("should emit logout event", () => {
+		const wrapper = getWrapper({
+			actions: mockActions,
+			user: {
+				firstName: "Arthur",
+				lastName: "Dent",
+				roles: [{ name: "administrator" }],
+			},
+			school: {
+				name: "dummy school",
+			},
+		});
+
+		const logoutBtn = wrapper.find("[data-testid='logout']");
+		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
+
+		logoutBtn.trigger("click");
+		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
 	});
 
 	it("can switch to fullscreen mode", () => {
-		const wrapper = mount(TheTopBar, {
-			propsData: {
-				fullscreenMode: true,
-				showStatusAlerts: false,
-			},
+		const wrapper = getWrapper({
+			fullscreenMode: true,
 		});
+
 		wrapper.find(".fullscreen-button").trigger("click");
 		expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
 		expect(wrapper.findAll(".item")).toHaveLength(0);
@@ -95,31 +91,45 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
 
-	it("render with Status Alerts", async () => {
-		jest.spyOn(statusAlertsModule, "fetchStatusAlerts").mockImplementation();
-		statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+	it("should render with status alerts", async () => {
+		const fetchStatusAlertsSpy = jest
+			.spyOn(statusAlertsModule, "fetchStatusAlerts")
+			.mockImplementation(() => {
+				statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+			});
 
-		const wrapper = mountComponent({
-			propsData: {
-				showStatusAlerts: true,
-			},
-		});
+		// jest.spyOn(statusAlertsModule, "fetchStatusAlerts").mockImplementation();
+		// statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
-		expect(wrapper.findAll("[data-testid=status-alerts-icon]")).toHaveLength(1);
 
+		expect(fetchStatusAlertsSpy).toHaveBeenCalled();
+		expect(wrapper.vm.showStatusAlertIcon).toStrictEqual(true);
+
+		expect(wrapper.findAll("[data-test-id='status-alerts-icon']")).toHaveLength(
+			1
+		);
 		expect(wrapper.findAll(".alert-item")).toHaveLength(
 			mockStatusAlerts.length
 		);
 	});
 
-	it("Should not render Status Alerts", async () => {
-		const wrapper = mountComponent({
-			propsData: {
-				showStatusAlerts: false,
-			},
-		});
+	it("should not render status alerts", async () => {
+		const fetchStatusAlertsSpy = jest
+			.spyOn(statusAlertsModule, "fetchStatusAlerts")
+			.mockImplementation(() => {
+				statusAlertsModule.setStatusAlerts([]);
+			});
+
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.findAll("[data-testid=status-alerts-icon]")).toHaveLength(0);
+		expect(fetchStatusAlertsSpy).toHaveBeenCalled();
+		expect(wrapper.vm.showStatusAlertIcon).toStrictEqual(false);
+
+		expect(wrapper.findAll("[data-test-id='status-alerts-icon']")).toHaveLength(
+			0
+		);
 	});
 });
