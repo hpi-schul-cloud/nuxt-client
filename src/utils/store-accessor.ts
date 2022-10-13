@@ -14,7 +14,7 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
-import StatusAlertsModule from "@store/statusAlerts";
+import StatusAlertsModule from "@/store/statusAlerts";
 import TaskModule from "@/store/tasks";
 import ShareCourseModule from "@/store/share-course";
 import { Store } from "vuex";
