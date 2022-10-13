@@ -2,6 +2,7 @@ import TheTopBar from "./TheTopBar";
 import setupStores from "@@/tests/test-utils/setupStores";
 import StatusAlertsModule from "@/store/statusAlerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { statusAlertsModule } from "@/store";
 
 const mockActions = [
 	{ type: "popupIcon", icon: "house", title: "test home", component: "v-icon" },
@@ -12,10 +13,6 @@ const mockActions = [
 		component: "menu-qr-code",
 	},
 ];
-
-const mockData = {
-	statusAlerts: mockStatusAlerts,
-};
 
 describe("@components/legacy/TheTopBar", () => {
 	beforeEach(() => {
@@ -99,12 +96,14 @@ describe("@components/legacy/TheTopBar", () => {
 	});
 
 	it("render with Status Alerts", async () => {
+		jest.spyOn(statusAlertsModule, "fetchStatusAlerts").mockImplementation();
+		statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+
 		const wrapper = mountComponent({
 			propsData: {
 				showStatusAlerts: true,
 			},
 		});
-		wrapper.setData(mockData);
 		await wrapper.vm.$nextTick();
 		expect(wrapper.findAll("[data-testid=status-alerts-icon]")).toHaveLength(1);
 
