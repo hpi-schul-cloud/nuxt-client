@@ -110,6 +110,7 @@
 	"components.legacy.footer.status": "Estado",
 	"components.legacy.footer.terms": "Condiciones de uso",
 	"components.legacy.MenuQrCode.qrHintText": "Dirige a otros usuarios a este sitio",
+	"components.legacy.MenuQrCode.print": "Imprimir",
 	"components.molecules.AddContentModal": "Para ser añadido a",
 	"components.molecules.adminfooterlegend.title": "Leyenda",
 	"components.molecules.admintablelegend.externalSync": "Algunos o todos los datos de usuari@ se sincronizan con un origen de datos externo (LDAP, IDM, etc.). Por lo tanto, no es posible editar la tabla manualmente con la nube de la escuela. La creación de nuevos estudiantes o profesores también es posible en el sistema de origen. Encuentra más información en el",

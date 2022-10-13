@@ -117,6 +117,7 @@
 	"components.legacy.footer.status": "Статус",
 	"components.legacy.footer.terms": "Умови використання",
 	"components.legacy.MenuQrCode.qrHintText": "Переспрямовувати інших користувачів на цей сайт",
+	"components.legacy.MenuQrCode.print": "Роздрукувати",
 	"components.molecules.AddContentModal": "Для додавання в",
 	"components.molecules.adminfooterlegend.title": "Легенда",
 	"components.molecules.admintablelegend.externalSync": "Деякі або всі ваші дані користувача синхронізуються із зовнішнім джерелом даних (LDAP, IDM тощо). Тому неможливо редагувати таблицю вручну за допомогою шкільної хмари. Створення нових учнів або викладачів також можливо лише у вихідній системі. Додаткову інформацію можна знайти на",

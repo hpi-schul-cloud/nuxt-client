@@ -111,6 +111,7 @@
 	"components.legacy.footer.status": "Status",
 	"components.legacy.footer.terms": "Nutzungsordnung",
 	"components.legacy.MenuQrCode.qrHintText": "Lotse mit dem QR-Code andere Nutzer:innen auf diese Seite",
+	"components.legacy.MenuQrCode.print": "Drucken",
 	"components.molecules.AddContentModal": "Hinzufügen zu",
 	"components.molecules.adminfooterlegend.title": "Legende",
 	"components.molecules.admintablelegend.externalSync": "Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o. ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte sind ebenfalls nur im Quellsystem möglich. Finde weitere Informationen im",
