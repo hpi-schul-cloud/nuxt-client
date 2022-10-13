@@ -29,7 +29,10 @@
 							kann im Folgenden umbenannt werden.
 						</div>
 					</div>
-					<v-text-field v-model="title" label="Kurs name"></v-text-field>
+					<v-text-field
+						v-model="parentNameModel"
+						label="Kurs name"
+					></v-text-field>
 				</div>
 			</v-fade-transition>
 		</template>
@@ -50,7 +53,8 @@ export default defineComponent({
 	inject: ["i18n", "notifierModule"],
 	emits: ["import"],
 	props: {
-		isOpen: { type: Boolean }
+		isOpen: { type: Boolean },
+		parentName: { type: String, default: () => '' }
 	},
 	setup(props, { emit }) {
 		// const i18n = inject("i18n");
@@ -65,14 +69,14 @@ export default defineComponent({
 
 		const shareCourseModule = inject("shareCourseModule");
 
-		const title = computed({
-			get: () => shareCourseModule.getName,
-			set: (value) => shareCourseModule.setName(value)
-		});
-
 		const onCloseDialog = () => {
 			shareCourseModule.resetImportFlow();
 		};
+
+		const parentNameModel = computed({
+			get: () => props.parentName,
+			set: () => {}
+		});
 
 		const onConfirmed = () => {
 			emit('import');
@@ -81,7 +85,7 @@ export default defineComponent({
 		return {
 			onCloseDialog,
 			onConfirmed,
-			title,
+			parentNameModel,
 			mdiInformation,
 		};
 	},

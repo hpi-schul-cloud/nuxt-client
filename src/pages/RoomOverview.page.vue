@@ -110,7 +110,7 @@
 				@drag-from-group="dragFromGroup"
 			>
 			</room-modal>
-			<import-flow :is-active="isImportMode"></import-flow>
+			<import-flow :is-active="isImportMode" :token="importToken"></import-flow>
 		</template>
 	</room-wrapper>
 </template>
@@ -196,8 +196,10 @@ export default {
 			});
 		},
 		isImportMode() {
-			console.log("isImportMode", this.$route.query.import !== undefined);
 			return this.$route.query.import !== undefined;
+		},
+		importToken() {
+			return this.$route.query.import;
 		},
 	},
 	async created() {

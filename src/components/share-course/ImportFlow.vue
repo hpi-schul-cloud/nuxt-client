@@ -2,11 +2,13 @@
 	<div>
 		<import-modal
 			:is-open="isImportModalOpen"
+			:parent-name="parentName"
 			@import="onImport"
 		></import-modal>
 		<copy-result-modal
 			:is-open="isCopyResultModalOpen"
 			:copy-result-items="copyResultModalItems"
+			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</div>
 </template>
@@ -14,7 +16,7 @@
 <script type="ts">
 import ImportModal from "@/components/share-course/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
-import { defineComponent, inject, reactive, ref, watch } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref, watch } from "@vue/composition-api";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -36,13 +38,19 @@ export default defineComponent({
 	},
 	setup(props) {
 
-		// const shareCourseModule = inject("shareCourseModule");
 		const copyModule = inject("copyModule");
 		const step = ref(0);
+		const parentName = ref("");
 
 		const isImportModalOpen = ref(false);
-		const isCopyResultModalOpen = ref(false);
-		const copyResultModalItems = reactive([]);
+
+		const isCopyResultModalOpen = computed({
+			get: () => copyModule.getIsResultModalOpen,
+			set: (bool) => copyModule.setResultModalOpen(bool)
+		});
+
+		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
+
 		const { isLoadingDialogOpen } = useLoadingState('Kurs importieren läuft...') // wip
 
 		const onImport = () => {
@@ -54,16 +62,14 @@ export default defineComponent({
 				case 1:
 					isImportModalOpen.value = true;
 					break;
+
 				case 2:
 					isImportModalOpen.value = false;
 					isLoadingDialogOpen.value = true;
 					copyModule.copyByShareToken({ token: props.token, type:'course' })
-						.then((result) => {
-							console.log("result", result);
-							copyResultModalItems.value = result;
-							step.value = 3;
-						});
+						.then(() => step.value = 3);
 					break;
+
 				case 3:
 					isLoadingDialogOpen.value = false;
 					isCopyResultModalOpen.value = true;
@@ -72,14 +78,22 @@ export default defineComponent({
 		})
 
 		if (props.isActive === true) {
-			step.value = 1;
+			copyModule.validateShareToken(props.token).then((result) => {
+				parentName.value = result.parentName;
+				step.value = 1;
+			})
+
 		}
+
+		const onCopyResultModalClosed = () => copyModule.reset();
 
 		return {
 			isImportModalOpen,
 			isCopyResultModalOpen,
 			copyResultModalItems,
+			parentName,
 			step,
+			onCopyResultModalClosed,
 			onImport
 		}
 	}

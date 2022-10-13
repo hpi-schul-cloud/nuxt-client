@@ -8,9 +8,9 @@ import {
 	RoomsApiInterface,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
+	ShareTokenInfoResponse,
 	TaskApiFactory,
 	TaskApiInterface,
-	ShareTokenInfoResponse,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 
@@ -129,11 +129,21 @@ export default class CopyModule extends VuexModule {
 			// 	.shareTokenControllerImportCourse(token)
 			// 	.then((response) => response.data);
 			copyResult = {
-				type: CopyApiResponseTypeEnum.Course,
+				title: "Aufgabe",
+				type: CopyApiResponseTypeEnum.Task,
 				status: CopyApiResponseStatusEnum.Partial,
+				id: "123",
 				elements: [
 					{
-						type: CopyApiResponseTypeEnum.Lesson,
+						type: CopyApiResponseTypeEnum.SubmissionGroup,
+						status: CopyApiResponseStatusEnum.NotDoing,
+					},
+					{
+						type: CopyApiResponseTypeEnum.File,
+						status: CopyApiResponseStatusEnum.NotImplemented,
+					},
+					{
+						type: CopyApiResponseTypeEnum.LessonContentEtherpad,
 						status: CopyApiResponseStatusEnum.Failure,
 					},
 				],
