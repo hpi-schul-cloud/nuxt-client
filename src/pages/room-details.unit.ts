@@ -396,7 +396,7 @@ describe("@pages/RoomDetails.page.vue", () => {
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true });
 			// const createCourseShareTokenSpy = jest.fn();
 			// shareCourseModule.createCourseShareToken = createCourseShareTokenSpy;
 			const wrapper = getWrapper();
