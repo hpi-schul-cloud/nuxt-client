@@ -10,6 +10,7 @@ import {
 	ShareTokenApiInterface,
 	TaskApiFactory,
 	TaskApiInterface,
+	ShareTokenInfoResponse,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 
@@ -103,15 +104,17 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	validateShareToken(token: string): ShareTokenValidationResult {
-		//this.callApiforTokenInfo(token);
-		//here we get the type (needed?) and course Id
-		return {
-			payload: {
-				parentType: "course",
-				parentName: "Mathematik",
-			},
-		};
+	async validateShareToken(
+		token: string
+	): Promise<ShareTokenInfoResponse | undefined> {
+		try {
+			const shareTokenResponse =
+				await this.shareApi.shareTokenControllerLookupShareToken(token);
+			if (!shareTokenResponse) return undefined;
+			return shareTokenResponse.data;
+		} catch {
+			return undefined;
+		}
 	}
 
 	@Action
