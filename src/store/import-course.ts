@@ -6,7 +6,7 @@ export interface ImportPayload {
 }
 
 @Module({
-	name: "share-course",
+	name: "import-course",
 	namespaced: true,
 	stateFactory: true,
 })
