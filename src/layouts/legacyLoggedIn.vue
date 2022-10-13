@@ -10,7 +10,6 @@
 					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
 					:expanded-menu="expandedMenu"
-					:show-status-alerts="showStatusAlerts"
 					:user="user"
 					:school="school"
 					@action="handleTopAction"
@@ -58,7 +57,6 @@ export default {
 			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
-			showStatusAlerts: true,
 			expandedMenu: false,
 			topbarBaseActions: [
 				{
