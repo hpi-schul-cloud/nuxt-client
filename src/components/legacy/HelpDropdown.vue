@@ -23,11 +23,32 @@
 
 <script>
 export default {
-	props: {
-		menuItems: {
-			type: Array,
-			required: true,
-		},
+	data() {
+		return {
+			menuItems: [
+				{
+					label: this.$t("global.topbar.actions.helpSection"),
+					icon: "question-circle",
+					action: "/help",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: this.$t("global.topbar.actions.contactSupport"),
+					icon: "pencil",
+					action: "/help/contact",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: this.$t("global.topbar.actions.training"),
+					icon: "fortbildung",
+					action: "https://www.lernen.cloud/",
+					source: "custom",
+					target: "_blank",
+				},
+			],
+		};
 	},
 };
 </script>
