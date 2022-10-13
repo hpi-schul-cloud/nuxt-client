@@ -92,6 +92,12 @@
 				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
+				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
+					<base-qr-code
+						:url="dialog.qrUrl"
+						data-testid="modal-qrcode"
+					></base-qr-code>
+				</div>
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
@@ -109,10 +115,11 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
+import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModal from "@components/share-modal/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
@@ -145,6 +152,7 @@ export default defineComponent({
 		};
 	},
 	components: {
+		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
 		ImportLessonModal,
@@ -276,7 +284,10 @@ export default defineComponent({
 				dataTestId: "title-menu-invite",
 			});
 
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+			if (
+				envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
+				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
+			) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
@@ -320,8 +331,20 @@ export default defineComponent({
 			this.dialog.subText = "";
 			this.dialog.isOpen = true;
 		},
-		shareCourse() {
-			this.shareCourseModule.startShareFlow(this.courseId);
+		async shareCourse() {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
+				this.shareCourseModule.startShareFlow(this.courseId);
+			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+				await roomModule.createCourseShareToken(this.courseId);
+				this.dialog.courseShareToken = roomModule.getCourseShareToken;
+				this.dialog.model = "share";
+				this.dialog.header = this.$t("pages.room.modal.course.share.header");
+				this.dialog.text = this.$t("pages.room.modal.course.share.text");
+				this.dialog.inputText = this.dialog.courseShareToken;
+				this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
+				this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
+				this.dialog.isOpen = true;
+			}
 		},
 		closeDialog() {
 			this.dialog.model = "";
