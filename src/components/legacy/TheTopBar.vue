@@ -8,7 +8,7 @@
 			<base-button
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				design="text icon"
-				data-test-id="top-bar-action"
+				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<base-icon class="menu-icon" source="fa" icon="bars" />
@@ -32,7 +32,7 @@
 					design="text icon"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
-					data-test-id="top-bar-action"
+					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
 					<base-icon source="fa" icon="expand" />
@@ -43,7 +43,7 @@
 					icon="qrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
-					data-test-id="top-bar-action"
+					data-test-id="qr-code-btn"
 				>
 					<menu-qr-code />
 				</popup-icon>
@@ -53,7 +53,7 @@
 					icon="question"
 					:title="$t('global.topbar.actions.help')"
 					:aria-label="$t('global.topbar.actions.help')"
-					data-test-id="top-bar-action"
+					data-test-id="help-btn"
 				>
 					<help-dropdown />
 				</popup-icon>
