@@ -8,6 +8,7 @@
 			<base-button
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				design="text icon"
+				data-test-id="top-bar-action"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<base-icon class="menu-icon" source="fa" icon="bars" />
@@ -23,7 +24,7 @@
 				:fill="statusAlertColor"
 				class="item"
 				centered
-				data-testid="status-alerts-icon"
+				data-test-id="status-alerts-icon"
 			>
 				<status-alerts :status-alerts="statusAlerts"></status-alerts>
 			</popup-icon>
@@ -32,6 +33,7 @@
 				design="text icon"
 				:title="$t('global.topbar.actions.fullscreen')"
 				:aria-label="$t('global.topbar.actions.fullscreen')"
+				data-test-id="top-bar-action"
 				@click.native="sendEvent('fullscreen')"
 			>
 				<base-icon source="fa" icon="expand" />
@@ -44,6 +46,7 @@
 					:icon="action.icon"
 					:title="action.title"
 					:aria-label="action.title"
+					data-test-id="top-bar-action"
 				>
 					<component :is="action.component" v-bind="action.config"></component>
 				</popup-icon>
@@ -138,9 +141,6 @@ export default defineComponent({
 				name: "",
 			}),
 		},
-		showStatusAlerts: {
-			type: Boolean,
-		},
 		user: {
 			type: Object,
 			validator: function (user) {
@@ -160,7 +160,7 @@ export default defineComponent({
 			return this.$t(`global.topbar.roleName.${roleName[0]}`);
 		},
 		showStatusAlertIcon() {
-			return this.showStatusAlerts && this.statusAlerts.length !== 0;
+			return this.statusAlerts.length !== 0;
 		},
 		statusAlertColor() {
 			const color = this.statusAlertDanger()
@@ -170,10 +170,8 @@ export default defineComponent({
 		},
 	},
 	async mounted() {
-		if (this.showStatusAlerts) {
-			await statusAlertsModule.fetchStatusAlerts();
-			this.statusAlerts = statusAlertsModule.getStatusAlerts;
-		}
+		await statusAlertsModule.fetchStatusAlerts();
+		this.statusAlerts = statusAlertsModule.getStatusAlerts;
 	},
 	methods: {
 		sendEvent(eventName) {
