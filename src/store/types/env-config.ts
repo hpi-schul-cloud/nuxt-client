@@ -36,4 +36,5 @@ export type Envs = {
 	GHOST_BASE_URL: string;
 	FEATURE_COURSE_SHARE?: boolean;
 	FEATURE_CONSENT_NECESSARY: boolean;
+	FEATURE_IMSCC_COURSE_EXPORT_ENABLED?: boolean;
 };

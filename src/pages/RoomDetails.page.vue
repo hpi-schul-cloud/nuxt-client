@@ -126,6 +126,7 @@ import RoomDashboard from "@components/templates/RoomDashboard";
 import {
 	mdiCloudDownload,
 	mdiContentCopy,
+	mdiDownload,
 	mdiEmailPlusOutline,
 	mdiFormatListChecks,
 	mdiPlus,
@@ -183,6 +184,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
+				mdiDownload,
 			},
 			breadcrumbs: [
 				{
@@ -293,6 +295,14 @@ export default defineComponent({
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
+				});
+			}
+			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+				items.push({
+					icon: this.icons.mdiDownload,
+					action: async () => await roomModule.downloadImsccCourse(),
+					name: this.$t("common.actions.download"),
+					dataTestId: "title-menu-imscc-download",
 				});
 			}
 			return items;
