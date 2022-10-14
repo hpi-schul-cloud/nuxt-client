@@ -30,7 +30,7 @@ export default defineComponent({
 	props: {
 		token: {
 			type: String,
-			default: () => 'ABC'
+			default: () => ''
 		},
 		isActive: {
 			type: Boolean,
@@ -38,8 +38,9 @@ export default defineComponent({
 		}
 	},
 	setup(props) {
-
+		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
+
 		const step = ref(0);
 		const parentName = ref("");
 
@@ -52,7 +53,7 @@ export default defineComponent({
 
 		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 
-		const { isLoadingDialogOpen } = useLoadingState('Kurs importieren läuft...') // wip
+		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage")) // wip
 
 		const onImport = (courseName) => {
 			step.value = 2;
@@ -60,29 +61,28 @@ export default defineComponent({
 		};
 
 		const onCancel = () => {
-			console.log('canceld')
-			step.value = 4;
+			step.value = 0;
 		};
 
 		watch(step, (newValue) => {
-			console.log('new step value', newValue);
 			switch (newValue) {
-				case 1:
+				case 1: //
 					isImportModalOpen.value = true;
 					break;
 
-				case 2:
+				case 2: // importing
 					isImportModalOpen.value = false;
 					isLoadingDialogOpen.value = true;
 					copyModule.copyByShareToken({ token: props.token, type:'course', newName: parentName.value })
 						.then(() => step.value = 3);
 					break;
 
-				case 3:
+				case 3: // result
 					isLoadingDialogOpen.value = false;
 					isCopyResultModalOpen.value = true;
 					break;
 
+				case 0: // initial or canceled
 				default:
 					isImportModalOpen.value = false;
 					isLoadingDialogOpen.value = false;

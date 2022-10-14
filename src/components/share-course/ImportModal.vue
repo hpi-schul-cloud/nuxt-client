@@ -10,7 +10,7 @@
 		@dialog-canceled="onCancel"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			Kurs importieren
+			{{ $t("components.molecules.importCourse.options.title") }}
 		</div>
 
 		<template slot="content">
@@ -26,8 +26,7 @@
 							}}</v-icon>
 						</div>
 						<div>
-							Teilnehmer:innen bezogene Daten werden nicht kopiert. Der Kurs
-							kann im Folgenden umbenannt werden.
+							{{ $t("components.molecules.importCourse.options.infoText") }}
 						</div>
 					</div>
 					<v-text-field v-model="courseName" label="Kurs name"></v-text-field>
