@@ -452,7 +452,7 @@ export default {
 }
 
 .action-button {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 }
 
 .chip-items-group {

@@ -4,7 +4,7 @@
 			v-if="error.statusCode === 404"
 			img-src="@assets/img/pageNotFound.svg"
 			img-height="300px"
-			fill="var(--color-primary)"
+			fill="var(--v-primary-base)"
 			role="presentation"
 		/>
 		<img

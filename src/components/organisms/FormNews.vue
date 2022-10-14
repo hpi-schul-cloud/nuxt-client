@@ -193,7 +193,7 @@ export default Vue.extend({
 			this.$dialog.confirm({
 				icon: "warning",
 				actionDesign: "success",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				invertedDesign: true,
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
@@ -220,7 +220,7 @@ export default Vue.extend({
 					"components.organisms.FormNews.cancel.confirm.confirm"
 				),
 				actionDesign: "success",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				invertedDesign: true,
 				onConfirm: () => this.$emit("cancel"),
 			});

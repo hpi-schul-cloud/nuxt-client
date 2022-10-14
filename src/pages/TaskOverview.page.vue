@@ -8,7 +8,6 @@ import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 
 export default {
 	components: { TasksDashboardMain },
-	layout: "defaultVuetify",
 	computed: {
 		userRoles: () => authModule.getUserRoles,
 		dashBoardRole: function () {

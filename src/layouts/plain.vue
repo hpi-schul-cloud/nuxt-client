@@ -1,5 +1,5 @@
 <template>
-	<div class="v-application">
+	<v-app>
 		<Nuxt />
-	</div>
+	</v-app>
 </template>

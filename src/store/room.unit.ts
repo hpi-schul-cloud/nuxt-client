@@ -521,6 +521,38 @@ describe("room module", () => {
 			});
 		});
 
+		describe("downloadImsccCourse", () => {
+			it("should call backend api", async () => {
+				const roomModule = new RoomModule({});
+				const mockApi = {
+					lessonControllerDelete: jest.fn(() => Promise.resolve()),
+				};
+				const spy = jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+
+				await expect(roomModule.downloadImsccCourse()).resolves.not.toBeDefined();
+
+				spy.mockRestore();
+			});
+			it("should catch error in catch block", async () => {
+				const roomModule = new RoomModule({});
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					courseControllerExportCourse: jest.fn(() => Promise.reject({ ...error })),
+				};
+				const spy = jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+
+				await roomModule.downloadImsccCourse();
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
 		describe("finishTask", () => {
 			beforeEach(() => {
 				// @ts-ignore
