@@ -3,17 +3,17 @@
 		min-width="250"
 		max-height="200"
 		class="alerts"
-		data-testid="status-alerts"
+		data-test-id="status-alerts"
 	>
 		<div
 			v-for="(item, index) in statusAlerts"
 			:key="index"
 			class="alert-item"
-			:data-testid="`alert-item-${index}`"
+			:data-test-id="`alert-item-${index}`"
 		>
 			<v-card-text class="py-2">
 				<div class="top-row-container">
-					<div class="alert-title" :data-testid="`alert-title-${index}`">
+					<div class="alert-title" :data-test-id="`alert-title-${index}`">
 						<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
 							{{ getIconTag(item.status).icon }}
 						</v-icon>
@@ -21,21 +21,20 @@
 					</div>
 					<div
 						class="alert-date text--primary mt-1 mb-0 pb-0"
-						:data-testid="`alert-date-${index}`"
+						:data-test-id="`alert-date-${index}`"
 					>
 						{{ getDate(item.timestamp) }}
 					</div>
 				</div>
-				<div class="alert-text" :data-testid="`alert-text-${index}`">
+				<div class="alert-text" :data-test-id="`alert-text-${index}`">
 					{{ getAlertText(item.text) }}
 				</div>
-				<div class="alert-link">
+				<div class="text-right">
 					<a
 						:href="item.url"
 						rel="noopener"
 						target="_blank"
-						class="action-button"
-						:data-testid="`alert-link-${index}`"
+						:data-test-id="`alert-link-${index}`"
 					>
 						{{ getUrl(item.url) }}
 					</a>
@@ -104,10 +103,6 @@ export default defineComponent({
 	}
 }
 
-.action-button {
-	color: var(--color-primary);
-}
-
 .alert-item:not(:first-child) {
 	padding-top: var(--space-xs-4);
 	margin-top: var(--space-xs-4);
@@ -131,9 +126,5 @@ export default defineComponent({
 		color: var(--color-gray);
 		text-align: right;
 	}
-}
-
-.alert-link {
-	text-align: right;
 }
 </style>
