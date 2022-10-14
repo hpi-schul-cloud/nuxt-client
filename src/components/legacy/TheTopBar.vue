@@ -159,10 +159,13 @@ export default defineComponent({
 			return this.statusAlerts.length !== 0;
 		},
 		statusAlertColor() {
-			const color = this.statusAlertDanger()
+			const statusAlertsIncludeDanger =
+				this.statusAlerts.filter((alert) => alert.status === "danger")
+					.length !== 0;
+
+			return statusAlertsIncludeDanger
 				? "var(--v-error-base)"
 				: "var(--v-secondary-darken1)";
-			return color;
 		},
 	},
 	async mounted() {
@@ -172,12 +175,6 @@ export default defineComponent({
 	methods: {
 		sendEvent(eventName) {
 			this.$emit("action", eventName);
-		},
-		statusAlertDanger() {
-			return (
-				this.statusAlerts.filter((alert) => alert.status === "danger")
-					.length !== 0
-			);
 		},
 	},
 });
