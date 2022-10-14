@@ -26,7 +26,7 @@
 						{{ getDate(item.timestamp) }}
 					</div>
 				</div>
-				<div class="alert-text" :data-test-id="`alert-text-${index}`">
+				<div :data-test-id="`alert-text-${index}`">
 					{{ getAlertText(item.text) }}
 				</div>
 				<div class="text-right">
@@ -36,7 +36,7 @@
 						target="_blank"
 						:data-test-id="`alert-link-${index}`"
 					>
-						{{ getUrl(item.url) }}
+						{{ prettifiedUrl(item.url) }}
 					</a>
 				</div>
 			</v-card-text>
@@ -77,7 +77,7 @@ export default defineComponent({
 			return text;
 		};
 
-		const getUrl = (url: string) => {
+		const prettifiedUrl = (url: string) => {
 			return url.replace(/(^\w+:|^)\/\//, "");
 		};
 
@@ -85,7 +85,7 @@ export default defineComponent({
 			return fromNow(date, true);
 		};
 
-		return { getIconTag, getAlertText, getUrl, getDate };
+		return { getIconTag, getAlertText, prettifiedUrl, getDate };
 	},
 });
 </script>
