@@ -37,14 +37,16 @@ describe("@components/legacy/TheTopBar", () => {
 	it(...isValidComponent(TheTopBar));
 
 	describe("when user is logged in with no status alerts", () => {
-		it("should render action buttons correctly", async () => {
+		let wrapper;
+
+		beforeEach(() => {
 			jest
 				.spyOn(statusAlertsModule, "fetchStatusAlerts")
 				.mockImplementation(() => {
 					statusAlertsModule.setStatusAlerts([]);
 				});
 
-			const wrapper = getWrapper({
+			wrapper = getWrapper({
 				user: {
 					firstName: "Arthur",
 					lastName: "Dent",
@@ -54,8 +56,9 @@ describe("@components/legacy/TheTopBar", () => {
 					name: "dummy school",
 				},
 			});
-			await wrapper.vm.$nextTick();
+		});
 
+		it("should render action buttons correctly", () => {
 			expect(wrapper.find("[data-test-id='top-menu-btn']").exists()).toBe(true);
 			expect(wrapper.find("[data-test-id='status-alerts-icon']").exists()).toBe(
 				false
@@ -65,6 +68,12 @@ describe("@components/legacy/TheTopBar", () => {
 			);
 			expect(wrapper.find("[data-test-id='qr-code-btn']").exists()).toBe(true);
 			expect(wrapper.find("[data-testid='initials']").exists()).toBe(true);
+		});
+
+		it("should not render status alert icon", () => {
+			expect(wrapper.find("[data-test-id='status-alerts-icon']").exists()).toBe(
+				false
+			);
 		});
 	});
 
@@ -85,7 +94,7 @@ describe("@components/legacy/TheTopBar", () => {
 			expect(
 				wrapper.findAll("[data-test-id='status-alerts-icon']")
 			).toHaveLength(1);
-			expect(wrapper.findAll(".alert-item")).toHaveLength(
+			expect(wrapper.findAll(".v-list-item")).toHaveLength(
 				mockStatusAlerts.length
 			);
 		});

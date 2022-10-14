@@ -29,7 +29,7 @@
 				<v-list-item-title :data-test-id="`alert-title-${index}`">
 					{{ item.title }}
 				</v-list-item-title>
-				<v-list-item-subtitle>
+				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
 					{{ getAlertText(item.text) }}
 				</v-list-item-subtitle>
 				<div class="text-right text-subtitle-2">
