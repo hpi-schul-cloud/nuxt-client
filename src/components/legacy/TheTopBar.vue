@@ -160,8 +160,8 @@ export default defineComponent({
 		},
 		statusAlertColor() {
 			const color = this.statusAlertDanger()
-				? "var(--color-error-base)"
-				: "var(--color-secondary-darken1)";
+				? "var(--v-error-base)"
+				: "var(--v-secondary-darken1)";
 			return color;
 		},
 	},
