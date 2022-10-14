@@ -6,7 +6,8 @@
 		has-buttons
 		:buttons="['cancel', 'confirm']"
 		confirm-btn-title-key="common.actions.import"
-		@dialog-confirmed="onConfirmed"
+		@dialog-confirmed="onConfirm"
+		@dialog-canceled="onCancel"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2">
 			Kurs importieren
@@ -29,10 +30,7 @@
 							kann im Folgenden umbenannt werden.
 						</div>
 					</div>
-					<v-text-field
-						v-model="parentNameModel"
-						label="Kurs name"
-					></v-text-field>
+					<v-text-field v-model="courseName" label="Kurs name"></v-text-field>
 				</div>
 			</v-fade-transition>
 		</template>
@@ -42,7 +40,8 @@
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject } from "@vue/composition-api";
+import { defineComponent, ref, watch } from "@vue/composition-api";
+import { XmlEntities } from "html-entities";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -50,42 +49,26 @@ export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
-	inject: ["i18n", "notifierModule"],
-	emits: ["import"],
+	inject: ["i18n"],
+	emits: ["import", "cancel"],
 	props: {
 		isOpen: { type: Boolean },
 		parentName: { type: String, default: () => '' }
 	},
 	setup(props, { emit }) {
-		// const i18n = inject("i18n");
-
-		// const t = (key) => {
-		// 	const translateResult = i18n?.t(key);
-		// 	if (typeof translateResult === "string") {
-		// 		return translateResult;
-		// 	}
-		// 	return "unknown translation-key:" + key;
-		// };
-
-		const shareCourseModule = inject("shareCourseModule");
-
-		const onCloseDialog = () => {
-			shareCourseModule.resetImportFlow();
-		};
-
-		const parentNameModel = computed({
-			get: () => props.parentName,
-			set: () => {}
+		const courseName = ref("");
+		watch(() => props.parentName, (newValue) => {
+			const entities = new XmlEntities();
+			courseName.value = entities.decode(newValue);
 		});
 
-		const onConfirmed = () => {
-			emit('import');
-		}
+		const onConfirm = () => emit('import', courseName.value);
+		const onCancel = () => emit('cancel')
 
 		return {
-			onCloseDialog,
-			onConfirmed,
-			parentNameModel,
+			onConfirm,
+			onCancel,
+			courseName,
 			mdiInformation,
 		};
 	},

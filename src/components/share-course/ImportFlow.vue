@@ -4,6 +4,7 @@
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
 			@import="onImport"
+			@cancel="onCancel"
 		></import-modal>
 		<copy-result-modal
 			:is-open="isCopyResultModalOpen"
@@ -53,11 +54,18 @@ export default defineComponent({
 
 		const { isLoadingDialogOpen } = useLoadingState('Kurs importieren läuft...') // wip
 
-		const onImport = () => {
+		const onImport = (courseName) => {
 			step.value = 2;
+			parentName.value = courseName;
+		};
+
+		const onCancel = () => {
+			console.log('canceld')
+			step.value = 4;
 		};
 
 		watch(step, (newValue) => {
+			console.log('new step value', newValue);
 			switch (newValue) {
 				case 1:
 					isImportModalOpen.value = true;
@@ -66,14 +74,20 @@ export default defineComponent({
 				case 2:
 					isImportModalOpen.value = false;
 					isLoadingDialogOpen.value = true;
-					copyModule.copyByShareToken({ token: props.token, type:'course' })
+					copyModule.copyByShareToken({ token: props.token, type:'course', newName: parentName.value })
 						.then(() => step.value = 3);
 					break;
 
 				case 3:
 					isLoadingDialogOpen.value = false;
 					isCopyResultModalOpen.value = true;
-					default:
+					break;
+
+				default:
+					isImportModalOpen.value = false;
+					isLoadingDialogOpen.value = false;
+					isCopyResultModalOpen.value = false;
+
 			}
 		})
 
@@ -94,7 +108,8 @@ export default defineComponent({
 			parentName,
 			step,
 			onCopyResultModalClosed,
-			onImport
+			onImport,
+			onCancel
 		}
 	}
 })

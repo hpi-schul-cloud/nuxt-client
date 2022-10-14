@@ -30,6 +30,7 @@ interface ShareTokenValidationResult {
 interface CopyByShareTokenPayload {
 	type: string;
 	token: string;
+	newName: string;
 }
 
 @Module({
@@ -121,13 +122,15 @@ export default class CopyModule extends VuexModule {
 	async copyByShareToken({
 		token,
 		type,
+		newName,
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === "course") {
-			// copyResult = await this.shareApi
-			// 	.shareTokenControllerImportCourse(token)
-			// 	.then((response) => response.data);
+			await this.shareApi
+				.shareTokenControllerImportByShareToken(token, { newName })
+				.then((response) => response.data);
+
 			copyResult = {
 				title: "Aufgabe",
 				type: CopyApiResponseTypeEnum.Task,
