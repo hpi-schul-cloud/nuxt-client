@@ -1,9 +1,14 @@
+import { provide } from "@nuxtjs/composition-api";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import AuthModule from "@/store/auth";
 import StatusAlertsModule from "@/store/status-alerts";
-import { statusAlertsModule } from "@/store";
+import { statusAlertsModule, authModule } from "@/store";
 import TheTopBar from "./TheTopBar";
+
+let authModuleMock;
+let envConfigModuleMock;
 
 const getWrapper = (props, options) => {
 	return mount(TheTopBar, {
@@ -11,6 +16,10 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
+		setup() {
+			provide("authModule", authModuleMock);
+			provide("envConfigModule", envConfigModuleMock);
+		},
 		propsData: props,
 		attachTo: document.body,
 		...options,
@@ -94,28 +103,35 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
 
-	// it("should emit logout event", async () => {
-	// 	authModule.setAccessToken("asdf");
+	it("should emit logout event", async () => {
+		authModule.setUser({
+			permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
+			roles: [{ name: "administrator" }],
+		});
+		authModule.setAccessToken("asdf");
+		authModuleMock = createModuleMocks(AuthModule, {
+			getLocale: "de",
+		});
 
-	// 	const wrapper = getWrapper({
-	// 		user: {
-	// 			firstName: "Arthur",
-	// 			lastName: "Dent",
-	// 			roles: [{ name: "administrator" }],
-	// 		},
-	// 		school: {
-	// 			name: "dummy school",
-	// 		},
-	// 	});
-	// 	await wrapper.vm.$nextTick();
+		const wrapper = getWrapper({
+			user: {
+				firstName: "Arthur",
+				lastName: "Dent",
+				roles: [{ name: "administrator" }],
+			},
+			school: {
+				name: "dummy school",
+			},
+		});
+		await wrapper.vm.$nextTick();
 
-	// 	const initials = wrapper.find("[data-testid='initials']");
-	// 	await initials.trigger("click");
+		const initials = wrapper.find("[data-testid='initials']");
+		await initials.trigger("click");
 
-	// 	const logoutBtn = initials.find("[data-testid='logout']");
-	// 	expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
+		const logoutBtn = wrapper.find("[data-testid='logout']");
+		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
 
-	// 	await logoutBtn.trigger("click");
-	// 	expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
-	// });
+		await logoutBtn.trigger("click");
+		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
+	});
 });
