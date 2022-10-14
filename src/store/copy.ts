@@ -127,30 +127,9 @@ export default class CopyModule extends VuexModule {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === "course") {
-			await this.shareApi
-				.shareTokenControllerImportByShareToken(token, { newName })
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);
-
-			copyResult = {
-				title: "Aufgabe",
-				type: CopyApiResponseTypeEnum.Task,
-				status: CopyApiResponseStatusEnum.Partial,
-				id: "123",
-				elements: [
-					{
-						type: CopyApiResponseTypeEnum.SubmissionGroup,
-						status: CopyApiResponseStatusEnum.NotDoing,
-					},
-					{
-						type: CopyApiResponseTypeEnum.File,
-						status: CopyApiResponseStatusEnum.NotImplemented,
-					},
-					{
-						type: CopyApiResponseTypeEnum.LessonContentEtherpad,
-						status: CopyApiResponseStatusEnum.Failure,
-					},
-				],
-			};
 		}
 
 		if (copyResult === undefined) {

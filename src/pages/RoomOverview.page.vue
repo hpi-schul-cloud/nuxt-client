@@ -110,7 +110,11 @@
 				@drag-from-group="dragFromGroup"
 			>
 			</room-modal>
-			<import-flow :is-active="isImportMode" :token="importToken"></import-flow>
+			<import-flow
+				:is-active="isImportMode"
+				:token="importToken"
+				@success="onImportSuccess"
+			></import-flow>
 		</template>
 	</room-wrapper>
 </template>
@@ -356,6 +360,10 @@ export default {
 				yPosition: pos.y,
 			};
 			roomsModule.update(payload);
+		},
+		onImportSuccess() {
+			this.$router.replace({ path: "/rooms-overview" });
+			roomsModule.fetch();
 		},
 	},
 	head() {

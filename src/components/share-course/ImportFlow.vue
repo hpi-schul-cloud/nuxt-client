@@ -37,7 +37,7 @@ export default defineComponent({
 			required: true
 		}
 	},
-	setup(props) {
+	setup(props, { emit }) {
 		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
 
@@ -99,7 +99,10 @@ export default defineComponent({
 
 		}
 
-		const onCopyResultModalClosed = () => copyModule.reset();
+		const onCopyResultModalClosed = () => {
+			emit('success');
+			copyModule.reset();
+		}
 
 		return {
 			isImportModalOpen,
