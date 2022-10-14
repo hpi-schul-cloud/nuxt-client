@@ -1,6 +1,6 @@
 import HelpDropdown from "./HelpDropdown";
 import BaseLink from "@basecomponents/BaseLink";
-import BaseIcon from "@basecomponents/BaseLink";
+import BaseIcon from "@basecomponents/BaseIcon";
 
 const menuItems = [
 	{
