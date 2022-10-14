@@ -63,7 +63,7 @@
 			<base-spinner
 				v-show="loading"
 				class="spinner mt--xl-2"
-				color="var(--color-secondary)"
+				color="var(--v-secondary-base)"
 				size="xlarge"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
@@ -96,7 +96,6 @@ export default {
 		ContentEduSharingFooter,
 	},
 	mixins: [infiniteScrolling],
-	layout: "defaultVuetify",
 	data() {
 		return {
 			searchQuery: "",
@@ -233,7 +232,7 @@ export default {
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-secondary);
+		color: var(--v-secondary-base);
 		cursor: pointer;
 	}
 

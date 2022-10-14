@@ -59,9 +59,9 @@ export default {
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
-	color: var(--color-white);
+	color: var(--v-white-base);
 	cursor: pointer;
-	background: var(--color-success);
+	background: var(--v-success-base);
 	border: none;
 	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 	transition: all var(--duration-transition-medium)
@@ -69,17 +69,17 @@ export default {
 
 	&:hover,
 	&:focus {
-		background: var(--color-success-dark);
+		background: var(--v-success-darken1);
 	}
 }
 
 .error {
 	.btn-confirm {
-		background: var(--color-danger);
+		background: var(--v-error-base);
 
 		&:hover,
 		&:focus {
-			background: var(--color-danger-dark);
+			background: var(--v-error-darken1);
 		}
 	}
 }

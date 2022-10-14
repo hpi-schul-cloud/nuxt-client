@@ -9,78 +9,78 @@ a:not(.is-none) {
 	--button-line-height: var(--line-height-md);
 
 	// color modes
-	--button-background: var(--color-secondary);
-	--button-text-color: var(--color-white);
+	--button-background: var(--v-secondary-base);
+	--button-text-color: var(--v-white-base);
 
 	&.is-outline {
-		--button-background: var(--color-secondary);
+		--button-background: var(--v-secondary-base);
 	}
 
 	&.is-text {
-		--button-background: var(--color-secondary);
+		--button-background: var(--v-secondary-base);
 	}
 
 	&.is-primary,
 	&.is-hero-cta {
-		--button-background: var(--color-primary);
-		--button-text-color: var(--color-white);
+		--button-background: var(--v-primary-base);
+		--button-text-color: var(--v-white-base);
 
 		&:hover {
-			--button-background: var(--color-primary-dark);
+			--button-background: var(--v-primary-darken1);
 		}
 	}
 
 	&.is-secondary {
-		--button-background: var(--color-primary);
-		--button-text-color: var(--color-white);
+		--button-background: var(--v-primary-base);
+		--button-text-color: var(--v-white-base);
 
 		&:hover {
-			--button-background: var(--color-primary-dark);
+			--button-background: var(--v-primary-darken1);
 		}
 	}
 
 	&.is-success {
-		--button-background: var(--color-success);
-		--button-text-color: var(--color-white);
+		--button-background: var(--v-success-base);
+		--button-text-color: var(--v-white-base);
 
 		&:hover {
-			--button-background: var(--color-success-dark);
+			--button-background: var(--v-success-darken1);
 		}
 	}
 
 	&.is-danger {
-		--button-background: var(--color-danger);
-		--button-text-color: var(--color-white);
+		--button-background: var(--v-error-base);
+		--button-text-color: var(--v-white-base);
 
 		&:hover {
-			--button-background: var(--color-danger-dark);
+			--button-background: var(--v-error-darken1);
 		}
 	}
 
 	&.is-info {
-		--button-background: var(--color-info);
-		--button-text-color: var(--color-white);
+		--button-background: var(--v-info-base);
+		--button-text-color: var(--v-white-base);
 
 		&:hover {
-			--button-background: var(--color-info-dark);
+			--button-background: var(--v-info-darken1);
 		}
 	}
 
 	&.is-fancy {
 		--button-background: linear-gradient(
 			45deg,
-			var(--color-accent),
-			var(--color-primary)
+			var(--v-accent-base),
+			var(--v-primary-base)
 		);
-		--button-text-color: var(--color-white);
+		--button-text-color: var(--v-white-base);
 
 		border: 0;
 
 		&:hover {
 			--button-background: linear-gradient(
 				45deg,
-				var(--color-accent-dark),
-				var(--color-primary-dark)
+				var(--v-accent-base),
+				var(--v-primary-darken1)
 			);
 		}
 	}
@@ -114,12 +114,12 @@ a:not(.is-none) {
 	}
 
 	&:disabled {
-		--button-background: var(--color-disabled);
-		--button-text-color: var(--color-disabled-dark);
+		--button-background: var(--v-grey-lighten2);
+		--button-text-color: var(--v-grey-base);
 
 		&.is-outline,
 		&.is-text {
-			--button-background: var(--color-disabled-dark);
+			--button-background: var(--v-grey-base);
 		}
 	}
 
@@ -163,19 +163,20 @@ a:not(.is-none) {
 	}
 
 	&:hover {
-		--button-background: var(--color-secondary-dark);
+		--button-background: var(--v-secondary-darken1);
 	}
 
 	&:focus {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--button-background);
+		box-shadow: 0 0 0 3px var(--v-white-base),
+			0 0 0 6px var(--button-background);
 	}
 
 	// defined multiple times to seperate style from behaviour
 	/* stylelint-disable-next-line */
 	&.is-outline {
 		color: var(--button-background);
-		background: var(--color-white);
+		background: var(--v-white-base);
 		border: 1px solid var(--button-background);
 
 		&:hover {
@@ -190,7 +191,7 @@ a:not(.is-none) {
 		border: 1px solid transparent;
 
 		&:hover {
-			background-color: var(--color-gray-light);
+			background-color: var(--v-grey-lighten1);
 			box-shadow: none;
 		}
 	}
@@ -208,7 +209,7 @@ a:not(.is-none) {
 		0 1px 10px rgba(0, 0, 0, 0.12);
 
 	&:focus {
-		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-primary);
+		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-primary-base);
 	}
 }
 

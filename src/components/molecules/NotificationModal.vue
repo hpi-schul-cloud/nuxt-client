@@ -6,14 +6,14 @@
 					<base-icon
 						source="material"
 						icon="check_circle"
-						:style="{ color: 'var(--color-success)' }"
+						:style="{ color: 'var(--v-success-base)' }"
 					/>
 				</template>
 				<template v-else #icon>
 					<base-icon
 						source="material"
 						icon="error"
-						:style="{ color: 'var(--color-danger)' }"
+						:style="{ color: 'var(--v-error-base)' }"
 					/>
 				</template>
 			</modal-body-info>

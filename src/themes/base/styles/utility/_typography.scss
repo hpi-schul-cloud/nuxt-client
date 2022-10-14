@@ -6,7 +6,7 @@ body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
 	line-height: var(--line-height-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 
 /* heading size */
@@ -19,7 +19,7 @@ body {
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);
 		line-height: var(--line-height-sm);
-		color: var(--color-black);
+		color: var(--v-black-base);
 	}
 }
 
@@ -83,18 +83,18 @@ button {
 }
 
 .default-link {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--color-gray);
+	border-bottom: 2px solid var(--v-grey-base);
 
 	&:hover,
 	&:focus {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 	}
 
 	&:visited {
-		color: var(--color-primary);
+		color: var(--v-primary-base);
 	}
 }
 

@@ -554,7 +554,7 @@ export default {
 $rounded: 50%;
 
 tr.head td {
-	border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary) !important;
+	border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base) !important;
 }
 
 .v-btn--round {

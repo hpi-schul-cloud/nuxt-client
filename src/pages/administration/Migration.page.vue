@@ -303,7 +303,6 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import ImportUsers from "@components/organisms/administration/ImportUsers";
 export default {
 	components: { DefaultWireframe, ImportUsers },
-	layout: "defaultVuetify",
 	data() {
 		return {
 			mdiClose,

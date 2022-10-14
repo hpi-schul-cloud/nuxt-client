@@ -3053,6 +3053,43 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerExportCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/export`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -3106,6 +3143,16 @@ export const CoursesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerExportCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -3127,6 +3174,15 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
@@ -3146,6 +3202,15 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 export interface CoursesApiInterface {
     /**
      * 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
@@ -3163,6 +3228,17 @@ export interface CoursesApiInterface {
  * @extends {BaseAPI}
  */
 export class CoursesApi extends BaseAPI implements CoursesApiInterface {
+    /**
+     * 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerExportCourse(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} [skip] Number of elements (not pages) to be skipped

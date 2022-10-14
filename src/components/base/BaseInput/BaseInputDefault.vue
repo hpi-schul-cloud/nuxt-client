@@ -69,13 +69,13 @@
 						v-if="hasError"
 						source="custom"
 						icon="warning"
-						fill="var(--color-danger)"
+						fill="var(--v-error-base)"
 					/>
 					<base-icon
 						v-if="success"
 						source="custom"
 						icon="success"
-						fill="var(--color-success)"
+						fill="var(--v-success-base)"
 					/>
 				</div>
 			</div>
@@ -210,7 +210,7 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--color-primary);
+			color: var(--v-primary-base);
 		}
 
 		.help {
@@ -218,7 +218,7 @@ export default {
 		}
 
 		.visible {
-			fill: var(--color-primary);
+			fill: var(--v-primary-base);
 		}
 	}
 }
@@ -229,11 +229,11 @@ export default {
 
 .top {
 	width: 100%;
-	border-bottom: var(--border-width) solid var(--color-black);
+	border-bottom: var(--border-width) solid var(--v-black-base);
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom: var(--border-width-bold) solid var(--color-primary);
+		border-bottom: var(--border-width-bold) solid var(--v-primary-base);
 		outline: none;
 
 		~ .bottom-line {
@@ -242,12 +242,12 @@ export default {
 	}
 
 	&.base-input-error {
-		border-bottom-color: var(--color-danger);
+		border-bottom-color: var(--v-error-base);
 	}
 
 	&.disabled {
-		color: var(--color-disabled-dark);
-		border-bottom-color: var(--color-disabled-dark);
+		color: var(--v-grey-base);
+		border-bottom-color: var(--v-grey-base);
 	}
 
 	.info-line {
@@ -304,7 +304,7 @@ export default {
 					background-color: transparent;
 
 					&::placeholder {
-						color: var(--color-disabled-dark);
+						color: var(--v-grey-base);
 					}
 				}
 			}
@@ -313,28 +313,28 @@ export default {
 }
 
 .pwd-toggle {
-	color: var(--color-gray);
+	color: var(--v-grey-base);
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: var(--color-gray-dark);
+		color: var(--v-grey-darken1);
 	}
 
 	&:focus {
-		color: var(--color-gray-dark);
+		color: var(--v-grey-darken1);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-gray-dark);
+		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-grey-darken1);
 	}
 }
 
 .base-input-info {
 	display: block;
 	font-size: var(--text-xs);
-	color: var(--color-gray);
+	color: var(--v-grey-base);
 }
 
 .base-input-info.base-input-error {
-	color: var(--color-danger);
+	color: var(--v-error-base);
 }
 
 .fade-enter-active {
