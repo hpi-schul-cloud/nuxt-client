@@ -1,35 +1,38 @@
 <template>
-	<v-card
+	<v-list
+		data-test-id="status-alerts"
 		min-width="250"
 		max-height="200"
 		class="alerts"
-		data-test-id="status-alerts"
+		elevation="2"
+		rounded
 	>
-		<div
+		<v-list-item
 			v-for="(item, index) in statusAlerts"
 			:key="index"
-			class="alert-item"
 			:data-test-id="`alert-item-${index}`"
+			three-line
+			class="px-2"
 		>
-			<v-card-text class="py-2">
-				<div class="top-row-container">
-					<div class="alert-title" :data-test-id="`alert-title-${index}`">
-						<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
-							{{ getIconTag(item.status).icon }}
-						</v-icon>
-						{{ item.title }}
-					</div>
-					<div
-						class="alert-date text--primary mt-1 mb-0 pb-0"
-						:data-test-id="`alert-date-${index}`"
-					>
-						{{ getDate(item.timestamp) }}
-					</div>
-				</div>
-				<div :data-test-id="`alert-text-${index}`">
+			<v-list-item-avatar size="24" class="mt-6">
+				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
+					{{ getIconTag(item.status).icon }}
+				</v-icon>
+			</v-list-item-avatar>
+			<v-list-item-content class="pb-0">
+				<v-list-item-subtitle
+					class="text-right text-caption"
+					:data-test-id="`alert-date-${index}`"
+				>
+					{{ getDate(item.timestamp) }}
+				</v-list-item-subtitle>
+				<v-list-item-title :data-test-id="`alert-title-${index}`">
+					{{ item.title }}
+				</v-list-item-title>
+				<v-list-item-subtitle>
 					{{ getAlertText(item.text) }}
-				</div>
-				<div class="text-right">
+				</v-list-item-subtitle>
+				<div class="text-right text-subtitle-2">
 					<a
 						:href="item.url"
 						rel="noopener"
@@ -39,9 +42,9 @@
 						{{ prettifiedUrl(item.url) }}
 					</a>
 				</div>
-			</v-card-text>
-		</div>
-	</v-card>
+			</v-list-item-content>
+		</v-list-item>
+	</v-list>
 </template>
 
 <script lang="ts">
@@ -96,35 +99,12 @@ export default defineComponent({
 
 .alerts {
 	width: auto;
+	max-width: 250px;
 	overflow-y: auto;
 
 	@include breakpoint(tablet) {
 		width: 400px;
-	}
-}
-
-.alert-item:not(:first-child) {
-	padding-top: var(--space-xs-4);
-	margin-top: var(--space-xs-4);
-	border-top: solid 1px var(--color-gray-light);
-}
-
-.top-row-container {
-	display: grid;
-	grid-template-columns: 75% 25%;
-	align-items: center;
-
-	.alert-title {
-		margin-bottom: var(--space-xs-2);
-		font-size: var(--text-md);
-		line-height: var(--line-height-md);
-		text-align: left;
-	}
-
-	.alert-date {
-		align-self: start;
-		color: var(--color-gray);
-		text-align: right;
+		max-width: 400px;
 	}
 }
 </style>
