@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardResponse,
+	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
@@ -212,6 +213,29 @@ export default class RoomModule extends VuexModule {
 			}
 			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
 			this.setCourseInvitationLink(invitationLink);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async downloadImsccCourse(): Promise<void> {
+		this.resetBusinessError();
+		try {
+			const response = await CoursesApiFactory(
+				undefined,
+				'v3',
+				$axios
+			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
+			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
+			link.click();
+			URL.revokeObjectURL(link.href);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
