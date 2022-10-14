@@ -44,7 +44,7 @@ export default class StatusAlertsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchStatusAlerts() {
+	async fetchStatusAlerts(): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
