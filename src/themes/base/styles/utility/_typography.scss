@@ -82,22 +82,6 @@ button {
 	white-space: nowrap;
 }
 
-.default-link {
-	color: var(--v-primary-base);
-	text-decoration: none;
-	cursor: pointer;
-	border-bottom: 2px solid var(--v-grey-base);
-
-	&:hover,
-	&:focus {
-		color: var(--v-primary-darken1);
-	}
-
-	&:visited {
-		color: var(--v-primary-base);
-	}
-}
-
 @include breakpoint(tablet) {
 	:root {
 		--text-base-size: calc(1rem * var(--text-device-scale-ratio));

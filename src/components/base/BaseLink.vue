@@ -142,9 +142,20 @@ export default {
 }
 
 .link {
-	@extend .default-link;
-
 	display: inline;
+	color: var(--v-primary-base);
+	text-decoration: none;
+	cursor: pointer;
+	border-bottom: 2px solid var(--v-gray-base);
+
+	&:hover,
+	&:focus {
+		color: var(--v-primary-darken1);
+	}
+
+	&:visited {
+		color: var(--v-primary-base);
+	}
 }
 
 .is-external {
