@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
 
 describe("@components/share-course/ShareModalOptionsForm", () => {
-	const mountComponent = (attrs = {}) => {
+	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ShareModalOptionsForm, {
 			...createComponentMocks({
 				i18n: true,
@@ -16,13 +16,13 @@ describe("@components/share-course/ShareModalOptionsForm", () => {
 	};
 
 	it("should emit initial event during setup", () => {
-		const wrapper = mountComponent();
+		const wrapper = getWrapper();
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(1);
 	});
 
 	it("should emit event on changes of SchoolInternally switch", async () => {
-		const wrapper = mountComponent();
+		const wrapper = getWrapper();
 
 		const switchExpiresInSevenDays = wrapper.find(
 			'[data-testid="schoolInternally"]'
@@ -33,7 +33,7 @@ describe("@components/share-course/ShareModalOptionsForm", () => {
 	});
 
 	it("should emit event on changes of ExpiresInSevenDays switch", async () => {
-		const wrapper = mountComponent();
+		const wrapper = getWrapper();
 
 		const switchExpiresInSevenDays = wrapper.find(
 			'[data-testid="expiresInSevenDays"]'
