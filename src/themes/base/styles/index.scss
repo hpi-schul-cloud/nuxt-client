@@ -1,2 +1,29 @@
-@import "./utility.scss";
-@import "./variables.scss";
+@import "./utility/breakpoints";
+
+.default-link {
+	color: var(--v-primary-base);
+	text-decoration: none;
+	cursor: pointer;
+	border-bottom: 2px solid var(--v-gray-base);
+
+	&:hover,
+	&:focus {
+		color: var(--v-primary-darken1);
+	}
+
+	&:visited {
+		color: var(--v-primary-base);
+	}
+}
+
+@mixin visually-hidden {
+	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
+	position: absolute !important;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+}
