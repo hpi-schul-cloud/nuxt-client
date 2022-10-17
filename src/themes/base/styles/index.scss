@@ -1,21 +1,5 @@
 @import "./utility/breakpoints";
 
-.default-link {
-	color: var(--v-primary-base);
-	text-decoration: none;
-	cursor: pointer;
-	border-bottom: 2px solid var(--v-gray-base);
-
-	&:hover,
-	&:focus {
-		color: var(--v-primary-darken1);
-	}
-
-	&:visited {
-		color: var(--v-primary-base);
-	}
-}
-
 @mixin visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 	position: absolute !important;
