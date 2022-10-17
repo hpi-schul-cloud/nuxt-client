@@ -30,7 +30,7 @@
 				<v-text-field
 					ref="textField"
 					:value="parentName"
-					label="Kursname"
+					:label="$t('components.molecules.importCourse.options.coursname')"
 					@input="onInput"
 				></v-text-field>
 			</div>
