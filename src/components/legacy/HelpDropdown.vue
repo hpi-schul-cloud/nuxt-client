@@ -1,5 +1,5 @@
 <template>
-	<ul class="dropdown-menu">
+	<ul class="dropdown-menu px-0">
 		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
 			<span class="core">
 				<base-icon
