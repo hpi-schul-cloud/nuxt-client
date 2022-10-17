@@ -62,7 +62,7 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
+			this._shareApi = ShareTokenApiFactory(undefined, "/api/v3");
 		}
 		return this._shareApi;
 	}

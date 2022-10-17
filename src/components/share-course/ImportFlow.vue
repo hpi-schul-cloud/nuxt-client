@@ -40,6 +40,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
+		const notifier = inject("notifierModule");
 
 		const step = ref(0);
 		const parentName = ref("");
@@ -65,43 +66,67 @@ export default defineComponent({
 		};
 
 		watch(step, (newValue) => {
-			switch (newValue) {
-				case 1: //
-					isImportModalOpen.value = true;
-					break;
-
-				case 2: // importing
-					isImportModalOpen.value = false;
-					isLoadingDialogOpen.value = true;
-					copyModule.copyByShareToken({ token: props.token, type:'course', newName: parentName.value })
-						.then(() => step.value = 3);
-					break;
-
-				case 3: // result
-					isLoadingDialogOpen.value = false;
-					isCopyResultModalOpen.value = true;
-					break;
-
-				case 0: // initial or canceled
-				default:
-					isImportModalOpen.value = false;
-					isLoadingDialogOpen.value = false;
-					isCopyResultModalOpen.value = false;
-
+			if (newValue === 1) {
+				isImportModalOpen.value = true
+				return;
 			}
+			if (newValue === 2) {
+				copyCourse();
+				return;
+			}
+			if (newValue === 3) {
+				isLoadingDialogOpen.value = false;
+				isCopyResultModalOpen.value = true;
+				return;
+			}
+
+			isImportModalOpen.value = false;
+			isLoadingDialogOpen.value = false;
+			isCopyResultModalOpen.value = false;
 		})
 
 		if (props.isActive === true) {
-			copyModule.validateShareToken(props.token).then((result) => {
-				parentName.value = result.parentName;
-				step.value = 1;
-			})
+			validateShareToken();
+			// copyModule.validateShareToken(props.token).then((result) => {
+			// 	parentName.value = result.parentName;
+			// 	step.value = 1;
+			// })
 
+			// check error for the validation
+			// 404 result would come after failing
+
+		}
+
+		const copyCourse = async() => {
+			isImportModalOpen.value = false;
+			isLoadingDialogOpen.value = true;
+			const copyResult = await copyModule.copyByShareToken({ token: props.token, type:'course', newName: parentName.value });
+			step.value = 3;
+
+			// check errors for copying
+			// check if 404 would be returned
+			console.log(copyResult);
 		}
 
 		const onCopyResultModalClosed = () => {
 			emit('success');
 			copyModule.reset();
+		}
+
+		async function validateShareToken() {
+			const validateResult = await copyModule.validateShareToken(props.token);
+			debugger;
+			if (validateResult.code === 404) {
+				isImportModalOpen.value = false;
+				notifier?.show({
+					text: "The token has expired or never existed",
+					status: "success",
+					timeout: 10000,
+				})
+				return;
+			}
+			parentName.value = validateResult.parentName;
+			step.value = 1;
 		}
 
 		return {
