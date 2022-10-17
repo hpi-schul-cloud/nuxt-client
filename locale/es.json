@@ -452,6 +452,7 @@
 	"components.molecules.importCourse.options.title": "Importar curso",
 	"components.molecules.importCourse.options.infoText": "Los datos relacionados con los participantes no se copiarán. El curso se puede renombrar a continuación.",
 	"components.molecules.importCourse.options.loadingMessage": "Importar curso en curso...",
+	"components.molecules.importCourse.options.coursname": "Nombre del curso",
 	"pages.administration.printQr.emptyUser": "L@s usuari@s seleccionad@s ya han sido registrad@s",
 	"pages.administration.printQr.error": "No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",

@@ -29,7 +29,10 @@
 							{{ $t("components.molecules.importCourse.options.infoText") }}
 						</div>
 					</div>
-					<v-text-field v-model="courseName" label="Kurs name"></v-text-field>
+					<v-text-field
+						v-model="courseName"
+						:label="$t('components.molecules.importCourse.options.coursname')"
+					></v-text-field>
 				</div>
 			</v-fade-transition>
 		</template>
