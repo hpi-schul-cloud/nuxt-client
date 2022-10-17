@@ -1,19 +1,19 @@
 <template>
-	<div>
-		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
-		<div class="qr-hint-text">
+	<div class="pa-4">
+		<base-qr-code ref="qrcode" :url="url" />
+		<div class="pb-2">
 			{{ $t("components.legacy.MenuQrCode.qrHintText") }}
 		</div>
-		<base-button design="outline" class="print-button" @click="openPrintMenu">
-			<div class="print-button-content">
-				<base-icon source="fa" icon="print" class="print-icon" />
-				Drucken
-			</div>
-		</base-button>
+		<v-btn outlined color="secondary" @click="openPrintMenu">
+			<v-icon left>{{ mdiPrinter }}</v-icon>
+			Drucken
+		</v-btn>
 	</div>
 </template>
 
 <script>
+import { mdiPrinter } from "@mdi/js";
+
 export default {
 	props: {
 		url: {
@@ -22,8 +22,9 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			mdiPrinter,
+		};
 	},
 	methods: {
 		openPrintMenu: function () {
@@ -35,28 +36,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@styles";
-
-.qrcode {
-	margin: var(--space-md);
-}
-
-.print-button {
-	margin-bottom: var(--space-md);
-	margin-left: var(--space-md);
-}
-
-.print-icon {
-	margin-right: var(--space-xs);
-}
-
-.print-button-content {
-	display: flex;
-}
-
-.qr-hint-text {
-	padding: 0 var(--space-md) var(--space-md) var(--space-md);
-}
-</style>

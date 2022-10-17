@@ -16,10 +16,10 @@ describe("@components/legacy/MenuQrCode", () => {
 		expect(wrapper.find("base-qr-code-stub").exists()).toBe(true);
 		expect(wrapper.find("base-qr-code-stub").props("url")).toBe("testUrl");
 
-		expect(wrapper.find("base-button-stub").exists()).toBe(true);
-		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
+		expect(wrapper.find("v-btn-stub").exists()).toBe(true);
+		expect(wrapper.find("v-icon-stub").exists()).toBe(true);
 
-		expect(wrapper.find(".print-button-content").text()).toBe("Drucken");
+		expect(wrapper.find("v-btn-stub").text()).toContain("Drucken");
 	});
 	it("opens a print window when print button is clicked", () => {
 		const wrapper = mount(menuQrCode, {
