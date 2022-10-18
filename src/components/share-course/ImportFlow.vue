@@ -63,7 +63,7 @@ export default defineComponent({
 			isCopyResultModalOpen.value = modalName === 'result';
 		}
 
-		const closeModals = openModal('none');
+		const closeModals = () => openModal('none');
 
 		// notifiers
 
