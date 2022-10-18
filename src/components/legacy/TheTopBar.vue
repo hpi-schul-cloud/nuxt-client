@@ -16,6 +16,7 @@
 			<div class="space"></div>
 			<v-btn
 				icon
+				color="secondary"
 				:title="$t('global.topbar.actions.fullscreen')"
 				:aria-label="$t('global.topbar.actions.fullscreen')"
 				@click.native="sendEvent('fullscreen')"
