@@ -44,6 +44,8 @@ export default defineComponent({
 
 		const parentName = ref("");
 
+		// modals
+
 		const isImportModalOpen = ref(false);
 
 		const isCopyResultModalOpen = computed({
@@ -53,87 +55,87 @@ export default defineComponent({
 
 		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 
-		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage")) // wip
+		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage"))
 
-		const onImport = (courseName) => startImport(courseName);
-		const onCancel = () => resetFlow();
-		const onCopyResultModalClosed = () => {
-			emit('success');
-			copyModule.reset();
+		const openModal = (modalName) => {
+			isImportModalOpen.value = modalName === 'import';
+			isLoadingDialogOpen.value = modalName === 'loading';
+			isCopyResultModalOpen.value = modalName === 'result';
 		}
+
+		const closeModals = openModal('none');
+
+		// notifiers
+
+		const showSuccess = () => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.importCourse.options.success", { type: i18n.t("common.labels.course") }),
+				status: "success",
+				timeout: 10000,
+			})
+			closeModals();
+		}
+
+		const showFailureBackend = (name) => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.importCourse.options.failure.backendError", { name }),
+				status: "error",
+				timeout: 10000,
+			})
+			closeModals();
+		}
+
+		const showFailureInvalidToken = () => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.importCourse.options.failure.invalidToken"),
+				status: "error",
+				timeout: 10000,
+			})
+			closeModals();
+		}
+
+		// business logic
 
 		if (props.isActive === true) {
 			validateShareToken();
 		}
 
-		const showImportModal = () => {
-			isImportModalOpen.value = true;
-		}
-
-		const startImport = async (newName) => {
-			isImportModalOpen.value = false;
-			isLoadingDialogOpen.value = true;
+		async function startImport(newName) {
+			openModal('loading');
 			await copyCourse(newName);
-		}
-
-		const showImportSuccess = () => {
-			notifier?.show({
-				text: "great it worked", // wip
-				status: "success",
-				timeout: 10000,
-			})
-			resetFlow();
-		}
-
-		const showResultModal = () => {
-			isLoadingDialogOpen.value = false;
-			isCopyResultModalOpen.value = true;
-		}
-
-		const showImportFailure = () => {
-			notifier?.show({
-				text: "Importing the course failed", // wip
-				status: "error",
-				timeout: 10000,
-			})
-			resetFlow();
-		}
-
-		const resetFlow = () => {
-			isImportModalOpen.value = false;
-			isLoadingDialogOpen.value = false;
-			isCopyResultModalOpen.value = false;
 		}
 
 		async function validateShareToken() {
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
-				showImportModal();
+				openModal('import');
 			} catch (error) {
-				isImportModalOpen.value = false;
-				notifier?.show({
-					text: "The token has expired or never existed", // wip
-					status: "error",
-					timeout: 10000,
-				})
+				showFailureInvalidToken();
 				return;
 			}
 		}
 
-		const copyCourse = async(newName) => {
+		async function copyCourse(newName) {
 			try {
 				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
 				if (copyResultFailedItems.length === 0) {
-					isImportModalOpen.value = false;
-					showImportSuccess();
+					showSuccess();
 				} else {
-					showResultModal();
+					openModal('result');
 				}
 			} catch (error) {
-				isImportModalOpen.value = false;
-				showImportFailure();
+				showFailureBackend(newName);
 			}
+		}
+
+		// event handlers
+
+		const onImport = (courseName) => startImport(courseName);
+		const onCancel = () => resetFlow();
+		const onCopyResultModalClosed = () => {
+			emit('success');
+			copyModule.reset();
 		}
 
 		return {
