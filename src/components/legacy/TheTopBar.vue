@@ -1,6 +1,5 @@
 <template>
 	<div class="topbar">
-		<!-- ACTIONS -->
 		<div
 			v-if="!fullscreenMode"
 			class="top-main"
@@ -9,67 +8,90 @@
 			<v-btn
 				icon
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
+				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<v-icon>fa-solid fa-bars</v-icon>
 			</v-btn>
-			<div class="space"></div>
-			<v-btn
-				icon
-				color="secondary"
-				:title="$t('global.topbar.actions.fullscreen')"
-				:aria-label="$t('global.topbar.actions.fullscreen')"
-				@click.native="sendEvent('fullscreen')"
-			>
-				<v-icon>{{ mdiArrowExpand }}</v-icon>
-			</v-btn>
-			<template v-for="action in actions">
+			<div class="top-bar-actions">
 				<popup-icon
-					:key="action.title"
+					v-if="showStatusAlertIcon"
+					source="fa"
+					icon="exclamation-triangle"
+					:title="$t('global.topbar.actions.alerts')"
+					:aria-label="$t('global.topbar.actions.alerts')"
+					:fill="statusAlertColor"
+					class="item"
+					centered
+					data-test-id="status-alerts-icon"
+				>
+					<status-alerts :status-alerts="statusAlerts"></status-alerts>
+				</popup-icon>
+				<v-btn
+					class="item"
+					icon
+					:title="$t('global.topbar.actions.fullscreen')"
+					:aria-label="$t('global.topbar.actions.fullscreen')"
+					data-test-id="fullscreen-btn"
+					@click.native="sendEvent('fullscreen')"
+				>
+					<v-icon>{{ mdiArrowExpand }}</v-icon>
+				</v-btn>
+				<popup-icon
 					class="item"
 					source="fa"
-					:icon="action.icon"
-					:title="action.title"
-					:aria-label="action.title"
+					icon="qrcode"
+					:title="$t('global.topbar.actions.qrCode')"
+					:aria-label="$t('global.topbar.actions.qrCode')"
+					data-test-id="qr-code-btn"
 				>
-					<component :is="action.component" v-bind="action.config"></component>
+					<menu-qr-code />
 				</popup-icon>
-			</template>
-			<div v-if="school" class="school-name item">
-				{{ school.name }}
+				<popup-icon
+					class="item"
+					source="fa"
+					icon="question"
+					:title="$t('global.topbar.actions.help')"
+					:aria-label="$t('global.topbar.actions.help')"
+					data-test-id="help-btn"
+				>
+					<help-dropdown />
+				</popup-icon>
+				<div v-if="school" class="school-name item">
+					{{ school.name }}
+				</div>
+				<img
+					v-if="school && school.logo_dataUrl"
+					class="school-logo"
+					:src="school.logo_dataUrl"
+					:alt="school.name"
+				/>
+				<popup-icon-initials
+					v-if="user"
+					:first-name="user.firstName || 'Unknown'"
+					:last-name="user.lastName || 'Unknown'"
+					:user-role="role"
+					class="item"
+				>
+					<language-menu />
+					<a
+						href="/account"
+						class="account-link"
+						role="menuitem"
+						:aria-label="$t('global.topbar.settings')"
+						>{{ $t("global.topbar.settings") }}</a
+					>
+					<button
+						class="logout-button"
+						data-testid="logout"
+						role="menuitem"
+						:aria-label="$t('common.labels.logout')"
+						@click="sendEvent('logout')"
+					>
+						{{ $t("common.labels.logout") }}
+					</button>
+				</popup-icon-initials>
 			</div>
-			<img
-				v-if="school && school.logo_dataUrl"
-				class="school-logo"
-				:src="school.logo_dataUrl"
-				:alt="school.name"
-			/>
-
-			<popup-icon-initials
-				v-if="user"
-				:first-name="user.firstName || 'Unknown'"
-				:last-name="user.lastName || 'Unknown'"
-				:user-role="role"
-				class="item"
-			>
-				<language-menu />
-				<a
-					href="/account"
-					class="account-link"
-					role="menuitem"
-					:aria-label="$t('global.topbar.settings')"
-					>{{ $t("global.topbar.settings") }}</a
-				>
-				<button
-					class="logout-button"
-					data-testid="logout"
-					role="menuitem"
-					:aria-label="$t('common.labels.logout')"
-					@click="sendEvent('logout')"
-				>
-					{{ $t("common.labels.logout") }}
-				</button>
-			</popup-icon-initials>
 		</div>
 		<v-btn
 			v-else
@@ -88,15 +110,20 @@
 </template>
 
 <script>
+import { defineComponent } from "@vue/composition-api";
+import { statusAlertsModule } from "@/store";
 import PopupIcon from "@components/legacy/PopupIcon";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
 import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
+import StatusAlerts from "@components/molecules/StatusAlerts";
 import LanguageMenu from "@components/molecules/LanguageMenu.vue";
 import { mdiArrowCollapse, mdiArrowExpand, mdiMenu } from "@mdi/js";
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
 	components: {
+		StatusAlerts,
 		PopupIcon,
 		PopupIconInitials,
 		HelpDropdown,
@@ -104,15 +131,6 @@ export default {
 		LanguageMenu,
 	},
 	props: {
-		actions: {
-			type: Array,
-			default: () => [],
-			validator: function (value) {
-				return value.every((action) => {
-					return action.icon && action.component;
-				});
-			},
-		},
 		fullscreenMode: {
 			type: Boolean,
 		},
@@ -138,6 +156,7 @@ export default {
 			mdiArrowCollapse,
 			mdiArrowExpand,
 			mdiMenu,
+			statusAlerts: [],
 		};
 	},
 	computed: {
@@ -145,13 +164,29 @@ export default {
 			const roleName = this.user.roles.map((r) => r.name);
 			return this.$t(`global.topbar.roleName.${roleName[0]}`);
 		},
+		showStatusAlertIcon() {
+			return this.statusAlerts.length !== 0;
+		},
+		statusAlertColor() {
+			const statusAlertsIncludeDanger =
+				this.statusAlerts.filter((alert) => alert.status === "danger")
+					.length !== 0;
+
+			return statusAlertsIncludeDanger
+				? "var(--v-error-base)"
+				: "var(--v-secondary-darken1)";
+		},
+	},
+	async mounted() {
+		await statusAlertsModule.fetchStatusAlerts();
+		this.statusAlerts = statusAlertsModule.getStatusAlerts;
 	},
 	methods: {
 		sendEvent(eventName) {
 			this.$emit("action", eventName);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -166,15 +201,16 @@ export default {
 	.top-main {
 		display: flex;
 		flex-direction: row;
-		flex-grow: 1;
-		align-items: center;
-		justify-content: flex-end;
+		justify-content: space-between;
 		width: 100%;
 		height: 100%;
 		padding-right: var(--space-sm);
 
-		.space {
+		.top-bar-actions {
+			display: flex;
 			flex-grow: 1;
+			align-items: center;
+			justify-content: flex-end;
 		}
 
 		.item {

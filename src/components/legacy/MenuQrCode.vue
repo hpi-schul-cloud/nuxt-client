@@ -6,7 +6,7 @@
 		</div>
 		<v-btn outlined color="secondary" @click="openPrintMenu">
 			<v-icon left>{{ mdiPrinter }}</v-icon>
-			Drucken
+			{{ $t("components.legacy.MenuQrCode.print") }}
 		</v-btn>
 	</div>
 </template>
