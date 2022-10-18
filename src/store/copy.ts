@@ -62,7 +62,12 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "/api/v3");
+			const axiosWithoutErrorPage = $axios.create();
+			this._shareApi = ShareTokenApiFactory(
+				undefined,
+				"/v3",
+				axiosWithoutErrorPage
+			);
 		}
 		return this._shareApi;
 	}
@@ -108,14 +113,10 @@ export default class CopyModule extends VuexModule {
 	async validateShareToken(
 		token: string
 	): Promise<ShareTokenInfoResponse | undefined> {
-		try {
-			const shareTokenResponse =
-				await this.shareApi.shareTokenControllerLookupShareToken(token);
-			if (!shareTokenResponse) return undefined;
-			return shareTokenResponse.data;
-		} catch {
-			return undefined;
-		}
+		const shareTokenResponse =
+			await this.shareApi.shareTokenControllerLookupShareToken(token);
+		if (!shareTokenResponse) return undefined;
+		return shareTokenResponse.data;
 	}
 
 	@Action
@@ -137,7 +138,6 @@ export default class CopyModule extends VuexModule {
 		}
 
 		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
-
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return this.copyResultFailedItems;
