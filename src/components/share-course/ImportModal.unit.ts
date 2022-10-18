@@ -34,6 +34,7 @@ describe("@components/share-course/ImportModal", () => {
 		}
 		fail("No error on required props");
 	});
+
 	it("should render with props", () => {
 		const wrapper = getWrapper({
 			propsData: {
@@ -51,12 +52,12 @@ describe("@components/share-course/ImportModal", () => {
 				parentName: "TestParentName",
 			},
 		});
-		const textField = wrapper.findComponent({
-			ref: "textField",
+		const nameInput = wrapper.findComponent({
+			ref: "nameInput",
 		});
-		expect(textField.props("value")).toStrictEqual("TestParentName");
+		expect(nameInput.props("value")).toStrictEqual("TestParentName");
 		await wrapper.setProps({ parentName: "UpdateParentName" });
-		expect(textField.props("value")).toStrictEqual("UpdateParentName");
+		expect(nameInput.props("value")).toStrictEqual("UpdateParentName");
 	});
 
 	it("should emit input value on next", async () => {
@@ -94,5 +95,29 @@ describe("@components/share-course/ImportModal", () => {
 
 		await dialog.vm.$emit("dialog-canceled");
 		expect(wrapper.emitted("cancel")).toHaveLength(1);
+	});
+
+	it("should not emit if nameInput has a required-error", async () => {
+		const wrapper = getWrapper({
+			propsData: {
+				isOpen: true,
+				parentName: "TestParentName",
+			},
+		});
+
+		await wrapper.setProps({ isOpen: true, parentName: "" });
+
+		const nameInput = wrapper.findComponent({
+			ref: "nameInput",
+		});
+		await nameInput.trigger("input");
+
+		const dialog = wrapper.findComponent({
+			ref: "dialog",
+		});
+		await dialog.vm.$emit("dialog-confirmed");
+
+		const emitted = wrapper.emitted("import");
+		expect(emitted).toBeUndefined();
 	});
 });

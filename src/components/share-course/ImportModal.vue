@@ -28,11 +28,10 @@
 					</div>
 				</div>
 				<v-text-field
-					ref="textField"
+					ref="nameInput"
 					:value="parentName"
 					:label="$t('common.labels.course')"
 					:rules="[rules.required]"
-					@input="onInput"
 				></v-text-field>
 			</div>
 		</template>
@@ -53,20 +52,19 @@ export default defineComponent({
 	emits: ["import", "cancel"],
 	props: {
 		isOpen: { type: Boolean },
-		parentName: { type: String, required:true }
+		parentName: { type: String, required: true }
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
-		const newName = ref(props.parentName);
+		const nameInput = ref(null);
 
 		const rules = reactive({
           required: value => !!value || i18n?.t("common.validation.required"),
 		});
 
-		const onInput = (value) => newName.value = value;
 		const onConfirm = () => {
-			if (rules.required(newName.value) === true) {
-				emit('import', newName.value);
+			if (rules.required(nameInput.value.value) === true) {
+				emit('import', nameInput.value.value);
 			}
 		}
 		const onCancel = () => emit('cancel')
@@ -74,9 +72,9 @@ export default defineComponent({
 		return {
 			onConfirm,
 			onCancel,
-      		onInput,
 			mdiInformation,
-			rules
+			rules,
+      nameInput
 		};
 	},
 });
