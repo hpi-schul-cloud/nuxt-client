@@ -113,10 +113,6 @@ export default defineComponent({
 
 		async function startImport(newName) {
 			openModal('loading');
-			await copyCourse(newName);
-		}
-
-		async function copyCourse(newName) {
 			try {
 				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
 				if (copyResultFailedItems.length === 0) {
