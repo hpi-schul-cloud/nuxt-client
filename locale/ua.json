@@ -181,7 +181,6 @@
 	"components.molecules.importCourse.options.title": "Курс імпорту",
 	"components.molecules.importCourse.options.infoText": "Дані учасників не будуть скопійовані. Курс можна перейменувати нижче.",
 	"components.molecules.importCourse.options.loadingMessage": "Виконується курс імпорту...",
-	"components.molecules.importCourse.options.coursname": "A tantárgy neve",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",
 	"components.molecules.importUsersMatch.search": "Пошук користувача",
 	"components.molecules.importUsersMatch.subtitle": "Das webbschule-Konto wird später in die {instance} importiert. Wenn Sie das Konto mit einem bestehenden {instance} Konto verknüpfen möchten, so dass die Benutzerdaten erhalten bleiben, wählen Sie hier das {instance} Konto aus. Andernfalls wird dieses als neues Konto angeleg.",

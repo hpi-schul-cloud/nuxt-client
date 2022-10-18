@@ -30,7 +30,7 @@
 				<v-text-field
 					ref="textField"
 					:value="parentName"
-					:label="$t('components.molecules.importCourse.options.coursname')"
+					:label="$t('common.labels.course')"
 					@input="onInput"
 				></v-text-field>
 			</div>
@@ -56,16 +56,16 @@ export default defineComponent({
 		parentName: { type: String, required:true }
 	},
 	setup(props, { emit }) {
-    const newName = ref(props.parentName);
+		const newName = ref(props.parentName);
 
+		const onInput = (value) => newName.value = value;
 		const onConfirm = () => emit('import', newName.value);
 		const onCancel = () => emit('cancel')
-    const onInput = (value) => newName.value = value;
 
 		return {
 			onConfirm,
 			onCancel,
-      onInput,
+      		onInput,
 			mdiInformation,
 		};
 	},
