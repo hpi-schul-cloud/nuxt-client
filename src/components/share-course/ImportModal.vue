@@ -31,6 +31,7 @@
 					ref="textField"
 					:value="parentName"
 					:label="$t('common.labels.course')"
+					:rules="[rules.required]"
 					@input="onInput"
 				></v-text-field>
 			</div>
@@ -41,7 +42,7 @@
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, inject, reactive, ref } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -49,17 +50,25 @@ export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
-	inject: ["i18n"],
 	emits: ["import", "cancel"],
 	props: {
 		isOpen: { type: Boolean },
 		parentName: { type: String, required:true }
 	},
 	setup(props, { emit }) {
+		const i18n = inject("i18n");
 		const newName = ref(props.parentName);
 
+		const rules = reactive({
+          required: value => !!value || i18n?.t("common.validation.required"),
+		});
+
 		const onInput = (value) => newName.value = value;
-		const onConfirm = () => emit('import', newName.value);
+		const onConfirm = () => {
+			if (rules.required(newName.value) === true) {
+				emit('import', newName.value);
+			}
+		}
 		const onCancel = () => emit('cancel')
 
 		return {
@@ -67,6 +76,7 @@ export default defineComponent({
 			onCancel,
       		onInput,
 			mdiInformation,
+			rules
 		};
 	},
 });
