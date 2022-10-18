@@ -7,7 +7,6 @@
 				<the-top-bar
 					v-if="!isInline"
 					:title="pageTitle"
-					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
 					:expanded-menu="expandedMenu"
 					:user="user"
@@ -58,45 +57,6 @@ export default {
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
-			topbarBaseActions: [
-				{
-					type: "popupIcon",
-					title: this.$t("global.topbar.actions.qrCode"),
-					icon: "qrcode",
-					component: "menu-qr-code",
-				},
-				{
-					type: "popupIcon",
-					title: this.$t("global.topbar.actions.help"),
-					icon: "question",
-					component: "help-dropdown",
-					config: {
-						menuItems: [
-							{
-								label: this.$t("global.topbar.actions.helpSection"),
-								icon: "question-circle",
-								action: "/help",
-								source: "fa",
-								target: "_self",
-							},
-							{
-								label: this.$t("global.topbar.actions.contactSupport"),
-								icon: "pencil",
-								action: "/help/contact",
-								source: "fa",
-								target: "_self",
-							},
-							{
-								label: this.$t("global.topbar.actions.training"),
-								icon: "fortbildung",
-								action: "https://www.lernen.cloud/",
-								source: "custom",
-								target: "_blank",
-							},
-						],
-					},
-				},
-			],
 		};
 	},
 	computed: {
