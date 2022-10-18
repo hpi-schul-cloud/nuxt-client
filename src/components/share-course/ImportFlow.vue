@@ -100,11 +100,6 @@ export default defineComponent({
 			validateShareToken();
 		}
 
-		async function startImport(newName) {
-			openModal('loading');
-			await copyCourse(newName);
-		}
-
 		async function validateShareToken() {
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
@@ -114,6 +109,11 @@ export default defineComponent({
 				showFailureInvalidToken();
 				return;
 			}
+		}
+
+		async function startImport(newName) {
+			openModal('loading');
+			await copyCourse(newName);
 		}
 
 		async function copyCourse(newName) {
