@@ -6,23 +6,22 @@
 			class="top-main"
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
-			<base-button
+			<v-btn
+				icon
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
-				design="text icon"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<base-icon class="menu-icon" source="fa" icon="bars" />
-			</base-button>
+				<v-icon>fa-solid fa-bars</v-icon>
+			</v-btn>
 			<div class="space"></div>
-			<base-button
-				class="item fullscreen-button"
-				design="text icon"
+			<v-btn
+				icon
 				:title="$t('global.topbar.actions.fullscreen')"
 				:aria-label="$t('global.topbar.actions.fullscreen')"
 				@click.native="sendEvent('fullscreen')"
 			>
-				<base-icon source="fa" icon="expand" />
-			</base-button>
+				<v-icon>{{ mdiArrowExpand }}</v-icon>
+			</v-btn>
 			<template v-for="action in actions">
 				<popup-icon
 					:key="action.title"
@@ -71,30 +70,34 @@
 				</button>
 			</popup-icon-initials>
 		</div>
-		<base-button
+		<v-btn
 			v-else
-			class="fullscreen-button fullscreen-button-active"
-			design="primary icon"
+			color="secondary darken-1"
+			fab
+			dark
+			depressed
+			width="40"
+			height="40"
+			class="fullscreen-button-active"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="compress" fill="var(--v-white-base)" />
-		</base-button>
+			<v-icon>{{ mdiArrowCollapse }}</v-icon>
+		</v-btn>
 	</div>
 </template>
 
 <script>
 import PopupIcon from "@components/legacy/PopupIcon";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
-import BaseLink from "@basecomponents/BaseLink";
 import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
 import LanguageMenu from "@components/molecules/LanguageMenu.vue";
+import { mdiArrowCollapse, mdiArrowExpand, mdiMenu } from "@mdi/js";
 
 export default {
 	components: {
 		PopupIcon,
 		PopupIconInitials,
-		BaseLink,
 		HelpDropdown,
 		MenuQrCode,
 		LanguageMenu,
@@ -130,8 +133,11 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			mdiArrowCollapse,
+			mdiArrowExpand,
+			mdiMenu,
+		};
 	},
 	computed: {
 		role() {
@@ -178,8 +184,6 @@ export default {
 			z-index: var(--layer-popover);
 			display: flex;
 			margin: var(--space-xs);
-			font-size: 22px;
-			text-align: center;
 			transition: transform 0.35s;
 
 			.menu-icon {
@@ -235,6 +239,7 @@ export default {
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);
+	opacity: 0.5;
 }
 
 .logout-button,
