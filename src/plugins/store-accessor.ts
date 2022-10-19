@@ -15,6 +15,7 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@store/share-course";
+import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import { getModule } from "vuex-module-decorators";
@@ -40,6 +41,7 @@ export default () => {
 		provide("roomsModule", getModule(RoomsModule, store));
 		provide("schoolsModule", getModule(SchoolsModule, store));
 		provide("shareCourseModule", getModule(ShareCourseModule, store));
+		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("taskModule", getModule(TaskModule, store));
 	});
 };

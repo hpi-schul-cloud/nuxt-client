@@ -7,7 +7,7 @@
 		<div
 			ref="popupContent"
 			class="popup-content"
-			:class="{ visible, 'expand-to-left': expandToLeft }"
+			:class="{ visible, 'expand-to-left': expandToLeft, centered }"
 		>
 			<slot></slot>
 		</div>
@@ -28,6 +28,9 @@ export default {
 		fill: {
 			type: String,
 			default: "var(--v-secondary-darken1)",
+		},
+		centered: {
+			type: Boolean,
 		},
 	},
 	data() {
@@ -98,6 +101,11 @@ export default {
 			right: 0%;
 			left: initial;
 		}
+
+		&.centered {
+			right: initial;
+			left: initial;
+		}
 	}
 
 	.popup-content::before {
@@ -150,6 +158,18 @@ export default {
 			right: var(--arrow-offset);
 			left: initial;
 		}
+	}
+
+	.centered::before {
+		right: initial;
+		left: calc(
+			var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+		);
+	}
+
+	.centered::after {
+		right: initial;
+		left: var(--arrow-offset);
 	}
 }
 </style>
