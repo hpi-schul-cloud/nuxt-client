@@ -150,8 +150,32 @@ describe("copy module", () => {
 			});
 		});
 
+		describe("validate share token", () => {
+			it("should validate share token by using the api", async () => {
+				const shareApiMock = {
+					shareTokenControllerLookupShareToken: jest.fn(async () => ({
+						data: {},
+					})),
+				};
+				jest
+					.spyOn(serverApi, "ShareTokenApiFactory")
+					.mockReturnValue(
+						shareApiMock as unknown as serverApi.ShareTokenApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+				const token = "abc123a";
+
+				await copyModule.validateShareToken(token);
+
+				expect(
+					shareApiMock.shareTokenControllerLookupShareToken
+				).toHaveBeenCalledWith(token);
+			});
+		});
+
 		describe("import a course", () => {
-			it("should make a 'POST' request to the backend", async () => {
+			it("should import a course by using the shareApi", async () => {
 				const shareApiMock = {
 					shareTokenControllerImportShareToken: jest.fn(async () => ({
 						data: {},
