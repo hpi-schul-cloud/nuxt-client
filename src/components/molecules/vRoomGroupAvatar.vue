@@ -51,7 +51,7 @@
 	</div>
 </template>
 <script>
-import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 export default {
 	components: {
 		RoomAvatarIterator,
@@ -120,7 +120,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 

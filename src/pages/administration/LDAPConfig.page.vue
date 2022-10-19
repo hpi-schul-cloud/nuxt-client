@@ -87,13 +87,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@utils/ldapErrorHandling";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
-import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
-import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
-import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
-import InfoMessage from "@components/atoms/InfoMessage";
+import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
+import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
+import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
+import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
+import InfoMessage from "@/components/atoms/InfoMessage";
 
 export default {
 	components: {

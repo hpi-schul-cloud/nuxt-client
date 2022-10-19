@@ -1,5 +1,5 @@
-import mergeDeep from "@utils/merge-deep";
-import serviceTemplate from "@utils/service-template";
+import mergeDeep from "@/utils/merge-deep";
+import serviceTemplate from "@/utils/service-template";
 const base = serviceTemplate("courses");
 
 const module = mergeDeep(base, {

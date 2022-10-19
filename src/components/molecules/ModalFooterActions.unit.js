@@ -1,7 +1,7 @@
 import ModalFooterActions from "./ModalFooterActions";
 import { mount } from "@vue/test-utils";
 
-describe("@components/molecules/ModalFooterAction", () => {
+describe("@/components/molecules/ModalFooterAction", () => {
 	it(...isValidComponent(ModalFooterActions));
 
 	it("renders with some slots", () => {

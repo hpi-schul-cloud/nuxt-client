@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ErrorPage from "@components/templates/ErrorPage";
+import ErrorPage from "@/components/templates/ErrorPage";
 export default {
 	components: {
 		ErrorPage,

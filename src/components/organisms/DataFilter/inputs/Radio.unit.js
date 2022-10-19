@@ -1,6 +1,6 @@
 import InputRadio from "./Radio";
 
-describe("@components/organisms/DataFilter/inputs/Radio", () => {
+describe("@/components/organisms/DataFilter/inputs/Radio", () => {
 	it("can preselect an option", async () => {
 		const expectedValue = "25";
 		const wrapper = mount(InputRadio, {

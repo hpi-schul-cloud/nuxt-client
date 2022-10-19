@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
-import DefaultWireframe from "@components/templates/DefaultWireframe";
+import CommonTermsOfUse from "@/components/templates/CommonTermsOfUse";
+import DefaultWireframe from "@/components/templates/DefaultWireframe";
 
 export default {
 	components: { CommonTermsOfUse, DefaultWireframe },

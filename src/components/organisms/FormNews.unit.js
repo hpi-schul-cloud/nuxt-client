@@ -1,5 +1,5 @@
 import FormNews from "./FormNews";
-import { DATETIME_FORMAT } from "@plugins/datetime";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 import dayjs from "dayjs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
@@ -58,7 +58,7 @@ const getMocks = ({
 		},
 	});
 
-describe("@components/organisms/FormNews", () => {
+describe("@/components/organisms/FormNews", () => {
 	beforeEach(() => {
 		setupStores({ "env-config": EnvConfigModule });
 	});

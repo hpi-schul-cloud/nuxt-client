@@ -12,7 +12,7 @@ const getInstance = () => {
 		}
 	);
 };
-describe("@mixins/infiniteScrolling", () => {
+describe("@/mixins/infiniteScrolling", () => {
 	it("can be used as a mixin", () => {
 		expect(getInstance).not.toThrow();
 	});

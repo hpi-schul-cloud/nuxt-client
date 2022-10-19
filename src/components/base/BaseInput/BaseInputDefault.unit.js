@@ -22,7 +22,7 @@ const mockInput = (type) => {
 	}
 };
 
-describe("@components/base/BaseInputDefault", () => {
+describe("@/components/base/BaseInputDefault", () => {
 	it("input has correct type", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = getMock(type);

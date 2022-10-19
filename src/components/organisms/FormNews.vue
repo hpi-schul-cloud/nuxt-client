@@ -73,12 +73,12 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
+import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule } from "@/store";
 
-import TextEditor from "@components/molecules/TextEditor.vue";
-import TitleInput from "@components/molecules/TitleInput.vue";
-import FormActions from "@components/molecules/FormActions.vue";
+import TextEditor from "@/components/molecules/TextEditor.vue";
+import TitleInput from "@/components/molecules/TitleInput.vue";
+import FormActions from "@/components/molecules/FormActions.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({

@@ -1,4 +1,4 @@
-import { provide } from "@nuxtjs/composition-api";
+import { provide } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
@@ -26,7 +26,7 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/legacy/TheTopBar", () => {
+describe("@/components/legacy/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
 			auth: AuthModule,

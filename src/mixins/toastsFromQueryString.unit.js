@@ -1,6 +1,6 @@
 import toastsFromQueryString from "./toastsFromQueryString";
 
-describe("@mixins/toastsFromQueryString", () => {
+describe("@/mixins/toastsFromQueryString", () => {
 	it.each([
 		["error", "errorMessage", undefined],
 		["success", "successMessage", 2000],

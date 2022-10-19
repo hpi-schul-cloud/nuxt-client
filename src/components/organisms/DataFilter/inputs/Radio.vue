@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import uid from "@mixins/uid";
+import uid from "@/mixins/uid";
 
 export default {
 	mixins: [uid],

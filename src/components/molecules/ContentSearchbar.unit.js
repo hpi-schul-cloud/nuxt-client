@@ -9,7 +9,7 @@ const contentSearchbarComponent = {
 	template: '<content-searchbar v-model="value" :placeholder="placeholder" />',
 };
 
-describe("@components/molecules/ContentSearchbar", () => {
+describe("@/components/molecules/ContentSearchbar", () => {
 	it(...isValidComponent(ContentSearchbar));
 
 	it("Defaults render", async () => {

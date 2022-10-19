@@ -22,7 +22,7 @@ function getLastPageWrapper() {
 	});
 }
 
-describe("@components/organisms/Pagination", () => {
+describe("@/components/organisms/Pagination", () => {
 	it(...isValidComponent(Pagination));
 
 	it("renders only a next page link on the first page", () => {

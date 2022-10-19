@@ -1,7 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BaseCard from "./BaseCard";
 
-describe("@components/base/BaseCard", () => {
+describe("@/components/base/BaseCard", () => {
 	it(...isValidComponent(BaseCard));
 	it(
 		...rendersSlotContent(

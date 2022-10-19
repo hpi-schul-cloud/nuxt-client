@@ -7,15 +7,15 @@ import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import TasksList from "@components/organisms/TasksList.vue";
-import TasksDashboardStudent from "@components/templates/TasksDashboardStudent.vue";
-import { provide } from "@nuxtjs/composition-api";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
+import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
+import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
-describe("@components/templates/TasksDashboardStudent", () => {
+describe("@/components/templates/TasksDashboardStudent", () => {
 	let taskModuleMock: TaskModule;
 	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;

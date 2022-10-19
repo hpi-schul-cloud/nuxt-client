@@ -73,12 +73,12 @@
 </template>
 
 <script>
-import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
+import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 import {
 	isToday,
 	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
-} from "@plugins/datetime";
+} from "@/plugins/datetime";
 
 // TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];

@@ -20,10 +20,10 @@
 	</backend-data-table>
 </template>
 <script>
-import { getValueByPath } from "@utils/helpers";
+import { getValueByPath } from "@/utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 
-import controllableData from "@mixins/controllableData";
+import controllableData from "@/mixins/controllableData";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));

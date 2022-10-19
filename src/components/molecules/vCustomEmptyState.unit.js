@@ -1,6 +1,6 @@
 import Vuetify from "vuetify";
 import vCustomEmptyState from "./vCustomEmptyState";
-import BaseImage from "@basecomponents/BaseImage";
+import BaseImage from "@/components/base/BaseImage";
 
 let vuetify;
 let wrapper;
@@ -9,7 +9,7 @@ const title = "Test title";
 const subtitle = "Test subtitle";
 const image = "@assets/img/empty-state/tasks-empty-state.svg";
 
-describe("@components/molecules/vCustomEmptyState", () => {
+describe("@/components/molecules/vCustomEmptyState", () => {
 	beforeEach(() => {
 		vuetify = new Vuetify();
 

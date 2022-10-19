@@ -20,7 +20,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/StatusAlerts", () => {
+describe("@/components/molecules/StatusAlerts", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores();

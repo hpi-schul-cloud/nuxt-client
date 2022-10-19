@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import FormCreateUser from "@components/organisms/FormCreateUser";
-import InfoMessage from "@components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 export default {

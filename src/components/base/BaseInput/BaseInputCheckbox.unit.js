@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputCheckbox";
 
-describe("@components/base/BaseInputCheckbox", () => {
+describe("@/components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {

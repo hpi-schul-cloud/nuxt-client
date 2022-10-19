@@ -156,12 +156,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@utils/ldapErrorHandling";
-import { unchangedPassword } from "@utils/ldapConstants";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { unchangedPassword } from "@/utils/ldapConstants";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
-import InfoMessage from "@components/atoms/InfoMessage";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
+import InfoMessage from "@/components/atoms/InfoMessage";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;

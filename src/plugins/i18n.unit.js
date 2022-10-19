@@ -3,7 +3,7 @@ import { authModule, envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
-import { globalPlugin } from "@nuxtjs/composition-api";
+import { globalPlugin } from "vue";
 
 const envs = {
 	FALLBACK_DISABLED: false,

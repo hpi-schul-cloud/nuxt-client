@@ -58,7 +58,7 @@ const axiosHelperThrowError = () => ({
 	},
 });
 
-describe("@utils/fetchAll", () => {
+describe("@/utils/fetchAll", () => {
 	describe("file exports works", () => {
 		it("default export works", () => {
 			expect(typeof fetchAllFromDefault).toBe("function");

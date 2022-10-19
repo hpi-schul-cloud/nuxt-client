@@ -1,7 +1,7 @@
 import ModalBodyInfo from "./ModalBodyInfo";
 import { shallowMount } from "@vue/test-utils";
 
-describe("@components/molecules/ModalBodyInfo", () => {
+describe("@/components/molecules/ModalBodyInfo", () => {
 	it(...isValidComponent(ModalBodyInfo));
 
 	it("renders icon", () => {

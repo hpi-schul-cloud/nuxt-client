@@ -34,7 +34,7 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import FormNews from "@components/organisms/FormNews";
+import FormNews from "@/components/organisms/FormNews";
 import { newsModule } from "@/store";
 
 export default {

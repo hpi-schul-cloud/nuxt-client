@@ -1,6 +1,6 @@
 import InputCheckbox from "./Checkbox";
 
-describe("@components/organisms/DataFilter/inputs/Checkbox", () => {
+describe("@/components/organisms/DataFilter/inputs/Checkbox", () => {
 	it("can preselect an option", async () => {
 		const expectedValue = ["A", "B"];
 		const wrapper = mount(InputCheckbox, {

@@ -25,7 +25,7 @@ const successButton = {
 	template: `<base-button design="success">Default</base-button>`,
 };
 
-describe("@components/base/BaseButton", () => {
+describe("@/components/base/BaseButton", () => {
 	it(...isValidComponent(BaseButton));
 	it(...rendersSlotContent(BaseButton));
 	it("Generates a default button", () => {

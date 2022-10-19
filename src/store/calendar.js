@@ -1,4 +1,4 @@
-import serviceTemplate from "@utils/service-template";
+import serviceTemplate from "@/utils/service-template";
 import mergeDeep from "@/utils/merge-deep";
 const baseUrl = "calendar";
 const base = serviceTemplate(baseUrl);

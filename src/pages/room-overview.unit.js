@@ -116,7 +116,7 @@ const getWrapper = (device = "desktop", isLoading = false, options = {}) => {
 	});
 };
 
-describe("@pages/RoomOverview", () => {
+describe("@/pages/RoomOverview", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

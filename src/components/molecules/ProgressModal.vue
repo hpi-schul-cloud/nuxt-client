@@ -7,7 +7,7 @@
 	</base-modal>
 </template>
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 export default {
 	components: {
 		ModalBodyInfo,

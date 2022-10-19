@@ -8,7 +8,7 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import TaskItemMenu from "./TaskItemMenu";
 
 const { tasksTeacher } = mocks;
@@ -46,7 +46,7 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/molecules/TaskItemMenu", () => {
+describe("@/components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({

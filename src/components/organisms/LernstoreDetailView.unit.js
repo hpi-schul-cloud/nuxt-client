@@ -5,7 +5,7 @@ const testProps = {
 	resource: Resource,
 };
 
-describe("@components/molecules/LernstoreDetailView", () => {
+describe("@/components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
 		...createComponentMocks({ i18n: true }),
 		propsData: { ...testProps },

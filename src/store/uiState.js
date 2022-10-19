@@ -1,4 +1,4 @@
-import mergeDeep from "@utils/merge-deep";
+import mergeDeep from "@/utils/merge-deep";
 
 const localStorageKey = "uiState";
 const version = 1;

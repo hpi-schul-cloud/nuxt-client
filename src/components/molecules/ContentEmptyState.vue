@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import EmptyState from "@components/molecules/EmptyState";
+import EmptyState from "@/components/molecules/EmptyState";
 export default {
 	components: {
 		EmptyState,

@@ -1,6 +1,6 @@
 import controllableData from "./controllableData";
 
-describe("@mixins/controllableData", () => {
+describe("@/mixins/controllableData", () => {
 	it("throws an error if no props are passed", () => {
 		expect(() => {
 			controllableData();

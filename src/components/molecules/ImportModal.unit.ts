@@ -5,7 +5,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import ImportModal from "./ImportModal.vue";
 
-describe("@components/molecules/RoomModal", () => {
+describe("@/components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

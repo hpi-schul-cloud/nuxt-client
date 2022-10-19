@@ -2,11 +2,11 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@nuxtjs/composition-api";
+import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
 
-describe("@components/templates/LanguageMenu", () => {
+describe("@/components/templates/LanguageMenu", () => {
 	let envConfigModuleMock: EnvConfigModule;
 	let authModuleMock: AuthModule;
 

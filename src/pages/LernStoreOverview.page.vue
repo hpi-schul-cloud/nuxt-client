@@ -73,14 +73,14 @@
 
 <script>
 import { contentModule } from "@/store";
-import ContentSearchbar from "@components/molecules/ContentSearchbar";
-import ContentCard from "@components/organisms/ContentCard";
-import ContentEmptyState from "@components/molecules/ContentEmptyState";
-import infiniteScrolling from "@mixins/infiniteScrolling";
-import BaseGrid from "@components/base/BaseGrid";
-import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-import BaseButton from "@basecomponents/BaseButton";
-import ContentInitialState from "@components/molecules/ContentInitialState";
+import ContentSearchbar from "@/components/molecules/ContentSearchbar";
+import ContentCard from "@/components/organisms/ContentCard";
+import ContentEmptyState from "@/components/molecules/ContentEmptyState";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
+import BaseGrid from "@/components/base/BaseGrid";
+import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import BaseButton from "@/components/base/BaseButton";
+import ContentInitialState from "@/components/molecules/ContentInitialState";
 
 export default {
 	meta: {

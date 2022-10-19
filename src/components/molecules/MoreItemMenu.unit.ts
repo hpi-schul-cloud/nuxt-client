@@ -26,7 +26,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/MoreItemMenu", () => {
+describe("@/components/molecules/MoreItemMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 	});

@@ -1,16 +1,16 @@
-import { StatusAlert } from '@store/types/status-alert';
+import { StatusAlert } from "@/store/types/status-alert";
 
-export const mockStatusAlerts : StatusAlert[] = [
+export const mockStatusAlerts: StatusAlert[] = [
 	{
 		title: "Important info",
 		text: "Description of the alert",
 		status: "info",
 		origin: {
 			page: "status",
-			message_id: 1
+			message_id: 1,
 		},
 		timestamp: "2022-08-25 10:33:38",
-		url :"https://status.test.cloud"
+		url: "https://status.test.cloud",
 	},
 	{
 		title: "Problem resolved",
@@ -18,10 +18,10 @@ export const mockStatusAlerts : StatusAlert[] = [
 		status: "done",
 		origin: {
 			page: "status",
-			message_id: 2
+			message_id: 2,
 		},
 		timestamp: "2022-08-25 10:33:38",
-		url :"https://status.test.cloud"
+		url: "https://status.test.cloud",
 	},
 	{
 		title: "Critical problem in progress info2",
@@ -29,9 +29,9 @@ export const mockStatusAlerts : StatusAlert[] = [
 		status: "danger",
 		origin: {
 			page: "status",
-			message_id: 3
+			message_id: 3,
 		},
 		timestamp: "2022-08-25 10:33:38",
-		url :"https://status.test.cloud"
-	}
+		url: "https://status.test.cloud",
+	},
 ];

@@ -9,7 +9,7 @@ const button = {
 	components: { ModalFooterConfirm },
 };
 
-describe("@components/molecules/ModalFooterConfirm", () => {
+describe("@/components/molecules/ModalFooterConfirm", () => {
 	it(...isValidComponent(ModalFooterConfirm, {}));
 
 	it("pressing the ok button should close the modal", () => {

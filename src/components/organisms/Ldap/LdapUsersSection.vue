@@ -109,7 +109,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathValidationRegex } from "@utils/ldapConstants";
+import { ldapPathValidationRegex } from "@/utils/ldapConstants";
 
 export default {
 	props: {

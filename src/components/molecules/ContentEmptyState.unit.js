@@ -1,6 +1,6 @@
 import ContentEmptyState from "./ContentEmptyState";
 
-describe("@components/molecules/ContentEmptyState", () => {
+describe("@/components/molecules/ContentEmptyState", () => {
 	const wrapper = mount(ContentEmptyState, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),

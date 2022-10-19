@@ -1,5 +1,5 @@
 import { authModule, envConfigModule } from "@/store";
-import { onGlobalSetup, provide } from "@nuxtjs/composition-api";
+import { onGlobalSetup, provide } from "vue";
 import Vue from "vue";
 import VueI18n from "vue-i18n";
 
@@ -17,10 +17,10 @@ export const i18n = () => {
 		locale,
 		fallbackLocale,
 		messages: {
-			en: require("@locale/en.json"),
-			de: require("@locale/de.json"),
-			es: require("@locale/es.json"),
-			ua: require("@locale/ua.json"),
+			en: require("@/locale/en.json"),
+			de: require("@/locale/de.json"),
+			es: require("@/locale/es.json"),
+			ua: require("@/locale/ua.json"),
 		},
 	});
 };

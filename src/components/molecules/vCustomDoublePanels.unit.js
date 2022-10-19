@@ -1,7 +1,7 @@
 import Vuetify from "vuetify";
 import vCustomDoublePanels from "./vCustomDoublePanels";
 
-describe("@components/molecules/vCustomDoublePanels", () => {
+describe("@/components/molecules/vCustomDoublePanels", () => {
 	const propsData = {
 		panelOneCount: 1,
 		panelTwoCount: 13,

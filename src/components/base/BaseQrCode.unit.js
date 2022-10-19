@@ -5,7 +5,7 @@ const qrCode = {
 	template: `<base-qr-code url="testUrl"/>`,
 };
 
-describe("@components/base/BaseQrCode", () => {
+describe("@/components/base/BaseQrCode", () => {
 	it(...isValidComponent(BaseQrCode));
 	it("Generates a qrCode image", () => {
 		const wrapper = mount(qrCode);

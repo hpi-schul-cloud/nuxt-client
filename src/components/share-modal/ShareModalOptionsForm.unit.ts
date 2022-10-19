@@ -2,7 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
 import { mount } from "@vue/test-utils";
 
-describe("@components/share-modal/ShareModalOptionsForm", () => {
+describe("@/components/share-modal/ShareModalOptionsForm", () => {
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(ShareModalOptionsForm, {
 			...createComponentMocks({

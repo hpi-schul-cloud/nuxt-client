@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import LdapClassesSection from "./LdapClassesSection";
 
-describe("@components/organisms/LdapClassesSection", () => {
+describe("@/components/organisms/LdapClassesSection", () => {
 	const ldapConfigData = {
 		classPath: "class=path",
 		nameAttribute: "description",

@@ -18,7 +18,7 @@ function getMock(options = {}) {
 	});
 }
 
-describe("@components/molecules/TextEditor", () => {
+describe("@/components/molecules/TextEditor", () => {
 	it(...isValidComponent(TextEditor));
 
 	// TODO:

@@ -60,7 +60,7 @@ const mockData = [
 	},
 ];
 
-describe("@pages/room-list.vue", () => {
+describe("@/pages/room-list.vue", () => {
 	let wrapper: Wrapper<Vue>;
 
 	beforeEach(() => {

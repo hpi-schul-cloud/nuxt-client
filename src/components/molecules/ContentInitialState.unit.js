@@ -1,6 +1,6 @@
 import ContentInitialState from "./ContentInitialState";
 
-describe("@components/molecules/ContentInitialState", () => {
+describe("@/components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),

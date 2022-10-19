@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { notifierModule } from "@/store";
-import { AlertPayload } from "@store/types/alert-payload";
+import { AlertPayload } from "@/store/types/alert-payload";
 
 export const notifierMixin = {
 	methods: {

@@ -16,7 +16,7 @@ const getWrapper = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/atoms/vCustomFab", () => {
+describe("@/components/atoms/vCustomFab", () => {
 	describe("when fab is simple (icon only)", () => {
 		const simpleFab = {
 			actions: [],

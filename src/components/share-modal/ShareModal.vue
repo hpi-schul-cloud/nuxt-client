@@ -46,11 +46,11 @@
 </template>
 
 <script type="ts">
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm";
-import ShareModalResult from "@components/share-modal/ShareModalResult";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModalOptionsForm from "@/components/share-modal/ShareModalOptionsForm";
+import ShareModalResult from "@/components/share-modal/ShareModalResult";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

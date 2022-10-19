@@ -1,6 +1,6 @@
 import SchoolsModule from "./schools";
-import ImportUsersModule from "@store/import-users";
-import { initializeAxios } from "@utils/api";
+import ImportUsersModule from "@/store/import-users";
+import { initializeAxios } from "@/utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";

@@ -217,8 +217,8 @@
 </template>
 
 <script>
-import BaseButton from "@basecomponents/BaseButton";
-import InfoBox from "@components/molecules/InfoBox";
+import BaseButton from "@/components/base/BaseButton";
+import InfoBox from "@/components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
 
 const selectionStateMap = new Map([

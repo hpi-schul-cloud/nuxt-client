@@ -47,15 +47,15 @@
 
 <script>
 import { contentModule } from "@/store";
-import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/molecules/NotificationModal";
-import LoadingModal from "@components/molecules/LoadingModal";
+import AddContentModal from "@/components/molecules/AddContentModal";
+import NotificationModal from "@/components/molecules/NotificationModal";
+import LoadingModal from "@/components/molecules/LoadingModal";
 import {
 	getTitle,
 	getMerlinReference,
 	getUrl,
 	getMetadataAttribute,
-} from "@utils/helpers";
+} from "@/utils/helpers";
 
 let slowAPICall;
 

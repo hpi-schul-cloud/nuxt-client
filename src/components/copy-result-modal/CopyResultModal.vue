@@ -50,8 +50,8 @@
 
 <script>
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import {
 	mdiAlert,
 	mdiCheckCircle,

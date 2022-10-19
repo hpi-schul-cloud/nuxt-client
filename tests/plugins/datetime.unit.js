@@ -15,8 +15,8 @@ import {
 	calculateUTC,
 	setDefaultFormats,
 	DATETIME_FORMAT,
-} from "@plugins/datetime";
-import datetime from "@plugins/datetime";
+} from "@/plugins/datetime";
+import datetime from "@/plugins/datetime";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
@@ -35,8 +35,8 @@ const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_CURRENT_LOCALE = "en";
 
 const translations = {
-	en: require("@locale/en.json"),
-	de: require("@locale/de.json"),
+	en: require("@/locale/en.json"),
+	de: require("@/locale/de.json"),
 };
 
 const defaultFormats = {
@@ -71,7 +71,7 @@ const localizedFormats = {
 
 setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
-describe("@plugins/datetime", () => {
+describe("@/plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
 	const dateUTC = dayjs.tz(dateString, "UTC");
 	const dateLocalFromUTC = dateUTC.tz();

@@ -7,9 +7,9 @@ import { OpenTasksForTeacher } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import TasksList from "@components/organisms/TasksList.vue";
-import { provide } from "@nuxtjs/composition-api";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
+import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
@@ -18,7 +18,7 @@ const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 
 const tabRoutes = ["current", "drafts", "finished"];
 
-describe("@components/templates/TasksDashboardTeacher", () => {
+describe("@/components/templates/TasksDashboardTeacher", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
 	let copyModuleMock: CopyModule;

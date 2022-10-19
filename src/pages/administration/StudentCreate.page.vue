@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import FormCreateUser from "@components/organisms/FormCreateUser";
-import InfoMessage from "@components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { inputRangeDate } from "@plugins/datetime";
+import { inputRangeDate } from "@/plugins/datetime";
 
 import { mapGetters } from "vuex";
 

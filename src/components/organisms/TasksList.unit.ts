@@ -6,14 +6,14 @@ import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { provide } from "@nuxtjs/composition-api";
+import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
-describe("@components/organisms/TasksList", () => {
+describe("@/components/organisms/TasksList", () => {
 	let taskModuleMock: TaskModule;
 	let finishedTaskModuleMock: FinishedTaskModule;
 	let copyModuleMock: CopyModule;

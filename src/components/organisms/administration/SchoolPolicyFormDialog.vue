@@ -104,8 +104,8 @@ import { schoolsModule } from "@/store";
 import { mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
-import { currentDate } from "@plugins/datetime";
-import { toBase64 } from "@utils/fileHelper.ts";
+import { currentDate } from "@/plugins/datetime";
+import { toBase64 } from "@/utils/fileHelper.ts";
 
 export default {
 	mixins: [validationMixin],

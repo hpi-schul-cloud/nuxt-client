@@ -42,9 +42,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { authModule, envConfigModule, roomsModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import ImportModal from "@components/molecules/ImportModal.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import ImportModal from "@/components/molecules/ImportModal.vue";
 import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export

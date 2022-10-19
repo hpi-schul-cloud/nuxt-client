@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ModalFooter from "@components/molecules/ModalFooter";
+import ModalFooter from "@/components/molecules/ModalFooter";
 import { XmlEntities } from "html-entities";
 const entities = new XmlEntities();
 

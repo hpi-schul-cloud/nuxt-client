@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import LdapRolesSection from "./LdapRolesSection";
 
-describe("@components/organisms/LdapRolesSection", () => {
+describe("@/components/organisms/LdapRolesSection", () => {
 	const ldapConfigData = {
 		groupOption: "group",
 		member: "description",

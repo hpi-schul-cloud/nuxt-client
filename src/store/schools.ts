@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
 import { Year, FederalState, School } from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
@@ -11,7 +11,7 @@ const SCHOOL_FEATURES: any = [
 	"studentVisibility", // deprecated
 	"messengerSchoolRoom",
 	"messengerStudentRoomCreate",
-	"ldapUniventionMigrationSchool"
+	"ldapUniventionMigrationSchool",
 ];
 
 function transformSchoolServerToClient(school: any): School {
@@ -99,7 +99,7 @@ export default class SchoolsModule extends VuexModule {
 		__v: 0,
 	};
 	systems: any[] = [];
-	loading: boolean = false;
+	loading = false;
 	error: null | {} = null;
 
 	@Mutation

@@ -3,7 +3,7 @@ import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
-import migrationIndex from "@pages/administration/Migration.page.vue";
+import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { mount, shallowMount } from "@vue/test-utils";
 
 declare var createComponentMocks: Function;

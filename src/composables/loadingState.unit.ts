@@ -1,6 +1,6 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { defineComponent, provide } from "@vue/composition-api";
+import { defineComponent, provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import { useLoadingState } from "./loadingState";
 

@@ -1,7 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import InsightsCard from "./InsightsCard";
 
-describe("@components/molecules/InsightsCard", () => {
+describe("@/components/molecules/InsightsCard", () => {
 	const getWrapper = (attrs) => {
 		return mount(InsightsCard, {
 			...createComponentMocks({

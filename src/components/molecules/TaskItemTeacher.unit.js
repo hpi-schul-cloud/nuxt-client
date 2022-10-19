@@ -3,7 +3,7 @@ import NotifierModule from "@/store/notifier";
 import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
 
@@ -46,7 +46,7 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/molecules/TaskItemTeacher", () => {
+describe("@/components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
 
 	beforeEach(() => {

@@ -12,7 +12,7 @@ const getLocalVue = () => {
 	return localVue;
 };
 
-describe("@components/base/BaseDialog", () => {
+describe("@/components/base/BaseDialog", () => {
 	it("Vue Instance gets a property $dialog with the function confirm", () => {
 		const localVue = getLocalVue();
 		expect(typeof localVue.prototype.$dialog.confirm).toBe("function");

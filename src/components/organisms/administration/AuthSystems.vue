@@ -120,7 +120,7 @@
 <script>
 import { envConfigModule, schoolsModule } from "@/store";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
 
 export default {

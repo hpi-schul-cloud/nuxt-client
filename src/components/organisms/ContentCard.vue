@@ -74,11 +74,11 @@
 
 <script>
 import { contentModule } from "@/store";
-import BaseLink from "@components/base/BaseLink";
-import AddContentButton from "@components/organisms/AddContentButton";
-import UserHasRole from "@components/helpers/UserHasRole";
-import contentMeta from "@mixins/contentMeta";
-import { getProvider, isCollectionHelper } from "@utils/helpers";
+import BaseLink from "@/components/base/BaseLink";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import UserHasRole from "@/components/helpers/UserHasRole";
+import contentMeta from "@/mixins/contentMeta";
+import { getProvider, isCollectionHelper } from "@/utils/helpers";
 
 export default {
 	components: {
@@ -148,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@/utils/multiline-ellipsis.scss";
 
 .card-tag {
 	position: absolute;

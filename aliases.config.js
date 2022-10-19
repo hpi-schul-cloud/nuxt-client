@@ -1,3 +1,6 @@
+// NUXTREMOVE
+// Path aliases moved to tsconfig.json. We should remove this file.
+
 const path = require("path");
 const fs = require("fs");
 const prettier = require("prettier");

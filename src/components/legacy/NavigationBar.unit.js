@@ -29,7 +29,7 @@ const getWrapper = () => {
 	});
 };
 
-describe("@components/legacy/NavigationBar", () => {
+describe("@/components/legacy/NavigationBar", () => {
 	beforeEach(() => {
 		setupStores({
 			"env-config": EnvConfigModule,

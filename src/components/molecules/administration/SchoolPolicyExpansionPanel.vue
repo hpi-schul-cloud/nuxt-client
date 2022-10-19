@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { printDateTimeFromStringUTC } from "@plugins/datetime";
+import { printDateTimeFromStringUTC } from "@/plugins/datetime";
 import { mdiDownload } from "@mdi/js";
 
 export default {

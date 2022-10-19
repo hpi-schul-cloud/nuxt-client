@@ -2,7 +2,7 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { authModule } from "@/store";
 import { BusinessError, Status } from "./types/commons";
-import { downloadFile } from "@utils/fileHelper";
+import { downloadFile } from "@/utils/fileHelper";
 import {
 	FileRecordResponse as FileRecord,
 	FileApiInterface,

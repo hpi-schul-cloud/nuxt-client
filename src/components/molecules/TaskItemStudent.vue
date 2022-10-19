@@ -51,13 +51,13 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
+import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 	fromNowToFuture,
-} from "@plugins/datetime";
-import TaskItemMenu from "@components/molecules/TaskItemMenu.vue";
+} from "@/plugins/datetime";
+import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 

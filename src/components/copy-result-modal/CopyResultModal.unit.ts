@@ -1,6 +1,6 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 
@@ -50,7 +50,7 @@ const getWrapper = (props?: any) => {
 	});
 };
 
-describe("@components/copy-result-modal/CopyResultModal", () => {
+describe("@/components/copy-result-modal/CopyResultModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

@@ -21,7 +21,7 @@ const getNewWindowMock = () => {
 
 let newWindowMock;
 
-describe("@mixins/print", () => {
+describe("@/mixins/print", () => {
 	beforeEach(() => {
 		newWindowMock = getNewWindowMock();
 		jest

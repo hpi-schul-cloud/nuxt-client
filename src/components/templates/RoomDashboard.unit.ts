@@ -102,7 +102,7 @@ const getWrapper = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/templates/RoomDashboard.vue", () => {
+describe("@/components/templates/RoomDashboard.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

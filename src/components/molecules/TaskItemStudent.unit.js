@@ -3,14 +3,14 @@ import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemStudent from "./TaskItemStudent";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import TaskModule from "@/store/tasks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
 
-describe("@components/molecules/TaskItemStudent", () => {
+describe("@/components/molecules/TaskItemStudent", () => {
 	let vuetify;
 	let taskModuleMock;
 	let copyModuleMock;

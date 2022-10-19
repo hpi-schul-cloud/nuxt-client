@@ -25,7 +25,7 @@ const modal = {
 	components: { BaseModal },
 };
 
-describe("@components/base/BaseModal", () => {
+describe("@/components/base/BaseModal", () => {
 	it(...isValidComponent(BaseModal));
 	it(
 		...rendersSlotContent(BaseModal, ["default"], {

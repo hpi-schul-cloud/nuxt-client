@@ -306,16 +306,16 @@
 <script>
 /* eslint-disable max-lines */
 import { envConfigModule, filePathsModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import StepProgress from "@components/organisms/StepProgress";
-import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import StepProgress from "@/components/organisms/StepProgress";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
 import {
 	inputDateFromDeUTC,
 	inputDateFormat,
 	printDateFromDeUTC,
-} from "@plugins/datetime";
+} from "@/plugins/datetime";
 
 export default {
 	components: {

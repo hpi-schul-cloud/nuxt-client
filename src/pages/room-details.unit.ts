@@ -10,7 +10,7 @@ import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 
@@ -127,7 +127,7 @@ const getWrapper: any = () => {
 	});
 };
 
-describe("@pages/RoomDetails.page.vue", () => {
+describe("@/pages/RoomDetails.page.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

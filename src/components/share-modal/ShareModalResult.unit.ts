@@ -1,10 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
-import ShareModalResult from "@components/share-modal/ShareModalResult.vue";
-import BaseQrCode from "@basecomponents/BaseQrCode.vue";
+import ShareModalResult from "@/components/share-modal/ShareModalResult.vue";
+import BaseQrCode from "@/components/base/BaseQrCode.vue";
 
-describe("@components/share-modal/ShareModalResult", () => {
+describe("@/components/share-modal/ShareModalResult", () => {
 	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ShareModalResult, {
 			...createComponentMocks({

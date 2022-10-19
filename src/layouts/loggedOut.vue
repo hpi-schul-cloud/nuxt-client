@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import NavigationBar from "@components/legacy/NavigationBar";
-import TheFooter from "@components/legacy/TheFooter";
+import NavigationBar from "@/components/legacy/NavigationBar";
+import TheFooter from "@/components/legacy/TheFooter";
 
 export default {
 	components: {

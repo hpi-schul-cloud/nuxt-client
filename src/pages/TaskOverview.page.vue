@@ -4,7 +4,7 @@
 
 <script>
 import { authModule, taskModule } from "@/store";
-import TasksDashboardMain from "@components/templates/TasksDashboardMain";
+import TasksDashboardMain from "@/components/templates/TasksDashboardMain";
 
 export default {
 	components: { TasksDashboardMain },

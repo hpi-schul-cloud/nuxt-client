@@ -65,10 +65,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
-import { ListItemsObject } from "@store/types/rooms";
+import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export

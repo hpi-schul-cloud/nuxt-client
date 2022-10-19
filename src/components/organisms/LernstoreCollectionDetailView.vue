@@ -134,12 +134,12 @@
 
 <script>
 import { contentModule } from "@/store";
-import AddContentButton from "@components/organisms/AddContentButton";
-import ContentCard from "@components/organisms/ContentCard";
-import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-import UserHasRole from "@components/helpers/UserHasRole";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import ContentCard from "@/components/organisms/ContentCard";
+import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
-import contentMeta from "@mixins/contentMeta";
+import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import {
@@ -148,9 +148,9 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
-} from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
-import infiniteScrolling from "@mixins/infiniteScrolling";
+} from "@/utils/helpers";
+import { printDateFromTimestamp } from "@/plugins/datetime";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
 
 const DEFAULT_AUTHOR = "admin";
 

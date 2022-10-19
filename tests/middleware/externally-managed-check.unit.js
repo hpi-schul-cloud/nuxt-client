@@ -1,6 +1,6 @@
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
-import externallyManagedCheck from "@middleware/externally-managed-check";
+import externallyManagedCheck from "@/middleware/externally-managed-check";
 import setupStores from "../test-utils/setupStores";
 
 const mockApp = {
@@ -18,7 +18,7 @@ const getMockContext = ({ app = mockApp, route = getMockRoute() } = {}) => ({
 	route,
 });
 
-describe("@middleware/externally-managed-check", () => {
+describe("@/middleware/externally-managed-check", () => {
 	beforeEach(() => {
 		setupStores({ auth: AuthModule });
 	});

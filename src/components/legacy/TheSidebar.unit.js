@@ -1,7 +1,7 @@
 import TheSidebar from "./TheSidebar";
 import { render } from "@testing-library/vue";
 
-describe("@components/legacy/TheSidebar", () => {
+describe("@/components/legacy/TheSidebar", () => {
 	it(...isValidComponent(TheSidebar));
 
 	it("Render with empty routes", () => {

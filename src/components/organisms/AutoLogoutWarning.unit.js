@@ -40,7 +40,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 		},
 	});
 
-describe("@components/organisms/AutoLogoutWarning", () => {
+describe("@/components/organisms/AutoLogoutWarning", () => {
 	let actions;
 	let wrapper;
 

@@ -29,7 +29,7 @@ const getAttachToOptions = () => {
 	return { options: { attachTo: div } };
 };
 
-describe("@components/molecules/ContextMenu", () => {
+describe("@/components/molecules/ContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
 
 	it("Renders all action buttons", () => {
@@ -93,7 +93,7 @@ describe("@components/molecules/ContextMenu", () => {
 				template: `
 					<div id="container">
 						<div data-testid="outside" class="outside">Outside</div>
-						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>	
+						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
 					</div>
 				`,
 				components: { ContextMenu },

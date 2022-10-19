@@ -164,10 +164,10 @@
 
 <script>
 /* eslint-disable max-lines */
-import AddContentButton from "@components/organisms/AddContentButton";
-import UserHasRole from "@components/helpers/UserHasRole";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
-import contentMeta from "@mixins/contentMeta";
+import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import {
@@ -178,8 +178,8 @@ import {
 	getProvider,
 	getTags,
 	isMerlinContent,
-} from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
+} from "@/utils/helpers";
+import { printDateFromTimestamp } from "@/plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 

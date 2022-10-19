@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
 
-describe("@components/base/BaseInput", () => {
+describe("@/components/base/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
 	// BaseInput passes all given slots to it's child components

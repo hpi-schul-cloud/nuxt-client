@@ -90,7 +90,7 @@
 </template>
 <script>
 import { roomsModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiCheck } from "@mdi/js";
 
 export default {

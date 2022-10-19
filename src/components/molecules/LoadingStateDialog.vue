@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject } from "@vue/composition-api";
+import { computed, defineComponent, inject } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

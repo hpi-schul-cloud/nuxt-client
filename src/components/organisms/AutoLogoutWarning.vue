@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import CenterSlot from "@components/atoms/CenterSlot";
+import CenterSlot from "@/components/atoms/CenterSlot";
 import { autoLogoutModule } from "@/store";
 
 const toast = {

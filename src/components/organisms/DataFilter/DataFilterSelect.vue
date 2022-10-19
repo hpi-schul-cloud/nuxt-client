@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import ContextMenu from "@components/molecules/ContextMenu";
+import ContextMenu from "@/components/molecules/ContextMenu";
 import { XmlEntities } from "html-entities";
 const entities = new XmlEntities();
 

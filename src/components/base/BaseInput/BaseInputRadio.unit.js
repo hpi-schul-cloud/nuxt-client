@@ -1,6 +1,6 @@
 import BaseInput from "./BaseInput";
 
-describe("@components/base/BaseInputRadio", () => {
+describe("@/components/base/BaseInputRadio", () => {
 	it(`Check if input type="radio" is rendered`, () => {
 		const wrapper = mount(BaseInput, {
 			propsData: {

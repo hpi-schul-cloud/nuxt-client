@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import LdapUsersSection from "./LdapUsersSection";
 
-describe("@components/organisms/LdapUsersSection", () => {
+describe("@/components/organisms/LdapUsersSection", () => {
 	const ldapConfigData = {
 		userPath: "user=path;;user=p",
 		firstName: "givenName",

@@ -90,14 +90,14 @@
 </template>
 
 <script>
-import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseQrCode from "@/components/base/BaseQrCode";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariant,
 } from "@mdi/js";
-import { defineComponent, inject, ref } from "@vue/composition-api";
+import { defineComponent, inject, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

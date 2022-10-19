@@ -1,6 +1,6 @@
 import HelpDropdown from "./HelpDropdown";
-import BaseLink from "@basecomponents/BaseLink";
-import BaseIcon from "@basecomponents/BaseIcon";
+import BaseLink from "@/components/base/BaseLink";
+import BaseIcon from "@/components/base/BaseIcon";
 
 const menuItems = [
 	{
@@ -12,7 +12,7 @@ const menuItems = [
 	},
 ];
 
-describe("@components/legacy/HelpDropdown", () => {
+describe("@/components/legacy/HelpDropdown", () => {
 	it(...isValidComponent(HelpDropdown));
 
 	it("shows a list of menu items", () => {

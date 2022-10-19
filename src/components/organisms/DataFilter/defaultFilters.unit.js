@@ -1,6 +1,6 @@
 import { defaultFilters } from "./defaultFilters";
 
-describe("@components/organisms/DataFilter/defaultFilters", () => {
+describe("@/components/organisms/DataFilter/defaultFilters", () => {
 	describe("it can filter strings", () => {
 		it.each([
 			["test", "te", true],

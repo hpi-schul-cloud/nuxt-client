@@ -14,7 +14,7 @@ const getWrapper = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/atoms/vCustomBreadcrumbs", () => {
+describe("@/components/atoms/vCustomBreadcrumbs", () => {
 	const prop = {
 		breadcrumbs: [{ text: "Cursos actuales", to: "/rooms-overview" }],
 	};

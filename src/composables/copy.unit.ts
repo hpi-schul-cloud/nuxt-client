@@ -3,8 +3,8 @@ import CopyModule, { CopyParams } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { watch } from "@nuxtjs/composition-api";
-import { defineComponent, provide, ref } from "@vue/composition-api";
+import { watch } from "vue";
+import { defineComponent, provide, ref } from "vue";
 import { mount } from "@vue/test-utils";
 import { useCopy } from "./copy";
 

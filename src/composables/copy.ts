@@ -1,7 +1,7 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import { inject, InjectionKey, Ref } from "@vue/composition-api";
+import { inject, InjectionKey, Ref } from "vue";
 import VueI18n from "vue-i18n";
 
 export const USE_COPY: InjectionKey<typeof useCopy> = Symbol();

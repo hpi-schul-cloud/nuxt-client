@@ -44,7 +44,7 @@ const getWrapper = (opts = {}) => {
 	});
 };
 
-describe("@components/copy-result-modal/CopyResultModalList", () => {
+describe("@/components/copy-result-modal/CopyResultModalList", () => {
 	it("Should render component", () => {
 		const wrapper = getWrapper({ propsData: { items: mockItems } });
 

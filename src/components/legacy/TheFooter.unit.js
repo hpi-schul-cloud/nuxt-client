@@ -4,7 +4,7 @@ import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TheFooter from "./TheFooter";
 
-describe("@components/legacy/TheFooter", () => {
+describe("@/components/legacy/TheFooter", () => {
 	beforeEach(() => {
 		setupStores({
 			filePaths: FilePathsModule,

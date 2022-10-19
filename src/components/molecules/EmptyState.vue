@@ -17,7 +17,7 @@
 	</div>
 </template>
 <script>
-import BaseImage from "@basecomponents/BaseImage";
+import BaseImage from "@/components/base/BaseImage";
 export default {
 	components: { BaseImage },
 	props: {

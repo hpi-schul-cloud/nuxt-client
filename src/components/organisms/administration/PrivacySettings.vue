@@ -207,7 +207,7 @@
 
 <script>
 import { envConfigModule } from "@/store";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 
 export default {
 	components: {

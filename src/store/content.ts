@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
-import { isCollectionHelper } from "@utils/helpers";
+import { isCollectionHelper } from "@/utils/helpers";
 import { envConfigModule } from "@/store";
 import hash from "object-hash";
 import {

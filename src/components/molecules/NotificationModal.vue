@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 export default {
 	name: "NotificationModal",
 	components: {

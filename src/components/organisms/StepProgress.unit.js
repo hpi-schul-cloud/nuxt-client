@@ -1,6 +1,6 @@
 import StepProgress from "./StepProgress";
 
-describe("@components/organisms/StepProgress", () => {
+describe("@/components/organisms/StepProgress", () => {
 	it(...isValidComponent(StepProgress));
 
 	it("Test that all steps are rendered", () => {

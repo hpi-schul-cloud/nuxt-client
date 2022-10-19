@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { fromNowToFuture } from "@plugins/datetime";
+import { fromNowToFuture } from "@/plugins/datetime";
 import dayjs from "dayjs";
 
 export default {

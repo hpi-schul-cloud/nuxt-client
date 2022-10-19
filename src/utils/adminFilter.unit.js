@@ -52,7 +52,7 @@ const MOCK_DATA = {
 	},
 };
 
-describe("@utils/adminFilter", () => {
+describe("@/utils/adminFilter", () => {
 	describe("getFilterDateCreatedFromTo", () => {
 		it("returns UTC date values for input values", () => {
 			const expected_gte_date = dayjs.tz("2021-04-01").utc().format();

@@ -31,7 +31,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/RoomTaskCardTeacher", () => {
+describe("@/components/molecules/RoomTaskCardTeacher", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({ "import-users": ImportUsersModule });

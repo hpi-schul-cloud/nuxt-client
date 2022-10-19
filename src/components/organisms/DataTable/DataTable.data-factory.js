@@ -1,10 +1,10 @@
-import { printDate } from "@plugins/datetime";
+import { printDate } from "@/plugins/datetime";
 import faker from "faker/locale/en";
 faker.seed(512); // any static number will do the job
 
-import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
-import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
-import InputDefault from "@components/organisms/DataFilter/inputs/Default";
+import InputCheckbox from "@/components/organisms/DataFilter/inputs/Checkbox";
+import InputRadio from "@/components/organisms/DataFilter/inputs/Radio";
+import InputDefault from "@/components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({

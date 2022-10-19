@@ -4,7 +4,7 @@ import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
 import Vue from "vue";
-import { AlertPayload } from "@store/types/alert-payload";
+import { AlertPayload } from "@/store/types/alert-payload";
 
 declare var createComponentMocks: Function;
 

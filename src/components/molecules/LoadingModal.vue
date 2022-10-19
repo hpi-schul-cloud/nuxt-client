@@ -17,8 +17,8 @@
 	</base-modal>
 </template>
 <script>
-import CenterSlot from "@components/atoms/CenterSlot";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import CenterSlot from "@/components/atoms/CenterSlot";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 export default {
 	components: {
 		ModalBodyInfo,

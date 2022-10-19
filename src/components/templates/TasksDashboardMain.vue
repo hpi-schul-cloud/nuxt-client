@@ -82,9 +82,9 @@
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
@@ -352,7 +352,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@variables";
+@import "@/variables";
 
 .substitute-filter-placeholder {
 	min-height: 46px;

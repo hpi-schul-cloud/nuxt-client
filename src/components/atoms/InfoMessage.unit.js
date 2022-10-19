@@ -1,6 +1,6 @@
 import InfoMessage from "./InfoMessage";
 
-describe("@components/atoms/InfoMessage", () => {
+describe("@/components/atoms/InfoMessage", () => {
 	it("shows the message", async () => {
 		const expectedMessage = "This is some useful information";
 		const wrapper = mount(InfoMessage, {

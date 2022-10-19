@@ -94,9 +94,9 @@
 	</div>
 </template>
 <script>
-import { inputRangeDate } from "@plugins/datetime";
+import { inputRangeDate } from "@/plugins/datetime";
 
-import uidMixin from "@mixins/uid";
+import uidMixin from "@/mixins/uid";
 
 export const supportedTypes = [
 	"email",

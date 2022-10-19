@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Impressum from "@components/templates/impressum";
+import Impressum from "@/components/templates/impressum";
 
 export default {
 	components: { Impressum },

@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import {
 	UserImportApiFactory,
 	ImportUserListResponse,
@@ -29,23 +29,23 @@ export default class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private firstName: string = "";
-	private lastName: string = "";
-	private loginName: string = "";
+	private firstName = "";
+	private lastName = "";
+	private loginName = "";
 	private role: ImportUserResponseRoleNamesEnum | "" = "";
-	private classes: string = "";
+	private classes = "";
 	private match: Array<MatchedBy> = [
 		MatchedBy.Admin,
 		MatchedBy.Auto,
 		MatchedBy.None,
 	];
-	private flagged: boolean = false;
-	private limit: number = 25;
-	private skip: number = 0;
-	private sortBy: string = "";
+	private flagged = false;
+	private limit = 25;
+	private skip = 0;
+	private sortBy = "";
 	private sortOrder: any = "asc";
-	private total: number = 0;
-	private totalMatched: number = 0;
+	private total = 0;
+	private totalMatched = 0;
 
 	private userList: UserMatchListResponse = {
 		data: [],
@@ -53,10 +53,10 @@ export default class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private userSearch: string = "";
-	private usersLimit: number = 1;
-	private usersSkip: number = 0;
-	private totalUnmatched: number = 0;
+	private userSearch = "";
+	private usersLimit = 1;
+	private usersSkip = 0;
+	private totalUnmatched = 0;
 
 	private businessError: BusinessError | null = null;
 

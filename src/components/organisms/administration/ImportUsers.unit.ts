@@ -1,10 +1,10 @@
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
-import ImportUsersModule, { MatchedBy } from "@store/import-users";
+import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import { mount } from "@vue/test-utils";
 import ImportUsers from "./ImportUsers.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const mockData = {
 	MatchedBy: { Admin: "admin", Auto: "auto", None: "none" },
@@ -103,7 +103,7 @@ const getWrapper: any = (data?: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/importUsers", () => {
+describe("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({

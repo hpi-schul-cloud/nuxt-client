@@ -3,7 +3,7 @@ import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import authenticate from "./authenticate";
 
-describe("@plugins/authenticate", () => {
+describe("@/plugins/authenticate", () => {
 	beforeEach(() => {
 		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
 	});

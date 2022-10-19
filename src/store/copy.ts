@@ -1,4 +1,4 @@
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
+import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
@@ -25,7 +25,7 @@ export type CopyParams = {
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
-	private isResultModalOpen: boolean = false;
+	private isResultModalOpen = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {

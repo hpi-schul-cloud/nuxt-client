@@ -299,8 +299,8 @@ import { mdiClose, mdiLoading } from "@mdi/js";
 
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import ImportUsers from "@components/organisms/administration/ImportUsers";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ImportUsers from "@/components/organisms/administration/ImportUsers";
 export default {
 	components: { DefaultWireframe, ImportUsers },
 	data() {

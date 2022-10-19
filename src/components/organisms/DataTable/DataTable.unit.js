@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-commented-out-tests */
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
-import { localDataPrefix } from "@mixins/controllableData";
+import { localDataPrefix } from "@/mixins/controllableData";
 
 const defaultData = tableData(50);
 
@@ -25,7 +25,7 @@ const getTableRowsContent = async (wrapper) => {
 	});
 };
 
-describe("@components/organisms/DataTable/DataTable", () => {
+describe("@/components/organisms/DataTable/DataTable", () => {
 	beforeEach(() => {
 		jest.spyOn(window, "scrollTo").mockImplementation();
 	});

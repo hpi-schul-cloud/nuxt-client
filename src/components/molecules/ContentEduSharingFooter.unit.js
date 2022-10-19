@@ -1,6 +1,6 @@
 import ContentEduSharingFooter from "./ContentEduSharingFooter";
 
-describe("@components/molecules/ContentEduSharingFooter", () => {
+describe("@/components/molecules/ContentEduSharingFooter", () => {
 	const wrapper = shallowMount(ContentEduSharingFooter, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),

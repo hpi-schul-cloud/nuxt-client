@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import Snackbar from "@components/molecules/Alert";
-import LoadingStateDialog from "@components/molecules/LoadingStateDialog";
+import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
+import Snackbar from "@/components/molecules/Alert";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 
 export default {
 	components: {

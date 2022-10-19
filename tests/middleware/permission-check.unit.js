@@ -1,4 +1,4 @@
-import permissionCheck from "@middleware/permission-check";
+import permissionCheck from "@/middleware/permission-check";
 import { authModule } from "@/store";
 import setupStores from "../test-utils/setupStores";
 import AuthModule from "@/store/auth";
@@ -32,7 +32,7 @@ const getMockContext = ({
 	route,
 });
 
-describe("@middleware/permission-check", () => {
+describe("@/middleware/permission-check", () => {
 	beforeEach(() => {
 		setupStores({ auth: AuthModule });
 	});

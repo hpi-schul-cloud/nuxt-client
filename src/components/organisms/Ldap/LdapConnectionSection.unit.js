@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import LdapConnectionSection from "./LdapConnectionSection";
 
-describe("@components/organisms/LdapConnectionSection", () => {
+describe("@/components/organisms/LdapConnectionSection", () => {
 	const ldapConfigData = {
 		url: "ldaps://url.u",
 		rootPath: "cn=schueler,ou=rolle",

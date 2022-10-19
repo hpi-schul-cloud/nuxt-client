@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import ContextMenu from "@components/molecules/ContextMenu";
+import ContextMenu from "@/components/molecules/ContextMenu";
 
 export default {
 	components: {

@@ -5,7 +5,7 @@
 	</div>
 </template>
 <script>
-import BaseIcon from "@components/base/BaseIcon";
+import BaseIcon from "@/components/base/BaseIcon";
 export default {
 	components: { BaseIcon },
 	props: {

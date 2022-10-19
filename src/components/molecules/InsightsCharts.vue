@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import InsightsCard from "@components/molecules/InsightsCard";
+import InsightsCard from "@/components/molecules/InsightsCard";
 
-import getActivityByRoleChart from "@utils/insights/activityByRoleChart";
-import getweeklyActivityChart from "@utils/insights/weeklyActivityChart";
-import getweeklyActiveUsersChart from "@utils/insights/weeklyActiveUsersChart";
-import getUniquePageCountChart from "@utils/insights/uniquePageCountChart";
-import getAvgPageLoadedChart from "@utils/insights/avgPageLoadedChart";
-import getAvgInteractTime from "@utils/insights/avgInteractTime";
+import getActivityByRoleChart from "@/utils/insights/activityByRoleChart";
+import getweeklyActivityChart from "@/utils/insights/weeklyActivityChart";
+import getweeklyActiveUsersChart from "@/utils/insights/weeklyActiveUsersChart";
+import getUniquePageCountChart from "@/utils/insights/uniquePageCountChart";
+import getAvgPageLoadedChart from "@/utils/insights/avgPageLoadedChart";
+import getAvgInteractTime from "@/utils/insights/avgInteractTime";
 
 import ECharts from "vue-echarts";
 import "echarts/lib/chart/pie";

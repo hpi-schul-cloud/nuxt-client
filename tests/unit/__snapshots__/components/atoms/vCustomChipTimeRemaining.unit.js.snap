@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@components/atoms/vCustomChipTimeRemaining should render an orange v-chip component, with n hours left 1`] = `
+exports[`@/components/atoms/vCustomChipTimeRemaining should render an orange v-chip component, with n hours left 1`] = `
 <span class="v-chip theme--light v-size--small orange lighten-3" data-test-id="dueDateHintLabel"><span class="v-chip__content"><i aria-hidden="true" class="v-icon notranslate v-icon--left material-icons theme--light" style="font-size: 16px;">$hourglassBottomBlack</i>
 	in  2 Stunden
 </span></span>
 `;
 
-exports[`@components/atoms/vCustomChipTimeRemaining should render an orange v-chip component, with n minutes left 1`] = `
+exports[`@/components/atoms/vCustomChipTimeRemaining should render an orange v-chip component, with n minutes left 1`] = `
 <span class="v-chip theme--light v-size--small orange lighten-3" data-test-id="dueDateHintLabel"><span class="v-chip__content"><i aria-hidden="true" class="v-icon notranslate v-icon--left material-icons theme--light" style="font-size: 16px;">$hourglassBottomBlack</i>
 	in  19 Minuten
 </span></span>

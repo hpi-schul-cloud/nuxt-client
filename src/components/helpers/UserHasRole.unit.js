@@ -38,7 +38,7 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 	}
 };
 
-describe("@components/helpers/UserHasRole", () => {
+describe("@/components/helpers/UserHasRole", () => {
 	beforeEach(() => {
 		setupStores({
 			auth: AuthModule,

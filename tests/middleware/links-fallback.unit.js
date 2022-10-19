@@ -2,7 +2,7 @@
 jest.mock("@serverMiddleware/routes.js", () => [`^/news`]);
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import linksFallback from "@middleware/links-fallback";
+import linksFallback from "@/middleware/links-fallback";
 import setupStores from "../test-utils/setupStores";
 
 const envs = {
@@ -26,7 +26,7 @@ const envs = {
 
 jest.useFakeTimers();
 
-describe("@middleware/linksFallback", () => {
+describe("@/middleware/linksFallback", () => {
 	beforeEach(() => {
 		setupStores({ "env-config": EnvConfigModule });
 	});

@@ -61,8 +61,8 @@
 <script>
 import { schoolsModule } from "@/store";
 import { mapGetters, mapActions } from "vuex";
-import SchoolPolicyFormDialog from "@components/organisms/administration/SchoolPolicyFormDialog";
-import SchoolPolicyExpansionPanel from "@components/molecules/administration/SchoolPolicyExpansionPanel";
+import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog";
+import SchoolPolicyExpansionPanel from "@/components/molecules/administration/SchoolPolicyExpansionPanel";
 
 export default {
 	components: {

@@ -1,14 +1,14 @@
 import ShareCourseModule from "@/store/share-course";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@components/share-modal/ShareModalOptionsForm.vue";
-import ShareModalResult from "@components/share-modal/ShareModalResult.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModalOptionsForm from "@/components/share-modal/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share-modal/ShareModalResult.vue";
 
-describe("@components/share-modal/ShareModal", () => {
+describe("@/components/share-modal/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
 	const showMock = jest.fn();
 

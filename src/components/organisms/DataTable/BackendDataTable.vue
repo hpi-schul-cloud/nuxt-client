@@ -71,14 +71,14 @@
 </template>
 
 <script>
-import { getValueByPath } from "@utils/helpers";
+import { getValueByPath } from "@/utils/helpers";
 
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
-import Pagination from "@components/organisms/Pagination.vue";
+import Pagination from "@/components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
-import controllableData from "@mixins/controllableData";
+import controllableData from "@/mixins/controllableData";
 
 export default {
 	components: {
@@ -165,7 +165,7 @@ export default {
 		/**
 		 * Array of Objects.
 		 * Each Object must define a function "action" that will be called with the list of current selectionIds and the selectionType.
-		 * Will be passed to the @components/organisms/DropdownMenu component.
+		 * Will be passed to the @/components/organisms/DropdownMenu component.
 		 */
 		actions: {
 			type: Array,
@@ -257,7 +257,7 @@ export default {
 				const allSelected =
 					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.every(isInSelection))
-						: !Boolean(this.data.some(isInSelection));
+						: !this.data.some(isInSelection);
 				if (allSelected) {
 					return "all";
 				}
@@ -265,7 +265,7 @@ export default {
 				const someSelected =
 					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.some(isInSelection))
-						: !Boolean(this.data.every(isInSelection));
+						: !this.data.every(isInSelection);
 				if (someSelected) {
 					return "some";
 				}

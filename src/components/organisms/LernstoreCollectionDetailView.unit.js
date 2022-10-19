@@ -16,7 +16,7 @@ localVue.use(Vuex);
 
 const router = new VueRouter();
 
-describe("@components/organisms/LernstoreCollectionDetailView", () => {
+describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 	let wrapper;
 
 	beforeEach(() => {

@@ -1,6 +1,6 @@
 import LoadingStateModule from "@/store/loading-state";
-import { Ref, unref, watch } from "@nuxtjs/composition-api";
-import { inject, InjectionKey, ref } from "@vue/composition-api";
+import { Ref, unref, watch } from "vue";
+import { inject, InjectionKey, ref } from "vue";
 
 export const UseLoadingState = typeof useLoadingState;
 

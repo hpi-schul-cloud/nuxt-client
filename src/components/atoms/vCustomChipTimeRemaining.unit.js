@@ -3,7 +3,7 @@ import VCustomChipTimeRemaining from "./VCustomChipTimeRemaining";
 
 let vuetify;
 
-describe("@components/atoms/vCustomChipTimeRemaining", () => {
+describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 	beforeEach(() => {
 		vuetify = new Vuetify();
 	});

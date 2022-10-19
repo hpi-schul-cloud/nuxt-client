@@ -107,7 +107,7 @@
 
 <script>
 import { envConfigModule, finishedTaskModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
 	mdiDotsVertical,
@@ -115,7 +115,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 
 // eslint-disable-next-line vue/require-direct-export

@@ -8,7 +8,7 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@nuxtjs/composition-api";
+import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
@@ -40,7 +40,7 @@ const defaultTaskModuleGetters: Partial<TaskModule> = {
 	hasTasks: false,
 };
 
-describe("@components/templates/TasksDashboardMain", () => {
+describe("@/components/templates/TasksDashboardMain", () => {
 	let taskModuleMock: TaskModule;
 	let copyModuleMock: CopyModule;
 	let finishedTaskModuleMock: FinishedTaskModule;

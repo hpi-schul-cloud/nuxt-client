@@ -1,4 +1,4 @@
-import generatePassword from "@mixins/generatePassword";
+import generatePassword from "@/mixins/generatePassword";
 import qs from "qs";
 
 export const actions = {

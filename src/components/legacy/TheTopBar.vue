@@ -105,14 +105,14 @@
 </template>
 
 <script>
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 import { statusAlertsModule } from "@/store";
-import PopupIcon from "@components/legacy/PopupIcon";
-import PopupIconInitials from "@components/legacy/PopupIconInitials";
-import HelpDropdown from "@components/legacy/HelpDropdown";
-import MenuQrCode from "@components/legacy/MenuQrCode";
-import StatusAlerts from "@components/molecules/StatusAlerts";
-import LanguageMenu from "@components/molecules/LanguageMenu.vue";
+import PopupIcon from "@/components/legacy/PopupIcon";
+import PopupIconInitials from "@/components/legacy/PopupIconInitials";
+import HelpDropdown from "@/components/legacy/HelpDropdown";
+import MenuQrCode from "@/components/legacy/MenuQrCode";
+import StatusAlerts from "@/components/molecules/StatusAlerts";
+import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

@@ -19,7 +19,7 @@ import "./directives";
 import "./filter";
 
 // Theme
-import Theme from "@theme/config";
+import Theme from "@/theme/config";
 Vue.prototype.$theme = Theme;
 
 // Dialog

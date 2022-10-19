@@ -71,7 +71,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { contentModule } from "@/store";
-import ModalFooter from "@components/molecules/ModalFooter";
+import ModalFooter from "@/components/molecules/ModalFooter";
 
 export default {
 	components: {

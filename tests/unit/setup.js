@@ -9,11 +9,11 @@ import commonTest from "./commonTests.js";
 // https://vue-test-utils.vuejs.org/
 import * as vueTestUtils from "@vue/test-utils";
 import { RouterLinkStub } from "@vue/test-utils";
-import "@plugins/global";
-import { mountBaseComponents } from "@basecomponents/_globals";
-import { i18n as i18nConfig } from "@plugins/i18n.js";
+import "@/plugins/global";
+import { mountBaseComponents } from "@/components/base/_globals";
+import { i18n as i18nConfig } from "@/plugins/i18n.js";
 import authStoreModule from "@/store/auth";
-import { mixin as userMixin } from "@plugins/user.js";
+import { mixin as userMixin } from "@/plugins/user.js";
 import globalStubs from "./stubs.js";
 import VueMeta from "vue-meta";
 

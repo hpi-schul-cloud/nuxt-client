@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, watch } from "@vue/composition-api";
+import { defineComponent, reactive, watch } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

@@ -8,7 +8,7 @@ const localVue = createLocalVue();
 localVue.use(VueRouter);
 
 const router = new VueRouter();
-describe("@components/organisms/ContentCard", () => {
+describe("@/components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
 		router,
@@ -50,7 +50,7 @@ describe("@components/organisms/ContentCard", () => {
 	});
 });
 
-describe("@components/organisms/ContentCard Collection", () => {
+describe("@/components/organisms/ContentCard Collection", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
 		router,
