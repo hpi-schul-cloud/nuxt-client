@@ -52,21 +52,21 @@ export type Breadcrumb = {
 };
 
 type FabAction = {
-	icon: String;
-	label: String;
-	href?: String;
-	to?: String;
-	dataTestid?: String;
-	class?: String;
-	testId?: String;
-	ariaLabel?: String;
+	icon: string;
+	label: string;
+	href?: string;
+	to?: string;
+	dataTestid?: string;
+	class?: string;
+	testId?: string;
+	ariaLabel?: string;
 };
 
 export type Fab = {
 	actions?: FabAction[];
-	icon: String;
-	title: String;
-	href?: String;
+	icon: string;
+	title: string;
+	href?: string;
 };
 
 // eslint-disable-next-line vue/require-direct-export
