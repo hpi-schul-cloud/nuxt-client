@@ -454,7 +454,7 @@
 	"components.molecules.shareCourse.mail.subject": "Kurs zum Importieren",
 	"components.molecules.shareCourse.mail.body": "Link zum Kurs:",
 	"components.molecules.importCourse.options.title": "Kurs importieren",
-	"components.molecules.importCourse.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert.",
+	"components.molecules.importCourse.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
 	"components.molecules.importCourse.options.loadingMessage": "Kurs importieren läuft...",
 	"components.molecules.importCourse.options.success": "{type} wurde erfolgreich importiert",
 	"components.molecules.importCourse.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
