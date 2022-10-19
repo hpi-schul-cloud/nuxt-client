@@ -117,6 +117,7 @@ export default defineComponent({
 				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
 				if (copyResultFailedItems.length === 0) {
 					showSuccess();
+					emit('success');
 				} else {
 					openModal('result');
 				}
@@ -128,7 +129,7 @@ export default defineComponent({
 		// event handlers
 
 		const onImport = (courseName) => startImport(courseName);
-		const onCancel = () => resetFlow();
+		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
 			emit('success');
 			copyModule.reset();
