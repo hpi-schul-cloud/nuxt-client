@@ -21,7 +21,7 @@
 <script>
 import { mapGetters } from "vuex";
 import InsightsCard from "@/components/molecules/InsightsCard";
-import InsightsCharts from "~/components/molecules/InsightsCharts";
+import InsightsCharts from "@/components/molecules/InsightsCharts";
 
 export default {
 	components: {

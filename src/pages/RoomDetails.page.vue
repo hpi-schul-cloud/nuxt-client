@@ -397,7 +397,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@/variables";
+@import "@variables";
 
 .course-title {
 	display: inline-block;
