@@ -15,6 +15,7 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
+import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -36,6 +37,7 @@ let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let schoolsModule: SchoolsModule;
 let shareCourseModule: ShareCourseModule;
+let statusAlertsModule: StatusAlertsModule;
 let taskModule: TaskModule;
 
 function initializeStores(store: Store<any>): void {
@@ -56,6 +58,7 @@ function initializeStores(store: Store<any>): void {
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
+	statusAlertsModule = getModule(StatusAlertsModule, store);
 	taskModule = getModule(TaskModule, store);
 }
 
@@ -70,7 +73,6 @@ export {
 	filePathsModule,
 	filesPOCModule,
 	finishedTaskModule,
-	importCourseModule,
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
@@ -79,5 +81,6 @@ export {
 	roomsModule,
 	schoolsModule,
 	shareCourseModule,
+	statusAlertsModule,
 	taskModule,
 };
