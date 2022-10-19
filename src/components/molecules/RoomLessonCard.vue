@@ -295,8 +295,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
