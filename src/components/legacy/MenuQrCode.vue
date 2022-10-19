@@ -7,7 +7,7 @@
 		<base-button design="outline" class="print-button" @click="openPrintMenu">
 			<div class="print-button-content">
 				<base-icon source="fa" icon="print" class="print-icon" />
-				Drucken
+				{{ $t("components.legacy.MenuQrCode.print") }}
 			</div>
 		</base-button>
 	</div>
@@ -20,10 +20,6 @@ export default {
 			type: String,
 			default: window.location.href,
 		},
-	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
 	},
 	methods: {
 		openPrintMenu: function () {
