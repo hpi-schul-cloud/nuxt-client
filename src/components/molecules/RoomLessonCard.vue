@@ -296,7 +296,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 
 .top-row-container {
 	display: grid;

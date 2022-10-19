@@ -19,8 +19,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .card {
 	background: #fff;
 	border-radius: var(--radius-md);
