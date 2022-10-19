@@ -74,13 +74,13 @@ describe("@components/share-course/ImportFlow", () => {
 					parentName: originalName,
 				});
 
-			it("should open importModal", () => {
+			it("should open importModal", async () => {
 				copyModuleMock.validateShareToken = validateShareTokenMock;
 				const wrapper = mountComponent();
+				await Vue.nextTick();
 
-				expect(
-					wrapper.findComponent({ name: "import-modal" }).isVisible()
-				).toBe(true);
+				const importModal = wrapper.findComponent({ name: "import-modal" });
+				expect(importModal.props("isOpen")).toBe(true);
 			});
 
 			it("should show original name in import modal", async () => {
@@ -88,11 +88,11 @@ describe("@components/share-course/ImportFlow", () => {
 				const wrapper = mountComponent();
 				await Vue.nextTick();
 
-				const component = wrapper.findComponent({ name: "import-modal" });
-				expect(component.props().parentName).toBe(originalName);
+				const importModal = wrapper.findComponent({ name: "import-modal" });
+				expect(importModal.props("parentName")).toBe(originalName);
 			});
 
-			it("should call copyByShareToken when import-button is pressed", async () => {
+			it("should call copyByShareToken when import is started", async () => {
 				copyModuleMock.validateShareToken = validateShareTokenMock;
 				const wrapper = mountComponent();
 				await Vue.nextTick();
@@ -115,8 +115,7 @@ describe("@components/share-course/ImportFlow", () => {
 					await Vue.nextTick();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
-					await Vue.nextTick();
+					await dialog.vm.$emit("dialog-confirmed");
 
 					expect(notifierModuleMock.show).toHaveBeenCalledWith(
 						expect.objectContaining({ status: "success" })
@@ -132,8 +131,7 @@ describe("@components/share-course/ImportFlow", () => {
 					await Vue.nextTick();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
-					await Vue.nextTick();
+					await dialog.vm.$emit("dialog-confirmed");
 
 					expect(notifierModuleMock.show).toHaveBeenCalledWith(
 						expect.objectContaining({ status: "error" })
@@ -142,11 +140,11 @@ describe("@components/share-course/ImportFlow", () => {
 			});
 
 			describe("copyResult: partial", () => {
-				it("should show copy result modal", async () => {
+				beforeEach(() => {
 					copyModuleMock.validateShareToken = validateShareTokenMock;
 					const copyResults: CopyResultItem[] = [
 						{
-							elementId: "werwer",
+							elementId: "a123abc",
 							title: "Great course",
 							elements: [
 								{
@@ -158,28 +156,40 @@ describe("@components/share-course/ImportFlow", () => {
 							url: "http://abc.de",
 						},
 					];
-					copyModuleMock.copyByShareToken = () => Promise.resolve(copyResults);
+					copyModuleMock.copyByShareToken = jest
+						.fn()
+						.mockResolvedValue(copyResults);
+				});
+
+				it("should open copy result modal", async () => {
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
-					await Vue.nextTick();
+					await dialog.vm.$emit("dialog-confirmed");
 					await new Promise((time) => setTimeout(time, 1000));
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
+				});
 
-					expect(
-						wrapper.findComponent({ name: "copy-result-modal" }).find("a")
-					).toBe(true);
+				it("should close copy result modal on close button click", async () => {
+					const wrapper = mountComponent();
+					await Vue.nextTick();
+
+					const dialog = wrapper.findComponent(vCustomDialog);
+					await dialog.vm.$emit("dialog-confirmed");
+					await new Promise((time) => setTimeout(time, 1000));
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
+
+					const copyResultModal = wrapper.findComponent({
+						name: "copy-result-modal",
+					});
+					await copyResultModal.vm.$emit("dialog-closed");
+
+					expect(wrapper.emitted("success")).toHaveLength(1);
 				});
 			});
 		});
 	});
-	// it("should validate the shareToken", () => {
-	// 	const wrapper = getWrapper({
-	// 		propsData: {
-	// 			token: "ABC",
-	// 			isActive: true,
-	// 		},
-	// 	});
-	// });
 });

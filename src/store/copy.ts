@@ -62,7 +62,7 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			const axiosWithoutErrorPage = $axios.create();
+			const axiosWithoutErrorPage = $axios?.create();
 			this._shareApi = ShareTokenApiFactory(
 				undefined,
 				"/v3",
