@@ -149,6 +149,36 @@ describe("copy module", () => {
 				);
 			});
 		});
+
+		describe("import a course", () => {
+			it("should make a 'POST' request to the backend", async () => {
+				const shareApiMock = {
+					shareTokenControllerImportShareToken: jest.fn(async () => ({
+						data: {},
+					})),
+				};
+				jest
+					.spyOn(serverApi, "ShareTokenApiFactory")
+					.mockReturnValue(
+						shareApiMock as unknown as serverApi.ShareTokenApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+				const token = "abc123a";
+				const newName = "My Course";
+				const payload = {
+					token,
+					type: "course",
+					newName,
+				};
+
+				await copyModule.copyByShareToken(payload);
+
+				expect(
+					shareApiMock.shareTokenControllerImportShareToken
+				).toHaveBeenCalledWith(token, { newName });
+			});
+		});
 	});
 
 	describe("mutations", () => {
