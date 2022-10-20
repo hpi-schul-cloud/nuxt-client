@@ -168,6 +168,8 @@ describe("@components/share-course/ImportFlow", () => {
 					const dialog = wrapper.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
 					await new Promise((time) => setTimeout(time, 1000));
+					await Vue.nextTick();
+
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 				});

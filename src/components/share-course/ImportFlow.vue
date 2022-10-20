@@ -115,7 +115,7 @@ export default defineComponent({
 				parentName.value = validateResult.parentName;
 				openModal('import');
 			} catch (error) {
-				if (error.response.status === 403) {
+				if (error.response?.status === 403) {
 					showFailurePermission();
 				} else {
 					showFailureInvalidToken();
@@ -127,8 +127,7 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal('loading');
 			try {
-				await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
-				const copyResultFailedItems = copyModule.getCopyResultFailedItems;
+				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
 				if (copyResultFailedItems.length === 0) {
 					showSuccess();
 					emit('success');
