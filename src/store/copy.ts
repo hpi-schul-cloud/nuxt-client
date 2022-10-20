@@ -109,7 +109,7 @@ export default class CopyModule extends VuexModule {
 		return copyResult;
 	}
 
-	@Action
+	@Action({ rawError: true })
 	async validateShareToken(
 		token: string
 	): Promise<ShareTokenInfoResponse | undefined> {
@@ -124,7 +124,7 @@ export default class CopyModule extends VuexModule {
 		token,
 		type,
 		newName,
-	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
+	}: CopyByShareTokenPayload): Promise<void> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === "course") {
@@ -140,7 +140,6 @@ export default class CopyModule extends VuexModule {
 		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
-		return this.copyResultFailedItems;
 	}
 
 	@Mutation

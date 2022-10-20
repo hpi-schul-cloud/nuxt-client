@@ -94,6 +94,15 @@ export default defineComponent({
 			closeModals();
 		}
 
+		const showFailurePermission = () => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.importCourse.options.failure.permissionError"),
+				status: "error",
+				timeout: 10000,
+			})
+			closeModals();
+		}
+
 		// business logic
 
 		if (props.isActive === true) {
@@ -106,7 +115,11 @@ export default defineComponent({
 				parentName.value = validateResult.parentName;
 				openModal('import');
 			} catch (error) {
-				showFailureInvalidToken();
+				if (error.response.status === 403) {
+					showFailurePermission();
+				} else {
+					showFailureInvalidToken();
+				}
 				return;
 			}
 		}
@@ -114,7 +127,8 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal('loading');
 			try {
-				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
+				await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
+				const copyResultFailedItems = copyModule.getCopyResultFailedItems;
 				if (copyResultFailedItems.length === 0) {
 					showSuccess();
 					emit('success');

@@ -459,6 +459,7 @@
 	"components.molecules.importCourse.options.success": "{type} wurde erfolgreich importiert",
 	"components.molecules.importCourse.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
 	"components.molecules.importCourse.options.failure.backendError": "'{name}' konnte nicht importiert werden.",
+	"components.molecules.importCourse.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
