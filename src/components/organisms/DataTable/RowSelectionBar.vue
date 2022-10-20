@@ -35,14 +35,23 @@
 				/>
 			</div>
 		</div>
-		<base-button design="icon" class="close" @click="closeBanner">
-			<base-icon icon="close" source="material" />
-		</base-button>
+		<v-btn
+			fab
+			depressed
+			color="secondary"
+			width="40"
+			height="40"
+			class="close"
+			@click="closeBanner"
+		>
+			<v-icon>{{ mdiClose }}</v-icon>
+		</v-btn>
 	</div>
 </template>
 
 <script>
 import ContextMenu from "@components/molecules/ContextMenu";
+import { mdiClose } from "@mdi/js";
 
 export default {
 	components: {
@@ -68,6 +77,7 @@ export default {
 	data() {
 		return {
 			actionsMenuOpen: false,
+			mdiClose,
 		};
 	},
 	computed: {
