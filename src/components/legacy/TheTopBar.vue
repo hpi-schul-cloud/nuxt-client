@@ -156,7 +156,6 @@ export default defineComponent({
 			mdiArrowCollapse,
 			mdiArrowExpand,
 			mdiMenu,
-			statusAlerts: [],
 		};
 	},
 	computed: {
@@ -176,10 +175,12 @@ export default defineComponent({
 				? "var(--v-error-base)"
 				: "var(--v-secondary-darken1)";
 		},
+		statusAlerts() {
+			return statusAlertsModule.getStatusAlerts;
+		},
 	},
 	async mounted() {
 		await statusAlertsModule.fetchStatusAlerts();
-		this.statusAlerts = statusAlertsModule.getStatusAlerts;
 	},
 	methods: {
 		sendEvent(eventName) {
