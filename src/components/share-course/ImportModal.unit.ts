@@ -53,7 +53,7 @@ describe("@components/share-course/ImportModal", () => {
 			},
 		});
 		const nameInput = wrapper.findComponent({
-			ref: "nameInput",
+			ref: "nameInputText",
 		});
 		expect(nameInput.props("value")).toStrictEqual("TestParentName");
 		await wrapper.setProps({ parentName: "UpdateParentName" });
@@ -108,7 +108,7 @@ describe("@components/share-course/ImportModal", () => {
 		await wrapper.setProps({ isOpen: true, parentName: "" });
 
 		const nameInput = wrapper.findComponent({
-			ref: "nameInput",
+			ref: "nameInputText",
 		});
 		await nameInput.trigger("input");
 

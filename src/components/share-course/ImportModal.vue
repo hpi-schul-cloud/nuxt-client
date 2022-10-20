@@ -28,6 +28,7 @@
 					</div>
 				</div>
 				<v-text-field
+					ref="nameInputText"
 					v-model="newName"
 					:label="$t('common.labels.course')"
 					:rules="[rules.required]"
