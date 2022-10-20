@@ -41,7 +41,6 @@
 			color="secondary"
 			width="40"
 			height="40"
-			class="close"
 			@click="closeBanner"
 		>
 			<v-icon>{{ mdiClose }}</v-icon>
