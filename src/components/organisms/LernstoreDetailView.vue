@@ -149,11 +149,7 @@
 			<user-has-role class="floating-buttons" :role="isNotStudent">
 				<add-content-button
 					:resource="resource"
-					btn-design="hero-cta"
-					btn-class="floating-button"
-					btn-size="large"
-					btn-icon-class="footer__content-icon"
-					btn-icon="add_circle_outline"
+					btn-color="primary"
 					:btn-label="$t('pages.content._id.addToTopic')"
 					:multiple="false"
 				/>
