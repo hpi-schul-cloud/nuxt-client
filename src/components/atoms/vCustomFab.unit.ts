@@ -1,9 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { mdiPlus, mdiAccountPlus, mdiAccountMultipleMinus } from "@mdi/js";
 import vCustomFab from "./vCustomFab.vue";
-import { vuetify } from "@@/nuxt.config";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const getWrapper = (props: object, options?: object) => {
 	return mount(vCustomFab, {

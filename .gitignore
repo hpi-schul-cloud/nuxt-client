@@ -1,6 +1,5 @@
 # Editor Configs
 *.swp
-.idea
 .dccache
 # Local Developer Configs
 
@@ -8,9 +7,6 @@
 ## yarn lockfile because we are using npm
 yarn.lock
 node_modules/
-
-# Secrets
-deploy/travis_rsa
 
 # Log Files
 logs
@@ -24,13 +20,6 @@ dist
 version.js
 
 # Runtime data
-.nuxt
 .env
-jsconfig.json
-tsconfig.json
 **/.DS_Store
 **/.tmp*
-
-docker-compose.yml
-.vscode/*
-.idea

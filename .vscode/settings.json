@@ -1,83 +1,15 @@
 {
-	"editor.detectIndentation": false,
-	"editor.insertSpaces": false,
-	"editor.trimAutoWhitespace": true,
-	"files.trimTrailingWhitespace": true,
-	"files.eol": "\n",
-	"files.insertFinalNewline": true,
-	"files.trimFinalNewlines": true,
-	"vetur.format.options.useTabs": true,
-	"scssFormatter.useTabs": true,
-	"prettier.configPath": ".prettierrc.js",
-	"prettier.ignorePath": ".prettierignore",
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"[vue]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-
-	"files.exclude": {
-		"**/*.log": true,
-		"**/*.log*": true,
-		"**/coverage": true
-	},
-	"search.exclude": {
-		"**/node_modules": true,
-		".git/*": true,
-		".nuxt/*": true
-	},
-	"files.associations": {
-		"Dockerfile.*": "dockerfile",
-		"compose-*.dummy": "yaml"
-	},
-	"[yaml]": {
-		"editor.tabSize": 2,
-		"editor.insertSpaces": true
-	},
-
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	},
-	"eslint.validate": [
-		"javascript",
-		"javascriptreact",
-		"vue",
-		"vue-html",
-		"html"
-	],
-	"trailing-spaces.trimOnSave": true,
-
-	"html.format.enable": false,
-	"vetur.validation.template": false,
-	"emmet.triggerExpansionOnTab": true,
-	"emmet.includeLanguages": {
-		"vue-html": "html"
-	},
-	"vetur.format.defaultFormatter.html": "none",
-
-	"jest.autoEnable": false,
-	"jest.enableCodeLens": false,
-	"javascript.format.enable": false,
-	"json.format.enable": false,
-	"vetur.format.defaultFormatter.js": "none",
-
-	"stylelint.enable": true,
-	"css.validate": false,
-	"scss.validate": false,
-	"vetur.validation.style": false,
-	"vetur.format.defaultFormatter.css": "none",
-	"vetur.format.defaultFormatter.postcss": "none",
-	"vetur.format.defaultFormatter.scss": "none",
-
-	"markdownlint.ignore": ["src/legacy-client/**/*.md"],
-	"[markdown]": {
-		"editor.wordWrap": "wordWrapColumn",
-		"editor.wordWrapColumn": 80
-	},
-
-	"npm.packageManager": "npm",
-	"editor.suggest.localityBonus": true,
-
-	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"],
-	"typescript.tsdk": "node_modules\\typescript\\lib"
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true
 }
