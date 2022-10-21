@@ -268,6 +268,21 @@ describe("@components/molecules/TaskItemTeacher", () => {
 		});
 	});
 
+	describe("when a task has an unpublished lesson", () => {
+		const wrapper = getWrapper({
+			task: dueDateTasksTeacher[4],
+		});
+		it("should show unpublished lesson info", () => {
+			const lessonInfo = wrapper.find("[data-testid='task-lesson-info']");
+			const taskStatus = wrapper.find("[data-testid='task-status']");
+
+			expect(lessonInfo.exists()).toBe(true);
+			expect(taskStatus.exists()).toBe(false);
+			// expect(topicLabel.text()).toMatch(/Thema Malen nach Zahlen/i);
+			// expect(wrapper.vm.topic).toStrictEqual(`Thema Malen nach Zahlen`);
+		});
+	});
+
 	describe("when a task has no topic", () => {
 		const wrapper = getWrapper({
 			task: dueDateTasksTeacher[1],
