@@ -36,7 +36,22 @@
 					</i18n>
 				</v-list-item-subtitle>
 			</v-list-item-content>
-			<section v-if="showTaskStatus" data-testid="task-status" class="mr-8">
+
+			<section
+				v-if="hasUnpublishedLesson"
+				data-testid="task-lesson-info"
+				class="mr-8"
+			>
+				<v-chip class="hidden-xs-only ml-4">
+					<v-icon left color="warning">{{ mdiAlert }}</v-icon>
+					Unpublished lesson
+				</v-chip>
+			</section>
+			<section
+				v-else-if="showTaskStatus"
+				data-testid="task-status"
+				class="mr-8"
+			>
 				<v-list-item-action class="hidden-xs-only ml-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.TaskItemTeacher.submitted")
@@ -79,6 +94,7 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
 } from "@plugins/datetime";
+import { mdiAlert } from "@mdi/js";
 
 // TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -102,6 +118,7 @@ export default {
 			isMenuActive: false,
 			isHovering: false,
 			isActive: false,
+			mdiAlert,
 		};
 	},
 	computed: {
@@ -174,6 +191,9 @@ export default {
 			return this.task.description
 				? `${this.$t("common.words.topic")} ${this.task.description}`
 				: "";
+		},
+		hasUnpublishedLesson() {
+			return this.task.lessonHidden && !this.isDraft;
 		},
 	},
 	methods: {
