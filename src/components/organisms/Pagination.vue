@@ -46,7 +46,7 @@
 						color="secondary"
 						depressed
 						class="pagination-link"
-						aria-label="Goto next page"
+						aria-label="Go to next page"
 						@click="nextPage"
 					>
 						<v-icon>{{ mdiChevronRight }} </v-icon>
