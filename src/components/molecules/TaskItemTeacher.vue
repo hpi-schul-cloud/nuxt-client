@@ -22,14 +22,19 @@
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
-					v-if="topic"
+					v-if="topic && breakpoint !== 'xs'"
 					data-testid="task-topic"
-					class="d-inline-flex"
+					class="d-inline-flex hidden-sm-and-up"
 				>
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-					<i18n path="components.molecules.TaskItemTeacher.status">
+					<v-chip v-if="hasUnpublishedLesson" x-small>
+						{{
+							$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
+						}}</v-chip
+					>
+					<i18n v-else path="components.molecules.TaskItemTeacher.status">
 						<template #submitted>{{ task.status.submitted }}</template>
 						<template #max>{{ task.status.maxSubmissions }}</template>
 						<template #graded>{{ task.status.graded }}</template>
@@ -40,12 +45,11 @@
 			<section
 				v-if="hasUnpublishedLesson"
 				data-testid="task-lesson-info"
-				class="mr-8"
+				class="hidden-xs-only mr-8"
 			>
-				<v-chip class="hidden-xs-only ml-4">
-					<v-icon left color="warning">{{ mdiAlert }}</v-icon>
-					Unpublished lesson
-				</v-chip>
+				<v-chip class="ml-4" small>{{
+					$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
+				}}</v-chip>
 			</section>
 			<section
 				v-else-if="showTaskStatus"
@@ -66,9 +70,9 @@
 					<v-list-item-subtitle>{{
 						$t("components.molecules.TaskItemTeacher.graded")
 					}}</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskGraded">{{
-						task.status.graded
-					}}</v-list-item-title>
+					<v-list-item-title data-testid="taskGraded"
+						>{{ task.status.graded }}
+					</v-list-item-title>
 				</v-list-item-action>
 			</section>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
@@ -94,7 +98,6 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
 } from "@plugins/datetime";
-import { mdiAlert } from "@mdi/js";
 
 // TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -118,7 +121,6 @@ export default {
 			isMenuActive: false,
 			isHovering: false,
 			isActive: false,
-			mdiAlert,
 		};
 	},
 	computed: {
@@ -194,6 +196,9 @@ export default {
 		},
 		hasUnpublishedLesson() {
 			return this.task.lessonHidden && !this.isDraft;
+		},
+		breakpoint() {
+			return this.$vuetify.breakpoint.name;
 		},
 	},
 	methods: {
