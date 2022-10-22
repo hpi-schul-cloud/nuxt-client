@@ -42,7 +42,10 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
-  ]
+    "node_modules",
+  ],
+  "vueCompilerOptions": {
+    "target": 2.7
+  }
 }
 

@@ -31,13 +31,14 @@ module.exports = {
 		"@typescript-eslint/ban-types": NUXT_REMOVAL ? "warn" : "error",
 		"prettier/prettier": NUXT_REMOVAL ? "warn" : "error",
 		"no-var": NUXT_REMOVAL ? "warn" : "error",
+		"vue/no-v-text-v-html-on-component": NUXT_REMOVAL ? "warn" : "error",
 	},
 	overrides: [
 		{
 			files: [
-				"src/**/*.unit.{j,t}s?(x)",
 				"**/__tests__/*.{j,t}s?(x)",
-				"tests/unit/**/*.unit.{j,t}s?(x)",
+				"**/tests/unit/**/*.spec.{j,t}s?(x)",
+				"**/*.unit.{j,t}s?(x)",
 			],
 			env: {
 				jest: true,

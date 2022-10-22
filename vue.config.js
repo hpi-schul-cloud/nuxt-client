@@ -2,6 +2,7 @@ const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
 
 const themeName = process.env.SC_THEME || "default";
+const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 module.exports = defineConfig({
 	transpileDependencies: ["vuetify"],
@@ -20,5 +21,22 @@ module.exports = defineConfig({
 				),
 			},
 		},
+	},
+	// use custom tsconfig for webpack builds
+	// to e.g. exclude test files
+	// https://github.com/vuejs/vue-cli/issues/2421
+	chainWebpack: (config) => {
+		config.module
+			.rule("ts")
+			.use("ts-loader")
+			.merge({
+				options: {
+					configFile: TSCONFIG_PATH,
+				},
+			});
+		config.plugin("fork-ts-checker").tap((args) => {
+			args[0].typescript.configFile = TSCONFIG_PATH;
+			return args;
+		});
 	},
 });
