@@ -34,6 +34,7 @@
 		</v-app-bar>
 
 		<v-main>
+			<p>{{ $t("common.actions.cancel") }}</p>
 			<router-view />
 		</v-main>
 	</v-app>
