@@ -120,10 +120,10 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async fetchSharedLesson(lessonId: string): Promise<void> {
 		try {
-			const lessonShareResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			const lessonShareResult = await $axios.get(`/v1/lessons/${lessonId}`);
 			if (!lessonShareResult.shareToken) {
 				lessonShareResult.shareToken = nanoid(9);
-				await $axios.$patch(
+				await $axios.patch(
 					`/v1/lessons/${lessonShareResult._id}`,
 					lessonShareResult
 				);
@@ -147,7 +147,7 @@ export default class RoomModule extends VuexModule {
 	async confirmImportLesson(shareToken: string): Promise<void> {
 		try {
 			this.resetBusinessError();
-			const lesson = await $axios.$get("/v1/lessons", {
+			const lesson = await $axios.get("/v1/lessons", {
 				params: { shareToken },
 			});
 
@@ -159,7 +159,7 @@ export default class RoomModule extends VuexModule {
 				return;
 			}
 
-			const copiedLesson = await $axios.$post("/v1/lessons/copy", {
+			const copiedLesson = await $axios.post("/v1/lessons/copy", {
 				lessonId: lesson.data[0]._id,
 				newCourseId: this.roomData.roomId,
 				shareToken,
@@ -202,7 +202,7 @@ export default class RoomModule extends VuexModule {
 	async createCourseInvitation(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const invitationData = await $axios.$post("/v1/link", {
+			const invitationData = await $axios.post("/v1/link", {
 				target: `${window.location.origin}/courses/${courseId}/addStudent`,
 			});
 			if (!invitationData._id) {
@@ -228,12 +228,18 @@ export default class RoomModule extends VuexModule {
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
-				'v3',
+				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
+			).courseControllerExportCourse(this.roomData.roomId, {
+				responseType: "blob",
+			});
 			const link = document.createElement("a");
-			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
-			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
+			link.href = URL.createObjectURL(
+				new Blob([response.data as unknown as Blob])
+			);
+			link.download = `${
+				this.roomData.title
+			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (error: any) {
@@ -249,7 +255,7 @@ export default class RoomModule extends VuexModule {
 	async createCourseShareToken(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const result = await $axios.$get(`/v1/courses-share/${courseId}`);
+			const result = await $axios.get(`/v1/courses-share/${courseId}`);
 			if (!result.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -271,7 +277,7 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		const userId = authModule.getUser?.id;
 		try {
-			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
+			const homework = await $axios.get(`/v1/homework/${payload.itemId}`);
 			if (!homework.archived) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -288,10 +294,9 @@ export default class RoomModule extends VuexModule {
 				archived = homework?.archived.filter((item: string) => item !== userId);
 			}
 
-			const patchedData = await $axios.$patch(
-				`/v1/homework/${payload.itemId}`,
-				{ archived }
-			);
+			const patchedData = await $axios.patch(`/v1/homework/${payload.itemId}`, {
+				archived,
+			});
 			if (!patchedData._id) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -315,7 +320,7 @@ export default class RoomModule extends VuexModule {
 		courseId: string;
 		userId: string;
 	}): Promise<void> {
-		const ret_val = await $axios.$get(
+		const ret_val = await $axios.get(
 			`/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`
 		);
 		this.setPermissionData(ret_val[payload.userId]);

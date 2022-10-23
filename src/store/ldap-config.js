@@ -78,7 +78,7 @@ export const actions = {
 		try {
 			commit("setStatus", "pending");
 			const data = formatClientData(payload);
-			const verification = await this.$axios.$post(
+			const verification = await this.$axios.post(
 				"/v1/ldap-config?verifyOnly=true",
 				data
 			);
@@ -93,7 +93,7 @@ export const actions = {
 		try {
 			commit("setStatus", "pending");
 			const data = formatClientData(systemData);
-			const verification = await this.$axios.$patch(
+			const verification = await this.$axios.patch(
 				`/v1/ldap-config/${systemId}?verifyOnly=true`,
 				data
 			);
@@ -111,7 +111,7 @@ export const actions = {
 		try {
 			commit("setStatus", "pending");
 			const data = formatClientData(payload);
-			const submission = await this.$axios.$post(
+			const submission = await this.$axios.post(
 				"/v1/ldap-config?verifyOnly=false&activate=true",
 				data
 			);
@@ -125,7 +125,7 @@ export const actions = {
 		try {
 			commit("setStatus", "pending");
 			const data = formatClientData(systemData);
-			const submission = await this.$axios.$patch(
+			const submission = await this.$axios.patch(
 				`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`,
 				data
 			);

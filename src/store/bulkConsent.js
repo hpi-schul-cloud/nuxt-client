@@ -19,7 +19,7 @@ export const actions = {
 								password: user.password,
 								userId: user._id,
 							};
-							this.$axios.$post("/v1/accounts/", accountModel);
+							this.$axios.post("/v1/accounts/", accountModel);
 						})
 						.catch((error) => errors.push({ updateError: error }));
 				})
@@ -41,7 +41,7 @@ export const actions = {
 
 	async findConsentUsers({ commit, state }, query) {
 		query.users = state.selectedStudents;
-		const response = await this.$axios.$get(`/v1/users/admin/students`, {
+		const response = await this.$axios.get(`/v1/users/admin/students`, {
 			params: query,
 			paramsSerializer: (params) => {
 				return qs.stringify(params);

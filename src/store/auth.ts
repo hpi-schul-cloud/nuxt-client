@@ -181,8 +181,8 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	async populateUser(): Promise<void> {
-		const user = await $axios.$get("/v1/me");
-		const roles = await $axios.$get(`/v1/roles/user/${user.id}`);
+		const user = await $axios.get("/v1/me");
+		const roles = await $axios.get(`/v1/roles/user/${user.id}`);
 		user.permissions = roles.reduce(
 			(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
 			[]

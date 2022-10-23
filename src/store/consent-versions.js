@@ -14,7 +14,7 @@ const module = {
 		) {
 			commit("setLoading", true);
 			try {
-				const response = await this.$axios.$get("/v1/consentVersions", {
+				const response = await this.$axios.get("/v1/consentVersions", {
 					params: {
 						schoolId,
 						consentTypes,
@@ -30,7 +30,7 @@ const module = {
 					const consentVersions = await Promise.all(
 						response.data.map(async (consentVersion) => {
 							if (consentVersion.consentDataId) {
-								const fileData = await this.$axios.$get(
+								const fileData = await this.$axios.get(
 									`/base64Files/${consentVersion.consentDataId}`
 								);
 								return { ...consentVersion, fileData };
@@ -52,7 +52,7 @@ const module = {
 			commit("setLoading", true);
 
 			try {
-				const data = await this.$axios.$post("/v1/consentVersions", payload);
+				const data = await this.$axios.post("/v1/consentVersions", payload);
 				const newConsentVersionsArray = [...state.consentVersions];
 				newConsentVersionsArray.unshift(data);
 

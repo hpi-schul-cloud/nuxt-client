@@ -6,7 +6,7 @@ const module = mergeDeep(base, {
 	actions: {
 		emailReset(ctx, payload = {}) {
 			const customEndpoint = "/v1/activation/eMailAddress";
-			return this.$axios.$post(customEndpoint, payload);
+			return this.$axios.post(customEndpoint, payload);
 		},
 	},
 });

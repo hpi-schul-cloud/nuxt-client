@@ -28,7 +28,7 @@ export default {
 	},
 	methods: {
 		async download() {
-			const data = await this.$axios.$get(
+			const data = await this.$axios.get(
 				`/v1/base64Files/${this.consentVersion.consentDataId}`
 			);
 			const downloadLink = document.createElement("a");

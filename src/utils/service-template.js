@@ -17,7 +17,7 @@ export default function (endpoint) {
 			async find({ commit }, payload = {}) {
 				const { qid = "default", query } = payload;
 				commit("setStatus", "pending");
-				const res = await this.$axios.$get(baseUrl, {
+				const res = await this.$axios.get(baseUrl, {
 					params: query,
 					paramsSerializer: (params) => {
 						return qs.stringify(params);
@@ -41,13 +41,13 @@ export default function (endpoint) {
 					id = payload;
 				}
 				commit("setStatus", "pending");
-				const res = await this.$axios.$get(baseUrl + "/" + id);
+				const res = await this.$axios.get(baseUrl + "/" + id);
 				commit("setCurrent", res);
 				commit("setStatus", "completed");
 			},
 			async create({ commit }, payload = {}) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.$post(baseUrl, payload);
+				const res = await this.$axios.post(baseUrl, payload);
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
@@ -55,7 +55,7 @@ export default function (endpoint) {
 			},
 			async patch({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.$patch(
+				const res = await this.$axios.patch(
 					baseUrl + "/" + payload[0],
 					payload[1]
 				);
@@ -66,7 +66,7 @@ export default function (endpoint) {
 			},
 			async update({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.$put(
+				const res = await this.$axios.put(
 					baseUrl + "/" + payload[0],
 					payload[1]
 				);
@@ -79,14 +79,14 @@ export default function (endpoint) {
 				if (typeof idOrPayload === "string") {
 					const id = idOrPayload;
 					commit("setStatus", "pending");
-					await this.$axios.$delete(baseUrl + "/" + id);
+					await this.$axios.delete(baseUrl + "/" + id);
 					commit("remove", idOrPayload);
 					commit("setStatus", "completed");
 				} else {
 					const payload = idOrPayload;
 					const { query } = payload;
 					commit("setStatus", "pending");
-					res = await this.$axios.$delete(baseUrl, {
+					res = await this.$axios.delete(baseUrl, {
 						params: query,
 						paramsSerializer: (params) => {
 							return qs.stringify(params);

@@ -311,7 +311,7 @@ export default class RoomsModule extends VuexModule {
 			shareToken: courseCode,
 		};
 		try {
-			const courseName = await $axios.$get("/v1/courses-share", {
+			const courseName = await $axios.get("/v1/courses-share", {
 				params,
 			});
 			this.setSharedCourseData({
@@ -335,7 +335,7 @@ export default class RoomsModule extends VuexModule {
 	): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const importedCourseResponse = await $axios.$post("/v1/courses-share", {
+			const importedCourseResponse = await $axios.post("/v1/courses-share", {
 				shareToken: courseData.code,
 				courseName: courseData.courseName,
 			});

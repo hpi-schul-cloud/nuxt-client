@@ -60,7 +60,7 @@ const module = mergeDeep(base, {
 		async findStudents({ commit }, payload = {}) {
 			const { qid = "default", query } = payload;
 			commit("setStatus", "pending");
-			const res = await this.$axios.$get(studentEndpoint, {
+			const res = await this.$axios.get(studentEndpoint, {
 				params: query,
 				paramsSerializer: (params) => {
 					return qs.stringify(params);
@@ -79,7 +79,7 @@ const module = mergeDeep(base, {
 		async findTeachers({ commit }, payload = {}) {
 			const { qid = "default", query } = payload;
 			commit("setStatus", "pending");
-			const res = await this.$axios.$get(teacherEndpoint, {
+			const res = await this.$axios.get(teacherEndpoint, {
 				params: query,
 				paramsSerializer: (params) => {
 					return qs.stringify(params);
@@ -96,7 +96,7 @@ const module = mergeDeep(base, {
 			commit("setStatus", "completed");
 		},
 		async findConsentUsers({ commit }, query) {
-			const res = await this.$axios.$get(`/v1/users/admin/students`, {
+			const res = await this.$axios.get(`/v1/users/admin/students`, {
 				params: query,
 				paramsSerializer: (params) => {
 					return qs.stringify(params);
@@ -112,7 +112,7 @@ const module = mergeDeep(base, {
 				for (let i = 0; i < numChunks; i++) {
 					const percent = ((i + 1) * chunkSize * 100) / (numChunks * chunkSize);
 					const chunkIds = ids.slice(i * chunkSize, i * chunkSize + chunkSize);
-					await this.$axios.$delete(`/v1/users/v2/admin/${userType}`, {
+					await this.$axios.delete(`/v1/users/v2/admin/${userType}`, {
 						params: { ids: chunkIds },
 					});
 					chunkIds.forEach((id) => {
@@ -127,14 +127,14 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const teacher = await this.$axios.$post(teacherEndpoint, teacherData);
+			const teacher = await this.$axios.post(teacherEndpoint, teacherData);
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
 			const { successMessage, ...studentData } = payload;
 			try {
-				const student = await this.$axios.$post(studentEndpoint, studentData);
+				const student = await this.$axios.post(studentEndpoint, studentData);
 				this.$toast.success(successMessage);
 				this.$router.push({
 					path: `/administration/students`,
@@ -146,11 +146,11 @@ const module = mergeDeep(base, {
 		},
 		async sendRegistrationLink(ctx, payload = {}) {
 			const registrationLinkEndpoint = "/v1/users/mail/registrationLink";
-			await this.$axios.$post(registrationLinkEndpoint, payload);
+			await this.$axios.post(registrationLinkEndpoint, payload);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const registrationQrEndpoint = "/v1/users/qrRegistrationLink";
-			const links = await this.$axios.$post(registrationQrEndpoint, payload);
+			const links = await this.$axios.post(registrationQrEndpoint, payload);
 			commit("setQrLinks", links);
 		},
 	},

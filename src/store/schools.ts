@@ -177,7 +177,7 @@ export default class SchoolsModule extends VuexModule {
 
 		if (authModule.getUser?.schoolId) {
 			try {
-				const school = await $axios.$get(
+				const school = await $axios.get(
 					`/v1/schools/${authModule.getUser?.schoolId} `
 				);
 
@@ -196,7 +196,7 @@ export default class SchoolsModule extends VuexModule {
 	async fetchFederalState(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await $axios.$get(
+			const response = await $axios.get(
 				`/v1/federalStates/${this.school.federalState}`
 			);
 
@@ -213,7 +213,7 @@ export default class SchoolsModule extends VuexModule {
 	async fetchCurrentYear(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const currentYear = await $axios.$get(
+			const currentYear = await $axios.get(
 				`/v1/years/${this.school.currentYear}`
 			);
 			this.setCurrentYear(currentYear);
@@ -233,7 +233,7 @@ export default class SchoolsModule extends VuexModule {
 			const systemIds = this.school.systems;
 
 			const requests = systemIds.map((systemId) =>
-				$axios.$get(`v1/systems/${systemId}`)
+				$axios.get(`v1/systems/${systemId}`)
 			);
 			const response = await Promise.all(requests);
 
@@ -251,7 +251,7 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload);
 		try {
-			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
+			const data = await $axios.patch(`/v1/schools/${school.id}`, school);
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
@@ -265,7 +265,7 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await $axios.$delete(`v1/systems/${systemId}`);
+			await $axios.delete(`v1/systems/${systemId}`);
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
