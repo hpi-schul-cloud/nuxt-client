@@ -177,7 +177,9 @@ export default Vue.extend({
 		save() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
-				return this.$toast.error(errors[0]);
+				// NUXT_REMOVAL this.$toast is not defined
+				// return this.$toast.error(errors[0]);
+				return errors[0];
 			}
 			this.$emit("save", { ...this.data, displayAt: this.displayAt });
 		},
