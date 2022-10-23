@@ -1,8 +1,8 @@
-import { Plugin } from "@nuxt/types";
-import { initializeCookies } from "../utils/cookies-initializer";
+// import { Plugin } from "@nuxt/types";
+// import { initializeCookies } from "../utils/cookies-initializer";
 
-const accessor: Plugin = ({ $cookies }) => {
-	initializeCookies($cookies);
-};
+// const accessor: Plugin = ({ $cookies }) => {
+// 	initializeCookies($cookies);
+// };
 
-export default accessor;
+// export default accessor;

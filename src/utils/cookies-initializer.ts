@@ -1,9 +1,9 @@
-import { NuxtCookies } from "cookie-universal-nuxt";
+// import { NuxtCookies } from "cookie-universal-nuxt";
 
-let $cookies: NuxtCookies;
+// let $cookies: NuxtCookies;
 
-export function initializeCookies(cookiesInstance: NuxtCookies) {
-	$cookies = cookiesInstance;
-}
+// export function initializeCookies(cookiesInstance: NuxtCookies) {
+// 	$cookies = cookiesInstance;
+// }
 
-export { $cookies };
+// export { $cookies };
