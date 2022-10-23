@@ -316,6 +316,7 @@ export default class RoomsModule extends VuexModule {
 			});
 			this.setSharedCourseData({
 				code: courseCode,
+				// @ts-ignore
 				courseName: courseName,
 				status: "success",
 				message: "",
@@ -339,6 +340,7 @@ export default class RoomsModule extends VuexModule {
 				shareToken: courseData.code,
 				courseName: courseData.courseName,
 			});
+			// @ts-ignore
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
 		} catch (error: any) {
 			this.setBusinessError({

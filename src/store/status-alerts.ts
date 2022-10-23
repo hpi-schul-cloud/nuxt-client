@@ -49,6 +49,7 @@ export default class StatusAlertsModule extends VuexModule {
 			this.resetBusinessError();
 			this.setStatus("pending");
 			const response = await $axios.get("/v1/alert");
+			// @ts-ignore
 			this.setStatusAlerts(response as StatusAlert[]);
 			this.setStatus("completed");
 		} catch (error) {

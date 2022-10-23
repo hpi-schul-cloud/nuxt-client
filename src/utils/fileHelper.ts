@@ -32,7 +32,9 @@ export function downloadFile(
 	var blobData = typeof bom !== "undefined" ? [bom, data] : [data];
 	var blob = new Blob(blobData, { type: mime || "application/octet-stream" });
 
+	// @ts-ignore
 	if (typeof window.navigator.msSaveBlob !== "undefined") {
+		// @ts-ignore
 		window.navigator.msSaveBlob(blob, filename);
 	} else {
 		var blobURL =

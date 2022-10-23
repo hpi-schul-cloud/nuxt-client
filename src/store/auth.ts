@@ -182,16 +182,22 @@ export default class AuthModule extends VuexModule {
 	@Action
 	async populateUser(): Promise<void> {
 		const user = await $axios.get("/v1/me");
+		// @ts-ignore
 		const roles = await $axios.get(`/v1/roles/user/${user.id}`);
+		// @ts-ignore
 		user.permissions = roles.reduce(
 			(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
 			[]
 		);
+		// @ts-ignore
 		this.setUser(user);
+		// @ts-ignore
 		if (user.schoolId) {
 			schoolsModule.fetchSchool();
 		}
+		// @ts-ignore
 		if (user.language) {
+			// @ts-ignore
 			this.setLocale(user.language);
 		}
 

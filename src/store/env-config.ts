@@ -137,10 +137,12 @@ export default class EnvConfigModule extends VuexModule {
 
 			const envs = await $axios.get("/v1/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
+				// @ts-ignore
 				if (envs[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);
 				}
 			});
+			// @ts-ignore
 			this.setEnvs({ ...configsFromEnvironmentVars, ...envs });
 
 			contentModule.init();

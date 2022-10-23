@@ -99,13 +99,14 @@ export default Vue.extend({
 	async mounted() {
 		await roomsModule.fetchAllElements();
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.courses.index.courses.all")} - ${
-				this.$theme.short_name
-			}`,
-		};
-	},
+	// NUXT_REMOVAL find other way
+	// head() {
+	// 	return {
+	// 		title: `${this.$t("pages.courses.index.courses.all")} - ${
+	// 			this.$theme.short_name
+	// 		}`,
+	// 	};
+	// },
 });
 </script>
 

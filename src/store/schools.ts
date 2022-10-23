@@ -200,6 +200,7 @@ export default class SchoolsModule extends VuexModule {
 				`/v1/federalStates/${this.school.federalState}`
 			);
 
+			// @ts-ignore
 			this.setFederalState(response);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -216,6 +217,7 @@ export default class SchoolsModule extends VuexModule {
 			const currentYear = await $axios.get(
 				`/v1/years/${this.school.currentYear}`
 			);
+			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: any) {

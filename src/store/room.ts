@@ -121,15 +121,20 @@ export default class RoomModule extends VuexModule {
 	async fetchSharedLesson(lessonId: string): Promise<void> {
 		try {
 			const lessonShareResult = await $axios.get(`/v1/lessons/${lessonId}`);
+			// @ts-ignore
 			if (!lessonShareResult.shareToken) {
+				// @ts-ignore
 				lessonShareResult.shareToken = nanoid(9);
 				await $axios.patch(
+					// @ts-ignore
 					`/v1/lessons/${lessonShareResult._id}`,
 					lessonShareResult
 				);
 			}
 			this.setSharedLessonData({
+				// @ts-ignore
 				code: lessonShareResult.shareToken,
+				// @ts-ignore
 				lessonName: lessonShareResult.name,
 				status: "",
 				message: "",
@@ -205,12 +210,14 @@ export default class RoomModule extends VuexModule {
 			const invitationData = await $axios.post("/v1/link", {
 				target: `${window.location.origin}/courses/${courseId}/addStudent`,
 			});
+			// @ts-ignore
 			if (!invitationData._id) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
+			// @ts-ignore
 			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
 			this.setCourseInvitationLink(invitationLink);
 		} catch (error: any) {
@@ -256,12 +263,14 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			const result = await $axios.get(`/v1/courses-share/${courseId}`);
+			// @ts-ignore
 			if (!result.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
+			// @ts-ignore
 			this.setCourseShareToken(result.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -278,6 +287,7 @@ export default class RoomModule extends VuexModule {
 		const userId = authModule.getUser?.id;
 		try {
 			const homework = await $axios.get(`/v1/homework/${payload.itemId}`);
+			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -287,16 +297,19 @@ export default class RoomModule extends VuexModule {
 			}
 			let archived = [];
 			if (payload.action === "finish") {
+				// @ts-ignore
 				archived = homework?.archived;
 				archived.push(userId);
 			}
 			if (payload.action === "restore") {
+				// @ts-ignore
 				archived = homework?.archived.filter((item: string) => item !== userId);
 			}
 
 			const patchedData = await $axios.patch(`/v1/homework/${payload.itemId}`, {
 				archived,
 			});
+			// @ts-ignore
 			if (!patchedData._id) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -323,6 +336,7 @@ export default class RoomModule extends VuexModule {
 		const ret_val = await $axios.get(
 			`/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`
 		);
+		// @ts-ignore
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
