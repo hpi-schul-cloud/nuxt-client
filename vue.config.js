@@ -6,6 +6,7 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 module.exports = defineConfig({
 	transpileDependencies: ["vuetify"],
+
 	configureWebpack: {
 		resolve: {
 			alias: {
@@ -22,6 +23,7 @@ module.exports = defineConfig({
 			},
 		},
 	},
+
 	// use custom tsconfig for webpack builds
 	// to e.g. exclude test files
 	// https://github.com/vuejs/vue-cli/issues/2421
@@ -38,5 +40,15 @@ module.exports = defineConfig({
 			args[0].typescript.configFile = TSCONFIG_PATH;
 			return args;
 		});
+	},
+
+	pluginOptions: {
+		i18n: {
+			locale: "de",
+			fallbackLocale: "de",
+			localeDir: "locales",
+			enableInSFC: true,
+			enableBridge: false,
+		},
 	},
 });
