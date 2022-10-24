@@ -105,7 +105,7 @@ export default defineComponent({
 
 		// business logic
 
-		if (props.isActive === true) {
+		if (props.isActive) {
 			validateShareToken();
 		}
 

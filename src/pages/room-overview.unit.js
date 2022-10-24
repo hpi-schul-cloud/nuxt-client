@@ -113,7 +113,13 @@ let copyModuleMock;
 let loadingStateModuleMock;
 let notifierModuleMock;
 
-const getWrapper = (device = "desktop", isLoading = false, options = {}) => {
+const defaultMocks = {
+	$route: { query: { } },
+	$router: { push: jest.fn(), replace: jest.fn() },
+	$t: (key) => key,
+}
+
+const getWrapper = (device = "desktop", isLoading = false, options = {}, attrs = {}) => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
@@ -128,19 +134,14 @@ const getWrapper = (device = "desktop", isLoading = false, options = {}) => {
 			$mq: () => device,
 			isLoading: () => isLoading,
 		},
-		mocks: {
-			$route: {
-				query: { import: "myToken" },
-			},
-			$router: { push: jest.fn(), replace: jest.fn() },
-			$t: (key) => key,
-		},
+		mocks: defaultMocks,
 		setup() {
 			provide("i18n", { t: (key) => key });
 			provide("copyModule", copyModuleMock);
 			provide("loadingStateModule", loadingStateModuleMock);
 			provide("notifierModule", notifierModuleMock);
 		},
+		...attrs
 	});
 };
 
@@ -515,7 +516,7 @@ describe("@pages/RoomOverview", () => {
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
 	});
 
-	it.skip("should set rowCount while loading", async () => {
+	it("should set rowCount while loading", async () => {
 		const roomData = [
 			{
 				id: "1",
@@ -551,12 +552,17 @@ describe("@pages/RoomOverview", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
 		await wrapper.vm.$nextTick();
-		const avatar = wrapper.findComponent({ ref: "7-3" });
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
-		expect(avatar.vm.$options["_componentTag"]).toStrictEqual("vRoomAvatar");
-		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(true);
-		expect(wrapper.vm.$refs["8-0"][0].$options["_componentTag"]).toStrictEqual(
-			"vRoomEmptyAvatar"
-		);
+	});
+
+	it("should open the import dialog, if import query-parameter is provided", async () => {
+		const wrapper = getWrapper('desktop', false, {}, {
+			mocks: {
+				...defaultMocks,
+				$route: { query: { import: 'anImportToken' } },
+			}
+		});
+		await flushPromises();
+		expect(wrapper.vm.isImportMode).toBe(true);
 	});
 });
