@@ -296,6 +296,20 @@ const dueDateTasksTeacher = [
 			graded: 4,
 		}),
 	},
+	{
+		id: "59cce1d381297026d02cdc4b",
+		_id: "59cce1d381297026d02cdc4b",
+		name: "Task with unpublished lesson",
+		duedate: "2300-09-28T13:00:00.000Z",
+		courseName: "Deutsch",
+		createdAt: "2017-09-28T11:49:39.924Z",
+		lessonHidden: true,
+		status: generateStatus({
+			submitted: 10,
+			maxSubmissions: 12,
+			graded: 4,
+		}),
+	},
 ];
 
 const noDueDateTasksTeacher = [
