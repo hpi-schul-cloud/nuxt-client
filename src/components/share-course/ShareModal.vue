@@ -90,7 +90,7 @@ export default defineComponent({
 		});
 		modalOptions.value.set(2, {
 			title: t("components.molecules.shareCourse.result.title"),
-			actionButtons: ["cancel"],
+			actionButtons: ["close"],
 		});
 
 		const shareUrl = computed(() => shareCourseModule.getShareUrl);
