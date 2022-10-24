@@ -1966,7 +1966,7 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
-    lessonName: string;
+    lessonName?: string;
     /**
      * 
      * @type {string}
