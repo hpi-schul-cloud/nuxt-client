@@ -58,9 +58,9 @@
 			<section
 				v-if="hasUnpublishedLesson"
 				data-testid="task-lesson-chip-large"
-				class="hidden-xs-only mr-8"
+				class="hidden-xs-only mr-8 pl-4"
 			>
-				<v-chip class="pl-4" small>{{
+				<v-chip small>{{
 					$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
 				}}</v-chip>
 			</section>
