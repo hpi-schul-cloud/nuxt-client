@@ -12,9 +12,14 @@
 			@keydown.tab.shift="handleFocus(false)"
 		>
 			<v-list-item-avatar>
-				<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
+				<v-icon
+					class="fill"
+					:class="unpublishedLessonClass"
+					:color="iconColor"
+					>{{ avatarIcon }}</v-icon
+				>
 			</v-list-item-avatar>
-			<v-list-item-content>
+			<v-list-item-content :class="unpublishedLessonClass">
 				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						taskLabel
@@ -197,6 +202,9 @@ export default {
 		hasUnpublishedLesson() {
 			return this.task.lessonHidden && !this.isDraft;
 		},
+		unpublishedLessonClass() {
+			return this.hasUnpublishedLesson ? "lesson-not-published" : "";
+		},
 		breakpoint() {
 			return this.$vuetify.breakpoint.name;
 		},
@@ -219,6 +227,10 @@ export default {
 <style lang="scss" scoped>
 .fill {
 	fill: currentColor;
+}
+
+.lesson-not-published {
+	opacity: 0.5;
 }
 
 // stylelint-disable sh-waqar/declaration-use-variable
