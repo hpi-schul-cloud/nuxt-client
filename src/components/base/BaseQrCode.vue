@@ -31,8 +31,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .qrcode {
 	min-width: 200px;
 	min-height: 200px;
