@@ -182,8 +182,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .section-sub-header {
 	margin-bottom: var(--space-xs);
 }

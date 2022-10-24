@@ -133,7 +133,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 
 ::v-deep .v-skeleton-loader__date-picker-days {
 	justify-content: space-between;

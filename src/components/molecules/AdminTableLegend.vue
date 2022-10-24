@@ -92,8 +92,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 $vertically-center: auto 0;
 
 .section {

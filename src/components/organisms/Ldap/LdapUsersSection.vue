@@ -159,8 +159,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .path-hint {
 	margin-top: var(--space-xl-3);
 	margin-bottom: var(--space-xl-2);

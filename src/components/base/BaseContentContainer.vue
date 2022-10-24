@@ -31,8 +31,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .wrapper {
 	min-width: var(--size-content-width-min);
 	margin: 0 auto;
