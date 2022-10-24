@@ -282,19 +282,13 @@ describe("@components/molecules/TaskItemTeacher", () => {
 			);
 			const taskStatus = wrapper.find("[data-testid='task-status']");
 			const taskStatusSmall = wrapper.find("[data-testid='task-status-small']");
+			const hasUnpublished = wrapper.vm.hasUnpublishedLesson;
 
+			expect(hasUnpublished).toBe(true);
 			expect(lessonChipLarge.exists()).toBe(true);
 			expect(lessonChipSmall.exists()).toBe(true);
 			expect(taskStatus.exists()).toBe(false);
 			expect(taskStatusSmall.exists()).toBe(false);
-		});
-
-		it("should have correct class name", () => {
-			const className = wrapper.vm.unpublishedLessonClass;
-			const hasUnpublished = wrapper.vm.hasUnpublishedLesson;
-
-			expect(className).toStrictEqual("lesson-not-published");
-			expect(hasUnpublished).toBe(true);
 		});
 	});
 

@@ -14,12 +14,12 @@
 			<v-list-item-avatar>
 				<v-icon
 					class="fill"
-					:class="unpublishedLessonClass"
+					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
 					:color="iconColor"
 					>{{ avatarIcon }}</v-icon
 				>
 			</v-list-item-avatar>
-			<v-list-item-content :class="unpublishedLessonClass">
+			<v-list-item-content :class="hasUnpublishedLesson ? 'opacity-0-5' : ''">
 				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">{{
 						taskLabel
@@ -27,9 +27,9 @@
 				</v-list-item-subtitle>
 				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 				<v-list-item-subtitle
-					v-if="topic && breakpoint !== 'xs'"
+					v-if="topic && currentBreakpoint !== 'xs'"
 					data-testid="task-topic"
-					class="d-inline-flex hidden-sm-and-up"
+					class="d-inline-flex"
 				>
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
@@ -60,7 +60,7 @@
 				data-testid="task-lesson-chip-large"
 				class="hidden-xs-only mr-8"
 			>
-				<v-chip class="ml-4" small>{{
+				<v-chip class="pl-4" small>{{
 					$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
 				}}</v-chip>
 			</section>
@@ -69,7 +69,7 @@
 				data-testid="task-status"
 				class="mr-8"
 			>
-				<v-list-item-action class="hidden-xs-only ml-4">
+				<v-list-item-action class="hidden-xs-only pl-4">
 					<v-list-item-subtitle>{{
 						$t("components.molecules.TaskItemTeacher.submitted")
 					}}</v-list-item-subtitle>
@@ -88,7 +88,10 @@
 					</v-list-item-title>
 				</v-list-item-action>
 			</section>
-			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
+			<v-list-item-action
+				:id="`task-menu-${task.id}`"
+				class="context-menu-min-width"
+			>
 				<task-item-menu
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
@@ -210,10 +213,7 @@ export default {
 		hasUnpublishedLesson() {
 			return this.task.lessonHidden && !this.isDraft;
 		},
-		unpublishedLessonClass() {
-			return this.hasUnpublishedLesson ? "lesson-not-published" : "";
-		},
-		breakpoint() {
+		currentBreakpoint() {
 			return this.$vuetify.breakpoint.name;
 		},
 	},
@@ -237,12 +237,12 @@ export default {
 	fill: currentColor;
 }
 
-.lesson-not-published {
+.opacity-0-5 {
 	opacity: 0.5;
 }
 
 // stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-btn {
+.context-menu-min-width {
 	min-width: 45px;
 }
 </style>
