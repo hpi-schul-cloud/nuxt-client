@@ -30,6 +30,8 @@
 				Andreas Reichel
 				<br />
 				Torsten Koß
+				<br />
+				Silke Tessmann-Storch
 			</p>
 			<p>USt-IdNr. gemäß § 27a Umsatzsteuergesetz: DE813840400</p>
 		</div>
