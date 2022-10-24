@@ -34,12 +34,20 @@
 					<span class="text-truncate">{{ topic }}</span>
 				</v-list-item-subtitle>
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-					<v-chip v-if="hasUnpublishedLesson" x-small>
+					<v-chip
+						v-if="hasUnpublishedLesson"
+						x-small
+						data-testid="task-lesson-chip-small"
+					>
 						{{
 							$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
 						}}</v-chip
 					>
-					<i18n v-else path="components.molecules.TaskItemTeacher.status">
+					<i18n
+						v-else
+						path="components.molecules.TaskItemTeacher.status"
+						data-testid="task-status-small"
+					>
 						<template #submitted>{{ task.status.submitted }}</template>
 						<template #max>{{ task.status.maxSubmissions }}</template>
 						<template #graded>{{ task.status.graded }}</template>
@@ -49,7 +57,7 @@
 
 			<section
 				v-if="hasUnpublishedLesson"
-				data-testid="task-lesson-info"
+				data-testid="task-lesson-chip-large"
 				class="hidden-xs-only mr-8"
 			>
 				<v-chip class="ml-4" small>{{

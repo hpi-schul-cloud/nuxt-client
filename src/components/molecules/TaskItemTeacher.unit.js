@@ -273,13 +273,19 @@ describe("@components/molecules/TaskItemTeacher", () => {
 			task: dueDateTasksTeacher[4],
 		});
 		it("should show unpublished lesson info", () => {
-			const lessonInfo = wrapper.find("[data-testid='task-lesson-info']");
+			const lessonChipLarge = wrapper.find(
+				"[data-testid='task-lesson-chip-large']"
+			);
+			const lessonChipSmall = wrapper.find(
+				"[data-testid='task-lesson-chip-small']"
+			);
 			const taskStatus = wrapper.find("[data-testid='task-status']");
+			const taskStatusSmall = wrapper.find("[data-testid='task-status-small']");
 
-			expect(lessonInfo.exists()).toBe(true);
+			expect(lessonChipLarge.exists()).toBe(true);
+			expect(lessonChipSmall.exists()).toBe(true);
 			expect(taskStatus.exists()).toBe(false);
-			// expect(topicLabel.text()).toMatch(/Thema Malen nach Zahlen/i);
-			// expect(wrapper.vm.topic).toStrictEqual(`Thema Malen nach Zahlen`);
+			expect(taskStatusSmall.exists()).toBe(false);
 		});
 	});
 
