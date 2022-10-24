@@ -114,12 +114,17 @@ let loadingStateModuleMock;
 let notifierModuleMock;
 
 const defaultMocks = {
-	$route: { query: { } },
+	$route: { query: {} },
 	$router: { push: jest.fn(), replace: jest.fn() },
 	$t: (key) => key,
-}
+};
 
-const getWrapper = (device = "desktop", isLoading = false, options = {}, attrs = {}) => {
+const getWrapper = (
+	device = "desktop",
+	isLoading = false,
+	options = {},
+	attrs = {}
+) => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
@@ -141,7 +146,7 @@ const getWrapper = (device = "desktop", isLoading = false, options = {}, attrs =
 			provide("loadingStateModule", loadingStateModuleMock);
 			provide("notifierModule", notifierModuleMock);
 		},
-		...attrs
+		...attrs,
 	});
 };
 
@@ -556,12 +561,17 @@ describe("@pages/RoomOverview", () => {
 	});
 
 	it("should open the import dialog, if import query-parameter is provided", async () => {
-		const wrapper = getWrapper('desktop', false, {}, {
-			mocks: {
-				...defaultMocks,
-				$route: { query: { import: 'anImportToken' } },
+		const wrapper = getWrapper(
+			"desktop",
+			false,
+			{},
+			{
+				mocks: {
+					...defaultMocks,
+					$route: { query: { import: "anImportToken" } },
+				},
 			}
-		});
+		);
 		await flushPromises();
 		expect(wrapper.vm.isImportMode).toBe(true);
 	});
