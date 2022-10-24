@@ -45,7 +45,7 @@
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
-					<ul v-if="route.active || route.childActive">
+					<ul v-if="route.active || route.childActive" class="px-0">
 						<li
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"

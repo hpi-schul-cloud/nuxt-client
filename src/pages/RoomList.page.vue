@@ -110,8 +110,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .search {
 	flex-wrap: nowrap;
 }
