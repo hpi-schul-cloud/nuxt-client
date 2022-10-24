@@ -183,7 +183,7 @@
 	"components.molecules.importCourse.options.infoText": "Дані учасників не будуть скопійовані. Курс можна перейменувати нижче.",
 	"components.molecules.importCourse.options.loadingMessage": "Виконується курс імпорту...",
 	"components.molecules.importCourse.options.success": "{type} успішно імпортовано",
-	"components.molecules.importCourse.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
+	"components.molecules.importCourse.options.failure.invalidToken": "Маркер у посиланні невідомий або термін дії минув.",
 	"components.molecules.importCourse.options.failure.backendError": "'{name}' не вдалося імпортувати.",
 	"components.molecules.importCourse.options.failure.permissionError": "На жаль, відсутній необхідний дозвіл.",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",
