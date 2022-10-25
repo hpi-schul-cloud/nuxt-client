@@ -51,16 +51,18 @@
 			<template #footer>
 				<modal-footer>
 					<template #right>
-						<base-button design="text" @click="closeModal">{{
-							$t("common.actions.cancel")
-						}}</base-button>
-						<base-button
-							design="primary"
+						<v-btn text color="secondary" @click="closeModal">
+							{{ $t("common.actions.cancel") }}
+						</v-btn>
+						<v-btn
+							color="primary"
+							depressed
 							:disabled="!isSendEnabled"
 							data-testid="modal_submit_btn"
 							@click="addToLesson"
-							>{{ $t("common.actions.add") }}</base-button
 						>
+							{{ $t("common.actions.add") }}
+						</v-btn>
 					</template>
 				</modal-footer>
 			</template>
