@@ -111,6 +111,43 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface ApiValidationError
+ */
+export interface ApiValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ApiValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ApiValidationError
+     */
+    details: object;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -6278,6 +6315,7 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6317,6 +6355,7 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @summary Import a share token payload.
          * @param {string} token The token that identifies the shared object
          * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
          * @param {*} [options] Override http request option.
@@ -6360,6 +6399,7 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @summary Look up a share token.
          * @param {string} token The token that identifies the shared object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6407,6 +6447,7 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6417,6 +6458,7 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Import a share token payload.
          * @param {string} token The token that identifies the shared object
          * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
          * @param {*} [options] Override http request option.
@@ -6428,6 +6470,7 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Look up a share token.
          * @param {string} token The token that identifies the shared object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6448,6 +6491,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6457,6 +6501,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @summary Import a share token payload.
          * @param {string} token The token that identifies the shared object
          * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
          * @param {*} [options] Override http request option.
@@ -6467,6 +6512,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @summary Look up a share token.
          * @param {string} token The token that identifies the shared object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6485,6 +6531,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
 export interface ShareTokenApiInterface {
     /**
      * 
+     * @summary Create a share token.
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6494,6 +6541,7 @@ export interface ShareTokenApiInterface {
 
     /**
      * 
+     * @summary Import a share token payload.
      * @param {string} token The token that identifies the shared object
      * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
      * @param {*} [options] Override http request option.
@@ -6504,6 +6552,7 @@ export interface ShareTokenApiInterface {
 
     /**
      * 
+     * @summary Look up a share token.
      * @param {string} token The token that identifies the shared object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6522,6 +6571,7 @@ export interface ShareTokenApiInterface {
 export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
     /**
      * 
+     * @summary Create a share token.
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6533,6 +6583,7 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
 
     /**
      * 
+     * @summary Import a share token payload.
      * @param {string} token The token that identifies the shared object
      * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
      * @param {*} [options] Override http request option.
@@ -6545,6 +6596,7 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
 
     /**
      * 
+     * @summary Look up a share token.
      * @param {string} token The token that identifies the shared object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
