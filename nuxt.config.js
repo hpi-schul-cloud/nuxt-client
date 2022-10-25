@@ -153,6 +153,8 @@ module.exports = {
 		"http://localhost:3030/api/**/*",
 	],
 
+	css: ["src/themes/base/styles/global.scss"],
+
 	/*
 	 ** Build configuration
 	 */

@@ -21,8 +21,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 $color-todo: var(--v-grey-lighten1);
 $color-done: var(--v-primary-base);
 

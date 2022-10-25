@@ -198,6 +198,7 @@
 	"components.molecules.TaskItemMenu.finish": "Завершити",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Створено",
 	"components.molecules.TaskItemTeacher.graded": "Оцінено",
+	"components.molecules.TaskItemTeacher.lessonIsNotPublished": "Урок не опублікований",
 	"components.molecules.TaskItemTeacher.status": "{submitted}/{max} надіслано, {graded} оцінено",
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
 	"components.molecules.TextEditor.noLocalFiles": "Наразі локальні файли не підтримуються.",

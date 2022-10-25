@@ -75,8 +75,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
-
 .alert-wrapper {
 	position: fixed;
 	right: 0;

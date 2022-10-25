@@ -692,6 +692,7 @@
 	"components.molecules.TaskItemTeacher.status": "{submitted}/{max} submitted, {graded} graded",
 	"components.molecules.TaskItemTeacher.submitted": "Submitted",
 	"components.molecules.TaskItemTeacher.graded": "Graded",
+	"components.molecules.TaskItemTeacher.lessonIsNotPublished": "Lesson not published",
 	"components.molecules.TaskItemMenu.finish": "Finish",
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Delete Task",
 	"components.molecules.TaskItemMenu.confirmDelete.text": "Are you sure, you want to delete task \"{taskTitle}\"?",
