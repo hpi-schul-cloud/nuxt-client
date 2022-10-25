@@ -55,9 +55,10 @@
 					</span>
 				</div>
 				<div>
-					<base-button
+					<v-btn
 						v-if="isMerlin"
-						design="outline"
+						outlined
+						color="secondary"
 						class="content-button"
 						@click="
 							() => {
@@ -65,19 +66,20 @@
 							}
 						"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
-					<base-button
+					</v-btn>
+					<v-btn
 						v-else
-						design="outline"
+						outlined
+						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
+					</v-btn>
 					<!-- This will be replaced with Modal -->
 					<div v-if="isBrandenburg" class="external-content-warning">
 						<p class="text-s external-content-title">
@@ -164,7 +166,7 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@plugins/datetime";
-import { mdiClose } from "@mdi/js";
+import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -195,6 +197,7 @@ export default {
 	data() {
 		return {
 			mdiClose,
+			mdiOpenInNew,
 		};
 	},
 	computed: {
