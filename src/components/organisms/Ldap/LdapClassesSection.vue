@@ -147,8 +147,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .title-class {
 	margin-top: var(--space-xl-2);
 	margin-bottom: var(--space-xl-2);

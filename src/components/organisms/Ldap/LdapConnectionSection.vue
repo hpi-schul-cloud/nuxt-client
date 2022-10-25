@@ -130,8 +130,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .connection-container {
 	margin-bottom: var(--space-xl-4);
 }

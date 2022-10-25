@@ -121,7 +121,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

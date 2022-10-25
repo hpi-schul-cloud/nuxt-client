@@ -418,9 +418,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-@import "@styles";
-
 .fill {
 	fill: currentColor;
 }

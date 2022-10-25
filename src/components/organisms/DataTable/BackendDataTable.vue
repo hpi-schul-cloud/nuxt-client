@@ -378,8 +378,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 thead,
 tbody {
 	font-size: var(--text-md);

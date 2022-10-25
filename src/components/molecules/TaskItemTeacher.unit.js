@@ -268,6 +268,30 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 	});
 
+	describe("when a task has an unpublished lesson", () => {
+		const wrapper = getWrapper({
+			task: dueDateTasksTeacher[4],
+		});
+
+		it("should show unpublished lesson info", () => {
+			const lessonChipLarge = wrapper.find(
+				"[data-testid='task-lesson-chip-large']"
+			);
+			const lessonChipSmall = wrapper.find(
+				"[data-testid='task-lesson-chip-small']"
+			);
+			const taskStatus = wrapper.find("[data-testid='task-status']");
+			const taskStatusSmall = wrapper.find("[data-testid='task-status-small']");
+			const hasUnpublished = wrapper.vm.hasUnpublishedLesson;
+
+			expect(hasUnpublished).toBe(true);
+			expect(lessonChipLarge.exists()).toBe(true);
+			expect(lessonChipSmall.exists()).toBe(true);
+			expect(taskStatus.exists()).toBe(false);
+			expect(taskStatusSmall.exists()).toBe(false);
+		});
+	});
+
 	describe("when a task has no topic", () => {
 		const wrapper = getWrapper({
 			task: dueDateTasksTeacher[1],

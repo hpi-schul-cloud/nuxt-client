@@ -134,8 +134,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 label {
 	// .wrapper but to keep specifcy low we use label directly
 	// this makes it easier to overwrite styles

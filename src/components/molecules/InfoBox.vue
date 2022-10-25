@@ -37,8 +37,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .wrapper {
 	color: var(--v-white-base);
 	background-color: var(--v-info-base);

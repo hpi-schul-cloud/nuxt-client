@@ -99,8 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 section {
 	// stylelint-disable
 	margin-top: 10%;

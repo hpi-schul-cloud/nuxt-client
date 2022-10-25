@@ -59,8 +59,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .btn {
 	width: 100% !important;
 	margin-right: var(--space-md) !important;

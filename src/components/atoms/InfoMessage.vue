@@ -32,8 +32,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@styles";
-
 .info-message {
 	display: flex;
 	align-items: top;
