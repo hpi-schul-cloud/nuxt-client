@@ -115,7 +115,7 @@ let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
-	$router: { push: jest.fn(), replace: jest.fn() },
+	$router: { replace: jest.fn() },
 	$t: (key) => key,
 };
 
@@ -568,7 +568,10 @@ describe("@pages/RoomOverview", () => {
 			{
 				mocks: {
 					...defaultMocks,
-					$route: { query: { import: "anImportToken" } },
+					$route: {
+						path: "/rooms-overview/",
+						query: { import: "anImportToken" },
+					},
 				},
 			}
 		);
