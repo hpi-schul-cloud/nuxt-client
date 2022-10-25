@@ -1,19 +1,18 @@
 <template>
 	<div class="resource">
 		<div ref="icons" class="icons">
-			<base-button
+			<v-btn
+				fab
+				small
 				:class="[
-					closeButtonStyleSelector
-						? 'close-transparent elevation-6'
-						: 'close-icon elevation-6',
+					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',
 				]"
-				design="icon"
-				aria-label="btnLabel"
+				aria-label="close detail view"
 				@click="goBack"
 			>
-				<base-icon source="material" icon="close" />
-			</base-button>
+				<v-icon size="20">{{ mdiClose }}</v-icon>
+			</v-btn>
 		</div>
 		<div class="content">
 			<div class="preview">
@@ -162,10 +161,10 @@
 /* eslint-disable max-lines */
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
-
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
-
+import { printDateFromTimestamp } from "@plugins/datetime";
+import { mdiClose } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -175,7 +174,6 @@ import {
 	getTags,
 	isMerlinContent,
 } from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -193,6 +191,11 @@ export default {
 		},
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
+	},
+	data() {
+		return {
+			mdiClose,
+		};
 	},
 	computed: {
 		provider() {
@@ -334,6 +337,7 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
+			color: var(--v-white-base);
 			background-color: var(--v-grey-darken1);
 		}
 
