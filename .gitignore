@@ -23,3 +23,6 @@ version.js
 .env
 **/.DS_Store
 **/.tmp*
+
+.nuxt
+nuxt.config.js
