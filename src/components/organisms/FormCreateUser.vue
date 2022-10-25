@@ -32,23 +32,23 @@
 		<slot name="inputs" />
 
 		<slot name="errors" />
-		<base-button
-			type="submit"
+		<v-btn
+			color="primary"
+			depressed
 			class="w-100 mt--lg"
-			design="secondary"
 			data-testid="button_create-user_submit"
 		>
 			{{ $t("common.actions.add") }}
-		</base-button>
-		<base-button
+		</v-btn>
+		<v-btn
 			class="w-100 mt--lg"
-			design="text"
 			text
+			color="secondary"
 			data-testid="button_create-user_abort"
 			@click.prevent="$router.go(-1)"
 		>
 			{{ $t("common.actions.back") }}
-		</base-button>
+		</v-btn>
 	</v-form>
 </template>
 
