@@ -31,6 +31,7 @@
 					<span class="info-slot">
 						<v-btn
 							icon
+							plain
 							color="info"
 							class="info-button"
 							style="background-color: transparent"
@@ -361,6 +362,10 @@ export default {
 			}
 		}
 	}
+}
+
+.info-button {
+	z-index: calc(var(--layer-fab) + 1);
 }
 
 .info-box {
