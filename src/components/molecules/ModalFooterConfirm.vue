@@ -24,8 +24,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .footer-button {
 	position: relative;
 	display: flex;

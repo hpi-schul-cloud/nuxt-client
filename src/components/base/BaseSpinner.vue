@@ -61,8 +61,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .spinner {
 	--spinner-circumference: 88;
 	--spinner-quarter-circumference: 22;
