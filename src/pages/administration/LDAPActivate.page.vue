@@ -9,7 +9,9 @@
 			{{ $t("common.actions.back") }}
 		</base-button>
 		<section class="section">
-			<h1 class="h4">{{ $t("pages.administration.ldap.save.title") }}</h1>
+			<h1 class="h4">
+				{{ $t("pages.administration.ldap.save.title") }}
+			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
@@ -104,6 +106,14 @@
 				type="bc-error"
 			/>
 		</div>
+		<section v-if="showUserMigrationOption" class="section">
+			<base-input
+				v-model="migrateUsersCheckbox"
+				type="checkbox"
+				label="TODO migrate existing users"
+				data-testid="migrateUsersCheckbox"
+			/>
+		</section>
 		<div class="bottom-buttons">
 			<base-button
 				design="text"
@@ -118,17 +128,16 @@
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
-				>{{
-					$t("pages.administration.ldap.save.example.synchronize")
-				}}</base-button
 			>
+				{{ $t("pages.administration.ldap.save.example.synchronize") }}
+			</base-button>
 		</div>
 		<base-modal
 			:active.sync="submitted.ok"
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>
-			<template #header></template>
+			<template #header />
 			<template #body>
 				<modal-body-info
 					:title="$t('pages.administration.ldap.activate.message')"
@@ -155,6 +164,7 @@
 </template>
 
 <script>
+import { importUsersModule, envConfigModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
@@ -176,6 +186,13 @@ export default {
 	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
+	},
+	data() {
+		return {
+			migrateUsersCheckbox: false,
+			showUserMigrationOption:
+				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED,
+		};
 	},
 	computed: {
 		...mapGetters("ldap-config", {
@@ -203,6 +220,10 @@ export default {
 
 			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
 				delete temporaryConfigData.searchUserPassword;
+			}
+			if (this.migrateUsersCheckbox) {
+				await importUsersModule.startMigration();
+				// TODO Error handling
 			}
 
 			if (id) {
@@ -236,6 +257,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .subtitle-text {
 	margin-top: var(--space-xl);
 }
