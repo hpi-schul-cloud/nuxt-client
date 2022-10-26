@@ -189,6 +189,20 @@ export default class ImportUsersModule extends VuexModule {
 	setUsersSkip(skip: number): void {
 		this.usersSkip = skip;
 	}
+	@Action
+	async startMigration(): Promise<void> {
+		try {
+			const response =
+				await this.importUserApi.importUserControllerStartSchoolInUserMigration(
+					false
+				);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: `${error.statusCode}`,
+				message: error.message,
+			});
+		}
+	}
 
 	@Action
 	async fetchAllImportUsers(): Promise<void> {
