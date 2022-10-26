@@ -16,20 +16,32 @@
 				</modal-body-info>
 			</template>
 			<template #footerRight>
-				<base-button
-					:design="invertedDesign ? actionDesign : 'text'"
+				<v-btn
+					depressed
+					:text="!invertedDesign"
+					:style="
+						invertedDesign
+							? `background-color: var(--v-${actionDesign}-base); color: var(--v-white-base)`
+							: 'color: var(--v-secondary-base)'
+					"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
 				>
 					{{ cancelText }}
-				</base-button>
-				<base-button
-					:design="invertedDesign ? 'text' : actionDesign"
+				</v-btn>
+				<v-btn
+					depressed
+					:text="invertedDesign"
+					:style="
+						!invertedDesign
+							? `background-color: var(--v-${actionDesign}-base); color: var(--v-white-base)`
+							: 'color: var(--v-secondary-base)'
+					"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
 					{{ confirmText }}
-				</base-button>
+				</v-btn>
 			</template>
 		</base-modal>
 	</div>
