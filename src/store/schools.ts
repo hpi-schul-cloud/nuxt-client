@@ -37,7 +37,7 @@ function transformSchoolClientToServer(school: any): School {
 }
 
 @Module({
-	name: "schools",
+	name: "schoolsModule",
 	namespaced: true,
 	stateFactory: true,
 })

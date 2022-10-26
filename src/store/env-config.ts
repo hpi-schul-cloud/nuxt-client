@@ -24,7 +24,7 @@ export const configsFromEnvironmentVars = {
 const retryLimit: number = 10;
 
 @Module({
-	name: "env-config",
+	name: "envConfigModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -135,7 +135,7 @@ export default class EnvConfigModule extends VuexModule {
 			this.resetBusinessError();
 			this.setStatus("pending");
 
-			const envs = await $axios.get("/v1/config/app/public");
+			const envs = (await $axios.get("/v1/config/app/public")).data;
 			Object.entries(requiredVars).forEach(([key]) => {
 				// @ts-ignore
 				if (envs[key] == null) {

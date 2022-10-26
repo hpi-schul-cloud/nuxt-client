@@ -4,16 +4,19 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import i18n from "./i18n";
-import axios from "axios";
-import { initializeAxios } from "./utils/api";
 
 Vue.config.productionTip = false;
 
-// NUXT_REMOVAL replace by Vue.use(axios);
-axios.defaults.baseURL = `${window.origin}/api`;
-initializeAxios(axios);
-Vue.prototype.$axios = axios;
-// Vue.axios = axios;
+// NUXT_REMOVAL set this based on the tenant theme
+// import Theme from "@/theme/config";
+// Vue.prototype.$theme = Theme;
+Vue.prototype.$theme = {
+	name: "dBildungscloud",
+	short_name: "dbc",
+};
+
+// NUXT_REMOVAL change how global components are handled
+import "@/components/base/_globals";
 
 new Vue({
 	router,

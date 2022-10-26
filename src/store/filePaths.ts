@@ -34,7 +34,7 @@ const globalFiles = {
 };
 
 @Module({
-	name: "filePaths",
+	name: "filePathsModule",
 	namespaced: true,
 	stateFactory: true,
 })

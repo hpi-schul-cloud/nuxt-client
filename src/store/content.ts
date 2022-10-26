@@ -74,7 +74,7 @@ const initialState = () => ({
 });
 
 @Module({
-	name: "content",
+	name: "contentModule",
 	namespaced: true,
 	stateFactory: true,
 })

@@ -5,7 +5,7 @@
 		:vmodel="vmodel"
 		class="calendar-input"
 	>
-		<flat-pickr
+		<!-- NUXT_REMOVAL <flat-pickr
 			:value="vmodel"
 			v-bind="$attrs"
 			:config="config"
@@ -13,18 +13,19 @@
 			class="input"
 			v-on="$listeners"
 			@input="$emit('input_change', $event)"
-		/>
+		/> -->
 	</base-input-default>
 </template>
 <script>
 import BaseInputDefault from "./BaseInputDefault";
-import FlatPickr from "vue-flatpickr-component";
-import { German } from "flatpickr/dist/l10n/de.js";
+// NUXT_REMOVAL
+// import FlatPickr from "vue-flatpickr-component";
+// import { German } from "flatpickr/dist/l10n/de.js";
 
 export const supportedTypes = ["date", "time"];
 
 export default {
-	components: { BaseInputDefault, FlatPickr },
+	components: { BaseInputDefault /* NUXT_REMOVAL, FlatPickr */ },
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -73,7 +74,8 @@ export default {
 };
 </script>
 
-<style src="flatpickr/dist/flatpickr.css"></style>
+<!-- NUXT_REMOVAL -->
+<!-- <style src="flatpickr/dist/flatpickr.css"></style> -->
 <style lang="scss" scoped>
 .calendar-input ::v-deep {
 	.flatpickr-input,

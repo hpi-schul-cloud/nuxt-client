@@ -1,6 +1,6 @@
 <template>
 	<base-input-default v-bind="$attrs" :type="false" vmodel :label="label">
-		<multi-select
+		<!-- NUXT_REMOVAL <multi-select
 			:aria-label="label"
 			:value="value"
 			v-bind="$attrs"
@@ -24,17 +24,18 @@
 			<template #tag="slotProps">
 				<slot name="tag" :option="slotProps.option" />
 			</template>
-		</multi-select>
+		</multi-select> -->
 	</base-input-default>
 </template>
 
 <script>
-import MultiSelect from "vue-multiselect";
+// NUXT_REMOVAL
+// import MultiSelect from "vue-multiselect";
 import BaseInputDefault from "./BaseInput/BaseInputDefault";
 
 export default {
 	components: {
-		MultiSelect,
+		// MultiSelect,
 		BaseInputDefault,
 	},
 	props: {
@@ -122,8 +123,8 @@ export default {
 	},
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<!-- NUXT_REMOVAL -->
+<!-- <style src="vue-multiselect/dist/vue-multiselect.min.css"></style> -->
 <style lang="scss">
 .input .multiselect__tags {
 	border: 0;
