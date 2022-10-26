@@ -1,5 +1,5 @@
 <template>
-	<div ref="dialog" data-testid="dialog">
+	<div ref="dialog" data-testid="dialog" class="v-application">
 		<base-modal :active="isActive" @update:active="clickOutside">
 			<template #body>
 				<modal-body-info :title="message">
@@ -19,11 +19,8 @@
 				<v-btn
 					depressed
 					:text="!invertedDesign"
-					:style="
-						invertedDesign
-							? `background-color: var(--v-${actionDesign}-base); color: var(--v-white-base)`
-							: 'color: var(--v-secondary-base)'
-					"
+					:dark="invertedDesign"
+					:color="!invertedDesign ? 'secondary' : 'success'"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
 				>
@@ -31,12 +28,9 @@
 				</v-btn>
 				<v-btn
 					depressed
+					:color="invertedDesign ? 'secondary' : 'success'"
 					:text="invertedDesign"
-					:style="
-						!invertedDesign
-							? `background-color: var(--v-${actionDesign}-base); color: var(--v-white-base)`
-							: 'color: var(--v-secondary-base)'
-					"
+					:dark="!invertedDesign"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
