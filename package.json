@@ -47,6 +47,7 @@
 		"svg-inline-loader": "^0.8.2",
 		"tiptap": "^1.32.2",
 		"tiptap-extensions": "^1.35.2",
+		"universal-cookie": "^4.0.4",
 		"vue": "^2.7.0",
 		"vue-filter-ui": "^0.8.0",
 		"vue-i18n": "^8.26.3",

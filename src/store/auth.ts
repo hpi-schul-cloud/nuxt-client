@@ -17,7 +17,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
 };
 @Module({
-	name: "auth",
+	name: "authModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -181,9 +181,10 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	async populateUser(): Promise<void> {
-		const user = await $axios.get("/v1/me");
+		const user = (await $axios.get("/v1/me")).data;
 		// @ts-ignore
-		const roles = await $axios.get(`/v1/roles/user/${user.id}`);
+		const roles = (await $axios.get(`/v1/roles/user/${user.id}`)).data;
+
 		// @ts-ignore
 		user.permissions = roles.reduce(
 			(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],

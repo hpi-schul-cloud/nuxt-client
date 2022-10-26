@@ -1,13 +1,9 @@
-// import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 
-import axios from "axios";
+let $axios: AxiosInstance;
 
-// let $axios: axios;
-
-// export function initializeAxios(axiosInstance: NuxtAxiosInstance) {
-// 	$axios = axiosInstance;
-// }
-
-const $axios = axios;
+export function initializeAxios(axios: AxiosInstance) {
+	$axios = axios;
+}
 
 export { $axios };

@@ -1,53 +1,56 @@
 <template>
 	<v-app>
-		<v-app-bar app color="primary" dark>
-			<div class="d-flex align-center">
-				<v-img
-					alt="Vuetify Logo"
-					class="shrink mr-2"
-					contain
-					src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-					transition="scale-transition"
-					width="40"
-				/>
-
-				<v-img
-					alt="Vuetify Name"
-					class="shrink mt-1 hidden-sm-and-down"
-					contain
-					min-width="100"
-					src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-					width="100"
-				/>
-			</div>
-
-			<v-spacer></v-spacer>
-
-			<v-btn
-				href="https://github.com/vuetifyjs/vuetify/releases/latest"
-				target="_blank"
-				text
-			>
-				<span class="mr-2">Latest Release</span>
-				<v-icon>mdi-open-in-new</v-icon>
-			</v-btn>
-		</v-app-bar>
-
-		<v-main>
-			<p>{{ $t("common.actions.cancel") }}</p>
-			<router-view />
-		</v-main>
+		<legacy-logged-in>
+			<v-main id="main-content" class="content">
+				<snackbar />
+				<router-view />
+			</v-main>
+			<loading-state-dialog />
+		</legacy-logged-in>
 	</v-app>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
+import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
+import Snackbar from "@/components/molecules/Alert";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
+import Cookies from "universal-cookie";
+import { authModule } from "@/store";
+import { $axios } from "@/utils/api";
 
-export default Vue.extend({
-	name: "App",
+export default {
+	components: {
+		LoadingStateDialog,
+		LegacyLoggedIn,
+		Snackbar,
+	},
+	created() {
+		const cookies = new Cookies();
+		const jwt = cookies.get("jwt");
+		authModule.setAccessToken(jwt);
+		$axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
+	},
 
-	data: () => ({
-		//
-	}),
-});
+	mounted() {
+		authModule.populateUser();
+	},
+};
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+.content {
+	grid-area: content;
+	width: inherit;
+	max-width: 100vw;
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
+}
+</style>
