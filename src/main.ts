@@ -39,6 +39,8 @@ Vue.prototype.$theme = {
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 
+import "@/scss/styles.scss";
+
 new Vue({
 	router,
 	store,
