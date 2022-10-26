@@ -4,6 +4,27 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import i18n from "./i18n";
+import {
+	accountsModule,
+	authModule,
+	autoLogoutModule,
+	contentModule,
+	copyModule,
+	envConfigModule,
+	filePathsModule,
+	filesPOCModule,
+	finishedTaskModule,
+	importUsersModule,
+	loadingStateModule,
+	newsModule,
+	notifierModule,
+	roomModule,
+	roomsModule,
+	schoolsModule,
+	shareCourseModule,
+	statusAlertsModule,
+	taskModule,
+} from "@/store";
 
 Vue.config.productionTip = false;
 
@@ -23,5 +44,26 @@ new Vue({
 	store,
 	vuetify,
 	i18n,
+	provide: {
+		accountsModule,
+		authModule,
+		autoLogoutModule,
+		contentModule,
+		copyModule,
+		envConfigModule,
+		filePathsModule,
+		filesPOCModule,
+		finishedTaskModule,
+		importUsersModule,
+		loadingStateModule,
+		newsModule,
+		notifierModule,
+		roomModule,
+		roomsModule,
+		schoolsModule,
+		shareCourseModule,
+		statusAlertsModule,
+		taskModule,
+	},
 	render: (h) => h(App),
 }).$mount("#app");
