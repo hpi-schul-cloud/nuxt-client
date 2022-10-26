@@ -7,7 +7,7 @@ import { Task } from "./types/tasks";
 import { envConfigModule } from "@/store";
 
 @Module({
-	name: "finished-tasks",
+	name: "finishedTasksModule",
 	namespaced: true,
 	stateFactory: true,
 })

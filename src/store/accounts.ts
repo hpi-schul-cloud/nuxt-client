@@ -3,7 +3,7 @@ import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
-	name: "accounts",
+	name: "accountsModule",
 	namespaced: true,
 	stateFactory: true,
 })

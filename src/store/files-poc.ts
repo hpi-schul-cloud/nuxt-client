@@ -10,7 +10,7 @@ import {
 } from "@/fileStorageApi/v3";
 
 @Module({
-	name: "files-poc",
+	name: "filesPOCModule",
 	namespaced: true,
 	stateFactory: true,
 })

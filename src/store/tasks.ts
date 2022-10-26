@@ -15,7 +15,7 @@ import {
 } from "./types/tasks";
 
 @Module({
-	name: "tasks",
+	name: "taskModule",
 	namespaced: true,
 	stateFactory: true,
 })

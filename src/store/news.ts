@@ -8,7 +8,7 @@ import { envConfigModule } from "@/store";
 // const newsUri = "/v3/news";
 
 @Module({
-	name: "news",
+	name: "newsModule",
 	namespaced: true,
 	stateFactory: true,
 })

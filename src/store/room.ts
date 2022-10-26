@@ -16,7 +16,7 @@ import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
 @Module({
-	name: "room",
+	name: "roomModule",
 	namespaced: true,
 	stateFactory: true,
 })

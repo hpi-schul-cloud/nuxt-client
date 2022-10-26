@@ -18,7 +18,7 @@ export enum MatchedBy {
 
 // @ts-ignore
 @Module({
-	name: "import-users",
+	name: "importUsersModule",
 	namespaced: true,
 	stateFactory: true,
 })

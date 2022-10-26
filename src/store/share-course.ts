@@ -19,7 +19,7 @@ export interface SharePayload extends ShareOptions {
 }
 
 @Module({
-	name: "share-course",
+	name: "shareCourseModule",
 	namespaced: true,
 	stateFactory: true,
 })
