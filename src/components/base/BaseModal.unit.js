@@ -15,9 +15,9 @@ const modal = {
 				</div>
 
 				<div class="modal-footer">
-					<base-button id="btn-close" class="is-light" @click="$refs.modal.close()">
+					<v-btn id="btn-close" @click="$refs.modal.close()">
 						OK
-					</base-button>
+					</v-btn>
 				</div>
 			</div>
 		</base-modal>
