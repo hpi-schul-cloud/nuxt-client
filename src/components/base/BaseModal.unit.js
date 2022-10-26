@@ -2,6 +2,10 @@ import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal";
 
 const modal = {
+	...createComponentMocks({
+		i18n: true,
+		vuetify: true,
+	}),
 	data: () => ({ active: false }),
 	template: `
 		<base-modal id="modal" ref="modal" :active.sync="active" @close="active = false">
