@@ -3,7 +3,7 @@ import BaseDialog from "./BaseDialog";
 const mountDialog = async (options = {}) => {
 	const wrapper = mount(BaseDialog, {
 		beforeMount() {},
-		...createComponentMocks({ stubs: { transition: true } }),
+		...createComponentMocks({ stubs: { transition: true }, vuetify: true }),
 		...options,
 	});
 	await wrapper.vm.$nextTick();

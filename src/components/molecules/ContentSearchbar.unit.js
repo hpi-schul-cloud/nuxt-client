@@ -1,6 +1,10 @@
 import ContentSearchbar from "./ContentSearchbar";
 
 const contentSearchbarComponent = {
+	...createComponentMocks({
+		i18n: true,
+		vuetify: true,
+	}),
 	components: { ContentSearchbar },
 	data: () => ({
 		value: "",

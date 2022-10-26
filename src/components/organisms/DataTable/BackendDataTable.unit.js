@@ -6,7 +6,7 @@ const defaultData = tableData(5);
 
 function getWrapper(attributes, options) {
 	return mount(BackendDataTable, {
-		...createComponentMocks({ i18n: true }),
+		...createComponentMocks({ i18n: true, vuetify: true }),
 		propsData: {
 			data: defaultData,
 			trackBy: "_id",
@@ -89,7 +89,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				rowsPerPage: pageSize,
 				currentPage: 1,
 			});
-			wrapper.find(`[aria-label="Goto next page"]`).trigger("click");
+			wrapper.find(`[aria-label="Go to next page"]`).trigger("click");
 			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});
