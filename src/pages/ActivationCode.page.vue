@@ -4,7 +4,7 @@
 			:title="getTitle"
 			:active="showModal"
 			:description="getDescription"
-			design="secondary"
+			design="primary"
 			@update:active="buttonHandler"
 		>
 			<template #icon>
@@ -83,14 +83,14 @@ export default {
 		},
 
 		async submitHandler() {
-			const { activationCode } = this.$route.params;
-			try {
-				await this.$store.dispatch("activation/update", [activationCode]);
-				this.keyword = this.data[0].keyword;
-				this.activated = this.data[0].success;
-			} catch (e) {
-				console.log(e);
-			}
+			// const { activationCode } = this.$route.params;
+			// try {
+			// 	await this.$store.dispatch("activation/update", [activationCode]);
+			// 	this.keyword = this.data[0].keyword;
+			// 	this.activated = this.data[0].success;
+			// } catch (e) {
+			// 	console.log(e);
+			// }
 			this.showModal = true;
 		},
 	},
