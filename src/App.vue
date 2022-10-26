@@ -32,8 +32,6 @@ export default {
 		};
 	},
 	async created() {
-		console.log("### before global created");
-
 		axios.defaults.baseURL = `${window.origin}/api`;
 		const cookies = new Cookies();
 		const jwt = cookies.get("jwt");
@@ -46,8 +44,6 @@ export default {
 		await authModule.populateUser();
 
 		this.isInitialized = true;
-
-		console.log("### after global created");
 	},
 };
 </script>
