@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { authModule } from "@/store";
+import { authModule, envConfigModule } from "@/store";
 
 export function extractRoomTypeAndIdFromPath(path) {
 	const matches = RegExp("/(course|team)s/([0-9a-f]{24})").exec(path);
@@ -66,9 +66,10 @@ export default {
 		},
 	},
 	mounted() {
+		const config = envConfigModule.getEnv;
 		if (
-			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === "true" ||
-			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === true
+			config.FEATURE_MATRIX_MESSENGER_ENABLED === "true" ||
+			config.FEATURE_MATRIX_MESSENGER_ENABLED === true
 		) {
 			this.$store.dispatch("messenger/init");
 		}

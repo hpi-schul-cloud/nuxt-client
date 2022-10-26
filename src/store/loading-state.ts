@@ -2,7 +2,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { LoadingStatePayload } from "@/store/types/loading-state-payload";
 
 @Module({
-	name: "loading-state",
+	name: "loadingStateModule",
 	namespaced: true,
 	stateFactory: true,
 })

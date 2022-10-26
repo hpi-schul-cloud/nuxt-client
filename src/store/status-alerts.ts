@@ -4,7 +4,7 @@ import { StatusAlert } from "./types/status-alert";
 import { $axios } from "../utils/api";
 
 @Module({
-	name: "status-alerts",
+	name: "statusAlertsModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -48,7 +48,7 @@ export default class StatusAlertsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const response = await $axios.get("/v1/alert");
+			const response = (await $axios.get("/v1/alert")).data;
 			// @ts-ignore
 			this.setStatusAlerts(response as StatusAlert[]);
 			this.setStatus("completed");

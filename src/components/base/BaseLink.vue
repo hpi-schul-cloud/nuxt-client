@@ -17,7 +17,7 @@
 		<!-- <base-icon source="material" icon="launch"/> -->
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
-	<NuxtLink
+	<router-link
 		v-else
 		:class="{ link: !noStyles, 'text-only': noStyles }"
 		tag="a"
@@ -26,7 +26,7 @@
 		v-on="$listeners"
 	>
 		<slot />
-	</NuxtLink>
+	</router-link>
 </template>
 
 <script>

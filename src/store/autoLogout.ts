@@ -132,7 +132,7 @@ const extendSession = async (
 };
 
 @Module({
-	name: "autoLogout",
+	name: "autoLogoutModule",
 	namespaced: true,
 	stateFactory: true,
 })
