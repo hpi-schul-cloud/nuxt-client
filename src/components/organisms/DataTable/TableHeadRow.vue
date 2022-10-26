@@ -222,7 +222,6 @@
 </template>
 
 <script>
-import BaseButton from "@basecomponents/BaseButton";
 import InfoBox from "@components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
 import { mdiInformation } from "@mdi/js";
@@ -287,9 +286,6 @@ export default {
 		},
 	},
 	methods: {
-		getColumnWrapperComponent(column) {
-			return column.sortable ? BaseButton : "div";
-		},
 		invertSortOrder(currentOrder) {
 			return currentOrder === "desc" ? "asc" : "desc";
 		},
