@@ -30,6 +30,7 @@
 				<v-btn
 					class="item"
 					icon
+					color="secondary darken-1"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-test-id="fullscreen-btn"
