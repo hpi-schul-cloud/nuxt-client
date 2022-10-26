@@ -7,6 +7,10 @@
 		>
 			<v-btn
 				icon
+				height="60"
+				width="60"
+				color="secondary darken-1"
+				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
@@ -222,7 +226,6 @@ export default defineComponent({
 		.menu-button {
 			z-index: var(--layer-popover);
 			display: flex;
-			margin: var(--space-xs);
 			transition: transform 0.35s;
 
 			.menu-icon {
