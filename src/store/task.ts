@@ -14,7 +14,7 @@ import { BusinessError } from "./types/commons";
 	namespaced: true,
 	stateFactory: true,
 })
-export default class RoomModule extends VuexModule {
+export default class TaskModule extends VuexModule {
 	taskData: Object = {
 		taskId: "",
 		courseId: "",
@@ -43,8 +43,17 @@ export default class RoomModule extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const { data } = await this.taskApi.taskControllerCreate(params);
+			const createActionResponse = await this.taskApi.taskControllerCreate({
+				courseId: params.courseId,
+			});
+			console.log(typeof createActionResponse.data.id);
+			const { data } = await this.taskApi.taskControllerUpdate(
+				createActionResponse.data.id,
+				params as TaskUpdateParams
+			);
+
 			this.setTaskData(data);
+			console.log(params, data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);

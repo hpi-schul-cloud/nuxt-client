@@ -1981,6 +1981,12 @@ export interface TaskResponse {
     description?: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    lessonHidden: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof TaskResponse
      */
@@ -2071,6 +2077,24 @@ export interface TaskUpdateParams {
      * @memberof TaskUpdateParams
      */
     name: string;
+    /**
+     * The description of the task
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    description?: string;
+    /**
+     * Date until the task is published
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    availableDate?: string;
+    /**
+     * Date until the task submissions can be sent
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    dueDate?: string;
 }
 /**
  * 
