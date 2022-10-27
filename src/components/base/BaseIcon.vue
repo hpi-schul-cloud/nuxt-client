@@ -15,7 +15,6 @@
 			:style="{ color: fillColor }"
 		></i>
 		<v-icon role="img" v-else v-text="'$' + icon"></v-icon>
-		{{ i18nKey | translate }}
 	</span>
 </template>
 
