@@ -559,23 +559,4 @@ describe("@pages/RoomOverview", () => {
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});
-
-	it("should open the import dialog, if import query-parameter is provided", async () => {
-		const wrapper = getWrapper(
-			"desktop",
-			false,
-			{},
-			{
-				mocks: {
-					...defaultMocks,
-					$route: {
-						path: "/rooms-overview/",
-						query: { import: "anImportToken" },
-					},
-				},
-			}
-		);
-		await flushPromises();
-		expect(wrapper.vm.isImportMode).toBe(true);
-	});
 });
