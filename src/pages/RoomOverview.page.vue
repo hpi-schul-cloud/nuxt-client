@@ -358,6 +358,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .rooms-container {
 	max-width: 600px;
 	margin: 0 auto;

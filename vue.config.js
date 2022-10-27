@@ -10,6 +10,7 @@ module.exports = defineConfig({
 	configureWebpack: {
 		resolve: {
 			alias: {
+				// NUXT_REMOVE change the paths so they align with @/<name>
 				"@assets": path.resolve(__dirname, `src/assets`),
 				"@styles": path.resolve(
 					__dirname,
