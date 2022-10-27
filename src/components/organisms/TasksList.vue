@@ -83,16 +83,16 @@ export default {
 			required: false,
 		},
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		currentTaskStatus() {
-			return this.taskModule.getStatus;
+			return this.tasksModule.getStatus;
 		},
 		finishedTasksStatus() {
-			return this.finishedTaskModule.getStatus;
+			return this.finishedTasksModule.getStatus;
 		},
 		finishedTasksIsInitialized() {
-			return this.finishedTaskModule.getIsInitialized;
+			return this.finishedTasksModule.getIsInitialized;
 		},
 		status: function () {
 			return this.type === "current"
@@ -120,7 +120,7 @@ export default {
 	methods: {
 		loadMore(entries) {
 			if (entries[0].isIntersecting && this.status !== "pending") {
-				this.finishedTaskModule.fetchFinishedTasks();
+				this.finishedTasksModule.fetchFinishedTasks();
 			}
 		},
 		isLastTaskItem: function (index) {

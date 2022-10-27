@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { taskModule } from "@/store";
+import { tasksModule } from "@/store";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Status, Pagination } from "./types/commons";
@@ -11,7 +11,7 @@ import { envConfigModule } from "@/store";
 	namespaced: true,
 	stateFactory: true,
 })
-export default class FinishedTaskModule extends VuexModule {
+export default class FinishedTasksModule extends VuexModule {
 	tasks: Task[] = [];
 
 	pagination: Pagination = {
@@ -107,7 +107,7 @@ export default class FinishedTaskModule extends VuexModule {
 			await this.taskApi.taskControllerRestore(taskId);
 
 			await this.refetchTasks();
-			await taskModule.fetchAllTasks();
+			await tasksModule.fetchAllTasks();
 
 			this.setStatus("completed");
 		} catch (error) {

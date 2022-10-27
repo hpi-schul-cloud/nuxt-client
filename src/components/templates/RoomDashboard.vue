@@ -168,7 +168,7 @@ import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
-import { copyModule, roomModule, taskModule } from "@/store";
+import { copyModule, roomModule, tasksModule } from "@/store";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
@@ -304,7 +304,7 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await taskModule.deleteTask(this.itemDelete.itemData.id);
+				await tasksModule.deleteTask(this.itemDelete.itemData.id);
 				await roomModule.fetchContent(this.roomData.roomId);
 				return Promise.resolve();
 			}
@@ -331,7 +331,7 @@ export default {
 			});
 		},
 		async deleteTask(itemId) {
-			await taskModule.deleteTask(itemId);
+			await tasksModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
 		},
 	},

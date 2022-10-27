@@ -106,31 +106,31 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["taskModule", "finishedTaskModule", "copyModule"],
+	inject: ["tasksModule", "finishedTasksModule", "copyModule"],
 	computed: {
 		openTasks() {
-			return this.taskModule.getOpenTasksForTeacher;
+			return this.tasksModule.getOpenTasksForTeacher;
 		},
 		draftTasks() {
-			return this.taskModule.getDraftTasksForTeacher;
+			return this.tasksModule.getDraftTasksForTeacher;
 		},
 		status() {
-			return this.taskModule.getStatus;
+			return this.tasksModule.getStatus;
 		},
 		hasTasks() {
-			return this.taskModule.hasTasks;
+			return this.tasksModule.hasTasks;
 		},
 		openTasksForTeacherIsEmpty() {
-			return this.taskModule.openTasksForTeacherIsEmpty;
+			return this.tasksModule.openTasksForTeacherIsEmpty;
 		},
 		draftsForTeacherIsEmpty() {
-			return this.taskModule.draftsForTeacherIsEmpty;
+			return this.tasksModule.draftsForTeacherIsEmpty;
 		},
 		finishedTasksIsEmpty() {
-			return this.finishedTaskModule.tasksIsEmpty;
+			return this.finishedTasksModule.tasksIsEmpty;
 		},
 		finishedTasks() {
-			return this.finishedTaskModule.getTasks;
+			return this.finishedTasksModule.getTasks;
 		},
 		overdueTasks() {
 			return this.openTasks.overdue;
@@ -143,10 +143,10 @@ export default defineComponent({
 		},
 		tab: {
 			get() {
-				return this.taskModule.getActiveTab;
+				return this.tasksModule.getActiveTab;
 			},
 			set(newTab) {
-				this.taskModule.setActiveTab(newTab);
+				this.tasksModule.setActiveTab(newTab);
 			},
 		},
 	},
@@ -157,8 +157,8 @@ export default defineComponent({
 			);
 			await this.copy(payload, loadingText);
 
-			this.taskModule.setActiveTab("drafts");
-			await this.taskModule.fetchAllTasks();
+			this.tasksModule.setActiveTab("drafts");
+			await this.tasksModule.fetchAllTasks();
 		},
 	},
 });

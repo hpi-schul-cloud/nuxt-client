@@ -6,7 +6,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
@@ -15,7 +15,8 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
+import TaskModule from "@/store/task";
 import ShareCourseModule from "@/store/share-course";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -28,7 +29,7 @@ let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
-let finishedTaskModule: FinishedTaskModule;
+let finishedTasksModule: FinishedTasksModule;
 let importUsersModule: ImportUsersModule;
 let loadingStateModule: LoadingStateModule;
 let newsModule: NewsModule;
@@ -37,6 +38,7 @@ let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let schoolsModule: SchoolsModule;
 let statusAlertsModule: StatusAlertsModule;
+let tasksModule: TasksModule;
 let taskModule: TaskModule;
 let shareCourseModule: ShareCourseModule;
 
@@ -48,13 +50,14 @@ function initializeStores(store: Store<any>): void {
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
-	finishedTaskModule = getModule(FinishedTaskModule, store);
+	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
+	tasksModule = getModule(TasksModule, store);
 	taskModule = getModule(TaskModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
@@ -71,13 +74,14 @@ export {
 	envConfigModule,
 	filePathsModule,
 	filesPOCModule,
-	finishedTaskModule,
+	finishedTasksModule,
 	importUsersModule,
 	newsModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
 	statusAlertsModule,
+	tasksModule,
 	taskModule,
 	notifierModule,
 	copyModule,

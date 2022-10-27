@@ -97,31 +97,31 @@ export default {
 			required: true,
 		},
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		status() {
-			return this.taskModule.getStatus;
+			return this.tasksModule.getStatus;
 		},
 		openTasks() {
-			return this.taskModule.getOpenTasksForStudent;
+			return this.tasksModule.getOpenTasksForStudent;
 		},
 		completedTasks() {
-			return this.taskModule.getCompletedTasksForStudent;
+			return this.tasksModule.getCompletedTasksForStudent;
 		},
 		openTasksForStudentIsEmpty() {
-			return this.taskModule.openTasksForStudentIsEmpty;
+			return this.tasksModule.openTasksForStudentIsEmpty;
 		},
 		completedTasksForStudentIsEmpty() {
-			return this.taskModule.completedTasksForStudentIsEmpty;
+			return this.tasksModule.completedTasksForStudentIsEmpty;
 		},
 		hasTasks() {
-			return this.taskModule.hasTasks;
+			return this.tasksModule.hasTasks;
 		},
 		finishedTasksIsEmpty() {
-			return this.finishedTaskModule.tasksIsEmpty;
+			return this.finishedTasksModule.tasksIsEmpty;
 		},
 		finishedTasks() {
-			return this.finishedTaskModule.getTasks;
+			return this.finishedTasksModule.getTasks;
 		},
 		overdueTasks() {
 			return this.openTasks.overdue;
@@ -140,10 +140,10 @@ export default {
 		},
 		tab: {
 			get() {
-				return this.taskModule.getActiveTab;
+				return this.tasksModule.getActiveTab;
 			},
 			set(newTab) {
-				this.taskModule.setActiveTab(newTab);
+				this.tasksModule.setActiveTab(newTab);
 			},
 		},
 	},

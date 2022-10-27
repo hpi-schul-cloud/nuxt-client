@@ -1,8 +1,8 @@
 import CopyModule from "@/store/copy";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -19,8 +19,8 @@ const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 const tabRoutes = ["current", "drafts", "finished"];
 
 describe("@components/templates/TasksDashboardTeacher", () => {
-	let taskModuleMock: TaskModule;
-	let finishedTaskModuleMock: FinishedTaskModule;
+	let tasksModuleMock: TasksModule;
+	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
@@ -33,8 +33,8 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 				i18n: true,
 			}),
 			setup() {
-				provide("taskModule", taskModuleMock);
-				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("tasksModule", tasksModuleMock);
+				provide("finishedTasksModule", finishedTasksModuleMock);
 				provide("copyModule", copyModuleMock);
 				provide("loadingStateModule", loadingStateModuleMock);
 				provide("notifierModule", notifierModuleMock);
@@ -46,7 +46,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		return wrapper;
 	};
 
-	const taskModuleGetters: Partial<TaskModule> = {
+	const tasksModuleGetters: Partial<TasksModule> = {
 		getStatus: "completed",
 		hasTasks: true,
 		openTasksForTeacherIsEmpty: false,
@@ -67,8 +67,8 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	};
 
 	beforeEach(() => {
-		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
-		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
+		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
@@ -98,8 +98,8 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 	});
 
 	it("Should render empty state", () => {
-		taskModuleMock = createModuleMocks(TaskModule, {
-			...taskModuleGetters,
+		tasksModuleMock = createModuleMocks(TasksModule, {
+			...tasksModuleGetters,
 			getActiveTab: tabRoutes[1],
 			draftsForTeacherIsEmpty: true,
 		});
@@ -125,7 +125,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 
 		await wrapper.setData({ tab: tabRoutes[1] });
 
-		expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
+		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 
 	it("Should handle copy-task event", async () => {

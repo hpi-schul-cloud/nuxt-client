@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { finishedTaskModule } from "@/store";
+import { finishedTasksModule } from "@/store";
 import { TaskFilter } from "./task.filter";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
@@ -19,7 +19,7 @@ import {
 	namespaced: true,
 	stateFactory: true,
 })
-export default class TaskModule extends VuexModule {
+export default class TasksModule extends VuexModule {
 	tasks: Task[] = [];
 
 	courseFilter: string[] = [];
@@ -75,8 +75,8 @@ export default class TaskModule extends VuexModule {
 			await this.taskApi.taskControllerFinish(taskId);
 
 			await this.fetchAllTasks();
-			if (finishedTaskModule.isInitialized) {
-				await finishedTaskModule.refetchTasks();
+			if (finishedTasksModule.isInitialized) {
+				await finishedTasksModule.refetchTasks();
 			}
 
 			this.setStatus("completed");
@@ -94,8 +94,8 @@ export default class TaskModule extends VuexModule {
 			await this.taskApi.taskControllerDelete(taskId);
 
 			await this.fetchAllTasks();
-			if (finishedTaskModule.isInitialized) {
-				await finishedTaskModule.refetchTasks();
+			if (finishedTasksModule.isInitialized) {
+				await finishedTasksModule.refetchTasks();
 			}
 
 			this.setStatus("completed");
