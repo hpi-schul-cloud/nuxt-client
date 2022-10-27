@@ -229,10 +229,13 @@ export default {
 					border-bottom: none;
 
 					.icon {
-						width: 25px;
-						margin-right: 6px;
-						font-size: 20px;
+						margin-right: 18px;
 						text-align: center;
+					}
+
+					.icon svg {
+						width: 25px;
+						font-size: 20px;
 					}
 
 					.side-bar-title {
