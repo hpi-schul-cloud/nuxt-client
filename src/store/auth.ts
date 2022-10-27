@@ -84,8 +84,6 @@ export default class AuthModule extends VuexModule {
 
 	status: Status = "";
 
-	_userApi?: UserApiInterface;
-
 	@Mutation
 	setUser(user: User): void {
 		this.user = user;
