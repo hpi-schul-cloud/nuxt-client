@@ -51,6 +51,7 @@
 		"vue": "^2.7.0",
 		"vue-filter-ui": "^0.8.0",
 		"vue-i18n": "^8.26.3",
+		"vue-mq": "^1.0.1",
 		"vue-router": "^3.6.5",
 		"vuedraggable": "^2.24.3",
 		"vuelidate": "^0.7.7",

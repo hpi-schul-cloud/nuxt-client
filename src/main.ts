@@ -29,12 +29,22 @@ import {
 Vue.config.productionTip = false;
 
 // NUXT_REMOVAL set this based on the tenant theme
-// import Theme from "@/theme/config";
-// Vue.prototype.$theme = Theme;
-Vue.prototype.$theme = {
-	name: "dBildungscloud",
-	short_name: "dbc",
-};
+import themeConfig from "@/themes/default/config";
+Vue.prototype.$theme = themeConfig;
+
+// NUXT_REMOVAL try to solve without vue-mq dependency
+// @ts-ignore
+import VueMq from "vue-mq";
+Vue.use(VueMq, {
+	breakpoints: {
+		mobile: 750,
+		tabletPortrait: 770,
+		tablet: 991,
+		desktop: 1200,
+		large: Infinity,
+	},
+	defaultBreakpoint: "mobile",
+});
 
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
@@ -47,6 +57,7 @@ new Vue({
 	store,
 	vuetify,
 	i18n,
+	// NUXT_REMOVAL get rid of store DI
 	provide: {
 		accountsModule,
 		authModule,
