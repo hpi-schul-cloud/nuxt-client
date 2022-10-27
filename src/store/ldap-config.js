@@ -67,7 +67,7 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			commit("setStatus", "pending");
-			const { data } = await this.$axios.get(`/v1/ldap-config/${id}`);
+			const { data } = (await this.$axios.get(`/v1/ldap-config/${id}`)).data;
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
@@ -77,11 +77,9 @@ export const actions = {
 	async verifyData({ commit }, payload) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = "/v1/ldap-config?verifyOnly=true";
 			const data = formatClientData(payload);
-			const verification = await this.$axios.post(
-				"/v1/ldap-config?verifyOnly=true",
-				data
-			);
+			const verification = (await this.$axios.post(requestUrl, data)).data;
 			commit("setTemp", payload);
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
@@ -92,11 +90,9 @@ export const actions = {
 	async verifyExisting({ commit }, { systemId, systemData }) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=true`;
 			const data = formatClientData(systemData);
-			const verification = await this.$axios.patch(
-				`/v1/ldap-config/${systemId}?verifyOnly=true`,
-				data
-			);
+			const verification = (await this.$axios.patch(requestUrl, data)).data;
 			if (!systemData.searchUserPassword) {
 				systemData.searchUserPassword = unchangedPassword;
 			}
@@ -110,11 +106,9 @@ export const actions = {
 	async submitData({ commit }, payload) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = "/v1/ldap-config?verifyOnly=false&activate=true";
 			const data = formatClientData(payload);
-			const submission = await this.$axios.post(
-				"/v1/ldap-config?verifyOnly=false&activate=true",
-				data
-			);
+			const submission = (await this.$axios.post(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
@@ -124,11 +118,9 @@ export const actions = {
 	async patchData({ commit }, { systemData, systemId }) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`;
 			const data = formatClientData(systemData);
-			const submission = await this.$axios.patch(
-				`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`,
-				data
-			);
+			const submission = (await this.$axios.patch(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {

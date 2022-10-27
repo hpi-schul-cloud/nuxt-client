@@ -111,7 +111,6 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["i18n"],
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
