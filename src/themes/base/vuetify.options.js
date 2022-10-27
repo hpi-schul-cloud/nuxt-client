@@ -1,16 +1,17 @@
-import hourglassBottomBlack from "@assets/icons/hourglass-bottom-black.vue";
-import hourglassDisabled from "@assets/icons/hourglass-disabled.vue";
-import taskOpenFilled from "@assets/icons/task-open-filled.vue";
-import taskDone from "@assets/icons/task-done.vue";
-import taskDoneFilled from "@assets/icons/task-done-filled.vue";
-import taskMissed from "@assets/icons/task-missed.vue";
-import taskMissedFilled from "@assets/icons/task-missed-filled.vue";
-import taskDraft from "@assets/icons/task-draft.vue";
-import taskFinished from "@assets/icons/task-finished.vue";
-import langIconDe from "@assets/icons/lang-icon-de.vue";
-import langIconEn from "@assets/icons/lang-icon-en.vue";
-import langIconEs from "@assets/icons/lang-icon-es.vue";
-import langIconUa from "@assets/icons/lang-icon-ua.vue";
+import hourglassBottomBlack from "@/assets/icons/hourglass-bottom-black.vue";
+import hourglassDisabled from "@/assets/icons/hourglass-disabled.vue";
+import tasks from "@/assets/icons/tasks.vue";
+import taskOpenFilled from "@/assets/icons/task-open-filled.vue";
+import taskDone from "@/assets/icons/task-done.vue";
+import taskDoneFilled from "@/assets/icons/task-done-filled.vue";
+import taskMissed from "@/assets/icons/task-missed.vue";
+import taskMissedFilled from "@/assets/icons/task-missed-filled.vue";
+import taskDraft from "@/assets/icons/task-draft.vue";
+import taskFinished from "@/assets/icons/task-finished.vue";
+import langIconDe from "@/assets/icons/lang-icon-de.vue";
+import langIconEn from "@/assets/icons/lang-icon-en.vue";
+import langIconEs from "@/assets/icons/lang-icon-es.vue";
+import langIconUa from "@/assets/icons/lang-icon-ua.vue";
 import colors from "vuetify/lib/util/colors";
 
 export default {
@@ -70,6 +71,9 @@ export default {
 			},
 			hourglassDisabled: {
 				component: hourglassDisabled,
+			},
+			tasks: {
+				component: tasks,
 			},
 			taskOpenFilled: {
 				component: taskOpenFilled,
