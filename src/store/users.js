@@ -127,14 +127,16 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const teacher = (await this.$axios.post(teacherEndpoint, teacherData)).data;
+			const teacher = (await this.$axios.post(teacherEndpoint, teacherData))
+				.data;
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
 			const { successMessage, ...studentData } = payload;
 			try {
-				const student = (await this.$axios.post(studentEndpoint, studentData)).data;
+				const student = (await this.$axios.post(studentEndpoint, studentData))
+					.data;
 				this.$toast.success(successMessage);
 				this.$router.push({
 					path: `/administration/students`,
@@ -150,10 +152,13 @@ const module = mergeDeep(base, {
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const registrationQrEndpoint = "/v1/users/qrRegistrationLink";
-			const links = (await this.$axios.post(registrationQrEndpoint, payload)).data;
+			const links = (await this.$axios.post(registrationQrEndpoint, payload))
+				.data;
 			commit("setQrLinks", links);
 		},
 	},
 });
 
 export const { state, getters, mutations, actions } = module;
+
+export default module;

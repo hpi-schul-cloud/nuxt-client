@@ -12,6 +12,7 @@ export default function (endpoint) {
 		};
 	};
 	return {
+		namespaced: true,
 		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
@@ -56,10 +57,7 @@ export default function (endpoint) {
 			async patch({ commit }, payload = []) {
 				commit("setStatus", "pending");
 				const data = (
-					await this.$axios.patch(
-						baseUrl + "/" + payload[0],
-						payload[1]
-					)
+					await this.$axios.patch(baseUrl + "/" + payload[0], payload[1])
 				).data;
 				commit("set", {
 					items: [data],
@@ -68,10 +66,9 @@ export default function (endpoint) {
 			},
 			async update({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const data = (await this.$axios.put(
-					baseUrl + "/" + payload[0],
-					payload[1]
-				)).data;
+				const data = (
+					await this.$axios.put(baseUrl + "/" + payload[0], payload[1])
+				).data;
 				commit("set", {
 					items: [data],
 				});

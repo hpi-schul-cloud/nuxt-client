@@ -111,3 +111,11 @@ export const state = () => {
 		registerError: {},
 	};
 };
+
+export const bulkConsent = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
+};

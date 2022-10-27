@@ -76,3 +76,11 @@ export const state = () => {
 			window.localStorage.getItem("mx_user_id"),
 	};
 };
+
+export const messenger = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
+};

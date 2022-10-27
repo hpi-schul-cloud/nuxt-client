@@ -185,3 +185,11 @@ export const state = () => {
 		status: null,
 	};
 };
+
+export const ldapConfig = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
+};

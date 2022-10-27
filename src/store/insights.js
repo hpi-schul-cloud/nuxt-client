@@ -161,3 +161,11 @@ export const state = () => {
 		avgInteractTime: {},
 	};
 };
+
+export const insights = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
+};
