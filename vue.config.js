@@ -54,6 +54,7 @@ module.exports = defineConfig({
 	},
 
 	devServer: {
+		port: 4000,
 		proxy: {
 			"^/api": {
 				target: "http://localhost:3030",
