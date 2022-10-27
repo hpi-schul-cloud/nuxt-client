@@ -140,7 +140,6 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
-	inject: ["copyModule"],
 	layout: "defaultVuetify",
 	data() {
 		return {
