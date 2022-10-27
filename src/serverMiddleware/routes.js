@@ -16,18 +16,19 @@ const routes = [
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
 	`^/administration/migration`,
-	`^/tasks/?$`,
-	`^/login-instances/?`,
 	`^/error/`,
 	`^/imprint/?`,
-	`^/termsofuse/?`,
 	`^/insights`,
+	`^/login-instances/?`,
 	`^/news/new`,
 	`^/news/${mongoId}/edit`,
+	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
-	`^/poc-files/?$`,
+	`^/tasks/?$`,
+	`^/tasks/new/?$`,
+	`^/termsofuse/?`,
 ];
 
 const uuid =

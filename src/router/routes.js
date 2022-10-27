@@ -140,6 +140,11 @@ export const routes = [
 		component: () => interopDefault(import("../pages/TaskOverview.page.vue")),
 		name: "tasks",
 	},
+	{
+		path: "/tasks/new",
+		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
+		name: "task-new",
+	},
 	// deprecated?
 	{
 		path: "/termsofuse",
