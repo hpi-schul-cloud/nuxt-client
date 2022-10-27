@@ -32,6 +32,9 @@ export default defineComponent({
 
 		return { breadcrumbs, title: "", description: "" };
 	},
+	mounted() {
+		// check for permission here or in store?
+	},
 	head() {
 		return {
 			title: this.$t("common.words.tasks"),
