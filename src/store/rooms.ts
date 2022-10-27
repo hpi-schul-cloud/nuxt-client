@@ -1,20 +1,20 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	DashboardApiFactory,
-	CoursesApiFactory,
 	CourseMetadataResponse,
+	CoursesApiFactory,
+	DashboardApiFactory,
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
+import { $axios } from "../utils/api";
 
-import {
-	DroppedObject,
-	RoomsData,
-	AllItems,
-	SharingCourseObject,
-} from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
 import { BusinessError } from "./types/commons";
+import {
+	AllItems,
+	DroppedObject,
+	RoomsData,
+	SharingCourseObject,
+} from "./types/rooms";
 
 const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
 const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
@@ -295,9 +295,11 @@ export default class RoomsModule extends VuexModule {
 			shareToken: courseCode,
 		};
 		try {
-			const courseName = await $axios.get("/v1/courses-share", {
-				params,
-			});
+			const courseName = (
+				await $axios.get("/v1/courses-share", {
+					params,
+				})
+			).data;
 			this.setSharedCourseData({
 				code: courseCode,
 				// @ts-ignore
@@ -320,10 +322,12 @@ export default class RoomsModule extends VuexModule {
 	): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const importedCourseResponse = await $axios.post("/v1/courses-share", {
-				shareToken: courseData.code,
-				courseName: courseData.courseName,
-			});
+			const importedCourseResponse = (
+				await $axios.post("/v1/courses-share", {
+					shareToken: courseData.code,
+					courseName: courseData.courseName,
+				})
+			).data;
 			// @ts-ignore
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
 		} catch (error: any) {

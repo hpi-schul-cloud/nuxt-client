@@ -1,8 +1,8 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@/utils/api";
+import { UserImportApiFactory } from "@/serverApi/v3";
 import { authModule } from "@/store";
-import { Year, FederalState, School } from "./types/schools";
-import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { FederalState, School, Year } from "./types/schools";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -36,14 +36,14 @@ function transformSchoolClientToServer(school: any): School {
 	return { ...school, features: featureArray };
 }
 
+const importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
+
 @Module({
 	name: "schoolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class SchoolsModule extends VuexModule {
-	private _importUserApi?: UserImportApiInterface;
-
 	school: School = {
 		_id: "",
 		name: "",
@@ -177,9 +177,9 @@ export default class SchoolsModule extends VuexModule {
 
 		if (authModule.getUser?.schoolId) {
 			try {
-				const school = await $axios.get(
-					`/v1/schools/${authModule.getUser?.schoolId} `
-				);
+				const school = (
+					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
+				).data;
 
 				this.setSchool(transformSchoolServerToClient(school));
 
@@ -196,12 +196,12 @@ export default class SchoolsModule extends VuexModule {
 	async fetchFederalState(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await $axios.get(
-				`/v1/federalStates/${this.school.federalState}`
-			);
+			const data = (
+				await $axios.get(`/v1/federalStates/${this.school.federalState}`)
+			).data;
 
 			// @ts-ignore
-			this.setFederalState(response);
+			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -214,9 +214,9 @@ export default class SchoolsModule extends VuexModule {
 	async fetchCurrentYear(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const currentYear = await $axios.get(
-				`/v1/years/${this.school.currentYear}`
-			);
+			const currentYear = (
+				await $axios.get(`/v1/years/${this.school.currentYear}`)
+			).data;
 			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
@@ -253,7 +253,8 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload);
 		try {
-			const data = await $axios.patch(`/v1/schools/${school.id}`, school);
+			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
+				.data;
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
@@ -290,7 +291,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 		this.setLoading(true);
 		try {
-			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
+			await importUserApi.importUserControllerEndSchoolInMaintenance();
 			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
 		} catch (error: any) {
@@ -306,7 +307,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 		this.setLoading(true);
 		try {
-			await this.importUserApi.importUserControllerStartSchoolInUserMigration();
+			await importUserApi.importUserControllerStartSchoolInUserMigration();
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,
@@ -317,12 +318,5 @@ export default class SchoolsModule extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 		}
-	}
-
-	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
 	}
 }

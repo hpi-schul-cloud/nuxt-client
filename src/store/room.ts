@@ -5,15 +5,16 @@ import {
 	BoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
-	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
-	RoomsApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
+
+const roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+const lessonApi = LessonApiFactory(undefined, "/v3", $axios);
 
 @Module({
 	name: "roomModule",
@@ -44,27 +45,11 @@ export default class RoomModule extends VuexModule {
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
 
-	private _roomsApi?: RoomsApiInterface;
-	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
-	}
-
-	private _lessonApi?: LessonApiInterface;
-	private get lessonApi(): LessonApiInterface {
-		if (!this._lessonApi) {
-			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
-		}
-		return this._lessonApi;
-	}
-
 	@Action
 	async fetchContent(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
+			const { data } = await roomsApi.roomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -83,7 +68,7 @@ export default class RoomModule extends VuexModule {
 			visibility: payload.visibility,
 		};
 		try {
-			await this.roomsApi.roomsControllerPatchElementVisibility(
+			await roomsApi.roomsControllerPatchElementVisibility(
 				this.roomData.roomId,
 				payload.elementId,
 				visibilityParam
@@ -101,7 +86,7 @@ export default class RoomModule extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.roomsApi.roomsControllerPatchOrderingOfElements(
+			await roomsApi.roomsControllerPatchOrderingOfElements(
 				this.roomData.roomId,
 				payload
 			);
@@ -120,7 +105,8 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async fetchSharedLesson(lessonId: string): Promise<void> {
 		try {
-			const lessonShareResult = await $axios.get(`/v1/lessons/${lessonId}`);
+			const lessonShareResult = (await $axios.get(`/v1/lessons/${lessonId}`))
+				.data;
 			// @ts-ignore
 			if (!lessonShareResult.shareToken) {
 				// @ts-ignore
@@ -164,11 +150,13 @@ export default class RoomModule extends VuexModule {
 				return;
 			}
 
-			const copiedLesson = await $axios.post("/v1/lessons/copy", {
-				lessonId: lesson.data[0]._id,
-				newCourseId: this.roomData.roomId,
-				shareToken,
-			});
+			const copiedLesson = (
+				await $axios.post("/v1/lessons/copy", {
+					lessonId: lesson.data[0]._id,
+					newCourseId: this.roomData.roomId,
+					shareToken,
+				})
+			).data;
 
 			if (!copiedLesson) {
 				this.setBusinessError({
@@ -191,7 +179,7 @@ export default class RoomModule extends VuexModule {
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			await this.lessonApi.lessonControllerDelete(lessonId);
+			await lessonApi.lessonControllerDelete(lessonId);
 
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
@@ -207,9 +195,11 @@ export default class RoomModule extends VuexModule {
 	async createCourseInvitation(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const invitationData = await $axios.post("/v1/link", {
-				target: `${window.location.origin}/courses/${courseId}/addStudent`,
-			});
+			const invitationData = (
+				await $axios.post("/v1/link", {
+					target: `${window.location.origin}/courses/${courseId}/addStudent`,
+				})
+			).data;
 			// @ts-ignore
 			if (!invitationData._id) {
 				this.setBusinessError({
@@ -262,16 +252,16 @@ export default class RoomModule extends VuexModule {
 	async createCourseShareToken(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const result = await $axios.get(`/v1/courses-share/${courseId}`);
+			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
 			// @ts-ignore
-			if (!result.shareToken) {
+			if (!data.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
 			// @ts-ignore
-			this.setCourseShareToken(result.shareToken);
+			this.setCourseShareToken(data.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -286,7 +276,8 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		const userId = authModule.getUser?.id;
 		try {
-			const homework = await $axios.get(`/v1/homework/${payload.itemId}`);
+			const requestUrl = `/v1/homework/${payload.itemId}`;
+			const homework = (await $axios.get(requestUrl)).data;
 			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({
@@ -306,9 +297,11 @@ export default class RoomModule extends VuexModule {
 				archived = homework?.archived.filter((item: string) => item !== userId);
 			}
 
-			const patchedData = await $axios.patch(`/v1/homework/${payload.itemId}`, {
-				archived,
-			});
+			const patchedData = (
+				await $axios.patch(`/v1/homework/${payload.itemId}`, {
+					archived,
+				})
+			).data;
 			// @ts-ignore
 			if (!patchedData._id) {
 				this.setBusinessError({
@@ -333,9 +326,8 @@ export default class RoomModule extends VuexModule {
 		courseId: string;
 		userId: string;
 	}): Promise<void> {
-		const ret_val = await $axios.get(
-			`/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`
-		);
+		const requestUrl = `/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`;
+		const ret_val = (await $axios.get(requestUrl)).data;
 		// @ts-ignore
 		this.setPermissionData(ret_val[payload.userId]);
 	}
