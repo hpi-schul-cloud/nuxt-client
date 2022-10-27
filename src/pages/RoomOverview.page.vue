@@ -130,6 +130,7 @@ import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import { mdiMagnify } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default {
 	components: {
 		RoomWrapper,
