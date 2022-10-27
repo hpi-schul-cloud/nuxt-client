@@ -1,24 +1,22 @@
 <template>
-	<component
-		:is="svgComponent"
-		v-if="source !== 'fa' && svgComponent"
-		ref="icon"
-		:class="['icon', source]"
-		v-bind="$attrs"
-		:fill="fill"
-		v-on="$listeners"
-	/>
-	<i
-		v-else-if="source === 'fa'"
-		:class="['icon', 'fa', `fa-${icon}`]"
-		:style="{ color: fillColor }"
-	></i>
-	<!-- eslint-disable vue/no-v-html -->
-	<span
-		v-else
-		class="icon"
-		v-html="require(`!!svg-inline-loader!@assets/icons/${icon}.svg`)"
-	></span>
+	<span>
+		<component
+			:is="svgComponent"
+			v-if="source !== 'fa' && svgComponent"
+			ref="icon"
+			:class="['icon', source]"
+			v-bind="$attrs"
+			:fill="fill"
+			v-on="$listeners"
+		/>
+		<i
+			v-else-if="source === 'fa'"
+			:class="['icon', 'fa', `fa-${icon}`]"
+			:style="{ color: fillColor }"
+		></i>
+		<v-icon role="img" v-else v-text="'$' + icon"></v-icon>
+		{{ i18nKey | translate }}
+	</span>
 </template>
 
 <script>
