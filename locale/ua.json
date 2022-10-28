@@ -294,7 +294,8 @@
 	"global.sidebar.calendar": "календар",
 	"global.sidebar.classes": "Класи",
 	"global.sidebar.courses": "Курси",
-	"global.sidebar.files": "Мої файли",
+	"global.sidebar.files-old": "Мої файли",
+	"global.sidebar.files": "файли",
 	"global.sidebar.filesPersonal": "особисті файли",
 	"global.sidebar.filesShared": "спільні файли",
 	"global.sidebar.helpArea": "Розділ довідки",
@@ -837,5 +838,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Фільтрувати за повним прізвищем...",
 	"utils.adminFilter.placeholder.complete.name": "Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
-	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020"
+	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"pages.files.title": "файли"
 }
