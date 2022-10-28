@@ -1,6 +1,7 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const legacyRoutes = [
+	"^/$",
 	"^/login",
 	"^/logout",
 	"^/styles",
