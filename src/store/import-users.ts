@@ -1,20 +1,21 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@/utils/api";
 import {
-	UserImportApiFactory,
 	ImportUserListResponse,
-	UserMatchListResponse,
 	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum,
-	UserImportApiInterface,
+	UserImportApiFactory,
+	UserMatchListResponse,
 } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {
 	Admin = "admin",
 	Auto = "auto",
 	None = "none",
 }
+
+const importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
 
 // @ts-ignore
 @Module({
@@ -59,8 +60,6 @@ export default class ImportUsersModule extends VuexModule {
 	private totalUnmatched = 0;
 
 	private businessError: BusinessError | null = null;
-
-	private _importUserApi?: UserImportApiInterface;
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -200,7 +199,7 @@ export default class ImportUsersModule extends VuexModule {
 					: undefined;
 
 			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
+				await importUserApi.importUserControllerFindAllImportUsers(
 					this.firstName || undefined,
 					this.lastName || undefined,
 					this.loginName || undefined,
@@ -226,7 +225,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchAllUsers(): Promise<void> {
 		try {
 			const response =
-				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
+				await importUserApi.importUserControllerFindAllUnmatchedUsers(
 					this.userSearch || undefined,
 					this.usersSkip,
 					this.usersLimit
@@ -246,7 +245,7 @@ export default class ImportUsersModule extends VuexModule {
 		flagged: boolean;
 	}): Promise<ImportUserResponse | void> {
 		try {
-			const response = await this.importUserApi.importUserControllerUpdateFlag(
+			const response = await importUserApi.importUserControllerUpdateFlag(
 				payload.importUserId,
 				{ flagged: payload.flagged }
 			);
@@ -265,7 +264,7 @@ export default class ImportUsersModule extends VuexModule {
 		userId: string;
 	}): Promise<ImportUserResponse | void> {
 		try {
-			const response = await this.importUserApi.importUserControllerSetMatch(
+			const response = await importUserApi.importUserControllerSetMatch(
 				payload.importUserId,
 				{ userId: payload.userId }
 			);
@@ -281,7 +280,7 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
-			const response = await this.importUserApi.importUserControllerRemoveMatch(
+			const response = await importUserApi.importUserControllerRemoveMatch(
 				importUserId
 			);
 			return response.data;
@@ -297,7 +296,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotal(): Promise<void> {
 		try {
 			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
+				await importUserApi.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
 					undefined,
@@ -323,7 +322,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotalMatched(): Promise<void> {
 		try {
 			const response =
-				await this.importUserApi.importUserControllerFindAllImportUsers(
+				await importUserApi.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
 					undefined,
@@ -349,7 +348,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotalUnmatched(): Promise<void> {
 		try {
 			const response =
-				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
+				await importUserApi.importUserControllerFindAllUnmatchedUsers(
 					undefined,
 					0,
 					1
@@ -366,19 +365,12 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async performMigration(): Promise<void> {
 		try {
-			await this.importUserApi.importUserControllerSaveAllUsersMatches();
+			await importUserApi.importUserControllerSaveAllUsersMatches();
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
 			});
 		}
-	}
-
-	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
 	}
 }

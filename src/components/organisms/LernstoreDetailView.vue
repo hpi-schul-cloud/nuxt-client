@@ -164,12 +164,13 @@
 
 <script>
 /* eslint-disable max-lines */
-import AddContentButton from "@/components/organisms/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
+import AddContentButton from "@/components/organisms/AddContentButton";
 
 import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
+import { printDateFromTimestamp } from "@/plugins/datetime";
 import {
 	getAuthor,
 	getDescription,
@@ -179,7 +180,6 @@ import {
 	getTags,
 	isMerlinContent,
 } from "@/utils/helpers";
-import { printDateFromTimestamp } from "@/plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -274,9 +274,8 @@ export default {
 	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
-			const url = await this.$axios.get(
-				`/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
-			);
+			const requestUrl = `/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`;
+			const url = (await this.$axios.get(requestUrl)).data;
 			window.open(url, "_blank");
 		},
 		isNotStudent(roles) {

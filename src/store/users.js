@@ -1,6 +1,6 @@
-import qs from "qs";
 import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
+import qs from "qs";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
@@ -69,7 +69,7 @@ const module = mergeDeep(base, {
 			commit("updatePaginationForQuery", {
 				query,
 				qid,
-				res,
+				res: res.data,
 			});
 			commit("set", {
 				items: res.data,
@@ -88,7 +88,7 @@ const module = mergeDeep(base, {
 			commit("updatePaginationForQuery", {
 				query,
 				qid,
-				res,
+				res: res.data,
 			});
 			commit("set", {
 				items: res.data,
@@ -102,7 +102,7 @@ const module = mergeDeep(base, {
 					return qs.stringify(params);
 				},
 			});
-			commit("setConsentList", res);
+			commit("setConsentList", res.data);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
@@ -127,14 +127,16 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const teacher = await this.$axios.post(teacherEndpoint, teacherData);
+			const teacher = (await this.$axios.post(teacherEndpoint, teacherData))
+				.data;
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
 			const { successMessage, ...studentData } = payload;
 			try {
-				const student = await this.$axios.post(studentEndpoint, studentData);
+				const student = (await this.$axios.post(studentEndpoint, studentData))
+					.data;
 				this.$toast.success(successMessage);
 				this.$router.push({
 					path: `/administration/students`,
@@ -150,10 +152,13 @@ const module = mergeDeep(base, {
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const registrationQrEndpoint = "/v1/users/qrRegistrationLink";
-			const links = await this.$axios.post(registrationQrEndpoint, payload);
+			const links = (await this.$axios.post(registrationQrEndpoint, payload))
+				.data;
 			commit("setQrLinks", links);
 		},
 	},
 });
 
 export const { state, getters, mutations, actions } = module;
+
+export default module;

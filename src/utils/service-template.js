@@ -1,5 +1,5 @@
-import Vue from "vue";
 import qs from "qs";
+import Vue from "vue";
 export default function (endpoint) {
 	const baseUrl = "/v1/" + endpoint;
 	const getDefaultState = () => {
@@ -12,6 +12,7 @@ export default function (endpoint) {
 		};
 	};
 	return {
+		namespaced: true,
 		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
@@ -26,7 +27,7 @@ export default function (endpoint) {
 				commit("updatePaginationForQuery", {
 					query,
 					qid,
-					res,
+					res: res.data,
 				});
 				commit("set", {
 					items: res.data,
@@ -41,37 +42,35 @@ export default function (endpoint) {
 					id = payload;
 				}
 				commit("setStatus", "pending");
-				const res = await this.$axios.get(baseUrl + "/" + id);
-				commit("setCurrent", res);
+				const data = (await this.$axios.get(baseUrl + "/" + id)).data;
+				commit("setCurrent", data);
 				commit("setStatus", "completed");
 			},
 			async create({ commit }, payload = {}) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.post(baseUrl, payload);
+				const data = (await this.$axios.post(baseUrl, payload)).data;
 				commit("set", {
-					items: Array.isArray(res) ? res : [res],
+					items: Array.isArray(data) ? data : [data],
 				});
 				commit("setStatus", "completed");
 			},
 			async patch({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.patch(
-					baseUrl + "/" + payload[0],
-					payload[1]
-				);
+				const data = (
+					await this.$axios.patch(baseUrl + "/" + payload[0], payload[1])
+				).data;
 				commit("set", {
-					items: [res],
+					items: [data],
 				});
 				commit("setStatus", "completed");
 			},
 			async update({ commit }, payload = []) {
 				commit("setStatus", "pending");
-				const res = await this.$axios.put(
-					baseUrl + "/" + payload[0],
-					payload[1]
-				);
+				const data = (
+					await this.$axios.put(baseUrl + "/" + payload[0], payload[1])
+				).data;
 				commit("set", {
-					items: [res],
+					items: [data],
 				});
 				commit("setStatus", "completed");
 			},
@@ -86,7 +85,7 @@ export default function (endpoint) {
 					const payload = idOrPayload;
 					const { query } = payload;
 					commit("setStatus", "pending");
-					res = await this.$axios.delete(baseUrl, {
+					await this.$axios.delete(baseUrl, {
 						params: query,
 						paramsSerializer: (params) => {
 							return qs.stringify(params);

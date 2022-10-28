@@ -1,11 +1,12 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { NewsApiFactory } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
-import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
-import { envConfigModule } from "@/store";
 
 // const newsUri = "/v3/news";
+
+const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 @Module({
 	name: "newsModule",
@@ -36,7 +37,6 @@ export default class NewsModule extends VuexModule {
 		message: "",
 	};
 	status: Status = "";
-	_newsApi?: NewsApiInterface;
 
 	get getNews(): News[] {
 		return this.news;
@@ -55,17 +55,6 @@ export default class NewsModule extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
-	}
-
-	private get newsApi() {
-		if (!this._newsApi) {
-			this._newsApi = NewsApiFactory(
-				undefined,
-				"/v3", //`${envConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._newsApi;
 	}
 
 	@Mutation
@@ -111,7 +100,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const response = await this.newsApi.newsControllerFindAll(
+			const response = await newsApi.newsControllerFindAll(
 				undefined,
 				undefined,
 				false,
@@ -131,7 +120,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const response = await this.newsApi.newsControllerFindOne(newsID);
+			const response = await newsApi.newsControllerFindOne(newsID);
 			this.setCurrent(response.data);
 			this.setStatus("completed");
 		} catch (error) {
@@ -144,7 +133,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await this.newsApi.newsControllerCreate(payload);
+			const res = await newsApi.newsControllerCreate(payload);
 			this.setCreatedNews(res.data);
 			this.setStatus("completed");
 		} catch (error) {
@@ -157,7 +146,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await this.newsApi.newsControllerUpdate(payload.id, payload);
+			const res = await newsApi.newsControllerUpdate(payload.id, payload);
 			this.setCurrent(res.data);
 			this.setStatus("completed");
 		} catch (error) {
@@ -170,7 +159,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await this.newsApi.newsControllerDelete(id);
+			const res = await newsApi.newsControllerDelete(id);
 			this.setCurrent(null);
 			this.setStatus("completed");
 		} catch (error) {

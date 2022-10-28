@@ -1,36 +1,36 @@
 import dayjs from "dayjs";
+import "dayjs/locale/de";
 import calendar from "dayjs/plugin/calendar";
 dayjs.extend(calendar);
-import "dayjs/locale/de";
 dayjs.locale("de");
 
 export const actions = {
 	async getMonthlyUsers({ commit }) {
-		const data = await this.$axios.get("/v1/insights/monthlyUsers");
+		const data = (await this.$axios.get("/v1/insights/monthlyUsers")).data;
 		commit("setMonthlyUsers", data);
 	},
 	async getWeeklyUsers({ commit }) {
-		const data = await this.$axios.get("/v1/insights/weeklyUsers");
+		const data = (await this.$axios.get("/v1/insights/weeklyUsers")).data;
 		commit("setWeeklyUsers", data);
 	},
 	async getDau({ commit }) {
-		const data = await this.$axios.get("/v1/insights/dauOverMau");
+		const data = (await this.$axios.get("/v1/insights/dauOverMau")).data;
 		commit("setDau", data);
 	},
 	async getActivityByRole({ commit }) {
-		const data = await this.$axios.get("/v1/insights/roleActivity");
+		const data = (await this.$axios.get("/v1/insights/roleActivity")).data;
 		commit("setActivityByRole", data);
 	},
 	async getWeeklyActivity({ commit }) {
-		const data = await this.$axios.get("/v1/insights/weeklyActivity");
+		const data = (await this.$axios.get("/v1/insights/weeklyActivity")).data;
 		commit("setWeeklyActivity", data);
 	},
 	async getWeeklyActiveUsers({ commit }) {
-		const data = await this.$axios.get("/v1/insights/weeklyActiveUsers");
+		const data = (await this.$axios.get("/v1/insights/weeklyActiveUsers")).data;
 		commit("setWeeklyActiveUsers", data);
 	},
 	async getUniquePageCount({ commit }) {
-		const data = await this.$axios.get("/v1/insights/uniquePageCount");
+		const data = (await this.$axios.get("/v1/insights/uniquePageCount")).data;
 		commit("setUniquePageCount", data);
 	},
 	async getAvgPageLoaded({ commit }) {
@@ -160,4 +160,12 @@ export const state = () => {
 		avgPageLoaded: {},
 		avgInteractTime: {},
 	};
+};
+
+export const insights = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
 };

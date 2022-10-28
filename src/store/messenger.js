@@ -1,7 +1,7 @@
 export const actions = {
 	async loadMessengerToken({ commit }) {
 		try {
-			const data = await this.$axios.post("/v1/messengerToken");
+			const data = (await this.$axios.post("/v1/messengerToken")).data;
 			commit("setMessengerToken", data);
 		} catch (error) {
 			commit("setError", error);
@@ -75,4 +75,12 @@ export const state = () => {
 			window.localStorage.getItem("mx_access_token") &&
 			window.localStorage.getItem("mx_user_id"),
 	};
+};
+
+export const messenger = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
 };

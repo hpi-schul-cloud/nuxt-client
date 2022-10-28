@@ -1,7 +1,6 @@
 import {
 	ChangeLanguageParamsLanguageEnum,
 	UserApiFactory,
-	UserApiInterface,
 } from "@/serverApi/v3";
 import { envConfigModule, schoolsModule } from "@/store";
 import { User } from "@/store/types/auth";
@@ -13,9 +12,11 @@ import { School } from "./types/schools";
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
 	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-	let expires = "expires=" + d.toUTCString();
+	const expires = "expires=" + d.toUTCString();
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
 };
+
+const userApi = UserApiFactory(undefined, "/v3", $axios);
 @Module({
 	name: "authModule",
 	namespaced: true,
@@ -82,8 +83,6 @@ export default class AuthModule extends VuexModule {
 	};
 
 	status: Status = "";
-
-	_userApi?: UserApiInterface;
 
 	@Mutation
 	setUser(user: User): void {
@@ -216,7 +215,7 @@ export default class AuthModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const response = await this.userApi.userControllerChangeLanguage({
+			const response = await userApi.userControllerChangeLanguage({
 				language,
 			});
 			if (response.data.successful === true) {
@@ -247,16 +246,5 @@ export default class AuthModule extends VuexModule {
 		}
 		this.context.commit("clearAuthData");
 		window.location.assign("/logout");
-	}
-
-	private get userApi() {
-		if (!this._userApi) {
-			this._userApi = UserApiFactory(
-				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._userApi;
 	}
 }
