@@ -1,5 +1,4 @@
 import { RouteConfig } from "vue-router";
-import HomePage from "../pages/HomePage.page.vue";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
@@ -7,11 +6,6 @@ const REGEX_UUID =
 const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
 
 export const routes: Array<RouteConfig> = [
-	{
-		path: "/",
-		component: HomePage,
-		name: "home-page",
-	},
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("../pages/ActivationCode.page.vue"),
