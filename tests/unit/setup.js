@@ -15,7 +15,7 @@ import { i18n as i18nConfig } from "@/plugins/i18n.js";
 import authStoreModule from "@/store/auth";
 import { mixin as userMixin } from "@/plugins/user.js";
 import globalStubs from "./stubs.js";
-import VueMeta from "vue-meta";
+// import VueMeta from "vue-meta";
 
 // make object properties configurable in tests
 // so they can be mocked
@@ -240,7 +240,7 @@ global.createComponentMocks = ({
 	returnOptions.vuetify = new Vuetify();
 
 	//Set 'vueMeta: true' for accessing nuxt page meta infos
-	if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
+	// if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
 
 	if (user) {
 		localVue.mixin(userMixin);
