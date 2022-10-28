@@ -1,5 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
+const { devServer } = require("./webpack-config/dev-server-config");
 
 const themeName = process.env.SC_THEME || "default";
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
@@ -53,14 +54,5 @@ module.exports = defineConfig({
 		},
 	},
 
-	devServer: {
-		port: 4000,
-		proxy: {
-			"^/api": {
-				target: "http://localhost:3030",
-				ws: true,
-				changeOrigin: true,
-			},
-		},
-	},
+	devServer,
 });
