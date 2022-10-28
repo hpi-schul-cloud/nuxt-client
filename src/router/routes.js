@@ -148,7 +148,8 @@ export const routes = [
 	},
 	{
 		path: "/cfiles",
-		component: () => interopDefault(import("@pages/files/FilesOverview.page.vue")),
-		name: 'files',
-	}
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "files",
+	},
 ];
