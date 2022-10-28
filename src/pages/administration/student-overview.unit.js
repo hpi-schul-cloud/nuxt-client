@@ -52,9 +52,9 @@ describe("students/index", () => {
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-			schools: SchoolsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });

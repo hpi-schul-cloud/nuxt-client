@@ -50,8 +50,8 @@ describe("@/components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			"finished-tasks": FinishedTaskModule,
-			"env-config": EnvConfigModule,
+			finishedTasksModule: FinishedTaskModule,
+			envConfigModule: EnvConfigModule,
 		});
 		taskModuleMock = createModuleMocks(TaskModule);
 		copyModuleMock = createModuleMocks(CopyModule);

@@ -5,7 +5,7 @@ import authenticate from "./authenticate";
 
 describe("@/plugins/authenticate", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	it.skip("should log an error if jwt is undefined and page is not public", () => {

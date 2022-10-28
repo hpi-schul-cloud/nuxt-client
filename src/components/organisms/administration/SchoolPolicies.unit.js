@@ -33,7 +33,7 @@ const generateMockStore = (options = {}) => ({
 
 describe("SchoolPolicies", () => {
 	beforeEach(() => {
-		setupStores({ schools: SchoolsModule });
+		setupStores({ schoolsModule: SchoolsModule });
 	});
 
 	it(...isValidComponent(SchoolPolicies));

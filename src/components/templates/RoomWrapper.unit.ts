@@ -78,9 +78,9 @@ describe("@templates/RoomWrapper.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			rooms: RoomsModule,
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
+			roomsModule: RoomsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
 		});
 		roomsModule.setAllElements(mockData as any);
 	});

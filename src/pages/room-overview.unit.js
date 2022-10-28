@@ -70,9 +70,9 @@ const mockAuthStoreData = {
 };
 
 setupStores({
-	auth: AuthModule,
-	"env-config": EnvConfigModule,
-	rooms: RoomsModule,
+	authModule: AuthModule,
+	envConfigModule: EnvConfigModule,
+	roomsModule: RoomsModule,
 });
 
 const spyMocks = {

@@ -7,8 +7,8 @@ import TheFooter from "./TheFooter";
 describe("@/components/legacy/TheFooter", () => {
 	beforeEach(() => {
 		setupStores({
-			filePaths: FilePathsModule,
-			"env-config": EnvConfigModule,
+			filePathsModule: FilePathsModule,
+			envConfigModule: EnvConfigModule,
 		});
 	});
 

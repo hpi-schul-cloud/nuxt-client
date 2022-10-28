@@ -29,8 +29,8 @@ const getWrapper = (props, options) => {
 describe("@/components/legacy/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
-			auth: AuthModule,
-			"status-alerts": StatusAlertsModule,
+			authModule: AuthModule,
+			statusAlertsModule: StatusAlertsModule,
 		});
 	});
 

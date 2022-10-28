@@ -60,7 +60,7 @@ const getMocks = ({
 
 describe("@/components/organisms/FormNews", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	it("converts date correctly", async () => {

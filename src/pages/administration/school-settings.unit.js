@@ -154,9 +154,9 @@ const mockStore = {
 };
 
 setupStores({
-	auth: AuthModule,
-	"env-config": EnvConfigModule,
-	schools: SchoolsModule,
+	authModule: AuthModule,
+	envConfigModule: EnvConfigModule,
+	schoolsModule: SchoolsModule,
 });
 
 const fetchYearSpy = jest

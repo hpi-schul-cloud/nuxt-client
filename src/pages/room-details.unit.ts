@@ -133,9 +133,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		document.body.setAttribute("data-app", "true");
 
 		setupStores({
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-			room: RoomModule,
+			authModule: AuthModule,
+			eenvConfigModule: EnvConfigModule,
+			roomModule: RoomModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);

@@ -34,7 +34,7 @@ describe("MatrixMessenger.unit", () => {
 	beforeEach(() => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
-		setupStores({ auth: AuthModule, schools: SchoolsModule });
+		setupStores({ authModule: AuthModule, schoolsModule: SchoolsModule });
 		schoolsModule.setSchool({ features: ["messenger"] });
 	});
 	afterEach(() => {

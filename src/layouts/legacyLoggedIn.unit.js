@@ -18,12 +18,12 @@ const $route = {
 const $router = { push: jest.fn() };
 
 setupStores({
-	auth: AuthModule,
-	autoLogout: AutoLogoutModule,
-	"env-config": EnvConfigModule,
-	filePaths: FilePathsModule,
-	schools: SchoolsModule,
-	"status-alerts": StatusAlertsModule,
+	authModule: AuthModule,
+	autoLogoutModule: AutoLogoutModule,
+	envConfigModule: EnvConfigModule,
+	filePathsModule: FilePathsModule,
+	schoolsModule: SchoolsModule,
+	statusAlertsModule: StatusAlertsModule,
 });
 
 authModule.setUser({

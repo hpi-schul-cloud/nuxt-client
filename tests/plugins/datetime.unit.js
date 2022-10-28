@@ -93,7 +93,7 @@ describe("@/plugins/datetime", () => {
 	const timeLocalString = dateLocal.format("HH:mm");
 
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	it("getUtcOffset", () => {

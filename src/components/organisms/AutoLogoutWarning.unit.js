@@ -54,8 +54,8 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 
 	beforeAll(() => {
 		setupStores({
-			autoLogout: AutoLogoutModule,
-			"env-config": EnvConfigModule,
+			autoLogoutModule: AutoLogoutModule,
+			envConfigModule: EnvConfigModule,
 		});
 
 		actions = getMockActions();

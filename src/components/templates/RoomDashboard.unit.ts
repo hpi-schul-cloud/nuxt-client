@@ -107,10 +107,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			tasks: TaskModule,
-			room: RoomModule,
-			"env-config": EnvConfigModule,
-			copy: CopyModule,
+			tasksModule: TaskModule,
+			roomModule: RoomModule,
+			envConfigModule: EnvConfigModule,
+			copyModule: CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });

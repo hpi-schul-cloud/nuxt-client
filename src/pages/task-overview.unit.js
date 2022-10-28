@@ -11,9 +11,9 @@ describe("TaskOverview", () => {
 
 	beforeEach(() => {
 		setupStores({
-			auth: AuthModule,
-			tasks: TaskModule,
-			finishedTasks: FinishedTaskModule,
+			authModule: AuthModule,
+			taskModule: TaskModule,
+			finishedTasksModule: FinishedTaskModule,
 		});
 
 		vuetify = new Vuetify();

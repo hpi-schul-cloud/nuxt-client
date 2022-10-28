@@ -34,7 +34,7 @@ const getMockContext = ({
 
 describe("@/middleware/permission-check", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	it("exports a function", () => {

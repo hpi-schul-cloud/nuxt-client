@@ -36,7 +36,10 @@ describe("PrivacySettings", () => {
 	beforeAll(() => {});
 
 	beforeEach(() => {
-		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+		setupStores({ 
+			authModule: AuthModule, 
+			envConfigModule: EnvConfigModule 
+		});
 	});
 
 	it(...isValidComponent(PrivacySettings));

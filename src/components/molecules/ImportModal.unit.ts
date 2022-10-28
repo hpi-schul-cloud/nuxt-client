@@ -9,7 +9,7 @@ describe("@/components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ rooms: RoomsModule });
+		setupStores({ roomsModule: RoomsModule });
 	});
 
 	it("should open and close on property change", async () => {

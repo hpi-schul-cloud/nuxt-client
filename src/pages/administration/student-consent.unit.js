@@ -86,8 +86,8 @@ describe("students/consent", () => {
 			},
 		};
 		setupStores({
-			filePaths: FilePathsModule,
-			"env-config": EnvConfigModule,
+			filePathsModule: FilePathsModule,
+			envConfigModule: EnvConfigModule,
 		});
 	});
 

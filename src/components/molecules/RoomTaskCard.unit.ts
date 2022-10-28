@@ -221,7 +221,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {

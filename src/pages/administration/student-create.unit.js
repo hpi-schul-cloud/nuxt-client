@@ -31,7 +31,7 @@ describe("students/new", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	it(...isValidComponent(NewStudent));

@@ -136,9 +136,9 @@ window.scrollTo = jest.fn();
 describe("User Migration / Index", () => {
 	beforeAll(() => {
 		setupStores({
-			"env-config": EnvConfigModule,
-			"import-users": ImportUsersModule,
-			schools: SchoolsModule,
+			envConfigModule: EnvConfigModule,
+			importUsersModule: ImportUsersModule,
+			schoolsModule: SchoolsModule,
 		});
 
 		document.body.setAttribute("data-app", "true");

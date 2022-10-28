@@ -184,7 +184,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			setupStores({
-				copy: CopyModule,
+				copyModule: CopyModule,
 			});
 
 			wrapper = mountComponent({

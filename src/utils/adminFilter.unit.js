@@ -25,7 +25,7 @@ const CTX_MOCK = {
 	},
 };
 
-setupStores({ auth: AuthModule, schools: SchoolsModule });
+setupStores({ authModule: AuthModule, schoolsModule: SchoolsModule });
 
 const filter = studentFilter(CTX_MOCK);
 const filterDateCreatedFromTo = filter[2];

@@ -26,7 +26,7 @@ const envs = {
 
 describe("i18n plugin", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	it("sets locale to the locale computed in the auth store module", () => {

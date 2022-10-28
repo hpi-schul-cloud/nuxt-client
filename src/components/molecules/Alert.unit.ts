@@ -24,7 +24,7 @@ const getWrapper: any = (device = "desktop", options?: object) => {
 describe("Alert", () => {
 	beforeEach(() => {
 		setupStores({
-			notifier: NotifierModule,
+			notifierModule: NotifierModule,
 		});
 	});
 

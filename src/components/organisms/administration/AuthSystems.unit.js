@@ -38,7 +38,10 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule, schools: SchoolsModule });
+		setupStores({ 
+			envConfigModule: EnvConfigModule, 
+			schoolsModule: SchoolsModule 
+		});
 	});
 
 	it(...isValidComponent(AuthSystems));

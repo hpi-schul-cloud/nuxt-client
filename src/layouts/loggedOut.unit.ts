@@ -33,8 +33,8 @@ describe("loggedOutLayout", () => {
 
 	beforeEach(() => {
 		setupStores({
-			"env-config": EnvConfigModule,
-			filePaths: FilePathsModule,
+			envConfigModule: EnvConfigModule,
+			filePathsModule: FilePathsModule,
 		});
 		envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getGhostBaseUrl: "https://works-like-charm.com",

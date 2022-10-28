@@ -26,7 +26,7 @@ describe("SchoolPolicyFormDialog", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ schools: SchoolsModule });
+		setupStores({ schoolsModule: SchoolsModule });
 	});
 
 	it(...isValidComponent(SchoolPolicyFormDialog));

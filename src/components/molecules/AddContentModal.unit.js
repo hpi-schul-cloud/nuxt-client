@@ -125,7 +125,7 @@ function getWrapper(attributes, options) {
 describe("@/components/molecules/AddContentModal", () => {
 	beforeEach(() => {
 		setupStores({
-			content: ContentModule,
+			contentModule: ContentModule,
 		});
 	});
 

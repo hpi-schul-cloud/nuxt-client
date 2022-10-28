@@ -28,7 +28,7 @@ jest.useFakeTimers();
 
 describe("@/middleware/linksFallback", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	it("use nuxt when a loop is detected", async () => {

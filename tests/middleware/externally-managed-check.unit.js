@@ -20,7 +20,7 @@ const getMockContext = ({ app = mockApp, route = getMockRoute() } = {}) => ({
 
 describe("@/middleware/externally-managed-check", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	it("exports a function", () => {

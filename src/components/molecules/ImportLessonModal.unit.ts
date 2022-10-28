@@ -22,7 +22,10 @@ describe("@/components/molecules/RoomLessonModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ "env-config": EnvConfigModule, room: RoomModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			roomModule: RoomModule,
+		});
 	});
 
 	it("should open and close on property change", async () => {
