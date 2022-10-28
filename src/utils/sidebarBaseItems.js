@@ -36,7 +36,8 @@ export default [
 		testId: "Aufgaben",
 	},
 	{
-		title: "global.sidebar.files",
+		title: "global.sidebar.files-old",
+		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
 		icon: "folder-open",
 		testId: "Meine Dateien",
@@ -67,6 +68,13 @@ export default [
 				testId: "geteilte Dateien",
 			},
 		],
+	},
+	{
+		title: "global.sidebar.files",
+		permission: "COLLABORATIVE_FILES",
+		href: "/cfiles",
+		icon: "folder-open",
+		testId: "Dateien",
 	},
 	{
 		title: "pages.news.title",
