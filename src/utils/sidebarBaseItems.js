@@ -37,7 +37,7 @@ export default [
 	},
 	{
 		title: "global.sidebar.files-old",
-		excludedPermission: "COLLABORATIVE_STORAGE",
+		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
 		icon: "folder-open",
 		testId: "Meine Dateien",
@@ -71,8 +71,8 @@ export default [
 	},
 	{
 		title: "global.sidebar.files",
-		permission: "COLLABORATIVE_STORAGE",
-		href: "/new-files",
+		permission: "COLLABORATIVE_FILES",
+		href: "/cfiles",
 		icon: "folder-open",
 		testId: "Dateien",
 	},

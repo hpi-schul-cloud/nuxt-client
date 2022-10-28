@@ -147,7 +147,7 @@ export const routes = [
 		name: "termsofuse",
 	},
 	{
-		path: "/new-files",
+		path: "/cfiles",
 		component: () => interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: 'files',
 	}
