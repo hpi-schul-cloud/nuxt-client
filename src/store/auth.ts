@@ -1,6 +1,7 @@
 import {
 	ChangeLanguageParamsLanguageEnum,
 	UserApiFactory,
+	UserApiInterface,
 } from "@/serverApi/v3";
 import { envConfigModule, schoolsModule } from "@/store";
 import { User } from "@/store/types/auth";
@@ -16,7 +17,6 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
 };
 
-const userApi = UserApiFactory(undefined, "/v3", $axios);
 @Module({
 	name: "authModule",
 	namespaced: true,
@@ -83,6 +83,13 @@ export default class AuthModule extends VuexModule {
 	};
 
 	status: Status = "";
+
+	private userApi: UserApiInterface;
+
+	constructor(module: VuexModule | {}) {
+		super(module);
+		this.userApi = UserApiFactory(undefined, "/v3", $axios);
+	}
 
 	@Mutation
 	setUser(user: User): void {
@@ -215,7 +222,7 @@ export default class AuthModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			const response = await userApi.userControllerChangeLanguage({
+			const response = await this.userApi.userControllerChangeLanguage({
 				language,
 			});
 			if (response.data.successful === true) {

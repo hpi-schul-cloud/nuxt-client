@@ -5,16 +5,18 @@ import {
 	BoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
+	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
+	RoomsApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
-const roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-const lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+let roomsApi: RoomsApiInterface;
+let lessonApi: LessonApiInterface;
 
 @Module({
 	name: "roomModule",
@@ -44,6 +46,12 @@ export default class RoomModule extends VuexModule {
 	};
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
+
+	constructor(module: any) {
+		super(module);
+		roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+		lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+	}
 
 	@Action
 	async fetchContent(id: string): Promise<void> {
@@ -107,20 +115,15 @@ export default class RoomModule extends VuexModule {
 		try {
 			const lessonShareResult = (await $axios.get(`/v1/lessons/${lessonId}`))
 				.data;
-			// @ts-ignore
 			if (!lessonShareResult.shareToken) {
-				// @ts-ignore
 				lessonShareResult.shareToken = nanoid(9);
 				await $axios.patch(
-					// @ts-ignore
 					`/v1/lessons/${lessonShareResult._id}`,
 					lessonShareResult
 				);
 			}
 			this.setSharedLessonData({
-				// @ts-ignore
 				code: lessonShareResult.shareToken,
-				// @ts-ignore
 				lessonName: lessonShareResult.name,
 				status: "",
 				message: "",
@@ -156,7 +159,7 @@ export default class RoomModule extends VuexModule {
 					newCourseId: this.roomData.roomId,
 					shareToken,
 				})
-			).data;
+			)?.data;
 
 			if (!copiedLesson) {
 				this.setBusinessError({
@@ -199,7 +202,7 @@ export default class RoomModule extends VuexModule {
 				await $axios.post("/v1/link", {
 					target: `${window.location.origin}/courses/${courseId}/addStudent`,
 				})
-			).data;
+			)?.data;
 			// @ts-ignore
 			if (!invitationData._id) {
 				this.setBusinessError({
@@ -277,7 +280,8 @@ export default class RoomModule extends VuexModule {
 		const userId = authModule.getUser?.id;
 		try {
 			const requestUrl = `/v1/homework/${payload.itemId}`;
-			const homework = (await $axios.get(requestUrl)).data;
+			const response = await $axios.get(requestUrl);
+			const homework = response?.data;
 			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({

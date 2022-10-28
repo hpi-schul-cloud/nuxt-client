@@ -32,7 +32,7 @@ describe("schools module", () => {
 				},
 				post: async (path: string) => {},
 			} as NuxtAxiosInstance);
-			setupStores({ auth: AuthModule });
+			setupStores({ authModule: AuthModule });
 		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {

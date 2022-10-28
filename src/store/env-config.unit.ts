@@ -53,7 +53,7 @@ describe("env-config module", () => {
 	beforeEach(() => {
 		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 	afterEach(() => {
 		consoleWarnSpy.mockRestore();

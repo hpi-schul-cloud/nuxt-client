@@ -5,7 +5,9 @@ import {
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
+	RoomsApiInterface,
 	TaskApiFactory,
+	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 
@@ -15,9 +17,8 @@ export type CopyParams = {
 	courseId?: string;
 };
 
-const roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-const taskApi = TaskApiFactory(undefined, "/v3", $axios);
-
+let roomsApi: RoomsApiInterface;
+let taskApi: TaskApiInterface;
 @Module({
 	name: "copyModule",
 	namespaced: true,
@@ -27,6 +28,12 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
+
+	constructor(module: any) {
+		super(module);
+		taskApi = TaskApiFactory(undefined, "/v3", $axios);
+		roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+	}
 
 	@Action
 	async copy({

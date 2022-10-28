@@ -72,8 +72,8 @@ describe("auth store module", () => {
 		describe("locale", () => {
 			beforeEach(() => {
 				setupStores({
-					schools: SchoolsModule,
-					"env-config": EnvConfigModule,
+					schoolsModule: SchoolsModule,
+					envConfigModule: EnvConfigModule,
 				});
 			});
 

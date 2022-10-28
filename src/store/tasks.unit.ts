@@ -160,7 +160,7 @@ describe("task store", () => {
 		describe("deleteTask", () => {
 			beforeEach(() => {
 				setupStores({
-					"finished-tasks": FinishedTaskModule,
+					finishedTasksModule: FinishedTaskModule,
 				});
 			});
 

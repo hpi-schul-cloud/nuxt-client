@@ -1,26 +1,26 @@
 import RoomsModule from "./rooms";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { RoomsData } from "./types/rooms";
+import { AxiosInstance } from "axios";
 
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string, data?: object) => {
+		get: async (path: string, data?: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
-		$post: async (path: string) => {},
-		$patch: async (path: string, params: {}) => {
+		post: async (path: string) => {},
+		patch: async (path: string, params: {}) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 
 const mockData = {
@@ -247,7 +247,7 @@ describe("rooms module", () => {
 				).toStrictEqual(100); // $limit: 100
 			});
 
-			it("handle error", async (done) => {
+			it("handle error", (done) => {
 				const error = { status: 418, statusText: "I'm not a teapot" };
 				const mockApi = {
 					courseControllerFindForUser: jest.fn(() =>

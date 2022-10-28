@@ -16,20 +16,22 @@ describe("store/consent-versions", () => {
 				};
 
 				actions.$axios = {
-					$get: async (url) => {
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
-							total: 1,
-							limit: 100,
-							skip: 0,
-							data: [
-								{
-									_id: "611a75856cfbb2aded54eae4",
-									versionNumber: "testversion",
-									consentText: "lorem ipsum",
-									date: "2017-01-01T00:06:40.150Z",
-								},
-							],
+							data: {
+								total: 1,
+								limit: 100,
+								skip: 0,
+								data: [
+									{
+										_id: "611a75856cfbb2aded54eae4",
+										versionNumber: "testversion",
+										consentText: "lorem ipsum",
+										date: "2017-01-01T00:06:40.150Z",
+									},
+								],
+							},
 						};
 					},
 				};

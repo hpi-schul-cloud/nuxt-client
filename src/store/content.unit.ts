@@ -73,7 +73,7 @@ const mockLessons = {
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string) => {
+		get: async (path: string) => {
 			requestPath = path;
 			if (path === ESPath) return mockResources;
 			if (path === lessonsPath) return mockLessons;
@@ -405,7 +405,7 @@ describe("content module", () => {
 			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
-			setupStores({ "env-config": EnvConfigModule });
+			setupStores({ envConfigModule: EnvConfigModule });
 
 			const contentModule = new ContentModule({});
 			const initSpy = jest.fn();

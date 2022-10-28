@@ -4,7 +4,7 @@ import EnvConfigModule from "./env-config";
 
 describe("autoLogout module", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	describe("actions", () => {
