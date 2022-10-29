@@ -7,6 +7,7 @@ import generateAliases from "./build-plugins/generateAliases";
 import proxy from "./build-plugins/proxy";
 import replaceFiles from "./build-plugins/rollup/replaceFiles";
 import vuetify from "vite-plugin-vuetify";
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
@@ -21,6 +22,10 @@ export default defineConfig(async () => {
 			vuetify({ styles: "expose" }),
 			replaceFiles(replacements),
 			proxy(),
+			// https://vue-i18n.intlify.dev/guide/advanced/optimization.html#how-to-configure
+			VueI18nPlugin({
+				include: resolve(__dirname, "./src/locales/**"),
+			}),
 		],
 		test: {
 			globals: true,
