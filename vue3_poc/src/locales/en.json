@@ -1,0 +1,4 @@
+{
+	"hello": "Welcome to the {instance}",
+	"only.exists.in.english": "this text only exists in english - in german it's missing. Do translate it."
+}
