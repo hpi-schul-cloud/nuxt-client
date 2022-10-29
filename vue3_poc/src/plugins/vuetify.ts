@@ -11,6 +11,9 @@ import { createVuetify } from "vuetify";
 import { customTheme } from "@/styles/custom-theme";
 import { Language } from "@/store/types/Language";
 
+// Translations provided by Vuetify
+import { de, en } from "vuetify/locale";
+
 export default createVuetify({
 	components,
 	directives,
@@ -31,6 +34,7 @@ export default createVuetify({
 	locale: {
 		locale: Language.German,
 		fallback: Language.English,
+		messages: { de, en },
 	},
 });
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
