@@ -19,6 +19,7 @@
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { Language } from "@/store/types/Language";
+import { useLocale } from "vuetify";
 
 export default defineComponent({
 	name: "LanguageSelector",
@@ -26,8 +27,14 @@ export default defineComponent({
 		// https://vue-i18n.intlify.dev/guide/advanced/composition.html#global-scope
 		const { locale } = useI18n({ useScope: "global" });
 
+		// https://next.vuetifyjs.com/en/features/internationalization/#getting-started
+		const { current } = useLocale();
+
 		const selectLanguage = (language: Language) => {
 			locale.value = language;
+
+			// change vuetify language
+			current.value = language;
 		};
 
 		return {
