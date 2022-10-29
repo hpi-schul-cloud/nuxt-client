@@ -8,7 +8,7 @@
 			</v-list>
 		</v-navigation-drawer>
 		<v-app-bar flat>
-			<template v-slot:append>
+			<template #append>
 				<v-btn v-if="isLoggedIn" @click="onLogout">Logout</v-btn>
 			</template>
 		</v-app-bar>
@@ -22,6 +22,7 @@
 				<v-btn flat to="/composition">Composition API</v-btn>
 				<v-btn flat to="/vitest">Vuetify Welcome page</v-btn>
 				<v-btn flat to="/imprint">Imprint</v-btn>
+				<v-btn flat to="/i18n">i18n</v-btn>
 			</v-row>
 		</v-footer>
 	</v-app>

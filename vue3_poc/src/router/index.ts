@@ -8,6 +8,7 @@ import {
 import HomePage from "@/pages/HomePage.vue";
 import CompositionApiPage from "@/pages/CompositionApiPage.vue";
 import TaskListPage from "@/pages/TaskListPage.vue";
+import I18nPage from "@/pages/I18nPage.vue";
 import VitestProofOfConcept from "@/components/VitestProofOfConcept.vue";
 import NotFoundPage from "@/pages/NotFoundPage.vue";
 import { useAuthStore } from "@/store/auth";
@@ -32,6 +33,11 @@ const routes: Readonly<RouteRecordRaw[]> = [
 		path: "/tasks",
 		name: "tasks",
 		component: TaskListPage,
+	},
+	{
+		path: "/i18n",
+		name: "i18n",
+		component: I18nPage,
 	},
 	{
 		path: "/imprint",
