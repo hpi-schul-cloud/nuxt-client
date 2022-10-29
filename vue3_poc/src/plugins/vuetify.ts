@@ -9,6 +9,7 @@ import * as directives from "vuetify/directives";
 // Vuetify
 import { createVuetify } from "vuetify";
 import { customTheme } from "@/styles/custom-theme";
+import { Language } from "@/store/types/Language";
 
 export default createVuetify({
 	components,
@@ -25,6 +26,11 @@ export default createVuetify({
 		sets: {
 			mdi,
 		},
+	},
+	// https://next.vuetifyjs.com/en/features/internationalization/#getting-started
+	locale: {
+		locale: Language.German,
+		fallback: Language.English,
 	},
 });
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
