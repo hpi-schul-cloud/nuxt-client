@@ -304,8 +304,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
+@import "@/styles/mixins";
 $tablet-portrait-width: 768px;
 
 .resource {

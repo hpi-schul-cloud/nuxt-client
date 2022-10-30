@@ -29,7 +29,7 @@ import store from "./store";
 Vue.config.productionTip = false;
 
 // NUXT_REMOVAL set this based on the tenant theme
-import themeConfig from "@/themes/default/config";
+import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
@@ -50,7 +50,7 @@ Vue.use(VueMq, {
 import "@/components/base/_globals";
 import "@/plugins/directives";
 
-import "@/scss/styles.scss";
+import "@/styles/global.scss";
 
 new Vue({
 	router,

@@ -320,7 +320,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .table__row {
 	font-weight: var(--font-weight-bold);

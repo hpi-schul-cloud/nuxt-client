@@ -1,28 +1,19 @@
 const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
 const { devServer } = require("./webpack-config/dev-server-config");
+const generateAliases = require("./webpack-config/theme-aliases");
+const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
 
-const themeName = process.env.SC_THEME || "default";
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
+
+const replacements = generateAliases(__dirname);
 
 module.exports = defineConfig({
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
 		resolve: {
-			alias: {
-				// NUXT_REMOVE change the paths so they align with @/<name>
-				"@assets": path.resolve(__dirname, `src/assets`),
-				"@styles": path.resolve(
-					__dirname,
-					`src/themes/${themeName}/styles/index.scss`
-				),
-				"@styles-base": path.resolve(__dirname, `src/themes/base/styles`),
-				"@variables": path.resolve(
-					__dirname,
-					`src/themes/${themeName}/styles/variables.scss`
-				),
-			},
+			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
 	},
 

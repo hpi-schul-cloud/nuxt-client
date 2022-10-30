@@ -14,7 +14,7 @@ describe("@/components/molecules/ContentEduSharingFooter", () => {
 			"edusharing-logo"
 		);
 		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
-			"@assets/img/edusharing/edusharing-logo.svg"
+			"@/assets/img/edusharing/edusharing-logo.svg"
 		);
 	});
 

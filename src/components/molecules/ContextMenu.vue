@@ -216,7 +216,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .context-menu {
 	--transition-duration: var(--duration-transition-fast);

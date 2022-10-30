@@ -4,12 +4,12 @@
 			<base-link to="/" href="/" :no-styles="true">
 				<img
 					class="logo logo-full"
-					src="@assets/img/logo/logo-image-mono.svg"
+					src="@/assets/img/logo/logo-image-mono.svg"
 					alt="Schulcloud Logo"
 				/>
 				<img
 					class="logo logo-small"
-					src="@assets/img/logo/logo-transparent-mono-48-48.svg"
+					src="@/assets/img/logo/logo-transparent-mono-48-48.svg"
 					alt="Schulcloud Logo"
 				/>
 			</base-link>
@@ -106,7 +106,7 @@ export default {
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
 
-@import "@styles";
+@import "@/styles/mixins";
 
 @keyframes menu-expand {
 	from {

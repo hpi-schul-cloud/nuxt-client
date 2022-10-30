@@ -2,7 +2,7 @@
 	<div class="text-centered">
 		<base-image
 			v-if="error.statusCode === 404"
-			img-src="@assets/img/pageNotFound.svg"
+			img-src="@/assets/img/pageNotFound.svg"
 			img-height="300px"
 			fill="var(--v-primary-base)"
 			role="presentation"
@@ -11,7 +11,7 @@
 			v-else
 			role="presentation"
 			alt=""
-			src="@assets/img/pc_repair.png"
+			src="@/assets/img/pc_repair.png"
 			class="error-img"
 		/>
 

@@ -23,7 +23,7 @@ const getWrapper = () => {
 		...createComponentMocks({ i18n: true }),
 		propsData: {
 			links: navbarLinks,
-			img: "@assets/img/logo/logo-dBildungscloud.svg",
+			img: "@/assets/img/logo/logo-dBildungscloud.svg",
 			buttons: true,
 		},
 	});

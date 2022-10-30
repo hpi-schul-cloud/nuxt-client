@@ -45,7 +45,7 @@
 			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
 				><img
 					class="poweredby-logo"
-					src="@assets/img/lokalise_logo.svg"
+					src="@/assets/img/lokalise_logo.svg"
 					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
 			/></base-link>
 		</p>

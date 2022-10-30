@@ -1,6 +1,6 @@
 <template>
 	<empty-state
-		image="@assets/img/empty-state/content-empty.svg"
+		image="@/assets/img/empty-state/content-empty.svg"
 		:image-alt="$t('pages.content.empty_state.error.img_alt')"
 		:title="$t('pages.content.empty_state.error.title')"
 	>

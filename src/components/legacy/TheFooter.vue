@@ -1,4 +1,5 @@
 <template>
+	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Secuurity'; the other instances are not using this link.  -->
 	<footer class="footer">
 		<div>
 			<template v-for="(link, index) in links">
@@ -45,7 +46,7 @@
 			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
 				><img
 					class="poweredby-logo"
-					src="@assets/img/lokalise_logo.svg"
+					src="@/assets/img/lokalise_logo.svg"
 					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
 			/></base-link>
 		</p>
@@ -102,26 +103,15 @@ export default {
 					rel: "noopener",
 				});
 			}
-			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
-				links.push({
-					href:
-						"mailto:" +
-						envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-						"?subject=" +
-						this.$t("components.legacy.footer.accessibility.report"),
-					text: this.$t("components.legacy.footer.accessibility.report"),
-					target: "_blank",
-					rel: "noopener",
-				});
-			}
 			links.push({
-				href: filePathsModule.getSpecificFiles.accessibilityStatement,
-				text: this.$t("components.legacy.footer.accessibility.statement"),
-				target: "_blank",
-				rel: "noopener",
+				to: "/security",
+				text: this.$t("components.legacy.footer.security"),
 			});
 			return links;
 		},
+	},
+	mounted() {
+		// console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

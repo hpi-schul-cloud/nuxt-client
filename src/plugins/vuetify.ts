@@ -1,4 +1,4 @@
-import theme from "@/themes/default/vuetify.options";
+import theme from "@/vuetify.options";
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
 

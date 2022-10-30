@@ -247,7 +247,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .link-style {
 	color: var(--v-primary-base);

@@ -1,4 +1,4 @@
-import base from "@/themes/base/vuetify.options.js";
+import base from "@/themes/base-vuetify.options.js";
 import { merge } from "lodash";
 
 const custom = {

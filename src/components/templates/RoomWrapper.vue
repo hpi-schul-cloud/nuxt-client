@@ -22,7 +22,7 @@
 		<template v-if="!isLoading && !hasRooms">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
-				image="@assets/img/empty-state/rooms-empty-state.svg"
+				image="@/assets/img/empty-state/rooms-empty-state.svg"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>

@@ -12,7 +12,7 @@
 			class="school-error-image"
 			role="presentation"
 			alt=""
-			src="@assets/img/pc_repair.png"
+			src="@/assets/img/pc_repair.png"
 		/>
 		<div v-if="!schoolError" class="no-school-error">
 			<v-alert light prominent text type="info">

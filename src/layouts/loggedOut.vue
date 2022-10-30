@@ -4,7 +4,7 @@
 			<div class="topbar" data-testid="logged-out-top-bar">
 				<navigation-bar
 					:buttons="true"
-					:img="require('@assets/img/logo/logo-image-mono.svg')"
+					:img="require('@/assets/img/logo/logo-image-mono.svg')"
 					:links="navbarItems"
 				/>
 			</div>

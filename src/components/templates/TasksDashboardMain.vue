@@ -257,7 +257,7 @@ export default {
 			return null;
 		},
 		emptyState() {
-			const image = "@assets/img/empty-state/tasks-empty-state.svg";
+			const image = "@/assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 

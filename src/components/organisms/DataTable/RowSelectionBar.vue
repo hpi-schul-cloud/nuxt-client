@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .row-selection-info {
 	display: flex;
