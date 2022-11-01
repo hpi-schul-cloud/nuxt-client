@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/assets/icons/tasks.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/base/BaseIcon.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/base/BaseIcon.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugins/vuetify.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/plugins/vuetify.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../schulcloud-server/config/development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../schulcloud-server/config/development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../schulcloud-server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../schulcloud-server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/plugins/store-accessor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/store-accessor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store-accessor.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,6 +207,7 @@
       <workItem from="1666257672864" duration="1921000" />
       <workItem from="1666342664027" duration="1871000" />
       <workItem from="1666873142914" duration="3112000" />
+      <workItem from="1667308745692" duration="3657000" />
     </task>
     <servers />
   </component>

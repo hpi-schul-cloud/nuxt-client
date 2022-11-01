@@ -24,8 +24,8 @@ import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
-import { Store } from "vuex";
-import { getModule } from "vuex-module-decorators";
+import { Module, Store } from "vuex";
+import { getModule, VuexModule } from "vuex-module-decorators";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -80,53 +80,90 @@ export function initilizeNewsModule(store: Store<any>) {
 // for use in 'modules' store init (see store/index.ts), so each module
 // appears as an element of the root store's state.
 // (This is required!)
-export const modules = {
+export const modules: KnownModules = {
 	accountsModule: AccountsModule,
 	authModule: AuthModule,
-	autoLogoutModule: AutoLogoutModule,
-	contentModule: ContentModule,
-	envConfigModule: EnvConfigModule,
-	filePathsModule: FilePaths,
-	filesPOCModule: FilesPOCModule,
-	finishedTaskModule: FinishedTaskModule,
-	importUsersModule: ImportUsersModule,
-	newsModule: NewsModule,
-	roomModule: RoomModule,
-	roomsModule: RoomsModule,
-	schoolsModule: SchoolsModule,
-	statusAlertsModule: StatusAlertsModule,
-	taskModule: TaskModule,
-	notifierModule: NotifierModule,
-	copyModule: CopyModule,
-	loadingStateModule: LoadingStateModule,
-	shareCourseModule: ShareCourseModule,
+	// autoLogoutModule: AutoLogoutModule,
+	// contentModule: ContentModule,
+	// envConfigModule: EnvConfigModule,
+	// filePathsModule: FilePaths,
+	// filesPOCModule: FilesPOCModule,
+	// finishedTaskModule: FinishedTaskModule,
+	// importUsersModule: ImportUsersModule,
+	// newsModule: NewsModule,
+	// roomModule: RoomModule,
+	// roomsModule: RoomsModule,
+	// schoolsModule: SchoolsModule,
+	// statusAlertsModule: StatusAlertsModule,
+	// taskModule: TaskModule,
+	// notifierModule: NotifierModule,
+	// copyModule: CopyModule,
+	// loadingStateModule: LoadingStateModule,
+	// shareCourseModule: ShareCourseModule,
 };
+
+declare type VuexModuleConstrutor<T extends VuexModule> = new (
+	module: Module<ThisType<any>, any>
+) => T;
+
+interface KnownModules {
+	accountsModule: VuexModuleConstrutor<AccountsModule>;
+	authModule: VuexModuleConstrutor<AuthModule>;
+	// autoLogoutModule: VuexModuleConstrutor<AutoLogoutModule>;
+	// contentModule: VuexModuleConstrutor<ContentModule>;
+	// envConfigModule: VuexModuleConstrutor<EnvConfigModule>;
+	// filePathsModule: VuexModuleConstrutor<FilePaths>;
+	// filesPOCModule: VuexModuleConstrutor<FilesPOCModule>;
+	// finishedTaskModule: VuexModuleConstrutor<FinishedTaskModule>;
+	// importUsersModule: VuexModuleConstrutor<ImportUsersModule>;
+	// newsModule: VuexModuleConstrutor<NewsModule>;
+	// roomModule: VuexModuleConstrutor<RoomModule>;
+	// roomsModule: VuexModuleConstrutor<RoomsModule>;
+	// schoolsModule: VuexModuleConstrutor<SchoolsModule>;
+	// statusAlertsModule: VuexModuleConstrutor<StatusAlertsModule>;
+	// taskModule: VuexModuleConstrutor<TaskModule>;
+	// notifierModule: VuexModuleConstrutor<NotifierModule>;
+	// copyModule: VuexModuleConstrutor<CopyModule>;
+	// loadingStateModule: VuexModuleConstrutor<LoadingStateModule>;
+	// shareCourseModule: VuexModuleConstrutor<ShareCourseModule>;
+}
+
+const declaredModules = {
+	// TODO
+	// create pattern to assign the instances bysed on their key in setupStore
+	// then -> deconstruct the object on export as global vars
+};
+//
+// const setupStore = <K extends keyof KnownModules>(
+// 	key: K,
+// 	moduleMock: KnownModules[K] // extends infer M ? M : never | undefined
+// ) => {
+// 	const store = new Store({});
+// 	// getModule(module, store);
+// 	if (moduleMock === undefined) {
+// 		// @ts-ignore
+// 		const moduleInstance = getModule(modules[key], store);
+// 		declaredModules[key] = moduleInstance;
+// 		return store;
+// 	}
+// 	declaredModules[key] = moduleMock;
+// 	return store;
+// };
+
+// setupStore("authModule", createModuleMocks(AuthModule));
+// setupStore("authModule");
 
 // const moduleMap: Map<string, VuexModule> = new Map();
 
-// export class Filter<F extends BaseFilter> {
-// 	private readonly _filters: F;
-// 	private readonly _pagination: FilterPagination;
-// 	private _sort: Map<keyof F, FilterSortDirection> = new Map<keyof F, FilterSortDirection>();
-// 	private readonly fc: new () => F;
-
-// 	constructor(filterClass: new () => F, pageSize = 10) {
-// 	this.fc = filterClass;
-// 	this._filters = new filterClass();
-// 	this._pagination = new FilterPagination(1, pageSize);
-// 	return this;
-// 	}
-// 	}
-
-// function setupStore(name: string, moduleInstance?: VuexModule) {
-// 	if (moduleInstance) {
-// 		// set specific instance
-// 		// moduleMap[name] = moduleInstance
-// 	} else {
-// 		const moduleClass: new () => VuexModule = modules[name];
-// 		// moduleMap[name] = getModule(moduleCalss, store);
-// 	}
-// }
+function setupStore(name: string, moduleInstance?: VuexModule) {
+	// if (moduleInstance) {
+	// 		// set specific instance
+	// 		// moduleMap[name] = moduleInstance
+	// 	} else {
+	// 		const moduleClass: new () => VuexModule = modules[name];
+	// 		// moduleMap[name] = getModule(moduleClass, store);
+	// 	}
+}
 
 // function setupStores(name: string): Store<unknown> {
 // 	const store = new Store({});
@@ -141,3 +178,5 @@ export const modules = {
 // 	// }
 // 	return store;
 // }
+
+// export global = myObj.global;
