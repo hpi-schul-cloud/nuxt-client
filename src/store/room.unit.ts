@@ -1,13 +1,10 @@
 import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-// import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import AuthModule from "@/store/auth";
-import { initializeStores } from ".";
 import setupStores from "@@/tests/test-utils/setupStores";
+
 import { AxiosInstance } from "axios";
-import { getModule } from "vuex-module-decorators";
-import Vuex from "vuex";
 import { authModule } from "@/store";
 
 let receivedRequests: any[] = [];

@@ -5,5 +5,8 @@ export default function setupStores(modules) {
 	const store = new Vuex.Store({
 		modules,
 	});
+
 	initializeStores(store);
+
+	return store;
 }

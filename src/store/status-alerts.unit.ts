@@ -1,7 +1,7 @@
 import StatusAlertsModule from "./status-alerts";
 import { StatusAlert } from "./types/status-alert";
 import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
@@ -9,10 +9,10 @@ describe("status alerts module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
-				$get: async (path) => {
+				get: async (path) => {
 					if (path === "/v1/alert") return mockStatusAlerts;
 				},
-			} as NuxtAxiosInstance);
+			} as AxiosInstance);
 			setupStores();
 		});
 		describe("fetchStatusAlerts", () => {
@@ -36,11 +36,11 @@ describe("status alerts module", () => {
 			});
 			it("should handle exception", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 				const statusAlertsModule = new StatusAlertsModule({});
 				const setBusinessErrorSpy = jest.spyOn(
 					statusAlertsModule,

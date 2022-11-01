@@ -65,7 +65,7 @@ describe("store/consent-versions", () => {
 				};
 
 				actions.$axios = {
-					$get: async (url) => {
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
 							total: 1,

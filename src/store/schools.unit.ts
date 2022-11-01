@@ -1,7 +1,7 @@
 import SchoolsModule from "./schools";
 import ImportUsersModule from "@/store/import-users";
 import { initializeAxios } from "@/utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
@@ -13,12 +13,12 @@ let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string) => {
+		get: async (path: string) => {
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
 		post: async (path: string) => {},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 axiosInitializer();
 
@@ -26,12 +26,12 @@ describe("schools module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
-				$get: async (path: string) => {
+				get: async (path: string) => {
 					receivedRequests.push({ path });
 					return getRequestReturn;
 				},
 				post: async (path: string) => {},
-			} as NuxtAxiosInstance);
+			} as AxiosInstance);
 			setupStores({ authModule: AuthModule });
 		});
 		describe("fetchSchool", () => {
@@ -82,11 +82,11 @@ describe("schools module", () => {
 
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
@@ -160,11 +160,11 @@ describe("schools module", () => {
 			});
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -214,11 +214,11 @@ describe("schools module", () => {
 			});
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -272,11 +272,11 @@ describe("schools module", () => {
 			});
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -315,7 +315,7 @@ describe("schools module", () => {
 					},
 				};
 				initializeAxios({
-					$patch: async (path: string) => {
+					patch: async (path: string) => {
 						receivedRequests.push({ path });
 						return {
 							id: "id_123",
@@ -323,7 +323,7 @@ describe("schools module", () => {
 							features: ["rocketChat", "messengerSchoolRoom"],
 						};
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -342,11 +342,11 @@ describe("schools module", () => {
 			});
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$patch: async (path: string) => {
+					patch: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const uploadData = {
 					id: "id_123",
@@ -382,11 +382,11 @@ describe("schools module", () => {
 			it("should call backend and sets state correctly", async () => {
 				const systemId = "id_1";
 				initializeAxios({
-					$delete: async (path: string) => {
+					delete: async (path: string) => {
 						receivedRequests.push({ path });
 						return { data: "some data" };
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{ _id: "id_1", type: "itslearning" },
@@ -427,11 +427,11 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				const systemId = "id_1";
 				initializeAxios({
-					$delete: async (path: string) => {
+					delete: async (path: string) => {
 						throw new Error("");
 						return "";
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");

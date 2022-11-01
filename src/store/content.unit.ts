@@ -1,6 +1,6 @@
 import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 import { Resource } from "./types/content";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
@@ -81,7 +81,7 @@ const axiosInitializer = () => {
 		post: async (path: string) => {
 			requestPath = path;
 		},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 
 describe("content module", () => {
