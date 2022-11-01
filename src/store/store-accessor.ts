@@ -5,8 +5,6 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import { Store } from "vuex";
-import { getModule } from "vuex-module-decorators";
 import AccountsModule from "@/store/accounts";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
@@ -23,9 +21,11 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
+import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
-import ShareCourseModule from "@/store/share-course";
+import { Store } from "vuex";
+import { getModule } from "vuex-module-decorators";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -73,6 +73,10 @@ export function initializeStores(store: Store<any>): void {
 	shareCourseModule = getModule(ShareCourseModule, store);
 }
 
+export function initilizeNewsModule(store: Store<any>) {
+	newsModule = getModule(NewsModule, store);
+}
+
 // for use in 'modules' store init (see store/index.ts), so each module
 // appears as an element of the root store's state.
 // (This is required!)
@@ -97,3 +101,43 @@ export const modules = {
 	loadingStateModule: LoadingStateModule,
 	shareCourseModule: ShareCourseModule,
 };
+
+// const moduleMap: Map<string, VuexModule> = new Map();
+
+// export class Filter<F extends BaseFilter> {
+// 	private readonly _filters: F;
+// 	private readonly _pagination: FilterPagination;
+// 	private _sort: Map<keyof F, FilterSortDirection> = new Map<keyof F, FilterSortDirection>();
+// 	private readonly fc: new () => F;
+
+// 	constructor(filterClass: new () => F, pageSize = 10) {
+// 	this.fc = filterClass;
+// 	this._filters = new filterClass();
+// 	this._pagination = new FilterPagination(1, pageSize);
+// 	return this;
+// 	}
+// 	}
+
+// function setupStore(name: string, moduleInstance?: VuexModule) {
+// 	if (moduleInstance) {
+// 		// set specific instance
+// 		// moduleMap[name] = moduleInstance
+// 	} else {
+// 		const moduleClass: new () => VuexModule = modules[name];
+// 		// moduleMap[name] = getModule(moduleCalss, store);
+// 	}
+// }
+
+// function setupStores(name: string): Store<unknown> {
+// 	const store = new Store({});
+
+// 	const moduleClass = modules[name] as VuexModule;
+// 	getModule(moduleClass, store);
+
+// 	// let key: keyof typeof m;
+// 	// for (key in m) {
+// 	// 	const moduleClass = m[key];
+// 	// 	moduleMap.set(key, getModule(moduleClass, store));
+// 	// }
+// 	return store;
+// }
