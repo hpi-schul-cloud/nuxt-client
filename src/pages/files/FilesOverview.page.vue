@@ -1,21 +1,28 @@
 <template>
-  <default-wireframe :full-width="true">
-    <h1>{{ $t("pages.files.headline") }}</h1>
-    <v-data-table disable-pagination="true" hide-default-footer="true" :items="data" :headers="headers">
-      <template #[`item.icon`]="{ item }">
-        <base-icon
-            source="material"
-            :icon="item.icon.name"
-            :fill="item.icon.colored
+	<default-wireframe :full-width="true">
+		<h1>{{ $t("pages.files.headline") }}</h1>
+		<v-data-table
+			disable-pagination="true"
+			hide-default-footer="true"
+			:items="data"
+			:headers="headers"
+		>
+			<template #[`item.icon`]="{ item }">
+				<base-icon
+					source="material"
+					:icon="item.icon.name"
+					:fill="
+						item.icon.colored
 							? 'var(--v-primary-base)'
-							: 'var(--v-secondary-base)'"
-        ></base-icon>
-      </template>
-      <template #[`item.lastChanged`]="{ item }">
-        <span>{{ timesAgo(item.lastChanged) }}</span>
-      </template>
-    </v-data-table>
-  </default-wireframe>
+							: 'var(--v-secondary-base)'
+					"
+				></base-icon>
+			</template>
+			<template #[`item.lastChanged`]="{ item }">
+				<span>{{ timesAgo(item.lastChanged) }}</span>
+			</template>
+		</v-data-table>
+	</default-wireframe>
 </template>
 
 <script lang="ts">
@@ -28,35 +35,35 @@ import moment from "moment/moment";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-  components: { DefaultWireframe },
-  setup() {
-    const { t, locale } = i18n();
+	components: { DefaultWireframe },
+	setup() {
+		const { t, locale } = i18n();
 
-    const headers: DataTableHeader[] = [
-      { text: "", value: "icon", sortable: false, width: 5 },
-      { text: t("common.labels.name"), value: "name", class: "primary--text" },
-      {
-        text: t("common.labels.size"),
-        value: "size",
-        class: "primary--text",
-        align: "end",
-        width: "150",
-      },
-      {
-        text: t("common.labels.changed"),
-        value: "lastChanged",
-        class: "primary--text",
-        align: "end",
-        width: "150"
-      },
-    ];
+		const headers: DataTableHeader[] = [
+			{ text: "", value: "icon", sortable: false, width: 5 },
+			{ text: t("common.labels.name"), value: "name", class: "primary--text" },
+			{
+				text: t("common.labels.size"),
+				value: "size",
+				class: "primary--text",
+				align: "end",
+				width: "150",
+			},
+			{
+				text: t("common.labels.changed"),
+				value: "lastChanged",
+				class: "primary--text",
+				align: "end",
+				width: "150",
+			},
+		];
 
-    const timesAgo = function (value: Date) {
-      if (!value) return "";
-      return moment(value).locale(locale()).fromNow();
-    };
+		const timesAgo = function (value: Date) {
+			if (!value) return "";
+			return moment(value).locale(locale()).fromNow();
+		};
 
-    return { headers, data, timesAgo };
-  },
+		return { headers, data, timesAgo };
+	},
 });
 </script>
