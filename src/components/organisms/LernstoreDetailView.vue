@@ -18,50 +18,21 @@
 			</base-button>
 		</div>
 		<div class="content">
-			<div class="preview">
-				<v-progress-circular
-					v-if="hasMediatypeH5p && hasSize"
-					v-show="isIFrameLoaded"
-					class="loading"
-					:size="150"
-					indeterminate
-				></v-progress-circular>
-				<iframe
-					v-if="hasMediatypeH5p && hasSize"
-					v-show="!isIFrameLoaded"
-					:src="getRendererIFrameSrc"
-					class="h5p-iframe"
-					allowfullscreen="allowfullscreen"
-					frameborder="0"
-					scrolling="no"
-					@load="setIsIFrameLoaded"
-				></iframe>
-				<script
-					v-if="hasMediatypeH5p && hasSize"
-					:src="getRendererScriptSrc"
-					charset="UTF-8"
-				></script>
+			<lern-store-player v-if="shouldShowPlayer" :node-id="resource.ref.id"/>
+			<div v-else class="preview">
+				<div
+					class="preview-background"
+					:style="{
+						backgroundImage: `url(${backgroundImage})`,
+					}"
+				/>
+				<img
+					:src="backgroundImage"
+					class="preview-img"
+					:alt="$t('pages.content.preview_img.alt')"
+					role="img"
+				/>
 				<div class="preview-background-color" />
-				<!-- TODO: delete (only for testing)
-					<iframe
-						:src="getRendererIFrameSrc"
-					>
-					</iframe>
-					<script :src="getRendererScriptSrc" charset="UTF-8"></script>-->
-				<div v-if="!hasMediatypeH5p && !hasSize">
-					<div
-						class="preview-background"
-						:style="{
-							backgroundImage: `url(${backgroundImage})`,
-						}"
-					/>
-					<img
-						:src="backgroundImage"
-						class="preview-img"
-						:alt="$t('pages.content.preview_img.alt')"
-						role="img"
-					/>
-				</div>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -87,7 +58,7 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div v-if="hasMediatypeH5p && hasSize" class="external-content-warning">
+				<div v-if="shouldShowPlayer" class="external-content-warning">
 					<p class="text-s external-content-title">
 						{{ $t("pages.content.material.showMaterialHint") }}
 					</p>
@@ -202,9 +173,11 @@
 <script>
 /* eslint-disable max-lines */
 import AddContentButton from "@components/organisms/AddContentButton";
+import LernStorePlayer from "@components/molecules/LernStorePlayer";
 import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
+
 import BaseLink from "../base/BaseLink";
 
 import {
@@ -213,8 +186,6 @@ import {
 	getMerlinReference,
 	getMetadataAttribute,
 	getProvider,
-	getRendererSrc,
-	getRendererScriptSrc,
 	getTags,
 	isMerlinContent,
 } from "@utils/helpers";
@@ -224,8 +195,9 @@ const DEFAULT_AUTHOR = "admin";
 
 export default {
 	components: {
-		BaseLink,
 		AddContentButton,
+		BaseLink,
+		LernStorePlayer,
 		UserHasRole,
 	},
 	mixins: [contentMeta],
@@ -234,16 +206,13 @@ export default {
 			type: Object,
 			default: () => {},
 		},
-		renderer: {
-			type: Object,
-			default: () => {},
-		},
+		id: String,
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
 	data() {
 		return {
-			isIFrameLoaded: true,
+			isIFrameLoading: true,
 		};
 	},
 	computed: {
@@ -292,38 +261,14 @@ export default {
 			return this.resource.filename;
 		},
 		getIconsJustifyContent() {
-			if (this.hasMediatypeH5p && this.hasSize) {
+			if (this.shouldShowPlayer) {
 				return "flex-end";
 			} else {
 				return "space-between";
 			}
 		},
-		getRendererIFrameSrc() {
-			return getRendererSrc(this.renderer);
-		},
-		getRendererScriptSrc() {
-			return getRendererScriptSrc(this.renderer);
-		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
-		},
-		hasMediatypeH5p() {
-			const { mediatype } = this.resource;
-			//TODO: Delete (only for testing)
-			//const mediatype = "file-h5p";
-			if (mediatype == "file-h5p") {
-				return true;
-			}
-			return false;
-		},
-		hasSize() {
-			const { size } = this.resource;
-			//TODO: Delete (only for testing)
-			//const size = 2;
-			if (size > 0 && size != null && size != undefined) {
-				return true;
-			}
-			return false;
 		},
 		isBrandenburg() {
 			return process.env.SC_THEME === "brb";
@@ -340,6 +285,12 @@ export default {
 		provider() {
 			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
+		},
+		shouldShowPlayer() {
+			//const { mediatype, size } = this.resource;
+			// TODO: support all videos, not only h5p
+			return true;
+			//return (mediatype === "file-h5p" && size !== undefined && size !== null && size > 0);
 		},
 		tags() {
 			return getTags(this.resource.properties);
@@ -370,9 +321,10 @@ export default {
 				window.close();
 			}
 		},
-		setIsIFrameLoaded(event) {
+		setIsIFrameLoading(event) {
+			console.log('setIsIFrameLoading()', event);
 			if (event) {
-				this.isIFrameLoaded = false;
+				this.isIFrameLoading = false;
 			}
 		},
 	},
@@ -453,7 +405,7 @@ $tablet-portrait-width: 768px;
 				height: 70vh;
 			}
 
-			.h5p-iframe {
+			.player-iframe {
 				width: 85%;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				margin: 1.1px;

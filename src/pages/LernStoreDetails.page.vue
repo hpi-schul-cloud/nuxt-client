@@ -1,13 +1,9 @@
 <template>
 	<span v-if="status === 'completed'">
-		<lernstore-collection-detail-view
-			v-if="isCollection"
-			:resource="resource"
-			:renderer="renderer"
-		/>
-		<lernstore-detail-view v-else :resource="resource" :renderer="renderer" />
+		<lernstore-collection-detail-view v-if="isCollection" :resource="resource"/>
+		<lernstore-detail-view v-else :id="$route.params.id" :resource="resource"/>
 	</span>
-	<base-spinner v-else class="loading" />
+	<base-spinner v-else class="spinner" size="xlarge"/>
 </template>
 
 <script>
@@ -35,8 +31,8 @@ export default {
 		resource() {
 			return contentModule.getCurrentResource;
 		},
-		renderer() {
-			return contentModule.getCurrentRenderer;
+		player() {
+			return contentModule.getCurrentPlayer;
 		},
 		collectionsFeatureFlag() {
 			return contentModule.getCollectionsFeatureFlag;
@@ -48,20 +44,12 @@ export default {
 			return contentModule.isCollection;
 		},
 	},
-	async created() {
+	async mounted() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
-		const { mediatype } = contentModule.getCurrentResource;
-		const { size } = contentModule.getCurrentResource;
-		//TODO: Delete (only for testing)
-		//const mediatype = "file-h5p";
-		//const size = 1;
-		if (
-			mediatype == "file-h5p" &&
-			size > 0 &&
-			size != null &&
-			size != undefined
-		) {
-			await contentModule.getResourceRenderer(this.$route.params.id);
+		console.log(contentModule.getCurrentResource);
+		const { mediatype, size } = contentModule.getCurrentResource;
+		if (size && mediatype === "file-h5p") {
+			await contentModule.getResourcePlayer(this.$route.params.id);
 		}
 	},
 };
@@ -70,14 +58,12 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.loading {
+.spinner {
 	position: absolute;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	width: 25%;
-	height: 25%;
 	margin: auto;
 }
 </style>

@@ -67,7 +67,7 @@ export const getMetadataAttribute = (properties, key) => {
 export const isCollectionHelper = (properties) => {
 	const type = getMetadataAttribute(
 		properties,
-		"ccm:hpi_lom_general_aggregationlevel"
+		"cclom:aggregationlevel"
 	);
 	return type === "2";
 };
@@ -97,30 +97,6 @@ export const getTags = (properties) => {
 
 export const getTitle = (resource) => {
 	return resource.title ? resource.title : "";
-};
-
-export const getRendererSrc = (rendererEdu) => {
-	const rendererArray = rendererEdu.toString().split(" ");
-	for (let i = 0; i < rendererArray.length; i++) {
-		if (
-			rendererArray[i].startsWith("src") &&
-			rendererArray[i - 1].startsWith("<iframe")
-		) {
-			return rendererArray[i].substr(5, rendererArray[i].length - 6);
-		}
-	}
-};
-
-export const getRendererScriptSrc = (rendererEdu) => {
-	const rendererArray = rendererEdu.toString().split(" ");
-	for (let i = 0; i < rendererArray.length; i++) {
-		if (
-			rendererArray[i].startsWith("src") &&
-			rendererArray[i - 1].startsWith("<script")
-		) {
-			return rendererArray[i].substr(5, rendererArray[i].length - 6);
-		}
-	}
 };
 
 export const getUrl = (resource) => {

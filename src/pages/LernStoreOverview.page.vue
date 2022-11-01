@@ -110,8 +110,8 @@ export default {
 		resources() {
 			return contentModule.getResourcesGetter;
 		},
-		renderer() {
-			return contentModule.getCurrentRenderer;
+		player() {
+			return contentModule.getCurrentPlayer;
 		},
 		loading() {
 			return contentModule.getLoading;
@@ -132,8 +132,8 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
-			const { skip, total } = this.resources;
-			if (bottom && !this.loading && skip < total) {
+			const { data, total } = this.resources;
+			if (bottom && !this.loading && data.length < total) {
 				this.addContent();
 			}
 		},
@@ -141,6 +141,8 @@ export default {
 			return this.loading;
 		},
 		searchQuery(to, from) {
+			console.log(`searchQuery(${to}, ${from})`);
+
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
@@ -152,11 +154,11 @@ export default {
 						q: "",
 					},
 				});
-				contentModule.clearResources();
+				//contentModule.clearResources();
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
-				contentModule.clearResources();
+				//contentModule.clearResources();
 				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
@@ -172,17 +174,31 @@ export default {
 			return this.resources;
 		},
 	},
+	created() {
+		console.log('created');
+	},
 	mounted() {
 		const initialSearchQuery = this.$route.query.q;
+		console.log('mounted()');
+		console.log(this.resources.data.length);
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
 			this.activateTransition = true;
-			this.enterKeyHandler();
+			if (this.resources.data.length === 0) {
+				this.enterKeyHandler();
+			}
 		}
+	},
+	updated() {
+		console.log('updated()');
+		console.log(this.resources.data.length);
+	},
+	activated() {
+		console.log('activated()');
 	},
 	methods: {
 		async addContent() {
-			if (this.query.$skip < this.resources.total) {
+			if (this.resources.data.length < this.resources.total) {
 				this.query.$skip += this.query.$limit;
 				// TODO wrong use of store (not so bad)
 				await contentModule.addResources(this.query);
@@ -190,6 +206,7 @@ export default {
 		},
 		async searchContent() {
 			try {
+				console.log('searchContent()');
 				// TODO wrong use of store (not so bad)
 				await contentModule.getResources(this.query);
 			} catch (error) {
@@ -198,11 +215,16 @@ export default {
 				);
 			}
 		},
+		async searchH5P() {
+			console.log('searchH5P()');
+			await contentModule.getResources({ "$limit": 4, "$skip": 0, searchQuery: "h5p" });
+		},
 		enterKeyHandler() {
 			if (this.$options.debounceTyping) {
 				clearTimeout(this.$options.debounceTyping);
 			}
 			this.$options.debounceTyping = setTimeout(() => {
+				console.log('triggered searchContent()');
 				this.searchContent();
 				this.activateTransition = true;
 			}, 500);

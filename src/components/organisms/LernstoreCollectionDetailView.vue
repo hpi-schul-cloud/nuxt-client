@@ -133,6 +133,7 @@
 </template>
 
 <script>
+// TODO: fix scrolling, reload after coming back
 import { contentModule } from "@/store";
 import AddContentButton from "@components/organisms/AddContentButton";
 import ContentCard from "@components/organisms/ContentCard";
