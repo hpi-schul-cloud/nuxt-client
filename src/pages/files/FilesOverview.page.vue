@@ -1,9 +1,9 @@
 <template>
 	<default-wireframe :full-width="true">
-		<h1>{{ $t("pages.files.headline") }}</h1>
+		<h1>{{ $t("pages.files.overview.headline") }}</h1>
 		<v-data-table
-			disable-pagination="true"
-			hide-default-footer="true"
+			:disable-pagination="true"
+			:hide-default-footer="true"
 			:items="data"
 			:headers="headers"
 		>
@@ -29,9 +29,9 @@
 import { DataTableHeader } from "vuetify";
 import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import data from "./data";
 import { i18n } from "../../utils/i18n-util";
 import moment from "moment/moment";
+import { getFileOverviewHeaders } from "./data";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -62,6 +62,8 @@ export default defineComponent({
 			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};
+
+    const data = getFileOverviewHeaders(t);
 
 		return { headers, data, timesAgo };
 	},
