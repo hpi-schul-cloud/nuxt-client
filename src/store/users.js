@@ -8,7 +8,7 @@ const baseState = base.state();
 const teacherEndpoint = "/v1/users/admin/teachers";
 const studentEndpoint = "/v1/users/admin/students";
 
-const module = mergeDeep(base, {
+const usersModule = mergeDeep(base, {
 	state: () =>
 		mergeDeep(baseState, {
 			progress: {
@@ -159,6 +159,6 @@ const module = mergeDeep(base, {
 	},
 });
 
-export const { state, getters, mutations, actions } = module;
+export const { state, getters, mutations, actions } = usersModule;
 
-export default module;
+export default usersModule;

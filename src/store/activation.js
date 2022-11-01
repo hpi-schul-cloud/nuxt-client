@@ -2,7 +2,7 @@ import serviceTemplate from "@/utils/service-template";
 import mergeDeep from "@/utils/merge-deep";
 const base = serviceTemplate("activation");
 
-const module = mergeDeep(base, {
+const activationModule = mergeDeep(base, {
 	actions: {
 		emailReset(ctx, payload = {}) {
 			const customEndpoint = "/v1/activation/eMailAddress";
@@ -11,4 +11,4 @@ const module = mergeDeep(base, {
 	},
 });
 
-export default module;
+export default activationModule;

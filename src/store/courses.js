@@ -2,7 +2,7 @@ import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
 const base = serviceTemplate("courses");
 
-const module = mergeDeep(base, {
+const coursesModule = mergeDeep(base, {
 	actions: {
 		async removeCourseItem({ dispatch }, courseItem) {
 			let successDeleteNotification;
@@ -45,4 +45,4 @@ const module = mergeDeep(base, {
 	},
 });
 
-export default module;
+export default coursesModule;

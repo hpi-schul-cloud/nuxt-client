@@ -1,4 +1,4 @@
-const module = {
+const termsAndConditionsModule = {
 	state: () => ({ consentVersion: null }),
 	actions: {
 		schoolTermsPresent: async function ({ commit }, schoolId) {
@@ -19,4 +19,4 @@ const module = {
 	},
 };
 
-export default module;
+export default termsAndConditionsModule;

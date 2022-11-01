@@ -1,4 +1,4 @@
-const module = {
+const consentVersionsModule = {
 	state() {
 		return {
 			consentVersions: [],
@@ -88,4 +88,4 @@ const module = {
 		},
 	},
 };
-export default module;
+export default consentVersionsModule;

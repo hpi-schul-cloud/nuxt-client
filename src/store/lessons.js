@@ -1,8 +1,8 @@
 import serviceTemplate from "@/utils/service-template";
 const base = serviceTemplate("lessons");
 
-const module = {
+const lessonsModule = {
 	...base,
 };
 
-export default module;
+export default lessonsModule;

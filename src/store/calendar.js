@@ -3,7 +3,7 @@ import mergeDeep from "@/utils/merge-deep";
 const baseUrl = "calendar";
 const base = serviceTemplate(baseUrl);
 
-const module = mergeDeep(base, {
+const calendarModule = mergeDeep(base, {
 	actions: {
 		removeDate: async function (ctx, payload) {
 			(await this.$axios.delete("/v1/" + baseUrl + "/" + payload.id)).data;
@@ -11,4 +11,4 @@ const module = mergeDeep(base, {
 	},
 });
 
-export default module;
+export default calendarModule;
