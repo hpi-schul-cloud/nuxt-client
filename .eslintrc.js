@@ -35,13 +35,14 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: [
-				"**/__tests__/*.{j,t}s?(x)",
-				"**/tests/unit/**/*.spec.{j,t}s?(x)",
-				"**/*.unit.{j,t}s?(x)",
-			],
+			files: ["**/*.unit.{j,t}s?(x)"],
 			env: {
 				jest: true,
+			},
+			globals: {
+				mount: false,
+				shallowMount: false,
+				createComponentMocks: false,
 			},
 		},
 	],
