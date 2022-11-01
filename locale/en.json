@@ -198,7 +198,8 @@
 	"global.sidebar.calendar": "calendar",
 	"global.sidebar.classes": "Classes",
 	"global.sidebar.courses": "Courses",
-	"global.sidebar.files": "My Files",
+	"global.sidebar.files-old": "My Files",
+	"global.sidebar.files": "Files",
 	"global.sidebar.filesPersonal": "personal files",
 	"global.sidebar.filesShared": "shared files",
 	"global.sidebar.helpArea": "Help section",
@@ -813,5 +814,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Filter by full last name...",
 	"utils.adminFilter.placeholder.complete.name": "Filter by full first name...",
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
-	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020"
+	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
+	"pages.files.title": "Files"
 }

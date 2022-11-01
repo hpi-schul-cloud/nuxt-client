@@ -198,7 +198,8 @@
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",
 	"global.sidebar.courses": "Cursos",
-	"global.sidebar.files": "Mis archivos",
+	"global.sidebar.files-old": "Mis archivos",
+	"global.sidebar.files": "Archivos",
 	"global.sidebar.filesPersonal": "archivos personales",
 	"global.sidebar.filesShared": "archivos compartidos",
 	"global.sidebar.helpArea": "Sección de ayuda",
@@ -820,5 +821,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Filtra por el apellido completo...",
 	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
-	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020"
+	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"pages.files.title": "Archivos"
 }
