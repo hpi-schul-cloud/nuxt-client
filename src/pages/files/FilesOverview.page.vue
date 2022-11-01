@@ -63,7 +63,7 @@ export default defineComponent({
 			return moment(value).locale(locale()).fromNow();
 		};
 
-    const data = getFileOverviewHeaders(t);
+		const data = getFileOverviewHeaders(t);
 
 		return { headers, data, timesAgo };
 	},
