@@ -1,4 +1,3 @@
-import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosInstance } from "axios";
 import { initializeAxios } from "../utils/api";
 import EnvConfigModule from "./env-config";
@@ -40,7 +39,7 @@ const axiosInitializer = (envs?: any, error?: boolean) => {
 			if (error) throw new Error();
 
 			requestPath = path;
-			return envs;
+			return { data: envs };
 		},
 	} as AxiosInstance);
 };
@@ -53,7 +52,7 @@ describe("env-config module", () => {
 	beforeEach(() => {
 		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-		setupStores({ envConfigModule: EnvConfigModule });
+		// setupStores({ envConfigModule: EnvConfigModule });
 	});
 	afterEach(() => {
 		consoleWarnSpy.mockRestore();
