@@ -4,7 +4,7 @@
 			v-model="dialogEdit"
 			large
 			max-width="900px"
-			@click:outside="editedItem = defaultItem"
+			@click:outside="closeEdit"
 		>
 			<v-import-users-match-search
 				v-if="dialogEdit"
@@ -12,7 +12,6 @@
 				:is-dialog="true"
 				@close="closeEdit"
 				@saved-match="savedMatch"
-				@deleted-match="deletedMatch"
 				@saved-flag="savedFlag"
 			></v-import-users-match-search>
 		</v-dialog>
@@ -305,18 +304,7 @@ export default {
 			options: {
 				itemsPerPage: 25,
 			},
-			importUsers: [],
-			totalImportUsers: 0,
 			defaultItem: {
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			},
-			editedItem: {
 				firstName: "",
 				lastName: "",
 				loginName: "",
@@ -377,11 +365,29 @@ export default {
 		canFinishMigration() {
 			return false;
 		},
+		editedItem() {
+			if (this.editedIndex < 0) {
+				return { ...this.defaultItem };
+			}
+			return this.importUsers[this.editedIndex];
+		},
+		importUsers() {
+			if (importUsersModule.getImportUserList?.data) {
+				return importUsersModule.getImportUserList.data;
+			}
+			return [];
+		},
 		school() {
 			return schoolsModule.getSchool;
 		},
 		total() {
 			return importUsersModule.getTotal;
+		},
+		totalImportUsers() {
+			if (importUsersModule?.getImportUserList?.total) {
+				return importUsersModule.getImportUserList.total;
+			}
+			return 0;
 		},
 	},
 	watch: {
@@ -456,13 +462,11 @@ export default {
 		},
 		editItem(item) {
 			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
 			this.dialogEdit = true;
 		},
 		closeEdit() {
 			this.dialogEdit = false;
 			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem);
 				this.editedIndex = -1;
 			});
 		},
@@ -473,30 +477,20 @@ export default {
 			}
 			this.closeEdit();
 		},
-		deletedMatch() {
-			this.importUsers[this.editedIndex].match = null;
-			this.importUsers[this.editedIndex].class = "primary";
-			if (this.searchMatchedBy) {
-				this.loading = true;
-				this.reloadData();
-			}
-			this.closeEdit();
-		},
 		async saveFlag(item) {
 			if (this.loading) return false;
 			this.loading = true;
 			this.editedIndex = this.importUsers.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			const importUser = await importUsersModule.saveFlag({
+			await importUsersModule.saveFlag({
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.flagged === !this.editedItem.flagged
-			) {
-				this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
-			}
+			// if (
+			// 	!importUsersModule.getBusinessError &&
+			// 	importUser.flagged === !this.editedItem.flagged
+			// ) {
+			// 	this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
+			// }
 			if (this.searchFlagged) {
 				this.reloadData();
 			} else {
@@ -541,8 +535,6 @@ export default {
 				);
 			}
 			await importUsersModule.fetchAllImportUsers();
-			this.importUsers = importUsersModule.getImportUserList.data;
-			this.totalImportUsers = importUsersModule.getImportUserList.total;
 
 			this.loading = false;
 		},
