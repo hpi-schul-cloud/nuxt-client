@@ -1,7 +1,7 @@
 import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
 import { AxiosInstance } from "axios";
-import { Resource } from "./types/content";
+import { Lessons, Resource, Resources } from "./types/content";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 
@@ -40,43 +40,47 @@ const mockResource: Resource = {
 	type: "",
 };
 
-const mockResources = {
-	total: 0,
-	limit: 0,
-	skip: 0,
-	data: [mockResource],
-	pagination: undefined,
+const mockResources: { data: Resources } = {
+	data: {
+		total: 0,
+		limit: 0,
+		skip: 0,
+		data: [mockResource],
+		pagination: undefined,
+	},
 };
 
-const mockLessons = {
-	total: 0,
-	limit: 0,
-	skip: 0,
-	data: [
-		{
-			contents: [],
-			courseId: "",
-			createdAt: "",
-			date: "",
-			hidden: false,
-			isCopyFrom: {},
-			materialIds: [],
-			name: "",
-			position: 0,
-			time: "",
-			updatedAt: "",
-			__v: 0,
-			_id: "",
-		},
-	],
+const mockLessons: { data: Lessons } = {
+	data: {
+		total: 0,
+		limit: 0,
+		skip: 0,
+		data: [
+			{
+				contents: [],
+				courseId: "",
+				createdAt: "",
+				date: "",
+				hidden: false,
+				isCopyFrom: {},
+				materialIds: [],
+				name: "",
+				position: 0,
+				time: "",
+				updatedAt: "",
+				__v: 0,
+				_id: "",
+			},
+		],
+	},
 };
 
 const axiosInitializer = () => {
 	initializeAxios({
 		get: async (path: string) => {
 			requestPath = path;
-			if (path === ESPath) return mockResources;
-			if (path === lessonsPath) return mockLessons;
+			if (path.startsWith(ESPath)) return mockResources;
+			if (path.startsWith(lessonsPath)) return mockLessons;
 		},
 		post: async (path: string) => {
 			requestPath = path;
@@ -156,7 +160,7 @@ describe("content module", () => {
 			};
 
 			await contentModule.getResources(query);
-			expect(contentModule.resources).toStrictEqual(mockResources);
+			expect(contentModule.resources).toStrictEqual(mockResources.data);
 		});
 		it("addResources should call incLoading, addResourceMutation and decLoading mutations", async () => {
 			const contentModule = new ContentModule({});
@@ -206,7 +210,7 @@ describe("content module", () => {
 			};
 
 			await contentModule.addResources(query);
-			expect(contentModule.resources).toStrictEqual(mockResources);
+			expect(contentModule.resources).toStrictEqual(mockResources.data);
 		});
 		it("getElements should call incLoading, setLastQuery, setElements and decLoading mutations", async () => {
 			const contentModule = new ContentModule({});
@@ -314,7 +318,7 @@ describe("content module", () => {
 			axiosInitializer();
 
 			await contentModule.getLessons("mockId");
-			expect(contentModule.lessons).toBe(mockLessons);
+			expect(contentModule.lessons).toBe(mockLessons.data);
 		});
 		it("addToLesson should call setNotificationModal mutation", async () => {
 			const contentModule = new ContentModule({});
@@ -383,6 +387,8 @@ describe("content module", () => {
 		});
 		it("getResourceMetadata should call setStatus and setCurrentResource mutation", async () => {
 			const contentModule = new ContentModule({});
+			axiosInitializer();
+
 			const setStatusSpy = jest.fn();
 			const setCurrentResourceSpy = jest.fn();
 
@@ -473,7 +479,10 @@ describe("content module", () => {
 
 			expect(contentModule.resources.data[0]).toBeUndefined();
 			contentModule.lastQuery = mockHash;
-			contentModule.setResources({ hash: mockHash, result: mockResources });
+			contentModule.setResources({
+				hash: mockHash,
+				result: mockResources.data,
+			});
 			expect(contentModule.resources.data[0]).not.toBeUndefined();
 			expect(contentModule.resources.data[0].name).toBe("mockResource");
 		});
@@ -481,7 +490,7 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 
 			expect(contentModule.resources.data[0]).toBeUndefined();
-			contentModule.addResourcesMutation(mockResources);
+			contentModule.addResourcesMutation(mockResources.data);
 			expect(contentModule.resources.data[0]).not.toBeUndefined();
 			expect(contentModule.resources.data[0].name).toBe("mockResource");
 		});
@@ -528,7 +537,7 @@ describe("content module", () => {
 		it("clearResources sets resources and selected to their initial values", () => {
 			const contentModule = new ContentModule({});
 
-			contentModule.resources = mockResources;
+			contentModule.resources = mockResources.data;
 			contentModule.selected = 123;
 			expect(contentModule.resources.data[0]).not.toBeUndefined();
 			expect(contentModule.selected).not.toBe(0);
@@ -561,7 +570,7 @@ describe("content module", () => {
 		});
 		it("clearLessons sets lessons to its initial value", () => {
 			const contentModule = new ContentModule({});
-			contentModule.lessons = mockLessons;
+			contentModule.lessons = mockLessons.data;
 			expect(contentModule.lessons.data[0]).not.toBeUndefined();
 
 			contentModule.clearLessons();
@@ -600,7 +609,7 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			expect(contentModule.lessons.data[0]).toBeUndefined();
 
-			contentModule.setLessons(mockLessons);
+			contentModule.setLessons(mockLessons.data);
 			expect(contentModule.lessons.data[0]).toBeDefined();
 		});
 		it("initMutation sets collectionsFeatureFlag value", () => {
@@ -631,8 +640,8 @@ describe("content module", () => {
 	describe("getters", () => {
 		it("getLessonsGetter gets lessons", () => {
 			const contentModule = new ContentModule({});
-			contentModule.lessons = mockLessons;
-			expect(contentModule.getLessonsGetter).toBe(mockLessons);
+			contentModule.lessons = mockLessons.data;
+			expect(contentModule.getLessonsGetter).toBe(mockLessons.data);
 		});
 		it("getElementsGetter gets elements", () => {
 			const contentModule = new ContentModule({});
@@ -662,8 +671,8 @@ describe("content module", () => {
 		});
 		it("getResourcesGetter gets resources", () => {
 			const contentModule = new ContentModule({});
-			contentModule.resources = mockResources;
-			expect(contentModule.getResourcesGetter).toBe(mockResources);
+			contentModule.resources = mockResources.data;
+			expect(contentModule.getResourcesGetter).toBe(mockResources.data);
 		});
 		it("getCollectionsFeatureFlag gets resources", () => {
 			const contentModule = new ContentModule({});
