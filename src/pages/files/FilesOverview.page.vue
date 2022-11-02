@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe :full-width="true">
-    <h1>{{ $t("pages.files.overview.headline") }}</h1>
-    <base-file-table :items="items"></base-file-table>
+		<h1>{{ $t("pages.files.overview.headline") }}</h1>
+		<base-file-table :items="items"></base-file-table>
 	</default-wireframe>
 </template>
 
