@@ -9,7 +9,7 @@
 			{{ $t("common.actions.back") }}
 		</base-button>
 		<section class="section">
-			<h1 class="h4">
+			<h1 class="h2">
 				{{ $t("pages.administration.ldap.save.title") }}
 			</h1>
 			<div class="icon-text">
@@ -107,17 +107,32 @@
 			/>
 		</div>
 		<section v-if="showUserMigrationOption" class="section">
+			<h3 class="title-class">
+				{{
+					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
+				}}
+			</h3>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
-				label="TODO migrate existing users"
+				:label="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')
+				"
 				data-testid="migrateUsersCheckbox"
 			/>
+			<p
+				class="title-class"
+				v-html="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.info')
+				"
+			></p>
 		</section>
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
 				data-testid="school-migration-activation-error"
-				message="TODO could not activate migration. LDAP was not activated"
+				:message="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.error')
+				"
 				type="bc-error"
 			/>
 		</div>
@@ -196,7 +211,7 @@ export default {
 	},
 	data() {
 		return {
-			migrateUsersCheckbox: false,
+			migrateUsersCheckbox: true,
 		};
 	},
 	computed: {
