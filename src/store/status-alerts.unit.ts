@@ -10,7 +10,7 @@ describe("status alerts module", () => {
 		beforeEach(() => {
 			initializeAxios({
 				get: async (path) => {
-					if (path === "/v1/alert") return mockStatusAlerts;
+					if (path === "/v1/alert") return { data: mockStatusAlerts };
 				},
 			} as AxiosInstance);
 			setupStores();
