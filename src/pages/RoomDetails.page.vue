@@ -279,8 +279,8 @@ export default defineComponent({
 				});
 			}
 
-      // The code below is commented due to a currently not working functionality
-      // (see BC-2542 for more info). To be uncommented after the functionality is fixed.
+			// The code below is commented due to a currently not working functionality
+			// (see BC-2542 for more info). To be uncommented after the functionality is fixed.
 			// items.push({
 			// 	icon: this.icons.mdiEmailPlusOutline,
 			// 	action: () => this.inviteCourse(),
