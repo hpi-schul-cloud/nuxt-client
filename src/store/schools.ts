@@ -1,4 +1,4 @@
-import { UserImportApiFactory } from "@/serverApi/v3";
+import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
@@ -36,14 +36,14 @@ function transformSchoolClientToServer(school: any): School {
 	return { ...school, features: featureArray };
 }
 
-const importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-
 @Module({
 	name: "schoolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class SchoolsModule extends VuexModule {
+	private _importUserApi?: UserImportApiInterface;
+
 	school: School = {
 		_id: "",
 		name: "",
@@ -291,7 +291,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 		this.setLoading(true);
 		try {
-			await importUserApi.importUserControllerEndSchoolInMaintenance();
+			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
 			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
 		} catch (error: any) {
@@ -307,7 +307,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 		this.setLoading(true);
 		try {
-			await importUserApi.importUserControllerStartSchoolInUserMigration();
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration();
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,
@@ -318,5 +318,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 		}
+	}
+
+	private get importUserApi(): UserImportApiInterface {
+		if (!this._importUserApi) {
+			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
+		}
+		return this._importUserApi;
 	}
 }

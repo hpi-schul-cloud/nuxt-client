@@ -84,12 +84,7 @@ export default class AuthModule extends VuexModule {
 
 	status: Status = "";
 
-	private userApi: UserApiInterface;
-
-	constructor(module: VuexModule | {}) {
-		super(module);
-		this.userApi = UserApiFactory(undefined, "/v3", $axios);
-	}
+	_userApi?: UserApiInterface;
 
 	@Mutation
 	setUser(user: User): void {
@@ -253,5 +248,16 @@ export default class AuthModule extends VuexModule {
 		}
 		this.context.commit("clearAuthData");
 		window.location.assign("/logout");
+	}
+
+	private get userApi() {
+		if (!this._userApi) {
+			this._userApi = UserApiFactory(
+				undefined,
+				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				$axios
+			);
+		}
+		return this._userApi;
 	}
 }

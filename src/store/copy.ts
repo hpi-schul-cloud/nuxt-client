@@ -17,8 +17,6 @@ export type CopyParams = {
 	courseId?: string;
 };
 
-let roomsApi: RoomsApiInterface;
-let taskApi: TaskApiInterface;
 @Module({
 	name: "copyModule",
 	namespaced: true,
@@ -29,10 +27,20 @@ export default class CopyModule extends VuexModule {
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
 
-	constructor(module: any) {
-		super(module);
-		taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+	private _roomsApi?: RoomsApiInterface;
+	private get roomsApi(): RoomsApiInterface {
+		if (!this._roomsApi) {
+			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+		}
+		return this._roomsApi;
+	}
+
+	private _taskApi?: TaskApiInterface;
+	private get taskApi(): TaskApiInterface {
+		if (!this._taskApi) {
+			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
+		}
+		return this._taskApi;
 	}
 
 	@Action
@@ -44,19 +52,19 @@ export default class CopyModule extends VuexModule {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === "task") {
-			copyResult = await taskApi
+			copyResult = await this.taskApi
 				.taskControllerCopyTask(id, { courseId })
 				.then((response) => response.data);
 		}
 
 		if (type === "lesson") {
-			copyResult = await roomsApi
+			copyResult = await this.roomsApi
 				.roomsControllerCopyLesson(id, { courseId })
 				.then((response) => response.data);
 		}
 
 		if (type === "course") {
-			copyResult = await roomsApi
+			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
 		}

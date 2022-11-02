@@ -3,6 +3,7 @@ import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	ShareTokenApiFactory,
+	ShareTokenApiInterface,
 	ShareTokenBodyParams,
 	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenResponse,
@@ -17,8 +18,6 @@ export interface SharePayload extends ShareOptions {
 	id: string;
 }
 
-const shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
-
 @Module({
 	name: "shareCourseModule",
 	namespaced: true,
@@ -28,6 +27,14 @@ export default class ShareCourseModule extends VuexModule {
 	private isShareModalOpen: boolean = false;
 	private courseId: string = "";
 	private shareUrl: string | undefined = undefined;
+
+	private _shareApi?: ShareTokenApiInterface;
+	private get shareApi(): ShareTokenApiInterface {
+		if (!this._shareApi) {
+			this._shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
+		}
+		return this._shareApi;
+	}
 
 	@Action
 	async createShareUrl(
@@ -41,7 +48,9 @@ export default class ShareCourseModule extends VuexModule {
 		};
 		try {
 			const shareTokenResult =
-				await shareApi.shareTokenControllerCreateShareToken(shareTokenPayload);
+				await this.shareApi.shareTokenControllerCreateShareToken(
+					shareTokenPayload
+				);
 			if (!shareTokenResult) return undefined;
 			const courseTitle = roomModule.getRoomData?.title || "";
 			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}&title=${courseTitle}`; // WIP decide which url will be used
