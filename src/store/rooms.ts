@@ -2,7 +2,9 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CourseMetadataResponse,
 	CoursesApiFactory,
+	CoursesApiInterface,
 	DashboardApiFactory,
+	DashboardApiInterface,
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
@@ -15,9 +17,6 @@ import {
 	RoomsData,
 	SharingCourseObject,
 } from "./types/rooms";
-
-const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
-const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
 
 @Module({
 	name: "roomsModule",
@@ -43,6 +42,9 @@ export default class RoomsModule extends VuexModule {
 		message: "",
 		error: {},
 	};
+
+	private _dashboardApi?: DashboardApiInterface;
+	private _coursesApi?: CoursesApiInterface;
 
 	@Mutation
 	setRoomData(data: DashboardGridElementResponse[]): void {
@@ -191,12 +193,26 @@ export default class RoomsModule extends VuexModule {
 		return this.roomsData.length > 0;
 	}
 
+	private get dashboardApi(): DashboardApiInterface {
+		if (!this._dashboardApi) {
+			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
+		}
+		return this._dashboardApi;
+	}
+
+	private get coursesApi(): CoursesApiInterface {
+		if (!this._coursesApi) {
+			this._coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
+		}
+		return this._coursesApi;
+	}
+
 	@Action
 	async fetch(device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
 		this.setLoading(true);
 		try {
-			const { data } = await dashboardApi.dashboardControllerFindForUser();
+			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
 
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);
@@ -218,7 +234,7 @@ export default class RoomsModule extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const response = await dashboardApi.dashboardControllerMoveElement(
+			const response = await this.dashboardApi.dashboardControllerMoveElement(
 				this.getRoomsId,
 				reqObject
 			);
@@ -236,7 +252,7 @@ export default class RoomsModule extends VuexModule {
 	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await dashboardApi.dashboardControllerPatchGroup(
+			const response = await this.dashboardApi.dashboardControllerPatchGroup(
 				this.getRoomsId,
 				payload.xPosition,
 				payload.yPosition,
@@ -278,7 +294,10 @@ export default class RoomsModule extends VuexModule {
 	async fetchAllElements(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await coursesApi.courseControllerFindForUser(0, 100);
+			const { data } = await this.coursesApi.courseControllerFindForUser(
+				0,
+				100
+			);
 
 			this.setAllElements(data.data);
 			this.setLoading(false);
