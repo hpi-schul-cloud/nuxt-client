@@ -279,12 +279,14 @@ export default defineComponent({
 				});
 			}
 
-			items.push({
-				icon: this.icons.mdiEmailPlusOutline,
-				action: () => this.inviteCourse(),
-				name: this.$t("common.actions.invite"),
-				dataTestId: "title-menu-invite",
-			});
+      // The code below is commented due to a currently not working functionality
+      // (see BC-2542 for more info). To be uncommented after the functionality is fixed.
+			// items.push({
+			// 	icon: this.icons.mdiEmailPlusOutline,
+			// 	action: () => this.inviteCourse(),
+			// 	name: this.$t("common.actions.invite"),
+			// 	dataTestId: "title-menu-invite",
+			// });
 
 			if (
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
