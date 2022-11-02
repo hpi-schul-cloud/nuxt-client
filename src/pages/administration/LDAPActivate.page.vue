@@ -114,6 +114,13 @@
 				data-testid="migrateUsersCheckbox"
 			/>
 		</section>
+		<div v-if="schoolErrors" class="errors-container">
+			<info-message
+				data-testid="school-migration-activation-error"
+				message="TODO could not activate migration. LDAP was not activated"
+				type="bc-error"
+			/>
+		</div>
 		<div class="bottom-buttons">
 			<base-button
 				design="text"
@@ -164,7 +171,7 @@
 </template>
 
 <script>
-import { importUsersModule, envConfigModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
@@ -190,8 +197,6 @@ export default {
 	data() {
 		return {
 			migrateUsersCheckbox: false,
-			showUserMigrationOption:
-				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED,
 		};
 	},
 	computed: {
@@ -201,6 +206,12 @@ export default {
 			submitted: "getSubmitted",
 			status: "getStatus",
 		}),
+		showUserMigrationOption() {
+			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED;
+		},
+		schoolErrors() {
+			return schoolsModule.error;
+		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
 		},
@@ -222,7 +233,10 @@ export default {
 				delete temporaryConfigData.searchUserPassword;
 			}
 			if (this.migrateUsersCheckbox) {
-				await importUsersModule.startMigration();
+				await schoolsModule.setSchoolInUserMigration(false);
+				if (this.schoolErrors) {
+					return;
+				}
 				// TODO Error handling
 			}
 

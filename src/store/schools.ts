@@ -11,7 +11,7 @@ const SCHOOL_FEATURES: any = [
 	"studentVisibility", // deprecated
 	"messengerSchoolRoom",
 	"messengerStudentRoomCreate",
-	"ldapUniventionMigrationSchool"
+	"ldapUniventionMigrationSchool",
 ];
 
 function transformSchoolServerToClient(school: any): School {
@@ -298,13 +298,17 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolInUserMigration(): Promise<void> {
+	async setSchoolInUserMigration(
+		setSchoolInUserMigration = true
+	): Promise<void> {
 		if (this.school.inUserMigration) {
 			return;
 		}
 		this.setLoading(true);
 		try {
-			await this.importUserApi.importUserControllerStartSchoolInUserMigration();
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(
+				setSchoolInUserMigration
+			);
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,
