@@ -287,10 +287,10 @@ export default {
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		shouldShowPlayer() {
-			//const { mediatype, size } = this.resource;
+			const { mediatype, size } = this.resource;
 			// TODO: support all videos, not only h5p
-			return true;
-			//return (mediatype === "file-h5p" && size !== undefined && size !== null && size > 0);
+			//return true;
+			return (mediatype === "file-h5p" && size !== undefined && size !== null && size > 0);
 		},
 		tags() {
 			return getTags(this.resource.properties);
