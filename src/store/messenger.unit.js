@@ -28,9 +28,9 @@ describe("store/messenger", () => {
 				const dummyReturnObject = { someProperty: "dummy return message" };
 				let receivedUrl;
 				actions.$axios = {
-					$post: (url) => {
+					post: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(dummyReturnObject);
+						return Promise.resolve({ data: dummyReturnObject });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -46,7 +46,7 @@ describe("store/messenger", () => {
 				const dummyErrorObject = { someProperty: "dummy error message" };
 				let receivedUrl;
 				actions.$axios = {
-					$post: (url) => {
+					post: (url) => {
 						receivedUrl = url;
 						return Promise.reject(dummyErrorObject);
 					},
