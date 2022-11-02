@@ -15,9 +15,9 @@ const axiosInitializer = () => {
 	initializeAxios({
 		get: async (path: string) => {
 			receivedRequests.push({ path });
-			return getRequestReturn;
+			return { data: getRequestReturn };
 		},
-		post: async (path: string) => {},
+		post: async (path: string) => ({ data: {} }),
 	} as AxiosInstance);
 };
 axiosInitializer();
@@ -41,19 +41,15 @@ describe("schools module", () => {
 			it("should call backend and sets state correctly", async () => {
 				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
 				getRequestReturn = {
-					id: "id_123",
-					features: ["rocketChat", "messengerSchoolRoom"],
+					data: {
+						id: "id_123",
+						features: ["rocketChat", "messengerSchoolRoom"],
+					},
 				};
 				const schoolsModule = new SchoolsModule({});
 
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const fetchCurrentYearSpy = jest.spyOn(
-					schoolsModule,
-					"fetchCurrentYear"
-				);
-				const fetchFederalSpy = jest.spyOn(schoolsModule, "fetchFederalState");
-				const fetchSystems = jest.spyOn(schoolsModule, "fetchSystems");
 
 				await schoolsModule.fetchSchool();
 
@@ -153,9 +149,7 @@ describe("schools module", () => {
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setFederalSpy).toHaveBeenCalled();
-				expect(setFederalSpy.mock.calls[0][0]).toStrictEqual({
-					data: "dummy response",
-				});
+				expect(setFederalSpy.mock.calls[0][0]).toStrictEqual("dummy response");
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 			it("should trigger error and goes into the catch block", async () => {
@@ -244,7 +238,7 @@ describe("schools module", () => {
 			});
 			it("should call backend and sets state correctly", async () => {
 				axiosInitializer();
-				getRequestReturn = { data: "dummy response" };
+				getRequestReturn = "dummy response";
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -318,9 +312,11 @@ describe("schools module", () => {
 					patch: async (path: string) => {
 						receivedRequests.push({ path });
 						return {
-							id: "id_123",
-							data: "some data to be updated",
-							features: ["rocketChat", "messengerSchoolRoom"],
+							data: {
+								id: "id_123",
+								data: "some data to be updated",
+								features: ["rocketChat", "messengerSchoolRoom"],
+							},
 						};
 					},
 				} as AxiosInstance);
