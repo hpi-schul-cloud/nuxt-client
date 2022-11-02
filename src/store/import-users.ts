@@ -91,10 +91,31 @@ export default class ImportUsersModule extends VuexModule {
 	setMatch(match: Array<MatchedBy>): void {
 		this.match = match;
 	}
+	@Mutation
+	deleteMatchMutation(importUserId: string): void {
+		const editedUser = this.importUserList.data.find(
+			(importUser) => importUser.importUserId === importUserId
+		);
+		if (editedUser) {
+			editedUser.match = undefined;
+			this.importUserList = { ...this.importUserList };
+		}
+	}
 
 	@Mutation
 	setFlagged(flagged: boolean): void {
 		this.flagged = flagged;
+	}
+
+	@Mutation
+	setUserFlagged(payload: { importUserId: string; flagged: boolean }) {
+		const editedUser = this.importUserList.data.find(
+			(importUser) => importUser.importUserId === payload.importUserId
+		);
+		if (editedUser) {
+			editedUser.flagged = payload.flagged;
+			this.importUserList = { ...this.importUserList };
+		}
 	}
 
 	@Mutation
@@ -246,6 +267,7 @@ export default class ImportUsersModule extends VuexModule {
 		flagged: boolean;
 	}): Promise<ImportUserResponse | void> {
 		try {
+			this.setUserFlagged(payload);
 			const response = await this.importUserApi.importUserControllerUpdateFlag(
 				payload.importUserId,
 				{ flagged: payload.flagged }
@@ -281,6 +303,7 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
+			this.deleteMatchMutation(importUserId);
 			const response = await this.importUserApi.importUserControllerRemoveMatch(
 				importUserId
 			);

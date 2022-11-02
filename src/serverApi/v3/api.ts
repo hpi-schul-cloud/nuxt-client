@@ -826,10 +826,10 @@ export interface ImportUserResponse {
     match?: object;
     /**
      * manual flag to apply it as filter
-     * @type {object}
+     * @type {boolean}
      * @memberof ImportUserResponse
      */
-    flagged: object;
+    flagged: boolean;
 }
 
 /**
@@ -1966,6 +1966,12 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
+    lessonName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
     courseId: string;
     /**
      * 
@@ -1973,6 +1979,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     description?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    lessonHidden: boolean;
     /**
      * 
      * @type {string}
