@@ -85,7 +85,7 @@ describe("store/ldap-config", () => {
 				actions.$axios = {
 					get: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(requestData);
+						return Promise.resolve({ data: requestData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -100,9 +100,9 @@ describe("store/ldap-config", () => {
 			it("it commits setTemp mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$post: (url) => {
+					post: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -116,9 +116,9 @@ describe("store/ldap-config", () => {
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$post: (url) => {
+					post: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -133,9 +133,9 @@ describe("store/ldap-config", () => {
 			it("it commits setTemp mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$patch: (url) => {
+					patch: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -152,9 +152,9 @@ describe("store/ldap-config", () => {
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$patch: (url) => {
+					patch: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -172,9 +172,9 @@ describe("store/ldap-config", () => {
 			it("it commits setSubmitted mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$post: (url) => {
+					post: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -191,9 +191,9 @@ describe("store/ldap-config", () => {
 			it("it commits setSubmitted mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
-					$patch: (url) => {
+					patch: (url) => {
 						receivedUrl = url;
-						return Promise.resolve(clientMockData);
+						return Promise.resolve({ data: clientMockData });
 					},
 				};
 				const spyCommit = jest.fn();
