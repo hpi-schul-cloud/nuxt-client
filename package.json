@@ -59,6 +59,7 @@
 	},
 	"devDependencies": {
 		"@intlify/vue-i18n-loader": "^1.1.0",
+		"@openapitools/openapi-generator-cli": "^2.5.2",
 		"@types/jest": "^27.0.1",
 		"@types/object-hash": "^2.2.1",
 		"@typescript-eslint/eslint-plugin": "^5.4.0",
