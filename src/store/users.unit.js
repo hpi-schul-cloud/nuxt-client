@@ -9,7 +9,7 @@ describe("store/users", () => {
 					commit: jest.fn(),
 				};
 				actions.$axios = {
-					$get: async (url, params) => {
+					get: async (url, params) => {
 						receivedRequests.push({ url, params });
 						return { data: "dummy response" };
 					},
@@ -34,7 +34,7 @@ describe("store/users", () => {
 					commit: jest.fn(),
 				};
 				actions.$axios = {
-					$get: async (url, params) => {
+					get: async (url, params) => {
 						receivedRequests.push({ url, params });
 						return { data: "dummy response" };
 					},
@@ -64,8 +64,9 @@ describe("store/users", () => {
 				};
 
 				actions.$axios = {
-					$post: async (url, params) => {
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
 				};
 
@@ -85,8 +86,9 @@ describe("store/users", () => {
 				};
 
 				actions.$axios = {
-					$post: async (url, params) => {
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
 				};
 
@@ -101,15 +103,16 @@ describe("store/users", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
 				const ctxMock = {
-					commit: () => {},
+					commit: () => ({}),
 				};
 				const payloadMock = {
 					someProperty: "some value",
 				};
 
 				actions.$axios = {
-					$post: async (url, params) => {
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
 				};
 
@@ -135,8 +138,9 @@ describe("store/users", () => {
 				};
 
 				actions.$axios = {
-					$post: async (url, params) => {
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
 				};
 				actions.$toast = {
@@ -168,7 +172,7 @@ describe("store/users", () => {
 				const errorMock = { response: { data: "dummy error message" } };
 
 				actions.$axios = {
-					$post: async () => {
+					post: async () => {
 						throw { response: { data: "dummy error message" } };
 					},
 				};
@@ -184,7 +188,7 @@ describe("store/users", () => {
 			it("triggers commit", async () => {
 				const receivedRequests = [];
 				actions.$axios = {
-					$delete: async (url, { params }) => {
+					delete: async (url, { params }) => {
 						receivedRequests.push({ url, params });
 					},
 				};
