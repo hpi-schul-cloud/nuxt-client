@@ -1,6 +1,6 @@
 import { finishedTaskModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { TaskApiFactory } from "../serverApi/v3/api";
+import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { TaskFilter } from "./task.filter";
 import { BusinessError, Status } from "./types/commons";
@@ -13,8 +13,6 @@ import {
 	TasksCountPerCourseStudent,
 	TasksCountPerCourseTeacher,
 } from "./types/tasks";
-
-const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 
 @Module({
 	name: "taskModule",
@@ -39,6 +37,8 @@ export default class TaskModule extends VuexModule {
 
 	tab: string = "";
 
+	_taskApi?: TaskApiInterface;
+
 	@Action
 	async fetchAllTasks(): Promise<void> {
 		this.resetBusinessError();
@@ -52,8 +52,8 @@ export default class TaskModule extends VuexModule {
 				// use initial request to get default page size from api
 				const response =
 					skip === 0
-						? await taskApi.taskControllerFindAll()
-						: await taskApi.taskControllerFindAll(skip, limit);
+						? await this.taskApi.taskControllerFindAll()
+						: await this.taskApi.taskControllerFindAll(skip, limit);
 				tasks.push(...response.data.data);
 				skip = skip + response.data.limit;
 				limit = response.data.limit;
@@ -72,7 +72,7 @@ export default class TaskModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			await taskApi.taskControllerFinish(taskId);
+			await this.taskApi.taskControllerFinish(taskId);
 
 			await this.fetchAllTasks();
 			if (finishedTaskModule.isInitialized) {
@@ -91,7 +91,7 @@ export default class TaskModule extends VuexModule {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {
-			await taskApi.taskControllerDelete(taskId);
+			await this.taskApi.taskControllerDelete(taskId);
 
 			await this.fetchAllTasks();
 			if (finishedTaskModule.isInitialized) {
@@ -344,5 +344,16 @@ export default class TaskModule extends VuexModule {
 
 	private get isReady(): boolean {
 		return this.status === "completed";
+	}
+
+	private get taskApi() {
+		if (!this._taskApi) {
+			this._taskApi = TaskApiFactory(
+				undefined,
+				"/v3", //`${envConfigModule.getApiUrl}/v3`,
+				$axios
+			);
+		}
+		return this._taskApi;
 	}
 }
