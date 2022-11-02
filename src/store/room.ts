@@ -15,9 +15,6 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { SharedLessonObject } from "./types/room";
 
-let roomsApi: RoomsApiInterface;
-let lessonApi: LessonApiInterface;
-
 @Module({
 	name: "roomModule",
 	namespaced: true,
@@ -47,17 +44,27 @@ export default class RoomModule extends VuexModule {
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
 
-	constructor(module: any) {
-		super(module);
-		roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+	private _roomsApi?: RoomsApiInterface;
+	private get roomsApi(): RoomsApiInterface {
+		if (!this._roomsApi) {
+			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
+		}
+		return this._roomsApi;
+	}
+
+	private _lessonApi?: LessonApiInterface;
+	private get lessonApi(): LessonApiInterface {
+		if (!this._lessonApi) {
+			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+		}
+		return this._lessonApi;
 	}
 
 	@Action
 	async fetchContent(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await roomsApi.roomsControllerGetRoomBoard(id);
+			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -76,7 +83,7 @@ export default class RoomModule extends VuexModule {
 			visibility: payload.visibility,
 		};
 		try {
-			await roomsApi.roomsControllerPatchElementVisibility(
+			await this.roomsApi.roomsControllerPatchElementVisibility(
 				this.roomData.roomId,
 				payload.elementId,
 				visibilityParam
@@ -94,7 +101,7 @@ export default class RoomModule extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			await roomsApi.roomsControllerPatchOrderingOfElements(
+			await this.roomsApi.roomsControllerPatchOrderingOfElements(
 				this.roomData.roomId,
 				payload
 			);
@@ -182,7 +189,7 @@ export default class RoomModule extends VuexModule {
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			await lessonApi.lessonControllerDelete(lessonId);
+			await this.lessonApi.lessonControllerDelete(lessonId);
 
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {

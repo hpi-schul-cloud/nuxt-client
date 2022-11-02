@@ -3,6 +3,7 @@ import {
 	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum,
 	UserImportApiFactory,
+	UserImportApiInterface,
 	UserMatchListResponse,
 } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
@@ -14,8 +15,6 @@ export enum MatchedBy {
 	Auto = "auto",
 	None = "none",
 }
-
-const importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
 
 // @ts-ignore
 @Module({
@@ -60,6 +59,8 @@ export default class ImportUsersModule extends VuexModule {
 	private totalUnmatched = 0;
 
 	private businessError: BusinessError | null = null;
+
+	private _importUserApi?: UserImportApiInterface;
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -199,7 +200,7 @@ export default class ImportUsersModule extends VuexModule {
 					: undefined;
 
 			const response =
-				await importUserApi.importUserControllerFindAllImportUsers(
+				await this.importUserApi.importUserControllerFindAllImportUsers(
 					this.firstName || undefined,
 					this.lastName || undefined,
 					this.loginName || undefined,
@@ -225,7 +226,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchAllUsers(): Promise<void> {
 		try {
 			const response =
-				await importUserApi.importUserControllerFindAllUnmatchedUsers(
+				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
 					this.userSearch || undefined,
 					this.usersSkip,
 					this.usersLimit
@@ -245,7 +246,7 @@ export default class ImportUsersModule extends VuexModule {
 		flagged: boolean;
 	}): Promise<ImportUserResponse | void> {
 		try {
-			const response = await importUserApi.importUserControllerUpdateFlag(
+			const response = await this.importUserApi.importUserControllerUpdateFlag(
 				payload.importUserId,
 				{ flagged: payload.flagged }
 			);
@@ -264,7 +265,7 @@ export default class ImportUsersModule extends VuexModule {
 		userId: string;
 	}): Promise<ImportUserResponse | void> {
 		try {
-			const response = await importUserApi.importUserControllerSetMatch(
+			const response = await this.importUserApi.importUserControllerSetMatch(
 				payload.importUserId,
 				{ userId: payload.userId }
 			);
@@ -280,7 +281,7 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
-			const response = await importUserApi.importUserControllerRemoveMatch(
+			const response = await this.importUserApi.importUserControllerRemoveMatch(
 				importUserId
 			);
 			return response.data;
@@ -296,7 +297,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotal(): Promise<void> {
 		try {
 			const response =
-				await importUserApi.importUserControllerFindAllImportUsers(
+				await this.importUserApi.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
 					undefined,
@@ -322,7 +323,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotalMatched(): Promise<void> {
 		try {
 			const response =
-				await importUserApi.importUserControllerFindAllImportUsers(
+				await this.importUserApi.importUserControllerFindAllImportUsers(
 					undefined,
 					undefined,
 					undefined,
@@ -348,7 +349,7 @@ export default class ImportUsersModule extends VuexModule {
 	async fetchTotalUnmatched(): Promise<void> {
 		try {
 			const response =
-				await importUserApi.importUserControllerFindAllUnmatchedUsers(
+				await this.importUserApi.importUserControllerFindAllUnmatchedUsers(
 					undefined,
 					0,
 					1
@@ -365,12 +366,19 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async performMigration(): Promise<void> {
 		try {
-			await importUserApi.importUserControllerSaveAllUsersMatches();
+			await this.importUserApi.importUserControllerSaveAllUsersMatches();
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
 			});
 		}
+	}
+
+	private get importUserApi(): UserImportApiInterface {
+		if (!this._importUserApi) {
+			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
+		}
+		return this._importUserApi;
 	}
 }

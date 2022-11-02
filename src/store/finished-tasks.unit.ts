@@ -14,9 +14,18 @@ import { Task } from "./types/tasks";
 
 describe("finished task store", () => {
 	describe("actions", () => {
+		const setup = (taskApiMock: any) => {
+			const spy = jest
+				.spyOn(serverApi, "TaskApiFactory")
+				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
+			const finishedTaskModule = new FinishedTaskModule({});
+
+			return { taskApiMock, finishedTaskModule };
+		};
+
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
-				const mockApi = {
+				const { taskApiMock, finishedTaskModule } = setup({
 					taskControllerFindAllFinished: jest.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
@@ -25,12 +34,7 @@ describe("finished task store", () => {
 							limit: 50,
 						},
 					})),
-				};
-
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const finishedTaskModule = new FinishedTaskModule({});
+				});
 
 				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([
@@ -39,25 +43,19 @@ describe("finished task store", () => {
 						},
 					]);
 					expect(finishedTaskModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-						1
-					);
+					expect(
+						taskApiMock.taskControllerFindAllFinished
+					).toHaveBeenCalledTimes(1);
 					done();
 				});
 				expect(finishedTaskModule.getStatus).toBe("pending");
-
-				spy.mockRestore();
 			});
 
 			it("should fetch the next page", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 50;
-				finishedTaskModule.pagination.total = 110;
-
 				const mockApi = {
 					taskControllerFindAllFinished: jest
 						.fn()
-						.mockReturnValueOnce({
+						.mockResolvedValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #1" }],
 								total: 110,
@@ -65,7 +63,7 @@ describe("finished task store", () => {
 								limit: 50,
 							},
 						})
-						.mockReturnValueOnce({
+						.mockResolvedValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #2" }],
 								total: 110,
@@ -78,6 +76,10 @@ describe("finished task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.pagination.skip = 50;
+				finishedTaskModule.pagination.total = 110;
 
 				finishedTaskModule.fetchFinishedTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([
