@@ -1,7 +1,6 @@
-import FinishedTaskModule from "./finished-tasks";
 import * as serverApi from "../serverApi/v3/api";
+import FinishedTaskModule from "./finished-tasks";
 import { taskFactory } from "./task.filter.unit";
-import { Task } from "./types/tasks";
 
 /**
  * Spy on a TaskFilter method and mock its return value.

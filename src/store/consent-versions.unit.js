@@ -97,9 +97,9 @@ describe("store/consent-versions", () => {
 				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual(
 					expect.any(Array)
 				);
-				expect(
-					Object.keys(ctxMock.commit.mock.calls[1][1][0]).includes("fileData")
-				).toBeTrue();
+				expect(Object.keys(ctxMock.commit.mock.calls[1][1][0])).toContain(
+					"fileData"
+				);
 				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[2][1]).toStrictEqual(false);
 			});
@@ -117,7 +117,7 @@ describe("store/consent-versions", () => {
 				};
 
 				actions.$axios = {
-					$get: async (url) => {
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
 							total: 1,
