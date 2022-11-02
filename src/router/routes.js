@@ -152,4 +152,10 @@ export const routes = [
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "files",
 	},
+	{
+		path: "/cfiles/teams",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "teamfiles",
+	},
 ];

@@ -1,71 +1,26 @@
 <template>
 	<default-wireframe :full-width="true">
-		<h1>{{ $t("pages.files.overview.headline") }}</h1>
-		<v-data-table
-			:disable-pagination="true"
-			:hide-default-footer="true"
-			:items="data"
-			:headers="headers"
-		>
-			<template #[`item.icon`]="{ item }">
-				<base-icon
-					source="material"
-					:icon="item.icon.name"
-					:fill="
-						item.icon.colored
-							? 'var(--v-primary-base)'
-							: 'var(--v-secondary-base)'
-					"
-				></base-icon>
-			</template>
-			<template #[`item.lastChanged`]="{ item }">
-				<span>{{ timesAgo(item.lastChanged) }}</span>
-			</template>
-		</v-data-table>
+    <h1>{{ $t("pages.files.overview.headline") }}</h1>
+    <base-file-table :items="items"></base-file-table>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { DataTableHeader } from "vuetify";
 import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import { i18n } from "../../utils/i18n-util";
-import moment from "moment/moment";
-import { getFileOverviewHeaders } from "./data";
+import { FileTableItem, getFileOverviewItems } from "./data";
+import BaseFileTable from "@pages/files/BaseFileTable.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	components: { DefaultWireframe },
+	components: { BaseFileTable, DefaultWireframe },
 	setup() {
-		const { t, locale } = i18n();
+		const { t } = i18n();
 
-		const headers: DataTableHeader[] = [
-			{ text: "", value: "icon", sortable: false, width: 5 },
-			{ text: t("common.labels.name"), value: "name", class: "primary--text" },
-			{
-				text: t("common.labels.size"),
-				value: "size",
-				class: "primary--text",
-				align: "end",
-				width: "150",
-			},
-			{
-				text: t("common.labels.changed"),
-				value: "lastChanged",
-				class: "primary--text",
-				align: "end",
-				width: "150",
-			},
-		];
+		const items: FileTableItem[] = getFileOverviewItems(t);
 
-		const timesAgo = function (value: Date) {
-			if (!value) return "";
-			return moment(value).locale(locale()).fromNow();
-		};
-
-		const data = getFileOverviewHeaders(t);
-
-		return { headers, data, timesAgo };
+		return { items };
 	},
 });
 </script>
