@@ -769,6 +769,7 @@
 	"pages.room.student.emptyState": "Aquí aparecen contenidos de aprendizaje como temas o tareas.",
 	"pages.room.lessonCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.lessonCard.label.share": "Compartir",
+	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.taskCard.aria": "{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.taskCard.label.taskDone": "Tarea completada",
 	"pages.room.taskCard.label.due": "Entrega",

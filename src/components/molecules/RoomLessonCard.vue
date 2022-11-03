@@ -242,6 +242,10 @@ export default {
 
 			chipStr += chipValueArray.join(" / ");
 
+			if (this.lesson.hidden) {
+				chipStr += ` (${this.$t("pages.room.lessonCard.label.notVisible")})`;
+			}
+
 			return chipStr;
 		},
 	},

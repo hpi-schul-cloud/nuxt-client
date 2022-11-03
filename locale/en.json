@@ -762,6 +762,7 @@
 	"pages.room.student.emptyState": "Learning content such as topics or tasks appear here.",
 	"pages.room.lessonCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.share": "Share",
+	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.taskCard.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.taskDone": "Task completed",
 	"pages.room.taskCard.label.due": "Due",

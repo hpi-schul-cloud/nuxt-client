@@ -737,6 +737,7 @@
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.aria": "{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.lessonCard.label.share": "Надати спільний доступ",
+	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonShare.btn.continue": "Продовжити",
 	"pages.room.lessonShare.codeError": "Код уроку не використовується.",
 	"pages.room.lessonShare.confirm": "Код копії створено!",
