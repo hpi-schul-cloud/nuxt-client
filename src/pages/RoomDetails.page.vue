@@ -324,16 +324,6 @@ export default defineComponent({
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
-		async inviteCourse() {
-			await roomModule.createCourseInvitation(this.courseId);
-			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
-			this.dialog.model = "invite";
-			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
-			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
-			this.dialog.inputText = this.dialog.courseInvitationLink;
-			this.dialog.subText = "";
-			this.dialog.isOpen = true;
-		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
 				this.shareCourseModule.startShareFlow(this.courseId);
