@@ -39,11 +39,11 @@ export default defineComponent({
 			required: false,
 			default: () => [],
 		},
-    headers: {
-      type: Array,
-      required: false,
-      default: () => [],
-    }
+		headers: {
+			type: Array,
+			required: false,
+			default: () => [],
+		},
 	},
 	setup() {
 		const router: VueRouter = useRouter();
