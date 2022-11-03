@@ -16,9 +16,15 @@ export const ldapPathValidationRegex = helpers.regex(
 	/^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
 );
 
-export const urlValidationRegex = helpers.regex(
-	"alpha",
-	/^ldaps:\/\/[\w\.-]+\.[a-z]+(:\d+)?$/
-);
+export const urlValidationRegex =
+	process.env.NODE_ENV === "development"
+		? helpers.regex(
+				"alpha",
+				/ldaps?:\/\/([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3})(:\d+)?$/
+		  )
+		: helpers.regex(
+				"alpha",
+				/ldaps:\/\/([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3})(:\d+)?$/
+		  );
 
 export const unchangedPassword = "🐱‍👤[unchanged]**";
