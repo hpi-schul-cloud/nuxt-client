@@ -91,6 +91,7 @@
 					H2
 				</v-btn>
 				<v-btn
+					color="secondary"
 					width="36"
 					height="36"
 					depressed

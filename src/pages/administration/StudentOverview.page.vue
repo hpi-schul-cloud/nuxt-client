@@ -148,7 +148,6 @@ export default {
 			mdiAccountPlus,
 			mdiCloudDownload,
 			mdiPencil,
-			something: [], // ?? xD
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
