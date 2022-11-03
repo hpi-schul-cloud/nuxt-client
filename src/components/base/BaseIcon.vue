@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import "font-awesome/css/font-awesome.min.css";
-
 export default {
 	inheritAttrs: false,
 	props: {
@@ -77,6 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "font-awesome/css/font-awesome.min.css";
 .icon {
 	display: inline-block;
 	width: 1em;
