@@ -9,8 +9,8 @@ describe("@/components/share-course/ImportModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

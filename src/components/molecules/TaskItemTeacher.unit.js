@@ -34,11 +34,11 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
-		setup() {
-			provide("taskModule", taskModuleMock);
-			provide("copyModule", copyModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key) => key });
+		provide: {
+			taskModule: taskModuleMock,
+			copyModule: copyModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		propsData: props,
 		attachTo: document.body,

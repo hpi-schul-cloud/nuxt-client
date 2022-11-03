@@ -9,7 +9,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
-import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
@@ -32,13 +31,13 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("taskModule", taskModuleMock);
-				provide("finishedTaskModule", finishedTaskModuleMock);
-				provide("copyModule", copyModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				taskModule: taskModuleMock,
+				copyModule: copyModuleMock,
+				finishedTaskModule: finishedTaskModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

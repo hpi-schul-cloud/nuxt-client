@@ -1,7 +1,6 @@
 import ShareCourseModule from "@/store/share-course";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -17,12 +16,12 @@ describe("@/components/share-modal/ShareModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("shareCourseModule", shareCourseModuleMock);
-				provide("i18n", { t: (key: string) => key });
-				provide("notifierModule", {
+			provide: {
+				notifierModule: {
 					show: showMock,
-				});
+				},
+				shareCourseModule: shareCourseModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

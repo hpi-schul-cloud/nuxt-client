@@ -3,7 +3,6 @@ import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemStudent from "./TaskItemStudent";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import TaskModule from "@/store/tasks";
-import { provide } from "vue";
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 
@@ -29,11 +28,11 @@ describe("@/components/molecules/TaskItemStudent", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			setup() {
-				provide("taskModule", taskModuleMock);
-				provide("copyModule", copyModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key) => key });
+			provide: {
+				taskModule: taskModuleMock,
+				copyModule: copyModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key) => key },
 			},
 			vuetify,
 			propsData: props,

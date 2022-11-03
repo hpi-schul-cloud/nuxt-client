@@ -4,7 +4,6 @@ import { urlValidationRegex } from "@/utils/ldapConstants";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import loggedOut from "./loggedOut.vue";
 
@@ -17,8 +16,8 @@ describe("loggedOutLayout", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("envConfigModule", envConfigModuleMock);
+			provide: {
+				envConfigModule: envConfigModuleMock,
 			},
 			...attrs,
 			stubs: {

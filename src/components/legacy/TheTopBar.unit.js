@@ -1,4 +1,3 @@
-import { provide } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
@@ -16,9 +15,9 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
-		setup() {
-			provide("authModule", authModuleMock);
-			provide("envConfigModule", envConfigModuleMock);
+		provide: {
+			authModule: authModuleMock,
+			envConfigModule: envConfigModuleMock,
 		},
 		propsData: props,
 		attachTo: document.body,

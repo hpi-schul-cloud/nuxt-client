@@ -8,7 +8,6 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "vue";
 import TaskItemMenu from "./TaskItemMenu";
 
 const { tasksTeacher } = mocks;
@@ -35,12 +34,12 @@ const getWrapper = (props, options) => {
 		}),
 		propsData: props,
 		attachTo: document.body,
-		setup() {
-			provide("taskModule", taskModuleMock);
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key) => key });
+		provide: {
+			taskModule: taskModuleMock,
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		...options,
 	});
@@ -197,8 +196,6 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 				const copyBtn = wrapper.find("#task-action-copy");
 				await copyBtn.trigger("click");
-
-				console.log(wrapper.emitted("copy-task"));
 
 				expect(wrapper.emitted("copy-task")).toStrictEqual([
 					[
