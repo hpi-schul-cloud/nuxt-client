@@ -381,38 +381,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("modal views", () => {
-			it("should open modal for inviting action", async () => {
-				const wrapper = getWrapper();
-				wrapper.setData({
-					dialog: {
-						isOpen: true,
-						model: "invite",
-						header: wrapper.vm.$i18n.t("pages.room.modal.course.invite.header"),
-						text: wrapper.vm.$i18n.t("pages.room.modal.course.invite.text"),
-						inputText: "/link/123456",
-						subText: "",
-						courseInvitationLink: "123456",
-					},
-				});
-				await wrapper.vm.$nextTick();
-
-				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
-				const titleElement = modalView.find(".dialog-header");
-				const textElement = modalView.find(".modal-text");
-				const inputElement = modalView.find(`[data-testid="modal-input"]`);
-
-				expect(modalView.vm.isOpen).toBe(true);
-				expect(titleElement.element.textContent).toContain(
-					wrapper.vm.dialog.header
-				);
-				expect(textElement.element.textContent).toContain(
-					wrapper.vm.dialog.text
-				);
-				expect(inputElement.element.value).toStrictEqual(
-					wrapper.vm.dialog.inputText
-				);
-			});
-
 			it("should open modal for sharing action", async () => {
 				const wrapper = getWrapper();
 				const modalView = wrapper.find(`[data-testid="share-dialog"]`);

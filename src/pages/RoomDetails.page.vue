@@ -176,7 +176,6 @@ export default defineComponent({
 				inputText: "",
 				subText: "",
 				qrUrl: "",
-				courseInvitationLink: "",
 				courseShareToken: "",
 			},
 			icons: {
