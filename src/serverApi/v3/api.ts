@@ -111,6 +111,43 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface ApiValidationError
+ */
+export interface ApiValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ApiValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ApiValidationError
+     */
+    details: object;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -1778,6 +1815,55 @@ export enum ShareTokenBodyParamsParentTypeEnum {
 /**
  * 
  * @export
+ * @interface ShareTokenImportBodyParams
+ */
+export interface ShareTokenImportBodyParams {
+    /**
+     * the new name of the imported object.
+     * @type {string}
+     * @memberof ShareTokenImportBodyParams
+     */
+    newName: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShareTokenInfoResponse
+ */
+export interface ShareTokenInfoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShareTokenInfoResponse
+     */
+    token: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShareTokenInfoResponse
+     */
+    parentType: ShareTokenInfoResponseParentTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShareTokenInfoResponse
+     */
+    parentName: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ShareTokenInfoResponseParentTypeEnum {
+    Courses = 'courses',
+    Tasks = 'tasks',
+    Lessons = 'lessons'
+}
+
+/**
+ * 
+ * @export
  * @interface ShareTokenPayloadResponse
  */
 export interface ShareTokenPayloadResponse {
@@ -1979,6 +2065,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     description?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    lessonHidden: boolean;
     /**
      * 
      * @type {string}
@@ -6229,6 +6321,7 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6268,7 +6361,52 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} token 
+         * @summary Import a share token payload.
+         * @param {string} token The token that identifies the shared object
+         * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shareTokenControllerImportShareToken: async (token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'token' is not null or undefined
+            assertParamExists('shareTokenControllerImportShareToken', 'token', token)
+            // verify required parameter 'shareTokenImportBodyParams' is not null or undefined
+            assertParamExists('shareTokenControllerImportShareToken', 'shareTokenImportBodyParams', shareTokenImportBodyParams)
+            const localVarPath = `/sharetoken/{token}/import`
+                .replace(`{${"token"}}`, encodeURIComponent(String(token)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(shareTokenImportBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Look up a share token.
+         * @param {string} token The token that identifies the shared object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -6315,6 +6453,7 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6325,11 +6464,24 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} token 
+         * @summary Import a share token payload.
+         * @param {string} token The token that identifies the shared object
+         * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareTokenControllerLookupShareToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenResponse>> {
+        async shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Look up a share token.
+         * @param {string} token The token that identifies the shared object
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async shareTokenControllerLookupShareToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shareTokenControllerLookupShareToken(token, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6345,6 +6497,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @summary Create a share token.
          * @param {ShareTokenBodyParams} shareTokenBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6354,11 +6507,23 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {string} token 
+         * @summary Import a share token payload.
+         * @param {string} token The token that identifies the shared object
+         * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenResponse> {
+        shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Look up a share token.
+         * @param {string} token The token that identifies the shared object
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenInfoResponse> {
             return localVarFp.shareTokenControllerLookupShareToken(token, options).then((request) => request(axios, basePath));
         },
     };
@@ -6372,6 +6537,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
 export interface ShareTokenApiInterface {
     /**
      * 
+     * @summary Create a share token.
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6381,12 +6547,24 @@ export interface ShareTokenApiInterface {
 
     /**
      * 
-     * @param {string} token 
+     * @summary Import a share token payload.
+     * @param {string} token The token that identifies the shared object
+     * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareTokenApiInterface
      */
-    shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenResponse>;
+    shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @summary Look up a share token.
+     * @param {string} token The token that identifies the shared object
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShareTokenApiInterface
+     */
+    shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenInfoResponse>;
 
 }
 
@@ -6399,6 +6577,7 @@ export interface ShareTokenApiInterface {
 export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
     /**
      * 
+     * @summary Create a share token.
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6410,7 +6589,21 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
 
     /**
      * 
-     * @param {string} token 
+     * @summary Import a share token payload.
+     * @param {string} token The token that identifies the shared object
+     * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShareTokenApi
+     */
+    public shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any) {
+        return ShareTokenApiFp(this.configuration).shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Look up a share token.
+     * @param {string} token The token that identifies the shared object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareTokenApi
