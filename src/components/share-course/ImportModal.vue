@@ -38,7 +38,7 @@
 	</v-custom-dialog>
 </template>
 
-<script lang="ts">
+<script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, reactive, ref } from "vue";

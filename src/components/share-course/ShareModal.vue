@@ -45,7 +45,7 @@
 	</v-custom-dialog>
 </template>
 
-<script lang="ts">
+<script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share-course/ShareModalResult.vue";

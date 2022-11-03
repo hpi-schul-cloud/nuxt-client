@@ -14,7 +14,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import ImportModal from "@/components/share-course/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "vue";
