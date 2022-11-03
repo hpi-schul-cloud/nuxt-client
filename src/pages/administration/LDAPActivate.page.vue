@@ -252,7 +252,6 @@ export default {
 				if (this.schoolErrors) {
 					return;
 				}
-				// TODO Error handling
 			}
 
 			if (id) {
