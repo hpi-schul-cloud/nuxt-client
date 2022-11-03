@@ -280,9 +280,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 					menuItems
 				)
 			).toBe(true);
-			// expect(
-			// 	findMenuItems(wrapper.vm.$i18n.t("common.actions.invite"), menuItems)
-			// ).toBe(true);
 			expect(
 				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
 			).toBe(true);
@@ -351,33 +348,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 				expect(onCopyRoom).toHaveBeenCalled();
 			});
 		});
-
-		// it("should call inviteCourse method when 'Invite to the course' menu clicked", async () => {
-		// 	const inviteCourseSpy = jest.fn();
-		// 	const wrapper = getWrapper();
-		// 	wrapper.vm.inviteCourse = inviteCourseSpy;
-		//
-		// 	const threeDotButton = wrapper.find(".three-dot-button");
-		// 	await threeDotButton.trigger("click");
-		// 	const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-		// 	await moreActionButton.trigger("click");
-		//
-		// 	expect(inviteCourseSpy).toHaveBeenCalled();
-		// });
-
-		// it("should call store action after 'Invite to the course' menu clicked", async () => {
-		// 	const createCourseInvitationSpy = jest.fn();
-		// 	roomModule.createCourseInvitation = createCourseInvitationSpy;
-		// 	const wrapper = getWrapper();
-		//
-		// 	const threeDotButton = wrapper.find(".three-dot-button");
-		// 	await threeDotButton.trigger("click");
-		// 	const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-		// 	await moreActionButton.trigger("click");
-		//
-		// 	expect(createCourseInvitationSpy).toHaveBeenCalled();
-		// 	expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual("123");
-		// });
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			// @ts-ignore
