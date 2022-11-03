@@ -485,12 +485,6 @@ export default {
 				importUserId: this.editedItem.importUserId,
 				flagged: !this.editedItem.flagged,
 			});
-			// if (
-			// 	!importUsersModule.getBusinessError &&
-			// 	importUser.flagged === !this.editedItem.flagged
-			// ) {
-			// 	this.importUsers[this.editedIndex].flagged = !this.editedItem.flagged;
-			// }
 			if (this.searchFlagged) {
 				this.reloadData();
 			} else {
