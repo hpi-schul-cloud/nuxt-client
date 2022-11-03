@@ -19,6 +19,8 @@ export const i18n = () => {
 	});
 };
 
+Vue.prototype._i18n = i18n();
+
 Vue.prototype.$ts = function (key) {
 	const result = this.$t(key);
 	if (typeof result !== "string") {
