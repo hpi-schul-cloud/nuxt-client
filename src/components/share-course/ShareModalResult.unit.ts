@@ -1,5 +1,4 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import ShareModalResult from "@/components/share-modal/ShareModalResult.vue";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
@@ -10,8 +9,8 @@ describe("@/components/share-modal/ShareModalResult", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

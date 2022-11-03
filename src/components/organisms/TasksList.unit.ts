@@ -6,7 +6,6 @@ import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
@@ -25,12 +24,12 @@ describe("@/components/organisms/TasksList", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("copyModule", copyModuleMock);
-				provide("taskModule", taskModuleMock);
-				provide("finishedTaskModule", finishedTaskModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				copyModule: copyModuleMock,
+				taskModule: taskModuleMock,
+				finishedTaskModule: finishedTaskModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});
