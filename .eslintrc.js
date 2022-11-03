@@ -44,6 +44,7 @@ module.exports = {
 				shallowMount: false,
 				createComponentMocks: false,
 				rendersSlotContent: false,
+				wait: false,
 			},
 		},
 	],

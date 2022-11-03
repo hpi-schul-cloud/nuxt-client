@@ -7,14 +7,14 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ImportFlow from "@components/share-course/ImportFlow.vue";
-import { provide } from "@vue/composition-api";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 
-describe("@components/share-course/ImportFlow", () => {
+describe("@/components/share-course/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;

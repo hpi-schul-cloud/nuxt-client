@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
+import {
+	config as vueTestUtilsConfig,
+	createLocalVue,
+	mount,
+	shallowMount,
+} from "@vue/test-utils";
 import Vuetify from "vuetify";
 // import { mixin as userMixin } from "@/plugins/user.js";
 import Vuelidate from "vuelidate";
@@ -16,9 +21,39 @@ import "@/plugins/directives";
 Vue.config.productionTip = false;
 Vue.use(Vuex);
 
+// mock translations
+const mockTranslate = (key) => key;
+vueTestUtilsConfig.mocks.$t = mockTranslate;
+vueTestUtilsConfig.mocks.$tc = mockTranslate;
+vueTestUtilsConfig.mocks.$i18n = { t: mockTranslate };
+
+// mock window.location
+// used e.g. in @/components/atoms/vRoomAvatar.unit.ts#L96
+const location = {
+	href: "",
+};
+Object.defineProperty(window, "location", {
+	set: function (val) {
+		location.host = "domain.io";
+		location.hostname = "domain.io";
+		location.origin = "http://domain.io";
+		location.href = "http://domain.io" + val;
+		location.pathname = val;
+	},
+	get: function () {
+		return location;
+	},
+});
+
 global.mount = mount;
 global.shallowMount = shallowMount;
-// global.createComponentMocks = ({ i18n }) => {};
+
+// used in
+// @/components/base/BaseModal.unit.js, @/components/molecules/ContextMenu.unit.js
+global.wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
@@ -39,8 +74,8 @@ global.createComponentMocks = ({
 	// Vue and thereby affecting other tests.
 	// https://vue-test-utils.vuejs.org/api/#createlocalvue
 	const localVue = createLocalVue();
-	
-	const returnOptions = { localVue, $t: (key) => key };
+
+	const returnOptions = { localVue };
 
 	// https://vue-test-utils.vuejs.org/api/options.html#stubs
 	returnOptions.stubs = stubs || {};
@@ -222,7 +257,7 @@ function readDirRecursiveSync(dir) {
 		}
 	});
 	return results;
-};
+}
 
 const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 	// Only include "Base" prefixed .vue files
@@ -235,3 +270,7 @@ const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 mountBaseComponents(globalComponentFiles, (fileName) =>
 	require(path.join(baseComponentDir, fileName))
 );
+
+// is imported by @@/tests/test-utils/componentMocks.ts
+// please refactor
+export default global.createComponentMocks;

@@ -1,7 +1,6 @@
 import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { isValidComponent } from "@@/tests/unit/commonTests";
 import AddContentModal from "@/components/molecules/AddContentModal";
 
 const testProps = {

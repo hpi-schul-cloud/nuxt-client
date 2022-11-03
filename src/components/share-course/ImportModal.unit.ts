@@ -1,9 +1,9 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
-import ImportModal from "@components/share-course/ImportModal.vue";
+import ImportModal from "@/components/share-course/ImportModal.vue";
 
-describe("@components/share-course/ImportModal", () => {
+describe("@/components/share-course/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ImportModal, {
 			...createComponentMocks({

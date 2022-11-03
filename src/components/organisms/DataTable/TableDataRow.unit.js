@@ -1,5 +1,3 @@
-import TableDataRow from "./TableDataRow";
-
 describe("@/components/organisms/DataTable/TableDataRow", () => {
-	it(...isValidComponent(TableDataRow));
+	it.todo("write tests");
 });

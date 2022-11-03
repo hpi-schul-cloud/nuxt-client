@@ -39,9 +39,9 @@
 </template>
 
 <script type="ts">
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, reactive, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

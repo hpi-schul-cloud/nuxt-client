@@ -17,7 +17,7 @@
 <script type="ts">
 import ImportModal from "@/components/share-course/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
-import { computed, defineComponent, inject, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
