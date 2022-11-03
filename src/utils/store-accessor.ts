@@ -19,6 +19,7 @@ import TaskModule from "@/store/tasks";
 import ShareCourseModule from "@/store/share-course";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import FilesModule from "@store/files";
 
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
@@ -39,6 +40,7 @@ let schoolsModule: SchoolsModule;
 let statusAlertsModule: StatusAlertsModule;
 let taskModule: TaskModule;
 let shareCourseModule: ShareCourseModule;
+let filesModule: FilesModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -60,6 +62,7 @@ function initializeStores(store: Store<any>): void {
 	copyModule = getModule(CopyModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
+	filesModule = getModule(FilesModule, store);
 }
 
 export {
@@ -83,4 +86,5 @@ export {
 	copyModule,
 	loadingStateModule,
 	shareCourseModule,
+	filesModule,
 };

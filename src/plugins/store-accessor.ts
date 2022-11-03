@@ -4,6 +4,7 @@ import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import FilesModule from "@store/files";
 import FilePathsModule from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTaskModule from "@/store/finished-tasks";
@@ -43,5 +44,6 @@ export default () => {
 		provide("shareCourseModule", getModule(ShareCourseModule, store));
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("taskModule", getModule(TaskModule, store));
+		provide("filesModule", getModule(FilesModule, store));
 	});
 };

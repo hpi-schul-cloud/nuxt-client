@@ -1,13 +1,4 @@
-export interface FileTableItem {
-	name: string;
-	icon: {
-		name: string;
-		colored?: boolean;
-	};
-	path: string;
-	size: string;
-	lastChanged: Date;
-}
+import { FileTableItem } from "@pages/files/file-table-item";
 
 export function getFileOverviewItems(
 	t: (key: string) => string

@@ -24,13 +24,12 @@
 </template>
 
 <script lang="ts">
-import { DataTableHeader } from "vuetify";
 import { defineComponent } from "@vue/composition-api";
-import { i18n } from "../../utils/i18n-util";
+import { i18n } from "@utils/i18n-util";
 import moment from "moment/moment";
-import { FileTableItem } from "./data";
 import { useRouter } from "@nuxtjs/composition-api";
 import VueRouter from "vue-router";
+import { BaseTableItem } from "@basecomponents/BaseTable/BaseTableItem";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -40,43 +39,26 @@ export default defineComponent({
 			required: false,
 			default: () => [],
 		},
+    headers: {
+      type: Array,
+      required: false,
+      default: () => [],
+    }
 	},
 	setup() {
 		const router: VueRouter = useRouter();
-		const { t, locale } = i18n();
-
-		const headers: DataTableHeader[] = [
-			{ text: "", value: "icon", sortable: false, width: 5 },
-			{
-				text: t("common.labels.name"),
-				value: "name",
-				class: "primary--text",
-				cellClass: "primary--text",
-			},
-			{
-				text: t("common.labels.size"),
-				value: "size",
-				class: "primary--text",
-				width: "94",
-			},
-			{
-				text: t("common.labels.changed"),
-				value: "lastChanged",
-				class: "primary--text",
-				width: "140",
-			},
-		];
+		const { locale } = i18n();
 
 		const timesAgo = function (value: Date): string {
 			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};
 
-		const click = function (item: FileTableItem): void {
+		const click = function (item: BaseTableItem): void {
 			router.push({ path: item.path });
 		};
 
-		return { headers, click, timesAgo };
+		return { click, timesAgo };
 	},
 });
 </script>
@@ -84,11 +66,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $arrow-offset: 8px;
 
-.v-data-table /deep/ th i {
+.v-data-table ::v-deep th i {
 	margin-left: $arrow-offset;
 }
 
-.v-data-table /deep/ td {
+.v-data-table ::v-deep td {
 	cursor: pointer;
 }
 </style>
