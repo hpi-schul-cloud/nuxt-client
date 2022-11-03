@@ -113,7 +113,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 			expect(lessonCard.element.className).not.toContain("hidden-lesson");
 		});
 
-		it("should show information about the visibility of tasks for hidden lesson cards", async () => {
+		it("should show information about the visibility of tasks for hidden lesson card", async () => {
 			const wrapper = getWrapper({ ...hiddenTestProps, role });
 			const chipElement = wrapper.find(".chip-value");
 			expect(chipElement.element.textContent).toContain(
