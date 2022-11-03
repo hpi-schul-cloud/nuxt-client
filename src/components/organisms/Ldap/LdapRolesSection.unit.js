@@ -112,7 +112,7 @@ describe("@/components/organisms/LdapRolesSection", () => {
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
@@ -164,7 +164,7 @@ describe("@/components/organisms/LdapRolesSection", () => {
 			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputMember = wrapper.find("input[data-testid=ldapDataRolesStudent]");
 		expect(inputMember.exists()).toBe(true);
@@ -176,6 +176,6 @@ describe("@/components/organisms/LdapRolesSection", () => {
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

@@ -45,8 +45,8 @@ describe("DefaultWireframe", () => {
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
-		expect(contentWrapper.classes("container-full-width")).toBeTrue();
-		expect(contentWrapper.classes("container-max-width")).toBeFalse();
+		expect(contentWrapper.classes("container-full-width")).toBeTruthy();
+		expect(contentWrapper.classes("container-max-width")).toBeFalsy();
 	});
 
 	it("has small width", () => {
@@ -56,8 +56,8 @@ describe("DefaultWireframe", () => {
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
-		expect(contentWrapper.classes("container-full-width")).toBeFalse();
-		expect(contentWrapper.classes("container-max-width")).toBeTrue();
+		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
+		expect(contentWrapper.classes("container-max-width")).toBeTruthy();
 	});
 
 	it("displays content in slot", () => {

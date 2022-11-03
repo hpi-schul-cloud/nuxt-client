@@ -53,9 +53,9 @@ describe("legacyLoggedIn", () => {
 		);
 		expect(
 			administrationListItem.element.classList.contains("child-active")
-		).toBeTrue();
+		).toBeTruthy();
 		expect(
 			studentAdministrationListItem.element.classList.contains("active")
-		).toBeTrue();
+		).toBeTruthy();
 	});
 });

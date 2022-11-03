@@ -97,7 +97,7 @@ describe("teachers/new", () => {
 			'input[data-testid="input_create-user_email"]'
 		);
 		let errorMessageComponent = wrapper.find(".info-message.bc-error");
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
@@ -108,6 +108,6 @@ describe("teachers/new", () => {
 		await wrapper.vm.$nextTick(); // trigger catch clause of dispatch
 		await wrapper.vm.$nextTick(); // display error component
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

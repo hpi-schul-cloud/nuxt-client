@@ -36,9 +36,9 @@ describe("PrivacySettings", () => {
 	beforeAll(() => {});
 
 	beforeEach(() => {
-		setupStores({ 
-			authModule: AuthModule, 
-			envConfigModule: EnvConfigModule 
+		setupStores({
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
 		});
 	});
 
@@ -256,8 +256,8 @@ describe("PrivacySettings", () => {
 			const learnStoreSwitch = wrapper.find(
 				`${searchStrings.learnStore} input`
 			);
-			expect(studentVisibilitySwitch.element.checked).toBeTrue();
-			expect(learnStoreSwitch.element.checked).toBeFalse();
+			expect(studentVisibilitySwitch.element.checked).toBeTruthy();
+			expect(learnStoreSwitch.element.checked).toBeFalsy();
 		});
 		it("should be correct for permissions (2)", () => {
 			envConfigModule.setEnvs({
@@ -288,8 +288,8 @@ describe("PrivacySettings", () => {
 			const learnStoreSwitch = wrapper.find(
 				`${searchStrings.learnStore} input`
 			);
-			expect(studentVisibilitySwitch.element.checked).toBeFalse();
-			expect(learnStoreSwitch.element.checked).toBeTrue();
+			expect(studentVisibilitySwitch.element.checked).toBeFalsy();
+			expect(learnStoreSwitch.element.checked).toBeTruthy();
 		});
 
 		it("should be correct for matrix (1)", () => {
@@ -324,9 +324,9 @@ describe("PrivacySettings", () => {
 			const messengerStudentRoomCreateSwitch = wrapper.find(
 				`${searchStrings.messengerStudentRoomCreate} input`
 			);
-			expect(matrixMessengerSwitch.element.checked).toBeTrue();
-			expect(messengerSchoolRoomSwitch.element.checked).toBeFalse();
-			expect(messengerStudentRoomCreateSwitch.element.checked).toBeTrue();
+			expect(matrixMessengerSwitch.element.checked).toBeTruthy();
+			expect(messengerSchoolRoomSwitch.element.checked).toBeFalsy();
+			expect(messengerStudentRoomCreateSwitch.element.checked).toBeTruthy();
 		});
 		it("should be correct for matrix (2)", () => {
 			envConfigModule.setEnvs({
@@ -360,9 +360,9 @@ describe("PrivacySettings", () => {
 			const messengerStudentRoomCreateSwitch = wrapper.find(
 				`${searchStrings.messengerStudentRoomCreate} input`
 			);
-			expect(matrixMessengerSwitch.element.checked).toBeFalse();
-			expect(messengerSchoolRoomSwitch.element.checked).toBeTrue();
-			expect(messengerStudentRoomCreateSwitch.element.checked).toBeFalse();
+			expect(matrixMessengerSwitch.element.checked).toBeFalsy();
+			expect(messengerSchoolRoomSwitch.element.checked).toBeTruthy();
+			expect(messengerStudentRoomCreateSwitch.element.checked).toBeFalsy();
 		});
 		it("should be correct for non matrix features (1)", () => {
 			envConfigModule.setEnvs({
@@ -391,8 +391,8 @@ describe("PrivacySettings", () => {
 			const videoconferenceSwitch = wrapper.find(
 				`${searchStrings.videoconference} input`
 			);
-			expect(rocketChatSwitch.element.checked).toBeFalse();
-			expect(videoconferenceSwitch.element.checked).toBeTrue();
+			expect(rocketChatSwitch.element.checked).toBeFalsy();
+			expect(videoconferenceSwitch.element.checked).toBeTruthy();
 		});
 		it("should be correct for non matrix features (2)", () => {
 			envConfigModule.setEnvs({
@@ -421,8 +421,8 @@ describe("PrivacySettings", () => {
 			const videoconferenceSwitch = wrapper.find(
 				`${searchStrings.videoconference} input`
 			);
-			expect(rocketChatSwitch.element.checked).toBeTrue();
-			expect(videoconferenceSwitch.element.checked).toBeFalse();
+			expect(rocketChatSwitch.element.checked).toBeTruthy();
+			expect(videoconferenceSwitch.element.checked).toBeFalsy();
 		});
 	});
 
@@ -449,7 +449,7 @@ describe("PrivacySettings", () => {
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
-			expect(emitted["update-privacy-settings"][0][0]).toBeFalse();
+			expect(emitted["update-privacy-settings"][0][0]).toBeFalsy();
 			expect(emitted["update-privacy-settings"][0][1]).toBe(
 				"student.LERNSTORE_VIEW"
 			);
@@ -459,7 +459,7 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
-			expect(emitted["update-privacy-settings"][1][0]).toBeTrue();
+			expect(emitted["update-privacy-settings"][1][0]).toBeTruthy();
 			expect(emitted["update-privacy-settings"][1][1]).toBe(
 				"student.LERNSTORE_VIEW"
 			);
@@ -484,7 +484,7 @@ describe("PrivacySettings", () => {
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
-			expect(emitted["update-privacy-settings"][0][0]).toBeFalse();
+			expect(emitted["update-privacy-settings"][0][0]).toBeFalsy();
 			expect(emitted["update-privacy-settings"][0][1]).toBe(
 				"teacher.STUDENT_LIST"
 			);
@@ -494,7 +494,7 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
-			expect(emitted["update-privacy-settings"][1][0]).toBeTrue();
+			expect(emitted["update-privacy-settings"][1][0]).toBeTruthy();
 			expect(emitted["update-privacy-settings"][1][1]).toBe(
 				"teacher.STUDENT_LIST"
 			);
@@ -522,7 +522,7 @@ describe("PrivacySettings", () => {
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(1);
-			expect(emitted["update-feature-settings"][0][0]).toBeFalse();
+			expect(emitted["update-feature-settings"][0][0]).toBeFalsy();
 			expect(emitted["update-feature-settings"][0][1]).toBe("rocketChat");
 
 			rocketChatSwitch.trigger("click");
@@ -530,7 +530,7 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(2);
-			expect(emitted["update-feature-settings"][1][0]).toBeTrue();
+			expect(emitted["update-feature-settings"][1][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][1][1]).toBe("rocketChat");
 		});
 
@@ -554,7 +554,7 @@ describe("PrivacySettings", () => {
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(1);
-			expect(emitted["update-feature-settings"][0][0]).toBeFalse();
+			expect(emitted["update-feature-settings"][0][0]).toBeFalsy();
 			expect(emitted["update-feature-settings"][0][1]).toBe("videoconference");
 
 			videoconferenceSwitch.trigger("click");
@@ -562,7 +562,7 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(2);
-			expect(emitted["update-feature-settings"][1][0]).toBeTrue();
+			expect(emitted["update-feature-settings"][1][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][1][1]).toBe("videoconference");
 		});
 
@@ -599,9 +599,9 @@ describe("PrivacySettings", () => {
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(2);
-			expect(emitted["update-feature-settings"][0][0]).toBeFalse();
+			expect(emitted["update-feature-settings"][0][0]).toBeFalsy();
 			expect(emitted["update-feature-settings"][0][1]).toBe("messenger");
-			expect(emitted["update-feature-settings"][1][0]).toBeFalse();
+			expect(emitted["update-feature-settings"][1][0]).toBeFalsy();
 			expect(emitted["update-feature-settings"][1][1]).toBe(
 				"messengerSchoolRoom"
 			);
@@ -612,11 +612,11 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(4);
-			expect(emitted["update-feature-settings"][2][0]).toBeTrue();
+			expect(emitted["update-feature-settings"][2][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][2][1]).toBe(
 				"messengerSchoolRoom"
 			);
-			expect(emitted["update-feature-settings"][3][0]).toBeFalse();
+			expect(emitted["update-feature-settings"][3][0]).toBeFalsy();
 			expect(emitted["update-feature-settings"][3][1]).toBe(
 				"messengerStudentRoomCreate"
 			);
@@ -627,9 +627,9 @@ describe("PrivacySettings", () => {
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(6);
-			expect(emitted["update-feature-settings"][4][0]).toBeTrue();
+			expect(emitted["update-feature-settings"][4][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][4][1]).toBe("messenger");
-			expect(emitted["update-feature-settings"][5][0]).toBeTrue();
+			expect(emitted["update-feature-settings"][5][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][5][1]).toBe(
 				"messengerStudentRoomCreate"
 			);

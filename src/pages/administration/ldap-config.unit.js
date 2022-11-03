@@ -193,11 +193,11 @@ describe("ldap/config", () => {
 			}),
 		});
 		const verifyBtn = wrapper.find(`[data-testid="ldapVerifyButton"]`);
-		expect(verifyBtn.exists()).toBeTrue();
+		expect(verifyBtn.exists()).toBeTruthy();
 		verifyBtn.trigger("click");
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.triggerValidation).toBeTrue();
+		expect(wrapper.vm.triggerValidation).toBeTruthy();
 	});
 
 	it("should clear 'systemData' values if clearInputs button is clicked", async () => {
@@ -231,7 +231,7 @@ describe("ldap/config", () => {
 		const clearInputsButton = wrapper.find(
 			`[data-testid="ldapResetInputsButton"]`
 		);
-		expect(clearInputsButton.exists()).toBeTrue();
+		expect(clearInputsButton.exists()).toBeTruthy();
 		clearInputsButton.trigger("click");
 
 		await wrapper.vm.$nextTick();

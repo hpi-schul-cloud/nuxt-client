@@ -193,7 +193,7 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeTrue();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeTruthy();
 	});
 
 	it("tests env var school policy being false", () => {
@@ -209,7 +209,7 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
 	});
 
 	it("tests whether current school year is computed right", () => {
@@ -244,7 +244,7 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTrue();
+		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTruthy();
 	});
 
 	it("error image should visible if schoolError occured", () => {
@@ -259,8 +259,8 @@ describe("SchoolSettingPage", () => {
 		const schoolError = wrapper.find(".school-error-image");
 		const noSchoolError = wrapper.find(".no-school-error");
 
-		expect(schoolError.exists()).toBeTrue();
-		expect(noSchoolError.exists()).toBeFalse();
+		expect(schoolError.exists()).toBeTruthy();
+		expect(noSchoolError.exists()).toBeFalsy();
 	});
 
 	it("should load needed data form server", async () => {

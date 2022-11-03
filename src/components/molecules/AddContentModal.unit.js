@@ -175,7 +175,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});
 
 	it("submit modal action multiple items", async () => {
@@ -188,7 +188,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});
 
 	it("cancel modal action", async () => {
@@ -200,6 +200,6 @@ describe("@/components/molecules/AddContentModal", () => {
 		expect(Object.keys(wrapper.vm.selectedCourse)).toHaveLength(0);
 		expect(Object.keys(wrapper.vm.selectedLesson)).toHaveLength(0);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});
 });

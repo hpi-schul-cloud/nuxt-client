@@ -101,7 +101,7 @@ describe("@/components/organisms/LdapClassesSection", () => {
 		// const errorMessageComponent = wrapper.find(
 		// 	"div[data-testid='ldapDataClassesPath'] .info.error"
 		// );
-		// expect(errorMessageComponent.exists()).toBeTrue();
+		// expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
@@ -150,7 +150,7 @@ describe("@/components/organisms/LdapClassesSection", () => {
 			"div[data-testid='ldapDataClassesPath'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPath]");
 		expect(inputPath.exists()).toBe(true);
@@ -162,6 +162,6 @@ describe("@/components/organisms/LdapClassesSection", () => {
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataClassesPath'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

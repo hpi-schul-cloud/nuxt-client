@@ -104,7 +104,7 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
@@ -155,7 +155,7 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputUrl = wrapper.find("input[data-testid=ldapDataConnectionUrl]");
 		expect(inputUrl.exists()).toBe(true);
@@ -167,6 +167,6 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

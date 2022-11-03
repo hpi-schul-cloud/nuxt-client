@@ -95,7 +95,7 @@ describe("SchoolPolicyFormDialog", () => {
 			expect(
 				mockStore["consent-versions"].actions.addConsentVersion
 			).toHaveBeenCalled();
-			expect(wrapper.vm.$v.$invalid).toBeFalse();
+			expect(wrapper.vm.$v.$invalid).toBeFalsy();
 		});
 
 		it("should give validation error if textarea is empty", async () => {
@@ -112,7 +112,7 @@ describe("SchoolPolicyFormDialog", () => {
 			await wrapper.setData({ description: "" });
 			button.trigger("click");
 
-			expect(wrapper.vm.$v.$invalid).toBeTrue();
+			expect(wrapper.vm.$v.$invalid).toBeTruthy();
 		});
 
 		it("should emit 'dialog-closed' with parameter 'false' if cancel button clicked", async () => {
