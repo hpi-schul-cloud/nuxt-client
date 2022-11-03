@@ -199,7 +199,8 @@
 	"global.sidebar.calendar": "Termine",
 	"global.sidebar.classes": "Klassen",
 	"global.sidebar.courses": "Kurse",
-	"global.sidebar.files": "Meine Dateien",
+	"global.sidebar.files-old": "Meine Dateien",
+	"global.sidebar.files": "Dateien",
 	"global.sidebar.filesPersonal": "persönliche Dateien",
 	"global.sidebar.filesShared": "geteilte Dateien",
 	"global.sidebar.helpArea": "Hilfebereich",
@@ -453,6 +454,13 @@
 	"components.molecules.shareCourse.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.shareCourse.mail.subject": "Kurs zum Importieren",
 	"components.molecules.shareCourse.mail.body": "Link zum Kurs:",
+	"components.molecules.importCourse.options.title": "Kurs importieren",
+	"components.molecules.importCourse.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
+	"components.molecules.importCourse.options.loadingMessage": "Kurs importieren läuft...",
+	"components.molecules.importCourse.options.success": "{type} wurde erfolgreich importiert",
+	"components.molecules.importCourse.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
+	"components.molecules.importCourse.options.failure.backendError": "'{name}' konnte nicht importiert werden.",
+	"components.molecules.importCourse.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
@@ -811,5 +819,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Nach vollständigem Nachnamen filtern...",
 	"utils.adminFilter.placeholder.complete.name": "Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
-	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020"
+	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
+	"pages.files.title": "Dateien"
 }

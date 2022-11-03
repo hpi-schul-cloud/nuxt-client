@@ -129,4 +129,9 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/TermsOfUse.vue"),
 		name: "termsofuse",
 	},
+	{
+		path: "/cfiles",
+		component: () => import("../pages/files/FilesOverview.page.vue"),
+		name: "files",
+	},
 ];

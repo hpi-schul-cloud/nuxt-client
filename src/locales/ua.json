@@ -179,6 +179,13 @@
 	"components.molecules.shareCourse.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.shareCourse.mail.subject": "Курс імпорту",
 	"components.molecules.shareCourse.mail.body": "Посилання на курс:",
+	"components.molecules.importCourse.options.title": "Курс імпорту",
+	"components.molecules.importCourse.options.infoText": "Дані учасників не будуть скопійовані. Курс можна перейменувати нижче.",
+	"components.molecules.importCourse.options.loadingMessage": "Виконується курс імпорту...",
+	"components.molecules.importCourse.options.success": "{type} успішно імпортовано",
+	"components.molecules.importCourse.options.failure.invalidToken": "Маркер у посиланні невідомий або термін дії минув.",
+	"components.molecules.importCourse.options.failure.backendError": "'{name}' не вдалося імпортувати.",
+	"components.molecules.importCourse.options.failure.permissionError": "На жаль, відсутній необхідний дозвіл.",
 	"components.molecules.importUsersMatch.saveMatch": "Зберегти зв'язок",
 	"components.molecules.importUsersMatch.search": "Пошук користувача",
 	"components.molecules.importUsersMatch.subtitle": "Das webbschule-Konto wird später in die {instance} importiert. Wenn Sie das Konto mit einem bestehenden {instance} Konto verknüpfen möchten, so dass die Benutzerdaten erhalten bleiben, wählen Sie hier das {instance} Konto aus. Andernfalls wird dieses als neues Konto angeleg.",
@@ -294,7 +301,8 @@
 	"global.sidebar.calendar": "календар",
 	"global.sidebar.classes": "Класи",
 	"global.sidebar.courses": "Курси",
-	"global.sidebar.files": "Мої файли",
+	"global.sidebar.files-old": "Мої файли",
+	"global.sidebar.files": "файли",
 	"global.sidebar.filesPersonal": "особисті файли",
 	"global.sidebar.filesShared": "спільні файли",
 	"global.sidebar.helpArea": "Розділ довідки",
@@ -837,5 +845,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Фільтрувати за повним прізвищем...",
 	"utils.adminFilter.placeholder.complete.name": "Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
-	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020"
+	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"pages.files.title": "файли"
 }
