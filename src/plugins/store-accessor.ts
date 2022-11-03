@@ -8,16 +8,16 @@ import FilePathsModule from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTaskModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
-import LoadingStateModule from "@store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
-import ShareCourseModule from "@store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
+import LoadingStateModule from "@store/loading-state";
+import ShareCourseModule from "@store/share-course";
 import { getModule } from "vuex-module-decorators";
 
 export default () => {
