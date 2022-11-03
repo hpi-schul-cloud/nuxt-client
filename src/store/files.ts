@@ -24,7 +24,6 @@ export default class FilesModule extends VuexModule {
 	async fetchFilesMeta(): Promise<void> {
 		filesModule.setLoading(true);
 		try {
-			wait(2);
 			const data: FileMetaListResponse = {
 				data: [
 					{
@@ -57,7 +56,7 @@ export default class FilesModule extends VuexModule {
 
 	@Mutation
 	addFiles(files: File[]) {
-		this.files = { ...this.files, ...files };
+		this.files = this.files.concat(files);
 	}
 
 	@Mutation

@@ -14,16 +14,27 @@ import BaseFileTable from "@basecomponents/BaseTable/BaseTable.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { filesModule } from "@/store";
-import { onMounted, Ref } from "@nuxtjs/composition-api";
+import { onMounted, Ref, useRoute } from "@nuxtjs/composition-api";
 import { File, FileType } from "@store/types/file";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
   components: { BaseFileTable, DefaultWireframe },
   setup() {
+    const route = useRoute();
+    const pathArray = route.value.path.split("/");
+
     onMounted(async () => {
+      if (pathArray.length === 1 && pathArray[0] === 'cfiles') {
+        // fetch initial page
+      } else if (pathArray.length === 2) {
+        //const pageType = pathArray[1];
+      } else if (pathArray.length >= 3) {
+        //const pageType = pathArray[1];
+      }
+
       await filesModule.fetchFilesMeta();
-    })
+    });
 
     const { t } = i18n();
 
@@ -37,7 +48,7 @@ export default defineComponent({
       }
     });
     const fileOverviewItems: FileTableItem[] = getFileOverviewItems(t);
-    const items2 = { ...fileOverviewItems, ...serverFileTableItems };
+    const items2: FileTableItem[] = [...fileOverviewItems, ...serverFileTableItems ];
 
     const items: Ref<FileTableItem[]> = ref<FileTableItem[]>(items2);
 

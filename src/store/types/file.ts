@@ -7,6 +7,7 @@ export enum FileType {
 	UNKNOWN = "unknown",
 }
 
+// styleclass
 export enum FileIcon {
 	FAVORITE = "favorite",
 	FILE = "file",
