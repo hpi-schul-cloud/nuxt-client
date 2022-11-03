@@ -1,18 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {
-	config as vueTestUtilsConfig,
-	createLocalVue,
-	mount,
-	shallowMount,
-} from "@vue/test-utils";
+import { config as vueTestUtilsConfig, createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import Vuetify from "vuetify";
 // import { mixin as userMixin } from "@/plugins/user.js";
 import Vuelidate from "vuelidate";
 import { mountBaseComponents } from "@/components/base/_globals";
 import path from "path";
 import fs from "fs";
-import _ from "lodash";
 import "@/plugins/directives";
 
 // Don't warn about not using the production build of Vue, as
@@ -47,13 +41,6 @@ Object.defineProperty(window, "location", {
 
 global.mount = mount;
 global.shallowMount = shallowMount;
-
-// used in
-// @/components/base/BaseModal.unit.js, @/components/molecules/ContextMenu.unit.js
-global.wait = (duration) =>
-	new Promise((resolve) => {
-		setTimeout(resolve, duration);
-	});
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({

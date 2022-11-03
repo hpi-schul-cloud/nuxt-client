@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugins/store-accessor.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/store-accessor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store-accessor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/setup-new.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/setup-new.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,29 +38,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/dev/repositories/nuxt-client/src/components/share-course&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;C:/dev/repositories/nuxt-client/node_modules/jest&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.tslint&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/dev/repositories/nuxt-client/src/components/share-course",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.stylelint": "C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "ts.external.directory.path": "C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\dev\repositories\nuxt-client\src\components\share-course" />
@@ -68,83 +70,87 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.@components/share-course/ImportModal">
-    <configuration name="@components/share-course/ImportModal" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.@/components/molecules/ContextMenu">
+    <configuration name="@/components/molecules/ContextMenu" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/components/share-course/ImportModal.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
       <test-names>
-        <test-name value="@components/share-course/ImportModal" />
+        <test-name value="@/components/molecules/ContextMenu" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@components/share-course/ImportModal.should cancel on dialog cancel" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/share-course/ImportModal.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
       <test-names>
-        <test-name value="@components/share-course/ImportModal" />
-        <test-name value="should cancel on dialog cancel" />
+        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="anchor positions" />
+        <test-name value="menu gets positioned correctly by anchor attribute %s" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@components/share-course/ImportModal.should emit input value on next" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/share-course/ImportModal.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
       <test-names>
-        <test-name value="@components/share-course/ImportModal" />
-        <test-name value="should emit input value on next" />
+        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="click outside" />
+        <test-name value="does not trigger event on click outside if noClose=true" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@components/share-course/ImportModal.should not emit if textField has a required-error" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside d" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/share-course/ImportModal.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
       <test-names>
-        <test-name value="@components/share-course/ImportModal" />
-        <test-name value="should not emit if textField has a required-error" />
+        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="click outside" />
+        <test-name value="triggers event on click outside d" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@components/share-course/ImportModal.should validate formfield for required-errors" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/share-course/ImportModal.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
       <test-names>
-        <test-name value="@components/share-course/ImportModal" />
-        <test-name value="should validate formfield for required-errors" />
+        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="click outside" />
+        <test-name value="triggers event on click outside" />
       </test-names>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Jest.@components/share-course/ImportModal" />
-        <item itemvalue="Jest.@components/share-course/ImportModal.should not emit if textField has a required-error" />
-        <item itemvalue="Jest.@components/share-course/ImportModal.should validate formfield for required-errors" />
-        <item itemvalue="Jest.@components/share-course/ImportModal.should cancel on dialog cancel" />
-        <item itemvalue="Jest.@components/share-course/ImportModal.should emit input value on next" />
+        <item itemvalue="Jest.@/components/molecules/ContextMenu" />
+        <item itemvalue="Jest.@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" />
+        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside" />
+        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" />
+        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside d" />
       </list>
     </recent_temporary>
   </component>
@@ -208,6 +214,7 @@
       <workItem from="1666342664027" duration="1871000" />
       <workItem from="1666873142914" duration="3112000" />
       <workItem from="1667308745692" duration="3657000" />
+      <workItem from="1667483716446" duration="6255000" />
     </task>
     <servers />
   </component>
