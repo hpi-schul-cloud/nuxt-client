@@ -271,7 +271,7 @@ describe("@pages/RoomDetails.page.vue", () => {
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
-			expect(menuItems).toHaveLength(4);
+			expect(menuItems).toHaveLength(3);
 			expect(
 				findMenuItems(
 					wrapper.vm.$i18n.t("common.actions.edit") +
@@ -279,9 +279,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 						wrapper.vm.$i18n.t("common.actions.remove"),
 					menuItems
 				)
-			).toBe(true);
-			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.invite"), menuItems)
 			).toBe(true);
 			expect(
 				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
@@ -352,33 +349,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 			});
 		});
 
-		it("should call inviteCourse method when 'Invite to the course' menu clicked", async () => {
-			const inviteCourseSpy = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.inviteCourse = inviteCourseSpy;
-
-			const threeDotButton = wrapper.find(".three-dot-button");
-			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-			await moreActionButton.trigger("click");
-
-			expect(inviteCourseSpy).toHaveBeenCalled();
-		});
-
-		it("should call store action after 'Invite to the course' menu clicked", async () => {
-			const createCourseInvitationSpy = jest.fn();
-			roomModule.createCourseInvitation = createCourseInvitationSpy;
-			const wrapper = getWrapper();
-
-			const threeDotButton = wrapper.find(".three-dot-button");
-			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-			await moreActionButton.trigger("click");
-
-			expect(createCourseInvitationSpy).toHaveBeenCalled();
-			expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual("123");
-		});
-
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
@@ -411,38 +381,6 @@ describe("@pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("modal views", () => {
-			it("should open modal for inviting action", async () => {
-				const wrapper = getWrapper();
-				wrapper.setData({
-					dialog: {
-						isOpen: true,
-						model: "invite",
-						header: wrapper.vm.$i18n.t("pages.room.modal.course.invite.header"),
-						text: wrapper.vm.$i18n.t("pages.room.modal.course.invite.text"),
-						inputText: "/link/123456",
-						subText: "",
-						courseInvitationLink: "123456",
-					},
-				});
-				await wrapper.vm.$nextTick();
-
-				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
-				const titleElement = modalView.find(".dialog-header");
-				const textElement = modalView.find(".modal-text");
-				const inputElement = modalView.find(`[data-testid="modal-input"]`);
-
-				expect(modalView.vm.isOpen).toBe(true);
-				expect(titleElement.element.textContent).toContain(
-					wrapper.vm.dialog.header
-				);
-				expect(textElement.element.textContent).toContain(
-					wrapper.vm.dialog.text
-				);
-				expect(inputElement.element.value).toStrictEqual(
-					wrapper.vm.dialog.inputText
-				);
-			});
-
 			it("should open modal for sharing action", async () => {
 				const wrapper = getWrapper();
 				const modalView = wrapper.find(`[data-testid="share-dialog"]`);

@@ -120,7 +120,7 @@ import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModal from "@components/share-modal/ShareModal.vue";
+import ShareModal from "@components/share-course/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
@@ -176,7 +176,6 @@ export default defineComponent({
 				inputText: "",
 				subText: "",
 				qrUrl: "",
-				courseInvitationLink: "",
 				courseShareToken: "",
 			},
 			icons: {
@@ -279,13 +278,6 @@ export default defineComponent({
 				});
 			}
 
-			items.push({
-				icon: this.icons.mdiEmailPlusOutline,
-				action: () => this.inviteCourse(),
-				name: this.$t("common.actions.invite"),
-				dataTestId: "title-menu-invite",
-			});
-
 			if (
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
@@ -330,16 +322,6 @@ export default defineComponent({
 	methods: {
 		fabClick() {
 			this.importDialog.isOpen = true;
-		},
-		async inviteCourse() {
-			await roomModule.createCourseInvitation(this.courseId);
-			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
-			this.dialog.model = "invite";
-			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
-			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
-			this.dialog.inputText = this.dialog.courseInvitationLink;
-			this.dialog.subText = "";
-			this.dialog.isOpen = true;
 		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
