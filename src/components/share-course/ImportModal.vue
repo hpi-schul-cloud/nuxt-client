@@ -38,7 +38,7 @@
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, reactive, ref } from "vue";
@@ -52,34 +52,34 @@ export default defineComponent({
 	emits: ["import", "cancel"],
 	props: {
 		isOpen: { type: Boolean },
-		parentName: { type: String, required: true }
+		parentName: { type: String, required: true },
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-          required: value => !!value || i18n?.t("common.validation.required"),
+			required: (value) => !!value || i18n?.t("common.validation.required"),
 		});
 
 		const newName = computed({
 			get: () => nameInput.value ?? props.parentName,
-			set: (value) => nameInput.value = value,
+			set: (value) => (nameInput.value = value),
 		});
 
 		const onConfirm = () => {
 			if (rules.required(newName.value) === true) {
-				emit('import', newName.value);
+				emit("import", newName.value);
 			}
-		}
-		const onCancel = () => emit('cancel')
+		};
+		const onCancel = () => emit("cancel");
 
 		return {
 			onConfirm,
 			onCancel,
 			mdiInformation,
 			rules,
-      		newName
+			newName,
 		};
 	},
 });

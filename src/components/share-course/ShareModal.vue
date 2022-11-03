@@ -45,10 +45,10 @@
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@/components/share-modal/ShareModalOptionsForm";
-import ShareModalResult from "@/components/share-modal/ShareModalResult";
+import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
@@ -123,7 +123,7 @@ export default defineComponent({
 				status: "success",
 				timeout: 10000,
 			});
-		}
+		};
 
 		return {
 			onShareOptionsChange,
@@ -137,7 +137,7 @@ export default defineComponent({
 			isOpen,
 			shareOptions,
 			mdiInformation,
-			onCopy
+			onCopy,
 		};
 	},
 });

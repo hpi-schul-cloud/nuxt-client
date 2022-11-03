@@ -14,7 +14,7 @@
 	</div>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import ImportModal from "@/components/share-course/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "vue";
@@ -22,20 +22,20 @@ import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: 'ImportFlow',
+	name: "ImportFlow",
 	components: {
 		ImportModal,
-		CopyResultModal
+		CopyResultModal,
 	},
 	props: {
 		token: {
 			type: String,
-			default: () => ''
+			default: () => "",
 		},
 		isActive: {
 			type: Boolean,
-			required: true
-		}
+			required: true,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
@@ -50,58 +50,71 @@ export default defineComponent({
 
 		const isCopyResultModalOpen = computed({
 			get: () => copyModule.getIsResultModalOpen,
-			set: (bool) => copyModule.setResultModalOpen(bool)
+			set: (bool) => copyModule.setResultModalOpen(bool),
 		});
 
-		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
+		const copyResultModalItems = computed(
+			() => copyModule.getCopyResultFailedItems
+		);
 
-		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage"))
+		const { isLoadingDialogOpen } = useLoadingState(
+			i18n?.t("components.molecules.importCourse.options.loadingMessage")
+		);
 
 		const openModal = (modalName) => {
-			isImportModalOpen.value = modalName === 'import';
-			isLoadingDialogOpen.value = modalName === 'loading';
-			isCopyResultModalOpen.value = modalName === 'result';
-		}
+			isImportModalOpen.value = modalName === "import";
+			isLoadingDialogOpen.value = modalName === "loading";
+			isCopyResultModalOpen.value = modalName === "result";
+		};
 
-		const closeModals = () => openModal('none');
+		const closeModals = () => openModal("none");
 
 		// notifiers
 
 		const showSuccess = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.success", { type: i18n.t("common.labels.course") }),
+				text: i18n?.t("components.molecules.importCourse.options.success", {
+					type: i18n.t("common.labels.course"),
+				}),
 				status: "success",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		const showFailureBackend = (name) => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.backendError", { name }),
+				text: i18n?.t(
+					"components.molecules.importCourse.options.failure.backendError",
+					{ name }
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		const showFailureInvalidToken = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.invalidToken"),
+				text: i18n?.t(
+					"components.molecules.importCourse.options.failure.invalidToken"
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		const showFailurePermission = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.permissionError"),
+				text: i18n?.t(
+					"components.molecules.importCourse.options.failure.permissionError"
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		// business logic
 
@@ -113,7 +126,7 @@ export default defineComponent({
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
-				openModal('import');
+				openModal("import");
 			} catch (error) {
 				if (error.response?.status === 403) {
 					showFailurePermission();
@@ -125,14 +138,18 @@ export default defineComponent({
 		}
 
 		async function startImport(newName) {
-			openModal('loading');
+			openModal("loading");
 			try {
-				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
+				const copyResultFailedItems = await copyModule.copyByShareToken({
+					token: props.token,
+					type: "course",
+					newName,
+				});
 				if (copyResultFailedItems.length === 0) {
 					showSuccess();
-					emit('success');
+					emit("success");
 				} else {
-					openModal('result');
+					openModal("result");
 				}
 			} catch (error) {
 				showFailureBackend(newName);
@@ -144,9 +161,9 @@ export default defineComponent({
 		const onImport = (courseName) => startImport(courseName);
 		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
-			emit('success');
+			emit("success");
 			copyModule.reset();
-		}
+		};
 
 		return {
 			isImportModalOpen,
@@ -155,8 +172,8 @@ export default defineComponent({
 			parentName,
 			onCopyResultModalClosed,
 			onImport,
-			onCancel
-		}
-	}
-})
+			onCancel,
+		};
+	},
+});
 </script>
