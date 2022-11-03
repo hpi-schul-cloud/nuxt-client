@@ -92,28 +92,28 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	// if (store || i18n || user || vueMeta) {
-	// 	localVue.use(Vuex);
-	// 	const storeModules = store || {};
-	// 	if (user) {
-	// 		WIP: storeModules.auth = authStoreModule;
-	// 	}
-	// 	returnOptions.store = new Vuex.Store({
-	// 		modules: Object.entries(storeModules)
-	// 			.map(([moduleName, storeModule]) => {
-	// 				return {
-	// 					[moduleName]: {
-	// 						state: storeModule.state || {},
-	// 						getters: storeModule.getters || {},
-	// 						mutations: storeModule.mutations || {},
-	// 						actions: storeModule.actions || {},
-	// 						namespaced: true,
-	// 					},
-	// 				};
-	// 			})
-	// 			.reduce((moduleA, moduleB) => Object.assign({}, moduleA, moduleB), {}),
-	// 	});
-	// }
+	if (store || i18n || user || vueMeta) {
+		localVue.use(Vuex);
+		const storeModules = store || {};
+		// if (user) {
+		// 	WIP: storeModules.auth = authStoreModule;
+		// }
+		returnOptions.store = new Vuex.Store({
+			modules: Object.entries(storeModules)
+				.map(([moduleName, storeModule]) => {
+					return {
+						[moduleName]: {
+							state: storeModule.state || {},
+							getters: storeModule.getters || {},
+							mutations: storeModule.mutations || {},
+							actions: storeModule.actions || {},
+							namespaced: true,
+						},
+					};
+				})
+				.reduce((moduleA, moduleB) => Object.assign({}, moduleA, moduleB), {}),
+		});
+	}
 
 	//Set `i18n: true` to enable localization and make `this.$i18n` available
 	// if (i18n) {
