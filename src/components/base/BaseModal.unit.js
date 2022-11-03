@@ -80,19 +80,4 @@ describe("@/components/base/BaseModal", () => {
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find("#btn-close").exists()).toBe(false);
 	});
-
-	it("closed modal can be reopened after clicking outside", async () => {
-		// TODO this test may can be removed, the problematic code is removed now.
-		const wrapper = mount(modal);
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-		wrapper.find(".base-modal-wrapper").trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(false);
-		await wait(300);
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-	});
 });

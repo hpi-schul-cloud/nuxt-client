@@ -202,7 +202,7 @@ export default {
 		emitEvent(event, args) {
 			setTimeout(() => {
 				this.closeMenu();
-			}, 300); // wait 500ms for the ripple animation to finish
+			}, 300);
 			/**
 			 * your custom event for each menu item
 			 *

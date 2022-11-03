@@ -1,18 +1,18 @@
 import BaseInput from "./BaseInput";
+import BaseInputHidden from "./BaseInputHidden";
 import { supportedTypes } from "./BaseInputHidden";
-import { render } from "@testing-library/vue";
 
 describe("@/components/base/BaseInputHidden", () => {
 	it("input is not visible", () => {
 		const mockText = "test input";
 		supportedTypes.forEach(() => {
-			const { getByDisplayValue } = render(BaseInput, {
+			const wrapper = mount(BaseInput, {
 				propsData: {
 					type: "hidden",
 					vmodel: mockText,
 				},
 			});
-			expect(getByDisplayValue(mockText)).not.toBeVisible();
+			expect(wrapper.findComponent(BaseInputHidden)).toBeTruthy();
 		});
 	});
 });

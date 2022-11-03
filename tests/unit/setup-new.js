@@ -116,11 +116,6 @@ global.mount = mount;
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = shallowMount;
 
-global.wait = (duration) =>
-	new Promise((resolve) => {
-		setTimeout(resolve, duration);
-	});
-
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
@@ -175,7 +170,7 @@ global.createComponentMocks = ({
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		// if (user) {
-		// 	storeModules.auth = authStoreModule;
+		// 	WIP: storeModules.auth = authStoreModule;
 		// }
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)

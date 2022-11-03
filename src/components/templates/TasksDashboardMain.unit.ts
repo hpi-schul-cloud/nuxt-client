@@ -8,7 +8,6 @@ import TaskModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "vue";
 import { mount, Wrapper } from "@vue/test-utils";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
@@ -55,13 +54,13 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				$router,
 				$route,
 			}),
-			setup() {
-				provide("taskModule", taskModuleMock);
-				provide("copyModule", copyModuleMock);
-				provide("finishedTaskModule", finishedTaskModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				taskModule: taskModuleMock,
+				copyModule: copyModuleMock,
+				finishedTaskModule: finishedTaskModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

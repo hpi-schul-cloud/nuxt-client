@@ -9,7 +9,6 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ImportFlow from "@/components/share-course/ImportFlow.vue";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
@@ -25,11 +24,11 @@ describe("@/components/share-course/ImportFlow", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("copyModule", copyModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
+			provide: {
+				copyModule: copyModuleMock,
+				notifierModule: notifierModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			propsData: {
 				token,

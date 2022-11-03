@@ -4,7 +4,6 @@ import EnvConfigModule from "@/store/env-config";
 import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import CopyModule from "../store/copy";
@@ -140,11 +139,11 @@ const getWrapper = (
 			isLoading: () => isLoading,
 		},
 		mocks: defaultMocks,
-		setup() {
-			provide("i18n", { t: (key) => key });
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
+		provide: {
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		...attrs,
 	});
