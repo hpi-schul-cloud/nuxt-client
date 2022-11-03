@@ -1,7 +1,6 @@
 import ProgressModal from "./ProgressModal";
 
 describe("@/components/molecules/ProgressModal", () => {
-	it(...isValidComponent(ProgressModal));
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(ProgressModal, {
 			propsData: {

@@ -36,8 +36,6 @@ describe("@/components/legacy/NavigationBar", () => {
 		});
 	});
 
-	it(...isValidComponent(NavigationBar));
-
 	it("renders logo, links and buttons for default theme", () => {
 		const wrapper = getWrapper();
 

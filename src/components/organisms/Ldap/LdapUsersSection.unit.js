@@ -10,7 +10,6 @@ describe("@/components/organisms/LdapUsersSection", () => {
 		uid: "uid",
 		uuid: "uuid",
 	};
-	it(...isValidComponent(LdapUsersSection));
 
 	it("has correct child components", () => {
 		const wrapper = mount(LdapUsersSection, {

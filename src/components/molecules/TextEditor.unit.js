@@ -19,8 +19,6 @@ function getMock(options = {}) {
 }
 
 describe("@/components/molecules/TextEditor", () => {
-	it(...isValidComponent(TextEditor));
-
 	// TODO:
 	// currently not possible to implement because I don't know how to
 	// simulate type events on an [contenteditable] field.

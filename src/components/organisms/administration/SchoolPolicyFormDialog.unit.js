@@ -29,8 +29,6 @@ describe("SchoolPolicyFormDialog", () => {
 		setupStores({ schoolsModule: SchoolsModule });
 	});
 
-	it(...isValidComponent(SchoolPolicyFormDialog));
-
 	describe("displaying values", () => {
 		it("should display the title", async () => {
 			const wrapper = mount(SchoolPolicyFormDialog, {

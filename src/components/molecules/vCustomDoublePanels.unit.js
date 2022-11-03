@@ -60,8 +60,6 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(vCustomDoublePanels));
-
 	it("Should render its slots", () => {
 		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({

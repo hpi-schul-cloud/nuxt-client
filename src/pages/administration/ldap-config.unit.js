@@ -59,8 +59,6 @@ describe("ldap/config", () => {
 		},
 	};
 
-	it(...isValidComponent(ldapConfig));
-
 	it("should call 'getData' action if $route.query.id is defined", async () => {
 		mount(ldapConfig, {
 			...createComponentMocks({

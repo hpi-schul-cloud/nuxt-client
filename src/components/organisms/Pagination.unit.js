@@ -23,8 +23,6 @@ function getLastPageWrapper() {
 }
 
 describe("@/components/organisms/Pagination", () => {
-	it(...isValidComponent(Pagination));
-
 	it("renders only a next page link on the first page", () => {
 		const wrapper = getFirstPageWrapper();
 		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);

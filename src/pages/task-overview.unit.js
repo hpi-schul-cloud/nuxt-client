@@ -19,8 +19,6 @@ describe("TaskOverview", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(TaskOverview));
-
 	it("has correct page title set in <head>", () => {
 		const wrapper = shallowMount(TaskOverview, {
 			...createComponentMocks({

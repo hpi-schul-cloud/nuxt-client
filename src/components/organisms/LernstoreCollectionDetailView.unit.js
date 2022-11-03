@@ -43,8 +43,6 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 		});
 	});
 
-	it(...isValidComponent(LernstoreCollectionDetailView));
-
 	it("Gets collection UUID", () => {
 		expect(wrapper.vm.collectionUUID).toBe(
 			"be9bc35d-78f9-51a0-beb0-170512ad9666"

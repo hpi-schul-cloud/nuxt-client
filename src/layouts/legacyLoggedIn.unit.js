@@ -46,8 +46,6 @@ describe("legacyLoggedIn", () => {
 		});
 	});
 
-	it(...isValidComponent(legacyLoggedIn));
-
 	it("should mark active links", () => {
 		const administrationListItem = wrapper.find("[data-testId='Verwaltung']");
 		const studentAdministrationListItem = wrapper.find(

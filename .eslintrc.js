@@ -43,6 +43,7 @@ module.exports = {
 				mount: false,
 				shallowMount: false,
 				createComponentMocks: false,
+				rendersSlotContent: false,
 			},
 		},
 	],

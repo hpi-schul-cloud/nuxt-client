@@ -34,8 +34,6 @@ describe("@/components/legacy/TheTopBar", () => {
 		});
 	});
 
-	it(...isValidComponent(TheTopBar));
-
 	describe("when user is logged in with no status alerts", () => {
 		let wrapper;
 

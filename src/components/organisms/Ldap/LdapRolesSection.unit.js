@@ -10,7 +10,6 @@ describe("@/components/organisms/LdapRolesSection", () => {
 		admin: "cn=admin,ou=rolle",
 		user: "cn=ehemalige,ou=rolle",
 	};
-	it(...isValidComponent(LdapRolesSection));
 
 	it("has correct child components", () => {
 		const wrapper = mount(LdapRolesSection, {

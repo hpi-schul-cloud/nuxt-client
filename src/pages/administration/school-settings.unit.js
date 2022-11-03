@@ -184,8 +184,6 @@ describe("SchoolSettingPage", () => {
 		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
 	});
-	it(...isValidComponent(SchoolPage));
-
 	it("tests env var school policy being true", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({

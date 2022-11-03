@@ -1,7 +1,6 @@
 import BaseIcon from "./BaseIcon";
 
 describe("@/components/base/BaseIcon", () => {
-	it(...isValidComponent(BaseIcon));
 
 	it("can render fontawesome icons", () => {
 		const wrapper = mount(BaseIcon, {

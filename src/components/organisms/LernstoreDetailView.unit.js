@@ -11,8 +11,6 @@ describe("@/components/molecules/LernstoreDetailView", () => {
 		propsData: { ...testProps },
 	});
 
-	it(...isValidComponent(LernstoreDetailView));
-
 	it("Renders close button", () => {
 		expect(wrapper.find(".close-transparent").exists()).toBe(true);
 	});

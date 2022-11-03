@@ -11,8 +11,6 @@ const mountDialog = async (options = {}) => {
 };
 
 describe("@/components/base/BaseDialog", () => {
-	it(...isValidComponent(BaseDialog));
-
 	describe("appearance", () => {
 		it("should display message", async () => {
 			const testMessage = "Hallo Welt";

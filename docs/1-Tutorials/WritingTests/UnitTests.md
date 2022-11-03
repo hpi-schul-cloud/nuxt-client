@@ -69,7 +69,6 @@ Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgela
 import BaseCard from "./BaseCard";
 
 describe("@components/base/BaseCard", () => {
-	it(...isValidComponent(BaseCard));
 	it(...rendersSlotContent(BaseCard));
 });
 ```

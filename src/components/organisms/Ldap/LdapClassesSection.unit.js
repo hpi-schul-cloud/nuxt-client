@@ -7,7 +7,6 @@ describe("@/components/organisms/LdapClassesSection", () => {
 		nameAttribute: "description",
 		participantAttribute: "member",
 	};
-	it(...isValidComponent(LdapClassesSection));
 
 	it("has correct child components", () => {
 		const wrapper = mount(LdapClassesSection, {

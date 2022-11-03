@@ -12,8 +12,6 @@ describe("@/components/legacy/TheFooter", () => {
 		});
 	});
 
-	it(...isValidComponent(TheFooter));
-
 	const $theme = {
 		name: "test",
 	};

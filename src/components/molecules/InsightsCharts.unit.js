@@ -45,8 +45,6 @@ const testData = {
 };
 
 describe("@/components/molecules/InsightsCharts", () => {
-	it(...isValidComponent(InsightsCharts));
-
 	it("renders data prop if it exists", () => {
 		const wrapper = mount(InsightsCharts, {
 			...createComponentMocks({

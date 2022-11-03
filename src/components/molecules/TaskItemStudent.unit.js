@@ -41,8 +41,6 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		});
 	};
 
-	it(...isValidComponent(TaskItemStudent));
-
 	it("Should link list item links to task/<id> page", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 

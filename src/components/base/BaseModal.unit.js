@@ -26,7 +26,6 @@ const modal = {
 };
 
 describe("@/components/base/BaseModal", () => {
-	it(...isValidComponent(BaseModal));
 	it(
 		...rendersSlotContent(BaseModal, ["default"], {
 			propsData: {

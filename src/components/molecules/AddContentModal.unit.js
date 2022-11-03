@@ -129,8 +129,6 @@ describe("@/components/molecules/AddContentModal", () => {
 		});
 	});
 
-	it(...isValidComponent(AddContentModal));
-
 	it("nothing selected submit should be disabled", async () => {
 		const wrapper = getWrapper(testProps);
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');

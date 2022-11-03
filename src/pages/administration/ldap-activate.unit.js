@@ -65,8 +65,6 @@ describe("ldap/activate", () => {
 		},
 	};
 
-	it(...isValidComponent(ldapActivate));
-
 	it("should push to router when clicking the back button", async () => {
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({

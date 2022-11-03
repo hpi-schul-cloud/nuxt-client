@@ -26,7 +26,6 @@ const successButton = {
 };
 
 describe("@/components/base/BaseButton", () => {
-	it(...isValidComponent(BaseButton));
 	it(...rendersSlotContent(BaseButton));
 	it("Generates a default button", () => {
 		const wrapper = mount(defaultButton);

@@ -123,8 +123,6 @@ describe("students/index", () => {
 		process.env = OLD_ENV; // restore old environment
 	});
 
-	it(...isValidComponent(StudentPage));
-
 	it("should call 'deleteUsers' action", async () => {
 		authModule.setUser({
 			roles: [

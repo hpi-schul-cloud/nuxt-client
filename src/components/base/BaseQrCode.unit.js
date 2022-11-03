@@ -6,7 +6,6 @@ const qrCode = {
 };
 
 describe("@/components/base/BaseQrCode", () => {
-	it(...isValidComponent(BaseQrCode));
 	it("Generates a qrCode image", () => {
 		const wrapper = mount(qrCode);
 		expect(wrapper.find("div").exists()).toBe(true);

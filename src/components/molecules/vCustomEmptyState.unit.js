@@ -32,8 +32,6 @@ describe("@/components/molecules/vCustomEmptyState", () => {
 		wrapper.destroy();
 	});
 
-	it(...isValidComponent(vCustomEmptyState));
-
 	it("should render Base Image component", () => {
 		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
 	});

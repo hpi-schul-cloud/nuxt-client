@@ -1,9 +1,10 @@
+import Vue from "vue";
+import VueI18n from "vue-i18n";
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
+Vue.use(VueI18n);
 
 describe("@/components/base/BaseInput", () => {
-	it(...isValidComponent(BaseInput));
-
 	// BaseInput passes all given slots to it's child components
 	it("passes all given slots to it's child components", async () => {
 		const slotNames = ["default", "icon", "someRandomSlot"];
@@ -29,6 +30,7 @@ describe("@/components/base/BaseInput", () => {
 					data: () => ({ value: "" }),
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
+					$t: (key) => key,
 				});
 				expect(wrapper.find(".label").exists()).toBe(true);
 				expect(wrapper.text()).toContain(testLabel);

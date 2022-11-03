@@ -1,7 +1,5 @@
 import BaseImage from "./BaseImage";
 describe("@/components/base/BaseImage", () => {
-	it(...isValidComponent(BaseImage));
-
 	it("can render jpg images", () => {
 		const testImgSrc = "blubb.jpg";
 		const testImgAlt = "test image";

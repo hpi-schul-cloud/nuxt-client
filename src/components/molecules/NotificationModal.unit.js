@@ -14,8 +14,6 @@ const testProps = {
 };
 
 describe("@/components/molecules/NotificationModal", () => {
-	it(...isValidComponent(NotificationModal));
-
 	it("success case", async () => {
 		const wrapper = mount(NotificationModal, {
 			propsData: { ...testProps, isSuccess: true },

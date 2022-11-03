@@ -6,8 +6,6 @@ describe("@/components/molecules/ContentInitialState", () => {
 		data: () => ({}),
 	});
 
-	it(...isValidComponent(ContentInitialState));
-
 	it("Renders an image", () => {
 		expect(wrapper.find(".img-container").exists()).toBe(true);
 	});

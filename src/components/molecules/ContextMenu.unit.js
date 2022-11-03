@@ -30,8 +30,6 @@ const getAttachToOptions = () => {
 };
 
 describe("@/components/molecules/ContextMenu", () => {
-	it(...isValidComponent(ContextMenu));
-
 	it("Renders all action buttons", () => {
 		const wrapper = mount(ContextMenu, {
 			...createComponentMocks({ i18n: true }),

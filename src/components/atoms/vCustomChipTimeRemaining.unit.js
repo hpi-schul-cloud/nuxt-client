@@ -8,8 +8,6 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(VCustomChipTimeRemaining));
-
 	it("should render an orange v-chip component, with n hours left", () => {
 		const dueDate = new Date();
 		dueDate.setHours(dueDate.getHours() + 3);

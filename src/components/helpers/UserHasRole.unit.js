@@ -45,7 +45,6 @@ describe("@/components/helpers/UserHasRole", () => {
 		});
 	});
 
-	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
 		authModule.setUser({ roles: [{ name: "admin" }] });
 		checkCorrectView("ADMIN", ["admin"], true);

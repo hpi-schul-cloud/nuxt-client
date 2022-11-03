@@ -55,8 +55,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
-	it(...isValidComponent(TaskItemTeacher));
-
 	it("accepts valid task props", () => {
 		const { validator } = TaskItemTeacher.props.task;
 		const validTasks = tasksTeacher;

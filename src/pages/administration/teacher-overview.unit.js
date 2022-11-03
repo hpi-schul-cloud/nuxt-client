@@ -141,9 +141,6 @@ describe("teachers/index", () => {
 			params.onConfirm();
 		},
 	};
-
-	it(...isValidComponent(TeacherPage));
-
 	it("should call 'deleteUsers' action", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({

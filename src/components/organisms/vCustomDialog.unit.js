@@ -32,7 +32,6 @@ describe("component/customDialog", () => {
 		document.body.setAttribute("data-app", "true");
 	});
 
-	it(...isValidComponent(CustomDialog));
 	it("should click dialog-close btn", () => {
 		const wrapper = mountComponent({ propsData: mockProps });
 

@@ -6,8 +6,6 @@ describe("@/components/molecules/ContentEduSharingFooter", () => {
 		data: () => ({}),
 	});
 
-	it(...isValidComponent(ContentEduSharingFooter));
-
 	it("Renders svg image", () => {
 		expect(wrapper.find(".edusharing-footer__logo").exists()).toBe(true);
 		expect(wrapper.find(".edusharing-footer__logo").attributes("alt")).toBe(

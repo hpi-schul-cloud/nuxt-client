@@ -42,8 +42,6 @@ describe("MatrixMessenger.unit", () => {
 		window.Matrix = undefined;
 	});
 
-	it(...isValidComponent(Messenger));
-
 	it("do not initialize if feature is not set", () => {
 		const mockStoresTestSpecific = { ...mockStores };
 		mockStoresTestSpecific.messenger = {

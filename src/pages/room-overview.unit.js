@@ -162,8 +162,6 @@ describe("@/pages/RoomOverview", () => {
 		jest.clearAllMocks();
 	});
 
-	it(...isValidComponent(RoomOverview));
-
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
 		await flushPromises();

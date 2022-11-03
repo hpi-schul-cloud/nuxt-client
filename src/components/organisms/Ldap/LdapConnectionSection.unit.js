@@ -9,7 +9,6 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 		searchUser: "cn=schueler,ou=rolle",
 		searchUserPassword: "pass",
 	};
-	it(...isValidComponent(LdapConnectionSection));
 
 	it("has correct child components", () => {
 		const wrapper = mount(LdapConnectionSection, {

@@ -1,7 +1,6 @@
 import BaseSpinner from "./BaseSpinner";
 
 describe("@/components/base/BaseSpinner", () => {
-	it(...isValidComponent(BaseSpinner));
 	it("can change its size", () => {
 		const wrapper = shallowMount(BaseSpinner, {
 			propsData: {

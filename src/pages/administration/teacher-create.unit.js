@@ -25,8 +25,6 @@ describe("teachers/new", () => {
 		setupStores({ authModule: AuthModule });
 	});
 
-	it(...isValidComponent(NewTeacher));
-
 	it("should call 'createTeacher' action", async () => {
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: mockStore }),

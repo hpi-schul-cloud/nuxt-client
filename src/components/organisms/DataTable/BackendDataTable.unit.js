@@ -29,8 +29,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		jest.spyOn(window, "scrollTo").mockImplementation();
 	});
 
-	it(...isValidComponent(BackendDataTable));
-
 	describe("rendering", () => {
 		it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
 			var wrapper = getWrapper();

@@ -137,8 +137,6 @@ describe("GeneralSettings", () => {
 		schoolsModule.setSystems(syncedSystem);
 	});
 
-	it(...isValidComponent(GeneralSettings));
-
 	describe("env-config", () => {
 		it("should display select element with available languages", async () => {
 			envConfigModule.setEnvs({

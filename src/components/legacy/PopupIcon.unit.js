@@ -3,7 +3,6 @@ import PopupIcon from "./PopupIcon";
 const testProps = { source: "fa", icon: "pencil", fill: "red", centered: true };
 
 describe("@/components/legacy/BaseIcon", () => {
-	it(...isValidComponent(PopupIcon));
 	it(...rendersSlotContent(PopupIcon, ["default"], { propsData: testProps }));
 
 	it("contains an icon", () => {

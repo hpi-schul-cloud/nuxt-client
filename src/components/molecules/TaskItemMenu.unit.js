@@ -61,8 +61,6 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	defineWindowWidth(1264);
 
-	it(...isValidComponent(TaskItemMenu));
-
 	describe("props", () => {
 		it("should accept valid userRole prop", () => {
 			const { validator } = TaskItemMenu.props.userRole;

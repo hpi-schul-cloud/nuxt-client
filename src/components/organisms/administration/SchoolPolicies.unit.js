@@ -36,8 +36,6 @@ describe("SchoolPolicies", () => {
 		setupStores({ schoolsModule: SchoolsModule });
 	});
 
-	it(...isValidComponent(SchoolPolicies));
-
 	it("should have the right number of policies", () => {
 		const mockStore = generateMockStore();
 		const wrapper = mount(SchoolPolicies, {

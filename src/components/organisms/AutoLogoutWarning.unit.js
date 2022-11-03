@@ -65,8 +65,6 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 		});
 	});
 
-	it(...isValidComponent(AutoLogoutWarning));
-
 	it("should call init on store", async () => {
 		const { showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds } =
 			autoLogoutModule.context.state;

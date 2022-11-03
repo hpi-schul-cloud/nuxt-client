@@ -30,8 +30,6 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		jest.spyOn(window, "scrollTo").mockImplementation();
 	});
 
-	it(...isValidComponent(DataTable));
-
 	describe("pagination", () => {
 		const total = 150;
 		const bigData = tableData(total);

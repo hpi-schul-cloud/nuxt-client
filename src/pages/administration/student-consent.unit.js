@@ -95,8 +95,6 @@ describe("students/consent", () => {
 		mockData[0].birthday = null;
 	});
 
-	it(...isValidComponent(ConsentPage));
-
 	it("should dispatch the users findConsentUsers action on load", async () => {
 		mount(ConsentPage, {
 			...createComponentMocks({

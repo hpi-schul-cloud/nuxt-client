@@ -6,7 +6,6 @@ const menuQrCode = {
 };
 
 describe("@/components/legacy/MenuQrCode", () => {
-	it(...isValidComponent(MenuQrCode));
 	it("generates an qrCode with print icon button", () => {
 		const wrapper = shallowMount(MenuQrCode, {
 			...createComponentMocks({ i18n: true }),

@@ -13,8 +13,6 @@ const menuItems = [
 ];
 
 describe("@/components/legacy/HelpDropdown", () => {
-	it(...isValidComponent(HelpDropdown));
-
 	it("shows a list of menu items", () => {
 		const wrapper = mount(HelpDropdown, {
 			...createComponentMocks({ i18n: true }),

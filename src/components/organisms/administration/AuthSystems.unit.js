@@ -44,8 +44,6 @@ describe("AuthSystems", () => {
 		});
 	});
 
-	it(...isValidComponent(AuthSystems));
-
 	describe("displaying values", () => {
 		describe("login link", () => {
 			beforeEach(() => {

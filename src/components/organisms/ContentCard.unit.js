@@ -16,8 +16,6 @@ describe("@/components/organisms/ContentCard", () => {
 		propsData: { resource: Resource },
 	});
 
-	it(...isValidComponent(ContentCard));
-
 	it("Sets inline attribute to query when the prop is set to true", () => {
 		wrapper.setProps({ inline: true });
 		wrapper.vm.$nextTick(() => {
@@ -57,8 +55,6 @@ describe("@/components/organisms/ContentCard Collection", () => {
 		localVue,
 		propsData: { resource: Collection },
 	});
-
-	it(...isValidComponent(ContentCard));
 
 	it("Renders head of contentCard as a link", () => {
 		expect(wrapper.find(".title-link").exists()).toBe(true);

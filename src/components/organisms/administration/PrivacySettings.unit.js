@@ -42,8 +42,6 @@ describe("PrivacySettings", () => {
 		});
 	});
 
-	it(...isValidComponent(PrivacySettings));
-
 	describe("env config", () => {
 		it("should display permission switches", () => {
 			envConfigModule.setEnvs({

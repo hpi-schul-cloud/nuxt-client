@@ -10,8 +10,6 @@ const contentSearchbarComponent = {
 };
 
 describe("@/components/molecules/ContentSearchbar", () => {
-	it(...isValidComponent(ContentSearchbar));
-
 	it("Defaults render", async () => {
 		const wrapper = mount(contentSearchbarComponent);
 		expect(wrapper.find("input").exists()).toBe(true);
