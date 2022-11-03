@@ -1,4 +1,5 @@
 import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
+import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
@@ -62,7 +63,7 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			const axiosWithoutErrorPage = $axios?.create();
+			const axiosWithoutErrorPage = ($axios as AxiosStatic)?.create();
 			this._shareApi = ShareTokenApiFactory(
 				undefined,
 				"/v3",
