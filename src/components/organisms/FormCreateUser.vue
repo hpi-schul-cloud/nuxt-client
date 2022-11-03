@@ -33,6 +33,7 @@
 
 		<slot name="errors" />
 		<v-btn
+			type="submit"
 			color="primary"
 			depressed
 			class="w-100 mt--lg"
