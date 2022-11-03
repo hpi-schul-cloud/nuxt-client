@@ -95,20 +95,24 @@ export default {
 				);
 			});
 
-      // Sidebar highlights
-      const { path } = this.$route;
-      const isActive = (item) => item.activeForUrls && item.activeForUrls.some((activeFor) => new RegExp(activeFor).test(path));
+			// Sidebar highlights
+			const { path } = this.$route;
+			const isActive = (item) =>
+				item.activeForUrls &&
+				item.activeForUrls.some((activeFor) =>
+					new RegExp(activeFor).test(path)
+				);
 
-      sidebarItems.forEach((item) => {
-        item.childActive = false;
-        if (item.children) {
-          item.children.forEach((childItem) => {
-            childItem.active = isActive(childItem);
-            item.childActive = item.childActive || childItem.active;
-          });
-        }
-        item.active = isActive(item) && !item.childActive;
-      });
+			sidebarItems.forEach((item) => {
+				item.childActive = false;
+				if (item.children) {
+					item.children.forEach((childItem) => {
+						childItem.active = isActive(childItem);
+						item.childActive = item.childActive || childItem.active;
+					});
+				}
+				item.active = isActive(item) && !item.childActive;
+			});
 
 			return sidebarItems;
 		},
