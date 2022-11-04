@@ -1754,6 +1754,39 @@ export interface ResolvedUserResponse {
 /**
  * 
  * @export
+ * @interface RichText
+ */
+export interface RichText {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichText
+     */
+    content: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichText
+     */
+    type: RichTextTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum RichTextTypeEnum {
+    Plaintext = 'plaintext',
+    Richtext = 'richtext',
+    Inline = 'inline',
+    RichtextCk4 = 'richtext_ck4',
+    RichtextCk5 = 'richtext_ck5',
+    RichtextCk5Inline = 'richtext_ck5_inline'
+}
+
+/**
+ * 
+ * @export
  * @interface SchoolInfoResponse
  */
 export interface SchoolInfoResponse {
@@ -1979,6 +2012,36 @@ export interface TaskCreateParams {
      * @memberof TaskCreateParams
      */
     courseId: string;
+    /**
+     * The id of an lesson object.
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    lessonId?: string;
+    /**
+     * The title of the task
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    name: string;
+    /**
+     * The description of the task
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    description?: string;
+    /**
+     * Date until the task is published
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    availableDate?: string;
+    /**
+     * Date until the task submissions can be sent
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    dueDate?: string;
 }
 /**
  * 
@@ -2060,11 +2123,11 @@ export interface TaskResponse {
      */
     courseId: string;
     /**
-     * 
-     * @type {string}
+     * Task description object, with props content: string and type: input format types
+     * @type {RichText}
      * @memberof TaskResponse
      */
-    description?: string;
+    description?: RichText;
     /**
      * 
      * @type {boolean}
