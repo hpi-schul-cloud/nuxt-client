@@ -12,7 +12,7 @@ describe("@/components/molecules/LernstoreDetailView", () => {
 	});
 
 	it("Renders close button", () => {
-		expect(wrapper.find(".close-transparent").exists()).toBe(true);
+		expect(wrapper.find(".close-transparent,.close-icon").exists()).toBe(true);
 	});
 
 	it("Renders Lernstore img", () => {
