@@ -16,16 +16,14 @@ export interface MountOptions {
 
 const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 	const TestComponent = defineComponent({
-		template: `<div></div>`,
-	});
-
-	const wrapper = mount(TestComponent, {
 		setup() {
 			options.provider?.();
 			const result = composable();
 			return { result };
 		},
 	});
+
+	const wrapper = mount(TestComponent);
 
 	//@ts-ignore
 	return wrapper.vm.result;
