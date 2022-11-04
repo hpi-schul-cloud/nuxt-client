@@ -8,7 +8,7 @@ import path from "path";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 // import { mixin as userMixin } from "@/plugins/user.js";
 import { mountBaseComponents } from "@/components/base/_globals";
-import { i18n as i18nConfig } from "@/plugins/i18n-test.js";
+import { setupI18n } from "@/plugins/i18n-test.js";
 import "@/plugins/directives";
 import globalStubs from "./stubs.js";
 
@@ -192,7 +192,7 @@ global.createComponentMocks = ({
 	//Set `i18n: true` to enable localization and make `this.$i18n` available
 	if (i18n) {
 		localVue.use(VueI18n);
-		returnOptions.i18n = i18nConfig(returnOptions.store);
+		returnOptions.i18n = setupI18n();
 	}
 
 	Vue.use(Vuetify);
