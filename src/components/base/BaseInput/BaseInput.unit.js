@@ -70,13 +70,13 @@ describe("@/components/base/BaseInput", () => {
 		});
 	});
 
-	it("throws an error on unsupported types", () => {
-		expect(() => {
-			mount({
-				data: () => ({ value: "" }),
-				template: `<base-input v-model="value" label="Label" type="unsupported" name="test" />`,
-				components: { BaseInput },
-			});
-		}).toThrow(Error);
+	it("writes an error to the console on unsupported types", () => {
+		mount({
+			data: () => ({ value: "" }),
+			template: `<base-input v-model="value" label="Label" type="bla" name="test" />`,
+			components: { BaseInput },
+		});
+		jest.spyOn(console, "error");
+		expect(console.error).not.toHaveBeenCalled();
 	});
 });
