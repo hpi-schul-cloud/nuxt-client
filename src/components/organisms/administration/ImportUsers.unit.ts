@@ -99,6 +99,11 @@ const getWrapper: any = (data?: object, options?: object) => {
 			vuetify: true,
 		}),
 		data: () => data,
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 		...options,
 	});
 };
@@ -132,6 +137,16 @@ describe("@/components/molecules/importUsers", () => {
 		wrapper.vm.school.inMaintenance = true;
 		wrapper.vm.school.inUserMigration = true;
 		await wrapper.vm.$nextTick();
+
+		const invisibleAlertElement = wrapper.findAll(".v-alert");
+		expect(invisibleAlertElement).toHaveLength(0);
+	});
+
+	it("alert section should visible/invisible according to 'canStartMigration' value", async () => {
+		const wrapper = getWrapper({
+			...mockData,
+			school: { inMaintenance: true, inUserMigration: true },
+		});
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");
 		expect(invisibleAlertElement).toHaveLength(0);
