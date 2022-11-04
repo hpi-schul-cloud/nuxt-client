@@ -44,20 +44,12 @@ export default class RoomModule extends VuexModule {
 	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
 
-	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
+		return RoomsApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _lessonApi?: LessonApiInterface;
 	private get lessonApi(): LessonApiInterface {
-		if (!this._lessonApi) {
-			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
-		}
-		return this._lessonApi;
+		return LessonApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action

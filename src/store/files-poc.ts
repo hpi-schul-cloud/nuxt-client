@@ -1,5 +1,6 @@
 import {
 	FileApiFactory,
+	FileApiInterface,
 	FileRecordResponse as FileRecord,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store";
@@ -7,8 +8,6 @@ import { downloadFile } from "@/utils/fileHelper";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
-
-const fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
 
 @Module({
 	name: "filesPOCModule",
@@ -32,7 +31,7 @@ export default class FilesPOCModule extends VuexModule {
 
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
-			const response = await fileStorageApi.filesStorageControllerList(
+			const response = await this.fileStorageApi.filesStorageControllerList(
 				schoolId,
 				schoolId,
 				"schools"
@@ -54,7 +53,7 @@ export default class FilesPOCModule extends VuexModule {
 
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
-			const response = await fileStorageApi.filesStorageControllerUpload(
+			const response = await this.fileStorageApi.filesStorageControllerUpload(
 				schoolId,
 				schoolId,
 				"schools",
@@ -75,7 +74,7 @@ export default class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			const res = await fileStorageApi.filesStorageControllerDownload(
+			const res = await this.fileStorageApi.filesStorageControllerDownload(
 				file.id,
 				file.name,
 				{ responseType: "blob" }
@@ -98,12 +97,13 @@ export default class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			const response = await fileStorageApi.filesStorageControllerPatchFilename(
-				params.fileId,
-				{
-					fileName: params.fileName,
-				}
-			);
+			const response =
+				await this.fileStorageApi.filesStorageControllerPatchFilename(
+					params.fileId,
+					{
+						fileName: params.fileName,
+					}
+				);
 
 			this.replaceFile(response.data);
 
@@ -157,5 +157,9 @@ export default class FilesPOCModule extends VuexModule {
 
 	get getBusinessError(): BusinessError {
 		return this.businessError;
+	}
+
+	get fileStorageApi(): FileApiInterface {
+		return FileApiFactory(undefined, "/v3", $axios);
 	}
 }

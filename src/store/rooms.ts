@@ -43,9 +43,6 @@ export default class RoomsModule extends VuexModule {
 		error: {},
 	};
 
-	private _dashboardApi?: DashboardApiInterface;
-	private _coursesApi?: CoursesApiInterface;
-
 	@Mutation
 	setRoomData(data: DashboardGridElementResponse[]): void {
 		this.roomsData = data.map((item) => {
@@ -194,17 +191,11 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
-		if (!this._dashboardApi) {
-			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
-		}
-		return this._dashboardApi;
+		return DashboardApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get coursesApi(): CoursesApiInterface {
-		if (!this._coursesApi) {
-			this._coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
-		}
-		return this._coursesApi;
+		return CoursesApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action

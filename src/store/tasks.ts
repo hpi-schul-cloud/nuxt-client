@@ -37,8 +37,6 @@ export default class TaskModule extends VuexModule {
 
 	tab: string = "";
 
-	_taskApi?: TaskApiInterface;
-
 	@Action
 	async fetchAllTasks(): Promise<void> {
 		this.resetBusinessError();
@@ -62,6 +60,7 @@ export default class TaskModule extends VuexModule {
 			this.setTasks(tasks);
 			this.setStatus("completed");
 		} catch (error) {
+			console.log(error);
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
 		}
@@ -346,14 +345,11 @@ export default class TaskModule extends VuexModule {
 		return this.status === "completed";
 	}
 
-	private get taskApi() {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(
-				undefined,
-				"/v3", //`${envConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._taskApi;
+	private get taskApi(): TaskApiInterface {
+		return TaskApiFactory(
+			undefined,
+			"/v3", //`${envConfigModule.getApiUrl}/v3`,
+			$axios
+		);
 	}
 }

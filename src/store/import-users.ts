@@ -60,8 +60,6 @@ export default class ImportUsersModule extends VuexModule {
 
 	private businessError: BusinessError | null = null;
 
-	private _importUserApi?: UserImportApiInterface;
-
 	@Mutation
 	setFirstName(firstName: string): void {
 		this.firstName = firstName;
@@ -376,9 +374,6 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
+		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
 }

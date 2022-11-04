@@ -1,4 +1,3 @@
-import { roomModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -28,12 +27,8 @@ export default class ShareCourseModule extends VuexModule {
 	private courseId: string = "";
 	private shareUrl: string | undefined = undefined;
 
-	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
-		}
-		return this._shareApi;
+		return ShareTokenApiFactory(undefined, "v3", $axios);
 	}
 
 	@Action

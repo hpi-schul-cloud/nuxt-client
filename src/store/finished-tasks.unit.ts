@@ -174,13 +174,6 @@ describe("finished task store", () => {
 
 		describe("refetchTasks", () => {
 			it("should fetch all tasks up until current pagination", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination = {
-					total: 26,
-					skip: 10,
-					limit: 10,
-				};
-
 				const mockApi = {
 					taskControllerFindAllFinished: jest
 						.fn()
@@ -213,6 +206,13 @@ describe("finished task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const finishedTaskModule = new FinishedTaskModule({});
+				finishedTaskModule.pagination = {
+					total: 26,
+					skip: 10,
+					limit: 10,
+				};
 
 				finishedTaskModule.refetchTasks().then(() => {
 					expect(finishedTaskModule.getTasks).toStrictEqual([
