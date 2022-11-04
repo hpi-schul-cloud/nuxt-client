@@ -1,6 +1,6 @@
 <template>
-	<default-wireframe :full-width="true">
-		<h1>{{ $t("pages.files.overview.headline") }}</h1>
+	<default-wireframe :breadcrumbs="breadcrumbs" :full-width="true">
+		<h1>{{ title }}</h1>
 		<base-file-table :items="items" :headers="headers"></base-file-table>
 	</default-wireframe>
 </template>
@@ -119,7 +119,7 @@ export default defineComponent({
       await loadFilesFunc();
     });
 
-		return { items, headers };
+	return { items, headers, breadcrumbs, title };
 	},
 });
 </script>

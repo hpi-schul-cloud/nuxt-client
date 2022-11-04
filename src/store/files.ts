@@ -141,8 +141,8 @@ export default class FilesModule extends VuexModule {
 	}
 
 	@Mutation
-	addFiles(files: File[]) {
-		this.files = this.files.concat(files);
+	setFiles(files: File[]) {
+		this.files = files;
 	}
 
 	@Mutation
@@ -151,9 +151,9 @@ export default class FilesModule extends VuexModule {
 	}
 
 	@Mutation
-	addFileMetaData(payload: FileMetaListResponse): void {
+	addFileMetaData(response: FileMetaListResponse): void {
 		const mappedFiles: File[] =
-			FileResponseMapper.mapFileMetaListResponse(payload);
-		filesModule.addFiles(mappedFiles);
+			FileResponseMapper.mapFileMetaListResponse(response);
+		filesModule.setFiles(mappedFiles);
 	}
 }

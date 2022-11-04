@@ -1,10 +1,10 @@
 export enum FileType {
 	FAVORITES = "favorites",
-	FILE = "file",
-	PDF = "pdf",
+	FILE = "draft",
+	PDF = "draft",
 	DIRECTORY = "dir",
 	SHARED_DIRECTORY = "shared_dir",
-	UNKNOWN = "unknown",
+	UNKNOWN = "question_mark",
 }
 
 // styleclass
@@ -32,7 +32,8 @@ export class File {
 		size: number,
 		name: string,
 		lastChanged: Date,
-		icon?: FileIcon
+		icon?: FileIcon,
+		translationKey?: string
 	) {
 		this.path = path;
 		this.type = fileType;
@@ -40,6 +41,7 @@ export class File {
 		this.size = size;
 		this.name = name;
 		this.lastChanged = lastChanged;
+		this.translationKey = translationKey;
 	}
 
 	name: string;
@@ -53,4 +55,6 @@ export class File {
 	size: number;
 
 	lastChanged: Date;
+
+	translationKey: string | undefined;
 }
