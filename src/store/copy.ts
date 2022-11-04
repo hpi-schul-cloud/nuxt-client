@@ -44,33 +44,17 @@ export default class CopyModule extends VuexModule {
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
 
-	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
+		return RoomsApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _taskApi?: TaskApiInterface;
 	private get taskApi(): TaskApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		}
-		return this._taskApi;
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			const axiosWithoutErrorPage = ($axios as AxiosStatic)?.create();
-			this._shareApi = ShareTokenApiFactory(
-				undefined,
-				"/v3",
-				axiosWithoutErrorPage
-			);
-		}
-		return this._shareApi;
+		const axiosWithoutErrorPage = ($axios as AxiosStatic)?.create();
+		return ShareTokenApiFactory(undefined, "/v3", axiosWithoutErrorPage);
 	}
 
 	@Action

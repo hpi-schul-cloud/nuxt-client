@@ -172,7 +172,11 @@ export default class FinishedTaskModule extends VuexModule {
 		return this.status === "completed";
 	}
 
-	private get taskApi() {
+	// private get taskApi(): TaskApiInterface {
+	// 	return TaskApiFactory(undefined, "/v3", $axios);
+	// }
+
+	private get taskApi(): TaskApiInterface {
 		if (!this._taskApi) {
 			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
 		}

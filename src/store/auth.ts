@@ -84,8 +84,6 @@ export default class AuthModule extends VuexModule {
 
 	status: Status = "";
 
-	_userApi?: UserApiInterface;
-
 	@Mutation
 	setUser(user: User): void {
 		this.user = user;
@@ -250,14 +248,11 @@ export default class AuthModule extends VuexModule {
 		window.location.assign("/logout");
 	}
 
-	private get userApi() {
-		if (!this._userApi) {
-			this._userApi = UserApiFactory(
-				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._userApi;
+	private get userApi(): UserApiInterface {
+		return UserApiFactory(
+			undefined,
+			"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+			$axios
+		);
 	}
 }

@@ -36,8 +36,6 @@ export default class NewsModule extends VuexModule {
 	};
 	status: Status = "";
 
-	_newsApi?: NewsApiInterface;
-
 	get getNews(): News[] {
 		return this.news;
 	}
@@ -58,14 +56,11 @@ export default class NewsModule extends VuexModule {
 	}
 
 	private get newsApi() {
-		if (!this._newsApi) {
-			this._newsApi = NewsApiFactory(
-				undefined,
-				"/v3", //`${envConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._newsApi;
+		return NewsApiFactory(
+			undefined,
+			"/v3", //`${envConfigModule.getApiUrl}/v3`,
+			$axios
+		);
 	}
 
 	@Mutation

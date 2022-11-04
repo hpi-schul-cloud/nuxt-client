@@ -42,8 +42,6 @@ function transformSchoolClientToServer(school: any): School {
 	stateFactory: true,
 })
 export default class SchoolsModule extends VuexModule {
-	private _importUserApi?: UserImportApiInterface;
-
 	school: School = {
 		_id: "",
 		name: "",
@@ -321,9 +319,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
+		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
 }
