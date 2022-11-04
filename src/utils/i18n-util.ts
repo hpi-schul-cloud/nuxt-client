@@ -2,10 +2,12 @@ import VueI18n, { Locale } from "vue-i18n";
 import { inject } from "@vue/composition-api";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
 
+export type TranslationFunction = (key: string) => string;
+
 export function i18n() {
 	const i18nLib = inject<VueI18n>("i18n");
 
-	const t = (key: string): string => {
+	const t: TranslationFunction = (key: string): string => {
 		const translateResult = i18nLib?.t(key);
 		if (typeof translateResult === "string") {
 			return translateResult;

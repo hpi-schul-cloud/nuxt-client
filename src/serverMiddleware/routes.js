@@ -30,6 +30,7 @@ const routes = [
 	`^/poc-files/?$`,
 	`^/cfiles/?$`,
 	`^/cfiles/teams/?$`,
+	`^/cfiles/teams/.+`,
 ];
 
 const uuid =

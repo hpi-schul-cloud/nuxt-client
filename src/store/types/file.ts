@@ -10,7 +10,7 @@ export enum FileType {
 // styleclass
 export enum FileIcon {
 	FAVORITE = "favorite",
-	FILE = "file",
+	FILE = "insert_drive_file",
 	FOLDER = "folder",
 	SHARED_FOLDER = "folder_shared",
 	UNKNOWN = "unknown",
