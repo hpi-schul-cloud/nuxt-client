@@ -198,7 +198,8 @@
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",
 	"global.sidebar.courses": "Cursos",
-	"global.sidebar.files": "Mis archivos",
+	"global.sidebar.files-old": "Mis archivos",
+	"global.sidebar.files": "Archivos",
 	"global.sidebar.filesPersonal": "archivos personales",
 	"global.sidebar.filesShared": "archivos compartidos",
 	"global.sidebar.helpArea": "Sección de ayuda",
@@ -451,6 +452,13 @@
 	"components.molecules.shareCourse.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.shareCourse.mail.subject": "Curso de importación",
 	"components.molecules.shareCourse.mail.body": "Enlace al curso:",
+	"components.molecules.importCourse.options.title": "Importar curso",
+	"components.molecules.importCourse.options.infoText": "Los datos relacionados con los participantes no se copiarán. El curso se puede renombrar a continuación.",
+	"components.molecules.importCourse.options.loadingMessage": "Importar curso en curso...",
+	"components.molecules.importCourse.options.success": "{type} importado con éxito",
+	"components.molecules.importCourse.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
+	"components.molecules.importCourse.options.failure.backendError": "'{name}' no se pudo importar.",
+	"components.molecules.importCourse.options.failure.permissionError": "Desafortunadamente, falta la autorización necesaria.",
 	"pages.administration.printQr.emptyUser": "L@s usuari@s seleccionad@s ya han sido registrad@s",
 	"pages.administration.printQr.error": "No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",
@@ -813,5 +821,6 @@
 	"utils.adminFilter.placeholder.complete.lastname": "Filtra por el apellido completo...",
 	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
-	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020"
+	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"pages.files.title": "Archivos"
 }

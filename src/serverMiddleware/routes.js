@@ -16,6 +16,7 @@ const routes = [
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
 	`^/administration/migration`,
+	`^/cfiles/?$`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/insights`,

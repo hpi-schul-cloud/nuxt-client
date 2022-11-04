@@ -14,10 +14,10 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
-import StatusAlertsModule from "@/store/status-alerts";
-import TasksModule from "@/store/tasks";
-import TaskModule from "@/store/task";
 import ShareCourseModule from "@/store/share-course";
+import StatusAlertsModule from "@/store/status-alerts";
+import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -37,32 +37,32 @@ let notifierModule: NotifierModule;
 let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let schoolsModule: SchoolsModule;
+let shareCourseModule: ShareCourseModule;
 let statusAlertsModule: StatusAlertsModule;
 let tasksModule: TasksModule;
 let taskModule: TaskModule;
-let shareCourseModule: ShareCourseModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
+	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
+	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
+	shareCourseModule = getModule(ShareCourseModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	tasksModule = getModule(TasksModule, store);
 	taskModule = getModule(TaskModule, store);
-	notifierModule = getModule(NotifierModule, store);
-	copyModule = getModule(CopyModule, store);
-	loadingStateModule = getModule(LoadingStateModule, store);
-	shareCourseModule = getModule(ShareCourseModule, store);
 }
 
 export {
@@ -71,20 +71,20 @@ export {
 	authModule,
 	autoLogoutModule,
 	contentModule,
+	copyModule,
 	envConfigModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,
 	importUsersModule,
+	loadingStateModule,
 	newsModule,
+	notifierModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
+	shareCourseModule,
 	statusAlertsModule,
 	tasksModule,
 	taskModule,
-	notifierModule,
-	copyModule,
-	loadingStateModule,
-	shareCourseModule,
 };

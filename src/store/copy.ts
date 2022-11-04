@@ -6,6 +6,9 @@ import {
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	ShareTokenApiFactory,
+	ShareTokenApiInterface,
+	ShareTokenInfoResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "../serverApi/v3/api";
@@ -16,6 +19,19 @@ export type CopyParams = {
 	type: "task" | "lesson" | "course";
 	courseId?: string;
 };
+
+interface ShareTokenValidationResult {
+	payload: {
+		parentType: "course";
+		parentName: string;
+	};
+}
+
+interface CopyByShareTokenPayload {
+	type: string;
+	token: string;
+	newName: string;
+}
 
 @Module({
 	name: "copy",
@@ -41,6 +57,19 @@ export default class CopyModule extends VuexModule {
 			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
 		}
 		return this._taskApi;
+	}
+
+	private _shareApi?: ShareTokenApiInterface;
+	private get shareApi(): ShareTokenApiInterface {
+		if (!this._shareApi) {
+			const axiosWithoutErrorPage = $axios?.create();
+			this._shareApi = ShareTokenApiFactory(
+				undefined,
+				"/v3",
+				axiosWithoutErrorPage
+			);
+		}
+		return this._shareApi;
 	}
 
 	@Action
@@ -78,6 +107,40 @@ export default class CopyModule extends VuexModule {
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return copyResult;
+	}
+
+	@Action({ rawError: true })
+	async validateShareToken(
+		token: string
+	): Promise<ShareTokenInfoResponse | undefined> {
+		const shareTokenResponse =
+			await this.shareApi.shareTokenControllerLookupShareToken(token);
+		if (!shareTokenResponse) return undefined;
+		return shareTokenResponse.data;
+	}
+
+	@Action({ rawError: true })
+	async copyByShareToken({
+		token,
+		type,
+		newName,
+	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
+		let copyResult: CopyApiResponse | undefined = undefined;
+
+		if (type === "course") {
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, { newName })
+				.then((response) => response.data);
+		}
+
+		if (copyResult === undefined) {
+			throw new Error("CopyProcess unknown type: " + type);
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		this.setCopyResult(copyResult);
+		this.setCopyResultFailedItems({ payload: copyResult });
+		return this.copyResultFailedItems;
 	}
 
 	@Mutation

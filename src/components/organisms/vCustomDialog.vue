@@ -42,7 +42,7 @@
 						class="dialog-closed"
 						depressed
 						text
-						@click="$emit('dialog-closed', false)"
+						@click="cancelDialog"
 					>
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
@@ -120,6 +120,10 @@ export default {
 	methods: {
 		confirmDialog() {
 			this.$emit("dialog-confirmed");
+			this.$emit("dialog-closed", false);
+		},
+		cancelDialog() {
+			this.$emit("dialog-canceled");
 			this.$emit("dialog-closed", false);
 		},
 		checkButtons(buttonName) {
