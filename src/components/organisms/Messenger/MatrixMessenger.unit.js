@@ -4,6 +4,7 @@ import { schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 
 const session = {
 	homeserverUrl: "https://matrix.domain",
@@ -28,13 +29,22 @@ const mockStores = {
 			getServerName: () => "dummy-server-name",
 		},
 	},
+	envConfigModule: {
+		getters: {
+			FEATURE_MATRIX_MESSENGER_ENABLED: () => true,
+		},
+	},
 };
 
 describe("MatrixMessenger.unit", () => {
 	beforeEach(() => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
-		setupStores({ authModule: AuthModule, schoolsModule: SchoolsModule });
+		setupStores({
+			authModule: AuthModule,
+			schoolsModule: SchoolsModule,
+			envConfigModule: EnvConfigModule
+		});
 		schoolsModule.setSchool({ features: ["messenger"] });
 	});
 	afterEach(() => {
