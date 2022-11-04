@@ -193,14 +193,13 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				wrapper.vm.copyCard = copyCard;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.copy"
-				)}`;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-lesson-menu-copy"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(copyCard).toHaveBeenCalled();
@@ -239,11 +238,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
-				const selectorName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.remove"
-				)}`;
 
-				const moreActionButton = wrapper.find(selectorName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-lesson-menu-remove"]`
+				);
 				await moreActionButton.trigger("click");
 				await wrapper.vm.$nextTick();
 				const emitted = wrapper.emitted("delete-lesson");
