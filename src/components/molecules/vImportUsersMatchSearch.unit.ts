@@ -5,7 +5,7 @@ import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const testProps = {
 	editedItem: {
@@ -27,6 +27,11 @@ const getWrapper: any = (props: object, options?: object) => {
 			vuetify: true,
 		}),
 		propsData: props,
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 		...options,
 	});
 };
@@ -38,6 +43,7 @@ describe("@/components/molecules/RoomTaskCardTeacher", () => {
 	});
 
 	it("should have correct props", () => {
+		console.log("testProps", testProps);
 		const wrapper = getWrapper(testProps);
 
 		expect(wrapper.vm.editedItem).toStrictEqual(testProps.editedItem);

@@ -1,8 +1,7 @@
 import { mount } from "@vue/test-utils";
 import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
-import flushPromises from "flush-promises";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const mockData = {
 	id: "4",
@@ -108,7 +107,7 @@ describe("vRoomGroupAvatar", () => {
 	});
 
 	it("should display the correct size and group-avatar property", () => {
-		const wrapper = getWrapper(propsData) as any;
+		const wrapper = getWrapper(propsData);
 		const iterator = wrapper.vm.$refs["avatar-iterator"] as any;
 
 		expect(iterator).toBeTruthy();
@@ -137,7 +136,7 @@ describe("vRoomGroupAvatar", () => {
 		const cardComponent = wrapper.find(".card-component");
 
 		cardComponent.trigger("click");
-		await flushPromises();
+		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["clicked"]).toHaveLength(1);
@@ -151,7 +150,7 @@ describe("vRoomGroupAvatar", () => {
 		const cardComponent = wrapper.find(".card-component");
 
 		cardComponent.trigger("keypress.enter");
-		await flushPromises();
+		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["clicked"]).toHaveLength(1);
@@ -170,7 +169,7 @@ describe("vRoomGroupAvatar", () => {
 		const avatarComponent = wrapper.find(".room-avatar");
 
 		avatarComponent.trigger("dragstart");
-		await flushPromises();
+		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["startDrag"]).toHaveLength(1);
@@ -189,7 +188,7 @@ describe("vRoomGroupAvatar", () => {
 		const avatarComponent = wrapper.find(".v-avatar");
 
 		avatarComponent.trigger("dragstart");
-		await flushPromises();
+		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["startDrag"]).toBe(undefined);
