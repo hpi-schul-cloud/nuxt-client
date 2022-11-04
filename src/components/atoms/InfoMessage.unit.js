@@ -8,7 +8,7 @@ describe("@/components/atoms/InfoMessage", () => {
 				message: expectedMessage,
 			},
 		});
-		expect(wrapper.find("div").element.textContent.trim()).toBe(
+		expect(wrapper.find("div.message").element.textContent.trim()).toBe(
 			expectedMessage
 		);
 	});
