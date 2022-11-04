@@ -1,6 +1,6 @@
 <template>
 	<empty-state
-		image="@/assets/img/empty-state/content-initial.svg"
+		:image="contentInitialImage"
 		:alt="$t('pages.content.init_state.img_alt')"
 		:title="$t('pages.content.init_state.title')"
 	>
@@ -15,13 +15,15 @@
 
 <script>
 import EmptyState from "@/components/molecules/EmptyState";
+import contentInitialImage from "@/assets/img/empty-state/content-initial.svg";
 export default {
 	components: {
 		EmptyState,
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			contentInitialImage,
+		};
 	},
 };
 </script>

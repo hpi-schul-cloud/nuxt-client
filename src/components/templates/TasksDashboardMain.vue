@@ -86,6 +86,7 @@ import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
+import tasksEmptyStateImage from "@/assets/img/empty-state/tasks-empty-state.svg";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -257,7 +258,6 @@ export default {
 			return null;
 		},
 		emptyState() {
-			const image = "@/assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 
@@ -281,7 +281,7 @@ export default {
 			}
 
 			return {
-				image,
+				image: tasksEmptyStateImage,
 				title,
 				subtitle,
 			};
