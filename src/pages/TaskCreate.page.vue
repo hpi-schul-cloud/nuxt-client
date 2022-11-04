@@ -41,8 +41,8 @@ export default defineComponent({
 		const save = () => {
 			taskModule.createTask({
 				courseId: "0000dcfbfb5c7a3f00bf21ab",
-				name,
-				description,
+				name: name.value,
+				description: description.value,
 			});
 		};
 

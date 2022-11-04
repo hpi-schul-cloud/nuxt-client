@@ -16,7 +16,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
-import TaskModule from "@/store/tasks";
+import TaskModule from "@/store/task";
 import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";

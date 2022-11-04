@@ -43,15 +43,12 @@ export default class TaskModule extends VuexModule {
 
 		this.setLoading(true);
 		try {
-			const createActionResponse = await this.taskApi.taskControllerCreate({
+			console.log(params);
+			const { data } = await this.taskApi.taskControllerCreate({
+				name: params.name,
 				courseId: params.courseId,
+				description: params.description,
 			});
-			console.log(typeof createActionResponse.data.id);
-			const { data } = await this.taskApi.taskControllerUpdate(
-				createActionResponse.data.id,
-				params as TaskUpdateParams
-			);
-
 			this.setTaskData(data);
 			console.log(params, data);
 			this.setLoading(false);
