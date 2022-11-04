@@ -3,24 +3,28 @@ import VueI18n from "vue-i18n";
 
 Vue.use(VueI18n);
 
-export const i18n = () => {
-	const locale = "de";
-	const fallbackLocale = "de";
+const locale = "de";
+const fallbackLocale = "de";
+const messages = {
+	en: require("@/locales/en.json"),
+	de: require("@/locales/de.json"),
+	es: require("@/locales/es.json"),
+	ua: require("@/locales/ua.json"),
+};
 
+// for setting up i18n in localVue
+export const setupI18n = () => {
 	return new VueI18n({
 		locale,
 		fallbackLocale,
-		messages: {
-			en: require("@/locales/en.json"),
-			de: require("@/locales/de.json"),
-			es: require("@/locales/es.json"),
-			ua: require("@/locales/ua.json"),
-		},
+		messages,
 	});
 };
 
-Vue.prototype._i18n = i18n();
+// make i18n globally available
+Vue.prototype._i18n = setupI18n();
 
+// NUXT_REMOVAL remove $ts when refactored
 Vue.prototype.$ts = function (key) {
 	const result = this.$t(key);
 	if (typeof result !== "string") {
