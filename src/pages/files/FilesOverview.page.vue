@@ -19,22 +19,22 @@ import { File, FileType } from "@store/types/file";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-  components: { BaseFileTable, DefaultWireframe },
-  setup() {
-    const route = useRoute();
-    const pathArray = route.value.path.split("/");
+	components: { BaseFileTable, DefaultWireframe },
+	setup() {
+		const route = useRoute();
+		const pathArray = route.value.path.split("/");
 
-    onMounted(async () => {
-      if (pathArray.length === 1 && pathArray[0] === 'cfiles') {
-        // fetch initial page
-      } else if (pathArray.length === 2) {
-        //const pageType = pathArray[1];
-      } else if (pathArray.length >= 3) {
-        //const pageType = pathArray[1];
-      }
+		onMounted(async () => {
+			if (pathArray.length === 1 && pathArray[0] === "cfiles") {
+				// fetch initial page
+			} else if (pathArray.length === 2) {
+				//const pageType = pathArray[1];
+			} else if (pathArray.length >= 3) {
+				//const pageType = pathArray[1];
+			}
 
-      await filesModule.fetchFilesMeta();
-    });
+			await filesModule.fetchFilesMeta();
+		});
 
 		const { t } = i18n();
 
