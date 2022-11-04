@@ -38,9 +38,9 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	beforeEach(() => {
-		setupStores({ 
-			envConfigModule: EnvConfigModule, 
-			schoolsModule: SchoolsModule 
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
 		});
 	});
 
@@ -167,9 +167,9 @@ describe("AuthSystems", () => {
 
 			const ldapButtonVisibility = wrapper.findAll(searchStrings.addLdap);
 			expect(ldapButtonVisibility).toHaveLength(1);
-			expect(
-				ldapButtonVisibility.wrappers[0].element.text.trim()
-			).toStrictEqual("LDAP-System hinzufügen");
+			expect(ldapButtonVisibility.at(0).text().trim()).toStrictEqual(
+				"LDAP-System hinzufügen"
+			);
 			expect(ldapButtonVisibility.wrappers[0].vm.to).toStrictEqual(
 				"/administration/ldap/config"
 			);
