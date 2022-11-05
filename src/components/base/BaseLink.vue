@@ -20,7 +20,6 @@
 	<router-link
 		v-else
 		:class="{ link: !noStyles, 'text-only': noStyles }"
-		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
 		v-on="$listeners"
