@@ -51,34 +51,60 @@ import "@/components/base/_globals";
 import "@/plugins/directives";
 
 import "@/styles/global.scss";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { initializeAxios } from "./utils/api";
 
-new Vue({
-	router,
-	store,
-	vuetify,
-	i18n,
-	// NUXT_REMOVAL get rid of store DI
-	provide: {
-		accountsModule,
-		authModule,
-		autoLogoutModule,
-		contentModule,
-		copyModule,
-		envConfigModule,
-		filePathsModule,
-		filesPOCModule,
-		finishedTaskModule,
-		importUsersModule,
-		loadingStateModule,
-		newsModule,
-		notifierModule,
-		roomModule,
-		roomsModule,
-		schoolsModule,
-		shareCourseModule,
-		statusAlertsModule,
-		taskModule,
+(async () => {
+	const runtimeConfigJson = await axios.get(
+		`${window.location.origin}/runtime.config.json`
+	);
+	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
+	const cookies = new Cookies();
+	const jwt = cookies.get("jwt");
+
+	if (!jwt) {
+		const target = `${window.location.pathname}${window.location.search}`;
+		window.location.assign(`/login?redirect=${target}`);
+	}
+
+	axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
+
+	initializeAxios(axios);
+
+	await envConfigModule.findEnvs();
+	await authModule.login(jwt);
+
+	// console.log("--- main login finished");
+
+	new Vue({
+		router,
+		store,
+		vuetify,
 		i18n,
-	},
-	render: (h) => h(App),
-}).$mount("#app");
+		// NUXT_REMOVAL get rid of store DI
+		provide: {
+			accountsModule,
+			authModule,
+			autoLogoutModule,
+			contentModule,
+			copyModule,
+			envConfigModule,
+			filePathsModule,
+			filesPOCModule,
+			finishedTaskModule,
+			importUsersModule,
+			loadingStateModule,
+			newsModule,
+			notifierModule,
+			roomModule,
+			roomsModule,
+			schoolsModule,
+			shareCourseModule,
+			statusAlertsModule,
+			taskModule,
+			i18n,
+		},
+		render: (h) => h(App),
+	}).$mount("#app");
+})();

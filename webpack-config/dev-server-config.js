@@ -20,6 +20,7 @@ const legacyRoutes = [
 	"^/help",
 	"^/addons",
 	"^/administration/?$",
+	"^/locales",
 ];
 
 const isLegacyClient = (path) => {
