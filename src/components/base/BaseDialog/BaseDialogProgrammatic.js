@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Vuetify from "vuetify";
 import Dialog from "./BaseDialog";
 
 function open(propsData) {
@@ -19,6 +20,7 @@ const DialogProgrammatic = {
 const Plugin = {
 	install(Vue) {
 		Vue.use(Dialog);
+		Vue.use(Vuetify);
 		Vue.prototype.$dialog = DialogProgrammatic;
 	},
 };

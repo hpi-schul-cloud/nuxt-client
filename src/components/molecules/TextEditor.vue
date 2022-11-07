@@ -2,102 +2,141 @@
 	<div class="editor">
 		<editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
 			<div class="menubar">
-				<base-button
+				<v-btn
+					icon
+					color="secondary"
 					data-testid="editor_undo"
-					design="text icon"
 					@click="commands.undo"
 				>
 					<base-icon source="material" icon="undo" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
 					data-testid="editor_redo"
-					design="text icon"
+					icon
+					color="secondary"
 					@click="commands.redo"
 				>
 					<base-icon source="material" icon="redo" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.bold()"
+					:fab="isActive.bold()"
 					data-testid="editor_format_bold"
-					:design="isActive.bold() ? 'icon' : 'text icon'"
 					@click="commands.bold"
 				>
 					<base-icon source="material" icon="format_bold" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.italic()"
+					:fab="isActive.italic()"
 					data-testid="editor_format_italic"
-					:design="isActive.italic() ? 'icon' : 'text icon'"
 					@click="commands.italic"
 				>
 					<base-icon source="material" icon="format_italic" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.underline()"
+					:fab="isActive.underline()"
 					data-testid="editor_format_underlined"
-					:design="isActive.underline() ? 'icon' : 'text icon'"
 					@click="commands.underline"
 				>
 					<base-icon source="material" icon="format_underlined" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.strike()"
+					:fab="isActive.strike()"
 					data-testid="editor_format_strikethrough"
-					:design="isActive.strike() ? 'icon' : 'text icon'"
 					@click="commands.strike"
 				>
 					<base-icon source="material" icon="format_strikethrough" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.heading({ level: 2 })"
+					:fab="isActive.heading({ level: 2 })"
 					data-testid="editor_format_h1"
-					:design="isActive.heading({ level: 2 }) ? 'icon' : 'text icon'"
 					@click="commands.heading({ level: 2 })"
 				>
 					H1
-				</base-button>
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.heading({ level: 3 })"
+					:fab="isActive.heading({ level: 3 })"
 					data-testid="editor_format_h2"
-					:design="isActive.heading({ level: 3 }) ? 'icon' : 'text icon'"
 					@click="commands.heading({ level: 3 })"
 				>
 					H2
-				</base-button>
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.heading({ level: 4 })"
+					:fab="isActive.heading({ level: 4 })"
 					data-testid="editor_format_h3"
-					:design="isActive.heading({ level: 4 }) ? 'icon' : 'text icon'"
 					@click="commands.heading({ level: 4 })"
 				>
 					H3
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.bullet_list()"
+					:fab="isActive.bullet_list()"
 					data-testid="editor_format_list_bulleted"
-					:design="isActive.bullet_list() ? 'icon' : 'text icon'"
 					:disabled="isInHeading"
 					@click="commands.bullet_list"
 				>
 					<base-icon source="material" icon="format_list_bulleted" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
+					color="secondary"
+					width="36"
+					height="36"
+					depressed
+					:icon="!isActive.ordered_list()"
+					:fab="isActive.ordered_list()"
 					data-testid="editor_format_list_numbered"
-					:design="isActive.ordered_list() ? 'icon' : 'text icon'"
 					:disabled="isInHeading"
 					@click="commands.ordered_list"
 				>
 					<base-icon source="material" icon="format_list_numbered" />
-				</base-button>
-
-				<base-button
+				</v-btn>
+				<v-btn
 					data-testid="editor_add_image"
-					design="text icon"
+					icon
+					color="secondary"
 					:disabled="isInHeading"
 					@click="showImagePrompt(commands.image)"
 				>
 					<base-icon source="material" icon="image" />
-				</base-button>
+				</v-btn>
 			</div>
 		</editor-menu-bar>
 

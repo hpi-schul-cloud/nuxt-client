@@ -3,7 +3,7 @@ import BaseDialog from "./BaseDialog";
 const mountDialog = async (options = {}) => {
 	const wrapper = mount(BaseDialog, {
 		beforeMount() {},
-		...createComponentMocks({ stubs: { transition: true } }),
+		...createComponentMocks({ stubs: { transition: true }, vuetify: true }),
 		...options,
 	});
 	await wrapper.vm.$nextTick();
@@ -23,6 +23,7 @@ describe("@components/base/BaseDialog", () => {
 			});
 			expect(wrapper.text()).toContain(testMessage);
 		});
+
 		it("iconColor Prop should override actionDesign", async () => {
 			const testColor = "lime";
 			const wrapper = await mountDialog({
@@ -41,6 +42,7 @@ describe("@components/base/BaseDialog", () => {
 			expect(wrapper.vm.currentIconColor).toBe(testColor);
 			expect(wrapper.get(".mock-icon").element.style.color).toBe(testColor);
 		});
+
 		it("icon should have by default the actionDesign prop color", async () => {
 			const designs = ["success", "danger", "primary"];
 			// Make sure all expects get executed
@@ -60,6 +62,7 @@ describe("@components/base/BaseDialog", () => {
 			};
 			await Promise.all(designs.map(testWithDesign));
 		});
+
 		it("passes correct button designs", async () => {
 			const wrapper = await mountDialog({
 				propsData: {
@@ -68,9 +71,10 @@ describe("@components/base/BaseDialog", () => {
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-confirm"]`);
 			const cancelBtn = wrapper.find(`[data-testid="btn-dialog-cancel"]`);
-			expect(confirmBtn.classes("is-success")).toBe(true);
-			expect(cancelBtn.classes("is-text")).toBe(true);
+			expect(confirmBtn.classes("success")).toBe(true);
+			expect(cancelBtn.classes("v-btn--text")).toBe(true);
 		});
+
 		it("invertedDesign: true switches the confirm and cancel button design", async () => {
 			const wrapper = await mountDialog({
 				propsData: {
@@ -80,16 +84,18 @@ describe("@components/base/BaseDialog", () => {
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-confirm"]`);
 			const cancelBtn = wrapper.find(`[data-testid="btn-dialog-cancel"]`);
-			expect(confirmBtn.classes("is-text")).toBe(true);
-			expect(cancelBtn.classes("is-success")).toBe(true);
+			expect(confirmBtn.classes("v-btn--text")).toBe(true);
+			expect(cancelBtn.classes("success")).toBe(true);
 		});
 	});
+
 	describe("behaviour", () => {
 		it("should auto open on mount", async () => {
 			const wrapper = await mountDialog({});
 			expect(wrapper.vm.isActive).toBe(true);
 			expect(wrapper.find(".modal-body").exists()).toBe(true);
 		});
+
 		it("should close on confirm", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.confirm();
@@ -97,6 +103,7 @@ describe("@components/base/BaseDialog", () => {
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
+
 		it("should close on cancel", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.cancel();
@@ -104,6 +111,7 @@ describe("@components/base/BaseDialog", () => {
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
+
 		it("should close on click outside", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.clickOutside();
@@ -111,6 +119,7 @@ describe("@components/base/BaseDialog", () => {
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
+
 		it("should call onConfirm prop on primary action click", async () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
@@ -122,6 +131,7 @@ describe("@components/base/BaseDialog", () => {
 			confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
+
 		it("should call onCancel prop on secondary action click", async () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
@@ -133,6 +143,7 @@ describe("@components/base/BaseDialog", () => {
 			confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
+
 		it("should call onClickOutside prop on click outside", async () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({

@@ -4,7 +4,7 @@
 			:title="getTitle"
 			:active="showModal"
 			:description="getDescription"
-			design="secondary"
+			design="primary"
 			@update:active="buttonHandler"
 		>
 			<template #icon>

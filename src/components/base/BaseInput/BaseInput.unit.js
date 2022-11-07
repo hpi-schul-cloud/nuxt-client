@@ -26,6 +26,10 @@ describe("@components/base/BaseInput", () => {
 			.filter((type) => type !== "hidden") // hidden inputs doesn't need a label
 			.forEach((type, index) => {
 				const wrapper = mount({
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
 					data: () => ({ value: "" }),
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
@@ -52,6 +56,10 @@ describe("@components/base/BaseInput", () => {
 		const attributes = { "data-test": "testAttrValue" };
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
 				attrs: attributes,
 				propsData: {
 					vmodel: "",

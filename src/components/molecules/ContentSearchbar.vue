@@ -14,27 +14,30 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-icon
+				<v-icon
 					v-if="value === ''"
+					icon
+					plain
+					x-large
+					color="black"
 					class="search-icon"
-					source="custom"
 					aria-label="search"
-					icon="search"
-				/>
-				<base-button v-else design="none" @click="clearBtnHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						aria-label="clear"
-						icon="clear"
-					/>
-				</base-button>
+				>
+					{{ mdiMagnify }}
+				</v-icon>
+				<v-btn v-else icon plain color="black" @click="clearBtnHandler">
+					<v-icon x-large class="search-icon" aria-label="clear">
+						{{ mdiClose }}
+					</v-icon>
+				</v-btn>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mdiClose, mdiMagnify } from "@mdi/js";
+
 let typingTimer;
 
 export default {
@@ -55,6 +58,8 @@ export default {
 		return {
 			isActive: true,
 			inputValue: "",
+			mdiClose,
+			mdiMagnify,
 		};
 	},
 	mounted() {
