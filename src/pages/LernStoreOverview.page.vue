@@ -63,11 +63,12 @@
 					</div>
 				</transition>
 			</div>
-			<base-spinner
-				v-show="loading"
-				class="spinner mt--xl-2"
-				color="var(--v-secondary-base)"
-				size="xlarge"
+			<v-progress-circular
+				v-if="loading"
+				indeterminate
+				color="secondary"
+				size="115"
+				class="align-self-center"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
@@ -267,17 +268,9 @@ export default {
 		margin-top: var(--space-md);
 	}
 
-	&__spinner {
-		margin: var(--space-lg) 0;
-	}
-
 	&__footer {
 		align-self: flex-end;
 		padding-bottom: var(--space-sm);
-	}
-
-	.spinner {
-		align-self: center;
 	}
 }
 
