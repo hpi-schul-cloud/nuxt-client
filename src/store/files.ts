@@ -21,7 +21,7 @@ export default class FilesModule extends VuexModule {
 
 	@Action
 	async fetchFilesOverview(): Promise<void> {
-		filesModule.setFiles([
+		this.setFiles([
 			{
 				name: "Favorites",
 				translationKey: "pages.files.overview.favorites",
@@ -72,7 +72,7 @@ export default class FilesModule extends VuexModule {
 
 	@Action
 	async fetchTeams(): Promise<void> {
-		filesModule.setLoading(true);
+		this.setLoading(true);
 		try {
 			// only mock data, comes from api in the future
 			const data: FileMetaListResponse = {
@@ -97,17 +97,17 @@ export default class FilesModule extends VuexModule {
 				size: 2,
 			};
 
-			filesModule.addFileMetaData(data);
-			filesModule.setLoading(false);
+			this.addFileMetaData(data);
+			this.setLoading(false);
 		} catch (error: any) {
 			console.log(error);
-			filesModule.setLoading(false);
+			this.setLoading(false);
 		}
 	}
 
 	@Action
 	async fetchTeamFiles(path: string): Promise<void> {
-		filesModule.setLoading(true);
+		this.setLoading(true);
 		try {
 			// only mock data, comes from api in the future
 			const data: FileMetaListResponse = {
@@ -132,11 +132,11 @@ export default class FilesModule extends VuexModule {
 				size: 2,
 			};
 
-			filesModule.addFileMetaData(data);
-			filesModule.setLoading(false);
+			this.addFileMetaData(data);
+			this.setLoading(false);
 		} catch (error: any) {
 			console.log(error);
-			filesModule.setLoading(false);
+			this.setLoading(false);
 		}
 	}
 
@@ -154,6 +154,6 @@ export default class FilesModule extends VuexModule {
 	addFileMetaData(response: FileMetaListResponse): void {
 		const mappedFiles: File[] =
 			FileResponseMapper.mapFileMetaListResponse(response);
-		filesModule.setFiles(mappedFiles);
+		this.setFiles(mappedFiles);
 	}
 }

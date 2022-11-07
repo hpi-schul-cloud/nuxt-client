@@ -10,7 +10,7 @@ import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe, {
 	Breadcrumb,
 } from "@components/templates/DefaultWireframe.vue";
-import { i18n } from "../../utils/i18n-util";
+import { I18nUtil } from "../../utils/i18n-util";
 import BaseFileTable from "@basecomponents/BaseTable/BaseTable.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
@@ -18,6 +18,7 @@ import { authModule, filesModule } from "@/store";
 import {
 	computed,
 	ComputedRef,
+  inject,
 	onMounted,
 	Ref,
 	ref,
@@ -29,6 +30,7 @@ import {
 	getFileCategory,
 	mapFileToFileTableItem,
 } from "@pages/files/file-table-utils";
+import VueI18n from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -41,7 +43,10 @@ export default defineComponent({
 		}
 	},
 	setup() {
-		const { t } = i18n();
+    const i18nLib = inject<VueI18n>("i18n");
+    const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
+    const t = (key: string) => i18nUtil.t(key);
+
 		const { path, params } = useRoute().value;
 
 		const title: Ref<string> = ref(t("pages.files.overview.headline"));

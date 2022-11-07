@@ -25,11 +25,12 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import { i18n } from "@utils/i18n-util";
+import { I18nUtil } from "@utils/i18n-util";
 import moment from "moment/moment";
-import { useRouter } from "@nuxtjs/composition-api";
+import { inject, useRouter } from "@nuxtjs/composition-api";
 import VueRouter from "vue-router";
 import { BaseTableItem } from "@basecomponents/BaseTable/BaseTableItem";
+import VueI18n from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -47,7 +48,9 @@ export default defineComponent({
 	},
 	setup() {
 		const router: VueRouter = useRouter();
-		const { locale } = i18n();
+    const i18nLib = inject<VueI18n>("i18n");
+    const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
+    const locale = () => i18nUtil.locale();
 
 		const timesAgo = function (value: Date): string {
 			if (!value) return "";
