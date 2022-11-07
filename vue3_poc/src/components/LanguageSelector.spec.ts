@@ -32,14 +32,11 @@ describe("LanguageSelector", () => {
 
 	it("should change language from de to en when en btn clicked", () => {
 		const wrapper = getWrapper();
-		const selectLanguageSpy = vi.spyOn(wrapper.vm, "selectLanguage");
 		const englishBtn = wrapper.find(`[data-test-id="changeLanguageToEnglish"]`);
 
 		expect(i18n.global.locale).toStrictEqual("de");
 
 		englishBtn.trigger("click");
-
-		expect(selectLanguageSpy).toHaveBeenCalled();
 
 		expect(i18n.global.locale).toStrictEqual("en");
 	});
