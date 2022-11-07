@@ -121,7 +121,6 @@
 				data-testid="migrateUsersCheckbox"
 			/>
 			<p
-				class="title-class"
 				v-html="
 					$t('pages.administration.ldap.activate.migrateExistingUsers.info')
 				"
@@ -343,5 +342,10 @@ tr:nth-child(odd) {
 	flex-direction: column;
 	align-items: flex-end;
 	margin: var(--space-xl-2);
+}
+
+.title-class {
+	margin-top: var(--space-xl-3);
+	margin-bottom: var(--space-lg);
 }
 </style>

@@ -160,12 +160,12 @@ export default {
 
 <style lang="scss" scoped>
 .path-hint {
-	margin-top: var(--space-xl-3);
-	margin-bottom: var(--space-xl-2);
+	margin-top: var(--space-xl);
+	margin-bottom: var(--space-lg);
 }
 
 .users-container {
-	margin-bottom: var(--space-xl-4);
+	margin-bottom: var(--space-xl-2);
 }
 
 .title-class {

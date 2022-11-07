@@ -153,7 +153,7 @@ export default defineComponent({
 	computed: {
 		role() {
 			const roleName = this.user.roles.map((r) => r.name);
-			return this.$t(`global.topbar.roleName.${roleName[0]}`);
+			return this.$t(`common.roleName.${roleName[0]}`);
 		},
 		showStatusAlertIcon() {
 			return this.statusAlerts.length !== 0;

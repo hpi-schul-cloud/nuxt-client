@@ -26,7 +26,7 @@
 					})
 				}}
 			</v-card-text>
-			<v-card-text>
+			<v-card-text class="px-5">
 				<v-row>
 					<v-col class="md-6">
 						<v-card-title>{{
@@ -38,7 +38,7 @@
 									>{{ `${editedItem.firstName} ${editedItem.lastName}` }}
 								</v-list-item-title>
 								<v-list-item-subtitle>
-									{{ editedItem.roleNames.join(", ") }}
+									{{ mapRoleNames(editedItem.roleNames) }}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle
 									>{{
@@ -57,7 +57,6 @@
 									}}
 								</v-list-item-subtitle>
 							</v-list-item-content>
-							<v-list-item-content> </v-list-item-content>
 						</v-list-item>
 					</v-col>
 					<v-col class="md-6">
@@ -68,11 +67,7 @@
 									{{ `${selectedItem.firstName} ${selectedItem.lastName}` }}
 								</v-list-item-title>
 								<v-list-item-subtitle>
-									{{
-										selectedItem.roleNames
-											? selectedItem.roleNames.join(", ")
-											: ""
-									}}
+									{{ mapRoleNames(selectedItem.roleNames) }}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
 									{{
@@ -89,11 +84,7 @@
 									}}
 								</v-list-item-title>
 								<v-list-item-subtitle>
-									{{
-										editedItem.match.roleNames
-											? editedItem.match.roleNames.join(", ")
-											: ""
-									}}
+									{{ mapRoleNames(editedItem.match.roleNames) }}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle>
 									{{
@@ -109,6 +100,7 @@
 						</v-list-item>
 						<v-autocomplete
 							v-model="selectedItem"
+							class="px-4"
 							item-value="userId"
 							:items="items"
 							:loading="loading"
@@ -146,7 +138,7 @@
 										{{ item.firstName }} {{ item.lastName }}
 									</v-list-item-title>
 									<v-list-item-subtitle>
-										{{ item.roleNames ? item.roleNames.join(", ") : "" }}
+										{{ mapRoleNames(item.roleNames) }}
 									</v-list-item-subtitle>
 									<v-list-item-subtitle>
 										{{
@@ -164,10 +156,10 @@
 					</v-col>
 				</v-row>
 			</v-card-text>
-			<v-card-actions>
-				<v-col class="col-6">
-					{{ $t("components.molecules.importUsersMatch.flag") }}
-					<v-btn
+			<v-card-actions class="px-4">
+				<v-col class="col-6 pa-0"
+					>{{ $t("components.molecules.importUsersMatch.flag")
+					}}<v-btn
 						v-model="flagged"
 						icon
 						:color="flagged ? 'primary' : ''"
@@ -180,7 +172,7 @@
 						</v-icon>
 					</v-btn>
 				</v-col>
-				<v-col class="col-6 text-right">
+				<v-col class="col-6 text-right pa-0">
 					<v-btn
 						text
 						:class="canSave ? 'primary' : ''"
@@ -383,6 +375,29 @@ export default {
 				this.flagged = !this.flagged;
 				this.$emit("saved-flag");
 			}
+		},
+		mapRoleNames(roleNames) {
+			if (!roleNames) {
+				return "";
+			}
+			return roleNames
+				.map((role) => {
+					switch (role) {
+						case "student":
+							return this.$t("common.roleName.student");
+						case "teacher":
+							return this.$t("common.roleName.teacher");
+						case "admin":
+							return this.$t("common.roleName.administrator");
+						case "expert":
+							return this.$t("common.roleName.expert");
+						case "superhero":
+							return this.$t("common.roleName.superhero");
+						default:
+							return role;
+					}
+				})
+				.join(", ");
 		},
 	},
 };
