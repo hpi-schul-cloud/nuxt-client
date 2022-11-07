@@ -39,12 +39,12 @@ describe("@components/organisms/DataTable/DataTable", () => {
 		const getNextPageButton = (wrapper) =>
 			wrapper
 				.findAll(".pagination-link")
-				.wrappers.find((w) => w.attributes("aria-label") === "Goto next page");
+				.wrappers.find((w) => w.attributes("aria-label") === "Go to next page");
 		const getPrevPageButton = (wrapper) =>
 			wrapper
 				.findAll(".pagination-link")
 				.wrappers.find(
-					(w) => w.attributes("aria-label") === "Goto previous page"
+					(w) => w.attributes("aria-label") === "Go to previous page"
 				);
 
 		const isPageValid = async (wrapper, page, pageSize) => {

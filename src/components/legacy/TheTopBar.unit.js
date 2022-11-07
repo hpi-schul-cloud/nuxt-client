@@ -92,7 +92,7 @@ describe("@components/legacy/TheTopBar", () => {
 			expect(wrapper.vm.showStatusAlertIcon).toStrictEqual(true);
 
 			expect(
-				wrapper.findAll("[data-test-id='status-alerts-icon']")
+				wrapper.findAll('[data-test-id="status-alerts-icon"]')
 			).toHaveLength(1);
 			expect(wrapper.findAll(".v-list-item")).toHaveLength(
 				mockStatusAlerts.length
@@ -100,16 +100,30 @@ describe("@components/legacy/TheTopBar", () => {
 		});
 	});
 
-	it("should be able to switch to full screen mode", () => {
-		const wrapper = getWrapper({
-			fullscreenMode: true,
+	describe("when enabling/disabling fullscreen mode", () => {
+		it("should emit fullscreen event when enabling", async () => {
+			const wrapper = getWrapper({
+				fullscreenMode: false,
+			});
+
+			const expandBtn = wrapper.find('[data-test-id="fullscreen-btn"]');
+			expect(expandBtn.exists()).toBe(true);
+
+			await expandBtn.trigger("click");
+			expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
 		});
 
-		wrapper.find(".fullscreen-button").trigger("click");
-		expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
-		expect(wrapper.findAll(".item")).toHaveLength(0);
-		expect(wrapper.findAll(".top-sidebar")).toHaveLength(0);
-		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
+		it("should emit fullcreen event", async () => {
+			const wrapper = getWrapper({
+				fullscreenMode: true,
+			});
+
+			const collapseBtn = wrapper.find(".fullscreen-button-active");
+			expect(collapseBtn.exists()).toBe(true);
+
+			await collapseBtn.trigger("click");
+			expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
+		});
 	});
 
 	it("should emit logout event", async () => {

@@ -1,14 +1,17 @@
 <template>
 	<section :class="{ inline: isInline }">
-		<base-button
+		<v-btn
 			v-if="isInline"
+			text
+			plain
+			:ripple="false"
 			design="none"
 			class="arrow__back"
 			@click="goBack"
 		>
-			<base-icon source="material" icon="navigate_before" />
+			<v-icon> {{ mdiChevronLeft }}</v-icon>
 			{{ $t("pages.content.index.backToCourse") }}
-		</base-button>
+		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
@@ -79,15 +82,14 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-import BaseButton from "@basecomponents/BaseButton";
 import ContentInitialState from "@components/molecules/ContentInitialState";
+import { mdiChevronLeft } from "@mdi/js";
 
 export default {
 	meta: {
 		requiredPermissions: ["LERNSTORE_VIEW"],
 	},
 	components: {
-		BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -103,6 +105,7 @@ export default {
 			backToTopScrollYLimit: 115,
 			activateTransition: false,
 			prevRoute: null,
+			mdiChevronLeft,
 		};
 	},
 	computed: {
@@ -298,5 +301,11 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+::v-deep
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+	.v-btn__content {
+	opacity: 1;
 }
 </style>

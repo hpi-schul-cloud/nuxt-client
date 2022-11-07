@@ -1,13 +1,14 @@
 <template>
 	<section>
-		<base-button
-			design="text"
+		<v-btn
+			text
+			color="secondary"
 			data-testid="ldapBackButton"
 			@click="backButtonHandler"
 		>
-			<base-icon source="material" icon="keyboard_arrow_left" />
+			<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 			{{ $t("common.actions.back") }}
-		</base-button>
+		</v-btn>
 		<section class="section">
 			<h1 class="h2">
 				{{ $t("pages.administration.ldap.save.title") }}
@@ -140,22 +141,24 @@
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<base-button
-				design="text"
+			<v-btn
+				text
+				color="secondary"
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
 			>
-				<base-icon source="material" icon="keyboard_arrow_left" />
+				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 				{{ $t("common.actions.back") }}
-			</base-button>
-			<base-button
-				design="secondary"
+			</v-btn>
+			<v-btn
+				color="primary"
+				depressed
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
 			>
 				{{ $t("pages.administration.ldap.save.example.synchronize") }}
-			</base-button>
+			</v-btn>
 		</div>
 		<base-modal
 			:active.sync="submitted.ok"
@@ -193,10 +196,10 @@ import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
-import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import InfoMessage from "@components/atoms/InfoMessage";
+import { mdiChevronLeft } from "@mdi/js";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -208,13 +211,14 @@ const redirectToConfigPage = (page) => {
 };
 
 export default {
-	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
+	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
 	data() {
 		return {
 			migrateUsersCheckbox: this.showUserMigrationOption,
+			mdiChevronLeft,
 		};
 	},
 	computed: {
