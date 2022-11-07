@@ -1,6 +1,6 @@
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { urlValidationRegex } from "@/utils/ldapConstants";
+import { urlRegexValidator } from "@/utils/ldapConstants";
 import { createModuleMocks } from "@/utils/mock-store-module";
 //import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";

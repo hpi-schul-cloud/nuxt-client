@@ -73,7 +73,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathValidationRegex } from "@utils/ldapConstants";
+import { ldapPathRegexValidatior } from "@utils/ldapConstants";
 
 export default {
 	props: {
@@ -95,7 +95,7 @@ export default {
 			],
 			classPathValidationMessage: [
 				{
-					key: "ldapPathValidationRegex",
+					key: "ldapPathRegexValidatior",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -133,7 +133,10 @@ export default {
 		if (this.checked === true) {
 			return {
 				value: {
-					classPath: { required, ldapPathValidationRegex },
+					classPath: {
+						required,
+						ldapPathRegexValidatior: ldapPathRegexValidatior,
+					},
 					nameAttribute: { required },
 					participantAttribute: { required },
 				},
