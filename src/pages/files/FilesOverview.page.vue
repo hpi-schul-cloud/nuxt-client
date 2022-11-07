@@ -1,7 +1,28 @@
 <template>
 	<default-wireframe :breadcrumbs="breadcrumbs" :full-width="true">
 		<h1>{{ title }}</h1>
-		<base-file-table :items="items" :headers="headers"></base-file-table>
+		<v-data-table
+			:disable-pagination="true"
+			:hide-default-footer="true"
+			:items="items"
+			:headers="headers"
+			@click:row="click"
+		>
+			<template #[`item.icon`]="{ item }">
+				<base-icon
+					source="material"
+					:icon="item.icon.name"
+					:fill="
+						item.icon.colored
+							? 'var(--v-primary-base)'
+							: 'var(--v-secondary-base)'
+					"
+				></base-icon>
+			</template>
+			<template #[`item.lastChanged`]="{ item }"
+				>{{ timesAgo(item.lastChanged) }}
+			</template>
+		</v-data-table>
 	</default-wireframe>
 </template>
 
@@ -10,19 +31,18 @@ import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe, {
 	Breadcrumb,
 } from "@components/templates/DefaultWireframe.vue";
-import { I18nUtil } from "../../utils/i18n-util";
-import BaseFileTable from "@basecomponents/BaseTable/BaseTable.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { authModule, filesModule } from "@/store";
 import {
 	computed,
 	ComputedRef,
-  inject,
+	inject,
 	onMounted,
 	Ref,
 	ref,
 	useRoute,
+	useRouter,
 } from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
 import {
@@ -31,10 +51,13 @@ import {
 	mapFileToFileTableItem,
 } from "@pages/files/file-table-utils";
 import VueI18n from "vue-i18n";
+import { I18nUtil } from "@utils/i18n-util";
+import moment from "moment/moment";
+import VueRouter from "vue-router";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	components: { BaseFileTable, DefaultWireframe },
+	components: { DefaultWireframe },
 	beforeRouteEnter(to, from, next) {
 		if (authModule.getUserPermissions.includes("collaborative_files")) {
 			next();
@@ -43,9 +66,9 @@ export default defineComponent({
 		}
 	},
 	setup() {
-    const i18nLib = inject<VueI18n>("i18n");
-    const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
-    const t = (key: string) => i18nUtil.t(key);
+		const i18nLib = inject<VueI18n>("i18n");
+		const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
+		const t = (key: string) => i18nUtil.t(key);
 
 		const { path, params } = useRoute().value;
 
@@ -130,9 +153,22 @@ export default defineComponent({
 				}
 				break;
 			}
-			default: {
-				break;
-			}
+			default:
+				{
+					break;
+				}
+				const router: VueRouter = useRouter();
+				const locale = () => i18nUtil.locale();
+				const timesAgo = function (value: Date): string {
+					if (!value) return "";
+					return moment(value).locale(locale()).fromNow();
+				};
+
+				const click = function (item: FileTableItem): void {
+					router.push({ path: item.path });
+				};
+
+				return { click, timesAgo };
 		}
 
 		onMounted(async () => {
@@ -143,3 +179,15 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+$arrow-offset: 8px;
+
+.v-data-table ::v-deep th i {
+	margin-left: $arrow-offset;
+}
+
+.v-data-table ::v-deep td {
+	cursor: pointer;
+}
+</style>
