@@ -106,7 +106,11 @@
 				type="bc-error"
 			/>
 		</div>
-		<section v-if="showUserMigrationOption" class="section">
+		<section
+			v-if="showUserMigrationOption"
+			class="section"
+			data-testid="migrateUsersSection"
+		>
 			<h3 class="title-class">
 				{{
 					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
@@ -210,7 +214,7 @@ export default {
 	},
 	data() {
 		return {
-			migrateUsersCheckbox: true,
+			migrateUsersCheckbox: this.showUserMigrationOption,
 		};
 	},
 	computed: {

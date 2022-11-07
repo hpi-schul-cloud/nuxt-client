@@ -1,10 +1,52 @@
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule, { MatchedBy } from "@store/import-users";
+import { importUsersModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import ImportUsers from "./ImportUsers.vue";
+import {
+	ImportUserListResponse,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
 
 declare var createComponentMocks: Function;
+const importUsersMockData: ImportUserListResponse = {
+	total: 3,
+	skip: 0,
+	limit: 3,
+	data: [
+		{
+			flagged: true,
+			importUserId: "61f40e790da0925bf739c12f",
+			loginName: "aaronb1",
+			firstName: "Aaron",
+			lastName: "Bruns",
+			roleNames: [ImportUserResponseRoleNamesEnum.Student],
+			classNames: ["6a"],
+		},
+		{
+			flagged: false,
+			importUserId: "61f40e7b0da0925bf739c6c9",
+			loginName: "armin.cordes",
+			firstName: "Armin",
+			lastName: "Cordes",
+			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			classNames: [],
+		},
+		{
+			flagged: false,
+			importUserId: "61f40e7b0da0925bf739c6d3",
+			loginName: "bettina.melzer",
+			firstName: "Bettina",
+			lastName: "Melzer",
+			roleNames: [
+				ImportUserResponseRoleNamesEnum.Admin,
+				ImportUserResponseRoleNamesEnum.Teacher,
+			],
+			classNames: ["1c"],
+		},
+	],
+};
 
 const mockData = {
 	MatchedBy: { Admin: "admin", Auto: "auto", None: "none" },
@@ -20,45 +62,6 @@ const mockData = {
 	delay: 500,
 	dialogEdit: false,
 	editedIndex: -1,
-	editedItem: {
-		firstName: "",
-		lastName: "",
-		loginName: "",
-		roleNames: [],
-		classNames: [],
-		match: {},
-		flagged: false,
-	},
-	importUsers: [
-		{
-			flagged: true,
-			importUserId: "61f40e790da0925bf739c12f",
-			loginName: "aaronb1",
-			firstName: "Aaron",
-			lastName: "Bruns",
-			roleNames: ["student"],
-			classNames: ["6a"],
-		},
-
-		{
-			flagged: false,
-			importUserId: "61f40e7b0da0925bf739c6c9",
-			loginName: "armin.cordes",
-			firstName: "Armin",
-			lastName: "Cordes",
-			roleNames: ["teacher"],
-		},
-
-		{
-			flagged: false,
-			importUserId: "61f40e7b0da0925bf739c6d3",
-			loginName: "bettina.melzer",
-			firstName: "Bettina",
-			lastName: "Melzer",
-			roleNames: ["admin", "teacher"],
-			classNames: ["1c"],
-		},
-	],
 	loading: false,
 	mdiAccountPlus: "mdiAccountPlus",
 	mdiAccountSwitch: "mdiAccountSwitch",
@@ -89,7 +92,6 @@ const mockData = {
 	searchLoginName: "",
 	searchMatchedBy: [],
 	searchRole: "",
-	totalImportUsers: 3,
 };
 
 const getWrapper: any = (data?: object, options?: object) => {
@@ -110,12 +112,13 @@ describe("@components/molecules/importUsers", () => {
 			schools: SchoolsModule,
 			"import-users": ImportUsersModule,
 		});
+		importUsersModule.setImportUsersList(importUsersMockData);
 	});
 
 	it("should have correct props", () => {
 		const wrapper = getWrapper(mockData);
 
-		expect(wrapper.vm.importUsers).toStrictEqual(mockData.importUsers);
+		expect(wrapper.vm.importUsers).toStrictEqual(importUsersMockData.data);
 		expect(wrapper.vm.options).toStrictEqual(mockData.options);
 		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
 	});
@@ -147,7 +150,7 @@ describe("@components/molecules/importUsers", () => {
 		const dataTableElement = wrapper.find(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
-		expect(dataTableElement.vm.items).toStrictEqual(mockData.importUsers);
+		expect(dataTableElement.vm.items).toStrictEqual(importUsersMockData.data);
 	});
 
 	describe("should search with all columns", () => {

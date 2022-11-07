@@ -31,7 +31,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@components/molecules/RoomTaskCardTeacher", () => {
+describe("@components/molecules/vImportUsersMatchSearch", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({ "import-users": ImportUsersModule });
@@ -50,7 +50,7 @@ describe("@components/molecules/RoomTaskCardTeacher", () => {
 
 		expect(editedItemElement.element.textContent).toContain("Max");
 		expect(editedItemElement.element.textContent).toContain("Mustermann");
-		expect(editedItemElement.element.textContent).toContain("student");
+		expect(editedItemElement.element.textContent).toContain("Schüler:in");
 		expect(editedItemElement.element.textContent).toContain("max_mus");
 		expect(editedItemElement.element.textContent).toContain("6a");
 	});
