@@ -98,8 +98,9 @@ export default {
 	},
 	computed: {
 		nextButtonName() {
-			if (this.step < 2) return this.$t("pages.room.lessonShare.btn.continue");
-			return this.$t("common.actions.import");
+			return this.step < 2
+				? "pages.room.lessonShare.btn.continue"
+				: "common.actions.import";
 		},
 		businessError() {
 			return roomModule.getBusinessError;
