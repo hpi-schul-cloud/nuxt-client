@@ -20,7 +20,7 @@
 				></base-icon>
 			</template>
 			<template #[`item.lastChanged`]="{ item }"
-				>{{ timesAgo(item.lastChanged) }}
+			>{{ timesAgo(item.lastChanged) }}
 			</template>
 		</v-data-table>
 	</default-wireframe>
@@ -28,32 +28,17 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe, {
-	Breadcrumb,
-} from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe, { Breadcrumb, } from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { authModule, filesModule } from "@/store";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-	ref,
-	useRoute,
-	useRouter,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter, } from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
-import {
-	getDeepBreadcumbs,
-	getFileCategory,
-	mapFileToFileTableItem,
-} from "@pages/files/file-table-utils";
-import VueI18n from "vue-i18n";
-import { I18nUtil } from "@utils/i18n-util";
+import { getDeepBreadcumbs, getFileCategory, mapFileToFileTableItem, } from "@pages/files/file-table-utils";
+import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter from "vue-router";
+import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
 
 function getHeaders(t: (key: string) => string) {
 	return [
@@ -90,9 +75,14 @@ export default defineComponent({
 		}
 	},
 	setup() {
-		const i18nLib = inject<VueI18n>("i18n");
-		const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
-		const t = (key: string) => i18nUtil.t(key);
+		const i18n = inject<VueI18n>("i18n");
+		const t = (key: string) => {
+			const translateResult = i18n?.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
 
 		const { path, params } = useRoute().value;
 
@@ -112,7 +102,8 @@ export default defineComponent({
 			.split("/")
 			.filter((element: string) => element !== "");
 		const currentCategory: string = getFileCategory(pathArray);
-		let loadFilesFunc: () => Promise<void> = async (): Promise<void> => {};
+		let loadFilesFunc: () => Promise<void> = async (): Promise<void> => {
+		};
 
 		switch (currentCategory) {
 			case "cfiles": {
@@ -157,29 +148,33 @@ export default defineComponent({
 				}
 				break;
 			}
-			default:
-				{
-					break;
-				}
-				const router: VueRouter = useRouter();
-				const locale = () => i18nUtil.locale();
-				const timesAgo = function (value: Date): string {
-					if (!value) return "";
-					return moment(value).locale(locale()).fromNow();
-				};
-
-				const click = function (item: FileTableItem): void {
-					router.push({ path: item.path });
-				};
-
-				return { click, timesAgo };
+			default: {
+				break;
+			}
 		}
+
+		const locale = (): Locale => {
+			if (i18n?.locale === ChangeLanguageParamsLanguageEnum.Ua) {
+				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
+			}
+			return i18n?.locale || "de";
+		}
+		const timesAgo = function (value: Date): string {
+
+			if (!value) return "";
+			return moment(value).locale(locale()).fromNow();
+		};
+
+		const router: VueRouter = useRouter();
+		const click = function (item: FileTableItem): void {
+			router.push({ path: item.path });
+		};
 
 		onMounted(async () => {
 			await loadFilesFunc();
 		});
 
-		return { items, headers, breadcrumbs, title };
+		return { items, headers, breadcrumbs, title, click, timesAgo };
 	},
 });
 </script>
