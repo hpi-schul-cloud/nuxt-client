@@ -11,32 +11,22 @@
 					>{{ numberOfSelectedItems }}
 					{{ $t("pages.administration.selected") }}
 				</span>
-				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
-					({{ $t("pages.administration.or") }}
-					<base-button
-						design="none"
-						class="select-all-rows"
-						@click="$emit('update:allRowsOfAllPagesSelected', true)"
-					>
-						{{ $t("pages.administration.all") }} {{ totalNumberOfItems }}
-						{{ $t("pages.administration.select") }}
-					</base-button>
-					)
-				</span>
-				-->
 			</div>
 			<div
 				v-if="actions && actions.length"
 				class="actions"
 				style="position: relative"
 			>
-				<base-button
+				<v-btn
+					data-test-id="context-menu-open"
 					class="context-menu-open"
-					size="small"
+					small
+					depressed
+					color="secondary"
 					@click="actionsMenuOpen = true"
 				>
 					{{ $t("pages.administration.actions") }}
-				</base-button>
+				</v-btn>
 				<context-menu
 					:show.sync="actionsMenuOpen"
 					anchor="top-right"
@@ -45,14 +35,22 @@
 				/>
 			</div>
 		</div>
-		<base-button design="icon" class="close" @click="closeBanner">
-			<base-icon icon="close" source="material" />
-		</base-button>
+		<v-btn
+			fab
+			depressed
+			color="secondary"
+			width="40"
+			height="40"
+			@click="closeBanner"
+		>
+			<v-icon>{{ mdiClose }}</v-icon>
+		</v-btn>
 	</div>
 </template>
 
 <script>
 import ContextMenu from "@components/molecules/ContextMenu";
+import { mdiClose } from "@mdi/js";
 
 export default {
 	components: {
@@ -78,6 +76,7 @@ export default {
 	data() {
 		return {
 			actionsMenuOpen: false,
+			mdiClose,
 		};
 	},
 	computed: {

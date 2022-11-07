@@ -9,9 +9,9 @@
 			</p>
 			<div class="actions">
 				<slot name="actions" />
-				<base-button design="info" @click.self="close">{{
-					$t("common.labels.close")
-				}}</base-button>
+				<v-btn text dark @click.self="close">
+					{{ $t("common.labels.close") }}
+				</v-btn>
 			</div>
 		</div>
 	</div>

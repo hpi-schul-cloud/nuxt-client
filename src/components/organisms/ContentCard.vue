@@ -31,11 +31,6 @@
 								:alt="$t('pages.content.card.img.alt')"
 								role="img"
 							/>
-							<!--base-icon v-show="!isCollection()"
-									:source="getTypeIcon(resource.mimetype).iconSource"
-									:icon="getTypeIcon(resource.mimetype).iconLarge"
-									class="content__img-icon"
-								/-->
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
 								<base-icon
@@ -59,9 +54,8 @@
 							<add-content-button
 								:resource="resource"
 								:client="provider()"
-								btn-design="text icon"
-								btn-icon-class="footer__content-icon"
-								btn-icon="add_circle_outline"
+								round
+								btn-color="secondary"
 								:multiple="false"
 							/>
 						</div>

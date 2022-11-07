@@ -1,9 +1,9 @@
 <template>
 	<error-page :error="error">
 		<template #action>
-			<base-button design="primary" @click="retryPageload">
+			<v-btn color="primary" depressed @click="retryPageload">
 				{{ $t("error.proxy.action") }}
-			</base-button>
+			</v-btn>
 		</template>
 	</error-page>
 </template>

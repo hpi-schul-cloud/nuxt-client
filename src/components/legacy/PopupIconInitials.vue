@@ -1,9 +1,8 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<base-button
-			type="button"
+		<v-btn
+			icon
 			class="icon-button"
-			design="text icon"
 			data-testid="initials"
 			role="menu"
 			:title="`${firstName} ${lastName} (${userRole})`"
@@ -13,7 +12,7 @@
 			@click="popup"
 		>
 			<div class="icon">{{ initials }}</div>
-		</base-button>
+		</v-btn>
 		<div v-if="visible" class="popuptext" data-testid="initials-popup">
 			<div class="username">
 				<span> {{ firstName }} {{ lastName }} ({{ userRole }})</span>

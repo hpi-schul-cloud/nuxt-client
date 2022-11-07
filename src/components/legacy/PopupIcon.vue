@@ -1,9 +1,8 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<base-button class="icon-button" design="text icon" @click="popup">
+		<v-btn icon class="icon-button" @click="popup">
 			<base-icon :source="source" :icon="icon" :fill="fill" />
-		</base-button>
-
+		</v-btn>
 		<div
 			ref="popupContent"
 			class="popup-content"
@@ -70,12 +69,6 @@ export default {
 
 	.icon-button {
 		font-size: 20px;
-	}
-
-	:focus-within {
-		.icon-button {
-			background-color: var(--v-grey-lighten1);
-		}
 	}
 
 	.popup-content {
