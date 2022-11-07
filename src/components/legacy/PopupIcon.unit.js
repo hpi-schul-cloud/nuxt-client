@@ -4,10 +4,22 @@ const testProps = { source: "fa", icon: "pencil", fill: "red", centered: true };
 
 describe("@components/legacy/BaseIcon", () => {
 	it(...isValidComponent(PopupIcon));
-	it(...rendersSlotContent(PopupIcon, ["default"], { propsData: testProps }));
+	it(
+		...rendersSlotContent(PopupIcon, ["default"], {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: testProps,
+		})
+	);
 
 	it("contains an icon", () => {
 		const wrapper = mount(PopupIcon, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: testProps,
 		});
 		expect(wrapper.find(".fa-pencil").exists()).toBe(true);
@@ -16,6 +28,10 @@ describe("@components/legacy/BaseIcon", () => {
 
 	it("it pops up when it is clicked", async () => {
 		const wrapper = mount(PopupIcon, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: testProps,
 		});
 

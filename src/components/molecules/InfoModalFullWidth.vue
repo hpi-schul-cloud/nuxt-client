@@ -14,10 +14,8 @@
 			</modal-body-info>
 		</template>
 		<template #footer>
-			<center-slot class="mb--md">
-				<base-button class="btn" :design="design" @click="close">{{
-					btn
-				}}</base-button>
+			<center-slot class="mb-4 px-4">
+				<v-btn depressed block :color="design" @click="close">{{ btn }}</v-btn>
 			</center-slot>
 		</template>
 	</base-modal>

@@ -1,5 +1,5 @@
 <template>
-	<div ref="dialog" data-testid="dialog">
+	<div ref="dialog" data-testid="dialog" class="v-application">
 		<base-modal :active="isActive" @update:active="clickOutside">
 			<template #body>
 				<modal-body-info :title="message">
@@ -16,20 +16,26 @@
 				</modal-body-info>
 			</template>
 			<template #footerRight>
-				<base-button
-					:design="invertedDesign ? actionDesign : 'text'"
+				<v-btn
+					depressed
+					:text="!invertedDesign"
+					:dark="invertedDesign"
+					:color="!invertedDesign ? 'secondary' : 'success'"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
 				>
 					{{ cancelText }}
-				</base-button>
-				<base-button
-					:design="invertedDesign ? 'text' : actionDesign"
+				</v-btn>
+				<v-btn
+					depressed
+					:color="invertedDesign ? 'secondary' : 'success'"
+					:text="invertedDesign"
+					:dark="!invertedDesign"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
 					{{ confirmText }}
-				</base-button>
+				</v-btn>
 			</template>
 		</base-modal>
 	</div>

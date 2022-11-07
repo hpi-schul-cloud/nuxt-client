@@ -22,9 +22,9 @@
 			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
-			<base-button design="primary" @click="$router.go(-1)">
+			<v-btn color="primary" depressed @click="$router.go(-1)">
 				{{ $t("error.action.back") }}
-			</base-button>
+			</v-btn>
 		</slot>
 	</div>
 </template>
