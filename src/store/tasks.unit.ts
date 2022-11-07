@@ -1,9 +1,9 @@
 import setupStores from "@@/tests/test-utils/setupStores";
 import * as serverApi from "../serverApi/v3/api";
-import FinishedTaskModule from "./finished-tasks";
+import FinishedTasksModule from "./finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { taskFactory } from "./task.filter.unit";
-import TaskModule from "./tasks";
+import TasksModule from "./tasks";
 import { Task } from "./types/tasks";
 
 type FunctionPropertyNames<T> = {
@@ -45,19 +45,19 @@ describe("task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 
-				taskModule.fetchAllTasks().then(() => {
-					expect(taskModule.getTasks).toStrictEqual([
+				tasksModule.fetchAllTasks().then(() => {
+					expect(tasksModule.getTasks).toStrictEqual([
 						{
 							mockTask: "mock task value",
 						},
 					]);
-					expect(taskModule.getStatus).toBe("completed");
+					expect(tasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
 					done();
 				});
-				expect(taskModule.getStatus).toBe("pending");
+				expect(tasksModule.getStatus).toBe("pending");
 
 				spy.mockRestore();
 			});
@@ -95,19 +95,19 @@ describe("task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 
-				taskModule.fetchAllTasks().then(() => {
-					expect(taskModule.getTasks).toStrictEqual([
+				tasksModule.fetchAllTasks().then(() => {
+					expect(tasksModule.getTasks).toStrictEqual([
 						{ mockTask: "mock task #1" },
 						{ mockTask: "mock task #2" },
 						{ mockTask: "mock task #3" },
 					]);
-					expect(taskModule.getStatus).toBe("completed");
+					expect(tasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(3);
 					done();
 				});
-				expect(taskModule.getStatus).toBe("pending");
+				expect(tasksModule.getStatus).toBe("pending");
 			});
 
 			it("should handle an error", (done) => {
@@ -118,15 +118,15 @@ describe("task store", () => {
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 
-				taskModule.fetchAllTasks().then(() => {
-					expect(taskModule.getTasks).toStrictEqual([]);
-					expect(taskModule.getStatus).toBe("error");
-					expect(taskModule.businessError).toStrictEqual(error);
+				tasksModule.fetchAllTasks().then(() => {
+					expect(tasksModule.getTasks).toStrictEqual([]);
+					expect(tasksModule.getStatus).toBe("error");
+					expect(tasksModule.businessError).toStrictEqual(error);
 					done();
 				});
-				expect(taskModule.getStatus).toBe("pending");
+				expect(tasksModule.getStatus).toBe("pending");
 				expect(mockApi.taskControllerFindAll).toHaveBeenCalledTimes(1);
 			});
 		});
@@ -145,14 +145,14 @@ describe("task store", () => {
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 
-				taskModule.finishTask(task.id).then(() => {
-					expect(taskModule.getStatus).toBe("error");
-					expect(taskModule.businessError).toStrictEqual(error);
+				tasksModule.finishTask(task.id).then(() => {
+					expect(tasksModule.getStatus).toBe("error");
+					expect(tasksModule.businessError).toStrictEqual(error);
 					done();
 				});
-				expect(taskModule.getStatus).toBe("pending");
+				expect(tasksModule.getStatus).toBe("pending");
 				expect(mockApi.taskControllerFinish).toHaveBeenCalledTimes(1);
 			});
 		});
@@ -160,7 +160,7 @@ describe("task store", () => {
 		describe("deleteTask", () => {
 			beforeEach(() => {
 				setupStores({
-					"finished-tasks": FinishedTaskModule,
+					"finished-tasks": FinishedTasksModule,
 				});
 			});
 
@@ -172,18 +172,18 @@ describe("task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const tasks = taskFactory.buildList(3);
-				taskModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(taskModule, "fetchAllTasks");
+				tasksModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
 
-				taskModule.deleteTask(tasks[0].id).then(() => {
-					expect(taskModule.getStatus).toBe("completed");
+				tasksModule.deleteTask(tasks[0].id).then(() => {
+					expect(tasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
 					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 					done();
 				});
-				expect(taskModule.getStatus).toBe("pending");
+				expect(tasksModule.getStatus).toBe("pending");
 
 				spy.mockRestore();
 			});
@@ -193,7 +193,7 @@ describe("task store", () => {
 	describe("mutations", () => {
 		describe("setTasks", () => {
 			it("should set the tasks in state", () => {
-				const tasksModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const tasks = taskFactory.buildList(3);
 				tasksModule.setTasks(tasks);
 
@@ -204,24 +204,24 @@ describe("task store", () => {
 		describe("setCourseFilters", () => {
 			it("should set course names as filter in state", () => {
 				const courseNames = ["a", "b", "c"];
-				const taskModule = new TaskModule({});
-				taskModule.setCourseFilters(courseNames);
+				const tasksModule = new TasksModule({});
+				tasksModule.setCourseFilters(courseNames);
 
-				expect(taskModule.courseFilter).toStrictEqual(courseNames);
+				expect(tasksModule.courseFilter).toStrictEqual(courseNames);
 			});
 		});
 
 		describe("setSubstituteFilter", () => {
 			it("should set substitution filter in state", () => {
-				const taskModule = new TaskModule({});
-				taskModule.setSubstituteFilter(true);
+				const tasksModule = new TasksModule({});
+				tasksModule.setSubstituteFilter(true);
 
-				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+				expect(tasksModule.isSubstituteFilterEnabled).toBe(true);
 			});
 
 			it("should be false by default", () => {
-				const taskModule = new TaskModule({});
-				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
+				const tasksModule = new TasksModule({});
+				expect(tasksModule.isSubstituteFilterEnabled).toBe(false);
 			});
 
 			it.todo(
@@ -231,47 +231,47 @@ describe("task store", () => {
 
 		describe("setStatus", () => {
 			it("should set the status in state", () => {
-				const taskModule = new TaskModule({});
-				taskModule.setStatus("completed");
+				const tasksModule = new TasksModule({});
+				tasksModule.setStatus("completed");
 
-				expect(taskModule.status).toBe("completed");
+				expect(tasksModule.status).toBe("completed");
 			});
 		});
 
 		describe("setActiveTab", () => {
 			it("should set the active tab in state", () => {
-				const taskModule = new TaskModule({});
-				taskModule.setActiveTab("drafts");
+				const tasksModule = new TasksModule({});
+				tasksModule.setActiveTab("drafts");
 
-				expect(taskModule.tab).toBe("drafts");
+				expect(tasksModule.tab).toBe("drafts");
 			});
 		});
 
 		describe("setBusinessError", () => {
 			it("should set the business error in state", () => {
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const error = {
 					statusCode: "404",
 					message: "not found",
 				};
-				taskModule.setBusinessError(error);
+				tasksModule.setBusinessError(error);
 
-				expect(taskModule.businessError).toEqual(error);
+				expect(tasksModule.businessError).toEqual(error);
 			});
 		});
 
 		describe("resetBusinessError", () => {
 			it("should reset the business error in state", () => {
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const error = {
 					statusCode: "404",
 					message: "not found",
 				};
-				taskModule.setBusinessError(error);
-				expect(taskModule.businessError).toEqual(error);
+				tasksModule.setBusinessError(error);
+				expect(tasksModule.businessError).toEqual(error);
 
-				taskModule.resetBusinessError();
-				expect(taskModule.businessError).toEqual({
+				tasksModule.resetBusinessError();
+				expect(tasksModule.businessError).toEqual({
 					statusCode: "",
 					message: "",
 				});
@@ -282,48 +282,48 @@ describe("task store", () => {
 	describe("getters", () => {
 		describe("getTasks", () => {
 			it("should return an empty list by default", () => {
-				const taskModule = new TaskModule({});
-				const tasks = taskModule.getTasks;
+				const tasksModule = new TasksModule({});
+				const tasks = tasksModule.getTasks;
 
 				expect(tasks).toHaveLength(0);
 			});
 
 			it("should return the tasks", () => {
-				const taskModule = new TaskModule({});
-				taskModule.tasks = taskFactory.buildList(3);
-				const tasks = taskModule.getTasks;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = taskFactory.buildList(3);
+				const tasks = tasksModule.getTasks;
 
 				expect(tasks).toHaveLength(3);
-				expect(tasks).toEqual(taskModule.tasks);
+				expect(tasks).toEqual(tasksModule.tasks);
 			});
 		});
 
 		describe("getStatus", () => {
 			it("should return the status", () => {
-				const taskModule = new TaskModule({});
-				taskModule.status = "error";
-				const status = taskModule.getStatus;
+				const tasksModule = new TasksModule({});
+				tasksModule.status = "error";
+				const status = tasksModule.getStatus;
 
-				expect(status).toBe(taskModule.status);
+				expect(status).toBe(tasksModule.status);
 			});
 		});
 
 		describe("getActiveTab", () => {
 			it("should return the active tab", () => {
-				const taskModule = new TaskModule({});
-				taskModule.tab = "drafts";
-				const activeTab = taskModule.getActiveTab;
+				const tasksModule = new TasksModule({});
+				tasksModule.tab = "drafts";
+				const activeTab = tasksModule.getActiveTab;
 
-				expect(activeTab).toBe(taskModule.tab);
+				expect(activeTab).toBe(tasksModule.tab);
 			});
 		});
 
 		describe("getCourseFilters", () => {
 			it("should return the appropiate properties", () => {
 				const task = taskFactory.build();
-				const taskModule = new TaskModule({});
-				taskModule.tasks = [task];
-				const result = taskModule.getCourseFilters;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = [task];
+				const result = tasksModule.getCourseFilters;
 
 				expect(result).toStrictEqual([
 					{
@@ -338,10 +338,10 @@ describe("task store", () => {
 				const task = taskFactory.build({
 					status: { isSubstitutionTeacher: true },
 				});
-				const taskModule = new TaskModule({});
-				taskModule.tasks = [task];
-				taskModule.substituteFilter = true;
-				const result = taskModule.getCourseFilters;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = [task];
+				tasksModule.substituteFilter = true;
+				const result = tasksModule.getCourseFilters;
 
 				expect(result).toStrictEqual([
 					{
@@ -353,9 +353,9 @@ describe("task store", () => {
 			});
 
 			it("should work for empty tasks", () => {
-				const taskModule = new TaskModule({});
-				taskModule.tasks = [];
-				const result = taskModule.getCourseFilters;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = [];
+				const result = tasksModule.getCourseFilters;
 
 				expect(result).toStrictEqual([]);
 			});
@@ -363,66 +363,66 @@ describe("task store", () => {
 
 		describe("getBusinessError", () => {
 			it("should return business error", () => {
-				const taskModule = new TaskModule({});
-				taskModule.businessError = {
+				const tasksModule = new TasksModule({});
+				tasksModule.businessError = {
 					statusCode: "404",
 					message: "not found",
 				};
-				const businessError = taskModule.getBusinessError;
+				const businessError = tasksModule.getBusinessError;
 
-				expect(businessError).toBe(taskModule.businessError);
+				expect(businessError).toBe(tasksModule.businessError);
 			});
 		});
 
 		describe("isSubstituteFilterEnabled", () => {
 			it("should return false by default", () => {
-				const taskModule = new TaskModule({});
-				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
+				const tasksModule = new TasksModule({});
+				expect(tasksModule.isSubstituteFilterEnabled).toBe(false);
 			});
 
 			it("should return true if enabled", () => {
-				const taskModule = new TaskModule({});
-				taskModule.substituteFilter = true;
-				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+				const tasksModule = new TasksModule({});
+				tasksModule.substituteFilter = true;
+				expect(tasksModule.isSubstituteFilterEnabled).toBe(true);
 			});
 		});
 
 		describe("hasFilterSelected", () => {
 			it("should return false by default", () => {
-				const taskModule = new TaskModule({});
-				expect(taskModule.hasFilterSelected).toBe(false);
+				const tasksModule = new TasksModule({});
+				expect(tasksModule.hasFilterSelected).toBe(false);
 			});
 
 			it("should return true if enabled", () => {
-				const taskModule = new TaskModule({});
-				taskModule.courseFilter = ["Mathe"];
-				expect(taskModule.hasFilterSelected).toBe(true);
+				const tasksModule = new TasksModule({});
+				tasksModule.courseFilter = ["Mathe"];
+				expect(tasksModule.hasFilterSelected).toBe(true);
 			});
 		});
 
 		describe("hasTasks", () => {
 			it("should return true if there are any tasks", () => {
-				const taskModule = new TaskModule({});
-				taskModule.tasks = taskFactory.buildList(3);
-				taskModule.status = "completed";
-				const hasTasks = taskModule.hasTasks;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = taskFactory.buildList(3);
+				tasksModule.status = "completed";
+				const hasTasks = tasksModule.hasTasks;
 
 				expect(hasTasks).toBe(true);
 			});
 
 			it("should return false when tasks are empty", () => {
-				const taskModule = new TaskModule({});
-				taskModule.status = "completed";
-				const hasTasks = taskModule.hasTasks;
+				const tasksModule = new TasksModule({});
+				tasksModule.status = "completed";
+				const hasTasks = tasksModule.hasTasks;
 
 				expect(hasTasks).toBe(false);
 			});
 
 			it("should return false when the store is not ready", () => {
-				const taskModule = new TaskModule({});
-				taskModule.tasks = taskFactory.buildList(3);
-				taskModule.status = "pending";
-				const hasTasks = taskModule.hasTasks;
+				const tasksModule = new TasksModule({});
+				tasksModule.tasks = taskFactory.buildList(3);
+				tasksModule.status = "pending";
+				const hasTasks = tasksModule.hasTasks;
 
 				expect(hasTasks).toBe(false);
 			});
@@ -430,35 +430,35 @@ describe("task store", () => {
 
 		describe("openTasksForStudentIsEmpty", () => {
 			it("should filter by course names", () => {
-				const taskModule = new TaskModule({});
-				taskModule.courseFilter = ["Mathe"];
+				const tasksModule = new TasksModule({});
+				tasksModule.courseFilter = ["Mathe"];
 				const spy = mockTaskFilter("byCourseNames", []);
 
-				taskModule.openTasksForStudentIsEmpty;
+				tasksModule.openTasksForStudentIsEmpty;
 
 				expect(spy).toHaveBeenCalledTimes(1);
-				expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+				expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 				spy.mockRestore();
 			});
 
 			it("should filter tasks that are open for students", () => {
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const spy = mockTaskFilter("byOpenForStudent", []);
 
-				taskModule.openTasksForStudentIsEmpty;
+				tasksModule.openTasksForStudentIsEmpty;
 
 				expect(spy).toHaveBeenCalledTimes(1);
 				spy.mockRestore();
 			});
 
 			it("should return false if the filters yield any results", () => {
-				const taskModule = new TaskModule({});
-				taskModule.status = "completed";
+				const tasksModule = new TasksModule({});
+				tasksModule.status = "completed";
 				const tasks = taskFactory.buildList(1);
 				const spy1 = mockTaskFilter("byCourseNames", tasks);
 				const spy2 = mockTaskFilter("byOpenForStudent", tasks);
 
-				const result = taskModule.openTasksForStudentIsEmpty;
+				const result = tasksModule.openTasksForStudentIsEmpty;
 
 				expect(result).toBe(false);
 				spy1.mockRestore();
@@ -466,12 +466,12 @@ describe("task store", () => {
 			});
 
 			it("should return true if the filters yield no results", () => {
-				const taskModule = new TaskModule({});
-				taskModule.status = "completed";
+				const tasksModule = new TasksModule({});
+				tasksModule.status = "completed";
 				const spy1 = mockTaskFilter("byCourseNames", []);
 				const spy2 = mockTaskFilter("byOpenForStudent", []);
 
-				const result = taskModule.openTasksForStudentIsEmpty;
+				const result = tasksModule.openTasksForStudentIsEmpty;
 
 				expect(result).toBe(true);
 				spy1.mockRestore();
@@ -479,13 +479,13 @@ describe("task store", () => {
 			});
 
 			it("should return false if the store is not ready", () => {
-				const taskModule = new TaskModule({});
+				const tasksModule = new TasksModule({});
 				const tasks = taskFactory.buildList(1);
-				taskModule.status = "pending";
+				tasksModule.status = "pending";
 				const spy1 = mockTaskFilter("byCourseNames", tasks);
 				const spy2 = mockTaskFilter("byOpenForStudent", tasks);
 
-				const result = taskModule.openTasksForStudentIsEmpty;
+				const result = tasksModule.openTasksForStudentIsEmpty;
 
 				expect(result).toBe(false);
 				spy1.mockRestore();
@@ -496,48 +496,48 @@ describe("task store", () => {
 
 	describe("openTasksForTeacherIsEmpty", () => {
 		it("should filter by substitution teacher", () => {
-			const taskModule = new TaskModule({});
-			taskModule.substituteFilter = true;
+			const tasksModule = new TasksModule({});
+			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			taskModule.openTasksForTeacherIsEmpty;
+			tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.openTasksForTeacherIsEmpty;
+			tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are open for students", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForTeacher", []);
 
-			taskModule.openTasksForTeacherIsEmpty;
+			tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should return false if the filters yield any results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const tasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byOpenForTeacher", tasks);
 
-			const result = taskModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -546,13 +546,13 @@ describe("task store", () => {
 		});
 
 		it("should return true if the filters yield no results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", []);
 			const spy2 = mockTaskFilter("byCourseNames", []);
 			const spy3 = mockTaskFilter("byOpenForTeacher", []);
 
-			const result = taskModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(result).toBe(true);
 			spy1.mockRestore();
@@ -561,14 +561,14 @@ describe("task store", () => {
 		});
 
 		it("should return false if the store is not ready", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "pending";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "pending";
 			const tasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byOpenForTeacher", tasks);
 
-			const result = taskModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -579,35 +579,35 @@ describe("task store", () => {
 
 	describe("completedTasksForStudentIsEmpty", () => {
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.completedTasksForStudentIsEmpty;
+			tasksModule.completedTasksForStudentIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are completed", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byCompletedForStudent", []);
 
-			taskModule.completedTasksForStudentIsEmpty;
+			tasksModule.completedTasksForStudentIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should return false if the filters yield any results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const tasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("byCourseNames", tasks);
 			const spy2 = mockTaskFilter("byCompletedForStudent", tasks);
 
-			const result = taskModule.completedTasksForStudentIsEmpty;
+			const result = tasksModule.completedTasksForStudentIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -615,12 +615,12 @@ describe("task store", () => {
 		});
 
 		it("should return true if the filters yield no results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const spy1 = mockTaskFilter("byCourseNames", []);
 			const spy2 = mockTaskFilter("byCompletedForStudent", []);
 
-			const result = taskModule.completedTasksForStudentIsEmpty;
+			const result = tasksModule.completedTasksForStudentIsEmpty;
 
 			expect(result).toBe(true);
 			spy1.mockRestore();
@@ -628,13 +628,13 @@ describe("task store", () => {
 		});
 
 		it("should return false if the store is not ready", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const tasks = taskFactory.buildList(1);
-			taskModule.status = "pending";
+			tasksModule.status = "pending";
 			const spy1 = mockTaskFilter("byCourseNames", tasks);
 			const spy2 = mockTaskFilter("byCompletedForStudent", tasks);
 
-			const result = taskModule.completedTasksForStudentIsEmpty;
+			const result = tasksModule.completedTasksForStudentIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -644,48 +644,48 @@ describe("task store", () => {
 
 	describe("draftsForTeacherIsEmpty", () => {
 		it("should filter by substitute teacher", () => {
-			const taskModule = new TaskModule({});
-			taskModule.substituteFilter = true;
+			const tasksModule = new TasksModule({});
+			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			taskModule.draftsForTeacherIsEmpty;
+			tasksModule.draftsForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.draftsForTeacherIsEmpty;
+			tasksModule.draftsForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are drafts", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byDraftForTeacher", []);
 
-			taskModule.draftsForTeacherIsEmpty;
+			tasksModule.draftsForTeacherIsEmpty;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should return false if the filters yield any results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const tasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byDraftForTeacher", tasks);
 
-			const result = taskModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -694,13 +694,13 @@ describe("task store", () => {
 		});
 
 		it("should return true if the filters yield no results", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "completed";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "completed";
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", []);
 			const spy2 = mockTaskFilter("byCourseNames", []);
 			const spy3 = mockTaskFilter("byDraftForTeacher", []);
 
-			const result = taskModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
 			expect(result).toBe(true);
 			spy1.mockRestore();
@@ -709,14 +709,14 @@ describe("task store", () => {
 		});
 
 		it("should return false if the store is not ready", () => {
-			const taskModule = new TaskModule({});
-			taskModule.status = "pending";
+			const tasksModule = new TasksModule({});
+			tasksModule.status = "pending";
 			const tasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byDraftForTeacher", tasks);
 
-			const result = taskModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
 			expect(result).toBe(false);
 			spy1.mockRestore();
@@ -727,29 +727,29 @@ describe("task store", () => {
 
 	describe("getOpenTasksForStudent", () => {
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.getOpenTasksForStudent;
+			tasksModule.getOpenTasksForStudent;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are open for students", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForStudent", []);
 
-			taskModule.getOpenTasksForStudent;
+			tasksModule.getOpenTasksForStudent;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should group the tasks by filters", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const overdueTasks = taskFactory.buildList(1);
 			const noDueDateTasks = taskFactory.buildList(1);
 			const withDueDateTasks = taskFactory.buildList(1);
@@ -757,7 +757,7 @@ describe("task store", () => {
 			const spy2 = mockTaskFilter("withoutDueDate", noDueDateTasks);
 			const spy3 = mockTaskFilter("withDueDate", withDueDateTasks);
 
-			const result = taskModule.getOpenTasksForStudent;
+			const result = tasksModule.getOpenTasksForStudent;
 
 			expect(result).toEqual({
 				overdue: overdueTasks,
@@ -772,25 +772,25 @@ describe("task store", () => {
 
 	describe("getCompletedTasksForStudent", () => {
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.getCompletedTasksForStudent;
+			tasksModule.getCompletedTasksForStudent;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should group the tasks by filters", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const submittedTasks = taskFactory.buildList(1);
 			const gradedTasks = taskFactory.buildList(1);
 			const spy1 = mockTaskFilter("bySubmittedForStudent", submittedTasks);
 			const spy2 = mockTaskFilter("byGradedForStudent", gradedTasks);
 
-			const result = taskModule.getCompletedTasksForStudent;
+			const result = tasksModule.getCompletedTasksForStudent;
 
 			expect(result).toEqual({
 				submitted: submittedTasks,
@@ -803,41 +803,41 @@ describe("task store", () => {
 
 	describe("getOpenTasksForTeacher", () => {
 		it("should filter by substitution teacher", () => {
-			const taskModule = new TaskModule({});
-			taskModule.substituteFilter = true;
+			const tasksModule = new TasksModule({});
+			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			taskModule.getOpenTasksForTeacher;
+			tasksModule.getOpenTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.getOpenTasksForTeacher;
+			tasksModule.getOpenTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are open for teachers", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForTeacher", []);
 
-			taskModule.getOpenTasksForTeacher;
+			tasksModule.getOpenTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should group the tasks by filters", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const overdueTasks = taskFactory.buildList(1);
 			const noDueDateTasks = taskFactory.buildList(1);
 			const withDueDateTasks = taskFactory.buildList(1);
@@ -845,7 +845,7 @@ describe("task store", () => {
 			const spy2 = mockTaskFilter("withoutDueDate", noDueDateTasks);
 			const spy3 = mockTaskFilter("withDueDate", withDueDateTasks);
 
-			const result = taskModule.getOpenTasksForTeacher;
+			const result = tasksModule.getOpenTasksForTeacher;
 
 			expect(result).toEqual({
 				overdue: overdueTasks,
@@ -860,47 +860,47 @@ describe("task store", () => {
 
 	describe("getDraftTasksForTeacher", () => {
 		it("should filter by substitution teacher", () => {
-			const taskModule = new TaskModule({});
-			taskModule.substituteFilter = true;
+			const tasksModule = new TasksModule({});
+			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			taskModule.getDraftTasksForTeacher;
+			tasksModule.getDraftTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter by course names", () => {
-			const taskModule = new TaskModule({});
-			taskModule.courseFilter = ["Mathe"];
+			const tasksModule = new TasksModule({});
+			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			taskModule.getDraftTasksForTeacher;
+			tasksModule.getDraftTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
-			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
 		});
 
 		it("should filter tasks that are open for teachers", () => {
-			const taskModule = new TaskModule({});
+			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byDraftForTeacher", []);
 
-			taskModule.getDraftTasksForTeacher;
+			tasksModule.getDraftTasksForTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
 
 		it("should return the result of the filters", () => {
-			const taskModule = new TaskModule({});
-			const tasks = (taskModule.tasks = taskFactory.buildList(2));
+			const tasksModule = new TasksModule({});
+			const tasks = (tasksModule.tasks = taskFactory.buildList(2));
 			const spy1 = mockTaskFilter("filterSubstituteForTeacher", tasks);
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byDraftForTeacher", tasks);
 
-			const result = taskModule.getDraftTasksForTeacher;
+			const result = tasksModule.getDraftTasksForTeacher;
 
 			expect(result).toEqual(tasks);
 			spy1.mockRestore();
@@ -909,8 +909,8 @@ describe("task store", () => {
 		});
 
 		it("should sort newly created on top", () => {
-			const taskModule = new TaskModule({});
-			const tasks = (taskModule.tasks = taskFactory.buildList(2));
+			const tasksModule = new TasksModule({});
+			const tasks = (tasksModule.tasks = taskFactory.buildList(2));
 
 			const newDate = new Date();
 			newDate.setDate(newDate.getDate() - 1);
@@ -920,7 +920,7 @@ describe("task store", () => {
 			const spy2 = mockTaskFilter("byCourseNames", tasks);
 			const spy3 = mockTaskFilter("byDraftForTeacher", tasks);
 
-			const result = taskModule.getDraftTasksForTeacher;
+			const result = tasksModule.getDraftTasksForTeacher;
 
 			expect(
 				new Date(result[0].createdAt).getTime() >
@@ -941,10 +941,10 @@ describe("task store", () => {
 			});
 			const spy2 = mockTaskFilter("byCompletedForStudent", completedTasks);
 
-			const taskModule = new TaskModule({});
-			taskModule.tasks = [...opentTasks, ...completedTasks];
+			const tasksModule = new TasksModule({});
+			tasksModule.tasks = [...opentTasks, ...completedTasks];
 
-			const result = taskModule.getTasksCountPerCourseStudent;
+			const result = tasksModule.getTasksCountPerCourseStudent;
 
 			expect(spy1).toHaveBeenCalledTimes(1);
 			expect(spy2).toHaveBeenCalledTimes(1);
@@ -972,10 +972,10 @@ describe("task store", () => {
 			];
 			const spy2 = mockTaskFilter("byDraftForTeacher", draftTasks);
 
-			const taskModule = new TaskModule({});
-			taskModule.tasks = [...opentTasks, ...draftTasks];
+			const tasksModule = new TasksModule({});
+			tasksModule.tasks = [...opentTasks, ...draftTasks];
 
-			const result = taskModule.getTasksCountPerCourseForTeacher;
+			const result = tasksModule.getTasksCountPerCourseForTeacher;
 
 			expect(spy1).toHaveBeenCalledTimes(1);
 			expect(spy2).toHaveBeenCalledTimes(1);
