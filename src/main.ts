@@ -21,7 +21,7 @@ import {
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
-import i18n from "./plugins/i18n";
+import { createI18n } from "./plugins/i18n";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./plugins/store";
@@ -76,6 +76,9 @@ import { initializeAxios } from "./utils/api";
 	await authModule.login(jwt);
 
 	// console.log("--- main login finished");
+
+	// creation of i18n relies on envConfigModule and authModule data to be loaded
+	const i18n = createI18n();
 
 	new Vue({
 		router,

@@ -4,7 +4,7 @@ import { authModule, envConfigModule } from "@/store";
 
 Vue.use(VueI18n);
 
-function loadLocaleMessages(): LocaleMessages {
+const loadLocaleMessages = (): LocaleMessages => {
 	const locales = require.context(
 		"../locales",
 		true,
@@ -19,13 +19,15 @@ function loadLocaleMessages(): LocaleMessages {
 		}
 	});
 	return messages;
-}
+};
 
-const locale = authModule && authModule.getLocale ? authModule.getLocale : "de"; // 'de' fallback for unit tests
-const fallbackLocale =
-	envConfigModule && envConfigModule.getFallbackLanguage
-		? envConfigModule.getFallbackLanguage
-		: "de"; // 'de' fallback for unit tests
+export const createI18n = (): VueI18n => {
+	return new VueI18n({
+		locale: authModule.getLocale,
+		fallbackLocale: envConfigModule.getFallbackLanguage,
+		messages: loadLocaleMessages(),
+	});
+};
 
 // NUXT_REMOVAL remove $ts when refactored
 declare module "vue/types/vue" {
@@ -42,9 +44,3 @@ Vue.prototype.$ts = (key: string) => {
 	}
 	return result;
 };
-
-export default new VueI18n({
-	locale,
-	fallbackLocale,
-	messages: loadLocaleMessages(),
-});
