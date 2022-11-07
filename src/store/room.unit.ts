@@ -307,115 +307,6 @@ describe("room module", () => {
 			});
 		});
 
-		describe("createCourseInvitation", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
-			it("should call the backend", async () => {
-				let received: any[] = [];
-				(() => {
-					initializeAxios({
-						$post: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
-						},
-					} as NuxtAxiosInstance);
-				})();
-				const roomModule = new RoomModule({});
-				const createCourseInvitationSpy = jest.spyOn(
-					roomModule,
-					"createCourseInvitation"
-				);
-				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
-					"resetBusinessError"
-				);
-				await roomModule.createCourseInvitation("123456");
-
-				expect(received[0].path).toStrictEqual("/v1/link");
-				expect(received[1].params.target).toContain(
-					"courses/123456/addStudent"
-				);
-				expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual(
-					"123456"
-				);
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-			});
-
-			it("should set businessError if server response does not contain '_id'", async () => {
-				let received: any[] = [];
-				let returned: any = {};
-
-				(() => {
-					initializeAxios({
-						$post: async (path: string) => {
-							received.push({ path });
-							if (path === "/v1/link") {
-								return (returned = {});
-							}
-						},
-					} as NuxtAxiosInstance);
-				})();
-				const roomModule = new RoomModule({});
-				const createCourseInvitationSpy = jest.spyOn(
-					roomModule,
-					"createCourseInvitation"
-				);
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
-				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
-					"resetBusinessError"
-				);
-				await roomModule.createCourseInvitation("123456");
-
-				expect(roomModule.businessError).toStrictEqual({
-					statusCode: "400",
-					message: "not-generated",
-				});
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(createCourseInvitationSpy).toHaveBeenCalled();
-			});
-
-			it("should catch error in catch block", async () => {
-				let received: any[] = [];
-				let returned: any = {};
-				const error = { statusCode: 404, message: "friendly error" };
-
-				(() => {
-					initializeAxios({
-						$post: async (path: string) => {
-							received.push({ path });
-							if (path === "/v1/link") {
-								return (returned = Promise.reject({ ...error }));
-							}
-						},
-					} as NuxtAxiosInstance);
-				})();
-
-				const roomModule = new RoomModule({});
-				const createCourseInvitationSpy = jest.spyOn(
-					roomModule,
-					"createCourseInvitation"
-				);
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
-				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
-					"resetBusinessError"
-				);
-				await roomModule.createCourseInvitation("123456");
-
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-				expect(createCourseInvitationSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(roomModule.businessError.statusCode).toStrictEqual(404);
-				expect(roomModule.businessError.message).toStrictEqual(
-					"friendly error"
-				);
-			});
-		});
-
 		describe("createCourseShareToken", () => {
 			beforeEach(() => {
 				receivedRequests = [];
@@ -869,16 +760,6 @@ describe("room module", () => {
 
 				roomModule.setSharedLessonData(shareLessonData);
 				expect(roomModule.sharedLessonData).toStrictEqual(shareLessonData);
-			});
-		});
-
-		describe("setCourseInvitationLink", () => {
-			it("should set the state", () => {
-				const roomModule = new RoomModule({});
-				const payload = "http://localhost:4000/link/123456";
-
-				roomModule.setCourseInvitationLink(payload);
-				expect(roomModule.getCourseInvitationLink).toStrictEqual(payload);
 			});
 		});
 

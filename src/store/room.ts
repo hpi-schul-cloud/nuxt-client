@@ -41,7 +41,6 @@ export default class RoomModule extends VuexModule {
 		status: "",
 		message: "",
 	};
-	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
 
 	private _roomsApi?: RoomsApiInterface;
@@ -199,30 +198,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async createCourseInvitation(courseId: string): Promise<void> {
-		this.resetBusinessError();
-		try {
-			const invitationData = await $axios.$post("/v1/link", {
-				target: `${window.location.origin}/courses/${courseId}/addStudent`,
-			});
-			if (!invitationData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-generated",
-				});
-			}
-			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
-			this.setCourseInvitationLink(invitationLink);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async downloadImsccCourse(): Promise<void> {
 		this.resetBusinessError();
 		try {
@@ -361,11 +336,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setCourseInvitationLink(payload: string): void {
-		this.courseInvitationLink = payload;
-	}
-
-	@Mutation
 	setCourseShareToken(payload: string): void {
 		this.courseShareToken = payload;
 	}
@@ -392,10 +362,6 @@ export default class RoomModule extends VuexModule {
 
 	get getSharedLessonData(): SharedLessonObject {
 		return this.sharedLessonData;
-	}
-
-	get getCourseInvitationLink(): string {
-		return this.courseInvitationLink;
 	}
 
 	get getCourseShareToken(): string {

@@ -5,6 +5,7 @@ import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
+import FilesModule from "@store/files";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTaskModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
@@ -14,12 +15,11 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
+import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
 import TaskModule from "@/store/tasks";
-import ShareCourseModule from "@/store/share-course";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import FilesModule from "@store/files";
 
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
@@ -28,6 +28,7 @@ let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
+let filesModule: FilesModule;
 let filesPOCModule: FilesPOCModule;
 let finishedTaskModule: FinishedTaskModule;
 let importUsersModule: ImportUsersModule;
@@ -37,32 +38,35 @@ let notifierModule: NotifierModule;
 let roomModule: RoomModule;
 let roomsModule: RoomsModule;
 let schoolsModule: SchoolsModule;
+let shareCourseModule: ShareCourseModule;
 let statusAlertsModule: StatusAlertsModule;
 let taskModule: TaskModule;
-let shareCourseModule: ShareCourseModule;
-let filesModule: FilesModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
+	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
+	filesModule = getModule(FilesModule, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTaskModule = getModule(FinishedTaskModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
+	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
+	shareCourseModule = getModule(ShareCourseModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	taskModule = getModule(TaskModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
-	filesModule = getModule(FilesModule, store);
 }
 
 export {
@@ -71,20 +75,20 @@ export {
 	authModule,
 	autoLogoutModule,
 	contentModule,
+	copyModule,
 	envConfigModule,
 	filePathsModule,
+	filesModule,
 	filesPOCModule,
 	finishedTaskModule,
 	importUsersModule,
+	loadingStateModule,
 	newsModule,
+	notifierModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
+	shareCourseModule,
 	statusAlertsModule,
 	taskModule,
-	notifierModule,
-	copyModule,
-	loadingStateModule,
-	shareCourseModule,
-	filesModule,
 };
