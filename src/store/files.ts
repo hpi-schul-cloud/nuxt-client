@@ -97,7 +97,7 @@ export default class FilesModule extends VuexModule {
 				size: 2,
 			};
 
-			this.addFileMetaData(data);
+			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			console.log(error);
@@ -132,7 +132,7 @@ export default class FilesModule extends VuexModule {
 				size: 2,
 			};
 
-			this.addFileMetaData(data);
+			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			console.log(error);
@@ -150,8 +150,8 @@ export default class FilesModule extends VuexModule {
 		this.loading = loading;
 	}
 
-	@Mutation
-	addFileMetaData(response: FileMetaListResponse): void {
+	@Action
+	async addFileMetaData(response: FileMetaListResponse): Promise<void> {
 		const mappedFiles: File[] =
 			FileResponseMapper.mapFileMetaListResponse(response);
 		this.setFiles(mappedFiles);
