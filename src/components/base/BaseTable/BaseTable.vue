@@ -48,9 +48,9 @@ export default defineComponent({
 	},
 	setup() {
 		const router: VueRouter = useRouter();
-    const i18nLib = inject<VueI18n>("i18n");
-    const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
-    const locale = () => i18nUtil.locale();
+		const i18nLib = inject<VueI18n>("i18n");
+		const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
+		const locale = () => i18nUtil.locale();
 
 		const timesAgo = function (value: Date): string {
 			if (!value) return "";

@@ -18,7 +18,7 @@ import { authModule, filesModule } from "@/store";
 import {
 	computed,
 	ComputedRef,
-  inject,
+	inject,
 	onMounted,
 	Ref,
 	ref,
@@ -43,9 +43,9 @@ export default defineComponent({
 		}
 	},
 	setup() {
-    const i18nLib = inject<VueI18n>("i18n");
-    const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
-    const t = (key: string) => i18nUtil.t(key);
+		const i18nLib = inject<VueI18n>("i18n");
+		const i18nUtil: I18nUtil = new I18nUtil(i18nLib);
+		const t = (key: string) => i18nUtil.t(key);
 
 		const { path, params } = useRoute().value;
 
