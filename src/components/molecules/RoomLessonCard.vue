@@ -242,7 +242,7 @@ export default {
 
 			chipStr += chipValueArray.join(" / ");
 
-			if (this.isHidden) {
+			if (this.isHidden && this.lesson.numberOfDraftTasks === 0) {
 				chipStr += ` (${this.$t("pages.room.lessonCard.label.notVisible")})`;
 			}
 

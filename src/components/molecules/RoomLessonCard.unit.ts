@@ -37,6 +37,7 @@ const hiddenTestProps = {
 		createdAt: "2017-09-28T11:58:46.601Z",
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		hidden: true,
+		numberOfDraftTasks: 0,
 		numberOfPublishedTasks: 1,
 	},
 	ariaLabel:
