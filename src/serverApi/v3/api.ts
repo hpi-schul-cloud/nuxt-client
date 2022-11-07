@@ -857,10 +857,10 @@ export interface ImportUserResponse {
     classNames: Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {object}
+     * @type {UserMatchResponse}
      * @memberof ImportUserResponse
      */
-    match?: object;
+    match?: UserMatchResponse;
     /**
      * manual flag to apply it as filter
      * @type {boolean}
@@ -2340,10 +2340,10 @@ export interface UserMatchResponse {
     lastName: string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {string}
+     * @type {Array<string>}
      * @memberof UserMatchResponse
      */
-    roleNames: UserMatchResponseRoleNamesEnum;
+    roleNames: Array<UserMatchResponseRoleNamesEnum>;
     /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
      * @type {string}
