@@ -20,7 +20,7 @@
 				></base-icon>
 			</template>
 			<template #[`item.lastChanged`]="{ item }"
-			>{{ timesAgo(item.lastChanged) }}
+				>{{ timesAgo(item.lastChanged) }}
 			</template>
 		</v-data-table>
 	</default-wireframe>
@@ -28,13 +28,28 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe, { Breadcrumb, } from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe, {
+	Breadcrumb,
+} from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { authModule, filesModule } from "@/store";
-import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter, } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+	ref,
+	useRoute,
+	useRouter,
+} from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
-import { getDeepBreadcumbs, getFileCategory, mapFileToFileTableItem, } from "@pages/files/file-table-utils";
+import {
+	getDeepBreadcumbs,
+	getFileCategory,
+	mapFileToFileTableItem,
+} from "@pages/files/file-table-utils";
 import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter from "vue-router";
@@ -102,8 +117,7 @@ export default defineComponent({
 			.split("/")
 			.filter((element: string) => element !== "");
 		const currentCategory: string = getFileCategory(pathArray);
-		let loadFilesFunc: () => Promise<void> = async (): Promise<void> => {
-		};
+		let loadFilesFunc: () => Promise<void> = async (): Promise<void> => {};
 
 		switch (currentCategory) {
 			case "cfiles": {
@@ -158,9 +172,8 @@ export default defineComponent({
 				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
 			}
 			return i18n?.locale || "de";
-		}
+		};
 		const timesAgo = function (value: Date): string {
-
 			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};
