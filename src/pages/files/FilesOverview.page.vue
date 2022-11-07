@@ -55,6 +55,30 @@ import { I18nUtil } from "@utils/i18n-util";
 import moment from "moment/moment";
 import VueRouter from "vue-router";
 
+function getHeaders(t: (key: string) => string) {
+	return [
+		{ text: "", value: "icon", sortable: false, width: 5 },
+		{
+			text: t("common.labels.name"),
+			value: "name",
+			class: "primary--text",
+			cellClass: "primary--text",
+		},
+		{
+			text: t("common.labels.size"),
+			value: "size",
+			class: "primary--text",
+			width: "110",
+		},
+		{
+			text: t("common.labels.changed"),
+			value: "lastChanged",
+			class: "primary--text",
+			width: "140",
+		},
+	];
+}
+
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: { DefaultWireframe },
@@ -76,27 +100,7 @@ export default defineComponent({
 
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([]);
 
-		const headers: DataTableHeader[] = [
-			{ text: "", value: "icon", sortable: false, width: 5 },
-			{
-				text: t("common.labels.name"),
-				value: "name",
-				class: "primary--text",
-				cellClass: "primary--text",
-			},
-			{
-				text: t("common.labels.size"),
-				value: "size",
-				class: "primary--text",
-				width: "110",
-			},
-			{
-				text: t("common.labels.changed"),
-				value: "lastChanged",
-				class: "primary--text",
-				width: "140",
-			},
-		];
+		const headers: DataTableHeader[] = getHeaders(t);
 
 		const items: ComputedRef<FileTableItem[]> = computed(() => {
 			return filesModule.getFiles.map((file: File) => {
