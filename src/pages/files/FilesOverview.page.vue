@@ -20,7 +20,7 @@
 				></base-icon>
 			</template>
 			<template #[`item.lastChanged`]="{ item }"
-			>{{ timesAgo(item.lastChanged) }}
+				>{{ timesAgo(item.lastChanged) }}
 			</template>
 		</v-data-table>
 	</default-wireframe>
@@ -28,11 +28,22 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe, { Breadcrumb } from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe, {
+	Breadcrumb,
+} from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { authModule, filesModule } from "@/store";
-import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+	ref,
+	useRoute,
+	useRouter,
+} from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
 import {
 	FilesPage,
@@ -84,7 +95,7 @@ export default defineComponent({
 				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
 			}
 			return i18n?.locale || "de";
-		}
+		};
 
 		const timesAgo = function (value: Date): string {
 			if (!value) return "";
