@@ -274,6 +274,10 @@ export default class ImportUsersModule extends VuexModule {
 			);
 			return response.data;
 		} catch (error: any) {
+			this.setUserFlagged({
+				importUserId: payload.importUserId,
+				flagged: !payload.flagged,
+			});
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
@@ -303,10 +307,10 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
-			this.deleteMatchMutation(importUserId);
 			const response = await this.importUserApi.importUserControllerRemoveMatch(
 				importUserId
 			);
+			this.deleteMatchMutation(importUserId);
 			return response.data;
 		} catch (error: any) {
 			this.setBusinessError({

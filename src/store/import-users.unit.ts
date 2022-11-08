@@ -5,6 +5,8 @@ import {
 	UserMatchResponseMatchedByEnum,
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
+import { importUsersModule } from ".";
+import { getAllJSDocTagsOfKind } from "typescript";
 
 const mockResponse = {
 	data: {
@@ -515,7 +517,7 @@ describe("import-users store actions", () => {
 		});
 
 		describe("saveFlag", function () {
-			it("should  call UpdateFlag with flag=true and reurn importUser with flag=true", async () => {
+			it("should  call UpdateFlag with flag=true and return importUser with flag=true", async () => {
 				mockApi = {
 					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
 				};
@@ -548,6 +550,58 @@ describe("import-users store actions", () => {
 					{ flagged: false }
 				);
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
+			});
+
+			it("should update the state", async () => {
+				mockApi = {
+					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+				importUserModule.setImportUsersList({
+					limit: 2,
+					skip: 0,
+					total: 2,
+					data: [
+						{
+							firstName: "asdf",
+							lastName: "asdf",
+							classNames: [],
+							flagged: true,
+							importUserId: "abc",
+							loginName: "asdf.asdf",
+							roleNames: [],
+						},
+						{
+							firstName: "qwer",
+							lastName: "qwer",
+							classNames: [],
+							flagged: true,
+							importUserId: "qwer",
+							loginName: "qwer.qwer",
+							roleNames: [],
+						},
+					],
+				});
+
+				const importUserId = "abc";
+				await importUserModule.saveFlag({ importUserId, flagged: false });
+				const temp = importUserModule.getImportUserList;
+
+				let changedUser = importUserModule.getImportUserList.data.find(
+					(importUser) => {
+						return importUser.importUserId === importUserId;
+					}
+				);
+				expect(changedUser?.flagged).toBe(false);
+				await importUserModule.saveFlag({ importUserId, flagged: true });
+				changedUser = importUserModule.getImportUserList.data.find(
+					(importUser) => {
+						return importUser.importUserId === importUserId;
+					}
+				);
+				expect(changedUser?.flagged).toBe(true);
 			});
 
 			it("should handle business error", async () => {
