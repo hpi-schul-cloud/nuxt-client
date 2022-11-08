@@ -116,28 +116,30 @@ export default defineComponent({
 
 		const route = useRoute();
 
-    const isItemActiveForRoute = (item: SidebarItem) =>
-        item.activeForUrls.some((activeFor) => new RegExp(activeFor).test(route.value.path));
+		const isItemActiveForRoute = (item: SidebarItem) =>
+			item.activeForUrls.some((activeFor) =>
+				new RegExp(activeFor).test(route.value.path)
+			);
 
-    const updateActiveItems = () => {
-		  // TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
-      props.routes.forEach((item: any) => {
-        if (isItemActiveForRoute(item)) {
-          activeItem.value = item.title;
-          activeParent.value = "";
-        }
-        if (item.children) {
-          item.children.forEach((childItem: SidebarItem) => {
-            if (isItemActiveForRoute(childItem)) {
-              activeItem.value = childItem.title;
-              activeParent.value = item.title;
-            }
-          });
-        }
-      });
-    }
-    updateActiveItems();
-    watch(route, updateActiveItems);
+		const updateActiveItems = () => {
+			// TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
+			props.routes.forEach((item: any) => {
+				if (isItemActiveForRoute(item)) {
+					activeItem.value = item.title;
+					activeParent.value = "";
+				}
+				if (item.children) {
+					item.children.forEach((childItem: SidebarItem) => {
+						if (isItemActiveForRoute(childItem)) {
+							activeItem.value = childItem.title;
+							activeParent.value = item.title;
+						}
+					});
+				}
+			});
+		};
+		updateActiveItems();
+		watch(route, updateActiveItems);
 
 		const isActive = (title: string): boolean => {
 			return title === activeItem.value;
