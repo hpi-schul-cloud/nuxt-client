@@ -1,17 +1,12 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
-		<base-select
-			style="max-width: 150px"
-			close-on-select
+		<v-select
+			:items="perPageOptions"
 			:value="perPageSelected"
-			:options="perPageOptions"
-			:allow-empty="false"
-			track-by="value"
-			option-label="label"
-			:label="$t('components.organisms.Pagination.recordsPerPage')"
-			:label-hidden="true"
-			@select="setPagination"
-		/>
+			style="max-width: 150px"
+			@change="setPagination"
+		>
+		</v-select>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
 				{{
@@ -81,23 +76,23 @@ export default {
 		return {
 			perPageOptions: [
 				{
-					label: this.$t("components.organisms.Pagination.perPage.5"),
+					text: this.$t("components.organisms.Pagination.perPage.5"),
 					value: 5,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.10"),
+					text: this.$t("components.organisms.Pagination.perPage.10"),
 					value: 10,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.25"),
+					text: this.$t("components.organisms.Pagination.perPage.25"),
 					value: 25,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.50"),
+					text: this.$t("components.organisms.Pagination.perPage.50"),
 					value: 50,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.100"),
+					text: this.$t("components.organisms.Pagination.perPage.100"),
 					value: 100,
 				},
 			],
@@ -106,7 +101,7 @@ export default {
 	computed: {
 		perPageSelected() {
 			return {
-				label:
+				text:
 					this.perPage +
 					" " +
 					this.$t("components.organisms.Pagination.perPage"),
@@ -119,7 +114,7 @@ export default {
 	},
 	methods: {
 		setPagination(val) {
-			this.$emit("update:per-page", val.value);
+			this.$emit("update:per-page", val);
 			this.$emit("update:current-page", 1);
 		},
 		previousPage() {

@@ -77,8 +77,6 @@ describe("@/components/organisms/Pagination", () => {
 		});
 		const secondOption = wrapper.vm.perPageOptions[2].value;
 		wrapper.vm.setPagination(secondOption);
-		expect(wrapper.emitted("update:per-page")).toStrictEqual([
-			[secondOption.value],
-		]);
+		expect(wrapper.emitted("update:per-page")).toStrictEqual([[secondOption]]);
 	});
 });
