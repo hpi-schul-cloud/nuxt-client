@@ -1,7 +1,10 @@
 <template>
 	<span>
 		<template v-if="status === 'completed'">
-			<lernstore-collection-detail-view v-if="true" :resource="resource" />
+			<lernstore-collection-detail-view
+				v-if="isCollection"
+				:resource="resource"
+			/>
 			<lernstore-detail-view v-else :resource="resource" />
 		</template>
 		<div v-else class="d-flex justify-center align-center min-height-screen">
