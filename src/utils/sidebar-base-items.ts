@@ -1,17 +1,31 @@
-export type SidebarItem = {
+export type SidebarItemBase = {
 	title: string;
-	href?: string;
-	to?: string;
 	icon: string;
 	source?: "material" | "custom" | "fa";
 	testId: string;
 	permission?: string;
 	excludedPermission?: string;
 	activeForUrls: string[];
-	children?: SidebarItem[];
 };
 
-const sidebarBaseItems: SidebarItem[] = [
+export type SidebarItemExternalLink = {
+	href: string;
+};
+
+export type SidebarItemRouterLink = {
+	to: string;
+};
+
+export type SidebarItem = SidebarItemBase &
+	(SidebarItemExternalLink | SidebarItemRouterLink);
+
+export type SidebarCategoryItem = SidebarItem & {
+	children: SidebarItem[];
+};
+
+export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
+
+const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
