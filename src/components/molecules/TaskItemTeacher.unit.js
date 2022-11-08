@@ -1,6 +1,6 @@
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { provide } from "@vue/composition-api";
@@ -24,7 +24,7 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-let taskModuleMock;
+let tasksModuleMock;
 let copyModuleMock;
 let notifierModuleMock;
 
@@ -35,7 +35,7 @@ const getWrapper = (props, options) => {
 			vuetify: true,
 		}),
 		setup() {
-			provide("taskModule", taskModuleMock);
+			provide("tasksModule", tasksModuleMock);
 			provide("copyModule", copyModuleMock);
 			provide("notifierModule", notifierModuleMock);
 			provide("i18n", { t: (key) => key });
@@ -50,7 +50,7 @@ describe("@components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
 
 	beforeEach(() => {
-		taskModuleMock = createModuleMocks(TaskModule);
+		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
