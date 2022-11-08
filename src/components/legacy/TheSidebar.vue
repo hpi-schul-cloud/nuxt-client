@@ -22,7 +22,10 @@
 				>
 					<li
 						class="list-item"
-						:class="{ active: isActive(route.title), 'child-active': isChildActive(route.title) }"
+						:class="{
+							active: isActive(route.title),
+							'child-active': isChildActive(route.title),
+						}"
 						:data-testId="route.testId"
 					>
 						<base-link
@@ -45,7 +48,10 @@
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
-					<ul v-if="isActive(route.title) || isChildActive(route.title)" class="px-0">
+					<ul
+						v-if="isActive(route.title) || isChildActive(route.title)"
+						class="px-0"
+					>
 						<li
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"
@@ -88,8 +94,8 @@ import { SidebarItem } from "@utils/sidebar-base-items";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-  name: "TheSidebar",
-  components: { baseLink, baseIcon },
+	name: "TheSidebar",
+	components: { baseLink, baseIcon },
 	props: {
 		routes: {
 			type: Array,
@@ -104,45 +110,43 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-  setup(props) {
-    let activeItem = "";
-    let activeParent = "";
+	setup(props) {
+		let activeItem = "";
+		let activeParent = "";
 
-    const { path } = useRoute().value;
-    const isItemActiveForRoute = (item: SidebarItem) =>
-        item.activeForUrls.some((activeFor) =>
-            new RegExp(activeFor).test(path)
-        );
+		const { path } = useRoute().value;
+		const isItemActiveForRoute = (item: SidebarItem) =>
+			item.activeForUrls.some((activeFor) => new RegExp(activeFor).test(path));
 
-    // TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
-    props.routes.forEach((item: any) => {
-      if (isItemActiveForRoute(item)) {
-        activeItem = item.title;
-        activeParent = "";
-      }
-      if (item.children) {
-        item.children.forEach((childItem: SidebarItem) => {
-          if (isItemActiveForRoute(childItem)) {
-            activeItem = childItem.title;
-            activeParent = item.title;
-          }
-        });
-      }
-    });
+		// TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
+		props.routes.forEach((item: any) => {
+			if (isItemActiveForRoute(item)) {
+				activeItem = item.title;
+				activeParent = "";
+			}
+			if (item.children) {
+				item.children.forEach((childItem: SidebarItem) => {
+					if (isItemActiveForRoute(childItem)) {
+						activeItem = childItem.title;
+						activeParent = item.title;
+					}
+				});
+			}
+		});
 
-    const isActive = (title: string): boolean => {
-      return title === activeItem;
-    };
+		const isActive = (title: string): boolean => {
+			return title === activeItem;
+		};
 
-    const isChildActive = (title: string): boolean => {
-      return title === activeParent;
-    };
+		const isChildActive = (title: string): boolean => {
+			return title === activeParent;
+		};
 
-    return {
-      isActive,
-      isChildActive
-    }
-  }
+		return {
+			isActive,
+			isChildActive,
+		};
+	},
 });
 </script>
 
