@@ -2,12 +2,12 @@ export type SidebarItem = {
 	title: string;
 	href?: string;
 	to?: string;
-	source?: string;
 	icon: string;
-	testId?: string;
+	source?: "material" | "custom" | "fa";
+	testId: string;
 	permission?: string;
 	excludedPermission?: string;
-	activeForUrls?: string[];
+	activeForUrls: string[];
 	children?: SidebarItem[];
 };
 

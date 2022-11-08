@@ -36,7 +36,7 @@ import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
-import sidebarBaseItems from "@utils/sidebarBaseItems";
+import sidebarBaseItems from "@utils/sidebar-base-items";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
@@ -93,25 +93,6 @@ export default {
 				return (
 					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
 				);
-			});
-
-			// Sidebar highlights
-			const { path } = this.$route;
-			const isActive = (item) =>
-				item.activeForUrls &&
-				item.activeForUrls.some((activeFor) =>
-					new RegExp(activeFor).test(path)
-				);
-
-			sidebarItems.forEach((item) => {
-				item.childActive = false;
-				if (item.children) {
-					item.children.forEach((childItem) => {
-						childItem.active = isActive(childItem);
-						item.childActive = item.childActive || childItem.active;
-					});
-				}
-				item.active = isActive(item) && !item.childActive;
 			});
 
 			return sidebarItems;
