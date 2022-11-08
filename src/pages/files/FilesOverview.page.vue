@@ -68,7 +68,7 @@ export default defineComponent({
 	},
 	setup() {
 		const i18n = inject<VueI18n>("i18n");
-		const t = (key: string) => {
+		const t = (key: string): string => {
 			const translateResult = i18n?.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
@@ -88,7 +88,7 @@ export default defineComponent({
 		const filesPage: FilesPage = getFilesPageFromCategory(t, route);
 
 		const title: Ref<string> = ref(filesPage.title);
-		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcumbs);
+		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);
 
 		const locale = (): Locale => {
 			if (i18n?.locale === ChangeLanguageParamsLanguageEnum.Ua) {
@@ -97,7 +97,7 @@ export default defineComponent({
 			return i18n?.locale || "de";
 		};
 
-		const timesAgo = function (value: Date): string {
+		const timesAgo = (value: Date): string => {
 			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};

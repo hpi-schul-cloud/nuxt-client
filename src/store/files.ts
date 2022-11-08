@@ -3,7 +3,6 @@ import { FileResponseMapper } from "@/serverApi/v3/files/file-response.mapper";
 import { FileMetaListResponse } from "@/serverApi/v3/files/file-meta-list.response";
 import { FileTypeResponse } from "@/serverApi/v3/files/file-meta.response";
 import { File, FileType } from "@store/types/file";
-import { filesModule } from "@utils/store-accessor";
 
 @Module({
 	name: "files",
