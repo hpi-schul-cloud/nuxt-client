@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useRoute } from "@nuxtjs/composition-api";
+import { defineComponent, ref, useRoute, watch } from "@nuxtjs/composition-api";
 import baseLink from "@basecomponents/BaseLink.vue";
 import baseIcon from "@basecomponents/BaseIcon.vue";
 import { SidebarItem } from "@utils/sidebar-base-items";
@@ -111,35 +111,40 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		let activeItem = "";
-		let activeParent = "";
+		const activeItem = ref("");
+		const activeParent = ref("");
 
-		const { path } = useRoute().value;
-		const isItemActiveForRoute = (item: SidebarItem) =>
-			item.activeForUrls.some((activeFor) => new RegExp(activeFor).test(path));
+		const route = useRoute();
 
-		// TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
-		props.routes.forEach((item: any) => {
-			if (isItemActiveForRoute(item)) {
-				activeItem = item.title;
-				activeParent = "";
-			}
-			if (item.children) {
-				item.children.forEach((childItem: SidebarItem) => {
-					if (isItemActiveForRoute(childItem)) {
-						activeItem = childItem.title;
-						activeParent = item.title;
-					}
-				});
-			}
-		});
+    const isItemActiveForRoute = (item: SidebarItem) =>
+        item.activeForUrls.some((activeFor) => new RegExp(activeFor).test(route.value.path));
+
+    const updateActiveItems = () => {
+		  // TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
+      props.routes.forEach((item: any) => {
+        if (isItemActiveForRoute(item)) {
+          activeItem.value = item.title;
+          activeParent.value = "";
+        }
+        if (item.children) {
+          item.children.forEach((childItem: SidebarItem) => {
+            if (isItemActiveForRoute(childItem)) {
+              activeItem.value = childItem.title;
+              activeParent.value = item.title;
+            }
+          });
+        }
+      });
+    }
+    updateActiveItems();
+    watch(route, updateActiveItems);
 
 		const isActive = (title: string): boolean => {
-			return title === activeItem;
+			return title === activeItem.value;
 		};
 
 		const isChildActive = (title: string): boolean => {
-			return title === activeParent;
+			return title === activeParent.value;
 		};
 
 		return {
