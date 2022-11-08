@@ -21,6 +21,7 @@ const legacyRoutes = [
 	"^/addons",
 	"^/administration/?$",
 	"^/locales",
+	"^/users/language",
 ];
 
 const isLegacyClient = (path) => {
@@ -70,5 +71,9 @@ const devServerConfig = {
 };
 
 module.exports = {
+	isLegacyClient,
+	isServer,
+	legacyClientProxy,
+	serverProxy,
 	devServer: devServerConfig,
 };
