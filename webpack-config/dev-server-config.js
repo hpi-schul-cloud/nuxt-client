@@ -8,6 +8,7 @@ const legacyRoutes = [
 	"^/fonts/ptsans",
 	"^/scripts",
 	"^/images",
+	"^/vendor/feathersjs",
 	"^/vendor-optimized",
 	"^/alerts",
 	"^/dashboard",
@@ -20,6 +21,7 @@ const legacyRoutes = [
 	"^/help",
 	"^/addons",
 	"^/administration/?$",
+	"^/administration/classes",
 	"^/locales",
 	"^/users/language",
 ];
