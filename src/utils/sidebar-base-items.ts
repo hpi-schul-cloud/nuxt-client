@@ -228,7 +228,10 @@ const sidebarBaseItems: SidebarItemList = [
 				icon: "building",
 				href: "/administration/school",
 				testId: "Schule",
-				activeForUrls: ["^/administration/school($|/.*)"],
+				activeForUrls: [
+					"^/administration/school($|/.*)",
+					"^/administration/school-settings($|/.*)",
+				],
 			},
 		],
 	},
