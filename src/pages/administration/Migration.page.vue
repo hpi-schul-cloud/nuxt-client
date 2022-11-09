@@ -22,7 +22,14 @@
 		</v-snackbar>
 
 		<div slot="header">
-			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
+			<h1 class="text-h3">
+				{{
+					$t("pages.administration.migration.title", {
+						source: ldapSourceTranslation,
+						instance: $theme.short_name,
+					})
+				}}
+			</h1>
 			<v-stepper v-model="migrationStep" flat class="stepper">
 				<v-stepper-header>
 					<v-stepper-step
@@ -183,9 +190,7 @@
 											v-html="
 												$t('pages.administration.migration.summary', {
 													instance: $theme.short_name,
-													source: $t(
-														'pages.administration.migration.ldapSource'
-													),
+													source: ldapSourceTranslation,
 													importUsersCount: totalMatched,
 													importUsersUnmatchedCount:
 														totalImportUsers - totalMatched,
@@ -244,7 +249,13 @@
 										<v-row>
 											<div
 												v-html="
-													$t('pages.administration.migration.endTransferPhase')
+													$t(
+														'pages.administration.migration.endTransferPhase',
+														{
+															source: ldapSourceTranslation,
+															instance: $theme.short_name,
+														}
+													)
 												"
 											></div>
 										</v-row>
@@ -284,7 +295,12 @@
 								elevation="2"
 								class="pa-5 mb-10"
 								color="grey lighten-5"
-								v-html="$t('pages.administration.migration.waitForSync')"
+								v-html="
+									$t('pages.administration.migration.waitForSync', {
+										source: ldapSourceTranslation,
+										instance: $theme.short_name,
+									})
+								"
 							></v-card>
 						</v-container>
 					</v-stepper-content>
@@ -363,6 +379,13 @@ export default {
 		totalImportUsers() {
 			return importUsersModule.getTotal;
 		},
+		ldapSourceTranslation() {
+			if (envConfigModule.getEnv.SC_THEME.toLowerCase === "brb") {
+				return this.$t("pages.administration.migration.brbSchulportal");
+			} else {
+				return this.$t("pages.administration.migration.ldapSource");
+			}
+		},
 	},
 	watch: {
 		async migrationStep(val) {
@@ -385,6 +408,21 @@ export default {
 		}
 		await this.summary();
 		this.checkTotalInterval();
+	},
+	mounted() {
+		this.breadcrumbs = [
+			{
+				text: this.$t("pages.administration.index.title"),
+				to: "/administration/",
+			},
+			{
+				text: this.$t("pages.administration.migration.title", {
+					source: this.ldapSourceTranslation,
+					instance: this.$theme.short_name,
+				}),
+				disabled: true,
+			},
+		];
 	},
 	methods: {
 		async isAllowed() {
@@ -521,7 +559,10 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.migration.title"),
+			title: this.$t("pages.administration.migration.title", {
+				source: this.ldapSourceTranslation,
+				instance: this.$theme.short_name,
+			}),
 		};
 	},
 };

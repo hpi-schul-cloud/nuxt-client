@@ -10,6 +10,7 @@
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
+				:ldap-source="ldapSourceTranslation"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
@@ -215,7 +216,7 @@
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 
@@ -224,7 +225,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 				<br />
@@ -232,7 +233,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 				<br />
@@ -240,7 +241,7 @@
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 			</p>
@@ -252,7 +253,7 @@
 
 <script>
 /* eslint-disable max-lines */
-import { importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
 import { MatchedBy } from "@store/import-users";
 import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
@@ -348,7 +349,9 @@ export default {
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableMatch"),
+					text: this.$t("components.organisms.importUsers.tableMatch", {
+						instance: this.$theme.short_name,
+					}),
 					value: "match",
 					sortable: false,
 				},
@@ -364,6 +367,13 @@ export default {
 		},
 		canFinishMigration() {
 			return false;
+		},
+		ldapSourceTranslation() {
+			if (envConfigModule.getEnv.SC_THEME.toLowerCase === "brb") {
+				return this.$t("pages.administration.migration.brbSchulportal");
+			} else {
+				return this.$t("pages.administration.migration.ldapSource");
+			}
 		},
 		editedItem() {
 			if (this.editedIndex < 0) {
