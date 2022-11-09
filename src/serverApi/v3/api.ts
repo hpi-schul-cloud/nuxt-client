@@ -2011,7 +2011,7 @@ export interface TaskCreateParams {
      * @type {string}
      * @memberof TaskCreateParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * The id of an lesson object.
      * @type {string}
@@ -2031,7 +2031,7 @@ export interface TaskCreateParams {
      */
     description?: string;
     /**
-     * Date until the task is published
+     * Date since the task is published
      * @type {string}
      * @memberof TaskCreateParams
      */
@@ -2233,7 +2233,7 @@ export interface TaskUpdateParams {
      */
     description?: string;
     /**
-     * Date until the task is published
+     * Date since the task is published
      * @type {string}
      * @memberof TaskUpdateParams
      */
