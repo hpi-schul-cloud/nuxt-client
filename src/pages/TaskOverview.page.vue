@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { authModule, taskModule } from "@/store";
+import { authModule, tasksModule } from "@/store";
 import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 
 export default {
@@ -23,7 +23,7 @@ export default {
 		},
 	},
 	mounted() {
-		taskModule.fetchAllTasks();
+		tasksModule.fetchAllTasks();
 	},
 	head() {
 		return {

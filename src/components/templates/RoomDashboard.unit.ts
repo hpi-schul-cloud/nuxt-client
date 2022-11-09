@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
-import { envConfigModule, roomModule, taskModule } from "@/store";
+import { envConfigModule, roomModule, tasksModule } from "@/store";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
@@ -107,7 +107,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			tasks: TaskModule,
+			tasks: TasksModule,
 			room: RoomModule,
 			"env-config": EnvConfigModule,
 			copy: CopyModule,
@@ -382,7 +382,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			taskModule.deleteTask = deleteTaskMock;
+			tasksModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
 			const taskCard = wrapper.find(".task-card");
@@ -404,7 +404,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			taskModule.deleteTask = deleteTaskMock;
+			tasksModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.find(".lesson-card");
