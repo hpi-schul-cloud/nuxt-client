@@ -48,6 +48,8 @@ export default {
 				name: name.value,
 				description: description.value,
 			});
+
+			router.go(-1);
 		};
 
 		const cancel = () => {
