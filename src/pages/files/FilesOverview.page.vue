@@ -33,9 +33,23 @@ import DefaultWireframe, {
 } from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
-import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+	ref,
+	useRoute,
+	useRouter,
+} from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
-import { FilesPage, getFilesPageFromCategory, getHeaders, mapFileToFileTableItem, } from "@pages/files/file-table-utils";
+import {
+	FilesPage,
+	getFilesPageFromCategory,
+	getHeaders,
+	mapFileToFileTableItem,
+} from "@pages/files/file-table-utils";
 import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
@@ -79,7 +93,7 @@ export default defineComponent({
 				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
 			}
 			return i18n.locale || "de";
-		}
+		};
 
 		const timesAgo = (value: Date): string => {
 			if (!value) return "";
