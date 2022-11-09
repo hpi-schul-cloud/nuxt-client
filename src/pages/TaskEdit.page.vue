@@ -48,8 +48,6 @@ export default {
 
 		const taskId = route.params.id;
 		onMounted(async () => {
-			// TODO - check for permission
-
 			await taskModule.findTask(taskId);
 
 			const taskData = taskModule.getTaskData;
