@@ -37,21 +37,21 @@ const testPropsMultiple = {
 
 const courseOptions = [
 	{
-		_id: "id1",
-		name: "course1",
+		value: "id1",
+		text: "course1",
 		isArchived: false,
 	},
 	{
-		_id: "id2",
-		name: "course2",
+		value: "id2",
+		text: "course2",
 		isArchived: true,
 	},
 ];
 
 const lessonsMock = [
 	{
-		_id: "id1",
-		name: "lesson-1",
+		value: "id1",
+		text: "lesson-1",
 	},
 ];
 
@@ -88,8 +88,8 @@ const mockStore = {
 					.filter((course) => course.isArchived === false)
 					.map((course) => {
 						return {
-							_id: course._id,
-							name: course.name,
+							value: course.value,
+							text: course.text,
 						};
 					}),
 		},
@@ -140,7 +140,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const wrapper = getWrapper(testProps);
 		expect(wrapper.vm.isSendEnabled).toBe(false);
 		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+			selectedLessons: lessonsMock[0],
 		});
 		await wrapper.vm.$nextTick();
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
@@ -152,8 +152,8 @@ describe("@/components/molecules/AddContentModal", () => {
 		const wrapper = getWrapper(testProps);
 		const co = wrapper.vm.coursesOptions;
 		expect(co).toHaveLength(1);
-		expect(co[0]._id).toBe(courseOptions[0]._id);
-		expect(co[0].name).toBe(courseOptions[0].name);
+		expect(co[0].value).toBe(courseOptions[0].value);
+		expect(co[0].text).toBe(courseOptions[0].text);
 	});
 
 	it("create lessonsOptions", async () => {
@@ -161,14 +161,14 @@ describe("@/components/molecules/AddContentModal", () => {
 		contentModule.setLessons(lessons);
 		const lo = wrapper.vm.lessonsOptions;
 		expect(lo).toHaveLength(1);
-		expect(lo[0]._id).toBe(lessonsMock[0]._id);
-		expect(lo[0].name).toBe(lessonsMock[0].name);
+		expect(lo[0].value).toBe(lessonsMock[0].value);
+		expect(lo[0].text).toBe(lessonsMock[0].text);
 	});
 
 	it("submit modal action", async () => {
 		const wrapper = getWrapper(testProps);
 		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+			selectedLessons: lessonsMock,
 		});
 		expect(wrapper.vm.isSendEnabled).toBe(true);
 		await wrapper.vm.$nextTick();
@@ -181,7 +181,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	it("submit modal action multiple items", async () => {
 		const wrapper = getWrapper(testPropsMultiple);
 		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+			selectedLessons: lessonsMock,
 		});
 		expect(wrapper.vm.isSendEnabled).toBe(true);
 		await wrapper.vm.$nextTick();
@@ -198,7 +198,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		wrapper.vm.selectedLesson = lessonsMock[0];
 		await cancelBtn.trigger("click");
 		expect(Object.keys(wrapper.vm.selectedCourse)).toHaveLength(0);
-		expect(Object.keys(wrapper.vm.selectedLesson)).toHaveLength(0);
+		expect(Object.keys(wrapper.vm.selectedLessons)).toHaveLength(0);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});

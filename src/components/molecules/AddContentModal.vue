@@ -10,39 +10,20 @@
 			}}</template>
 			<template #body>
 				<div class="content-modal__body">
-					<base-select
+					<v-select
 						v-model="selectedCourse"
-						class="content-modal__body--select"
-						:options="coursesOptions"
-						:show-labels="true"
 						:label="$t('pages.content.label.chooseACourse')"
-						placeholder
-						close-on-select
-						option-label="name"
-						:deselect-label="$t('pages.content.label.deselect')"
-						:select-label="$t('pages.content.label.select')"
-						:selected-label="$t('pages.content.label.selected')"
-						track-by="_id"
+						:items="coursesOptions"
 						data-testid="topicSelector"
+						@change="onCourseSelect"
 					/>
 					<transition name="fade">
-						<base-select
-							v-if="!!(selectedCourse || {})._id"
-							v-model="selectedLesson"
-							class="content-modal__body--select"
-							:options="lessonsOptions"
+						<v-select
+							v-if="selectedCourse"
+							v-model="selectedLessons"
 							:label="$t('pages.content.label.chooseALessonTopic')"
-							option-label="name"
-							close-on-select
-							:placeholder="
-								(lessonsOptions || []).length === 0
-									? $t('pages.content.placeholder.noLessonTopic')
-									: ''
-							"
-							:deselect-label="$t('pages.content.label.deselect')"
-							:select-label="$t('pages.content.label.select')"
-							:selected-label="$t('pages.content.label.selected')"
-							track-by="_id"
+							:items="lessonsOptions"
+							multiple
 							data-testid="courseSelector"
 						/>
 					</transition>
@@ -83,7 +64,6 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		merlinReference: { type: String, default: "" },
 		items: { type: Array, default: () => [] },
-
 		showCopyModal: {
 			type: Boolean,
 			required: true,
@@ -95,8 +75,8 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourse: {},
-			selectedLesson: {},
+			selectedCourse: "",
+			selectedLessons: [],
 		};
 	},
 	computed: {
@@ -107,7 +87,7 @@ export default {
 			return contentModule.getLessonsGetter;
 		},
 		isSendEnabled() {
-			return (this.selectedLesson || {})._id !== undefined;
+			return this.selectedLessons.length !== 0;
 		},
 		lessonsOptions() {
 			return (
@@ -115,8 +95,8 @@ export default {
 				this.lessons.data &&
 				this.lessons.data.map((lesson) => {
 					return {
-						_id: lesson._id,
-						name: lesson.name,
+						value: lesson._id,
+						text: lesson.name,
 					};
 				})
 			);
@@ -124,7 +104,7 @@ export default {
 	},
 	watch: {
 		selectedCourse(to, from) {
-			this.selectedLesson = {};
+			this.selectedLessons = [];
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
@@ -133,43 +113,35 @@ export default {
 		},
 	},
 	methods: {
+		onCourseSelect(val) {
+			if (val) contentModule.getLessons(val);
+		},
+		addToLesson() {
+			this.$emit("close");
+			const payload = this.selectedLessons.map((lesson) => {
+				return {
+					lessonId: lesson,
+					material: {
+						title: this.title,
+						client: this.client,
+						url: this.url,
+						merlinReference: this.merlinReference,
+					},
+				};
+			});
+			contentModule.addToLesson(payload);
+			this.closeModal();
+		},
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
 			this.clearState();
 		},
-		addToLesson() {
-			this.$emit("close");
-			const payload = {
-				lessonId: this.selectedLesson._id,
-				event: this.$eventBus,
-				material: [],
-			};
-			if (this.items.length > 0) {
-				this.items.forEach((element) => {
-					payload.material.push({
-						title: element.title,
-						client: element.client,
-						url: element.url,
-						merlinReference: element.merlinReference,
-					});
-				});
-			} else {
-				payload.material = {
-					title: this.title,
-					client: this.client,
-					url: this.url,
-					merlinReference: this.merlinReference,
-				};
-			}
-			contentModule.addToLesson(payload);
-			this.closeModal();
-		},
-		findLessons(course) {
-			contentModule.getLessons(course._id);
+		findLessons(courseId) {
+			contentModule.getLessons(courseId);
 		},
 		clearState() {
-			this.selectedCourse = {};
-			this.selectedLesson = {};
+			this.selectedCourse = "";
+			this.selectedLessons = [];
 		},
 	},
 };
