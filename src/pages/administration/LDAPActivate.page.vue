@@ -217,7 +217,7 @@ export default {
 	},
 	data() {
 		return {
-			migrateUsersCheckbox: this.showUserMigrationOption,
+			migrateUsersCheckbox: false,
 			mdiChevronLeft,
 		};
 	},
@@ -242,6 +242,9 @@ export default {
 		if (!Object.keys(this.verified).length) {
 			redirectToConfigPage(this);
 		}
+	},
+	mounted() {
+		this.migrateUsersCheckbox = this.showUserMigrationOption;
 	},
 	methods: {
 		backButtonHandler() {
