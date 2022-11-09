@@ -31,34 +31,27 @@ import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe, { Breadcrumb } from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
-import { authModule, filesModule } from "@/store";
 import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
 import { File } from "@store/types/file";
-import {
-	FilesPage,
-	getFilesPageFromCategory,
-	getHeaders,
-	mapFileToFileTableItem,
-} from "@pages/files/file-table-utils";
+import { FilesPage, getFilesPageFromCategory, getHeaders, mapFileToFileTableItem, } from "@pages/files/file-table-utils";
 import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
+import FilesModule from "@store/files";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: { DefaultWireframe },
-	beforeRouteEnter(to, from, next) {
-		if (authModule.getUserPermissions.includes("collaborative_files")) {
-			next();
-		} else {
-			next("/dashboard");
-		}
-	},
 	setup() {
-		const i18n = inject<VueI18n>("i18n");
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const filesModule: FilesModule | undefined = inject<FilesModule>("files");
+		if (!filesModule || !i18n) {
+			throw new Error();
+		}
+
 		const t = (key: string) => {
-			const translateResult = i18n?.t(key);
+			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
@@ -80,10 +73,10 @@ export default defineComponent({
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcumbs);
 
 		const locale = (): Locale => {
-			if (i18n?.locale === ChangeLanguageParamsLanguageEnum.Ua) {
+			if (i18n.locale === ChangeLanguageParamsLanguageEnum.Ua) {
 				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
 			}
-			return i18n?.locale || "de";
+			return i18n.locale || "de";
 		}
 
 		const timesAgo = function (value: Date): string {

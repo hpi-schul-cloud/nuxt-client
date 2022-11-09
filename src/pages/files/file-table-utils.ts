@@ -2,7 +2,13 @@ import { File, FileType } from "@store/types/file";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { filesModule } from "@utils/store-accessor";
 import { Route } from "vue-router";
-import { Breadcrumb } from "@components/templates/DefaultWireframe.vue";
+
+type Breadcrumb = {
+	text: string;
+	href?: string;
+	to?: string;
+	disabled?: boolean;
+};
 
 export type FilesPage = {
 	title: string;
