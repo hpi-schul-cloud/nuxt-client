@@ -122,7 +122,6 @@ export default defineComponent({
 			);
 
 		const updateActiveItems = () => {
-			// TODO change type 'any' to 'SidebarItem'. eslint has parsing errors when using 'as'-casting in ts script tag.
 			props.routes.forEach((item: any) => {
 				if (isItemActiveForRoute(item)) {
 					activeItem.value = item.title;
