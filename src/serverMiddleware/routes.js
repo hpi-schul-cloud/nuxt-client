@@ -29,6 +29,7 @@ const routes = [
 	`^/rooms/${mongoId}/?$`,
 	`^/tasks/?$`,
 	`^/tasks/new/?$`,
+	`^/tasks/${mongoId}/edit/?$`,
 	`^/termsofuse/?`,
 ];
 

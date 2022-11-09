@@ -55,6 +55,21 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
+	async findTask(taskId: string): Promise<void> {
+		this.setLoading(true);
+
+		try {
+			const { data } = await this.taskApi.taskControllerFindTask(taskId);
+			console.log("store", data);
+
+			this.setTaskData(data);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setLoading(false);
+		}
+	}
+
+	@Action
 	async updateTask(taskId: string, params: TaskUpdateParams): Promise<void> {
 		this.setLoading(true);
 

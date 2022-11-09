@@ -145,6 +145,11 @@ export const routes = [
 		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
 		name: "task-new",
 	},
+	{
+		path: "/tasks/:id/edit",
+		component: () => interopDefault(import("../pages/TaskEdit.page.vue")),
+		name: "task-edit",
+	},
 	// deprecated?
 	{
 		path: "/termsofuse",
