@@ -187,6 +187,7 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
+	isVideoContent,
 	isMerlinContent,
 } from "@utils/helpers";
 import { printDateFromTimestamp } from "@plugins/datetime";
@@ -209,11 +210,6 @@ export default {
 		id: String,
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
-	},
-	data() {
-		return {
-			isIFrameLoading: true,
-		};
 	},
 	computed: {
 		author() {
@@ -287,10 +283,7 @@ export default {
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		shouldShowPlayer() {
-			const { mediatype, size } = this.resource;
-			// TODO: support all videos, not only h5p
-			//return true;
-			return (mediatype === "file-h5p" && size !== undefined && size !== null && size > 0);
+			return isVideoContent(this.resource);
 		},
 		tags() {
 			return getTags(this.resource.properties);
@@ -319,12 +312,6 @@ export default {
 				this.$router && this.$router.back();
 			} else {
 				window.close();
-			}
-		},
-		setIsIFrameLoading(event) {
-			console.log('setIsIFrameLoading()', event);
-			if (event) {
-				this.isIFrameLoading = false;
 			}
 		},
 	},

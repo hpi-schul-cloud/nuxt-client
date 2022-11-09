@@ -6,7 +6,6 @@
 		allowfullscreen="allowfullscreen"
 		frameborder="0"
 		scrolling="no"
-		@load="setIsIFrameLoading"
 	></iframe>
 	<base-spinner v-else class="spinner" size="xlarge"/>
 	<!--
@@ -46,8 +45,9 @@ export default {
 	},
 	methods: {
 		async getPlayer() {
-			console.log('getPlayer()', 'id =', this.nodeId);
-			this.iframeSrc, this.scriptSrc = await this.$axios.$get(`/v1/edu-sharing/player/${this.nodeId}`);
+			const response = await this.$axios.$get(`/v1/edu-sharing/player/${this.nodeId}`);
+			this.iframeSrc = response.iframe_src;
+			this.scriptSrc = response.script_src;
 			this.loading = false;
 		}
 	}
@@ -55,4 +55,9 @@ export default {
 </script>
 
 <style>
+.player-iframe {
+	width:100%;
+	height: 100%;
+	border:none;
+}
 </style>

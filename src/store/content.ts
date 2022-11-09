@@ -269,7 +269,6 @@ export default class ContentModule extends VuexModule {
 			const res = await $axios.$get("/v1/edu-sharing", {
 				params: query,
 			});
-
 			this.setResources({ hash: queryHash, result: res });
 		} catch (e) {
 			console.error(e);
@@ -307,7 +306,6 @@ export default class ContentModule extends VuexModule {
 			const res = await $axios.$get("/v1/edu-sharing", {
 				params: query,
 			});
-
 			this.setElements({ hash: queryHash, result: res });
 		} catch (e) {
 			console.error(e);

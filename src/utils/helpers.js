@@ -87,12 +87,8 @@ export const getAuthor = (properties) => {
 };
 
 export const getTags = (properties) => {
-	const tagValue = properties["cclom:general_keyword"];
-	let tags = null;
-	if (Array.isArray(tagValue)) {
-		tags = tagValue;
-	}
-	return tags ? tags : [];
+	const tags = properties["cclom:general_keyword"];
+	return Array.isArray(tags) ? tags : [];
 };
 
 export const getTitle = (resource) => {
@@ -105,6 +101,13 @@ export const getUrl = (resource) => {
 	}
 	return null;
 };
+
+export const isVideoContent = (resource) => {
+	return (
+		resource.size &&
+		(resource.mediatype === "file-h5p" || resource.mediatype === "file-video")
+	);
+}
 
 export const isMerlinContent = (resource) => {
 	return (

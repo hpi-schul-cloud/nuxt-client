@@ -141,8 +141,6 @@ export default {
 			return this.loading;
 		},
 		searchQuery(to, from) {
-			console.log(`searchQuery(${to}, ${from})`);
-
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
@@ -174,13 +172,8 @@ export default {
 			return this.resources;
 		},
 	},
-	created() {
-		console.log('created');
-	},
 	mounted() {
 		const initialSearchQuery = this.$route.query.q;
-		console.log('mounted()');
-		console.log(this.resources.data.length);
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
 			this.activateTransition = true;
@@ -188,13 +181,6 @@ export default {
 				this.enterKeyHandler();
 			}
 		}
-	},
-	updated() {
-		console.log('updated()');
-		console.log(this.resources.data.length);
-	},
-	activated() {
-		console.log('activated()');
 	},
 	methods: {
 		async addContent() {
@@ -206,7 +192,6 @@ export default {
 		},
 		async searchContent() {
 			try {
-				console.log('searchContent()');
 				// TODO wrong use of store (not so bad)
 				await contentModule.getResources(this.query);
 			} catch (error) {
@@ -216,7 +201,6 @@ export default {
 			}
 		},
 		async searchH5P() {
-			console.log('searchH5P()');
 			await contentModule.getResources({ "$limit": 4, "$skip": 0, searchQuery: "h5p" });
 		},
 		enterKeyHandler() {
@@ -224,7 +208,6 @@ export default {
 				clearTimeout(this.$options.debounceTyping);
 			}
 			this.$options.debounceTyping = setTimeout(() => {
-				console.log('triggered searchContent()');
 				this.searchContent();
 				this.activateTransition = true;
 			}, 500);

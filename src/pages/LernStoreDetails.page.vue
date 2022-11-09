@@ -31,9 +31,6 @@ export default {
 		resource() {
 			return contentModule.getCurrentResource;
 		},
-		player() {
-			return contentModule.getCurrentPlayer;
-		},
 		collectionsFeatureFlag() {
 			return contentModule.getCollectionsFeatureFlag;
 		},
@@ -46,11 +43,6 @@ export default {
 	},
 	async mounted() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
-		console.log(contentModule.getCurrentResource);
-		const { mediatype, size } = contentModule.getCurrentResource;
-		if (size && mediatype === "file-h5p") {
-			await contentModule.getResourcePlayer(this.$route.params.id);
-		}
 	},
 };
 </script>
