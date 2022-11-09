@@ -5,14 +5,18 @@
 			class="top-main"
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
-			<base-button
+			<v-btn
+				icon
+				height="60"
+				width="60"
+				color="secondary darken-1"
+				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
-				design="text icon"
 				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<base-icon class="menu-icon" source="fa" icon="bars" />
-			</base-button>
+				<v-icon>fa-solid fa-bars</v-icon>
+			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
@@ -27,16 +31,17 @@
 				>
 					<status-alerts :status-alerts="statusAlerts"></status-alerts>
 				</popup-icon>
-				<base-button
-					class="item fullscreen-button"
-					design="text icon"
+				<v-btn
+					class="item"
+					icon
+					color="secondary darken-1"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
-					<base-icon source="fa" icon="expand" />
-				</base-button>
+					<v-icon>{{ mdiArrowExpand }}</v-icon>
+				</v-btn>
 				<popup-icon
 					class="item"
 					source="fa"
@@ -93,14 +98,19 @@
 				</popup-icon-initials>
 			</div>
 		</div>
-		<base-button
+		<v-btn
 			v-else
-			class="fullscreen-button fullscreen-button-active"
-			design="primary icon"
+			color="secondary darken-1"
+			fab
+			dark
+			depressed
+			width="40"
+			height="40"
+			class="fullscreen-button-active"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="compress" fill="var(--v-white-base)" />
-		</base-button>
+			<v-icon>{{ mdiArrowCollapse }}</v-icon>
+		</v-btn>
 	</div>
 </template>
 
@@ -113,6 +123,7 @@ import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
 import StatusAlerts from "@components/molecules/StatusAlerts";
 import LanguageMenu from "@components/molecules/LanguageMenu.vue";
+import { mdiArrowCollapse, mdiArrowExpand, mdiMenu } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -147,7 +158,9 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			statusAlerts: [],
+			mdiArrowCollapse,
+			mdiArrowExpand,
+			mdiMenu,
 		};
 	},
 	computed: {
@@ -167,10 +180,12 @@ export default defineComponent({
 				? "var(--v-error-base)"
 				: "var(--v-secondary-darken1)";
 		},
+		statusAlerts() {
+			return statusAlertsModule.getStatusAlerts;
+		},
 	},
 	async mounted() {
 		await statusAlertsModule.fetchStatusAlerts();
-		this.statusAlerts = statusAlertsModule.getStatusAlerts;
 	},
 	methods: {
 		sendEvent(eventName) {
@@ -211,9 +226,6 @@ export default defineComponent({
 		.menu-button {
 			z-index: var(--layer-popover);
 			display: flex;
-			margin: var(--space-xs);
-			font-size: 22px;
-			text-align: center;
 			transition: transform 0.35s;
 
 			.menu-icon {
@@ -269,6 +281,7 @@ export default defineComponent({
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);
+	opacity: 0.5;
 }
 
 .logout-button,

@@ -222,7 +222,9 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(".context-menu-open");
+		const openContextButton = wrapper.find(
+			"[data-test-id='context-menu-open']"
+		);
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -266,7 +268,9 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(".context-menu-open");
+		const openContextButton = wrapper.find(
+			"[data-test-id='context-menu-open']"
+		);
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
@@ -312,7 +316,9 @@ describe("teachers/index", () => {
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
-		const openContextButton = wrapper.find(".context-menu-open");
+		const openContextButton = wrapper.find(
+			"[data-test-id='context-menu-open']"
+		);
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");

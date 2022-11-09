@@ -17,13 +17,16 @@ describe("@components/base/BaseDialog", () => {
 		const localVue = getLocalVue();
 		expect(typeof localVue.prototype.$dialog.confirm).toBe("function");
 	});
+
 	it("confirm() should return BaseDialog instance", () => {
 		const localVue = getLocalVue();
 		expect(isBaseDialog(localVue.prototype.$dialog.confirm())).toBe(true);
 	});
+
 	it.todo(
 		"should mount BaseDialog on body when Vue.$dialog.confirm() is called"
 	);
+
 	it("confirm passes props to BaseDialog instance", () => {
 		const localVue = getLocalVue();
 		const testProps = {

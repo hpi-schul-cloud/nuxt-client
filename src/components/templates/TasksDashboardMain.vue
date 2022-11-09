@@ -117,52 +117,52 @@ export default {
 		};
 	},
 	inject: [
-		"taskModule",
+		"tasksModule",
 		"copyModule",
-		"finishedTaskModule",
+		"finishedTasksModule",
 		"loadingStateModule",
 	],
 	computed: {
 		hasTasks() {
-			return this.taskModule.hasTasks;
+			return this.tasksModule.hasTasks;
 		},
 		openTasksForStudentIsEmpty() {
-			return this.taskModule.openTasksForStudentIsEmpty;
+			return this.tasksModule.openTasksForStudentIsEmpty;
 		},
 		openTasksForTeacherIsEmpty() {
-			return this.taskModule.openTasksForTeacherIsEmpty;
+			return this.tasksModule.openTasksForTeacherIsEmpty;
 		},
 		completedTasksForStudentIsEmpty() {
-			return this.taskModule.completedTasksForStudentIsEmpty;
+			return this.tasksModule.completedTasksForStudentIsEmpty;
 		},
 		draftsForTeacherIsEmpty() {
-			return this.taskModule.draftsForTeacherIsEmpty;
+			return this.tasksModule.draftsForTeacherIsEmpty;
 		},
 		tasksCountStudent() {
-			return this.taskModule.getTasksCountPerCourseStudent;
+			return this.tasksModule.getTasksCountPerCourseStudent;
 		},
 		tasksCountTeacher() {
-			return this.taskModule.getTasksCountPerCourseForTeacher;
+			return this.tasksModule.getTasksCountPerCourseForTeacher;
 		},
 		isSubstituteFilterEnabled() {
-			return this.taskModule.isSubstituteFilterEnabled;
+			return this.tasksModule.isSubstituteFilterEnabled;
 		},
 		courseFilters() {
-			return this.taskModule.getCourseFilters;
+			return this.tasksModule.getCourseFilters;
 		},
 		tab: {
 			get() {
-				return this.taskModule.getActiveTab;
+				return this.tasksModule.getActiveTab;
 			},
 			set(newTab) {
 				this.setActiveTab(newTab);
 			},
 		},
 		selectedCourseFilters() {
-			return this.taskModule.getSelectedCourseFilters;
+			return this.tasksModule.getSelectedCourseFilters;
 		},
 		finishedTasksIsInitialized() {
-			return this.finishedTaskModule.getIsInitialized;
+			return this.finishedTasksModule.getIsInitialized;
 		},
 		// TODO: split teacher and student sides
 		isStudent() {
@@ -305,10 +305,10 @@ export default {
 	},
 	methods: {
 		setCourseFilters(courseNames) {
-			this.taskModule.setCourseFilters(courseNames);
+			this.tasksModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
-			this.taskModule.setSubstituteFilter(enabled);
+			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === this.tabRoutes[0]) {
@@ -326,7 +326,7 @@ export default {
 			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
 			// we should probably find a better solution :D
 			if (!this.finishedTasksIsInitialized) {
-				this.finishedTaskModule.fetchFinishedTasks();
+				this.finishedTasksModule.fetchFinishedTasks();
 			}
 		},
 		initTabState() {
@@ -342,7 +342,7 @@ export default {
 			this.setActiveTab(this.$route.query.tab);
 		},
 		setActiveTab(tab) {
-			this.taskModule.setActiveTab(tab);
+			this.tasksModule.setActiveTab(tab);
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();

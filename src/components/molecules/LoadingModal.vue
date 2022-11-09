@@ -9,9 +9,9 @@
 		</template>
 		<template #footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="$emit('update:active', false)">
+				<v-btn color="primary" depressed @click="$emit('update:active', false)">
 					{{ btnText }}
-				</base-button>
+				</v-btn>
 			</center-slot>
 		</template>
 	</base-modal>

@@ -28,18 +28,14 @@ describe("@components/organisms/Pagination", () => {
 	it("renders only a next page link on the first page", () => {
 		const wrapper = getFirstPageWrapper();
 		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);
-		expect(
-			wrapper.get(".pagination-link base-icon-stub").attributes("icon")
-		).toBe("keyboard_arrow_right");
+		expect(wrapper.get(".pagination-link v-icon-stub").exists()).toBe(true);
 	});
 
 	it("renders only a previous page link on the last page", () => {
 		const wrapper = getLastPageWrapper();
 
 		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);
-		expect(
-			wrapper.get(".pagination-link base-icon-stub").attributes("icon")
-		).toBe("keyboard_arrow_left");
+		expect(wrapper.get(".pagination-link v-icon-stub").exists()).toBe(true);
 	});
 
 	it("emits update:current-page when next page link is clicked", async () => {
