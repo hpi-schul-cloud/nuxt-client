@@ -98,8 +98,8 @@ module.exports = {
 			"^/content": {
 				defaultSrc: "https://pichasso.xopic.de",
 				fontSrc: "https://fonts.gstatic.com",
-				frameSrc: "https://repository.dev-edusharing.staging.dbildungscloud.org",
-				scriptSrc: "https://repository.dev-edusharing.staging.dbildungscloud.org",
+				frameSrc: "https://repository.dev-edusharing.staging.dbildungscloud.org https://rendering.services.dev-edusharing.staging.dbildungscloud.org",
+				scriptSrc: "https://repository.dev-edusharing.staging.dbildungscloud.org https://rendering.services.dev-edusharing.staging.dbildungscloud.org",
 			},
 			/* '^/(content|(courses/[a-f0-9]{24}/topics/[a-f0-9]{24}))': {
 			}, */
