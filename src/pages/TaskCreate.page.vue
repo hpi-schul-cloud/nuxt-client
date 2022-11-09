@@ -13,7 +13,7 @@
 			<v-btn color="secondary" outlined @click="cancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn color="primary" depressed @click="save">
+			<v-btn class="float-right" color="primary" depressed @click="save">
 				{{ $t("common.actions.save") }}
 			</v-btn>
 		</v-form>
