@@ -38,19 +38,16 @@ export default class TaskModule extends VuexModule {
 
 	@Action
 	async createTask(params: TaskCreateParams): Promise<void> {
-		// check for permission here or in page?
-		// probably checked in server?
-
 		this.setLoading(true);
+
 		try {
-			console.log(params);
 			const { data } = await this.taskApi.taskControllerCreate({
 				name: params.name,
 				courseId: params.courseId,
 				description: params.description,
 			});
+
 			this.setTaskData(data);
-			console.log(params, data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -59,10 +56,8 @@ export default class TaskModule extends VuexModule {
 
 	@Action
 	async updateTask(taskId: string, params: TaskUpdateParams): Promise<void> {
-		// check for permission here or in page?
-		// probably checked in server?
-
 		this.setLoading(true);
+
 		try {
 			const { data } = await this.taskApi.taskControllerUpdate(taskId, params);
 			this.setTaskData(data);
