@@ -1,4 +1,3 @@
-import { authModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	TaskApiFactory,
@@ -41,11 +40,7 @@ export default class TaskModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskControllerCreate({
-				name: params.name,
-				courseId: params.courseId,
-				description: params.description,
-			});
+			const { data } = await this.taskApi.taskControllerCreate(params);
 
 			this.setTaskData(data);
 			this.setLoading(false);
@@ -60,7 +55,6 @@ export default class TaskModule extends VuexModule {
 
 		try {
 			const { data } = await this.taskApi.taskControllerFindTask(taskId);
-			console.log("store", data);
 
 			this.setTaskData(data);
 			this.setLoading(false);
@@ -74,7 +68,9 @@ export default class TaskModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
+			console.log(taskId, params); // why is params undefined?
 			const { data } = await this.taskApi.taskControllerUpdate(taskId, params);
+			console.log(data);
 			this.setTaskData(data);
 			this.setLoading(false);
 		} catch (error: any) {

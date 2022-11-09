@@ -44,7 +44,6 @@ export default {
 
 		const save = async () => {
 			await taskModule.createTask({
-				courseId: "0000dcfbfb5c7a3f00bf21ab",
 				name: name.value,
 				description: description.value,
 			});

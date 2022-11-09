@@ -2,7 +2,7 @@
 	<default-wireframe
 		:full-width="false"
 		:breadcrumbs="breadcrumbs"
-		headline="Create Task"
+		headline="Edit Task"
 	>
 		<v-form>
 			<v-text-field v-model="name" :label="$t('common.labels.title')" />
@@ -31,6 +31,7 @@ export default {
 	components: { DefaultWireframe },
 	setup(props, context) {
 		const router = context.root.$router;
+		const route = context.root.$route;
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
@@ -42,26 +43,24 @@ export default {
 			},
 		];
 
+		const taskId = route.params.id;
 		onMounted(async () => {
 			// TODO - check for permission
-			const route = context.root.$route;
-			const taskId = route.params.id;
 
 			await taskModule.findTask(taskId);
+
 			const taskData = taskModule.getTaskData;
 			name.value = taskData.name;
-			console.log(taskData.description);
-			//description.value = taskData.description || "";
+			description.value = taskData.description.content;
 		});
 
 		const save = async () => {
-			await taskModule.createTask({
-				courseId: "0000dcfbfb5c7a3f00bf21ab",
+			console.log("hello?", name.value);
+			await taskModule.updateTask(taskId, {
 				name: name.value,
-				description: description.value,
 			});
 
-			router.go(-1);
+			//router.go(-1);
 		};
 
 		const cancel = () => {
