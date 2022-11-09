@@ -20,7 +20,7 @@
 				></base-icon>
 			</template>
 			<template #[`item.lastChanged`]="{ item }"
-			>{{ timesAgo(item.lastChanged) }}
+				>{{ timesAgo(item.lastChanged) }}
 			</template>
 		</v-data-table>
 	</default-wireframe>
@@ -28,7 +28,9 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe, { Breadcrumb } from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe, {
+	Breadcrumb,
+} from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
@@ -70,7 +72,7 @@ export default defineComponent({
 		const filesPage: FilesPage = getFilesPageFromCategory(t, route);
 
 		const title: Ref<string> = ref(filesPage.title);
-		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcumbs);
+		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);
 
 		const locale = (): Locale => {
 			if (i18n.locale === ChangeLanguageParamsLanguageEnum.Ua) {
@@ -79,7 +81,7 @@ export default defineComponent({
 			return i18n.locale || "de";
 		}
 
-		const timesAgo = function (value: Date): string {
+		const timesAgo = (value: Date): string => {
 			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};

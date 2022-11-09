@@ -2,6 +2,7 @@ import { File, FileType } from "@store/types/file";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { filesModule } from "@utils/store-accessor";
 import { Route } from "vue-router";
+import { DataTableHeader } from "vuetify";
 
 type Breadcrumb = {
 	text: string;
@@ -12,11 +13,11 @@ type Breadcrumb = {
 
 export type FilesPage = {
 	title: string;
-	breadcumbs: Breadcrumb[];
+	breadcrumbs: Breadcrumb[];
 	loadFilesFunction: () => Promise<void>;
 };
 
-export function getHeaders(t: (key: string) => string) {
+export function getHeaders(t: (key: string) => string): DataTableHeader[] {
 	return [
 		{ text: "", value: "icon", sortable: false, width: 5 },
 		{
@@ -42,18 +43,18 @@ export function getHeaders(t: (key: string) => string) {
 
 export const getDeepBreadcumbs = (params: string[]): Breadcrumb[] => {
 	let redirectTo = "/cfiles/teams";
-	const deepBreadcumbs: Breadcrumb[] = [];
+	const deepBreadcrumbs: Breadcrumb[] = [];
 
 	params.forEach((param: string) => {
 		redirectTo += `/${param}`;
-		deepBreadcumbs.push({
+		deepBreadcrumbs.push({
 			text: param,
 			to: redirectTo,
 		});
 	});
-	deepBreadcumbs.pop();
+	deepBreadcrumbs.pop();
 
-	return deepBreadcumbs;
+	return deepBreadcrumbs;
 };
 
 export const getFileCategory = (pathArray: string[]): string => {
@@ -76,7 +77,7 @@ export const mapFileToFileTableItem = (
 export function getFilesOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.headline"),
-		breadcumbs: [
+		breadcrumbs: [
 			{
 				text: t("pages.files.overview.headline"),
 				to: "/cfiles/",
@@ -89,7 +90,7 @@ export function getFilesOverview(t: (key: string) => string): FilesPage {
 export function getTeamsOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.teamFiles"),
-		breadcumbs: [
+		breadcrumbs: [
 			{
 				text: t("pages.files.overview.headline"),
 				to: "/cfiles/",
@@ -111,7 +112,7 @@ export function getTeamsPage(
 
 	return {
 		title: paramsArray.slice(-1)[0],
-		breadcumbs: [
+		breadcrumbs: [
 			{
 				text: t("pages.files.overview.headline"),
 				to: "/cfiles/",
