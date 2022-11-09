@@ -12,7 +12,8 @@ export default async ({ app, route }) => {
 
 				await authModule.populateUser();
 			} else if (!isPublic) {
-				authModule.logout();
+				const currentUrl = encodeURIComponent(window.location.href);
+				window.location.assign(`/login?redirect=${currentUrl}`);
 			}
 		} catch (error) {
 			authModule.logout();
