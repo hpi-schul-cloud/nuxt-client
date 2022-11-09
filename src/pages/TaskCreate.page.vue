@@ -10,23 +10,27 @@
 				v-model="description"
 				:label="$t('common.labels.description')"
 			/>
-			<v-btn color="primary" @click="save">{{
-				$t("common.actions.save")
-			}}</v-btn>
+			<v-btn color="secondary" outlined @click="cancel">
+				{{ $t("common.actions.cancel") }}
+			</v-btn>
+			<v-btn color="primary" depressed @click="save">
+				{{ $t("common.actions.save") }}
+			</v-btn>
 		</v-form>
 	</default-wireframe>
 </template>
 
 <script>
-import { defineComponent, inject, ref } from "@vue/composition-api";
+import { inject, ref } from "@vue/composition-api";
 import { taskModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 
 // eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
+export default {
 	name: "TaskCreatePage",
 	components: { DefaultWireframe },
-	setup() {
+	setup(props, context) {
+		const router = context.root.$router;
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
@@ -38,15 +42,19 @@ export default defineComponent({
 			},
 		];
 
-		const save = () => {
-			taskModule.createTask({
+		const save = async () => {
+			await taskModule.createTask({
 				courseId: "0000dcfbfb5c7a3f00bf21ab",
 				name: name.value,
 				description: description.value,
 			});
 		};
 
-		return { breadcrumbs, name, description, save };
+		const cancel = () => {
+			router.go(-1);
+		};
+
+		return { breadcrumbs, name, description, save, cancel };
 	},
 	mounted() {
 		// check for permission here or in store?
@@ -56,5 +64,5 @@ export default defineComponent({
 			title: this.$t("common.words.tasks"),
 		};
 	},
-});
+};
 </script>
