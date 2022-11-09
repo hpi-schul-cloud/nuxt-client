@@ -1,19 +1,18 @@
 <template>
 	<div class="resource">
 		<div ref="icons" class="icons">
-			<base-button
+			<v-btn
+				fab
+				small
 				:class="[
-					closeButtonStyleSelector
-						? 'close-transparent elevation-6'
-						: 'close-icon elevation-6',
+					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',
 				]"
-				design="icon"
-				aria-label="btnLabel"
+				aria-label="close detail view"
 				@click="goBack"
 			>
-				<base-icon source="material" icon="close" />
-			</base-button>
+				<v-icon size="20">{{ mdiClose }}</v-icon>
+			</v-btn>
 		</div>
 		<div class="content">
 			<div class="preview">
@@ -56,9 +55,10 @@
 					</span>
 				</div>
 				<div>
-					<base-button
+					<v-btn
 						v-if="isMerlin"
-						design="outline"
+						outlined
+						color="secondary"
 						class="content-button"
 						@click="
 							() => {
@@ -66,19 +66,20 @@
 							}
 						"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
-					<base-button
+					</v-btn>
+					<v-btn
 						v-else
-						design="outline"
+						outlined
+						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
+					</v-btn>
 					<!-- This will be replaced with Modal -->
 					<div v-if="isBrandenburg" class="external-content-warning">
 						<p class="text-s external-content-title">
@@ -149,11 +150,7 @@
 			<user-has-role class="floating-buttons" :role="isNotStudent">
 				<add-content-button
 					:resource="resource"
-					btn-design="hero-cta"
-					btn-class="floating-button"
-					btn-size="large"
-					btn-icon-class="footer__content-icon"
-					btn-icon="add_circle_outline"
+					btn-color="primary"
 					:btn-label="$t('pages.content._id.addToTopic')"
 					:multiple="false"
 				/>
@@ -166,10 +163,10 @@
 /* eslint-disable max-lines */
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
-
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
-
+import { printDateFromTimestamp } from "@plugins/datetime";
+import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -179,7 +176,6 @@ import {
 	getTags,
 	isMerlinContent,
 } from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -197,6 +193,12 @@ export default {
 		},
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
+	},
+	data() {
+		return {
+			mdiClose,
+			mdiOpenInNew,
+		};
 	},
 	computed: {
 		provider() {
@@ -338,6 +340,7 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
+			color: var(--v-white-base);
 			background-color: var(--v-grey-darken1);
 		}
 

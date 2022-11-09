@@ -79,19 +79,18 @@
 			</template>
 
 			<template #datacolumn-_id="{ data, selected, highlighted }">
-				<base-button
+				<v-btn
+					icon
 					:class="{
 						'action-button': true,
 						'row-selected': selected,
 						'row-highlighted': highlighted,
 					}"
-					design="text icon"
-					size="small"
 					:to="`/administration/teachers/${data}/edit`"
 					data-testid="edit_teacher_button"
 				>
-					<base-icon source="material" icon="edit" />
-				</base-button>
+					<v-icon size="20">{{ mdiPencil }}</v-icon>
+				</v-btn>
 			</template>
 		</backend-data-table>
 		<admin-table-legend
@@ -114,7 +113,7 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
+import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
 
 export default {
 	components: {
@@ -138,6 +137,7 @@ export default {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
+			mdiPencil,
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.teachers.index"
@@ -563,6 +563,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+::v-deep .row-highlighted.theme--light.v-btn:hover::before {
+	opacity: 0;
+}
 
 a.action-button {
 	&.row-highlighted:hover {

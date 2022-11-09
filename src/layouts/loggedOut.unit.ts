@@ -2,11 +2,13 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { urlValidationRegex } from "@/utils/ldapConstants";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+//import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { provide } from "@nuxtjs/composition-api";
 import { mount, Wrapper } from "@vue/test-utils";
 import loggedOut from "./loggedOut.vue";
+
+declare var createComponentMocks: Function;
 
 describe("loggedOutLayout", () => {
 	let envConfigModuleMock: EnvConfigModule;
@@ -16,6 +18,7 @@ describe("loggedOutLayout", () => {
 		const wrapper = mount(loggedOut, {
 			...createComponentMocks({
 				i18n: true,
+				vuetify: true,
 			}),
 			setup() {
 				provide("envConfigModule", envConfigModuleMock);
@@ -25,6 +28,7 @@ describe("loggedOutLayout", () => {
 				Nuxt: true,
 				NuxtLink: true,
 				TheFooter: true,
+				RouterLink: true,
 			},
 		});
 

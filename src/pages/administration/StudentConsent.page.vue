@@ -90,22 +90,26 @@
 					</template>
 				</backend-data-table>
 
-				<p v-if="birthdayWarning" class="warning" data-testid="error-text">
-					<base-icon source="material" icon="report_problem" />
+				<p v-if="birthdayWarning" class="error--text" data-testid="error-text">
+					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
 
-				<base-button
-					design="secondary"
-					data-testid="button-next"
-					@click="next"
-					>{{
-						$t("pages.administration.students.consent.steps.complete.next")
-					}}</base-button
-				>
-				<base-button design="text" @click="cancelWarning = true">{{
-					$t("common.actions.cancel")
-				}}</base-button>
+				<div class="d-flex justify-end">
+					<v-btn text color="secondary" @click="cancelWarning = true">
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						color="primary"
+						depressed
+						data-testid="button-next"
+						@click="next"
+					>
+						{{
+							$t("pages.administration.students.consent.steps.complete.next")
+						}}
+					</v-btn>
+				</div>
 			</section>
 
 			<section v-if="currentStep === 1">
@@ -156,8 +160,8 @@
 					</label>
 				</div>
 
-				<p v-if="checkWarning" class="warning" data-testid="confirm-error">
-					<base-icon source="material" icon="report_problem" />
+				<p v-if="checkWarning" class="error--text" data-testid="confirm-error">
+					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{
 						$t(
 							"pages.administration.students.consent.steps.register.confirm.warn"
@@ -165,17 +169,21 @@
 					}}
 				</p>
 
-				<base-button
-					design="secondary"
-					data-testid="button-next-2"
-					@click="register"
-					>{{
-						$t("pages.administration.students.consent.steps.register.next")
-					}}</base-button
-				>
-				<base-button design="text" @click="cancelWarning = true">{{
-					$t("common.actions.cancel")
-				}}</base-button>
+				<div class="d-flex justify-end">
+					<v-btn text color="secondary" @click="cancelWarning = true">
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						color="primary"
+						depressed
+						data-testid="button-next-2"
+						@click="register"
+					>
+						{{
+							$t("pages.administration.students.consent.steps.register.next")
+						}}
+					</v-btn>
+				</div>
 			</section>
 
 			<section v-if="currentStep === 2">
@@ -201,12 +209,16 @@
 					{{ passwordHint }}
 				</p>
 
-				<base-button design="secondary" @click="download">{{
-					$t("pages.administration.students.consent.steps.download.next")
-				}}</base-button>
-				<base-button design="text" @click="cancelWarning = true">{{
-					$t("common.actions.cancel")
-				}}</base-button>
+				<div class="d-flex justify-end">
+					<v-btn color="secondary" text @click="cancelWarning = true">
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn color="primary" depressed @click="download">
+						{{
+							$t("pages.administration.students.consent.steps.download.next")
+						}}
+					</v-btn>
+				</div>
 			</section>
 
 			<section v-if="currentStep === 3">
@@ -224,9 +236,11 @@
 						"
 					/>
 
-					<base-button design="secondary outline" @click="success">{{
-						$t("pages.administration.students.consent.steps.success.back")
-					}}</base-button>
+					<div class="d-flex justify-end">
+						<v-btn color="primary" outlined @click="success">{{
+							$t("pages.administration.students.consent.steps.success.back")
+						}}</v-btn>
+					</div>
 				</base-content-container>
 			</section>
 
@@ -239,11 +253,7 @@
 						"
 					>
 						<template #icon>
-							<base-icon
-								class="warning"
-								source="material"
-								icon="report_problem"
-							/>
+							<v-icon color="error" size="60">{{ mdiAlert }}</v-icon>
 						</template>
 					</modal-body-info>
 					<span v-if="currentStep === 2">
@@ -258,14 +268,15 @@
 					</span>
 				</template>
 				<template #footerRight>
-					<base-button design="danger text" @click="cancel">
+					<v-btn color="error" text @click="cancel">
 						{{
 							$t("pages.administration.students.consent.cancel.modal.confirm")
 						}}
-					</base-button>
-					<base-button
+					</v-btn>
+					<v-btn
 						v-if="currentStep === 2"
-						design="danger"
+						color="error"
+						depressed
 						@click="download"
 					>
 						{{
@@ -273,12 +284,12 @@
 								"pages.administration.students.consent.cancel.modal.download.continue"
 							)
 						}}
-					</base-button>
-					<base-button v-else design="danger" @click="cancelWarning = false">
+					</v-btn>
+					<v-btn v-else color="error" depressed @click="cancelWarning = false">
 						{{
 							$t("pages.administration.students.consent.cancel.modal.continue")
 						}}
-					</base-button>
+					</v-btn>
 				</template>
 			</base-modal>
 
@@ -316,6 +327,7 @@ import {
 	inputDateFormat,
 	printDateFromDeUTC,
 } from "@plugins/datetime";
+import { mdiAlert } from "@mdi/js";
 
 export default {
 	components: {
@@ -329,6 +341,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiAlert,
 			tableColumns: [
 				{
 					field: "fullName",

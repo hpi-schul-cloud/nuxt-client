@@ -1,3 +1,5 @@
+import { RichText } from "@/serverApi/v3";
+
 export type TaskStatus = {
 	submitted: number;
 	maxSubmissions: number;
@@ -9,7 +11,7 @@ export type TaskStatus = {
 export type Task = {
 	id: string;
 	name: string;
-	description?: string;
+	description?: RichText;
 	availableDate?: string;
 	duedate?: string;
 	courseId: string;
