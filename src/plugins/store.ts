@@ -15,7 +15,6 @@ import consentVersions from "@/store/consent-versions";
 import courses from "@/store/courses";
 import error from "@/store/error";
 // import ghost from "@/store/ghost"; // NUXT_REMOVAL unused
-import { insights } from "@/store/insights";
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
 import { messenger } from "@/store/messenger";
@@ -50,7 +49,6 @@ export default new Store({
 		courses,
 		error,
 		// ghost, // NUXT_REMOVAL unused
-		insights,
 		ldapConfig,
 		lessons,
 		messenger,

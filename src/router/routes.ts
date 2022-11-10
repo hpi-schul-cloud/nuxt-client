@@ -76,12 +76,6 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/Imprint.page.vue"),
 		name: "imprint",
 	},
-	// deprecated?
-	{
-		path: "/insights",
-		component: () => import("../pages/Insights.page.vue"),
-		name: "insights",
-	},
 	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),

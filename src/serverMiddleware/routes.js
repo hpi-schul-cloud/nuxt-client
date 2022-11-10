@@ -21,7 +21,6 @@ const routes = [
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
-	`^/insights`,
 	`^/news/new`,
 	`^/news/${mongoId}/edit`,
 	`^/rooms-overview/?$`,
