@@ -61,9 +61,9 @@ export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const filesModule: FilesModule | undefined = inject<FilesModule>("files");
+		const filesModule: FilesModule | undefined = inject<FilesModule>("filesModule");
 		if (!filesModule || !i18n) {
-			throw new Error();
+			throw new Error("Injection of dependencies failed");
 		}
 
 		const t = (key: string) => {
@@ -109,7 +109,7 @@ export default defineComponent({
 			await filesPage.loadFilesFunction();
 		});
 
-		return { items, headers, breadcrumbs, title, click, timesAgo };
+		return { items, headers, breadcrumbs, title, click, timesAgo, t };
 	},
 });
 </script>
