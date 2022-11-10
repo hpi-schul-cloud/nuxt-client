@@ -104,11 +104,12 @@
 							</div>
 						</transition>
 					</div>
-					<base-spinner
+					<v-progress-circular
 						v-show="loading"
-						class="spinner mt--xl-2"
-						color="var(--v-secondary-base)"
-						size="xlarge"
+						indeterminate
+						color="secondary"
+						size="115"
+						class="spinner mt-16"
 					/>
 				</div>
 				<div class="buttons">
