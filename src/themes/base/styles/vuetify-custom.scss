@@ -36,11 +36,12 @@ $headings: (
 $button-font-size: 1rem;
 $btn-text-transform: none;
 $btn-font-weight: var(--font-weight-bold);
-$btn-letter-spacing: 0.044em;
+// $btn-letter-spacing: 0.044em;
+$btn-letter-spacing: normal;
 $btn-focus-opacity: 0;
 
 .v-btn {
-	font-family: var(--font-accent);
+	font-family: var(--font-primary);
 
 	&.v-size--small,
 	&.v-size--default,

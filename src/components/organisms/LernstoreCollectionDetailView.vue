@@ -104,22 +104,19 @@
 							</div>
 						</transition>
 					</div>
-					<base-spinner
+					<v-progress-circular
 						v-show="loading"
-						class="spinner mt--xl-2"
-						color="var(--v-secondary-base)"
-						size="xlarge"
+						indeterminate
+						color="secondary"
+						size="115"
+						class="spinner mt-16"
 					/>
 				</div>
 				<div class="buttons">
 					<user-has-role class="floating-buttons" :role="isNotStudent">
 						<add-content-button
 							:resource="{}"
-							btn-design="hero-cta"
-							btn-class="floating-button wide-button"
-							btn-size="large"
-							btn-icon-class="footer__content-icon"
-							btn-icon="add_circle_outline"
+							btn-color="primary"
 							:btn-label="btnLabel"
 							:disabled="!(selected > 0)"
 							:multiple="true"

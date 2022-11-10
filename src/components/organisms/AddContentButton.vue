@@ -1,9 +1,12 @@
 <template>
 	<div>
-		<base-button
-			:design="btnDesign"
+		<v-btn
+			:text="round"
+			:fab="round"
+			:small="round"
+			:large="!round"
+			:color="btnColor"
 			:class="btnClass"
-			:size="btnSize"
 			role="button"
 			:aria-label="
 				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
@@ -11,9 +14,11 @@
 			:disabled="disabled"
 			@click.prevent="addResource"
 		>
-			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
+			<v-icon :class="{ 'mr-2': !round }">
+				{{ mdiPlusCircleOutline }}
+			</v-icon>
 			{{ btnLabel }}
-		</base-button>
+		</v-btn>
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
 			:updatedid="itemId"
@@ -50,6 +55,7 @@ import { contentModule } from "@/store";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
+import { mdiPlusCircleOutline } from "@mdi/js";
 import {
 	getTitle,
 	getMerlinReference,
@@ -67,12 +73,10 @@ export default {
 		LoadingModal,
 	},
 	props: {
+		round: { type: Boolean },
+		btnColor: { type: String, default: "primary" },
 		btnLabel: { type: String, default: "" },
-		btnDesign: { type: String, default: "" },
-		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
-		btnIconClass: { type: String, default: "" },
-		btnIcon: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
 		disabled: { type: Boolean },
@@ -80,6 +84,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiPlusCircleOutline,
 			copyModalActive: false,
 			loadingModal: {
 				visible: false,

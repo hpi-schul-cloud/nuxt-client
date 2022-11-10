@@ -8,10 +8,13 @@
 			:style="anchorCSS"
 			role="menu"
 		>
-			<base-button
+			<v-btn
 				v-for="(action, index) of actions"
 				:key="action.text"
-				design="none"
+				text
+				tile
+				height="50"
+				:ripple="false"
 				class="context-menu__button"
 				role="menuitem"
 				:data-testid="action.dataTestId || null"
@@ -34,17 +37,7 @@
 				>
 					{{ action.text }}
 				</div>
-			</base-button>
-			<base-button
-				design="none"
-				class="context-menu__button context-menu__button-close"
-				@click.prevent="closeMenu"
-				@keydown.up="focusPrev(actions.length)"
-			>
-				<div class="context-menu__button-text no-icon">
-					{{ $t("components.molecules.ContextMenu.action.close") }}
-				</div>
-			</base-button>
+			</v-btn>
 		</div>
 	</transition>
 </template>
@@ -289,5 +282,9 @@ export default {
 .fade-leave-to {
 	opacity: 0;
 	transition: opacity var(--transition-duration) ease-in-out;
+}
+
+.v-btn {
+	font-weight: var(--font-weight-normal) !important;
 }
 </style>

@@ -7,6 +7,7 @@ const base64Image = faker.image.dataUri(1, 1);
 function getMock(options = {}) {
 	return new Promise((resolve) => {
 		const wrapper = mount({
+			...createComponentMocks({ i18n: true, vuetify: true }),
 			data: () => ({ content: "" }),
 			template: `<text-editor v-model="content"/>`,
 			components: { TextEditor },
@@ -18,31 +19,16 @@ function getMock(options = {}) {
 	});
 }
 
+const getWrapper = (options) => {
+	return mount(TextEditor, {
+		...createComponentMocks({ i18n: true, vuetify: true }),
+		template: `<text-editor v-model="content"/>`,
+		...options,
+	});
+};
+
 describe("@components/molecules/TextEditor", () => {
 	it(...isValidComponent(TextEditor));
-
-	// TODO:
-	// currently not possible to implement because I don't know how to
-	// simulate type events on an [contenteditable] field.
-	it.todo("changing the element's value, updates the v-model");
-
-	it("changing the v-model, updates the element's value", async () => {
-		const before = `<p>before</p>`;
-		const after = `<p>after</p>`;
-		const wrapper = await getMock({ data: () => ({ content: before }) });
-		const contentContainer = wrapper.find(`[contenteditable]`);
-		expect(contentContainer.html()).toStrictEqual(
-			expect.stringContaining(before)
-		);
-		wrapper.setData({ content: after });
-		await wrapper.vm.$nextTick();
-		expect(contentContainer.html()).toStrictEqual(
-			expect.not.stringContaining(before)
-		);
-		expect(contentContainer.html()).toStrictEqual(
-			expect.stringContaining(after)
-		);
-	});
 
 	it("showImagePrompt calls callback with src", async () => {
 		// Make sure all expects get executed
@@ -50,6 +36,7 @@ describe("@components/molecules/TextEditor", () => {
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
 		jest.spyOn(window, "prompt").mockImplementation(() => testUrl);
+
 		const wrapper = await getMock();
 		await new Promise((resolve) => {
 			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
@@ -59,37 +46,45 @@ describe("@components/molecules/TextEditor", () => {
 		});
 	});
 
-	it("component can be destroyed", async () => {
-		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
-		const mockFn = jest.fn().mockImplementation(() => true);
-		const wrapper = await getMock({ destroyed: mockFn });
-		wrapper.destroy();
-		expect(mockFn.mock.calls).toHaveLength(1);
-	});
-
 	it("some options are disabled when cursor is in Headings", async () => {
-		let testInstances = ["h2", "h3", "h4"].map((tag) =>
-			getMock({
-				data: () => ({ content: `<${tag}>Hi</${tag}>` }),
-			})
-		);
-		testInstances = await Promise.all(testInstances);
+		const wrapper = getWrapper({
+			data: () => ({ content: `<p>Hi</p>` }),
+			propsData: { value: "" },
+		});
 		const listOptionSelectors = [
 			`[data-testid="editor_format_list_bulleted"]`,
 			`[data-testid="editor_format_list_numbered"]`,
 			`[data-testid="editor_add_image"]`,
 		];
-		testInstances.forEach((wrapper) => {
-			listOptionSelectors.forEach((selector) => {
-				expect(wrapper.find(`${selector}[disabled]`).exists()).toBe(true);
-			});
+
+		const h1Btn = wrapper.find("[data-testid='editor_format_h1']");
+		await h1Btn.trigger("click");
+
+		listOptionSelectors.forEach((selector) => {
+			expect(wrapper.find(selector).classes("v-btn--disabled")).toBe(true);
+		});
+
+		const h2Btn = wrapper.find("[data-testid='editor_format_h2']");
+		await h2Btn.trigger("click");
+
+		listOptionSelectors.forEach((selector) => {
+			expect(wrapper.find(selector).classes("v-btn--disabled")).toBe(true);
+		});
+
+		const h3Btn = wrapper.find("[data-testid='editor_format_h3']");
+		await h3Btn.trigger("click");
+
+		listOptionSelectors.forEach((selector) => {
+			expect(wrapper.find(selector).classes("v-btn--disabled")).toBe(true);
 		});
 	});
 
 	it("some options are enabled when cursor is outside Headings", async () => {
-		const wrapper = await getMock({
+		const wrapper = getWrapper({
 			data: () => ({ content: `<p>Hi</p>` }),
+			propsData: { value: "" },
 		});
+
 		const listOptionSelectors = [
 			`[data-testid="editor_format_list_bulleted"]`,
 			`[data-testid="editor_format_list_numbered"]`,

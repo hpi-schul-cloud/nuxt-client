@@ -52,19 +52,17 @@
 					</slot>
 				</div>
 				<div class="icon icon-behind">
-					<base-button
+					<v-btn
 						v-if="type === 'password' && !error && !success"
-						design="none"
+						icon
+						plain
 						type="button"
 						data-testid="pwd-visibility-toggle"
 						class="pwd-toggle"
 						@click="togglePasswordVisibility"
 					>
-						<base-icon
-							source="custom"
-							:icon="passwordVisible ? 'visible' : 'invisible'"
-						/>
-					</base-button>
+						<v-icon>{{ visibilityIcon }}</v-icon>
+					</v-btn>
 					<base-icon
 						v-if="hasError"
 						source="custom"
@@ -95,8 +93,8 @@
 </template>
 <script>
 import { inputRangeDate } from "@plugins/datetime";
-
 import uidMixin from "@mixins/uid";
+import { mdiEyeOff, mdiEye } from "@mdi/js";
 
 export const supportedTypes = [
 	"email",
@@ -141,6 +139,8 @@ export default {
 	},
 	data() {
 		return {
+			mdiEyeOff,
+			mdiEye,
 			hasFocus: false,
 			passwordVisible: false,
 			minDate: inputRangeDate(-100, "y"),
@@ -167,6 +167,9 @@ export default {
 					!this.placeholder) &&
 				!this.labelHidden
 			);
+		},
+		visibilityIcon() {
+			return this.passwordVisible ? mdiEye : mdiEyeOff;
 		},
 	},
 	methods: {

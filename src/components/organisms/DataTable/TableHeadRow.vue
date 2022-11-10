@@ -29,14 +29,17 @@
 			>
 				<span v-if="column.infobox">
 					<span class="info-slot">
-						<base-button
+						<v-btn
+							icon
+							plain
+							color="info"
 							class="info-button"
 							style="background-color: transparent"
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<base-icon source="material" icon="info" style="margin: 0" />
-						</base-button>
+							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
+						</v-btn>
 					</span>
 					<info-box
 						v-if="isConsentNecessary"
@@ -190,13 +193,15 @@
 						</template>
 					</info-box>
 				</span>
-				<BaseButton
+				<v-btn
 					v-if="column.sortable"
+					text
+					plain
+					:ripple="false"
 					:class="{
 						'is-current-sort': sortBy === column.field,
 						'is-sortable': column.sortable,
 					}"
-					design="none"
 					class="th-wrap"
 					@click.stop="sort(column)"
 				>
@@ -207,7 +212,7 @@
 						source="custom"
 					/>
 					<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
-				</BaseButton>
+				</v-btn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
 				</div>
@@ -217,9 +222,9 @@
 </template>
 
 <script>
-import BaseButton from "@basecomponents/BaseButton";
 import InfoBox from "@components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
+import { mdiInformation } from "@mdi/js";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -261,6 +266,7 @@ export default {
 	data() {
 		return {
 			infoBoxActive: false,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -280,9 +286,6 @@ export default {
 		},
 	},
 	methods: {
-		getColumnWrapperComponent(column) {
-			return column.sortable ? BaseButton : "div";
-		},
 		invertSortOrder(currentOrder) {
 			return currentOrder === "desc" ? "asc" : "desc";
 		},
@@ -357,6 +360,10 @@ export default {
 	}
 }
 
+.info-button {
+	z-index: calc(var(--layer-fab) + 1);
+}
+
 .info-box {
 	position: absolute;
 	right: 0%;
@@ -393,5 +400,11 @@ export default {
 	position: absolute;
 	top: -20%;
 	left: 56%;
+}
+
+::v-deep
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+	.v-btn__content {
+	opacity: 1;
 }
 </style>

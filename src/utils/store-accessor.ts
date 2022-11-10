@@ -7,7 +7,7 @@ import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
 import FilesModule from "@store/files";
 import FilesPOCModule from "@/store/files-poc";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
@@ -17,7 +17,8 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
-import TaskModule from "@/store/tasks";
+import TaskModule from "@/store/task";
+import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -30,7 +31,7 @@ let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
 let filesModule: FilesModule;
 let filesPOCModule: FilesPOCModule;
-let finishedTaskModule: FinishedTaskModule;
+let finishedTasksModule: FinishedTasksModule;
 let importUsersModule: ImportUsersModule;
 let loadingStateModule: LoadingStateModule;
 let newsModule: NewsModule;
@@ -40,6 +41,7 @@ let roomsModule: RoomsModule;
 let schoolsModule: SchoolsModule;
 let shareCourseModule: ShareCourseModule;
 let statusAlertsModule: StatusAlertsModule;
+let tasksModule: TasksModule;
 let taskModule: TaskModule;
 
 function initializeStores(store: Store<any>): void {
@@ -52,7 +54,7 @@ function initializeStores(store: Store<any>): void {
 	filePathsModule = getModule(FilePaths, store);
 	filesModule = getModule(FilesModule, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
-	finishedTaskModule = getModule(FinishedTaskModule, store);
+	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
@@ -62,6 +64,7 @@ function initializeStores(store: Store<any>): void {
 	schoolsModule = getModule(SchoolsModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
+	tasksModule = getModule(TasksModule, store);
 	taskModule = getModule(TaskModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
@@ -80,7 +83,7 @@ export {
 	filePathsModule,
 	filesModule,
 	filesPOCModule,
-	finishedTaskModule,
+	finishedTasksModule,
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
@@ -90,5 +93,6 @@ export {
 	schoolsModule,
 	shareCourseModule,
 	statusAlertsModule,
+	tasksModule,
 	taskModule,
 };

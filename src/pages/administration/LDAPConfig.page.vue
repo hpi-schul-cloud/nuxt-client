@@ -63,23 +63,23 @@
 				</span>
 			</div>
 			<div class="buttons-container">
-				<base-button
-					design="text"
-					class="ml--sm"
+				<v-btn
+					text
+					color="secondary"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
 				>
 					{{ $t("pages.administration.ldap.index.buttons.reset") }}
-				</base-button>
-				<base-button
-					design="secondary"
-					class="ml--sm"
+				</v-btn>
+				<v-btn
+					color="primary"
+					depressed
 					data-testid="ldapVerifyButton"
 					:disabled="status === 'pending'"
 					@click="validateHandler"
 				>
 					{{ $t("pages.administration.ldap.index.buttons.verify") }}
-				</base-button>
+				</v-btn>
 			</div>
 		</section>
 	</default-wireframe>
