@@ -26,8 +26,8 @@ data:
         fontSrc: "'self' data: ",
         styleSrc: "'self' 'unsafe-inline' ",
         // scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
-        scriptSrc: "'self' 'unsafe-eval' {{ MATRIX_MESSENGER__URI | default("") }} {{ MATRIX_MESSENGER__DISCOVER_URI | default('', true) }} {{ MATRIX_MESSENGER__URI | default('', true) }} {{ MATRIX_MESSENGER__EMBED_URI | default('', true) }}",
-        frameSrc: "'self' https://{{ LIBREOFFICE_PREFIX }}{{ DOMAIN }} https://docs.dbildungscloud.de https://{{ ROCKETCHAT_DNS_PREFIX }}{{ DOMAIN }} {{ MATRIX_MESSENGER__URI | default("") }} {{ MATRIX_MESSENGER__DISCOVER_URI | default('', true) }} {{ MATRIX_MESSENGER__URI | default('', true) }} {{ MATRIX_MESSENGER__EMBED_URI | default('', true) }}",
+        scriptSrc: "'self' 'unsafe-eval' {{ MATRIX_MESSENGER__URI | default("") }} {{ MATRIX_MESSENGER__DISCOVER_URI | default('', true) }} {{ MATRIX_MESSENGER__URI | default('', true) }} {{ MATRIX_MESSENGER__EMBED_URI | default('', true) }} https://rendering.services.dev-edusharing.staging.dbildungscloud.org",
+        frameSrc: "'self' https://{{ LIBREOFFICE_PREFIX }}{{ DOMAIN }} https://docs.dbildungscloud.de https://{{ ROCKETCHAT_DNS_PREFIX }}{{ DOMAIN }} {{ MATRIX_MESSENGER__URI | default("") }} {{ MATRIX_MESSENGER__DISCOVER_URI | default('', true) }} {{ MATRIX_MESSENGER__URI | default('', true) }} {{ MATRIX_MESSENGER__EMBED_URI | default('', true) }} https://rendering.services.dev-edusharing.staging.dbildungscloud.org",
         // Please activate for production
         // upgradeInsecureRequestsSrc: 'upgrade-insecure-requests',
         // blockAllMixedContentSrc: 'block-all-mixed-content',
