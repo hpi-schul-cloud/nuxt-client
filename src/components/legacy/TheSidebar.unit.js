@@ -1,11 +1,16 @@
 import TheSidebar from "./TheSidebar";
 import { render } from "@testing-library/vue";
+import { isValidComponent } from "@@/tests/unit/commonTests";
+
+const $route = {
+	path: "home",
+};
 
 describe("@components/legacy/TheSidebar", () => {
 	it(...isValidComponent(TheSidebar));
 
 	it("Render with empty routes", () => {
-		const { getByTestId } = render(TheSidebar);
+		const { getByTestId } = render(TheSidebar, { routes: [{ path: "home" }] });
 		expect(getByTestId("routesListTest")).toBeEmptyDOMElement();
 	});
 
@@ -15,10 +20,12 @@ describe("@components/legacy/TheSidebar", () => {
 				title: "test",
 				to: "home",
 				icon: "test",
+				testId: "testId",
+				activeForUrls: ["home"],
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
-			...createComponentMocks({ i18n: true }),
+			...createComponentMocks({ i18n: true, $route }),
 			propsData: {
 				routes: testRoutes,
 			},
@@ -34,28 +41,36 @@ describe("@components/legacy/TheSidebar", () => {
 				to: "home",
 				active: true,
 				icon: "test",
+				testId: "testId",
+				activeForUrls: ["home"],
 			},
 			{
 				title: "can't go to bing",
 				href: "https://www.bing.com",
 				active: false,
 				icon: "trash",
+				testId: "testId",
+				activeForUrls: [],
 			},
 			{
 				title: "test active false",
 				to: "away",
 				active: false,
 				icon: "away",
+				testId: "testId",
+				activeForUrls: ["away"],
 			},
 			{
 				title: "google",
 				href: "https://www.google.com",
 				active: true,
 				icon: "google",
+				testId: "testId",
+				activeForUrls: [],
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
-			...createComponentMocks({ i18n: true }),
+			...createComponentMocks({ i18n: true, $route }),
 			propsData: {
 				routes: testRoutes,
 			},
