@@ -44,7 +44,7 @@ import {
 	useRoute,
 	useRouter,
 } from "@nuxtjs/composition-api";
-import { File } from "@store/types/file";
+import { CollaborativeFile } from "@store/types/collaborative-file";
 import {
 	FilesPage,
 	getFilesPageForRoute,
@@ -55,7 +55,7 @@ import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
-import FilesModule from "@store/files";
+import CollaborativeFilesModule from "@store/collaborative-files";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -63,9 +63,9 @@ export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const filesModule: FilesModule | undefined =
-			inject<FilesModule>("filesModule");
-		if (!filesModule || !i18n) {
+		const collaborativeFilesModule: CollaborativeFilesModule | undefined =
+			inject<CollaborativeFilesModule>("collaborativeFilesModule");
+		if (!collaborativeFilesModule || !i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -80,7 +80,7 @@ export default defineComponent({
 		const headers: DataTableHeader[] = getHeaders(t);
 
 		const items: ComputedRef<FileTableItem[]> = computed(() => {
-			return filesModule.getFiles.map((file: File) => {
+			return collaborativeFilesModule.getFiles.map((file: CollaborativeFile) => {
 				return mapFileToFileTableItem(file, t);
 			});
 		});

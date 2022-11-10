@@ -1,20 +1,23 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { File, FileType } from "@store/types/file";
-import { FileMetaListResponse } from "@store/files/file-meta-list.response";
-import { FileTypeResponse } from "@store/files/file-meta.response";
-import { FileResponseMapper } from "@store/files/file-response.mapper";
+import {
+	CollaborativeFile,
+	CollaborativeFileType,
+} from "@store/types/collaborative-file";
+import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
+import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
+import { CollaborativeFileResponseMapper } from "@store/collaborative-files/collaborative-file-response.mapper";
 
 @Module({
-	name: "files",
+	name: "collaborative-files",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class FilesModule extends VuexModule {
+export default class CollaborativeFilesModule extends VuexModule {
 	loading: boolean = false;
 
-	files: File[] = [];
+	files: CollaborativeFile[] = [];
 
-	get getFiles(): File[] {
+	get getFiles(): CollaborativeFile[] {
 		return this.files;
 	}
 
@@ -27,7 +30,7 @@ export default class FilesModule extends VuexModule {
 				icon: "favorite",
 				path: "/cfiles/",
 				size: 221,
-				type: FileType.FAVORITES,
+				type: CollaborativeFileType.FAVORITES,
 				lastChanged: new Date(2022, 10, 1, 14, 4),
 			},
 			{
@@ -36,7 +39,7 @@ export default class FilesModule extends VuexModule {
 				icon: "folder",
 				path: "/files/my",
 				size: 33,
-				type: FileType.DIRECTORY,
+				type: CollaborativeFileType.DIRECTORY,
 				lastChanged: new Date(2022, 10, 1, 14, 4),
 			},
 			{
@@ -45,7 +48,7 @@ export default class FilesModule extends VuexModule {
 				icon: "folder_shared",
 				path: "/files/courses",
 				size: 1337,
-				type: FileType.SHARED_DIRECTORY,
+				type: CollaborativeFileType.SHARED_DIRECTORY,
 				lastChanged: new Date(2021, 10, 1, 14, 4),
 			},
 			{
@@ -54,7 +57,7 @@ export default class FilesModule extends VuexModule {
 				icon: "folder_shared",
 				path: "/cfiles/teams",
 				size: 33331,
-				type: FileType.SHARED_DIRECTORY,
+				type: CollaborativeFileType.SHARED_DIRECTORY,
 				lastChanged: new Date(2019, 11, 1, 14, 4),
 			},
 			{
@@ -63,7 +66,7 @@ export default class FilesModule extends VuexModule {
 				icon: "folder_shared",
 				path: "/files/shared",
 				size: 123123,
-				type: FileType.SHARED_DIRECTORY,
+				type: CollaborativeFileType.SHARED_DIRECTORY,
 				lastChanged: new Date(2022, 10, 1, 9, 4),
 			},
 		]);
@@ -140,7 +143,7 @@ export default class FilesModule extends VuexModule {
 	}
 
 	@Mutation
-	setFiles(files: File[]) {
+	setFiles(files: CollaborativeFile[]) {
 		this.files = files;
 	}
 
@@ -151,8 +154,8 @@ export default class FilesModule extends VuexModule {
 
 	@Action
 	async addFileMetaData(response: FileMetaListResponse): Promise<void> {
-		const mappedFiles: File[] =
-			FileResponseMapper.mapFileMetaListResponse(response);
+		const mappedFiles: CollaborativeFile[] =
+			CollaborativeFileResponseMapper.mapFileMetaListResponse(response);
 		this.setFiles(mappedFiles);
 	}
 }

@@ -1,31 +1,38 @@
-import FilesModule from "@store/files";
-import { File, FileIcon, FileType } from "@store/types/file";
-import { FileResponseMapper } from "@store/files/file-response.mapper";
-import { FileMetaListResponse } from "@store/files/file-meta-list.response";
+import CollaborativeFilesModule from "@store/collaborative-files";
+import {
+	CollaborativeFile,
+	CollaborativeFileType,
+	FileIcon,
+} from "@store/types/collaborative-file";
+import { CollaborativeFileResponseMapper } from "@store/collaborative-files/collaborative-file-response.mapper";
+import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
-} from "@store/files/file-meta.response";
+} from "@store/collaborative-files/file-meta.response";
 
-describe("Files module", () => {
-	let filesModule: FilesModule;
+describe("CollaborativeFilesModule", () => {
+	let collaborativeFilesModule: CollaborativeFilesModule;
 
 	beforeEach(() => {
-		filesModule = new FilesModule({});
+		collaborativeFilesModule = new CollaborativeFilesModule({});
 	});
 
 	function setup() {
-		const setLoadingSpy = jest.spyOn(filesModule, "setLoading");
-		const addFileMetaDataSpy = jest.spyOn(filesModule, "addFileMetaData");
+		const setLoadingSpy = jest.spyOn(collaborativeFilesModule, "setLoading");
+		const addFileMetaDataSpy = jest.spyOn(
+			collaborativeFilesModule,
+			"addFileMetaData"
+		);
 		const fileResponseMapperSpy = jest.spyOn(
-			FileResponseMapper,
+			CollaborativeFileResponseMapper,
 			"mapFileMetaListResponse"
 		);
-		const mockFile: File = {
+		const mockFile: CollaborativeFile = {
 			name: "name",
 			size: 123,
 			lastChanged: new Date(2022, 1, 1),
-			type: FileType.SHARED_DIRECTORY,
+			type: CollaborativeFileType.SHARED_DIRECTORY,
 			icon: FileIcon.SHARED_FOLDER,
 			path: "/root/path",
 			translationKey: "translation.key.test",
@@ -63,9 +70,10 @@ describe("Files module", () => {
 	describe("getFiles", () => {
 		it("should return files from store", async () => {
 			const { mockFile } = setup();
-			filesModule.files[0] = mockFile;
+			collaborativeFilesModule.files[0] = mockFile;
 
-			const files: File[] = await filesModule.getFiles;
+			const files: CollaborativeFile[] =
+				await collaborativeFilesModule.getFiles;
 
 			expect(files[0]).toEqual(mockFile);
 		});
@@ -73,9 +81,9 @@ describe("Files module", () => {
 
 	describe("fetchFilesOverview", () => {
 		it("should set the fetched files to store", async () => {
-			await filesModule.fetchFilesOverview();
+			await collaborativeFilesModule.fetchFilesOverview();
 
-			expect(filesModule.files.length).toBeGreaterThan(0);
+			expect(collaborativeFilesModule.files.length).toBeGreaterThan(0);
 		});
 	});
 
@@ -83,7 +91,7 @@ describe("Files module", () => {
 		it("should set loading to true and after success to false", async () => {
 			const { setLoadingSpy } = setup();
 
-			await filesModule.fetchTeams();
+			await collaborativeFilesModule.fetchTeams();
 
 			expect(setLoadingSpy).toHaveBeenCalledWith(true);
 			expect(setLoadingSpy).toHaveBeenCalledWith(false);
@@ -95,15 +103,15 @@ describe("Files module", () => {
 				throw new Error();
 			});
 
-			await filesModule.fetchTeams();
+			await collaborativeFilesModule.fetchTeams();
 
-			expect(filesModule.loading).toBeFalsy();
+			expect(collaborativeFilesModule.loading).toBeFalsy();
 		});
 
 		it("should add files to store after fetching them from api", async () => {
 			const { addFileMetaDataSpy } = setup();
 
-			await filesModule.fetchTeams();
+			await collaborativeFilesModule.fetchTeams();
 
 			expect(addFileMetaDataSpy).toHaveBeenCalledWith(
 				expect.objectContaining<FileMetaListResponse>({
@@ -117,7 +125,7 @@ describe("Files module", () => {
 		it("should set loading to true and after success to false", async () => {
 			const { setLoadingSpy } = setup();
 
-			await filesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles("/path");
 
 			expect(setLoadingSpy).toHaveBeenCalledWith(true);
 			expect(setLoadingSpy).toHaveBeenCalledWith(false);
@@ -129,15 +137,15 @@ describe("Files module", () => {
 				throw new Error();
 			});
 
-			await filesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles("/path");
 
-			expect(filesModule.loading).toBeFalsy();
+			expect(collaborativeFilesModule.loading).toBeFalsy();
 		});
 
 		it("should add files to store after fetching them from api", async () => {
 			const { addFileMetaDataSpy } = setup();
 
-			await filesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles("/path");
 
 			expect(addFileMetaDataSpy).toHaveBeenCalledWith(
 				expect.objectContaining<FileMetaListResponse>({
@@ -151,19 +159,19 @@ describe("Files module", () => {
 		it("should set files to store", async () => {
 			const { mockFile } = setup();
 
-			await filesModule.setFiles([mockFile]);
+			await collaborativeFilesModule.setFiles([mockFile]);
 
-			expect(filesModule.files[0]).toEqual(mockFile);
+			expect(collaborativeFilesModule.files[0]).toEqual(mockFile);
 		});
 	});
 
 	describe("setLoading", () => {
 		it("should set loading to store", async () => {
-			await filesModule.setLoading(true);
-			expect(filesModule.loading).toBeTruthy();
+			await collaborativeFilesModule.setLoading(true);
+			expect(collaborativeFilesModule.loading).toBeTruthy();
 
-			await filesModule.setLoading(false);
-			expect(filesModule.loading).toBeFalsy();
+			await collaborativeFilesModule.setLoading(false);
+			expect(collaborativeFilesModule.loading).toBeFalsy();
 		});
 	});
 
@@ -171,7 +179,7 @@ describe("Files module", () => {
 		it("should call the fileResponseMapper", async () => {
 			const { mockFileMetaListResponse, fileResponseMapperSpy } = setup();
 
-			await filesModule.addFileMetaData(mockFileMetaListResponse);
+			await collaborativeFilesModule.addFileMetaData(mockFileMetaListResponse);
 
 			expect(fileResponseMapperSpy).toHaveBeenCalledWith(
 				mockFileMetaListResponse
@@ -181,9 +189,9 @@ describe("Files module", () => {
 		it("should set the mapped files to store", async () => {
 			const { mockFileMetaListResponse } = setup();
 
-			await filesModule.addFileMetaData(mockFileMetaListResponse);
+			await collaborativeFilesModule.addFileMetaData(mockFileMetaListResponse);
 
-			expect(filesModule.files[0]).toEqual(
+			expect(collaborativeFilesModule.files[0]).toEqual(
 				expect.objectContaining<FileMetaResponse>({
 					path: mockFileMetaListResponse.data[0].path,
 				} as FileMetaResponse)

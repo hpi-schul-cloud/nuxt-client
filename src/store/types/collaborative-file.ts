@@ -1,4 +1,4 @@
-export enum FileType {
+export enum CollaborativeFileType {
 	FAVORITES = "favorites",
 	FILE = "draft",
 	PDF = "draft",
@@ -17,18 +17,18 @@ export enum FileIcon {
 }
 
 const FileTypeIconMapping = {
-	[FileType.FILE]: FileIcon.FILE,
-	[FileType.PDF]: FileIcon.FILE,
-	[FileType.UNKNOWN]: FileIcon.FILE,
-	[FileType.DIRECTORY]: FileIcon.FOLDER,
-	[FileType.SHARED_DIRECTORY]: FileIcon.SHARED_FOLDER,
-	[FileType.FAVORITES]: FileIcon.FAVORITE,
+	[CollaborativeFileType.FILE]: FileIcon.FILE,
+	[CollaborativeFileType.PDF]: FileIcon.FILE,
+	[CollaborativeFileType.UNKNOWN]: FileIcon.FILE,
+	[CollaborativeFileType.DIRECTORY]: FileIcon.FOLDER,
+	[CollaborativeFileType.SHARED_DIRECTORY]: FileIcon.SHARED_FOLDER,
+	[CollaborativeFileType.FAVORITES]: FileIcon.FAVORITE,
 };
 
-export class File {
+export class CollaborativeFile {
 	constructor(
 		path: string,
-		fileType: FileType,
+		fileType: CollaborativeFileType,
 		size: number,
 		name: string,
 		lastChanged: Date,
@@ -50,7 +50,7 @@ export class File {
 
 	icon: string;
 
-	type: FileType;
+	type: CollaborativeFileType;
 
 	size: number;
 

@@ -5,7 +5,7 @@ import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
-import FilesModule from "@store/files";
+import CollaborativeFilesModule from "@store/collaborative-files";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
@@ -25,11 +25,11 @@ import { getModule } from "vuex-module-decorators";
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
+let collaborativeFilesModule: CollaborativeFilesModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
 let filePathsModule: FilePaths;
-let filesModule: FilesModule;
 let filesPOCModule: FilesPOCModule;
 let finishedTasksModule: FinishedTasksModule;
 let importUsersModule: ImportUsersModule;
@@ -48,11 +48,11 @@ function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
+	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
-	filesModule = getModule(FilesModule, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
@@ -77,11 +77,11 @@ export {
 	accountsModule,
 	authModule,
 	autoLogoutModule,
+	collaborativeFilesModule,
 	contentModule,
 	copyModule,
 	envConfigModule,
 	filePathsModule,
-	filesModule,
 	filesPOCModule,
 	finishedTasksModule,
 	importUsersModule,

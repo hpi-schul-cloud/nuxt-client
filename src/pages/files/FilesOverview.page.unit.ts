@@ -1,11 +1,11 @@
 import FilesOverview from "@pages/files/FilesOverview.page.vue";
 import { mount, shallowMount, Wrapper, WrapperArray } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import FilesModule from "@store/files";
+import CollaborativeFilesModule from "@store/collaborative-files";
 import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
 import { createModuleMocks } from "@utils/mock-store-module";
-import { FileType } from "@store/types/file";
+import { CollaborativeFileType } from "@store/types/collaborative-file";
 import * as utils from "@pages/files/file-table-utils";
 
 const $route: Route = {
@@ -16,7 +16,7 @@ const $router = { replace: jest.fn(), push: jest.fn() };
 
 describe("FileOverview", () => {
 	let wrapper: Wrapper<any>;
-	let filesModule: FilesModule;
+	let collaborativeFilesModule: CollaborativeFilesModule;
 
 	const pageTitle = "Page Title";
 	const loadFilesFunctionMock = jest.fn();
@@ -36,9 +36,9 @@ describe("FileOverview", () => {
 		});
 	});
 
-	function setup(getters: Partial<FilesModule> = {}) {
+	function setup(getters: Partial<CollaborativeFilesModule> = {}) {
 		document.body.setAttribute("data-app", "true");
-		filesModule = createModuleMocks(FilesModule, {
+		collaborativeFilesModule = createModuleMocks(CollaborativeFilesModule, {
 			getFiles: [],
 			...getters,
 		});
@@ -50,7 +50,7 @@ describe("FileOverview", () => {
 			}),
 			setup() {
 				provide("i18n", { t: (key: string) => key });
-				provide("filesModule", filesModule);
+				provide("collaborativeFilesModule", collaborativeFilesModule);
 			},
 		});
 
@@ -79,7 +79,7 @@ describe("FileOverview", () => {
 			try {
 				wrapper = shallowMount(FilesOverview, {
 					setup() {
-						provide("files", filesModule);
+						provide("collaborativeFiles", collaborativeFilesModule);
 					},
 				});
 			} catch (e) {
@@ -87,7 +87,7 @@ describe("FileOverview", () => {
 			}
 		});
 
-		it("should throw an error when filesModule injection fails", () => {
+		it("should throw an error when collaborativeFilesModule injection fails", () => {
 			try {
 				wrapper = shallowMount(FilesOverview, {
 					setup() {
@@ -96,7 +96,7 @@ describe("FileOverview", () => {
 				});
 			} catch (e) {
 				expect(
-					e.message.includes('Injection "filesModule" not found')
+					e.message.includes('Injection "collaborativeFilesModule" not found')
 				).toBeTruthy();
 			}
 		});
@@ -161,7 +161,7 @@ describe("FileOverview", () => {
 						icon: "favorite",
 						path: "/cfiles/",
 						size,
-						type: FileType.FAVORITES,
+						type: CollaborativeFileType.FAVORITES,
 						lastChanged: new Date(2022, 10, 1, 14, 4),
 					},
 				],
@@ -185,7 +185,7 @@ describe("FileOverview", () => {
 						icon: "favorite",
 						path: "/cfiles/",
 						size: 221,
-						type: FileType.FAVORITES,
+						type: CollaborativeFileType.FAVORITES,
 						lastChanged: new Date(2022, 10, 1, 14, 4),
 					},
 				],
@@ -206,7 +206,7 @@ describe("FileOverview", () => {
 						icon: "favorite",
 						path: "/cfiles/",
 						size: 123,
-						type: FileType.FAVORITES,
+						type: CollaborativeFileType.FAVORITES,
 						lastChanged: new Date(2022, 10, 1, 14, 4),
 					},
 				],
@@ -229,7 +229,7 @@ describe("FileOverview", () => {
 						icon: "favorite",
 						path,
 						size: 123,
-						type: FileType.FAVORITES,
+						type: CollaborativeFileType.FAVORITES,
 						lastChanged: new Date(2022, 10, 1, 14, 4),
 					},
 				],

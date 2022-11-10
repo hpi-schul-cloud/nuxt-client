@@ -8,10 +8,10 @@ import {
 import { DataTableHeader } from "vuetify";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
 import { Route } from "vue-router";
-import { filesModule } from "@utils/store-accessor";
+import { collaborativeFilesModule } from "@utils/store-accessor";
 
 jest.mock("@utils/store-accessor", () => ({
-	filesModule: {
+	collaborativeFilesModule: {
 		fetchFilesOverview: jest.fn(),
 		fetchTeams: jest.fn(),
 		fetchTeamFiles: jest.fn(),
@@ -128,7 +128,7 @@ describe("FileTableUtils", () => {
 				expect(filesOverview.title).toEqual(expectedTranslation);
 				expect(filesOverview.breadcrumbs).toEqual([]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
-				expect(filesModule.fetchFilesOverview).toHaveBeenCalled();
+				expect(collaborativeFilesModule.fetchFilesOverview).toHaveBeenCalled();
 			});
 		});
 
@@ -148,7 +148,7 @@ describe("FileTableUtils", () => {
 				]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.teamFiles");
-				expect(filesModule.fetchTeams).toHaveBeenCalled();
+				expect(collaborativeFilesModule.fetchTeams).toHaveBeenCalled();
 			});
 		});
 
@@ -170,7 +170,7 @@ describe("FileTableUtils", () => {
 				]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.teamFiles");
-				expect(filesModule.fetchTeamFiles).toHaveBeenCalledWith(
+				expect(collaborativeFilesModule.fetchTeamFiles).toHaveBeenCalledWith(
 					"/testFolder1/testFolder2"
 				);
 			});

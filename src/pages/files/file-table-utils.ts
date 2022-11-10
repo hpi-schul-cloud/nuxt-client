@@ -1,6 +1,9 @@
-import { File, FileType } from "@store/types/file";
+import {
+	CollaborativeFile,
+	CollaborativeFileType,
+} from "@store/types/collaborative-file";
 import { FileTableItem } from "@pages/files/file-table-item";
-import { filesModule } from "@utils/store-accessor";
+import { collaborativeFilesModule } from "@utils/store-accessor";
 import { Route } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
@@ -56,13 +59,16 @@ export const getFileCategory = (pathArray: string[]): string => {
 };
 
 export const mapFileToFileTableItem = (
-	file: File,
+	file: CollaborativeFile,
 	t: (key: string) => string
 ): FileTableItem => {
 	return {
 		name: file.translationKey ? t(file.translationKey) : file.name,
 		path: file.path,
-		icon: { name: file.icon, colored: file.type === FileType.FAVORITES },
+		icon: {
+			name: file.icon,
+			colored: file.type === CollaborativeFileType.FAVORITES,
+		},
 		size: file.size.toString(),
 		lastChanged: file.lastChanged,
 	};
@@ -72,7 +78,8 @@ function getFilesOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.headline"),
 		breadcrumbs: [],
-		loadFilesFunction: async () => filesModule.fetchFilesOverview(),
+		loadFilesFunction: async () =>
+			collaborativeFilesModule.fetchFilesOverview(),
 	};
 }
 
@@ -85,7 +92,7 @@ function getTeamsOverview(t: (key: string) => string): FilesPage {
 				to: "/cfiles/",
 			},
 		],
-		loadFilesFunction: async () => filesModule.fetchTeams(),
+		loadFilesFunction: async () => collaborativeFilesModule.fetchTeams(),
 	};
 }
 
@@ -109,7 +116,8 @@ function getTeamsPage(t: (key: string) => string, route: Route): FilesPage {
 			},
 			...deepBreadcrumbs,
 		],
-		loadFilesFunction: async () => filesModule.fetchTeamFiles(teamsPath),
+		loadFilesFunction: async () =>
+			collaborativeFilesModule.fetchTeamFiles(teamsPath),
 	};
 }
 
