@@ -1,8 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { FileResponseMapper } from "@/serverApi/v3/files/file-response.mapper";
-import { FileMetaListResponse } from "@/serverApi/v3/files/file-meta-list.response";
-import { FileTypeResponse } from "@/serverApi/v3/files/file-meta.response";
 import { File, FileType } from "@store/types/file";
+import { FileMetaListResponse } from "@store/files/file-meta-list.response";
+import { FileTypeResponse } from "@store/files/file-meta.response";
+import { FileResponseMapper } from "@store/files/file-response.mapper";
 
 @Module({
 	name: "files",
@@ -86,7 +86,7 @@ export default class FilesModule extends VuexModule {
 					},
 					{
 						id: "455738mb219",
-						path: "/cfiles/teams/Basketball%2Arbeitsgemeinschaft",
+						path: "/cfiles/teams/Basketball%20Arbeitsgemeinschaft",
 						type: FileTypeResponse.SHARED_DIRECTORY,
 						size: 232,
 						name: "Basketball Arbeitsgemeinschaft",

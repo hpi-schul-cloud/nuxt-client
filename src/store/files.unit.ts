@@ -1,11 +1,11 @@
 import FilesModule from "@store/files";
-import { FileMetaListResponse } from "@/serverApi/v3/files/file-meta-list.response";
 import { File, FileIcon, FileType } from "@store/types/file";
+import { FileResponseMapper } from "@store/files/file-response.mapper";
+import { FileMetaListResponse } from "@store/files/file-meta-list.response";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
-} from "@/serverApi/v3/files/file-meta.response";
-import { FileResponseMapper } from "@/serverApi/v3/files/file-response.mapper";
+} from "@store/files/file-meta.response";
 
 describe("Files module", () => {
 	let filesModule: FilesModule;

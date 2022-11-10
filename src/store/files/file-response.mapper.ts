@@ -1,9 +1,9 @@
+import { File, FileType } from "@store/types/file";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
-} from "@/serverApi/v3/files/file-meta.response";
-import { FileMetaListResponse } from "@/serverApi/v3/files/file-meta-list.response";
-import { File, FileType } from "@store/types/file";
+} from "@store/files/file-meta.response";
+import { FileMetaListResponse } from "@store/files/file-meta-list.response";
 
 const FileTypeMapping = {
 	[FileTypeResponse.FILE]: FileType.FILE,

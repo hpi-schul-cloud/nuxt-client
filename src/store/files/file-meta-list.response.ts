@@ -1,4 +1,4 @@
-import { FileMetaResponse } from "@/serverApi/v3/files/file-meta.response";
+import { FileMetaResponse } from "@store/files/file-meta.response";
 
 // ONLY FOR MOCKING, SERVER IMPLEMENTATION FOLLOWS
 
