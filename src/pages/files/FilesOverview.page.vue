@@ -1,5 +1,9 @@
 <template>
-	<default-wireframe :headline="title" :breadcrumbs="breadcrumbs" :full-width="true">
+	<default-wireframe
+		:headline="title"
+		:breadcrumbs="breadcrumbs"
+		:full-width="true"
+	>
 		<v-data-table
 			:disable-pagination="true"
 			:hide-default-footer="true"
