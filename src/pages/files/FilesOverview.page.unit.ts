@@ -33,7 +33,7 @@ describe("FileOverview", () => {
 			...getters,
 		});
 
-		wrapper = shallowMount(FilesOverview, {
+		wrapper = mount(FilesOverview, {
 			...createComponentMocks({
 				i18n: true,
 				$router,
@@ -188,10 +188,6 @@ describe("FileOverview", () => {
 			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
 			expect(firstRowElements.at(1).text()).toEqual(translationKey);
 		});
-	});
-
-	describe("currentCategory", () => {
-		it("", () => {});
 	});
 
 	describe("click", () => {

@@ -77,12 +77,7 @@ export const mapFileToFileTableItem = (
 export function getFilesOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.headline"),
-		breadcrumbs: [
-			{
-				text: t("pages.files.overview.headline"),
-				to: "/cfiles/",
-			},
-		],
+		breadcrumbs: [],
 		loadFilesFunction: async () => filesModule.fetchFilesOverview(),
 	};
 }
