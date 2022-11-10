@@ -22,7 +22,7 @@ import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import setupStores from "../test-utils/setupStores";
+import setupStores from "../../tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 
 dayjs.extend(customParseFormat);
@@ -35,8 +35,8 @@ const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_CURRENT_LOCALE = "en";
 
 const translations = {
-	en: require("@/locale/en.json"),
-	de: require("@/locale/de.json"),
+	en: require("@/locales/en.json"),
+	de: require("@/locales/de.json"),
 };
 
 const defaultFormats = {
