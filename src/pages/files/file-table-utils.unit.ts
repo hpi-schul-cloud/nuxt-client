@@ -36,7 +36,7 @@ describe("FileTableUtils", () => {
 	}
 
 	describe("getHeaders", () => {
-		it("should retrun dataTableHeader array", () => {
+		it("should return dataTableHeader array", () => {
 			const { tMock, expectedTranslation } = setup();
 
 			const headers: DataTableHeader[] = getHeaders(tMock);
