@@ -80,9 +80,11 @@ export default defineComponent({
 		const headers: DataTableHeader[] = getHeaders(t);
 
 		const items: ComputedRef<FileTableItem[]> = computed(() => {
-			return collaborativeFilesModule.getFiles.map((file: CollaborativeFile) => {
-				return mapFileToFileTableItem(file, t);
-			});
+			return collaborativeFilesModule.getFiles.map(
+				(file: CollaborativeFile) => {
+					return mapFileToFileTableItem(file, t);
+				}
+			);
 		});
 
 		const route: Route = useRoute().value;
