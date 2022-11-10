@@ -46,7 +46,7 @@ import {
 import { File } from "@store/types/file";
 import {
 	FilesPage,
-	getFilesPageFromCategory,
+	getFilesPageForRoute,
 	getHeaders,
 	mapFileToFileTableItem,
 } from "@pages/files/file-table-utils";
@@ -83,7 +83,7 @@ export default defineComponent({
 		});
 
 		const route: Route = useRoute().value;
-		const filesPage: FilesPage = getFilesPageFromCategory(t, route);
+		const filesPage: FilesPage = getFilesPageForRoute(t, route);
 
 		const title: Ref<string> = ref(filesPage.title);
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);

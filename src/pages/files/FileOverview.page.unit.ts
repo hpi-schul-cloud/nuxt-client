@@ -5,7 +5,10 @@ import FilesModule from "@store/files";
 import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
 import { createModuleMocks } from "@utils/mock-store-module";
-import Vue from "vue";
+import { DataTableHeader } from "vuetify";
+import { ComputedRef } from "@nuxtjs/composition-api";
+import { FileTableItem } from "@pages/files/file-table-item";
+import { FileType } from "@store/types/file";
 
 const $route: Route = {
 	path: "/cfiles",
@@ -17,9 +20,12 @@ describe("FileOverview", () => {
 	let wrapper: Wrapper<any>;
 	let filesModule: FilesModule;
 
-	function setup() {
+	function setup(getters: Partial<FilesModule> = {}) {
 		document.body.setAttribute("data-app", "true");
-		filesModule = createModuleMocks(FilesModule);
+		filesModule = createModuleMocks(FilesModule, {
+			getFiles: [],
+			...getters,
+		});
 
 		wrapper = shallowMount(FilesOverview, {
 			...createComponentMocks({
@@ -79,11 +85,24 @@ describe("FileOverview", () => {
 			expect(result).toEqual(testKey);
 		});
 
-		it("should return 'unknown translation-key'", () => {});
+		it("should return 'unknown translation-key'", () => {
+			setup();
+			const testKey = 123;
+
+			const result: string = wrapper.vm.t(testKey);
+
+			expect(result.includes("unknown translation-key:")).toBeTruthy();
+		});
 	});
 
 	describe("headers", () => {
-		it("", () => {});
+		it("should display dataTableHeaders in v-data-table ", () => {
+			setup();
+
+			const result: DataTableHeader[] = wrapper.vm.headers;
+
+			expect(result.length).toBeGreaterThan(0);
+		});
 	});
 
 	describe("items", () => {

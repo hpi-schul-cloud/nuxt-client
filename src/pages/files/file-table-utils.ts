@@ -127,7 +127,7 @@ export function getTeamsPage(
 	};
 }
 
-export function getFilesPageFromCategory(
+export function getFilesPageForRoute(
 	t: (key: string) => string,
 	route: Route
 ): FilesPage {
