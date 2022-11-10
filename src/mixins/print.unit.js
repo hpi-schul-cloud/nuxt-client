@@ -55,7 +55,6 @@ describe("@/mixins/print", () => {
 			);
 			expect(newWindowMock.focus).toHaveBeenCalled();
 			expect(newWindowMock.print).toHaveBeenCalled();
-			expect(newWindowMock.focus).toHaveBeenCalledBefore(newWindowMock.print);
 		});
 
 		it("closes new window after print", () => {
@@ -65,7 +64,6 @@ describe("@/mixins/print", () => {
 			jest.runAllTimers();
 			expect(newWindowMock.print).toHaveBeenCalled();
 			expect(newWindowMock.close).toHaveBeenCalled();
-			expect(newWindowMock.close).toHaveBeenCalledAfter(newWindowMock.print);
 		});
 	});
 
