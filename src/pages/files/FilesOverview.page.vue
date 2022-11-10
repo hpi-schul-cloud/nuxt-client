@@ -61,7 +61,8 @@ export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const filesModule: FilesModule | undefined = inject<FilesModule>("filesModule");
+		const filesModule: FilesModule | undefined =
+			inject<FilesModule>("filesModule");
 		if (!filesModule || !i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
