@@ -1,6 +1,5 @@
 <template>
-	<default-wireframe :breadcrumbs="breadcrumbs" :full-width="true">
-		<h1>{{ title }}</h1>
+	<default-wireframe :headline="title" :breadcrumbs="breadcrumbs" :full-width="true">
 		<v-data-table
 			:disable-pagination="true"
 			:hide-default-footer="true"
@@ -28,9 +27,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe, {
-	Breadcrumb,
-} from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
 import {
@@ -55,6 +52,7 @@ import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
 import FilesModule from "@store/files";
+import { Breadcrumb } from "@components/templates/default-wireframe.types";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -97,7 +95,6 @@ export default defineComponent({
 		};
 
 		const timesAgo = (value: Date): string => {
-			if (!value) return "";
 			return moment(value).locale(locale()).fromNow();
 		};
 

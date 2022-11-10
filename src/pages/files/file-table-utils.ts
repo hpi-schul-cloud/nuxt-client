@@ -3,13 +3,7 @@ import { FileTableItem } from "@pages/files/file-table-item";
 import { filesModule } from "@utils/store-accessor";
 import { Route } from "vue-router";
 import { DataTableHeader } from "vuetify";
-
-type Breadcrumb = {
-	text: string;
-	href?: string;
-	to?: string;
-	disabled?: boolean;
-};
+import { Breadcrumb } from "@components/templates/default-wireframe.types";
 
 export type FilesPage = {
 	title: string;
@@ -74,7 +68,7 @@ export const mapFileToFileTableItem = (
 	};
 };
 
-export function getFilesOverview(t: (key: string) => string): FilesPage {
+function getFilesOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.headline"),
 		breadcrumbs: [],
@@ -82,7 +76,7 @@ export function getFilesOverview(t: (key: string) => string): FilesPage {
 	};
 }
 
-export function getTeamsOverview(t: (key: string) => string): FilesPage {
+function getTeamsOverview(t: (key: string) => string): FilesPage {
 	return {
 		title: t("pages.files.overview.teamFiles"),
 		breadcrumbs: [
@@ -95,10 +89,7 @@ export function getTeamsOverview(t: (key: string) => string): FilesPage {
 	};
 }
 
-export function getTeamsPage(
-	t: (key: string) => string,
-	route: Route
-): FilesPage {
+function getTeamsPage(t: (key: string) => string, route: Route): FilesPage {
 	const paramsArray: string[] = route.params.catchAll
 		.split("/")
 		.filter((element: string) => element !== "");

@@ -6,25 +6,35 @@ import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
 import { createModuleMocks } from "@utils/mock-store-module";
 import { FileType } from "@store/types/file";
+import * as utils from "@pages/files/file-table-utils";
 
 const $route: Route = {
 	path: "/cfiles",
 } as Route;
 
-const $router = { replace: jest.fn() };
-
-const loadFilesFunctionMock = jest.fn();
-
-const fileTableUtil = require("./file-table-utils");
-jest.spyOn(fileTableUtil, "getFilesPageForRoute").mockReturnValue({
-	title: "test",
-	breadcrumbs: [],
-	loadFilesFunction: loadFilesFunctionMock,
-});
+const $router = { replace: jest.fn(), push: jest.fn() };
 
 describe("FileOverview", () => {
 	let wrapper: Wrapper<any>;
 	let filesModule: FilesModule;
+
+	const pageTitle = "Page Title";
+	const loadFilesFunctionMock = jest.fn();
+	const breadcrumbTitle = "breadcrumb1";
+	const breadcrumbPath = "/cfiles/";
+
+	beforeAll(() => {
+		jest.spyOn(utils, "getFilesPageForRoute").mockReturnValue({
+			title: pageTitle,
+			breadcrumbs: [
+				{
+					text: breadcrumbTitle,
+					to: breadcrumbPath,
+				},
+			],
+			loadFilesFunction: loadFilesFunctionMock,
+		});
+	});
 
 	function setup(getters: Partial<FilesModule> = {}) {
 		document.body.setAttribute("data-app", "true");
@@ -32,7 +42,6 @@ describe("FileOverview", () => {
 			getFiles: [],
 			...getters,
 		});
-
 		wrapper = mount(FilesOverview, {
 			...createComponentMocks({
 				i18n: true,
@@ -44,11 +53,23 @@ describe("FileOverview", () => {
 				provide("filesModule", filesModule);
 			},
 		});
-		return {};
+
+		const pageTitle = "Page Title";
+		const loadFilesFunctionMock = jest.fn();
+		const breadcrumbTitle = "breadcrumb1";
+		const breadcrumbPath = "/cfiles/";
+
+		return {
+			loadFilesFunctionMock,
+			pageTitle,
+			breadcrumbTitle,
+			breadcrumbPath,
+		};
 	}
 
 	describe("basic functions", () => {
 		it("should render component", () => {
+			setup();
 			expect(wrapper.findComponent(FilesOverview).exists()).toBe(true);
 		});
 	});
@@ -78,6 +99,13 @@ describe("FileOverview", () => {
 					e.message.includes('Injection "filesModule" not found')
 				).toBeTruthy();
 			}
+		});
+	});
+
+	describe("onMounted", () => {
+		it("should call the loadFilesFunction onMounted", () => {
+			setup();
+			expect(loadFilesFunctionMock).toHaveBeenCalled();
 		});
 	});
 
@@ -191,10 +219,50 @@ describe("FileOverview", () => {
 	});
 
 	describe("click", () => {
-		it("", () => {});
+		const path = "/cfiles/";
+		it("should push path of fileTableItem to router when clicked on a row", () => {
+			setup({
+				getFiles: [
+					{
+						name: "name",
+						translationKey: undefined,
+						icon: "favorite",
+						path,
+						size: 123,
+						type: FileType.FAVORITES,
+						lastChanged: new Date(2022, 10, 1, 14, 4),
+					},
+				],
+			});
+
+			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+			tableRows.at(0).trigger("click");
+
+			expect($router.push).toHaveBeenCalledWith(
+				expect.objectContaining({ path })
+			);
+		});
 	});
 
-	describe("timesAgo", () => {
-		it("", () => {});
+	describe("breadcrumbs", () => {
+		it("should display breadcrumbs", () => {
+			setup();
+
+			const breadcrumbs: WrapperArray<any> =
+				wrapper.findAll(".breadcrumbs-item");
+
+			expect(breadcrumbs.length).toEqual(1);
+			expect(breadcrumbs.at(0).text()).toEqual(breadcrumbTitle);
+		});
+	});
+
+	describe("title", () => {
+		it("should display the page title", () => {
+			setup();
+
+			const title: Wrapper<any> = wrapper.find("h1");
+
+			expect(title.text()).toEqual(pageTitle);
+		});
 	});
 });
