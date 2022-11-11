@@ -152,7 +152,7 @@ export function fileTableComposable(
 		}
 	}
 
-	const FileTypeMapping = {
+	const FileTypeMapping: Record<FileTypeResponse, CollaborativeFileType> = {
 		[FileTypeResponse.FILE]: CollaborativeFileType.FILE,
 		[FileTypeResponse.PDF]: CollaborativeFileType.PDF,
 		[FileTypeResponse.SHARED_DIRECTORY]: CollaborativeFileType.SHARED_DIRECTORY,

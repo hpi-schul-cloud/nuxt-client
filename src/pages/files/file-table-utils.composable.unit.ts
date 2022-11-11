@@ -21,10 +21,6 @@ jest.mock("@utils/store-accessor", () => ({
 }));
 
 describe("FileTableComposable", () => {
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
-
 	let {
 		getHeaders,
 		getFilesPageForRoute,
@@ -32,8 +28,6 @@ describe("FileTableComposable", () => {
 		mapFileMetaListResponse,
 		getDeepBreadcumbs,
 	} = fileTableComposable(collaborativeFilesModule);
-
-	beforeAll(() => {});
 
 	function setup() {
 		const expectedTranslation = "translated";
