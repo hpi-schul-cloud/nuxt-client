@@ -18,21 +18,27 @@
 			</base-button>
 		</div>
 		<div class="content">
-			<lern-store-player v-if="shouldShowPlayer" :node-id="resource.ref.id"/>
-			<div v-else class="preview">
-				<div
-					class="preview-background"
-					:style="{
-						backgroundImage: `url(${backgroundImage})`,
-					}"
+			<div class="preview">
+				<lern-store-player
+					v-if="shouldShowPlayer"
+					class="preview preview-player"
+					:node-id="resource.ref.id"
 				/>
-				<img
-					:src="backgroundImage"
-					class="preview-img"
-					:alt="$t('pages.content.preview_img.alt')"
-					role="img"
-				/>
-				<div class="preview-background-color" />
+				<div v-else>
+					<div
+						class="preview-background"
+						:style="{
+							backgroundImage: `url(${backgroundImage})`,
+						}"
+					/>
+					<img
+						:src="backgroundImage"
+						class="preview-img"
+						:alt="$t('pages.content.preview_img.alt')"
+						role="img"
+					/>
+					<div class="preview-background-color" />
+				</div>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -207,7 +213,7 @@ export default {
 			type: Object,
 			default: () => {},
 		},
-		id: String,
+		id: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
@@ -375,6 +381,7 @@ $tablet-portrait-width: 768px;
 	.content {
 		position: relative;
 		grid-area: content;
+		overflow: hidden;
 
 		@media (max-width: $tablet-portrait-width) {
 			position: sticky;
@@ -392,13 +399,6 @@ $tablet-portrait-width: 768px;
 				height: 70vh;
 			}
 
-			.player-iframe {
-				width: 85%;
-				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				margin: 1.1px;
-				border: none;
-			}
-
 			.loading {
 				position: absolute;
 				top: 0;
@@ -408,6 +408,16 @@ $tablet-portrait-width: 768px;
 				margin: auto;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				color: white;
+			}
+
+			.preview-player {
+				position: relative;
+				top: 25%;
+				height: 100%;
+
+				@media (max-width: $tablet-portrait-width) {
+					top: 15%;
+				}
 			}
 
 			.preview-background-color {

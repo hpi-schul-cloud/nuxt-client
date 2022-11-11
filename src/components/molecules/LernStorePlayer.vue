@@ -7,7 +7,7 @@
 		frameborder="0"
 		scrolling="no"
 	></iframe>
-	<base-spinner v-else class="spinner" size="xlarge"/>
+	<base-spinner v-else class="spinner" size="xlarge" />
 	<!--
 						v-if="isIFrameLoading"
 						<v-progress-circular
@@ -18,17 +18,14 @@
 					></v-progress-circular> -->
 </template>
 
-<script
-	:src="scriptSrc"
-	charset="UTF-8"
-></script>
+<script :src="scriptSrc" charset="UTF-8"></script>
 
 <script>
 import BaseSpinner from "@components/base/BaseSpinner";
 
 export default {
 	components: {
-		BaseSpinner
+		BaseSpinner,
 	},
 	props: {
 		nodeId: String,
@@ -36,8 +33,8 @@ export default {
 	data() {
 		return {
 			loading: true,
-			iframeSrc: '',
-			scriptSrc: ''
+			iframeSrc: "",
+			scriptSrc: "",
 		};
 	},
 	async mounted() {
@@ -45,19 +42,20 @@ export default {
 	},
 	methods: {
 		async getPlayer() {
-			const response = await this.$axios.$get(`/v1/edu-sharing/player/${this.nodeId}`);
+			const response = await this.$axios.$get(
+				`/v1/edu-sharing/player/${this.nodeId}`
+			);
 			this.iframeSrc = response.iframe_src;
 			this.scriptSrc = response.script_src;
 			this.loading = false;
-		}
-	}
-}
+		},
+	},
+};
 </script>
 
 <style>
 .player-iframe {
-	width:100%;
-	height: 100%;
-	border:none;
+	width: 100%;
+	border: none;
 }
 </style>
