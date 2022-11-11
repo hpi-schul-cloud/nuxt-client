@@ -20,7 +20,7 @@ jest.mock("@utils/store-accessor", () => ({
 	},
 }));
 
-describe("FileTableUtils", () => {
+describe("FileTableComposable", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -31,7 +31,7 @@ describe("FileTableUtils", () => {
 		getFileCategory,
 		mapFileMetaListResponse,
 		getDeepBreadcumbs,
-	} = fileTableComposable();
+	} = fileTableComposable(collaborativeFilesModule);
 
 	beforeAll(() => {});
 

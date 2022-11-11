@@ -26,7 +26,7 @@ describe("FileOverview", () => {
 
 	beforeAll(() => {
 		jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
-			...fileTableComposable.fileTableComposable(),
+			...fileTableComposable.fileTableComposable(collaborativeFilesModule),
 			getFilesPageForRoute(
 				t: (key: string) => string,
 				route: Route

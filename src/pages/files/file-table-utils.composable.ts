@@ -4,7 +4,6 @@ import {
 	FileTypeIconMapping,
 } from "@store/types/collaborative-file";
 import { FileTableItem } from "@pages/files/file-table-item";
-import { collaborativeFilesModule } from "@utils/store-accessor";
 import { Route } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
@@ -14,8 +13,11 @@ import {
 	FileTypeResponse,
 } from "@store/collaborative-files/file-meta.response";
 import { FilesPageConfig } from "@pages/files/file-page-config.type";
+import CollaborativeFilesModule from "@store/collaborative-files";
 
-export function fileTableComposable() {
+export function fileTableComposable(
+	collaborativeFilesModule: CollaborativeFilesModule
+) {
 	function getHeaders(t: (key: string) => string): DataTableHeader[] {
 		return [
 			{ text: "", value: "icon", sortable: false, width: 5 },

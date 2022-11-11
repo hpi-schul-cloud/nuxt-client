@@ -34,7 +34,16 @@ import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
-import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+	ref,
+	useRoute,
+	useRouter,
+} from "@nuxtjs/composition-api";
 import { CollaborativeFile } from "@store/types/collaborative-file";
 import { fileTableComposable } from "@pages/files/file-table-utils.composable";
 import VueI18n, { Locale } from "vue-i18n";
@@ -64,7 +73,8 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const { getHeaders, mapFileToFileTableItem, getFilesPageForRoute } = fileTableComposable();
+		const { getHeaders, mapFileToFileTableItem, getFilesPageForRoute } =
+			fileTableComposable(collaborativeFilesModule);
 
 		const headers: DataTableHeader[] = getHeaders(t);
 

@@ -185,7 +185,7 @@ describe("CollaborativeFilesModule", () => {
 			const { mockFileMetaListResponse } = setup();
 			const mapFileMetaListResponseMock = jest.fn();
 			jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
-				...fileTableComposable.fileTableComposable(),
+				...fileTableComposable.fileTableComposable(collaborativeFilesModule),
 				mapFileMetaListResponse: mapFileMetaListResponseMock,
 			});
 
@@ -199,7 +199,7 @@ describe("CollaborativeFilesModule", () => {
 		it("should set the mapped files to store", async () => {
 			const { mockFileMetaListResponse } = setup();
 			jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
-				...fileTableComposable.fileTableComposable(),
+				...fileTableComposable.fileTableComposable(collaborativeFilesModule),
 				mapFileMetaListResponse(
 					response: FileMetaListResponse
 				): CollaborativeFile[] {

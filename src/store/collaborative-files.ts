@@ -6,6 +6,7 @@ import {
 import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
 import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
 import { fileTableComposable } from "@pages/files/file-table-utils.composable";
+import { collaborativeFilesModule } from "@utils/store-accessor";
 
 @Module({
 	name: "collaborative-files",
@@ -159,7 +160,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 	@Action
 	async addFileMetaData(response: FileMetaListResponse): Promise<void> {
 		const mappedFiles: CollaborativeFile[] =
-			fileTableComposable().mapFileMetaListResponse(response);
+			fileTableComposable(this).mapFileMetaListResponse(response);
 		this.setFiles(mappedFiles);
 	}
 }
