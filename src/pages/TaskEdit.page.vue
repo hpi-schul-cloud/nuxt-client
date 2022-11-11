@@ -47,7 +47,6 @@ export default {
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
-
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -61,16 +60,16 @@ export default {
 
 			const taskData = taskModule.getTaskData;
 			name.value = taskData.name;
-			description.value = taskData.description.content;
+			// description.value = taskData.description.content;
 		});
 
 		const save = async () => {
-			console.log("hello?", name.value);
-			await taskModule.updateTask(taskId, {
+			await taskModule.updateTask({
+				taskId,
 				name: name.value,
 			});
 
-			//router.go(-1);
+			router.go(-1);
 		};
 
 		const cancel = () => {
@@ -80,7 +79,7 @@ export default {
 		const remove = async () => {
 			await tasksModule.deleteTask(taskId);
 
-			router.go(-1); // TODO - fix return url
+			router.go(-1);
 		};
 
 		return { breadcrumbs, name, description, save, cancel, remove };

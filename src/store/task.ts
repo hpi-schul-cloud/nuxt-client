@@ -8,16 +8,24 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
+type TempTask = {
+	id: string;
+	courseId: string;
+	name: string;
+	description: string;
+};
+
 @Module({
 	name: "task",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class TaskModule extends VuexModule {
-	taskData: Object = {
-		taskId: "",
+	// TODO - implement/use proper type
+	taskData: TempTask = {
+		id: "",
 		courseId: "",
-		title: "",
+		name: "",
 		description: "",
 	};
 	loading: boolean = false;
@@ -64,12 +72,14 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async updateTask(taskId: string, params: TaskUpdateParams): Promise<void> {
+	async updateTask(params: TaskUpdateParams): Promise<void> {
 		this.setLoading(true);
 
 		try {
-			console.log(taskId, params); // why is params undefined?
-			const { data } = await this.taskApi.taskControllerUpdate(taskId, params);
+			const { data } = await this.taskApi.taskControllerUpdate(
+				this.taskData.id,
+				params
+			);
 			console.log(data);
 			this.setTaskData(data);
 			this.setLoading(false);
@@ -78,8 +88,9 @@ export default class TaskModule extends VuexModule {
 		}
 	}
 
+	// TODO - use proper type
 	@Mutation
-	setTaskData(payload: Object): void {
+	setTaskData(payload: any): void {
 		this.taskData = payload;
 	}
 
