@@ -1,4 +1,4 @@
-import { authModule } from "@/store";
+// import { authModule } from "@/store";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
@@ -7,16 +7,6 @@ const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
 
 function interopDefault(promise) {
 	return promise.then((m) => m.default || m);
-}
-
-// if everything would be vue this would be amazing
-// TODO - figure out how to direct to previous page
-function denyAccessWithoutPermission(next, permission, goTo = "/dashboard") {
-	if (!authModule.getUserPermissions.includes(permission.toLowerCase())) {
-		next(goTo);
-	} else {
-		next();
-	}
 }
 
 export const routes = [
@@ -156,15 +146,11 @@ export const routes = [
 		path: "/tasks/new",
 		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
 		name: "task-new",
-		beforeEnter: (to, from, next) =>
-			denyAccessWithoutPermission(next, "HOMEWORK_CREATE", "/tasks"),
 	},
 	{
 		path: "/tasks/:id/edit",
 		component: () => interopDefault(import("../pages/TaskEdit.page.vue")),
 		name: "task-edit",
-		beforeEnter: (to, from, next) =>
-			denyAccessWithoutPermission(next, "HOMEWORK_CREATE", "/tasks"),
 	},
 	// deprecated?
 	{

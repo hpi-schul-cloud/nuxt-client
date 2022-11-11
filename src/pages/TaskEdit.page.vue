@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import { inject, ref, onMounted } from "@vue/composition-api";
-import { taskModule, tasksModule } from "@/store";
+import { inject, ref, onMounted, onBeforeMount } from "@vue/composition-api";
+import { taskModule, tasksModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -35,6 +35,15 @@ export default {
 	setup(props, context) {
 		const router = context.root.$router;
 		const route = context.root.$route;
+
+		onBeforeMount(() => {
+			if (
+				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+			) {
+				router.go(-1);
+			}
+		});
+
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
