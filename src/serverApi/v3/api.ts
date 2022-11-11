@@ -2213,7 +2213,7 @@ export interface TaskUpdateParams {
      * @type {string}
      * @memberof TaskUpdateParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * The id of an lesson object.
      * @type {string}
