@@ -36,7 +36,7 @@ import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
-import sidebarBaseItems from "@utils/sidebarBaseItems.js";
+import sidebarBaseItems from "@utils/sidebar-base-items";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
@@ -95,25 +95,7 @@ export default {
 				);
 			});
 
-			return sidebarItems.map((item) => {
-				const isInRoute = (activeURL) => this.$route.path.includes(activeURL);
-				const isActive =
-					this.$route.path.includes(item.href) ||
-					this.$route.path.includes(item.to) ||
-					(item.activeForUrls && item.activeForUrls.some(isInRoute));
-				item.childActive = false;
-				if (item.children) {
-					item.children.forEach((childItem) => {
-						childItem.active =
-							this.$route.path.includes(childItem.href) ||
-							this.$route.path.includes(childItem.to);
-						item.childActive = item.childActive || childItem.active;
-					});
-				}
-				item.active = isActive && !item.childActive;
-
-				return item;
-			});
+			return sidebarItems;
 		},
 		style() {
 			return this.fullscreenMode ? "display: inherit;" : "";
