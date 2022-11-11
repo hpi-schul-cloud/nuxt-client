@@ -4,12 +4,12 @@ import {
 	CollaborativeFileType,
 	FileIcon,
 } from "@store/types/collaborative-file";
-import { CollaborativeFileResponseMapper } from "@store/collaborative-files/collaborative-file-response.mapper";
 import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
 } from "@store/collaborative-files/file-meta.response";
+import * as fileTableComposable from "@pages/files/file-table-utils.composable";
 
 describe("CollaborativeFilesModule", () => {
 	let collaborativeFilesModule: CollaborativeFilesModule;
@@ -24,14 +24,10 @@ describe("CollaborativeFilesModule", () => {
 			collaborativeFilesModule,
 			"addFileMetaData"
 		);
-		const fileResponseMapperSpy = jest.spyOn(
-			CollaborativeFileResponseMapper,
-			"mapFileMetaListResponse"
-		);
 		const mockFile: CollaborativeFile = {
 			name: "name",
 			size: 123,
-			lastChanged: new Date(2022, 1, 1),
+			lastChanged: new Date(2022, 1, 1).toISOString(),
 			type: CollaborativeFileType.SHARED_DIRECTORY,
 			icon: FileIcon.SHARED_FOLDER,
 			path: "/root/path",
@@ -46,7 +42,7 @@ describe("CollaborativeFilesModule", () => {
 					type: FileTypeResponse.DIRECTORY,
 					size: 1234,
 					name: "Fotos",
-					lastChanged: new Date(2022, 11, 4, 10, 16),
+					lastChanged: new Date(2022, 11, 4, 10, 16).toISOString(),
 				},
 				{
 					id: "2371272n12",
@@ -54,14 +50,13 @@ describe("CollaborativeFilesModule", () => {
 					type: FileTypeResponse.FILE,
 					size: 23939,
 					name: "Klassenbuch.txt",
-					lastChanged: new Date(2022, 11, 4, 15, 16),
+					lastChanged: new Date(2022, 11, 4, 15, 16).toISOString(),
 				},
 			],
 		};
 		return {
 			setLoadingSpy,
 			addFileMetaDataSpy,
-			fileResponseMapperSpy,
 			mockFile,
 			mockFileMetaListResponse,
 		};
@@ -76,6 +71,16 @@ describe("CollaborativeFilesModule", () => {
 				await collaborativeFilesModule.getFiles;
 
 			expect(files[0]).toEqual(mockFile);
+		});
+	});
+
+	describe("getLoading", () => {
+		it("should return loading from store", async () => {
+			setup();
+
+			let loading: boolean = await collaborativeFilesModule.getLoading;
+
+			expect(loading).toEqual(collaborativeFilesModule.loading);
 		});
 	});
 
@@ -176,18 +181,35 @@ describe("CollaborativeFilesModule", () => {
 	});
 
 	describe("addFileMetaData", () => {
-		it("should call the fileResponseMapper", async () => {
-			const { mockFileMetaListResponse, fileResponseMapperSpy } = setup();
+		it("should call the fileTableComposable", async () => {
+			const { mockFileMetaListResponse } = setup();
+			const mapFileMetaListResponseMock = jest.fn();
+			jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
+				...fileTableComposable.fileTableComposable(),
+				mapFileMetaListResponse: mapFileMetaListResponseMock,
+			});
 
 			await collaborativeFilesModule.addFileMetaData(mockFileMetaListResponse);
 
-			expect(fileResponseMapperSpy).toHaveBeenCalledWith(
+			expect(mapFileMetaListResponseMock).toHaveBeenCalledWith(
 				mockFileMetaListResponse
 			);
 		});
 
 		it("should set the mapped files to store", async () => {
 			const { mockFileMetaListResponse } = setup();
+			jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
+				...fileTableComposable.fileTableComposable(),
+				mapFileMetaListResponse(
+					response: FileMetaListResponse
+				): CollaborativeFile[] {
+					return [
+						{
+							path: mockFileMetaListResponse.data[0].path,
+						} as CollaborativeFile,
+					];
+				},
+			});
 
 			await collaborativeFilesModule.addFileMetaData(mockFileMetaListResponse);
 

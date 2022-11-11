@@ -6,7 +6,8 @@ import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
 import { createModuleMocks } from "@utils/mock-store-module";
 import { CollaborativeFileType } from "@store/types/collaborative-file";
-import * as utils from "@pages/files/file-table-utils";
+import * as fileTableComposable from "@pages/files/file-table-utils.composable";
+import { FilesPageConfig } from "@pages/files/file-page-config.type";
 
 const $route: Route = {
 	path: "/cfiles",
@@ -24,15 +25,23 @@ describe("FileOverview", () => {
 	const breadcrumbPath = "/cfiles/";
 
 	beforeAll(() => {
-		jest.spyOn(utils, "getFilesPageForRoute").mockReturnValue({
-			title: pageTitle,
-			breadcrumbs: [
-				{
-					text: breadcrumbTitle,
-					to: breadcrumbPath,
-				},
-			],
-			loadFilesFunction: loadFilesFunctionMock,
+		jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
+			...fileTableComposable.fileTableComposable(),
+			getFilesPageForRoute(
+				t: (key: string) => string,
+				route: Route
+			): FilesPageConfig {
+				return {
+					title: pageTitle,
+					breadcrumbs: [
+						{
+							text: breadcrumbTitle,
+							to: breadcrumbPath,
+						},
+					],
+					loadFilesFunction: loadFilesFunctionMock,
+				};
+			},
 		});
 	});
 
@@ -162,7 +171,7 @@ describe("FileOverview", () => {
 						path: "/cfiles/",
 						size,
 						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4),
+						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
 					},
 				],
 			});
@@ -186,7 +195,7 @@ describe("FileOverview", () => {
 						path: "/cfiles/",
 						size: 221,
 						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4),
+						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
 					},
 				],
 			});
@@ -207,7 +216,7 @@ describe("FileOverview", () => {
 						path: "/cfiles/",
 						size: 123,
 						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4),
+						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
 					},
 				],
 			});
@@ -230,7 +239,7 @@ describe("FileOverview", () => {
 						path,
 						size: 123,
 						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4),
+						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
 					},
 				],
 			});

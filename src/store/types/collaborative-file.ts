@@ -16,7 +16,7 @@ export enum FileIcon {
 	UNKNOWN = "unknown",
 }
 
-const FileTypeIconMapping = {
+export const FileTypeIconMapping = {
 	[CollaborativeFileType.FILE]: FileIcon.FILE,
 	[CollaborativeFileType.PDF]: FileIcon.FILE,
 	[CollaborativeFileType.UNKNOWN]: FileIcon.FILE,
@@ -25,36 +25,18 @@ const FileTypeIconMapping = {
 	[CollaborativeFileType.FAVORITES]: FileIcon.FAVORITE,
 };
 
-export class CollaborativeFile {
-	constructor(
-		path: string,
-		fileType: CollaborativeFileType,
-		size: number,
-		name: string,
-		lastChanged: Date,
-		icon?: FileIcon,
-		translationKey?: string
-	) {
-		this.path = path;
-		this.type = fileType;
-		this.icon = icon || FileTypeIconMapping[fileType];
-		this.size = size;
-		this.name = name;
-		this.lastChanged = lastChanged;
-		this.translationKey = translationKey;
-	}
-
+export interface CollaborativeFile {
 	name: string;
 
 	path: string;
 
-	icon: string;
+	icon?: string;
 
 	type: CollaborativeFileType;
 
 	size: number;
 
-	lastChanged: Date;
+	lastChanged: string;
 
-	translationKey: string | undefined;
+	translationKey?: string;
 }

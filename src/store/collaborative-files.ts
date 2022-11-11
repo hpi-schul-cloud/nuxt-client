@@ -5,7 +5,7 @@ import {
 } from "@store/types/collaborative-file";
 import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
 import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
-import { CollaborativeFileResponseMapper } from "@store/collaborative-files/collaborative-file-response.mapper";
+import { fileTableComposable } from "@pages/files/file-table-utils.composable";
 
 @Module({
 	name: "collaborative-files",
@@ -21,6 +21,10 @@ export default class CollaborativeFilesModule extends VuexModule {
 		return this.files;
 	}
 
+	get getLoading() {
+		return this.loading;
+	}
+
 	@Action
 	async fetchFilesOverview(): Promise<void> {
 		this.setFiles([
@@ -31,7 +35,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 				path: "/cfiles/",
 				size: 221,
 				type: CollaborativeFileType.FAVORITES,
-				lastChanged: new Date(2022, 10, 1, 14, 4),
+				lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
 			},
 			{
 				name: "Personal Files",
@@ -40,7 +44,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 				path: "/files/my",
 				size: 33,
 				type: CollaborativeFileType.DIRECTORY,
-				lastChanged: new Date(2022, 10, 1, 14, 4),
+				lastChanged: new Date(2022, 10, 1, 14, 1).toISOString(),
 			},
 			{
 				name: "Course Files",
@@ -49,7 +53,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 				path: "/files/courses",
 				size: 1337,
 				type: CollaborativeFileType.SHARED_DIRECTORY,
-				lastChanged: new Date(2021, 10, 1, 14, 4),
+				lastChanged: new Date(2021, 10, 1, 14, 3).toISOString(),
 			},
 			{
 				name: "Team Files",
@@ -58,7 +62,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 				path: "/cfiles/teams",
 				size: 33331,
 				type: CollaborativeFileType.SHARED_DIRECTORY,
-				lastChanged: new Date(2019, 11, 1, 14, 4),
+				lastChanged: new Date(2019, 11, 1, 14, 4).toISOString(),
 			},
 			{
 				name: "Shared Files",
@@ -67,7 +71,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 				path: "/files/shared",
 				size: 123123,
 				type: CollaborativeFileType.SHARED_DIRECTORY,
-				lastChanged: new Date(2022, 10, 1, 9, 4),
+				lastChanged: new Date(2022, 10, 1, 9, 4).toISOString(),
 			},
 		]);
 	}
@@ -85,7 +89,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 						type: FileTypeResponse.SHARED_DIRECTORY,
 						size: 212232,
 						name: "Lehrerzimmer",
-						lastChanged: new Date(2022, 11, 3, 15, 16),
+						lastChanged: new Date(2022, 11, 3, 15, 16).toISOString(),
 					},
 					{
 						id: "455738mb219",
@@ -93,7 +97,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 						type: FileTypeResponse.SHARED_DIRECTORY,
 						size: 232,
 						name: "Basketball Arbeitsgemeinschaft",
-						lastChanged: new Date(2022, 11, 2, 15, 16),
+						lastChanged: new Date(2022, 11, 2, 15, 19).toISOString(),
 					},
 				],
 				size: 2,
@@ -120,7 +124,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 						type: FileTypeResponse.DIRECTORY,
 						size: 1234,
 						name: "Fotos",
-						lastChanged: new Date(2022, 11, 4, 10, 16),
+						lastChanged: new Date(2022, 11, 4, 10, 16).toISOString(),
 					},
 					{
 						id: "2371272n12",
@@ -128,7 +132,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 						type: FileTypeResponse.FILE,
 						size: 23939,
 						name: "Klassenbuch.txt",
-						lastChanged: new Date(2022, 11, 4, 15, 16),
+						lastChanged: new Date(2022, 11, 4, 15, 16).toISOString(),
 					},
 				],
 				size: 2,
@@ -155,7 +159,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 	@Action
 	async addFileMetaData(response: FileMetaListResponse): Promise<void> {
 		const mappedFiles: CollaborativeFile[] =
-			CollaborativeFileResponseMapper.mapFileMetaListResponse(response);
+			fileTableComposable().mapFileMetaListResponse(response);
 		this.setFiles(mappedFiles);
 	}
 }

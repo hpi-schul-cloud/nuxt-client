@@ -23,8 +23,10 @@ describe("PermissionGuard", () => {
 	describe("createPermissionGuard", () => {
 		it("should check permissions from the authModule and allow access", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard =
-				createPermissionGuard("validPermission");
+			const permissionGuard: NavigationGuard = createPermissionGuard(
+				"validPermission",
+				"/dashboard"
+			);
 
 			permissionGuard(to, from, next);
 
@@ -33,12 +35,15 @@ describe("PermissionGuard", () => {
 
 		it("should check permissions from the authModule and deny access", () => {
 			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard =
-				createPermissionGuard("invalidPermission");
+			const fallbackRoute = "/dashboard";
+			const permissionGuard: NavigationGuard = createPermissionGuard(
+				"invalidPermission",
+				fallbackRoute
+			);
 
 			permissionGuard(to, from, next);
 
-			expect(next).toHaveBeenCalledWith("/dashboard");
+			expect(next).toHaveBeenCalledWith(fallbackRoute);
 		});
 	});
 });

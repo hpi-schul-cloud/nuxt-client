@@ -158,20 +158,20 @@ export const routes = [
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "files",
-		beforeEnter: createPermissionGuard("collaborative_files"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 	{
 		path: "/cfiles/teams",
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 	{
 		path: "/cfiles/teams/:catchAll(.*)",
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 ];

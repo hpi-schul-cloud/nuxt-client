@@ -34,29 +34,16 @@ import { defineComponent } from "@vue/composition-api";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import { FileTableItem } from "@pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-	ref,
-	useRoute,
-	useRouter,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, ref, useRoute, useRouter } from "@nuxtjs/composition-api";
 import { CollaborativeFile } from "@store/types/collaborative-file";
-import {
-	FilesPage,
-	getFilesPageForRoute,
-	getHeaders,
-	mapFileToFileTableItem,
-} from "@pages/files/file-table-utils";
+import { fileTableComposable } from "@pages/files/file-table-utils.composable";
 import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
 import CollaborativeFilesModule from "@store/collaborative-files";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
+import { FilesPageConfig } from "@pages/files/file-page-config.type";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -77,6 +64,8 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
+		const { getHeaders, mapFileToFileTableItem, getFilesPageForRoute } = fileTableComposable();
+
 		const headers: DataTableHeader[] = getHeaders(t);
 
 		const items: ComputedRef<FileTableItem[]> = computed(() => {
@@ -88,7 +77,7 @@ export default defineComponent({
 		});
 
 		const route: Route = useRoute().value;
-		const filesPage: FilesPage = getFilesPageForRoute(t, route);
+		const filesPage: FilesPageConfig = getFilesPageForRoute(t, route);
 
 		const title: Ref<string> = ref(filesPage.title);
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);
@@ -100,12 +89,12 @@ export default defineComponent({
 			return i18n.locale || "de";
 		};
 
-		const timesAgo = (value: Date): string => {
+		const timesAgo = (value: string): string => {
 			return moment(value).locale(locale()).fromNow();
 		};
 
 		const router: VueRouter = useRouter();
-		const click = function (item: FileTableItem): void {
+		const click = (item: FileTableItem): void => {
 			router.push({ path: item.path });
 		};
 

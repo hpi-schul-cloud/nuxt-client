@@ -14,5 +14,5 @@ export interface FileMetaResponse {
 	path: string;
 	type: FileTypeResponse;
 	size: number;
-	lastChanged: Date;
+	lastChanged: string;
 }

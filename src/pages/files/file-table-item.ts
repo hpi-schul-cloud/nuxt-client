@@ -6,5 +6,5 @@ export interface FileTableItem {
 		colored?: boolean;
 	};
 	size: string;
-	lastChanged: Date;
+	lastChanged: string;
 }

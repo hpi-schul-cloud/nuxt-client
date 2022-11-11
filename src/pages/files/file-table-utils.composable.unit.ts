@@ -1,14 +1,16 @@
-import {
-	FilesPage,
-	getDeepBreadcumbs,
-	getFileCategory,
-	getFilesPageForRoute,
-	getHeaders,
-} from "@pages/files/file-table-utils";
 import { DataTableHeader } from "vuetify";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
 import { Route } from "vue-router";
 import { collaborativeFilesModule } from "@utils/store-accessor";
+import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
+import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
+import {
+	CollaborativeFile,
+	CollaborativeFileType,
+	FileIcon,
+} from "@store/types/collaborative-file";
+import { fileTableComposable } from "@pages/files/file-table-utils.composable";
+import { FilesPageConfig } from "@pages/files/file-page-config.type";
 
 jest.mock("@utils/store-accessor", () => ({
 	collaborativeFilesModule: {
@@ -22,6 +24,14 @@ describe("FileTableUtils", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
+
+	let {
+		getHeaders,
+		getFilesPageForRoute,
+		getFileCategory,
+		mapFileMetaListResponse,
+		getDeepBreadcumbs,
+	} = fileTableComposable();
 
 	beforeAll(() => {});
 
@@ -122,7 +132,10 @@ describe("FileTableUtils", () => {
 					params: {},
 				} as Route;
 
-				const filesOverview: FilesPage = getFilesPageForRoute(tMock, route);
+				const filesOverview: FilesPageConfig = getFilesPageForRoute(
+					tMock,
+					route
+				);
 				await filesOverview.loadFilesFunction();
 
 				expect(filesOverview.title).toEqual(expectedTranslation);
@@ -140,7 +153,10 @@ describe("FileTableUtils", () => {
 					params: {},
 				} as Route;
 
-				const filesOverview: FilesPage = getFilesPageForRoute(tMock, route);
+				const filesOverview: FilesPageConfig = getFilesPageForRoute(
+					tMock,
+					route
+				);
 				await filesOverview.loadFilesFunction();
 
 				expect(filesOverview.breadcrumbs).toEqual([
@@ -160,7 +176,10 @@ describe("FileTableUtils", () => {
 					params: { catchAll: "testFolder1/testFolder2" } as unknown,
 				} as Route;
 
-				const filesOverview: FilesPage = getFilesPageForRoute(tMock, route);
+				const filesOverview: FilesPageConfig = getFilesPageForRoute(
+					tMock,
+					route
+				);
 				await filesOverview.loadFilesFunction();
 
 				expect(filesOverview.breadcrumbs).toEqual([
@@ -186,6 +205,45 @@ describe("FileTableUtils", () => {
 			expect(() => getFilesPageForRoute(tMock, route)).toThrowError(
 				"page not found"
 			);
+		});
+	});
+
+	describe("mapFileMetaListResponse", () => {
+		it("should map a fileMetaListResponse to collaborativeFile array", () => {
+			const response: FileMetaListResponse = {
+				data: [
+					{
+						id: "id",
+						name: "FileName",
+						size: 38383,
+						type: FileTypeResponse.FILE,
+						path: "/path/to/fileName",
+						lastChanged: new Date(2022, 10, 11).toISOString(),
+					},
+					{
+						id: "id2",
+						name: "FileName2",
+						size: 2112,
+						type: FileTypeResponse.DIRECTORY,
+						path: "/path/to/fileName2",
+						lastChanged: new Date(2022, 10, 10).toISOString(),
+					},
+				],
+				size: 2,
+			};
+
+			const collaborativeFiles: CollaborativeFile[] =
+				mapFileMetaListResponse(response);
+
+			expect(collaborativeFiles[0]).toEqual({
+				name: "FileName",
+				size: 38383,
+				type: CollaborativeFileType.FILE,
+				path: "/path/to/fileName",
+				lastChanged: new Date(2022, 10, 11).toISOString(),
+				icon: FileIcon.FILE,
+				translationKey: undefined,
+			});
 		});
 	});
 });
