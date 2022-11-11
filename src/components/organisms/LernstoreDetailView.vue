@@ -412,11 +412,11 @@ $tablet-portrait-width: 768px;
 
 			.preview-player {
 				position: relative;
-				top: 25%;
+				top: 15%;
 				height: 100%;
 
-				@media (max-width: $tablet-portrait-width) {
-					top: 15%;
+				@media (min-width: 1025px) {
+					top: 25%;
 				}
 			}
 
