@@ -54,6 +54,10 @@ export default {
 </script>
 
 <style>
+.spinner {
+	top: 0 !important;
+}
+
 .player-iframe {
 	width: 100%;
 	border: none;
