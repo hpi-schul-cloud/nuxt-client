@@ -10,7 +10,6 @@
 				v-model="description"
 				:label="$t('common.labels.description')"
 				mode="simple"
-				language="de"
 			></editor>
 			<v-btn color="primary" @click="save">{{
 				$t("common.actions.save")
