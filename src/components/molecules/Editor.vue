@@ -81,6 +81,26 @@ export default defineComponent({
 					];
 				})(),
 			},
+			plugins: (() => {
+				if (props.mode === "simple") {
+					return ["Essentials", "Bold", "Italic", "Paragraph", "Underline"];
+				}
+
+				return [
+					"Essentials",
+					"BlockQuote",
+					"Bold",
+					"Code",
+					"Heading",
+					"Italic",
+					"Link",
+					"List",
+					"Paragraph",
+					"Subscript",
+					"Superscript",
+					"Underline",
+				];
+			})(),
 			language: language,
 		};
 
