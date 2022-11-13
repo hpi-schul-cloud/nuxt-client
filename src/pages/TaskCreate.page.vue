@@ -33,13 +33,43 @@
 						<v-date-picker
 							v-model="dueDate"
 							no-title
+							color="primary"
 							@input="showDatePicker = false"
 						></v-date-picker>
 					</v-menu>
 				</v-col>
-				<v-col class="col-2"
-					><v-text-field v-model="dueTime" type="time"
-				/></v-col>
+				<v-col class="col-2">
+					<v-menu
+						v-model="showTimePicker"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+						<template #activator="{ on, attrs }">
+							<v-text-field
+								v-model="dueTime"
+								type="time"
+								v-bind="attrs"
+								v-on="on"
+							/>
+						</template>
+						<v-list height="200">
+							<v-list-item-group v-model="selectedTime" color="primary">
+								<template v-for="(time, index) in timesOfDayList">
+									<v-list-item
+										:key="index"
+										class="time-list-item"
+										@click="selectTime(time)"
+									>
+										<v-list-item-title>{{ time }}</v-list-item-title>
+									</v-list-item>
+								</template>
+							</v-list-item-group>
+						</v-list>
+					</v-menu>
+				</v-col>
 			</v-row>
 			<v-btn color="secondary" outlined @click="cancel">
 				{{ $t("common.actions.cancel") }}
@@ -79,6 +109,8 @@ export default {
 		const dueDate = ref("");
 		const dueTime = ref("");
 		const showDatePicker = ref(false);
+		const showTimePicker = ref(false);
+		const selectedTime = ref(null);
 
 		const breadcrumbs = [
 			{
@@ -87,11 +119,33 @@ export default {
 			},
 		];
 
+		const timesOfDayList = computed(() => {
+			const times = [];
+
+			for (let hour = 0; hour < 24; hour++) {
+				times.push(moment({ hour }).format("HH:mm"));
+				times.push(
+					moment({
+						hour,
+						minute: 30,
+					}).format("HH:mm")
+				);
+			}
+
+			return times;
+		});
+		console.log(timesOfDayList);
+
 		const formattedDate = computed(() => {
 			return dueDate.value
 				? moment(dueDate.value).format(i18n.t("format.date"))
 				: "";
 		});
+
+		const selectTime = (time) => {
+			dueTime.value = time;
+			showTimePicker.value = false;
+		};
 
 		const save = async () => {
 			const dueDateTime = dueDate.value + " " + dueTime.value;
@@ -117,6 +171,10 @@ export default {
 			dueDate,
 			dueTime,
 			showDatePicker,
+			showTimePicker,
+			timesOfDayList,
+			selectedTime,
+			selectTime,
 			save,
 			cancel,
 		};
@@ -133,5 +191,9 @@ export default {
 ::v-deep .v-input__icon--append .v-icon {
 	width: 20px;
 	height: 20px;
+}
+
+.time-list-item {
+	min-height: 24px;
 }
 </style>
