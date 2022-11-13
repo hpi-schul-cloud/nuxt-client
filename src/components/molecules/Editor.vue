@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref, inject } from "@vue/composition-api";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 require("@hpi-schul-cloud/ckeditor/build/translations/en");
 require("@hpi-schul-cloud/ckeditor/build/translations/es");
@@ -41,14 +41,19 @@ export default defineComponent({
 			validator: (value) => ["simple", "regular"].includes(value),
 			default: "regular",
 		},
-		language: {
-			type: String,
-			validator: (value) => ["de", "en", "es"].includes(value),
-			default: "de",
-		},
 	},
 	setup(props, { emit }) {
+		const i18n = inject("i18n");
+
 		const content = ref(props.value);
+		const language = (() => {
+			// as we don't have a translation for ua yet we map to en
+			if (i18n.locale === "ua") {
+				return "en";
+			}
+
+			return i18n.locale;
+		})();
 
 		const config = {
 			toolbar: {
@@ -76,7 +81,7 @@ export default defineComponent({
 					];
 				})(),
 			},
-			language: props.language,
+			language: language,
 		};
 
 		const handleInput = () => emit("input", content.value);
