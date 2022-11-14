@@ -478,6 +478,7 @@
 	"pages.administration.selected": "ausgewählt",
 	"pages.administration.actions": "Aktionen",
 	"pages.administration.sendMail.success": "Registrierungslink(s) erfolgreich verschickt",
+	"pages.administration.sendMail.alreadyRegistered": "Die Registrierungsmail wurde nicht versendet, weil bereits eine Registrierung erfolgt ist",
 	"pages.administration.students.consent.cancel.modal.confirm": "Trotzdem abbrechen",
 	"pages.administration.students.consent.cancel.modal.continue": "Registrierung weiter machen",
 	"pages.administration.students.consent.cancel.modal.download.continue": "Zugangsdaten drucken",

@@ -467,6 +467,7 @@
 	"pages.administration.remove.success": "Usuarios seleccionados eliminados",
 	"pages.administration.sendMail.error": "No se ha podido enviar el enlace de registro | No se han podido enviar los enlaces de registro",
 	"pages.administration.sendMail.success": "Enlace de registro enviado correctamente | Enlaces de registro enviados correctamente",
+	"pages.administration.sendMail.alreadyRegistered": "El correo electrónico de registro no se ha enviado porque el registro ya ha tenido lugar",
 	"pages.administration.or": "o",
 	"pages.administration.all": "todos",
 	"pages.administration.select": "seleccionad@s",
