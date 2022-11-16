@@ -1,16 +1,48 @@
-export default [
+export type SidebarItemBase = {
+	title: string;
+	icon: string;
+	source?: "material" | "custom" | "fa";
+	testId: string;
+	permission?: string;
+	excludedPermission?: string;
+	activeForUrls: string[];
+};
+
+export type SidebarItemExternalLink = {
+	href: string;
+};
+
+export type SidebarItemRouterLink = {
+	to: string;
+};
+
+export type SidebarItem = SidebarItemBase &
+	(SidebarItemExternalLink | SidebarItemRouterLink);
+
+export type SidebarCategoryItem = SidebarItem & {
+	children: SidebarItem[];
+};
+
+export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
+
+const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
 		icon: "th-large",
 		testId: "Übersicht",
+		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
 		title: "global.sidebar.courses",
 		to: "/rooms-overview",
 		icon: "graduation-cap",
 		testId: "Course-Overview",
-		activeForUrls: ["/rooms", "/rooms-list"],
+		activeForUrls: [
+			"^/rooms-overview($|/.*)",
+			"^/rooms($|/.*)",
+			"^/rooms-list($|/.*)",
+		],
 	},
 	{
 		title: "global.sidebar.teams",
@@ -18,6 +50,7 @@ export default [
 		icon: "users",
 		permission: "TEAMS_ENABLED",
 		testId: "Teams",
+		activeForUrls: ["^/teams($|/.*)"],
 	},
 	{
 		title: "global.sidebar.tasks",
@@ -26,6 +59,7 @@ export default [
 		source: "custom",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Aufgaben",
+		activeForUrls: ["^/tasks($|/.*)"],
 	},
 	{
 		title: "global.sidebar.tasks",
@@ -34,6 +68,7 @@ export default [
 		source: "custom",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aufgaben",
+		activeForUrls: ["^/tasks($|/.*)"],
 	},
 	{
 		title: "global.sidebar.files-old",
@@ -41,18 +76,21 @@ export default [
 		href: "/files",
 		icon: "folder-open",
 		testId: "Meine Dateien",
+		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.filesPersonal",
 				icon: "folder-open-o",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
+				activeForUrls: ["^/files/my($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
 				icon: "folder-open-o",
 				href: "/files/courses/",
 				testId: "Kurse",
+				activeForUrls: ["^/files/courses($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
@@ -60,12 +98,14 @@ export default [
 				icon: "folder-open-o",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
+				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.filesShared",
 				icon: "folder-open-o",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
+				activeForUrls: ["^/files/shared($|/.*)"],
 			},
 		],
 	},
@@ -75,18 +115,21 @@ export default [
 		href: "/cfiles",
 		icon: "folder-open",
 		testId: "Dateien",
+		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",
 		href: "/news",
 		icon: "newspaper-o",
 		testId: "Neuigkeiten",
+		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
 		icon: "table",
 		testId: "Termine",
+		activeForUrls: ["^/calendar($|/.*)"],
 	},
 	{
 		title: "common.words.lernstore",
@@ -94,6 +137,7 @@ export default [
 		icon: "search",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
+		activeForUrls: ["^/content($|/.*)"],
 	},
 	{
 		title: "global.sidebar.addons",
@@ -101,6 +145,7 @@ export default [
 		icon: "puzzle-piece",
 		permission: "ADDONS_ENABLED",
 		testId: "Add-ons",
+		activeForUrls: ["^/addons($|/.*)"],
 	},
 	{
 		title: "global.sidebar.management",
@@ -109,6 +154,7 @@ export default [
 		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
+		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
@@ -116,18 +162,21 @@ export default [
 				to: "/administration/students",
 				permission: "STUDENT_LIST",
 				testId: "Schüler:innen",
+				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teacher",
 				icon: "user",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
+				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
 				icon: "users",
 				href: "/administration/classes",
 				testId: "Klassen",
+				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
 		],
 	},
@@ -137,42 +186,52 @@ export default [
 		icon: "cogs",
 		permission: "ADMIN_VIEW",
 		testId: "Verwaltung",
+		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
 				to: "/administration/students",
 				testId: "Schüler:innen",
+				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teacher",
 				icon: "user",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
+				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
 				icon: "graduation-cap",
 				href: "/administration/courses",
 				testId: "Kurse",
+				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
 				icon: "users",
 				href: "/administration/classes",
 				testId: "Klassen",
+				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
 				icon: "users",
 				href: "/administration/teams",
 				testId: "Teams",
+				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.school",
 				icon: "building",
 				href: "/administration/school",
 				testId: "Schule",
+				activeForUrls: [
+					"^/administration/school($|/.*)",
+					"^/administration/school-settings($|/.*)",
+				],
 			},
 		],
 	},
@@ -181,6 +240,7 @@ export default [
 		href: "/help",
 		icon: "question-circle",
 		testId: "Hilfebereich",
+		activeForUrls: ["^/help($|/.*)"],
 	},
 	{
 		title: "global.sidebar.myMaterial",
@@ -188,5 +248,7 @@ export default [
 		icon: "book",
 		permission: "BETA_FEATURES",
 		testId: "Meine Materialien",
+		activeForUrls: ["^/my-material($|/.*)"],
 	},
 ];
+export default sidebarBaseItems;

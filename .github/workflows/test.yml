@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node }}
       - name: npm ci
@@ -42,7 +42,7 @@ jobs:
       - name: npm run lint:fix
         if: failure() && matrix.os == 'ubuntu-latest'
         run: npm run lint
-      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      - uses: stefanzweifel/git-auto-commit-action@ebb57560423c39cbe37e0620f5653ed953658014
         # only run on one of the matrix builds
         if: failure() && matrix.os == 'ubuntu-latest'
         with:

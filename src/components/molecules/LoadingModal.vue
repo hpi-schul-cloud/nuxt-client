@@ -3,7 +3,13 @@
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>
-					<base-spinner :color="color" size="large" />
+					<v-progress-circular
+						indeterminate
+						width="2"
+						:color="color"
+						size="60"
+						class="mb-6"
+					/>
 				</template>
 			</modal-body-info>
 		</template>
