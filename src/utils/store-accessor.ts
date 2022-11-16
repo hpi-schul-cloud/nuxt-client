@@ -5,6 +5,7 @@ import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
+import CollaborativeFilesModule from "@store/collaborative-files";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
@@ -24,6 +25,7 @@ import { getModule } from "vuex-module-decorators";
 let accountsModule: AccountsModule;
 let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
+let collaborativeFilesModule: CollaborativeFilesModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
@@ -46,6 +48,7 @@ function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
+	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
@@ -63,6 +66,10 @@ function initializeStores(store: Store<any>): void {
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	tasksModule = getModule(TasksModule, store);
 	taskModule = getModule(TaskModule, store);
+	notifierModule = getModule(NotifierModule, store);
+	copyModule = getModule(CopyModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
+	shareCourseModule = getModule(ShareCourseModule, store);
 }
 
 export {
@@ -70,6 +77,7 @@ export {
 	accountsModule,
 	authModule,
 	autoLogoutModule,
+	collaborativeFilesModule,
 	contentModule,
 	copyModule,
 	envConfigModule,
