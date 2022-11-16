@@ -1,3 +1,7 @@
+import SchoolsModule from "@/store/schools";
+import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 
 const mockResponseData = {
@@ -64,6 +68,15 @@ describe("ldap/activate", () => {
 			},
 		},
 	};
+
+	beforeEach(() => {
+		document.body.setAttribute("data-app", "true");
+		setupStores({
+			"env-config": EnvConfigModule,
+			schools: SchoolsModule,
+		});
+		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
+	});
 
 	it(...isValidComponent(ldapActivate));
 
@@ -204,5 +217,36 @@ describe("ldap/activate", () => {
 
 		const infoMessage = wrapper.find(`[data-testid="errorInfoMessage"]`);
 		expect(infoMessage.exists()).toBe(true);
+	});
+
+	it("should not show checkbox for user migration", async () => {
+		const wrapper = mount(ldapActivate, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				$router: { push: routerPushStub },
+				$route,
+			}),
+		});
+		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
+		expect(section.exists()).toBe(false);
+		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
+		expect(checkbox.exists()).toBe(false);
+	});
+
+	it("should show checkbox for user migration", async () => {
+		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: true });
+		const wrapper = mount(ldapActivate, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				$router: { push: routerPushStub },
+				$route,
+			}),
+		});
+		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
+		expect(section.exists()).toBe(true);
+		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
+		expect(checkbox.exists()).toBe(true);
 	});
 });
