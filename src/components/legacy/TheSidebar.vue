@@ -22,7 +22,10 @@
 				>
 					<li
 						class="list-item"
-						:class="{ active: route.active, 'child-active': route.childActive }"
+						:class="{
+							active: isActive(route.title),
+							'child-active': isChildActive(route.title),
+						}"
 						:data-testId="route.testId"
 					>
 						<base-link
@@ -36,7 +39,7 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="
-									route.active || route.childActive
+									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'
 										: 'var(--v-secondary-base)'
 								"
@@ -45,11 +48,14 @@
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
-					<ul v-if="route.active || route.childActive" class="px-0">
+					<ul
+						v-if="isActive(route.title) || isChildActive(route.title)"
+						class="px-0"
+					>
 						<li
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"
-							:class="{ active: child.active }"
+							:class="{ active: isActive(child.title) }"
 							class="list-item list-sub-item"
 							:data-testId="child.testId"
 						>
@@ -64,7 +70,7 @@
 									:icon="child.icon"
 									:source="child.source || 'fa'"
 									:fill="
-										child.active
+										isActive(child.title)
 											? 'var(--v-primary-base)'
 											: 'var(--v-secondary-base)'
 									"
@@ -80,15 +86,23 @@
 	</aside>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, useRoute, watch } from "@nuxtjs/composition-api";
+import baseLink from "@basecomponents/BaseLink.vue";
+import baseIcon from "@basecomponents/BaseIcon.vue";
+import { SidebarItem } from "@utils/sidebar-base-items";
+
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	name: "TheSidebar",
+	components: { baseLink, baseIcon },
 	props: {
 		routes: {
 			type: Array,
 			default: () => [],
-			validator: (value) => {
+			validator: (value: []) => {
 				return value.every(
-					(route) => route.title && route.icon && (route.to || route.href)
+					(route: any) => route.title && route.icon && (route.to || route.href)
 				);
 			},
 		},
@@ -96,11 +110,50 @@ export default {
 			type: Boolean,
 		},
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+	setup(props) {
+		const activeItem = ref("");
+		const activeParent = ref("");
+
+		const route = useRoute();
+
+		const isItemActiveForRoute = (item: SidebarItem) =>
+			item.activeForUrls.some((activeFor) =>
+				new RegExp(activeFor).test(route.value.path)
+			);
+
+		const updateActiveItems = () => {
+			props.routes.forEach((item: any) => {
+				if (isItemActiveForRoute(item)) {
+					activeItem.value = item.title;
+					activeParent.value = "";
+				}
+				if (item.children) {
+					item.children.forEach((childItem: SidebarItem) => {
+						if (isItemActiveForRoute(childItem)) {
+							activeItem.value = childItem.title;
+							activeParent.value = item.title;
+						}
+					});
+				}
+			});
+		};
+		updateActiveItems();
+		watch(route, updateActiveItems);
+
+		const isActive = (title: string): boolean => {
+			return title === activeItem.value;
+		};
+
+		const isChildActive = (title: string): boolean => {
+			return title === activeParent.value;
+		};
+
+		return {
+			isActive,
+			isChildActive,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -845,10 +845,10 @@ export interface ImportUserResponse {
     lastName: string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ImportUserResponse
      */
-    roleNames: ImportUserResponseRoleNamesEnum;
+    roleNames: Array<ImportUserResponseRoleNamesEnum>;
     /**
      * names of classes the user attends from external system
      * @type {Array<string>}
@@ -857,16 +857,16 @@ export interface ImportUserResponse {
     classNames: Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {object}
+     * @type {UserMatchResponse}
      * @memberof ImportUserResponse
      */
-    match?: object;
+    match?: UserMatchResponse;
     /**
      * manual flag to apply it as filter
-     * @type {object}
+     * @type {boolean}
      * @memberof ImportUserResponse
      */
-    flagged: object;
+    flagged: boolean;
 }
 
 /**
@@ -2421,10 +2421,10 @@ export interface UserMatchResponse {
     lastName: string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {string}
+     * @type {Array<string>}
      * @memberof UserMatchResponse
      */
-    roleNames: UserMatchResponseRoleNamesEnum;
+    roleNames: Array<UserMatchResponseRoleNamesEnum>;
     /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
      * @type {string}
@@ -8082,10 +8082,13 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration: async (options: any = {}): Promise<RequestArgs> => {
+        importUserControllerStartSchoolInUserMigration: async (useCentralLdap: boolean, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'useCentralLdap' is not null or undefined
+            assertParamExists('importUserControllerStartSchoolInUserMigration', 'useCentralLdap', useCentralLdap)
             const localVarPath = `/user/import/startUserMigration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8101,6 +8104,10 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (useCentralLdap !== undefined) {
+                localVarQueryParameter['useCentralLdap'] = useCentralLdap;
+            }
 
 
     
@@ -8239,11 +8246,12 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerStartSchoolInUserMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(options);
+        async importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(useCentralLdap, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -8334,11 +8342,12 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void> {
-            return localVarFp.importUserControllerStartSchoolInUserMigration(options).then((request) => request(axios, basePath));
+        importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8426,11 +8435,12 @@ export interface UserImportApiInterface {
 
     /**
      * 
+     * @param {boolean} useCentralLdap 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void>;
+    importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8530,12 +8540,13 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
+     * @param {boolean} useCentralLdap 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerStartSchoolInUserMigration(options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

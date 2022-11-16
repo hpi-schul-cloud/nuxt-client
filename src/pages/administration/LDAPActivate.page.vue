@@ -10,7 +10,9 @@
 			{{ $t("common.actions.back") }}
 		</v-btn>
 		<section class="section">
-			<h1 class="h4">{{ $t("pages.administration.ldap.save.title") }}</h1>
+			<h1 class="h2">
+				{{ $t("pages.administration.ldap.save.title") }}
+			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
@@ -105,6 +107,39 @@
 				type="bc-error"
 			/>
 		</div>
+		<section
+			v-if="showUserMigrationOption"
+			class="section"
+			data-testid="migrateUsersSection"
+		>
+			<h3 class="title-class">
+				{{
+					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
+				}}
+			</h3>
+			<base-input
+				v-model="migrateUsersCheckbox"
+				type="checkbox"
+				:label="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')
+				"
+				data-testid="migrateUsersCheckbox"
+			/>
+			<p
+				v-html="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.info')
+				"
+			></p>
+		</section>
+		<div v-if="schoolErrors" class="errors-container">
+			<info-message
+				data-testid="school-migration-activation-error"
+				:message="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.error')
+				"
+				type="bc-error"
+			/>
+		</div>
 		<div class="bottom-buttons">
 			<v-btn
 				text
@@ -130,7 +165,7 @@
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>
-			<template #header></template>
+			<template #header />
 			<template #body>
 				<modal-body-info
 					:title="$t('pages.administration.ldap.activate.message')"
@@ -157,6 +192,7 @@
 </template>
 
 <script>
+import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
@@ -181,6 +217,7 @@ export default {
 	},
 	data() {
 		return {
+			migrateUsersCheckbox: false,
 			mdiChevronLeft,
 		};
 	},
@@ -191,6 +228,12 @@ export default {
 			submitted: "getSubmitted",
 			status: "getStatus",
 		}),
+		showUserMigrationOption() {
+			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED;
+		},
+		schoolErrors() {
+			return schoolsModule.error;
+		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
 		},
@@ -199,6 +242,9 @@ export default {
 		if (!Object.keys(this.verified).length) {
 			redirectToConfigPage(this);
 		}
+	},
+	mounted() {
+		this.migrateUsersCheckbox = this.showUserMigrationOption;
 	},
 	methods: {
 		backButtonHandler() {
@@ -210,6 +256,12 @@ export default {
 
 			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
 				delete temporaryConfigData.searchUserPassword;
+			}
+			if (this.migrateUsersCheckbox) {
+				await schoolsModule.setSchoolInUserMigration(false);
+				if (this.schoolErrors) {
+					return;
+				}
 			}
 
 			if (id) {
@@ -243,6 +295,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .subtitle-text {
 	margin-top: var(--space-xl);
 }
@@ -299,5 +353,10 @@ tr:nth-child(odd) {
 	flex-direction: column;
 	align-items: flex-end;
 	margin: var(--space-xl-2);
+}
+
+.title-class {
+	margin-top: var(--space-xl-3);
+	margin-bottom: var(--space-lg);
 }
 </style>

@@ -1,4 +1,4 @@
-// import { authModule } from "@/store";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
@@ -163,5 +163,20 @@ export const routes = [
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "files",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams/:catchAll(.*)",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 ];
