@@ -24,6 +24,9 @@ describe("CollaborativeFilesModule", () => {
 			collaborativeFilesModule,
 			"addFileMetaData"
 		);
+		const tMock = jest.fn().mockImplementation((key: string) => {
+			return key;
+		});
 		const mockFile: CollaborativeFile = {
 			name: "name",
 			size: 123,
@@ -59,6 +62,7 @@ describe("CollaborativeFilesModule", () => {
 			addFileMetaDataSpy,
 			mockFile,
 			mockFileMetaListResponse,
+			tMock,
 		};
 	}
 
@@ -182,10 +186,13 @@ describe("CollaborativeFilesModule", () => {
 
 	describe("addFileMetaData", () => {
 		it("should call the useFileTableUtils", async () => {
-			const { mockFileMetaListResponse } = setup();
+			const { mockFileMetaListResponse, tMock } = setup();
 			const mapFileMetaListResponseMock = jest.fn();
 			jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
-				...fileTableComposable.useFileTableUtils(collaborativeFilesModule),
+				...fileTableComposable.useFileTableUtils(
+					collaborativeFilesModule,
+					tMock
+				),
 				mapFileMetaListResponse: mapFileMetaListResponseMock,
 			});
 
@@ -197,9 +204,12 @@ describe("CollaborativeFilesModule", () => {
 		});
 
 		it("should set the mapped files to store", async () => {
-			const { mockFileMetaListResponse } = setup();
+			const { mockFileMetaListResponse, tMock } = setup();
 			jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
-				...fileTableComposable.useFileTableUtils(collaborativeFilesModule),
+				...fileTableComposable.useFileTableUtils(
+					collaborativeFilesModule,
+					tMock
+				),
 				mapFileMetaListResponse(
 					response: FileMetaListResponse
 				): CollaborativeFile[] {
