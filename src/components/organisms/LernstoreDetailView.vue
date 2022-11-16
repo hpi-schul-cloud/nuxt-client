@@ -381,7 +381,6 @@ $tablet-portrait-width: 768px;
 	.content {
 		position: relative;
 		grid-area: content;
-		overflow: hidden;
 
 		@media (max-width: $tablet-portrait-width) {
 			position: sticky;
@@ -408,16 +407,6 @@ $tablet-portrait-width: 768px;
 				margin: auto;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				color: white;
-			}
-
-			.preview-player {
-				position: relative;
-				top: 15%;
-				height: 100%;
-
-				@media (min-width: 1025px) {
-					top: 25%;
-				}
 			}
 
 			.preview-background-color {

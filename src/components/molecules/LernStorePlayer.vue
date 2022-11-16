@@ -5,7 +5,7 @@
 		class="player-iframe"
 		allowfullscreen="allowfullscreen"
 		frameborder="0"
-		scrolling="no"
+		scrolling="yes"
 	></iframe>
 	<base-spinner v-else class="spinner" size="xlarge" />
 	<!--
