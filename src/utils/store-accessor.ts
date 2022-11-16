@@ -4,6 +4,7 @@ import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import ErrorModule from "@/store/error";
 import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -27,6 +28,7 @@ let autoLogoutModule: AutoLogoutModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
+let errorModule: ErrorModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTasksModule: FinishedTasksModule;
@@ -49,6 +51,7 @@ function initializeStores(store: Store<any>): void {
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
+	errorModule = getModule(ErrorModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
@@ -73,6 +76,7 @@ export {
 	contentModule,
 	copyModule,
 	envConfigModule,
+	errorModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,

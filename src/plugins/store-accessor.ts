@@ -4,6 +4,7 @@ import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import ErrorModule from "@/store/error";
 import FilePathsModule from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -31,6 +32,7 @@ export default () => {
 		provide("contentModule", getModule(ContentModule, store));
 		provide("copyModule", getModule(CopyModule, store));
 		provide("envConfigModule", getModule(EnvConfigModule, store));
+		provide("errorModule", getModule(ErrorModule, store));
 		provide("filePathsModule", getModule(FilePathsModule, store));
 		provide("filesPOCModule", getModule(FilesPOCModule, store));
 		provide("finishedTasksModule", getModule(FinishedTasksModule, store));
