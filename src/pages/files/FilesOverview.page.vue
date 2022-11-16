@@ -45,7 +45,7 @@ import {
 	useRouter,
 } from "@nuxtjs/composition-api";
 import { CollaborativeFile } from "@store/types/collaborative-file";
-import { fileTableComposable } from "@pages/files/file-table-utils.composable";
+import { useFileTableUtils } from "@pages/files/file-table-utils.composable";
 import VueI18n, { Locale } from "vue-i18n";
 import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
@@ -74,20 +74,20 @@ export default defineComponent({
 		};
 
 		const { getHeaders, mapFileToFileTableItem, getFilesPageForRoute } =
-			fileTableComposable(collaborativeFilesModule);
+			useFileTableUtils(collaborativeFilesModule, t);
 
-		const headers: DataTableHeader[] = getHeaders(t);
+		const headers: DataTableHeader[] = getHeaders();
 
 		const items: ComputedRef<FileTableItem[]> = computed(() => {
 			return collaborativeFilesModule.getFiles.map(
 				(file: CollaborativeFile) => {
-					return mapFileToFileTableItem(file, t);
+					return mapFileToFileTableItem(file);
 				}
 			);
 		});
 
 		const route: Route = useRoute().value;
-		const filesPage: FilesPageConfig = getFilesPageForRoute(t, route);
+		const filesPage: FilesPageConfig = getFilesPageForRoute(route);
 
 		const title: Ref<string> = ref(filesPage.title);
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);

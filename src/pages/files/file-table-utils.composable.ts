@@ -15,10 +15,11 @@ import {
 import { FilesPageConfig } from "@pages/files/file-page-config.type";
 import CollaborativeFilesModule from "@store/collaborative-files";
 
-export function fileTableComposable(
-	collaborativeFilesModule: CollaborativeFilesModule
+export function useFileTableUtils(
+	collaborativeFilesModule: CollaborativeFilesModule,
+	t: (key: string) => string
 ) {
-	function getHeaders(t: (key: string) => string): DataTableHeader[] {
+	const getHeaders = (): DataTableHeader[] => {
 		return [
 			{ text: "", value: "icon", sortable: false, width: 5 },
 			{
@@ -40,7 +41,7 @@ export function fileTableComposable(
 				width: "140",
 			},
 		];
-	}
+	};
 
 	const getDeepBreadcumbs = (params: string[]): Breadcrumb[] => {
 		let redirectTo = "/cfiles/teams";
@@ -62,10 +63,7 @@ export function fileTableComposable(
 		return pathArray.length >= 2 ? pathArray[1] : pathArray[0];
 	};
 
-	const mapFileToFileTableItem = (
-		file: CollaborativeFile,
-		t: (key: string) => string
-	): FileTableItem => {
+	const mapFileToFileTableItem = (file: CollaborativeFile): FileTableItem => {
 		return {
 			name: file.translationKey ? t(file.translationKey) : file.name,
 			path: file.path,
@@ -78,16 +76,16 @@ export function fileTableComposable(
 		};
 	};
 
-	function getFilesOverview(t: (key: string) => string): FilesPageConfig {
+	const getFilesOverview = (): FilesPageConfig => {
 		return {
 			title: t("pages.files.overview.headline"),
 			breadcrumbs: [],
 			loadFilesFunction: async () =>
 				collaborativeFilesModule.fetchFilesOverview(),
 		};
-	}
+	};
 
-	function getTeamsOverview(t: (key: string) => string): FilesPageConfig {
+	const getTeamsOverview = (): FilesPageConfig => {
 		return {
 			title: t("pages.files.overview.teamFiles"),
 			breadcrumbs: [
@@ -98,12 +96,9 @@ export function fileTableComposable(
 			],
 			loadFilesFunction: async () => collaborativeFilesModule.fetchTeams(),
 		};
-	}
+	};
 
-	function getTeamsPage(
-		t: (key: string) => string,
-		route: Route
-	): FilesPageConfig {
+	const getTeamsPage = (route: Route): FilesPageConfig => {
 		const paramsArray: string[] = route.params.catchAll
 			.split("/")
 			.filter((element: string) => element !== "");
@@ -126,12 +121,9 @@ export function fileTableComposable(
 			loadFilesFunction: async () =>
 				collaborativeFilesModule.fetchTeamFiles(teamsPath),
 		};
-	}
+	};
 
-	function getFilesPageForRoute(
-		t: (key: string) => string,
-		route: Route
-	): FilesPageConfig {
+	const getFilesPageForRoute = (route: Route): FilesPageConfig => {
 		const pathArray: string[] = route.path
 			.split("/")
 			.filter((element: string) => element !== "");
@@ -140,17 +132,17 @@ export function fileTableComposable(
 
 		switch (currentCategory) {
 			case "cfiles":
-				return getFilesOverview(t);
+				return getFilesOverview();
 			case "teams":
 				if (pathArray.length == 2) {
-					return getTeamsOverview(t);
+					return getTeamsOverview();
 				} else {
-					return getTeamsPage(t, route);
+					return getTeamsPage(route);
 				}
 			default:
 				throw new Error("page not found");
 		}
-	}
+	};
 
 	const FileTypeMapping: Record<FileTypeResponse, CollaborativeFileType> = {
 		[FileTypeResponse.FILE]: CollaborativeFileType.FILE,
@@ -160,16 +152,18 @@ export function fileTableComposable(
 		[FileTypeResponse.FAVORITES]: CollaborativeFileType.FAVORITES,
 	};
 
-	function mapFileMetaListResponse(
+	const mapFileMetaListResponse = (
 		response: FileMetaListResponse
-	): CollaborativeFile[] {
+	): CollaborativeFile[] => {
 		const files: CollaborativeFile[] = response.data.map(
 			(fileMeta: FileMetaResponse) => mapFileMetaResponse(fileMeta)
 		);
 		return files;
-	}
+	};
 
-	function mapFileMetaResponse(fileMeta: FileMetaResponse): CollaborativeFile {
+	const mapFileMetaResponse = (
+		fileMeta: FileMetaResponse
+	): CollaborativeFile => {
 		const fileType: CollaborativeFileType = FileTypeMapping[fileMeta.type];
 		const file: CollaborativeFile = {
 			path: fileMeta.path,
@@ -181,7 +175,7 @@ export function fileTableComposable(
 			translationKey: undefined,
 		};
 		return file;
-	}
+	};
 
 	return {
 		mapFileMetaListResponse,

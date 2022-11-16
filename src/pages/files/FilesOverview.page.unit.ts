@@ -23,14 +23,14 @@ describe("FileOverview", () => {
 	const loadFilesFunctionMock = jest.fn();
 	const breadcrumbTitle = "breadcrumb1";
 	const breadcrumbPath = "/cfiles/";
+	const tMock = jest.fn().mockImplementation((key: string) => {
+		return key;
+	});
 
 	beforeAll(() => {
-		jest.spyOn(fileTableComposable, "fileTableComposable").mockReturnValue({
-			...fileTableComposable.fileTableComposable(collaborativeFilesModule),
-			getFilesPageForRoute(
-				t: (key: string) => string,
-				route: Route
-			): FilesPageConfig {
+		jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
+			...fileTableComposable.useFileTableUtils(collaborativeFilesModule, tMock),
+			getFilesPageForRoute(route: Route): FilesPageConfig {
 				return {
 					title: pageTitle,
 					breadcrumbs: [
