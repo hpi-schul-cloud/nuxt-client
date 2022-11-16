@@ -1,8 +1,8 @@
 import { authModule, errorModule } from "@/store";
 
-const unrecoverableErrorCodes = [401, 404, 500];
+const unrecoverableErrorCodes = [401, 403, 404, 500];
 
-export default async function ({ $axios, store, error }) {
+export default async function ({ $axios, app, error }) {
 	const runtimeConfigJson = await $axios.get(
 		`${window.location.origin}/runtime.config.json`
 	);
@@ -39,8 +39,8 @@ export default async function ({ $axios, store, error }) {
 				};
 			}
 			errorModule.setError(unrecoverableError);
-			// store.commit("error/set", unrecoverableError);
 			error(unrecoverableError);
+			app.router.push({ path: "/request-error" });
 		}
 	});
 }
