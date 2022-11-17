@@ -10,39 +10,25 @@
 			}}</template>
 			<template #body>
 				<div class="content-modal__body">
-					<base-select
+					<v-select
 						v-model="selectedCourse"
-						class="content-modal__body--select"
-						:options="coursesOptions"
-						:show-labels="true"
+						return-object
+						item-value="_id"
+						item-text="name"
+						:items="coursesOptions"
 						:label="$t('pages.content.label.chooseACourse')"
-						placeholder
-						close-on-select
-						option-label="name"
-						:deselect-label="$t('pages.content.label.deselect')"
-						:select-label="$t('pages.content.label.select')"
-						:selected-label="$t('pages.content.label.selected')"
-						track-by="_id"
 						data-testid="topicSelector"
 					/>
 					<transition name="fade">
-						<base-select
-							v-if="!!(selectedCourse || {})._id"
+						<v-select
+							v-show="!!(selectedCourse || {})._id"
 							v-model="selectedLesson"
-							class="content-modal__body--select"
-							:options="lessonsOptions"
+							return-object
+							item-value="_id"
+							item-text="name"
+							:items="lessonsOptions"
 							:label="$t('pages.content.label.chooseALessonTopic')"
-							option-label="name"
-							close-on-select
-							:placeholder="
-								(lessonsOptions || []).length === 0
-									? $t('pages.content.placeholder.noLessonTopic')
-									: ''
-							"
-							:deselect-label="$t('pages.content.label.deselect')"
-							:select-label="$t('pages.content.label.select')"
-							:selected-label="$t('pages.content.label.selected')"
-							track-by="_id"
+							:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
 							data-testid="courseSelector"
 						/>
 					</transition>
@@ -201,5 +187,9 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+::v-deep .v-input__icon .v-icon {
+	font-size: var(--text-base-size);
 }
 </style>
