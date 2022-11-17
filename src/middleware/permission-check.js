@@ -1,7 +1,12 @@
-import { authModule } from "@/store";
+import { authModule, errorModule } from "@/store";
 
 export default async ({ app, route }) => {
+	errorModule.resetError();
 	const user = authModule.getUser;
+	const error = {
+		message: app.i18n.t("error.401"),
+		statusCode: "401",
+	};
 
 	const userHasPermission = (permission) =>
 		user.permissions.includes(permission);
@@ -11,7 +16,8 @@ export default async ({ app, route }) => {
 			return allowed;
 		}
 		if (!user) {
-			throw new Error(app.i18n.t("error.401"));
+			errorModule.setError(error);
+			throw new Error(error.message);
 		}
 		const REQUIRED_PERMISSIONS = Array.isArray(meta.requiredPermissions)
 			? meta.requiredPermissions
@@ -26,5 +32,6 @@ export default async ({ app, route }) => {
 	if (ACCESS_ALLOWED) {
 		return true; // Access allowed
 	}
-	throw new Error(app.i18n.t("error.401"));
+	errorModule.setError(error);
+	throw new Error(error.message);
 };

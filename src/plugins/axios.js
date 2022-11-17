@@ -10,7 +10,7 @@ export default async function ({ $axios, app, error }) {
 	$axios.setBaseURL(window.schoolCloudRuntimeConfig.apiURL);
 
 	$axios.onRequest((config) => {
-		errorModule.setError(null);
+		errorModule.resetError();
 
 		if (authModule.getAccessToken) {
 			config.headers.common["Authorization"] =
