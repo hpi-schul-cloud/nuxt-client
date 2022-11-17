@@ -188,6 +188,7 @@
 	"error.400": "401 — Bad Request",
 	"error.401": "401 — Unauthorized",
 	"error.404": "404 — Not Found",
+	"error.generic": "An error has occurred",
 	"error.action.back": "Click here to go back",
 	"error.load": "Error while loading the data.",
 	"error.proxy.action": "Reload page",

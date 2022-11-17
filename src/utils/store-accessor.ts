@@ -4,7 +4,7 @@ import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import ErrorModule from "@/store/error";
+import ApplicationErrorModule from "@/store/application-error";
 import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -23,12 +23,12 @@ import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
 let accountsModule: AccountsModule;
+let applicationErrorModule: ApplicationErrorModule;
 let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
-let errorModule: ErrorModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTasksModule: FinishedTasksModule;
@@ -46,12 +46,12 @@ let taskModule: TaskModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
+	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
-	errorModule = getModule(ErrorModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
@@ -70,13 +70,13 @@ function initializeStores(store: Store<any>): void {
 
 export {
 	initializeStores,
+	applicationErrorModule,
 	accountsModule,
 	authModule,
 	autoLogoutModule,
 	contentModule,
 	copyModule,
 	envConfigModule,
-	errorModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,

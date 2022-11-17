@@ -188,6 +188,7 @@
 	"error.400": "401 — Solicitud incorrecta",
 	"error.401": "401 — No autorizado",
 	"error.404": "404 — No encontrado",
+	"error.generic": "Se ha producido un error",
 	"error.action.back": "Haz clic aquí para volver",
 	"error.load": "Error al cargar los datos.",
 	"error.proxy.action": "Volver a cargar la página",

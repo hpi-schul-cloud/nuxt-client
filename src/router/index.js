@@ -6,8 +6,10 @@ const emptyFn = () => {};
 
 Vue.use(Router);
 
+export let router;
+
 export function createRouter() {
-	const router = new Router({
+	router = new Router({
 		mode: "history",
 		base: "/",
 		linkActiveClass: "nuxt-link-active",

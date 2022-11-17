@@ -1,14 +1,35 @@
 <template>
-	<div class="text-centered">
+	<div v-if="applicationError" class="text-centered">
 		<base-image
-			v-if="error.statusCode === 404"
-			img-src="@assets/img/pageNotFound.svg"
+			v-if="applicationError.statusCode === 400"
+			img-src="@assets/img/permission-error.svg"
+			img-height="300px"
+			fill="var(--v-primary-base)"
+			role="presentation"
+		/>
+		<base-image
+			v-if="applicationError.statusCode === 401"
+			img-src="@assets/img/permission-error.svg"
+			img-height="300px"
+			fill="var(--v-primary-base)"
+			role="presentation"
+		/>
+		<base-image
+			v-if="applicationError.statusCode === 403"
+			img-src="@assets/img/permission-error.svg"
 			img-height="300px"
 			fill="var(--v-primary-base)"
 			role="presentation"
 		/>
 		<img
-			v-else
+			v-if="applicationError.statusCode === 500"
+			role="presentation"
+			alt=""
+			src="@assets/img/pc_repair.png"
+			class="error-img"
+		/>
+		<img
+			v-if="!applicationError.statusCode"
 			role="presentation"
 			alt=""
 			src="@assets/img/pc_repair.png"
@@ -16,29 +37,44 @@
 		/>
 
 		<h1 class="error-msg">
-			<template v-if="error.message">
-				{{ error.message }}
+			<template v-if="applicationError.message">
+				{{ applicationError.message }}
 			</template>
-			<template v-else> Ein Fehler ist aufgetreten </template>
+			<template v-else> {{ $t("error.generic") }} </template>
 		</h1>
 		<slot name="action">
-			<v-btn color="primary" depressed @click="$router.go(-1)">
-				{{ $t("error.action.back") }}
+			<v-btn color="primary" depressed @click="onBackClick">
+				<!-- {{ $t("error.action.back") }} -->
+
+				<!-- TODO: ask UXies -->
+				Go to Dashboard
 			</v-btn>
 		</slot>
 	</div>
 </template>
 <script>
+import { applicationErrorModule } from "@/store";
 export default {
-	props: {
-		error: {
-			type: Object,
-			required: true,
-		},
-	},
+	props: {},
 	data() {
 		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			error: {},
+		};
+	},
+	computed: {
+		applicationError() {
+			return applicationErrorModule.getError;
+		},
+	},
+	destroyed() {
+		applicationErrorModule.resetError();
+	},
+	methods: {
+		onBackClick() {
+			this.$router.push("/dashboard");
+			applicationErrorModule.resetError();
+		},
 	},
 };
 </script>

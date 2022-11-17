@@ -1,4 +1,4 @@
-import { authModule, errorModule } from "@/store";
+import { authModule, applicationErrorModule } from "@/store";
 
 const unrecoverableErrorCodes = [401, 403, 404, 500];
 
@@ -10,8 +10,6 @@ export default async function ({ $axios, app, error }) {
 	$axios.setBaseURL(window.schoolCloudRuntimeConfig.apiURL);
 
 	$axios.onRequest((config) => {
-		errorModule.resetError();
-
 		if (authModule.getAccessToken) {
 			config.headers.common["Authorization"] =
 				"Bearer " + authModule.getAccessToken;
@@ -38,9 +36,9 @@ export default async function ({ $axios, app, error }) {
 					data: unrecoverableError,
 				};
 			}
-			errorModule.setError(unrecoverableError);
+			applicationErrorModule.setError(unrecoverableError);
 			error(unrecoverableError);
-			app.router.push({ path: "/request-error" });
+			app.router.push({ path: "/request" });
 		}
 	});
 }
