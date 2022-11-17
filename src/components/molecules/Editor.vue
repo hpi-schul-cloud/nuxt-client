@@ -8,6 +8,7 @@
 				v-model="content"
 				:config="config"
 				:editor="CustomCKEditor"
+				data-testid="ckeditor"
 				@input="handleInput"
 			></ckeditor>
 		</div>
