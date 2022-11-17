@@ -1,6 +1,6 @@
-import ErrorPage from "./ErrorPage";
+import ErrorPage from "./Error.page";
 
-describe("@components/templates/ErrorPage", () => {
+describe("@pages/Error.page.vue", () => {
 	it(...isValidComponent(ErrorPage));
 
 	it("Show error-message if defined", () => {

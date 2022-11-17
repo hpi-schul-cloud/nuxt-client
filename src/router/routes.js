@@ -159,8 +159,7 @@ export const routes = [
 	},
 	{
 		path: "/error",
-		component: () =>
-			interopDefault(import("../components/templates/ErrorPage.vue")),
+		component: () => interopDefault(import("../pages/Error.page.vue")),
 		name: "error",
 	},
 ];
