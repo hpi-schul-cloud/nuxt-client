@@ -4,6 +4,7 @@
 
 		<div class="ck-wrapper">
 			<ckeditor
+				ref="ck"
 				v-model="content"
 				:config="config"
 				:editor="CustomCKEditor"
