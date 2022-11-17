@@ -12,10 +12,19 @@ export type Error = {
 })
 export default class ErrorModule extends VuexModule {
 	private error: Error | null = null;
+	private errorList: Error[] = [];
 
 	@Action
-	setError(payload: Error | null): void {
+	setError(payload: Error): void {
+		if (!payload) return;
+
 		this.setErrorObject(payload);
+		this.setErrorList(payload);
+	}
+
+	@Action
+	resetError(): void {
+		this.setErrorObject(null);
 	}
 
 	@Mutation
@@ -23,7 +32,16 @@ export default class ErrorModule extends VuexModule {
 		this.error = payload;
 	}
 
+	// TODO: This is for only see the error list, DELETE after implementation
+	@Mutation
+	setErrorList(payload: any): void {
+		this.errorList.push(payload);
+	}
+
 	get getError(): Error | null {
 		return this.error;
+	}
+	get getErrorList(): Error[] {
+		return this.errorList;
 	}
 }
