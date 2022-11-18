@@ -13,18 +13,16 @@ export type ApplicationError = {
 })
 export default class ApplicationErrorModule extends VuexModule {
 	private applicationError: ApplicationError | null = null;
-	private errorList: ApplicationError[] = [];
 
-	@Action
+	@Action({ rawError: true })
 	setError(payload: ApplicationError): void {
 		if (!payload) return;
 
 		this.setErrorObject(payload);
-		this.setErrorList(payload);
 		router.replace("/error");
 	}
 
-	@Action
+	@Action({ rawError: true })
 	resetError(): void {
 		this.setErrorObject(null);
 	}
@@ -34,16 +32,7 @@ export default class ApplicationErrorModule extends VuexModule {
 		this.applicationError = payload;
 	}
 
-	// TODO: This is for only see the error list, DELETE after implementation
-	@Mutation
-	setErrorList(payload: any): void {
-		this.errorList.push(payload);
-	}
-
 	get getError(): ApplicationError | null {
 		return this.applicationError;
-	}
-	get getErrorList(): ApplicationError[] {
-		return this.errorList;
 	}
 }
