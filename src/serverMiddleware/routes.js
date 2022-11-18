@@ -17,6 +17,8 @@ const routes = [
 	`^/administration/school-settings$`,
 	`^/administration/migration`,
 	`^/cfiles/?$`,
+	`^/cfiles/teams/?$`,
+	`^/cfiles/teams/.+`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/insights`,

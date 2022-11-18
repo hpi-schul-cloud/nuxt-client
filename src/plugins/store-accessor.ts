@@ -5,6 +5,7 @@ import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import ApplicationErrorModule from "@/store/application-error";
+import CollaborativeFilesModule from "@store/collaborative-files";
 import FilePathsModule from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -30,6 +31,10 @@ export default () => {
 		provide("applicationErrorModule", getModule(ApplicationErrorModule, store));
 		provide("authModule", getModule(AuthModule, store));
 		provide("autoLogoutModule", getModule(AutoLogoutModule, store));
+    provide(
+			"collaborativeFilesModule",
+			getModule(CollaborativeFilesModule, store)
+		);
 		provide("contentModule", getModule(ContentModule, store));
 		provide("copyModule", getModule(CopyModule, store));
 		provide("envConfigModule", getModule(EnvConfigModule, store));
