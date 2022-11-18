@@ -1,17 +1,14 @@
 <template>
 	<div>
-		<label class="v-label theme--light">{{ label }}</label>
-
-		<div class="ck-wrapper">
-			<ckeditor
-				ref="ck"
-				v-model="content"
-				:config="config"
-				:editor="CustomCKEditor"
-				data-testid="ckeditor"
-				@input="handleInput"
-			></ckeditor>
-		</div>
+		<label>{{ label }}</label>
+		<ckeditor
+			ref="ck"
+			v-model="content"
+			:config="config"
+			:editor="CustomCKEditor"
+			data-testid="ckeditor"
+			@input="handleInput"
+		/>
 	</div>
 </template>
 
@@ -117,9 +114,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.ck-wrapper {
-	margin: var(--space-xs) 0 var(--space-md) 0;
-}
-</style>
