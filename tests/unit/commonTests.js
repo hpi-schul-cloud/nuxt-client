@@ -6,7 +6,7 @@ export function isValidComponent(component) {
 		},
 	];
 }
-
+//
 export function rendersSlotContent(
 	component,
 	slotNames = ["default"],
