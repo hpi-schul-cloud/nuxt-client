@@ -1,82 +1,85 @@
 <template>
-	<div v-if="applicationError" class="text-centered">
-		<base-image
-			v-if="applicationError.statusCode === 400"
-			img-src="@assets/img/permission-error.svg"
-			img-height="300px"
-			fill="var(--v-primary-base)"
-			role="presentation"
-		/>
-		<base-image
-			v-if="applicationError.statusCode === 401"
-			img-src="@assets/img/permission-error.svg"
-			img-height="300px"
-			fill="var(--v-primary-base)"
-			role="presentation"
-		/>
-		<base-image
-			v-if="applicationError.statusCode === 403"
-			img-src="@assets/img/permission-error.svg"
-			img-height="300px"
-			fill="var(--v-primary-base)"
-			role="presentation"
-		/>
-		<img
-			v-if="applicationError.statusCode === 500"
-			role="presentation"
-			alt=""
-			src="@assets/img/pc_repair.png"
-			class="error-img"
-		/>
-		<img
-			v-if="!applicationError.statusCode"
-			role="presentation"
-			alt=""
-			src="@assets/img/pc_repair.png"
-			class="error-img"
-		/>
+	<div class="text-centered">
+		<div v-if="applicationError">
+			<base-image
+				v-if="applicationError.statusCode === 400"
+				img-src="@assets/img/permission-error.svg"
+				img-height="300px"
+				fill="var(--v-primary-base)"
+				role="presentation"
+			/>
+			<base-image
+				v-if="applicationError.statusCode === 401"
+				img-src="@assets/img/permission-error.svg"
+				img-height="300px"
+				fill="var(--v-primary-base)"
+				role="presentation"
+			/>
+			<base-image
+				v-if="applicationError.statusCode === 403"
+				img-src="@assets/img/permission-error.svg"
+				img-height="300px"
+				fill="var(--v-primary-base)"
+				role="presentation"
+			/>
+			<img
+				v-if="applicationError.statusCode === 500"
+				role="presentation"
+				alt=""
+				src="@assets/img/pc_repair.png"
+				class="error-img"
+			/>
+		</div>
+		<div v-else>
+			<img
+				role="presentation"
+				alt=""
+				src="@assets/img/pc_repair.png"
+				class="error-img"
+			/>
+		</div>
+		<div>
+			<h1 class="error-msg">
+				<template v-if="applicationError">
+					{{ applicationError.message }}
+				</template>
+				<template v-else> {{ $t("error.generic") }} </template>
+			</h1>
+			<slot name="action">
+				<v-btn color="primary" depressed @click="onBackClick">
+					<!-- {{ $t("error.action.back") }} -->
 
-		<h1 class="error-msg">
-			<template v-if="applicationError.message">
-				{{ applicationError.message }}
-			</template>
-			<template v-else> {{ $t("error.generic") }} </template>
-		</h1>
-		<slot name="action">
-			<v-btn color="primary" depressed @click="onBackClick">
-				<!-- {{ $t("error.action.back") }} -->
-
-				<!-- TODO: ask UXies -->
-				Go to Dashboard
-			</v-btn>
-		</slot>
+					<!-- TODO: ask UXies -->
+					Go to Dashboard
+				</v-btn>
+			</slot>
+		</div>
 	</div>
 </template>
 <script>
+import { defineComponent, computed, onUnmounted } from "@vue/composition-api";
 import { applicationErrorModule } from "@/store";
-export default {
-	props: {},
-	data() {
-		// This solely exists to appear in the coverage report
+
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		const onBackClick = () => {
+			window.location.assign("/dashboard");
+			applicationErrorModule.resetError();
+		};
+
+		const applicationError = computed(() => {
+			return applicationErrorModule.getError;
+		});
+
+		onUnmounted(() => applicationErrorModule.resetError());
+
 		return {
-			error: {},
+			onBackClick,
+			applicationError,
 		};
 	},
-	computed: {
-		applicationError() {
-			return applicationErrorModule.getError;
-		},
-	},
-	destroyed() {
-		applicationErrorModule.resetError();
-	},
-	methods: {
-		onBackClick() {
-			this.$router.push("/dashboard");
-			applicationErrorModule.resetError();
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
