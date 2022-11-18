@@ -31,7 +31,7 @@ export default () => {
 		provide("applicationErrorModule", getModule(ApplicationErrorModule, store));
 		provide("authModule", getModule(AuthModule, store));
 		provide("autoLogoutModule", getModule(AutoLogoutModule, store));
-    provide(
+		provide(
 			"collaborativeFilesModule",
 			getModule(CollaborativeFilesModule, store)
 		);
