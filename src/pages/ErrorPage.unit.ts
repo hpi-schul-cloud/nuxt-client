@@ -22,7 +22,7 @@ describe("@pages/Error.page.vue", () => {
 		return mount(ErrorPage, {
 			...createComponentMocks({ i18n: true }),
 			setup() {
-				provide("applicationErrorModule", applicationErrorModuleMock);
+				provide("application-error", applicationErrorModuleMock);
 			},
 		});
 	};

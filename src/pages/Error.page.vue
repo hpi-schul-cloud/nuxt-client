@@ -46,7 +46,12 @@
 				<template v-else> {{ $t("error.generic") }} </template>
 			</h1>
 			<slot name="action">
-				<v-btn color="primary" depressed @click="onBackClick">
+				<v-btn
+					color="primary"
+					depressed
+					data-testid="btn-back"
+					@click="onBackClick"
+				>
 					<!-- {{ $t("error.action.back") }} -->
 
 					<!-- TODO: ask UXies -->
@@ -57,12 +62,17 @@
 	</div>
 </template>
 <script>
-import { defineComponent, computed, onUnmounted } from "@vue/composition-api";
-import { applicationErrorModule } from "@/store";
+import {
+	defineComponent,
+	computed,
+	onUnmounted,
+	inject,
+} from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
+		const applicationErrorModule = inject("application-error");
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
 			applicationErrorModule.resetError();
