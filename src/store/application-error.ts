@@ -19,7 +19,7 @@ export default class ApplicationErrorModule extends VuexModule {
 
 		this.setErrorObject(payload);
 		// @ts-ignore
-		this.store.$router.push("/error");
+		this.store.$router.replace("/error");
 	}
 
 	@Action({ rawError: true })
