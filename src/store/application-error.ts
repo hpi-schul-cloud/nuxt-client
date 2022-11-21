@@ -1,5 +1,5 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {router} from "@/router";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { router } from "@/router";
 
 export type ApplicationError = {
 	statusCode: number;
@@ -19,7 +19,8 @@ export default class ApplicationErrorModule extends VuexModule {
 		if (!payload) return;
 
 		this.setErrorObject(payload);
-		router.replace("/error");
+		window.location.href = "/error";
+		// router.replace("/error");
 	}
 
 	@Action({ rawError: true })
