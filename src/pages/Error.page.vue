@@ -69,7 +69,7 @@ import {
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
-		const applicationErrorModule = inject("application-error");
+		const applicationErrorModule = inject("applicationErrorModule");
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
 			applicationErrorModule.resetError();
