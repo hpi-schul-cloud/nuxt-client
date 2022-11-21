@@ -1,28 +1,20 @@
-FROM docker.io/node:16 as git
+# build stage
+FROM docker.io/node:18-bullseye as build-stage
 
-RUN mkdir /app && chown -R node:node /app
+#  add libraries needed for installing canvas npm package
+RUN apt update && apt install -y g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev;
+
 WORKDIR /app
-COPY .git .
-RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > /app/nuxtversion
-
-FROM docker.io/node:16
-
-ENV NUXT_TELEMETRY_DISABLED=1
+COPY package*.json ./
+RUN npm ci
+COPY ./ .
 ARG SC_THEME=default
 ENV SC_THEME ${SC_THEME}
+RUN npm run vue:build
+
+# run stage
+FROM docker.io/nginx:1.23
+COPY dockerconf/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 4000
-
-RUN mkdir /app && chown -R node:node /app
-WORKDIR /app
-
-COPY package.json package-lock.json nuxt.config.js babel.config.js aliases.config.js http-headers.config.js LICENSE.md tsconfig.template.js jsconfig.template.js variation.js .prettierrc.js vue-shim.d.ts /app/
-USER node
-RUN npm ci
-COPY --chown=node:node locale /app/locale
-COPY --chown=node:node src /app/src
-
-ENV NODE_ENV=production
-RUN ["npm", "run", "build:nuxt"]
-COPY --from=git /app/nuxtversion /app/src/static/nuxtversion
-COPY run.sh /app
-CMD [ "./run.sh"]
+CMD ["nginx", "-g", "daemon off;"]
