@@ -1,9 +1,9 @@
 import ErrorPage from "./Error.page.vue";
-import { mount } from "@vue/test-utils";
+import {mount} from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import {provide} from "@vue/composition-api";
 import ApplicationErrorModule from "@/store/application-error";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import {createModuleMocks} from "@/utils/mock-store-module";
 
 describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
@@ -14,7 +14,7 @@ describe("@pages/Error.page.vue", () => {
 	});
 	let applicationErrorModuleMock: ApplicationErrorModule;
 	const errorModuleMocks: Partial<ApplicationErrorModule> = {
-		getError: { statusCode: 401, message: "Error message" },
+		getError: { statusCode: 401, messageTranslationKey: "Error message" },
 		resetError: jest.fn(),
 	};
 
@@ -42,7 +42,7 @@ describe("@pages/Error.page.vue", () => {
 	it("should show error-message which comes from the store", () => {
 		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 			...errorModuleMocks,
-			getError: { statusCode: 401, message: "401 Error" },
+			getError: { statusCode: 401, messageTranslationKey: "401 Error" },
 		});
 		const wrapper = mountComponent();
 		const errorElement = wrapper.find(".error-msg");
@@ -52,7 +52,7 @@ describe("@pages/Error.page.vue", () => {
 	it("should assign 'window.location' when back button is clicked", async () => {
 		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 			...errorModuleMocks,
-			getError: { statusCode: 401, message: "401 Error" },
+			getError: { statusCode: 401, messageTranslationKey: "401 Error" },
 		});
 		const wrapper = mountComponent();
 		const btnElement = wrapper.find("[data-testid='btn-back']");

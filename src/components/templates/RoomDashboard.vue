@@ -164,10 +164,7 @@
 </template>
 
 <script>
-import {
-	BoardElementResponseTypeEnum,
-	ImportUserResponseRoleNamesEnum,
-} from "@/serverApi/v3";
+import { BoardElementResponseTypeEnum, ImportUserResponseRoleNamesEnum, } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule } from "@/store";
 import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
@@ -288,7 +285,7 @@ export default {
 			this.lessonShare.token = sharedLesson.code;
 			this.lessonShare.lessonName = sharedLesson.lessonName;
 			this.lessonShare.status = sharedLesson.status;
-			this.lessonShare.message = sharedLesson.message;
+			this.lessonShare.messageTranslationKey = sharedLesson.message;
 
 			this.lessonShare.isOpen = true;
 		},

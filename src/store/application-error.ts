@@ -2,7 +2,7 @@ import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
 
 export type ApplicationError = {
 	statusCode: number;
-	message: string;
+	messageTranslationKey: string;
 };
 
 @Module({

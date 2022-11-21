@@ -41,7 +41,7 @@
 		<div>
 			<h1 class="error-msg">
 				<template v-if="applicationError">
-					{{ applicationError.message }}
+					{{ translatedErrorMessage }}
 				</template>
 				<template v-else> {{ $t("error.generic") }} </template>
 			</h1>
@@ -58,18 +58,30 @@
 		</div>
 	</div>
 </template>
-<script>
-import {
-	defineComponent,
-	computed,
-	onUnmounted,
-	inject,
-} from "@vue/composition-api";
+<script lang="ts">
+import { computed, inject, onUnmounted } from "@vue/composition-api";
+import ApplicationErrorModule from "@store/application-error";
+import { defineComponent, useMeta } from "@nuxtjs/composition-api";
+import VueI18n from "vue-i18n";
+import Theme from "@theme/config";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
+	head: {},
 	setup() {
-		const applicationErrorModule = inject("applicationErrorModule");
+		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+			"applicationErrorModule"
+		);
+
+		const i18n = inject<VueI18n | undefined>("i18n");
+		if (applicationErrorModule === undefined || i18n === undefined) {
+			return;
+		}
+
+		useMeta({
+			title: i18n.t("error.generic").toString() + " - " + Theme.short_name,
+		});
+
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
 			applicationErrorModule.resetError();
@@ -79,11 +91,27 @@ export default defineComponent({
 			return applicationErrorModule.getError;
 		});
 
+		const translatedErrorMessage = computed(() => {
+			const appErrorValue = applicationError.value;
+			if (appErrorValue === null) {
+				return "";
+			}
+
+			const translatedError = i18n
+				.t(appErrorValue.messageTranslationKey)
+				.toString();
+
+			return translatedError !== appErrorValue.messageTranslationKey
+				? translatedError
+				: i18n.t("error.generic").toString();
+		});
+
 		onUnmounted(() => applicationErrorModule.resetError());
 
 		return {
 			onBackClick,
 			applicationError,
+			translatedErrorMessage,
 		};
 	},
 });

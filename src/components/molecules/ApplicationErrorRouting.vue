@@ -1,11 +1,12 @@
 <template>
-	<span class="sr-only"> ABC: hasError {{ hasError }}</span>
+	<div><slot></slot></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onUnmounted, ref, watch, } from "@vue/composition-api";
+import { defineComponent, inject, onErrorCaptured, onUnmounted, ref, watch, } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
 import { useRouter } from "@nuxtjs/composition-api";
+import { ApplicationError } from "@/composables/application-error.composable";
 
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
@@ -16,7 +17,7 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 
-		const applicationErrorModule: ApplicationErrorModule | undefined = inject(
+		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
 
@@ -27,19 +28,29 @@ export default defineComponent({
 		const hasError = ref<boolean>(applicationErrorModule.getError !== null);
 
 		const routeToErrorPage = () => {
-			console.log("ROUTER: has been called");
 			router.replace("/error");
 		};
 
-		watch(hasError, (to, from) => {
-			console.log("WATCHER: ", from, to);
-			from === false && to !== true ? routeToErrorPage() : null;
+		onErrorCaptured((err: ApplicationError | Error) => {
+			if (err instanceof ApplicationError) {
+				applicationErrorModule.setError({
+					statusCode: err.statusCode,
+					messageTranslationKey: err.translationKey,
+				});
+				return false;
+			}
+
+			applicationErrorModule.setError({
+				statusCode: 500,
+				messageTranslationKey: "error.generic",
+			});
+
+			return false;
 		});
 
 		watch(
 			() => applicationErrorModule.getError,
-			(to, from) => {
-				console.log("WATCHER on store getter: ", from, to);
+			(to) => {
 				to !== null ? routeToErrorPage() : null;
 			},
 			{ immediate: true }

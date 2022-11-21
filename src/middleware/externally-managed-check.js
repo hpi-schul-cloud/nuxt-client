@@ -1,9 +1,9 @@
 import { applicationErrorModule, authModule } from "@/store";
 
-export default async ({ app, route }) => {
+export default async ({ route }) => {
 	const user = authModule.getUser;
 	const error = {
-		message: app.i18n.t("error.401"),
+		messageTranslationKey: "error.401",
 		statusCode: 401,
 	};
 
@@ -15,13 +15,11 @@ export default async ({ app, route }) => {
 		}
 		if (!user) {
 			applicationErrorModule.setError(error);
-			// throw new Error(error.message); WIP
 		}
 		return !userExternallyManaged;
 	}, true);
 	if (ACCESS_ALLOWED) {
-		return true; // Access allowed
+		return true;
 	}
 	applicationErrorModule.setError(error);
-	// throw new Error(error.message);
 };

@@ -5,10 +5,9 @@ const unrecoverableErrorCodes = [401, 403, 404, 500];
 const isRecoverable = (err) =>
 	unrecoverableErrorCodes.includes(err.response.data.code);
 
-const isTimeout = (err) =>
-	err.response === undefined || err.response === null;
+const isTimeout = (err) => err.response === undefined || err.response === null;
 
-export default async function ({ $axios, error }) {
+export default async function ({ $axios }) {
 	const runtimeConfigJson = await $axios.get(
 		`${window.location.origin}/runtime.config.json`
 	);
@@ -26,21 +25,21 @@ export default async function ({ $axios, error }) {
 		if (!isTimeout(err) && isRecoverable(err)) {
 			return;
 		}
-		const unrecoverableError = {
-			statusCode: null,
-			message: null,
-		};
-		unrecoverableError.message = isTimeout(err)
-			? "Connection timeout!"
-			: err.response.data.message;
-		unrecoverableError.statusCode = isTimeout(err)
-			? 408
-			: err.response.data.code;
-		if (!err.response) {
-			err.response = {
-				data: unrecoverableError,
-			};
+
+		// const { createApplicationError } = useApplicationError();
+
+		if (isTimeout(err)) {
+			applicationErrorModule.setError({
+				statusCode: 408,
+				messageTranslationKey: "error.408",
+			});
+			// throw createApplicationError(408)
+			return;
 		}
-		applicationErrorModule.setError(unrecoverableError);
+
+		applicationErrorModule.setError({
+			statusCode: err.response.data.statusCode,
+			messageTranslationKey: "error." + err.response.data.statusCode,
+		});
 	});
 }

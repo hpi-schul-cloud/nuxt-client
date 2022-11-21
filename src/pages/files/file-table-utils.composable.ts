@@ -1,24 +1,21 @@
-import {
-	CollaborativeFile,
-	CollaborativeFileType,
-	FileTypeIconMapping,
-} from "@store/types/collaborative-file";
-import { FileTableItem } from "@pages/files/file-table-item";
-import { Route } from "vue-router";
-import { DataTableHeader } from "vuetify";
-import { Breadcrumb } from "@components/templates/default-wireframe.types";
-import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
-import {
-	FileMetaResponse,
-	FileTypeResponse,
-} from "@store/collaborative-files/file-meta.response";
-import { FilesPageConfig } from "@pages/files/file-page-config.type";
+import {CollaborativeFile, CollaborativeFileType, FileTypeIconMapping,} from "@store/types/collaborative-file";
+import {FileTableItem} from "@pages/files/file-table-item";
+import {Route} from "vue-router";
+import {DataTableHeader} from "vuetify";
+import {Breadcrumb} from "@components/templates/default-wireframe.types";
+import {FileMetaListResponse} from "@store/collaborative-files/file-meta-list.response";
+import {FileMetaResponse, FileTypeResponse,} from "@store/collaborative-files/file-meta.response";
+import {FilesPageConfig} from "@pages/files/file-page-config.type";
 import CollaborativeFilesModule from "@store/collaborative-files";
+import {useApplicationError} from "@/composables/application-error.composable";
 
 export function useFileTableUtils(
 	collaborativeFilesModule: CollaborativeFilesModule,
 	t: (key: string) => string
 ) {
+	const { createApplicationError } =
+		useApplicationError();
+
 	const getHeaders = (): DataTableHeader[] => {
 		return [
 			{ text: "", value: "icon", sortable: false, width: 5 },
@@ -140,7 +137,8 @@ export function useFileTableUtils(
 					return getTeamsPage(route);
 				}
 			default:
-				throw new Error("page not found");
+				// throwApplicationError(404);
+				throw createApplicationError(403);
 		}
 	};
 

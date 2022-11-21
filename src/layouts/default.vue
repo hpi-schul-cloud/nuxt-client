@@ -1,13 +1,14 @@
 <template>
 	<v-app>
-		<legacy-logged-in>
-			<application-error-routing></application-error-routing>
-			<v-main id="main-content" class="content">
-				<snackbar />
-				<Nuxt />
-			</v-main>
-			<loading-state-dialog />
-		</legacy-logged-in>
+		<application-error-routing>
+			<legacy-logged-in>
+				<v-main id="main-content" class="content">
+					<snackbar />
+					<Nuxt />
+				</v-main>
+				<loading-state-dialog />
+			</legacy-logged-in>
+		</application-error-routing>
 	</v-app>
 </template>
 
