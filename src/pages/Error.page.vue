@@ -52,10 +52,7 @@
 					data-testid="btn-back"
 					@click="onBackClick"
 				>
-					<!-- {{ $t("error.action.back") }} -->
-
-					<!-- TODO: ask UXies -->
-					Go to Dashboard
+					{{ $t("error.action.back") }}
 				</v-btn>
 			</slot>
 		</div>

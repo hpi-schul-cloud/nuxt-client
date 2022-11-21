@@ -191,7 +191,7 @@
 	"error.401": "401 — No autorizado",
 	"error.404": "404 — No encontrado",
 	"error.generic": "Se ha producido un error",
-	"error.action.back": "Haz clic aquí para volver",
+	"error.action.back": "Volver al panel de control",
 	"error.load": "Error al cargar los datos.",
 	"error.proxy.action": "Volver a cargar la página",
 	"error.proxy.description": "Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",

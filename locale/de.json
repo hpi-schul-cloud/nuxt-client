@@ -192,7 +192,7 @@
 	"error.401": "401 – das dürfen wir dir leider nicht zeigen",
 	"error.404": "404 – Seite nicht gefunden",
 	"error.generic": "Ein Fehler ist aufgetreten",
-	"error.action.back": "Hier geht es zurück",
+	"error.action.back": "Zurück zu Dashboard",
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
