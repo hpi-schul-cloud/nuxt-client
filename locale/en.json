@@ -472,6 +472,7 @@
 	"pages.administration.actions": "Actions",
 	"pages.administration.sendMail.error": "Registration link could not be sent | Registration links could not be sent",
 	"pages.administration.sendMail.success": "Registration link sent successfully | Registration links sent successfully",
+	"pages.administration.sendMail.alreadyRegistered": "The registration email was not sent because a registration has already been made",
 	"pages.administration.students.consent.cancel.modal.confirm": "Cancel anyway",
 	"pages.administration.students.consent.cancel.modal.continue": "Continue registration",
 	"pages.administration.students.consent.cancel.modal.download.continue": "Zugangsdaten drucken",
