@@ -252,6 +252,7 @@ export default {
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
+			registrationLinks: "getRegistrationLinks",
 		}),
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
@@ -502,9 +503,15 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				this.$toast.success(
-					this.$tc("pages.administration.sendMail.success", rowIds.length)
-				);
+				if (this.registrationLinks.totalMailsSend === rowIds.length) {
+					this.$toast.success(
+						this.$tc("pages.administration.sendMail.success", rowIds.length)
+					);
+				} else {
+					this.$toast.info(
+						this.$tc("pages.administration.sendMail.alreadyRegistered")
+					);
+				}
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(

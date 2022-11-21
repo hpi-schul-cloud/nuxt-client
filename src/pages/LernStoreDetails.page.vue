@@ -1,13 +1,15 @@
 <template>
 	<span>
-		<span v-if="status === 'completed'">
+		<template v-if="status === 'completed'">
 			<lernstore-collection-detail-view
 				v-if="isCollection"
 				:resource="resource"
 			/>
 			<lernstore-detail-view v-else :resource="resource" />
-		</span>
-		<base-spinner v-else />
+		</template>
+		<div v-else class="d-flex justify-center align-center min-height-screen">
+			<v-progress-circular indeterminate color="secondary" size="115" />
+		</div>
 	</span>
 </template>
 
@@ -15,7 +17,6 @@
 import { contentModule } from "@/store";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
-import BaseSpinner from "@components/base/BaseSpinner";
 
 export default {
 	meta: {
@@ -24,7 +25,6 @@ export default {
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,
-		BaseSpinner,
 	},
 	layout({ query }) {
 		return String(query.isCollection) === "true" &&
@@ -51,3 +51,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.min-height-screen {
+	min-height: 100vh;
+}
+</style>
