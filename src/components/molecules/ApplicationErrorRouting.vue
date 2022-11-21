@@ -3,7 +3,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onErrorCaptured, onUnmounted, ref, watch, } from "@vue/composition-api";
+import {
+	defineComponent,
+	inject,
+	onErrorCaptured,
+	onUnmounted,
+	ref,
+	watch,
+} from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
 import { useRouter } from "@nuxtjs/composition-api";
 import { ApplicationError } from "@/composables/application-error.composable";
