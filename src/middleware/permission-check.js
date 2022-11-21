@@ -1,4 +1,4 @@
-import { authModule, applicationErrorModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
 
 export default async ({ app, route }) => {
 	const error = {
@@ -16,7 +16,7 @@ export default async ({ app, route }) => {
 		}
 		if (!user) {
 			applicationErrorModule.setError(error);
-			throw new Error(error.message);
+			// throw new Error(error.message);
 		}
 		const REQUIRED_PERMISSIONS = Array.isArray(meta.requiredPermissions)
 			? meta.requiredPermissions
@@ -32,5 +32,5 @@ export default async ({ app, route }) => {
 		return true; // Access allowed
 	}
 	applicationErrorModule.setError(error);
-	throw new Error(error.message);
+	// throw new Error(error.message);
 };

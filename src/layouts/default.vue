@@ -1,6 +1,7 @@
 <template>
 	<v-app>
 		<legacy-logged-in>
+			<application-error-routing></application-error-routing>
 			<v-main id="main-content" class="content">
 				<snackbar />
 				<Nuxt />
@@ -14,9 +15,11 @@
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
 import Snackbar from "@components/molecules/Alert";
 import LoadingStateDialog from "@components/molecules/LoadingStateDialog";
+import ApplicationErrorRouting from "@components/molecules/ApplicationErrorRouting";
 
 export default {
 	components: {
+		ApplicationErrorRouting,
 		LoadingStateDialog,
 		LegacyLoggedIn,
 		Snackbar,

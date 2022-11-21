@@ -1,4 +1,4 @@
-import { authModule, applicationErrorModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
 
 export default async ({ app, route }) => {
 	const user = authModule.getUser;
@@ -15,7 +15,7 @@ export default async ({ app, route }) => {
 		}
 		if (!user) {
 			applicationErrorModule.setError(error);
-			throw new Error(error.message);
+			// throw new Error(error.message); WIP
 		}
 		return !userExternallyManaged;
 	}, true);
@@ -23,5 +23,5 @@ export default async ({ app, route }) => {
 		return true; // Access allowed
 	}
 	applicationErrorModule.setError(error);
-	throw new Error(error.message);
+	// throw new Error(error.message);
 };

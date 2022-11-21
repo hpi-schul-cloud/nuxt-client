@@ -1,8 +1,14 @@
-import { authModule, applicationErrorModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
 
 const unrecoverableErrorCodes = [401, 403, 404, 500];
 
-export default async function ({ $axios, app, error }) {
+const isRecoverable = (err) =>
+	unrecoverableErrorCodes.includes(err.response.data.code);
+
+const isTimeout = (err) =>
+	err.response === undefined || err.response === null;
+
+export default async function ({ $axios, error }) {
 	const runtimeConfigJson = await $axios.get(
 		`${window.location.origin}/runtime.config.json`
 	);
@@ -17,28 +23,24 @@ export default async function ({ $axios, app, error }) {
 	});
 
 	$axios.onError((err) => {
-		if (
-			!err.response ||
-			unrecoverableErrorCodes.includes(err.response.data.code)
-		) {
-			const unrecoverableError = {
-				statusCode: null,
-				message: null,
-			};
-			unrecoverableError.message = !err.response
-				? "Connection timeout!"
-				: err.response.data.message;
-			unrecoverableError.statusCode = !err.response
-				? null
-				: err.response.data.code;
-			if (!err.response) {
-				err.response = {
-					data: unrecoverableError,
-				};
-			}
-			applicationErrorModule.setError(unrecoverableError);
-			error(unrecoverableError);
-			app.router.push({ path: "/request" });
+		if (!isTimeout(err) && isRecoverable(err)) {
+			return;
 		}
+		const unrecoverableError = {
+			statusCode: null,
+			message: null,
+		};
+		unrecoverableError.message = isTimeout(err)
+			? "Connection timeout!"
+			: err.response.data.message;
+		unrecoverableError.statusCode = isTimeout(err)
+			? 408
+			: err.response.data.code;
+		if (!err.response) {
+			err.response = {
+				data: unrecoverableError,
+			};
+		}
+		applicationErrorModule.setError(unrecoverableError);
 	});
 }
