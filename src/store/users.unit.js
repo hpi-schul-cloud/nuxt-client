@@ -79,7 +79,9 @@ describe("store/users", () => {
 		describe("sendRegistrationLink", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const ctxMock = {};
+				const ctxMock = {
+					commit: () => {},
+				};
 				const payloadMock = {
 					someProperty: "some value",
 				};
