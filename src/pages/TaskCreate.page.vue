@@ -5,7 +5,11 @@
 		headline="Create Task"
 	>
 		<v-form>
-			<v-text-field v-model="name" :label="$t('common.labels.title')" />
+			<title-card
+				:name="name"
+				:label="$t('common.labels.title')"
+				@update:name="(payload) => (name = payload)"
+			/>
 			<v-textarea
 				v-model="description"
 				:label="$t('common.labels.description')"
@@ -21,14 +25,15 @@
 import { defineComponent, inject, ref } from "@vue/composition-api";
 import { taskModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import TitleCard from "@components/atoms/TitleCard.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TaskCreatePage",
-	components: { DefaultWireframe },
+	components: { DefaultWireframe, TitleCard },
 	setup() {
 		const i18n = inject("i18n");
-		const name = ref("");
+		const name = ref(taskModule.getTaskData.name);
 		const description = ref("");
 
 		const breadcrumbs = [

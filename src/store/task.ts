@@ -18,7 +18,7 @@ export default class TaskModule extends VuexModule {
 	taskData: Object = {
 		taskId: "",
 		courseId: "",
-		title: "",
+		name: "",
 		description: "",
 	};
 	loading: boolean = false;
