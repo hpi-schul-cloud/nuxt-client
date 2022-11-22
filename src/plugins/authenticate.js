@@ -4,6 +4,8 @@ export default async ({ app, route }) => {
 	const isPublic = route.meta.some((meta) => meta.isPublic);
 	const isPopulateNeeded = route.meta.some((meta) => meta.populateNeeded);
 
+	const currentUrl = encodeURIComponent(window.location.href);
+	const redirectUrl = `/login?redirect=${currentUrl}`;
 	if (isPopulateNeeded || !isPublic) {
 		try {
 			const jwt = app.$cookies.get("jwt");
@@ -12,10 +14,10 @@ export default async ({ app, route }) => {
 
 				await authModule.populateUser();
 			} else if (!isPublic) {
-				authModule.logout();
+				window.location.assign(redirectUrl);
 			}
 		} catch (error) {
-			authModule.logout();
+			authModule.logout(redirectUrl);
 		}
 	}
 };

@@ -1,16 +1,12 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
-		<base-select
-			style="max-width: 150px"
-			close-on-select
+		<v-select
+			return-object
 			:value="perPageSelected"
-			:options="perPageOptions"
-			:allow-empty="false"
-			track-by="value"
-			option-label="label"
-			:label="$t('components.organisms.Pagination.recordsPerPage')"
-			:label-hidden="true"
-			@select="setPagination"
+			:items="perPageOptions"
+			:aria-label="$t('components.organisms.Pagination.recordsPerPage')"
+			class="select-input-width"
+			@change="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
@@ -86,23 +82,23 @@ export default {
 			mdiChevronRight,
 			perPageOptions: [
 				{
-					label: this.$t("components.organisms.Pagination.perPage.5"),
+					text: this.$t("components.organisms.Pagination.perPage.5"),
 					value: 5,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.10"),
+					text: this.$t("components.organisms.Pagination.perPage.10"),
 					value: 10,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.25"),
+					text: this.$t("components.organisms.Pagination.perPage.25"),
 					value: 25,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.50"),
+					text: this.$t("components.organisms.Pagination.perPage.50"),
 					value: 50,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.100"),
+					text: this.$t("components.organisms.Pagination.perPage.100"),
 					value: 100,
 				},
 			],
@@ -111,7 +107,7 @@ export default {
 	computed: {
 		perPageSelected() {
 			return {
-				label:
+				text:
 					this.perPage +
 					" " +
 					this.$t("components.organisms.Pagination.perPage"),
@@ -165,5 +161,13 @@ export default {
 .total {
 	margin-right: var(--space-sm);
 	margin-bottom: 0;
+}
+
+::v-deep .v-input__icon .v-icon {
+	font-size: var(--text-base-size);
+}
+
+.select-input-width {
+	max-width: 150px;
 }
 </style>
