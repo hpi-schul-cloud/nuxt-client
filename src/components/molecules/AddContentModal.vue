@@ -83,8 +83,6 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		merlinReference: { type: String, default: "" },
 		items: { type: Array, default: () => [] },
-		mediatype: { type: String, default: "" },
-		itemid: { type: String, default: "" },
 
 		showCopyModal: {
 			type: Boolean,

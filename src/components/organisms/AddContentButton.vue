@@ -22,8 +22,6 @@
 			:title="title"
 			:merlin-reference="merlinReference"
 			:items="selectedElements"
-			:mediatype="mediatype"
-			:itemid="itemId"
 			@close="performAPICall"
 		/>
 		<loading-modal
@@ -132,9 +130,6 @@ export default {
 		},
 		merlinReference() {
 			return getMerlinReference(this.resource);
-		},
-		mediatype() {
-			return getMediatype(this.resource);
 		},
 	},
 	watch: {
