@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onUnmounted, ref, } from "@vue/composition-api";
+import { defineComponent, inject, ref } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
 import { useRouter, watch } from "@nuxtjs/composition-api";
+import { useApplicationError } from "@/composables/application-error.composable";
 
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
@@ -16,12 +17,14 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 
+		const { createApplicationError } = useApplicationError();
+
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
 
 		if (applicationErrorModule === undefined) {
-			throw new Error("ApplicationErrorRouting: Modules are not initialized");
+			throw createApplicationError(500);
 		}
 
 		const hasError = ref<boolean>(applicationErrorModule.getError !== null);
@@ -37,8 +40,6 @@ export default defineComponent({
 			},
 			{ immediate: true }
 		);
-
-		onUnmounted(() => console.log("Component destroyed"));
 
 		return { hasError };
 	},
