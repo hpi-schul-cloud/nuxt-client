@@ -1,9 +1,10 @@
 import { applicationErrorModule, authModule } from "@/store";
+import { createApplicationError } from "@utils/create-application-error.factory";
 
 const unrecoverableErrorCodes = [401, 403, 404, 500];
 
 const isRecoverable = (err) =>
-	unrecoverableErrorCodes.includes(err.response.data.code);
+	!unrecoverableErrorCodes.includes(err.response.data.code);
 
 const isTimeout = (err) => err.response === undefined || err.response === null;
 
@@ -26,20 +27,16 @@ export default async function ({ $axios }) {
 			return;
 		}
 
-		// const { createApplicationError } = useApplicationError();
-
 		if (isTimeout(err)) {
-			applicationErrorModule.setError({
-				statusCode: 408,
-				messageTranslationKey: "error.408",
-			});
-			// throw createApplicationError(408)
+			applicationErrorModule.setError(createApplicationError(408));
 			return;
 		}
-
-		applicationErrorModule.setError({
-			statusCode: err.response.data.statusCode,
-			messageTranslationKey: "error." + err.response.data.statusCode,
-		});
+		if (err.response.data.code) {
+			applicationErrorModule.setError(
+				createApplicationError(err.response.data.code)
+			);
+		} else {
+			applicationErrorModule.setError(createApplicationError(500));
+		}
 	});
 }

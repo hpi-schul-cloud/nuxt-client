@@ -1,9 +1,5 @@
 import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-
-export type ApplicationError = {
-	statusCode: number;
-	messageTranslationKey: string;
-};
+import {ApplicationError} from "@store/types/application-error";
 
 @Module({
 	name: "application-error",
@@ -16,9 +12,7 @@ export default class ApplicationErrorModule extends VuexModule {
 	@Action({ rawError: true })
 	setError(payload: ApplicationError): void {
 		if (!payload) return;
-
 		this.setErrorObject(payload);
-		// this.store.$router.replace("/error");
 	}
 
 	@Action({ rawError: true })

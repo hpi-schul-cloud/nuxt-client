@@ -59,7 +59,7 @@
 	</div>
 </template>
 <script lang="ts">
-import { computed, inject, onUnmounted } from "@vue/composition-api";
+import { computed, inject } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
 import { defineComponent, useMeta } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
@@ -72,7 +72,6 @@ export default defineComponent({
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
-
 		const i18n = inject<VueI18n | undefined>("i18n");
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
@@ -84,7 +83,6 @@ export default defineComponent({
 
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
-			applicationErrorModule.resetError();
 		};
 
 		const applicationError = computed(() => {
@@ -97,16 +95,12 @@ export default defineComponent({
 				return "";
 			}
 
-			const translatedError = i18n
-				.t(appErrorValue.messageTranslationKey)
-				.toString();
+			const translatedError = i18n.t(appErrorValue.translationKey).toString();
 
-			return translatedError !== appErrorValue.messageTranslationKey
+			return translatedError !== appErrorValue.translationKey
 				? translatedError
 				: i18n.t("error.generic").toString();
 		});
-
-		onUnmounted(() => applicationErrorModule.resetError());
 
 		return {
 			onBackClick,

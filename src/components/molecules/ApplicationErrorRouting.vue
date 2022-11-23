@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onErrorCaptured, onUnmounted, ref, watch, } from "@vue/composition-api";
+import { defineComponent, inject, onUnmounted, ref, } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
-import { useRouter } from "@nuxtjs/composition-api";
-import { ApplicationError } from "@/composables/application-error.composable";
+import { useRouter, watch } from "@nuxtjs/composition-api";
 
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
@@ -30,23 +29,6 @@ export default defineComponent({
 		const routeToErrorPage = () => {
 			router.replace("/error");
 		};
-
-		onErrorCaptured((err: ApplicationError | Error) => {
-			if (err instanceof ApplicationError) {
-				applicationErrorModule.setError({
-					statusCode: err.statusCode,
-					messageTranslationKey: err.translationKey,
-				});
-				return false;
-			}
-
-			applicationErrorModule.setError({
-				statusCode: 500,
-				messageTranslationKey: "error.generic",
-			});
-
-			return false;
-		});
 
 		watch(
 			() => applicationErrorModule.getError,

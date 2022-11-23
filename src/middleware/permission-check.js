@@ -1,10 +1,7 @@
-import { applicationErrorModule, authModule } from "@/store";
+import { authModule } from "@/store";
+import { createApplicationError } from "@utils/create-application-error.factory";
 
 export default async ({ route }) => {
-	const error = {
-		messageTranslationKey: "error.401",
-		statusCode: 401,
-	};
 	const user = authModule.getUser;
 
 	const userHasPermission = (permission) =>
@@ -15,7 +12,7 @@ export default async ({ route }) => {
 			return allowed;
 		}
 		if (!user) {
-			applicationErrorModule.setError(error);
+			return false;
 		}
 		const REQUIRED_PERMISSIONS = Array.isArray(meta.requiredPermissions)
 			? meta.requiredPermissions
@@ -30,5 +27,5 @@ export default async ({ route }) => {
 	if (ACCESS_ALLOWED) {
 		return true;
 	}
-	applicationErrorModule.setError(error);
+	throw createApplicationError(401);
 };

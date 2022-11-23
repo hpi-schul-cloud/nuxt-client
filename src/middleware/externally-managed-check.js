@@ -1,11 +1,8 @@
-import { applicationErrorModule, authModule } from "@/store";
+import { authModule } from "@/store";
+import { createApplicationError } from "@utils/create-application-error.factory";
 
 export default async ({ route }) => {
 	const user = authModule.getUser;
-	const error = {
-		messageTranslationKey: "error.401",
-		statusCode: 401,
-	};
 
 	const userExternallyManaged = authModule.userIsExternallyManaged;
 
@@ -14,12 +11,12 @@ export default async ({ route }) => {
 			return allowed;
 		}
 		if (!user) {
-			applicationErrorModule.setError(error);
+			return false;
 		}
 		return !userExternallyManaged;
 	}, true);
 	if (ACCESS_ALLOWED) {
 		return true;
 	}
-	applicationErrorModule.setError(error);
+	throw createApplicationError(401);
 };
