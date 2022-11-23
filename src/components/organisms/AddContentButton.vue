@@ -58,6 +58,7 @@ import {
 	getUrl,
 	getMetadataAttribute,
 	getMediatype,
+	getID,
 } from "@utils/helpers";
 
 let slowAPICall;
@@ -117,6 +118,16 @@ export default {
 			return getTitle(this.resource);
 		},
 		url() {
+			if (getMediatype(this.resource) == "file-h5p") {
+				return (
+					"/content/" +
+					getMetadataAttribute(
+						this.resource.properties,
+						"ccm:replicationsourceuuid"
+					) +
+					"?isCollection=false&q=h5p"
+				);
+			}
 			return getUrl(this.resource);
 		},
 		merlinReference() {
@@ -134,8 +145,14 @@ export default {
 				);
 
 				this.selectedElements = selectedElements.map((element) => {
+					let elementUrl = getUrl(element);
+					if (getMediatype(element) == "file-h5p") {
+						const elementID = getID(element);
+						elementUrl = `/content/${elementID}?isCollection=false&q=h5p`;
+					}
+
 					return {
-						url: getUrl(element),
+						url: elementUrl,
 						title: getTitle(element),
 						client: this.client,
 						merlinReference: getMerlinReference(element),

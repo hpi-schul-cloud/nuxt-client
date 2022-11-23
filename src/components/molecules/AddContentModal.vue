@@ -146,19 +146,12 @@ export default {
 				event: this.$eventBus,
 				material: [],
 			};
-			let contentURL = this.url;
-			if (this.mediatype == "file-h5p") {
-				contentURL = `/content/${this.itemid}?isCollection=false&q=h5p`;
-			}
 			if (this.items.length > 0) {
 				this.items.forEach((element) => {
-					if (this.mediatype != "file-h5p") {
-						contentURL = element.url;
-					}
 					payload.material.push({
 						title: element.title,
 						client: element.client,
-						url: contentURL,
+						url: element.url,
 						merlinReference: element.merlinReference,
 					});
 				});
@@ -166,7 +159,7 @@ export default {
 				payload.material = {
 					title: this.title,
 					client: this.client,
-					url: contentURL,
+					url: this.url,
 					merlinReference: this.merlinReference,
 				};
 			}

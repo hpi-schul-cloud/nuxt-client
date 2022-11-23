@@ -125,3 +125,13 @@ export const getMerlinReference = (resource) => {
 	}
 	return "";
 };
+
+export const getID = (resource) => {
+	if (resource.properties) {
+		return getMetadataAttribute(
+			resource.properties,
+			"ccm:replicationsourceuuid"
+		);
+	}
+	return;
+};
