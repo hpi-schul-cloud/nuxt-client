@@ -5,8 +5,8 @@
 				{{ $t("components.molecules.shareCourse.options.schoolInternally") }}
 			</div>
 			<v-switch
-				v-model="shareOptions.schoolInternally"
-				data-testid="schoolInternally"
+				v-model="shareOptions.isSchoolInternal"
+				data-testid="isSchoolInternal"
 				color="primary"
 				input-value="true"
 				class="ma-0"
@@ -17,8 +17,8 @@
 				{{ $t("components.molecules.shareCourse.options.expiresInDays") }}
 			</div>
 			<v-switch
-				v-model="shareOptions.expiresInSevenDays"
-				data-testid="expiresInSevenDays"
+				v-model="shareOptions.hasExpiryDate"
+				data-testid="hasExpiryDate"
 				color="primary"
 				input-value="true"
 				class="ma-0"
@@ -36,8 +36,8 @@ export default defineComponent({
 	emits: ["shareOptionsChange"],
 	setup(props, { emit }) {
 		const shareOptions = reactive({
-			schoolInternally: true,
-			expiresInSevenDays: true,
+			isSchoolInternal: true,
+			hasExpiryDate: true,
 		});
 
 		watch(shareOptions, (newValue) => {
