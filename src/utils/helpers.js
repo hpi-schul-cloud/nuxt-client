@@ -65,10 +65,7 @@ export const getMetadataAttribute = (properties, key) => {
 };
 
 export const isCollectionHelper = (properties) => {
-	const type = getMetadataAttribute(
-		properties,
-		"cclom:aggregationlevel"
-	);
+	const type = getMetadataAttribute(properties, "cclom:aggregationlevel");
 	return type === "2";
 };
 
@@ -95,6 +92,10 @@ export const getTitle = (resource) => {
 	return resource.title ? resource.title : "";
 };
 
+export const getMediatype = (resource) => {
+	return resource.mediatype ? resource.mediatype : "";
+};
+
 export const getUrl = (resource) => {
 	if (resource.properties && resource.properties["ccm:wwwurl"]) {
 		return getMetadataAttribute(resource.properties, "ccm:wwwurl");
@@ -107,7 +108,7 @@ export const isVideoContent = (resource) => {
 		resource.size &&
 		(resource.mediatype === "file-h5p" || resource.mediatype === "file-video")
 	);
-}
+};
 
 export const isMerlinContent = (resource) => {
 	return (

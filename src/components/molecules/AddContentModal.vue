@@ -83,6 +83,8 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		merlinReference: { type: String, default: "" },
 		items: { type: Array, default: () => [] },
+		mediatype: { type: String, default: "" },
+		itemid: { type: String, default: "" },
 
 		showCopyModal: {
 			type: Boolean,
@@ -144,12 +146,19 @@ export default {
 				event: this.$eventBus,
 				material: [],
 			};
+			let contentURL = this.url;
+			if (this.mediatype == "file-h5p") {
+				contentURL = `/content/${this.itemid}?isCollection=false&q=h5p`;
+			}
 			if (this.items.length > 0) {
 				this.items.forEach((element) => {
+					if (this.mediatype != "file-h5p") {
+						contentURL = element.url;
+					}
 					payload.material.push({
 						title: element.title,
 						client: element.client,
-						url: element.url,
+						url: contentURL,
 						merlinReference: element.merlinReference,
 					});
 				});
@@ -157,7 +166,7 @@ export default {
 				payload.material = {
 					title: this.title,
 					client: this.client,
-					url: this.url,
+					url: contentURL,
 					merlinReference: this.merlinReference,
 				};
 			}

@@ -22,6 +22,8 @@
 			:title="title"
 			:merlin-reference="merlinReference"
 			:items="selectedElements"
+			:mediatype="mediatype"
+			:itemid="itemId"
 			@close="performAPICall"
 		/>
 		<loading-modal
@@ -55,6 +57,7 @@ import {
 	getMerlinReference,
 	getUrl,
 	getMetadataAttribute,
+	getMediatype,
 } from "@utils/helpers";
 
 let slowAPICall;
@@ -118,6 +121,9 @@ export default {
 		},
 		merlinReference() {
 			return getMerlinReference(this.resource);
+		},
+		mediatype() {
+			return getMediatype(this.resource);
 		},
 	},
 	watch: {
