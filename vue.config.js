@@ -33,6 +33,13 @@ module.exports = defineConfig({
 			args[0].typescript.configFile = TSCONFIG_PATH;
 			return args;
 		});
+		config.plugin("html").tap((args) => {
+			args[0].title = "dBildungscloud - Deine digitale Lernumgebung";
+			args[0].favicon = `./public/themes/${
+				process.env.SC_THEME || "default"
+			}/favicon.png`;
+			return args;
+		});
 	},
 
 	pluginOptions: {
