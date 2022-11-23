@@ -452,7 +452,7 @@
 	"components.molecules.shareCourse.options.title": "Teilen-Einstellungen",
 	"components.molecules.shareCourse.options.infoText": "Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
 	"components.molecules.shareCourse.options.schoolInternally": "Link nur schulintern gültig",
-	"components.molecules.shareCourse.options.expiresInSevenDays": "Link läuft nach 7 Tagen ab",
+	"components.molecules.shareCourse.options.expiresInDays": "Link läuft nach 21 Tagen ab",
 	"components.molecules.shareCourse.result.title": "Teilen über",
 	"components.molecules.shareCourse.result.linkLabel": "Link Kurskopie",
 	"components.molecules.shareCourse.result.mailShare": "Als Mail versenden",

@@ -446,7 +446,7 @@
 	"components.molecules.shareCourse.options.title": "Compartir la configuración",
 	"components.molecules.shareCourse.options.infoText": "Con el siguiente enlace, el curso puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.shareCourse.options.schoolInternally": "El enlace sólo es válido dentro de la escuela",
-	"components.molecules.shareCourse.options.expiresInSevenDays": "El enlace caduca a los 7 días",
+	"components.molecules.shareCourse.options.expiresInDays": "El enlace caduca a los 21 días",
 	"components.molecules.shareCourse.result.title": "Compartir vía",
 	"components.molecules.shareCourse.result.linkLabel": "Enlace a la copia del curso",
 	"components.molecules.shareCourse.result.mailShare": "Enviar como correo",
