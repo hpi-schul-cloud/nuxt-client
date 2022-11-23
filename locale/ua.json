@@ -548,6 +548,7 @@
 	"pages.administration.selected": "вибрано",
 	"pages.administration.sendMail.error": "Не вдалося надіслати посилання на реєстрацію | Не вдалося надіслати посилання на реєстрацію",
 	"pages.administration.sendMail.success": "Посилання на реєстрацію успішно надіслано | Посилання на реєстрацію успішно надіслано",
+	"pages.administration.sendMail.alreadyRegistered": "Реєстраційний лист не було надіслано, оскільки реєстрація вже відбулася",
 	"pages.administration.students.consent.cancel.modal.confirm": "Все одно скасувати",
 	"pages.administration.students.consent.cancel.modal.continue": "Продовжити реєстрацію",
 	"pages.administration.students.consent.cancel.modal.download.continue": "Роздрукувати дані доступу",
