@@ -27,14 +27,16 @@ export default defineComponent({
 			throw createApplicationError(500);
 		}
 
-		const hasError = ref<boolean>(applicationErrorModule.getError !== null);
+		const hasError = ref<boolean>(
+			applicationErrorModule.getStatusCode !== null
+		);
 
 		const routeToErrorPage = () => {
 			router.replace("/error");
 		};
 
 		watch(
-			() => applicationErrorModule.getError,
+			() => applicationErrorModule.getStatusCode,
 			(to) => {
 				to !== null ? routeToErrorPage() : null;
 			},
