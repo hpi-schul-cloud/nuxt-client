@@ -14,7 +14,7 @@ server {
 
     location /runtime.config.json {
         return 200 '{ "apiURL" : "${API_URL}" }\n';
-        add_header Content-Type text/plain;
+        add_header Content-Type application/json;
     }
 
     gzip on;
