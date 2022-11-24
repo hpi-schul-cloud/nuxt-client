@@ -1,4 +1,4 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "application-error",
@@ -19,7 +19,7 @@ export default class ApplicationErrorModule extends VuexModule {
 	@Action({ rawError: true })
 	resetError(): void {
 		this.setStatusCode(null);
-		this.setTranslationKey(null);
+		this.setTranslationKey("");
 	}
 
 	@Mutation
