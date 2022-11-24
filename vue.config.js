@@ -9,6 +9,8 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 const replacements = generateAliases(__dirname);
 
 module.exports = defineConfig({
+	assetsDir: "_nuxt",
+
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
