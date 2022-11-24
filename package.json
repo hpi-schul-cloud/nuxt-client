@@ -33,7 +33,7 @@
 		"generate-client:server": "node generate-client.js",
 		"generate-client:filestorage": "npm run generate-client:server -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3'",
 		"vue:serve": "vue-cli-service serve",
-		"vue:build": "vue-cli-service build",
+		"vue:build": "vue-cli-service build --mode production",
 		"vue:test:unit": "vue-cli-service test:unit",
 		"vue:lint": "vue-cli-service lint"
 	},

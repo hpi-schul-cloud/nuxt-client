@@ -2,6 +2,7 @@
   Note: This app is for testing purposes only,
   e.g. in order to run the vue client in a docker container on localhost
 */
+process.env.NODE_ENV = "development";
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const {

@@ -34,42 +34,50 @@ const isServer = (path) => {
 	return path.startsWith("/api/v");
 };
 
-const legacyClientProxy = createProxyMiddleware({
-	target: "http://localhost:3100",
-	changeOrigin: true,
-});
+let legacyClientProxy;
+let serverProxy;
 
-const serverProxy = createProxyMiddleware({
-	target: "http://localhost:3030",
-	changeOrigin: true,
-});
+const createDevServerConfig = () => {
+	legacyClientProxy = createProxyMiddleware({
+		target: "http://localhost:3100",
+		changeOrigin: true,
+	});
 
-const devServerConfig = {
-	port: 4000,
-	setupMiddlewares: (middlewares, devServer) => {
-		if (!devServer) {
-			throw new Error("webpack-dev-server is not defined");
-		}
+	serverProxy = createProxyMiddleware({
+		target: "http://localhost:3030",
+		changeOrigin: true,
+	});
 
-		middlewares.unshift({
-			name: "dev-server-proxy",
-			middleware: (req, res, next) => {
-				const path = req.originalUrl;
+	const devServerConfig = {
+		port: 4000,
+		setupMiddlewares: (middlewares, devServer) => {
+			if (!devServer) {
+				throw new Error("webpack-dev-server is not defined");
+			}
 
-				if (path && isServer(path)) {
-					// console.log("--- serverUrl: ", path);
-					serverProxy(req, res, next);
-				} else if (path && isLegacyClient(path)) {
-					// console.log("--- legacyUrl: ", path);
-					legacyClientProxy(req, res, next);
-				} else {
-					next();
-				}
-			},
-		});
+			middlewares.unshift({
+				name: "dev-server-proxy",
+				middleware: (req, res, next) => {
+					const path = req.originalUrl;
 
-		return middlewares;
-	},
+					if (path && isServer(path)) {
+						// console.log("--- serverUrl: ", path);
+						serverProxy(req, res, next);
+					} else if (path && isLegacyClient(path)) {
+						// console.log("--- legacyUrl: ", path);
+						legacyClientProxy(req, res, next);
+					} else {
+						// console.log("--- vueUrl: ", path);
+						next();
+					}
+				},
+			});
+
+			return middlewares;
+		},
+	};
+
+	return devServerConfig;
 };
 
 module.exports = {
@@ -77,5 +85,6 @@ module.exports = {
 	isServer,
 	legacyClientProxy,
 	serverProxy,
-	devServer: devServerConfig,
+	devServer:
+		process.env.NODE_ENV === "development" ? createDevServerConfig() : {},
 };
