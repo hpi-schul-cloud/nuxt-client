@@ -13,7 +13,7 @@ server {
     }
 
     location /runtime.config.json {
-        return 200 '{ "apiURL" : "${API_URL}" }\n';
+        return 200 '{ "apiURL" : "${API_URL}" }';
         add_header Content-Type application/json;
     }
 
