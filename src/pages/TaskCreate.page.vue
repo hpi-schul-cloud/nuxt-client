@@ -6,10 +6,11 @@
 	>
 		<v-form>
 			<v-text-field v-model="name" :label="$t('common.labels.title')" />
-			<v-textarea
+			<editor
 				v-model="description"
 				:label="$t('common.labels.description')"
-			/>
+				mode="simple"
+			></editor>
 			<v-btn color="primary" @click="save">{{
 				$t("common.actions.save")
 			}}</v-btn>
@@ -21,11 +22,12 @@
 import { defineComponent, inject, ref } from "@vue/composition-api";
 import { taskModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import Editor from "@/components/molecules/Editor.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TaskCreatePage",
-	components: { DefaultWireframe },
+	components: { DefaultWireframe, Editor },
 	setup() {
 		const i18n = inject("i18n");
 		const name = ref("");
