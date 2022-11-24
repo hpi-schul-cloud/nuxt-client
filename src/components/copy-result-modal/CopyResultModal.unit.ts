@@ -1,7 +1,7 @@
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import {CopyApiResponseTypeEnum} from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mount } from "@vue/test-utils";
+import {mount} from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 
 const defaultResultItems = () => {
@@ -113,7 +113,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			).toBe(false);
 		});
 
-		// WIP make test titles work in Jest + VSCode
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
@@ -136,7 +135,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			).toBe(true);
 		});
 
-		// WIP make test titles work in Jest + VSCode
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],

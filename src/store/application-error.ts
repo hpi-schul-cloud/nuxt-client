@@ -1,5 +1,4 @@
 import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {ApplicationError} from "@store/types/application-error";
 
 @Module({
 	name: "application-error",
@@ -7,25 +6,35 @@ import {ApplicationError} from "@store/types/application-error";
 	stateFactory: true,
 })
 export default class ApplicationErrorModule extends VuexModule {
-	private applicationError: ApplicationError | null = null;
+	private statusCode: number | null = null;
+	private translationKey: string = "";
 
 	@Action({ rawError: true })
-	setError(payload: ApplicationError): void {
+	setError(payload: { statusCode: number; translationKey: string }): void {
 		if (!payload) return;
-		this.setErrorObject(payload);
+		this.setStatusCode(payload.statusCode);
+		this.setTranslationKey(payload.translationKey);
 	}
 
 	@Action({ rawError: true })
 	resetError(): void {
-		this.setErrorObject(null);
+		this.setStatusCode(null);
+		this.setTranslationKey(null);
 	}
 
 	@Mutation
-	setErrorObject(payload: ApplicationError | null): void {
-		this.applicationError = payload;
+	setStatusCode(statusCode: number | null): void {
+		this.statusCode = statusCode;
+	}
+	@Mutation
+	setTranslationKey(translationKey: string | null): void {
+		this.translationKey = translationKey || "";
 	}
 
-	get getError(): ApplicationError | null {
-		return this.applicationError;
+	get getStatusCode(): number | null {
+		return this.statusCode;
+	}
+	get getTranslationKey(): string {
+		return this.translationKey;
 	}
 }

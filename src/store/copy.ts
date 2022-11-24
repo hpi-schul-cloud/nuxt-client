@@ -1,5 +1,5 @@
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import {CopyResultItem} from "@components/copy-result-modal/types/CopyResultItem";
+import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import {
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
@@ -12,7 +12,7 @@ import {
 	TaskApiFactory,
 	TaskApiInterface,
 } from "../serverApi/v3/api";
-import { $axios } from "../utils/api";
+import {$axios} from "../utils/api";
 
 export type CopyParams = {
 	id: string;
@@ -103,7 +103,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
@@ -138,7 +138,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return this.copyResultFailedItems;

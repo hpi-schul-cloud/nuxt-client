@@ -1,29 +1,29 @@
 <template>
 	<div class="text-centered">
-		<div v-if="applicationError">
+		<div v-if="appErrorStatusCode">
 			<base-image
-				v-if="applicationError.statusCode === 400"
+				v-if="appErrorStatusCode === 400"
 				img-src="@assets/img/permission-error.svg"
 				img-height="300px"
 				fill="var(--v-primary-base)"
 				role="presentation"
 			/>
 			<base-image
-				v-if="applicationError.statusCode === 401"
+				v-if="appErrorStatusCode === 401"
 				img-src="@assets/img/permission-error.svg"
 				img-height="300px"
 				fill="var(--v-primary-base)"
 				role="presentation"
 			/>
 			<base-image
-				v-if="applicationError.statusCode === 403"
+				v-if="appErrorStatusCode === 403"
 				img-src="@assets/img/permission-error.svg"
 				img-height="300px"
 				fill="var(--v-primary-base)"
 				role="presentation"
 			/>
 			<img
-				v-if="applicationError.statusCode === 500"
+				v-if="appErrorStatusCode === 500"
 				role="presentation"
 				alt=""
 				src="@assets/img/pc_repair.png"
@@ -40,7 +40,7 @@
 		</div>
 		<div>
 			<h1 class="error-msg">
-				<template v-if="applicationError">
+				<template v-if="appErrorStatusCode">
 					{{ translatedErrorMessage }}
 				</template>
 				<template v-else> {{ $t("error.generic") }} </template>
@@ -85,26 +85,28 @@ export default defineComponent({
 			window.location.assign("/dashboard");
 		};
 
-		const applicationError = computed(() => {
-			return applicationErrorModule.getError;
+		const appErrorTranslationKey = computed(() => {
+			return applicationErrorModule.getTranslationKey;
+		});
+		const appErrorStatusCode = computed(() => {
+			return applicationErrorModule.getStatusCode;
 		});
 
 		const translatedErrorMessage = computed(() => {
-			const appErrorValue = applicationError.value;
-			if (appErrorValue === null) {
-				return "";
-			}
+			const translationKey = appErrorTranslationKey.value;
 
-			const translatedError = i18n.t(appErrorValue.translationKey).toString();
+			if (translationKey === "") return translationKey;
 
-			return translatedError !== appErrorValue.translationKey
+			const translatedError = i18n.t(translationKey).toString();
+
+			return translatedError !== translationKey
 				? translatedError
 				: i18n.t("error.generic").toString();
 		});
 
 		return {
 			onBackClick,
-			applicationError,
+			appErrorStatusCode,
 			translatedErrorMessage,
 		};
 	},
