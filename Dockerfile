@@ -23,10 +23,8 @@ RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --t
 
 # run stage
 FROM docker.io/nginx:1.23
-COPY dockerconf/nginx.conf /etc/nginx/conf.d/default.conf
-COPY dockerconf/docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN mkdir /etc/nginx/templates
+COPY dockerconf/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 4000
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
