@@ -8,10 +8,8 @@ metadata:
     app: nuxtclient
 data:
   # general
-  NODE_ENV: "production"
   TZ: "Europe/Berlin"
   SC_THEME: "{{ SC_THEME }}"
-  LOG_LEVEL: "error"
 {% for name, data in configuration_all.items() %}
   {% if data.nuxtclient is defined and data.nuxtclient == true %}
     {% if data.config_name is defined and data.config_name in hostvars[inventory_hostname] %}

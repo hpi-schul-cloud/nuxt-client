@@ -39,9 +39,10 @@ spec:
         - configMapRef:
             name: nuxtclient-configmap
         volumeMounts:
-        - mountPath: /app/http-headers.config.js
-          subPath: http-headers.js
-          name: http-headers
+        - mountPath: /var/run
+          name: tmpfs-1
+        - mountPath: /var/cache/nginx
+          name: tmpfs-2
         readinessProbe:
           httpGet:
             path: /nuxtversion
@@ -66,14 +67,12 @@ spec:
         resources:
           limits:
             cpu: {{ NUXTCLIENT_CPU_LIMITS|default("2000m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("1Gi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("256Mi", true) }}
           requests:
             cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("128Mi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("32Mi", true) }}
       volumes:
-      - name: http-headers
-        configMap:
-          name: nuxtclient-configmap-files
-          items:
-          - key: http-headers.js
-            path: http-headers.js
+      - name: tmpfs-1
+        emptyDir: {}
+      - name: tmpfs-2
+        emptyDir: {}
