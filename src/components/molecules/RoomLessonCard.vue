@@ -5,10 +5,11 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
+		:outlined="isHidden"
+		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
-		@keydown.enter="handleClick"
+		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"
@@ -105,7 +106,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--color-secondary",
+			defaultTitleColor: "--v-secondary-base",
 		};
 	},
 	computed: {
@@ -241,6 +242,10 @@ export default {
 
 			chipStr += chipValueArray.join(" / ");
 
+			if (this.isHidden && this.lesson.numberOfDraftTasks === 0) {
+				chipStr += ` (${this.$t("pages.room.lessonCard.label.notVisible")})`;
+			}
+
 			return chipStr;
 		},
 	},
@@ -294,9 +299,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-@import "@styles";
-
 .top-row-container {
 	display: grid;
 	grid-template-columns: 95% 5%;
@@ -331,16 +333,7 @@ export default {
 }
 
 .action-button {
-	color: var(--color-primary);
-}
-
-.v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
-
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
+	color: var(--v-primary-base);
 }
 
 .v-card__text {
@@ -348,8 +341,6 @@ export default {
 }
 
 .hidden-lesson {
-	box-shadow: none;
-
 	.lesson-name {
 		opacity: 0.5;
 	}

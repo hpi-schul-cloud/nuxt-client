@@ -4,6 +4,7 @@ import AutoLogoutModule from "@/store/autoLogout";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import SchoolsModule from "@/store/schools";
+import StatusAlertsModule from "@/store/status-alerts";
 import setupStores from "@@/tests/test-utils/setupStores";
 import legacyLoggedIn from "./legacyLoggedIn";
 
@@ -22,6 +23,7 @@ setupStores({
 	"env-config": EnvConfigModule,
 	filePaths: FilePathsModule,
 	schools: SchoolsModule,
+	"status-alerts": StatusAlertsModule,
 });
 
 authModule.setUser({

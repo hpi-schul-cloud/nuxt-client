@@ -75,8 +75,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
-
 .alert-wrapper {
 	position: fixed;
 	right: 0;
@@ -96,12 +94,12 @@ export default {
 .alert {
 	margin: 0 var(--space-sm);
 	overflow: hidden;
-	background-color: var(--color-white) !important;
+	background-color: var(--v-white-base) !important;
 }
 
 ::v-deep .v-btn__content .v-icon,
 .alert_text {
-	color: var(--color-black) !important;
+	color: var(--v-black-base) !important;
 }
 
 ::v-deep .v-alert__border {

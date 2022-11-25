@@ -15,24 +15,23 @@
 			<span class="label">
 				{{ chip.label }}
 			</span>
-			<base-button
+			<v-btn
 				v-if="chip.deletable"
-				design="none"
-				type="button"
+				fab
+				depressed
+				color="secondary"
 				class="btn-delete"
 				@click.stop="$emit('remove', chip.id)"
 			>
-				<base-icon
-					icon="close"
-					source="material"
-					style="font-size: var(--text-sm)"
-				/>
-			</base-button>
+				<v-icon small>{{ mdiClose }}</v-icon>
+			</v-btn>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mdiClose } from "@mdi/js";
+
 export default {
 	props: {
 		chips: {
@@ -40,12 +39,15 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		return {
+			mdiClose,
+		};
+	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 $transition: background var(--duration-transition-medium)
 	cubic-bezier(0.23, 1, 0.32, 1);
 $mobile: 750px; // css variables do not work with media queries
@@ -62,11 +64,11 @@ $mobile: 750px; // css variables do not work with media queries
 	padding: var(--space-xs-3) var(--space-sm);
 	margin-right: var(--space-sm);
 	line-height: var(--line-height);
-	color: var(--color-white);
+	color: var(--v-white-base);
 	white-space: nowrap;
 	cursor: pointer;
-	background-color: var(--color-white);
-	border: 1px solid var(--color-secondary);
+	background-color: var(--v-white-base);
+	border: 1px solid var(--v-secondary-base);
 	border-radius: var(--radius-round);
 	transition: $transition;
 
@@ -79,13 +81,13 @@ $mobile: 750px; // css variables do not work with media queries
 	}
 
 	&:hover {
-		box-shadow: 0 0 0 1px var(--color-secondary);
+		box-shadow: 0 0 0 1px var(--v-secondary-base);
 	}
 
 	&:focus {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--color-white),
-			0 0 0 6px var(--color-secondary-dark);
+		box-shadow: 0 0 0 3px var(--v-white-base),
+			0 0 0 6px var(--v-secondary-darken1);
 	}
 
 	.btn-delete {
@@ -98,23 +100,23 @@ $mobile: 750px; // css variables do not work with media queries
 		margin: 0;
 		margin-right: calc(-1 * var(--space-xs-4));
 		margin-left: var(--space-xs);
-		color: var(--color-white);
+		color: var(--v-white-base);
 		cursor: pointer;
-		background-color: var(--color-secondary);
+		background-color: var(--v-secondary-base);
 		border: none;
 		border-radius: var(--radius-round);
 		transition: $transition;
 
 		&:hover,
 		&:focus {
-			color: var(--color-white);
-			background: var(--color-secondary-dark);
+			color: var(--v-white-base);
+			background: var(--v-secondary-darken1);
 		}
 
 		&:focus {
 			outline: none;
-			box-shadow: 0 0 0 3px var(--color-white),
-				0 0 0 6px var(--color-secondary-dark);
+			box-shadow: 0 0 0 3px var(--v-white-base),
+				0 0 0 6px var(--v-secondary-darken1);
 		}
 	}
 
@@ -122,7 +124,7 @@ $mobile: 750px; // css variables do not work with media queries
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-secondary);
+		color: var(--v-secondary-base);
 	}
 }
 

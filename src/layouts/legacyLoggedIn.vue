@@ -7,7 +7,6 @@
 				<the-top-bar
 					v-if="!isInline"
 					:title="pageTitle"
-					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
 					:expanded-menu="expandedMenu"
 					:user="user"
@@ -37,7 +36,7 @@ import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
-import sidebarBaseItems from "@utils/sidebarBaseItems.js";
+import sidebarBaseItems from "@utils/sidebar-base-items";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
@@ -58,51 +57,6 @@ export default {
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
-			topbarBaseActions: [
-				{
-					type: "popupIcon",
-					title: this.$t("global.topbar.actions.qrCode"),
-					icon: "qrcode",
-					component: "menu-qr-code",
-				},
-				{
-					type: "popupIcon",
-					title: this.$t("global.topbar.actions.help"),
-					icon: "question",
-					component: "help-dropdown",
-					config: {
-						menuItems: [
-							{
-								label: this.$t("global.topbar.actions.helpSection"),
-								icon: "question-circle",
-								action: "/help",
-								source: "fa",
-								target: "_self",
-							},
-							// TODO: implement intro for nuxt-client
-							// {
-							// 	label: "Intro",
-							// 	icon: "map-signs",
-							// 	action: "/",
-							// },
-							{
-								label: this.$t("global.topbar.actions.contactSupport"),
-								icon: "pencil",
-								action: "/help/contact",
-								source: "fa",
-								target: "_self",
-							},
-							{
-								label: this.$t("global.topbar.actions.training"),
-								icon: "fortbildung",
-								action: "https://www.lernen.cloud/",
-								source: "custom",
-								target: "_blank",
-							},
-						],
-					},
-				},
-			],
 		};
 	},
 	computed: {
@@ -141,25 +95,7 @@ export default {
 				);
 			});
 
-			return sidebarItems.map((item) => {
-				const isInRoute = (activeURL) => this.$route.path.includes(activeURL);
-				const isActive =
-					this.$route.path.includes(item.href) ||
-					this.$route.path.includes(item.to) ||
-					(item.activeForUrls && item.activeForUrls.some(isInRoute));
-				item.childActive = false;
-				if (item.children) {
-					item.children.forEach((childItem) => {
-						childItem.active =
-							this.$route.path.includes(childItem.href) ||
-							this.$route.path.includes(childItem.to);
-						item.childActive = item.childActive || childItem.active;
-					});
-				}
-				item.active = isActive && !item.childActive;
-
-				return item;
-			});
+			return sidebarItems;
 		},
 		style() {
 			return this.fullscreenMode ? "display: inherit;" : "";

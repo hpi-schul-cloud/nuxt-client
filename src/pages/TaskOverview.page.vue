@@ -3,12 +3,11 @@
 </template>
 
 <script>
-import { authModule, taskModule } from "@/store";
+import { authModule, tasksModule } from "@/store";
 import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 
 export default {
 	components: { TasksDashboardMain },
-	layout: "defaultVuetify",
 	computed: {
 		userRoles: () => authModule.getUserRoles,
 		dashBoardRole: function () {
@@ -24,7 +23,7 @@ export default {
 		},
 	},
 	mounted() {
-		taskModule.fetchAllTasks();
+		tasksModule.fetchAllTasks();
 	},
 	head() {
 		return {

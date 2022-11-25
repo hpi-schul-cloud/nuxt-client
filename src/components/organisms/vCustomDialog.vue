@@ -7,10 +7,10 @@
 		@keydown.esc="$emit('dialog-closed', false)"
 	>
 		<v-card :ripple="false">
-			<v-card-title>
+			<v-card-title data-testid="dialog-title">
 				<slot name="title"></slot>
 			</v-card-title>
-			<v-card-text>
+			<v-card-text class="text--primary">
 				<slot name="content"></slot>
 			</v-card-text>
 			<v-card-actions v-if="hasButtons">
@@ -42,7 +42,7 @@
 						class="dialog-closed"
 						depressed
 						text
-						@click="$emit('dialog-closed', false)"
+						@click="cancelDialog"
 					>
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
@@ -120,6 +120,10 @@ export default {
 	methods: {
 		confirmDialog() {
 			this.$emit("dialog-confirmed");
+			this.$emit("dialog-closed", false);
+		},
+		cancelDialog() {
+			this.$emit("dialog-canceled");
 			this.$emit("dialog-closed", false);
 		},
 		checkButtons(buttonName) {

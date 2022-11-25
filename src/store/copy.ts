@@ -6,17 +6,32 @@ import {
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	ShareTokenApiFactory,
+	ShareTokenApiInterface,
+	ShareTokenInfoResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
-import { BusinessError } from "./types/commons";
 
 export type CopyParams = {
 	id: string;
 	type: "task" | "lesson" | "course";
-	courseId: string;
+	courseId?: string;
 };
+
+interface ShareTokenValidationResult {
+	payload: {
+		parentType: "course";
+		parentName: string;
+	};
+}
+
+interface CopyByShareTokenPayload {
+	type: string;
+	token: string;
+	newName: string;
+}
 
 @Module({
 	name: "copy",
@@ -26,8 +41,7 @@ export type CopyParams = {
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
-	private businessError: BusinessError | undefined = undefined;
-	private loading: boolean = false;
+	private isResultModalOpen: boolean = false;
 
 	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
@@ -45,46 +59,93 @@ export default class CopyModule extends VuexModule {
 		return this._taskApi;
 	}
 
-	@Action
-	async copy({ id, courseId, type }: CopyParams): Promise<void> {
-		this.resetBusinessError();
-		this.setLoading(true);
-		try {
-			let copyResult: CopyApiResponse | undefined = undefined;
-
-			if (type === "task") {
-				copyResult = await this.taskApi
-					.taskControllerCopyTask(id, { courseId })
-					.then((response) => response.data);
-			}
-
-			if (type === "lesson") {
-				copyResult = await this.roomsApi
-					.roomsControllerCopyLesson(id, { courseId })
-					.then((response) => response.data);
-			}
-
-			if (type === "course") {
-				copyResult = await this.roomsApi
-					.roomsControllerCopyCourse(id)
-					.then((response) => response.data);
-			}
-
-			if (copyResult === undefined) {
-				throw new Error("CopyProcess unknown type: " + type);
-			}
-
-			this.setCopyResult(copyResult);
-			this.setCopyResultFailedItems({ payload: copyResult });
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setLoading(false);
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
+	private _shareApi?: ShareTokenApiInterface;
+	private get shareApi(): ShareTokenApiInterface {
+		if (!this._shareApi) {
+			const axiosWithoutErrorPage = $axios?.create();
+			this._shareApi = ShareTokenApiFactory(
+				undefined,
+				"/v3",
+				axiosWithoutErrorPage
+			);
 		}
+		return this._shareApi;
+	}
+
+	@Action
+	async copy({
+		id,
+		courseId,
+		type,
+	}: CopyParams): Promise<CopyApiResponse | undefined> {
+		let copyResult: CopyApiResponse | undefined = undefined;
+
+		if (type === "task") {
+			copyResult = await this.taskApi
+				.taskControllerCopyTask(id, { courseId })
+				.then((response) => response.data);
+		}
+
+		if (type === "lesson") {
+			copyResult = await this.roomsApi
+				.roomsControllerCopyLesson(id, { courseId })
+				.then((response) => response.data);
+		}
+
+		if (type === "course") {
+			copyResult = await this.roomsApi
+				.roomsControllerCopyCourse(id)
+				.then((response) => response.data);
+		}
+
+		if (copyResult === undefined) {
+			throw new Error("CopyProcess unknown type: " + type);
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+
+		this.setCopyResult(copyResult);
+		this.setCopyResultFailedItems({ payload: copyResult });
+		return copyResult;
+	}
+
+	@Action({ rawError: true })
+	async validateShareToken(
+		token: string
+	): Promise<ShareTokenInfoResponse | undefined> {
+		const shareTokenResponse =
+			await this.shareApi.shareTokenControllerLookupShareToken(token);
+		if (!shareTokenResponse) return undefined;
+		return shareTokenResponse.data;
+	}
+
+	@Action({ rawError: true })
+	async copyByShareToken({
+		token,
+		type,
+		newName,
+	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
+		let copyResult: CopyApiResponse | undefined = undefined;
+
+		if (type === "course") {
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, { newName })
+				.then((response) => response.data);
+		}
+
+		if (copyResult === undefined) {
+			throw new Error("CopyProcess unknown type: " + type);
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		this.setCopyResult(copyResult);
+		this.setCopyResultFailedItems({ payload: copyResult });
+		return this.copyResultFailedItems;
+	}
+
+	@Mutation
+	setResultModalOpen(open: boolean) {
+		this.isResultModalOpen = open;
 	}
 
 	@Mutation
@@ -176,23 +237,11 @@ export default class CopyModule extends VuexModule {
 		};
 
 		const rootUrl = getUrl(payload);
-		const result: CopyResultItem[] = getItemsFromBranch(payload, rootUrl!);
+		const result: CopyResultItem[] = getItemsFromBranch(
+			payload,
+			rootUrl!
+		).filter((item) => item.elements.length > 0);
 		this.copyResultFailedItems = result;
-	}
-
-	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
-
-	@Mutation
-	setBusinessError(businessError: BusinessError): void {
-		this.businessError = businessError;
-	}
-
-	@Mutation
-	resetBusinessError(): void {
-		this.businessError = undefined;
 	}
 
 	@Mutation
@@ -204,7 +253,7 @@ export default class CopyModule extends VuexModule {
 	reset(): void {
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
-		this.businessError = undefined;
+		this.isResultModalOpen = false;
 	}
 
 	get getCopyResult(): CopyApiResponse | undefined {
@@ -223,11 +272,7 @@ export default class CopyModule extends VuexModule {
 		return this.copyResult?.id ?? "";
 	}
 
-	get getLoading(): boolean {
-		return this.loading;
-	}
-
-	get getBusinessError(): BusinessError | undefined {
-		return this.businessError;
+	get getIsResultModalOpen(): boolean {
+		return this.isResultModalOpen;
 	}
 }

@@ -217,14 +217,14 @@ export default {
 }
 
 ::v-deep .v-btn--has-bg {
-	background-color: var(--color-white) !important;
+	background-color: var(--v-white-base) !important;
 }
 
 .fab-action-icon {
-	color: var(--color-primary) !important;
+	color: var(--v-primary-base) !important;
 }
 
 .fab-action:hover .fab-action-icon {
-	color: var(--color-primary-dark) !important;
+	color: var(--v-primary-darken1) !important;
 }
 </style>

@@ -1,12 +1,12 @@
-import { authModule, roomsModule, envConfigModule } from "@/store";
+import { authModule, envConfigModule, roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
-import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import Vue from "vue";
 
 const getWrapper = (
 	options: any = {
@@ -17,8 +17,6 @@ const getWrapper = (
 	return mount(RoomWrapper, {
 		...createComponentMocks({
 			i18n: true,
-			//@ts-ignore
-			vuetify: true,
 		}),
 		...options,
 	});

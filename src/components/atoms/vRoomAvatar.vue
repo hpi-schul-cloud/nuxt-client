@@ -13,7 +13,7 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="var(--color-primary)"
+			color="var(--v-primary-base)"
 			icon="mdi-lock"
 			overlap
 			:value="displayBadge"
@@ -121,7 +121,6 @@ export default {
 <style lang="scss" scoped>
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -144,7 +143,7 @@ export default {
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
-	color: var(--color-black);
+	color: var(--v-black-base);
 	text-align: center;
 	overflow-wrap: break-word;
 
@@ -161,7 +160,7 @@ export default {
 		margin-left: calc(var(--space-base-vuetify) * -3);
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
-		color: var(--color-black);
+		color: var(--v-black-base);
 	}
 }
 

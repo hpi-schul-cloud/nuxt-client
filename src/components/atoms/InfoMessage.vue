@@ -32,8 +32,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@styles";
-
 .info-message {
 	display: flex;
 	align-items: top;
@@ -41,19 +39,19 @@ export default {
 }
 
 .info-message.bc-error {
-	color: var(--color-danger);
+	color: var(--v-error-base);
 }
 
 .info-message.bc-success {
-	color: var(--color-success);
+	color: var(--v-success-base);
 }
 
 .info-message.bc-warning {
-	color: var(--color-warning);
+	color: var(--v-warning-base);
 }
 
 .info-message.bc-info {
-	color: var(--color-info);
+	color: var(--v-info-base);
 }
 
 .info-message .icon {

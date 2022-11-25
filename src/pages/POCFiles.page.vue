@@ -59,7 +59,6 @@ export default {
 	components: {
 		DefaultWireframe,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			mdiPencil,

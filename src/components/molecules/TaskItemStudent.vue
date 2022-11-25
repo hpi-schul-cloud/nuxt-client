@@ -121,8 +121,8 @@ export default {
 			return stateIcons[this.taskState] || stateIcons["open"];
 		},
 		topic() {
-			return this.task.description
-				? `${this.$t("common.words.topic")} ${this.task.description}`
+			return this.task.lessonName
+				? `${this.$t("common.words.topic")} ${this.task.lessonName}`
 				: "";
 		},
 		dueDateLabel() {

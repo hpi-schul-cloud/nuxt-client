@@ -3,6 +3,9 @@ import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardResponse,
+	CoursesApiFactory,
+	LessonApiFactory,
+	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
@@ -38,7 +41,6 @@ export default class RoomModule extends VuexModule {
 		status: "",
 		message: "",
 	};
-	private courseInvitationLink: string = "";
 	private courseShareToken: string = "";
 
 	private _roomsApi?: RoomsApiInterface;
@@ -47,6 +49,14 @@ export default class RoomModule extends VuexModule {
 			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._roomsApi;
+	}
+
+	private _lessonApi?: LessonApiInterface;
+	private get lessonApi(): LessonApiInterface {
+		if (!this._lessonApi) {
+			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
+		}
+		return this._lessonApi;
 	}
 
 	@Action
@@ -175,13 +185,7 @@ export default class RoomModule extends VuexModule {
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const deletedLessonData = await $axios.$delete(`/v1/lessons/${lessonId}`);
-			if (!deletedLessonData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-deleted",
-				});
-			}
+			await this.lessonApi.lessonControllerDelete(lessonId);
 
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
@@ -194,20 +198,19 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async createCourseInvitation(courseId: string): Promise<void> {
+	async downloadImsccCourse(): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const invitationData = await $axios.$post("/v1/link", {
-				target: `${window.location.origin}/courses/${courseId}/addStudent`,
-			});
-			if (!invitationData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-generated",
-				});
-			}
-			const invitationLink = `${window.location.origin}/link/${invitationData._id}`;
-			this.setCourseInvitationLink(invitationLink);
+			const response = await CoursesApiFactory(
+				undefined,
+				'v3',
+				$axios
+			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
+			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
+			link.click();
+			URL.revokeObjectURL(link.href);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -333,11 +336,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setCourseInvitationLink(payload: string): void {
-		this.courseInvitationLink = payload;
-	}
-
-	@Mutation
 	setCourseShareToken(payload: string): void {
 		this.courseShareToken = payload;
 	}
@@ -364,10 +362,6 @@ export default class RoomModule extends VuexModule {
 
 	get getSharedLessonData(): SharedLessonObject {
 		return this.sharedLessonData;
-	}
-
-	get getCourseInvitationLink(): string {
-		return this.courseInvitationLink;
 	}
 
 	get getCourseShareToken(): string {

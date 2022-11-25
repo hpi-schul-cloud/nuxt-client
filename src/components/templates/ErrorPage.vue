@@ -4,7 +4,7 @@
 			v-if="error.statusCode === 404"
 			img-src="@assets/img/pageNotFound.svg"
 			img-height="300px"
-			fill="var(--color-primary)"
+			fill="var(--v-primary-base)"
 			role="presentation"
 		/>
 		<img
@@ -22,9 +22,9 @@
 			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
-			<base-button design="primary" @click="$router.go(-1)">
+			<v-btn color="primary" depressed @click="$router.go(-1)">
 				{{ $t("error.action.back") }}
-			</base-button>
+			</v-btn>
 		</slot>
 	</div>
 </template>
@@ -44,8 +44,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .text-centered {
 	text-align: center;
 }

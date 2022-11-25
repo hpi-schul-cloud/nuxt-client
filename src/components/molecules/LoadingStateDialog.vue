@@ -25,6 +25,7 @@
 <script>
 import { computed, defineComponent, inject } from "@vue/composition-api";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "LoadingStateDialog",
 	setup() {
@@ -43,5 +44,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<!--<style scoped></style>-->

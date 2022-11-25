@@ -42,12 +42,10 @@
 					id="task-action-copy"
 					class="task-action"
 					data-testId="task-copy"
-					@click.stop.prevent="copyTask"
+					@click.stop.prevent="onCopyTask"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiContentCopy }}
-						</v-icon>
+						<v-icon class="task-action-icon"> {{ mdiContentCopy }} </v-icon>
 						{{ $t("common.actions.copy") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -108,6 +106,8 @@
 </template>
 
 <script>
+import { envConfigModule, finishedTasksModule } from "@/store";
+import vCustomDialog from "@components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
 	mdiDotsVertical,
@@ -115,15 +115,17 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import {
-	copyModule,
-	envConfigModule,
-	finishedTaskModule,
-	taskModule,
-} from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import { defineComponent } from "@vue/composition-api";
+import { useCopy } from "../../composables/copy";
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		const { copy } = useCopy();
+		return {
+			copy,
+		};
+	},
 	components: { vCustomDialog },
 	props: {
 		taskId: {
@@ -149,6 +151,7 @@ export default {
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
+	inject: ["tasksModule"],
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
@@ -160,9 +163,6 @@ export default {
 		};
 	},
 	computed: {
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
-		},
 		editLink() {
 			return `/homework/${this.taskId}/edit`;
 		},
@@ -185,23 +185,30 @@ export default {
 		},
 		handleFinish() {
 			if (this.taskIsFinished) {
-				finishedTaskModule.restoreTask(this.taskId);
+				finishedTasksModule.restoreTask(this.taskId);
 			} else {
-				taskModule.finishTask(this.taskId);
+				this.tasksModule.finishTask(this.taskId);
 			}
 		},
 		handleDelete() {
-			taskModule.deleteTask(this.taskId);
+			this.tasksModule.deleteTask(this.taskId);
 		},
-		async copyTask() {
-			await copyModule.copy({
+		onCopyTask() {
+			if (!this.copyServiceEnabled) {
+				window.location.href = this.copyLink;
+				return;
+			}
+
+			const payload = {
 				id: this.taskId,
-				courseId: this.courseId,
+				courseId: this.courseId === "" ? undefined : this.courseId,
 				type: "task",
-			});
+			};
+
+			this.$emit("copy-task", payload);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

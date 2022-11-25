@@ -94,9 +94,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .v-list-item__icon {
-	margin-right: var(--space-xs);
+	margin-right: var(--space-xs) !important;
 	margin-left: var(--space-xs);
 }
 

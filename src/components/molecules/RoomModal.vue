@@ -48,6 +48,7 @@ import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
 
 import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		vCustomDialog,

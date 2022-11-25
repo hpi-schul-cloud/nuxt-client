@@ -7,100 +7,43 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<h2 slot="title" class="text-h4 my-2 wordbreak-normal">
-			{{ title }}
-		</h2>
-		<template slot="content">
-			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<v-alert
-					v-if="status === 'success'"
-					data-testid="success-alert"
-					type="success"
-					:icon="mdiCheckCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.successfullyCopied") }}
-					</div>
-				</v-alert>
-				<v-alert
-					v-if="status === 'failure'"
-					data-testid="failure-alert"
-					type="error"
-					:icon="mdiCloseCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.failedCopy") }}
-					</div>
-				</v-alert>
-				<v-alert
-					v-if="hasTimeoutError"
-					data-testid="timeout-alert"
-					type="warning"
-					:icon="mdiCloseCircle"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						{{ $t("components.molecules.copyResult.timeoutCopy") }}
-					</div>
-				</v-alert>
-				<v-alert
-					v-if="needsInfoText"
-					type="warning"
-					:icon="mdiInformation"
-					text
-					border="left"
-				>
-					<div class="alert_text mr-2">
-						<div v-if="hasGeogebraElement" data-testid="geogebra">
-							<strong>{{
-								$t("components.molecules.copyResult.label.geogebra")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.geogebraCopy.info") }}
-						</div>
-						<div v-if="hasEtherpadElement" data-testid="etherpad">
-							<strong>{{
-								$t("components.molecules.copyResult.label.etherpad")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.etherpadCopy.info") }}
-						</div>
-						<div v-if="hasNexboardElement" data-testid="nexboard">
-							<strong>{{
-								$t("components.molecules.copyResult.label.nexboard")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.nexboardCopy.info") }}
-						</div>
-						<div v-if="hasCourseGroup" data-testid="coursegroups">
-							<strong>{{ $t("common.words.courseGroups") }}</strong> &middot;
-							{{ $t("components.molecules.copyResult.courseGroupCopy.info") }}
-						</div>
-						<div v-if="hasFileElement" data-testid="files">
-							<strong>{{
-								$t("components.molecules.copyResult.label.files")
-							}}</strong>
-							&middot;
-							{{ $t("components.molecules.copyResult.fileCopy.error") }}
-						</div>
-					</div>
-				</v-alert>
+		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+			{{ $t("components.molecules.copyResult.title.partial") }}
+		</div>
 
-				<div v-if="isLoading">
-					<v-skeleton-loader
-						type="article, list-item-three-line"
-						data-testid="copy-skeleton"
-					/>
-				</div>
-				<div v-else>
-					<copy-result-modal-list :items="items"></copy-result-modal-list>
+		<template slot="content">
+			<div
+				v-if="needsInfoText"
+				ref="copy-dialog-content"
+				data-testid="copy-result-notifications"
+			>
+				<div
+					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
+				>
+					<div class="mx-2">
+						<v-icon class="orange--text text--darken-1">{{ mdiAlert }}</v-icon>
+					</div>
+					<div>
+						<template v-for="(warning, index) in copyResultWarnings">
+							<p
+								v-if="warning.isShow"
+								:key="index"
+								class="black--text mb-0"
+								data-testid="warning-title"
+							>
+								<strong>{{ warning.title }}</strong>
+								&middot;
+								{{ warning.text }}
+							</p>
+						</template>
+					</div>
 				</div>
 			</div>
+
+			<div class="black--text">
+				<p>{{ $t("components.molecules.copyResult.information") }}</p>
+			</div>
+			<copy-result-modal-list :items="items"></copy-result-modal-list>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -109,24 +52,23 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mdiCheckCircle, mdiCloseCircle, mdiInformation } from "@mdi/js";
+import {
+	mdiAlert,
+	mdiCheckCircle,
+	mdiCloseCircle,
+	mdiInformation,
+} from "@mdi/js";
 
 export default {
 	name: "CopyResultModal",
 	components: { CopyResultModalList, vCustomDialog },
 	props: {
-		isLoading: Boolean,
+		isOpen: {
+			type: Boolean,
+		},
 		copyResultItems: {
 			type: Array,
 			default: () => [],
-		},
-		copyResultStatus: {
-			type: String,
-			default: () => undefined,
-		},
-		copyResultError: {
-			type: Object,
-			default: () => undefined,
 		},
 	},
 	data() {
@@ -134,27 +76,47 @@ export default {
 			mdiInformation,
 			mdiCheckCircle,
 			mdiCloseCircle,
+			mdiAlert,
 		};
 	},
 	computed: {
 		items() {
 			return this.copyResultItems;
 		},
+		copyResultWarnings() {
+			return [
+				{
+					isShow: this.hasGeogebraElement,
+					text: this.$t("components.molecules.copyResult.geogebraCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.geogebra"),
+				},
+				{
+					isShow: this.hasEtherpadElement,
+					text: this.$t("components.molecules.copyResult.etherpadCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.etherpad"),
+				},
+				{
+					isShow: this.hasNexboardElement,
+					text: this.$t("components.molecules.copyResult.nexboardCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.nexboard"),
+				},
+				{
+					isShow: this.hasFileElement,
+					text: this.$t("components.molecules.copyResult.label.files"),
+					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+				},
+				{
+					isShow: this.hasCourseGroup,
+					text: this.$t("components.molecules.copyResult.courseGroupCopy.info"),
+					title: this.$t("common.words.courseGroups"),
+				},
+			];
+		},
 		hasTimeoutError() {
 			return (
 				this.copyResultError !== undefined &&
 				this.copyResultError.statusCode === 504
 			);
-		},
-		isOpen() {
-			return (
-				this.isLoading === true ||
-				this.copyResultStatus !== undefined ||
-				this.hasTimeoutError
-			);
-		},
-		status() {
-			return this.copyResultStatus;
 		},
 		needsInfoText() {
 			return (
@@ -192,41 +154,15 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
-		title() {
-			if (this.isLoading || this.hasTimeoutError) {
-				return this.$t("components.molecules.copyResult.title.loading");
-			}
-
-			if (this.copyResultStatus === "success") {
-				return this.$t("components.molecules.copyResult.title.success");
-			}
-
-			if (this.copyResultStatus === "partial") {
-				return this.$t("components.molecules.copyResult.title.partial");
-			}
-
-			return this.$t("components.molecules.copyResult.title.failure");
-		},
-	},
-	watch: {
-		isLoading: function () {
-			if (this.isLoading === false) {
-				this.$nextTick(() => setTimeout(this.focusFirstLink, 100));
-			}
-		},
 	},
 	methods: {
-		focusFirstLink() {
-			const dialog = this.$refs["copy-dialog-content"];
-			if (dialog && dialog.querySelector("a")) {
-				dialog.querySelector("a").focus();
-			}
-		},
-		hasElementOfType(items, type) {
+		hasElementOfType(items, types) {
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
-				item.elements.find((e) => e.type === type) ? (found = true) : null;
+				item.elements.find((e) => types.includes(e.type))
+					? (found = true)
+					: null;
 			});
 			return found;
 		},
@@ -237,24 +173,8 @@ export default {
 };
 </script>
 
-<style scoped>
-::v-deep .v-btn__content .v-icon,
-.alert_text {
-	color: var(--color-black) !important;
-}
-
-::v-deep .v-alert__border {
-	opacity: 1;
-}
-
+<style scoped lang="scss">
 .wordbreak-normal {
 	word-break: normal;
-}
-</style>
-
-<style lang="scss">
-a.v-breadcrumbs__item:hover,
-a.v-breadcrumbs__item:focus {
-	border-bottom: 1px solid var(--color-primary);
 }
 </style>

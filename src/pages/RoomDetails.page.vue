@@ -101,11 +101,12 @@
 				<v-divider></v-divider>
 			</template>
 		</v-custom-dialog>
+
+		<share-modal></share-modal>
+
 		<copy-result-modal
-			:is-loading="copyResultModalIsLoading"
+			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
-			:copy-result-status="copyResultModalStatus"
-			:copy-result-error="copyResultError"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -113,17 +114,19 @@
 
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { authModule, copyModule, envConfigModule, roomModule } from "@/store";
+import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@components/base/BaseQrCode.vue";
 import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@components/molecules/ImportLessonModal";
 import MoreItemMenu from "@components/molecules/MoreItemMenu";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import ShareModal from "@components/share-course/ShareModal.vue";
 import DefaultWireframe from "@components/templates/DefaultWireframe";
 import RoomDashboard from "@components/templates/RoomDashboard";
 import {
 	mdiCloudDownload,
 	mdiContentCopy,
+	mdiDownload,
 	mdiEmailPlusOutline,
 	mdiFormatListChecks,
 	mdiPlus,
@@ -131,18 +134,35 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
+import { defineComponent, inject } from "@vue/composition-api";
+import { useCopy } from "../composables/copy";
+import { useLoadingState } from "../composables/loadingState";
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		const i18n = inject("i18n");
+		const { isLoadingDialogOpen } = useLoadingState(
+			i18n.t("components.molecules.copyResult.title.loading")
+		);
+
+		const { copy } = useCopy(isLoadingDialogOpen);
+
+		return {
+			copy,
+		};
+	},
 	components: {
+		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
 		ImportLessonModal,
 		MoreItemMenu,
 		vCustomDialog,
-		BaseQrCode,
 		CopyResultModal,
+		ShareModal,
 	},
-	layout: "defaultVuetify",
+	inject: ["copyModule", "shareCourseModule"],
 	data() {
 		return {
 			importDialog: {
@@ -156,7 +176,6 @@ export default {
 				inputText: "",
 				subText: "",
 				qrUrl: "",
-				courseInvitationLink: "",
 				courseShareToken: "",
 			},
 			icons: {
@@ -164,6 +183,7 @@ export default {
 				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
+				mdiDownload,
 			},
 			breadcrumbs: [
 				{
@@ -173,7 +193,7 @@ export default {
 			],
 			courseId: this.$route.params.id,
 			tab: null,
-			copyProcessReturnId: "",
+			isShareModalOpen: false,
 		};
 	},
 	computed: {
@@ -247,12 +267,6 @@ export default {
 						this.$t("common.actions.remove"),
 					dataTestId: "title-menu-edit-delete",
 				},
-				{
-					icon: this.icons.mdiEmailPlusOutline,
-					action: () => this.inviteCourse(),
-					name: this.$t("common.actions.invite"),
-					dataTestId: "title-menu-invite",
-				},
 			];
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -263,27 +277,39 @@ export default {
 					dataTestId: "title-menu-copy",
 				});
 			}
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+
+			if (
+				envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
+				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
+			) {
 				items.push({
 					icon: this.icons.mdiShareVariant,
 					action: () => this.shareCourse(),
-					name: this.$t("common.actions.share"),
+					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
+				});
+			}
+			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+				items.push({
+					icon: this.icons.mdiDownload,
+					action: async () => await roomModule.downloadImsccCourse(),
+					name: this.$t("common.actions.download"),
+					dataTestId: "title-menu-imscc-download",
 				});
 			}
 			return items;
 		},
-		copyResultModalIsLoading() {
-			return copyModule.getLoading;
-		},
 		copyResultModalStatus() {
-			return copyModule.getCopyResult?.status;
+			return this.copyModule.getCopyResult?.status;
 		},
 		copyResultModalItems() {
-			return copyModule.getCopyResultFailedItems;
+			return this.copyModule.getCopyResultFailedItems;
 		},
 		copyResultError() {
-			return copyModule.getBusinessError;
+			return this.copyModule.getBusinessError;
+		},
+		isCopyModalOpen() {
+			return this.copyModule.getIsResultModalOpen;
 		},
 	},
 	async created() {
@@ -297,26 +323,20 @@ export default {
 		fabClick() {
 			this.importDialog.isOpen = true;
 		},
-		async inviteCourse() {
-			await roomModule.createCourseInvitation(this.courseId);
-			this.dialog.courseInvitationLink = roomModule.getCourseInvitationLink;
-			this.dialog.model = "invite";
-			this.dialog.header = this.$t("pages.room.modal.course.invite.header");
-			this.dialog.text = this.$t("pages.room.modal.course.invite.text");
-			this.dialog.inputText = this.dialog.courseInvitationLink;
-			this.dialog.subText = "";
-			this.dialog.isOpen = true;
-		},
 		async shareCourse() {
-			await roomModule.createCourseShareToken(this.courseId);
-			this.dialog.courseShareToken = roomModule.getCourseShareToken;
-			this.dialog.model = "share";
-			this.dialog.header = this.$t("pages.room.modal.course.share.header");
-			this.dialog.text = this.$t("pages.room.modal.course.share.text");
-			this.dialog.inputText = this.dialog.courseShareToken;
-			this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-			this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
-			this.dialog.isOpen = true;
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
+				this.shareCourseModule.startShareFlow(this.courseId);
+			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+				await roomModule.createCourseShareToken(this.courseId);
+				this.dialog.courseShareToken = roomModule.getCourseShareToken;
+				this.dialog.model = "share";
+				this.dialog.header = this.$t("pages.room.modal.course.share.header");
+				this.dialog.text = this.$t("pages.room.modal.course.share.text");
+				this.dialog.inputText = this.dialog.courseShareToken;
+				this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
+				this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
+				this.dialog.isOpen = true;
+			}
 		},
 		closeDialog() {
 			this.dialog.model = "";
@@ -326,27 +346,28 @@ export default {
 			this.dialog.subText = "";
 		},
 		async onCopyRoom(courseId) {
-			await copyModule.copy({ id: courseId, courseId, type: "course" });
-			const copyResult = copyModule.getCopyResult;
-			const businessError = copyModule.getBusinessError;
-
-			if (businessError?.statusCode !== undefined) {
-				return;
-			}
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			const payload = { id: courseId, courseId, type: "course" };
+			await this.copy(payload, loadingText);
+			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
-				this.copyProcessReturnId = copyResult.id;
+				await this.$router.push(
+					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
+				);
 			}
 		},
 		async onCopyBoardElement(payload) {
-			await copyModule.copy(payload);
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			await this.copy(payload, loadingText);
 			await roomModule.fetchContent(payload.courseId);
 		},
-		async onCopyResultModalClosed() {
-			copyModule.reset();
-			if (this.copyProcessReturnId === "") return;
-			await this.$router.push("/rooms/" + this.copyProcessReturnId);
-			this.copyProcessReturnId = "";
+		onCopyResultModalClosed() {
+			this.copyModule.reset();
 		},
 	},
 	head() {
@@ -354,11 +375,10 @@ export default {
 			title: `${this.roomData.title} - ${this.$theme.short_name}`,
 		};
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
-@import "@variables";
 
 .course-title {
 	display: inline-block;
@@ -368,7 +388,7 @@ export default {
 
 .modal-text {
 	font-size: var(--space-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {

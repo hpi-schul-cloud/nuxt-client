@@ -1,13 +1,12 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<base-button class="icon-button" design="text icon" @click="popup">
+		<v-btn icon class="icon-button" @click="popup">
 			<base-icon :source="source" :icon="icon" :fill="fill" />
-		</base-button>
-
+		</v-btn>
 		<div
 			ref="popupContent"
 			class="popup-content"
-			:class="{ visible, 'expand-to-left': expandToLeft }"
+			:class="{ visible, 'expand-to-left': expandToLeft, centered }"
 		>
 			<slot></slot>
 		</div>
@@ -27,7 +26,10 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "var(--color-secondary-dark)",
+			default: "var(--v-secondary-darken1)",
+		},
+		centered: {
+			type: Boolean,
 		},
 	},
 	data() {
@@ -69,20 +71,14 @@ export default {
 		font-size: 20px;
 	}
 
-	:focus-within {
-		.icon-button {
-			background-color: var(--color-gray-light);
-		}
-	}
-
 	.popup-content {
 		position: absolute;
 		top: 100%;
 		right: 0%;
 		z-index: var(--layer-popover);
 		visibility: hidden;
-		background-color: var(--color-white);
-		border: 1px solid var(--color-gray-light);
+		background-color: var(--v-white-base);
+		border: 1px solid var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 
 		@include breakpoint(tablet) {
@@ -98,6 +94,11 @@ export default {
 			right: 0%;
 			left: initial;
 		}
+
+		&.centered {
+			right: initial;
+			left: initial;
+		}
 	}
 
 	.popup-content::before {
@@ -108,7 +109,7 @@ export default {
 		);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--color-gray-light) transparent;
+		border-color: transparent transparent var(--v-grey-lighten1) transparent;
 		border-style: solid;
 		border-width: var(--outer-arrow-size);
 
@@ -135,7 +136,7 @@ export default {
 		right: var(--arrow-offset);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--color-white) transparent;
+		border-color: transparent transparent var(--v-white-base) transparent;
 		border-style: solid;
 		border-width: var(--arrow-size);
 
@@ -150,6 +151,18 @@ export default {
 			right: var(--arrow-offset);
 			left: initial;
 		}
+	}
+
+	.centered::before {
+		right: initial;
+		left: calc(
+			var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+		);
+	}
+
+	.centered::after {
+		right: initial;
+		left: var(--arrow-offset);
 	}
 }
 </style>

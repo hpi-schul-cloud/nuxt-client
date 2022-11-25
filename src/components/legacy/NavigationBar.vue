@@ -1,5 +1,5 @@
 <template>
-	<div class="header">
+	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
 				<base-link :href="logoLink">
@@ -7,43 +7,37 @@
 				</base-link>
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
-				<base-link
+				<v-btn
 					v-for="(route, idx) in linksToDisplay"
 					:key="route.href"
+					text
+					class="font-weight-regular mx-0"
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
 					:href="route.href"
 					:target="route.target"
-					:no-styles="true"
 					@click="setActive(idx)"
 				>
 					{{ route.title }}
-				</base-link>
+				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<base-link href="/loginRedirect">
-						<base-button design="secondary outline">
-							<base-icon source="fa" icon="sign-in" class="icon" />
-							{{ $t("common.labels.login") }}
-						</base-button>
-					</base-link>
-					<base-link href="/community">
-						<base-button design="secondary">
-							{{ $t("common.labels.register") }}
-						</base-button>
-					</base-link>
+					<v-btn color="primary" outlined to="/loginRedirect" class="mx-2">
+						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
+						{{ $t("common.labels.login") }}
+					</v-btn>
+					<v-btn color="primary" depressed to="/community">
+						{{ $t("common.labels.register") }}
+					</v-btn>
 				</div>
-				<slot name="actions"></slot>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-import BaseButton from "../base/BaseButton";
-import BaseLink from "../base/BaseLink";
 import { envConfigModule } from "@/store";
+import { mdiLogin } from "@mdi/js";
 
 export default {
-	components: { BaseLink, BaseButton },
 	props: {
 		logoLink: {
 			type: String,
@@ -66,6 +60,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiLogin,
 			activeLink: window.location.pathname,
 		};
 	},
@@ -99,12 +94,11 @@ export default {
 	justify-content: center;
 	width: 100%;
 	line-height: var(--line-height-lg);
-	color: var(--color-black);
+	color: var(--v-black-base);
 	text-align: center;
-	background-color: var(--color-overlay-light);
+	background-color: var(--v-white-base);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
-	box-shadow: var(--shadow-sm);
 }
 
 .nav-container {
@@ -216,7 +210,7 @@ export default {
 	padding: var(--space-xs) var(--space-md);
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 
 	@include breakpoint(tablet) {
 		display: flex;
@@ -227,20 +221,20 @@ export default {
 	}
 
 	&:hover {
-		background-color: var(--color-gray-light);
+		background-color: var(--v-grey-lighten1);
 		border-radius: var(--radius-sm);
 	}
 }
 
 a.active {
 	font-weight: var(--font-weight-bold);
-	color: var(--color-white);
-	background-color: var(--color-accent);
+	color: var(--v-white-base);
+	background-color: var(--v-accent-base);
 	border-radius: var(--radius-sm);
 
 	&:hover {
-		color: var(--color-white);
-		background-color: var(--color-accent);
+		color: var(--v-white-base);
+		background-color: var(--v-accent-base);
 		border-radius: var(--radius-sm);
 	}
 }

@@ -6,7 +6,7 @@
 
 ```css
 p {
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 ```
 

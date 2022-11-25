@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-secondary)"
+					style="color: var(--v-secondary-base)"
 				/>
 			</div>
 		</th>
@@ -29,14 +29,17 @@
 			>
 				<span v-if="column.infobox">
 					<span class="info-slot">
-						<base-button
+						<v-btn
+							icon
+							plain
+							color="info"
 							class="info-button"
 							style="background-color: transparent"
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<base-icon source="material" icon="info" style="margin: 0" />
-						</base-button>
+							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
+						</v-btn>
 					</span>
 					<info-box
 						v-if="isConsentNecessary"
@@ -61,7 +64,7 @@
 								<base-icon
 									source="material"
 									icon="warning"
-									color="var(--color-danger)"
+									color="var(--v-error-base)"
 								/>{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
@@ -72,7 +75,7 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--color-white); text-decoration: underline"
+									style="color: var(--v-white-base); text-decoration: underline"
 									to="/"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
@@ -101,7 +104,7 @@
 									<base-link
 										class="link-style"
 										style="
-											color: var(--color-white);
+											color: var(--v-white-base);
 											text-decoration: underline;
 										"
 										to="/"
@@ -122,7 +125,7 @@
 								<base-icon
 									source="material"
 									icon="warning"
-									color="var(--color-danger)"
+									color="var(--v-error-base)"
 								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
@@ -190,13 +193,15 @@
 						</template>
 					</info-box>
 				</span>
-				<BaseButton
+				<v-btn
 					v-if="column.sortable"
+					text
+					plain
+					:ripple="false"
 					:class="{
 						'is-current-sort': sortBy === column.field,
 						'is-sortable': column.sortable,
 					}"
-					design="none"
 					class="th-wrap"
 					@click.stop="sort(column)"
 				>
@@ -207,7 +212,7 @@
 						source="custom"
 					/>
 					<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
-				</BaseButton>
+				</v-btn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
 				</div>
@@ -217,9 +222,9 @@
 </template>
 
 <script>
-import BaseButton from "@basecomponents/BaseButton";
 import InfoBox from "@components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
+import { mdiInformation } from "@mdi/js";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -261,6 +266,7 @@ export default {
 	data() {
 		return {
 			infoBoxActive: false,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -280,9 +286,6 @@ export default {
 		},
 	},
 	methods: {
-		getColumnWrapperComponent(column) {
-			return column.sortable ? BaseButton : "div";
-		},
 		invertSortOrder(currentOrder) {
 			return currentOrder === "desc" ? "asc" : "desc";
 		},
@@ -326,7 +329,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary);
+		border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base);
 
 		&.is-current-sort {
 			opacity: 1;
@@ -343,7 +346,7 @@ export default {
 
 			svg {
 				font-size: calc(1.5 * var(--text-lg));
-				color: var(--color-secondary);
+				color: var(--v-secondary-base);
 			}
 		}
 
@@ -355,6 +358,10 @@ export default {
 			}
 		}
 	}
+}
+
+.info-button {
+	z-index: calc(var(--layer-fab) + 1);
 }
 
 .info-box {
@@ -381,7 +388,7 @@ export default {
 	button:not(.is-none):focus {
 		z-index: var(--layer-fab);
 		outline: none;
-		box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+		box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 	}
 }
 
@@ -393,5 +400,11 @@ export default {
 	position: absolute;
 	top: -20%;
 	left: 56%;
+}
+
+::v-deep
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+	.v-btn__content {
+	opacity: 1;
 }
 </style>

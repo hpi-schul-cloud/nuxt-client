@@ -2,10 +2,15 @@ import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
+import ShareCourseModule from "@/store/share-course";
 import { User } from "@/store/types/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 
@@ -99,6 +104,11 @@ const $route = {
 	path: "/rooms/",
 };
 
+let copyModuleMock: CopyModule;
+let loadingStateModuleMock: LoadingStateModule;
+let notifierModuleMock: NotifierModule;
+let shareCourseModuleMock: ShareCourseModule;
+
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
 	return mount(Room, {
@@ -107,20 +117,40 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		}),
+		setup() {
+			provide("copyModule", copyModuleMock);
+			provide("loadingStateModule", loadingStateModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide("i18n", { t: (key: string) => key });
+			provide("shareCourseModule", shareCourseModuleMock);
+		},
 	});
 };
 
-describe("@pages/rooms/_id/index.vue", () => {
+describe("@pages/RoomDetails.page.vue", () => {
 	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
+
 		setupStores({
 			auth: AuthModule,
 			"env-config": EnvConfigModule,
 			room: RoomModule,
-			copy: CopyModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		authModule.setUser(mockAuthStoreDataTeacher as User);
+		copyModuleMock = createModuleMocks(CopyModule, {
+			getIsResultModalOpen: false,
+		});
+		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
+			getIsOpen: false,
+		});
+		notifierModuleMock = createModuleMocks(NotifierModule);
+		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+			getIsShareModalOpen: true,
+			startShareFlow: jest.fn(),
+		});
 	});
 
 	it("should fetch data", async () => {
@@ -241,7 +271,7 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
-			expect(menuItems).toHaveLength(4);
+			expect(menuItems).toHaveLength(3);
 			expect(
 				findMenuItems(
 					wrapper.vm.$i18n.t("common.actions.edit") +
@@ -251,13 +281,13 @@ describe("@pages/rooms/_id/index.vue", () => {
 				)
 			).toBe(true);
 			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.invite"), menuItems)
-			).toBe(true);
-			expect(
 				findMenuItems(wrapper.vm.$i18n.t("common.actions.copy"), menuItems)
 			).toBe(true);
 			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.share"), menuItems)
+				findMenuItems(
+					wrapper.vm.$i18n.t("common.actions.shareCourse"),
+					menuItems
+				)
 			).toBe(true);
 		});
 
@@ -268,7 +298,10 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const menuItems = wrapper.vm.headlineMenuItems;
 
 			expect(
-				findMenuItems(wrapper.vm.$i18n.t("common.actions.share"), menuItems)
+				findMenuItems(
+					wrapper.vm.$i18n.t("common.actions.shareCourse"),
+					menuItems
+				)
 			).toBe(true);
 		});
 
@@ -316,33 +349,6 @@ describe("@pages/rooms/_id/index.vue", () => {
 			});
 		});
 
-		it("should call inviteCourse method when 'Invite to the course' menu clicked", async () => {
-			const inviteCourseSpy = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.inviteCourse = inviteCourseSpy;
-
-			const threeDotButton = wrapper.find(".three-dot-button");
-			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-			await moreActionButton.trigger("click");
-
-			expect(inviteCourseSpy).toHaveBeenCalled();
-		});
-
-		it("should call store action after 'Invite to the course' menu clicked", async () => {
-			const createCourseInvitationSpy = jest.fn();
-			roomModule.createCourseInvitation = createCourseInvitationSpy;
-			const wrapper = getWrapper();
-
-			const threeDotButton = wrapper.find(".three-dot-button");
-			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-invite]`);
-			await moreActionButton.trigger("click");
-
-			expect(createCourseInvitationSpy).toHaveBeenCalled();
-			expect(createCourseInvitationSpy.mock.calls[0][0]).toStrictEqual("123");
-		});
-
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
@@ -360,9 +366,9 @@ describe("@pages/rooms/_id/index.vue", () => {
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
 			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
-			const createCourseShareTokenSpy = jest.fn();
-			roomModule.createCourseShareToken = createCourseShareTokenSpy;
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true });
+			// const createCourseShareTokenSpy = jest.fn();
+			// shareCourseModule.createCourseShareToken = createCourseShareTokenSpy;
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -370,85 +376,16 @@ describe("@pages/rooms/_id/index.vue", () => {
 			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
 			await moreActionButton.trigger("click");
 
-			expect(createCourseShareTokenSpy).toHaveBeenCalled();
-			expect(createCourseShareTokenSpy.mock.calls[0][0]).toStrictEqual("123");
+			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalled();
+			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalledWith("123");
 		});
 
 		describe("modal views", () => {
-			it("should open modal for inviting action", async () => {
-				const wrapper = getWrapper();
-				wrapper.setData({
-					dialog: {
-						isOpen: true,
-						model: "invite",
-						header: wrapper.vm.$i18n.t("pages.room.modal.course.invite.header"),
-						text: wrapper.vm.$i18n.t("pages.room.modal.course.invite.text"),
-						inputText: "/link/123456",
-						subText: "",
-						courseInvitationLink: "123456",
-					},
-				});
-				await wrapper.vm.$nextTick();
-
-				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
-				const titleElement = modalView.find(".dialog-header");
-				const textElement = modalView.find(".modal-text");
-				const inputElement = modalView.find(`[data-testid="modal-input"]`);
-
-				expect(modalView.vm.isOpen).toBe(true);
-				expect(titleElement.element.textContent).toContain(
-					wrapper.vm.dialog.header
-				);
-				expect(textElement.element.textContent).toContain(
-					wrapper.vm.dialog.text
-				);
-				expect(inputElement.element.value).toStrictEqual(
-					wrapper.vm.dialog.inputText
-				);
-			});
-
 			it("should open modal for sharing action", async () => {
 				const wrapper = getWrapper();
-				wrapper.setData({
-					dialog: {
-						isOpen: true,
-						model: "share",
-						header: wrapper.vm.$i18n.t("pages.room.modal.course.share.header"),
-						text: wrapper.vm.$i18n.t("pages.room.modal.course.share.text"),
-						inputText: "shareToken_123456",
-						subText: wrapper.vm.$i18n.t(
-							"pages.room.modal.course.share.subText"
-						),
-						courseShareToken: "shareToken_123456",
-						qrUrl: "/courses?import=shareToken_123456",
-					},
-				});
-
-				await wrapper.vm.$nextTick();
-				const modalView = wrapper.find(`[data-testid="title-dialog"]`);
-				const titleElement = modalView.find(".dialog-header");
-				const textElement = modalView.find(".modal-text");
-				const subTextElement = modalView.find(".modal-sub-text");
-				const inputElement = modalView.find(`[data-testid="modal-input"]`);
-				const qrComponent = modalView.find(`[data-testid="modal-qrcode"]`);
+				const modalView = wrapper.find(`[data-testid="share-dialog"]`);
 
 				expect(modalView.vm.isOpen).toBe(true);
-				expect(titleElement.element.textContent).toContain(
-					wrapper.vm.dialog.header
-				);
-				expect(textElement.element.textContent).toContain(
-					wrapper.vm.dialog.text
-				);
-				expect(subTextElement.element.textContent).toContain(
-					wrapper.vm.dialog.subText
-				);
-				expect(inputElement.element.value).toStrictEqual(
-					wrapper.vm.dialog.inputText
-				);
-				expect(qrComponent.vm.$options._componentTag).toStrictEqual(
-					"base-qr-code"
-				);
-				expect(qrComponent.vm.url).toStrictEqual(wrapper.vm.dialog.qrUrl);
 			});
 
 			it("should close the modal and call 'closeDialog' method", async () => {

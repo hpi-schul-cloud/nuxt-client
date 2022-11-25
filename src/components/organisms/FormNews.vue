@@ -42,28 +42,24 @@
 				</transition>
 				<form-actions>
 					<template #primary>
-						<base-button
-							design="primary"
+						<v-btn
+							color="primary"
+							depressed
 							type="submit"
 							data-testid="btn_news_submit"
 							:disabled="status === 'pending'"
 						>
-							<base-icon source="material" icon="check" />
+							<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
 							{{ $t("common.actions.save") }}
-						</base-button>
-						<base-button
-							v-if="news && news.id"
-							design="danger text"
-							type="button"
-							@click="remove"
-						>
-							<base-icon source="material" icon="delete" />
+						</v-btn>
+						<v-btn v-if="news && news.id" text color="error" @click="remove">
+							<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
 							{{ $t("common.actions.remove") }}
-						</base-button>
-						<base-button design="text" @click="cancel">
-							<base-icon source="material" icon="clear" />
+						</v-btn>
+						<v-btn text color="secondary" @click="cancel">
+							<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
 							{{ $t("common.actions.discard") }}
-						</base-button>
+						</v-btn>
 					</template>
 				</form-actions>
 			</div>
@@ -75,11 +71,12 @@
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
 import { newsModule } from "@/store";
-
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
 import FormActions from "@components/molecules/FormActions.vue";
+import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		TextEditor,
@@ -109,6 +106,9 @@ export default Vue.extend({
 			content: string;
 			date: { date: string; time: string };
 		};
+		mdiClose: string;
+		mdiCheck: string;
+		mdiDelete: string;
 	} {
 		return {
 			data: {
@@ -119,6 +119,9 @@ export default Vue.extend({
 					time: "",
 				},
 			},
+			mdiClose,
+			mdiCheck,
+			mdiDelete,
 		};
 	},
 	computed: {
@@ -192,7 +195,7 @@ export default Vue.extend({
 			this.$dialog.confirm({
 				icon: "warning",
 				actionDesign: "success",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				invertedDesign: true,
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
@@ -219,7 +222,7 @@ export default Vue.extend({
 					"components.organisms.FormNews.cancel.confirm.confirm"
 				),
 				actionDesign: "success",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				invertedDesign: true,
 				onConfirm: () => this.$emit("cancel"),
 			});
@@ -229,8 +232,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 1s;

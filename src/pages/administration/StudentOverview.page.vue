@@ -73,37 +73,36 @@
 						v-if="status === 'ok'"
 						source="custom"
 						icon="doublecheck"
-						color="var(--color-success)"
+						color="var(--v-success-base)"
 					/>
 
 					<base-icon
 						v-else-if="status === 'parentsAgreed'"
 						source="material"
 						icon="check"
-						color="var(--color-warning)"
+						color="var(--v-warning-base)"
 					/>
 					<base-icon
 						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
-						color="var(--color-danger)"
+						color="var(--v-error-base)"
 					/>
 				</span>
 			</template>
 			<template #datacolumn-_id="{ data, selected, highlighted }">
-				<base-button
+				<v-btn
+					icon
 					:class="{
 						'action-button': true,
 						'row-selected': selected,
 						'row-highlighted': highlighted,
 					}"
-					design="text icon"
-					size="small"
 					:to="`/administration/students/${data}/edit`"
 					data-testid="edit_student_button"
 				>
-					<base-icon source="material" icon="edit" />
-				</base-button>
+					<v-icon size="20">{{ mdiPencil }}</v-icon>
+				</v-btn>
 			</template>
 		</backend-data-table>
 		<admin-table-legend
@@ -127,7 +126,7 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
+import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
 
 export default {
 	components: {
@@ -148,7 +147,7 @@ export default {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			something: [],
+			mdiPencil,
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
@@ -243,7 +242,6 @@ export default {
 				"",
 		};
 	},
-	layout: "defaultVuetify",
 	meta: {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
@@ -254,6 +252,7 @@ export default {
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
+			registrationLinks: "getRegistrationLinks",
 		}),
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
@@ -356,7 +355,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "doublecheck",
-				color: "var(--color-success)",
+				color: "var(--v-success-base)",
 				style: "margin: -3px 3px",
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
@@ -364,7 +363,7 @@ export default {
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: "check",
-					color: "var(--color-warning)",
+					color: "var(--v-warning-base)",
 					label: this.$t(
 						"utils.adminFilter.consent.label.parentsAgreementMissing"
 					),
@@ -373,7 +372,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "clear",
-				color: "var(--color-danger)",
+				color: "var(--v-error-base)",
 				label: this.$t("utils.adminFilter.consent.label.missing"),
 			});
 
@@ -504,9 +503,15 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				this.$toast.success(
-					this.$tc("pages.administration.sendMail.success", rowIds.length)
-				);
+				if (this.registrationLinks.totalMailsSend === rowIds.length) {
+					this.$toast.success(
+						this.$tc("pages.administration.sendMail.success", rowIds.length)
+					);
+				} else {
+					this.$toast.info(
+						this.$tc("pages.administration.sendMail.alreadyRegistered")
+					);
+				}
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(
@@ -577,7 +582,7 @@ export default {
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
-				iconColor: "var(--color-danger)",
+				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,
 				onCancel,
@@ -614,16 +619,20 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+::v-deep .row-highlighted.theme--light.v-btn:hover::before {
+	opacity: 0;
+}
+
 a.action-button {
 	&.row-highlighted:hover {
-		background-color: var(--color-white);
+		background-color: var(--v-white-base);
 	}
 
 	&.row-selected {
-		color: var(--color-white);
+		color: var(--v-white-base);
 
 		&:hover {
-			background-color: var(--color-secondary-dark);
+			background-color: var(--v-secondary-darken1);
 			box-shadow: none;
 		}
 	}
@@ -659,7 +668,7 @@ a.action-button {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 }
 
 .search-section {

@@ -1,11 +1,11 @@
 <template>
-	<ul class="dropdown-menu">
+	<ul class="dropdown-menu px-0">
 		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
 			<span class="core">
 				<base-icon
 					:source="menuItem.source"
 					:icon="menuItem.icon"
-					fill="var(--color-secondary-dark)"
+					fill="var(--v-secondary-darken1)"
 				/>
 				<base-link
 					:href="menuItem.action"
@@ -23,15 +23,32 @@
 
 <script>
 export default {
-	props: {
-		menuItems: {
-			type: Array,
-			required: true,
-		},
-	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			menuItems: [
+				{
+					label: this.$t("global.topbar.actions.helpSection"),
+					icon: "question-circle",
+					action: "/help",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: this.$t("global.topbar.actions.contactSupport"),
+					icon: "pencil",
+					action: "/help/contact",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: this.$t("global.topbar.actions.training"),
+					icon: "fortbildung",
+					action: "https://www.lernen.cloud/",
+					source: "custom",
+					target: "_blank",
+				},
+			],
+		};
 	},
 };
 </script>
@@ -53,8 +70,8 @@ export default {
 	padding: var(--space-sm) var(--space-sm);
 	font-size: var(--text-md); // text size in legacy client 14px;
 	text-align: inherit;
-	background-color: var(--color-white);
-	border-bottom: 1px solid var(--color-disabled);
+	background-color: var(--v-white-base);
+	border-bottom: 1px solid var(--v-grey-lighten2);
 
 	&:first-child {
 		border-top-left-radius: var(--radius-sm);

@@ -71,12 +71,12 @@ import { roomsModule } from "@/store";
 import { ListItemsObject } from "@store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		RoomWrapper,
 		vRoomAvatar,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			searchText: "",
@@ -110,8 +110,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .search {
 	flex-wrap: nowrap;
 }

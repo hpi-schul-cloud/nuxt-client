@@ -60,8 +60,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 label {
 	position: relative;
 }
@@ -71,7 +69,7 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	border: 2px solid var(--color-secondary);
+	border: 2px solid var(--v-secondary-base);
 	border-radius: var(--radius-round);
 }
 
@@ -88,7 +86,7 @@ input:checked + .radio {
 		margin: 20% auto;
 		/* stylelint-enable */
 		content: "";
-		background: var(--color-secondary);
+		background: var(--v-secondary-base);
 		border-radius: var(--radius-round);
 	}
 }

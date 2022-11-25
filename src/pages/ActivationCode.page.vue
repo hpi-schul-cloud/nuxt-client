@@ -4,14 +4,14 @@
 			:title="getTitle"
 			:active="showModal"
 			:description="getDescription"
-			design="secondary"
+			design="primary"
 			@update:active="buttonHandler"
 		>
 			<template #icon>
 				<base-icon
 					source="custom"
 					:icon="activated ? 'mail-check' : 'mail-error'"
-					style="color: var(--color-secondary)"
+					style="color: var(--v-secondary-base)"
 				/>
 			</template>
 		</info-modal-full-width>
@@ -99,8 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 section {
 	// stylelint-disable
 	margin-top: 10%;

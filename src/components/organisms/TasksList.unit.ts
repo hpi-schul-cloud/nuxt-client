@@ -1,18 +1,23 @@
-import TasksList from "./TasksList.vue";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskModule from "@/store/tasks";
-import FinishedTaskModule from "@/store/finished-tasks";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import CopyModule from "@/store/copy";
+import FinishedTasksModule from "@/store/finished-tasks";
+import NotifierModule from "@/store/notifier";
+import TasksModule from "@/store/tasks";
 import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import { provide } from "@nuxtjs/composition-api";
+import { mount, Wrapper } from "@vue/test-utils";
+import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
+import TasksList from "./TasksList.vue";
 
 const { tasks, overDueTasks, openTasks } = mocks;
 
 describe("@components/organisms/TasksList", () => {
-	let taskModuleMock: TaskModule;
-	let finishedTaskModuleMock: FinishedTaskModule;
+	let tasksModuleMock: TasksModule;
+	let finishedTasksModuleMock: FinishedTasksModule;
+	let copyModuleMock: CopyModule;
+	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -21,8 +26,11 @@ describe("@components/organisms/TasksList", () => {
 				i18n: true,
 			}),
 			setup() {
-				provide("taskModule", taskModuleMock);
-				provide("finishedTaskModule", finishedTaskModuleMock);
+				provide("copyModule", copyModuleMock);
+				provide("tasksModule", tasksModuleMock);
+				provide("finishedTasksModule", finishedTasksModuleMock);
+				provide("notifierModule", notifierModuleMock);
+				provide("i18n", { t: (key: string) => key });
 			},
 			...attrs,
 		});
@@ -30,19 +38,20 @@ describe("@components/organisms/TasksList", () => {
 		return wrapper;
 	};
 
-	const taskModuleGetters: Partial<TaskModule> = {
+	const tasksModuleGetters: Partial<TasksModule> = {
 		getTasks: tasks as unknown as Task[],
 		getStatus: "completed",
 		hasTasks: true,
 	};
 
 	beforeEach(() => {
-		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
-
-		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+		copyModuleMock = createModuleMocks(CopyModule);
+		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
+		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	describe("props", () => {
@@ -125,7 +134,7 @@ describe("@components/organisms/TasksList", () => {
 	});
 
 	it("Should render an empty list, if there are no tasks", () => {
-		taskModuleMock = createModuleMocks(TaskModule, {
+		tasksModuleMock = createModuleMocks(TasksModule, {
 			getTasks: [],
 			getStatus: "completed",
 			hasTasks: false,
@@ -143,8 +152,8 @@ describe("@components/organisms/TasksList", () => {
 
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				hasTasks: true,
 				getStatus: "pending",
 			});
@@ -166,12 +175,12 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getStatus: "pending",
 			});
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getIsInitialized: true,
 			});
 
@@ -193,12 +202,12 @@ describe("@components/organisms/TasksList", () => {
 		});
 
 		it("Should compute correct status", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getStatus: "completed",
 			});
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getStatus: "pending",
 			});
 
@@ -212,5 +221,27 @@ describe("@components/organisms/TasksList", () => {
 			//@ts-ignore
 			expect(wrapper.vm.status).toBe("completed");
 		});
+	});
+
+	it("should passthrough copy-task event", async () => {
+		wrapper = mountComponent({
+			propsData: {
+				tasks,
+				userRole: "teacher",
+			},
+		});
+
+		const payload = {
+			id: "123",
+			courseId: "c789",
+			type: "task",
+		};
+
+		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);
+		oneTaskItemTeacher.vm.$emit("copy-task", payload);
+
+		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(
+			expect.arrayContaining([payload])
+		);
 	});
 });

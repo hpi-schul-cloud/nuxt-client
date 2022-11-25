@@ -3,6 +3,7 @@ import { authModule, envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
+import { globalPlugin } from "@nuxtjs/composition-api";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -35,6 +36,7 @@ describe("i18n plugin", () => {
 			app: {},
 		};
 
+		globalPlugin(mockContext);
 		i18n(mockContext);
 		const vue18n = mockContext.app.i18n;
 

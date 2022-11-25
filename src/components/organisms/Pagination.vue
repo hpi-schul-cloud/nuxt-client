@@ -1,16 +1,12 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
-		<base-select
-			style="max-width: 150px"
-			close-on-select
+		<v-select
+			return-object
 			:value="perPageSelected"
-			:options="perPageOptions"
-			:allow-empty="false"
-			track-by="value"
-			option-label="label"
-			:label="$t('components.organisms.Pagination.recordsPerPage')"
-			:label-hidden="true"
-			@select="setPagination"
+			:items="perPageOptions"
+			:aria-label="$t('components.organisms.Pagination.recordsPerPage')"
+			class="select-input-width"
+			@change="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
@@ -29,26 +25,28 @@
 			</p>
 			<ul v-if="total > 0" class="pagination-list">
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
-					<base-button
-						design="none"
+					<v-btn
+						min-width="35"
+						color="secondary"
+						depressed
 						class="pagination-link"
-						aria-label="Goto previous page"
+						aria-label="Go to previous page"
 						@click="previousPage"
 					>
-						<base-icon source="material" icon="keyboard_arrow_left">
-						</base-icon>
-					</base-button>
+						<v-icon>{{ mdiChevronLeft }} </v-icon>
+					</v-btn>
 				</li>
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-					<base-button
-						design="none"
+					<v-btn
+						min-width="35"
+						color="secondary"
+						depressed
 						class="pagination-link"
-						aria-label="Goto next page"
+						aria-label="Go to next page"
 						@click="nextPage"
 					>
-						<base-icon source="material" icon="keyboard_arrow_right">
-						</base-icon>
-					</base-button>
+						<v-icon>{{ mdiChevronRight }} </v-icon>
+					</v-btn>
 				</li>
 			</ul>
 		</div>
@@ -59,6 +57,7 @@
 </template>
 
 <script>
+import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 export default {
 	model: {
 		event: "update",
@@ -79,25 +78,27 @@ export default {
 	},
 	data() {
 		return {
+			mdiChevronLeft,
+			mdiChevronRight,
 			perPageOptions: [
 				{
-					label: this.$t("components.organisms.Pagination.perPage.5"),
+					text: this.$t("components.organisms.Pagination.perPage.5"),
 					value: 5,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.10"),
+					text: this.$t("components.organisms.Pagination.perPage.10"),
 					value: 10,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.25"),
+					text: this.$t("components.organisms.Pagination.perPage.25"),
 					value: 25,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.50"),
+					text: this.$t("components.organisms.Pagination.perPage.50"),
 					value: 50,
 				},
 				{
-					label: this.$t("components.organisms.Pagination.perPage.100"),
+					text: this.$t("components.organisms.Pagination.perPage.100"),
 					value: 100,
 				},
 			],
@@ -106,7 +107,7 @@ export default {
 	computed: {
 		perPageSelected() {
 			return {
-				label:
+				text:
 					this.perPage +
 					" " +
 					this.$t("components.organisms.Pagination.perPage"),
@@ -133,8 +134,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .pagination {
 	display: flex;
 	align-items: center;
@@ -153,14 +152,22 @@ export default {
 .pagination-link-wrapper .pagination-link {
 	padding: var(--space-xs);
 	margin-left: var(--space-sm);
-	color: var(--color-white);
+	color: var(--v-white-base);
 	cursor: pointer;
-	background-color: var(--color-secondary);
+	background-color: var(--v-secondary-base);
 	border-radius: var(--radius-sm);
 }
 
 .total {
 	margin-right: var(--space-sm);
 	margin-bottom: 0;
+}
+
+::v-deep .v-input__icon .v-icon {
+	font-size: var(--text-base-size);
+}
+
+.select-input-width {
+	max-width: 150px;
 }
 </style>

@@ -85,9 +85,8 @@ module.exports = {
 	/*
 	 ** Customize the progress-bar color
 	 */
-	loading: {
-		color: "#fff",
-	},
+
+	loading: false,
 
 	/*
 	 ** Global CSS
@@ -154,6 +153,8 @@ module.exports = {
 		"http://localhost:3030/api/**/*",
 	],
 
+	css: ["src/themes/base/styles/global.scss"],
+
 	/*
 	 ** Build configuration
 	 */
@@ -201,9 +202,6 @@ module.exports = {
 		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
-		options: {
-			customProperties: true,
-		},
 	},
 	ignore: ["**/*.unit.ts", "**/*.unit.js"],
 };

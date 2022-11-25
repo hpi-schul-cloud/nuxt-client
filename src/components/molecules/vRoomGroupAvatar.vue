@@ -12,7 +12,7 @@
 		<v-badge
 			class="badge-component avatar-badge"
 			bordered
-			color="var(--color-primary)"
+			color="var(--v-primary-base)"
 			icon="mdi-lock"
 			overlap
 			:value="hasNotifications"
@@ -122,7 +122,6 @@ export default {
 <style lang="scss" scoped>
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
-@import "@styles";
 
 .sub-title {
 	margin-right: calc(var(--space-base-vuetify) * -5);

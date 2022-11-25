@@ -1,9 +1,8 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<base-button
-			type="button"
+		<v-btn
+			icon
 			class="icon-button"
-			design="text icon"
 			data-testid="initials"
 			role="menu"
 			:title="`${firstName} ${lastName} (${userRole})`"
@@ -13,7 +12,7 @@
 			@click="popup"
 		>
 			<div class="icon">{{ initials }}</div>
-		</base-button>
+		</v-btn>
 		<div v-if="visible" class="popuptext" data-testid="initials-popup">
 			<div class="username">
 				<span> {{ firstName }} {{ lastName }} ({{ userRole }})</span>
@@ -72,15 +71,15 @@ export default {
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-white);
+	color: var(--v-white-base);
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: var(--color-secondary);
+	background-color: var(--v-secondary-base);
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--color-secondary-dark);
+		background-color: var(--v-secondary-darken1);
 	}
 }
 
@@ -99,10 +98,10 @@ export default {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: var(--color-black);
+		color: var(--v-black-base);
 		white-space: nowrap;
-		background-color: var(--color-white);
-		border: 1px solid var(--color-disabled);
+		background-color: var(--v-white-base);
+		border: 1px solid var(--v-grey-lighten2);
 		border-radius: var(--radius-sm);
 
 		.username {
@@ -112,7 +111,7 @@ export default {
 			margin-bottom: 5px;
 			/* stylelint-enable */
 			white-space: normal;
-			border-bottom: 1px solid var(--color-disabled);
+			border-bottom: 1px solid var(--v-grey-lighten2);
 		}
 	}
 }

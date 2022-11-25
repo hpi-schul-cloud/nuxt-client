@@ -24,6 +24,7 @@ describe("notifier store", () => {
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
+					autoClose: true,
 				};
 				notifierModule.show(payload);
 

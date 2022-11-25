@@ -3,6 +3,10 @@ import BaseInputDefault, { supportedTypes } from "./BaseInputDefault";
 
 function getMock(type, attributes) {
 	return mount({
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
 		data: () => ({ content: "" }),
 		template: `<base-input v-model="content" label="test" type="${type}" name="test" ${attributes}/>`,
 		components: { BaseInput },
@@ -159,6 +163,10 @@ describe("@components/base/BaseInputDefault", () => {
 
 	it("can toggle pwd visibility", async () => {
 		const wrapper = mount(BaseInput, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: {
 				vmodel: "",
 				type: "password",
@@ -176,6 +184,10 @@ describe("@components/base/BaseInputDefault", () => {
 	it("should have an aria label if the label is hidden", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
 				propsData: {
 					vmodel: "",
 					type,

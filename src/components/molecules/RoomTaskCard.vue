@@ -5,10 +5,11 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		outlined
+		:outlined="isDraft"
+		hover
 		data-testid="content-card-task"
 		@click="handleClick"
-		@keydown.enter="handleClick"
+		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
 		@keydown.down.prevent="onKeyPress"
 		@keydown.space.prevent="onKeyPress"
@@ -417,9 +418,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-@import "@styles";
-
 .fill {
 	fill: currentColor;
 }
@@ -451,7 +449,7 @@ export default {
 }
 
 .action-button {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 }
 
 .chip-items-group {
@@ -462,22 +460,11 @@ export default {
 	margin-right: var(--space-xs);
 }
 
-.v-card {
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
-
-	&:hover {
-		box-shadow: var(--shadow-m);
-	}
-}
-
 .v-card__text {
 	padding-bottom: var(--space-xs-4);
 }
 
 .task-hidden {
-	box-shadow: none;
-
 	.task-name,
 	.text-description,
 	.submitted-section {

@@ -29,8 +29,15 @@
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
+					@copy-task="onCopyTask"
 				/>
-				<task-item-teacher v-else :key="index" :task="task" role="article" />
+				<task-item-teacher
+					v-else
+					:key="index"
+					:task="task"
+					role="article"
+					@copy-task="onCopyTask"
+				/>
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
 		</template>
@@ -76,16 +83,16 @@ export default {
 			required: false,
 		},
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		currentTaskStatus() {
-			return this.taskModule.getStatus;
+			return this.tasksModule.getStatus;
 		},
 		finishedTasksStatus() {
-			return this.finishedTaskModule.getStatus;
+			return this.finishedTasksModule.getStatus;
 		},
 		finishedTasksIsInitialized() {
-			return this.finishedTaskModule.getIsInitialized;
+			return this.finishedTasksModule.getIsInitialized;
 		},
 		status: function () {
 			return this.type === "current"
@@ -113,11 +120,14 @@ export default {
 	methods: {
 		loadMore(entries) {
 			if (entries[0].isIntersecting && this.status !== "pending") {
-				this.finishedTaskModule.fetchFinishedTasks();
+				this.finishedTasksModule.fetchFinishedTasks();
 			}
 		},
 		isLastTaskItem: function (index) {
 			return this.hasPagination && index === this.tasks.length - 1;
+		},
+		onCopyTask(payload) {
+			this.$emit("copy-task", payload);
 		},
 	},
 };

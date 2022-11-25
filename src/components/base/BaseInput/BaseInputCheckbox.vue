@@ -54,7 +54,7 @@ export default {
 		},
 		color: {
 			type: String,
-			default: `var(--color-secondary)`,
+			default: `var(--v-secondary-base)`,
 		},
 		label: {
 			type: String,
@@ -134,8 +134,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 label {
 	// .wrapper but to keep specifcy low we use label directly
 	// this makes it easier to overwrite styles
@@ -175,7 +173,7 @@ input:focus + .icon-wrapper svg {
 	}
 
 	input:checked + .icon-wrapper {
-		color: var(--color-success);
+		color: var(--v-success-base);
 	}
 
 	.label {

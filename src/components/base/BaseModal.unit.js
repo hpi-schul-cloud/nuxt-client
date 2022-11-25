@@ -2,6 +2,10 @@ import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal";
 
 const modal = {
+	...createComponentMocks({
+		i18n: true,
+		vuetify: true,
+	}),
 	data: () => ({ active: false }),
 	template: `
 		<base-modal id="modal" ref="modal" :active.sync="active" @close="active = false">
@@ -15,9 +19,9 @@ const modal = {
 				</div>
 
 				<div class="modal-footer">
-					<base-button id="btn-close" class="is-light" @click="$refs.modal.close()">
+					<v-btn id="btn-close" @click="$refs.modal.close()">
 						OK
-					</base-button>
+					</v-btn>
 				</div>
 			</div>
 		</base-modal>

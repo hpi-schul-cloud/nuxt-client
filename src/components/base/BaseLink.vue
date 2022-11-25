@@ -135,27 +135,36 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@styles";
-
 .text-only {
 	text-decoration: none;
 }
 
 .link {
-	@extend .default-link;
-
 	display: inline;
+	color: var(--v-primary-base);
+	text-decoration: none;
+	cursor: pointer;
+	border-bottom: 2px solid var(--v-gray-base);
+
+	&:hover,
+	&:focus {
+		color: var(--v-primary-darken1);
+	}
+
+	&:visited {
+		color: var(--v-primary-base);
+	}
 }
 
 .is-external {
 	border: none;
 
 	&:active {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 	}
 
 	&:hover {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 	}
 }
 </style>

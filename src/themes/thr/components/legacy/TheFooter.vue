@@ -134,7 +134,7 @@ export default {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: var(--color-secondary-dark);
+	color: var(--v-secondary-darken1);
 	text-align: center;
 }
 
@@ -154,7 +154,7 @@ export default {
 	margin-top: var(--space-xs);
 
 	.heart {
-		color: var(--color-primary);
+		color: var(--v-primary-base);
 	}
 
 	.poweredby-logo {
@@ -164,17 +164,17 @@ export default {
 }
 
 .footer-link {
-	color: var(--color-primary);
+	color: var(--v-primary-base);
 	border: none;
 
 	&:focus,
 	&:hover {
-		color: var(--color-primary-dark);
+		color: var(--v-primary-darken1);
 		text-decoration: underline;
 	}
 
 	&:visited {
-		color: var(--color-primary);
+		color: var(--v-primary-base);
 	}
 }
 </style>

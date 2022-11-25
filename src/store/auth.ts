@@ -223,7 +223,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Action
-	logout(): void {
+	logout(redirectUrl = "/logout"): void {
 		localStorage.clear();
 		// Delete matrix messenger indexedDB databases
 		if (window.indexedDB) {
@@ -239,7 +239,7 @@ export default class AuthModule extends VuexModule {
 			}
 		}
 		this.context.commit("clearAuthData");
-		window.location.assign("/logout");
+		window.location.assign(redirectUrl);
 	}
 
 	private get userApi() {

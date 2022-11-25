@@ -1,15 +1,18 @@
 <template>
 	<section>
-		<base-button
-			design="text"
+		<v-btn
+			text
+			color="secondary"
 			data-testid="ldapBackButton"
 			@click="backButtonHandler"
 		>
-			<base-icon source="material" icon="keyboard_arrow_left" />
+			<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 			{{ $t("common.actions.back") }}
-		</base-button>
+		</v-btn>
 		<section class="section">
-			<h1 class="h4">{{ $t("pages.administration.ldap.save.title") }}</h1>
+			<h1 class="h2">
+				{{ $t("pages.administration.ldap.save.title") }}
+			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
@@ -104,31 +107,65 @@
 				type="bc-error"
 			/>
 		</div>
+		<section
+			v-if="showUserMigrationOption"
+			class="section"
+			data-testid="migrateUsersSection"
+		>
+			<h3 class="title-class">
+				{{
+					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
+				}}
+			</h3>
+			<base-input
+				v-model="migrateUsersCheckbox"
+				type="checkbox"
+				:label="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')
+				"
+				data-testid="migrateUsersCheckbox"
+			/>
+			<p
+				v-html="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.info')
+				"
+			></p>
+		</section>
+		<div v-if="schoolErrors" class="errors-container">
+			<info-message
+				data-testid="school-migration-activation-error"
+				:message="
+					$t('pages.administration.ldap.activate.migrateExistingUsers.error')
+				"
+				type="bc-error"
+			/>
+		</div>
 		<div class="bottom-buttons">
-			<base-button
-				design="text"
+			<v-btn
+				text
+				color="secondary"
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
 			>
-				<base-icon source="material" icon="keyboard_arrow_left" />
+				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 				{{ $t("common.actions.back") }}
-			</base-button>
-			<base-button
-				design="secondary"
+			</v-btn>
+			<v-btn
+				color="primary"
+				depressed
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
-				>{{
-					$t("pages.administration.ldap.save.example.synchronize")
-				}}</base-button
 			>
+				{{ $t("pages.administration.ldap.save.example.synchronize") }}
+			</v-btn>
 		</div>
 		<base-modal
 			:active.sync="submitted.ok"
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>
-			<template #header></template>
+			<template #header />
 			<template #body>
 				<modal-body-info
 					:title="$t('pages.administration.ldap.activate.message')"
@@ -137,14 +174,14 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--v-success-base)"
 						/>
 					</template>
 				</modal-body-info>
 			</template>
 			<template #footer>
 				<modal-footer-confirm
-					backgroundcolor="var(--color-success)"
+					backgroundcolor="var(--v-success-base)"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
 					@click="okButtonHandler"
@@ -155,13 +192,14 @@
 </template>
 
 <script>
+import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
-import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import InfoMessage from "@components/atoms/InfoMessage";
+import { mdiChevronLeft } from "@mdi/js";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -173,9 +211,15 @@ const redirectToConfigPage = (page) => {
 };
 
 export default {
-	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
+	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
+	},
+	data() {
+		return {
+			migrateUsersCheckbox: false,
+			mdiChevronLeft,
+		};
 	},
 	computed: {
 		...mapGetters("ldap-config", {
@@ -184,6 +228,12 @@ export default {
 			submitted: "getSubmitted",
 			status: "getStatus",
 		}),
+		showUserMigrationOption() {
+			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED;
+		},
+		schoolErrors() {
+			return schoolsModule.error;
+		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
 		},
@@ -192,6 +242,9 @@ export default {
 		if (!Object.keys(this.verified).length) {
 			redirectToConfigPage(this);
 		}
+	},
+	mounted() {
+		this.migrateUsersCheckbox = this.showUserMigrationOption;
 	},
 	methods: {
 		backButtonHandler() {
@@ -203,6 +256,12 @@ export default {
 
 			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
 				delete temporaryConfigData.searchUserPassword;
+			}
+			if (this.migrateUsersCheckbox) {
+				await schoolsModule.setSchoolInUserMigration(false);
+				if (this.schoolErrors) {
+					return;
+				}
 			}
 
 			if (id) {
@@ -294,5 +353,10 @@ tr:nth-child(odd) {
 	flex-direction: column;
 	align-items: flex-end;
 	margin: var(--space-xl-2);
+}
+
+.title-class {
+	margin-top: var(--space-xl-3);
+	margin-bottom: var(--space-lg);
 }
 </style>

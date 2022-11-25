@@ -5,9 +5,18 @@ const custom = {
 	theme: {
 		themes: {
 			light: {
-				primary: "#9e292b",
-				secondary: "#54616e",
-				accent: "#E98404",
+				primary: {
+					base: "#9e292b",
+					darken1: "#800416",
+				},
+				secondary: {
+					base: "#54616e",
+					lighten1: "#8a9199",
+					darken1: "#3a424b",
+				},
+				accent: {
+					base: "#e98404",
+				},
 			},
 		},
 	},

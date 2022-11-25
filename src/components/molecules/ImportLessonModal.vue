@@ -157,7 +157,7 @@ export default {
 .step-sections {
 	min-height: var(--sidebar-width);
 	font-size: var(--space-md);
-	color: var(--color-black);
+	color: var(--v-black-base);
 }
 
 .step {

@@ -48,7 +48,6 @@ export default {
 		InfoMessage,
 		DefaultWireframe,
 	},
-	layout: "defaultVuetify",
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},

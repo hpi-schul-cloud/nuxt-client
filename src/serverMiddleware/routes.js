@@ -2,18 +2,10 @@
 // everything else will be forwarded to the legacy client
 // using the ./proxy.js serverMiddleware
 
-// const id = "[a-z0-9]+";
 const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
-// const courseId = "[a-f0-9]{24}";
+
 const routes = [
-	// `^/account/?$`,
-	// `^/courses/${courseId}/?$`,
-	// `^/account/email/edit/?$`,
-	// `^/account/name/edit/?$`,
-	// `^/account/password/edit/?$`,
-	// `^/account/password/edit/?$`,
-	// `^/account/locale/edit/?$`,
 	`^/activation/${activationCode}/?$`,
 	`^/administration/students/?$`,
 	`^/administration/students/new/?$`,
@@ -24,23 +16,22 @@ const routes = [
 	`^/administration/ldap/activate/?$`,
 	`^/administration/school-settings$`,
 	`^/administration/migration`,
-	`^/tasks/?$`,
-	`^/login-instances/?`,
-	//`^/calendar/?`,
+	`^/cfiles/?$`,
+	`^/cfiles/teams/?$`,
+	`^/cfiles/teams/.+`,
 	`^/error/`,
 	`^/imprint/?`,
-	`^/termsofuse/?`,
 	`^/insights`,
-	//`^/news`,
+	`^/login-instances/?`,
 	`^/news/new`,
-	//`^/news/${mongoId}/?$`,
 	`^/news/${mongoId}/edit`,
+	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
-	// `^/courses/?$`,
-	`^/poc-files/?$`,
-	`^/poc-vuex/?$`,
+	`^/tasks/?$`,
+	`^/tasks/new/?$`,
+	`^/termsofuse/?`,
 ];
 
 const uuid =

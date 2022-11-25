@@ -110,20 +110,27 @@
 				@drag-from-group="dragFromGroup"
 			>
 			</room-modal>
+			<import-flow
+				:is-active="isImportMode"
+				:token="importToken"
+				@success="onImportSuccess"
+			></import-flow>
 		</template>
 	</room-wrapper>
 </template>
 
 <script>
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import vRoomAvatar from "@components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
-import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import RoomModal from "@components/molecules/RoomModal";
+import ImportFlow from "@/components/share-course/ImportFlow.vue";
 import { roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
+import vRoomAvatar from "@components/atoms/vRoomAvatar";
+import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
+import RoomModal from "@components/molecules/RoomModal";
+import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
+import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import { mdiMagnify } from "@mdi/js";
 
+// eslint-disable-next-line vue/require-direct-export
 export default {
 	components: {
 		RoomWrapper,
@@ -132,6 +139,7 @@ export default {
 		vRoomEmptyAvatar,
 		RoomModal,
 		vCustomSwitch,
+		ImportFlow,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -190,6 +198,12 @@ export default {
 			return this.$t("pages.rooms.headerSection.ariaLabel", {
 				itemCount: this.rooms.length,
 			});
+		},
+		isImportMode() {
+			return this.$route.query.import !== undefined;
+		},
+		importToken() {
+			return this.$route.query.import;
 		},
 	},
 	async created() {
@@ -347,6 +361,10 @@ export default {
 			};
 			roomsModule.update(payload);
 		},
+		onImportSuccess() {
+			this.$router.replace({ path: "/rooms-overview" });
+			roomsModule.fetch();
+		},
 	},
 	head() {
 		return {
@@ -359,8 +377,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .rooms-container {
 	max-width: 600px;
 	margin: 0 auto;

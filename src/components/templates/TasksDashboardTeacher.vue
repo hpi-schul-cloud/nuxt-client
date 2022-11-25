@@ -12,18 +12,24 @@
 					:expanded-default="1"
 				>
 					<template #panelOne>
-						<tasks-list :tasks="noDueDateTasks" user-role="teacher" />
+						<tasks-list
+							:tasks="noDueDateTasks"
+							user-role="teacher"
+							@copy-task="onCopyTask"
+						/>
 					</template>
 					<template #panelTwo>
 						<tasks-list
 							:tasks="overdueTasks"
 							:title="$t('pages.tasks.teacher.subtitleOverDue')"
 							user-role="teacher"
+							@copy-task="onCopyTask"
 						/>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
 							user-role="teacher"
+							@copy-task="onCopyTask"
 						/>
 					</template>
 				</v-custom-double-panels>
@@ -36,7 +42,11 @@
 				/>
 			</v-tab-item>
 			<v-tab-item :value="tabRoutes[1]" class="padding-bottom">
-				<tasks-list :tasks="draftTasks" user-role="teacher" />
+				<tasks-list
+					:tasks="draftTasks"
+					user-role="teacher"
+					@copy-task="onCopyTask"
+				/>
 				<v-custom-empty-state
 					v-if="draftsForTeacherIsEmpty"
 					:image="emptyState.image"
@@ -50,6 +60,7 @@
 					user-role="teacher"
 					type="finished"
 					:has-pagination="tab === tabRoutes[2]"
+					@copy-task="onCopyTask"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"
@@ -63,11 +74,27 @@
 </template>
 
 <script>
+import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
-import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
+import { defineComponent, inject } from "@vue/composition-api";
+import { useCopy } from "../../composables/copy";
+import { useLoadingState } from "../../composables/loadingState";
 
-export default {
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		const i18n = inject("i18n");
+		const { isLoadingDialogOpen } = useLoadingState(
+			i18n.t("components.molecules.copyResult.title.loading")
+		);
+
+		const { copy } = useCopy(isLoadingDialogOpen);
+
+		return {
+			copy,
+		};
+	},
 	components: { vCustomEmptyState, TasksList, vCustomDoublePanels },
 	props: {
 		emptyState: {
@@ -79,31 +106,31 @@ export default {
 			required: true,
 		},
 	},
-	inject: ["taskModule", "finishedTaskModule"],
+	inject: ["tasksModule", "finishedTasksModule", "copyModule"],
 	computed: {
 		openTasks() {
-			return this.taskModule.getOpenTasksForTeacher;
+			return this.tasksModule.getOpenTasksForTeacher;
 		},
 		draftTasks() {
-			return this.taskModule.getDraftTasksForTeacher;
+			return this.tasksModule.getDraftTasksForTeacher;
 		},
 		status() {
-			return this.taskModule.getStatus;
+			return this.tasksModule.getStatus;
 		},
 		hasTasks() {
-			return this.taskModule.hasTasks;
+			return this.tasksModule.hasTasks;
 		},
 		openTasksForTeacherIsEmpty() {
-			return this.taskModule.openTasksForTeacherIsEmpty;
+			return this.tasksModule.openTasksForTeacherIsEmpty;
 		},
 		draftsForTeacherIsEmpty() {
-			return this.taskModule.draftsForTeacherIsEmpty;
+			return this.tasksModule.draftsForTeacherIsEmpty;
 		},
 		finishedTasksIsEmpty() {
-			return this.finishedTaskModule.tasksIsEmpty;
+			return this.finishedTasksModule.tasksIsEmpty;
 		},
 		finishedTasks() {
-			return this.finishedTaskModule.getTasks;
+			return this.finishedTasksModule.getTasks;
 		},
 		overdueTasks() {
 			return this.openTasks.overdue;
@@ -116,14 +143,25 @@ export default {
 		},
 		tab: {
 			get() {
-				return this.taskModule.getActiveTab;
+				return this.tasksModule.getActiveTab;
 			},
 			set(newTab) {
-				this.taskModule.setActiveTab(newTab);
+				this.tasksModule.setActiveTab(newTab);
 			},
 		},
 	},
-};
+	methods: {
+		async onCopyTask(payload) {
+			const loadingText = this.$t(
+				"components.molecules.copyResult.title.loading"
+			);
+			await this.copy(payload, loadingText);
+
+			this.tasksModule.setActiveTab("drafts");
+			await this.tasksModule.fetchAllTasks();
+		},
+	},
+});
 </script>
 
 <style lang="scss" scoped>

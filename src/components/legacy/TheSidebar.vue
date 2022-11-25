@@ -22,7 +22,10 @@
 				>
 					<li
 						class="list-item"
-						:class="{ active: route.active, 'child-active': route.childActive }"
+						:class="{
+							active: isActive(route.title),
+							'child-active': isChildActive(route.title),
+						}"
 						:data-testId="route.testId"
 					>
 						<base-link
@@ -36,20 +39,23 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="
-									route.active || route.childActive
-										? 'var(--color-sidebar-menu-item-active)'
-										: 'var(--color-sidebar-menu-item)'
+									isActive(route.title) || isChildActive(route.title)
+										? 'var(--v-primary-base)'
+										: 'var(--v-secondary-base)'
 								"
 								class="icon"
 							/>
-							<span class="title">{{ $t(route.title) }}</span>
+							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
-					<ul v-if="route.active || route.childActive">
+					<ul
+						v-if="isActive(route.title) || isChildActive(route.title)"
+						class="px-0"
+					>
 						<li
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"
-							:class="{ active: child.active }"
+							:class="{ active: isActive(child.title) }"
 							class="list-item list-sub-item"
 							:data-testId="child.testId"
 						>
@@ -64,13 +70,13 @@
 									:icon="child.icon"
 									:source="child.source || 'fa'"
 									:fill="
-										child.active
-											? 'var(--color-sidebar-menu-item-active)'
-											: 'var(--color-sidebar-menu-item)'
+										isActive(child.title)
+											? 'var(--v-primary-base)'
+											: 'var(--v-secondary-base)'
 									"
 									class="icon"
 								/>
-								<span class="title">{{ $t(child.title) }}</span>
+								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
 					</ul>
@@ -80,15 +86,23 @@
 	</aside>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, useRoute, watch } from "@nuxtjs/composition-api";
+import baseLink from "@basecomponents/BaseLink.vue";
+import baseIcon from "@basecomponents/BaseIcon.vue";
+import { SidebarItem } from "@utils/sidebar-base-items";
+
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	name: "TheSidebar",
+	components: { baseLink, baseIcon },
 	props: {
 		routes: {
 			type: Array,
 			default: () => [],
-			validator: (value) => {
+			validator: (value: []) => {
 				return value.every(
-					(route) => route.title && route.icon && (route.to || route.href)
+					(route: any) => route.title && route.icon && (route.to || route.href)
 				);
 			},
 		},
@@ -96,11 +110,50 @@ export default {
 			type: Boolean,
 		},
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+	setup(props) {
+		const activeItem = ref("");
+		const activeParent = ref("");
+
+		const route = useRoute();
+
+		const isItemActiveForRoute = (item: SidebarItem) =>
+			item.activeForUrls.some((activeFor) =>
+				new RegExp(activeFor).test(route.value.path)
+			);
+
+		const updateActiveItems = () => {
+			props.routes.forEach((item: any) => {
+				if (isItemActiveForRoute(item)) {
+					activeItem.value = item.title;
+					activeParent.value = "";
+				}
+				if (item.children) {
+					item.children.forEach((childItem: SidebarItem) => {
+						if (isItemActiveForRoute(childItem)) {
+							activeItem.value = childItem.title;
+							activeParent.value = item.title;
+						}
+					});
+				}
+			});
+		};
+		updateActiveItems();
+		watch(route, updateActiveItems);
+
+		const isActive = (title: string): boolean => {
+			return title === activeItem.value;
+		};
+
+		const isChildActive = (title: string): boolean => {
+			return title === activeParent.value;
+		};
+
+		return {
+			isActive,
+			isChildActive,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -127,8 +180,8 @@ export default {
 	display: none;
 	height: calc(100vh - 55px);
 	overflow-y: auto;
-	background-color: var(--color-white);
-	box-shadow: 0 5px 5px var(--color-gray-light);
+	background-color: var(--v-white-base);
+	box-shadow: 0 5px 5px var(--v-grey-lighten1);
 	transition: display 2s;
 
 	&.expanded {
@@ -146,7 +199,7 @@ export default {
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--color-gray-light);
+		border-right: 1px solid var(--v-grey-lighten1);
 		border-bottom: none;
 	}
 
@@ -225,7 +278,7 @@ export default {
 					padding: 0 20px;
 					font-size: 16px;
 					line-height: 100%;
-					color: var(--color-sidebar-menu-item);
+					color: var(--v-secondary-base);
 					border-bottom: none;
 
 					.icon {
@@ -235,7 +288,7 @@ export default {
 						text-align: center;
 					}
 
-					.title {
+					.side-bar-title {
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {
@@ -255,14 +308,14 @@ export default {
 
 				&:hover,
 				&.active {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--color-sidebar-active-bg);
+					background-color: var(--v-grey-lighten1);
 				}
 
 				&.active .list-content,
 				&.child-active .list-content {
-					color: var(--color-sidebar-menu-item-active);
+					color: var(--v-primary-base);
 				}
 			}
 		}

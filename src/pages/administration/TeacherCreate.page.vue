@@ -39,7 +39,6 @@ export default {
 	meta: {
 		requiredPermissions: ["TEACHER_CREATE"],
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			error: false,

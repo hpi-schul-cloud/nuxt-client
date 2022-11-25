@@ -1,21 +1,18 @@
 <template>
 	<div class="resource">
-		<div
-			ref="icons"
-			class="icons"
-			:style="{ 'justify-content': getIconsJustifyContent }"
-		>
-			<base-button
+		<div ref="icons" class="icons" :style="{ 'justify-content': getIconsJustifyContent }">
+			<v-btn
+				fab
+				small
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',
 				]"
-				design="icon"
-				aria-label="btnLabel"
+				aria-label="close detail view"
 				@click="goBack"
 			>
-				<base-icon source="material" icon="close" />
-			</base-button>
+				<v-icon size="20">{{ mdiClose }}</v-icon>
+			</v-btn>
 		</div>
 		<div class="content">
 			<div class="preview">
@@ -41,7 +38,7 @@
 				</div>
 			</div>
 		</div>
-		<div ref="sidebar" class="sidebar">
+		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions"></div>
 				<div class="title">
@@ -70,9 +67,10 @@
 					</p>
 				</div>
 				<div v-else>
-					<base-button
+					<v-btn
 						v-if="isMerlin"
-						design="outline"
+						outlined
+						color="secondary"
 						class="content-button"
 						@click="
 							() => {
@@ -80,19 +78,20 @@
 							}
 						"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
-					<base-button
+					</v-btn>
+					<v-btn
 						v-else
-						design="outline"
+						outlined
+						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
 					>
-						<base-icon source="custom" icon="open_new_window" />
+						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
-					</base-button>
+					</v-btn>
 					<!-- This will be replaced with Modal -->
 					<div v-if="isBrandenburg" class="external-content-warning">
 						<p class="text-s external-content-title">
@@ -163,11 +162,7 @@
 			<user-has-role class="floating-buttons" :role="isNotStudent">
 				<add-content-button
 					:resource="resource"
-					btn-design="hero-cta"
-					btn-class="floating-button"
-					btn-size="large"
-					btn-icon-class="footer__content-icon"
-					btn-icon="add_circle_outline"
+					btn-color="primary"
 					:btn-label="$t('pages.content._id.addToTopic')"
 					:multiple="false"
 				/>
@@ -181,11 +176,10 @@
 import AddContentButton from "@components/organisms/AddContentButton";
 import LernStorePlayer from "@components/molecules/LernStorePlayer";
 import UserHasRole from "@components/helpers/UserHasRole";
-
 import contentMeta from "@mixins/contentMeta";
-
 import BaseLink from "../base/BaseLink";
-
+import { printDateFromTimestamp } from "@plugins/datetime";
+import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -196,7 +190,6 @@ import {
 	isVideoContent,
 	isMerlinContent,
 } from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -216,6 +209,12 @@ export default {
 		id: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
+	},
+	data() {
+		return {
+			mdiClose,
+			mdiOpenInNew,
+		};
 	},
 	computed: {
 		author() {
@@ -345,7 +344,6 @@ $tablet-portrait-width: 768px;
 	grid-template-columns: auto 30%;
 	min-width: 100vw;
 	min-height: 100vh;
-	box-shadow: var(--shadow-md);
 
 	@media (max-width: $tablet-portrait-width) {
 		grid-template-areas:
@@ -367,14 +365,13 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			background-color: var(--color-gray-dark);
-			box-shadow: var(--shadow-sm);
+			color: var(--v-white-base);
+			background-color: var(--v-grey-darken1);
 		}
 
 		.close-transparent {
-			color: var(--color-black);
-			background-color: var(--color-white);
-			box-shadow: var(--shadow-sm);
+			color: var(--v-black-base);
+			background-color: var(--v-white-base);
 		}
 	}
 
@@ -418,7 +415,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--color-secondary);
+				background-color: var(--v-secondary-base);
 			}
 
 			.preview-background {
@@ -468,12 +465,29 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--color-white);
-		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
+		background-color: var(--v-white-base);
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
 			overflow: inherit;
+		}
+
+		.content-container {
+			width: 80%;
+			margin-top: var(--space-md);
+		}
+
+		.external-content-warning {
+			color: var(--v-error-base);
+
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		.content-button {
+			width: 100%;
 		}
 
 		.actions {
@@ -486,32 +500,14 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--color-secondary);
+				color: var(--v-secondary-base);
 				text-decoration: underline;
 			}
-		}
-
-		.content-button {
-			width: 100%;
-		}
-
-		.content-container {
-			width: 80%;
-			margin-top: var(--space-md);
 		}
 
 		.description {
 			margin: var(--space-xl-2) 0;
 			font-size: var(--text-md);
-		}
-
-		.external-content-warning {
-			color: var(--color-danger);
-
-			.external-content-title {
-				margin-top: var(--space-md);
-				font-weight: var(--font-weight-bold);
-			}
 		}
 
 		.text-wrap {
@@ -551,15 +547,15 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--color-secondary);
+					color: var(--v-secondary-base);
 				}
 
 				.tertiary-color {
-					color: var(--color-black);
+					color: var(--v-black-base);
 					text-decoration: none;
 
 					:hover {
-						color: var(--color-black);
+						color: var(--v-black-base);
 					}
 				}
 			}

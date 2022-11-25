@@ -1,3 +1,4 @@
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import InsightsCharts from "./InsightsCharts";
 
 const testData = {
@@ -48,6 +49,9 @@ describe("@components/molecules/InsightsCharts", () => {
 
 	it("renders data prop if it exists", () => {
 		const wrapper = mount(InsightsCharts, {
+			...createComponentMocks({
+				i18n: true,
+			}),
 			propsData: {
 				data: testData,
 			},

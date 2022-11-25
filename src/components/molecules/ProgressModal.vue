@@ -2,7 +2,12 @@
 	<base-modal v-bind="$attrs" v-on="$listeners">
 		<template #body>
 			<modal-body-info :title="title" :description="description" />
-			<base-progressbar :value="percent" :max="100" style="width: 100%" />
+			<v-progress-linear
+				:value="percent"
+				height="15"
+				background-color="grey lighten-1"
+				class="rounded"
+			/>
 		</template>
 	</base-modal>
 </template>
@@ -34,5 +39,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+.rounded,
+::v-deep .v-progress-linear__determinate {
+	border-radius: var(--radius-round) !important;
+}
 </style>

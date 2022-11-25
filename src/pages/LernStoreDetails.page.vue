@@ -1,16 +1,22 @@
 <template>
-	<span v-if="status === 'completed'">
-		<lernstore-collection-detail-view v-if="isCollection" :resource="resource"/>
-		<lernstore-detail-view v-else :id="$route.params.id" :resource="resource"/>
+	<span>
+		<template v-if="status === 'completed'">
+			<lernstore-collection-detail-view
+				v-if="isCollection"
+				:resource="resource"
+			/>
+			<lernstore-detail-view v-else :id="$route.params.id" :resource="resource" />
+		</template>
+		<div v-else class="d-flex justify-center align-center min-height-screen">
+			<v-progress-circular indeterminate color="secondary" size="115" />
+		</div>
 	</span>
-	<base-spinner v-else class="spinner" size="xlarge"/>
 </template>
 
 <script>
 import { contentModule } from "@/store";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
-import BaseSpinner from "@components/base/BaseSpinner";
 
 export default {
 	meta: {
@@ -19,12 +25,11 @@ export default {
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,
-		BaseSpinner,
 	},
 	layout({ query }) {
 		return String(query.isCollection) === "true" &&
 			contentModule.getCollectionsFeatureFlag === true
-			? "defaultVuetify"
+			? "default"
 			: "plain";
 	},
 	computed: {
@@ -41,21 +46,14 @@ export default {
 			return contentModule.isCollection;
 		},
 	},
-	async mounted() {
+	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
-.spinner {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: auto;
+.min-height-screen {
+	min-height: 100vh;
 }
 </style>

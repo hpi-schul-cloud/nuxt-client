@@ -87,21 +87,21 @@ export default {
 
 <style lang="scss" scoped>
 .table__row {
-	background-color: var(--color-white);
-	border-top: 1px solid var(--color-white);
-	border-bottom: 1px solid var(--color-white);
+	background-color: var(--v-white-base);
+	border-top: 1px solid var(--v-white-base);
+	border-bottom: 1px solid var(--v-white-base);
 
 	&.highlight {
-		background-color: var(--color-gray-light);
-		border-top: 1px solid var(--color-white);
-		border-bottom: 1px solid var(--color-white);
+		background-color: var(--v-grey-lighten1);
+		border-top: 1px solid var(--v-white-base);
+		border-bottom: 1px solid var(--v-white-base);
 	}
 
 	&.selected {
-		color: var(--color-on-tertiary-light);
-		background-color: var(--color-secondary-light);
-		border-top: 1px solid var(--color-white);
-		border-bottom: 1px solid var(--color-white);
+		color: var(--v-white-base);
+		background-color: var(--v-secondary-lighten1);
+		border-top: 1px solid var(--v-white-base);
+		border-bottom: 1px solid var(--v-white-base);
 	}
 
 	td {
@@ -122,7 +122,7 @@ export default {
 	}
 
 	a.is-text {
-		color: var(--color-secondary);
+		color: var(--v-secondary-base);
 	}
 }
 </style>

@@ -14,27 +14,30 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-icon
+				<v-icon
 					v-if="value === ''"
+					icon
+					plain
+					x-large
+					color="black"
 					class="search-icon"
-					source="custom"
 					aria-label="search"
-					icon="search"
-				/>
-				<base-button v-else design="none" @click="clearBtnHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						aria-label="clear"
-						icon="clear"
-					/>
-				</base-button>
+				>
+					{{ mdiMagnify }}
+				</v-icon>
+				<v-btn v-else icon plain color="black" @click="clearBtnHandler">
+					<v-icon x-large class="search-icon" aria-label="clear">
+						{{ mdiClose }}
+					</v-icon>
+				</v-btn>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mdiClose, mdiMagnify } from "@mdi/js";
+
 let typingTimer;
 
 export default {
@@ -55,6 +58,8 @@ export default {
 		return {
 			isActive: true,
 			inputValue: "",
+			mdiClose,
+			mdiMagnify,
 		};
 	},
 	mounted() {
@@ -113,7 +118,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		color: var(--color-gray);
+		color: var(--v-grey-base);
 
 		input {
 			flex: 1;
@@ -133,15 +138,15 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--color-gray-light) solid;
+				border-bottom: 2px var(--v-grey-lighten1) solid;
 			}
 
 			&::placeholder {
-				color: var(--color-gray);
+				color: var(--v-grey-base);
 			}
 
 			&:hover {
-				border-bottom: 2px var(--color-black) solid;
+				border-bottom: 2px var(--v-black-base) solid;
 			}
 		}
 
@@ -151,7 +156,7 @@ export default {
 			justify-content: center;
 			height: 100%;
 			font-size: var(--heading-4);
-			color: var(--color-black);
+			color: var(--v-black-base);
 			cursor: pointer;
 
 			.icon {

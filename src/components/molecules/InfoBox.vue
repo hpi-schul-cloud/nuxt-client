@@ -9,9 +9,9 @@
 			</p>
 			<div class="actions">
 				<slot name="actions" />
-				<base-button design="info" @click.self="close">{{
-					$t("common.labels.close")
-				}}</base-button>
+				<v-btn text dark @click.self="close">
+					{{ $t("common.labels.close") }}
+				</v-btn>
 			</div>
 		</div>
 	</div>
@@ -37,15 +37,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .wrapper {
-	color: var(--color-white);
-	background-color: var(--color-info);
+	color: var(--v-white-base);
+	background-color: var(--v-info-base);
 	border-radius: var(--radius-lg);
 
 	h4 {
-		color: var(--color-white);
+		color: var(--v-white-base);
 		text-align: center;
 	}
 }

@@ -3,22 +3,28 @@
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>
-					<base-spinner :color="color" size="large" />
+					<v-progress-circular
+						indeterminate
+						width="2"
+						:color="color"
+						size="60"
+						class="mb-6"
+					/>
 				</template>
 			</modal-body-info>
 		</template>
 		<template #footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="$emit('update:active', false)">
+				<v-btn color="primary" depressed @click="$emit('update:active', false)">
 					{{ btnText }}
-				</base-button>
+				</v-btn>
 			</center-slot>
 		</template>
 	</base-modal>
 </template>
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import CenterSlot from "@components/atoms/CenterSlot";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 export default {
 	components: {
 		ModalBodyInfo,
@@ -27,7 +33,7 @@ export default {
 	props: {
 		color: {
 			type: String,
-			default: "var(--color-primary)",
+			default: "var(--v-primary-base)",
 		},
 		title: {
 			type: String,
@@ -50,7 +56,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@styles";
-</style>

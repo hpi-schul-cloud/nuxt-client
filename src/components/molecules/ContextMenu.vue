@@ -4,14 +4,17 @@
 			v-if="show"
 			ref="context-menu"
 			v-outside-click="handleClickOutside"
-			class="context-menu"
+			class="context-menu elevation-8"
 			:style="anchorCSS"
 			role="menu"
 		>
-			<base-button
+			<v-btn
 				v-for="(action, index) of actions"
 				:key="action.text"
-				design="none"
+				text
+				tile
+				height="50"
+				:ripple="false"
 				class="context-menu__button"
 				role="menuitem"
 				:data-testid="action.dataTestId || null"
@@ -34,17 +37,7 @@
 				>
 					{{ action.text }}
 				</div>
-			</base-button>
-			<base-button
-				design="none"
-				class="context-menu__button context-menu__button-close"
-				@click.prevent="closeMenu"
-				@keydown.up="focusPrev(actions.length)"
-			>
-				<div class="context-menu__button-text no-icon">
-					{{ $t("components.molecules.ContextMenu.action.close") }}
-				</div>
-			</base-button>
+			</v-btn>
 		</div>
 	</transition>
 </template>
@@ -227,12 +220,11 @@ export default {
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
-	background-color: var(--color-white);
+	background-color: var(--v-white-base);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-m);
 
 	> :hover {
-		background-color: var(--color-gray-light);
+		background-color: var(--v-grey-lighten1);
 	}
 
 	&__button {
@@ -246,13 +238,13 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--color-secondary);
+			color: var(--v-secondary-base);
 		}
 
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
-			color: var(--color-black);
+			color: var(--v-black-base);
 			text-align: left;
 			white-space: normal;
 
@@ -290,5 +282,9 @@ export default {
 .fade-leave-to {
 	opacity: 0;
 	transition: opacity var(--transition-duration) ease-in-out;
+}
+
+.v-btn {
+	font-weight: var(--font-weight-normal) !important;
 }
 </style>

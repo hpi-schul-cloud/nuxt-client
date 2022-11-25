@@ -1,15 +1,15 @@
 <template>
 	<div v-if="options.length > 0" v-outside-click="hideMenu" class="menu">
-		<base-button
-			design="text"
+		<v-btn
+			text
+			color="secondary"
 			data-testid="add_filter_button"
 			@click="showMenu"
 		>
-			<base-icon source="custom" icon="filter" class="filter-icon" />
-			<span class="filter-btn"> {{ labelAdd }} </span>
-
+			<base-icon source="custom" icon="filter" class="filter-icon mr-2" />
+			<span class="filter-btn mr-2"> {{ labelAdd }} </span>
 			<base-icon source="material" icon="arrow_drop_down" class="filter-icon" />
-		</base-button>
+		</v-btn>
 		<context-menu
 			:show.sync="visible"
 			anchor="top-left"
@@ -69,11 +69,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
 .menu {
 	position: relative;
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 }
 
 .filter-icon {
@@ -81,6 +79,6 @@ export default {
 }
 
 .button.is-medium.is-text {
-	color: var(--color-secondary);
+	color: var(--v-secondary-base);
 }
 </style>

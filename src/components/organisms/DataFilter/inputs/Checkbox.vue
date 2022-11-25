@@ -61,8 +61,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@styles";
-
 fieldset {
 	display: flex;
 	flex-direction: column;

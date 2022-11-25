@@ -70,7 +70,7 @@ export default {
 .description {
 	margin-top: var(--space-md);
 	font-size: var(--text-sm);
-	color: var(--color-secondary-light);
+	color: var(--v-secondary-lighten1);
 	text-align: center;
 }
 </style>

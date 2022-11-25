@@ -1,3 +1,5 @@
+import { createPermissionGuard } from "@/router/guards/permission.guard";
+
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
@@ -105,25 +107,16 @@ export const routes = [
 		name: "login-instances",
 	},
 	{
-		path: "/news",
-		component: () => interopDefault(import("../pages/NewsOverview.page.vue")),
-		name: "news",
-	},
-	{
 		path: "/news/new",
 		component: () => interopDefault(import("../pages/NewsCreate.page.vue")),
 		name: "news-new",
-	},
-	{
-		path: `/news/:id(${REGEX_ID})`,
-		component: () => interopDefault(import("../pages/NewsDetails.page.vue")),
-		name: "news-id",
 	},
 	{
 		path: `/news/:id(${REGEX_ID})/edit`,
 		component: () => interopDefault(import("../pages/NewsEdit.page.vue")),
 		name: "news-id-edit",
 	},
+	// can this be removed?
 	{
 		path: "/poc-files",
 		component: () => interopDefault(import("../pages/POCFiles.page.vue")),
@@ -149,10 +142,36 @@ export const routes = [
 		component: () => interopDefault(import("../pages/TaskOverview.page.vue")),
 		name: "tasks",
 	},
+	{
+		path: "/tasks/new",
+		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
+		name: "task-new",
+	},
 	// deprecated?
 	{
 		path: "/termsofuse",
 		component: () => interopDefault(import("../pages/TermsOfUse.vue")),
 		name: "termsofuse",
+	},
+	{
+		path: "/cfiles",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "files",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams/:catchAll(.*)",
+		component: () =>
+			interopDefault(import("@pages/files/FilesOverview.page.vue")),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 ];
