@@ -2,7 +2,7 @@
 	<div v-if="isMigrationEnabled">
 		test
 		<v-switch label="Hallo Welt"></v-switch>
-<!--		<v-switch :label="$t('pages.courses.index.courses.arrangeCourses')></v-switch>-->
+		<!--		<v-switch :label="$t('pages.courses.index.courses.arrangeCourses')></v-switch>-->
 	</div>
 </template>
 
@@ -14,7 +14,7 @@ import { inject } from "@nuxtjs/composition-api";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "SystemMigrationSection",
-	components: { },
+	components: {},
 	/* props: {
 		enableIfEnvExists: {
 			type: Boolean,
@@ -31,8 +31,8 @@ export default defineComponent({
 			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 		});
 		return {
-			isMigrationEnabled
-		}
-	}
+			isMigrationEnabled,
+		};
+	},
 });
 </script>

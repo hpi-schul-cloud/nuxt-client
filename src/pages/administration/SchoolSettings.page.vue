@@ -42,8 +42,7 @@
 					<school-policies
 						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
 					></school-policies>
-					<system-migration-section>
-					</system-migration-section>
+					<system-migration-section> </system-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
