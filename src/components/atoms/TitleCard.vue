@@ -1,14 +1,14 @@
 <template>
-	<v-card class="py-2 px-4">
-		<v-text-field
-			:label="label"
-			:value="name"
-			@input="$emit('update:name', $event)"
-		/>
-	</v-card>
+	<v-text-field
+		v-model="name"
+		solo
+		:label="label"
+		@input="$emit('input', $event)"
+	/>
 </template>
 
 <script>
+import { ref } from "@vue/composition-api";
 export default {
 	name: "TitleCard",
 	props: {
@@ -16,10 +16,17 @@ export default {
 			required: true,
 			type: String,
 		},
-		name: {
-			required: true,
+		value: {
 			type: String,
+			default: "",
 		},
+	},
+	setup(props) {
+		const name = ref(props.value);
+
+		return {
+			name,
+		};
 	},
 };
 </script>

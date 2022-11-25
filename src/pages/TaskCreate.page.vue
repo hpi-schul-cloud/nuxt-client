@@ -5,26 +5,30 @@
 		headline="Create Task"
 	>
 		<v-form>
-			<title-card
-				:name="name"
-				:label="$t('common.labels.title')"
-				@update:name="(payload) => (name = payload)"
-			/>
+			<title-card v-model="name" :label="$t('common.labels.title')" />
 			<editor
 				v-model="description"
 				:label="$t('common.labels.description')"
 				mode="simple"
 			></editor>
-			<v-btn color="primary" @click="save">{{
-				$t("common.actions.save")
-			}}</v-btn>
+			<v-btn color="secondary" outlined @click="cancel">
+				{{ $t("common.actions.cancel") }}
+			</v-btn>
+			<v-btn class="float-right" color="primary" depressed @click="save">
+				{{ $t("common.actions.save") }}
+			</v-btn>
 		</v-form>
 	</default-wireframe>
 </template>
 
 <script>
-import { defineComponent, inject, ref } from "@vue/composition-api";
-import { taskModule } from "@/store";
+import {
+	defineComponent,
+	inject,
+	ref,
+	onBeforeMount,
+} from "@vue/composition-api";
+import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TitleCard from "@components/atoms/TitleCard.vue";
 import Editor from "@/components/molecules/Editor.vue";
@@ -33,9 +37,18 @@ import Editor from "@/components/molecules/Editor.vue";
 export default defineComponent({
 	name: "TaskCreatePage",
 	components: { DefaultWireframe, TitleCard, Editor },
-	setup() {
+	setup(props, context) {
+		const router = context.root.$router;
+		onBeforeMount(() => {
+			if (
+				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+			) {
+				router.go(-1);
+			}
+		});
+
 		const i18n = inject("i18n");
-		const name = ref(taskModule.getTaskData.name);
+		const name = ref("");
 		const description = ref("");
 
 		const breadcrumbs = [
@@ -54,9 +67,6 @@ export default defineComponent({
 		};
 
 		return { breadcrumbs, name, description, save };
-	},
-	mounted() {
-		// check for permission here or in store?
 	},
 	head() {
 		return {
