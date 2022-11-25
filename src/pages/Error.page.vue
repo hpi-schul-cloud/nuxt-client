@@ -1,27 +1,15 @@
 <template>
 	<div class="text-centered">
 		<div v-if="appErrorStatusCode">
-			<base-image
-				v-if="appErrorStatusCode === 400"
-				img-src="@assets/img/permission-error.svg"
-				img-height="300px"
+			<permission-error-svg
+				v-if="
+					appErrorStatusCode === 400 ||
+					appErrorStatusCode === 401 ||
+					appErrorStatusCode === 403
+				"
 				fill="var(--v-primary-base)"
-				role="presentation"
 			/>
-			<base-image
-				v-if="appErrorStatusCode === 401"
-				img-src="@assets/img/permission-error.svg"
-				img-height="300px"
-				fill="var(--v-primary-base)"
-				role="presentation"
-			/>
-			<base-image
-				v-if="appErrorStatusCode === 403"
-				img-src="@assets/img/permission-error.svg"
-				img-height="300px"
-				fill="var(--v-primary-base)"
-				role="presentation"
-			/>
+
 			<img
 				v-if="appErrorStatusCode === 500"
 				role="presentation"
@@ -59,14 +47,18 @@
 	</div>
 </template>
 <script lang="ts">
-import { computed, inject } from "@vue/composition-api";
+import { computed, inject, defineComponent } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
-import { defineComponent, useMeta } from "@nuxtjs/composition-api";
+import { useMeta } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
+import PermissionErrorSvg from "@assets/img/permission-error.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
+	components: {
+		PermissionErrorSvg,
+	},
 	head: {},
 	setup() {
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
@@ -78,7 +70,7 @@ export default defineComponent({
 		}
 
 		useMeta({
-			title: i18n.t("error.generic").toString() + " - " + Theme.short_name,
+			title: i18n?.t("error.generic").toString() + " - " + Theme.short_name,
 		});
 
 		const onBackClick = () => {
@@ -99,9 +91,11 @@ export default defineComponent({
 
 			const translatedError = i18n.t(translationKey).toString();
 
-			return translatedError !== translationKey
-				? translatedError
-				: i18n.t("error.generic").toString();
+			const result =
+				translatedError !== translationKey
+					? translatedError
+					: i18n.t("error.generic").toString();
+			return result;
 		});
 
 		return {
