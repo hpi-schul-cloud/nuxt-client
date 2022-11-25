@@ -42,6 +42,8 @@
 					<school-policies
 						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
 					></school-policies>
+					<system-migration-section>
+					</system-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
@@ -58,9 +60,11 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
+import SystemMigrationSection from "@components/administration/SystemMigrationSection";
 
 export default {
 	components: {
+		SystemMigrationSection,
 		GeneralSettings,
 		SchoolPolicies,
 		AuthSystems,

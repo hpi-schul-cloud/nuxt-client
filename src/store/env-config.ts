@@ -43,6 +43,8 @@ export default class EnvConfigModule extends VuexModule {
 		SC_SHORT_TITLE: "",
 		GHOST_BASE_URL: "",
 		FEATURE_CONSENT_NECESSARY: true,
+		// TODO: Set default to false
+		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";
@@ -101,6 +103,11 @@ export default class EnvConfigModule extends VuexModule {
 			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
 			this.env.FEATURE_LERNSTORE_ENABLED
 		);
+	}
+
+	get getFeatureSchoolSanisUserMigrationEnabled() {
+		console.log(this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED)
+		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
 	get getTeacherStudentVisibilityIsConfigurable() {
