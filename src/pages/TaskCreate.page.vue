@@ -10,10 +10,11 @@
 				:label="$t('common.labels.title')"
 				@update:name="(payload) => (name = payload)"
 			/>
-			<v-textarea
+			<editor
 				v-model="description"
 				:label="$t('common.labels.description')"
-			/>
+				mode="simple"
+			></editor>
 			<v-btn color="primary" @click="save">{{
 				$t("common.actions.save")
 			}}</v-btn>
@@ -26,11 +27,12 @@ import { defineComponent, inject, ref } from "@vue/composition-api";
 import { taskModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TitleCard from "@components/atoms/TitleCard.vue";
+import Editor from "@/components/molecules/Editor.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TaskCreatePage",
-	components: { DefaultWireframe, TitleCard },
+	components: { DefaultWireframe, TitleCard, Editor },
 	setup() {
 		const i18n = inject("i18n");
 		const name = ref(taskModule.getTaskData.name);
