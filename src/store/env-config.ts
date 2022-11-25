@@ -106,7 +106,6 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getFeatureSchoolSanisUserMigrationEnabled() {
-		console.log(this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED)
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 

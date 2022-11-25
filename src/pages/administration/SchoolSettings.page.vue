@@ -61,6 +61,7 @@ import SchoolPolicies from "@components/organisms/administration/SchoolPolicies"
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 import SystemMigrationSection from "@components/administration/SystemMigrationSection";
 
+
 export default {
 	components: {
 		SystemMigrationSection,
