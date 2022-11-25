@@ -1,5 +1,5 @@
 <template>
-	<div class="text-centered">
+	<div class="text-centered mt-8">
 		<div v-if="appErrorStatusCode">
 			<permission-error-svg
 				v-if="
@@ -7,6 +7,7 @@
 					appErrorStatusCode === 401 ||
 					appErrorStatusCode === 403
 				"
+				:svg-width="$vuetify.breakpoint.xs ? 200 : null"
 				fill="var(--v-primary-base)"
 			/>
 
@@ -27,7 +28,7 @@
 			/>
 		</div>
 		<div>
-			<h1 class="error-msg">
+			<h1 class="h4 error-msg pa-4">
 				<template v-if="appErrorStatusCode">
 					{{ translatedErrorMessage }}
 				</template>
@@ -35,6 +36,7 @@
 			</h1>
 			<slot name="action">
 				<v-btn
+					class="mt-4"
 					color="primary"
 					depressed
 					data-testid="btn-back"
@@ -52,7 +54,7 @@ import ApplicationErrorModule from "@store/application-error";
 import { useMeta } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
-import PermissionErrorSvg from "@assets/img/permission-error.vue";
+import PermissionErrorSvg from "@assets/img/PermissionErrorSvg.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

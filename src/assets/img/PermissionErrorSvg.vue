@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<svg
-			width="295"
+			:width="svgWidth"
 			height="320"
 			viewBox="0 0 295 320"
 			:fill="fill"
@@ -113,6 +113,10 @@ export default {
 			type: String,
 			default: "none",
 		},
+		svgWidth: {
+			type: Number,
+			default: 295
+		}
 	},
 };
 </script>
