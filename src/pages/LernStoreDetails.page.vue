@@ -5,7 +5,11 @@
 				v-if="isCollection"
 				:resource="resource"
 			/>
-			<lernstore-detail-view v-else :id="$route.params.id" :resource="resource" />
+			<lernstore-detail-view
+				v-else
+				:id="$route.params.id"
+				:resource="resource"
+			/>
 		</template>
 		<div v-else class="d-flex justify-center align-center min-height-screen">
 			<v-progress-circular indeterminate color="secondary" size="115" />

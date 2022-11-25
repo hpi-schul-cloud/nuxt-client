@@ -204,7 +204,11 @@ export default {
 			}
 		},
 		async searchH5P() {
-			await contentModule.getResources({ "$limit": 4, "$skip": 0, searchQuery: "h5p" });
+			await contentModule.getResources({
+				$limit: 4,
+				$skip: 0,
+				searchQuery: "h5p",
+			});
 		},
 		enterKeyHandler() {
 			if (this.$options.debounceTyping) {

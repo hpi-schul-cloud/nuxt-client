@@ -1,6 +1,10 @@
 <template>
 	<div class="resource">
-		<div ref="icons" class="icons" :style="{ 'justify-content': getIconsJustifyContent }">
+		<div
+			ref="icons"
+			class="icons"
+			:style="{ 'justify-content': getIconsJustifyContent }"
+		>
 			<v-btn
 				fab
 				small
