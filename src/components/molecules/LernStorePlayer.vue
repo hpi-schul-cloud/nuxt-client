@@ -7,7 +7,9 @@
 		frameborder="0"
 		scrolling="yes"
 	></iframe>
-	<base-spinner v-else class="spinner" size="xlarge" />
+	<div v-else class="d-flex justify-center align-center min-height-screen">
+		<v-progress-circular indeterminate color="secondary" size="115" />
+	</div>
 	<!--
 						v-if="isIFrameLoading"
 						<v-progress-circular
@@ -21,12 +23,8 @@
 <script :src="scriptSrc" charset="UTF-8"></script>
 
 <script>
-import BaseSpinner from "@components/base/BaseSpinner";
-
 export default {
-	components: {
-		BaseSpinner,
-	},
+	components: {},
 	props: {
 		nodeId: String,
 	},
