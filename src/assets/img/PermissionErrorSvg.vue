@@ -115,8 +115,8 @@ export default {
 		},
 		svgWidth: {
 			type: Number,
-			default: 295
-		}
+			default: 295,
+		},
 	},
 };
 </script>
