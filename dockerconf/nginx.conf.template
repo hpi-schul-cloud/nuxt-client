@@ -2,6 +2,8 @@ server {
     listen 4000;
     server_name  localhost;
 
+    add_header Content-Security-Policy "default-src 'self';" always;
+
     location /status {
         stub_status;
     }
