@@ -134,7 +134,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		setupStores({
 			authModule: AuthModule,
-			eenvConfigModule: EnvConfigModule,
+			envConfigModule: EnvConfigModule,
 			roomModule: RoomModule,
 		});
 		roomModule.setRoomData(mockData as any);
