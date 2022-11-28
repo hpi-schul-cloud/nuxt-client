@@ -9,7 +9,6 @@
 			<editor
 				v-model="description"
 				:label="$t('common.labels.description')"
-				mode="simple"
 			></editor>
 			<v-btn color="secondary" outlined @click="cancel">
 				{{ $t("common.actions.cancel") }}

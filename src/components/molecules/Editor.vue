@@ -1,12 +1,12 @@
 <template>
-	<div>
-		<label>{{ label }}</label>
+	<div class="elevation-4 rounded mb-6">
 		<ckeditor
 			ref="ck"
 			v-model="content"
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
+			placeholder="Write something here..."
 			@input="handleInput"
 		/>
 	</div>
@@ -62,8 +62,6 @@ export default defineComponent({
 					}
 
 					return [
-						"undo",
-						"redo",
 						"heading",
 						"|",
 						"bold",
@@ -77,6 +75,9 @@ export default defineComponent({
 						"link",
 						"bulletedList",
 						"numberedList",
+						"|",
+						"undo",
+						"redo",
 					];
 				})(),
 			},
@@ -114,3 +115,22 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+/* stylelint-disable sh-waqar/declaration-use-variable */
+// ::v-deep .ck-button__label {
+// 	font-family: var(--font-primary) !important;
+// }
+
+::v-deep .ck-toolbar {
+	padding: 4px 6px 4px 6px !important;
+	background: transparent !important;
+	border: none !important;
+	border-radius: 4px 4px 0 0 !important;
+}
+
+::v-deep .ck-content {
+	border: none !important;
+	border-radius: 0 0 4px 4px !important;
+}
+</style>
