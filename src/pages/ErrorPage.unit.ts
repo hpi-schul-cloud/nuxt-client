@@ -30,19 +30,6 @@ describe("@pages/Error.page.vue", () => {
 		});
 	};
 
-	it("should show generic error-message no error in store", () => {
-		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-			...errorModuleMocks,
-			getStatusCode: null,
-			getTranslationKey: "",
-		});
-		const wrapper = mountComponent();
-		const errorElement = wrapper.find(".error-msg");
-		expect(errorElement.element.innerHTML).toContain(
-			wrapper.vm.$i18n.t("error.generic")
-		);
-	});
-
 	it.skip("should show error-message which comes from the store", async () => {
 		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 			...errorModuleMocks,

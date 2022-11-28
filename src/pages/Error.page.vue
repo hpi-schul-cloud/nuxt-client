@@ -1,68 +1,42 @@
 <template>
 	<div class="text-centered mt-8">
-		<div v-if="appErrorStatusCode">
-			<permission-error-svg
-				v-if="
-					appErrorStatusCode === 400 ||
-					appErrorStatusCode === 401 ||
-					appErrorStatusCode === 403
-				"
-				:svg-width="$vuetify.breakpoint.xs ? 200 : null"
-				fill="var(--v-primary-base)"
-			/>
-
-			<img
-				v-if="appErrorStatusCode === 500"
-				role="presentation"
-				alt=""
-				src="@assets/img/pc_repair.png"
-				class="error-img"
-			/>
-		</div>
-		<div v-else>
-			<img
-				role="presentation"
-				alt=""
-				src="@assets/img/pc_repair.png"
-				class="error-img"
-			/>
-		</div>
-		<div>
-			<h1 class="h4 error-msg pa-4">
-				<template v-if="appErrorStatusCode">
-					{{ translatedErrorMessage }}
-				</template>
-				<template v-else> {{ $t("error.generic") }} </template>
-			</h1>
-			<slot name="action">
-				<v-btn
-					class="mt-4"
-					color="primary"
-					depressed
-					data-testid="btn-back"
-					@click="onBackClick"
-				>
-					{{ $t("error.action.back") }}
-				</v-btn>
-			</slot>
-		</div>
+		<error-content
+			:is-generic-error="isGenericError"
+			:is-permission-error="isPermissionError"
+			:error-text="translatedErrorMessage"
+		/>
+		<v-btn
+			class="mt-4"
+			color="primary"
+			depressed
+			data-testid="btn-back"
+			@click="onBackClick"
+		>
+			{{ $t("error.action.back") }}
+		</v-btn>
 	</div>
 </template>
 <script lang="ts">
-import { computed, inject, defineComponent } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
-import { useMeta } from "@nuxtjs/composition-api";
+import {
+	computed,
+	inject,
+	defineComponent,
+	useMeta,
+} from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
-import PermissionErrorSvg from "@assets/img/PermissionErrorSvg.vue";
+import ErrorContent from "@components/error-handling/ErrorContent.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
+	name: "ErrorPage",
 	components: {
-		PermissionErrorSvg,
+		ErrorContent,
 	},
 	head: {},
 	setup() {
+		const permissionErrors: Array<Number> = [401, 403, 403];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
@@ -72,7 +46,7 @@ export default defineComponent({
 		}
 
 		useMeta({
-			title: i18n?.t("error.generic").toString() + " - " + Theme.short_name,
+			title: i18n?.t("error.generic") + " - " + Theme.short_name,
 		});
 
 		const onBackClick = () => {
@@ -86,10 +60,18 @@ export default defineComponent({
 			return applicationErrorModule.getStatusCode;
 		});
 
+		const isPermissionError = computed(() => {
+			return permissionErrors.includes(Number(appErrorStatusCode.value));
+		});
+
+		const isGenericError = computed(() => {
+			return (
+				appErrorStatusCode.value === 500 || appErrorStatusCode.value === null
+			);
+		});
+
 		const translatedErrorMessage = computed(() => {
 			const translationKey = appErrorTranslationKey.value;
-
-			if (translationKey === "") return translationKey;
 
 			const translatedError = i18n.t(translationKey).toString();
 
@@ -104,6 +86,8 @@ export default defineComponent({
 			onBackClick,
 			appErrorStatusCode,
 			translatedErrorMessage,
+			isPermissionError,
+			isGenericError,
 		};
 	},
 });
@@ -112,13 +96,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .text-centered {
 	text-align: center;
-}
-
-h1.error-msg {
-	margin-bottom: var(--space-lg);
-}
-
-.error-img {
-	margin-top: var(--space-xl-4);
 }
 </style>
