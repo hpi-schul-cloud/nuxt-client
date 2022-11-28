@@ -1,4 +1,3 @@
-import { authModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	TaskApiFactory,
