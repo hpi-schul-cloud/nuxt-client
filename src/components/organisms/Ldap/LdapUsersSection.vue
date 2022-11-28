@@ -109,7 +109,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathValidationRegex } from "@/utils/ldapConstants";
+import { ldapPathRegexValidatior } from "@/utils/ldapConstants";
 
 export default {
 	props: {
@@ -130,7 +130,7 @@ export default {
 			],
 			userPathValidationMessage: [
 				{
-					key: "ldapPathValidationRegex",
+					key: "ldapPathRegexValidatior",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -146,7 +146,7 @@ export default {
 	validations() {
 		return {
 			value: {
-				userPath: { required, ldapPathValidationRegex },
+				userPath: { required, ldapPathRegexValidatior },
 				firstName: { required },
 				familyName: { required },
 				email: { required },
@@ -160,12 +160,12 @@ export default {
 
 <style lang="scss" scoped>
 .path-hint {
-	margin-top: var(--space-xl-3);
-	margin-bottom: var(--space-xl-2);
+	margin-top: var(--space-xl);
+	margin-bottom: var(--space-lg);
 }
 
 .users-container {
-	margin-bottom: var(--space-xl-4);
+	margin-bottom: var(--space-xl-2);
 }
 
 .title-class {

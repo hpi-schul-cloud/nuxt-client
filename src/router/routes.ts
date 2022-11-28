@@ -1,4 +1,5 @@
 import { RouteConfig } from "vue-router";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
@@ -76,6 +77,12 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/Imprint.page.vue"),
 		name: "imprint",
 	},
+	// deprecated?
+	{
+		path: "/insights",
+		component: () => import("../pages/Insights.page.vue"),
+		name: "insights",
+	},
 	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
@@ -117,6 +124,11 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/TaskOverview.page.vue"),
 		name: "tasks",
 	},
+	{
+		path: "/tasks/new",
+		component: () => import("../pages/TaskCreate.page.vue"),
+		name: "task-new",
+	},
 	// deprecated?
 	{
 		path: "/termsofuse",
@@ -125,7 +137,20 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/cfiles",
-		component: () => import("../pages/files/FilesOverview.page.vue"),
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "files",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+	},
+	{
+		path: "/cfiles/teams/:catchAll(.*)",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 ];

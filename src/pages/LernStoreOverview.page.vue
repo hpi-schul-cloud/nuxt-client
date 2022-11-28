@@ -1,14 +1,17 @@
 <template>
 	<section :class="{ inline: isInline }">
-		<base-button
+		<v-btn
 			v-if="isInline"
+			text
+			plain
+			:ripple="false"
 			design="none"
 			class="arrow__back"
 			@click="goBack"
 		>
-			<base-icon source="material" icon="navigate_before" />
+			<v-icon> {{ mdiChevronLeft }}</v-icon>
 			{{ $t("pages.content.index.backToCourse") }}
-		</base-button>
+		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
@@ -60,11 +63,12 @@
 					</div>
 				</transition>
 			</div>
-			<base-spinner
-				v-show="loading"
-				class="spinner mt--xl-2"
-				color="var(--v-secondary-base)"
-				size="xlarge"
+			<v-progress-circular
+				v-if="loading"
+				indeterminate
+				color="secondary"
+				size="115"
+				class="align-self-center"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
@@ -79,15 +83,14 @@ import ContentEmptyState from "@/components/molecules/ContentEmptyState";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import BaseGrid from "@/components/base/BaseGrid";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
-import BaseButton from "@/components/base/BaseButton";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
+import { mdiChevronLeft } from "@mdi/js";
 
 export default {
 	meta: {
 		requiredPermissions: ["LERNSTORE_VIEW"],
 	},
 	components: {
-		BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -103,6 +106,7 @@ export default {
 			backToTopScrollYLimit: 115,
 			activateTransition: false,
 			prevRoute: null,
+			mdiChevronLeft,
 		};
 	},
 	computed: {
@@ -264,17 +268,9 @@ export default {
 		margin-top: var(--space-md);
 	}
 
-	&__spinner {
-		margin: var(--space-lg) 0;
-	}
-
 	&__footer {
 		align-self: flex-end;
 		padding-bottom: var(--space-sm);
-	}
-
-	.spinner {
-		align-self: center;
 	}
 }
 
@@ -298,5 +294,11 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+::v-deep
+	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
+	.v-btn__content {
+	opacity: 1;
 }
 </style>

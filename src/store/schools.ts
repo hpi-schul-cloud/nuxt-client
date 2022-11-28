@@ -126,7 +126,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
+	setError(error: {} | null): void {
 		this.error = error;
 	}
 
@@ -299,13 +299,18 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolInUserMigration(): Promise<void> {
+	async setSchoolInUserMigration(
+		setSchoolInUserMigration = true
+	): Promise<void> {
 		if (this.school.inUserMigration) {
 			return;
 		}
 		this.setLoading(true);
+		this.setError(null);
 		try {
-			await this.importUserApi.importUserControllerStartSchoolInUserMigration();
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(
+				setSchoolInUserMigration
+			);
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,

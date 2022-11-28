@@ -148,6 +148,25 @@ export interface ApiValidationError {
 /**
  * 
  * @export
+ * @interface BasicToolConfigParams
+ */
+export interface BasicToolConfigParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicToolConfigParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicToolConfigParams
+     */
+    baseUrl: string;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -748,6 +767,116 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalToolParams
+ */
+export interface ExternalToolParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolParams
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolParams
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolParams
+     */
+    logoUrl?: string;
+    /**
+     * 
+     * @type {BasicToolConfigParams | Lti11ToolConfigParams | Oauth2ToolConfigParams}
+     * @memberof ExternalToolParams
+     */
+    config: BasicToolConfigParams | Lti11ToolConfigParams | Oauth2ToolConfigParams;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ExternalToolParams
+     */
+    parameters?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolParams
+     */
+    isHidden: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolParams
+     */
+    openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolResponse
+ */
+export interface ExternalToolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    logoUrl?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof ExternalToolResponse
+     */
+    config: object;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ExternalToolResponse
+     */
+    parameters: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolResponse
+     */
+    isHidden: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolResponse
+     */
+    openNewTab: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ExternalToolResponse
+     */
+    version: number;
+}
+/**
+ * 
+ * @export
  * @interface ForbiddenOperationError
  */
 export interface ForbiddenOperationError {
@@ -845,10 +974,10 @@ export interface ImportUserResponse {
     lastName: string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ImportUserResponse
      */
-    roleNames: ImportUserResponseRoleNamesEnum;
+    roleNames: Array<ImportUserResponseRoleNamesEnum>;
     /**
      * names of classes the user attends from external system
      * @type {Array<string>}
@@ -857,16 +986,16 @@ export interface ImportUserResponse {
     classNames: Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {object}
+     * @type {UserMatchResponse}
      * @memberof ImportUserResponse
      */
-    match?: object;
+    match?: UserMatchResponse;
     /**
      * manual flag to apply it as filter
-     * @type {object}
+     * @type {boolean}
      * @memberof ImportUserResponse
      */
-    flagged: object;
+    flagged: boolean;
 }
 
 /**
@@ -1007,6 +1136,110 @@ export interface LoginResponse {
      * @memberof LoginResponse
      */
     subject: object;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11LaunchResponse
+ */
+export interface Lti11LaunchResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_token?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11LaunchResponse
+     */
+    oauth_body_hash?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11ToolConfigParams
+ */
+export interface Lti11ToolConfigParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    secret: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    resource_link_id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigParams
+     */
+    privacy_permission: string;
 }
 /**
  * 
@@ -1201,6 +1434,67 @@ export enum NewsTargetModel {
     Teams = 'teams'
 }
 
+/**
+ * 
+ * @export
+ * @interface Oauth2ToolConfigParams
+ */
+export interface Oauth2ToolConfigParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    clientId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    clientSecret: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Oauth2ToolConfigParams
+     */
+    skipConsent: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    frontchannelLogoutUri?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    scope?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Oauth2ToolConfigParams
+     */
+    redirectUris: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigParams
+     */
+    tokenEndpointAuthMethod: string;
+}
 /**
  * 
  * @export
@@ -1754,6 +2048,39 @@ export interface ResolvedUserResponse {
 /**
  * 
  * @export
+ * @interface RichText
+ */
+export interface RichText {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichText
+     */
+    content: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichText
+     */
+    type: RichTextTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum RichTextTypeEnum {
+    Plaintext = 'plaintext',
+    Richtext = 'richtext',
+    Inline = 'inline',
+    RichtextCk4 = 'richtext_ck4',
+    RichtextCk5 = 'richtext_ck5',
+    RichtextCk5Inline = 'richtext_ck5_inline'
+}
+
+/**
+ * 
+ * @export
  * @interface SchoolInfoResponse
  */
 export interface SchoolInfoResponse {
@@ -1978,7 +2305,37 @@ export interface TaskCreateParams {
      * @type {string}
      * @memberof TaskCreateParams
      */
-    courseId: string;
+    courseId?: string;
+    /**
+     * The id of an lesson object.
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    lessonId?: string;
+    /**
+     * The title of the task
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    name: string;
+    /**
+     * The description of the task
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    description?: string;
+    /**
+     * Date since the task is published
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    availableDate?: string;
+    /**
+     * Date until the task submissions can be sent
+     * @type {string}
+     * @memberof TaskCreateParams
+     */
+    dueDate?: string;
 }
 /**
  * 
@@ -2060,11 +2417,11 @@ export interface TaskResponse {
      */
     courseId: string;
     /**
-     * 
-     * @type {string}
+     * Task description object, with props content: string and type: input format types
+     * @type {RichText}
      * @memberof TaskResponse
      */
-    description?: string;
+    description?: RichText;
     /**
      * 
      * @type {boolean}
@@ -2150,7 +2507,7 @@ export interface TaskUpdateParams {
      * @type {string}
      * @memberof TaskUpdateParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * The id of an lesson object.
      * @type {string}
@@ -2163,6 +2520,24 @@ export interface TaskUpdateParams {
      * @memberof TaskUpdateParams
      */
     name: string;
+    /**
+     * The description of the task
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    description?: string;
+    /**
+     * Date since the task is published
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    availableDate?: string;
+    /**
+     * Date until the task submissions can be sent
+     * @type {string}
+     * @memberof TaskUpdateParams
+     */
+    dueDate?: string;
 }
 /**
  * 
@@ -2340,10 +2715,10 @@ export interface UserMatchResponse {
     lastName: string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {string}
+     * @type {Array<string>}
      * @memberof UserMatchResponse
      */
-    roleNames: UserMatchResponseRoleNamesEnum;
+    roleNames: Array<UserMatchResponseRoleNamesEnum>;
     /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
      * @type {string}
@@ -7520,6 +7895,217 @@ export class TaskApi extends BaseAPI implements TaskApiInterface {
 
 
 /**
+ * ToolApi - axios parameter creator
+ * @export
+ */
+export const ToolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {ExternalToolParams} externalToolParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerCreateExternalTool: async (externalToolParams: ExternalToolParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolParams' is not null or undefined
+            assertParamExists('toolControllerCreateExternalTool', 'externalToolParams', externalToolParams)
+            const localVarPath = `/tools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(externalToolParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetLti11LaunchParameters: async (toolId: string, courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'toolId' is not null or undefined
+            assertParamExists('toolControllerGetLti11LaunchParameters', 'toolId', toolId)
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('toolControllerGetLti11LaunchParameters', 'courseId', courseId)
+            const localVarPath = `/tools/lti11/{toolId}/launch`
+                .replace(`{${"toolId"}}`, encodeURIComponent(String(toolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (courseId !== undefined) {
+                localVarQueryParameter['courseId'] = courseId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ToolApi - functional programming interface
+ * @export
+ */
+export const ToolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ToolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {ExternalToolParams} externalToolParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerCreateExternalTool(externalToolParams: ExternalToolParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerCreateExternalTool(externalToolParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Lti11LaunchResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetLti11LaunchParameters(toolId, courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ToolApi - factory interface
+ * @export
+ */
+export const ToolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ToolApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {ExternalToolParams} externalToolParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerCreateExternalTool(externalToolParams: ExternalToolParams, options?: any): AxiosPromise<ExternalToolResponse> {
+            return localVarFp.toolControllerCreateExternalTool(externalToolParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {string} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): AxiosPromise<Lti11LaunchResponse> {
+            return localVarFp.toolControllerGetLti11LaunchParameters(toolId, courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ToolApi - interface
+ * @export
+ * @interface ToolApi
+ */
+export interface ToolApiInterface {
+    /**
+     * 
+     * @param {ExternalToolParams} externalToolParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerCreateExternalTool(externalToolParams: ExternalToolParams, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @param {string} toolId 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): AxiosPromise<Lti11LaunchResponse>;
+
+}
+
+/**
+ * ToolApi - object-oriented interface
+ * @export
+ * @class ToolApi
+ * @extends {BaseAPI}
+ */
+export class ToolApi extends BaseAPI implements ToolApiInterface {
+    /**
+     * 
+     * @param {ExternalToolParams} externalToolParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerCreateExternalTool(externalToolParams: ExternalToolParams, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerCreateExternalTool(externalToolParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} toolId 
+     * @param {string} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetLti11LaunchParameters(toolId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * UserApi - axios parameter creator
  * @export
  */
@@ -8001,10 +8587,13 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration: async (options: any = {}): Promise<RequestArgs> => {
+        importUserControllerStartSchoolInUserMigration: async (useCentralLdap: boolean, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'useCentralLdap' is not null or undefined
+            assertParamExists('importUserControllerStartSchoolInUserMigration', 'useCentralLdap', useCentralLdap)
             const localVarPath = `/user/import/startUserMigration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8020,6 +8609,10 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (useCentralLdap !== undefined) {
+                localVarQueryParameter['useCentralLdap'] = useCentralLdap;
+            }
 
 
     
@@ -8158,11 +8751,12 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerStartSchoolInUserMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(options);
+        async importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(useCentralLdap, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -8253,11 +8847,12 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {boolean} useCentralLdap 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void> {
-            return localVarFp.importUserControllerStartSchoolInUserMigration(options).then((request) => request(axios, basePath));
+        importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8345,11 +8940,12 @@ export interface UserImportApiInterface {
 
     /**
      * 
+     * @param {boolean} useCentralLdap 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerStartSchoolInUserMigration(options?: any): AxiosPromise<void>;
+    importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8449,12 +9045,13 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
+     * @param {boolean} useCentralLdap 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerStartSchoolInUserMigration(options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -14,9 +14,9 @@
 		</template>
 		<template #footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="extendSession">{{
-					$t("components.organisms.AutoLogoutWarning.confirm")
-				}}</base-button>
+				<v-btn color="primary" depressed @click="extendSession">
+					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
+				</v-btn>
 			</center-slot>
 		</template>
 	</base-modal>

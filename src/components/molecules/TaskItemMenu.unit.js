@@ -1,10 +1,10 @@
-import { envConfigModule, finishedTaskModule } from "@/store";
+import { envConfigModule, finishedTasksModule } from "@/store";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -21,7 +21,7 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-let taskModuleMock;
+let tasksModuleMock;
 let copyModuleMock;
 let loadingStateModuleMock;
 let notifierModuleMock;
@@ -35,7 +35,7 @@ const getWrapper = (props, options) => {
 		propsData: props,
 		attachTo: document.body,
 		provide: {
-			taskModule: taskModuleMock,
+			tasksModule: tasksModuleMock,
 			copyModule: copyModuleMock,
 			loadingStateModule: loadingStateModuleMock,
 			notifierModule: notifierModuleMock,
@@ -49,10 +49,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			finishedTasksModule: FinishedTaskModule,
+			finishedTasksModule: FinishedTasksModule,
 			envConfigModule: EnvConfigModule,
 		});
-		taskModuleMock = createModuleMocks(TaskModule);
+		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
@@ -118,7 +118,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 	});
 
 	describe("when finishing a task", () => {
-		it("should call finishTask of TaskModule", async () => {
+		it("should call finishTask of TasksModule", async () => {
 			const task = tasksTeacher[0];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -132,13 +132,13 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const finishBtn = wrapper.find("#task-action-finish");
 			await finishBtn.trigger("click");
 
-			expect(taskModuleMock.finishTask).toHaveBeenCalled();
+			expect(tasksModuleMock.finishTask).toHaveBeenCalled();
 		});
 	});
 
 	describe("when restoring a task", () => {
-		it("should call restoreTask of FinishedTaskModule", async () => {
-			const restoreTaskMock = jest.spyOn(finishedTaskModule, "restoreTask");
+		it("should call restoreTask of FinishedTasksModule", async () => {
+			const restoreTaskMock = jest.spyOn(finishedTasksModule, "restoreTask");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -157,7 +157,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 	});
 
 	describe("when deleting a task", () => {
-		it("should call deleteTask of TaskModule", async () => {
+		it("should call deleteTask of TasksModule", async () => {
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -174,7 +174,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const confirmBtn = wrapper.find(".dialog-confirmed");
 			await confirmBtn.trigger("click");
 
-			expect(taskModuleMock.deleteTask).toHaveBeenCalled();
+			expect(tasksModuleMock.deleteTask).toHaveBeenCalled();
 		});
 	});
 

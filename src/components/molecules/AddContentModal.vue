@@ -12,18 +12,24 @@
 				<div class="content-modal__body">
 					<v-select
 						v-model="selectedCourse"
-						:label="$t('pages.content.label.chooseACourse')"
+						return-object
+						item-value="_id"
+						item-text="name"
 						:items="coursesOptions"
+						:label="$t('pages.content.label.chooseACourse')"
 						data-testid="topicSelector"
 						@change="onCourseSelect"
 					/>
 					<transition name="fade">
 						<v-select
-							v-if="selectedCourse"
-							v-model="selectedLessons"
-							:label="$t('pages.content.label.chooseALessonTopic')"
+							v-show="!!(selectedCourse || {})._id"
+							v-model="selectedLesson"
+							return-object
+							item-value="_id"
+							item-text="name"
 							:items="lessonsOptions"
-							multiple
+							:label="$t('pages.content.label.chooseALessonTopic')"
+							:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
 							data-testid="courseSelector"
 						/>
 					</transition>
@@ -32,16 +38,18 @@
 			<template #footer>
 				<modal-footer>
 					<template #right>
-						<base-button design="text" @click="closeModal">{{
-							$t("common.actions.cancel")
-						}}</base-button>
-						<base-button
-							design="primary"
+						<v-btn text color="secondary" @click="closeModal">
+							{{ $t("common.actions.cancel") }}
+						</v-btn>
+						<v-btn
+							color="primary"
+							depressed
 							:disabled="!isSendEnabled"
 							data-testid="modal_submit_btn"
 							@click="addToLesson"
-							>{{ $t("common.actions.add") }}</base-button
 						>
+							{{ $t("common.actions.add") }}
+						</v-btn>
 					</template>
 				</modal-footer>
 			</template>
@@ -171,5 +179,9 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+::v-deep .v-input__icon .v-icon {
+	font-size: var(--text-base-size);
 }
 </style>

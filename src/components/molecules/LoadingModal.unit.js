@@ -3,6 +3,10 @@ import LoadingModal from "./LoadingModal";
 describe("@/components/molecules/LoadingModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(LoadingModal, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: {
 				title: "title",
 				description: "description",

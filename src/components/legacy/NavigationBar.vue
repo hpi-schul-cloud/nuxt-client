@@ -7,43 +7,37 @@
 				</base-link>
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
-				<base-link
+				<v-btn
 					v-for="(route, idx) in linksToDisplay"
 					:key="route.href"
+					text
+					class="font-weight-regular mx-0"
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
 					:href="route.href"
 					:target="route.target"
-					:no-styles="true"
 					@click="setActive(idx)"
 				>
 					{{ route.title }}
-				</base-link>
+				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<base-link href="/loginRedirect">
-						<base-button design="secondary outline">
-							<base-icon source="fa" icon="sign-in" class="icon" />
-							{{ $t("common.labels.login") }}
-						</base-button>
-					</base-link>
-					<base-link href="/community">
-						<base-button design="secondary">
-							{{ $t("common.labels.register") }}
-						</base-button>
-					</base-link>
+					<v-btn color="primary" outlined to="/loginRedirect" class="mx-2">
+						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
+						{{ $t("common.labels.login") }}
+					</v-btn>
+					<v-btn color="primary" depressed to="/community">
+						{{ $t("common.labels.register") }}
+					</v-btn>
 				</div>
-				<slot name="actions"></slot>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-import BaseButton from "../base/BaseButton";
-import BaseLink from "../base/BaseLink";
 import { envConfigModule } from "@/store";
+import { mdiLogin } from "@mdi/js";
 
 export default {
-	components: { BaseLink, BaseButton },
 	props: {
 		logoLink: {
 			type: String,
@@ -66,6 +60,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiLogin,
 			activeLink: window.location.pathname,
 		};
 	},

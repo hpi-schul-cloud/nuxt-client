@@ -15,30 +15,34 @@
 			<span class="label">
 				{{ chip.label }}
 			</span>
-			<base-button
+			<v-btn
 				v-if="chip.deletable"
-				design="none"
-				type="button"
+				fab
+				depressed
+				color="secondary"
 				class="btn-delete"
 				@click.stop="$emit('remove', chip.id)"
 			>
-				<base-icon
-					icon="close"
-					source="material"
-					style="font-size: var(--text-sm)"
-				/>
-			</base-button>
+				<v-icon small>{{ mdiClose }}</v-icon>
+			</v-btn>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mdiClose } from "@mdi/js";
+
 export default {
 	props: {
 		chips: {
 			type: Array,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			mdiClose,
+		};
 	},
 };
 </script>

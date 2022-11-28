@@ -1,20 +1,21 @@
 import CopyModule from "@/store/copy";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import NotifierModule from "@/store/notifier";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
 
-const { tasks, overDueTasks, openTasks } = mocks;
+const { tasks } = mocks;
 
 describe("@/components/organisms/TasksList", () => {
-	let taskModuleMock: TaskModule;
-	let finishedTaskModuleMock: FinishedTaskModule;
+	let tasksModuleMock: TasksModule;
+	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
@@ -26,8 +27,8 @@ describe("@/components/organisms/TasksList", () => {
 			}),
 			provide: {
 				copyModule: copyModuleMock,
-				taskModule: taskModuleMock,
-				finishedTaskModule: finishedTaskModuleMock,
+				tasksModule: tasksModuleMock,
+				finishedTasksModule: finishedTasksModuleMock,
 				notifierModule: notifierModuleMock,
 				i18n: { t: (key: string) => key },
 			},
@@ -37,7 +38,7 @@ describe("@/components/organisms/TasksList", () => {
 		return wrapper;
 	};
 
-	const taskModuleGetters: Partial<TaskModule> = {
+	const tasksModuleGetters: Partial<TasksModule> = {
 		getTasks: tasks as unknown as Task[],
 		getStatus: "completed",
 		hasTasks: true,
@@ -45,8 +46,8 @@ describe("@/components/organisms/TasksList", () => {
 
 	beforeEach(() => {
 		copyModuleMock = createModuleMocks(CopyModule);
-		taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
-		finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
+		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
@@ -133,7 +134,7 @@ describe("@/components/organisms/TasksList", () => {
 	});
 
 	it("Should render an empty list, if there are no tasks", () => {
-		taskModuleMock = createModuleMocks(TaskModule, {
+		tasksModuleMock = createModuleMocks(TasksModule, {
 			getTasks: [],
 			getStatus: "completed",
 			hasTasks: false,
@@ -151,8 +152,8 @@ describe("@/components/organisms/TasksList", () => {
 
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				hasTasks: true,
 				getStatus: "pending",
 			});
@@ -174,12 +175,12 @@ describe("@/components/organisms/TasksList", () => {
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getStatus: "pending",
 			});
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getIsInitialized: true,
 			});
 
@@ -201,12 +202,12 @@ describe("@/components/organisms/TasksList", () => {
 		});
 
 		it("Should compute correct status", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getStatus: "completed",
 			});
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getStatus: "pending",
 			});
 

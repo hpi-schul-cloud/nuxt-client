@@ -19,6 +19,7 @@ const usersModule = mergeDeep(base, {
 			},
 			qrLinks: [],
 			consentList: [],
+			registrationLinks: [],
 		}),
 	mutations: {
 		startProgress(state, { action }) {
@@ -38,6 +39,9 @@ const usersModule = mergeDeep(base, {
 		setConsentList(state, { data }) {
 			state.consentList = data;
 		},
+		setRegistrationLinks(state, payload) {
+			state.registrationLinks = payload;
+		},
 	},
 	getters: {
 		getPagination(state) {
@@ -54,6 +58,9 @@ const usersModule = mergeDeep(base, {
 		},
 		getConsentList(state) {
 			return state.consentList;
+		},
+		getRegistrationLinks(state) {
+			return state.registrationLinks;
 		},
 	},
 	actions: {
@@ -146,9 +153,10 @@ const usersModule = mergeDeep(base, {
 				commit("setBusinessError", error.response.data);
 			}
 		},
-		async sendRegistrationLink(ctx, payload = {}) {
+		async sendRegistrationLink({ commit }, payload = {}) {
 			const registrationLinkEndpoint = "/v1/users/mail/registrationLink";
-			await this.$axios.post(registrationLinkEndpoint, payload);
+			const links = await this.$axios.$post(registrationLinkEndpoint, payload);
+			commit("setRegistrationLinks", links);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const registrationQrEndpoint = "/v1/users/qrRegistrationLink";

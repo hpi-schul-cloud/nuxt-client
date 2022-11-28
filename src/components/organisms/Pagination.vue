@@ -1,12 +1,13 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<v-select
-			:items="perPageOptions"
+			return-object
 			:value="perPageSelected"
-			style="max-width: 150px"
+			:items="perPageOptions"
+			:aria-label="$t('components.organisms.Pagination.recordsPerPage')"
+			class="select-input-width"
 			@change="setPagination"
-		>
-		</v-select>
+		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
 				{{
@@ -24,26 +25,28 @@
 			</p>
 			<ul v-if="total > 0" class="pagination-list">
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
-					<base-button
-						design="none"
+					<v-btn
+						min-width="35"
+						color="secondary"
+						depressed
 						class="pagination-link"
-						aria-label="Goto previous page"
+						aria-label="Go to previous page"
 						@click="previousPage"
 					>
-						<base-icon source="material" icon="keyboard_arrow_left">
-						</base-icon>
-					</base-button>
+						<v-icon>{{ mdiChevronLeft }} </v-icon>
+					</v-btn>
 				</li>
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-					<base-button
-						design="none"
+					<v-btn
+						min-width="35"
+						color="secondary"
+						depressed
 						class="pagination-link"
-						aria-label="Goto next page"
+						aria-label="Go to next page"
 						@click="nextPage"
 					>
-						<base-icon source="material" icon="keyboard_arrow_right">
-						</base-icon>
-					</base-button>
+						<v-icon>{{ mdiChevronRight }} </v-icon>
+					</v-btn>
 				</li>
 			</ul>
 		</div>
@@ -54,6 +57,7 @@
 </template>
 
 <script>
+import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 export default {
 	model: {
 		event: "update",
@@ -74,6 +78,8 @@ export default {
 	},
 	data() {
 		return {
+			mdiChevronLeft,
+			mdiChevronRight,
 			perPageOptions: [
 				{
 					text: this.$t("components.organisms.Pagination.perPage.5"),
@@ -155,5 +161,13 @@ export default {
 .total {
 	margin-right: var(--space-sm);
 	margin-bottom: 0;
+}
+
+::v-deep .v-input__icon .v-icon {
+	font-size: var(--text-base-size);
+}
+
+.select-input-width {
+	max-width: 150px;
 }
 </style>

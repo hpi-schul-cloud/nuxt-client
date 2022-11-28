@@ -7,7 +7,7 @@ import {
 	envConfigModule,
 	filePathsModule,
 	filesPOCModule,
-	finishedTaskModule,
+	finishedTasksModule,
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
@@ -17,7 +17,7 @@ import {
 	schoolsModule,
 	shareCourseModule,
 	statusAlertsModule,
-	taskModule,
+	tasksModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -95,7 +95,7 @@ import { initializeAxios } from "./utils/api";
 			envConfigModule,
 			filePathsModule,
 			filesPOCModule,
-			finishedTaskModule,
+			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
@@ -105,7 +105,7 @@ import { initializeAxios } from "./utils/api";
 			schoolsModule,
 			shareCourseModule,
 			statusAlertsModule,
-			taskModule,
+			tasksModule,
 			i18n,
 		},
 		render: (h) => h(App),

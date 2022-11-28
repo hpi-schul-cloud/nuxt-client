@@ -38,9 +38,12 @@
 		"vue:lint": "vue-cli-service lint"
 	},
 	"dependencies": {
+		"@ckeditor/ckeditor5-vue2": "^3.0.1",
+		"@hpi-schul-cloud/ckeditor": "^0.1.5",
 		"@mdi/js": "^7.0.96",
 		"axios": "^1.1.3",
 		"dayjs": "^1.11.6",
+		"echarts": "^4.9.0",
 		"font-awesome": "^4.7.0",
 		"kjua": "^0.9.0",
 		"object-hash": "^3.0.0",

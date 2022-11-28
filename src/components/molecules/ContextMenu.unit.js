@@ -12,7 +12,7 @@ const hasWrapperFocus = (wrapper) => {
 
 const getWrapper = ({ options, additionalProps } = {}) => {
 	return mount(ContextMenu, {
-		...createComponentMocks({ i18n: true }),
+		...createComponentMocks({ i18n: true, vuetify: true }),
 		propsData: {
 			show: true,
 			actions,
@@ -30,18 +30,11 @@ const getAttachToOptions = () => {
 
 describe("@/components/molecules/ContextMenu", () => {
 	it("Renders all action buttons", () => {
-		const wrapper = mount(ContextMenu, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				show: true,
-				actions,
-			},
-		});
+		const wrapper = getWrapper();
 
 		expect(
 			wrapper.findAll(".context-menu__button:not(.context-menu__button-close)")
 		).toHaveLength(actions.length);
-		expect(wrapper.findAll(".context-menu__button-close")).toHaveLength(1);
 	});
 
 	it("Emits defined event when clicked", () => {
@@ -83,6 +76,52 @@ describe("@/components/molecules/ContextMenu", () => {
 		wrapper.destroy();
 	});
 
+	describe("click outside", () => {
+		it("triggers event on click outside d", async () => {
+			// Mount Menu wrapper to have something to click outside
+			const emptyNode = "<!---->";
+			const wrapper = render({
+				data: () => ({ show: true, actions }),
+				template: `
+					<div id="container">
+						<div data-testid="outside" class="outside">Outside</div>
+						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
+					</div>
+				`,
+				components: { ContextMenu },
+				...createComponentMocks({ i18n: true }),
+			});
+			// wait because ctxmenu is not reacting to clicks outside immediatly
+			await wait(0);
+			await fireEvent.click(wrapper.getByTestId("outside"));
+			expect(wrapper.getByTestId("testid").innerHTML).toStrictEqual(emptyNode);
+		});
+
+		it("does not trigger event on click outside if noClose=true", async () => {
+			// Mount Menu wrapper to have something to click outside
+			const wrapper = mount(
+				{
+					data: () => ({ show: true, actions }),
+					template: `
+					<div>
+					<div class="outside">Outside</div>
+					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show" :noClose="true"></ContextMenu>
+					</div>
+				`,
+					components: { ContextMenu },
+					...createComponentMocks({ i18n: true }),
+				},
+				getAttachToOptions()
+			);
+			const Menu = wrapper.find(".ctxmenu");
+			// wait because ctxmenu is not reacting to clicks outside immediatly
+			await wait(0);
+			wrapper.find(".outside").trigger("click");
+			expect(Menu.emitted("update:show")).toBeUndefined();
+			wrapper.destroy();
+		});
+	});
+
 	describe("anchor positions", () => {
 		it.each([
 			["bottom-left", "", "0px", "0px", ""],
@@ -119,16 +158,6 @@ describe("@/components/molecules/ContextMenu", () => {
 	});
 
 	describe("a11y", () => {
-		it("has a focusable close button", () => {
-			const wrapper = getWrapper();
-			const closeButton = wrapper.find(".context-menu__button-close");
-			closeButton.element.focus();
-			closeButton.trigger("click");
-			expect(wrapper.emitted("update:show")).toHaveLength(1);
-			expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
-			wrapper.destroy();
-		});
-
 		it("first element get's focused on mount", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
 			await wrapper.vm.$nextTick();
@@ -155,7 +184,7 @@ describe("@/components/molecules/ContextMenu", () => {
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 
-			expect(buttons.wrappers).toHaveLength(4);
+			expect(buttons.wrappers).toHaveLength(3);
 
 			buttons.at(buttons.length - 1).element.focus();
 			await wrapper.vm.$nextTick();

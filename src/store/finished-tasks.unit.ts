@@ -1,5 +1,5 @@
+import FinishedTasksModule from "./finished-tasks";
 import * as serverApi from "../serverApi/v3/api";
-import FinishedTaskModule from "./finished-tasks";
 import { taskFactory } from "./task.filter.unit";
 
 /**
@@ -17,14 +17,14 @@ describe("finished task store", () => {
 			const spy = jest
 				.spyOn(serverApi, "TaskApiFactory")
 				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
-			const finishedTaskModule = new FinishedTaskModule({});
+			const finishedTasksModule = new FinishedTasksModule({});
 
-			return { taskApiMock, finishedTaskModule };
+			return { taskApiMock, finishedTasksModule };
 		};
 
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
-				const { taskApiMock, finishedTaskModule } = setup({
+				const { taskApiMock, finishedTasksModule } = setup({
 					taskControllerFindAllFinished: jest.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
@@ -35,19 +35,19 @@ describe("finished task store", () => {
 					})),
 				});
 
-				finishedTaskModule.fetchFinishedTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([
+				finishedTasksModule.fetchFinishedTasks().then(() => {
+					expect(finishedTasksModule.getTasks).toStrictEqual([
 						{
 							mockTask: "mock task value",
 						},
 					]);
-					expect(finishedTaskModule.getStatus).toBe("completed");
+					expect(finishedTasksModule.getStatus).toBe("completed");
 					expect(
 						taskApiMock.taskControllerFindAllFinished
 					).toHaveBeenCalledTimes(1);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 			});
 
 			it("should fetch the next page", (done) => {
@@ -76,29 +76,29 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 50;
-				finishedTaskModule.pagination.total = 110;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 50;
+				finishedTasksModule.pagination.total = 110;
 
-				finishedTaskModule.fetchFinishedTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([
+				finishedTasksModule.fetchFinishedTasks().then(() => {
+					expect(finishedTasksModule.getTasks).toStrictEqual([
 						{ mockTask: "mock task #1" },
 					]);
-					expect(finishedTaskModule.getStatus).toBe("completed");
+					expect(finishedTasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						1
 					);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 				spy.mockRestore();
 			});
 
 			it("should not call api when total is reached", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 100;
-				finishedTaskModule.pagination.total = 100;
-				finishedTaskModule.isInitialized = true;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 100;
+				finishedTasksModule.pagination.total = 100;
+				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(),
@@ -108,8 +108,8 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchFinishedTasks().then(() => {
-					expect(finishedTaskModule.getStatus).toBe("completed");
+				finishedTasksModule.fetchFinishedTasks().then(() => {
+					expect(finishedTasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						0
 					);
@@ -119,10 +119,10 @@ describe("finished task store", () => {
 			});
 
 			it("should not call api when skip value is higher than total", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 150;
-				finishedTaskModule.pagination.total = 120;
-				finishedTaskModule.isInitialized = true;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 150;
+				finishedTasksModule.pagination.total = 120;
+				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
 					taskControllerFindAllFinished: jest.fn(),
@@ -132,8 +132,8 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchFinishedTasks().then(() => {
-					expect(finishedTaskModule.getStatus).toBe("completed");
+				finishedTasksModule.fetchFinishedTasks().then(() => {
+					expect(finishedTasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						0
 					);
@@ -143,9 +143,9 @@ describe("finished task store", () => {
 			});
 
 			it("should handle an error", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 50;
-				finishedTaskModule.pagination.total = 100;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 50;
+				finishedTasksModule.pagination.total = 100;
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
@@ -157,16 +157,16 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.fetchFinishedTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([]);
-					expect(finishedTaskModule.getStatus).toBe("error");
-					expect(finishedTaskModule.businessError).toStrictEqual(error);
+				finishedTasksModule.fetchFinishedTasks().then(() => {
+					expect(finishedTasksModule.getTasks).toStrictEqual([]);
+					expect(finishedTasksModule.getStatus).toBe("error");
+					expect(finishedTasksModule.businessError).toStrictEqual(error);
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						1
 					);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 
 				spy.mockRestore();
 			});
@@ -207,33 +207,33 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination = {
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination = {
 					total: 26,
 					skip: 10,
 					limit: 10,
 				};
 
-				finishedTaskModule.refetchTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([
+				finishedTasksModule.refetchTasks().then(() => {
+					expect(finishedTasksModule.getTasks).toStrictEqual([
 						{ mockTask: "mock task #1" },
 						{ mockTask: "mock task #2" },
 					]);
-					expect(finishedTaskModule.getStatus).toBe("completed");
+					expect(finishedTasksModule.getStatus).toBe("completed");
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						2
 					);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 
 				spy.mockRestore();
 			});
 
 			it("should handle an error", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.pagination.skip = 50;
-				finishedTaskModule.pagination.total = 100;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 50;
+				finishedTasksModule.pagination.total = 100;
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
@@ -245,16 +245,16 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.refetchTasks().then(() => {
-					expect(finishedTaskModule.getTasks).toStrictEqual([]);
-					expect(finishedTaskModule.getStatus).toBe("error");
-					expect(finishedTaskModule.businessError).toStrictEqual(error);
+				finishedTasksModule.refetchTasks().then(() => {
+					expect(finishedTasksModule.getTasks).toStrictEqual([]);
+					expect(finishedTasksModule.getStatus).toBe("error");
+					expect(finishedTasksModule.businessError).toStrictEqual(error);
 					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
 						1
 					);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 
 				spy.mockRestore();
 			});
@@ -265,7 +265,7 @@ describe("finished task store", () => {
 			it.todo("should call restore task api and refetch all tasks");
 
 			it("should handle an error", (done) => {
-				const finishedTaskModule = new FinishedTaskModule({});
+				const finishedTasksModule = new FinishedTasksModule({});
 				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
@@ -276,12 +276,12 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTaskModule.restoreTask(task.id).then(() => {
-					expect(finishedTaskModule.getStatus).toBe("error");
-					expect(finishedTaskModule.businessError).toStrictEqual(error);
+				finishedTasksModule.restoreTask(task.id).then(() => {
+					expect(finishedTasksModule.getStatus).toBe("error");
+					expect(finishedTasksModule.businessError).toStrictEqual(error);
 					done();
 				});
-				expect(finishedTaskModule.getStatus).toBe("pending");
+				expect(finishedTasksModule.getStatus).toBe("pending");
 				expect(mockApi.taskControllerRestore).toHaveBeenCalledTimes(1);
 			});
 		});
@@ -290,7 +290,7 @@ describe("finished task store", () => {
 	describe("mutations", () => {
 		describe("setTasks", () => {
 			it("should set the tasks in state", () => {
-				const tasksModule = new FinishedTaskModule({});
+				const tasksModule = new FinishedTasksModule({});
 				const tasks = taskFactory.buildList(3);
 				tasksModule.setTasks(tasks);
 
@@ -300,37 +300,37 @@ describe("finished task store", () => {
 
 		describe("setStatus", () => {
 			it("should set the status in state", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.setStatus("completed");
-				expect(finishedTaskModule.status).toBe("completed");
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.setStatus("completed");
+				expect(finishedTasksModule.status).toBe("completed");
 			});
 		});
 
 		describe("setBusinessError", () => {
 			it("should set the business error in state", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
+				const finishedTasksModule = new FinishedTasksModule({});
 				const error = {
 					statusCode: "404",
 					message: "not found",
 				};
-				finishedTaskModule.setBusinessError(error);
+				finishedTasksModule.setBusinessError(error);
 
-				expect(finishedTaskModule.businessError).toEqual(error);
+				expect(finishedTasksModule.businessError).toEqual(error);
 			});
 		});
 
 		describe("resetBusinessError", () => {
 			it("should reset the business error in state", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
+				const finishedTasksModule = new FinishedTasksModule({});
 				const error = {
 					statusCode: "404",
 					message: "not found",
 				};
-				finishedTaskModule.setBusinessError(error);
-				expect(finishedTaskModule.businessError).toEqual(error);
+				finishedTasksModule.setBusinessError(error);
+				expect(finishedTasksModule.businessError).toEqual(error);
 
-				finishedTaskModule.resetBusinessError();
-				expect(finishedTaskModule.businessError).toEqual({
+				finishedTasksModule.resetBusinessError();
+				expect(finishedTasksModule.businessError).toEqual({
 					statusCode: "",
 					message: "",
 				});
@@ -341,65 +341,65 @@ describe("finished task store", () => {
 	describe("getters", () => {
 		describe("getTasks", () => {
 			it("should return an empty list by default", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				const tasks = finishedTaskModule.getTasks;
+				const finishedTasksModule = new FinishedTasksModule({});
+				const tasks = finishedTasksModule.getTasks;
 
 				expect(tasks).toHaveLength(0);
 			});
 
 			it("should return the tasks", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.tasks = taskFactory.buildList(3);
-				const tasks = finishedTaskModule.getTasks;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.tasks = taskFactory.buildList(3);
+				const tasks = finishedTasksModule.getTasks;
 
 				expect(tasks).toHaveLength(3);
-				expect(tasks).toEqual(finishedTaskModule.tasks);
+				expect(tasks).toEqual(finishedTasksModule.tasks);
 			});
 		});
 
 		describe("getStatus", () => {
 			it("should return the status", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.status = "error";
-				const status = finishedTaskModule.getStatus;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.status = "error";
+				const status = finishedTasksModule.getStatus;
 
-				expect(status).toBe(finishedTaskModule.status);
+				expect(status).toBe(finishedTasksModule.status);
 			});
 		});
 
 		describe("getIsInitialized", () => {
 			it("should return isInitialized value", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.isInitialized = true;
-				const isInitialized = finishedTaskModule.getIsInitialized;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.isInitialized = true;
+				const isInitialized = finishedTasksModule.getIsInitialized;
 
-				expect(isInitialized).toBe(finishedTaskModule.isInitialized);
+				expect(isInitialized).toBe(finishedTasksModule.isInitialized);
 			});
 		});
 
 		describe("tasksIsEmpty", () => {
 			it("should return false if there are any tasks", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.tasks = taskFactory.buildList(3);
-				finishedTaskModule.status = "completed";
-				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.tasks = taskFactory.buildList(3);
+				finishedTasksModule.status = "completed";
+				const tasksIsEmpty = finishedTasksModule.tasksIsEmpty;
 
 				expect(tasksIsEmpty).toBe(false);
 			});
 
 			it("should return true when tasks are empty", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.status = "completed";
-				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.status = "completed";
+				const tasksIsEmpty = finishedTasksModule.tasksIsEmpty;
 
 				expect(tasksIsEmpty).toBe(true);
 			});
 
 			it("should return false when the store is not ready", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.tasks = taskFactory.buildList(3);
-				finishedTaskModule.status = "pending";
-				const tasksIsEmpty = finishedTaskModule.tasksIsEmpty;
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.tasks = taskFactory.buildList(3);
+				finishedTasksModule.status = "pending";
+				const tasksIsEmpty = finishedTasksModule.tasksIsEmpty;
 
 				expect(tasksIsEmpty).toBe(false);
 			});
@@ -407,14 +407,14 @@ describe("finished task store", () => {
 
 		describe("getBusinessError", () => {
 			it("should return business error", () => {
-				const finishedTaskModule = new FinishedTaskModule({});
-				finishedTaskModule.businessError = {
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.businessError = {
 					statusCode: "404",
 					message: "not found",
 				};
-				const businessError = finishedTaskModule.getBusinessError;
+				const businessError = finishedTasksModule.getBusinessError;
 
-				expect(businessError).toBe(finishedTaskModule.businessError);
+				expect(businessError).toBe(finishedTasksModule.businessError);
 			});
 		});
 	});

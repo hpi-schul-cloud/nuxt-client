@@ -2,7 +2,7 @@ import Vuetify from "vuetify";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemStudent from "./TaskItemStudent";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 
@@ -11,13 +11,13 @@ const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 
 describe("@/components/molecules/TaskItemStudent", () => {
 	let vuetify;
-	let taskModuleMock;
+	let tasksModuleMock;
 	let copyModuleMock;
 	let notifierModuleMock;
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
-		taskModuleMock = createModuleMocks(TaskModule);
+		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
@@ -29,7 +29,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 				vuetify: true,
 			}),
 			provide: {
-				taskModule: taskModuleMock,
+				tasksModule: tasksModuleMock,
 				copyModule: copyModuleMock,
 				notifierModule: notifierModuleMock,
 				i18n: { t: (key) => key },

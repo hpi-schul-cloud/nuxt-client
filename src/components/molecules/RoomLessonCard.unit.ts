@@ -37,6 +37,8 @@ const hiddenTestProps = {
 		createdAt: "2017-09-28T11:58:46.601Z",
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		hidden: true,
+		numberOfDraftTasks: 0,
+		numberOfPublishedTasks: 1,
 	},
 	ariaLabel:
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken",
@@ -110,6 +112,14 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			const regularLessonWrapper = getWrapper({ ...baseTestProps, role });
 			const lessonCard = regularLessonWrapper.find(".lesson-card");
 			expect(lessonCard.element.className).not.toContain("hidden-lesson");
+		});
+
+		it("should show information about the visibility of tasks for hidden lesson card", async () => {
+			const wrapper = getWrapper({ ...hiddenTestProps, role });
+			const chipElement = wrapper.find(".chip-value");
+			expect(chipElement.element.textContent).toContain(
+				wrapper.vm.$i18n.t("pages.room.lessonCard.label.notVisible")
+			);
 		});
 	});
 

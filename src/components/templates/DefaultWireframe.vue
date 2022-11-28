@@ -44,31 +44,6 @@ import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
 
-export type Breadcrumb = {
-	text: string;
-	href?: string;
-	to?: string;
-	disabled?: boolean;
-};
-
-type FabAction = {
-	icon: string;
-	label: string;
-	href?: string;
-	to?: string;
-	dataTestid?: string;
-	class?: string;
-	testId?: string;
-	ariaLabel?: string;
-};
-
-export type Fab = {
-	actions?: FabAction[];
-	icon: string;
-	title: string;
-	href?: string;
-};
-
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {

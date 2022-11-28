@@ -1,14 +1,15 @@
 /* eslint-disable max-lines */
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import CopyModule from "@/store/copy";
-import FinishedTaskModule from "@/store/finished-tasks";
+import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import TaskModule from "@/store/tasks";
+import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
@@ -21,7 +22,7 @@ const $route = {
 
 const $router = { replace: jest.fn() };
 
-const defaultTaskModuleGetters: Partial<TaskModule> = {
+const defaultTasksModuleGetters: Partial<TasksModule> = {
 	getStatus: "completed",
 	getOpenTasksForStudent: {
 		overdue: [],
@@ -40,9 +41,9 @@ const defaultTaskModuleGetters: Partial<TaskModule> = {
 };
 
 describe("@/components/templates/TasksDashboardMain", () => {
-	let taskModuleMock: TaskModule;
+	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
-	let finishedTaskModuleMock: FinishedTaskModule;
+	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 	let wrapper: Wrapper<Vue>;
@@ -55,9 +56,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				$route,
 			}),
 			provide: {
-				taskModule: taskModuleMock,
+				tasksModule: tasksModuleMock,
 				copyModule: copyModuleMock,
-				finishedTaskModule: finishedTaskModuleMock,
+				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
 				i18n: { t: (key: string) => key },
@@ -84,11 +85,14 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 	describe("when user role is student", () => {
 		beforeEach(() => {
-			taskModuleMock = createModuleMocks(TaskModule, defaultTaskModuleGetters);
+			tasksModuleMock = createModuleMocks(
+				TasksModule,
+				defaultTasksModuleGetters
+			);
 			copyModuleMock = createModuleMocks(CopyModule);
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
 			});
@@ -131,8 +135,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 		describe("with hasTasks === true", () => {
 			beforeEach(() => {
-				taskModuleMock = createModuleMocks(TaskModule, {
-					...defaultTaskModuleGetters,
+				tasksModuleMock = createModuleMocks(TasksModule, {
+					...defaultTasksModuleGetters,
 					hasTasks: true,
 					getCourseFilters: [],
 					getSelectedCourseFilters: [],
@@ -149,13 +153,13 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				const autocompleteEl = wrapper.find(".v-autocomplete");
 				autocompleteEl.vm.$emit("selected-item");
 
-				expect(taskModuleMock.setCourseFilters).toHaveBeenCalled();
+				expect(tasksModuleMock.setCourseFilters).toHaveBeenCalled();
 			});
 		});
 	});
 
 	describe("when user role is teacher", () => {
-		const taskModuleGetters: Partial<TaskModule> = {
+		const tasksModuleGetters: Partial<TasksModule> = {
 			getOpenTasksForTeacher: {
 				overdue: [],
 				noDueDate: [],
@@ -170,14 +174,14 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		};
 
 		beforeEach(() => {
-			taskModuleMock = createModuleMocks(TaskModule, taskModuleGetters);
+			tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 			notifierModuleMock = createModuleMocks(NotifierModule);
 
-			finishedTaskModuleMock = createModuleMocks(FinishedTaskModule, {
+			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
 			});
@@ -218,8 +222,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getActiveTab: "current",
 			});
 
@@ -234,8 +238,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getActiveTab: "drafts",
 			});
 
@@ -250,8 +254,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getActiveTab: "finished",
 			});
 
@@ -266,8 +270,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("Should update state when tab changes", async () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
-				...taskModuleGetters,
+			tasksModuleMock = createModuleMocks(TasksModule, {
+				...tasksModuleGetters,
 				getActiveTab: "finished",
 			});
 
@@ -279,19 +283,19 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			await wrapper.setData({ tab: "drafts" });
 
-			expect(taskModuleMock.setActiveTab).toHaveBeenCalled();
+			expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 		});
 
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", async () => {
 			const switchEl = wrapper.find(".v-input--switch");
 			switchEl.vm.$emit("input-changed");
-			expect(taskModuleMock.setSubstituteFilter).toHaveBeenCalled();
+			expect(tasksModuleMock.setSubstituteFilter).toHaveBeenCalled();
 		});
 
 		describe("with hasTasks === true", () => {
 			beforeEach(() => {
-				taskModuleMock = createModuleMocks(TaskModule, {
-					...taskModuleGetters,
+				tasksModuleMock = createModuleMocks(TasksModule, {
+					...tasksModuleGetters,
 					hasTasks: true,
 					getCourseFilters: [],
 					getSelectedCourseFilters: [],
@@ -311,7 +315,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should disable filter when active tab contains empty list and no course is selected", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
+			tasksModuleMock = createModuleMocks(TasksModule, {
 				getStatus: "completed",
 				getOpenTasksForStudent: {
 					overdue: [],
@@ -343,7 +347,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should enable filter when active tab is not empty and no course is selected", () => {
-			taskModuleMock = createModuleMocks(TaskModule, {
+			tasksModuleMock = createModuleMocks(TasksModule, {
 				getStatus: "completed",
 				getOpenTasksForStudent: {
 					overdue: [],
