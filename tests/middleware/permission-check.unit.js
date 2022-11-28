@@ -3,6 +3,8 @@ import { authModule, applicationErrorModule } from "@/store";
 import setupStores from "../test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import ApplicationErrorModule from "@/store/application-error";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const mockApp = {
 	i18n: {
@@ -99,7 +101,7 @@ describe("@middleware/permission-check", () => {
 		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
 
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
@@ -117,7 +119,7 @@ describe("@middleware/permission-check", () => {
 			}),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
@@ -132,7 +134,7 @@ describe("@middleware/permission-check", () => {
 			}),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
@@ -145,7 +147,7 @@ describe("@middleware/permission-check", () => {
 			route: getMockRoute(["MISSING_PERMISSION"]),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 });

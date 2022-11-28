@@ -3,6 +3,8 @@ import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import externallyManagedCheck from "@middleware/externally-managed-check";
 import setupStores from "../test-utils/setupStores";
+import { createApplicationError } from "@utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const mockApp = {
 	i18n: {
@@ -65,7 +67,7 @@ describe("@middleware/externally-managed-check", () => {
 		});
 
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
@@ -90,7 +92,7 @@ describe("@middleware/externally-managed-check", () => {
 			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
