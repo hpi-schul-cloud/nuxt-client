@@ -2,7 +2,7 @@
 	<default-wireframe
 		:full-width="false"
 		:breadcrumbs="breadcrumbs"
-		headline="Create Task"
+		headline="Task Form"
 	>
 		<v-form>
 			<title-card v-model="name" :label="$t('common.labels.title')" />
@@ -26,6 +26,7 @@ import {
 	inject,
 	ref,
 	onBeforeMount,
+	onMounted,
 } from "@vue/composition-api";
 import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
@@ -46,6 +47,7 @@ export default defineComponent({
 			}
 		});
 
+		const route = context.root.$route;
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
@@ -57,15 +59,34 @@ export default defineComponent({
 			},
 		];
 
+		const taskId = route.params.id;
+		onMounted(async () => {
+			await taskModule.findTask(taskId);
+			const taskData = taskModule.getTaskData;
+			name.value = taskData.name;
+			description.value = taskData.description.content;
+		});
+
 		const save = () => {
-			taskModule.createTask({
-				courseId: "0000dcfbfb5c7a3f00bf21ab",
+			const newTaskData = {
 				name: name.value,
 				description: description.value,
-			});
+			};
+
+			if (!taskId) {
+				taskModule.createTask(newTaskData);
+			} else {
+				taskModule.updateTask(newTaskData);
+			}
+
+			//router.go(-1);
 		};
 
-		return { breadcrumbs, name, description, save };
+		const cancel = () => {
+			router.go(-1);
+		};
+
+		return { breadcrumbs, name, description, save, cancel };
 	},
 	head() {
 		return {

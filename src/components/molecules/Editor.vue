@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject } from "@vue/composition-api";
+import { defineComponent, ref, inject, watch } from "@vue/composition-api";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 require("@hpi-schul-cloud/ckeditor/build/translations/en");
 require("@hpi-schul-cloud/ckeditor/build/translations/es");
@@ -53,6 +53,13 @@ export default defineComponent({
 
 			return i18n.locale;
 		})();
+
+		watch(
+			() => props.value,
+			(newValue) => {
+				content.value = newValue;
+			}
+		);
 
 		const config = {
 			toolbar: {
@@ -117,11 +124,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
 // ::v-deep .ck-button__label {
 // 	font-family: var(--font-primary) !important;
 // }
 
+/* stylelint-disable sh-waqar/declaration-use-variable */
 ::v-deep .ck-toolbar {
 	padding: 4px 6px 4px 6px !important;
 	background: transparent !important;

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref } from "@vue/composition-api";
+import { ref, watch } from "@vue/composition-api";
 export default {
 	name: "TitleCard",
 	props: {
@@ -23,6 +23,13 @@ export default {
 	},
 	setup(props) {
 		const name = ref(props.value);
+
+		watch(
+			() => props.value,
+			(newValue) => {
+				name.value = newValue;
+			}
+		);
 
 		return {
 			name,

@@ -144,12 +144,12 @@ export const routes = [
 	},
 	{
 		path: `/tasks/:id(${REGEX_ID})/edit`,
-		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
+		component: () => interopDefault(import("../pages/TaskForm.page.vue")),
 		name: "task-edit",
 	},
 	{
 		path: "/tasks/new",
-		component: () => interopDefault(import("../pages/TaskCreate.page.vue")),
+		component: () => interopDefault(import("../pages/TaskForm.page.vue")),
 		name: "task-new",
 	},
 	// deprecated?
