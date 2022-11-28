@@ -1,5 +1,5 @@
-import {ApplicationError} from "@store/types/application-error";
-import {HttpStatusCode} from "@store/types/http-status-code.enum";
+import { ApplicationError } from "@store/types/application-error";
+import { HttpStatusCode } from "@store/types/http-status-code.enum";
 
 declare type HandledApplicationErrors =
 	| HttpStatusCode.BadRequest

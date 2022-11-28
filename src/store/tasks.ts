@@ -1,9 +1,9 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {finishedTasksModule} from "@/store";
-import {TaskFilter} from "./task.filter";
-import {$axios} from "../utils/api";
-import {TaskApiFactory, TaskApiInterface} from "../serverApi/v3/api";
-import {BusinessError, Status} from "./types/commons";
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { finishedTasksModule } from "@/store";
+import { TaskFilter } from "./task.filter";
+import { $axios } from "../utils/api";
+import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
+import { BusinessError, Status } from "./types/commons";
 import {
 	CompletedTasksForStudent,
 	OpenTasksForStudent,

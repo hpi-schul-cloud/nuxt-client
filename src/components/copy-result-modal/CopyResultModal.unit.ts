@@ -1,7 +1,7 @@
-import {CopyApiResponseTypeEnum} from "@/serverApi/v3";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import {mount} from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 
 const defaultResultItems = () => {

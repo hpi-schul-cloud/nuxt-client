@@ -1,7 +1,7 @@
-import {defineComponent} from "@vue/composition-api";
-import {mount} from "@vue/test-utils";
-import {useApplicationError} from "@/composables/application-error.composable";
-import {HttpStatusCode} from "../store/types/http-status-code.enum";
+import { defineComponent } from "@vue/composition-api";
+import { mount } from "@vue/test-utils";
+import { useApplicationError } from "@/composables/application-error.composable";
+import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
 jest.mock("./loadingState");
 

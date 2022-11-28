@@ -1,10 +1,10 @@
 import AccountsModule from "@/store/accounts";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import ApplicationErrorModule from "@/store/application-error";
 import FilePaths from "@/store/filePaths";
 import CollaborativeFilesModule from "@store/collaborative-files";
 import FilesPOCModule from "@/store/files-poc";
@@ -77,8 +77,8 @@ function initializeStores(store: Store<any>): void {
 
 export {
 	initializeStores,
-	applicationErrorModule,
 	accountsModule,
+	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
