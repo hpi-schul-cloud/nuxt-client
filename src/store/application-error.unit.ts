@@ -1,4 +1,5 @@
 import ApplicationErrorModule from "./application-error";
+import {HttpStatusCode} from "@store/types/http-status-code.enum";
 
 const errorModule = new ApplicationErrorModule({});
 describe("ApplicationErrorModule store", () => {
@@ -8,7 +9,7 @@ describe("ApplicationErrorModule store", () => {
 			it("should set the state", () => {
 				const setErrorMock = jest.spyOn(errorModule, "setError");
 				const payload = {
-					statusCode: 401,
+					statusCode: HttpStatusCode.Unauthorized,
 					translationKey: "funny error key",
 				};
 				errorModule.setError(payload);
@@ -23,7 +24,7 @@ describe("ApplicationErrorModule store", () => {
 					"setTranslationKey"
 				);
 				const payload = {
-					statusCode: 401,
+					statusCode: HttpStatusCode.Unauthorized,
 					translationKey: "funny error key",
 				};
 				errorModule.setError(payload);
@@ -58,7 +59,7 @@ describe("ApplicationErrorModule store", () => {
 	describe("mutations", () => {
 		it("should set the states", () => {
 			const payload = {
-				statusCode: 401,
+				statusCode: HttpStatusCode.Unauthorized,
 				translationKey: "funny error key",
 			};
 			errorModule.setStatusCode(payload.statusCode);

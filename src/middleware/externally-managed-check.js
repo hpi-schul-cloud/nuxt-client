@@ -1,5 +1,6 @@
 import { authModule } from "@/store";
 import { createApplicationError } from "@utils/create-application-error.factory";
+import { HttpStatusCode } from "@store/types/http-status-code.enum";
 
 export default async ({ route }) => {
 	const user = authModule.getUser;
@@ -18,5 +19,5 @@ export default async ({ route }) => {
 	if (ACCESS_ALLOWED) {
 		return true;
 	}
-	throw createApplicationError(401);
+	throw createApplicationError(HttpStatusCode.Unauthorized);
 };

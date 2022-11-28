@@ -1,4 +1,5 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
+import {HttpStatusCode} from "@store/types/http-status-code.enum";
 
 @Module({
 	name: "application-error",
@@ -6,11 +7,14 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 	stateFactory: true,
 })
 export default class ApplicationErrorModule extends VuexModule {
-	private statusCode: number | null = null;
+	private statusCode: HttpStatusCode | null = null;
 	private translationKey: string = "";
 
 	@Action({ rawError: true })
-	setError(payload: { statusCode: number; translationKey: string }): void {
+	setError(payload: {
+		statusCode: HttpStatusCode;
+		translationKey: string;
+	}): void {
 		if (!payload) return;
 		this.setStatusCode(payload.statusCode);
 		this.setTranslationKey(payload.translationKey);
@@ -23,7 +27,7 @@ export default class ApplicationErrorModule extends VuexModule {
 	}
 
 	@Mutation
-	setStatusCode(statusCode: number | null): void {
+	setStatusCode(statusCode: HttpStatusCode | null): void {
 		this.statusCode = statusCode;
 	}
 	@Mutation
@@ -31,7 +35,7 @@ export default class ApplicationErrorModule extends VuexModule {
 		this.translationKey = translationKey || "";
 	}
 
-	get getStatusCode(): number | null {
+	get getStatusCode(): HttpStatusCode | null {
 		return this.statusCode;
 	}
 	get getTranslationKey(): string {
