@@ -19,6 +19,7 @@ import ImportModal from "@/components/share-course/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
+import { useApplicationError } from "@/composables/application-error.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -45,6 +46,10 @@ export default defineComponent({
 		const parentName = ref("");
 
 		// modals
+
+    const { createApplicationError } = useApplicationError();
+
+    throw createApplicationError(401, "my.custom.translation", "Edge case blah")
 
 		const isImportModalOpen = ref(false);
 

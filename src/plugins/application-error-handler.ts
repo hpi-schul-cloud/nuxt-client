@@ -2,7 +2,7 @@ import {ApplicationError} from "@store/types/application-error";
 import {applicationErrorModule} from "@/store";
 import Vue from "vue";
 
-export const handleApplicationError = (err: ApplicationError | Error) => {
+export const handleApplicationError = (err: Error) => {
 	// WIP add logging based on env-var
 	// err.message.length > 0 ? console.warn(err) : null;
 	/**

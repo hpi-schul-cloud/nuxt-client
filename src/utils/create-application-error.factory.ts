@@ -1,49 +1,56 @@
 import {ApplicationError} from "@store/types/application-error";
+import {HttpStatusCode} from "@store/types/http-status-code.enum";
 
-declare type HandledApplicationErrors = 400 | 401 | 403 | 404 | 408 | 500;
+declare type HandledApplicationErrors =
+	| HttpStatusCode.BadRequest
+	| HttpStatusCode.Unauthorized
+	| HttpStatusCode.Forbidden
+	| HttpStatusCode.NotFound
+	| HttpStatusCode.RequestTimeout
+	| HttpStatusCode.InternalServerError;
 
 export function createApplicationError(
 	statusCode: HandledApplicationErrors
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: number,
+	statusCode: HttpStatusCode,
 	translationKey: string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 400,
+	statusCode: HttpStatusCode.BadRequest,
 	translationKey: "error.400" | string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 401,
+	statusCode: HttpStatusCode.Unauthorized,
 	translationKey: "error.401" | string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 403,
+	statusCode: HttpStatusCode.Forbidden,
 	translationKey: "error.403" | string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 404,
+	statusCode: HttpStatusCode.NotFound,
 	translationKey: "error.404" | string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 408,
+	statusCode: HttpStatusCode.RequestTimeout,
 	translationKey: "error.408" | string,
 	message?: string | undefined
 ): ApplicationError;
 export function createApplicationError(
-	statusCode: 500,
+	statusCode: HttpStatusCode.InternalServerError,
 	translationKey: "error.generic" | string,
 	message?: string | undefined
 ): ApplicationError;
 /**
  *  Creates an ApplicationError which has to be thrown to trigger global ApplicationError-Handling.
  *
- *  @param statusCode: Describes the type of Error based on HTTP_StatusCodes
+ *  @param statusCode: Describes the type of Error based on HttpStatusCode
  *  @param translationKey: TranslationKey for the user-facing error message
  *  @param message: Technical Information - they are not shown to the user
  *
@@ -59,34 +66,28 @@ export function createApplicationError(
  *  ```
  */
 export function createApplicationError(
-	statusCode: number,
+	statusCode: HttpStatusCode,
 	translationKey?: string | undefined,
 	message?: string | undefined
 ): ApplicationError {
-	let localTranslationKey = translationKey;
-
-	if (statusCode === 400 && translationKey === undefined) {
-		localTranslationKey = "error.400";
-	}
-	if (statusCode === 401 && translationKey === undefined) {
-		localTranslationKey = "error.401";
-	}
-	if (statusCode === 403 && translationKey === undefined) {
-		localTranslationKey = "error.403";
-	}
-	if (statusCode === 404 && translationKey === undefined) {
-		localTranslationKey = "error.404";
-	}
-	if (statusCode === 408 && translationKey === undefined) {
-		localTranslationKey = "error.408";
-	}
-	if (statusCode === 500 && translationKey === undefined) {
-		localTranslationKey = "error.generic";
+	if (translationKey !== undefined) {
+		return new ApplicationError(statusCode, translationKey, message);
 	}
 
-	return new ApplicationError(
-		statusCode,
-		localTranslationKey || "error.generic",
-		message
-	);
+	switch (statusCode) {
+		case HttpStatusCode.BadRequest:
+			return new ApplicationError(statusCode, "error.400", message);
+		case HttpStatusCode.Unauthorized:
+			return new ApplicationError(statusCode, "error.401", message);
+		case HttpStatusCode.Forbidden:
+			return new ApplicationError(statusCode, "error.403", message);
+		case HttpStatusCode.NotFound:
+			return new ApplicationError(statusCode, "error.404", message);
+		case HttpStatusCode.RequestTimeout:
+			return new ApplicationError(statusCode, "error.408", message);
+		case HttpStatusCode.InternalServerError:
+			return new ApplicationError(statusCode, "error.generic", message);
+		default:
+			return new ApplicationError(statusCode, "error.generic", message);
+	}
 }

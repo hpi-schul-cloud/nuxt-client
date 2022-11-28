@@ -1,6 +1,7 @@
 import {defineComponent} from "@vue/composition-api";
 import {mount} from "@vue/test-utils";
 import {useApplicationError} from "@/composables/application-error.composable";
+import {HttpStatusCode} from "../store/types/http-status-code.enum";
 
 jest.mock("./loadingState");
 
@@ -45,7 +46,7 @@ describe("application-error composable", () => {
 
 	it("createApplicationError should create an ApplicationError", async () => {
 		const { createApplicationError } = setup();
-		const result = createApplicationError(500);
+		const result = createApplicationError(HttpStatusCode.InternalServerError);
 		expect(result).toBeInstanceOf(Error);
 		expect(result.name).toBe("ApplicationError");
 	});
