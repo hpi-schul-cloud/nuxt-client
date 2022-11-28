@@ -1,20 +1,18 @@
 <template>
 	<div>
 		<h2 class="text-h4 mb-10">Migration...</h2>
-		<v-alert light
-             prominent
-             text
-             type="info">
-      Hier kommt der Text hinein, der den Admin informiert, dass die Migration
+		<v-alert light prominent text type="info">
+			Hier kommt der Text hinein, der den Admin informiert, dass die Migration
 			nur stattfinden kann, wenn die offizielle Schulnummer da ist.
-    </v-alert>
-		<v-switch label="Migration von IServ zu SANIS aktivieren..."
-              :disabled="isMigrationAvailable && isMigrationFeatureEnabled"
-              :true-value="true"
-              :false-value="false"
-              :value="isMigrationEnabled"
-            @change=setMigration
-        ></v-switch>
+		</v-alert>
+		<v-switch
+			label="Migration von IServ zu SANIS aktivieren..."
+			:disabled="isMigrationAvailable && isMigrationFeatureEnabled"
+			:true-value="true"
+			:false-value="false"
+			:value="isMigrationEnabled"
+			@change="setMigration"
+		></v-switch>
 	</div>
 </template>
 
@@ -31,7 +29,8 @@ export default defineComponent({
 	setup() {
 		const envConfigModule: EnvConfigModule | undefined =
 			inject<EnvConfigModule>("envConfigModule");
-        const schoolsModule: SchoolsModule | undefined = inject<SchoolsModule>("schoolsModule");
+		const schoolsModule: SchoolsModule | undefined =
+			inject<SchoolsModule>("schoolsModule");
 		if (!envConfigModule || !schoolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
@@ -40,18 +39,22 @@ export default defineComponent({
 			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
 		});
 
-    const isMigrationEnabled: Ref<boolean> = ref(schoolsModule.getOauthMigration);
-    const isMigrationAvailable: Ref<boolean> = ref(schoolsModule.getOauthMigrationAvailable);
+		const isMigrationEnabled: Ref<boolean> = ref(
+			schoolsModule.getOauthMigration
+		);
+		const isMigrationAvailable: Ref<boolean> = ref(
+			schoolsModule.getOauthMigrationAvailable
+		);
 
-    const setMigration = (value: boolean) => {
-      schoolsModule.setSchoolOauthMigration(value);
-    };
+		const setMigration = (value: boolean) => {
+			schoolsModule.setSchoolOauthMigration(value);
+		};
 
 		return {
-      isMigrationEnabled,
-      isMigrationFeatureEnabled,
-      setMigration,
-      isMigrationAvailable,
+			isMigrationEnabled,
+			isMigrationFeatureEnabled,
+			setMigration,
+			isMigrationAvailable,
 		};
 	},
 });
