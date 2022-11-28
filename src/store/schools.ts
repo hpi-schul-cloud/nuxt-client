@@ -80,6 +80,7 @@ export default class SchoolsModule extends VuexModule {
 		id: "",
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
+		oauthUserMigration: false,
 	};
 	currentYear: Year = {
 		_id: "",
@@ -98,6 +99,7 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
+	oauthMigrationAvailable: boolean = false;
 	systems: any[] = [];
 	loading: boolean = false;
 	error: null | {} = null;
@@ -125,6 +127,16 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
+	}
+
+	@Mutation
+	setOauthMigration(enabled: boolean): void {
+		this.school.oauthUserMigration = enabled;
+	}
+
+	@Mutation
+	setOauthMigrationAvailable(available: boolean): void {
+		this.oauthMigrationAvailable = available;
 	}
 
 	@Mutation
@@ -169,6 +181,14 @@ export default class SchoolsModule extends VuexModule {
 						system.ldapConfig.provider === "univention" ||
 						system.ldapConfig.provider === "general"))
 		);
+	}
+
+	get getOauthMigration(): boolean {
+		return this.school.oauthUserMigration;
+	}
+
+	get getOauthMigrationAvailable(): boolean {
+		return this.oauthMigrationAvailable;
 	}
 
 	@Action
@@ -319,6 +339,33 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
+		}
+	}
+	@Action
+	async fetchSchoolOauthMigrationAvailable(): Promise<void> {
+		if(!this.school._id) {
+			return;
+		}
+
+		try {
+			const available: boolean = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
+			this.setOauthMigrationAvailable(available);
+		} catch (error: any) {
+			this.setError(error);
+		}
+	}
+
+	@Action
+	async setSchoolOauthMigration(enabled: boolean): Promise<void> {
+		if(!this.school._id) {
+			return;
+		}
+
+		try {
+			await $axios.$post(`v3/schools/${this.school._id}/migration`, { enabled });
+			this.setOauthMigration(enabled);
+		} catch (error: any) {
+			this.setError(error);
 		}
 	}
 

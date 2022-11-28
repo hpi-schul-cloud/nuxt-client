@@ -119,6 +119,7 @@ describe("schools module", () => {
 					accountId: "",
 					schoolName: "",
 					externallyManaged: false,
+
 				});
 
 				await schoolsModule.fetchSchool();
@@ -842,5 +843,6 @@ describe("schools module", () => {
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
 			});
 		});
+
 	});
 });
