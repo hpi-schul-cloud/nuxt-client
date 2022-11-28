@@ -1,5 +1,5 @@
-import {CopyResultItem} from "@components/copy-result-modal/types/CopyResultItem";
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
+import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
@@ -12,7 +12,7 @@ import {
 	TaskApiFactory,
 	TaskApiInterface,
 } from "../serverApi/v3/api";
-import {$axios} from "../utils/api";
+import { $axios } from "../utils/api";
 
 export type CopyParams = {
 	id: string;
@@ -62,13 +62,7 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			// TODO: replace this $asxios with line 57
-			const axiosWithoutErrorPage = $axios?.create();
-			this._shareApi = ShareTokenApiFactory(
-				undefined,
-				"/v3",
-				axiosWithoutErrorPage
-			);
+			this._shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 		}
 		return this._shareApi;
 	}
