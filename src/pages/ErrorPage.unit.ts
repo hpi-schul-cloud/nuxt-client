@@ -30,21 +30,6 @@ describe("@pages/Error.page.vue", () => {
 		});
 	};
 
-	it.skip("should show error-message which comes from the store", async () => {
-		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-			...errorModuleMocks,
-			getStatusCode: 401,
-			getTranslationKey: "error.401",
-		});
-		const wrapper = mountComponent();
-
-		const errorElement = wrapper.find(".error-msg");
-		// TODO: investigate why this is not working properly
-		expect(errorElement.element.innerHTML).toContain(
-			wrapper.vm.$i18n.t("error.401")
-		);
-	});
-
 	it("should assign 'window.location' when back button is clicked", async () => {
 		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 			...errorModuleMocks,
@@ -55,5 +40,39 @@ describe("@pages/Error.page.vue", () => {
 		const btnElement = wrapper.find("[data-testid='btn-back']");
 		await btnElement.trigger("click");
 		expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
+	});
+	describe("should set 'error-content' sub component with correct props", () => {
+		it("should set 'is-generic-error' prop to 'true'", async () => {
+			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
+				...errorModuleMocks,
+				getStatusCode: null,
+				getTranslationKey: "",
+			});
+			const wrapper = mountComponent();
+			const errorComponent = wrapper.find("[data-testid='error-content']");
+			expect(errorComponent.vm.$props.isGenericError).toBe(true);
+		});
+
+		it("should set 'is-generic-error' prop to 'true'", async () => {
+			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
+				...errorModuleMocks,
+				getStatusCode: 500,
+				getTranslationKey: "generic error",
+			});
+			const wrapper = mountComponent();
+			const errorComponent = wrapper.find("[data-testid='error-content']");
+			expect(errorComponent.vm.$props.isGenericError).toBe(true);
+		});
+
+		it("should set 'is-permission-error' prop to 'true'", async () => {
+			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
+				...errorModuleMocks,
+				getStatusCode: 401,
+				getTranslationKey: "error.401",
+			});
+			const wrapper = mountComponent();
+			const errorComponent = wrapper.find("[data-testid='error-content']");
+			expect(errorComponent.vm.$props.isPermissionError).toBe(true);
+		});
 	});
 });

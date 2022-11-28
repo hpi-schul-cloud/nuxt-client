@@ -4,6 +4,7 @@
 			:is-generic-error="isGenericError"
 			:is-permission-error="isPermissionError"
 			:error-text="translatedErrorMessage"
+			data-testid="error-content"
 		/>
 		<v-btn
 			class="mt-4"
@@ -36,7 +37,7 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const permissionErrors: Array<Number> = [401, 403, 403];
+		const permissionErrors: Array<Number> = [400, 401, 403];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
