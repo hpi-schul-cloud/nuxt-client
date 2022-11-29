@@ -79,11 +79,6 @@ export const routes: Array<RouteConfig> = [
 	},
 	// deprecated?
 	{
-		path: "/insights",
-		component: () => import("../pages/Insights.page.vue"),
-		name: "insights",
-	},
-	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
 		name: "login-instances",

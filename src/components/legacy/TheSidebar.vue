@@ -119,7 +119,7 @@ export default defineComponent({
 
 		const isItemActiveForRoute = (item: SidebarItem) =>
 			item.activeForUrls.some((activeFor) =>
-				new RegExp(activeFor).test(route.value.path)
+				new RegExp(activeFor).test(route.path)
 			);
 
 		const updateActiveItems = () => {

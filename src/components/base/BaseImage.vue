@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const SVG_PREFIXES = ["@assets/img/", "/_nuxt/src/assets/img/", "/_nuxt/img/"];
+const SVG_PREFIXES = ["@/assets/img/", "/_nuxt/src/assets/img/", "/_nuxt/img/"];
 const SVG_SUFFIX = ".svg";
 export default {
 	inheritAttrs: false,
@@ -64,7 +64,7 @@ export default {
 
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
 			try {
-				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}, {"inlineStyles": true}]}}!@assets/img/${sanitizedImgSrc}.svg`);
+				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}, {"inlineStyles": true}]}}!@/assets/img/${sanitizedImgSrc}.svg`);
 				return img ? img.default : "";
 			} catch (error) {
 				console.error(

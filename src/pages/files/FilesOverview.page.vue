@@ -78,7 +78,7 @@ export default defineComponent({
 			);
 		});
 
-		const route: Route = useRoute().value;
+		const route: Route = useRoute();
 		const filesPage: FilesPageConfig = getFilesPageForRoute(route);
 
 		const title: Ref<string> = ref(filesPage.title);
