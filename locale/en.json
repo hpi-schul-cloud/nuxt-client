@@ -446,7 +446,7 @@
 	"components.molecules.shareCourse.options.title": "Share settings",
 	"components.molecules.shareCourse.options.infoText": "With the following link, the course can be imported as a copy by other teachers. Personal data will not be imported.",
 	"components.molecules.shareCourse.options.schoolInternally": "Link only valid within the school",
-	"components.molecules.shareCourse.options.expiresInSevenDays": "Link expires after 7 days",
+	"components.molecules.shareCourse.options.expiresInDays": "Link expires after 21 days",
 	"components.molecules.shareCourse.result.title": "Share via",
 	"components.molecules.shareCourse.result.linkLabel": "Link course copy",
 	"components.molecules.shareCourse.result.mailShare": "Send as mail",
