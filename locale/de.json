@@ -106,6 +106,7 @@
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.times": "Zeiten",
 	"common.words.copiedToClipboard": "In den Zwischenspeicher kopiert",
+	"components.administration.adminMigrationSection.infoText": "Hier kommt der Text hinein, der den Admin informiert, dass die Migration\n\t\t\tnur stattfinden kann, wenn die offizielle Schulnummer da ist.",
 	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"components.legacy.footer.accessibility.report": "Barriere melden",
