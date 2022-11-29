@@ -102,8 +102,8 @@ export default {
 				},
 				{
 					isShow: this.hasFileElement,
-					text: this.$t("components.molecules.copyResult.label.files"),
-					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+					text: this.$t("components.molecules.copyResult.fileCopy.error"),
+					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
 					isShow: this.hasCourseGroup,
