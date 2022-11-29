@@ -1,17 +1,26 @@
 import TheSidebar from "./TheSidebar";
 // import { render } from "@/testing-library/vue";
+import { createLocalVue } from "@vue/test-utils";
+import VueRouter from "vue-router";
 
-const $route = {
-	path: "home",
-};
+const localVue = createLocalVue();
+localVue.use(VueRouter);
 
 describe("@/components/legacy/TheSidebar", () => {
-	// it("Render with empty routes", () => {
-	// 	const { getByTestId } = render(TheSidebar, { routes: [{ path: "home" }] });
-	// 	expect(getByTestId("routesListTest")).toBeEmptyDOMElement();
-	// });
+	it("Render with empty routes", () => {
+		const router = new VueRouter([{ path: "home" }]);
 
-	it("Render with one route", () => {
+		const wrapper = shallowMount(TheSidebar, {
+			localVue,
+			router,
+		});
+
+		expect(wrapper.find('[data-testid="routesListTest"]')).toBeDefined();
+	});
+
+	it("Render with one route", async () => {
+		const router = new VueRouter([{ path: "home" }]);
+
 		const testRoutes = [
 			{
 				title: "test",
@@ -22,16 +31,19 @@ describe("@/components/legacy/TheSidebar", () => {
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
-			...createComponentMocks({ i18n: true, $route }),
 			propsData: {
 				routes: testRoutes,
 			},
+			localVue,
+			router,
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
 	});
 
 	it("Render with more routes mixing to and href", () => {
+		const router = new VueRouter([{ path: "home" }]);
+
 		const testRoutes = [
 			{
 				title: "test",
@@ -67,10 +79,11 @@ describe("@/components/legacy/TheSidebar", () => {
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
-			...createComponentMocks({ i18n: true, $route }),
 			propsData: {
 				routes: testRoutes,
 			},
+			localVue,
+			router,
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
