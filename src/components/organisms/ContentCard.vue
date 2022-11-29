@@ -1,5 +1,5 @@
 <template>
-	<base-card v-bind="$attrs">
+	<v-card v-bind="$attrs">
 		<div class="content-card">
 			<base-link
 				class="title-link"
@@ -63,7 +63,7 @@
 				</div>
 			</user-has-role>
 		</div>
-	</base-card>
+	</v-card>
 </template>
 
 <script>
