@@ -17,7 +17,10 @@ const axiosInitializer = () => {
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
+		$post: async (path: string) => {
+			receivedRequests.push({ path });
+			return getRequestReturn;
+		},
 	} as NuxtAxiosInstance);
 };
 axiosInitializer();
@@ -625,224 +628,395 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
-	});
-
-	describe("mutations", () => {
-		describe("setSchool", () => {
-			it("should set the school data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const schoolDataToBeChanged = {
-					_id: "456",
-					name: "Updated Gymnasium",
-				};
-				expect(schoolsModule.getSchool).not.toStrictEqual({
-					...mockSchool,
-					...schoolDataToBeChanged,
-				});
-				schoolsModule.setSchool({ ...mockSchool, ...schoolDataToBeChanged });
-				expect(schoolsModule.getSchool).toStrictEqual({
-					...mockSchool,
-					...schoolDataToBeChanged,
-				});
+		describe("fetchSchoolOauthMigrationAvailable", () => {
+			beforeEach(() => {
+				receivedRequests = [];
 			});
-		});
+			it('should trigger call to backend and return state of oauthMigrationAvailable', async () => {
 
-		describe("setFederalState", () => {
-			it("should set federalState data", () => {
+				getRequestReturn = { available: true };
+				axiosInitializer();
 				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					__v: 0,
-					counties: [],
-					logoUrl: "",
-					_id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				const expectedFileStorageState = {
-					_id: "0000b186816abba584714c56",
-					name: "Hessen",
-					abbreviation: "HE",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
+				schoolsModule.setSchool({
+					...mockSchool
 				});
-				schoolsModule.setFederalState({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-				expect(schoolsModule.getFederalState).toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-			});
-		});
 
-		describe("setSystems", () => {
-			it("should set systems data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const expectedSystemState = ["systems_id_2"];
-				expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
-				schoolsModule.setSystems(expectedSystemState);
-				expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
-			});
-		});
+				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
 
-		describe("setLoading", () => {
-			it("should set loading data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const loadingValue = true;
-				expect(schoolsModule.getLoading).not.toBe(loadingValue);
-				schoolsModule.setLoading(loadingValue);
-				expect(schoolsModule.getLoading).toBe(loadingValue);
-			});
-		});
-	});
-	describe("getters", () => {
-		describe("getSchool", () => {
-			it("should return school state", () => {
-				const schoolsModule = new SchoolsModule({});
-				const expectedValue = {
-					...mockSchool,
-					name: "mockName",
-				};
-				expect(schoolsModule.getSchool).not.toStrictEqual(expectedValue);
-				schoolsModule.setSchool(expectedValue);
-				expect(schoolsModule.getSchool).toStrictEqual(expectedValue);
-			});
-		});
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
 
-		describe("getCurrentYear", () => {
-			it("should return current year state", () => {
-				const schoolsModule = new SchoolsModule({});
-				const mockYear = schoolsModule.getCurrentYear;
-				expect(schoolsModule.getCurrentYear).not.toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
-				schoolsModule.setCurrentYear({ ...mockYear, _id: "mockId" });
-				expect(schoolsModule.getCurrentYear).toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
-			});
-		});
-
-		describe("getFederalState", () => {
-			it("shoud return federalState state", () => {
-				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					__v: 0,
-					counties: [],
-					logoUrl: "",
-					_id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual(
-					mockFederalState
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"v3/schools/mockSchoolId/migration-available"
 				);
-				schoolsModule.setFederalState(mockFederalState);
-				expect(schoolsModule.getFederalState).toStrictEqual(mockFederalState);
+				expect(setOauthMigrationAvailableSpy).toHaveBeenCalled();
+				expect(setOauthMigrationAvailableSpy.mock.calls[0][0]).toStrictEqual(
+					{
+						available: true,
+					});
 			});
+
+			it("should not set OauthMigrationAvailable ", async () => {
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool, _id: '',
+				});
+
+
+				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
+
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+
+				expect(receivedRequests.length).toBe(0);
+				expect(setOauthMigrationAvailableSpy).not.toHaveBeenCalled();
+			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					$get: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+
+				expect(receivedRequests).toHaveLength(0);
+				expect(setErrorSpy).toHaveBeenCalled();
+				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+			});
+
 		});
 
-		describe("getSystems", () => {
-			it("should return systems state", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = ["system"];
-				expect(schoolsModule.getSystems).not.toStrictEqual(systems);
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.getSystems).toStrictEqual(systems);
+		describe("setSchoolOauthMigration", () => {
+			beforeEach(() => {
+				receivedRequests = [];
 			});
-		});
 
-		describe("getLoading", () => {
-			it("should return loading state", () => {
+			it('should trigger call to backend and return state of oauthMigration', async () => {
+				axiosInitializer();
+				getRequestReturn = { enabled: true };
 				const schoolsModule = new SchoolsModule({});
-				expect(schoolsModule.getLoading).not.toStrictEqual(true);
-				schoolsModule.setLoading(true);
-				expect(schoolsModule.getLoading).toStrictEqual(true);
-			});
-		});
+				schoolsModule.setSchool({
+					...mockSchool
+				});
 
-		describe("getIsSynced", () => {
-			it("should return correct sync status for iserv-idm schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "ldap",
-						ldapConfig: {
-							provider: "iserv-idm",
-						},
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
-			});
-			it("should return correct sync status for univention schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "ldap",
-						ldapConfig: {
-							provider: "univention",
-						},
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
-			});
-			it("should return correct sync status for TSP schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "tsp-school",
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
-			});
-			it("should return correct sync status for ldap general schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "ldap",
-						ldapConfig: {
-							provider: "general",
-						},
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
-			});
-			it("should return correct sync status for moodle schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "moodle",
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
-			});
-			it("should return correct sync status for itslearning schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{
-						_id: "id_1",
-						type: "itslearning",
-					},
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
-			});
-		});
+				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
 
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"v3/schools/mockSchoolId/migration"
+				);
+				expect(setOauthMigrationSpy).toHaveBeenCalled();
+				expect(setOauthMigrationSpy.mock.calls[0][0]).toBe(true);
+			});
+
+			it("should not set OauthMigration ", async () => {
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool, _id: '',
+				});
+
+
+				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
+
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests.length).toBe(0);
+				expect(setOauthMigrationSpy).not.toHaveBeenCalled();
+			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					$post: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests).toHaveLength(0);
+				expect(setErrorSpy).toHaveBeenCalled();
+				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(setOauthMigrationSpy).not.toHaveBeenCalled();
+			});
+
+
+		})
 	});
+
+		describe("mutations", () => {
+			describe("setSchool", () => {
+				it("should set the school data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const schoolDataToBeChanged = {
+						_id: "456",
+						name: "Updated Gymnasium",
+					};
+					expect(schoolsModule.getSchool).not.toStrictEqual({
+						...mockSchool,
+						...schoolDataToBeChanged,
+					});
+					schoolsModule.setSchool({ ...mockSchool, ...schoolDataToBeChanged });
+					expect(schoolsModule.getSchool).toStrictEqual({
+						...mockSchool,
+						...schoolDataToBeChanged,
+					});
+				});
+			});
+
+			describe("setFederalState", () => {
+				it("should set federalState data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const mockFederalState = {
+						__v: 0,
+						counties: [],
+						logoUrl: "",
+						_id: "mockId",
+						name: "mockname",
+						abbreviation: "MO",
+					};
+					const expectedFileStorageState = {
+						_id: "0000b186816abba584714c56",
+						name: "Hessen",
+						abbreviation: "HE",
+					};
+					expect(schoolsModule.getFederalState).not.toStrictEqual({
+						...mockFederalState,
+						...expectedFileStorageState,
+					});
+					schoolsModule.setFederalState({
+						...mockFederalState,
+						...expectedFileStorageState,
+					});
+					expect(schoolsModule.getFederalState).toStrictEqual({
+						...mockFederalState,
+						...expectedFileStorageState,
+					});
+				});
+			});
+
+			describe("setSystems", () => {
+				it("should set systems data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const expectedSystemState = ["systems_id_2"];
+					expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
+					schoolsModule.setSystems(expectedSystemState);
+					expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
+				});
+			});
+
+			describe("setLoading", () => {
+				it("should set loading data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const loadingValue = true;
+					expect(schoolsModule.getLoading).not.toBe(loadingValue);
+					schoolsModule.setLoading(loadingValue);
+					expect(schoolsModule.getLoading).toBe(loadingValue);
+				});
+			});
+
+			describe("setMigration", () => {
+				it("should set oauth migration data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const oauthMigrationValue = true;
+					expect(schoolsModule.getOauthMigration).not.toBe(oauthMigrationValue)
+					schoolsModule.setOauthMigration(oauthMigrationValue);
+					expect(schoolsModule.getOauthMigration).toBe(oauthMigrationValue)
+				})
+			})
+
+			describe("setOauthMigrationAvailable", () => {
+				it("should set oauth migration available data", () => {
+					const schoolsModule = new SchoolsModule({});
+					const oauthMigrationValue = true;
+					expect(schoolsModule.getOauthMigrationAvailable).not.toBe(oauthMigrationValue)
+					schoolsModule.setOauthMigrationAvailable(oauthMigrationValue);
+					expect(schoolsModule.getOauthMigrationAvailable).toBe(oauthMigrationValue)
+				})
+			});
+		});
+		describe("getters", () => {
+			describe("getSchool", () => {
+				it("should return school state", () => {
+					const schoolsModule = new SchoolsModule({});
+					const expectedValue = {
+						...mockSchool,
+						name: "mockName",
+					};
+					expect(schoolsModule.getSchool).not.toStrictEqual(expectedValue);
+					schoolsModule.setSchool(expectedValue);
+					expect(schoolsModule.getSchool).toStrictEqual(expectedValue);
+				});
+			});
+
+			describe("getCurrentYear", () => {
+				it("should return current year state", () => {
+					const schoolsModule = new SchoolsModule({});
+					const mockYear = schoolsModule.getCurrentYear;
+					expect(schoolsModule.getCurrentYear).not.toStrictEqual({
+						...mockYear,
+						_id: "mockId",
+					});
+					schoolsModule.setCurrentYear({ ...mockYear, _id: "mockId" });
+					expect(schoolsModule.getCurrentYear).toStrictEqual({
+						...mockYear,
+						_id: "mockId",
+					});
+				});
+			});
+
+			describe("getFederalState", () => {
+				it("shoud return federalState state", () => {
+					const schoolsModule = new SchoolsModule({});
+					const mockFederalState = {
+						__v: 0,
+						counties: [],
+						logoUrl: "",
+						_id: "mockId",
+						name: "mockname",
+						abbreviation: "MO",
+					};
+					expect(schoolsModule.getFederalState).not.toStrictEqual(
+						mockFederalState
+					);
+					schoolsModule.setFederalState(mockFederalState);
+					expect(schoolsModule.getFederalState).toStrictEqual(mockFederalState);
+				});
+			});
+
+			describe("getSystems", () => {
+				it("should return systems state", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = ["system"];
+					expect(schoolsModule.getSystems).not.toStrictEqual(systems);
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.getSystems).toStrictEqual(systems);
+				});
+			});
+
+			describe("getLoading", () => {
+				it("should return loading state", () => {
+					const schoolsModule = new SchoolsModule({});
+					expect(schoolsModule.getLoading).not.toStrictEqual(true);
+					schoolsModule.setLoading(true);
+					expect(schoolsModule.getLoading).toStrictEqual(true);
+				});
+			});
+
+			describe("getIsSynced", () => {
+				it("should return correct sync status for iserv-idm schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "ldap",
+							ldapConfig: {
+								provider: "iserv-idm",
+							},
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+				});
+				it("should return correct sync status for univention schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "ldap",
+							ldapConfig: {
+								provider: "univention",
+							},
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+				});
+				it("should return correct sync status for TSP schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "tsp-school",
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+				});
+				it("should return correct sync status for ldap general schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "ldap",
+							ldapConfig: {
+								provider: "general",
+							},
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
+				});
+				it("should return correct sync status for moodle schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "moodle",
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+				});
+				it("should return correct sync status for itslearning schools", () => {
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{
+							_id: "id_1",
+							type: "itslearning",
+						},
+					];
+					schoolsModule.setSystems(systems);
+					expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+				});
+			});
+
+			describe("getOauthMigration", () => {
+				it("should return if oauth Migration is enabled", () => {
+					const schoolsModule = new SchoolsModule({});
+					expect(schoolsModule.getOauthMigration).not.toStrictEqual(true);
+					schoolsModule.setOauthMigration(true);
+					expect(schoolsModule.getOauthMigration).toStrictEqual(true);
+				})
+			})
+
+			describe("getOauthMigrationAvailable", () => {
+				it("should return if oauth Migration is available", () => {
+					const schoolsModule = new SchoolsModule({});
+					expect(schoolsModule.getOauthMigrationAvailable).not.toStrictEqual(true);
+					schoolsModule.setOauthMigrationAvailable(true);
+					expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true);
+				})
+			})
+
+		});
+
 });

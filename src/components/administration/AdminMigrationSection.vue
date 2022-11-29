@@ -26,7 +26,7 @@ import SchoolsModule from "@store/schools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "SystemMigrationSection",
+	name: "AdminMigrationSection",
 	components: {},
 	setup() {
 		const envConfigModule: EnvConfigModule | undefined =
