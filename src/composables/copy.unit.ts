@@ -4,8 +4,8 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { watch } from "vue";
-import { defineComponent, provide, ref } from "vue";
-import { mount } from "@vue/test-utils";
+import { provide, ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import { useCopy } from "./copy";
 
 jest.mock("./loadingState");
@@ -14,16 +14,24 @@ export interface MountOptions {
 	provider?: () => void;
 }
 
-const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
-	const TestComponent = defineComponent({
+const mountComposable = <R>(
+	composable: () => R,
+	providers: Record<string, unknown>
+): R => {
+	const TestComponent = {
+		inject: Object.keys(providers),
+		template: "<div></div>",
+	};
+
+	const wrapper = shallowMount(TestComponent, {
 		setup() {
-			options.provider?.();
+			for (const [key, mockFn] of Object.entries(providers)) {
+				provide(key, mockFn);
+			}
 			const result = composable();
 			return { result };
 		},
 	});
-
-	const wrapper = mount(TestComponent);
 
 	//@ts-ignore
 	return wrapper.vm.result;
@@ -42,12 +50,10 @@ describe("copy composable", () => {
 		const isLoadingDialogOpen = ref(false);
 
 		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
-			provider: () => {
-				provide("copyModule", copyModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("i18n", i18n);
-			},
+			copyModule: copyModuleMock,
+			notifierModule: notifierModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			i18n: i18n,
 		});
 
 		return {
@@ -95,7 +101,6 @@ describe("copy composable", () => {
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		await copy(payload);
-
 		expect(notifierModuleMock.show).toHaveBeenCalledWith(
 			expect.objectContaining({ status: "success" })
 		);
