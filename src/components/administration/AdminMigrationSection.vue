@@ -2,9 +2,9 @@
 	<div>
 		<h2 class="text-h4 mb-10">Migration...</h2>
 		<v-alert light prominent text type="info">
-      {{$t("components.administration.adminMigrationSection.infoText")}}
+			{{ $t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
-    <v-switch
+		<v-switch
 			label="Migration von IServ zu SANIS aktivieren..."
 			:disabled="isMigrationAvailable && isMigrationFeatureEnabled"
 			:true-value="true"
@@ -27,8 +27,8 @@ export default defineComponent({
 	name: "AdminMigrationSection",
 	components: {},
 	setup() {
-       const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-       const envConfigModule: EnvConfigModule | undefined =
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const envConfigModule: EnvConfigModule | undefined =
 			inject<EnvConfigModule>("envConfigModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
@@ -36,13 +36,13 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-        const t = (key: string) => {
-          const translateResult = i18n.t(key);
-          if (typeof translateResult === "string") {
-            return translateResult;
-          }
-          return "unknown translation-key:" + key;
-        };
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
 
 		const isMigrationFeatureEnabled = computed(() => {
 			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
@@ -64,7 +64,7 @@ export default defineComponent({
 			isMigrationFeatureEnabled,
 			setMigration,
 			isMigrationAvailable,
-      t
+			t,
 		};
 	},
 });
