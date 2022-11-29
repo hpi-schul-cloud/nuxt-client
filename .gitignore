@@ -26,3 +26,5 @@ version.js
 
 .nuxt
 nuxt.config.js
+
+__snapshots__
