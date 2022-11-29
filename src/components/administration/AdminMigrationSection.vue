@@ -4,7 +4,7 @@
 		<v-alert light prominent text type="info">
 			{{ $t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
-    <v-switch
+		<v-switch
 			label="Migration von IServ zu SANIS aktivieren..."
 			:disabled="isMigrationAvailable && isMigrationFeatureEnabled"
 			:true-value="true"
@@ -27,8 +27,8 @@ export default defineComponent({
 	name: "AdminMigrationSection",
 	components: {},
 	setup() {
-       const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-       const envConfigModule: EnvConfigModule | undefined =
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const envConfigModule: EnvConfigModule | undefined =
 			inject<EnvConfigModule>("envConfigModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
