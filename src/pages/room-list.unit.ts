@@ -2,7 +2,6 @@ import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
-import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
@@ -84,7 +83,7 @@ describe("@/pages/room-list.vue", () => {
 		});
 
 		it("should fetch data", async () => {
-			await flushPromises();
+			await wrapper.vm.$nextTick();
 
 			const expectedItem = {
 				id: "123",
@@ -114,7 +113,7 @@ describe("@/pages/room-list.vue", () => {
 					isLoading: () => false,
 					hasRooms: () => true,
 				});
-				await flushPromises();
+				await wrapper.vm.$nextTick();
 
 				const searchInput = wrapper.vm.$refs["search"] as any;
 
