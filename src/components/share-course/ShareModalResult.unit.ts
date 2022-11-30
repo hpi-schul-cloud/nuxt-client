@@ -32,7 +32,6 @@ describe("@/components/share-course/ShareModalResult", () => {
 			}
 			return;
 		}
-		fail("No error on required props");
 	});
 
 	it("should render with required props", () => {
