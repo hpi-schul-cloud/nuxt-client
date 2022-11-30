@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/setup-new.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/setup-new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/task-overview.unit.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,29 +40,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/dev/repositories/nuxt-client/src/components/share-course",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.stylelint": "C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs.jest.jest_package": "C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "ts.external.directory.path": "C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/dev/repositories/nuxt-client/src/components/share-course&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\dev\repositories\nuxt-client\src\components\share-course" />
@@ -70,87 +72,83 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.@/components/molecules/ContextMenu">
-    <configuration name="@/components/molecules/ContextMenu" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.TaskOverview">
+    <configuration name="TaskOverview" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="TaskOverview" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskOverview.should fetchAllTasks on mount" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="anchor positions" />
-        <test-name value="menu gets positioned correctly by anchor attribute %s" />
+        <test-name value="TaskOverview" />
+        <test-name value="should fetchAllTasks on mount" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskOverview.should not render child component for arbitrary roles" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="does not trigger event on click outside if noClose=true" />
+        <test-name value="TaskOverview" />
+        <test-name value="should not render child component for arbitrary roles" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside d" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskOverview.should render child component for %p" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="triggers event on click outside d" />
+        <test-name value="TaskOverview" />
+        <test-name value="should render child component for %p" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskOverview.should set title to tasks" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="triggers event on click outside" />
+        <test-name value="TaskOverview" />
+        <test-name value="should set title to tasks" />
       </test-names>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Jest.@/components/molecules/ContextMenu" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside d" />
+        <item itemvalue="Jest.TaskOverview" />
+        <item itemvalue="Jest.TaskOverview.should not render child component for arbitrary roles" />
+        <item itemvalue="Jest.TaskOverview.should render child component for %p" />
+        <item itemvalue="Jest.TaskOverview.should set title to tasks" />
+        <item itemvalue="Jest.TaskOverview.should fetchAllTasks on mount" />
       </list>
     </recent_temporary>
   </component>
@@ -231,5 +229,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/nuxt_client$application_error_composable.info" NAME="application-error composable Coverage Results" MODIFIED="1669302489127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
