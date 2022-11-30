@@ -41,6 +41,7 @@
 		"@ckeditor/ckeditor5-vue2": "^3.0.1",
 		"@hpi-schul-cloud/ckeditor": "^0.1.5",
 		"@mdi/js": "^7.0.96",
+		"@vueuse/core": "^9.6.0",
 		"axios": "^1.1.3",
 		"dayjs": "^1.11.6",
 		"echarts": "^4.9.0",
