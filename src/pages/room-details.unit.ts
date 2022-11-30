@@ -121,7 +121,7 @@ const getWrapper: any = () => {
 		}),
 		mocks: {
 			$theme: {
-				short_name: "nbc",
+				short_name: "instance name",
 			},
 		},
 		setup() {

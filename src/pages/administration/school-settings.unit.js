@@ -174,6 +174,7 @@ const fetchFederalStateSpy = jest
 	.mockImplementation(() => {
 		schoolsModule.setFederalState(federalState);
 	});
+const short_name = "instance name";
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
@@ -191,6 +192,11 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeTruthy();
@@ -207,6 +213,11 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
@@ -218,6 +229,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
@@ -229,6 +245,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
@@ -242,6 +263,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTruthy();
@@ -254,6 +280,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const schoolError = wrapper.find(".school-error-image");
@@ -269,6 +300,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.vm.$nextTick();
 		expect(fetchYearSpy).toHaveBeenCalled();
