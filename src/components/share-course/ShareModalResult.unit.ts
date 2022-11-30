@@ -24,28 +24,21 @@ describe("@/components/share-course/ShareModalResult", () => {
 	});
 
 	it("should not render without required props", () => {
-		try {
-			getWrapper();
-		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain('Missing required prop: "shareUrl"');
-			}
-			return;
-		}
-		fail("No error on required props");
+		const errorSpy = jest.spyOn(console, "error");
+
+		// should log an error to console.error
+		getWrapper();
+
+		expect(errorSpy).toBeCalledWith(
+			expect.stringContaining('Missing required prop: "shareUrl"')
+		);
+		errorSpy.mockRestore();
 	});
 
 	it("should render with required props", () => {
 		const shareUrl = "http://example.com";
-		try {
-			const wrapper = getWrapper({ propsData: { shareUrl } });
-			expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
-		} catch (e) {
-			if (e instanceof Error) {
-				fail(e.message);
-			}
-			return;
-		}
+		const wrapper = getWrapper({ propsData: { shareUrl } });
+		expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
 	});
 
 	it("should render QR-Code if onShowQrCode is called", async () => {
