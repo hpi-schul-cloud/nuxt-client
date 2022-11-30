@@ -27,8 +27,6 @@ const getWrapper = (options) => {
 };
 
 describe("@/components/molecules/TextEditor", () => {
-	it(...isValidComponent(TextEditor));
-
 	it("showImagePrompt calls callback with src", async () => {
 		// Make sure all expects get executed
 		expect.assertions(1);
