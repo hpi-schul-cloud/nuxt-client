@@ -8,7 +8,6 @@ describe("@/components/share-course/ShareModalOptionsForm", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {},
 			...attrs,
 		});
 
