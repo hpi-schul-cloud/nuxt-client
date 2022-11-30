@@ -1,5 +1,4 @@
 import TheSidebar from "./TheSidebar";
-// import { render } from "@/testing-library/vue";
 import { createLocalVue } from "@vue/test-utils";
 import VueRouter from "vue-router";
 
