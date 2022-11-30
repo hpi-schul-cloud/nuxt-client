@@ -13,6 +13,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
+import { initializeAxios } from "@/utils/api";
+import { AxiosInstance } from "axios";
 
 const mockData = {
 	roomId: "123",
@@ -134,7 +136,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		setupStores({
 			authModule: AuthModule,
-			eenvConfigModule: EnvConfigModule,
+			envConfigModule: EnvConfigModule,
 			roomModule: RoomModule,
 		});
 		roomModule.setRoomData(mockData as any);
@@ -151,6 +153,12 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsShareModalOpen: true,
 			startShareFlow: jest.fn(),
 		});
+
+		initializeAxios({
+			get: async (path) => {
+				return { data: [] };
+			},
+		} as AxiosInstance);
 	});
 
 	it("should fetch data", async () => {
