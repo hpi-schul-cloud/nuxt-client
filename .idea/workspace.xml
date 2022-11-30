@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/base/BaseModal.unit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ContextMenu.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/setup-new.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/setup-new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/task-overview.unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/task-overview.unit.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="Vue Single File Component" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -44,7 +46,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "TODO_SCOPE": "All Places",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/dev/repositories/nuxt-client/src/components/share-course",
+    "last_opened_file_path": "C:/dev/repositories/schulcloud-server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.stylelint": "true",
@@ -69,88 +71,88 @@
       <recent name="C:\dev\repositories\nuxt-client\vue3_poc\src" />
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\repositories\nuxt-client\src\store\types" />
+      <recent name="C:\dev\repositories\nuxt-client\src\store\types\errors" />
+      <recent name="C:\dev\repositories\nuxt-client\src\router\hooks" />
+    </key>
   </component>
-  <component name="RunManager" selected="Jest.@/components/molecules/ContextMenu">
-    <configuration name="@/components/molecules/ContextMenu" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.TaskOverview">
+    <configuration name="TaskOverview" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.js" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
+        <test-name value="TaskOverview" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="application-error composable" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/utils/create-application-error.factory.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="anchor positions" />
-        <test-name value="menu gets positioned correctly by anchor attribute %s" />
+        <test-name value="application-error composable" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="application-error composable.Code %p should create translationKey of %p" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/utils/create-application-error.factory.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="does not trigger event on click outside if noClose=true" />
+        <test-name value="application-error composable" />
+        <test-name value="Code %p should create translationKey of %p" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside d" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="application-error composable.createApplicationError should create an ApplicationError" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/composables/application-error.composable.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="triggers event on click outside d" />
+        <test-name value="application-error composable" />
+        <test-name value="createApplicationError should create an ApplicationError" />
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/ContextMenu.click outside.triggers event on click outside" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="application-error composable.should be possible to add an optional message" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/ContextMenu.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/utils/create-application-error.factory.unit.ts" />
       <test-names>
-        <test-name value="@/components/molecules/ContextMenu" />
-        <test-name value="click outside" />
-        <test-name value="triggers event on click outside" />
+        <test-name value="application-error composable" />
+        <test-name value="should be possible to add an optional message" />
       </test-names>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Jest.@/components/molecules/ContextMenu" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.anchor positions.menu gets positioned correctly by anchor attribute %s" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.does not trigger event on click outside if noClose=true" />
-        <item itemvalue="Jest.@/components/molecules/ContextMenu.click outside.triggers event on click outside d" />
+        <item itemvalue="Jest.TaskOverview" />
+        <item itemvalue="Jest.application-error composable" />
+        <item itemvalue="Jest.application-error composable.should be possible to add an optional message" />
+        <item itemvalue="Jest.application-error composable.Code %p should create translationKey of %p" />
+        <item itemvalue="Jest.application-error composable.createApplicationError should create an ApplicationError" />
       </list>
     </recent_temporary>
   </component>
@@ -215,11 +217,41 @@
       <workItem from="1666873142914" duration="3112000" />
       <workItem from="1667308745692" duration="3657000" />
       <workItem from="1667483716446" duration="6255000" />
+      <workItem from="1668000200036" duration="3104000" />
+      <workItem from="1668074754456" duration="613000" />
+      <workItem from="1668769477822" duration="836000" />
+      <workItem from="1668770459487" duration="1604000" />
+      <workItem from="1669022439400" duration="10697000" />
+      <workItem from="1669037349043" duration="8869000" />
+      <workItem from="1669193474603" duration="17342000" />
+      <workItem from="1669284554072" duration="7221000" />
+      <workItem from="1669368610738" duration="2794000" />
+      <workItem from="1669383288579" duration="1644000" />
+      <workItem from="1669385425172" duration="34000" />
+      <workItem from="1669385664974" duration="3203000" />
+      <workItem from="1669624781149" duration="5348000" />
+      <workItem from="1669801269037" duration="1260000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/plugins/i18n.d.ts" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -231,5 +263,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/nuxt_client$application_error_composable.info" NAME="application-error composable Coverage Results" MODIFIED="1669302489127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

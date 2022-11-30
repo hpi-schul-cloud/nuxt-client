@@ -30,7 +30,7 @@ describe("TaskOverview", () => {
 		});
 
 		const title = wrapper.vm.$i18n.t("common.words.tasks");
-		expect(wrapper.vm.$metaInfo.title).toBe(title);
+		expect(document.title).toBe(title);
 	});
 
 	it("Should should trigger fetschAllTasks", async () => {
