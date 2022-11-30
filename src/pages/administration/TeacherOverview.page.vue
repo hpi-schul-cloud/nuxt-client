@@ -138,35 +138,29 @@ export default {
 			mdiAccountPlus,
 			mdiCloudDownload,
 			mdiPencil,
-			currentFilterQuery: this.$uiState.get(
+			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
 			),
-			test: this.$uiState,
+			// test: this.$uiState,
 			page:
-				(this.$uiState.get(
-					"pagination",
-					"pages.administration.teachers.index"
-				) &&
-					this.$uiState.get("pagination", "pages.administration.teachers.index")
+				(this.getUiState("pagination", "pages.administration.teachers.index") &&
+					this.getUiState("pagination", "pages.administration.teachers.index")
 						.page) ||
 				1,
 			limit:
-				(this.$uiState.get(
-					"pagination",
-					"pages.administration.teachers.index"
-				) &&
-					this.$uiState.get("pagination", "pages.administration.teachers.index")
+				(this.getUiState("pagination", "pages.administration.teachers.index") &&
+					this.getUiState("pagination", "pages.administration.teachers.index")
 						.limit) ||
 				25,
 			sortBy:
-				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
-					this.$uiState.get("sorting", "pages.administration.teachers.index")
+				(this.getUiState("sorting", "pages.administration.teachers.index") &&
+					this.getUiState("sorting", "pages.administration.teachers.index")
 						.sortBy) ||
 				"firstName",
 			sortOrder:
-				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
-					this.$uiState.get("sorting", "pages.administration.teachers.index")
+				(this.getUiState("sorting", "pages.administration.teachers.index") &&
+					this.getUiState("sorting", "pages.administration.teachers.index")
 						.sortOrder) ||
 				"asc",
 			breadcrumbs: [
@@ -261,8 +255,8 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				(this.$uiState.get("filter", "pages.administration.teachers.index") &&
-					this.$uiState.get("filter", "pages.administration.teachers.index")
+				(this.getUiState("filter", "pages.administration.teachers.index") &&
+					this.getUiState("filter", "pages.administration.teachers.index")
 						.searchQuery) ||
 				"",
 		};
@@ -377,7 +371,7 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			var temp = this.$uiState.get(
+			var temp = this.getUiState(
 				"filter",
 				"pages.administration.teacher.index"
 			);
@@ -388,12 +382,12 @@ export default {
 			if (
 				JSON.stringify(query) !==
 				JSON.stringify(
-					this.$uiState.get("filter", "pages.administration.teachers.index")
+					this.getUiState("filter", "pages.administration.teachers.index")
 				)
 			) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.$uiState.set("filter", "pages.administration.teachers.index", {
+			this.setUiState("filter", "pages.administration.teachers.index", {
 				query,
 			});
 		},
@@ -418,7 +412,7 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.$uiState.set("sorting", "pages.administration.teachers.index", {
+			this.setUiState("sorting", "pages.administration.teachers.index", {
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
@@ -426,7 +420,7 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+			this.setUiState("pagination", "pages.administration.teachers.index", {
 				currentPage: page,
 			});
 			this.find();
@@ -435,7 +429,7 @@ export default {
 			// this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+			this.setUiState("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
 				currentPage: this.page,
 			});
@@ -540,7 +534,7 @@ export default {
 
 			const query = this.currentFilterQuery;
 
-			this.$uiState.set("filter", "pages.administration.teachers.index", {
+			this.setUiState("filter", "pages.administration.teachers.index", {
 				query,
 			});
 
@@ -549,6 +543,16 @@ export default {
 					query,
 				});
 			}, 400);
+		},
+		setUiState(key, identifier, data) {
+			this.$store?.commit("uiState/set", {
+				key,
+				identifier,
+				object: data,
+			});
+		},
+		getUiState(key, identifier) {
+			return this.$store?.getters["uiState/get"]({ key, identifier });
 		},
 	},
 	head() {

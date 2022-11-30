@@ -125,7 +125,7 @@ global.createComponentMocks = ({
 	$route,
 	$router,
 	router,
-	uiState,
+	// uiState,
 	dialog,
 	/*style,*/ mocks,
 	stubs,
@@ -211,13 +211,13 @@ global.createComponentMocks = ({
 	// 		get: (key, identifier) => {},
 	// 		set: (key, identifier) => {},
 	// }
-	if (uiState) {
-		localVue.use({
-			install: (Vue) => {
-				Vue.prototype.$uiState = uiState;
-			},
-		});
-	}
+	// if (uiState) {
+	// 	localVue.use({
+	// 		install: (Vue) => {
+	// 			Vue.prototype.$uiState = uiState;
+	// 		},
+	// 	});
+	// }
 
 	// Set (confirmation) dialog like:
 	// {
