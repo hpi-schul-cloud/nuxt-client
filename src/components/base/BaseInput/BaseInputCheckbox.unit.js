@@ -110,7 +110,7 @@ describe("@/components/base/BaseInputCheckbox", () => {
 				template: `<base-input v-model="value" label="test" type="switch" name="checkbox" :show-undefined-state="true" />`,
 				components: { BaseInput },
 			})
-		).toThrow("Error: showUndefinedState is only allowed on type=checkbox.");
+		).toThrow("showUndefinedState is only allowed on type=checkbox.");
 	});
 
 	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {
@@ -120,8 +120,6 @@ describe("@/components/base/BaseInputCheckbox", () => {
 				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
 				components: { BaseInput },
 			})
-		).toThrow(
-			"Error: showUndefinedState is not allowed if v-model is of type Array."
-		);
+		).toThrow("showUndefinedState is not allowed if v-model is of type Array.");
 	});
 });
