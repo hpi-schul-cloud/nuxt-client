@@ -6,7 +6,6 @@
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
-			placeholder="Write something here..."
 			@input="handleInput"
 		/>
 	</div>
@@ -31,7 +30,7 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
-		label: {
+		placeholder: {
 			type: String,
 			default: "",
 		},
@@ -109,6 +108,7 @@ export default defineComponent({
 				];
 			})(),
 			language: language,
+			placeholder: props.placeholder,
 		};
 
 		const handleInput = () => emit("input", content.value);
