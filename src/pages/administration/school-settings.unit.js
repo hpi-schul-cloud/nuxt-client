@@ -231,7 +231,7 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.vm.systems).toBeArray(true);
+		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
