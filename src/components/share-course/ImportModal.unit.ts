@@ -1,5 +1,4 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import ImportModal from "@/components/share-course/ImportModal.vue";
 
@@ -24,15 +23,12 @@ describe("@/components/share-course/ImportModal", () => {
 	});
 
 	it("should not render without required props", () => {
-		try {
-			getWrapper();
-		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain("Missing required prop:");
-			}
-			return;
-		}
-		fail("No error on required props");
+		const errorSpy = jest.spyOn(console, "error");
+
+		// should log an error to console.error
+		getWrapper();
+
+		expect(errorSpy).toBeCalled();
 	});
 
 	it("should render with props", () => {
