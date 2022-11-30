@@ -168,13 +168,13 @@ import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
-	getAuthor,
-	getDescription,
-	getMerlinReference,
-	getMetadataAttribute,
-	getProvider,
-	getTags,
-	isMerlinContent,
+  getAuthor,
+  getDescription,
+  getMerlinReference,
+  getMetadataAttribute,
+  getProvider,
+  getTags,
+  isMerlinContent
 } from "@/utils/helpers";
 
 const DEFAULT_AUTHOR = "admin";
@@ -293,14 +293,16 @@ export default {
 			}
 		},
 	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
+	mounted() {
+		document.title = (
+			this.isInline
+				? {
+						title: this.$t("pages.content.page.window.title", {
+							instance: this.$theme.name,
+						}),
+				  }
+				: { title: this.$t("common.words.lernstore") }
+		).toString();
 	},
 };
 </script>

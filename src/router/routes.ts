@@ -93,12 +93,6 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/NewsEdit.page.vue"),
 		name: "news-id-edit",
 	},
-	// can this be removed?
-	{
-		path: "/poc-files",
-		component: () => import("../pages/POCFiles.page.vue"),
-		name: "poc-files",
-	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
 		component: () => import("../pages/RoomDetails.page.vue"),

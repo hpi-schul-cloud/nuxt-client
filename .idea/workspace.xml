@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/enum/device-media-query.enum.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/LernstoreDetailView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/LernstoreDetailView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/LernStoreOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/LernStoreOverview.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/LoginInstances.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/LoginInstances.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/NewsCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/NewsCreate.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/NewsEdit.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/NewsEdit.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/POCFiles.page.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/RoomDetails.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomDetails.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/RoomList.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomList.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/RoomOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomOverview.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/TaskCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TaskCreate.page.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/task-overview.unit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="Vue Single File Component" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -72,7 +84,20 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.TaskOverview">
+  <component name="RunManager" selected="Jest.ldap/activate">
+    <configuration name="@/components/organisms/LernstoreCollectionDetailView" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.unit.js" />
+      <test-names>
+        <test-name value="@/components/organisms/LernstoreCollectionDetailView" />
+      </test-names>
+      <method v="2" />
+    </configuration>
     <configuration name="TaskOverview" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
@@ -83,20 +108,6 @@
       <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
       <test-names>
         <test-name value="TaskOverview" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="TaskOverview.should fetchAllTasks on mount" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
-      <test-names>
-        <test-name value="TaskOverview" />
-        <test-name value="should fetchAllTasks on mount" />
       </test-names>
       <method v="2" />
     </configuration>
@@ -128,27 +139,26 @@
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="TaskOverview.should set title to tasks" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="ldap/activate" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/pages/administration/ldap-activate.unit.js" />
       <test-names>
-        <test-name value="TaskOverview" />
-        <test-name value="should set title to tasks" />
+        <test-name value="ldap/activate" />
       </test-names>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.ldap/activate" />
+        <item itemvalue="Jest.@/components/organisms/LernstoreCollectionDetailView" />
         <item itemvalue="Jest.TaskOverview" />
         <item itemvalue="Jest.TaskOverview.should not render child component for arbitrary roles" />
         <item itemvalue="Jest.TaskOverview.should render child component for %p" />
-        <item itemvalue="Jest.TaskOverview.should set title to tasks" />
-        <item itemvalue="Jest.TaskOverview.should fetchAllTasks on mount" />
       </list>
     </recent_temporary>
   </component>

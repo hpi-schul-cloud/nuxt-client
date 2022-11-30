@@ -53,6 +53,12 @@ export default {
 	},
 	mounted() {
 		newsModule.fetchNews(this.$route.params.id);
+		const hasTitle = (this.news || {}).title;
+		document.title = (
+			hasTitle
+				? `${(this.news || {}).title} bearbeiten`
+				: this.$t("pages.news._id.edit.title")
+		).toString();
 	},
 	methods: {
 		save: async function (newsToPatch) {
@@ -96,14 +102,6 @@ export default {
 				params: { id: this.$route.params.id },
 			});
 		},
-	},
-	head() {
-		const hasTitle = (this.news || {}).title;
-		return {
-			title: hasTitle
-				? `${(this.news || {}).title} bearbeiten`
-				: this.$t("pages.news._id.edit.title"),
-		};
 	},
 };
 </script>

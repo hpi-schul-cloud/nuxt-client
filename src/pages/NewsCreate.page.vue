@@ -82,10 +82,8 @@ export default {
 			});
 		},
 	},
-	head() {
-		return {
-			title: this.$t("pages.news.new.title"),
-		};
+	mounted() {
+		document.title = this.$t("pages.news.new.title").toString();
 	},
 };
 </script>

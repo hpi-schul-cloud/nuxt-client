@@ -12,7 +12,6 @@ describe("TaskOverview", () => {
 					getUserRoles: [userRole],
 				},
 				tasksModule: {
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					fetchAllTasks: fetchAllTasksSpy,
 				},
 			},

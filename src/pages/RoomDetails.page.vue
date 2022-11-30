@@ -124,15 +124,15 @@ import ShareModal from "@/components/share-course/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
-	mdiContentCopy,
-	mdiDownload,
-	mdiEmailPlusOutline,
-	mdiFormatListChecks,
-	mdiPlus,
-	mdiShareVariant,
-	mdiSquareEditOutline,
-	mdiViewListOutline,
+  mdiCloudDownload,
+  mdiContentCopy,
+  mdiDownload,
+  mdiEmailPlusOutline,
+  mdiFormatListChecks,
+  mdiPlus,
+  mdiShareVariant,
+  mdiSquareEditOutline,
+  mdiViewListOutline
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
@@ -370,10 +370,8 @@ export default defineComponent({
 			this.copyModule.reset();
 		},
 	},
-	head() {
-		return {
-			title: `${this.roomData.title} - ${this.$theme.short_name}`,
-		};
+	mounted() {
+		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
 	},
 });
 </script>

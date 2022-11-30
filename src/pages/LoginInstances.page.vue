@@ -22,10 +22,14 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import InstanceTile from "@/components/molecules/InstanceTile";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { useMediaQuery, useTitle } from "@vueuse/core";
+import { computed, defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 
-export default {
+export default defineComponent({
 	components: {
 		InstanceTile,
 	},
@@ -33,46 +37,48 @@ export default {
 	meta: {
 		isPublic: true,
 	},
-	data: function () {
+	setup() {
+		useTitle("dBildungscloud");
+
+		const i18n = inject<VueI18n | undefined>("i18n");
+
+		if (i18n === undefined) {
+			throw new Error("i18n module undefined"); // NUXT_REMOVAL throw createApplicationError instead
+		}
+
+		const isTablet = computed(() => useMediaQuery(DeviceMediaQuery.Tablet));
+		const isMobile = computed(() => useMediaQuery(DeviceMediaQuery.Mobile));
+
+		const tiles = ref<{ icon: string; url: string }[]>([
+			{
+				icon: "dBildungscloud",
+				url: i18n.tc("pages.loginInstances.dbildungscloud_link"),
+			},
+			{
+				icon: "brb",
+				url: i18n.tc("pages.loginInstances.brb_link"),
+			},
+			{
+				icon: "n21",
+				url: i18n.tc("pages.loginInstances.n21_link"),
+			},
+			{
+				icon: "thr",
+				url: i18n.tc("pages.loginInstances.thr_link"),
+			},
+			{
+				icon: "HPI-Int",
+				url: i18n.tc("pages.loginInstances.hpi_int_link"),
+			},
+		]);
+
 		return {
-			tiles: [
-				{
-					icon: "dBildungscloud",
-					url: this.$t("pages.loginInstances.dbildungscloud_link"),
-				},
-				{
-					icon: "brb",
-					url: this.$t("pages.loginInstances.brb_link"),
-				},
-				{
-					icon: "n21",
-					url: this.$t("pages.loginInstances.n21_link"),
-				},
-				{
-					icon: "thr",
-					url: this.$t("pages.loginInstances.thr_link"),
-				},
-				{
-					icon: "HPI-Int",
-					url: this.$t("pages.loginInstances.hpi_int_link"),
-				},
-			],
+			isTablet,
+			isMobile,
+			tiles,
 		};
 	},
-	computed: {
-		isMobile() {
-			return this.$mq === "mobile";
-		},
-		isTablet() {
-			return this.$mq === "tablet";
-		},
-	},
-	head() {
-		return {
-			title: "dBildungscloud",
-		};
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
