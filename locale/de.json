@@ -194,7 +194,7 @@
 	"error.404": "404 – Seite nicht gefunden",
 	"error.408": "408 – Zeitüberschreitung bei der Serververbindung",
 	"error.generic": "Ein Fehler ist aufgetreten",
-	"error.action.back": "Zurück zu Dashboard",
+	"error.action.back": "Zur Startseite",
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
