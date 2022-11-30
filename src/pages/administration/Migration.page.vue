@@ -301,6 +301,7 @@ import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
+
 export default {
 	components: { DefaultWireframe, ImportUsers },
 	data() {
@@ -519,10 +520,8 @@ export default {
 			this.migrationStep = nextStep;
 		},
 	},
-	head() {
-		return {
-			title: this.$t("pages.administration.migration.title"),
-		};
+	mounted() {
+		document.title = this.$t("pages.administration.migration.title").toString();
 	},
 };
 </script>

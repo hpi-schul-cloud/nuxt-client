@@ -139,19 +139,14 @@ import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-import {
-	getAuthor,
-	getDescription,
-	getMetadataAttribute,
-	getProvider,
-	getTags,
-} from "@/utils/helpers";
+import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags } from "@/utils/helpers";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
+import { defineComponent } from "vue";
 
 const DEFAULT_AUTHOR = "admin";
 
-export default {
+export default defineComponent({
 	components: {
 		AddContentButton,
 		BaseLink,
@@ -253,13 +248,21 @@ export default {
 	mounted() {
 		this.searchElements();
 		this.activateTransition = true;
+		document.title = (
+			this.isInline
+				? {
+						title: this.$t("pages.content.page.window.title", {
+							instance: this.$theme.name,
+						}),
+				  }
+				: { title: this.$t("common.words.lernstore") }
+		).toString();
 	},
 	methods: {
 		async searchElements() {
 			try {
 				// Clears the previous collection elements before rendering the new ones
 				contentModule.clearElements();
-				// TODO wrong use of store (not so bad)
 				await contentModule.getElements(this.query);
 			} catch (error) {
 				this.$toast.error(
@@ -270,7 +273,6 @@ export default {
 		async addElements() {
 			if (this.query.$skip < this.elements.total) {
 				this.query.$skip += this.query.$limit;
-				// TODO wrong use of store (not so bad)
 				await contentModule.addElements(this.query);
 			}
 		},
@@ -280,16 +282,7 @@ export default {
 				: this.role;
 		},
 	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
-	},
-};
+});
 </script>
 
 <style>

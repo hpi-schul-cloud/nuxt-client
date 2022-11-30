@@ -73,12 +73,11 @@ describe("ldap/activate", () => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
 			envConfigModule: EnvConfigModule,
-			schools: SchoolsModule,
+			schoolsModule: SchoolsModule,
 		});
 		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 
-	it(...isValidComponent(ldapActivate));
 
 	it("should push to router when clicking the back button", async () => {
 		const wrapper = mount(ldapActivate, {

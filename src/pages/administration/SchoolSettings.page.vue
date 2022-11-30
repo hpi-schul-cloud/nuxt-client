@@ -126,12 +126,10 @@ export default {
 			immediate: true,
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.school.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.school.index.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

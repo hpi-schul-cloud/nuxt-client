@@ -173,6 +173,16 @@ export default {
 		},
 	},
 	mounted() {
+		document.title = (
+			this.isInline
+				? {
+						title: this.$t("pages.content.page.window.title", {
+							instance: this.$theme.name,
+						}),
+				  }
+				: { title: this.$t("common.words.lernstore") }
+		).toString();
+
 		const initialSearchQuery = this.$route.query.q;
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
@@ -184,13 +194,11 @@ export default {
 		async addContent() {
 			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
-				// TODO wrong use of store (not so bad)
 				await contentModule.addResources(this.query);
 			}
 		},
 		async searchContent() {
 			try {
-				// TODO wrong use of store (not so bad)
 				await contentModule.getResources(this.query);
 			} catch (error) {
 				this.$toast.error(
@@ -210,15 +218,6 @@ export default {
 		goBack() {
 			window.close();
 		},
-	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
 	},
 };
 </script>

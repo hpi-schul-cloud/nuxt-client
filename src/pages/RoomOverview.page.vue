@@ -366,12 +366,10 @@ export default {
 			roomsModule.fetch();
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.courses.index.courses.active")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.courses.index.courses.active")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

@@ -27,7 +27,7 @@ export default defineComponent({
 		if (tasksModule === undefined) {
 			throw new Error("tasksModule Module undefined"); // NUXT_REMOVAL use application error
 		}
-    
+
 		useTitle(i18n.t("common.words.tasks").toString());
 
 		onMounted(() => tasksModule.fetchAllTasks());

@@ -245,6 +245,10 @@ export default {
 	},
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
+
+		document.title = `${this.$t("pages.administration.ldap.save.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 	methods: {
 		backButtonHandler() {
@@ -265,13 +269,11 @@ export default {
 			}
 
 			if (id) {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("ldap-config/patchData", {
 					systemData: temporaryConfigData,
 					systemId: id,
 				});
 			} else {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch(
 					"ldap-config/submitData",
 					temporaryConfigData
@@ -283,13 +285,6 @@ export default {
 				path: `/administration/school`,
 			});
 		},
-	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.ldap.save.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
 	},
 };
 </script>

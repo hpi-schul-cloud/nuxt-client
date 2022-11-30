@@ -113,7 +113,7 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
+import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -555,12 +555,10 @@ export default {
 			return this.$store?.getters["uiState/get"]({ key, identifier });
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.teachers.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t(
+			"pages.administration.teachers.index.title"
+		)} - ${this.$theme.short_name}`;
 	},
 };
 </script>
