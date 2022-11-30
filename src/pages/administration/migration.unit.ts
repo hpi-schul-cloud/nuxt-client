@@ -150,7 +150,7 @@ describe("User Migration / Index", () => {
 		const wrapper = getWrapperShallow();
 
 		const title = wrapper.vm.$i18n.t("pages.administration.migration.title");
-		expect(wrapper.vm.$metaInfo.title).toBe(title);
+		expect(document.title).toBe(title);
 	});
 
 	it("shows business error", () => {
