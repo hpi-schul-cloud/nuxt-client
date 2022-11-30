@@ -26,8 +26,7 @@
 
 <script>
 import ModalFooter from "@/components/molecules/ModalFooter";
-import { XmlEntities } from "html-entities";
-const entities = new XmlEntities();
+import { decode } from "html-entities";
 
 export default {
 	components: {
@@ -35,7 +34,7 @@ export default {
 	},
 	filters: {
 		entities(value) {
-			return entities.decode(value);
+			return decode(value);
 		},
 	},
 	props: {
