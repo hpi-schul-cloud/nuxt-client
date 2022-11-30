@@ -322,11 +322,7 @@ import StepProgress from "@/components/organisms/StepProgress";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
-import {
-	inputDateFromDeUTC,
-	inputDateFormat,
-	printDateFromDeUTC,
-} from "@/plugins/datetime";
+import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { mdiAlert } from "@mdi/js";
 
 export default {
@@ -473,6 +469,7 @@ export default {
 	},
 	mounted() {
 		this.checkTableData();
+		document.title = `${this.title} - ${this.$theme.short_name}`;
 	},
 	methods: {
 		async find() {
@@ -625,11 +622,6 @@ export default {
 				this.cancelWarning = true;
 			}
 		},
-	},
-	head() {
-		return {
-			title: `${this.title} - ${this.$theme.short_name}`,
-		};
 	},
 };
 </script>

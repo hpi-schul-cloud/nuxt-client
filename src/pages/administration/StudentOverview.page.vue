@@ -124,9 +124,9 @@ import AdminTableLegend from "@/components/molecules/AdminTableLegend";
 import { studentFilter } from "@/utils/adminFilter";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDateFromDeUTC, printDate } from "@/plugins/datetime";
+import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
+import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -437,6 +437,11 @@ export default {
 	created(ctx) {
 		this.find();
 	},
+	mounted() {
+		document.title = `${this.$t(
+			"pages.administration.students.index.title"
+		)} - ${this.$theme.short_name}`;
+	},
 	methods: {
 		find() {
 			const query = {
@@ -498,7 +503,6 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -540,7 +544,6 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "student",
@@ -605,13 +608,6 @@ export default {
 				});
 			}, 400);
 		},
-	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.students.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
 	},
 };
 </script>

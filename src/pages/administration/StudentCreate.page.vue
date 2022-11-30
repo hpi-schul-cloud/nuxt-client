@@ -98,12 +98,10 @@ export default {
 			});
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.students.new.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.students.new.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

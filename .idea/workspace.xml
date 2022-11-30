@@ -5,22 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/types/enum/device-media-query.enum.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/LernstoreDetailView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/LernstoreDetailView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/LernStoreOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/LernStoreOverview.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/LoginInstances.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/LoginInstances.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/NewsCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/NewsCreate.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/NewsEdit.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/NewsEdit.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/POCFiles.page.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RoomDetails.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomDetails.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RoomList.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomList.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RoomOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RoomOverview.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TaskCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TaskCreate.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TaskOverview.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/task-overview.unit.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/LDAPConfig.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/LDAPConfig.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/Migration.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/Migration.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/SchoolSettings.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/SchoolSettings.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentConsent.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentConsent.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentCreate.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentOverview.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/TeacherCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/TeacherCreate.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/administration/TeacherOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/TeacherOverview.page.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
