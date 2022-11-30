@@ -4,18 +4,36 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Form"
 	>
-		<v-form>
+		<v-form class="d-flex flex-column">
 			<title-card v-model="name" :label="$t('common.labels.title')" />
-			<editor
+			<!-- <editor
 				v-model="description"
 				:label="$t('common.labels.description')"
-			></editor>
-			<v-btn color="secondary" outlined @click="cancel">
-				{{ $t("common.actions.cancel") }}
+			></editor> -->
+			<template v-for="child in children">
+				<component
+					:is="componentProps.component"
+					:key="child.name"
+					v-bind="componentProps.props"
+					v-model="componentProps.model"
+				></component>
+			</template>
+			<v-btn
+				fab
+				color="primary"
+				class="align-self-center"
+				@click="addComponent"
+			>
+				<v-icon>{{ mdiPlus }}</v-icon>
 			</v-btn>
-			<v-btn class="float-right" color="primary" depressed @click="save">
-				{{ $t("common.actions.save") }}
-			</v-btn>
+			<div>
+				<v-btn color="secondary" outlined @click="cancel">
+					{{ $t("common.actions.cancel") }}
+				</v-btn>
+				<v-btn class="float-right" color="primary" depressed @click="save">
+					{{ $t("common.actions.save") }}
+				</v-btn>
+			</div>
 		</v-form>
 	</default-wireframe>
 </template>
@@ -32,6 +50,7 @@ import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TitleCard from "@components/atoms/TitleCard.vue";
 import Editor from "@/components/molecules/Editor.vue";
+import { mdiPlus } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -51,6 +70,8 @@ export default defineComponent({
 		const i18n = inject("i18n");
 		const name = ref("");
 		const description = ref("");
+		const children = ref([]);
+		const componentProps = ref({});
 
 		const breadcrumbs = [
 			{
@@ -65,6 +86,16 @@ export default defineComponent({
 			const taskData = taskModule.getTaskData;
 			name.value = taskData.name;
 			description.value = taskData.description.content;
+
+			if (description.value !== "") {
+				componentProps.value = {
+					component: "Editor",
+					model: description,
+					props: { placeholder: i18n.t("common.labels.description") },
+				};
+
+				children.value.push(componentProps.value);
+			}
 		});
 
 		const save = () => {
@@ -86,7 +117,27 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		return { breadcrumbs, name, description, save, cancel };
+		const addComponent = () => {
+			componentProps.value = {
+				component: "Editor",
+				model: description,
+				props: { placeholder: i18n.t("common.labels.description") },
+			};
+
+			children.value.push(componentProps.value);
+		};
+
+		return {
+			mdiPlus,
+			breadcrumbs,
+			name,
+			description,
+			children,
+			componentProps,
+			save,
+			cancel,
+			addComponent,
+		};
 	},
 	head() {
 		return {
