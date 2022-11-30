@@ -60,7 +60,6 @@ export default defineComponent({
 		ShareModalResult,
 		vCustomDialog,
 	},
-	inject: ["i18n", "notifierModule"],
 	setup() {
 		const i18n = inject("i18n");
 		const notifier = inject("notifierModule");

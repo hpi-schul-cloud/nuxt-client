@@ -95,12 +95,6 @@ export const routes = [
 		component: () => interopDefault(import("../pages/Imprint.page.vue")),
 		name: "imprint",
 	},
-	// deprecated?
-	{
-		path: "/insights",
-		component: () => interopDefault(import("../pages/Insights.page.vue")),
-		name: "insights",
-	},
 	{
 		path: "/login-instances",
 		component: () => interopDefault(import("../pages/LoginInstances.page.vue")),

@@ -21,7 +21,6 @@ const routes = [
 	`^/cfiles/teams/.+`,
 	`^/error/`,
 	`^/imprint/?`,
-	`^/insights`,
 	`^/login-instances/?`,
 	`^/news/new`,
 	`^/news/${mongoId}/edit`,
