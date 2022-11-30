@@ -28,7 +28,10 @@ describe("@/components/share-course/ImportModal", () => {
 		// should log an error to console.error
 		getWrapper();
 
-		expect(errorSpy).toBeCalled();
+		expect(errorSpy).toBeCalledWith(
+			expect.stringContaining('Missing required prop: "parentName"')
+		);
+		errorSpy.mockRestore();
 	});
 
 	it("should render with props", () => {
