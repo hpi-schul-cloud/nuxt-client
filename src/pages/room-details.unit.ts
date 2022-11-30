@@ -119,6 +119,11 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		}),
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 		setup() {
 			provide("copyModule", copyModuleMock);
 			provide("loadingStateModule", loadingStateModuleMock);
