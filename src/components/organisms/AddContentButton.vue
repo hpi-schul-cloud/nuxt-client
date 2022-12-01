@@ -128,7 +128,7 @@ export default {
 						this.resource.properties,
 						"ccm:replicationsourceuuid"
 					) +
-					"?isCollection=false&q=h5p"
+					"?isCollection=false%26q=h5p"
 				);
 			}
 			return getUrl(this.resource);
@@ -148,7 +148,7 @@ export default {
 					let elementUrl = getUrl(element);
 					if (getMediatype(element) == "file-h5p") {
 						const elementID = getID(element);
-						elementUrl = `/content/${elementID}?isCollection=false&q=h5p`;
+						elementUrl = `/content/${elementID}?isCollection=false%26q=h5p`;
 					}
 
 					return {
