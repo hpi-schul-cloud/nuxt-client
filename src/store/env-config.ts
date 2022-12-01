@@ -44,7 +44,7 @@ export default class EnvConfigModule extends VuexModule {
 		GHOST_BASE_URL: "",
 		FEATURE_CONSENT_NECESSARY: true,
 		// TODO: Set default to false
-		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 	};
 	loadingErrorCount: number = 0;
 	status: Status = "";

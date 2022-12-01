@@ -1,22 +1,22 @@
 <template>
-	<div>
-		<h2 class="text-h4 mb-10">Migration...</h2>
-		<v-alert light prominent text type="info">
-			{{ $t("components.administration.adminMigrationSection.infoText") }}
-		</v-alert>
-		<v-switch
-			label="Migration von IServ zu SANIS aktivieren..."
-			:disabled="isMigrationAvailable && isMigrationFeatureEnabled"
-			:true-value="true"
-			:false-value="false"
-			:value="isMigrationEnabled"
-			@change="setMigration"
-		></v-switch>
+  <div>
+	<h2 class="text-h4 mb-10">{{ t("components.administration.adminMigrationSection.headers") }}</h2>
+	<v-alert light prominent text type="info">
+		{{ t("components.administration.adminMigrationSection.infoText") }}
+	</v-alert>
+	<v-switch
+		:label="t('components.administration.adminMigrationSection.label')"
+		:disabled="!isMigrationAvailable"
+		:true-value="true"
+		:false-value="false"
+		:value="isMigrationEnabled"
+		@change="setMigration"
+	></v-switch>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref } from "@vue/composition-api";
 import { inject, Ref } from "@nuxtjs/composition-api";
 import EnvConfigModule from "../../store/env-config";
 import SchoolsModule from "@store/schools";
@@ -44,9 +44,9 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationFeatureEnabled = computed(() => {
-			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
-		});
+		const isMigrationFeatureEnabled = ref(
+        envConfigModule.getFeatureSchoolSanisUserMigrationEnabled
+        );
 
 		const isMigrationEnabled: Ref<boolean> = ref(
 			schoolsModule.getOauthMigration
