@@ -1,17 +1,19 @@
 <template>
-  <div>
-	<h2 class="text-h4 mb-10">{{ t("components.administration.adminMigrationSection.headers") }}</h2>
-	<v-alert light prominent text type="info">
-		{{ t("components.administration.adminMigrationSection.infoText") }}
-	</v-alert>
-	<v-switch
-		:label="t('components.administration.adminMigrationSection.label')"
-		:disabled="!isMigrationAvailable"
-		:true-value="true"
-		:false-value="false"
-		:value="isMigrationEnabled"
-		@change="setMigration"
-	></v-switch>
+	<div>
+		<h2 class="text-h4 mb-10">
+			{{ t("components.administration.adminMigrationSection.headers") }}
+		</h2>
+		<v-alert light prominent text type="info">
+			{{ t("components.administration.adminMigrationSection.infoText") }}
+		</v-alert>
+		<v-switch
+			:label="t('components.administration.adminMigrationSection.label')"
+			:disabled="!isMigrationAvailable"
+			:true-value="true"
+			:false-value="false"
+			:value="isMigrationEnabled"
+			@change="setMigration"
+		></v-switch>
 	</div>
 </template>
 
@@ -45,8 +47,8 @@ export default defineComponent({
 		};
 
 		const isMigrationFeatureEnabled = ref(
-        envConfigModule.getFeatureSchoolSanisUserMigrationEnabled
-        );
+			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled
+		);
 
 		const isMigrationEnabled: Ref<boolean> = ref(
 			schoolsModule.getOauthMigration

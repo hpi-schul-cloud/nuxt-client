@@ -271,16 +271,17 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("AdminMigrationSection should be visible", () => {
-
 		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore
+				store: mockStore,
 			}),
 		});
 
-		expect(wrapper.findComponent({ name: 'admin-migration-section' }).exists()).toStrictEqual(true);
+		expect(
+			wrapper.findComponent({ name: "admin-migration-section" }).exists()
+		).toStrictEqual(true);
 	});
 
 	it("AdminMigrationSection should not be visible", () => {
@@ -295,7 +296,9 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.findComponent({ name: 'admin-migration-section' }).exists()).toStrictEqual(false);
+		expect(
+			wrapper.findComponent({ name: "admin-migration-section" }).exists()
+		).toStrictEqual(false);
 	});
 
 	it("should load skeleton while loading", () => {
@@ -307,7 +310,9 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 
-		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBeTrue();
+		expect(
+			wrapper.findComponent({ name: "v-skeleton-loader" }).exists()
+		).toBeTrue();
 	});
 
 	it("error image should visible if schoolError occured", () => {

@@ -42,7 +42,9 @@
 					<school-policies
 						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
 					></school-policies>
-					<admin-migration-section  v-if="isOauthMigrationEnabled" class="oauth-migration"
+					<admin-migration-section
+						v-if="isOauthMigrationEnabled"
+						class="oauth-migration"
 					></admin-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
@@ -101,7 +103,8 @@ export default {
 			return schoolsModule.getError;
 		},
 		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
-    isOauthMigrationEnabled: () => envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
+		isOauthMigrationEnabled: () =>
+			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},
