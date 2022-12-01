@@ -7,7 +7,14 @@ const testProps = {
 
 describe("@/components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
-		...createComponentMocks({ i18n: true }),
+		...createComponentMocks({
+			i18n: true,
+			$route: {
+				query: {
+					id: "mockId",
+				},
+			},
+		}),
 		propsData: { ...testProps },
 	});
 
