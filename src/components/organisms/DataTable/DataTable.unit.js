@@ -3,7 +3,7 @@ import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
 import { localDataPrefix } from "@/mixins/controllableData";
 
-const defaultData = tableData(50);
+const defaultData = tableData(30);
 
 function getWrapper(attributes, options) {
 	return mount(DataTable, {
@@ -31,13 +31,15 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("pagination", () => {
-		const total = 150;
+		const total = 100;
 		const bigData = tableData(total);
 
-		const getNextPageButton = (wrapper) =>
-			wrapper
+		const getNextPageButton = (wrapper) =>{
+			wrapper.vm.$nextTick()
+			return wrapper
 				.findAll(".pagination-link")
 				.wrappers.find((w) => w.attributes("aria-label") === "Go to next page");
+		}
 		const getPrevPageButton = (wrapper) =>
 			wrapper
 				.findAll(".pagination-link")
@@ -77,7 +79,7 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		});
 
 		it("should show correct data on page 2", async () => {
-			const pageSize = 25;
+			const pageSize = 5;
 			const wrapper = getWrapper({
 				data: bigData,
 				paginated: true,
@@ -151,7 +153,8 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		const sortedOtherItems = "LastItem";
 		const testItems = 4;
 		const centerIndex = Math.floor(testItems / 2);
-		const flatData = tableData(testItems, (index) => ({
+		const flatData = tableData(testItems).map( (item, index) => ({
+			...item,
 			firstName: index === centerIndex ? sortedFirstItem : sortedOtherItems,
 		}));
 		const isUnsorted = async (wrapper) => {
@@ -298,7 +301,8 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 
 	describe("selection", () => {
 		const total = 10;
-		const testData = tableData(total, (index) => ({
+		const testData = tableData(total).map( (item, index) => ({
+			...item,
 			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
@@ -339,7 +343,9 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 				data: testData,
 				rowsSelectable: true,
 			});
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			wrapper.vm.$nextTick();
+			const ele = wrapper.find("tbody tr input[type=checkbox]")
+			ele.trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[[testData[0]._id]],

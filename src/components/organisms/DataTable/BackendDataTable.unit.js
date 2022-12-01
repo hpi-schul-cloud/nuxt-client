@@ -176,7 +176,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 	describe("selection", () => {
 		const total = 10;
-		const testData = tableData(Math.floor(total / 2), (index) => ({
+		const testData = tableData(Math.floor(total / 2)).map((item, index) => ({
+			...item,
 			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
