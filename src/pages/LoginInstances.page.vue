@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import InstanceTile from "@/components/molecules/InstanceTile";
+import InstanceTile from "@/components/molecules/InstanceTile.vue";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useTitle } from "@vueuse/core";
 import { computed, defineComponent, inject, ref } from "vue";

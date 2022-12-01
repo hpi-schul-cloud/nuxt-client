@@ -1,24 +1,11 @@
-import { printDate } from "@/plugins/datetime";
-import faker from "faker/locale/en";
-faker.seed(512); // any static number will do the job
+import users from "./testUserData";
 
 import InputCheckbox from "@/components/organisms/DataFilter/inputs/Checkbox";
 import InputRadio from "@/components/organisms/DataFilter/inputs/Radio";
 import InputDefault from "@/components/organisms/DataFilter/inputs/Default";
 
-const tableData = (n, overwrite = () => ({})) =>
-	new Array(n).fill(0).map((item, index) => ({
-		_id: faker.datatype.uuid(),
-		firstName: faker.name.firstName(),
-		lastName: faker.name.lastName(),
-		address: {
-			city: faker.address.city(),
-		},
-		age: faker.datatype.number(),
-		birthday: printDate(faker.date.past()),
-		agreed: faker.datatype.boolean(),
-		...overwrite(index),
-	}));
+const tableData = (n) => users.slice(0, n);
+
 
 const tableColumns = [
 	{

@@ -17,8 +17,6 @@ import globalStubs from "./stubs.js";
 // for tests.
 Vue.config.productionTip = false;
 
-Vue.use(Vuex);
-
 // ===
 // Register global components
 // ===
@@ -115,6 +113,11 @@ global.mount = mount;
 
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = shallowMount;
+
+// global.wait = (duration) =>
+// 	new Promise((resolve) => {
+// 		setTimeout(resolve, duration);
+// 	});
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({

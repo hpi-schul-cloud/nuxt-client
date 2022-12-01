@@ -15,7 +15,6 @@ type componentMockOptions = {
 	$route?: string | any;
 	$router?: any;
 	router?: boolean;
-	uiState?: any;
 	dialog?: {
 		confirm: (params: any) => void;
 	};
@@ -32,7 +31,6 @@ export default function createComponentMocks({
 	$route,
 	$router,
 	router,
-	uiState,
 	dialog,
 	mocks,
 	stubs,
@@ -46,7 +44,6 @@ export default function createComponentMocks({
 		$route,
 		$router,
 		router,
-		uiState,
 		dialog,
 		mocks,
 		stubs,

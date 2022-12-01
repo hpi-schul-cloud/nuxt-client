@@ -84,13 +84,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
@@ -106,13 +106,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
-				$route: { query: {} },
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route: { query: {} },
 			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
@@ -128,13 +128,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
@@ -178,12 +178,12 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
 			},
 		});
 		const confirmModal = wrapper.find(`[data-testid="confirmModal"]`);
@@ -200,12 +200,12 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$router: { push: routerPushStub },
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
 			},
 		});
 
