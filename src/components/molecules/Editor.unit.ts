@@ -1,11 +1,11 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Editor from "@/components/molecules/Editor.vue";
 import { provide } from "vue";
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 
 describe("@/components/molecules/Editor", () => {
-	const getWrapper: any = (attrs = {}) => {
-		const wrapper = mount(Editor, {
+	const getWrapper = (attrs = {}) => {
+		const wrapper = shallowMount(Editor, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -37,7 +37,7 @@ describe("@/components/molecules/Editor", () => {
 			}
 			return;
 		}
-		fail("No error on invalid prop");
+		throw new Error("No error on invalid prop");
 	});
 
 	it("should render ckeditor component", () => {
@@ -52,7 +52,7 @@ describe("@/components/molecules/Editor", () => {
 			ref: "ck",
 		});
 
-		await ck.vm.$emit("input");
+		await ck.trigger("input");
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 });

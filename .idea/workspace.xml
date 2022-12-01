@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/guards/permission.guard.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/guards/permission.guard.unit.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,17 +70,59 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.PermissionGuard">
-    <configuration name="@/components/organisms/LernstoreCollectionDetailView" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.@/components/molecules/Editor.should emit input on content changes">
+    <configuration name="@/components/molecules/Editor" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/components/organisms/LernstoreCollectionDetailView.unit.js" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
       <test-names>
-        <test-name value="@/components/organisms/LernstoreCollectionDetailView" />
+        <test-name value="@/components/molecules/Editor" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@/components/molecules/Editor.should emit input on content changes" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
+      <test-names>
+        <test-name value="@/components/molecules/Editor" />
+        <test-name value="should emit input on content changes" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@/components/molecules/Editor.should not render with invalid mode property" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
+      <test-names>
+        <test-name value="@/components/molecules/Editor" />
+        <test-name value="should not render with invalid mode property" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@/components/molecules/Editor.should render ckeditor component" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
+      <test-names>
+        <test-name value="@/components/molecules/Editor" />
+        <test-name value="should render ckeditor component" />
       </test-names>
       <method v="2" />
     </configuration>
@@ -97,52 +139,13 @@
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="UseFileTableUtils" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/pages/files/file-table-utils.composable.unit.ts" />
-      <test-names>
-        <test-name value="UseFileTableUtils" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="ldap/activate" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/pages/administration/ldap-activate.unit.js" />
-      <test-names>
-        <test-name value="ldap/activate" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="store/users" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/store/users.unit.js" />
-      <test-names>
-        <test-name value="store/users" />
-      </test-names>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.@/components/molecules/Editor.should emit input on content changes" />
+        <item itemvalue="Jest.@/components/molecules/Editor" />
+        <item itemvalue="Jest.@/components/molecules/Editor.should not render with invalid mode property" />
+        <item itemvalue="Jest.@/components/molecules/Editor.should render ckeditor component" />
         <item itemvalue="Jest.PermissionGuard" />
-        <item itemvalue="Jest.UseFileTableUtils" />
-        <item itemvalue="Jest.store/users" />
-        <item itemvalue="Jest.ldap/activate" />
-        <item itemvalue="Jest.@/components/organisms/LernstoreCollectionDetailView" />
       </list>
     </recent_temporary>
   </component>
@@ -207,7 +210,7 @@
       <workItem from="1666873142914" duration="3112000" />
       <workItem from="1667308745692" duration="3657000" />
       <workItem from="1667483716446" duration="6255000" />
-      <workItem from="1669901447274" duration="1048000" />
+      <workItem from="1669901447274" duration="4623000" />
     </task>
     <servers />
   </component>
