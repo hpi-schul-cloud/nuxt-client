@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/LDAPConfig.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/LDAPConfig.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/Migration.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/Migration.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/SchoolSettings.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/SchoolSettings.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentConsent.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentConsent.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentCreate.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/StudentOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/StudentOverview.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/TeacherCreate.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/TeacherCreate.page.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/administration/TeacherOverview.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/administration/TeacherOverview.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/files/file-table-utils.composable.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/files/file-table-utils.composable.unit.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +70,7 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.ldap/activate">
+  <component name="RunManager" selected="Jest.UseFileTableUtils">
     <configuration name="@/components/organisms/LernstoreCollectionDetailView" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
@@ -118,17 +111,16 @@
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="TaskOverview.should render child component for %p" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="UseFileTableUtils" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/pages/task-overview.unit.ts" />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/pages/files/file-table-utils.composable.unit.ts" />
       <test-names>
-        <test-name value="TaskOverview" />
-        <test-name value="should render child component for %p" />
+        <test-name value="UseFileTableUtils" />
       </test-names>
       <method v="2" />
     </configuration>
@@ -147,11 +139,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.UseFileTableUtils" />
         <item itemvalue="Jest.ldap/activate" />
         <item itemvalue="Jest.@/components/organisms/LernstoreCollectionDetailView" />
         <item itemvalue="Jest.TaskOverview" />
         <item itemvalue="Jest.TaskOverview.should not render child component for arbitrary roles" />
-        <item itemvalue="Jest.TaskOverview.should render child component for %p" />
       </list>
     </recent_temporary>
   </component>
@@ -216,6 +208,7 @@
       <workItem from="1666873142914" duration="3112000" />
       <workItem from="1667308745692" duration="3657000" />
       <workItem from="1667483716446" duration="6255000" />
+      <workItem from="1669901447274" duration="439000" />
     </task>
     <servers />
   </component>
