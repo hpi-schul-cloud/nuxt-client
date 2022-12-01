@@ -1,41 +1,47 @@
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import { createModuleMocks } from "@utils/mock-store-module";
 import AdminMigrationSection from "@components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@store/schools";
 import EnvConfigModule from "@store/env-config";
+import VueI18n from "vue-i18n";
 
 describe("AdminMigrationSection", () => {
-    let wrapper: Wrapper<any>;
-    let schoolsModule: SchoolsModule;
-    let envConfigModule: EnvConfigModule;
+    let schoolsModule: jest.Mocked<SchoolsModule>;
+    let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-
-    function setup(getters: Partial<SchoolsModule> = {}) {
+    const setup = (schoolGetters: Partial<SchoolsModule> = {}) => {
         document.body.setAttribute("data-app", "true");
         schoolsModule = createModuleMocks(SchoolsModule, {
-            getOauthMigrationAvailable: true,
-            getOauthMigration : true,
-            ...getters });
+            getOauthMigrationAvailable: false,
+            getOauthMigration : false,
+            ...schoolGetters
+        }) as jest.Mocked<SchoolsModule>;
+
         envConfigModule = createModuleMocks(EnvConfigModule, {
             getFeatureSchoolSanisUserMigrationEnabled: true,
-            ... getters });
-        wrapper = mount(AdminMigrationSection, {
+        })  as jest.Mocked<EnvConfigModule>;
+
+        const wrapper: Wrapper<any> = shallowMount(AdminMigrationSection, {
             ...createComponentMocks({
                 i18n: true,
             }),
             setup() {
                 provide("i18n", { t: (key: string) => key });
-                provide("schoolModule", schoolsModule);
+                provide("schoolsModule", schoolsModule);
                 provide("envConfigModule", envConfigModule);
             },
         });
-    }
-// schoolsModule injection not found
+
+        return {
+            wrapper
+        }
+    };
+
     describe("basic functions", () => {
         it("should render component", () => {
-            setup();
+            const { wrapper } = setup();
             expect(wrapper.findComponent(AdminMigrationSection).exists()).toBe(true);
         });
     });
@@ -43,34 +49,37 @@ describe("AdminMigrationSection", () => {
     describe("inject", () => {
         it("should throw an error when schoolsModule injection fails", () => {
             try {
-                wrapper = shallowMount(AdminMigrationSection, {
+                shallowMount(AdminMigrationSection, {
                     setup() {
-                        provide("schoolsModule", SchoolsModule);
+                        provide("envConfigModule", EnvConfigModule);
+                        provide("i18n", VueI18n);
                     },
                 });
             } catch (e) {
-                expect(e.message.includes('Injection of dependencies failed')).toBeTruthy();
+                expect(e.message.includes('Injection "schoolsModule" not found')).toBeTruthy();
             }
         });
 
         it("should throw an error when envConfigModule injection fails", () => {
             try {
-                wrapper = shallowMount(AdminMigrationSection, {
+                shallowMount(AdminMigrationSection, {
                     setup() {
-                        provide("envConfigModule", EnvConfigModule);
+                        provide("schoolsModule", SchoolsModule);
+                        provide("i18n", VueI18n);
                     },
                 });
             } catch (e) {
                 expect(
-                    e.message.includes('Injection of dependencies failed')
+                    e.message.includes('Injection "envConfigModule" not found')
                 ).toBeTruthy();
             }
         });
 
         it("should throw an error when i18n injection fails", () => {
             try {
-                wrapper = shallowMount(AdminMigrationSection, {
+                shallowMount(AdminMigrationSection, {
                     setup() {
+                        provide("schoolsModule", SchoolsModule);
                         provide("envConfigModule", EnvConfigModule);
                     },
                 });
@@ -80,6 +89,77 @@ describe("AdminMigrationSection", () => {
         });
     });
 
+    describe("t", () => {
+        it("should return translation", () => {
+            const { wrapper } = setup({});
+            const testKey = "testKey";
 
+            const result: string = wrapper.vm.t(testKey);
 
+            expect(result).toEqual(testKey);
+        });
+
+        it("should return 'unknown translation-key'", () => {
+            const { wrapper } = setup({});
+            const testKey = 123;
+
+            const result: string = wrapper.vm.t(testKey);
+
+            expect(result.includes("unknown translation-key:")).toBeTruthy();
+        });
+    });
+
+    describe("Switch Button", () => {
+        it("should be available when migration is available", () => {
+            const { wrapper } = setup({
+                getOauthMigrationAvailable: true
+            });
+            const switchComponent = wrapper.findComponent({ name: "v-switch" });
+
+            expect(switchComponent.vm.$props.disabled).toBeFalsy();
+        });
+
+        it("should be disabled when migration is not available", () => {
+            const { wrapper } = setup();
+
+            const switchComponent = wrapper.findComponent({ name: "v-switch" });
+
+            expect(switchComponent.vm.$props.disabled).toBeTruthy();
+        });
+
+        it("should set school oauth migration, when click have been triggered", () => {
+            const { wrapper } = setup({
+                getOauthMigrationAvailable: true
+            });
+
+            const switchComponent = wrapper.findComponent({ name: "v-switch" });
+            switchComponent.vm.$emit('change', true);
+
+            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith(true)
+        });
+
+        it("should set school oauth migration, when click have been triggered again", () => {
+            const { wrapper } = setup({
+                getOauthMigrationAvailable: true,
+                getOauthMigration : true
+            });
+
+            const switchComponent = wrapper.findComponent({ name: "v-switch" });
+            switchComponent.vm.$emit('change', false);
+
+            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith(false)
+        });
+    });
+
+    describe("Info Text", () => {
+        it('should display the info text', ()=> {
+            const { wrapper } = setup({
+                getOauthMigrationAvailable: true,
+            });
+
+            const text: string = wrapper.findComponent({ name: 'v-alert' }).text();
+
+            expect(text).toStrictEqual('components.administration.adminMigrationSection.infoText');
+        })
+    });
 });
