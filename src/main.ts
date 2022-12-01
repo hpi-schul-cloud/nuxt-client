@@ -46,6 +46,17 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+
+Vue.mixin({
+	computed: {
+		$user() {
+			return authModule.getUser;
+		},
+	},
+});
+
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";

@@ -204,9 +204,9 @@ global.createComponentMocks = ({
 	//Set 'vueMeta: true' for accessing nuxt page meta infos
 	// if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
 
-	if (user) {
-		// localVue.mixin(userMixin);
-	}
+	// if (user) {
+	// 	localVue.mixin(userMixin);
+	// }
 	localVue.use(Vuelidate);
 
 	// Set uiState like:

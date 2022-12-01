@@ -28,6 +28,12 @@ describe("teachers/new", () => {
 	it("should call 'createTeacher' action", async () => {
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
@@ -52,6 +58,12 @@ describe("teachers/new", () => {
 	it("should call toast successful", async () => {
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
@@ -85,6 +97,12 @@ describe("teachers/new", () => {
 		};
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: customMockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
