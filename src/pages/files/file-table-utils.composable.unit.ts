@@ -10,9 +10,9 @@ import {
 } from "@/store/types/collaborative-file";
 import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
-import { collaborativeFilesModule } from "@/store/store-accessor";
+import { collaborativeFilesModule } from "@/store";
 
-jest.mock("@/store/store-accessor", () => ({
+jest.mock("@/store", () => ({
 	collaborativeFilesModule: {
 		fetchFilesOverview: jest.fn(),
 		fetchTeams: jest.fn(),

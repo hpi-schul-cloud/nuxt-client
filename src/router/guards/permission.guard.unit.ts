@@ -3,7 +3,7 @@ import { NavigationGuard } from "vue-router";
 import { NavigationGuardNext, Route } from "vue-router/types/router";
 import Mock = jest.Mock;
 
-jest.mock("@/store/store-accessor", () => ({
+jest.mock("@/store", () => ({
 	authModule: {
 		getUserPermissions: ["validPermission"],
 	},
