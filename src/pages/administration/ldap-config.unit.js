@@ -59,6 +59,8 @@ describe("ldap/config", () => {
 		},
 	};
 
+	const short_name = "instance name";
+
 	it("should call 'getData' action if $route.query.id is defined", async () => {
 		mount(ldapConfig, {
 			...createComponentMocks({
@@ -66,6 +68,11 @@ describe("ldap/config", () => {
 				store: mockStore,
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		expect(getDataStub).toHaveBeenCalled();
 		getDataStub.mockClear();
@@ -85,6 +92,11 @@ describe("ldap/config", () => {
 				store: customMockStore,
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.systemData).toStrictEqual(mockInputData);
@@ -128,6 +140,11 @@ describe("ldap/config", () => {
 				store: customMockStore,
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		expect(getDataStub).not.toHaveBeenCalled();
 		expect(Object.keys(wrapper.vm.temp)).toHaveLength(1);
@@ -141,6 +158,11 @@ describe("ldap/config", () => {
 				store: mockStore,
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.setData({
 			systemData: mockInputData,
@@ -162,6 +184,11 @@ describe("ldap/config", () => {
 				store: mockStore,
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.setData({
 			systemData: mockInputData,
@@ -190,6 +217,11 @@ describe("ldap/config", () => {
 				},
 				store: mockStore,
 				$route,
+				mocks: {
+					$theme: {
+						short_name,
+					},
+				},
 			}),
 		});
 		const verifyBtn = wrapper.find(`[data-testid="ldapVerifyButton"]`);
@@ -222,6 +254,11 @@ describe("ldap/config", () => {
 				},
 				store: customMockStore,
 				$route,
+				mocks: {
+					$theme: {
+						short_name,
+					},
+				},
 			}),
 		});
 		await wrapper.vm.$nextTick();
