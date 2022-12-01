@@ -61,17 +61,33 @@ describe("ldap/config", () => {
 
 	const short_name = "instance name";
 
-	it("should call 'getData' action if $route.query.id is defined", async () => {
-		mount(ldapConfig, {
+	it("should mount component", () => {
+		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$route,
+			},
+		});
+		expect(wrapper).toBeDefined();
+	});
+
+	it("should call 'getData' action if $route.query.id is defined", async () => {
+		mount(ldapConfig, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+				$route,
 			},
 		});
 		expect(getDataStub).toHaveBeenCalled();
@@ -90,12 +106,12 @@ describe("ldap/config", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$route,
 			},
 		});
 		await wrapper.vm.$nextTick();
@@ -118,32 +134,38 @@ describe("ldap/config", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+				$route,
+			},
 		});
 		expect(getDataStub).not.toHaveBeenCalled();
 	});
 
 	it("should set 'systemData' as 'temp' if 'temp' exists", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			data: mockInputData,
-			temp: {
+		customMockStore["ldap-config"].getters = {
+			getData: () => mockInputData,
+			getVerified: () => ({}),
+			getSubmitted: () => ({}),
+			getTemp: () => ({
 				testKey: "test",
-			},
-			verified: {},
-			submitted: {},
-		});
+			}),
+			getStatus: () => null,
+		};
 		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$route,
 			},
 		});
 		expect(getDataStub).not.toHaveBeenCalled();
@@ -156,12 +178,12 @@ describe("ldap/config", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$route,
 			},
 		});
 		await wrapper.setData({
@@ -182,12 +204,12 @@ describe("ldap/config", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$route,
 			},
 		});
 		await wrapper.setData({
@@ -216,11 +238,11 @@ describe("ldap/config", () => {
 					};
 				},
 				store: mockStore,
-				$route,
 				mocks: {
 					$theme: {
 						short_name,
 					},
+					$route,
 				},
 			}),
 		});
@@ -253,11 +275,11 @@ describe("ldap/config", () => {
 					};
 				},
 				store: customMockStore,
-				$route,
 				mocks: {
 					$theme: {
 						short_name,
 					},
+					$route,
 				},
 			}),
 		});
