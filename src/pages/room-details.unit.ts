@@ -114,15 +114,13 @@ let shareCourseModuleMock: ShareCourseModule;
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
 	return mount(Room, {
-		...createComponentMocks({
-			i18n: true,
-			$router,
-			$route,
-		}),
+		...createComponentMocks({}),
 		mocks: {
 			$theme: {
 				short_name: "instance name",
 			},
+			$router,
+			$route,
 		},
 		setup() {
 			provide("copyModule", copyModuleMock);
