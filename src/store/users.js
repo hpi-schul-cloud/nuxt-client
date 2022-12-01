@@ -155,7 +155,7 @@ const usersModule = mergeDeep(base, {
 		},
 		async sendRegistrationLink({ commit }, payload = {}) {
 			const registrationLinkEndpoint = "/v1/users/mail/registrationLink";
-			const links = await this.$axios.$post(registrationLinkEndpoint, payload);
+			const links = await this.$axios.post(registrationLinkEndpoint, payload);
 			commit("setRegistrationLinks", links);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
