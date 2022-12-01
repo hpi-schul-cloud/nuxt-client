@@ -92,6 +92,7 @@ const envs = {
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 	FEATURE_SCHOOL_POLICY_ENABLED: true,
 	FEATURE_VIDEOCONFERENCE_ENABLED: true,
+	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 	ROCKETCHAT_SERVICE_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: "de,en,es",
 	I18N__DEFAULT_LANGUAGE: "de",
@@ -187,7 +188,7 @@ describe("SchoolSettingPage", () => {
 	it(...isValidComponent(SchoolPage));
 
 	it("tests env var school policy being true", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -203,7 +204,7 @@ describe("SchoolSettingPage", () => {
 			FEATURE_SCHOOL_POLICY_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
 		});
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -214,8 +215,40 @@ describe("SchoolSettingPage", () => {
 		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
 	});
 
+	it("tests env var school oauth migration being true", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.vm.isOauthMigrationEnabled).toBeTrue();
+	});
+
+	it("tests env var school oauth migration being false", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.vm.isOauthMigrationEnabled).toBeFalse();
+	});
+
 	it("tests whether current school year is computed right", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -226,7 +259,7 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("systems section should be visible and shows its data", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -237,21 +270,49 @@ describe("SchoolSettingPage", () => {
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
-	it("should load skeleton while loading", () => {
-		schoolsModule.setLoading(true);
-		const wrapper = mount(SchoolPage, {
+	it("AdminMigrationSection should be visible", () => {
+
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore
+			}),
+		});
+
+		expect(wrapper.findComponent({ name: 'admin-migration-section' }).exists()).toStrictEqual(true);
+	});
+
+	it("AdminMigrationSection should not be visible", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 		});
 
-		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTrue();
+		expect(wrapper.findComponent({ name: 'admin-migration-section' }).exists()).toStrictEqual(false);
+	});
+
+	it("should load skeleton while loading", () => {
+		schoolsModule.setLoading(true);
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+		});
+
+		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBeTrue();
 	});
 
 	it("error image should visible if schoolError occured", () => {
 		schoolsModule.setError({ error: { message: "some errors" } });
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -266,7 +327,7 @@ describe("SchoolSettingPage", () => {
 	});
 
 	it("should load needed data form server", async () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
