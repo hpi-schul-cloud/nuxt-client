@@ -1,9 +1,11 @@
+import { $axios } from "@/utils/api";
+
 const termsAndConditionsModule = {
 	state: () => ({ consentVersion: null }),
 	actions: {
 		schoolTermsPresent: async function ({ commit }, schoolId) {
 			const params = `?$limit=1&$sort[publishedAt]=-1&schoolId=${schoolId}`;
-			const data = (await this.$axios.get("/v1/consentVersions" + params)).data;
+			const data = (await $axios.get("/v1/consentVersions" + params)).data;
 			commit("setSchoolTermsPresent", data);
 		},
 	},

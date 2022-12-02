@@ -1,4 +1,5 @@
 import { unchangedPassword } from "../utils/ldapConstants";
+import { $axios } from "@/utils/api";
 
 const formatServerData = (data) => {
 	const { providerOptions } = data;
@@ -67,7 +68,7 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			commit("setStatus", "pending");
-			const { data } = (await this.$axios.get(`/v1/ldap-config/${id}`)).data;
+			const { data } = (await $axios.get(`/v1/ldap-config/${id}`)).data;
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
@@ -79,7 +80,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const requestUrl = "/v1/ldap-config?verifyOnly=true";
 			const data = formatClientData(payload);
-			const verification = (await this.$axios.post(requestUrl, data)).data;
+			const verification = (await $axios.post(requestUrl, data)).data;
 			commit("setTemp", payload);
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
@@ -92,7 +93,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=true`;
 			const data = formatClientData(systemData);
-			const verification = (await this.$axios.patch(requestUrl, data)).data;
+			const verification = (await $axios.patch(requestUrl, data)).data;
 			if (!systemData.searchUserPassword) {
 				systemData.searchUserPassword = unchangedPassword;
 			}
@@ -108,7 +109,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const requestUrl = "/v1/ldap-config?verifyOnly=false&activate=true";
 			const data = formatClientData(payload);
-			const submission = (await this.$axios.post(requestUrl, data)).data;
+			const submission = (await $axios.post(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
@@ -120,7 +121,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`;
 			const data = formatClientData(systemData);
-			const submission = (await this.$axios.patch(requestUrl, data)).data;
+			const submission = (await $axios.patch(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {

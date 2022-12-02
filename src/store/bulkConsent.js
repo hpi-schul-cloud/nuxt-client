@@ -1,5 +1,5 @@
 import generatePassword from "@/mixins/generatePassword";
-import qs from "qs";
+import { $axios } from "@/utils/api";
 
 export const actions = {
 	async register({ commit }, payload) {
@@ -10,16 +10,16 @@ export const actions = {
 			const promiseResult = await Promise.allSettled(
 				payload.map((user) => {
 					registered.push(user._id);
-					this.$axios
-						.$patch("/v1/users/admin/students/" + user._id, user)
+					$axios
+						.patch("/v1/users/admin/students/" + user._id, user)
 						.then((userData) => {
 							const accountModel = {
 								activated: true,
-								username: userData.email,
+								username: userData.data.email,
 								password: user.password,
 								userId: user._id,
 							};
-							this.$axios.post("/v1/accounts/", accountModel);
+							$axios.post("/v1/accounts/", accountModel);
 						})
 						.catch((error) => errors.push({ updateError: error }));
 				})
@@ -41,12 +41,14 @@ export const actions = {
 
 	async findConsentUsers({ commit, state }, query) {
 		query.users = state.selectedStudents;
-		const response = await this.$axios.get(`/v1/users/admin/students`, {
-			params: query,
-			paramsSerializer: (params) => {
-				return qs.stringify(params);
-			},
-		});
+		const response = (
+			await $axios.get(`/v1/users/admin/students`, {
+				params: query,
+				// paramsSerializer: (params) => {
+				// 	return qs.stringify(params);
+				// },
+			})
+		).data;
 
 		if (!response.data) {
 			commit("setStudentsData", []);

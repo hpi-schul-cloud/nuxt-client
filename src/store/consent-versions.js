@@ -1,3 +1,5 @@
+import { $axios } from "@/utils/api";
+
 const consentVersionsModule = {
 	state() {
 		return {
@@ -14,14 +16,14 @@ const consentVersionsModule = {
 		) {
 			commit("setLoading", true);
 			try {
-				const response = await this.$axios.get("/v1/consentVersions", {
+				const response = await $axios.get("/v1/consentVersions", {
 					params: {
 						schoolId,
 						consentTypes,
 						$limit: 100,
 						"$sort[publishedAt]": -1, // -> read more at https://docs.feathersjs.com/api/databases/querying.html#sort
 					},
-				});
+				}).data;
 
 				if (!withFile) {
 					commit("setConsentVersions", response.data);
@@ -31,7 +33,7 @@ const consentVersionsModule = {
 						response.data.map(async (consentVersion) => {
 							if (consentVersion.consentDataId) {
 								const requestUrl = `/base64Files/${consentVersion.consentDataId}`;
-								const fileData = (await this.$axios.get(requestUrl)).data;
+								const fileData = (await $axios.get(requestUrl)).data;
 								return { ...consentVersion, fileData };
 							} else {
 								return consentVersion;
@@ -52,7 +54,7 @@ const consentVersionsModule = {
 
 			try {
 				const requestUrl = "/v1/consentVersions";
-				const data = (await this.$axios.post(requestUrl, payload)).data;
+				const data = (await $axios.post(requestUrl, payload)).data;
 				const newConsentVersionsArray = [...state.consentVersions];
 				newConsentVersionsArray.unshift(data);
 
