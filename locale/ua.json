@@ -106,7 +106,6 @@
 	"common.words.times": "Часи",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
-	"common.words.copiedToClipboard": "Скопійовано в кеш",
 	"components.administration.adminMigrationSection.infoText": "Зверніть увагу, що міграція можлива лише за умови введення офіційного номера школи.",
 	"components.administration.adminMigrationSection.headers": "міграція",
 	"components.administration.adminMigrationSection.label": "Увімкнути міграцію з IServ до SANIS",

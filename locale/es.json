@@ -105,7 +105,6 @@
 	"common.words.times": "Veces",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
-	"common.words.copiedToClipboard": "Copiado en la caché",
 	"components.administration.adminMigrationSection.infoText": "Tenga en cuenta que la migración sólo puede tener lugar si se introduce el número oficial de la escuela.",
 	"components.administration.adminMigrationSection.headers": "Migración",
 	"components.administration.adminMigrationSection.label": "Activar la migración de IServ a SANIS",

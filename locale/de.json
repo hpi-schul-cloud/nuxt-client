@@ -106,7 +106,6 @@
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.times": "Zeiten",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
-	"common.words.copiedToClipboard": "In den Zwischenspeicher kopiert",
 	"components.administration.adminMigrationSection.infoText": "Bitte beachten Sie, dass die Migration nur dann erfolgen kann, wenn die offizielle Schulnummer eingetragen ist.",
 	"components.administration.adminMigrationSection.headers": "Migration",
 	"components.administration.adminMigrationSection.label": "Migration von IServ zu SANIS aktivieren",
