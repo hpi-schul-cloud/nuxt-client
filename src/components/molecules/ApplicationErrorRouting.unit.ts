@@ -26,6 +26,16 @@ describe("@components/molecules/ApplicationErrorRouting.vue", () => {
 		});
 	};
 
+	it("should routeToErrorPage has not been called when no error in the store", () => {
+		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
+			getStatusCode: null,
+			getTranslationKey: "",
+		});
+		mountComponent();
+
+		expect($router.replace).not.toHaveBeenCalledWith("/error");
+	});
+
 	it("should routeToErrorPage has been called when an error set in the store", () => {
 		applicationErrorModuleMock = createModuleMocks(
 			ApplicationErrorModule,
