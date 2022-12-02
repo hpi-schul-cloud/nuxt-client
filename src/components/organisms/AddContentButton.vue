@@ -122,7 +122,9 @@ export default {
 		},
 		url() {
 			if (getMediatype(this.resource) == "file-h5p") {
+				const baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
 				return (
+					baseUrlH5p +
 					"/content/" +
 					getMetadataAttribute(
 						this.resource.properties,
@@ -147,7 +149,8 @@ export default {
 					let elementUrl = getUrl(element);
 					if (getMediatype(element) == "file-h5p") {
 						const elementID = getID(element);
-						elementUrl = `/content/${elementID}`;
+						const baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+						elementUrl = `${baseUrlH5p}/content/${elementID}`;
 					}
 
 					return {
