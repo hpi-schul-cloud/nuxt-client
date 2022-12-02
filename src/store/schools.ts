@@ -183,7 +183,7 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): boolean {
+	get getOauthMigration(): boolean  | undefined {
 		return this.school.oauthUserMigration;
 	}
 
