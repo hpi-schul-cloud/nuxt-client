@@ -131,12 +131,6 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
 	},
 	{
-		path: "/cfiles/teams",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
-	},
-	{
 		path: "/cfiles/teams/:catchAll(.*)",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "teamfiles",
