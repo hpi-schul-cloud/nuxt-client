@@ -80,7 +80,7 @@ describe("@/components/molecules/ContextMenu", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
 			const emptyNode = "<!---->";
-			const wrapper = render({
+			const wrapper = mount({
 				data: () => ({ show: true, actions }),
 				template: `
 					<div id="container">
@@ -91,10 +91,12 @@ describe("@/components/molecules/ContextMenu", () => {
 				components: { ContextMenu },
 				...createComponentMocks({ i18n: true }),
 			});
-			// wait because ctxmenu is not reacting to clicks outside immediatly
-			await wait(0);
-			await fireEvent.click(wrapper.getByTestId("outside"));
-			expect(wrapper.getByTestId("testid").innerHTML).toStrictEqual(emptyNode);
+
+			const outsideElement = wrapper.find(".outside");
+			await outsideElement.trigger("click");
+			const contextElement = wrapper.find(".ctxmenu");
+
+			expect(contextElement.element.innerHTML).toContain(emptyNode);
 		});
 
 		it("does not trigger event on click outside if noClose=true", async () => {
@@ -114,11 +116,9 @@ describe("@/components/molecules/ContextMenu", () => {
 				getAttachToOptions()
 			);
 			const Menu = wrapper.find(".ctxmenu");
-			// wait because ctxmenu is not reacting to clicks outside immediatly
-			await wait(0);
-			wrapper.find(".outside").trigger("click");
+			const outsideElement = wrapper.find(".outside");
+			await outsideElement.trigger("click");
 			expect(Menu.emitted("update:show")).toBeUndefined();
-			wrapper.destroy();
 		});
 	});
 
