@@ -141,6 +141,9 @@ describe("teachers/index", () => {
 			params.onConfirm();
 		},
 	};
+
+	const short_name = "instance name";
+
 	it("should call 'deleteUsers' action", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -149,6 +152,11 @@ describe("teachers/index", () => {
 				uiState: mockUiState,
 				dialog: mockDialog,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -192,6 +200,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
@@ -202,6 +215,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
@@ -246,6 +264,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -294,6 +317,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -340,6 +368,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const table = wrapper.find(`[data-testid="teachers_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
@@ -351,6 +384,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.exists()).toBe(true);
@@ -363,6 +401,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.exists()).toBe(false);
@@ -376,6 +419,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.vm.to).toStrictEqual(expectedURL);
@@ -387,6 +435,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const fabComponent = wrapper.find(
@@ -402,6 +455,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: customMockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const fabComponent = wrapper.find(".external-sync-hint");
@@ -415,6 +473,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_teachers_table"]`
@@ -429,6 +492,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 
@@ -441,6 +509,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const externalHint = wrapper.find(`.external-sync-hint`);
@@ -453,6 +526,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		// run all existing timers
@@ -507,6 +585,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -526,6 +609,11 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
