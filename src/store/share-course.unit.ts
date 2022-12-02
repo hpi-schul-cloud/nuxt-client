@@ -6,13 +6,13 @@ import RoomModule from "@/store/room";
 
 const sharePayload: SharePayload = {
 	id: "sampleCourseId",
-	expiresInSevenDays: true,
-	schoolInternally: true,
+	hasExpiryDate: true,
+	isSchoolInternal: true,
 };
 const expectedServerPayload = {
 	parentType: "courses",
 	parentId: "sampleCourseId",
-	expiresInDays: 7,
+	expiresInDays: 21,
 	schoolExclusive: true,
 };
 

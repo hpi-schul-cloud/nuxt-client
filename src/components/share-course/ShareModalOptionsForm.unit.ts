@@ -21,24 +21,22 @@ describe("@components/share-course/ShareModalOptionsForm", () => {
 		expect(wrapper.emitted("share-options-change")).toHaveLength(1);
 	});
 
-	it("should emit event on changes of SchoolInternally switch", async () => {
+	it("should emit event on changes of isSchoolInternal switch", async () => {
 		const wrapper = getWrapper();
 
-		const switchExpiresInSevenDays = wrapper.find(
-			'[data-testid="schoolInternally"]'
+		const switchIsSchoolInternal = wrapper.find(
+			'[data-testid="isSchoolInternal"]'
 		);
-		await switchExpiresInSevenDays.setChecked(false);
+		await switchIsSchoolInternal.setChecked(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
 
-	it("should emit event on changes of ExpiresInSevenDays switch", async () => {
+	it("should emit event on changes of hasExpiryDate switch", async () => {
 		const wrapper = getWrapper();
 
-		const switchExpiresInSevenDays = wrapper.find(
-			'[data-testid="expiresInSevenDays"]'
-		);
-		await switchExpiresInSevenDays.setChecked(false);
+		const switchhasExpiryDate = wrapper.find('[data-testid="hasExpiryDate"]');
+		await switchhasExpiryDate.setChecked(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
