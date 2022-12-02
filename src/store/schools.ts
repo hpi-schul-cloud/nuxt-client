@@ -14,6 +14,10 @@ const SCHOOL_FEATURES: any = [
 	"ldapUniventionMigrationSchool",
 ];
 
+interface oauthMigrationAvailableInterface {
+ available: boolean;
+}
+
 function transformSchoolServerToClient(school: any): School {
 	const featureObject: any = {};
 	SCHOOL_FEATURES.forEach((schoolFeature: any) => {
@@ -348,8 +352,8 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			const available: boolean = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
-			this.setOauthMigrationAvailable(available);
+			const oauthMigrationAvailable: oauthMigrationAvailableInterface = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
+			this.setOauthMigrationAvailable(oauthMigrationAvailable.available);
 		} catch (error: any) {
 			this.setError(error);
 		}

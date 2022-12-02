@@ -647,7 +647,7 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/schools/mockSchoolId/migration-available"
 				);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual({available: true})
+				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true)
 			});
 
 			it("should not set OauthMigrationAvailable ", async () => {
@@ -690,7 +690,7 @@ describe("schools module", () => {
 
 			it('should trigger call to backend and return state of oauthMigration', async () => {
 				axiosInitializer();
-				getRequestReturn = { enabled: true };
+				getRequestReturn = true;
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool
