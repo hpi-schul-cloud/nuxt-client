@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import { authModule } from "@/store";
-import { Year, FederalState, School } from "./types/schools";
+import {Year, FederalState, School, IOauthMigration} from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 
 const SCHOOL_FEATURES: any = [
@@ -13,10 +13,6 @@ const SCHOOL_FEATURES: any = [
 	"messengerStudentRoomCreate",
 	"ldapUniventionMigrationSchool",
 ];
-
-interface oauthMigrationAvailableInterface {
- available: boolean;
-}
 
 function transformSchoolServerToClient(school: any): School {
 	const featureObject: any = {};
@@ -352,8 +348,8 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			const oauthMigrationAvailable: oauthMigrationAvailableInterface = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
-			this.setOauthMigrationAvailable(oauthMigrationAvailable.available);
+			const oauthMigration: IOauthMigration = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
+			this.setOauthMigrationAvailable(oauthMigration.available);
 		} catch (error: any) {
 			this.setError(error);
 		}

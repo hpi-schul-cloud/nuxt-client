@@ -59,3 +59,7 @@ export type School = {
 	isTeamCreationByStudentsEnabled: boolean;
 	oauthUserMigration?: boolean;
 };
+
+export type IOauthMigration = {
+	available: boolean;
+};
