@@ -1,10 +1,6 @@
 <template>
 	<div class="resource">
-		<div
-			ref="icons"
-			class="icons"
-			:style="{ 'justify-content': getIconsJustifyContent }"
-		>
+		<div ref="icons" class="icons" :style="{ 'justify-content': 'flex-end' }">
 			<v-btn
 				fab
 				small
@@ -264,13 +260,6 @@ export default {
 		},
 		filename() {
 			return this.resource.filename;
-		},
-		getIconsJustifyContent() {
-			if (this.shouldShowPlayer) {
-				return "flex-end";
-			} else {
-				return "space-between";
-			}
 		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
