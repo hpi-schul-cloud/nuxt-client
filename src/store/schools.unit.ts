@@ -122,7 +122,6 @@ describe("schools module", () => {
 					accountId: "",
 					schoolName: "",
 					externallyManaged: false,
-
 				});
 
 				await schoolsModule.fetchSchool();
@@ -632,6 +631,7 @@ describe("schools module", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
+
 			it('should trigger call to backend and return state of oauthMigrationAvailable', async () => {
 
 				getRequestReturn = { available: true };
@@ -641,19 +641,13 @@ describe("schools module", () => {
 					...mockSchool
 				});
 
-				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
-
 				await schoolsModule.fetchSchoolOauthMigrationAvailable();
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/schools/mockSchoolId/migration-available"
 				);
-				expect(setOauthMigrationAvailableSpy).toHaveBeenCalled();
-				expect(setOauthMigrationAvailableSpy.mock.calls[0][0]).toStrictEqual(
-					{
-						available: true,
-					});
+				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual({available: true})
 			});
 
 			it("should not set OauthMigrationAvailable ", async () => {
@@ -662,13 +656,10 @@ describe("schools module", () => {
 					...mockSchool, _id: '',
 				});
 
-
-				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
-
 				await schoolsModule.fetchSchoolOauthMigrationAvailable();
 
 				expect(receivedRequests.length).toBe(0);
-				expect(setOauthMigrationAvailableSpy).not.toHaveBeenCalled();
+				expect(schoolsModule.getOauthMigrationAvailable).toEqual(false)
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
@@ -683,14 +674,11 @@ describe("schools module", () => {
 				schoolsModule.setSchool({
 					...mockSchool,
 				});
-				const setOauthMigrationAvailableSpy = jest.spyOn(schoolsModule, "setOauthMigrationAvailable");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
-				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+				await  schoolsModule.fetchSchoolOauthMigrationAvailable();
 
 				expect(receivedRequests).toHaveLength(0);
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(schoolsModule.getError).toStrictEqual(new Error(""))
 			});
 
 		});
@@ -708,31 +696,30 @@ describe("schools module", () => {
 					...mockSchool
 				});
 
-				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
-
 				await schoolsModule.setSchoolOauthMigration(true);
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/schools/mockSchoolId/migration"
 				);
-				expect(setOauthMigrationSpy).toHaveBeenCalled();
-				expect(setOauthMigrationSpy.mock.calls[0][0]).toBe(true);
+				expect(schoolsModule.getOauthMigration).toStrictEqual(true)
 			});
 
 			it("should not set OauthMigration ", async () => {
+				initializeAxios({
+					$post: async (path: string) => {
+						return false;
+					},
+				} as NuxtAxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool, _id: '',
 				});
 
-
-				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
-
 				await schoolsModule.setSchoolOauthMigration(true);
 
 				expect(receivedRequests.length).toBe(0);
-				expect(setOauthMigrationSpy).not.toHaveBeenCalled();
+				expect(schoolsModule.getOauthMigration).toStrictEqual(false)
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
@@ -747,15 +734,11 @@ describe("schools module", () => {
 				schoolsModule.setSchool({
 					...mockSchool,
 				});
-				const setOauthMigrationSpy = jest.spyOn(schoolsModule, "setOauthMigration");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
 				await schoolsModule.setSchoolOauthMigration(true);
 
 				expect(receivedRequests).toHaveLength(0);
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setOauthMigrationSpy).not.toHaveBeenCalled();
+				expect(schoolsModule.getError).toStrictEqual(new Error(""))
 			});
 
 
@@ -833,7 +816,7 @@ describe("schools module", () => {
 				});
 			});
 
-			describe("setMigration", () => {
+			describe("setOauthMigration", () => {
 				it("should set oauth migration data", () => {
 					const schoolsModule = new SchoolsModule({});
 					const oauthMigrationValue = true;

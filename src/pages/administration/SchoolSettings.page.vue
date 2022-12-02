@@ -44,7 +44,6 @@
 					></school-policies>
 					<admin-migration-section
 						v-if="isOauthMigrationEnabled"
-						class="oauth-migration"
 					></admin-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />

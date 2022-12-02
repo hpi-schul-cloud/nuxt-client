@@ -20,7 +20,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import { inject, Ref } from "@nuxtjs/composition-api";
-import EnvConfigModule from "../../store/env-config";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
 
@@ -30,11 +29,9 @@ export default defineComponent({
 	components: {},
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
-		if (!envConfigModule || !schoolsModule || !i18n) {
+		if (!schoolsModule || !i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -45,10 +42,6 @@ export default defineComponent({
 			}
 			return "unknown translation-key:" + key;
 		};
-
-		const isMigrationFeatureEnabled = ref(
-			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled
-		);
 
 		const isMigrationEnabled: Ref<boolean> = ref(
 			schoolsModule.getOauthMigration
@@ -63,7 +56,6 @@ export default defineComponent({
 
 		return {
 			isMigrationEnabled,
-			isMigrationFeatureEnabled,
 			setMigration,
 			isMigrationAvailable,
 			t,
