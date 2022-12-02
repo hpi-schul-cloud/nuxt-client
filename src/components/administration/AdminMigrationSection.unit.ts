@@ -4,12 +4,10 @@ import { provide } from "@vue/composition-api";
 import { createModuleMocks } from "@utils/mock-store-module";
 import AdminMigrationSection from "@components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@store/schools";
-import EnvConfigModule from "@store/env-config";
 import VueI18n from "vue-i18n";
 
 describe("AdminMigrationSection", () => {
     let schoolsModule: jest.Mocked<SchoolsModule>;
-    let envConfigModule: jest.Mocked<EnvConfigModule>;
 
     const setup = (schoolGetters: Partial<SchoolsModule> = {}) => {
         document.body.setAttribute("data-app", "true");
@@ -19,9 +17,6 @@ describe("AdminMigrationSection", () => {
             ...schoolGetters
         }) as jest.Mocked<SchoolsModule>;
 
-        envConfigModule = createModuleMocks(EnvConfigModule, {
-            getFeatureSchoolSanisUserMigrationEnabled: true,
-        })  as jest.Mocked<EnvConfigModule>;
 
         const wrapper: Wrapper<any> = shallowMount(AdminMigrationSection, {
             ...createComponentMocks({
@@ -30,8 +25,7 @@ describe("AdminMigrationSection", () => {
             setup() {
                 provide("i18n", { t: (key: string) => key });
                 provide("schoolsModule", schoolsModule);
-                provide("envConfigModule", envConfigModule);
-            },
+                },
         });
 
         return {
@@ -51,7 +45,6 @@ describe("AdminMigrationSection", () => {
             try {
                 shallowMount(AdminMigrationSection, {
                     setup() {
-                        provide("envConfigModule", EnvConfigModule);
                         provide("i18n", VueI18n);
                     },
                 });
@@ -60,27 +53,11 @@ describe("AdminMigrationSection", () => {
             }
         });
 
-        it("should throw an error when envConfigModule injection fails", () => {
-            try {
-                shallowMount(AdminMigrationSection, {
-                    setup() {
-                        provide("schoolsModule", SchoolsModule);
-                        provide("i18n", VueI18n);
-                    },
-                });
-            } catch (e) {
-                expect(
-                    e.message.includes('Injection "envConfigModule" not found')
-                ).toBeTruthy();
-            }
-        });
-
         it("should throw an error when i18n injection fails", () => {
             try {
                 shallowMount(AdminMigrationSection, {
                     setup() {
                         provide("schoolsModule", SchoolsModule);
-                        provide("envConfigModule", EnvConfigModule);
                     },
                 });
             } catch (e) {
