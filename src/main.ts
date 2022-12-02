@@ -46,6 +46,8 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
+// NUXT_REMOVAL try to solve without vuelidate dependency
+// @ts-ignore
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 
