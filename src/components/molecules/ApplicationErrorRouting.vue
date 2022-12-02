@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from "@vue/composition-api";
+import { defineComponent, inject } from "@vue/composition-api";
 import ApplicationErrorModule from "@store/application-error";
 import { useRouter, watch } from "@nuxtjs/composition-api";
 import { useApplicationError } from "@/composables/application-error.composable";
@@ -27,10 +27,6 @@ export default defineComponent({
 			throw createApplicationError(500);
 		}
 
-		const hasError = ref<boolean>(
-			applicationErrorModule.getStatusCode !== null
-		);
-
 		const routeToErrorPage = () => {
 			router.replace("/error");
 		};
@@ -42,8 +38,6 @@ export default defineComponent({
 			},
 			{ immediate: true }
 		);
-
-		return { hasError };
 	},
 });
 </script>

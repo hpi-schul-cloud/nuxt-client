@@ -26,37 +26,13 @@ describe("@components/molecules/ApplicationErrorRouting.vue", () => {
 		});
 	};
 
-	it("should hasError property be false", () => {
-		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-			...errorModuleMocks,
-			getStatusCode: null,
-			getTranslationKey: "",
-		});
-		const wrapper = mountComponent();
+	it("should routeToErrorPage has been called when an error set in the store", () => {
+		applicationErrorModuleMock = createModuleMocks(
+			ApplicationErrorModule,
+			errorModuleMocks
+		);
+		mountComponent();
 
-		expect(wrapper.vm.hasError).toBe(false);
-	});
-
-	it("should hasError property be true", () => {
-		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-			...errorModuleMocks,
-			getStatusCode: 401,
-			getTranslationKey: "",
-		});
-		const wrapper = mountComponent();
-
-		expect(wrapper.vm.hasError).toBe(true);
-	});
-
-	it("should routeToErrorPage has been called when the 'hasError' property true", () => {
-		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-			...errorModuleMocks,
-			getStatusCode: 500,
-			getTranslationKey: "",
-		});
-		const wrapper = mountComponent();
-
-		expect(wrapper.vm.hasError).toBe(true);
 		expect($router.replace).toHaveBeenCalledWith("/error");
 	});
 });
