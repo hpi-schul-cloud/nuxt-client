@@ -16,14 +16,16 @@ const consentVersionsModule = {
 		) {
 			commit("setLoading", true);
 			try {
-				const response = await $axios.get("/v1/consentVersions", {
-					params: {
-						schoolId,
-						consentTypes,
-						$limit: 100,
-						"$sort[publishedAt]": -1, // -> read more at https://docs.feathersjs.com/api/databases/querying.html#sort
-					},
-				}).data;
+				const response = (
+					await $axios.get("/v1/consentVersions", {
+						params: {
+							schoolId,
+							consentTypes,
+							$limit: 100,
+							"$sort[publishedAt]": -1, // -> read more at https://docs.feathersjs.com/api/databases/querying.html#sort
+						},
+					})
+				).data;
 
 				if (!withFile) {
 					commit("setConsentVersions", response.data);
