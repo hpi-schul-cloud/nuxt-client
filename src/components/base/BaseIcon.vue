@@ -1,24 +1,23 @@
 <template>
 	<span>
-		<component
-			:is="svgComponent"
-			v-if="source !== 'fa' && svgComponent"
-			ref="icon"
-			:class="['icon', source]"
+		<v-icon v-if="source === 'fa'" :color="fill" v-bind="$attrs">{{
+			`fa-${icon}`
+		}}</v-icon>
+		<v-icon
+			v-else-if="source === 'material'"
+			:color="fill"
+			class="material-icon"
 			v-bind="$attrs"
-			:fill="fill"
-			v-on="$listeners"
-		/>
-		<i
-			v-else-if="source === 'fa'"
-			:class="['icon', 'fa', `fa-${icon}`]"
-			:style="{ color: fillColor }"
-		></i>
-		<v-icon role="img" v-else v-text="'$' + icon"></v-icon>
+			>{{ mdiSvgPath }}</v-icon
+		>
+		<v-icon v-else :color="fill" class="custom-icon" v-bind="$attrs">{{
+			`$${icon}`
+		}}</v-icon>
 	</span>
 </template>
 
 <script>
+import materialIcons from "@/components/icons/material";
 export default {
 	inheritAttrs: false,
 	props: {
@@ -31,11 +30,9 @@ export default {
 		},
 		icon: {
 			type: String,
-			default: "solid/icons",
 		},
 		fill: {
 			type: String,
-			default: "currentColor",
 		},
 	},
 	data() {
@@ -43,67 +40,9 @@ export default {
 		return {};
 	},
 	computed: {
-		fillColor() {
-			if (this.fill !== "currentColor") return this.fill;
-			switch (this.source) {
-				case "fa":
-					return "inherit";
-				default:
-					return "currentColor";
-			}
-		},
-		svgComponent() {
-			let icon;
-			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
-			try {
-				if (this.source === "custom") {
-					// src: @assets/icons
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${this.icon}.svg`);
-				}
-				if (this.source === "material") {
-					// src: https://material.io/tools/icons/?style=baseline
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/round-${this.icon}-24px.svg`);
-				}
-				return icon.default;
-			} catch (error) {
-				console.error(this.$t("components.base.BaseIcon.error"), error);
-				return undefined;
-			}
+		mdiSvgPath() {
+			return materialIcons[`mdi-${this.icon}`];
 		},
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "font-awesome/css/font-awesome.min.css";
-.icon {
-	display: inline-block;
-	width: 1em;
-	height: 1em;
-	vertical-align: baseline;
-}
-
-.fa {
-	width: 1em;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: calc(1em + 4px);
-	line-height: 100%;
-	vertical-align: middle; // should this be default?
-}
-
-.custom {
-	width: 1em;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: calc(1em + 4px);
-	line-height: 100%;
-	vertical-align: middle; // should this be default?
-}
-
-.material {
-	// remove material icon margin
-	width: calc(1em + 4px);
-	height: calc(1em + 4px);
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin: -4px 0;
-}
-</style>

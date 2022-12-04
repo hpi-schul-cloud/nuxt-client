@@ -1,17 +1,4 @@
-import hourglassBottomBlack from "@/assets/icons/hourglass-bottom-black.vue";
-import hourglassDisabled from "@/assets/icons/hourglass-disabled.vue";
-import tasks from "@/assets/icons/tasks.vue";
-import taskOpenFilled from "@/assets/icons/task-open-filled.vue";
-import taskDone from "@/assets/icons/task-done.vue";
-import taskDoneFilled from "@/assets/icons/task-done-filled.vue";
-import taskMissed from "@/assets/icons/task-missed.vue";
-import taskMissedFilled from "@/assets/icons/task-missed-filled.vue";
-import taskDraft from "@/assets/icons/task-draft.vue";
-import taskFinished from "@/assets/icons/task-finished.vue";
-import langIconDe from "@/assets/icons/lang-icon-de.vue";
-import langIconEn from "@/assets/icons/lang-icon-en.vue";
-import langIconEs from "@/assets/icons/lang-icon-es.vue";
-import langIconUa from "@/assets/icons/lang-icon-ua.vue";
+import customIcons from "@/components/icons/custom";
 import colors from "vuetify/lib/util/colors";
 
 export default {
@@ -66,48 +53,9 @@ export default {
 	icons: {
 		iconfont: "fa4",
 		values: {
-			hourglassBottomBlack: {
-				component: hourglassBottomBlack,
-			},
-			hourglassDisabled: {
-				component: hourglassDisabled,
-			},
-			tasks: {
-				component: tasks,
-			},
-			taskOpenFilled: {
-				component: taskOpenFilled,
-			},
-			taskDone: {
-				component: taskDone,
-			},
-			taskDoneFilled: {
-				component: taskDoneFilled,
-			},
-			taskMissed: {
-				component: taskMissed,
-			},
-			taskMissedFilled: {
-				component: taskMissedFilled,
-			},
-			taskDraft: {
-				component: taskDraft,
-			},
-			taskFinished: {
-				component: taskFinished,
-			},
-			langIconDe: {
-				component: langIconDe,
-			},
-			langIconEn: {
-				component: langIconEn,
-			},
-			langIconEs: {
-				component: langIconEs,
-			},
-			langIconUa: {
-				component: langIconUa,
-			},
+			// NUXT_REMOVAL Do we really have to register all these icons
+			// This here is only to supplement the Vuetify Icons.
+			...customIcons,
 		},
 	},
 };

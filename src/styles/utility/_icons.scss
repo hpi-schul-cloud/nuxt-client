@@ -1,0 +1,35 @@
+@import "font-awesome/css/font-awesome.min.css";
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
+}
+
+.v-icon {
+  &.fa {
+    width: 1em;
+    /* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+    font-size: calc(1em + 4px);
+    line-height: 100%;
+    vertical-align: middle; // should this be default?
+  }
+
+  &.custom-icon {
+    width: 1em;
+    /* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+    font-size: calc(1em + 4px);
+    line-height: 100%;
+    vertical-align: middle; // should this be default?
+    fill: currentColor;
+  }
+
+  &.material-icon {
+    // remove material icon margin
+    width: calc(1em + 4px);
+    height: calc(1em + 4px);
+    /* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+    margin: -4px 0;
+  }
+}

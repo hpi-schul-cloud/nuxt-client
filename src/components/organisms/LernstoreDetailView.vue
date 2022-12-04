@@ -134,7 +134,7 @@
 					</div>
 					<div v-show="collectionLink !== ''" class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="material" icon="ic_collection" />
+							<base-icon source="custom" icon="ic_collection" />
 						</div>
 						<base-link
 							design="none"
@@ -168,13 +168,13 @@ import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
-  getAuthor,
-  getDescription,
-  getMerlinReference,
-  getMetadataAttribute,
-  getProvider,
-  getTags,
-  isMerlinContent
+	getAuthor,
+	getDescription,
+	getMerlinReference,
+	getMetadataAttribute,
+	getProvider,
+	getTags,
+	isMerlinContent,
 } from "@/utils/helpers";
 
 const DEFAULT_AUTHOR = "admin";
