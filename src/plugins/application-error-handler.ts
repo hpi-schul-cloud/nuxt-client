@@ -3,8 +3,6 @@ import { applicationErrorModule } from "@/store";
 import Vue from "vue";
 
 export const handleApplicationError = (err: Error) => {
-	// WIP add logging based on env-var
-	// err.message.length > 0 ? console.warn(err) : null;
 	/**
 	 * Note: The Global-ErrorHandler wraps the error
 	 * so we can't use instanceof ApplicationError here.
