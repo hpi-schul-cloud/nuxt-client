@@ -1,7 +1,10 @@
 import permissionCheck from "@middleware/permission-check";
-import { authModule } from "@/store";
+import { authModule, applicationErrorModule } from "@/store";
 import setupStores from "../test-utils/setupStores";
 import AuthModule from "@/store/auth";
+import ApplicationErrorModule from "@/store/application-error";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const mockApp = {
 	i18n: {
@@ -34,7 +37,10 @@ const getMockContext = ({
 
 describe("@middleware/permission-check", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({
+			auth: AuthModule,
+			"application-error": ApplicationErrorModule,
+		});
 	});
 
 	it("exports a function", () => {
@@ -92,13 +98,16 @@ describe("@middleware/permission-check", () => {
 		const mockContext = getMockContext({
 			route: getMockRoute(["MISSING_PERMISSION"]),
 		});
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
+
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
 	it("throws error.401 on missing permission using advanced AND syntax", async () => {
 		authModule.setUser({ permissions: ["PERMISSION_A"] });
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
 
 		const mockContext = getMockContext({
 			store: getMockStore({
@@ -110,12 +119,14 @@ describe("@middleware/permission-check", () => {
 			}),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
 	it("throws error.401 on missing permission using advanced OR syntax", async () => {
 		authModule.setUser({ permissions: [] });
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
+
 		const mockContext = getMockContext({
 			route: getMockRoute({
 				operator: "OR",
@@ -123,18 +134,20 @@ describe("@middleware/permission-check", () => {
 			}),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
 	it("throws error.401 on missing user", async () => {
 		authModule.setUser(null);
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
+
 		const mockContext = getMockContext({
 			store: getMockStore({ user: null }),
 			route: getMockRoute(["MISSING_PERMISSION"]),
 		});
 		await expect(permissionCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 });
