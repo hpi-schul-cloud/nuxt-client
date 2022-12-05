@@ -17,7 +17,6 @@ describe("AdminMigrationSection", () => {
             ...schoolGetters
         }) as jest.Mocked<SchoolsModule>;
 
-
         const wrapper: Wrapper<any> = shallowMount(AdminMigrationSection, {
             ...createComponentMocks({
                 i18n: true,
