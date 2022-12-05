@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import { authModule } from "@/store";
-import {Year, FederalState, School, IOauthMigration} from "./types/schools";
+import { Year, FederalState, School, IOauthMigration } from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 
 const SCHOOL_FEATURES: any = [
@@ -350,8 +350,10 @@ export default class SchoolsModule extends VuexModule {
 		try {
 			const oauthMigration: IOauthMigration = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
 			this.setOauthMigrationAvailable(oauthMigration.available);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				this.setError(error);
+			}
 		}
 	}
 
@@ -364,8 +366,10 @@ export default class SchoolsModule extends VuexModule {
 		try {
 			await $axios.$post(`v3/schools/${this.school._id}/migration`, { enabled });
 			this.setOauthMigration(enabled);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				this.setError(error);
+			}
 		}
 	}
 
