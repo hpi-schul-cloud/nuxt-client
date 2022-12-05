@@ -42,7 +42,8 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 		const wrapper = getWrapper({ item: mockItem });
 		const elementTitle = wrapper.find("ul > li").text();
 
-		expect(elementTitle).toBe("GeoGebra · Geogebra Element Title");
+		expect(elementTitle).toContain("GeoGebra");
+		expect(elementTitle).toContain("Geogebra Element Title");
 	});
 
 	it("should render the elements with the correct element title", () => {
@@ -51,10 +52,10 @@ describe("@components/copy-result-modal/CopyResultModalListItem", () => {
 			.findAll("ul > li")
 			.wrappers.map((el) => el.text());
 
-		expect(elementTitles).toEqual([
-			"GeoGebra · Geogebra Element Title",
-			"NeXboard · Nexboard Element Title",
-		]);
+		expect(elementTitles[0]).toContain("GeoGebra");
+		expect(elementTitles[0]).toContain("Geogebra Element Title");
+		expect(elementTitles[1]).toContain("NeXboard");
+		expect(elementTitles[1]).toContain("Nexboard Element Title");
 	});
 
 	it("should render the correct link", () => {
