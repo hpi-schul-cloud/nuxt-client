@@ -1,4 +1,5 @@
 import AccountsModule from "@/store/accounts";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
@@ -27,8 +28,13 @@ export default () => {
 		const { store } = useContext();
 
 		provide("accountsModule", getModule(AccountsModule, store));
+		provide("applicationErrorModule", getModule(ApplicationErrorModule, store));
 		provide("authModule", getModule(AuthModule, store));
 		provide("autoLogoutModule", getModule(AutoLogoutModule, store));
+		provide(
+			"collaborativeFilesModule",
+			getModule(CollaborativeFilesModule, store)
+		);
 		provide("contentModule", getModule(ContentModule, store));
 		provide("copyModule", getModule(CopyModule, store));
 		provide("envConfigModule", getModule(EnvConfigModule, store));
@@ -46,9 +52,5 @@ export default () => {
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("tasksModule", getModule(TasksModule, store));
 		provide("taskModule", getModule(TaskModule, store));
-		provide(
-			"collaborativeFilesModule",
-			getModule(CollaborativeFilesModule, store)
-		);
 	});
 };
