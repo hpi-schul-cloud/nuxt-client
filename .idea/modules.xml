@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/nuxt-client.iml" filepath="$PROJECT_DIR$/.idea/nuxt-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../schulcloud-client/.idea/schulcloud-client.iml" filepath="$PROJECT_DIR$/../schulcloud-client/.idea/schulcloud-client.iml" />
     </modules>
   </component>
 </project>

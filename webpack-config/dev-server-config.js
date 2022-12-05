@@ -1,38 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-
-const legacyRoutes = [
-	"^/$",
-	"^/login",
-	"^/logout",
-	"^/styles",
-	"^/fonts/ptsans",
-	"^/scripts",
-	"^/images",
-	"^/vendor/feathersjs",
-	"^/vendor-optimized",
-	"^/alerts",
-	"^/dashboard",
-	"^/homework",
-	"^/teams",
-	"^/courses",
-	"^/files",
-	"^/news",
-	"^/calendar",
-	"^/help",
-	"^/addons",
-	"^/administration/?$",
-	"^/administration/classes",
-	"^/locales",
-	"^/users/language",
-];
-
-const isLegacyClient = (path) => {
-	return legacyRoutes.some((regex) => new RegExp(regex).exec(path));
-};
-
-const isServer = (path) => {
-	return path.startsWith("/api/v");
-};
+const { isLegacyClient } = require("@/router/legacy-client-route");
+const { isServer } = require("@/router/server-route");
 
 let legacyClientProxy;
 let serverProxy;
@@ -81,7 +49,6 @@ const createDevServerConfig = () => {
 };
 
 module.exports = {
-	isLegacyClient,
 	isServer,
 	legacyClientProxy,
 	serverProxy,

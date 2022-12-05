@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/router/guards/is-authenticated.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/guards/legacy-route-compatibility.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/legacy-client-route.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/server-route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/nuxt-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/nuxt-client.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-proxy.js" beforeDir="false" afterPath="$PROJECT_DIR$/server-proxy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/composables/loadingState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/composables/loadingState.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack-config/dev-server-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack-config/dev-server-config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../schulcloud-client/controllers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../schulcloud-client/controllers/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,11 +30,12 @@
       <list>
         <option value="Vue Single File Component" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../schulcloud-client" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -38,29 +51,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/dev/repositories/nuxt-client/src/components/share-course&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/dev/repositories/schulcloud-client",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.stylelint": "C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "ts.external.directory.path": "C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\dev\repositories\nuxt-client\src\components\share-course" />
@@ -68,6 +81,9 @@
       <recent name="C:\dev\repositories\nuxt-client\src\components\share-modal" />
       <recent name="C:\dev\repositories\nuxt-client\vue3_poc\src" />
       <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\repositories\nuxt-client\src\router" />
     </key>
   </component>
   <component name="RunManager" selected="Jest.@/components/molecules/Editor.should emit input on content changes">
