@@ -23,7 +23,7 @@ describe("@components/error-handling/ErrorContent.vue", () => {
 		);
 	});
 
-	it("should show generic error image", () => {
+	it("should show generic error svg", () => {
 		const wrapper = getWrapper({ isGenericError: true });
 		const genericErrorImage = wrapper.find('[data-testid="img-generic"]');
 		expect(genericErrorImage.element).toBeInstanceOf(HTMLImageElement);
@@ -32,7 +32,7 @@ describe("@components/error-handling/ErrorContent.vue", () => {
 		expect(genericErrorImageContent.src).toContain("assets/img/pc_repair.png");
 	});
 
-	it("should show generic error image", () => {
+	it("should show permission error svg", () => {
 		const wrapper = getWrapper({ isPermissionError: true });
 		const permissionElement = wrapper.find('[data-testid="img-permission"]');
 		expect(permissionElement.exists()).toBe(true);
