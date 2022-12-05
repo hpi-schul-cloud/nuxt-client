@@ -87,13 +87,13 @@ describe("AdminMigrationSection", () => {
     });
 
     describe("Switch Button", () => {
-        it("should be available when migration is available", () => {
+        it("should be enabled when migration is available", () => {
             const { wrapper } = setup({
                 getOauthMigrationAvailable: true
             });
             const switchComponent = wrapper.findComponent({ name: "v-switch" });
 
-            expect(switchComponent.vm.$props.disabled).toBeFalsy();
+            expect(switchComponent.props('disabled')).toBeFalsy();
         });
 
         it("should be disabled when migration is not available", () => {
@@ -101,7 +101,7 @@ describe("AdminMigrationSection", () => {
 
             const switchComponent = wrapper.findComponent({ name: "v-switch" });
 
-            expect(switchComponent.vm.$props.disabled).toBeTruthy();
+            expect(switchComponent.props('disabled')).toBeTruthy();
         });
 
         it("should set school oauth migration, when click have been triggered", () => {
