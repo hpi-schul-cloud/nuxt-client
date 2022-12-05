@@ -27,14 +27,7 @@ const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 
 describe("application-error composable", () => {
 	const setup = () => {
-		const { createApplicationError } = mountComposable(
-			() => useApplicationError(),
-			{}
-		);
-
-		return {
-			createApplicationError,
-		};
+		return mountComposable(() => useApplicationError(), {});
 	};
 
 	it("should return createApplicationError", async () => {
