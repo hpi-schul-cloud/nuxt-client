@@ -171,7 +171,7 @@
 	"components.molecules.copyResult.successfullyCopied": "Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.failedCopy": "Не вдалося завершити процес копіювання.",
 	"components.molecules.copyResult.timeoutCopy": "Можливо, процес копіювання займає більше часу, оскільки включено більші файли. У цьому випадку скопійований елемент уже має існувати, а файли мають стати доступними пізніше.",
-	"components.molecules.copyResult.fileCopy.error": "Помилка копіювання файлів.",
+	"components.molecules.copyResult.fileCopy.error": "Наступні файли не можуть бути скопійовані і повинні бути додані заново.",
 	"components.molecules.copyResult.courseGroupCopy.info": "З технічних причин групи та їхній вміст не копіюються і повинні бути додані знову.",
 	"components.molecules.copyResult.etherpadCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.geogebraCopy.info": "Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",

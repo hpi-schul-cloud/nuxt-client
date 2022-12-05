@@ -6,7 +6,9 @@
 		</div>
 		<ul class="ml-4 mb-4 pl-1">
 			<li v-for="(e, index) of elements" :key="index" class="element-info">
-				<span class="black--text">{{ getElementTitle(e) }}</span>
+				<span class="black--text"
+					>{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}</span
+				>
 			</li>
 		</ul>
 	</div>
@@ -42,9 +44,11 @@ export default {
 		},
 	},
 	methods: {
+		getElementType(element) {
+			return this.getElementTypeName(element.type);
+		},
 		getElementTitle(element) {
-			const title = element.title ? " · " + element.title : "";
-			return this.getElementTypeName(element.type) + title;
+			return element.title ?? "";
 		},
 		getElementTypeName(type) {
 			switch (type) {
