@@ -7,10 +7,11 @@ export const handleApplicationError = (err: Error) => {
 	 * Note: The Global-ErrorHandler wraps the error
 	 * so we can't use instanceof ApplicationError here.
 	 */
+	const applicationError = err as ApplicationError;
 	if (err.name === "ApplicationError") {
 		applicationErrorModule.setError({
-			statusCode: asApplicationError(err).statusCode,
-			translationKey: asApplicationError(err).translationKey,
+			statusCode: applicationError.statusCode,
+			translationKey: applicationError.translationKey,
 		});
 		return;
 	}
@@ -19,8 +20,5 @@ export const handleApplicationError = (err: Error) => {
 		translationKey: "error.generic",
 	});
 };
-
-const asApplicationError: (err: Error) => ApplicationError = (err) =>
-	err as ApplicationError;
 
 Vue.config.errorHandler = handleApplicationError;
