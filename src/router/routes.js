@@ -158,7 +158,7 @@ export const routes = [
 		path: "/cfiles/teams",
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
-		name: "teamfiles",
+		name: "teams",
 		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
 	},
 	{
