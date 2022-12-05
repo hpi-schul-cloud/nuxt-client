@@ -1,10 +1,6 @@
 import ErrorContent from "./ErrorContent.vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
-import ApplicationErrorModule from "@/store/application-error";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import i18n from "vue-i18n";
 
 describe("@components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (props?: object) => {
