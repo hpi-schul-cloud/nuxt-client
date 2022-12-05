@@ -31,6 +31,7 @@ const routes = [
 	`^/tasks/?$`,
 	`^/tasks/new/?$`,
 	`^/termsofuse/?`,
+	`^/error/?`,
 ];
 
 const uuid =
