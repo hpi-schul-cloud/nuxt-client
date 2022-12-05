@@ -438,7 +438,7 @@
 	"components.molecules.copyResult.successfullyCopied": "All elements were successfully copied.",
 	"components.molecules.copyResult.failedCopy": "The copy process could not be completed.",
 	"components.molecules.copyResult.timeoutCopy": "It could be that the copying process takes longer because larger files are included. In that case, the copied item should already exist and the files should become available later.",
-	"components.molecules.copyResult.fileCopy.error": "Error copying files.",
+	"components.molecules.copyResult.fileCopy.error": "The following files cannot be copied and must be added again.",
 	"components.molecules.copyResult.courseGroupCopy.info": "For technical reasons, groups and their content are not copied and must be added again.",
 	"components.molecules.copyResult.etherpadCopy.info": "Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.geogebraCopy.info": "Material IDs are not copied for technical reasons and must be added again.",
