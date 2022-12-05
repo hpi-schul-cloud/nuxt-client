@@ -5,11 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<title-card v-model="name" :label="$t('common.labels.title')" />
-			<!-- <editor
-				v-model="description"
-				:label="$t('common.labels.description')"
-			></editor> -->
+			<card-title v-model="name" />
 			<template v-for="child in children">
 				<component
 					:is="componentProps.component"
@@ -48,14 +44,14 @@ import {
 } from "@vue/composition-api";
 import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import TitleCard from "@components/atoms/TitleCard.vue";
+import CardTitle from "@/components/atoms/CardTitle.vue";
 import Editor from "@/components/molecules/Editor.vue";
 import { mdiPlus } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TaskCreatePage",
-	components: { DefaultWireframe, TitleCard, Editor },
+	components: { DefaultWireframe, CardTitle, Editor },
 	setup(props, context) {
 		const router = context.root.$router;
 		onBeforeMount(() => {

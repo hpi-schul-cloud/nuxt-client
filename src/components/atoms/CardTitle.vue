@@ -10,11 +10,11 @@
 <script>
 import { ref, watch } from "@vue/composition-api";
 export default {
-	name: "TitleCard",
+	name: "CardTitle",
 	props: {
 		label: {
-			required: true,
 			type: String,
+			default: "",
 		},
 		value: {
 			type: String,
