@@ -43,7 +43,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationEnabled: Ref<boolean> = ref(
+		const isMigrationEnabled: Ref<boolean | undefined > = ref(
 			schoolsModule.getOauthMigration
 		);
 		const isMigrationAvailable: Ref<boolean> = ref(
