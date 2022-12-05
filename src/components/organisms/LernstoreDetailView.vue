@@ -61,9 +61,20 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div v-if="shouldShowPlayer" class="external-content-warning">
+				<div
+					v-if="shouldShowPlayer && window.width >= 768"
+					class="external-content-warning"
+				>
 					<p class="text-s external-content-title">
 						{{ $t("pages.content.material.showMaterialHint") }}
+					</p>
+				</div>
+				<div
+					v-else-if="shouldShowPlayer && window.width < 768"
+					class="external-content-warning"
+				>
+					<p class="text-s external-content-title">
+						{{ $t("pages.content.material.showMaterialHintMobile") }}
 					</p>
 				</div>
 				<div v-else>
@@ -214,6 +225,11 @@ export default {
 		return {
 			mdiClose,
 			mdiOpenInNew,
+			windowWidth: window.outerWidth,
+			window: {
+				width: 0,
+				height: 0,
+			},
 		};
 	},
 	computed: {
@@ -293,6 +309,13 @@ export default {
 			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 	},
+	created() {
+		window.addEventListener("resize", this.handleResize);
+		this.handleResize();
+	},
+	destroyed() {
+		window.removeEventListener("resize", this.handleResize);
+	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
 			const url = await this.$axios.$get(
@@ -304,6 +327,10 @@ export default {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
+		},
+		handleResize() {
+			this.window.width = window.innerWidth;
+			this.window.height = window.innerHeight;
 		},
 		goBack() {
 			if (window.history.length > 1) {
