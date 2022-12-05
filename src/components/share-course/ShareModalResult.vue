@@ -9,7 +9,7 @@
 		<div class="mb-4">
 			<div
 				v-if="!isShowQrCode"
-				class="d-flex flex-sm-row flex-column justify-content-space-between"
+				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
 					plain
@@ -19,11 +19,11 @@
 					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span class="d-flex flex-column justify-content-cente v-b-widthr">
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span>{{ $t("common.actions.share") }}</span>
+						<span class="justify-center sub-title">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -34,11 +34,11 @@
 					data-testid="shareMailAction"
 					@click="onMailShareUrl(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span class="d-flex flex-column justify-content-center v-b-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
-						<span>{{
+						<span class="justify-center sub-title">{{
 							$t("components.molecules.shareCourse.result.mailShare")
 						}}</span>
 					</span>
@@ -52,11 +52,11 @@
 					data-testid="copyAction"
 					@click="onCopy(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span class="d-flex flex-column justify-content-center v-b-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
-						<span>{{
+						<span class="justify-center sub-title">{{
 							$t("components.molecules.shareCourse.result.copyClipboard")
 						}}</span>
 					</span>
@@ -69,11 +69,11 @@
 					data-testid="qrCodeAction"
 					@click="onShowQrCode"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span class="d-flex flex-column justify-content-center v-b-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
-						<span>{{
+						<span class="justify-center sub-title">{{
 							$t("components.molecules.shareCourse.result.qrCodeScan")
 						}}</span>
 					</span>
@@ -170,3 +170,24 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+	@import "~vuetify/src/styles/styles.sass";
+
+	.sub-title {
+		color: var(--v-black-base);
+		text-align: center;
+		overflow-wrap: break-word;
+		white-space: normal;
+
+		@include excerpt(
+				$font-size: calc(var(--space-base-vuetify) * 4),
+				$line-height: var(--line-height-lg),
+				$lines-to-show: 2
+		);
+	}
+
+	.v-b-width {
+		max-width: 100px;
+	}
+</style>
