@@ -19,7 +19,7 @@
 					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-cente v-b-widthr">
+					<span class="d-flex flex-column justify-content-cente v-b-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
