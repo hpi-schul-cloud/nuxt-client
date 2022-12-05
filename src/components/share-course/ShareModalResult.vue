@@ -23,7 +23,9 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span class="justify-center sub-title">{{ $t("common.actions.share") }}</span>
+						<span class="justify-center sub-title">{{
+							$t("common.actions.share")
+						}}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -172,23 +174,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-	@import "@utils/multiline-ellipsis.scss";
-	@import "~vuetify/src/styles/styles.sass";
+@import "@utils/multiline-ellipsis.scss";
+@import "~vuetify/src/styles/styles.sass";
 
-	.sub-title {
-		color: var(--v-black-base);
-		text-align: center;
-		overflow-wrap: break-word;
-		white-space: normal;
+.sub-title {
+	color: var(--v-black-base);
+	text-align: center;
+	overflow-wrap: break-word;
+	white-space: normal;
 
-		@include excerpt(
-				$font-size: calc(var(--space-base-vuetify) * 4),
-				$line-height: var(--line-height-lg),
-				$lines-to-show: 2
-		);
-	}
+	@include excerpt(
+		$font-size: calc(var(--space-base-vuetify) * 4),
+		$line-height: var(--line-height-lg),
+		$lines-to-show: 2
+	);
+}
 
-	.v-b-width {
-		max-width: 100px;
-	}
+.v-b-width {
+	max-width: 100px;
+}
 </style>
