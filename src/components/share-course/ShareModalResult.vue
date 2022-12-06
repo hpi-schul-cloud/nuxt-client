@@ -9,36 +9,40 @@
 		<div class="mb-4">
 			<div
 				v-if="!isShowQrCode"
-				class="d-flex flex-sm-row flex-column justify-content-space-between"
+				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
 					plain
 					large
-					class="d-sm-none d-flex"
+					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
 					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span>{{ $t("common.actions.share") }}</span>
+						<span class="sub-title">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
 					plain
 					large
 					:height="84"
-					class="d-sm-flex d-none"
+					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
 					@click="onMailShareUrl(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
-						<span>{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.mailShare")
 						}}</span>
 					</span>
@@ -48,15 +52,17 @@
 					plain
 					large
 					:height="84"
-					class="d-sm-flex d-none"
+					class="d-sm-flex d-none button-alignment-top"
 					data-testid="copyAction"
 					@click="onCopy(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
-						<span>{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.copyClipboard")
 						}}</span>
 					</span>
@@ -67,13 +73,16 @@
 					large
 					:height="84"
 					data-testid="qrCodeAction"
+					class="button-alignment-top"
 					@click="onShowQrCode"
 				>
-					<span class="d-flex flex-column justify-content-center">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
-						<span>{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.qrCodeScan")
 						}}</span>
 					</span>
@@ -170,3 +179,21 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@utils/multiline-ellipsis.scss";
+@import "~vuetify/src/styles/styles.sass";
+
+.sub-title {
+	overflow-wrap: break-word;
+	white-space: normal;
+}
+
+.button-max-width {
+	max-width: calc(var(--topbar-height) * 2);
+}
+
+.button-alignment-top {
+	align-items: start;
+}
+</style>
