@@ -19,13 +19,13 @@
 					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center button-max-width">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span class="sub-title">{{
-							$t("common.actions.share")
-						}}</span>
+						<span class="sub-title">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -36,7 +36,9 @@
 					data-testid="shareMailAction"
 					@click="onMailShareUrl(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center button-max-width">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
@@ -54,7 +56,9 @@
 					data-testid="copyAction"
 					@click="onCopy(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center button-max-width">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
@@ -72,7 +76,9 @@
 					class="button-alignment-top"
 					@click="onShowQrCode"
 				>
-					<span class="d-flex flex-column justify-content-center button-max-width">
+					<span
+						class="d-flex flex-column justify-content-center button-max-width"
+					>
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
@@ -184,7 +190,7 @@ export default defineComponent({
 }
 
 .button-max-width {
-	max-width: calc(var(--topbar-height) * 2),
+	max-width: calc(var(--topbar-height) * 2);
 }
 
 .button-alignment-top {
