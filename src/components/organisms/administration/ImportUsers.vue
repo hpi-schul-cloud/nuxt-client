@@ -282,15 +282,15 @@ export default {
 			loading: false,
 			roles: [
 				{
-					text: this.$t("components.organisms.importUsers.roleStudent"),
+					text: this.$t("common.roleName.student"),
 					value: ImportUserResponseRoleNamesEnum.Student,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.roleTeacher"),
+					text: this.$t("common.roleName.teacher"),
 					value: ImportUserResponseRoleNamesEnum.Teacher,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.roleAdministrator"),
+					text: this.$t("common.roleName.administrator"),
 					value: ImportUserResponseRoleNamesEnum.Admin,
 				},
 			],
@@ -442,19 +442,13 @@ export default {
 			const rolesLables = [];
 			if (Array.isArray(roles) && roles.length > 0) {
 				if (roles.includes("student")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleStudent")
-					);
+					rolesLables.push(this.$t("common.roleName.student"));
 				}
 				if (roles.includes("teacher")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleTeacher")
-					);
+					rolesLables.push(this.$t("common.roleName.teacher"));
 				}
 				if (roles.includes("admin")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleAdministrator")
-					);
+					rolesLables.push(this.$t("common.roleName.administrator"));
 				}
 			}
 			return rolesLables.join(", ");
