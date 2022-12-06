@@ -14,16 +14,16 @@
 				<v-btn
 					plain
 					large
-					class="d-sm-none d-flex"
+					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
 					data-testid="mobilePlatformAction"
 					@click="onShareMobilePlatflorm(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center v-b-width">
+					<span class="d-flex flex-column justify-content-center button-max-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span class="justify-center sub-title">{{
+						<span class="sub-title">{{
 							$t("common.actions.share")
 						}}</span>
 					</span>
@@ -32,15 +32,15 @@
 					plain
 					large
 					:height="84"
-					class="d-sm-flex d-none"
+					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
 					@click="onMailShareUrl(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center v-b-width">
+					<span class="d-flex flex-column justify-content-center button-max-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
-						<span class="justify-center sub-title">{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.mailShare")
 						}}</span>
 					</span>
@@ -50,15 +50,15 @@
 					plain
 					large
 					:height="84"
-					class="d-sm-flex d-none"
+					class="d-sm-flex d-none button-alignment-top"
 					data-testid="copyAction"
 					@click="onCopy(shareUrl)"
 				>
-					<span class="d-flex flex-column justify-content-center v-b-width">
+					<span class="d-flex flex-column justify-content-center button-max-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
-						<span class="justify-center sub-title">{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.copyClipboard")
 						}}</span>
 					</span>
@@ -69,13 +69,14 @@
 					large
 					:height="84"
 					data-testid="qrCodeAction"
+					class="button-alignment-top"
 					@click="onShowQrCode"
 				>
-					<span class="d-flex flex-column justify-content-center v-b-width">
+					<span class="d-flex flex-column justify-content-center button-max-width">
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
-						<span class="justify-center sub-title">{{
+						<span class="sub-title">{{
 							$t("components.molecules.shareCourse.result.qrCodeScan")
 						}}</span>
 					</span>
@@ -178,19 +179,15 @@ export default defineComponent({
 @import "~vuetify/src/styles/styles.sass";
 
 .sub-title {
-	color: var(--v-black-base);
-	text-align: center;
 	overflow-wrap: break-word;
 	white-space: normal;
-
-	@include excerpt(
-		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-lg),
-		$lines-to-show: 2
-	);
 }
 
-.v-b-width {
-	max-width: 100px;
+.button-max-width {
+	max-width: calc(var(--topbar-height) * 2),
+}
+
+.button-alignment-top {
+	align-items: start;
 }
 </style>
