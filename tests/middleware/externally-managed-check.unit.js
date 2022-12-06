@@ -1,7 +1,10 @@
-import { authModule } from "@/store";
+import { authModule, applicationErrorModule } from "@/store";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import externallyManagedCheck from "@middleware/externally-managed-check";
 import setupStores from "../test-utils/setupStores";
+import { createApplicationError } from "@utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const mockApp = {
 	i18n: {
@@ -20,7 +23,10 @@ const getMockContext = ({ app = mockApp, route = getMockRoute() } = {}) => ({
 
 describe("@middleware/externally-managed-check", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({
+			auth: AuthModule,
+			"application-error": ApplicationErrorModule,
+		});
 	});
 
 	it("exports a function", () => {
@@ -54,12 +60,14 @@ describe("@middleware/externally-managed-check", () => {
 
 	it("throws error.401 if userNotExternallyManaged is required AND user is externally managed", async () => {
 		authModule.setUser({ externallyManaged: true });
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
 
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
+
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 
@@ -78,11 +86,13 @@ describe("@middleware/externally-managed-check", () => {
 
 	it("throws error.401 on missing user", async () => {
 		authModule.setUser(null);
+		jest.spyOn(applicationErrorModule, "setError").mockImplementation();
+
 		const mockContext = getMockContext({
 			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
+			createApplicationError(HttpStatusCode.Unauthorized)
 		);
 	});
 

@@ -130,6 +130,7 @@ module.exports = {
 		"@plugins/iconfonts",
 		"@plugins/store-accessor",
 		"@plugins/notifier.ts",
+		"@plugins/application-error-handler",
 	],
 
 	/*
