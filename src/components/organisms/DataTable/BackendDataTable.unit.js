@@ -272,7 +272,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			});
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
-			// await wrapper.vm.$nextTick();
 
 			const rowSelectionBarElement = wrapper.find(
 				'[data-testid="table-data-head"]'

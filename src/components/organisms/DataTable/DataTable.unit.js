@@ -34,12 +34,12 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		const total = 100;
 		const bigData = tableData(total);
 
-		const getNextPageButton = (wrapper) =>{
-			wrapper.vm.$nextTick()
+		const getNextPageButton = (wrapper) => {
+			wrapper.vm.$nextTick();
 			return wrapper
 				.findAll(".pagination-link")
 				.wrappers.find((w) => w.attributes("aria-label") === "Go to next page");
-		}
+		};
 		const getPrevPageButton = (wrapper) =>
 			wrapper
 				.findAll(".pagination-link")
@@ -153,7 +153,7 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		const sortedOtherItems = "LastItem";
 		const testItems = 4;
 		const centerIndex = Math.floor(testItems / 2);
-		const flatData = tableData(testItems).map( (item, index) => ({
+		const flatData = tableData(testItems).map((item, index) => ({
 			...item,
 			firstName: index === centerIndex ? sortedFirstItem : sortedOtherItems,
 		}));
@@ -301,7 +301,7 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 
 	describe("selection", () => {
 		const total = 10;
-		const testData = tableData(total).map( (item, index) => ({
+		const testData = tableData(total).map((item, index) => ({
 			...item,
 			_id: String(index), // simplify IDs of test data for easier testing
 		}));
@@ -344,9 +344,11 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 				rowsSelectable: true,
 			});
 			wrapper.vm.$nextTick();
-			const ele = wrapper.find("tbody tr input[type=checkbox]")
+			const ele = wrapper.find("tbody tr input[type=checkbox]");
 			ele.trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", true);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[[testData[0]._id]],
 			]);
@@ -361,6 +363,8 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", false);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([[[]]]);
 		});
 
@@ -375,6 +379,14 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 			});
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+
+			const rowSelectionBarElement = wrapper.find(
+				'[data-testid="table-data-head"]'
+			);
+			await rowSelectionBarElement.vm.$emit(
+				"update:current-page-selection-state",
+				"all"
+			);
 			expect(
 				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);
