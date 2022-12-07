@@ -216,6 +216,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		jest.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
@@ -267,6 +268,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -320,6 +322,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
