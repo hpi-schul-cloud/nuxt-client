@@ -38,6 +38,7 @@ import {
 	defineComponent,
 	inject,
 	ref,
+	reactive,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
@@ -61,13 +62,7 @@ export default defineComponent({
 			}
 		});
 
-		const route = context.root.$route;
 		const i18n = inject("i18n");
-		const name = ref("");
-		const description = ref("");
-		const children = ref([]);
-		const componentProps = ref({});
-
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -75,28 +70,49 @@ export default defineComponent({
 			},
 		];
 
+		const name = ref("");
+		const description = reactive([]);
+		const children = ref([]);
+		const componentProps = ref({});
+
+		const route = context.root.$route;
 		const taskId = route.params.id;
 		onMounted(async () => {
-			await taskModule.findTask(taskId);
-			const taskData = taskModule.getTaskData;
-			name.value = taskData.name;
-			description.value = taskData.description.content;
-
-			if (description.value !== "") {
-				componentProps.value = {
-					component: "Editor",
-					model: description,
-					props: { placeholder: i18n.t("common.labels.description") },
-				};
-
-				children.value.push(componentProps.value);
+			if (taskId) {
+				await taskModule.findTask(taskId);
 			}
+			const taskData = taskModule.getTaskData;
+
+			name.value = taskData.name;
+			const desc = taskData.description.content || taskData.description; // TODO - clean this up
+			description.push(ref(desc));
+
+			// TODO - iterate
+			componentProps.value = {
+				component: "Editor",
+				model: description[0],
+				props: { placeholder: i18n.t("common.labels.description") },
+			};
+
+			children.value.push(componentProps.value);
 		});
 
+		const addComponent = () => {
+			description.push(ref(""));
+			componentProps.value = {
+				component: "Editor",
+				model: description[description.length - 1],
+				props: { placeholder: i18n.t("common.labels.description") },
+			};
+			console.log(description, componentProps);
+			children.value.push(componentProps.value);
+		};
+
 		const save = () => {
+			console.log(description);
 			const newTaskData = {
 				name: name.value,
-				description: description.value,
+				description: description[0].value,
 			};
 
 			if (!taskId) {
@@ -110,16 +126,6 @@ export default defineComponent({
 
 		const cancel = () => {
 			router.go(-1);
-		};
-
-		const addComponent = () => {
-			componentProps.value = {
-				component: "Editor",
-				model: description,
-				props: { placeholder: i18n.t("common.labels.description") },
-			};
-
-			children.value.push(componentProps.value);
 		};
 
 		return {
