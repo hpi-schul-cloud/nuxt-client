@@ -218,9 +218,15 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				data: testData,
 				rowsSelectable: true,
 			});
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			const checkboxElement = wrapper.find("tbody tr input[type=checkbox]");
+
+			await checkboxElement.trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
-			expect(wrapper.emitted("update:selection")).toStrictEqual([
+
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", true);
+
+			expect(await wrapper.emitted("update:selection")).toStrictEqual([
 				[[testData[0]._id], "inclusive"],
 			]);
 			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
@@ -235,9 +241,15 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				selectedRowIds: ["0"],
 				rowsSelectable: true,
 			});
+
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", false);
+
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[["0"], "inclusive"],
 				[[], "inclusive"],
@@ -260,7 +272,15 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			});
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
-			await wrapper.vm.$nextTick();
+			// await wrapper.vm.$nextTick();
+
+			const rowSelectionBarElement = wrapper.find(
+				'[data-testid="table-data-head"]'
+			);
+			await rowSelectionBarElement.vm.$emit(
+				"update:current-page-selection-state",
+				"all"
+			);
 			expect(
 				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);

@@ -7,7 +7,7 @@ export default [
 			city: "Washington",
 		},
 		age: 50,
-		birthday: "2000-12-25",
+		birthday: "25.12.2000",
 		agreed: true,
 	},
 	{
@@ -18,7 +18,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 28,
-		birthday: "2003-08-02",
+		birthday: "02.08.2003",
 		agreed: false,
 	},
 	{
@@ -29,7 +29,7 @@ export default [
 			city: "Grass Valley",
 		},
 		age: 38,
-		birthday: "1992-12-30",
+		birthday: "30.12.1992",
 		agreed: true,
 	},
 	{
@@ -40,7 +40,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 49,
-		birthday: "1969-01-16",
+		birthday: "16.01.1969",
 		agreed: true,
 	},
 	{
@@ -51,7 +51,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 38,
-		birthday: "1968-11-03",
+		birthday: "03.11.1968",
 		agreed: true,
 	},
 	{
@@ -62,7 +62,7 @@ export default [
 			city: "Essex",
 		},
 		age: 21,
-		birthday: "1969-07-21",
+		birthday: "21.07.1969",
 		agreed: false,
 	},
 	{
@@ -73,7 +73,7 @@ export default [
 			city: "Vallejo",
 		},
 		age: 31,
-		birthday: "1982-02-21",
+		birthday: "21.02.1982",
 		agreed: false,
 	},
 	{
@@ -84,7 +84,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 29,
-		birthday: "1964-08-24",
+		birthday: "24.08.1964",
 		agreed: false,
 	},
 	{
@@ -95,7 +95,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 22,
-		birthday: "1971-03-11",
+		birthday: "11.03.1971",
 		agreed: false,
 	},
 	{
@@ -106,7 +106,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 37,
-		birthday: "1958-08-11",
+		birthday: "11.08.1958",
 		agreed: true,
 	},
 	{
@@ -117,7 +117,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 39,
-		birthday: "1961-09-12",
+		birthday: "12.09.1961",
 		agreed: true,
 	},
 	{
@@ -128,7 +128,7 @@ export default [
 			city: "Arvada",
 		},
 		age: 42,
-		birthday: "1990-12-14",
+		birthday: "14.12.1990",
 		agreed: true,
 	},
 	{
@@ -139,7 +139,7 @@ export default [
 			city: "West Windsor",
 		},
 		age: 26,
-		birthday: "1967-07-23",
+		birthday: "23.07.1967",
 		agreed: false,
 	},
 	{
@@ -150,7 +150,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 21,
-		birthday: "1979-08-25",
+		birthday: "25.08.1979",
 		agreed: false,
 	},
 	{
@@ -161,7 +161,7 @@ export default [
 			city: "Yarmouth",
 		},
 		age: 26,
-		birthday: "1996-02-02",
+		birthday: "02.02.1996",
 		agreed: false,
 	},
 	{
@@ -172,7 +172,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 41,
-		birthday: "1963-07-03",
+		birthday: "03.07.1963",
 		agreed: true,
 	},
 	{
@@ -183,7 +183,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 43,
-		birthday: "1975-10-20",
+		birthday: "20.10.1975",
 		agreed: true,
 	},
 	{
@@ -194,7 +194,7 @@ export default [
 			city: "Montgomery",
 		},
 		age: 42,
-		birthday: "1958-02-05",
+		birthday: "05.02.1958",
 		agreed: true,
 	},
 	{
@@ -205,7 +205,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 46,
-		birthday: "1989-10-15",
+		birthday: "15.10.1989",
 		agreed: true,
 	},
 	{
@@ -216,7 +216,7 @@ export default [
 			city: "Salinas",
 		},
 		age: 41,
-		birthday: "1980-01-19",
+		birthday: "19.01.1980",
 		agreed: true,
 	},
 	{
@@ -227,7 +227,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 23,
-		birthday: "1983-01-22",
+		birthday: "22.01.1983",
 		agreed: false,
 	},
 	{
@@ -238,7 +238,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 41,
-		birthday: "1987-11-11",
+		birthday: "11.11.1987",
 		agreed: true,
 	},
 	{
@@ -249,7 +249,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 46,
-		birthday: "1967-10-05",
+		birthday: "05.10.1967",
 		agreed: true,
 	},
 	{
@@ -260,7 +260,7 @@ export default [
 			city: "Montgomery",
 		},
 		age: 19,
-		birthday: "1966-06-02",
+		birthday: "02.06.1966",
 		agreed: false,
 	},
 	{
@@ -271,7 +271,7 @@ export default [
 			city: "Savannah",
 		},
 		age: 21,
-		birthday: "2000-09-28",
+		birthday: "28.09.2000",
 		agreed: false,
 	},
 	{
@@ -282,7 +282,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 35,
-		birthday: "1965-09-06",
+		birthday: "06.09.1965",
 		agreed: false,
 	},
 	{
@@ -293,7 +293,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 47,
-		birthday: "1983-06-07",
+		birthday: "07.06.1983",
 		agreed: true,
 	},
 	{
@@ -304,7 +304,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 28,
-		birthday: "1979-01-09",
+		birthday: "09.01.1979",
 		agreed: false,
 	},
 	{
@@ -315,7 +315,7 @@ export default [
 			city: "O'Neals",
 		},
 		age: 45,
-		birthday: "1976-09-07",
+		birthday: "07.09.1976",
 		agreed: true,
 	},
 	{
@@ -326,7 +326,7 @@ export default [
 			city: "Washington",
 		},
 		age: 31,
-		birthday: "1964-12-18",
+		birthday: "18.12.1964",
 		agreed: false,
 	},
 	{
@@ -337,7 +337,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 27,
-		birthday: "1968-01-31",
+		birthday: "31.01.1968",
 		agreed: false,
 	},
 	{
@@ -348,7 +348,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 36,
-		birthday: "1978-04-26",
+		birthday: "26.04.1978",
 		agreed: true,
 	},
 	{
@@ -359,7 +359,7 @@ export default [
 			city: "Crofton",
 		},
 		age: 45,
-		birthday: "1962-07-05",
+		birthday: "05.07.1962",
 		agreed: true,
 	},
 	{
@@ -370,7 +370,7 @@ export default [
 			city: "Deale",
 		},
 		age: 42,
-		birthday: "1970-02-16",
+		birthday: "16.02.1970",
 		agreed: true,
 	},
 	{
@@ -381,7 +381,7 @@ export default [
 			city: "Agawam",
 		},
 		age: 35,
-		birthday: "1994-12-09",
+		birthday: "09.12.1994",
 		agreed: false,
 	},
 	{
@@ -392,7 +392,7 @@ export default [
 			city: "Norman",
 		},
 		age: 46,
-		birthday: "1971-05-11",
+		birthday: "11.05.1971",
 		agreed: true,
 	},
 	{
@@ -403,7 +403,7 @@ export default [
 			city: "Foresthill",
 		},
 		age: 18,
-		birthday: "1985-08-15",
+		birthday: "15.08.1985",
 		agreed: false,
 	},
 	{
@@ -414,7 +414,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 30,
-		birthday: "1957-06-12",
+		birthday: "12.06.1957",
 		agreed: false,
 	},
 	{
@@ -425,7 +425,7 @@ export default [
 			city: "Washington",
 		},
 		age: 35,
-		birthday: "1960-07-12",
+		birthday: "12.07.1960",
 		agreed: false,
 	},
 	{
@@ -436,7 +436,7 @@ export default [
 			city: "Washington",
 		},
 		age: 40,
-		birthday: "1990-05-23",
+		birthday: "23.05.1990",
 		agreed: true,
 	},
 	{
@@ -447,7 +447,7 @@ export default [
 			city: "Westmore",
 		},
 		age: 23,
-		birthday: "1992-04-11",
+		birthday: "11.04.1992",
 		agreed: false,
 	},
 	{
@@ -458,7 +458,7 @@ export default [
 			city: "Norman",
 		},
 		age: 36,
-		birthday: "1992-03-21",
+		birthday: "21.03.1992",
 		agreed: true,
 	},
 	{
@@ -467,7 +467,7 @@ export default [
 		lastName: "Klocko",
 		address: {},
 		age: 44,
-		birthday: "1991-07-28",
+		birthday: "28.07.1991",
 		agreed: true,
 	},
 	{
@@ -478,7 +478,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 46,
-		birthday: "1993-09-25",
+		birthday: "25.09.1993",
 		agreed: true,
 	},
 	{
@@ -489,7 +489,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 37,
-		birthday: "1997-07-07",
+		birthday: "07.07.1997",
 		agreed: true,
 	},
 	{
@@ -500,7 +500,7 @@ export default [
 			city: "Glen Burnie",
 		},
 		age: 45,
-		birthday: "1974-12-06",
+		birthday: "06.12.1974",
 		agreed: true,
 	},
 	{
@@ -511,7 +511,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 18,
-		birthday: "1971-07-23",
+		birthday: "23.07.1971",
 		agreed: false,
 	},
 	{
@@ -522,7 +522,7 @@ export default [
 			city: "Methuen",
 		},
 		age: 32,
-		birthday: "1960-05-26",
+		birthday: "26.05.1960",
 		agreed: false,
 	},
 	{
@@ -533,7 +533,7 @@ export default [
 			city: "Brentwood",
 		},
 		age: 26,
-		birthday: "1989-01-17",
+		birthday: "17.01.1989",
 		agreed: false,
 	},
 	{
@@ -544,7 +544,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 18,
-		birthday: "1965-03-22",
+		birthday: "22.03.1965",
 		agreed: false,
 	},
 	{
@@ -555,7 +555,7 @@ export default [
 			city: "Washington",
 		},
 		age: 43,
-		birthday: "1988-09-14",
+		birthday: "14.09.1988",
 		agreed: true,
 	},
 	{
@@ -566,7 +566,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 41,
-		birthday: "1959-11-13",
+		birthday: "13.11.1959",
 		agreed: true,
 	},
 	{
@@ -577,7 +577,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 44,
-		birthday: "1962-05-02",
+		birthday: "02.05.1962",
 		agreed: true,
 	},
 	{
@@ -588,7 +588,7 @@ export default [
 			city: "Baltimore",
 		},
 		age: 22,
-		birthday: "1996-11-23",
+		birthday: "23.11.1996",
 		agreed: false,
 	},
 	{
@@ -599,7 +599,7 @@ export default [
 			city: "Burlington",
 		},
 		age: 45,
-		birthday: "1985-02-15",
+		birthday: "15.02.1985",
 		agreed: true,
 	},
 	{
@@ -610,7 +610,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 46,
-		birthday: "1971-09-23",
+		birthday: "23.09.1971",
 		agreed: true,
 	},
 	{
@@ -621,7 +621,7 @@ export default [
 			city: "Alburgh",
 		},
 		age: 27,
-		birthday: "1985-01-19",
+		birthday: "19.01.1985",
 		agreed: false,
 	},
 	{
@@ -632,7 +632,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 30,
-		birthday: "1981-10-15",
+		birthday: "15.10.1981",
 		agreed: false,
 	},
 	{
@@ -643,7 +643,7 @@ export default [
 			city: "Santa Cruz",
 		},
 		age: 26,
-		birthday: "1966-02-16",
+		birthday: "16.02.1966",
 		agreed: false,
 	},
 	{
@@ -654,7 +654,7 @@ export default [
 			city: "Glen Burnie",
 		},
 		age: 31,
-		birthday: "1958-02-01",
+		birthday: "01.02.1958",
 		agreed: false,
 	},
 	{
@@ -665,7 +665,7 @@ export default [
 			city: "Pasadena",
 		},
 		age: 46,
-		birthday: "1986-06-03",
+		birthday: "03.06.1986",
 		agreed: true,
 	},
 	{
@@ -676,7 +676,7 @@ export default [
 			city: "Grand Junction",
 		},
 		age: 33,
-		birthday: "1981-02-18",
+		birthday: "18.02.1981",
 		agreed: false,
 	},
 	{
@@ -687,7 +687,7 @@ export default [
 			city: "Arvada",
 		},
 		age: 37,
-		birthday: "1996-02-29",
+		birthday: "29.02.1996",
 		agreed: true,
 	},
 	{
@@ -698,7 +698,7 @@ export default [
 			city: "Holyoke",
 		},
 		age: 49,
-		birthday: "1999-12-27",
+		birthday: "27.12.1999",
 		agreed: true,
 	},
 	{
@@ -709,7 +709,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 26,
-		birthday: "1979-09-11",
+		birthday: "11.09.1979",
 		agreed: false,
 	},
 	{
@@ -720,7 +720,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 28,
-		birthday: "1996-02-05",
+		birthday: "05.02.1996",
 		agreed: false,
 	},
 	{
@@ -731,7 +731,7 @@ export default [
 			city: "Panama City",
 		},
 		age: 33,
-		birthday: "1979-05-28",
+		birthday: "28.05.1979",
 		agreed: false,
 	},
 	{
@@ -742,7 +742,7 @@ export default [
 			city: "Savannah",
 		},
 		age: 50,
-		birthday: "1959-06-26",
+		birthday: "26.06.1959",
 		agreed: true,
 	},
 	{
@@ -753,7 +753,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 22,
-		birthday: "1970-10-07",
+		birthday: "07.10.1970",
 		agreed: false,
 	},
 	{
@@ -764,7 +764,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 42,
-		birthday: "1981-05-10",
+		birthday: "10.05.1981",
 		agreed: true,
 	},
 	{
@@ -775,7 +775,7 @@ export default [
 			city: "Union City",
 		},
 		age: 30,
-		birthday: "1980-08-05",
+		birthday: "05.08.1980",
 		agreed: false,
 	},
 	{
@@ -786,7 +786,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 39,
-		birthday: "1970-12-18",
+		birthday: "18.12.1970",
 		agreed: true,
 	},
 	{
@@ -797,7 +797,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 45,
-		birthday: "1999-02-17",
+		birthday: "17.02.1999",
 		agreed: true,
 	},
 	{
@@ -808,7 +808,7 @@ export default [
 			city: "Panama City",
 		},
 		age: 45,
-		birthday: "1966-08-30",
+		birthday: "30.08.1966",
 		agreed: true,
 	},
 	{
@@ -819,7 +819,7 @@ export default [
 			city: "Easton",
 		},
 		age: 36,
-		birthday: "1984-01-25",
+		birthday: "25.01.1984",
 		agreed: true,
 	},
 	{
@@ -830,7 +830,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 39,
-		birthday: "1962-03-07",
+		birthday: "07.03.1962",
 		agreed: true,
 	},
 	{
@@ -841,7 +841,7 @@ export default [
 			city: "Savannah",
 		},
 		age: 22,
-		birthday: "1988-05-06",
+		birthday: "06.05.1988",
 		agreed: false,
 	},
 	{
@@ -852,7 +852,7 @@ export default [
 			city: "Nashville",
 		},
 		age: 32,
-		birthday: "1980-07-25",
+		birthday: "25.07.1980",
 		agreed: false,
 	},
 	{
@@ -861,7 +861,7 @@ export default [
 		lastName: "Lemke",
 		address: {},
 		age: 20,
-		birthday: "2000-01-15",
+		birthday: "15.01.2000",
 		agreed: false,
 	},
 	{
@@ -872,7 +872,7 @@ export default [
 			city: "Chester",
 		},
 		age: 31,
-		birthday: "1999-08-30",
+		birthday: "30.08.1999",
 		agreed: false,
 	},
 	{
@@ -883,7 +883,7 @@ export default [
 			city: "Bakersfield",
 		},
 		age: 50,
-		birthday: "2003-08-19",
+		birthday: "19.08.2003",
 		agreed: true,
 	},
 	{
@@ -894,7 +894,7 @@ export default [
 			city: "Montgomery",
 		},
 		age: 42,
-		birthday: "1957-06-11",
+		birthday: "11.06.1957",
 		agreed: true,
 	},
 	{
@@ -905,7 +905,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 47,
-		birthday: "1983-11-19",
+		birthday: "19.11.1983",
 		agreed: true,
 	},
 	{
@@ -916,7 +916,7 @@ export default [
 			city: "Castro Valley",
 		},
 		age: 49,
-		birthday: "1991-07-19",
+		birthday: "19.07.1991",
 		agreed: true,
 	},
 	{
@@ -927,7 +927,7 @@ export default [
 			city: "Annapolis",
 		},
 		age: 48,
-		birthday: "1994-10-14",
+		birthday: "14.10.1994",
 		agreed: true,
 	},
 	{
@@ -938,7 +938,7 @@ export default [
 			city: "Fayetteville",
 		},
 		age: 22,
-		birthday: "2003-04-04",
+		birthday: "04.04.2003",
 		agreed: false,
 	},
 	{
@@ -949,7 +949,7 @@ export default [
 			city: "Manchester",
 		},
 		age: 28,
-		birthday: "1983-09-11",
+		birthday: "11.09.1983",
 		agreed: false,
 	},
 	{
@@ -960,7 +960,7 @@ export default [
 			city: "Fort Collins",
 		},
 		age: 32,
-		birthday: "1999-07-07",
+		birthday: "07.07.1999",
 		agreed: false,
 	},
 	{
@@ -971,7 +971,7 @@ export default [
 			city: "Louisville",
 		},
 		age: 31,
-		birthday: "1972-09-15",
+		birthday: "15.09.1972",
 		agreed: false,
 	},
 	{
@@ -982,7 +982,7 @@ export default [
 			city: "Panama City Beach",
 		},
 		age: 19,
-		birthday: "1960-06-03",
+		birthday: "03.06.1960",
 		agreed: false,
 	},
 	{
@@ -993,7 +993,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 29,
-		birthday: "1997-04-13",
+		birthday: "13.04.1997",
 		agreed: false,
 	},
 	{
@@ -1004,7 +1004,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 48,
-		birthday: "1958-07-05",
+		birthday: "05.07.1958",
 		agreed: true,
 	},
 	{
@@ -1015,7 +1015,7 @@ export default [
 			city: "Anchorage",
 		},
 		age: 43,
-		birthday: "1990-07-02",
+		birthday: "02.07.1990",
 		agreed: true,
 	},
 	{
@@ -1026,7 +1026,7 @@ export default [
 			city: "Glendale",
 		},
 		age: 21,
-		birthday: "1968-01-17",
+		birthday: "17.01.1968",
 		agreed: false,
 	},
 	{
@@ -1037,7 +1037,7 @@ export default [
 			city: "Savannah",
 		},
 		age: 20,
-		birthday: "1960-05-10",
+		birthday: "10.05.1960",
 		agreed: false,
 	},
 	{
@@ -1048,7 +1048,7 @@ export default [
 			city: "Washington",
 		},
 		age: 33,
-		birthday: "1971-10-30",
+		birthday: "30.10.1971",
 		agreed: false,
 	},
 	{
@@ -1059,7 +1059,7 @@ export default [
 			city: "Carson",
 		},
 		age: 32,
-		birthday: "1980-01-18",
+		birthday: "18.01.1980",
 		agreed: false,
 	},
 	{
@@ -1070,7 +1070,7 @@ export default [
 			city: "Washington",
 		},
 		age: 25,
-		birthday: "2000-07-07",
+		birthday: "07.07.2000",
 		agreed: false,
 	},
 	{
@@ -1081,7 +1081,7 @@ export default [
 			city: "Panama City",
 		},
 		age: 38,
-		birthday: "1961-01-31",
+		birthday: "31.01.1961",
 		agreed: true,
 	},
 	{
@@ -1092,7 +1092,7 @@ export default [
 			city: "Burlington",
 		},
 		age: 34,
-		birthday: "1988-08-14",
+		birthday: "14.08.1988",
 		agreed: false,
 	},
 ];
