@@ -84,28 +84,24 @@ export default defineComponent({
 
 			name.value = taskData.name;
 			const desc = taskData.description.content || taskData.description; // TODO - clean this up
-			description.push(ref(desc));
 
 			// TODO - iterate
-			const child = {
-				component: "Editor",
-				model: ref(description[0]),
-				props: { placeholder: i18n.t("common.labels.description") },
-			};
-
-			children.push(child);
-			console.log(children);
+			createChild(desc);
 		});
 
-		const addComponent = () => {
-			description.push(ref(""));
+		const createChild = (desc) => {
+			description.push(ref(desc));
 			const child = {
 				component: "Editor",
-				model: description[description.length - 1],
+				model: ref(description[description.length - 1]),
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
 
 			children.push(child);
+		};
+
+		const addComponent = () => {
+			createChild("");
 		};
 
 		const save = () => {
