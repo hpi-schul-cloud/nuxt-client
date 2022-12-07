@@ -18,6 +18,63 @@
 				Anschrift: wie oben
 			</p>
 			<p>
+				<strong>Allgemeine Anfragen und Support:</strong><br />
+				📞 03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
+				📞 03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
+				🗪
+				<a
+					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
+					target="_blank"
+					rel="noopener"
+					:aria-label="
+						$t('components.legacy.footer.ariaLabel', {
+							itemName: 'Online-Chat',
+						})
+					"
+					>Online-Chat</a
+				>
+				(Do. 15–16 Uhr)<br />
+				📧
+				<a
+					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
+					target="_blank"
+					rel="noopener"
+					:aria-label="
+						$t('components.legacy.footer.ariaLabel', { itemName: 'Mail' })
+					"
+					>schul-cloud@bildungsserver.berlin-brandenburg.de</a
+				>
+			</p>
+			<p>
+				<strong>Allgemeine Anfragen und Support:</strong><br />
+				Telefon: 03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13
+				Uhr)<br />
+				Telefon: 03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13
+				Uhr)<br />
+				<a
+					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
+					target="_blank"
+					rel="noopener"
+					:aria-label="
+						$t('components.legacy.footer.ariaLabel', {
+							itemName: 'Online-Chat',
+						})
+					"
+					>Online-Chat</a
+				>
+				(Do. 15–16 Uhr)<br />
+				Email:
+				<a
+					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
+					target="_blank"
+					rel="noopener"
+					:aria-label="
+						$t('components.legacy.footer.ariaLabel', { itemName: 'Email' })
+					"
+					>schul-cloud@bildungsserver.berlin-brandenburg.de</a
+				>
+			</p>
+			<p>
 				<strong>Wichtige Hinweise:</strong>
 				<br />
 				Die genannten eMail-Adressen dienen nur für den Empfang einfacher
