@@ -1,5 +1,6 @@
 import { mutations, actions } from "../../src/store/ldap-config";
 import { unchangedPassword } from "../utils/ldapConstants";
+import { initializeAxios } from "@/utils/api";
 
 const serverMockData = {
 	providerOptions: {
@@ -82,12 +83,13 @@ describe("store/ldap-config", () => {
 					},
 				};
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					get: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: requestData });
 					},
-				};
+				});
+
 				const spyCommit = jest.fn();
 				await actions.getData({ commit: spyCommit }, "id");
 				expect(receivedUrl).toBe("/v1/ldap-config/id");
@@ -99,12 +101,13 @@ describe("store/ldap-config", () => {
 		describe("verifyData", () => {
 			it("it commits setTemp mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					post: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
+
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
@@ -115,12 +118,13 @@ describe("store/ldap-config", () => {
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					post: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
+
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
@@ -132,12 +136,13 @@ describe("store/ldap-config", () => {
 		describe("verifyExisting", () => {
 			it("it commits setTemp mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					patch: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
+
 				const spyCommit = jest.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
@@ -151,12 +156,13 @@ describe("store/ldap-config", () => {
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					patch: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
+
 				const spyCommit = jest.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
@@ -171,12 +177,12 @@ describe("store/ldap-config", () => {
 		describe("submitData", () => {
 			it("it commits setSubmitted mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					post: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
 				const spyCommit = jest.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe(
@@ -190,12 +196,12 @@ describe("store/ldap-config", () => {
 		describe("patchData", () => {
 			it("it commits setSubmitted mutation", async () => {
 				let receivedUrl;
-				actions.$axios = {
+				initializeAxios({
 					patch: (url) => {
 						receivedUrl = url;
 						return Promise.resolve({ data: clientMockData });
 					},
-				};
+				});
 				const spyCommit = jest.fn();
 				await actions.patchData(
 					{ commit: spyCommit },
