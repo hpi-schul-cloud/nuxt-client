@@ -8,7 +8,7 @@
 		@dialog-closed="onCloseDialog"
 		@next="onNext(shareOptions)"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
+		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
 			{{ modalTitle }}
 		</div>
 

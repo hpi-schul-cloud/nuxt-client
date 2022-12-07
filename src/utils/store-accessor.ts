@@ -1,4 +1,5 @@
 import AccountsModule from "@/store/accounts";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import ContentModule from "@/store/content";
@@ -23,6 +24,7 @@ import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
 let accountsModule: AccountsModule;
+let applicationErrorModule: ApplicationErrorModule;
 let authModule: AuthModule;
 let autoLogoutModule: AutoLogoutModule;
 let collaborativeFilesModule: CollaborativeFilesModule;
@@ -46,6 +48,7 @@ let taskModule: TaskModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
+	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
@@ -75,6 +78,7 @@ function initializeStores(store: Store<any>): void {
 export {
 	initializeStores,
 	accountsModule,
+	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
