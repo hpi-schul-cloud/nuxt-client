@@ -7,11 +7,11 @@
 		<v-form class="d-flex flex-column">
 			<card-title v-model="name" :label="$t('common.labels.title')" />
 			<component
-				:is="componentProps.component"
+				:is="child.component"
 				v-for="child in children"
 				:key="child.name"
-				v-bind="componentProps.props"
-				v-model="componentProps.model"
+				v-bind="child.props"
+				v-model="child.model.value"
 			></component>
 			<v-btn
 				fab
@@ -72,8 +72,7 @@ export default defineComponent({
 
 		const name = ref("");
 		const description = reactive([]);
-		const children = ref([]);
-		const componentProps = ref({});
+		const children = reactive([]);
 
 		const route = context.root.$route;
 		const taskId = route.params.id;
@@ -88,24 +87,25 @@ export default defineComponent({
 			description.push(ref(desc));
 
 			// TODO - iterate
-			componentProps.value = {
+			const child = {
 				component: "Editor",
-				model: description[0],
+				model: ref(description[0]),
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
 
-			children.value.push(componentProps.value);
+			children.push(child);
+			console.log(children);
 		});
 
 		const addComponent = () => {
 			description.push(ref(""));
-			componentProps.value = {
+			const child = {
 				component: "Editor",
 				model: description[description.length - 1],
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
-			console.log(description, componentProps);
-			children.value.push(componentProps.value);
+
+			children.push(child);
 		};
 
 		const save = () => {
@@ -134,7 +134,6 @@ export default defineComponent({
 			name,
 			description,
 			children,
-			componentProps,
 			save,
 			cancel,
 			addComponent,
