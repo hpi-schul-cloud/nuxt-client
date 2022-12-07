@@ -5,15 +5,14 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<card-title v-model="name" />
-			<template v-for="child in children">
-				<component
-					:is="componentProps.component"
-					:key="child.name"
-					v-bind="componentProps.props"
-					v-model="componentProps.model"
-				></component>
-			</template>
+			<card-title v-model="name" :label="$t('common.labels.title')" />
+			<component
+				:is="componentProps.component"
+				v-for="child in children"
+				:key="child.name"
+				v-bind="componentProps.props"
+				v-model="componentProps.model"
+			></component>
 			<v-btn
 				fab
 				color="primary"
