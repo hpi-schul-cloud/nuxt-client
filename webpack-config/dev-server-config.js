@@ -1,20 +1,26 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { isLegacyClient } = require("@/router/legacy-client-route");
-const { isServer } = require("@/router/server-route");
+const { isLegacyClient } = require("../src/router/legacy-client-route");
+const { isServer } = require("../src/router/server-route");
 
-let legacyClientProxy;
-let serverProxy;
-
-const createDevServerConfig = () => {
-	legacyClientProxy = createProxyMiddleware({
+const createLegacyClientProxy = () => {
+	const legacyClientProxy = createProxyMiddleware({
 		target: "http://localhost:3100",
 		changeOrigin: true,
 	});
+	return legacyClientProxy;
+};
 
-	serverProxy = createProxyMiddleware({
+const createServerProxy = () => {
+	const serverProxy = createProxyMiddleware({
 		target: "http://localhost:3030",
 		changeOrigin: true,
 	});
+	return serverProxy;
+};
+
+const createDevServerConfig = () => {
+	const legacyClientProxy = createLegacyClientProxy();
+	const serverProxy = createServerProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -49,9 +55,7 @@ const createDevServerConfig = () => {
 };
 
 module.exports = {
-	isServer,
-	legacyClientProxy,
-	serverProxy,
-	devServer:
-		process.env.NODE_ENV === "development" ? createDevServerConfig() : {},
+	createLegacyClientProxy,
+	createServerProxy,
+	createDevServerConfig,
 };
