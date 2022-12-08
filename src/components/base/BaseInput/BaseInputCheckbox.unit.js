@@ -5,6 +5,9 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
+				...createComponentMocks({
+					vuetify: true,
+				}),
 				propsData: {
 					label: "Checkbox",
 					name: "checkbox",
@@ -45,6 +48,9 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	it(`use array v-model if value is specified`, () => {
 		const testValue = "test";
 		const wrapper = mount({
+			...createComponentMocks({
+				vuetify: true,
+			}),
 			data: () => ({ value: ["other Value"] }),
 			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"/>`,
 			components: { BaseInput },
