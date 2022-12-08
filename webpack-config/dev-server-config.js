@@ -1,6 +1,7 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { isLegacyClient } = require("../src/router/legacy-client-route");
+const { isVueClient } = require("../src/router/vue-client-route");
 const { isServer } = require("../src/router/server-route");
+const url = require("url");
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
@@ -32,17 +33,17 @@ const createDevServerConfig = () => {
 			middlewares.unshift({
 				name: "dev-server-proxy",
 				middleware: (req, res, next) => {
-					const path = req.originalUrl;
+					const path = url.parse(req.originalUrl).pathname;
 
-					if (path && isServer(path)) {
-						// console.log("--- serverUrl: ", path);
+					if (isServer(path)) {
+						// console.log("--- serverPath: ", path);
 						serverProxy(req, res, next);
-					} else if (path && isLegacyClient(path)) {
-						// console.log("--- legacyUrl: ", path);
-						legacyClientProxy(req, res, next);
-					} else {
-						// console.log("--- vueUrl: ", path);
+					} else if (isVueClient(path)) {
+						// console.log("--- vuePath: ", path);
 						next();
+					} else {
+						// console.log("--- legacyPath: ", path);
+						legacyClientProxy(req, res, next);
 					}
 				},
 			});
