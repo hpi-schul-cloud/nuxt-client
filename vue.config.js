@@ -1,6 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
-const { devServer } = require("./webpack-config/dev-server-config");
+const { createDevServerConfig } = require("./webpack-config/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
 
@@ -54,5 +54,6 @@ module.exports = defineConfig({
 		},
 	},
 
-	devServer,
+	devServer:
+		process.env.NODE_ENV === "development" ? createDevServerConfig() : {},
 });

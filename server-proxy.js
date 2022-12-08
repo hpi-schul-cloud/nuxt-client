@@ -5,16 +5,19 @@
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const {
-	legacyClientProxy,
-	serverProxy,
+	createLegacyClientProxy,
+	createServerProxy,
 } = require("./webpack-config/dev-server-config");
-const { isLegacyClient } = require("@/router/legacy-client-route");
-const { isServer } = require("@/router/server-route");
+const { isLegacyClient } = require("./src/router/legacy-client-route");
+const { isServer } = require("./src/router/server-route");
 
 const vueClientProxy = createProxyMiddleware({
 	target: "http://localhost:4000",
 	changeOrigin: true,
 });
+
+const legacyClientProxy = createLegacyClientProxy();
+const serverProxy = createServerProxy();
 
 const app = express();
 
