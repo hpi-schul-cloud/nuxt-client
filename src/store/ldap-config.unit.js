@@ -86,7 +86,7 @@ describe("store/ldap-config", () => {
 				initializeAxios({
 					get: (url) => {
 						receivedUrl = url;
-						return Promise.resolve({ data: requestData });
+						return Promise.resolve(requestData);
 					},
 				});
 
