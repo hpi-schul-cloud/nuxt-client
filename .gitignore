@@ -24,6 +24,9 @@ version.js
 **/.DS_Store
 **/.tmp*
 
+# Test data
+coverage/
+
 .nuxt
 nuxt.config.js
 
