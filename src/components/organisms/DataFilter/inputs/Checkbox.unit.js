@@ -4,6 +4,9 @@ describe("@/components/organisms/DataFilter/inputs/Checkbox", () => {
 	it("can preselect an option", async () => {
 		const expectedValue = ["A", "B"];
 		const wrapper = mount(InputCheckbox, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
 			propsData: {
 				label: "Chechbox",
 				value: expectedValue,
@@ -27,6 +30,9 @@ describe("@/components/organisms/DataFilter/inputs/Checkbox", () => {
 
 	it("can choose an option", async () => {
 		const wrapper = mount(InputCheckbox, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
 			propsData: {
 				label: "Checkbox",
 				value: [],
@@ -46,6 +52,9 @@ describe("@/components/organisms/DataFilter/inputs/Checkbox", () => {
 
 	it("can deselect an option", async () => {
 		const wrapper = mount(InputCheckbox, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
 			propsData: {
 				label: "Checkbox",
 				value: ["A"],
