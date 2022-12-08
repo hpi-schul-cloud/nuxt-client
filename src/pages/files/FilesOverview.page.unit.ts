@@ -2,7 +2,6 @@ import FilesOverview from "@/pages/files/FilesOverview.page.vue";
 import { mount, shallowMount, Wrapper, WrapperArray } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CollaborativeFilesModule from "@/store/collaborative-files";
-import { provide } from "vue";
 import { Route } from "vue-router";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { CollaborativeFileType } from "@/store/types/collaborative-file";
@@ -13,7 +12,7 @@ const $route: Route = {
 	path: "/cfiles",
 } as Route;
 
-const $router = { replace: jest.fn(), push: jest.fn() };
+const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
 
 describe("FileOverview", () => {
 	let wrapper: Wrapper<any>;
@@ -52,28 +51,16 @@ describe("FileOverview", () => {
 			...getters,
 		});
 		wrapper = mount(FilesOverview, {
-			...createComponentMocks({
-				i18n: true,
+			...createComponentMocks({}),
+			mocks: {
 				$router,
 				$route,
-			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("collaborativeFilesModule", collaborativeFilesModule);
+			},
+			provide: {
+				i18n: { t: (key: string) => key },
+				collaborativeFilesModule,
 			},
 		});
-
-		const pageTitle = "Page Title";
-		const loadFilesFunctionMock = jest.fn();
-		const breadcrumbTitle = "breadcrumb1";
-		const breadcrumbPath = "/cfiles/";
-
-		return {
-			loadFilesFunctionMock,
-			pageTitle,
-			breadcrumbTitle,
-			breadcrumbPath,
-		};
 	}
 
 	describe("basic functions", () => {
@@ -85,29 +72,24 @@ describe("FileOverview", () => {
 
 	describe("inject", () => {
 		it("should throw an error when i18n injection fails", () => {
-			try {
-				wrapper = shallowMount(FilesOverview, {
-					setup() {
-						provide("collaborativeFiles", collaborativeFilesModule);
+			const collaborativeFilesModule = createModuleMocks(
+				CollaborativeFilesModule
+			);
+			expect(() => {
+				shallowMount(FilesOverview, {
+					provide: {
+						collaborativeFilesModule,
 					},
 				});
-			} catch (e) {
-				expect(e.message.includes('Injection "i18n" not found')).toBeTruthy();
-			}
+			}).toThrow("Injection of dependencies failed");
 		});
 
 		it("should throw an error when collaborativeFilesModule injection fails", () => {
-			try {
-				wrapper = shallowMount(FilesOverview, {
-					setup() {
-						provide("i18n", { t: (key: string) => key });
-					},
+			expect(() => {
+				shallowMount(FilesOverview, {
+					provide: { i18n: { t: (key: string) => key } },
 				});
-			} catch (e) {
-				expect(
-					e.message.includes('Injection "collaborativeFilesModule" not found')
-				).toBeTruthy();
-			}
+			}).toThrow("Injection of dependencies failed");
 		});
 	});
 
