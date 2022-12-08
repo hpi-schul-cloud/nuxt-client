@@ -11,15 +11,9 @@ export const actions = {
 				payload.map((user) => {
 					registered.push(user._id);
 					this.$axios
-						.$patch("/v1/users/admin/students/" + user._id, user)
-						.then((userData) => {
-							const accountModel = {
-								activated: true,
-								username: userData.email,
-								password: user.password,
-								userId: user._id,
-							};
-							this.$axios.$post("/v1/accounts/", accountModel);
+						.$patch("/v1/users/admin/students/" + user._id, {
+							user,
+							createAccount: true,
 						})
 						.catch((error) => errors.push({ updateError: error }));
 				})
