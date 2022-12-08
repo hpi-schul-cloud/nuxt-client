@@ -43,7 +43,6 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	});
 
 	it("should have correct props", () => {
-		console.log("testProps", testProps);
 		const wrapper = getWrapper(testProps);
 
 		expect(wrapper.vm.editedItem).toStrictEqual(testProps.editedItem);
