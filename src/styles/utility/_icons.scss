@@ -25,6 +25,10 @@
     fill: currentColor;
   }
 
+  &.custom-icon svg {
+    fill: currentColor;
+  }
+
   &.material-icon {
     // remove material icon margin
     width: calc(1em + 4px);

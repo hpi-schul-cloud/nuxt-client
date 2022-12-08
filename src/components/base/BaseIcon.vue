@@ -1,16 +1,16 @@
 <template>
 	<span>
-		<v-icon v-if="source === 'fa'" :color="fill" v-bind="$attrs">{{
+		<v-icon v-if="source === 'fa'" :color="fillColor" v-bind="$attrs">{{
 			`fa-${icon}`
 		}}</v-icon>
 		<v-icon
 			v-else-if="source === 'material'"
-			:color="fill"
+			:color="fillColor"
 			class="material-icon"
 			v-bind="$attrs"
 			>{{ mdiSvgPath }}</v-icon
 		>
-		<v-icon v-else :color="fill" class="custom-icon" v-bind="$attrs">{{
+		<v-icon v-else :color="fillColor" class="custom-icon" v-bind="$attrs">{{
 			`$${icon}`
 		}}</v-icon>
 	</span>
@@ -33,6 +33,10 @@ export default {
 		},
 		fill: {
 			type: String,
+			default: "currentColor",
+		},
+		color: {
+			type: String,
 		},
 	},
 	data() {
@@ -42,6 +46,9 @@ export default {
 	computed: {
 		mdiSvgPath() {
 			return materialIcons[`mdi-${this.icon}`];
+		},
+		fillColor() {
+			return this.color ? this.color : this.fill;
 		},
 	},
 };

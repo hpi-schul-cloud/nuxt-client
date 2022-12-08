@@ -5,6 +5,9 @@ import {
 	mdiCalendar,
 	mdiCheck,
 	mdiCheckAll,
+	mdiCheckboxOutline,
+	mdiCheckboxBlankOutline,
+	mdiCheckboxIntermediate,
 	mdiCheckCircle,
 	mdiClose,
 	mdiDns,
@@ -29,8 +32,10 @@ import {
 
 const materialIcons = {
 	"mdi-arrow_drop_down": mdiMenuDown,
-	"mdi-check": mdiCheck,
+	"mdi-check_box_outline_blank": mdiCheckboxBlankOutline,
+	"mdi-check_box": mdiCheckboxOutline,
 	"mdi-check_circle": mdiCheckCircle,
+	"mdi-check": mdiCheck,
 	"mdi-clear": mdiClose,
 	"mdi-close": mdiClose,
 	"mdi-dns": mdiDns,
@@ -40,8 +45,8 @@ const materialIcons = {
 	"mdi-error": mdiAlertCircle,
 	"mdi-event": mdiCalendar,
 	"mdi-favorite": mdiHeart,
-	"mdi-folder": mdiFolder,
 	"mdi-folder_shared": mdiFolderAccount,
+	"mdi-folder": mdiFolder,
 	"mdi-format_bold": mdiFormatBold,
 	"mdi-format_italic": mdiFormatItalic,
 	"mdi-format_list_bulleted": mdiFormatListBulleted,
@@ -49,6 +54,7 @@ const materialIcons = {
 	"mdi-format_strikethrough": mdiFormatStrikethrough,
 	"mdi-format_underlined": mdiFormatUnderline,
 	"mdi-image": mdiImage,
+	"mdi-indeterminate_check_box": mdiCheckboxIntermediate,
 	"mdi-launch": mdiLaunch,
 	"mdi-lock": mdiLock,
 	"mdi-person": mdiAccount,
@@ -65,6 +71,8 @@ export default materialIcons;
 // ---------------------------------------------------------------------------
 // mdi-arrow_drop_down : menu-down
 // mdi-check (check) : check
+// mdi-check_box : checkbox
+// mdi-check_box_outline_blank : checkbox-blank-outline
 // mdi-check_circle : check-circle
 // mdi-clear : close
 // mdi-close : close
@@ -83,6 +91,7 @@ export default materialIcons;
 // mdi-format_strikethrough : format-strikethrough
 // mdi-format_underlined : format-underline
 // mdi-image : image
+// mdi-indeterminate_check_box : checkbox-intermediate
 // mdi-launch : launch
 // mdi-lock : lock
 // mdi-person : account
