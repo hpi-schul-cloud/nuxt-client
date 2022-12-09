@@ -52,7 +52,6 @@ import CardTitle from "@/components/atoms/CardTitle.vue";
 import Editor from "@/components/molecules/Editor.vue";
 import { mdiPlus, mdiTrashCanOutline } from "@mdi/js";
 
-// eslint-disable-next-line vue/require-direct-export
 export default {
 	name: "TaskCreatePage",
 	components: { DefaultWireframe, CardTitle, Editor },
@@ -75,7 +74,6 @@ export default {
 		];
 
 		const name = ref("");
-		const description = reactive([]);
 		const children = reactive([]);
 
 		const route = context.root.$route;
@@ -94,10 +92,9 @@ export default {
 		});
 
 		const createChild = (desc) => {
-			description.push(ref(desc));
 			const child = {
 				component: "Editor",
-				model: ref(description[description.length - 1]),
+				model: ref(desc),
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
 
@@ -110,14 +107,13 @@ export default {
 
 		const deleteElement = (index) => {
 			children.splice(index, 1);
-			description.splice(index, 1);
 		};
 
 		const save = () => {
-			console.log(description);
+			console.log(children);
 			const newTaskData = {
 				name: name.value,
-				description: description[0].value,
+				description: children[0].model.value,
 			};
 
 			if (!taskId) {
@@ -138,7 +134,6 @@ export default {
 			mdiTrashCanOutline,
 			breadcrumbs,
 			name,
-			description,
 			children,
 			save,
 			cancel,
