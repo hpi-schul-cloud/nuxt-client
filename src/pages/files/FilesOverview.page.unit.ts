@@ -75,6 +75,7 @@ describe("FileOverview", () => {
 			const collaborativeFilesModule = createModuleMocks(
 				CollaborativeFilesModule
 			);
+			console.error = jest.fn();
 			expect(() => {
 				shallowMount(FilesOverview, {
 					provide: {
@@ -85,6 +86,7 @@ describe("FileOverview", () => {
 		});
 
 		it("should throw an error when collaborativeFilesModule injection fails", () => {
+			console.error = jest.fn();
 			expect(() => {
 				shallowMount(FilesOverview, {
 					provide: { i18n: { t: (key: string) => key } },

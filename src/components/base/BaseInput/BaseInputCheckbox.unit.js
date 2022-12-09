@@ -110,6 +110,8 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	});
 
 	it(`throws an error if show-undefined-state is set on type=switch`, async () => {
+		console.error = jest.fn();
+
 		expect(() =>
 			mount({
 				data: () => ({ value: undefined }),
@@ -120,6 +122,8 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	});
 
 	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {
+		console.error = jest.fn();
+
 		expect(() =>
 			mount({
 				data: () => ({ value: [] }),
