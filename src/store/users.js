@@ -78,7 +78,7 @@ const usersModule = mergeDeep(base, {
 			commit("updatePaginationForQuery", {
 				query,
 				qid,
-				res: res.data,
+				res,
 			});
 			commit("set", {
 				items: res.data,
@@ -99,7 +99,7 @@ const usersModule = mergeDeep(base, {
 			commit("updatePaginationForQuery", {
 				query,
 				qid,
-				res: res.data,
+				res,
 			});
 			commit("set", {
 				items: res.data,
