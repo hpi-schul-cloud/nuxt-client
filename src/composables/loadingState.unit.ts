@@ -1,6 +1,6 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { provide } from "vue";
+import { defineComponent, provide } from "vue";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import { useLoadingState } from "./loadingState";
 
@@ -10,18 +10,28 @@ export interface MountOptions {
 
 let wrapper: Wrapper<Vue>;
 
-const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
+const mountComposable = <R>(
+	composable: () => R,
+	providers: Record<string, unknown>
+): R => {
+	const ParentComponent = defineComponent({
+		setup() {
+			for (const [key, mockFn] of Object.entries(providers)) {
+				provide(key, mockFn);
+			}
+		},
+	});
+
 	const TestComponent = {
-		inject: ["loadingStateModule"],
 		template: "<div></div>",
 	};
 
 	wrapper = shallowMount(TestComponent, {
 		setup() {
-			options.provider?.();
 			const result = composable();
 			return { result };
 		},
+		parentComponent: ParentComponent,
 	});
 
 	//@ts-ignore
@@ -35,9 +45,7 @@ describe("loadingState composable", () => {
 		const { isLoadingDialogOpen } = mountComposable(
 			() => useLoadingState(loadingMessage),
 			{
-				provider: () => {
-					provide("loadingStateModule", loadingStateModuleMock);
-				},
+				loadingStateModule: loadingStateModuleMock,
 			}
 		);
 
@@ -56,9 +64,7 @@ describe("loadingState composable", () => {
 		const { isLoadingDialogOpen } = mountComposable(
 			() => useLoadingState("...loading"),
 			{
-				provider: () => {
-					provide("loadingStateModule", loadingStateModuleMock);
-				},
+				loadingStateModule: loadingStateModuleMock,
 			}
 		);
 

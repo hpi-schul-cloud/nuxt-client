@@ -3,7 +3,7 @@ import CopyModule, { CopyParams } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { watch } from "vue";
+import { defineComponent, watch } from "vue";
 import { provide, ref } from "vue";
 import { shallowMount } from "@vue/test-utils";
 import { useCopy } from "./copy";
@@ -18,19 +18,24 @@ const mountComposable = <R>(
 	composable: () => R,
 	providers: Record<string, unknown>
 ): R => {
+	const ParentComponent = defineComponent({
+		setup() {
+			for (const [key, mockFn] of Object.entries(providers)) {
+				provide(key, mockFn);
+			}
+		},
+	});
+
 	const TestComponent = {
-		inject: Object.keys(providers),
 		template: "<div></div>",
 	};
 
 	const wrapper = shallowMount(TestComponent, {
 		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
 			const result = composable();
 			return { result };
 		},
+		parentComponent: ParentComponent,
 	});
 
 	//@ts-ignore
