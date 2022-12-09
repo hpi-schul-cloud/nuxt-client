@@ -1,6 +1,6 @@
 <template>
 	<empty-state
-		:image="contentInitialImage"
+		image="content-initial"
 		:alt="$t('pages.content.init_state.img_alt')"
 		:title="$t('pages.content.init_state.title')"
 	>
@@ -15,15 +15,12 @@
 
 <script>
 import EmptyState from "@/components/molecules/EmptyState";
-import contentInitialImage from "@/assets/img/empty-state/content-initial.svg";
 export default {
 	components: {
 		EmptyState,
 	},
 	data() {
-		return {
-			contentInitialImage,
-		};
+		return {};
 	},
 };
 </script>

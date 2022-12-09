@@ -1,10 +1,9 @@
 <template>
 	<div class="text-centered">
-		<base-image
+		<bird-searching-map
 			v-if="error.statusCode === 404"
-			img-src="@/assets/img/pageNotFound.svg"
-			img-height="300px"
 			fill="var(--v-primary-base)"
+			:style="{ maxHeight: '300px' }"
 			role="presentation"
 		/>
 		<img
@@ -29,7 +28,12 @@
 	</div>
 </template>
 <script>
+import birdSearchingMap from "@/components/atoms/bird-image/birdSearchingMap.vue";
+
 export default {
+	components: {
+		birdSearchingMap,
+	},
 	props: {
 		error: {
 			type: Object,

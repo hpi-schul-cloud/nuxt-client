@@ -1,6 +1,5 @@
 import Vuetify from "vuetify";
 import vCustomEmptyState from "./vCustomEmptyState";
-import BaseImage from "@/components/base/BaseImage";
 
 let vuetify;
 let wrapper;
@@ -30,10 +29,6 @@ describe("@/components/molecules/vCustomEmptyState", () => {
 
 	afterEach(() => {
 		wrapper.destroy();
-	});
-
-	it("should render Base Image component", () => {
-		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
 	});
 
 	it("should render a title", () => {

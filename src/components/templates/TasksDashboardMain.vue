@@ -86,7 +86,6 @@ import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
-import tasksEmptyStateImage from "@/assets/img/empty-state/tasks-empty-state.svg";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -281,7 +280,7 @@ export default {
 			}
 
 			return {
-				image: tasksEmptyStateImage,
+				image: "tasks-empty-state",
 				title,
 				subtitle,
 			};

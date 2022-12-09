@@ -22,7 +22,7 @@
 		<template v-if="!isLoading && !hasRooms">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
-				:image="roomsEmptyStateImage"
+				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>
@@ -45,7 +45,6 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
 import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
-import roomsEmptyStateImage from "@/assets/img/empty-state/rooms-empty-state.svg";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -70,7 +69,6 @@ export default Vue.extend({
 			importDialog: {
 				isOpen: false,
 			},
-			roomsEmptyStateImage,
 		};
 	},
 	computed: {
