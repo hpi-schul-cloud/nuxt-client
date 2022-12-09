@@ -155,13 +155,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$router: { push: routerPushStub },
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
@@ -235,13 +235,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$router: { push: routerPushStub },
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);

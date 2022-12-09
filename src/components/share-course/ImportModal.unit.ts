@@ -23,15 +23,13 @@ describe("@/components/share-course/ImportModal", () => {
 	});
 
 	it("should not render without required props", () => {
-		const errorSpy = jest.spyOn(console, "error");
+		console.error = jest.fn();
 
-		// should log an error to console.error
 		getWrapper();
 
-		expect(errorSpy).toBeCalledWith(
+		expect(console.error).toBeCalledWith(
 			expect.stringContaining('Missing required prop: "parentName"')
 		);
-		errorSpy.mockRestore();
 	});
 
 	it("should render with props", () => {
