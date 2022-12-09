@@ -60,7 +60,6 @@ export default class TasksModule extends VuexModule {
 			this.setTasks(tasks);
 			this.setStatus("completed");
 		} catch (error) {
-			console.log(error);
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
 		}
