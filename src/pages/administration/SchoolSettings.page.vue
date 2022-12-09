@@ -42,6 +42,9 @@
 					<school-policies
 						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
 					></school-policies>
+					<admin-migration-section
+						v-if="isOauthMigrationEnabled"
+					></admin-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
@@ -58,9 +61,11 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
+import AdminMigrationSection from "@components/administration/AdminMigrationSection";
 
 export default {
 	components: {
+		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicies,
 		AuthSystems,
@@ -97,6 +102,8 @@ export default {
 			return schoolsModule.getError;
 		},
 		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
+		isOauthMigrationEnabled: () =>
+			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},

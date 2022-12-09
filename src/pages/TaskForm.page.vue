@@ -6,14 +6,16 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-title v-model="name" :label="$t('common.labels.title')" />
-			<template v-for="child in children">
+			<v-card v-for="child in children" :key="child.name" class="mb-6">
+				<v-btn fab outlined color="secondary" x-small class="delete-btn">
+					<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
+				</v-btn>
 				<component
-					:is="componentProps.component"
-					:key="child.name"
-					v-bind="componentProps.props"
-					v-model="componentProps.model"
-				></component>
-			</template>
+					:is="child.component"
+					v-bind="child.props"
+					v-model="child.model.value"
+				/>
+			</v-card>
 			<v-btn
 				fab
 				color="primary"
@@ -39,6 +41,7 @@ import {
 	defineComponent,
 	inject,
 	ref,
+	reactive,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
@@ -46,7 +49,7 @@ import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardTitle from "@/components/atoms/CardTitle.vue";
 import Editor from "@/components/molecules/Editor.vue";
-import { mdiPlus } from "@mdi/js";
+import { mdiPlus, mdiTrashCanOutline } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -62,13 +65,7 @@ export default defineComponent({
 			}
 		});
 
-		const route = context.root.$route;
 		const i18n = inject("i18n");
-		const name = ref("");
-		const description = ref("");
-		const children = ref([]);
-		const componentProps = ref({});
-
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -76,28 +73,45 @@ export default defineComponent({
 			},
 		];
 
+		const name = ref("");
+		const description = reactive([]);
+		const children = reactive([]);
+
+		const route = context.root.$route;
 		const taskId = route.params.id;
 		onMounted(async () => {
-			await taskModule.findTask(taskId);
-			const taskData = taskModule.getTaskData;
-			name.value = taskData.name;
-			description.value = taskData.description.content;
-
-			if (description.value !== "") {
-				componentProps.value = {
-					component: "Editor",
-					model: description,
-					props: { placeholder: i18n.t("common.labels.description") },
-				};
-
-				children.value.push(componentProps.value);
+			if (taskId) {
+				await taskModule.findTask(taskId);
 			}
+			const taskData = taskModule.getTaskData;
+
+			name.value = taskData.name;
+			const desc = taskData.description.content || taskData.description; // TODO - clean this up
+
+			// TODO - iterate
+			createChild(desc);
 		});
 
+		const createChild = (desc) => {
+			description.push(ref(desc));
+			const child = {
+				component: "Editor",
+				model: ref(description[description.length - 1]),
+				props: { placeholder: i18n.t("common.labels.description") },
+			};
+
+			children.push(child);
+		};
+
+		const addComponent = () => {
+			createChild("");
+		};
+
 		const save = () => {
+			console.log(description);
 			const newTaskData = {
 				name: name.value,
-				description: description.value,
+				description: description[0].value,
 			};
 
 			if (!taskId) {
@@ -113,23 +127,13 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		const addComponent = () => {
-			componentProps.value = {
-				component: "Editor",
-				model: description,
-				props: { placeholder: i18n.t("common.labels.description") },
-			};
-
-			children.value.push(componentProps.value);
-		};
-
 		return {
 			mdiPlus,
+			mdiTrashCanOutline,
 			breadcrumbs,
 			name,
 			description,
 			children,
-			componentProps,
 			save,
 			cancel,
 			addComponent,
@@ -142,3 +146,12 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.delete-btn {
+	position: absolute;
+	top: -5px;
+	right: -20px;
+	background-color: var(--v-white-base);
+}
+</style>

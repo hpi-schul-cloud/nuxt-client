@@ -53,7 +53,13 @@ export type School = {
 	documentBaseDir: string;
 	isExternal: boolean;
 	id: string;
+	officialSchoolNumber?: string;
 	years: {};
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
+	oauthUserMigration?: boolean;
+};
+
+export type IOauthMigration = {
+	available: boolean;
 };

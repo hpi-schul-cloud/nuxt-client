@@ -1,5 +1,5 @@
 <template>
-	<div class="elevation-2 rounded mb-6">
+	<div class="rounded">
 		<ckeditor
 			ref="ck"
 			v-model="content"

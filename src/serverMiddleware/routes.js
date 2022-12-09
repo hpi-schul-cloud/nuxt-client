@@ -32,6 +32,7 @@ const routes = [
 	`^/tasks/${mongoId}/edit/?$`,
 	`^/tasks/new/?$`,
 	`^/termsofuse/?`,
+	`^/error/?`,
 ];
 
 const uuid =
