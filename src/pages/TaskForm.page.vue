@@ -5,7 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<card-title v-model="name" />
+			<card-title v-model="name" :label="$t('common.labels.title')" />
 			<template v-for="child in children">
 				<component
 					:is="componentProps.component"
