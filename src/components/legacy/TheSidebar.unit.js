@@ -22,7 +22,7 @@ describe("@/components/legacy/TheSidebar", () => {
 
 		const testRoutes = [
 			{
-				title: "test",
+				title: "common.labels.room",
 				to: "home",
 				icon: "test",
 				testId: "testId",
@@ -45,7 +45,7 @@ describe("@/components/legacy/TheSidebar", () => {
 
 		const testRoutes = [
 			{
-				title: "test",
+				title: "common.labels.status",
 				to: "home",
 				active: true,
 				icon: "test",
@@ -53,15 +53,15 @@ describe("@/components/legacy/TheSidebar", () => {
 				activeForUrls: ["home"],
 			},
 			{
-				title: "can't go to bing",
+				title: "common.labels.search",
 				href: "https://www.bing.com",
 				active: false,
-				icon: "trash",
+				icon: "test",
 				testId: "testId",
 				activeForUrls: [],
 			},
 			{
-				title: "test active false",
+				title: "common.labels.title",
 				to: "away",
 				active: false,
 				icon: "away",
@@ -69,10 +69,10 @@ describe("@/components/legacy/TheSidebar", () => {
 				activeForUrls: ["away"],
 			},
 			{
-				title: "google",
+				title: "common.labels.teacher",
 				href: "https://www.google.com",
 				active: true,
-				icon: "google",
+				icon: "test",
 				testId: "testId",
 				activeForUrls: [],
 			},
@@ -86,8 +86,6 @@ describe("@/components/legacy/TheSidebar", () => {
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
-		expect(wrapper.findAll("base-link-stub").at(1).text()).toBe(
-			testRoutes[0].title
-		);
+		expect(wrapper.findAll("base-link-stub").at(1).text()).toBe("Status");
 	});
 });
