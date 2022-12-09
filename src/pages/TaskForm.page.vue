@@ -6,8 +6,15 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-title v-model="name" :label="$t('common.labels.title')" />
-			<v-card v-for="child in children" :key="child.name" class="mb-6">
-				<v-btn fab outlined color="secondary" x-small class="delete-btn">
+			<v-card v-for="(child, index) in children" :key="child.name" class="mb-6">
+				<v-btn
+					fab
+					outlined
+					color="secondary"
+					x-small
+					class="delete-element-btn"
+					@click="deleteElement(index)"
+				>
 					<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
 				</v-btn>
 				<component
@@ -16,12 +23,7 @@
 					v-model="child.model.value"
 				/>
 			</v-card>
-			<v-btn
-				fab
-				color="primary"
-				class="align-self-center"
-				@click="addComponent"
-			>
+			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
 			</v-btn>
 			<div>
@@ -38,7 +40,6 @@
 
 <script>
 import {
-	defineComponent,
 	inject,
 	ref,
 	reactive,
@@ -52,7 +53,7 @@ import Editor from "@/components/molecules/Editor.vue";
 import { mdiPlus, mdiTrashCanOutline } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
+export default {
 	name: "TaskCreatePage",
 	components: { DefaultWireframe, CardTitle, Editor },
 	setup(props, context) {
@@ -103,8 +104,13 @@ export default defineComponent({
 			children.push(child);
 		};
 
-		const addComponent = () => {
+		const addElement = () => {
 			createChild("");
+		};
+
+		const deleteElement = (index) => {
+			children.splice(index, 1);
+			description.splice(index, 1);
 		};
 
 		const save = () => {
@@ -136,7 +142,8 @@ export default defineComponent({
 			children,
 			save,
 			cancel,
-			addComponent,
+			addElement,
+			deleteElement,
 		};
 	},
 	head() {
@@ -144,11 +151,11 @@ export default defineComponent({
 			title: this.$t("common.words.tasks"),
 		};
 	},
-});
+};
 </script>
 
 <style lang="scss" scoped>
-.delete-btn {
+.delete-element-btn {
 	position: absolute;
 	top: -5px;
 	right: -20px;
