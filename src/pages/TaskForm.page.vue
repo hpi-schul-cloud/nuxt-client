@@ -6,13 +6,19 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-title v-model="name" :label="$t('common.labels.title')" />
-			<component
-				:is="child.component"
-				v-for="child in children"
-				:key="child.name"
-				v-bind="child.props"
-				v-model="child.model.value"
-			></component>
+			<v-card class="mb-6">
+				<v-btn fab outlined color="secondary" x-small class="delete-btn">
+					<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
+				</v-btn>
+				<component
+					:is="child.component"
+					v-for="child in children"
+					:key="child.name"
+					v-bind="child.props"
+					v-model="child.model.value"
+				/>
+			</v-card>
+
 			<v-btn
 				fab
 				color="primary"
@@ -46,7 +52,7 @@ import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardTitle from "@/components/atoms/CardTitle.vue";
 import Editor from "@/components/molecules/Editor.vue";
-import { mdiPlus } from "@mdi/js";
+import { mdiPlus, mdiTrashCanOutline } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -126,6 +132,7 @@ export default defineComponent({
 
 		return {
 			mdiPlus,
+			mdiTrashCanOutline,
 			breadcrumbs,
 			name,
 			description,
@@ -142,3 +149,12 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.delete-btn {
+	position: absolute;
+	top: -5px;
+	right: -20px;
+	background-color: var(--v-white-base);
+}
+</style>
