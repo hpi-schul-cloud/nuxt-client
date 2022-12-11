@@ -10,7 +10,7 @@ import { BusinessError } from "./types/commons";
 
 type TempTask = {
 	id: string;
-	courseId: string;
+	courseId?: string;
 	name: string;
 	description: string;
 };
@@ -24,7 +24,6 @@ export default class TaskModule extends VuexModule {
 	// TODO - implement/use proper type
 	taskData: TempTask = {
 		id: "",
-		courseId: "",
 		name: "",
 		description: "",
 	};
@@ -45,6 +44,7 @@ export default class TaskModule extends VuexModule {
 
 	@Action
 	async findTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
@@ -54,16 +54,18 @@ export default class TaskModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
+			this.setBusinessError(error);
 		}
 	}
 
 	@Action
 	async createTask(params: TaskCreateParams): Promise<void> {
+		this.resetBusinessError();
 		this.setLoading(true);
+
 		try {
 			const { data } = await this.taskApi.taskControllerCreate({
 				name: params.name,
-				courseId: params.courseId,
 				description: params.description,
 			});
 
@@ -71,12 +73,15 @@ export default class TaskModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
+			this.setBusinessError(error);
 		}
 	}
 
 	@Action
 	async updateTask(params: TaskUpdateParams): Promise<void> {
+		this.resetBusinessError();
 		this.setLoading(true);
+
 		try {
 			const { data } = await this.taskApi.taskControllerUpdate(
 				this.taskData.id,
@@ -86,6 +91,7 @@ export default class TaskModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
+			this.setBusinessError(error);
 		}
 	}
 

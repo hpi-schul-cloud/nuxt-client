@@ -111,7 +111,6 @@ export default {
 		};
 
 		const save = () => {
-			console.log(children);
 			const newTaskData = {
 				name: name.value,
 				description: children[0].model.value,
