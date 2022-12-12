@@ -138,8 +138,10 @@ export default {
 
 @media #{map-get($display-breakpoints, 'xs-only')} {
 	.sub-title {
-		margin-right: calc(var(--space-base-vuetify) * -3);
-		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-right: unset;
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-left: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
 	}

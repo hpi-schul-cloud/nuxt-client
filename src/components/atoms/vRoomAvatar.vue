@@ -37,13 +37,17 @@
 					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div v-if="!condenseLayout" class="justify-center mt-2 mb-7 sub-title">
+			<div
+				v-if="!condenseLayout && !item.titleDate"
+				class="justify-center mt-2 mb-7 sub-title"
+			>
 				{{ item.title }}
 			</div>
 			<div
 				v-if="!condenseLayout && item.titleDate"
-				class="justify-center sub-title date-title mt-1"
+				class="justify-center sub-title date-title mt-2 mb-5"
 			>
+				{{ item.title }}
 				{{ item.titleDate }}
 			</div>
 		</v-badge>
@@ -156,8 +160,10 @@ export default {
 
 @media #{map-get($display-breakpoints, 'xs-only')} {
 	.sub-title {
-		margin-right: calc(var(--space-base-vuetify) * -3);
-		margin-left: calc(var(--space-base-vuetify) * -3);
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-right: unset;
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-left: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
 		color: var(--v-black-base);
