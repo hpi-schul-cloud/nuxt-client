@@ -205,7 +205,7 @@
 </template>
 
 <script>
-import { mdiEmailOutline, mdiCellphone, mdiPhone, mdiChat } from "@mdi/js";
+import { mdiEmailOutline, mdiPhone, mdiChat } from "@mdi/js";
 import { defineComponent } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -213,7 +213,6 @@ export default defineComponent({
 	setup() {
 		return {
 			mdiEmailOutline,
-			mdiCellphone,
 			mdiPhone,
 			mdiChat,
 		};
