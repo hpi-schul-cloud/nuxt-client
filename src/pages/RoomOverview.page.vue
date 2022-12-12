@@ -2,6 +2,7 @@
 	<room-wrapper
 		:header-aria-label="sectionAriaLabel"
 		:has-rooms="hasCurrentRooms"
+		:has-import-token="importToken"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
