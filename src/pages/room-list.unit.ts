@@ -18,6 +18,11 @@ const getWrapper = (computed: any = {}, device = "desktop") => {
 			$mq: () => device,
 			...computed,
 		},
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 	});
 };
 
