@@ -171,7 +171,7 @@ export default {
 	},
 	computed: {
 		hasCurrentRooms() {
-			return roomsModule.hasCurrentRooms;
+			return roomsModule.hasCurrentRooms || this.importToken;
 		},
 		rooms() {
 			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
