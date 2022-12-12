@@ -22,7 +22,7 @@
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews";
-import { newsModule } from "@/store";
+import { newsModule, notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -62,18 +62,22 @@ export default {
 					targetModel: newsTarget.targetModel,
 				});
 				if (this.status === "completed") {
-					this.$toast.success(
-						this.$ts("components.organisms.FormNews.success.create")
-					);
+					notifierModule.show({
+						text: this.$t("components.organisms.FormNews.success.create"),
+						status: "success",
+						timeout: 10000,
+					});
 					await this.$router.push({
 						path: `/news/${this.createdNews.id}`,
 					});
 				}
 			} catch (e) {
 				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.create")
-				);
+				notifierModule.show({
+					text: this.$t("components.organisms.FormNews.errors.create"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async cancelHandler() {
