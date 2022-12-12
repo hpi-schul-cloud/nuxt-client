@@ -62,6 +62,7 @@ Vue.mixin({
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";
+import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
 import axios from "axios";
