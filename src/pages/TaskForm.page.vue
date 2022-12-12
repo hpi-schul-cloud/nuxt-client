@@ -6,23 +6,43 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-title v-model="name" :label="$t('common.labels.title')" />
-			<v-card v-for="(child, index) in children" :key="child.name" class="mb-6">
-				<v-btn
-					fab
-					outlined
-					color="secondary"
-					x-small
-					class="delete-element-btn"
-					@click="deleteElement(index)"
-				>
-					<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
-				</v-btn>
-				<component
-					:is="child.component"
-					v-bind="child.props"
-					v-model="child.model.value"
-				/>
-			</v-card>
+			<draggable
+				v-model="children"
+				:animation="400"
+				:delay="touchDelay"
+				handle=".handle"
+				@start="startDragging"
+				@end="endDragging"
+			>
+				<v-card v-for="(child, index) in children" :key="index" class="mb-6">
+					<v-btn
+						fab
+						outlined
+						color="secondary"
+						x-small
+						class="delete-element-btn"
+						@click="deleteElement(index)"
+					>
+						<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						v-if="isDraggable"
+						fab
+						outlined
+						color="secondary"
+						x-small
+						class="drag-element-btn handle"
+					>
+						<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
+					</v-btn>
+					<component
+						:is="child.component"
+						v-bind="child.props"
+						v-model="child.model"
+						:disabled="dragInProgress"
+					/>
+				</v-card>
+			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
 			</v-btn>
@@ -42,7 +62,7 @@
 import {
 	inject,
 	ref,
-	reactive,
+	computed,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
@@ -50,11 +70,13 @@ import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardTitle from "@/components/atoms/CardTitle.vue";
 import Editor from "@/components/molecules/Editor.vue";
-import { mdiPlus, mdiTrashCanOutline } from "@mdi/js";
+import { mdiPlus, mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
+import { useDrag } from "@/composables/drag";
+import draggable from "vuedraggable";
 
 export default {
 	name: "TaskCreatePage",
-	components: { DefaultWireframe, CardTitle, Editor },
+	components: { DefaultWireframe, CardTitle, Editor, draggable },
 	setup(props, context) {
 		const router = context.root.$router;
 		onBeforeMount(() => {
@@ -74,7 +96,7 @@ export default {
 		];
 
 		const name = ref("");
-		const children = reactive([]);
+		const children = ref([]);
 
 		const route = context.root.$route;
 		const taskId = route.params.id;
@@ -94,11 +116,11 @@ export default {
 		const createChild = (desc) => {
 			const child = {
 				component: "Editor",
-				model: ref(desc),
+				model: desc,
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
 
-			children.push(child);
+			children.value.push(child);
 		};
 
 		const addElement = () => {
@@ -106,14 +128,14 @@ export default {
 		};
 
 		const deleteElement = (index) => {
-			children.splice(index, 1);
+			children.value.splice(index, 1);
 		};
 
 		const save = () => {
 			console.log(children);
 			const newTaskData = {
 				name: name.value,
-				description: children[0].model.value,
+				description: children.value[0].model,
 			};
 
 			if (!taskId) {
@@ -129,9 +151,15 @@ export default {
 			router.go(-1);
 		};
 
+		const { touchDelay, startDragging, endDragging, dragInProgress } =
+			useDrag();
+
+		const isDraggable = computed(() => children.value.length > 1);
+
 		return {
 			mdiPlus,
 			mdiTrashCanOutline,
+			mdiDragHorizontalVariant,
 			breadcrumbs,
 			name,
 			children,
@@ -139,6 +167,11 @@ export default {
 			cancel,
 			addElement,
 			deleteElement,
+			touchDelay,
+			startDragging,
+			endDragging,
+			dragInProgress,
+			isDraggable,
 		};
 	},
 	head() {
@@ -154,6 +187,12 @@ export default {
 	position: absolute;
 	top: -5px;
 	right: -20px;
+	background-color: var(--v-white-base);
+}
+
+.drag-element-btn {
+	position: absolute;
+	left: -40px;
 	background-color: var(--v-white-base);
 }
 </style>
