@@ -8,7 +8,7 @@
 		@dialog-closed="onCloseDialog"
 		@next="onNext(shareOptions)"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
+		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
 			{{ modalTitle }}
 		</div>
 
@@ -60,7 +60,6 @@ export default defineComponent({
 		ShareModalResult,
 		vCustomDialog,
 	},
-	inject: ["i18n", "notifierModule"],
 	setup() {
 		const i18n = inject("i18n");
 		const notifier = inject("notifierModule");

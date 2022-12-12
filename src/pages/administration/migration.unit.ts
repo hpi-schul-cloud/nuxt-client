@@ -129,6 +129,7 @@ const schoolMock = {
 		},
 	},
 	isTeamCreationByStudentsEnabled: false,
+	oauthUserMigration: false,
 };
 
 window.scrollTo = jest.fn();

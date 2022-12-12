@@ -62,12 +62,7 @@ export default class CopyModule extends VuexModule {
 	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
 		if (!this._shareApi) {
-			const axiosWithoutErrorPage = $axios?.create();
-			this._shareApi = ShareTokenApiFactory(
-				undefined,
-				"/v3",
-				axiosWithoutErrorPage
-			);
+			this._shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 		}
 		return this._shareApi;
 	}
@@ -102,7 +97,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
@@ -137,7 +132,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return this.copyResultFailedItems;
