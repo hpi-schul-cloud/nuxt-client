@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
+import { contentModule, notifierModule } from "@/store";
 import AddContentButton from "@/components/organisms/AddContentButton";
 import ContentCard from "@/components/organisms/ContentCard";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
@@ -139,7 +139,13 @@ import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags } from "@/utils/helpers";
+import {
+	getAuthor,
+	getDescription,
+	getMetadataAttribute,
+	getProvider,
+	getTags,
+} from "@/utils/helpers";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { defineComponent } from "vue";
@@ -265,9 +271,11 @@ export default defineComponent({
 				contentModule.clearElements();
 				await contentModule.getElements(this.query);
 			} catch (error) {
-				this.$toast.error(
-					this.$t("pages.content.notification.lernstoreNotAvailable")
-				);
+				notifierModule.show({
+					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async addElements() {
