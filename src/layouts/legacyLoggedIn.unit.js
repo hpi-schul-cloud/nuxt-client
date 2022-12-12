@@ -15,7 +15,7 @@ const $route = {
 	path: "/administration/students/",
 };
 
-const $router = { push: jest.fn() };
+const $router = { push: jest.fn(), currentRoute: $route, afterEach: jest.fn() };
 
 setupStores({
 	authModule: AuthModule,
@@ -39,14 +39,18 @@ envConfigModule.setEnvs({
 });
 
 describe("legacyLoggedIn", () => {
-	let wrapper;
-	beforeAll(() => {
-		wrapper = mount(legacyLoggedIn, {
-			...createComponentMocks({ i18n: true, $router, $route }),
-		});
-	});
-
 	it("should mark active links", () => {
+		const wrapper = mount(legacyLoggedIn, {
+			...createComponentMocks({ i18n: true }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$router,
+				$route,
+			},
+		});
+
 		const administrationListItem = wrapper.find("[data-testId='Verwaltung']");
 		const studentAdministrationListItem = wrapper.find(
 			"[data-testId='Schüler:innen']"
