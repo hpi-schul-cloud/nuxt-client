@@ -43,7 +43,7 @@ describe("vRoomAvatar", () => {
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML.trim()).toStrictEqual("Bio 12c");
+		expect(labelElement.innerHTML.trim()).toContain("Bio 12c");
 	});
 
 	it("should NOT display the title", () => {
@@ -190,6 +190,6 @@ describe("vRoomAvatar", () => {
 		const element = wrapper.find(".date-title").element as HTMLElement;
 
 		expect(element).toBeTruthy();
-		expect(element.innerHTML.trim()).toStrictEqual("2015-2018");
+		expect(element.innerHTML.trim()).toContain("2015-2018");
 	});
 });
