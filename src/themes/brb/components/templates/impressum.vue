@@ -19,9 +19,11 @@
 			</p>
 			<p>
 				<strong>Allgemeine Anfragen und Support:</strong><br />
-				📞 03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				📞 03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				🗪
+				<v-icon>{{ mdiPhone }}</v-icon>
+				03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
+				<v-icon>{{ mdiPhone }}</v-icon>
+				03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
+				<v-icon>{{ mdiChat }}</v-icon>
 				<a
 					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
 					target="_blank"
@@ -34,42 +36,13 @@
 					>Online-Chat</a
 				>
 				(Do. 15–16 Uhr)<br />
-				📧
+				<v-icon>{{ mdiEmailOutline }}</v-icon>
 				<a
 					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
 					target="_blank"
 					rel="noopener"
 					:aria-label="
 						$t('components.legacy.footer.ariaLabel', { itemName: 'Mail' })
-					"
-					>schul-cloud@bildungsserver.berlin-brandenburg.de</a
-				>
-			</p>
-			<p>
-				<strong>Allgemeine Anfragen und Support:</strong><br />
-				Telefon: 03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13
-				Uhr)<br />
-				Telefon: 03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13
-				Uhr)<br />
-				<a
-					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
-					target="_blank"
-					rel="noopener"
-					:aria-label="
-						$t('components.legacy.footer.ariaLabel', {
-							itemName: 'Online-Chat',
-						})
-					"
-					>Online-Chat</a
-				>
-				(Do. 15–16 Uhr)<br />
-				Email:
-				<a
-					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
-					target="_blank"
-					rel="noopener"
-					:aria-label="
-						$t('components.legacy.footer.ariaLabel', { itemName: 'Email' })
 					"
 					>schul-cloud@bildungsserver.berlin-brandenburg.de</a
 				>
@@ -232,7 +205,20 @@
 </template>
 
 <script>
-export default {};
+import { mdiEmailOutline, mdiCellphone, mdiPhone, mdiChat } from "@mdi/js";
+import { defineComponent } from "@vue/composition-api";
+
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	setup() {
+		return {
+			mdiEmailOutline,
+			mdiCellphone,
+			mdiPhone,
+			mdiChat,
+		};
+	},
+});
 </script>
 
 <style lang="scss" scoped>
