@@ -1,277 +1,144 @@
-import FilesOverview from "@pages/files/FilesOverview.page.vue";
-import { mount, shallowMount, Wrapper, WrapperArray } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CollaborativeFilesModule from "@store/collaborative-files";
 import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
-import { createModuleMocks } from "@utils/mock-store-module";
-import { CollaborativeFileType } from "@store/types/collaborative-file";
-import * as fileTableComposable from "@pages/files/file-table-utils.composable";
-import { FilesPageConfig } from "@pages/files/file-page-config.type";
+import { mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import TaskForm from "./TaskForm.page.vue";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TaskModule from "@/store/task";
+import AuthModule from "@/store/auth";
+import { authModule, taskModule } from "@/store";
+import { User } from "@/store/types/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
-const $route: Route = {
-	path: "/cfiles",
+const $router = { go: jest.fn() };
+const taskCreateRoute: Route = {
+	path: "/tasks/new",
+} as Route;
+const taskEditRoute: Route = {
+	path: "/tasks/new",
 } as Route;
 
-const $router = { replace: jest.fn(), push: jest.fn() };
+const mockAuthStoreDataStudent: User = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
+	roles: [{ name: "teacher" }],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+} as User;
+const mockAuthStoreDataTeacher: User = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
+	roles: [{ name: "teacher" }],
+	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+} as User;
 
-describe("FileOverview", () => {
-	let wrapper: Wrapper<any>;
-	let collaborativeFilesModule: CollaborativeFilesModule;
+const mockTaskStoreData = {
+	id: "",
+	courseId: "",
+	name: "",
+	description: "",
+};
 
-	const pageTitle = "Page Title";
-	const loadFilesFunctionMock = jest.fn();
-	const breadcrumbTitle = "breadcrumb1";
-	const breadcrumbPath = "/cfiles/";
-	const tMock = jest.fn().mockImplementation((key: string) => {
-		return key;
+const taskModuleGetters: Partial<TaskModule> = {
+	getTaskData: {
+		id: "",
+		courseId: "",
+		name: "",
+		description: "",
+	},
+};
+
+const getWrapper = (
+	props?: object,
+	options?: object,
+	$route: Route = taskCreateRoute
+) => {
+	return mount(TaskForm, {
+		...createComponentMocks({
+			i18n: true,
+			$router,
+			$route,
+		}),
+		setup() {
+			provide("i18n", { t: (key: string) => key });
+		},
+		propsData: props,
+		...options,
 	});
+};
 
-	beforeAll(() => {
-		jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
-			...fileTableComposable.useFileTableUtils(collaborativeFilesModule, tMock),
-			getFilesPageForRoute(route: Route): FilesPageConfig {
-				return {
-					title: pageTitle,
-					breadcrumbs: [
-						{
-							text: breadcrumbTitle,
-							to: breadcrumbPath,
-						},
-					],
-					loadFilesFunction: loadFilesFunctionMock,
-				};
-			},
-		});
-	});
-
-	function setup(getters: Partial<CollaborativeFilesModule> = {}) {
+describe("TaskForm", () => {
+	beforeEach(() => {
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		collaborativeFilesModule = createModuleMocks(CollaborativeFilesModule, {
-			getFiles: [],
-			...getters,
-		});
-		wrapper = mount(FilesOverview, {
-			...createComponentMocks({
-				i18n: true,
-				$router,
-				$route,
-			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("collaborativeFilesModule", collaborativeFilesModule);
-			},
-		});
-
-		const pageTitle = "Page Title";
-		const loadFilesFunctionMock = jest.fn();
-		const breadcrumbTitle = "breadcrumb1";
-		const breadcrumbPath = "/cfiles/";
-
-		return {
-			loadFilesFunctionMock,
-			pageTitle,
-			breadcrumbTitle,
-			breadcrumbPath,
-		};
-	}
-
-	describe("basic functions", () => {
-		it("should render component", () => {
-			setup();
-			expect(wrapper.findComponent(FilesOverview).exists()).toBe(true);
+		setupStores({
+			task: TaskModule,
+			auth: AuthModule,
 		});
 	});
 
-	describe("inject", () => {
-		it("should throw an error when i18n injection fails", () => {
-			try {
-				wrapper = shallowMount(FilesOverview, {
-					setup() {
-						provide("collaborativeFiles", collaborativeFilesModule);
-					},
+	it("should render component page", () => {
+		const wrapper = getWrapper();
+		expect(wrapper.findComponent(TaskForm).exists()).toBe(true);
+	});
+
+	describe("permission check before mounting", () => {
+		describe("when user does not have permission HOMEWORK_CREATE", () => {
+			it("should redirect to the page before", () => {
+				authModule.setUser(mockAuthStoreDataStudent);
+				expect($router.go).toHaveBeenCalled();
+				// QUESTION should not render TaskForm page?
+			});
+		});
+
+		describe("when user does have permission HOMEWORK_CREATE", () => {
+			it.todo("should do what?"); // QUESTION
+		});
+	});
+
+	describe("getting data from store on mounting", () => {
+		beforeEach(() => {
+			authModule.setUser(mockAuthStoreDataTeacher);
+		});
+
+		describe("when route is /tasks/new", () => {
+			it("should call getTaskData", () => {
+				const taskModuleMock: TaskModule = createModuleMocks(TaskModule, {
+					...taskModuleGetters,
 				});
-			} catch (e) {
-				expect(e.message.includes('Injection "i18n" not found')).toBeTruthy();
-			}
-		});
+				const getTaskDataSpy = jest
+					.spyOn(taskModule, "getTaskData", "get")
+					.mockImplementation();
 
-		it("should throw an error when collaborativeFilesModule injection fails", () => {
-			try {
-				wrapper = shallowMount(FilesOverview, {
-					setup() {
-						provide("i18n", { t: (key: string) => key });
-					},
+				const wrapper = getWrapper();
+
+				// jest.spyOn(MyClass, "something", "get").mockReturnValue("bar");
+
+				expect(getTaskDataSpy).toHaveBeenCalled();
+			});
+
+			it("should create one child with empty fields", () => {
+				const taskModuleMock = createModuleMocks(TaskModule, {
+					getTaskData: mockTaskStoreData,
 				});
-			} catch (e) {
-				expect(
-					e.message.includes('Injection "collaborativeFilesModule" not found')
-				).toBeTruthy();
-			}
-		});
-	});
 
-	describe("onMounted", () => {
-		it("should call the loadFilesFunction onMounted", () => {
-			setup();
-			expect(loadFilesFunctionMock).toHaveBeenCalled();
-		});
-	});
+				const wrapper = getWrapper();
+				//@ts-ignore
+				console.log(wrapper.vm.children);
 
-	describe("t", () => {
-		it("should return translation", () => {
-			setup();
-			const testKey = "testKey";
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result).toEqual(testKey);
-		});
-
-		it("should return 'unknown translation-key'", () => {
-			setup();
-			const testKey = 123;
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result.includes("unknown translation-key:")).toBeTruthy();
-		});
-	});
-
-	describe("headers", () => {
-		it("should display dataTableHeaders in v-data-table", () => {
-			setup();
-
-			const vueWrapperArray: WrapperArray<any> = wrapper
-				.find(".v-data-table-header")
-				.findAll("th");
-
-			expect(vueWrapperArray.at(0).find("span").text()).toEqual("");
-			expect(vueWrapperArray.at(1).find("span").text()).toEqual(
-				"common.labels.name"
-			);
-			expect(vueWrapperArray.at(2).find("span").text()).toEqual(
-				"common.labels.size"
-			);
-			expect(vueWrapperArray.at(3).find("span").text()).toEqual(
-				"common.labels.changed"
-			);
-		});
-	});
-
-	describe("items", () => {
-		it("should display data of fetched files in a datatable row", () => {
-			const size = 221;
-			setup({
-				getFiles: [
-					{
-						name: "notExpectedToBeDisplayed",
-						translationKey: "pages.files.overview.favorites",
-						icon: "favorite",
-						path: "/cfiles/",
-						size,
-						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
-					},
-				],
+				expect(wrapper.findComponent(TaskForm).exists()).toBe(true);
 			});
-
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(0).html()).toBeTruthy();
-			expect(firstRowElements.at(1).text()).toBeTruthy();
-			expect(firstRowElements.at(2).text()).toEqual(size.toString());
-			expect(firstRowElements.at(3).text()).toBeTruthy();
 		});
 
-		it("should display name of file when traslationKey is undefined", () => {
-			const name = "Favorites";
-			setup({
-				getFiles: [
-					{
-						name,
-						translationKey: undefined,
-						icon: "favorite",
-						path: "/cfiles/",
-						size: 221,
-						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
-					},
-				],
-			});
-
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(1).text()).toEqual(name);
-		});
-
-		it("should display translated name of file", () => {
-			const translationKey = "pages.files.overview.favorites";
-			setup({
-				getFiles: [
-					{
-						name: "notDisplayed",
-						translationKey: translationKey,
-						icon: "favorite",
-						path: "/cfiles/",
-						size: 123,
-						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
-					},
-				],
-			});
-
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(1).text()).toEqual(translationKey);
-		});
-	});
-
-	describe("click", () => {
-		const path = "/cfiles/";
-		it("should push path of fileTableItem to router when clicked on a row", () => {
-			setup({
-				getFiles: [
-					{
-						name: "name",
-						translationKey: undefined,
-						icon: "favorite",
-						path,
-						size: 123,
-						type: CollaborativeFileType.FAVORITES,
-						lastChanged: new Date(2022, 10, 1, 14, 4).toISOString(),
-					},
-				],
-			});
-
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			tableRows.at(0).trigger("click");
-
-			expect($router.push).toHaveBeenCalledWith(
-				expect.objectContaining({ path })
-			);
-		});
-	});
-
-	describe("breadcrumbs", () => {
-		it("should display breadcrumbs", () => {
-			setup();
-
-			const breadcrumbs: WrapperArray<any> =
-				wrapper.findAll(".breadcrumbs-item");
-
-			expect(breadcrumbs.length).toEqual(1);
-			expect(breadcrumbs.at(0).text()).toEqual(breadcrumbTitle);
-		});
-	});
-
-	describe("title", () => {
-		it("should display the page title", () => {
-			setup();
-
-			const title: Wrapper<any> = wrapper.find("h1");
-
-			expect(title.text()).toEqual(pageTitle);
-		});
+		// describe("when user does have permission HOMEWORK_CREATE", () => {
+		// 	it.todo("should do what?"); // QUESTION
+		// });
 	});
 });

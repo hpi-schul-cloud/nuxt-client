@@ -75,7 +75,7 @@ import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 
 export default {
-	name: "TaskCreatePage",
+	name: "TaskForm",
 	components: { DefaultWireframe, CardTitle, Editor, draggable },
 	setup(props, context) {
 		const router = context.root.$router;
@@ -97,14 +97,14 @@ export default {
 
 		const name = ref("");
 		const children = ref([]);
-
 		const route = context.root.$route;
-		const taskId = route.params.id;
+
 		onMounted(async () => {
+			const taskId = route.name === "task-edit" ? route.params.id : undefined;
 			if (taskId) {
 				await taskModule.findTask(taskId);
 			}
-			const taskData = taskModule.getTaskData;
+			const taskData = computed(() => taskModule.getTaskData);
 
 			name.value = taskData.name;
 			const desc = taskData.description.content || taskData.description; // TODO - clean this up
@@ -132,13 +132,12 @@ export default {
 		};
 
 		const save = () => {
-			console.log(children);
 			const newTaskData = {
 				name: name.value,
 				description: children.value[0].model,
 			};
 
-			if (!taskId) {
+			if (route.name === "task-new") {
 				taskModule.createTask(newTaskData);
 			} else {
 				taskModule.updateTask(newTaskData);
@@ -174,6 +173,7 @@ export default {
 			isDraggable,
 		};
 	},
+	// TODO - should not use this, because it's nuxt
 	head() {
 		return {
 			title: this.$t("common.words.tasks"),
