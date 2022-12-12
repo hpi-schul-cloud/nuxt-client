@@ -1,6 +1,7 @@
 import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
 import { $axios } from "@/utils/api";
+import { notifierModule } from "@/store";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
@@ -148,13 +149,17 @@ const usersModule = mergeDeep(base, {
 			const { successMessage, ...studentData } = payload;
 			try {
 				const student = (await $axios.post(studentEndpoint, studentData)).data;
-				this.$toast.success(successMessage);
+				notifierModule.show({
+					text: successMessage,
+					status: "success",
+					timeout: 10000,
+				});
 				this.$router.push({
 					path: `/administration/students`,
 				});
 				commit("setCurrent", student);
 			} catch (error) {
-				commit("setBusinessError", error.response.data);
+				commit("setBusinessError", error.response?.data);
 			}
 		},
 		async sendRegistrationLink({ commit }, payload = {}) {
