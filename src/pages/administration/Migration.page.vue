@@ -96,10 +96,7 @@
 									indeterminate
 								></v-progress-linear>
 								<v-card-text>
-									<iframe
-										class="full"
-										src="https://docs.dbildungscloud.de/display/SCDOK/Migrationsprozess?frameable=true"
-									></iframe>
+									<iframe class="full" :src="helpPageUri"></iframe>
 									<v-alert
 										v-if="!school.inUserMigration || totalImportUsers === 0"
 										dense
@@ -247,34 +244,69 @@
 								>
 									<v-card-text>
 										<v-row>
-											<div
-												v-html="
+											<p>
+												{{
 													$t(
-														'pages.administration.migration.endTransferPhase',
+														"pages.administration.migration.step4.linkingFinished",
 														{
 															source: ldapSourceTranslation,
 															instance: $theme.short_name,
 														}
 													)
-												"
-											></div>
-										</v-row>
-										<v-row>
-											<v-checkbox
-												v-model="isMaintenanceConfirm"
-												:label="
+												}}
+											</p>
+											<p>
+												{{
 													$t(
-														'pages.administration.migration.confirmMaintenance'
+														"pages.administration.migration.step4.transferphase"
 													)
-												"
-												data-testid="isMaintenanceConfirm"
-											></v-checkbox>
+												}}
+											</p>
+											<ul>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.linkedUsers",
+															{ source: ldapSourceTranslation }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.newUsers",
+															{ instance: $theme.short_name }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.classes",
+															{ source: ldapSourceTranslation }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.oldUsers"
+														)
+													}}
+												</li>
+											</ul>
+											<p class="font-weight-bold">
+												{{
+													$t(
+														"pages.administration.migration.step4.endTransferphase"
+													)
+												}}
+											</p>
 										</v-row>
 									</v-card-text>
 
 									<div class="text-right">
 										<v-btn
-											:disabled="!isMaintenanceConfirm"
 											class="primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
@@ -295,13 +327,62 @@
 								elevation="2"
 								class="pa-5 mb-10"
 								color="grey lighten-5"
-								v-html="
-									$t('pages.administration.migration.waitForSync', {
-										source: ldapSourceTranslation,
-										instance: $theme.short_name,
-									})
-								"
-							></v-card>
+							>
+								<p>
+									{{ $t("pages.administration.migration.step5.syncReady1") }}
+								</p>
+								<p>
+									{{
+										$t("pages.administration.migration.step5.syncReady2", {
+											source: ldapSourceTranslation,
+											instance: $theme.short_name,
+										})
+									}}
+								</p>
+
+								<p>
+									{{
+										$t("pages.administration.migration.step5.afterSync", {
+											source: ldapSourceTranslation,
+											instance: $theme.short_name,
+										})
+									}}
+								</p>
+								<ul>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step5.afterSync.bullet1",
+												{ source: ldapSourceTranslation }
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step5.afterSync.bullet2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step4.bullets.oldUsers"
+											)
+										}}
+									</li>
+								</ul>
+								<div class="text-right">
+									<v-btn
+										class="primary"
+										data-testid="migration_backToAdministration"
+										to="/administration"
+										>{{
+											$t("pages.administration.migration.backToAdministration")
+										}}
+									</v-btn>
+								</div>
+							</v-card>
 						</v-container>
 					</v-stepper-content>
 				</v-stepper-items>
@@ -335,7 +416,6 @@ export default {
 				},
 			],
 			isMigrationConfirm: false,
-			isMaintenanceConfirm: false,
 			errorTimeout: 7500,
 			isLoading: false,
 			checkTotal: null,
@@ -379,12 +459,21 @@ export default {
 		totalImportUsers() {
 			return importUsersModule.getTotal;
 		},
+		isBrb() {
+			return envConfigModule.getEnv.SC_THEME.toLowerCase === "brb";
+		},
 		ldapSourceTranslation() {
-			if (envConfigModule.getEnv.SC_THEME.toLowerCase === "brb") {
+			if (this.isBrb) {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}
+		},
+		helpPageUri() {
+			if (this.isBrb) {
+				return "https://docs.dbildungscloud.de/x/DwK6Cw?frameable=true";
+			}
+			return "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
 		},
 	},
 	watch: {
@@ -520,9 +609,6 @@ export default {
 			}
 		},
 		async endMaintenance() {
-			if (!this.isMaintenanceConfirm) {
-				return;
-			}
 			this.isLoading = true;
 			await schoolsModule.migrationStartSync();
 			if (schoolsModule.getError) {

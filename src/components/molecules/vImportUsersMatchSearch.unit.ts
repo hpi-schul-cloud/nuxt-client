@@ -4,6 +4,7 @@ import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
+import { ImportUserResponse } from "@/serverApi/v3";
 
 declare var createComponentMocks: Function;
 
@@ -18,6 +19,7 @@ const testProps = {
 		classNames: ["6a"],
 	},
 	isDialog: true,
+	ldapSource: "LDAP",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -148,6 +150,7 @@ describe("@components/molecules/vImportUsersMatchSearch", () => {
 		};
 		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
+			ldapSource: "LDAP",
 		});
 
 		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");
