@@ -6,6 +6,7 @@
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
+			:disabled="disabled"
 			@input="handleInput"
 		/>
 	</div>
@@ -16,6 +17,7 @@ import { defineComponent, ref, inject, watch } from "@vue/composition-api";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 require("@hpi-schul-cloud/ckeditor/build/translations/en");
 require("@hpi-schul-cloud/ckeditor/build/translations/es");
+require("@hpi-schul-cloud/ckeditor/build/translations/uk");
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -39,15 +41,19 @@ export default defineComponent({
 			validator: (value) => ["simple", "regular"].includes(value),
 			default: "regular",
 		},
+		disabled: {
+			type: Boolean,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
 		const content = ref(props.value);
 		const language = (() => {
-			// as we don't have a translation for ua yet we map to en
+			// map ua to correct uk
+			// todo remove if language code is fixed
 			if (i18n.locale === "ua") {
-				return "en";
+				return "uk";
 			}
 
 			return i18n.locale;
@@ -68,12 +74,16 @@ export default defineComponent({
 					}
 
 					return [
+						"undo",
+						"redo",
+						"|",
 						"heading",
 						"|",
 						"bold",
 						"italic",
 						"underline",
-						"blockQuote",
+						"strikethrough",
+						"highlight",
 						"code",
 						"superscript",
 						"subscript",
@@ -81,9 +91,12 @@ export default defineComponent({
 						"link",
 						"bulletedList",
 						"numberedList",
+						"horizontalLine",
 						"|",
-						"undo",
-						"redo",
+						"blockQuote",
+						"insertTable",
+						"specialCharacters",
+						"removeFormat",
 					];
 				})(),
 			},
@@ -98,12 +111,19 @@ export default defineComponent({
 					"Bold",
 					"Code",
 					"Heading",
+					"Highlight",
+					"HorizontalLine",
 					"Italic",
 					"Link",
 					"List",
 					"Paragraph",
+					"RemoveFormat",
+					"SpecialCharacters",
+					"Strikethrough",
 					"Subscript",
 					"Superscript",
+					"Table",
+					"TableToolbar",
 					"Underline",
 				];
 			})(),
