@@ -66,7 +66,6 @@
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
-								nuxt
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
@@ -88,7 +87,6 @@
 			class="my-8 add-ldap"
 			depressed
 			to="/administration/ldap/config"
-			nuxt
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
