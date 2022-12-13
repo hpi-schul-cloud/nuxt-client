@@ -70,7 +70,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
-import { newsModule } from "@/store";
+import { newsModule, notifierModule } from "@/store";
 import TextEditor from "@/components/molecules/TextEditor.vue";
 import TitleInput from "@/components/molecules/TitleInput.vue";
 import FormActions from "@/components/molecules/FormActions.vue";
@@ -179,8 +179,11 @@ export default Vue.extend({
 		save() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
-				// NUXT_REMOVAL this.$toast is not defined
-				// return this.$toast.error(errors[0]);
+				notifierModule.show({
+					text: String(errors[0]),
+					status: "error",
+					timeout: 10000,
+				});
 				return errors[0];
 			}
 			this.$emit("save", { ...this.data, displayAt: this.displayAt });
