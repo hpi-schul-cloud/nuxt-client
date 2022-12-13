@@ -1,5 +1,6 @@
 import { unchangedPassword } from "../utils/ldapConstants";
 import { $axios } from "@/utils/api";
+import { notifierModule } from "@/store";
 
 const formatServerData = (data) => {
 	const { providerOptions } = data;
@@ -68,11 +69,15 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			commit("setStatus", "pending");
-			const { data } = (await $axios.get(`/v1/ldap-config/${id}`));
+			const { data } = await $axios.get(`/v1/ldap-config/${id}`);
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async verifyData({ commit }, payload) {
@@ -85,7 +90,11 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async verifyExisting({ commit }, { systemId, systemData }) {
@@ -101,7 +110,11 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async submitData({ commit }, payload) {
@@ -113,7 +126,11 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async patchData({ commit }, { systemData, systemId }) {
@@ -125,7 +142,11 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 };
