@@ -29,6 +29,7 @@
 import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -73,9 +74,11 @@ export default {
 					generateRegistrationLink: true,
 				})
 				.then(() => {
-					this.$toast.success(
-						this.$t("pages.administration.teachers.new.success")
-					);
+					notifierModule.show({
+						text: this.$t("pages.administration.teachers.new.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					this.$router.push({
 						path: `/administration/teachers`,
 					});

@@ -8,7 +8,7 @@ export const actions = {
 		if (Array.isArray(payload)) {
 			const errors = [];
 			const promiseResult = await Promise.allSettled(
-				payload.map((user) => {
+				payload.forEach((user) => {
 					registered.push(user._id);
 					$axios
 						.patch("/v1/users/admin/students/" + user._id, user)
@@ -25,7 +25,7 @@ export const actions = {
 				})
 			);
 
-			promiseResult.map((promise) => {
+			promiseResult.forEach((promise) => {
 				if (promise.status !== "fulfilled") {
 					errors.push(promise);
 				}

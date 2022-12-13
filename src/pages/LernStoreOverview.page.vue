@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
+import { contentModule, notifierModule } from "@/store";
 import ContentSearchbar from "@/components/molecules/ContentSearchbar";
 import ContentCard from "@/components/organisms/ContentCard";
 import ContentEmptyState from "@/components/molecules/ContentEmptyState";
@@ -201,9 +201,11 @@ export default {
 			try {
 				await contentModule.getResources(this.query);
 			} catch (error) {
-				this.$toast.error(
-					this.$t("pages.content.notification.lernstoreNotAvailable")
-				);
+				notifierModule.show({
+					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		enterKeyHandler() {

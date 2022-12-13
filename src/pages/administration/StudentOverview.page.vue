@@ -116,7 +116,7 @@
 <script>
 /* eslint-disable max-lines */
 import { mapGetters } from "vuex";
-import { envConfigModule, schoolsModule } from "@/store";
+import { envConfigModule, schoolsModule, notifierModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter";
@@ -502,19 +502,28 @@ export default {
 					selectionType,
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					this.$toast.success(
-						this.$tc("pages.administration.sendMail.success", rowIds.length)
-					);
+					notifierModule.show({
+						text: this.$tc(
+							"pages.administration.sendMail.success",
+							rowIds.length
+						),
+						status: "success",
+						timeout: 10000,
+					});
 				} else {
-					this.$toast.info(
-						this.$tc("pages.administration.sendMail.alreadyRegistered")
-					);
+					notifierModule.show({
+						text: this.$tc("pages.administration.sendMail.alreadyRegistered"),
+						status: "info",
+						timeout: 10000,
+					});
 				}
 			} catch (error) {
 				console.error(error);
-				this.$toast.error(
-					this.$tc("pages.administration.sendMail.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -527,12 +536,18 @@ export default {
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
 				} else {
-					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+					notifierModule.show({
+						text: this.$tc("pages.administration.printQr.emptyUser"),
+						status: "info",
+						timeout: 10000,
+					});
 				}
 			} catch (error) {
-				this.$toast.error(
-					this.$tc("pages.administration.printQr.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
@@ -542,10 +557,18 @@ export default {
 						ids: rowIds,
 						userType: "student",
 					});
-					this.$toast.success(this.$t("pages.administration.remove.success"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					this.find();
 				} catch (error) {
-					this.$toast.error(this.$t("pages.administration.remove.error"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.error"),
+						status: "error",
+						timeout: 10000,
+					});
 				}
 			};
 			const onCancel = () => {

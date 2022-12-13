@@ -146,9 +146,6 @@ describe("store/users", () => {
 						return { data: {} };
 					},
 				});
-				actions.$toast = {
-					success: jest.fn(),
-				};
 				actions.$router = {
 					push: jest.fn(),
 				};

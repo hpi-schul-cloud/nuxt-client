@@ -1,9 +1,9 @@
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { default as ConsentPage } from "./StudentConsent.page.vue";
-import { envConfigModule } from "@/store";
+import { envConfigModule, notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-// import mock$objects from "../../../../tests/test-utils/pageStubs";
+import NotifierModule from "@/store/notifier";
 
 const mockData = [
 	{
@@ -94,6 +94,7 @@ describe("students/consent", () => {
 		setupStores({
 			filePathsModule: FilePathsModule,
 			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
 		});
 	});
 
@@ -350,6 +351,7 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
+		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		envConfigModule.setEnvs({
 			FEATURE_CONSENT_NECESSARY: false,
 		});
@@ -360,9 +362,6 @@ describe("students/consent", () => {
 			}),
 			mocks,
 		});
-		const toastStub = jest.fn();
-		wrapper.vm.$toast = {};
-		wrapper.vm.$toast.success = toastStub;
 
 		mockData[0].birthday = "10.10.2010";
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
@@ -375,6 +374,6 @@ describe("students/consent", () => {
 		nextButton_2.trigger("click");
 		await wrapper.vm.$nextTick();
 
-		expect(toastStub).toHaveBeenCalled();
+		expect(notifierModuleMock).toHaveBeenCalled();
 	});
 });
