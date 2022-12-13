@@ -102,7 +102,12 @@
 </template>
 <script>
 /* eslint-disable max-lines */
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import {
+	authModule,
+	envConfigModule,
+	schoolsModule,
+	notifierModule,
+} from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
@@ -450,13 +455,20 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				this.$toast.success(
-					this.$tc("pages.administration.sendMail.success", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc(
+						"pages.administration.sendMail.success",
+						rowIds.length
+					),
+					status: "success",
+					timeout: 10000,
+				});
 			} catch (error) {
-				this.$toast.error(
-					this.$tc("pages.administration.sendMail.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -469,12 +481,18 @@ export default {
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
 				} else {
-					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+					notifierModule.show({
+						text: this.$tc("pages.administration.printQr.emptyUser"),
+						status: "info",
+						timeout: 10000,
+					});
 				}
 			} catch (error) {
-				this.$toast.error(
-					this.$tc("pages.administration.printQr.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
@@ -485,10 +503,18 @@ export default {
 						ids: rowIds,
 						userType: "teacher",
 					});
-					this.$toast.success(this.$t("pages.administration.remove.success"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					this.find();
 				} catch (error) {
-					this.$toast.error(this.$t("pages.administration.remove.error"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.error"),
+						status: "error",
+						timeout: 10000,
+					});
 				}
 			};
 			const onCancel = () => {

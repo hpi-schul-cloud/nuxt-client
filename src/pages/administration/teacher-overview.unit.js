@@ -6,6 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
 
 const mockData = [
 	{
@@ -63,6 +64,7 @@ describe("teachers/index", () => {
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
+			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });

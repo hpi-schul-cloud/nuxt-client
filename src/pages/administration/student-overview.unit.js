@@ -1,11 +1,6 @@
 import { default as StudentPage } from "./StudentOverview.page.vue";
 import mock$objects from "../../../tests/test-utils/pageStubs";
-import {
-	authModule,
-	envConfigModule,
-	schoolsModule,
-	notifierModule,
-} from "@/store";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
