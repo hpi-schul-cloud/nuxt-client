@@ -369,7 +369,7 @@ export default {
 			return false;
 		},
 		ldapSourceTranslation() {
-			if (envConfigModule.getEnv.SC_THEME.toLowerCase === "brb") {
+			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");

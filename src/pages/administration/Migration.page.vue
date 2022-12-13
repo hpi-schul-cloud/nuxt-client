@@ -460,7 +460,7 @@ export default {
 			return importUsersModule.getTotal;
 		},
 		isBrb() {
-			return envConfigModule.getEnv.SC_THEME.toLowerCase === "brb";
+			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
 		},
 		ldapSourceTranslation() {
 			if (this.isBrb) {
