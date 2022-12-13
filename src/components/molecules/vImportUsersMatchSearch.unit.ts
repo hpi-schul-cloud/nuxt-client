@@ -4,7 +4,6 @@ import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
-import { ImportUserResponse } from "@/serverApi/v3";
 
 declare var createComponentMocks: Function;
 
