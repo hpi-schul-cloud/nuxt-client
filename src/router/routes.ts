@@ -1,5 +1,6 @@
 import { RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { Layouts } from "@/layouts/types";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
@@ -11,6 +12,10 @@ export const routes: Array<RouteConfig> = [
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("../pages/ActivationCode.page.vue"),
 		name: "activation-activationCode",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
 	},
 	{
 		path: "/administration/ldap/activate",
@@ -71,17 +76,29 @@ export const routes: Array<RouteConfig> = [
 		path: "/error/proxy",
 		component: () => import("../pages/ProxyError.page.vue"),
 		name: "error-proxy",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
 	},
 	{
 		path: "/imprint",
 		component: () => import("../pages/Imprint.page.vue"),
 		name: "imprint",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
 	},
 	// deprecated?
 	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
 		name: "login-instances",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
 	},
 	{
 		path: "/news/new",
@@ -123,6 +140,10 @@ export const routes: Array<RouteConfig> = [
 		path: "/termsofuse",
 		component: () => import("../pages/TermsOfUse.vue"),
 		name: "termsofuse",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
 	},
 	{
 		path: "/cfiles",

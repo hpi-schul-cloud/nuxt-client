@@ -74,24 +74,20 @@ import { initializeAxios } from "./utils/api";
 		`${window.location.origin}/runtime.config.json`
 	);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
-	const cookies = new Cookies();
-	const jwt = cookies.get("jwt");
-
-	if (!jwt) {
-		const target = `${window.location.pathname}${window.location.search}`;
-		window.location.assign(`/login?redirect=${target}`);
-	}
-
-	axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
 
 	initializeAxios(axios);
 
 	await envConfigModule.findEnvs();
-	await authModule.login(jwt);
 
-	// console.log("--- main login finished");
+	const cookies = new Cookies();
+	const jwt = cookies.get("jwt");
 
-	// creation of i18n relies on envConfigModule and authModule data to be loaded
+	if (jwt) {
+		axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
+		await authModule.login(jwt);
+	}
+
+	// creation of i18n relies on envConfigModule authModule
 	const i18n = createI18n();
 
 	new Vue({

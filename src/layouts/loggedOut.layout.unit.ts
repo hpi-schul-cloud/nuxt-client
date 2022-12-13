@@ -1,13 +1,11 @@
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { urlRegexValidator } from "@/utils/ldapConstants";
 import { createModuleMocks } from "@/utils/mock-store-module";
-//import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
-import loggedOut from "./loggedOut.vue";
+import loggedOut from "./loggedOut.layout.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 describe("loggedOutLayout", () => {
 	let envConfigModuleMock: EnvConfigModule;
