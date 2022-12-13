@@ -3,13 +3,12 @@
 		<h3 class="title-class">
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
-		<base-input
+		<v-switch
 			v-model="checked"
-			type="switch"
-			datatest-id="ldapDataClassesCheckbox"
+			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
-		>
-		</base-input>
+			dense
+		></v-switch>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
