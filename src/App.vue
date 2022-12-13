@@ -1,42 +1,33 @@
 <template>
 	<v-app>
-		<legacy-logged-in>
-			<v-main id="main-content" class="content">
-				<snackbar />
-				<router-view />
-			</v-main>
-			<loading-state-dialog />
-		</legacy-logged-in>
+		<component :is="layout">
+			<router-view />
+		</component>
 	</v-app>
 </template>
 
-<script>
-import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
-import Snackbar from "@/components/molecules/Alert";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
+<script lang="ts">
+import { authModule } from "@/store";
+import { Layouts } from "@/layouts/types";
+
+const defaultLayout = Layouts.LOGGED_IN;
+
 export default {
-	components: {
-		LoadingStateDialog,
-		LegacyLoggedIn,
-		Snackbar,
+	computed: {
+		layout() {
+			let layout = defaultLayout;
+
+			if (this.$route.path.match("^/imprint\\/?$")) {
+				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
+			} else {
+				layout = this.$route.meta?.layout || defaultLayout;
+			}
+
+			return () => import(`@/layouts/${layout}.layout.vue`);
+		},
+		isLoggedIn() {
+			return authModule.isLoggedIn;
+		},
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/mixins";
-
-.content {
-	grid-area: content;
-	width: inherit;
-	max-width: 100vw;
-
-	@include breakpoint(tablet) {
-		max-width: calc(100vw - var(--sidebar-width-tablet));
-	}
-
-	@include breakpoint(desktop) {
-		max-width: calc(100vw - var(--sidebar-width));
-	}
-}
-</style>

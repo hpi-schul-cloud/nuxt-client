@@ -9,7 +9,7 @@
 				/>
 			</div>
 			<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
-				<Nuxt />
+				<slot />
 			</div>
 			<the-footer class="footer" />
 		</div>
@@ -21,11 +21,15 @@ import NavigationBar from "@/components/legacy/NavigationBar";
 import TheFooter from "@/components/legacy/TheFooter";
 
 export default {
+	name: "LoggedOutLayout",
+
 	components: {
 		NavigationBar,
 		TheFooter,
 	},
+
 	inject: ["envConfigModule"],
+
 	computed: {
 		ghostBaseUrl() {
 			return this.envConfigModule.getGhostBaseUrl;
