@@ -136,7 +136,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("ldap-config", {
+		...mapGetters("ldapConfig", {
 			data: "getData",
 			verified: "getVerified",
 			temp: "getTemp",
