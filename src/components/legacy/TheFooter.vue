@@ -75,7 +75,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					to: filePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
