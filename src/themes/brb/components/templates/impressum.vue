@@ -19,11 +19,11 @@
 			</p>
 			<p>
 				<strong>Allgemeine Anfragen und Support:</strong><br />
-				<v-icon>{{ mdiPhone }}</v-icon>
+				<v-icon size="20" class="mr-1">{{ mdiPhone }}</v-icon>
 				03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				<v-icon>{{ mdiPhone }}</v-icon>
+				<v-icon size="20" class="mr-1">{{ mdiPhone }}</v-icon>
 				03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				<v-icon>{{ mdiChat }}</v-icon>
+				<v-icon size="20" class="mr-1">{{ mdiChat }}</v-icon>
 				<a
 					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
 					target="_blank"
@@ -36,7 +36,7 @@
 					>Online-Chat</a
 				>
 				(Do. 15–16 Uhr)<br />
-				<v-icon>{{ mdiEmailOutline }}</v-icon>
+				<v-icon size="20" class="mr-1">{{ mdiEmailOutline }}</v-icon>
 				<a
 					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
 					target="_blank"
