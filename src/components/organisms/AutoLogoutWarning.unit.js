@@ -1,8 +1,9 @@
-import { autoLogoutModule, envConfigModule } from "@/store";
+import { autoLogoutModule, envConfigModule, notifierModule } from "@/store";
 import AutoLogoutModule from "@/store/autoLogout";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AutoLogoutWarning from "./AutoLogoutWarning";
+import NotifierModule from "@/store/notifier";
 
 const toast = {
 	error401: -1,
@@ -56,6 +57,7 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 		setupStores({
 			autoLogoutModule: AutoLogoutModule,
 			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
 		});
 
 		actions = getMockActions();
@@ -96,6 +98,9 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 	});
 
 	describe("Extend secession", () => {
+		beforeEach(() => {
+			jest.resetAllMocks();
+		});
 		it("extend secession over modal", async () => {
 			const extendSpy = jest.fn();
 			autoLogoutModule.extendSessionAction = extendSpy;
@@ -110,36 +115,31 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 		});
 
 		it("show success toast on showToast change", async () => {
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
-
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			setShowToast(toast.success);
 			await wrapper.vm.$nextTick();
 
-			expect(toastStubs.success.mock.calls).toHaveLength(1);
-			expect(toastStubs.error.mock.calls).toHaveLength(0);
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
 		});
 
 		it("show retry error toast on showToast change", async () => {
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
-
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			setShowToast(toast.error);
 			await wrapper.vm.$nextTick();
 
-			expect(toastStubs.success.mock.calls).toHaveLength(0);
-			expect(toastStubs.error.mock.calls).toHaveLength(1);
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
 
 		it("show 401 error toast on showToast change", async () => {
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
+			const notifierMock = jest.spyOn(notifierModule, "show");
 
 			setShowToast(toast.error401);
 			await wrapper.vm.$nextTick();
 
-			expect(toastStubs.success.mock.calls).toHaveLength(0);
-			expect(toastStubs.error.mock.calls).toHaveLength(1);
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
 	});
 });

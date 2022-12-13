@@ -376,7 +376,7 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			var temp = this.getUiState(
+			const temp = this.getUiState(
 				"filter",
 				"pages.administration.teacher.index"
 			);
