@@ -16,7 +16,6 @@ export default {
 	computed: {
 		layout() {
 			let layout = defaultLayout;
-			debugger;
 
 			if (this.$route.path.match("^/imprint\\/?$")) {
 				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
