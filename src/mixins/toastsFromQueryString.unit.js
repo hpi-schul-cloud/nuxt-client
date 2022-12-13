@@ -1,13 +1,22 @@
 import toastsFromQueryString from "./toastsFromQueryString";
+import NotifierModule from "@/store/notifier";
+import { notifierModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("@/mixins/toastsFromQueryString", () => {
+	beforeEach(() => {
+		setupStores({
+			notifierModule: NotifierModule,
+		});
+		jest.clearAllMocks();
+	});
 	it.each([
 		["error", "errorMessage", undefined],
-		["success", "successMessage", 2000],
+		["success", "successMessage", 5000],
 		["info", "infoMessage", undefined],
-		["show", "showMessage", undefined],
 	])("can show an toast of type %p", (type, message, duration) => {
-		const toastMock = jest.fn();
+		const notifierMock = jest.spyOn(notifierModule, "show");
+
 		shallowMount({
 			template: "<div/>",
 			beforeMount() {
@@ -28,21 +37,22 @@ describe("@/mixins/toastsFromQueryString", () => {
 						"toast-duration": duration,
 					},
 				};
-				this.$toast = {
-					[type]: toastMock,
-				};
 			},
 			mixins: [toastsFromQueryString],
 		});
-		expect(toastMock).toHaveBeenCalledWith(message, {
-			duration: duration || 5000,
-		});
+		const expectedResult = {
+			status: type,
+			text: message,
+			timeout: 5000,
+		};
+		expect(notifierMock).toHaveBeenCalledWith(expectedResult);
 	});
 
 	it.each([[""], ["http://another.adress/abc/def"]])(
 		"does not show a toast if request is coming from origin %p",
 		(ref) => {
-			const errorToastMock = jest.fn();
+			const notifierMock = jest.spyOn(notifierModule, "show");
+
 			shallowMount({
 				template: "<div/>",
 				beforeMount() {
@@ -62,13 +72,10 @@ describe("@/mixins/toastsFromQueryString", () => {
 							"toast-message": "test",
 						},
 					};
-					this.$toast = {
-						error: errorToastMock,
-					};
 				},
 				mixins: [toastsFromQueryString],
 			});
-			expect(errorToastMock).not.toHaveBeenCalled();
+			expect(notifierMock).not.toHaveBeenCalled();
 		}
 	);
 });
