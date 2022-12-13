@@ -6,7 +6,7 @@
 	</v-app>
 </template>
 
-<script lang="ts">
+<script>
 import { authModule } from "@/store";
 import { Layouts } from "@/layouts/types";
 
