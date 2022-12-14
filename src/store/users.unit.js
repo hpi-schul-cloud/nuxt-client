@@ -137,7 +137,6 @@ describe("store/users", () => {
 				};
 				const payloadMock = {
 					...studentData,
-					successMessage: "display this if post was successful",
 				};
 
 				initializeAxios({

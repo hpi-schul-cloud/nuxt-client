@@ -146,17 +146,8 @@ const usersModule = mergeDeep(base, {
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
-			const { successMessage, ...studentData } = payload;
 			try {
-				const student = (await $axios.post(studentEndpoint, studentData)).data;
-				notifierModule.show({
-					text: successMessage,
-					status: "success",
-					timeout: 10000,
-				});
-				this.$router.push({
-					path: `/administration/students`,
-				});
+				const student = (await $axios.post(studentEndpoint, payload)).data;
 				commit("setCurrent", student);
 			} catch (error) {
 				commit("setBusinessError", error.response?.data);
