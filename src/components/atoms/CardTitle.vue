@@ -7,6 +7,7 @@
 			v-model="title"
 			solo
 			flat
+			:placeholder="label"
 			@input="$emit('input', $event)"
 			@blur="toggleEdit"
 		/>
