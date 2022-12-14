@@ -14,7 +14,12 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<v-card v-for="(child, index) in children" :key="index" class="mb-6">
+				<v-card
+					v-for="(child, index) in children"
+					:key="index"
+					flat
+					class="mb-6"
+				>
 					<v-btn
 						fab
 						outlined
@@ -184,6 +189,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .v-card {
+	margin-left: calc(-1 * var(--ck-spacing-standard));
+}
+
 .delete-element-btn {
 	position: absolute;
 	top: -5px;
