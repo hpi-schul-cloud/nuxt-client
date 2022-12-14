@@ -1,15 +1,13 @@
 <template>
-	<div class="rounded">
-		<ckeditor
-			ref="ck"
-			v-model="content"
-			:config="config"
-			:editor="CustomCKEditor"
-			data-testid="ckeditor"
-			:disabled="disabled"
-			@input="handleInput"
-		/>
-	</div>
+	<ckeditor
+		ref="ck"
+		v-model="content"
+		:config="config"
+		:editor="CustomCKEditor"
+		data-testid="ckeditor"
+		:disabled="disabled"
+		@input="handleInput"
+	/>
 </template>
 
 <script>
@@ -127,6 +125,38 @@ export default defineComponent({
 					"Underline",
 				];
 			})(),
+			highlight: {
+				options: [
+					{
+						model: "yellowMarker",
+						class: "marker-yellow",
+						title: "Yellow Marker",
+						color: "var(--ck-highlight-marker-yellow)",
+						type: "marker",
+					},
+					{
+						model: "greenMarker",
+						class: "marker-green",
+						title: "Green marker",
+						color: "var(--ck-highlight-marker-green)",
+						type: "marker",
+					},
+					{
+						model: "pinkMarker",
+						class: "marker-pink",
+						title: "Pink marker",
+						color: "var(--ck-highlight-marker-pink)",
+						type: "marker",
+					},
+					{
+						model: "blueMarker",
+						class: "marker-blue",
+						title: "Blue marker",
+						color: "var(--ck-highlight-marker-blue)",
+						type: "marker",
+					},
+				],
+			},
 			language: language,
 			placeholder: props.placeholder,
 		};
@@ -142,22 +172,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-// ::v-deep .ck-button__label {
-// 	font-family: var(--font-primary) !important;
-// }
-
-/* stylelint-disable sh-waqar/declaration-use-variable */
-::v-deep .ck-toolbar {
-	padding: 4px 6px 4px 6px !important;
-	background: transparent !important;
-	border: none !important;
-	border-radius: 4px 4px 0 0 !important;
-}
-
-::v-deep .ck-content {
-	border: none !important;
-	border-radius: 0 0 4px 4px !important;
-}
-</style>
