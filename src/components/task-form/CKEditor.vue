@@ -1,12 +1,12 @@
 <template>
-	<div class="rounded">
+	<div>
 		<ckeditor
 			ref="ck"
 			v-model="content"
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
-			:disabled="disabled"
+			:disabled="dragInProgress"
 			@input="handleInput"
 		/>
 	</div>

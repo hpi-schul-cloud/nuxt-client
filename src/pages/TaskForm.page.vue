@@ -20,7 +20,8 @@
 							:is="child.component"
 							v-bind="child.props"
 							v-model="child.model"
-							:disabled="dragInProgress"
+							class="rounded"
+							:drag-in-progress="dragInProgress"
 						/>
 					</task-content-element>
 				</div>
@@ -45,7 +46,7 @@
 import {
 	inject,
 	ref,
-	computed,
+	// computed,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
@@ -146,7 +147,8 @@ export default {
 			useDrag();
 
 		// TODO - why is length not reactive when children is reactive not ref
-		const isDraggable = computed(() => children.value.length > 1);
+		// TODO - is this necessary?
+		// const isDraggable = computed(() => children.value.length > 1);
 
 		return {
 			mdiPlus,
@@ -161,7 +163,7 @@ export default {
 			startDragging,
 			endDragging,
 			dragInProgress,
-			isDraggable,
+			// isDraggable,
 		};
 	},
 	// TODO - should not use this, because it's nuxt
