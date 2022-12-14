@@ -49,7 +49,7 @@ export default new Store({
 		courses,
 		error,
 		// ghost, // NUXT_REMOVAL unused
-		ldapConfig,
+		"ldap-config": ldapConfig,
 		lessons,
 		messenger,
 		// publicTeachers, // NUXT_REMOVAL unused
