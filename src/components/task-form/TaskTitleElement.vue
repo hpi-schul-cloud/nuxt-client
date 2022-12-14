@@ -7,7 +7,7 @@
 	/>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch } from "@vue/composition-api";
 export default {
 	name: "TaskTitleElement",

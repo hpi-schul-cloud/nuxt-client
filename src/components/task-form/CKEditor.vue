@@ -21,7 +21,7 @@ require("@hpi-schul-cloud/ckeditor/build/translations/uk");
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 
 export default defineComponent({
-	name: "Editor",
+	name: "CKEditor",
 	components: {
 		ckeditor: CKEditor.component,
 	},

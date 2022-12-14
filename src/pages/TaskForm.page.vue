@@ -15,15 +15,13 @@
 				@end="endDragging"
 			>
 				<div v-for="(child, index) in children" :key="index">
-					<task-content-element @delete-element="deleteElement(index)">
-						<component
-							:is="child.component"
-							v-bind="child.props"
-							v-model="child.model"
-							class="rounded"
-							:drag-in-progress="dragInProgress"
-						/>
-					</task-content-element>
+					<component
+						:is="child.component"
+						v-bind="child.props"
+						v-model="child.model"
+						:drag-in-progress="dragInProgress"
+						@delete-element="deleteElement(index)"
+					/>
 				</div>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
@@ -56,7 +54,7 @@ import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
-import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
+import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
 import CKEditor from "@/components/task-form/CKEditor.vue";
 import { mdiPlus } from "@mdi/js";
 
@@ -71,7 +69,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		TaskTitleElement,
-		TaskContentElement,
+		TaskTextElement,
 		CKEditor,
 		draggable,
 	},
@@ -118,7 +116,7 @@ export default defineComponent({
 
 		const createChild = (desc: string) => {
 			const child = {
-				component: "CKEditor",
+				component: "TaskTextElement",
 				model: desc,
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
