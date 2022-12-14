@@ -38,14 +38,14 @@
 				>
 			</v-avatar>
 			<div
-				v-if="!condenseLayout && !item.titleDate"
-				class="justify-center mt-2 mb-7 sub-title"
+				v-if="showOnlyTitle"
+				class="justify-center mt-2 mb-7 subtitle"
 			>
 				{{ item.title }}
 			</div>
 			<div
-				v-if="!condenseLayout && item.titleDate"
-				class="justify-center sub-title date-title mt-2 mb-5"
+				v-if="showArchiveDateAndTitle"
+				class="justify-center subtitle date-title mt-2 mb-5"
 			>
 				{{ item.title }}
 				{{ item.titleDate }}
@@ -84,6 +84,12 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
+		showOnlyTitle() {
+			return !this.condenseLayout && !this.item.titleDate;
+		},
+		showArchiveDateAndTitle() {
+			return !this.condenseLayout && this.item.titleDate;
+		}
 	},
 	methods: {
 		onClick() {
@@ -144,7 +150,7 @@ export default {
 	text-transform: capitalize;
 }
 
-.sub-title {
+.subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
 	color: var(--v-black-base);
@@ -159,7 +165,7 @@ export default {
 }
 
 @media #{map-get($display-breakpoints, 'xs-only')} {
-	.sub-title {
+	.subtitle {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
