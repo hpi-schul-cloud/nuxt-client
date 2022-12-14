@@ -173,15 +173,11 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = (
-			this.isInline
-				? {
-						title: this.$t("pages.content.page.window.title", {
-							instance: this.$theme.name,
-						}),
-				  }
-				: { title: this.$t("common.words.lernstore") }
-		).toString();
+		document.title = this.isInline
+			? this.$t("pages.content.page.window.title", {
+					instance: this.$theme.name,
+			  })
+			: this.$t("common.words.lernstore");
 
 		const initialSearchQuery = this.$route.query.q;
 		if (initialSearchQuery) {
