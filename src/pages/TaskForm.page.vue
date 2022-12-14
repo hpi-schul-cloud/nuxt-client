@@ -5,7 +5,11 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<card-title v-model="name" :label="$t('common.labels.title')" />
+			<card-title
+				v-model="name"
+				:editable="editable"
+				:placeholder="$t('common.labels.title')"
+			/>
 			<draggable
 				v-model="children"
 				:animation="400"
@@ -74,14 +78,14 @@ import {
 import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardTitle from "@/components/atoms/CardTitle.vue";
-import Editor from "@/components/molecules/Editor.vue";
+import CardText from "@/components/atoms/CardText.vue";
 import { mdiPlus, mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 
 export default {
 	name: "TaskForm",
-	components: { DefaultWireframe, CardTitle, Editor, draggable },
+	components: { DefaultWireframe, CardTitle, CardText, draggable },
 	setup(props, context) {
 		const router = context.root.$router;
 		onBeforeMount(() => {
@@ -104,6 +108,8 @@ export default {
 		const children = ref([]);
 		const route = context.root.$route;
 
+		const editable = true;
+
 		onMounted(async () => {
 			const taskId = route.name === "task-edit" ? route.params.id : undefined;
 			if (taskId) {
@@ -121,9 +127,12 @@ export default {
 
 		const createChild = (desc) => {
 			const child = {
-				component: "Editor",
+				component: "CardText",
 				model: desc,
-				props: { placeholder: i18n.t("common.labels.description") },
+				props: {
+					placeholder: i18n.t("common.labels.description"),
+					editable: editable,
+				},
 			};
 
 			children.value.push(child);
@@ -177,6 +186,7 @@ export default {
 			endDragging,
 			dragInProgress,
 			isDraggable,
+			editable,
 		};
 	},
 	// TODO - should not use this, because it's nuxt
@@ -189,10 +199,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .v-card {
-	margin-left: calc(-1 * var(--ck-spacing-standard));
-}
-
 .delete-element-btn {
 	position: absolute;
 	top: -5px;
