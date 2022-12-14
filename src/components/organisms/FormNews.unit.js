@@ -93,7 +93,7 @@ describe("@/components/organisms/FormNews", () => {
 					news: { ...validNews },
 				},
 			});
-			wrapper.trigger("submit");
+			wrapper.find("form").trigger("submit");
 			await wrapper.vm.$nextTick();
 			const events = wrapper.emitted();
 			expect(events.save).toHaveLength(1);
@@ -113,7 +113,7 @@ describe("@/components/organisms/FormNews", () => {
 				},
 			});
 
-			wrapper.trigger("submit");
+			wrapper.find("form").trigger("submit");
 			expect(notifierMock).toHaveBeenCalled();
 			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 			expect(actions.create.mock.calls).toHaveLength(0); // and no dispatch happend
