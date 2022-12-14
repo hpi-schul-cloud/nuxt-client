@@ -12,7 +12,7 @@ export const actions = {
 					registered.push(user._id);
 					this.$axios
 						.$patch("/v1/users/admin/students/" + user._id, {
-							user,
+							...user,
 							createAccount: true,
 						})
 						.catch((error) => errors.push({ updateError: error }));
