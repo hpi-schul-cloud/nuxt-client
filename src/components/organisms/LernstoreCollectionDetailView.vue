@@ -254,15 +254,11 @@ export default defineComponent({
 	mounted() {
 		this.searchElements();
 		this.activateTransition = true;
-		document.title = (
-			this.isInline
-				? {
-						title: this.$t("pages.content.page.window.title", {
-							instance: this.$theme.name,
-						}),
-				  }
-				: { title: this.$t("common.words.lernstore") }
-		).toString();
+		document.title = this.isInline
+			? this.$t("pages.content.page.window.title", {
+					instance: this.$theme.name,
+			  })
+			: this.$t("common.words.lernstore");
 	},
 	methods: {
 		async searchElements() {

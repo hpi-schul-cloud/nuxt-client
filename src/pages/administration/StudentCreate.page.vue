@@ -39,6 +39,7 @@ import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
+import { notifierModule } from "@/store";
 
 import { mapGetters } from "vuex";
 
@@ -86,16 +87,26 @@ export default {
 	},
 	methods: {
 		createStudent(userData) {
-			this.$store.dispatch("users/createStudent", {
-				firstName: userData.firstName,
-				lastName: userData.lastName,
-				email: userData.email,
-				birthday: this.date,
-				roles: ["student"],
-				schoolId: this.$user.schoolId,
-				sendRegistration: this.sendRegistration,
-				successMessage: this.$t("pages.administration.students.new.success"),
-			});
+			this.$store
+				.dispatch("users/createStudent", {
+					firstName: userData.firstName,
+					lastName: userData.lastName,
+					email: userData.email,
+					birthday: this.date,
+					roles: ["student"],
+					schoolId: this.$user.schoolId,
+					sendRegistration: this.sendRegistration,
+				})
+				.then(() => {
+					notifierModule.show({
+						text: this.$t("pages.administration.students.new.success"),
+						status: "success",
+						timeout: 10000,
+					});
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				});
 		},
 	},
 	mounted() {

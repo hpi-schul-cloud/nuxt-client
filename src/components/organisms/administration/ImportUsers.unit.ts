@@ -10,7 +10,7 @@ import {
 } from "@/serverApi/v3";
 
 declare let createComponentMocks: Function;
-const importUsersMockData: ImportUserListResponse = {
+const mockImportUsers: ImportUserListResponse = {
 	total: 3,
 	skip: 0,
 	limit: 3,
@@ -117,13 +117,13 @@ describe("@/components/molecules/importUsers", () => {
 			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,
 		});
-		importUsersModule.setImportUsersList(importUsersMockData);
+		importUsersModule.setImportUsersList(mockImportUsers);
 	});
 
 	it("should have correct props", () => {
 		const wrapper = getWrapper(mockData);
 
-		expect(wrapper.vm.importUsers).toStrictEqual(importUsersMockData.data);
+		expect(wrapper.vm.importUsers).toStrictEqual(mockImportUsers.data);
 		expect(wrapper.vm.options).toStrictEqual(mockData.options);
 		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
 	});
@@ -145,11 +145,21 @@ describe("@/components/molecules/importUsers", () => {
 		expect(invisibleAlertElement).toHaveLength(0);
 	});
 
-	it("alert section should visible/invisible according to 'canStartMigration' value", async () => {
+	it("alert section should be visible/invisible according to 'canStartMigration' value", async () => {
 		const wrapper = getWrapper({
 			...mockData,
-			school: { inMaintenance: true, inUserMigration: true },
 		});
+
+		wrapper.vm.school.inMaintenance = false;
+		wrapper.vm.school.inUserMigration = true;
+		await wrapper.vm.$nextTick();
+
+		const visibleAlertElement = wrapper.findAll(".v-alert");
+		expect(visibleAlertElement).toHaveLength(1);
+
+		wrapper.vm.school.inMaintenance = true;
+		wrapper.vm.school.inUserMigration = true;
+		await wrapper.vm.$nextTick();
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");
 		expect(invisibleAlertElement).toHaveLength(0);
@@ -165,7 +175,7 @@ describe("@/components/molecules/importUsers", () => {
 		const dataTableElement = wrapper.find(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
-		expect(dataTableElement.vm.items).toStrictEqual(importUsersMockData.data);
+		expect(dataTableElement.vm.items).toStrictEqual(mockImportUsers.data);
 	});
 
 	describe("should search with all columns", () => {

@@ -6,6 +6,13 @@ import { createLocalVue } from "@vue/test-utils";
 import ContentModule from "@/store/content";
 import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { initializeAxios } from "@/utils/api";
+
+initializeAxios({
+	get: async () => {
+		return { data: [] };
+	},
+});
 
 const testProps = {
 	resource: Collection,

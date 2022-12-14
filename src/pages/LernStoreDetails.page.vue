@@ -48,6 +48,7 @@ export default {
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
+		document.title = this.$t("common.words.lernstore");
 	},
 };
 </script>
