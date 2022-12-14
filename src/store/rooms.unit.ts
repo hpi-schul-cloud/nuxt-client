@@ -84,7 +84,9 @@ describe("rooms module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
-					dashboardControllerFindForUser: jest.fn(),
+					dashboardControllerFindForUser: jest
+						.fn()
+						.mockResolvedValue({ data: {} }),
 				};
 
 				jest
