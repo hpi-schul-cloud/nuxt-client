@@ -10,8 +10,10 @@ import {
 	mdiCheckboxIntermediate,
 	mdiCheckCircle,
 	mdiClose,
+	mdiDeleteOutline,
 	mdiDns,
 	mdiEmail,
+	mdiEmailOutline,
 	mdiFolder,
 	mdiFolderAccount,
 	mdiFormatBold,
@@ -38,10 +40,12 @@ const materialIcons = {
 	"mdi-check": mdiCheck,
 	"mdi-clear": mdiClose,
 	"mdi-close": mdiClose,
+	"mdi-delete_outline": mdiDeleteOutline,
 	"mdi-dns": mdiDns,
 	"mdi-done_all": mdiCheckAll,
 	"mdi-doublecheck": mdiCheckAll,
 	"mdi-email": mdiEmail,
+	"mdi-mail_outline": mdiEmailOutline,
 	"mdi-error": mdiAlertCircle,
 	"mdi-event": mdiCalendar,
 	"mdi-favorite": mdiHeart,
@@ -77,6 +81,7 @@ export default materialIcons;
 // mdi-check_circle : check-circle
 // mdi-clear : close
 // mdi-close : close
+// mdi-delete_outline : mdiDeleteOutline
 // mdi-dns : dns
 // mdi-done_all (doublecheck) : check-all
 // mdi-email : email
@@ -95,6 +100,7 @@ export default materialIcons;
 // mdi-indeterminate_check_box : checkbox-intermediate
 // mdi-launch : launch
 // mdi-lock : lock
+// mdi-mail_outline : mdiEmailOutline,
 // mdi-person : account
 // mdi-redo : redo
 // mdi-report_problem : mdiAlert

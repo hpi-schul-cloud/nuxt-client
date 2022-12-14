@@ -286,5 +286,12 @@ export default {
 
 .v-btn {
 	font-weight: var(--font-weight-normal) !important;
+	font-family: var(--font-accent);
+}
+</style>
+
+<style lang="scss">
+.context-menu .context-menu__button-icon .v-icon.v-icon {
+	font-size: var(--text-md);
 }
 </style>
