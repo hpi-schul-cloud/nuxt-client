@@ -37,10 +37,7 @@
 					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div
-				v-if="showOnlyTitle"
-				class="justify-center mt-2 mb-7 subtitle"
-			>
+			<div v-if="showOnlyTitle" class="justify-center mt-2 mb-7 subtitle">
 				{{ item.title }}
 			</div>
 			<div
@@ -89,7 +86,7 @@ export default {
 		},
 		showArchiveDateAndTitle() {
 			return !this.condenseLayout && this.item.titleDate;
-		}
+		},
 	},
 	methods: {
 		onClick() {
