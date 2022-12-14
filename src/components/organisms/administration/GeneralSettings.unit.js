@@ -135,13 +135,14 @@ describe("GeneralSettings", () => {
 		schoolsModule.setSchool(school);
 		schoolsModule.setFederalState(federalState);
 		schoolsModule.setSystems(syncedSystem);
+
+		envConfigModule.setEnvs({
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
 	});
 
 	describe("env-config", () => {
 		it("should display select element with available languages", async () => {
-			envConfigModule.setEnvs({
-				I18N__AVAILABLE_LANGUAGES: "de,en,es",
-			});
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
