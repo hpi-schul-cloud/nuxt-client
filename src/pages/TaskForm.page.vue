@@ -41,15 +41,16 @@
 	</default-wireframe>
 </template>
 
-<script>
-// TODO - write this in typescript
+<script lang="ts">
 import {
+	defineComponent,
 	inject,
 	ref,
 	// computed,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
+import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
@@ -59,7 +60,13 @@ import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import CKEditor from "@/components/task-form/CKEditor.vue";
 import { mdiPlus } from "@mdi/js";
 
-export default {
+type Element = {
+	component: string;
+	model: string;
+	props: Object;
+};
+
+export default defineComponent({
 	name: "TaskForm",
 	components: {
 		DefaultWireframe,
@@ -71,6 +78,7 @@ export default {
 	setup(props, context) {
 		// TODO - useRouter, useRoute aus vue compo, with defineComponent
 		const router = context.root.$router;
+		// TODO - can this be a navigation guard?
 		onBeforeMount(() => {
 			if (
 				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
@@ -79,8 +87,10 @@ export default {
 			}
 		});
 
-		// TODO - returned undefined
-		const i18n = inject("i18n");
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -89,7 +99,7 @@ export default {
 		];
 
 		const name = ref("");
-		const children = ref([]);
+		const children = ref<Element[]>([]);
 		const route = context.root.$route;
 
 		onMounted(async () => {
@@ -100,13 +110,13 @@ export default {
 
 			const taskData = taskModule.getTaskData;
 			name.value = taskData.name;
-			const desc = taskData.description.content || taskData.description; // TODO - clean this up
+			const desc = taskData.description.content;
 
 			// TODO - iterate
 			createChild(desc);
 		});
 
-		const createChild = (desc) => {
+		const createChild = (desc: string) => {
 			const child = {
 				component: "CKEditor",
 				model: desc,
@@ -120,7 +130,7 @@ export default {
 			createChild("");
 		};
 
-		const deleteElement = (index) => {
+		const deleteElement = (index: number) => {
 			children.value.splice(index, 1);
 		};
 
@@ -172,5 +182,5 @@ export default {
 			title: this.$t("common.words.tasks"),
 		};
 	},
-};
+});
 </script>
