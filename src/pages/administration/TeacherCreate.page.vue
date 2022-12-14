@@ -17,7 +17,7 @@
 			<template #errors>
 				<info-message
 					v-if="error"
-					:message="$t('pages.administration.students.new.error')"
+					:message="$t('pages.administration.teachers.new.error')"
 					type="bc-error"
 				></info-message>
 			</template>
