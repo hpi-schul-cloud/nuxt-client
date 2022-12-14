@@ -96,11 +96,10 @@ export default {
 			if (taskId) {
 				await taskModule.findTask(taskId);
 			}
-			// TODO does taskData has to be computed?
-			const taskData = computed(() => taskModule.getTaskData);
-			name.value = taskData.value.name;
-			const desc =
-				taskData.value.description.content || taskData.value.description; // TODO - clean this up
+
+			const taskData = taskModule.getTaskData;
+			name.value = taskData.name;
+			const desc = taskData.description.content || taskData.description; // TODO - clean this up
 
 			// TODO - iterate
 			createChild(desc);
