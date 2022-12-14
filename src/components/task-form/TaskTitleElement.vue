@@ -10,7 +10,7 @@
 <script>
 import { ref, watch } from "@vue/composition-api";
 export default {
-	name: "CardTitle",
+	name: "TaskTitleElement",
 	props: {
 		label: {
 			type: String,

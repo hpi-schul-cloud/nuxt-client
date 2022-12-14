@@ -5,7 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<card-title v-model="name" :label="$t('common.labels.title')" />
+			<task-title-element v-model="name" :label="$t('common.labels.title')" />
 			<draggable
 				v-model="children"
 				:animation="400"
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+// TODO - write this in typescript
 import {
 	inject,
 	ref,
@@ -68,16 +69,17 @@ import {
 } from "@vue/composition-api";
 import { taskModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import CardTitle from "@/components/atoms/CardTitle.vue";
-import Editor from "@/components/molecules/Editor.vue";
+import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
+import CKEditor from "@/components/task-form/CKEditor.vue";
 import { mdiPlus, mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 
 export default {
 	name: "TaskForm",
-	components: { DefaultWireframe, CardTitle, Editor, draggable },
+	components: { DefaultWireframe, TaskTitleElement, CKEditor, draggable },
 	setup(props, context) {
+		// TODO - useRouter, useRoute aus vue compo, with defineComponent
 		const router = context.root.$router;
 		onBeforeMount(() => {
 			if (
@@ -87,6 +89,7 @@ export default {
 			}
 		});
 
+		// TODO - returned undefined
 		const i18n = inject("i18n");
 		const breadcrumbs = [
 			{
@@ -116,7 +119,7 @@ export default {
 
 		const createChild = (desc) => {
 			const child = {
-				component: "Editor",
+				component: "CKEditor",
 				model: desc,
 				props: { placeholder: i18n.t("common.labels.description") },
 			};
@@ -154,6 +157,7 @@ export default {
 		const { touchDelay, startDragging, endDragging, dragInProgress } =
 			useDrag();
 
+		// TODO - why is length not reactive when children is reactive not ref
 		const isDraggable = computed(() => children.value.length > 1);
 
 		return {
