@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<h2 v-show="!editing" @click="toggleEdit">{{ titleView }}</h2>
+		<h2 v-if="!editing" @click="toggleEdit">{{ titleView }}</h2>
 		<v-text-field
-			v-show="editing"
+			v-if="editing"
 			ref="titleRef"
 			v-model="title"
 			solo
 			flat
-			:placeholder="label"
-			@input="$emit('input', $event)"
+			:placeholder="placeholder"
+			@input="handleInput"
 			@blur="toggleEdit"
 		/>
 	</div>
@@ -18,36 +18,42 @@
 import { ref, watch, nextTick, computed } from "@vue/composition-api";
 export default {
 	name: "CardTitle",
+	emits: ["input"],
 	props: {
-		label: {
-			type: String,
-			default: "",
-		},
 		value: {
 			type: String,
 			default: "",
 		},
+		placeholder: {
+			type: String,
+			default: "",
+		},
+		editable: {
+			type: Boolean,
+		},
 	},
-	setup(props) {
+	setup(props, { emit }) {
 		const title = ref(props.value);
-
+		const titleRef = ref(null);
 		const editing = ref(false);
+
 		const toggleEdit = async () => {
-			editing.value = !editing.value;
-			if (editing.value) {
-				await nextTick();
-				focusInput();
+			if (props.editable) {
+				editing.value = !editing.value;
+				if (editing.value) {
+					await nextTick();
+					focusInput();
+				}
 			}
 		};
 
-		const titleRef = ref(null);
 		const focusInput = () => {
 			titleRef.value.focus();
 		};
 
 		const titleView = computed(() => {
 			if (title.value === "") {
-				return props.label;
+				return props.placeholder;
 			}
 
 			return title.value;
@@ -60,12 +66,15 @@ export default {
 			}
 		);
 
+		const handleInput = () => emit("input", title.value);
+
 		return {
 			title,
 			titleView,
 			titleRef,
 			editing,
 			toggleEdit,
+			handleInput,
 		};
 	},
 };
