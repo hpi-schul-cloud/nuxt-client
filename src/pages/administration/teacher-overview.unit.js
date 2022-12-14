@@ -94,6 +94,8 @@ describe("teachers/index", () => {
 				actions: {
 					findTeachers: jest.fn(),
 					deleteUsers: deleteUsersStub,
+					getQrRegistrationLinks: jest.fn(),
+					sendRegistrationLink: jest.fn(),
 				},
 				getters: {
 					getList: () => mockData,
@@ -137,13 +139,6 @@ describe("teachers/index", () => {
 		set: (key, identifier) => {},
 	};
 
-	// always confirm
-	const mockDialog = {
-		confirm: (params) => {
-			params.onConfirm();
-		},
-	};
-
 	const short_name = "instance name";
 
 	it("should call 'deleteUsers' action", async () => {
@@ -152,7 +147,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 				uiState: mockUiState,
-				dialog: mockDialog,
 			}),
 			mocks: {
 				$theme: {
@@ -185,7 +179,10 @@ describe("teachers/index", () => {
 		const deleteBtn = wrapper
 			.findAll(".row-selection-info .context-menu button")
 			.at(2);
-		deleteBtn.trigger("click");
+		await deleteBtn.trigger("click");
+
+		const confirmBtn = wrapper.find("[data-testid='btn-dialog-confirm']");
+		await confirmBtn.trigger("click");
 
 		expect(deleteUsersStub.mock.calls).toHaveLength(1);
 		expect(deleteUsersStub.mock.calls[0][1]).toStrictEqual({

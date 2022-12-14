@@ -59,6 +59,7 @@ const materialIcons = {
 	"mdi-lock": mdiLock,
 	"mdi-person": mdiAccount,
 	"mdi-redo": mdiRedo,
+	"mdi-report_problem": mdiAlert,
 	"mdi-search": mdiMagnify,
 	"mdi-undo": mdiUndo,
 	"mdi-warning": mdiAlert,
@@ -96,6 +97,7 @@ export default materialIcons;
 // mdi-lock : lock
 // mdi-person : account
 // mdi-redo : redo
+// mdi-report_problem : mdiAlert
 // mdi-search : magnify
 // mdi-undo : undo
 // mdi-warning : alert

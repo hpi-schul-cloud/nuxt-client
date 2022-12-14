@@ -1,116 +1,126 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.administration.students.index.title')"
-		:breadcrumbs="breadcrumbs"
-		:full-width="true"
-		:fab-items="fab"
-	>
-		<progress-modal
-			:active="isDeleting"
-			:percent="deletedPercent"
-			:title="$t('pages.administration.students.index.remove.progress.title')"
-			:description="
-				$t('pages.administration.students.index.remove.progress.description')
-			"
-			data-testid="progress-modal"
-		/>
-
-		<base-input
-			v-model="searchQuery"
-			type="text"
-			:placeholder="
-				$t('pages.administration.students.index.searchbar.placeholder')
-			"
-			class="search-section"
-			label=""
-			data-testid="searchbar"
-			@update:vmodel="barSearch"
+	<div>
+		<default-wireframe
+			:headline="$t('pages.administration.students.index.title')"
+			:breadcrumbs="breadcrumbs"
+			:full-width="true"
+			:fab-items="fab"
 		>
-			<template #icon> <base-icon source="material" icon="search" /></template>
-		</base-input>
+			<progress-modal
+				:active="isDeleting"
+				:percent="deletedPercent"
+				:title="$t('pages.administration.students.index.remove.progress.title')"
+				:description="
+					$t('pages.administration.students.index.remove.progress.description')
+				"
+				data-testid="progress-modal"
+			/>
 
-		<data-filter
-			:filters="filters"
-			:backend-filtering="true"
-			:active-filters.sync="currentFilterQuery"
-			data-testid="data_filter"
+			<base-input
+				v-model="searchQuery"
+				type="text"
+				:placeholder="
+					$t('pages.administration.students.index.searchbar.placeholder')
+				"
+				class="search-section"
+				label=""
+				data-testid="searchbar"
+				@update:vmodel="barSearch"
+			>
+				<template #icon>
+					<base-icon source="material" icon="search"
+				/></template>
+			</base-input>
+
+			<data-filter
+				:filters="filters"
+				:backend-filtering="true"
+				:active-filters.sync="currentFilterQuery"
+				data-testid="data_filter"
+			/>
+
+			<backend-data-table
+				:actions="filteredActions"
+				:columns="filteredColumns"
+				:current-page.sync="page"
+				:data="students"
+				:paginated="true"
+				:rows-per-page.sync="limit"
+				:rows-selectable="true"
+				:total="pagination.total"
+				track-by="_id"
+				:selected-row-ids.sync="tableSelection"
+				:selection-type.sync="tableSelectionType"
+				:sort-by="sortBy"
+				:sort-order="sortOrder"
+				:show-external-text="schoolIsExternallyManaged"
+				data-testid="students_table"
+				@update:sort="onUpdateSort"
+				@update:current-page="onUpdateCurrentPage"
+				@update:rows-per-page="onUpdateRowsPerPage"
+			>
+				<template #datacolumn-birthday="{ data }">
+					<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+				</template>
+				<template #datacolumn-classes="{ data }">
+					{{ (data || []).join(", ") }}
+				</template>
+				<template #headcolumn-consent> </template>
+				<template #columnlabel-consent></template>
+				<template #datacolumn-createdAt="{ data }">
+					<span class="text-content">{{ printDate(data) }}</span>
+				</template>
+				<template #datacolumn-consentStatus="{ data: status }">
+					<span class="text-content">
+						<base-icon
+							v-if="status === 'ok'"
+							source="custom"
+							icon="doublecheck"
+							color="var(--v-success-base)"
+						/>
+
+						<base-icon
+							v-else-if="status === 'parentsAgreed'"
+							source="material"
+							icon="check"
+							color="var(--v-warning-base)"
+						/>
+						<base-icon
+							v-else-if="status === 'missing'"
+							source="material"
+							icon="close"
+							color="var(--v-error-base)"
+						/>
+					</span>
+				</template>
+				<template #datacolumn-_id="{ data, selected, highlighted }">
+					<v-btn
+						icon
+						:class="{
+							'action-button': true,
+							'row-selected': selected,
+							'row-highlighted': highlighted,
+						}"
+						:to="`/administration/students/${data}/edit`"
+						data-testid="edit_student_button"
+					>
+						<v-icon size="20">{{ mdiPencil }}</v-icon>
+					</v-btn>
+				</template>
+			</backend-data-table>
+			<admin-table-legend
+				:icons="icons"
+				:show-icons="showConsent"
+				:show-external-sync-hint="schoolIsExternallyManaged"
+			/>
+		</default-wireframe>
+		<base-dialog
+			v-if="isConfirmDialogActive"
+			:active="isConfirmDialogActive"
+			v-bind="confirmDialogProps"
+			@update:active="isConfirmDialogActive = false"
 		/>
-
-		<backend-data-table
-			:actions="filteredActions"
-			:columns="filteredColumns"
-			:current-page.sync="page"
-			:data="students"
-			:paginated="true"
-			:rows-per-page.sync="limit"
-			:rows-selectable="true"
-			:total="pagination.total"
-			track-by="_id"
-			:selected-row-ids.sync="tableSelection"
-			:selection-type.sync="tableSelectionType"
-			:sort-by="sortBy"
-			:sort-order="sortOrder"
-			:show-external-text="schoolIsExternallyManaged"
-			data-testid="students_table"
-			@update:sort="onUpdateSort"
-			@update:current-page="onUpdateCurrentPage"
-			@update:rows-per-page="onUpdateRowsPerPage"
-		>
-			<template #datacolumn-birthday="{ data }">
-				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
-			</template>
-			<template #datacolumn-classes="{ data }">
-				{{ (data || []).join(", ") }}
-			</template>
-			<template #headcolumn-consent> </template>
-			<template #columnlabel-consent></template>
-			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
-			</template>
-			<template #datacolumn-consentStatus="{ data: status }">
-				<span class="text-content">
-					<base-icon
-						v-if="status === 'ok'"
-						source="custom"
-						icon="doublecheck"
-						color="var(--v-success-base)"
-					/>
-
-					<base-icon
-						v-else-if="status === 'parentsAgreed'"
-						source="material"
-						icon="check"
-						color="var(--v-warning-base)"
-					/>
-					<base-icon
-						v-else-if="status === 'missing'"
-						source="material"
-						icon="close"
-						color="var(--v-error-base)"
-					/>
-				</span>
-			</template>
-			<template #datacolumn-_id="{ data, selected, highlighted }">
-				<v-btn
-					icon
-					:class="{
-						'action-button': true,
-						'row-selected': selected,
-						'row-highlighted': highlighted,
-					}"
-					:to="`/administration/students/${data}/edit`"
-					data-testid="edit_student_button"
-				>
-					<v-icon size="20">{{ mdiPencil }}</v-icon>
-				</v-btn>
-			</template>
-		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-			:show-icons="showConsent"
-			:show-external-sync-hint="schoolIsExternallyManaged"
-		/>
-	</default-wireframe>
+	</div>
 </template>
 
 <script>
@@ -234,6 +244,8 @@ export default {
 					this.getUiState("filter", "pages.administration.students.index")
 						.searchQuery) ||
 				"",
+			confirmDialogProps: {},
+			isConfirmDialogActive: false,
 		};
 	},
 	meta: {
@@ -428,7 +440,7 @@ export default {
 			});
 		},
 	},
-	created(ctx) {
+	created() {
 		this.find();
 	},
 	mounted() {
@@ -594,7 +606,7 @@ export default {
 					);
 				}
 			}
-			this.$dialog.confirm({
+			this.dialogConfirm({
 				message,
 				confirmText: this.$t(
 					"pages.administration.students.index.remove.confirm.btnText"
@@ -634,6 +646,10 @@ export default {
 		},
 		getUiState(key, identifier) {
 			return this.$store?.getters["uiState/get"]({ key, identifier });
+		},
+		dialogConfirm(confirmDialogProps) {
+			this.confirmDialogProps = confirmDialogProps;
+			this.isConfirmDialogActive = true;
 		},
 	},
 };

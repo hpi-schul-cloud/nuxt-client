@@ -16,6 +16,7 @@ describe("@/components/base/BaseDialog", () => {
 			const testMessage = "Hallo Welt";
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					message: testMessage,
 				},
 			});
@@ -31,6 +32,7 @@ describe("@/components/base/BaseDialog", () => {
 					},
 				}),
 				propsData: {
+					active: true,
 					iconColor: testColor,
 					actionDesign: "danger",
 					icon: "warning",
@@ -38,7 +40,6 @@ describe("@/components/base/BaseDialog", () => {
 			});
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.currentIconColor).toBe(testColor);
-			expect(wrapper.get(".mock-icon").element.style.color).toBe(testColor);
 		});
 
 		it("icon should have by default the actionDesign prop color", async () => {
@@ -64,6 +65,7 @@ describe("@/components/base/BaseDialog", () => {
 		it("passes correct button designs", async () => {
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					actionDesign: "success",
 				},
 			});
@@ -76,6 +78,7 @@ describe("@/components/base/BaseDialog", () => {
 		it("invertedDesign: true switches the confirm and cancel button design", async () => {
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					actionDesign: "success",
 					invertedDesign: true,
 				},
@@ -89,44 +92,41 @@ describe("@/components/base/BaseDialog", () => {
 
 	describe("behaviour", () => {
 		it("should auto open on mount", async () => {
-			const wrapper = await mountDialog({});
-			expect(wrapper.vm.isActive).toBe(true);
+			const wrapper = await mountDialog({ propsData: { active: true } });
 			expect(wrapper.find(".modal-body").exists()).toBe(true);
 		});
 
 		it("should close on confirm", async () => {
-			const wrapper = await mountDialog({});
+			const wrapper = await mountDialog({ propsData: { active: true } });
 			wrapper.vm.confirm();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.isActive).toBe(false);
-			expect(wrapper.find(".modal-body").exists()).toBe(false);
+			expect(wrapper.emitted("update:active")[0]).toEqual([false]);
 		});
 
 		it("should close on cancel", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.cancel();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.isActive).toBe(false);
-			expect(wrapper.find(".modal-body").exists()).toBe(false);
+			expect(wrapper.emitted("update:active")[0]).toEqual([false]);
 		});
 
 		it("should close on click outside", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.clickOutside();
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.isActive).toBe(false);
-			expect(wrapper.find(".modal-body").exists()).toBe(false);
+			expect(wrapper.emitted("update:active")[0]).toEqual([false]);
 		});
 
 		it("should call onConfirm prop on primary action click", async () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					onConfirm: callbackStub,
 				},
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-confirm"]`);
-			confirmBtn.trigger("click");
+			await confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 
@@ -134,11 +134,12 @@ describe("@/components/base/BaseDialog", () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					onCancel: callbackStub,
 				},
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-cancel"]`);
-			confirmBtn.trigger("click");
+			await confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 
@@ -146,11 +147,12 @@ describe("@/components/base/BaseDialog", () => {
 			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
+					active: true,
 					onClickOutside: callbackStub,
 				},
 			});
 			const confirmBtn = wrapper.find(`.base-modal-wrapper`);
-			confirmBtn.trigger("click");
+			await confirmBtn.trigger("click");
 			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 	});

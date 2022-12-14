@@ -1,6 +1,6 @@
 <template>
-	<div ref="dialog" data-testid="dialog" class="v-application">
-		<base-modal :active="isActive" @update:active="clickOutside">
+	<div ref="dialog" data-testid="dialog" class="v-application base-dialog">
+		<base-modal :active="active" @update:active="clickOutside">
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
@@ -8,9 +8,7 @@
 							v-if="icon"
 							:source="iconSource"
 							:icon="icon"
-							:style="{
-								color: currentIconColor,
-							}"
+							:color="currentIconColor"
 						/>
 					</template>
 				</modal-body-info>
@@ -51,6 +49,9 @@ export default {
 		ModalBodyInfo,
 	},
 	props: {
+		active: {
+			type: Boolean,
+		},
 		message: {
 			type: String,
 			default: "",
@@ -96,9 +97,7 @@ export default {
 		},
 	},
 	data() {
-		return {
-			isActive: false,
-		};
+		return {};
 	},
 	computed: {
 		currentIconColor() {
@@ -106,15 +105,6 @@ export default {
 				? this.iconColor
 				: `var(--color-${this.actionDesign})`;
 		},
-	},
-	beforeMount() {
-		// Insert the Dialog component in body tag
-		this.$nextTick(() => {
-			document.body.appendChild(this.$el);
-		});
-	},
-	mounted() {
-		this.isActive = true;
 	},
 	methods: {
 		/**
@@ -138,17 +128,22 @@ export default {
 		 * Close the Dialog.
 		 */
 		close() {
-			this.isActive = false;
-			// Timeout for the animation complete before destroying
-			setTimeout(() => {
-				this.$destroy();
-				if (typeof this.$el.remove !== "undefined") {
-					this.$el.remove();
-				} else if (typeof el.parentNode !== "undefined") {
-					this.$el.parentNode.removeChild(el);
-				}
-			}, 2000);
+			this.$emit("update:active", false);
 		},
 	},
 };
 </script>
+
+<style lang="scss">
+.base-dialog .icon {
+	margin-bottom: 24px;
+	.v-icon.v-icon {
+		font-size: var(--sidebar-item-height);
+
+		svg {
+			width: 1em;
+			height: 1em;
+		}
+	}
+}
+</style>

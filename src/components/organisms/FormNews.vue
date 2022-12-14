@@ -1,70 +1,82 @@
 <template>
-	<form v-on="$listeners" @submit.prevent="save">
-		<title-input
-			v-model="data.title"
-			:focus="true"
-			:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
-			name="title"
-			type="text"
-			:required="true"
-			data-testid="news_title"
-			:label="$t('components.organisms.FormNews.input.title.label')"
+	<div>
+		<form v-on="$listeners" @submit.prevent="save">
+			<title-input
+				v-model="data.title"
+				:focus="true"
+				:placeholder="
+					$t('components.organisms.FormNews.input.title.placeholder')
+				"
+				name="title"
+				type="text"
+				:required="true"
+				data-testid="news_title"
+				:label="$t('components.organisms.FormNews.input.title.label')"
+			/>
+			<transition name="fade">
+				<div v-if="data.title">
+					<text-editor
+						v-model="data.content"
+						class="mb--md mt--xl-3"
+						:error="errors.content"
+						:required="true"
+						:placeholder="
+							$t('components.organisms.FormNews.editor.placeholder')
+						"
+					/>
+					<transition name="fade">
+						<div v-if="data.content">
+							<p class="mt--xl-3">
+								{{ $t("components.organisms.FormNews.label.planned_publish") }}
+							</p>
+							<base-input
+								v-model="data.date.date"
+								type="date"
+								:label="$t('components.organisms.FormNews.label.date')"
+								data-testid="news_date"
+								placeholder="JJJJ-MM-TT"
+							/>
+							<base-input
+								v-model="data.date.time"
+								type="time"
+								:label="$t('components.organisms.FormNews.label.time')"
+								data-testid="news_time"
+								placeholder="HH:MM"
+							/>
+						</div>
+					</transition>
+					<form-actions>
+						<template #primary>
+							<v-btn
+								color="primary"
+								depressed
+								type="submit"
+								data-testid="btn_news_submit"
+								:disabled="status === 'pending'"
+							>
+								<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
+								{{ $t("common.actions.save") }}
+							</v-btn>
+							<v-btn v-if="news && news.id" text color="error" @click="remove">
+								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
+								{{ $t("common.actions.remove") }}
+							</v-btn>
+							<v-btn text color="secondary" @click="cancel">
+								<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
+								{{ $t("common.actions.discard") }}
+							</v-btn>
+						</template>
+					</form-actions>
+				</div>
+			</transition>
+		</form>
+		<base-dialog
+			v-if="isConfirmDialogActive"
+			:active="isConfirmDialogActive"
+			v-bind="confirmDialogProps"
+			@update:active="isConfirmDialogActive = false"
 		/>
-		<transition name="fade">
-			<div v-if="data.title">
-				<text-editor
-					v-model="data.content"
-					class="mb--md mt--xl-3"
-					:error="errors.content"
-					:required="true"
-					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
-				/>
-				<transition name="fade">
-					<div v-if="data.content">
-						<p class="mt--xl-3">
-							{{ $t("components.organisms.FormNews.label.planned_publish") }}
-						</p>
-						<base-input
-							v-model="data.date.date"
-							type="date"
-							:label="$t('components.organisms.FormNews.label.date')"
-							data-testid="news_date"
-							placeholder="JJJJ-MM-TT"
-						/>
-						<base-input
-							v-model="data.date.time"
-							type="time"
-							:label="$t('components.organisms.FormNews.label.time')"
-							data-testid="news_time"
-							placeholder="HH:MM"
-						/>
-					</div>
-				</transition>
-				<form-actions>
-					<template #primary>
-						<v-btn
-							color="primary"
-							depressed
-							type="submit"
-							data-testid="btn_news_submit"
-							:disabled="status === 'pending'"
-						>
-							<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
-							{{ $t("common.actions.save") }}
-						</v-btn>
-						<v-btn v-if="news && news.id" text color="error" @click="remove">
-							<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
-							{{ $t("common.actions.remove") }}
-						</v-btn>
-						<v-btn text color="secondary" @click="cancel">
-							<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
-							{{ $t("common.actions.discard") }}
-						</v-btn>
-					</template>
-				</form-actions>
-			</div>
-		</transition>
-	</form>
+	</div>
 </template>
 
 <script lang="ts">
@@ -109,6 +121,8 @@ export default Vue.extend({
 		mdiClose: string;
 		mdiCheck: string;
 		mdiDelete: string;
+		confirmDialogProps: Record<string, unknown>;
+		isConfirmDialogActive: boolean;
 	} {
 		return {
 			data: {
@@ -122,6 +136,8 @@ export default Vue.extend({
 			mdiClose,
 			mdiCheck,
 			mdiDelete,
+			confirmDialogProps: {},
+			isConfirmDialogActive: false,
 		};
 	},
 	computed: {
@@ -197,7 +213,7 @@ export default Vue.extend({
 			}
 		},
 		async remove() {
-			this.$dialog.confirm({
+			this.dialogConfirm({
 				icon: "warning",
 				actionDesign: "success",
 				iconColor: "var(--v-error-base)",
@@ -215,7 +231,7 @@ export default Vue.extend({
 			});
 		},
 		async cancel() {
-			this.$dialog.confirm({
+			this.dialogConfirm({
 				message: this.$t(
 					"components.organisms.FormNews.cancel.confirm.message"
 				),
@@ -231,6 +247,10 @@ export default Vue.extend({
 				invertedDesign: true,
 				onConfirm: () => this.$emit("cancel"),
 			});
+		},
+		dialogConfirm(confirmDialogProps: Record<string, unknown>) {
+			this.confirmDialogProps = confirmDialogProps;
+			this.isConfirmDialogActive = true;
 		},
 	},
 });

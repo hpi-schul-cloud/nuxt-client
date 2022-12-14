@@ -201,38 +201,7 @@ global.createComponentMocks = ({
 	Vue.use(Vuetify);
 	returnOptions.vuetify = new Vuetify();
 
-	//Set 'vueMeta: true' for accessing nuxt page meta infos
-	// if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
-
-	// if (user) {
-	// 	localVue.mixin(userMixin);
-	// }
 	localVue.use(Vuelidate);
-
-	// Set uiState like:
-	// {
-	// 		get: (key, identifier) => {},
-	// 		set: (key, identifier) => {},
-	// }
-	// if (uiState) {
-	// 	localVue.use({
-	// 		install: (Vue) => {
-	// 			Vue.prototype.$uiState = uiState;
-	// 		},
-	// 	});
-	// }
-
-	// Set (confirmation) dialog like:
-	// {
-	//		confirm: (params) => {}
-	// }
-	if (dialog) {
-		localVue.use({
-			install: (Vue) => {
-				Vue.prototype.$dialog = dialog;
-			},
-		});
-	}
 
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
