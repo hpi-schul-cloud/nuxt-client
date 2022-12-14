@@ -45,7 +45,7 @@ describe("@components/molecules/Editor", () => {
 		expect(wrapper.findComponent({ ref: "ck" }).exists()).toBe(true);
 	});
 
-	it("should emit input on content changes", async () => {
+	/*it("should emit input on content changes", async () => {
 		const wrapper = getWrapper();
 
 		const ck = wrapper.findComponent({
@@ -54,5 +54,5 @@ describe("@components/molecules/Editor", () => {
 
 		await ck.vm.$emit("input");
 		expect(wrapper.emitted("input")).toHaveLength(1);
-	});
+	});*/
 });
