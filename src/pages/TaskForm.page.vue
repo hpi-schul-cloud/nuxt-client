@@ -14,34 +14,16 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<v-card v-for="(child, index) in children" :key="index" class="mb-6">
-					<v-btn
-						fab
-						outlined
-						color="secondary"
-						x-small
-						class="delete-element-btn"
-						@click="deleteElement(index)"
-					>
-						<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
-					</v-btn>
-					<v-btn
-						v-if="isDraggable"
-						fab
-						outlined
-						color="secondary"
-						x-small
-						class="drag-element-btn handle"
-					>
-						<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
-					</v-btn>
-					<component
-						:is="child.component"
-						v-bind="child.props"
-						v-model="child.model"
-						:disabled="dragInProgress"
-					/>
-				</v-card>
+				<div v-for="(child, index) in children" :key="index">
+					<task-content-element @delete-element="deleteElement(index)">
+						<component
+							:is="child.component"
+							v-bind="child.props"
+							v-model="child.model"
+							:disabled="dragInProgress"
+						/>
+					</task-content-element>
+				</div>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
@@ -68,16 +50,23 @@ import {
 	onMounted,
 } from "@vue/composition-api";
 import { taskModule, authModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
-import CKEditor from "@/components/task-form/CKEditor.vue";
-import { mdiPlus, mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
+import CKEditor from "@/components/task-form/CKEditor.vue";
+import { mdiPlus } from "@mdi/js";
 
 export default {
 	name: "TaskForm",
-	components: { DefaultWireframe, TaskTitleElement, CKEditor, draggable },
+	components: {
+		DefaultWireframe,
+		TaskTitleElement,
+		TaskContentElement,
+		CKEditor,
+		draggable,
+	},
 	setup(props, context) {
 		// TODO - useRouter, useRoute aus vue compo, with defineComponent
 		const router = context.root.$router;
@@ -162,8 +151,6 @@ export default {
 
 		return {
 			mdiPlus,
-			mdiTrashCanOutline,
-			mdiDragHorizontalVariant,
 			breadcrumbs,
 			name,
 			children,
@@ -186,18 +173,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.delete-element-btn {
-	position: absolute;
-	top: -5px;
-	right: -20px;
-	background-color: var(--v-white-base);
-}
-
-.drag-element-btn {
-	position: absolute;
-	left: -40px;
-	background-color: var(--v-white-base);
-}
-</style>
