@@ -34,7 +34,7 @@
 				<v-text-field
 					ref="search"
 					v-model="searchText"
-					class="room-search"
+					class="room-search px-1"
 					solo
 					rounded
 					:label="$t('pages.rooms.index.search.label')"
