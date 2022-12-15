@@ -3,7 +3,7 @@
 		:class="{ 'alert-wrapper-mobile': isMobile, 'alert-wrapper': !isMobile }"
 	>
 		<v-alert
-			v-model="show"
+			v-model="showNotifier"
 			:icon="icon"
 			:transition="transition"
 			:type="status"
@@ -14,6 +14,7 @@
 			text
 			:close-icon="mdiClose"
 			border="left"
+			@input="closeNotification"
 		>
 			<div class="alert_text mr-2">
 				{{ text }}
@@ -29,8 +30,6 @@ import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
 export default {
 	data() {
 		return {
-			show: false,
-			timeoutId: undefined,
 			mdiClose,
 			mdiAlert,
 			mdiCheckCircle,
@@ -60,15 +59,13 @@ export default {
 			if (this.status === "info") return mdiInformation;
 			return undefined;
 		},
+		showNotifier() {
+			return this.notifierData !== undefined;
+		},
 	},
-	watch: {
-		notifierData() {
-			this.show = true;
-			if (this.notifierData.autoClose === false) return;
-			clearTimeout(this.timeoutId);
-			this.timeoutId = setTimeout(() => {
-				this.show = false;
-			}, this.notifierData.timeout);
+	methods: {
+		closeNotification() {
+			notifierModule.setNotifier(undefined);
 		},
 	},
 };

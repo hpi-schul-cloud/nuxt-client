@@ -30,11 +30,11 @@ describe("Alert", () => {
 
 	it("should watch 'notifierData' and set 'show' to true", async () => {
 		const wrapper = getWrapper();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.notifierData).toBe(undefined);
 		notifierModule.setNotifier({ text: "some text", status: "success" });
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.notifierData).not.toBe(undefined);
 	});
 
 	it("should be visible when set", async () => {
@@ -46,7 +46,7 @@ describe("Alert", () => {
 		notifierModule.show(data);
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when no timeout is given", async () => {
@@ -59,10 +59,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after default timeout when autoClose is false", async () => {
@@ -76,10 +76,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when autoClose is set", async () => {
@@ -95,10 +95,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should disappear after specific timeout when autoClose is not set", async () => {
@@ -114,10 +114,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(testTimeout);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after any time when autoClose is false", async () => {
@@ -131,12 +131,36 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
+	});
+
+	it("should set store 'undefined' when close button clicked", async () => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+		const data: AlertPayload = {
+			text: "hello world",
+			status: "success",
+			autoClose: false,
+		};
+		notifierModule.show(data);
+
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(true);
+
+		jest.runAllTimers();
+
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(true);
+
+		const alertComponent = wrapper.find(".alert");
+		await alertComponent.vm.$emit("input");
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should set mobile position-class as default if the device is mobile", async () => {

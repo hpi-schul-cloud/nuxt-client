@@ -22,10 +22,14 @@ export default class NotifierModule extends VuexModule {
 			timeout: payload.timeout || this.defaultTimeout,
 		};
 		this.setNotifier(alertData);
+		if (!alertData.autoClose) return;
+		setTimeout(() => {
+			this.setNotifier(undefined);
+		}, payload.timeout || this.defaultTimeout);
 	}
 
 	@Mutation
-	setNotifier(payload: AlertPayload): void {
+	setNotifier(payload: AlertPayload | undefined): void {
 		this.notifier = payload;
 	}
 }
