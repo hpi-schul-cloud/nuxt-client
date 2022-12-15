@@ -157,10 +157,14 @@ export default Vue.extend({
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
-				: this.$ts("components.organisms.FormNews.errors.missing_title");
+				: this.$t(
+						"components.organisms.FormNews.errors.missing_title"
+				  ).toString();
 			const content = this.data.content
 				? undefined
-				: this.$ts("components.organisms.FormNews.errors.missing_content");
+				: this.$t(
+						"components.organisms.FormNews.errors.missing_content"
+				  ).toString();
 			return {
 				title,
 				content,
