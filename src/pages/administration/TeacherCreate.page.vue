@@ -6,9 +6,8 @@
 	>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
 			<template #inputs>
-				<base-input
+				<v-checkbox
 					v-model="sendRegistration"
-					type="checkbox"
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.teachers.new.checkbox.label')"

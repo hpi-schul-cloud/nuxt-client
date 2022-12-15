@@ -14,9 +14,8 @@
 					data-testid="input_create-student_birthdate"
 					type="date"
 				></v-text-field>
-				<base-input
+				<v-checkbox
 					v-model="sendRegistration"
-					type="checkbox"
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.students.new.checkbox.label')"
