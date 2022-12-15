@@ -51,6 +51,23 @@ describe("notifier store", () => {
 
 				expect(setNotifierMock).toHaveBeenCalledWith(payload);
 			});
+
+			it("should call setNotifier when timeout reached", () => {
+				jest.useFakeTimers();
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 1000,
+				};
+				notifierModule.show(payload);
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+				jest.advanceTimersByTime(1000);
+				expect(setNotifierMock).toHaveBeenCalledWith(undefined);
+			});
 		});
 	});
 
