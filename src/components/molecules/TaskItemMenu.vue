@@ -214,7 +214,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 // stylelint-disable sh-waqar/declaration-use-variable
 .task-action {
-	min-height: 25px;
+	min-height: 25px !important;
 }
 
 .task-action-icon {
