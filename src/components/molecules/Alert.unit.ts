@@ -28,13 +28,13 @@ describe("Alert", () => {
 		});
 	});
 
-	it("should watch 'notifierData' and set 'show' to true", async () => {
+	it("should observe the store and set 'showNotifier' to true", async () => {
 		const wrapper = getWrapper();
-		expect(wrapper.vm.notifierData).toBe(undefined);
+		expect(wrapper.vm.showNotifier).toBe(false);
 		notifierModule.setNotifier({ text: "some text", status: "success" });
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.notifierData).not.toBe(undefined);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should be visible when set", async () => {
@@ -103,7 +103,7 @@ describe("Alert", () => {
 
 	it("should disappear after specific timeout when autoClose is not set", async () => {
 		jest.useFakeTimers();
-		const testTimeout = 10000;
+		const testTimeout = 1000;
 
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
