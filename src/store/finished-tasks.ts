@@ -28,8 +28,6 @@ export default class FinishedTasksModule extends VuexModule {
 
 	isInitialized: boolean = false;
 
-	_taskApi?: TaskApiInterface;
-
 	@Action
 	async fetchFinishedTasks(): Promise<void> {
 		this.resetBusinessError();
@@ -172,14 +170,7 @@ export default class FinishedTasksModule extends VuexModule {
 		return this.status === "completed";
 	}
 
-	// private get taskApi(): TaskApiInterface {
-	// 	return TaskApiFactory(undefined, "/v3", $axios);
-	// }
-
 	private get taskApi(): TaskApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		}
-		return this._taskApi;
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 }
