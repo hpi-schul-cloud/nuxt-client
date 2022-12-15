@@ -17,7 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="dns" />
+				<base-icon source="material" icon="dns" :fill="'var(--v-black-base)'" />
 			</template>
 		</base-input>
 		<base-input
@@ -33,7 +33,11 @@
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" />
+				<base-icon
+					source="custom"
+					icon="account_tree"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -49,7 +53,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" />
+				<base-icon source="custom" icon="user" :fill="'var(--v-black-base)'" />
 			</template>
 		</base-input>
 		<base-input
@@ -65,7 +69,11 @@
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 			><template #icon>
-				<base-icon source="material" icon="lock" />
+				<base-icon
+					source="material"
+					icon="lock"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 	</div>

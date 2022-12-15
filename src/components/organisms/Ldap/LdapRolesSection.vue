@@ -69,7 +69,11 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="student" />
+				<base-icon
+					source="custom"
+					icon="student"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -86,7 +90,11 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="teacher" />
+				<base-icon
+					source="custom"
+					icon="teacher"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -101,7 +109,11 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="admin_panel_settings" />
+				<base-icon
+					source="custom"
+					icon="admin_panel_settings"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -114,7 +126,11 @@
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="person_ignore" />
+				<base-icon
+					source="custom"
+					icon="person_ignore"
+					:fill="'var(--v-black-base)'"
+				/>
 			</template>
 		</base-input>
 	</div>
