@@ -113,7 +113,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			).toBe(false);
 		});
 
-		// WIP make test titles work in Jest + VSCode
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
@@ -136,7 +135,6 @@ describe("@components/copy-result-modal/CopyResultModal", () => {
 			).toBe(true);
 		});
 
-		// WIP make test titles work in Jest + VSCode
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],

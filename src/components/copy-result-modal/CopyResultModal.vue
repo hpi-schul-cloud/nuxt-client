@@ -28,7 +28,7 @@
 							<p
 								v-if="warning.isShow"
 								:key="index"
-								class="black--text mb-0"
+								class="black--text mb-0 aligned-with-icon"
 								data-testid="warning-title"
 							>
 								<strong>{{ warning.title }}</strong>
@@ -102,8 +102,8 @@ export default {
 				},
 				{
 					isShow: this.hasFileElement,
-					text: this.$t("components.molecules.copyResult.label.files"),
-					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+					text: this.$t("components.molecules.copyResult.fileCopy.error"),
+					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
 					isShow: this.hasCourseGroup,
@@ -176,5 +176,9 @@ export default {
 <style scoped lang="scss">
 .wordbreak-normal {
 	word-break: normal;
+}
+
+.aligned-with-icon {
+	padding-top: var(--space-xs-3);
 }
 </style>

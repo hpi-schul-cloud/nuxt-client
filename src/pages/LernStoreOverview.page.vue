@@ -68,7 +68,7 @@
 				indeterminate
 				color="secondary"
 				size="115"
-				class="align-self-center"
+				class="align-self-center mt-4"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>

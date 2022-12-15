@@ -95,12 +95,6 @@ export const routes = [
 		component: () => interopDefault(import("../pages/Imprint.page.vue")),
 		name: "imprint",
 	},
-	// deprecated?
-	{
-		path: "/insights",
-		component: () => interopDefault(import("../pages/Insights.page.vue")),
-		name: "insights",
-	},
 	{
 		path: "/login-instances",
 		component: () => interopDefault(import("../pages/LoginInstances.page.vue")),
@@ -158,20 +152,25 @@ export const routes = [
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "files",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
 	},
 	{
 		path: "/cfiles/teams",
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+		name: "teams",
+		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
 	},
 	{
 		path: "/cfiles/teams/:catchAll(.*)",
 		component: () =>
 			interopDefault(import("@pages/files/FilesOverview.page.vue")),
 		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
+	},
+	{
+		path: "/error",
+		component: () => interopDefault(import("../pages/Error.page.vue")),
+		name: "error",
 	},
 ];
