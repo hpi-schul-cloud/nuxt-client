@@ -86,27 +86,26 @@ export default {
 		this.$store.commit("users/resetBusinessError");
 	},
 	methods: {
-		createStudent(userData) {
-			this.$store
-				.dispatch("users/createStudent", {
-					firstName: userData.firstName,
-					lastName: userData.lastName,
-					email: userData.email,
-					birthday: this.date,
-					roles: ["student"],
-					schoolId: this.$user.schoolId,
-					sendRegistration: this.sendRegistration,
-				})
-				.then(() => {
-					notifierModule.show({
-						text: this.$t("pages.administration.students.new.success"),
-						status: "success",
-						timeout: 10000,
-					});
-					this.$router.push({
-						path: `/administration/students`,
-					});
+		async createStudent(userData) {
+			await this.$store.dispatch("users/createStudent", {
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				email: userData.email,
+				birthday: this.date,
+				roles: ["student"],
+				schoolId: this.$user.schoolId,
+				sendRegistration: this.sendRegistration,
+			});
+			if (!this.businessError) {
+				notifierModule.show({
+					text: this.$t("pages.administration.students.new.success"),
+					status: "success",
+					timeout: 10000,
 				});
+				this.$router.push({
+					path: `/administration/students`,
+				});
+			}
 		},
 	},
 	mounted() {
