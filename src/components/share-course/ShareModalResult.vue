@@ -25,7 +25,7 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiShareVariant }}</v-icon></span
 						>
-						<span class="sub-title">{{ $t("common.actions.share") }}</span>
+						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -42,7 +42,7 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
-						<span class="sub-title">{{
+						<span class="subtitle">{{
 							$t("components.molecules.shareCourse.result.mailShare")
 						}}</span>
 					</span>
@@ -62,7 +62,7 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
-						<span class="sub-title">{{
+						<span class="subtitle">{{
 							$t("components.molecules.shareCourse.result.copyClipboard")
 						}}</span>
 					</span>
@@ -82,7 +82,7 @@
 						<span class="mb-2">
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
-						<span class="sub-title">{{
+						<span class="subtitle">{{
 							$t("components.molecules.shareCourse.result.qrCodeScan")
 						}}</span>
 					</span>
@@ -184,7 +184,7 @@ export default defineComponent({
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 
-.sub-title {
+.subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;
 }
