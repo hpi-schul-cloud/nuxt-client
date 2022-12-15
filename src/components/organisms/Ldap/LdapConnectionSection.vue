@@ -17,7 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="dns" :fill="'var(--v-black-base)'" />
+				<base-icon source="material" icon="dns" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -33,11 +33,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
-				<base-icon
-					source="custom"
-					icon="account_tree"
-					:fill="'var(--v-black-base)'"
-				/>
+				<base-icon source="custom" icon="account_tree" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -53,7 +49,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" :fill="'var(--v-black-base)'" />
+				<base-icon source="custom" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -69,11 +65,7 @@
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 			><template #icon>
-				<base-icon
-					source="material"
-					icon="lock"
-					:fill="'var(--v-black-base)'"
-				/>
+				<base-icon source="material" icon="lock" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>
@@ -117,6 +109,11 @@ export default {
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
 		};
+	},
+	computed: {
+		fillColor() {
+			return "var(--v-black-base)";
+		},
 	},
 	watch: {
 		validate: function () {
