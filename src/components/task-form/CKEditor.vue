@@ -6,7 +6,7 @@
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
-			:disabled="dragInProgress"
+			:disabled="disabled"
 			@input="handleInput"
 		/>
 	</div>

@@ -6,6 +6,7 @@
 			color="secondary"
 			x-small
 			class="delete-element-btn"
+			data-testid="delete-element-btn"
 			@click="() => $emit('delete-element')"
 		>
 			<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
@@ -16,13 +17,14 @@
 			color="secondary"
 			x-small
 			class="drag-element-btn handle"
+			data-testid="drag-element-btn"
 		>
 			<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
 		</v-btn>
 		<c-k-editor
 			v-model="text"
 			:placeholder="placeholder"
-			:disabled="disabled"
+			:disabled="dragInProgress"
 			@input="handleInput"
 		/>
 		<slot />
@@ -45,7 +47,7 @@ export default {
 			type: String,
 			default: "",
 		},
-		disabled: {
+		dragInProgress: {
 			type: Boolean,
 		},
 	},
