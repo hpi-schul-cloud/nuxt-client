@@ -7,6 +7,7 @@ import { scrollBehaviourDragImageTranslateOverride } from "mobile-drag-drop/scro
 polyfill({
 	// use this to make use of the scroll behaviour
 	dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
+	forceApply: true,
 });
 
 // console.log("mobileDragAndDrop loaded", polyfill);
