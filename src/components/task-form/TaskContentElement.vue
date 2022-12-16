@@ -28,23 +28,8 @@
 <script lang="ts">
 import { ref } from "@vue/composition-api";
 import { mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
-// import CKEditor from "./CKEditor.vue";
 
 export default {
-	// components: { CKEditor },
-	props: {
-		value: {
-			type: String,
-			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: "",
-		},
-		dragInProgress: {
-			type: Boolean,
-		},
-	},
 	setup(props, { emit }) {
 		const text = ref(props.value);
 		const handleInput = () => emit("input", text.value);
