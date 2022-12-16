@@ -1,21 +1,23 @@
 <template>
 	<div>
-		<h2 v-if="!editing" @click="toggleEdit">{{ titleView }}</h2>
-		<v-text-field
-			v-if="editing"
-			ref="titleRef"
+		<h2 v-if="!editable">
+			{{ title }}
+		</h2>
+		<v-textarea
+			v-if="editable"
 			v-model="title"
+			rows="1"
+			auto-grow
 			solo
 			flat
 			:placeholder="placeholder"
 			@input="handleInput"
-			@blur="toggleEdit"
 		/>
 	</div>
 </template>
 
 <script>
-import { ref, watch, nextTick, computed } from "@vue/composition-api";
+import { ref, watch } from "@vue/composition-api";
 export default {
 	name: "CardTitle",
 	emits: ["input"],
@@ -34,30 +36,6 @@ export default {
 	},
 	setup(props, { emit }) {
 		const title = ref(props.value);
-		const titleRef = ref(null);
-		const editing = ref(false);
-
-		const toggleEdit = async () => {
-			if (props.editable) {
-				editing.value = !editing.value;
-				if (editing.value) {
-					await nextTick();
-					focusInput();
-				}
-			}
-		};
-
-		const focusInput = () => {
-			titleRef.value.focus();
-		};
-
-		const titleView = computed(() => {
-			if (title.value === "") {
-				return props.placeholder;
-			}
-
-			return title.value;
-		});
 
 		watch(
 			() => props.value,
@@ -70,10 +48,6 @@ export default {
 
 		return {
 			title,
-			titleView,
-			titleRef,
-			editing,
-			toggleEdit,
 			handleInput,
 		};
 	},
@@ -84,15 +58,16 @@ export default {
 	display: none;
 }
 
-::v-deep .v-text-field .v-input__slot {
+::v-deep .v-textarea .v-input__slot {
 	padding: 0 !important;
 	margin-bottom: 0;
 }
 
-::v-deep .v-text-field input {
+::v-deep .v-textarea textarea {
+	height: auto;
 	max-height: none;
 	padding: 0;
-	margin-top: var(--space-xl);
+	margin-top: var(--space-xl) !important;
 	margin-bottom: var(--space-sm);
 	font-family: var(--font-accent);
 	font-size: var(--heading-2);
