@@ -5,6 +5,10 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import TasksModule from "@/store/tasks";
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
+import {
+	printDateFromStringUTC as dateFromUTC,
+	printDateTimeFromStringUTC as dateTimeFromUTC,
+} from "@/plugins/datetime";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
@@ -59,8 +63,13 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("Should display due date label if task has duedate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
+		const convertedDueDate = dateTimeFromUTC(tasks[0].duedate);
+		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
+			"pages.tasks.labels.due"
+		)} ${convertedDueDate}`;
+
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
-		expect(dueDateLabel.text()).toBe("Abgabe 11.06.00 16:00");
+		expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
 	});
 
 	it("Should render hint label, if task is close to due date and not submitted", () => {
@@ -121,14 +130,17 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		);
 	});
 
-	it("computedDueDateLabel() method should be able to render a shortened date", () => {
+	it("computed DueDateLabel() method should be able to render a shortened date", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		expect(wrapper.vm.dueDateLabel).toBe("Abgabe 11.06.00 16:00");
+		wrapper.vm.$vuetify.breakpoint.xsOnly = true;
 
-		/* 	expect(
-			wrapper.vm.computedDueDateLabel(openTasksWithDueDate[0].duedate, true)
-		).toBe("Abgabe 11.06.00"); */
+		const convertedDueDate = dateFromUTC(tasks[0].duedate);
+		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
+			"pages.tasks.labels.due"
+		)} ${convertedDueDate}`;
+
+		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);
 	});
 
 	it("accepts valid task props", () => {
