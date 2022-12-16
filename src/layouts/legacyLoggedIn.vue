@@ -4,6 +4,15 @@
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
+				<v-alert
+					color="red lighten-2"
+					dark
+					dense
+					class="ma-2"
+					style="text-align: center"
+				>
+					Bug Hunt: You are on a Vue page
+				</v-alert>
 				<the-top-bar
 					v-if="!isInline"
 					:title="pageTitle"
