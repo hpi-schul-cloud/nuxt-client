@@ -14,7 +14,7 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<div v-for="(child, index) in children" :key="index">
+				<task-content-element v-for="(child, index) in children" :key="index">
 					<component
 						:is="child.component"
 						v-bind="child.props"
@@ -22,7 +22,7 @@
 						:drag-in-progress="dragInProgress"
 						@delete-element="deleteElement(index)"
 					/>
-				</div>
+				</task-content-element>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
@@ -54,7 +54,7 @@ import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
-import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import CKEditor from "@/components/task-form/CKEditor.vue";
 import { mdiPlus } from "@mdi/js";
 
@@ -69,7 +69,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		TaskTitleElement,
-		TaskTextElement,
+		TaskContentElement,
 		CKEditor,
 		draggable,
 	},
@@ -116,7 +116,7 @@ export default defineComponent({
 
 		const createChild = (desc: string) => {
 			const child = {
-				component: "TaskTextElement",
+				component: "CKEditor",
 				model: desc,
 				props: { placeholder: i18n.t("common.labels.description") },
 			};

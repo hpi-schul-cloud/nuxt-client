@@ -6,7 +6,7 @@
 			:config="config"
 			:editor="CustomCKEditor"
 			data-testid="ckeditor"
-			:disabled="disabled"
+			:disabled="dragInProgress"
 			@input="handleInput"
 		/>
 	</div>
@@ -40,7 +40,7 @@ export default defineComponent({
 			validator: (value) => ["simple", "regular"].includes(value),
 			default: "regular",
 		},
-		disabled: {
+		dragInProgress: {
 			type: Boolean,
 		},
 	},

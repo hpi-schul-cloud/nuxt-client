@@ -21,12 +21,6 @@
 		>
 			<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
 		</v-btn>
-		<c-k-editor
-			v-model="text"
-			:placeholder="placeholder"
-			:disabled="dragInProgress"
-			@input="handleInput"
-		/>
 		<slot />
 	</v-card>
 </template>
@@ -34,10 +28,10 @@
 <script lang="ts">
 import { ref } from "@vue/composition-api";
 import { mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
-import CKEditor from "./CKEditor.vue";
+// import CKEditor from "./CKEditor.vue";
 
 export default {
-	components: { CKEditor },
+	// components: { CKEditor },
 	props: {
 		value: {
 			type: String,

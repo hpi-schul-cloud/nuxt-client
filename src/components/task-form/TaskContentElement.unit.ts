@@ -1,10 +1,10 @@
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskTextElement from "@components/task-form/TaskTextElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TaskTextElement, {
+	return mount(TaskContentElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -17,10 +17,10 @@ const getWrapper = (props?: object, options?: object) => {
 };
 
 // TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
-describe("@components/task-form/TaskTextElement", () => {
+describe("@components/task-form/TaskContentElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper({ value: "abc" });
-		expect(wrapper.findComponent(TaskTextElement).exists()).toBe(true);
+		expect(wrapper.findComponent(TaskContentElement).exists()).toBe(true);
 	});
 
 	it("should emit delete-element event", async () => {
@@ -41,9 +41,13 @@ describe("@components/task-form/TaskTextElement", () => {
 	});
 
 	it("should render ckeditor", async () => {
-		const wrapper = getWrapper({ value: "abc" });
-		const editor = wrapper.find('[data-testid="ckeditor"]');
+		const wrapper = getWrapper(
+			{ value: "abc" },
+			{ slots: { default: "<div id='hi'>hello</div>" } }
+		);
+		const slot = wrapper.find("#hi");
 
-		expect(editor.exists()).toBe(true);
+		expect(slot.exists()).toBe(true);
+		expect(slot.text()).toContain("hello");
 	});
 });
