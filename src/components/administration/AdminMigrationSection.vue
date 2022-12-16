@@ -14,6 +14,14 @@
 			:value="isMigrationEnabled"
 			@change="setMigration"
 		></v-switch>
+    <v-switch
+        :label="'Migration verpflichtend machen'"
+        :disabled="!isMigrationEnabled"
+        :true-value="true"
+        :false-value="false"
+        :value="isMigrationMandatory"
+        @change="setMigration"
+    ></v-switch>
 	</div>
 </template>
 
@@ -51,14 +59,19 @@ export default defineComponent({
 			schoolsModule.getOauthMigrationAvailable
 		);
 
-		const setMigration = (value: boolean) => {
-			schoolsModule.setSchoolOauthMigration(value);
+    const isMigrationMandatory: Ref<boolean> = ref(
+        schoolsModule.getOauthMigrationMandatory
+    );
+
+		const setMigration = (enabled: boolean, mandatory: boolean) => {
+			schoolsModule.setSchoolOauthMigration(enabled, mandatory);
 		};
 
 		return {
 			isMigrationEnabled,
 			setMigration,
 			isMigrationAvailable,
+      isMigrationMandatory,
 			t,
 		};
 	},
