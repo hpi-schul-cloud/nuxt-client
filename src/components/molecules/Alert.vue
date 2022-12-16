@@ -59,8 +59,13 @@ export default {
 			if (this.status === "info") return mdiInformation;
 			return undefined;
 		},
-		showNotifier() {
-			return this.notifierData !== undefined;
+		showNotifier: {
+			get() {
+				return this.notifierData !== undefined;
+			},
+			set() {
+				this.closeNotification();
+			},
 		},
 	},
 	methods: {
