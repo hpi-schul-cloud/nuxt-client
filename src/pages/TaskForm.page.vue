@@ -48,6 +48,7 @@ import {
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
+import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
@@ -73,11 +74,11 @@ export default defineComponent({
 		CKEditor,
 		draggable,
 	},
-	setup(props, context) {
-		// TODO - useRouter, useRoute aus vue compo, with defineComponent
-		const router = context.root.$router;
+	setup() {
+		const router = useRouter();
 		// TODO - can this be a navigation guard?
 		onBeforeMount(() => {
+			// TODO - apparantly does not work?
 			if (
 				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
@@ -98,7 +99,7 @@ export default defineComponent({
 
 		const name = ref("");
 		const children = ref<Element[]>([]);
-		const route = context.root.$route;
+		const route = useRoute().value;
 
 		onMounted(async () => {
 			const taskId = route.name === "task-edit" ? route.params.id : undefined;
