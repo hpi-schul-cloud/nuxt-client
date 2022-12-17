@@ -21,7 +21,7 @@
 			@update:vmodel="$emit('input', { ...value, userPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" />
+				<base-icon source="custom" icon="account_tree" :fill="fillColor" />
 			</template>
 		</base-input>
 		<p class="path-hint">
@@ -39,7 +39,7 @@
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" />
+				<base-icon source="custom" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -54,7 +54,7 @@
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" />
+				<base-icon source="custom" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -69,7 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="email" />
+				<base-icon source="material" icon="email" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -85,7 +85,7 @@
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="uid" />
+				<base-icon source="custom" icon="uid" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -101,7 +101,7 @@
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="uuid" />
+				<base-icon source="custom" icon="uuid" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>
@@ -136,6 +136,11 @@ export default {
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
 		};
+	},
+	computed: {
+		fillColor() {
+			return "var(--v-black-base)";
+		},
 	},
 	watch: {
 		validate: function () {

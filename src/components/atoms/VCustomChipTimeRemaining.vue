@@ -46,7 +46,7 @@ export default {
 
 				return `${this.$t(
 					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-				)} ${diffMins} ${label}`;
+				)}${diffMins} ${label}`;
 			} else {
 				const label = shorten
 					? this.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
@@ -56,7 +56,7 @@ export default {
 					  );
 				return `${this.$t(
 					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-				)} ${diffHrs} ${label}`;
+				)}${diffHrs} ${label}`;
 			}
 		},
 	},

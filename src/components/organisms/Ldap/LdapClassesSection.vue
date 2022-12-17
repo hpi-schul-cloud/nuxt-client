@@ -27,7 +27,11 @@
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" />
+				<base-icon
+					source="custom"
+					icon="account_tree"
+					:fill="classesActivatedColor"
+				/>
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -46,7 +50,7 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="class" />
+				<base-icon source="custom" icon="class" :fill="classesActivatedColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -64,7 +68,11 @@
 			"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="gruppen" />
+				<base-icon
+					source="custom"
+					icon="gruppen"
+					:fill="classesActivatedColor"
+				/>
 			</template>
 		</base-input>
 	</div>
@@ -88,6 +96,7 @@ export default {
 	},
 	data() {
 		return {
+			classesActivatedColor: "currentColor",
 			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -119,7 +128,12 @@ export default {
 		},
 		checked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
-			if (this.checked === false) this.$emit("update:inputs");
+			if (this.checked === false) {
+				this.classesActivatedColor = "currentColor";
+				this.$emit("update:inputs");
+			} else {
+				this.classesActivatedColor = "var(--v-black-base)";
+			}
 		},
 		classPathChanged: function () {
 			this.checked = !!this.value.classPath;
