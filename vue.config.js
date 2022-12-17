@@ -42,6 +42,12 @@ module.exports = defineConfig({
 			}/favicon.png`;
 			return args;
 		});
+		config.plugin("copy").tap((args) => {
+			args[0].patterns[0].globOptions.ignore.push(
+				path.resolve(__dirname, "./public/themes/**/*")
+			);
+			return args;
+		});
 	},
 
 	pluginOptions: {

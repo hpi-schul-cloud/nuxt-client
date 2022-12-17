@@ -8,8 +8,8 @@ const uuid =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
 const vueRoutes = [
+	`^/favicon.png$`,
 	`^/_nuxt/*`,
-	`^/themes/*./favicon.png$`,
 	`^/runtime.config.json`,
 	`^/activation/${activationCode}/?$`,
 	`^/administration/students/?$`,
