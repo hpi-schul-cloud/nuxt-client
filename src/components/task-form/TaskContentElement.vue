@@ -26,19 +26,13 @@
 </template>
 
 <script lang="ts">
-import { ref } from "@vue/composition-api";
 import { mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
 
 export default {
-	setup(props, { emit }) {
-		const text = ref(props.value);
-		const handleInput = () => emit("input", text.value);
-
+	setup() {
 		return {
 			mdiTrashCanOutline,
 			mdiDragHorizontalVariant,
-			text,
-			handleInput,
 		};
 	},
 };

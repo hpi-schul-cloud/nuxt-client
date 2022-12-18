@@ -40,14 +40,14 @@ describe("@components/task-form/TaskContentElement", () => {
 		expect(dragBtn.exists()).toBe(true);
 	});
 
-	it("should render ckeditor", async () => {
+	it("should render slot", async () => {
 		const wrapper = getWrapper(
 			{ value: "abc" },
-			{ slots: { default: "<div id='hi'>hello</div>" } }
+			{ slots: { default: "<div id='slot'>slot content</div>" } }
 		);
-		const slot = wrapper.find("#hi");
+		const slot = wrapper.find("#slot");
 
 		expect(slot.exists()).toBe(true);
-		expect(slot.text()).toContain("hello");
+		expect(slot.text()).toContain("slot content");
 	});
 });
