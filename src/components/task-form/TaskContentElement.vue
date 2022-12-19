@@ -1,5 +1,5 @@
 <template>
-	<v-card class="mb-6">
+	<v-card flat class="mb-6">
 		<v-btn
 			fab
 			outlined
