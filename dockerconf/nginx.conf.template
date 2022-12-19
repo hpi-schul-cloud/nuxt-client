@@ -6,15 +6,37 @@ server {
         stub_status;
     }
 
-    location / {
+    location /runtime.config.json {
+        return 200 '{ "apiURL" : "${API_URL}" }';
+        add_header Content-Type application/json;
+    }
+
+    location /tasks {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
         try_files $uri /index.html;
     }
 
-    location /runtime.config.json {
-        return 200 '{ "apiURL" : "${API_URL}" }';
-        add_header Content-Type application/json;
+    location /rooms-list {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    location ~ ^/news/new {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    location ~ ^/news/[a-z0-9]{24}/edit {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+ 
+    location / {
+        proxy_pass '${LEGACY_CLIENT_URL}';
     }
 
     gzip on;
