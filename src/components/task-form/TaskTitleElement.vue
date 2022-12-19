@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
-import { Data, ref, watch } from "@vue/composition-api";
-export default {
+import { defineComponent, ref, watch } from "@vue/composition-api";
+export default defineComponent({
 	name: "TaskTitleElement",
 	props: {
 		value: {
@@ -33,7 +33,7 @@ export default {
 			type: Boolean,
 		},
 	},
-	setup(props: Readonly<Data>, { emit }) {
+	setup(props, { emit }) {
 		const title = ref(props.value);
 
 		watch(
@@ -50,7 +50,7 @@ export default {
 			handleInput,
 		};
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 ::v-deep .v-textarea .v-text-field__details {
