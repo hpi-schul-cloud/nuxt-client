@@ -16,11 +16,10 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch } from "@vue/composition-api";
 export default {
-	name: "CardTitle",
-	emits: ["input"],
+	name: "TaskTitleElement",
 	props: {
 		value: {
 			type: String,

@@ -2,13 +2,13 @@ import { provide } from "@vue/composition-api";
 import { Route } from "vue-router";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskForm from "./TaskForm.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskModule from "@/store/task";
 import AuthModule from "@/store/auth";
 import { authModule, taskModule } from "@/store";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import TaskForm from "./TaskForm.page.vue";
 
 const $router = { go: jest.fn() };
 const taskCreateRoute: Route = {
@@ -56,9 +56,9 @@ const taskModuleGetters: Partial<TaskModule> = {
 };
 
 const getWrapper = (
+	$route: Route = taskCreateRoute,
 	props?: object,
-	options?: object,
-	$route: Route = taskCreateRoute
+	options?: object
 ) => {
 	return mount(TaskForm, {
 		...createComponentMocks({
@@ -109,20 +109,18 @@ describe("TaskForm", () => {
 		});
 
 		describe("when route is /tasks/new", () => {
-			it("should call getTaskData", () => {
-				const taskModuleMock: TaskModule = createModuleMocks(TaskModule, {
-					...taskModuleGetters,
-				});
-				const getTaskDataSpy = jest
-					.spyOn(taskModule, "getTaskData", "get")
-					.mockImplementation();
+			// it("should call getTaskData", () => {
+			// 	const taskModuleMock: TaskModule = createModuleMocks(TaskModule, {
+			// 		...taskModuleGetters,
+			// 	});
+			// 	const getTaskDataSpy = jest
+			// 		.spyOn(taskModule, "getTaskData", "get")
+			// 		.mockImplementation();
 
-				const wrapper = getWrapper();
+			// 	const wrapper = getWrapper();
 
-				// jest.spyOn(MyClass, "something", "get").mockReturnValue("bar");
-
-				expect(getTaskDataSpy).toHaveBeenCalled();
-			});
+			// 	expect(getTaskDataSpy).toHaveBeenCalled();
+			// });
 
 			it("should create one child with empty fields", () => {
 				const taskModuleMock = createModuleMocks(TaskModule, {
@@ -130,15 +128,9 @@ describe("TaskForm", () => {
 				});
 
 				const wrapper = getWrapper();
-				//@ts-ignore
-				console.log(wrapper.vm.children);
 
-				expect(wrapper.findComponent(TaskForm).exists()).toBe(true);
+				// expect(wrapper.findComponent(Editor).exists()).toBe(true);
 			});
 		});
-
-		// describe("when user does have permission HOMEWORK_CREATE", () => {
-		// 	it.todo("should do what?"); // QUESTION
-		// });
 	});
 });

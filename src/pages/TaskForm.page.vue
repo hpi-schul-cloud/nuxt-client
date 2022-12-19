@@ -5,7 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<card-title
+			<task-title-element
 				v-model="name"
 				:editable="editable"
 				:placeholder="$t('common.labels.title')"
@@ -18,39 +18,15 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<v-card
-					v-for="(child, index) in children"
-					:key="index"
-					flat
-					class="mb-6"
-				>
-					<v-btn
-						fab
-						outlined
-						color="secondary"
-						x-small
-						class="delete-element-btn"
-						@click="deleteElement(index)"
-					>
-						<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
-					</v-btn>
-					<v-btn
-						v-if="isDraggable"
-						fab
-						outlined
-						color="secondary"
-						x-small
-						class="drag-element-btn handle"
-					>
-						<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
-					</v-btn>
+				<task-content-element v-for="(child, index) in children" :key="index">
 					<component
 						:is="child.component"
 						v-bind="child.props"
 						v-model="child.model"
-						:disabled="dragInProgress"
+						:drag-in-progress="dragInProgress"
+						@delete-element="deleteElement(index)"
 					/>
-				</v-card>
+				</task-content-element>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
@@ -67,28 +43,46 @@
 	</default-wireframe>
 </template>
 
-<script>
+<script lang="ts">
 import {
+	defineComponent,
 	inject,
 	ref,
-	computed,
+	// computed,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
+import { useRouter, useRoute } from "@nuxtjs/composition-api";
+import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import CardTitle from "@/components/atoms/CardTitle.vue";
-import CardText from "@/components/atoms/CardText.vue";
-import { mdiPlus, mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
+import CKEditor from "@/components/task-form/CKEditor.vue";
+import { mdiPlus } from "@mdi/js";
 
-export default {
+type Element = {
+	component: string;
+	model: string;
+	props: Object;
+};
+
+export default defineComponent({
 	name: "TaskForm",
-	components: { DefaultWireframe, CardTitle, CardText, draggable },
-	setup(props, context) {
-		const router = context.root.$router;
+	components: {
+		DefaultWireframe,
+		TaskTitleElement,
+		TaskContentElement,
+		CKEditor,
+		draggable,
+	},
+	setup() {
+		const router = useRouter();
+		// TODO - can this be a navigation guard?
 		onBeforeMount(() => {
+			// TODO - apparantly does not work?
 			if (
 				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
@@ -96,7 +90,10 @@ export default {
 			}
 		});
 
-		const i18n = inject("i18n");
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -105,8 +102,8 @@ export default {
 		];
 
 		const name = ref("");
-		const children = ref([]);
-		const route = context.root.$route;
+		const children = ref<Element[]>([]);
+		const route = useRoute().value;
 
 		const editable = true;
 
@@ -115,19 +112,18 @@ export default {
 			if (taskId) {
 				await taskModule.findTask(taskId);
 			}
-			// TODO does taskData has to be computed?
-			const taskData = computed(() => taskModule.getTaskData);
-			name.value = taskData.value.name;
-			const desc =
-				taskData.value.description.content || taskData.value.description; // TODO - clean this up
+
+			const taskData = taskModule.getTaskData;
+			name.value = taskData.name;
+			const desc = taskData.description.content;
 
 			// TODO - iterate
 			createChild(desc);
 		});
 
-		const createChild = (desc) => {
+		const createChild = (desc: string) => {
 			const child = {
-				component: "CardText",
+				component: "CKEditor",
 				model: desc,
 				props: {
 					placeholder: i18n.t("common.labels.description"),
@@ -142,7 +138,7 @@ export default {
 			createChild("");
 		};
 
-		const deleteElement = (index) => {
+		const deleteElement = (index: number) => {
 			children.value.splice(index, 1);
 		};
 
@@ -168,12 +164,12 @@ export default {
 		const { touchDelay, startDragging, endDragging, dragInProgress } =
 			useDrag();
 
-		const isDraggable = computed(() => children.value.length > 1);
+		// TODO - why is length not reactive when children is reactive not ref
+		// TODO - is this necessary?
+		// const isDraggable = computed(() => children.value.length > 1);
 
 		return {
 			mdiPlus,
-			mdiTrashCanOutline,
-			mdiDragHorizontalVariant,
 			breadcrumbs,
 			name,
 			children,
@@ -185,7 +181,7 @@ export default {
 			startDragging,
 			endDragging,
 			dragInProgress,
-			isDraggable,
+			// isDraggable,
 			editable,
 		};
 	},
@@ -195,20 +191,5 @@ export default {
 			title: this.$t("common.words.tasks"),
 		};
 	},
-};
+});
 </script>
-
-<style lang="scss" scoped>
-.delete-element-btn {
-	position: absolute;
-	top: -5px;
-	right: -20px;
-	background-color: var(--v-white-base);
-}
-
-.drag-element-btn {
-	position: absolute;
-	left: -40px;
-	background-color: var(--v-white-base);
-}
-</style>

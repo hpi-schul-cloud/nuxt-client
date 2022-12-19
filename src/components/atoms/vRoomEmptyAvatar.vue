@@ -21,7 +21,7 @@
 			>
 			</v-avatar>
 		</v-badge>
-		<div class="d-flex justify-center mt-1 sub-title"></div>
+		<div class="d-flex justify-center mt-1 subtitle"></div>
 	</div>
 </template>
 <script>
@@ -70,7 +70,7 @@ export default {
 	border-radius: 1em;
 }
 
-.sub-title {
+.subtitle {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

@@ -1,10 +1,11 @@
 import TaskModule from "@store/task";
 import * as serverApi from "../serverApi/v3/api";
+import { RichTextTypeEnum } from "../serverApi/v3/api";
 
 const mockTaskData = {
 	id: "123",
 	name: "abc",
-	description: "Lorem ipsum",
+	description: { content: "Lorem ipsum", type: RichTextTypeEnum.RichtextCk5 },
 };
 
 describe("task store", () => {

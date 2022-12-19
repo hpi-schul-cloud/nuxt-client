@@ -18,9 +18,8 @@ require("@hpi-schul-cloud/ckeditor/build/translations/es");
 require("@hpi-schul-cloud/ckeditor/build/translations/uk");
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "Editor",
+	name: "CKEditor",
 	components: {
 		ckeditor: CKEditor.component,
 	},

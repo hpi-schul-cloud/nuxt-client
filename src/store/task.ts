@@ -1,5 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	RichText,
+	RichTextTypeEnum,
 	TaskApiFactory,
 	TaskApiInterface,
 	TaskCreateParams,
@@ -12,7 +14,7 @@ type TempTask = {
 	id: string;
 	courseId?: string;
 	name: string;
-	description: string;
+	description: RichText;
 };
 
 @Module({
@@ -25,7 +27,7 @@ export default class TaskModule extends VuexModule {
 	taskData: TempTask = {
 		id: "",
 		name: "",
-		description: "",
+		description: { content: "", type: RichTextTypeEnum.RichtextCk5 },
 	};
 	loading: boolean = false;
 	businessError: BusinessError = {
@@ -123,7 +125,7 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getTaskData(): Object {
+	get getTaskData(): TempTask {
 		return this.taskData;
 	}
 
