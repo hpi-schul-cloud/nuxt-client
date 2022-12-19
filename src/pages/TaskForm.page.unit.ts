@@ -46,14 +46,14 @@ const mockTaskStoreData = {
 	description: "",
 };
 
-const taskModuleGetters: Partial<TaskModule> = {
-	getTaskData: {
-		id: "",
-		courseId: "",
-		name: "",
-		description: "",
-	},
-};
+// const taskModuleGetters: Partial<TaskModule> = {
+// 	getTaskData: {
+// 		id: "",
+// 		courseId: "",
+// 		name: "",
+// 		description: "",
+// 	},
+// };
 
 const getWrapper = (
 	$route: Route = taskCreateRoute,
@@ -100,37 +100,6 @@ describe("TaskForm", () => {
 
 		describe("when user does have permission HOMEWORK_CREATE", () => {
 			it.todo("should do what?"); // QUESTION
-		});
-	});
-
-	describe("getting data from store on mounting", () => {
-		beforeEach(() => {
-			authModule.setUser(mockAuthStoreDataTeacher);
-		});
-
-		describe("when route is /tasks/new", () => {
-			// it("should call getTaskData", () => {
-			// 	const taskModuleMock: TaskModule = createModuleMocks(TaskModule, {
-			// 		...taskModuleGetters,
-			// 	});
-			// 	const getTaskDataSpy = jest
-			// 		.spyOn(taskModule, "getTaskData", "get")
-			// 		.mockImplementation();
-
-			// 	const wrapper = getWrapper();
-
-			// 	expect(getTaskDataSpy).toHaveBeenCalled();
-			// });
-
-			it("should create one child with empty fields", () => {
-				const taskModuleMock = createModuleMocks(TaskModule, {
-					getTaskData: mockTaskStoreData,
-				});
-
-				const wrapper = getWrapper();
-
-				// expect(wrapper.findComponent(Editor).exists()).toBe(true);
-			});
 		});
 	});
 });

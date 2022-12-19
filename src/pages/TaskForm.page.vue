@@ -18,13 +18,16 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<task-content-element v-for="(child, index) in children" :key="index">
+				<task-content-element
+					v-for="(child, index) in children"
+					:key="index"
+					@delete-element="deleteElement(index)"
+				>
 					<component
 						:is="child.component"
 						v-bind="child.props"
 						v-model="child.model"
 						:drag-in-progress="dragInProgress"
-						@delete-element="deleteElement(index)"
 					/>
 				</task-content-element>
 			</draggable>
@@ -69,6 +72,7 @@ type Element = {
 	props: Object;
 };
 
+// TODO - unit tests!
 export default defineComponent({
 	name: "TaskForm",
 	components: {
@@ -80,9 +84,8 @@ export default defineComponent({
 	},
 	setup() {
 		const router = useRouter();
-		// TODO - can this be a navigation guard?
+		// TODO - FIX THIS, can this be a navigation guard?
 		onBeforeMount(() => {
-			// TODO - apparantly does not work?
 			if (
 				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
@@ -186,6 +189,7 @@ export default defineComponent({
 		};
 	},
 	// TODO - should not use this, because it's nuxt
+	// @ts-ignore
 	head() {
 		return {
 			title: this.$t("common.words.tasks"),
