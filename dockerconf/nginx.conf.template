@@ -14,6 +14,10 @@ server {
     location ~ '^/news/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
+
+    location ~ '^/news/[a-z0-9]{24}/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
    
     location ~ '^/administration/students/.+/edit/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
