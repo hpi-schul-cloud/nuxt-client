@@ -58,8 +58,8 @@ export type School = {
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
 	oauthUserMigration?: boolean;
-	oauthMigrationAvailable: boolean;
-	oauthMigrationMandatory: boolean;
+	oauthMigrationAvailable?: boolean;
+	oauthMigrationMandatory?: boolean;
 };
 
 export type IOauthMigration = {

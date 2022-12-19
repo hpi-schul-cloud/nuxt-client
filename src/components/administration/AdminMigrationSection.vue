@@ -6,14 +6,25 @@
 		<v-alert light prominent text type="info">
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
-		<v-switch
-			:label="t('components.administration.adminMigrationSection.label')"
-			:disabled="!isMigrationAvailable"
-			:true-value="true"
-			:false-value="false"
-			:value="isMigrationEnabled"
-			@change="setMigration"
-		></v-switch>
+    <v-btn
+        class="my-5 button-start"
+        color="primary"
+        depressed
+        :disabled="!isMigrationAvailable"
+        @click="setMigration(true, false)"
+    >
+      {{ $t("components.administration.adminMigrationSection.label") }}
+    </v-btn>
+
+    <v-btn v-if="isMigrationEnabled"
+        class="my-5 button-end"
+        color="primary"
+        depressed
+        @click="setMigration(false, false)"
+    >
+      Migration abschließen
+    </v-btn>
+
     <v-switch
         :label="'Migration verpflichtend machen'"
         :disabled="!isMigrationEnabled"
