@@ -11,10 +11,10 @@ server {
         add_header Content-Type application/json;
     }
 
-    location ~ ^/(?!(nuxtversion|tasks|rooms-list|news/new|news/[a-z0-9]{24}/edit)) {
+    location ~ '^/news/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
-
+   
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
