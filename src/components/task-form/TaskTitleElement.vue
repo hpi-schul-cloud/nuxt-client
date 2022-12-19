@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { ref, watch } from "@vue/composition-api";
+import { Data, ref, watch } from "@vue/composition-api";
 export default {
 	name: "TaskTitleElement",
 	props: {
@@ -21,7 +21,7 @@ export default {
 			default: "",
 		},
 	},
-	setup(props) {
+	setup(props: Readonly<Data>) {
 		const name = ref(props.value);
 
 		watch(
