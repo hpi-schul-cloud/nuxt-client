@@ -14,13 +14,16 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<task-content-element v-for="(child, index) in children" :key="index">
+				<task-content-element
+					v-for="(child, index) in children"
+					:key="index"
+					@delete-element="deleteElement(index)"
+				>
 					<component
 						:is="child.component"
 						v-bind="child.props"
 						v-model="child.model"
 						:drag-in-progress="dragInProgress"
-						@delete-element="deleteElement(index)"
 					/>
 				</task-content-element>
 			</draggable>
