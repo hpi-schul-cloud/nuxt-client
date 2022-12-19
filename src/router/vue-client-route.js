@@ -38,6 +38,7 @@ const vueRoutes = [
 	`^/tasks/?$`,
 	`^/tasks/new/?$`,
 	`^/termsofuse/?`,
+	`^/login-instances/?$`,
 ];
 
 const isVueClient = (path) => {
