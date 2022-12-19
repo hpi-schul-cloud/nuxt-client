@@ -347,15 +347,11 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
-	async addToLesson(payload: AddToLessonQuery[]) {
+	async addToLesson(payload: AddToLessonQuery) {
 		try {
-			await Promise.all(
-				payload.map(async (item) => {
-					await $axios.post(
-						`/v1/lessons/${item.lessonId}/material`,
-						item.material
-					);
-				})
+			await $axios.post(
+				`/v1/lessons/${payload.lessonId}/material`,
+				payload.material
 			);
 			this.setNotificationModal("successModal");
 		} catch (error) {

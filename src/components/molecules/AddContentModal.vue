@@ -18,7 +18,6 @@
 						:items="coursesOptions"
 						:label="$t('pages.content.label.chooseACourse')"
 						data-testid="topicSelector"
-						@change="onCourseSelect"
 					/>
 					<transition name="fade">
 						<v-select
@@ -61,7 +60,6 @@
 import { mapGetters } from "vuex";
 import { contentModule } from "@/store";
 import ModalFooter from "@/components/molecules/ModalFooter";
-
 export default {
 	components: {
 		ModalFooter,
@@ -83,8 +81,8 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourse: "",
-			selectedLessons: [],
+			selectedCourse: {},
+			selectedLesson: {},
 		};
 	},
 	computed: {
@@ -95,7 +93,7 @@ export default {
 			return contentModule.getLessonsGetter;
 		},
 		isSendEnabled() {
-			return this.selectedLessons.length !== 0;
+			return (this.selectedLesson || {})._id !== undefined;
 		},
 		lessonsOptions() {
 			return (
@@ -103,8 +101,8 @@ export default {
 				this.lessons.data &&
 				this.lessons.data.map((lesson) => {
 					return {
-						value: lesson._id,
-						text: lesson.name,
+						_id: lesson._id,
+						name: lesson.name,
 					};
 				})
 			);
@@ -112,7 +110,7 @@ export default {
 	},
 	watch: {
 		selectedCourse(to, from) {
-			this.selectedLessons = [];
+			this.selectedLesson = {};
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
@@ -121,35 +119,43 @@ export default {
 		},
 	},
 	methods: {
-		onCourseSelect(val) {
-			if (val) contentModule.getLessons(val);
-		},
-		addToLesson() {
-			this.$emit("close");
-			const payload = this.selectedLessons.map((lesson) => {
-				return {
-					lessonId: lesson,
-					material: {
-						title: this.title,
-						client: this.client,
-						url: this.url,
-						merlinReference: this.merlinReference,
-					},
-				};
-			});
-			contentModule.addToLesson(payload);
-			this.closeModal();
-		},
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
 			this.clearState();
 		},
-		findLessons(courseId) {
-			contentModule.getLessons(courseId);
+		addToLesson() {
+			this.$emit("close");
+			const payload = {
+				lessonId: this.selectedLesson._id,
+				event: this.$eventBus,
+				material: [],
+			};
+			if (this.items.length > 0) {
+				this.items.forEach((element) => {
+					payload.material.push({
+						title: element.title,
+						client: element.client,
+						url: element.url,
+						merlinReference: element.merlinReference,
+					});
+				});
+			} else {
+				payload.material = {
+					title: this.title,
+					client: this.client,
+					url: this.url,
+					merlinReference: this.merlinReference,
+				};
+			}
+			contentModule.addToLesson(payload);
+			this.closeModal();
+		},
+		findLessons(course) {
+			contentModule.getLessons(course._id);
 		},
 		clearState() {
-			this.selectedCourse = "";
-			this.selectedLessons = [];
+			this.selectedCourse = {};
+			this.selectedLesson = {};
 		},
 	},
 };
@@ -159,28 +165,23 @@ export default {
 .modal {
 	width: 100%;
 }
-
 .content-modal {
 	&__body {
 		min-height: 300px;
 		color: var(--v-black-base) !important;
-
 		&--select {
 			margin-top: var(--space-xl);
 		}
 	}
 }
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity var(--duration-transition-slow);
 }
-
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
 }
-
 ::v-deep .v-input__icon .v-icon {
 	font-size: var(--text-base-size);
 }

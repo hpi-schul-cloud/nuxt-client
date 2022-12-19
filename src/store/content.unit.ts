@@ -324,18 +324,16 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 
-			const query = [
-				{
-					lessonId: "",
-					event: {},
-					material: {
-						client: "",
-						merlinReference: "",
-						title: "",
-						url: "",
-					},
+			const query = {
+				lessonId: "",
+				event: {},
+				material: {
+					client: "",
+					merlinReference: "",
+					title: "",
+					url: "",
 				},
-			];
+			};
 			const setNotificationSpy = jest.fn();
 
 			contentModule.setNotificationModal = setNotificationSpy;
@@ -350,38 +348,34 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 
-			const mockQuery = [
-				{
-					lessonId: "mockId",
-					event: {},
-					material: {
-						client: "",
-						merlinReference: "",
-						title: "",
-						url: "",
-					},
+			const mockQuery = {
+				lessonId: "mockId",
+				event: {},
+				material: {
+					client: "",
+					merlinReference: "",
+					title: "",
+					url: "",
 				},
-			];
+			};
 
 			await contentModule.addToLesson(mockQuery);
-			expect(requestPath).toBe(`/v1/lessons/${mockQuery[0].lessonId}/material`);
+			expect(requestPath).toBe(`/v1/lessons/${mockQuery.lessonId}/material`);
 		});
 		it("addToLesson should call setNotificationModal with 'successModal' parameter when the call is successful", async () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 
-			const mockQuery = [
-				{
-					lessonId: "mockId",
-					event: {},
-					material: {
-						client: "",
-						merlinReference: "",
-						title: "",
-						url: "",
-					},
+			const mockQuery = {
+				lessonId: "mockId",
+				event: {},
+				material: {
+					client: "",
+					merlinReference: "",
+					title: "",
+					url: "",
 				},
-			];
+			};
 			const setNoticationSpy = jest.spyOn(
 				contentModule,
 				"setNotificationModal"

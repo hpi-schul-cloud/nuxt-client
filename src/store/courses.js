@@ -47,8 +47,8 @@ const coursesModule = mergeDeep(base, {
 				.filter((course) => course.isArchived === false)
 				.map((course) => {
 					return {
-						value: course._id,
-						text: course.name,
+						_id: course._id,
+						name: course.name,
 					};
 				});
 		},

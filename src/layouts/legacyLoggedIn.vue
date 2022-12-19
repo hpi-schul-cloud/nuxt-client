@@ -4,6 +4,7 @@
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
+				<!-- NUXT_REMOVAL: Testival alert -->
 				<v-alert
 					color="red lighten-2"
 					dark
