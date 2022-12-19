@@ -179,6 +179,7 @@ export default defineComponent({
 		};
 	},
 	// TODO - should not use this, because it's nuxt
+	// @ts-ignore
 	head() {
 		return {
 			title: this.$t("common.words.tasks"),
