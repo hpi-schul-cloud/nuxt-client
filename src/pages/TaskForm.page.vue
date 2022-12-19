@@ -27,7 +27,7 @@
 						:is="child.component"
 						v-bind="child.props"
 						v-model="child.model"
-						:drag-in-progress="dragInProgress"
+						:disabled="dragInProgress"
 					/>
 				</task-content-element>
 			</draggable>
