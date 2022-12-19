@@ -46,14 +46,14 @@ const mockTaskStoreData = {
 	description: "",
 };
 
-const taskModuleGetters: Partial<TaskModule> = {
-	getTaskData: {
-		id: "",
-		courseId: "",
-		name: "",
-		description: "",
-	},
-};
+// const taskModuleGetters: Partial<TaskModule> = {
+// 	getTaskData: {
+// 		id: "",
+// 		courseId: "",
+// 		name: "",
+// 		description: "",
+// 	},
+// };
 
 const getWrapper = (
 	$route: Route = taskCreateRoute,
