@@ -70,9 +70,9 @@ export default defineComponent({
 			schoolsModule.getOauthMigrationAvailable
 		);
 
-    const isMigrationMandatory: Ref<boolean> = ref(
-        schoolsModule.getOauthMigrationMandatory
-    );
+		const isMigrationMandatory: Ref<boolean> = ref(
+			schoolsModule.getOauthMigrationMandatory
+		);
 
 		const setMigration = (enabled: boolean, mandatory: boolean) => {
 			schoolsModule.setSchoolOauthMigration(enabled, mandatory);
@@ -82,7 +82,7 @@ export default defineComponent({
 			isMigrationEnabled,
 			setMigration,
 			isMigrationAvailable,
-      isMigrationMandatory,
+			isMigrationMandatory,
 			t,
 		};
 	},
