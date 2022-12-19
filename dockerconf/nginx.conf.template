@@ -15,6 +15,14 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
    
+    location ~ '^/administration/students/.+/edit/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/teachers/.+/edit/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
