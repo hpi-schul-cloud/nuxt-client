@@ -36,7 +36,7 @@ server {
     }
  
     location / {
-        proxy_pass '${LEGACY_CLIENT_URL}';
+        proxy_pass 'http://client-svc:3100';
     }
 
     gzip on;
