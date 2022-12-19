@@ -68,6 +68,7 @@ type Element = {
 	props: Object;
 };
 
+// TODO - unit tests!
 export default defineComponent({
 	name: "TaskForm",
 	components: {
@@ -79,9 +80,8 @@ export default defineComponent({
 	},
 	setup() {
 		const router = useRouter();
-		// TODO - can this be a navigation guard?
+		// TODO - FIX THIS, can this be a navigation guard?
 		onBeforeMount(() => {
-			// TODO - apparantly does not work?
 			if (
 				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
