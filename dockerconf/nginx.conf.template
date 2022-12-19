@@ -23,13 +23,13 @@ server {
         try_files $uri /index.html;
     }
 
-    location ~ ^/news/new {
+    location ~ '^/news/new' {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
         try_files $uri /index.html;
     }
 
-    location ~ ^/news/[a-z0-9]{24}/edit {
+    location ~ '^/news/[a-z0-9]{24}/edit' {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
         try_files $uri /index.html;
