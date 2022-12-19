@@ -6,7 +6,7 @@
 					{{
 						$t("components.molecules.importUsersMatch.title", {
 							instance: $theme.short_name,
-							source: $t("pages.administration.migration.ldapSource"),
+							source: ldapSource,
 						})
 					}}
 				</v-toolbar-title>
@@ -22,16 +22,14 @@
 				{{
 					$t("components.molecules.importUsersMatch.subtitle", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSource,
 					})
 				}}
 			</v-card-text>
 			<v-card-text class="px-5">
 				<v-row>
 					<v-col class="md-6">
-						<v-card-title>{{
-							$t("pages.administration.migration.ldapSource")
-						}}</v-card-title>
+						<v-card-title>{{ ldapSource }}</v-card-title>
 						<v-list-item>
 							<v-list-item-content data-testid="edited-item">
 								<v-list-item-title data-testid="edited-item-fullname"
@@ -216,6 +214,10 @@ export default {
 	props: {
 		isDialog: {
 			type: Boolean,
+		},
+		ldapSource: {
+			type: String,
+			required: true,
 		},
 		editedItem: {
 			type: Object,
