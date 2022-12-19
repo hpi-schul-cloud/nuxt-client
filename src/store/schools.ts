@@ -183,7 +183,7 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): boolean  | undefined {
+	get getOauthMigration(): boolean | undefined {
 		return this.school.oauthUserMigration;
 	}
 
@@ -343,12 +343,14 @@ export default class SchoolsModule extends VuexModule {
 	}
 	@Action
 	async fetchSchoolOauthMigrationAvailable(): Promise<void> {
-		if(!this.school._id) {
+		if (!this.school._id) {
 			return;
 		}
 
 		try {
-			const oauthMigration: IOauthMigration = await $axios.$get(`v3/schools/${this.school._id}/migration-available`);
+			const oauthMigration: IOauthMigration = await $axios.$get(
+				`v3/schools/${this.school._id}/migration-available`
+			);
 			this.setOauthMigrationAvailable(oauthMigration.available);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -359,12 +361,14 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async setSchoolOauthMigration(enabled: boolean): Promise<void> {
-		if(!this.school._id) {
+		if (!this.school._id) {
 			return;
 		}
 
 		try {
-			await $axios.$post(`v3/schools/${this.school._id}/migration`, { enabled });
+			await $axios.$post(`v3/schools/${this.school._id}/migration`, {
+				enabled,
+			});
 			this.setOauthMigration(enabled);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
