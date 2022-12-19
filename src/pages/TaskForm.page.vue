@@ -60,7 +60,7 @@ import draggable from "vuedraggable";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
 import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
-import CKEditor from "@/components/task-form/CKEditor.vue";
+import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
 import { mdiPlus } from "@mdi/js";
 
 type Element = {
@@ -75,7 +75,7 @@ export default defineComponent({
 		DefaultWireframe,
 		TaskTitleElement,
 		TaskContentElement,
-		CKEditor,
+		TaskTextElement,
 		draggable,
 	},
 	setup() {
@@ -123,7 +123,7 @@ export default defineComponent({
 
 		const createChild = (desc: string) => {
 			const child = {
-				component: "CKEditor",
+				component: "TaskTextElement",
 				model: desc,
 				props: {
 					placeholder: i18n.t("common.labels.description"),
