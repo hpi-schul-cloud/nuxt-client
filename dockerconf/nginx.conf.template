@@ -11,6 +11,12 @@ server {
         add_header Content-Type application/json;
     }
 
+    location /nuxtversion {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
     location /tasks {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
@@ -36,7 +42,7 @@ server {
     }
  
     location / {
-        proxy_pass 'http://client-svc:3100';
+        proxy_pass ${LEGACY_CLIENT_URL};
     }
 
     gzip on;
