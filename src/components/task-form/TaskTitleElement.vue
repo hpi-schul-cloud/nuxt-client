@@ -53,7 +53,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep .v-text-field .v-text-field__details {
+::v-deep .v-textarea .v-text-field__details {
 	display: none;
 }
 
