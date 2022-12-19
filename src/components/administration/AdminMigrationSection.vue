@@ -6,33 +6,35 @@
 		<v-alert light prominent text type="info">
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
-    <v-btn v-if="!isMigrationEnabled"
-        class="my-5 button-start"
-        color="primary"
-        depressed
-        :disabled="!isMigrationAvailable"
-        @click="setMigration(true, false)"
-    >
-      {{ $t("components.administration.adminMigrationSection.label") }}
-    </v-btn>
+		<v-btn
+			v-if="!isMigrationEnabled"
+			class="my-5 button-start"
+			color="primary"
+			depressed
+			:disabled="!isMigrationAvailable"
+			@click="setMigration(true, false)"
+		>
+			{{ $t("components.administration.adminMigrationSection.label") }}
+		</v-btn>
 
-    <v-btn v-if="isMigrationEnabled"
-        class="my-5 button-end"
-        color="primary"
-        depressed
-        @click="setMigration(false, false)"
-    >
-      Migration abschließen
-    </v-btn>
+		<v-btn
+			v-if="isMigrationEnabled"
+			class="my-5 button-end"
+			color="primary"
+			depressed
+			@click="setMigration(false, false)"
+		>
+			Migration abschließen
+		</v-btn>
 
-    <v-switch
-        :label="'Migration verpflichtend machen'"
-        :disabled="!isMigrationEnabled"
-        :true-value="true"
-        :false-value="false"
-        :value="isMigrationMandatory"
-        @change="setMigration"
-    ></v-switch>
+		<v-switch
+			:label="'Migration verpflichtend machen'"
+			:disabled="!isMigrationEnabled"
+			:true-value="true"
+			:false-value="false"
+			:value="isMigrationMandatory"
+			@change="setMigration"
+		></v-switch>
 	</div>
 </template>
 
