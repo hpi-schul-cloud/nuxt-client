@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { ref, watch } from "@vue/composition-api";
+import { Data, ref, watch } from "@vue/composition-api";
 export default {
 	name: "TaskTitleElement",
 	props: {
@@ -33,7 +33,7 @@ export default {
 			type: Boolean,
 		},
 	},
-	setup(props, { emit }) {
+	setup(props: Readonly<Data>, { emit }) {
 		const title = ref(props.value);
 
 		watch(
