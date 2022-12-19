@@ -6,7 +6,7 @@
 		<v-alert light prominent text type="info">
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
-    <v-btn
+    <v-btn v-if="!isMigrationEnabled"
         class="my-5 button-start"
         color="primary"
         depressed
@@ -70,9 +70,9 @@ export default defineComponent({
 			schoolsModule.getOauthMigrationAvailable
 		);
 
-    const isMigrationMandatory: Ref<boolean> = ref(
-        schoolsModule.getOauthMigrationMandatory
-    );
+		const isMigrationMandatory: Ref<boolean> = ref(
+			schoolsModule.getOauthMigrationMandatory
+		);
 
 		const setMigration = (enabled: boolean, mandatory: boolean) => {
 			schoolsModule.setSchoolOauthMigration(enabled, mandatory);
@@ -82,7 +82,7 @@ export default defineComponent({
 			isMigrationEnabled,
 			setMigration,
 			isMigrationAvailable,
-      isMigrationMandatory,
+			isMigrationMandatory,
 			t,
 		};
 	},
