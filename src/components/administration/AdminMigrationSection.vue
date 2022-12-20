@@ -28,7 +28,7 @@
 		</v-btn>
 
 		<v-switch
-			:label="'migrationSwitchLabel'"
+			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
 			:false-value="false"
