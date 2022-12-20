@@ -3,6 +3,7 @@ const path = require("path");
 const { createDevServerConfig } = require("./webpack-config/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
+const NoncePlaceholderPlugin = require("./webpack-config/nonce-placeholder-plugin");
 
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
@@ -14,6 +15,7 @@ module.exports = defineConfig({
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
+		plugins: [new NoncePlaceholderPlugin()],
 		resolve: {
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
