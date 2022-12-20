@@ -28,7 +28,7 @@
 		</v-btn>
 
 		<v-switch
-			:label="'Migration verpflichtend machen'"
+			:label="'migrationSwitchLabel'"
 			:disabled="!isMigrationEnabled"
 			:true-value="true"
 			:false-value="false"
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
-import { inject, Ref } from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref } from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
 
@@ -80,12 +80,25 @@ export default defineComponent({
 			schoolsModule.setSchoolOauthMigration(enabled, mandatory);
 		};
 
+    const migrationSwitchLabel: ComputedRef<string> = computed(() => {
+      if (isMigrationMandatory.value) {
+        return 'Verpflichtung aufheben'
+      } else {
+        return 'Migration verpflichtend machen';
+      }
+    });
+
+    onMounted(async () => {
+      await schoolsModule.fetchSchoolOAuthMigration()
+    });
+
 		return {
 			isMigrationEnabled,
 			setMigration,
 			isMigrationAvailable,
 			isMigrationMandatory,
 			t,
+      migrationSwitchLabel,
 		};
 	},
 });

@@ -67,3 +67,9 @@ export type IOauthMigration = {
 	mandatory: boolean;
 	enabled: boolean;
 };
+
+export type OauthMigrationResponse = {
+	oauthMigrationPossible: boolean;
+	oauthMigrationMandatory: boolean;
+	enableMigrationStart: boolean;
+};
