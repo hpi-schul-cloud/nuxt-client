@@ -627,27 +627,30 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
-		describe("fetchSchoolOauthMigrationAvailable", () => {
+		describe("fetchSchoolOAuthMigration", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
 
-			it('should trigger call to backend and return state of oauthMigrationAvailable', async () => {
+			it('should trigger call to backend and return state of oauthMigrationAvailable, oauthMigrationEnabled and oauthMigrationMandatory', async () => {
 
-				getRequestReturn = { available: true };
+				getRequestReturn = { oauthMigrationPossible: true, enableMigrationStart: true, oauthMigrationMandatory: true };
 				axiosInitializer();
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool
 				});
 
-				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+				await schoolsModule.fetchSchoolOAuthMigration();
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
-					"v3/schools/mockSchoolId/migration-available"
+					"v3/school/mockSchoolId/migration"
 				);
 				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true)
+				expect(schoolsModule.getOauthMigration).toStrictEqual(true)
+				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(true)
+
 			});
 
 			it("should not set OauthMigrationAvailable ", async () => {
@@ -656,7 +659,7 @@ describe("schools module", () => {
 					...mockSchool, _id: '',
 				});
 
-				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+				await schoolsModule.fetchSchoolOAuthMigration();
 
 				expect(receivedRequests.length).toBe(0);
 				expect(schoolsModule.getOauthMigrationAvailable).toEqual(false)
@@ -675,7 +678,7 @@ describe("schools module", () => {
 					...mockSchool,
 				});
 
-				await  schoolsModule.fetchSchoolOauthMigrationAvailable();
+				await  schoolsModule.fetchSchoolOAuthMigration();
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(schoolsModule.getError).toStrictEqual(new Error(""))
@@ -696,7 +699,7 @@ describe("schools module", () => {
 					...mockSchool
 				});
 
-				await schoolsModule.setSchoolOauthMigration(true);
+				await schoolsModule.setSchoolOauthMigration(true, false);
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
@@ -716,7 +719,7 @@ describe("schools module", () => {
 					...mockSchool, _id: '',
 				});
 
-				await schoolsModule.setSchoolOauthMigration(true);
+				await schoolsModule.setSchoolOauthMigration(true, false);
 
 				expect(receivedRequests.length).toBe(0);
 				expect(schoolsModule.getOauthMigration).toStrictEqual(false)
@@ -735,7 +738,7 @@ describe("schools module", () => {
 					...mockSchool,
 				});
 
-				await schoolsModule.setSchoolOauthMigration(true);
+				await schoolsModule.setSchoolOauthMigration(true, false);
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(schoolsModule.getError).toStrictEqual(new Error(""))

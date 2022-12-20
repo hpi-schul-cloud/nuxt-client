@@ -7,18 +7,18 @@
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
 		<v-btn
-			v-if="!isMigrationEnabled"
+			v-if="!isMigrationAvailable"
 			class="my-5 button-start"
 			color="primary"
 			depressed
-			:disabled="!isMigrationAvailable"
+			:disabled="!isMigrationEnabled"
 			@click="setMigration(true, false)"
 		>
 			{{ $t("components.administration.adminMigrationSection.label") }}
 		</v-btn>
 
 		<v-btn
-			v-if="isMigrationEnabled"
+			v-if="isMigrationAvailable"
 			class="my-5 button-end"
 			color="primary"
 			depressed
@@ -28,8 +28,8 @@
 		</v-btn>
 
 		<v-switch
-			:label="'Migration verpflichtend machen'"
-			:disabled="!isMigrationEnabled"
+			:label="'migrationSwitchLabel'"
+			:disabled="!isMigrationAvailable"
 			:true-value="true"
 			:false-value="false"
 			:value="isMigrationMandatory"
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
-import { inject, Ref } from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref } from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
 
@@ -76,9 +76,21 @@ export default defineComponent({
 			schoolsModule.getOauthMigrationMandatory
 		);
 
-		const setMigration = (enabled: boolean, mandatory: boolean) => {
-			schoolsModule.setSchoolOauthMigration(enabled, mandatory);
+		const setMigration = (available: boolean, mandatory: boolean) => {
+			schoolsModule.setSchoolOauthMigration(available, mandatory);
 		};
+
+    const migrationSwitchLabel: ComputedRef<string> = computed(() => {
+      if (isMigrationMandatory.value) {
+        return 'Verpflichtung aufheben'
+      } else {
+        return 'Migration verpflichtend machen';
+      }
+    });
+
+    onMounted(async () => {
+      await schoolsModule.fetchSchoolOAuthMigration()
+    });
 
 		return {
 			isMigrationEnabled,
@@ -86,6 +98,7 @@ export default defineComponent({
 			isMigrationAvailable,
 			isMigrationMandatory,
 			t,
+      migrationSwitchLabel,
 		};
 	},
 });

@@ -1,8 +1,9 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import { authModule } from "@/store";
-import { Year, FederalState, School, IOauthMigration } from "./types/schools";
+import {Year, FederalState, School, IOauthMigration, OauthMigrationResponse} from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
+import {useOAuthMigration} from "@pages/administration/oauth-migration.composable";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -351,15 +352,20 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		}
 	}
+
 	@Action
-	async fetchSchoolOauthMigrationAvailable(): Promise<void> {
+	async fetchSchoolOAuthMigration(): Promise<void> {
 		if(!this.school._id) {
 			return;
 		}
 
 		try {
-			const oauthMigration: IOauthMigration = await $axios.$get(`v3/school/${this.school._id}/migration`);
-			this.setOauthMigrationAvailable(oauthMigration.available);
+			const oauthMigration: OauthMigrationResponse = await $axios.$get(`v3/school/${this.school._id}/migration`);
+			const mappedOauthMigration: IOauthMigration =
+				useOAuthMigration(oauthMigration).getMappedOAuthMigration()
+			this.setOauthMigrationAvailable(mappedOauthMigration.available)
+			this.setOauthMigration(mappedOauthMigration.enabled)
+			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory)
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
@@ -368,30 +374,14 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchSchoolOauthMigrationMandatory(): Promise<void> {
+	async setSchoolOauthMigration(available: boolean, mandatory: boolean): Promise<void> {
 		if(!this.school._id) {
 			return;
 		}
 
 		try {
-			const oauthMigration: IOauthMigration = await $axios.$get(`v3/school/${this.school._id}/migration`);
-			this.setOauthMigrationAvailable(oauthMigration.mandatory);
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
-			}
-		}
-	}
-
-	@Action
-	async setSchoolOauthMigration(enabled: boolean, mandatory: boolean): Promise<void> {
-		if(!this.school._id) {
-			return;
-		}
-
-		try {
-			await $axios.$post(`v3/school/${this.school._id}/migration`, { enabled, mandatory });
-			this.setOauthMigration(enabled);
+			await $axios.$post(`v3/school/${this.school._id}/migration`, { available, mandatory });
+			this.setOauthMigrationAvailable(available);
 			this.setOauthMigrationMandatory(mandatory);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
