@@ -1,21 +1,32 @@
 <template>
 	<base-link :href="tile.url">
-		<base-icon source="custom" :icon="tile.icon" />
+		<component :is="instanceComponent" />
 	</base-link>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
 	props: {
 		tile: {
 			type: Object,
-			default: Object,
+			default: () => {
+				return {
+					icon: "",
+					url: "",
+				};
+			},
 		},
 	},
-	data() {
-		return {};
+	setup(props) {
+		const instanceComponent = () =>
+			import(`@/components/icons/custom/${props.tile.icon}`);
+		return {
+			instanceComponent,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
