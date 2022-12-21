@@ -23,8 +23,6 @@
 			color="primary"
 			depressed
       :disabled="!isMigrationAvailable"
-      :true-value="true"
-      :false-value="false"
 			@click= "toggleShowWarning"
 		>
 			Migration abschließen
