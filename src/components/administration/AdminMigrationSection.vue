@@ -22,14 +22,14 @@
 			class="my-5 button-end"
 			color="primary"
 			depressed
-      :disabled="!isMigrationAvailable"
-			@click= "toggleShowWarning"
+			:disabled="!isMigrationAvailable"
+			@click="toggleShowWarning"
 		>
 			Migration abschließen
 		</v-btn>
 
 		<v-switch
-      v-if="!showWarning"
+			v-if="!showWarning"
 			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
@@ -38,35 +38,42 @@
 			@change="setMigration(true, true)"
 		></v-switch>
 
-    <v-card
-        v-if="showWarning">
-        <v-card-title>Sind sie sich sicher?</v-card-title>
-        <v-card-text>
-          <div> Mit dem Abschluss der Migration können keine weiteren Nutzer mehr migrieren.</div>
-        </v-card-text>
-    <v-card-actions>
-      <v-btn
-          color="primary"
-          @click="toggleShowWarning; endMigration"
-      >
-        Ja, abschließen.
-      </v-btn>
+		<v-card v-if="showWarning">
+			<v-card-title>Sind sie sich sicher?</v-card-title>
+			<v-card-text>
+				<div>
+					Mit dem Abschluss der Migration können keine weiteren Nutzer mehr
+					migrieren.
+				</div>
+			</v-card-text>
+			<v-card-actions>
+				<v-btn
+					color="primary"
+					@click="
+						toggleShowWarning;
+						endMigration;
+					"
+				>
+					Ja, abschließen.
+				</v-btn>
 
-      <v-btn
-          color="primary"
-          @click="toggleShowWarning"
-      >
-        Nein, Migration fortsetzen.
-      </v-btn>
-    </v-card-actions>
-    </v-card>
-
+				<v-btn color="primary" @click="toggleShowWarning">
+					Nein, Migration fortsetzen.
+				</v-btn>
+			</v-card-actions>
+		</v-card>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
-import { computed, ComputedRef, inject, onMounted, Ref } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+} from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
 
@@ -106,33 +113,29 @@ export default defineComponent({
 			schoolsModule.setSchoolOauthMigration(available, mandatory);
 		};
 
-    const endMigration = () => {
-        schoolsModule.endMigration()
-    }
+		const endMigration = () => {
+			schoolsModule.endMigration();
+		};
 
-    let warning = false
+		let warning = false;
 
-    const showWarning: Ref<boolean> = ref(
-       warning
-    )
+		const showWarning: Ref<boolean> = ref(warning);
 
-    const toggleShowWarning: ComputedRef<void> = computed(() => {
-      warning = !warning;
-    });
+		const toggleShowWarning: ComputedRef<void> = computed(() => {
+			warning = !warning;
+		});
 
+		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
+			if (isMigrationMandatory.value) {
+				return "Verpflichtung aufheben";
+			} else {
+				return "Migration verpflichtend machen";
+			}
+		});
 
-
-    const migrationSwitchLabel: ComputedRef<string> = computed(() => {
-      if (isMigrationMandatory.value) {
-        return 'Verpflichtung aufheben'
-      } else {
-        return 'Migration verpflichtend machen';
-      }
-    });
-
-    onMounted(async () => {
-      await schoolsModule.fetchSchoolOAuthMigration()
-    });
+		onMounted(async () => {
+			await schoolsModule.fetchSchoolOAuthMigration();
+		});
 
 		return {
 			isMigrationEnabled,
@@ -140,11 +143,11 @@ export default defineComponent({
 			isMigrationAvailable,
 			isMigrationMandatory,
 			t,
-      migrationSwitchLabel,
-      warning,
-      showWarning,
-      toggleShowWarning,
-      endMigration,
+			migrationSwitchLabel,
+			warning,
+			showWarning,
+			toggleShowWarning,
+			endMigration,
 		};
 	},
 });
