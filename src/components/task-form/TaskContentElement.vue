@@ -5,7 +5,7 @@
 		@mouseover="hover = true"
 		@mouseleave="hover = false"
 	>
-		<div class="element-content">
+		<div class="element-content mr-4">
 			<slot />
 		</div>
 		<div class="element-actions">
