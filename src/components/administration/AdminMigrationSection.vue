@@ -14,7 +14,11 @@
 			:disabled="!isMigrationEnabled"
 			@click="setMigration(true, false)"
 		>
-			{{ $t("components.administration.adminMigrationSection.migrationEnableButton.label") }}
+			{{
+				$t(
+					"components.administration.adminMigrationSection.migrationEnableButton.label"
+				)
+			}}
 		</v-btn>
 
 		<v-btn
@@ -25,7 +29,11 @@
 			:disabled="!isMigrationAvailable"
 			@click="toggleShowWarning"
 		>
-      {{ $t("components.administration.adminMigrationSection.migrationEndButton.label")}}
+			{{
+				$t(
+					"components.administration.adminMigrationSection.migrationEndButton.label"
+				)
+			}}
 		</v-btn>
 
 		<v-switch
@@ -125,13 +133,13 @@ export default defineComponent({
 			warning = !warning;
 		});
 
-    const migrationSwitchLabel: ComputedRef<string> = computed(() => {
-      if (isMigrationMandatory.value) {
-        return 'Pflicht zu Iserv-Migration aufheben'
-      } else {
-        return 'Iserv-Migration verpflichtend machen';
-      }
-    });
+		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
+			if (isMigrationMandatory.value) {
+				return "Pflicht zu Iserv-Migration aufheben";
+			} else {
+				return "Iserv-Migration verpflichtend machen";
+			}
+		});
 
 		onMounted(async () => {
 			await schoolsModule.fetchSchoolOAuthMigration();
