@@ -7,7 +7,7 @@
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
 		<v-btn
-			v-if="!isMigrationAvailable"
+			v-if="!isMigrationAvailable && !showWarning"
 			class="my-5 button-start"
 			color="primary"
 			depressed
@@ -18,23 +18,51 @@
 		</v-btn>
 
 		<v-btn
-			v-if="isMigrationAvailable"
+			v-if="isMigrationAvailable && !showWarning"
 			class="my-5 button-end"
 			color="primary"
 			depressed
-			@click="setMigration(false, false)"
+      :disabled="!isMigrationAvailable"
+      :true-value="true"
+      :false-value="false"
+			@click= "toggleShowWarning"
 		>
 			Migration abschließen
 		</v-btn>
 
 		<v-switch
+      v-if="!showWarning"
 			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
 			:false-value="false"
 			:value="isMigrationMandatory"
-			@change="setMigration"
+			@change="setMigration(true, true)"
 		></v-switch>
+
+    <v-card
+        v-if="showWarning">
+        <v-card-title>Sind sie sich sicher?</v-card-title>
+        <v-card-text>
+          <div> Mit dem Abschluss der Migration können keine weiteren Nutzer mehr migrieren.</div>
+        </v-card-text>
+    <v-card-actions>
+      <v-btn
+          color="primary"
+          @click="toggleShowWarning; endMigration"
+      >
+        Ja, abschließen.
+      </v-btn>
+
+      <v-btn
+          color="primary"
+          @click="toggleShowWarning"
+      >
+        Nein, Migration fortsetzen.
+      </v-btn>
+    </v-card-actions>
+    </v-card>
+
 	</div>
 </template>
 
@@ -80,6 +108,22 @@ export default defineComponent({
 			schoolsModule.setSchoolOauthMigration(available, mandatory);
 		};
 
+    const endMigration = () => {
+        schoolsModule.endMigration()
+    }
+
+    let warning = false
+
+    const showWarning: Ref<boolean> = ref(
+       warning
+    )
+
+    const toggleShowWarning: ComputedRef<void> = computed(() => {
+      warning = !warning;
+    });
+
+
+
     const migrationSwitchLabel: ComputedRef<string> = computed(() => {
       if (isMigrationMandatory.value) {
         return 'Verpflichtung aufheben'
@@ -99,6 +143,10 @@ export default defineComponent({
 			isMigrationMandatory,
 			t,
       migrationSwitchLabel,
+      warning,
+      showWarning,
+      toggleShowWarning,
+      endMigration,
 		};
 	},
 });

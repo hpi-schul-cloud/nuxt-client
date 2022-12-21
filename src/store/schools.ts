@@ -389,6 +389,22 @@ export default class SchoolsModule extends VuexModule {
 			}
 		}
 	}
+	@Action
+	async endMigration(): Promise<void> {
+		if(!this.school._id) {
+			return;
+		}
+
+		try {
+			await $axios.$post(`v3/school/${this.school._id}/end-migration`, { });
+			this.setOauthMigrationAvailable(false);
+			this.setOauthMigrationMandatory(false);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				this.setError(error);
+			}
+		}
+	}
 
 	private get importUserApi(): UserImportApiInterface {
 		if (!this._importUserApi) {
