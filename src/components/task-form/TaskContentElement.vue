@@ -1,56 +1,89 @@
 <template>
-	<v-card flat class="mb-6">
-		<v-btn
-			fab
-			outlined
-			color="secondary"
-			x-small
-			class="delete-element-btn"
-			data-testid="delete-element-btn"
-			@click="() => $emit('delete-element')"
-		>
-			<v-icon size="18">{{ mdiTrashCanOutline }}</v-icon>
-		</v-btn>
-		<v-btn
-			fab
-			outlined
-			color="secondary"
-			x-small
-			class="drag-element-btn handle"
-			data-testid="drag-element-btn"
-		>
-			<v-icon size="18">{{ mdiDragHorizontalVariant }}</v-icon>
-		</v-btn>
-		<slot />
+	<v-card
+		flat
+		class="element"
+		@mouseover="hover = true"
+		@mouseleave="hover = false"
+	>
+		<div class="element-content">
+			<slot />
+		</div>
+		<div class="element-actions">
+			<v-btn
+				icon
+				outlined
+				color="secondary"
+				absolute
+				class="delete-element-btn"
+				:class="{ 'd-sr-only': isHidden }"
+				data-testid="delete-element-btn"
+				@click="() => $emit('delete-element')"
+			>
+				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+			</v-btn>
+			<v-btn
+				icon
+				outlined
+				color="secondary"
+				absolute
+				class="drag-element-btn handle"
+				:class="{ 'd-sr-only': isHidden }"
+				data-testid="drag-element-btn"
+			>
+				<v-icon>{{ mdiDrag }}</v-icon>
+			</v-btn>
+		</div>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { mdiTrashCanOutline, mdiDragHorizontalVariant } from "@mdi/js";
+import { defineComponent, ref, computed } from "@vue/composition-api";
+import { useDrag } from "@/composables/drag";
+import { mdiTrashCanOutline, mdiDrag } from "@mdi/js";
 
-export default {
+export default defineComponent({
+	name: "TaskContentElement",
 	setup() {
+		const { isTouchDevice } = useDrag();
+
+		const hover = ref(false);
+		const isHidden = computed(() => !hover.value && !isTouchDevice());
+
 		return {
+			hover,
+			isHidden,
 			mdiTrashCanOutline,
-			mdiDragHorizontalVariant,
+			mdiDrag,
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/components/VBtn/_variables.scss";
+@import "~vuetify/src/components/VCard/_variables.scss";
+
+.element {
+	display: flex;
+	align-items: flex-start;
+}
+
+.element-content {
+	flex-basis: 100%;
+}
+
+.element-actions {
+	position: relative;
+	flex-basis: #{map-get($btn-sizes, "default")}px;
+	flex-shrink: 1;
+}
+
 .delete-element-btn {
-	position: absolute;
-	top: -5px;
-	right: -20px;
-	background-color: var(--v-white-base);
+	z-index: var(--layer-page);
 }
 
 .drag-element-btn {
-	position: absolute;
-	top: 32px;
-	right: -20px;
+	top: #{map-get($btn-sizes, "default") + $card-actions-padding};
 	z-index: var(--layer-page);
-	background-color: var(--v-white-base);
 }
 </style>
