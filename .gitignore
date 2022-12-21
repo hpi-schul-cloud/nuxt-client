@@ -29,5 +29,6 @@ coverage/
 
 .nuxt
 nuxt.config.js
+.vscode/*
 
 __snapshots__
