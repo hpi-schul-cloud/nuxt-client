@@ -71,7 +71,6 @@ module.exports = {
 				objectsInObjects: true, //false, // FIX: we wan't to use false but: conflict with prettier
 			},
 		],
-		"vue/require-direct-export": ["error"],
 		// TODO "vue/script-indent" script & css ist bisher base:0, template aber 1
 		"vue/space-infix-ops": ["error"],
 		"vue/space-unary-ops": ["error"],
