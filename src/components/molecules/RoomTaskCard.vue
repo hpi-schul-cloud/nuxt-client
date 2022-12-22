@@ -203,7 +203,8 @@ export default {
 					});
 				}
 			}
-
+			console.log("role", this.role);
+			console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
@@ -338,6 +339,7 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
+			console.log("dueDate", dueDate);
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
