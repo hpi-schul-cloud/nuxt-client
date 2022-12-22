@@ -140,6 +140,7 @@
 			></privacy-settings>
 			<v-btn
 				class="my-5 button-save"
+				data-testid="save-general-setting"
 				color="primary"
 				depressed
 				:disabled="loading"
