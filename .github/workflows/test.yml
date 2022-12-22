@@ -2,6 +2,9 @@ name: Test code
 
 on: [push]
 
+permissions:
+  contents: read
+
 env:
   node: 16
 jobs:
