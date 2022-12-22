@@ -41,7 +41,7 @@
 			></div>
 		</v-card-text>
 		<v-card-text
-			v-if="!isPlanned && isDraft && !isFinished"
+			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 			data-testid="content-card-task-info"
 		>
@@ -58,7 +58,7 @@
 						left
 						small
 						class="fill"
-						color="rgba(0, 0, 0, 0.87)"
+						color="rgba(240, 128, 128, 0.87)"
 						d
 					>
 						{{ chip.icon }}
@@ -203,8 +203,6 @@ export default {
 					});
 				}
 			}
-			// console.log("role", this.role);
-			// console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
