@@ -41,7 +41,7 @@
 			></div>
 		</v-card-text>
 		<v-card-text
-			v-if="!isPlanned && !isDraft && !isFinished"
+			v-if="!isPlanned && isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 			data-testid="content-card-task-info"
 		>
@@ -203,8 +203,8 @@ export default {
 					});
 				}
 			}
-			console.log("role", this.role);
-			console.log("roleBasedActions", roleBasedActions);
+			// console.log("role", this.role);
+			// console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
@@ -339,7 +339,6 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
-			console.log("dueDate", dueDate);
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
