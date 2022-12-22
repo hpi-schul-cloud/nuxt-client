@@ -29,6 +29,9 @@ coverage/
 
 .nuxt
 nuxt.config.js
-.vscode/*
+
+# Visual Studio Code data
+.vscode/settings.json
+.vscode/launch.json
 
 __snapshots__
