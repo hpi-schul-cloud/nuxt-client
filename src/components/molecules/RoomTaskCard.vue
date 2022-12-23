@@ -19,7 +19,8 @@
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
-					{{ cardTitle(task.duedate) }}
+					<!-- {{ cardTitle(task.duedate) }} -->
+					{{ task.duedate }}
 				</div>
 				<div class="dot-menu-section">
 					<more-item-menu
