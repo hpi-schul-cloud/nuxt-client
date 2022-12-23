@@ -19,8 +19,8 @@
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
-					<!-- {{ cardTitle(task.duedate) }} -->
-					{{ task.duedate }}
+					{{ cardTitle(task.duedate) }}
+					<!-- {{ task.duedate }} -->
 				</div>
 				<div class="dot-menu-section">
 					<more-item-menu
@@ -59,7 +59,7 @@
 						left
 						small
 						class="fill"
-						color="rgba(250, 50, 120, 0.87)"
+						color="rgba(0, 0, 0, 0.87)"
 						d
 					>
 						{{ chip.icon }}
