@@ -58,7 +58,7 @@
 						left
 						small
 						class="fill"
-						color="rgba(0, 0, 0, 0.87)"
+						color="rgba(250, 50, 120, 0.87)"
 						d
 					>
 						{{ chip.icon }}
@@ -338,6 +338,7 @@ export default {
 	},
 	methods: {
 		cardTitle(dueDate) {
+			console.log("dueDate", dueDate);
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
