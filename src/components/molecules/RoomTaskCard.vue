@@ -20,7 +20,6 @@
 				<div class="title-section" tabindex="0">
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ cardTitle(task.duedate) }}
-					<!-- {{ task.duedate }} -->
 				</div>
 				<div class="dot-menu-section">
 					<more-item-menu
@@ -204,7 +203,7 @@ export default {
 					});
 				}
 			}
-
+			console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
@@ -270,7 +269,7 @@ export default {
 					});
 				}
 			}
-
+			console.log("roleBasedChips", roleBasedChips);
 			return roleBasedChips;
 		},
 		moreActionsMenuItems() {
@@ -372,6 +371,7 @@ export default {
 			window.location = value;
 		},
 		publishCard() {
+			console.log("publikuje task");
 			this.$emit("post-task");
 		},
 		revertPublishedCard() {
