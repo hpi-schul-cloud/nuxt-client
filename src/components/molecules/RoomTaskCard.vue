@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div class="text-h6 text--primary mb-2 task-name">
-				{{ task.name }}
+				{{ cardName(task.name) }}
 			</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
@@ -337,6 +337,10 @@ export default {
 		},
 	},
 	methods: {
+		cardName(name) {
+			console.log("name", name);
+			return name;
+		},
 		cardTitle(dueDate) {
 			console.log("dueDate", dueDate);
 			if (this.isFinished) {
