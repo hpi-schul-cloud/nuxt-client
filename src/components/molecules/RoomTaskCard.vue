@@ -171,7 +171,15 @@ export default {
 			return this.task.status.submitted && !this.task.status.graded;
 		},
 		isPlanned() {
+			console.log("computed isPlaned");
 			const scheduledDate = this.task.availableDate;
+			console.log("this.task.availableDate", this.task.availableDate);
+			console.log(
+				"new Date(scheduledDate) > new Date()",
+				new Date(scheduledDate),
+				new Date(),
+				new Date(scheduledDate) > new Date()
+			);
 			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
 		cardActions() {
