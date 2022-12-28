@@ -182,13 +182,24 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
-					console.log("Akuku ", this.isPlanned, this.isDraft, this.isFinished);
+					console.log(
+						"Akuku PUBLISH",
+						this.isPlanned,
+						this.isDraft,
+						this.isFinished
+					);
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
+					console.log(
+						"Akuku FINISH",
+						this.isPlanned,
+						this.isDraft,
+						this.isFinished
+					);
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
