@@ -182,6 +182,7 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
+					console.log("Akuku ", this.isPlanned, this.isDraft, this.isFinished);
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
@@ -339,7 +340,12 @@ export default {
 	methods: {
 		cardTitle(dueDate) {
 			console.log("dueDate", dueDate);
-			console.log("planned", this.isPlaned);
+			console.log(
+				"planned, draft, finished",
+				this.isPlaned,
+				this.isDraft,
+				this.isFinished
+			);
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
