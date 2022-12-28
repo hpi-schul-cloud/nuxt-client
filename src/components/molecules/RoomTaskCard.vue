@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div class="text-h6 text--primary mb-2 task-name">
-				{{ cardName(task.name) }}
+				{{ task.name }}
 			</div>
 			<!-- eslint-disable vue/no-v-html -->
 			<div
@@ -337,12 +337,9 @@ export default {
 		},
 	},
 	methods: {
-		cardName(name) {
-			console.log("name", name);
-			return name;
-		},
 		cardTitle(dueDate) {
 			console.log("dueDate", dueDate);
+			console.log("planned", this.isPlaned);
 			if (this.isFinished) {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
@@ -377,6 +374,7 @@ export default {
 		publishCard() {
 			console.log("publikuje task");
 			this.$emit("post-task");
+			location.reload();
 		},
 		revertPublishedCard() {
 			this.$emit("revert-task");
