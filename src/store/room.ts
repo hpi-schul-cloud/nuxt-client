@@ -77,6 +77,12 @@ export default class RoomModule extends VuexModule {
 		elementId: string;
 		visibility: boolean;
 	}): Promise<void> {
+		console.log(
+			"akcja publishCard",
+			payload.elementId,
+			payload.visibility,
+			this.loading
+		);
 		this.setLoading(true);
 		const visibilityParam: PatchVisibilityParams = {
 			visibility: payload.visibility,
@@ -203,12 +209,18 @@ export default class RoomModule extends VuexModule {
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
-				'v3',
+				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
+			).courseControllerExportCourse(this.roomData.roomId, {
+				responseType: "blob",
+			});
 			const link = document.createElement("a");
-			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
-			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
+			link.href = URL.createObjectURL(
+				new Blob([response.data as unknown as Blob])
+			);
+			link.download = `${
+				this.roomData.title
+			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (error: any) {

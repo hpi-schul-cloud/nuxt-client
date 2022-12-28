@@ -374,7 +374,7 @@ export default {
 		publishCard() {
 			console.log("publikuje task");
 			this.$emit("post-task");
-			location.reload();
+			// location.reload();
 		},
 		revertPublishedCard() {
 			this.$emit("revert-task");
