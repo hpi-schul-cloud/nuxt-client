@@ -40,8 +40,9 @@
 				v-html="task.description"
 			></div>
 		</v-card-text>
+		<!-- v-if="!isPlanned && !isDraft && !isFinished" -->
 		<v-card-text
-			v-if="!isPlanned && !isDraft && !isFinished"
+			v-if="!isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 			data-testid="content-card-task-info"
 		>
@@ -171,14 +172,14 @@ export default {
 			return this.task.status.submitted && !this.task.status.graded;
 		},
 		isPlanned() {
-			console.log("computed isPlaned");
+			console.log("computed isPlaned:");
 			const scheduledDate = this.task.availableDate;
-			console.log("this.task.availableDate", this.task.availableDate);
+			console.log("scheduledDate", scheduledDate);
+			console.log("new Date(scheduledDate)", new Date(scheduledDate));
+			console.log("new Date()", new Date());
 			console.log(
-				"new Date(scheduledDate) > new Date()",
-				new Date(scheduledDate),
-				new Date(),
-				new Date(scheduledDate) > new Date()
+				"scheduledDate && new Date(scheduledDate) > new Date()",
+				scheduledDate && new Date(scheduledDate) > new Date()
 			);
 			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
@@ -189,7 +190,8 @@ export default {
 			};
 
 			if (this.role === Roles.Teacher) {
-				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
+				// if (this.isPlanned || (this.isDraft && !this.isFinished)) {
+				if (this.isDraft && !this.isFinished) {
 					console.log(
 						"Akuku PUBLISH",
 						this.isPlanned,
