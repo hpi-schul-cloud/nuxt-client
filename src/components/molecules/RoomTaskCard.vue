@@ -190,7 +190,7 @@ export default {
 			console.log("END ------ computed isPlaned:");
 			return (
 				scheduledDate &&
-				new Date(new Date(scheduledDate).getTime() + milliseconds)
+				new Date(new Date(scheduledDate).getTime() + milliseconds) > new Date()
 			);
 		},
 		cardActions() {
