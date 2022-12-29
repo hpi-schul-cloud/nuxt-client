@@ -172,16 +172,24 @@ export default {
 		},
 		isPlanned() {
 			console.log("computed isPlaned:");
+			const currentDate = new Date();
 			const scheduledDate = this.task.availableDate;
 			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
 			// const testedgetTime = scheduledDate.getTime();
 			console.log("scheduledDate", scheduledDate);
 			// console.log("test", testedgetTime);
+			const calculatedDate = new Date(
+				new Date(scheduledDate).getTime() + milliseconds
+			);
 			console.log(
 				"new Date(scheduledDate.getTime() + milliseconds)",
-				new Date(new Date(scheduledDate).getTime() + milliseconds)
+				calculatedDate
 			);
-			console.log("new Date()", new Date());
+			console.log("new Date()", currentDate);
+			console.log(
+				"return",
+				scheduledDate && new Date(calculatedDate) > currentDate
+			);
 			// console.log(
 			// 	"scheduledDate && new Date(scheduledDate.getTime() + milliseconds) > new Date()",
 			// 	scheduledDate &&
