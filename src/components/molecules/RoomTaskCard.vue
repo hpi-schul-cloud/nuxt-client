@@ -175,9 +175,9 @@ export default {
 			const scheduledDate = this.task.availableDate;
 
 			// const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
-			const testedgetTime = scheduledDate.getTime();
+			// const testedgetTime = scheduledDate.getTime();
 			console.log("scheduledDate", scheduledDate);
-			console.log("test", testedgetTime);
+			// console.log("test", testedgetTime);
 			// console.log(
 			// 	"new Date(scheduledDate.getTime() + milliseconds)",
 			// 	new Date(scheduledDate.getTime() + milliseconds)
