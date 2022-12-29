@@ -173,15 +173,14 @@ export default {
 		isPlanned() {
 			console.log("computed isPlaned:");
 			const scheduledDate = this.task.availableDate;
-
-			// const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
+			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
 			// const testedgetTime = scheduledDate.getTime();
 			console.log("scheduledDate", scheduledDate);
 			// console.log("test", testedgetTime);
-			// console.log(
-			// 	"new Date(scheduledDate.getTime() + milliseconds)",
-			// 	new Date(scheduledDate.getTime() + milliseconds)
-			// );
+			console.log(
+				"new Date(scheduledDate.getTime() + milliseconds)",
+				new Date(new Date(scheduledDate).getTime() + milliseconds)
+			);
 			console.log("new Date()", new Date());
 			// console.log(
 			// 	"scheduledDate && new Date(scheduledDate.getTime() + milliseconds) > new Date()",
@@ -189,7 +188,10 @@ export default {
 			// 		new Date(scheduledDate.getTime() + milliseconds) > new Date()
 			// );
 			console.log("END ------ computed isPlaned:");
-			return scheduledDate && new Date(scheduledDate) > new Date();
+			return (
+				scheduledDate &&
+				new Date(new Date(scheduledDate).getTime() + milliseconds)
+			);
 		},
 		cardActions() {
 			const roleBasedActions = {
