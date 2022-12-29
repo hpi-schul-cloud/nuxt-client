@@ -40,9 +40,8 @@
 				v-html="task.description"
 			></div>
 		</v-card-text>
-		<!-- v-if="!isPlanned && !isDraft && !isFinished" -->
 		<v-card-text
-			v-if="!isDraft && !isFinished"
+			v-if="!isPlanned && !isDraft && !isFinished"
 			class="ma-0 pb-0 pt-0 submitted-section"
 			data-testid="content-card-task-info"
 		>
@@ -174,6 +173,8 @@ export default {
 		isPlanned() {
 			console.log("computed isPlaned:");
 			const scheduledDate = this.task.availableDate;
+
+			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
 			console.log("scheduledDate", scheduledDate);
 			console.log("new Date(scheduledDate)", new Date(scheduledDate));
 			console.log("new Date()", new Date());
@@ -181,7 +182,10 @@ export default {
 				"scheduledDate && new Date(scheduledDate) > new Date()",
 				scheduledDate && new Date(scheduledDate) > new Date()
 			);
-			return scheduledDate && new Date(scheduledDate) > new Date();
+			return (
+				scheduledDate &&
+				new Date(scheduledDate.getTime() + milliseconds) > new Date()
+			);
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -190,8 +194,8 @@ export default {
 			};
 
 			if (this.role === Roles.Teacher) {
-				// if (this.isPlanned || (this.isDraft && !this.isFinished)) {
-				if (this.isDraft && !this.isFinished) {
+				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
+					// if (this.isDraft && !this.isFinished) {
 					console.log(
 						"Akuku PUBLISH",
 						this.isPlanned,
