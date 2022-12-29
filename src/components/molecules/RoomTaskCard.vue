@@ -171,8 +171,25 @@ export default {
 			return this.task.status.submitted && !this.task.status.graded;
 		},
 		isPlanned() {
+			console.log("computed isPlaned:");
 			const scheduledDate = this.task.availableDate;
-			return scheduledDate && new Date(scheduledDate) > new Date();
+
+			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
+			console.log("scheduledDate", scheduledDate);
+			console.log(
+				"new Date(scheduledDate.getTime() + milliseconds)",
+				new Date(scheduledDate.getTime() + milliseconds)
+			);
+			console.log("new Date()", new Date());
+			console.log(
+				"scheduledDate && new Date(scheduledDate.getTime() + milliseconds) > new Date()",
+				scheduledDate &&
+					new Date(scheduledDate.getTime() + milliseconds) > new Date()
+			);
+			return (
+				scheduledDate &&
+				new Date(scheduledDate.getTime() + milliseconds) > new Date()
+			);
 		},
 		cardActions() {
 			const roleBasedActions = {
