@@ -194,9 +194,13 @@ export default {
 			// 		new Date(scheduledDate.getTime() + milliseconds) > new Date()
 			// );
 			console.log("END ------ computed isPlaned:");
+			// return (
+			// 	scheduledDate &&
+			// 	new Date(new Date(scheduledDate).getTime() + milliseconds) > new Date()
+			// );
 			return (
 				scheduledDate &&
-				new Date(new Date(scheduledDate).getTime() + milliseconds) > new Date()
+				new Date(new Date(scheduledDate).getTime() - milliseconds) > new Date()
 			);
 		},
 		cardActions() {
