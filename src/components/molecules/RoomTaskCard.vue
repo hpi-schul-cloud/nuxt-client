@@ -186,6 +186,7 @@ export default {
 				scheduledDate &&
 					new Date(scheduledDate.getTime() + milliseconds) > new Date()
 			);
+			console.log("END ------ computed isPlaned:");
 			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
 		cardActions() {
