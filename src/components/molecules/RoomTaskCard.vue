@@ -186,10 +186,7 @@ export default {
 				scheduledDate &&
 					new Date(scheduledDate.getTime() + milliseconds) > new Date()
 			);
-			return (
-				scheduledDate &&
-				new Date(scheduledDate.getTime() + milliseconds) > new Date()
-			);
+			return scheduledDate && new Date(scheduledDate) > new Date();
 		},
 		cardActions() {
 			const roleBasedActions = {
