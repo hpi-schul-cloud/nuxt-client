@@ -177,6 +177,7 @@ export default {
 			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
 			// const testedgetTime = scheduledDate.getTime();
 			console.log("scheduledDate", scheduledDate);
+			console.log("only dategetTime", new Date(scheduledDate).getTime());
 			// console.log("test", testedgetTime);
 			const calculatedDate = new Date(
 				new Date(scheduledDate).getTime() + milliseconds
@@ -186,10 +187,7 @@ export default {
 				calculatedDate
 			);
 			console.log("new Date()", currentDate);
-			console.log(
-				"return",
-				scheduledDate && new Date(calculatedDate) > currentDate
-			);
+			console.log("return", scheduledDate && calculatedDate > currentDate);
 			// console.log(
 			// 	"scheduledDate && new Date(scheduledDate.getTime() + milliseconds) > new Date()",
 			// 	scheduledDate &&
