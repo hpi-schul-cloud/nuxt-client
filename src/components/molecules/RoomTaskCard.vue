@@ -180,7 +180,7 @@ export default {
 			console.log("only dategetTime", new Date(scheduledDate).getTime());
 			// console.log("test", testedgetTime);
 			const calculatedDate = new Date(
-				new Date(scheduledDate).getTime() + milliseconds
+				new Date(scheduledDate).getTime() - milliseconds
 			);
 			console.log(
 				"new Date(scheduledDate.getTime() + milliseconds)",
