@@ -2,7 +2,7 @@
 	<default-wireframe
 		ref="main"
 		headline=""
-		:full-width="true"
+		:full-width="isLoading"
 		:aria-label="$t('pages.courses.index.courses.all')"
 		:fab-items="fabItems"
 		@fabButtonEvent="fabClick"
@@ -27,7 +27,7 @@
 				class="mt-16"
 			/>
 		</template>
-		<template v-else>
+		<template v-if="!isLoading">
 			<slot name="page-content"></slot>
 		</template>
 		<import-modal

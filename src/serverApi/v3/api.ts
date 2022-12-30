@@ -3928,7 +3928,8 @@ export const DashboardApiAxiosParamCreator = function (
 		 * @throws {RequiredError}
 		 */
 		dashboardControllerFindForUser: async (
-			options: any = {}
+			options: any = {},
+			showSubstitute?: boolean
 		): Promise<RequestArgs> => {
 			const localVarPath = `/dashboard`;
 			// use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3944,7 +3945,10 @@ export const DashboardApiAxiosParamCreator = function (
 				...options,
 			};
 			const localVarHeaderParameter = {} as any;
-			const localVarQueryParameter = {} as any;
+			const localVarQueryParameter =
+				showSubstitute === undefined
+					? ({} as any)
+					: ({ showSubstitute } as any);
 
 			// authentication bearer required
 			// http bearer authentication required
@@ -4133,7 +4137,8 @@ export const DashboardApiFp = function (configuration?: Configuration) {
 		 * @throws {RequiredError}
 		 */
 		async dashboardControllerFindForUser(
-			options?: any
+			options?: any,
+			showSubstitute?: boolean
 		): Promise<
 			(
 				axios?: AxiosInstance,
@@ -4141,7 +4146,10 @@ export const DashboardApiFp = function (configuration?: Configuration) {
 			) => AxiosPromise<DashboardResponse>
 		> {
 			const localVarAxiosArgs =
-				await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
+				await localVarAxiosParamCreator.dashboardControllerFindForUser(
+					options,
+					showSubstitute
+				);
 			return createRequestFunction(
 				localVarAxiosArgs,
 				globalAxios,
@@ -4235,10 +4243,11 @@ export const DashboardApiFactory = function (
 		 * @throws {RequiredError}
 		 */
 		dashboardControllerFindForUser(
-			options?: any
+			options?: any,
+			showSubstitute?: boolean
 		): AxiosPromise<DashboardResponse> {
 			return localVarFp
-				.dashboardControllerFindForUser(options)
+				.dashboardControllerFindForUser(options, showSubstitute)
 				.then((request) => request(axios, basePath));
 		},
 		/**
@@ -4299,7 +4308,8 @@ export interface DashboardApiInterface {
 	 * @memberof DashboardApiInterface
 	 */
 	dashboardControllerFindForUser(
-		options?: any
+		options?: any,
+		showSubstitute?: boolean
 	): AxiosPromise<DashboardResponse>;
 
 	/**
@@ -4348,9 +4358,12 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
 	 * @throws {RequiredError}
 	 * @memberof DashboardApi
 	 */
-	public dashboardControllerFindForUser(options?: any) {
+	public dashboardControllerFindForUser(
+		options?: any,
+		showSubstitute?: boolean
+	) {
 		return DashboardApiFp(this.configuration)
-			.dashboardControllerFindForUser(options)
+			.dashboardControllerFindForUser(options, showSubstitute)
 			.then((request) => request(this.axios, this.basePath));
 	}
 

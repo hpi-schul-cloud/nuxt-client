@@ -19,6 +19,15 @@
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
+				<user-has-role :role="isTeacher">
+					<div class="toggle-div">
+						<v-custom-switch
+							v-model="showSubstitute"
+							class="enable-disable"
+							:label="$t('pages.courses.index.courses.substituteCourses')"
+						></v-custom-switch>
+					</div>
+				</user-has-role>
 				<div class="toggle-div">
 					<v-custom-switch
 						v-if="isTouchDevice"
@@ -130,6 +139,8 @@ import RoomModal from "@components/molecules/RoomModal";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import { mdiMagnify } from "@mdi/js";
+import UserHasRole from "@components/helpers/UserHasRole";
+import { authModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -141,8 +152,12 @@ export default {
 		RoomModal,
 		vCustomSwitch,
 		ImportFlow,
+		UserHasRole,
 	},
 	layout: "defaultVuetify",
+	props: {
+		role: { type: String, default: "" },
+	},
 	data() {
 		return {
 			device: "mobile",
@@ -168,6 +183,7 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
+			showSubstitute: false,
 		};
 	},
 	computed: {
@@ -207,11 +223,25 @@ export default {
 			return this.$route.query.import;
 		},
 	},
+	watch: {
+		showSubstitute: async function (showSubstitute) {
+			await roomsModule.fetch({ device: undefined, showSubstitute }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		},
+	},
 	async created() {
-		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		const showSubstituteCourses = !this.isTeacher(authModule.getUserRoles);
+		await roomsModule.fetch({
+			device: undefined,
+			showSubstitute: showSubstituteCourses,
+		}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
 	methods: {
+		isTeacher(roles) {
+			return this.role === ""
+				? roles.some((role) => role.startsWith("teacher"))
+				: this.role;
+		},
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
@@ -400,6 +430,7 @@ export default {
 
 	.toggle-div {
 		display: inline-block;
+		margin-left: 35px; // stylelint-disable sh-waqar/declaration-use-variable
 	}
 }
 
