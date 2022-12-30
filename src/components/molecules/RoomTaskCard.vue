@@ -211,24 +211,24 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
-					console.log(
-						"this.isPlanned || (this.isDraft && !this.isFinished",
-						this.isPlanned,
-						this.isDraft,
-						this.isFinished
-					);
+					// console.log(
+					// 	"this.isPlanned || (this.isDraft && !this.isFinished",
+					// 	this.isPlanned,
+					// 	this.isDraft,
+					// 	this.isFinished
+					// );
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
-					console.log(
-						"!this.isPlanned && !this.isDraft && !this.isFinished",
-						this.isPlanned,
-						this.isDraft,
-						this.isFinished
-					);
+					// console.log(
+					// 	"!this.isPlanned && !this.isDraft && !this.isFinished",
+					// 	this.isPlanned,
+					// 	this.isDraft,
+					// 	this.isFinished
+					// );
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -244,7 +244,7 @@ export default {
 					});
 				}
 			}
-			console.log("roleBasedActions", roleBasedActions);
+			// console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
@@ -450,13 +450,13 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			console.log(
-				"getStyleClasses",
-				this.isPlanned,
-				this.isDraft,
-				this.isFinished,
-				this.isPlanned || (this.isDraft && !this.isFinished)
-			);
+			// console.log(
+			// 	"getStyleClasses",
+			// 	this.isPlanned,
+			// 	this.isDraft,
+			// 	this.isFinished,
+			// 	this.isPlanned || (this.isDraft && !this.isFinished)
+			// );
 			return this.isPlanned || (this.isDraft && !this.isFinished)
 				? "task-hidden"
 				: "";
