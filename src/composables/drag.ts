@@ -1,0 +1,31 @@
+import { ref } from "@vue/composition-api";
+
+export function useDrag() {
+	const dragInProgressDelay = 300;
+	const dragInProgress = ref(false);
+
+	const isTouchDevice = () => {
+		return window.ontouchstart !== undefined;
+	};
+
+	const touchDelay = isTouchDevice() ? 200 : 20;
+
+	const endDragging = () => {
+		setTimeout(() => {
+			dragInProgress.value = false;
+		}, dragInProgressDelay);
+	};
+
+	const startDragging = () => {
+		dragInProgress.value = true;
+	};
+
+	return {
+		isTouchDevice,
+		touchDelay,
+		startDragging,
+		endDragging,
+		dragInProgress,
+		dragInProgressDelay,
+	};
+}

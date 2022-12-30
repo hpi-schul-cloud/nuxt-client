@@ -54,7 +54,6 @@ import CollaborativeFilesModule from "@store/collaborative-files";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
 import { FilesPageConfig } from "@pages/files/file-page-config.type";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
