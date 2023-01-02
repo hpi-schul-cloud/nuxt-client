@@ -22,10 +22,9 @@ export default async ({ app, route }) => {
 	}
 };
 
-
-function composeRedirectUrl(themeName = 'default' ) {
+function composeRedirectUrl(themeName = "default") {
 	const currentUrl = encodeURIComponent(window.location.href);
-	if (themeName === 'thr') {
+	if (themeName === "thr") {
 		return `/tsp-login?redirect=${currentUrl}`;
 	}
 	return `/login?redirect=${currentUrl}`;
