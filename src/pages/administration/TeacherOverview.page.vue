@@ -89,7 +89,7 @@
 							'row-selected': selected,
 							'row-highlighted': highlighted,
 						}"
-						:to="`/administration/teachers/${data}/edit`"
+						:href="`/administration/teachers/${data}/edit`"
 						data-testid="edit_teacher_button"
 					>
 						<v-icon size="20">{{ mdiPencil }}</v-icon>
@@ -181,7 +181,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.teachers.index.title"),

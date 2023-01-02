@@ -416,7 +416,7 @@ describe("students/index", () => {
 			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
-		expect(editBtn.vm.to).toStrictEqual(expectedURL);
+		expect(editBtn.vm.href).toStrictEqual(expectedURL);
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {

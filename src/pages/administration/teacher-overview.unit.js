@@ -428,7 +428,7 @@ describe("teachers/index", () => {
 			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
-		expect(editBtn.vm.to).toStrictEqual(expectedURL);
+		expect(editBtn.vm.href).toStrictEqual(expectedURL);
 	});
 
 	it("should render the fab-floating component if user has TEACHER_CREATE permission", () => {
