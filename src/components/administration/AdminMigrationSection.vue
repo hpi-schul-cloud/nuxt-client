@@ -123,11 +123,11 @@ export default defineComponent({
 		);
 
 		const isMigrationAvailable: Ref<boolean> = ref(
-			schoolsModule.getOauthMigrationAvailable
+			schoolsModule.getOauthMigrationAvailable ?? false
 		);
 
 		const isMigrationMandatory: Ref<boolean> = ref(
-			schoolsModule.getOauthMigrationMandatory
+			schoolsModule.getOauthMigrationMandatory ?? false
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
@@ -138,13 +138,11 @@ export default defineComponent({
 			schoolsModule.endMigration();
 		};
 
-		let warning = false;
+		const showWarning: Ref<boolean> = ref(false);
 
-		const showWarning: Ref<boolean> = ref(warning);
-
-		const toggleShowWarning: ComputedRef<void> = computed(() => {
-			warning = !warning;
-		});
+		const toggleShowWarning =() => {
+			showWarning.value = !showWarning.value;
+		};
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -165,7 +163,6 @@ export default defineComponent({
 			isMigrationMandatory,
 			t,
 			migrationSwitchLabel,
-			warning,
 			showWarning,
 			toggleShowWarning,
 			endMigration,
