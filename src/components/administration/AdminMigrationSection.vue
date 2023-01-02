@@ -140,15 +140,19 @@ export default defineComponent({
 
 		const showWarning: Ref<boolean> = ref(false);
 
-		const toggleShowWarning =() => {
+		const toggleShowWarning = () => {
 			showWarning.value = !showWarning.value;
 		};
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
-				return t("components.administration.adminMigrationSection.mandatorySwitch.disable");
+				return t(
+					"components.administration.adminMigrationSection.mandatorySwitch.disable"
+				);
 			} else {
-        return t("components.administration.adminMigrationSection.mandatorySwitch.enable");
+				return t(
+					"components.administration.adminMigrationSection.mandatorySwitch.enable"
+				);
 			}
 		});
 
