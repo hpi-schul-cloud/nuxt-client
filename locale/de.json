@@ -459,6 +459,7 @@
 	"components.molecules.copyResult.failedCopy": "Der Kopiervorgang konnte nicht abgeschlossen werden.",
 	"components.molecules.copyResult.timeoutCopy": "Es könnte sein, dass der Kopiervorgang länger dauert, da größere Dateien enthalten sind. In dem Fall sollte das kopierte Element bereits vorhanden sein und die Dateien später verfügbar werden.",
 	"components.molecules.copyResult.fileCopy.error": "Die folgenden Dateien können nicht kopiert werden und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.courseFiles.info": "Die Kursdateien, welche weder in Aufgaben noch in Themen eingebunden sind, werden nicht kopiert.",
 	"components.molecules.copyResult.courseGroupCopy.info": "Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info": "Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",

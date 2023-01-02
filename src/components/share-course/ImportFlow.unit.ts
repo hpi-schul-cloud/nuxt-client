@@ -110,16 +110,17 @@ describe("@components/share-course/ImportFlow", () => {
 			describe("copyResult: success", () => {
 				it("should show success notifier", async () => {
 					copyModuleMock.validateShareToken = validateShareTokenMock;
-					copyModuleMock.copyByShareToken = () => Promise.resolve([]);
+					copyModuleMock.copyByShareToken = jest.fn().mockResolvedValue([]);
+					copyModuleMock.setResultModalOpen = jest.fn();
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
+					await new Promise((time) => setTimeout(time, 1000));
 
-					expect(notifierModuleMock.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "success" })
-					);
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 				});
 			});
 
@@ -168,7 +169,6 @@ describe("@components/share-course/ImportFlow", () => {
 					const dialog = wrapper.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
 					await new Promise((time) => setTimeout(time, 1000));
-					await Vue.nextTick();
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);

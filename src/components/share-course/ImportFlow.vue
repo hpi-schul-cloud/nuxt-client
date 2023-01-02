@@ -65,14 +65,6 @@ export default defineComponent({
 
 		// notifiers
 
-		const showSuccess = () => {
-			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.success", { type: i18n.t("common.labels.course") }),
-				status: "success",
-				timeout: 10000,
-			})
-			closeModals();
-		}
 
 		const showFailureBackend = (name) => {
 			notifier?.show({
@@ -125,13 +117,8 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal('loading');
 			try {
-				const copyResultFailedItems = await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
-				if (copyResultFailedItems.length === 0) {
-					showSuccess();
-					emit('success');
-				} else {
-					openModal('result');
-				}
+				await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
+				openModal('result');
 			} catch (error) {
 				showFailureBackend(newName);
 			}
