@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import MoreItemMenu from "./MoreItemMenu.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const action = jest.fn();
 const testProps = {

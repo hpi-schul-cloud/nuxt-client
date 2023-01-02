@@ -43,7 +43,7 @@ describe("MatrixMessenger.unit", () => {
 		setupStores({
 			authModule: AuthModule,
 			schoolsModule: SchoolsModule,
-			envConfigModule: EnvConfigModule
+			envConfigModule: EnvConfigModule,
 		});
 		schoolsModule.setSchool({ features: ["messenger"] });
 	});

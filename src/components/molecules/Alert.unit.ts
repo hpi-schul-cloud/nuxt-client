@@ -6,7 +6,7 @@ import NotifierModule from "@/store/notifier";
 import Vue from "vue";
 import { AlertPayload } from "@/store/types/alert-payload";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const getWrapper: any = (device = "desktop", options?: object) => {
 	return mount(Alert, {

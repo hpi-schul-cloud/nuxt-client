@@ -26,7 +26,7 @@ export default class FinishedTasksModule extends VuexModule {
 
 	status: Status = "";
 
-	isInitialized: boolean = false;
+	isInitialized = false;
 
 	@Action
 	async fetchFinishedTasks(): Promise<void> {

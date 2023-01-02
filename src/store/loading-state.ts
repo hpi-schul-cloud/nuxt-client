@@ -17,7 +17,7 @@ export default class LoadingStateModule extends VuexModule {
 		...this._defaultPayload,
 	};
 
-	_isOpen: boolean = false;
+	_isOpen = false;
 
 	get getLoadingState(): Required<LoadingStatePayload> {
 		return this._loadingState;

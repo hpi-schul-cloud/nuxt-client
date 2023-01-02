@@ -82,7 +82,7 @@ describe("CollaborativeFilesModule", () => {
 		it("should return loading from store", async () => {
 			setup();
 
-			let loading: boolean = await collaborativeFilesModule.getLoading;
+			const loading: boolean = await collaborativeFilesModule.getLoading;
 
 			expect(loading).toEqual(collaborativeFilesModule.loading);
 		});

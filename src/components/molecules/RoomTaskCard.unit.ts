@@ -4,7 +4,7 @@ import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const testProps = {
 	room: {

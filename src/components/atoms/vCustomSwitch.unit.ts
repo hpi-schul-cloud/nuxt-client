@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import vCustomSwitch from "./vCustomSwitch.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 describe("vCustomSwitch", () => {
 	it("should take property value true", () => {

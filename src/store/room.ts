@@ -27,8 +27,8 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 	};
-	scopePermissions: String[] = [];
-	loading: boolean = false;
+	scopePermissions: string[] = [];
+	loading = false;
 	error: null | {} = null;
 	businessError: BusinessError = {
 		statusCode: "",
@@ -41,7 +41,7 @@ export default class RoomModule extends VuexModule {
 		status: "",
 		message: "",
 	};
-	private courseShareToken: string = "";
+	private courseShareToken = "";
 
 	private get roomsApi(): RoomsApiInterface {
 		return RoomsApiFactory(undefined, "/v3", $axios);
@@ -312,7 +312,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setPermissionData(payload: String[]): void {
+	setPermissionData(payload: string[]): void {
 		this.scopePermissions = payload;
 	}
 
@@ -362,7 +362,7 @@ export default class RoomModule extends VuexModule {
 		return this.roomData;
 	}
 
-	get getPermissionData(): String[] {
+	get getPermissionData(): string[] {
 		return this.scopePermissions;
 	}
 

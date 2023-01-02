@@ -6,7 +6,6 @@ import InputDefault from "@/components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n) => users.slice(0, n);
 
-
 const tableColumns = [
 	{
 		field: "firstName",

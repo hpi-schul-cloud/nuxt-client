@@ -3,7 +3,7 @@ import StatusAlerts from "./StatusAlerts.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,

@@ -13,7 +13,7 @@ import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 	stateFactory: true,
 })
 export default class CollaborativeFilesModule extends VuexModule {
-	loading: boolean = false;
+	loading = false;
 
 	files: CollaborativeFile[] = [];
 

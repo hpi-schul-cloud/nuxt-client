@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import vCustomBreadcrumbs from "./vCustomBreadcrumbs.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const getWrapper = (props: object, options?: object) => {
 	return mount(vCustomBreadcrumbs, {

@@ -23,8 +23,8 @@ export interface SharePayload extends ShareOptions {
 	stateFactory: true,
 })
 export default class ShareCourseModule extends VuexModule {
-	private isShareModalOpen: boolean = false;
-	private courseId: string = "";
+	private isShareModalOpen = false;
+	private courseId = "";
 	private shareUrl: string | undefined = undefined;
 
 	private get shareApi(): ShareTokenApiInterface {

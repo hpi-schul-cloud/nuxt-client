@@ -75,7 +75,7 @@ export default class AuthModule extends VuexModule {
 		externallyManaged: false,
 	};
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale: string = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+	locale = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 
 	businessError: BusinessError = {
 		statusCode: "",

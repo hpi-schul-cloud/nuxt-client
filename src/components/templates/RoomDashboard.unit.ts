@@ -8,7 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const mockData = {
 	roomId: "123",

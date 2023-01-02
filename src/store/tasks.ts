@@ -24,7 +24,7 @@ export default class TasksModule extends VuexModule {
 
 	courseFilter: string[] = [];
 
-	substituteFilter: boolean = false;
+	substituteFilter = false;
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -33,9 +33,9 @@ export default class TasksModule extends VuexModule {
 
 	status: Status = "";
 
-	loading: boolean = false;
+	loading = false;
 
-	tab: string = "";
+	tab = "";
 
 	@Action
 	async fetchAllTasks(): Promise<void> {

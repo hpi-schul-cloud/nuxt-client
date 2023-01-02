@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import vRoomDeleteAvatar from "./vRoomDeleteAvatar.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 describe("vRoomDeleteAvatar", () => {
 	it("should emit 'deleteAvatar' event when an element drops onto it", async () => {
@@ -16,7 +16,7 @@ describe("vRoomDeleteAvatar", () => {
 		avatarComponent.trigger("drop");
 		await wrapper.vm.$nextTick();
 
-		let emitted = wrapper.emitted();
+		const emitted = wrapper.emitted();
 		expect(emitted["deleteAvatar"]).toHaveLength(1);
 	});
 

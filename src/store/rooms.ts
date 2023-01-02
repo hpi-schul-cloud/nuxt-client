@@ -25,7 +25,7 @@ import {
 })
 export default class RoomsModule extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
-	gridElementsId: string = "";
+	gridElementsId = "";
 	allElements: CourseMetadataResponse[] = [];
 	sharedCourseData: SharingCourseObject = {
 		code: "",
@@ -33,9 +33,9 @@ export default class RoomsModule extends VuexModule {
 		status: "",
 		message: "",
 	};
-	importedCourseId: string = "";
+	importedCourseId = "";
 
-	loading: boolean = false;
+	loading = false;
 	error: null | {} = null;
 	businessError: BusinessError = {
 		statusCode: "",

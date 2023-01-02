@@ -16,7 +16,7 @@ export default class NotifierModule extends VuexModule {
 
 	@Action
 	show(payload: AlertPayload) {
-		let alertData: AlertPayload = {
+		const alertData: AlertPayload = {
 			...payload,
 			autoClose: payload.autoClose === undefined || payload.autoClose,
 			timeout: payload.timeout || this.defaultTimeout,

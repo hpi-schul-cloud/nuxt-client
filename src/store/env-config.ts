@@ -21,7 +21,7 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 };
 
-const retryLimit: number = 10;
+const retryLimit = 10;
 
 @Module({
 	name: "envConfigModule",
@@ -44,7 +44,7 @@ export default class EnvConfigModule extends VuexModule {
 		GHOST_BASE_URL: "",
 		FEATURE_CONSENT_NECESSARY: true,
 	};
-	loadingErrorCount: number = 0;
+	loadingErrorCount = 0;
 	status: Status = "";
 	businessError: BusinessError = {
 		statusCode: "",

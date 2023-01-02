@@ -2,7 +2,6 @@ import ModalFooterActions from "./ModalFooterActions";
 import { mount } from "@vue/test-utils";
 
 describe("@/components/molecules/ModalFooterAction", () => {
-
 	it("renders with some slots", () => {
 		const wrapper = mount(ModalFooterActions, {
 			slots: {

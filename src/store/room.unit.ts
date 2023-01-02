@@ -8,7 +8,7 @@ import { AxiosInstance } from "axios";
 import { authModule } from "@/store";
 
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -147,7 +147,7 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if server couldn't find any lesson", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 
 				(() => {
@@ -174,7 +174,7 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if the server sends nothing after creating lesson ", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 
 				(() => {
@@ -208,8 +208,8 @@ describe("room module", () => {
 			});
 
 			it("should trigger fetchContent method after copying lesson", async () => {
-				let received: any[] = [];
-				let returned: any = {};
+				const received: any[] = [];
+				const returned: any = {};
 
 				(() => {
 					initializeAxios({
@@ -238,7 +238,7 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
@@ -314,7 +314,7 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: {}) => {
@@ -449,7 +449,7 @@ describe("room module", () => {
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: {}) => {
@@ -485,7 +485,7 @@ describe("room module", () => {
 			});
 
 			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: {}) => {
@@ -521,7 +521,7 @@ describe("room module", () => {
 			});
 
 			it("should make a 'PATCH' call to the backend with archived list", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: {}) => {
@@ -555,7 +555,7 @@ describe("room module", () => {
 			});
 
 			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: {}) => {
@@ -591,8 +591,8 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				let received: any[] = [];
-				let returned: any = {};
+				const received: any[] = [];
+				const returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
@@ -638,7 +638,7 @@ describe("room module", () => {
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: {}) => {

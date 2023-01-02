@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const propsData = {
 	itemSize: "4em",

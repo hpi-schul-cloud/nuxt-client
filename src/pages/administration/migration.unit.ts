@@ -6,7 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { mount, shallowMount } from "@vue/test-utils";
 
-declare var createComponentMocks: Function;
+declare let createComponentMocks: Function;
 
 const $theme = {
 	short_name: "instance name",

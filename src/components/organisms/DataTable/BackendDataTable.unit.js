@@ -31,7 +31,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 	describe("rendering", () => {
 		it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
-			var wrapper = getWrapper();
+			const wrapper = getWrapper();
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(defaultData.length);
 			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
@@ -435,7 +435,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				const selection = [...Array(totalSelections).keys()].map(String);
 				const testAction = jest.fn();
 				const actionLabel = "TestAction";
-				var wrapper = getWrapper(
+				const wrapper = getWrapper(
 					{
 						rowsSelectable: true,
 						selectedRowIds: selection,

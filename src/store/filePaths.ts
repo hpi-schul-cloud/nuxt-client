@@ -39,7 +39,7 @@ const globalFiles = {
 	stateFactory: true,
 })
 export default class FilePathsModule extends VuexModule {
-	documentBaseDir: string = "";
+	documentBaseDir = "";
 	specificFiles: SpecificFiles = {
 		accessibilityStatement: "",
 		privacyExemplary: "",
