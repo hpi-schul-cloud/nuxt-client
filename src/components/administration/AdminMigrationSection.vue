@@ -47,11 +47,10 @@
 		></v-switch>
 
 		<v-card v-if="showWarning">
-			<v-card-title>Sind sie sich sicher?</v-card-title>
+			<v-card-title>{{ $t("components.administration.adminMigrationSection.warningCard.title") }}</v-card-title>
 			<v-card-text>
 				<div>
-					Mit dem Abschluss der Migration können keine weiteren Nutzer mehr
-					migrieren.
+					{{ $t("components.administration.adminMigrationSection.warningCard.text") }}
 				</div>
 			</v-card-text>
 			<v-card-actions>
@@ -62,11 +61,11 @@
 						endMigration;
 					"
 				>
-					Ja, abschließen.
+          {{ $t("components.administration.adminMigrationSection.warningCard.agree") }}
 				</v-btn>
 
 				<v-btn color="primary" @click="toggleShowWarning">
-					Nein, Migration fortsetzen.
+          {{ $t("components.administration.adminMigrationSection.warningCard.disagree") }}
 				</v-btn>
 			</v-card-actions>
 		</v-card>
