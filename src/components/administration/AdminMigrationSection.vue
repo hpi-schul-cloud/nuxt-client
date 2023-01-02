@@ -47,10 +47,16 @@
 		></v-switch>
 
 		<v-card v-if="showWarning">
-			<v-card-title>{{ $t("components.administration.adminMigrationSection.warningCard.title") }}</v-card-title>
+			<v-card-title>{{
+				$t("components.administration.adminMigrationSection.warningCard.title")
+			}}</v-card-title>
 			<v-card-text>
 				<div>
-					{{ $t("components.administration.adminMigrationSection.warningCard.text") }}
+					{{
+						$t(
+							"components.administration.adminMigrationSection.warningCard.text"
+						)
+					}}
 				</div>
 			</v-card-text>
 			<v-card-actions>
@@ -61,11 +67,19 @@
 						endMigration;
 					"
 				>
-          {{ $t("components.administration.adminMigrationSection.warningCard.agree") }}
+					{{
+						$t(
+							"components.administration.adminMigrationSection.warningCard.agree"
+						)
+					}}
 				</v-btn>
 
 				<v-btn color="primary" @click="toggleShowWarning">
-          {{ $t("components.administration.adminMigrationSection.warningCard.disagree") }}
+					{{
+						$t(
+							"components.administration.adminMigrationSection.warningCard.disagree"
+						)
+					}}
 				</v-btn>
 			</v-card-actions>
 		</v-card>
