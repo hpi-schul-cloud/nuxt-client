@@ -15,7 +15,7 @@
 			@click="setMigration(true, false)"
 		>
 			{{
-				$t(
+				t(
 					"components.administration.adminMigrationSection.migrationEnableButton.label"
 				)
 			}}
@@ -30,7 +30,7 @@
 			@click="toggleShowWarning"
 		>
 			{{
-				$t(
+				t(
 					"components.administration.adminMigrationSection.migrationEndButton.label"
 				)
 			}}
@@ -48,12 +48,12 @@
 
 		<v-card v-if="showWarning">
 			<v-card-title>{{
-				$t("components.administration.adminMigrationSection.warningCard.title")
+				t("components.administration.adminMigrationSection.warningCard.title")
 			}}</v-card-title>
 			<v-card-text>
 				<div>
 					{{
-						$t(
+						t(
 							"components.administration.adminMigrationSection.warningCard.text"
 						)
 					}}
@@ -68,7 +68,7 @@
 					"
 				>
 					{{
-						$t(
+						t(
 							"components.administration.adminMigrationSection.warningCard.agree"
 						)
 					}}
@@ -76,7 +76,7 @@
 
 				<v-btn color="primary" @click="toggleShowWarning">
 					{{
-						$t(
+						t(
 							"components.administration.adminMigrationSection.warningCard.disagree"
 						)
 					}}
@@ -148,9 +148,9 @@ export default defineComponent({
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
-				return "Pflicht zu Iserv-Migration aufheben";
+				return t("components.administration.adminMigrationSection.mandatorySwitch.disable");
 			} else {
-				return "Iserv-Migration verpflichtend machen";
+        return t("components.administration.adminMigrationSection.mandatorySwitch.enable");
 			}
 		});
 
