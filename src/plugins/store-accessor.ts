@@ -22,6 +22,7 @@ import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import LoadingStateModule from "@store/loading-state";
 import ShareCourseModule from "@store/share-course";
 import { getModule } from "vuex-module-decorators";
+import ExternalToolsModule from "@store/external-tools";
 
 export default () => {
 	onGlobalSetup(() => {
@@ -38,6 +39,7 @@ export default () => {
 		provide("contentModule", getModule(ContentModule, store));
 		provide("copyModule", getModule(CopyModule, store));
 		provide("envConfigModule", getModule(EnvConfigModule, store));
+		provide("externalToolsModule", getModule(ExternalToolsModule, store));
 		provide("filePathsModule", getModule(FilePathsModule, store));
 		provide("filesPOCModule", getModule(FilesPOCModule, store));
 		provide("finishedTasksModule", getModule(FinishedTasksModule, store));
