@@ -11,6 +11,7 @@ import {
 } from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 import {useOAuthMigration} from "@pages/administration/oauth-migration.composable";
+import {availableActions} from "hygen";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
