@@ -42,13 +42,8 @@
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
-					<p class="text-md mt-2">
-						{{
-							$t(
-								"components.administration.externalToolsSection.dialog.content"
-							)
-						}}
-					</p>
+					<p class="text-md mt-2"
+					   v-html="$t('components.administration.externalToolsSection.dialog.content', { itemName: getItemName })"/>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
@@ -179,6 +174,10 @@ export default defineComponent({
 		};
 
 		const itemToDelete: Ref<ExternalToolItem | undefined> = ref();
+		const getItemName: ComputedRef<string> = computed(() => {
+			return itemToDelete.value ? itemToDelete.value?.name : "";
+		})
+
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 		const openDeleteDialog = (item: ExternalToolItem) => {
@@ -204,6 +203,8 @@ export default defineComponent({
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			closeDeleteDialog,
+			itemToDelete,
+			getItemName,
 		};
 	},
 });

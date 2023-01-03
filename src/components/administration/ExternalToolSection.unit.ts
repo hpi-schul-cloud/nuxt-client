@@ -212,4 +212,31 @@ describe("ExternalToolSection", () => {
 			})
 		})
 	})
+
+	describe("getItemName is called", () => {
+		describe("when itemToDelete is set", () => {
+			it('should return the name', () => {
+				setup();
+
+				const expectedName = "Name";
+				wrapper.vm.itemToDelete = { name: expectedName, status: ExternalToolStatus.Latest, outdated: false };
+
+				const itemName: string = wrapper.vm.getItemName;
+
+				expect(itemName).toEqual(expectedName);
+			})
+		});
+
+		describe('when itemToDelete is not set', () => {
+			it('should return an empty string', () => {
+				setup();
+
+				wrapper.vm.itemToDelete = undefined;
+
+				const itemName: string = wrapper.vm.getItemName;
+
+				expect(itemName).toEqual("");
+			})
+		})
+	})
 });

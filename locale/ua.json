@@ -115,7 +115,7 @@
 	"components.administration.externalToolsSection.table.header.status.outdated": "Застаріла",
 	"components.administration.externalToolsSection.action.add": "Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.dialog.title": "Видаліть зовнішній інструмент",
-	"components.administration.externalToolsSection.dialog.content": "Чи бажаєте ви видалити зовнішній інструмент зі своєї школи? Якщо ви видалите зовнішній інструмент зі своєї школи, його буде видалено з усіх курсів вашої школи. Інструмент більше не можна використовувати.",
+	"components.administration.externalToolsSection.dialog.content": "Чи бажаєте ви видалити зовнішній інструмент <b>{itemName}</b> зі своєї школи? </br></br> Якщо ви видалите зовнішній інструмент зі своєї школи, його буде видалено з усіх курсів вашої школи. Інструмент більше не можна використовувати.",
 	"componente.molecules.CoursesGrid.emptystate": "Наразі тут курсів немає.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "година | години (годин)",
