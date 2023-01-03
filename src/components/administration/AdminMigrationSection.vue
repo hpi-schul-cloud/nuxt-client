@@ -46,26 +46,30 @@
 			@change="setMigration(true, true)"
 		></v-switch>
 
-    <v-card v-if="showStartWarning">
-      <v-card-title>"Wollen Sie die Migration wirklich starten?"</v-card-title>
-      <v-card-text>
-        <div>
-          "Nutzer werden somit in der Lage sein ihren Account auf das neue Login-System zu migrieren."
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-            color="primary"
-            @click="toggleShowStartWarning(); setMigration(true, false);"
-        >
-          "Ja, Migration starten"
-        </v-btn>
+		<v-card v-if="showStartWarning">
+			<v-card-title>"Wollen Sie die Migration wirklich starten?"</v-card-title>
+			<v-card-text>
+				<div>
+					"Nutzer werden somit in der Lage sein ihren Account auf das neue
+					Login-System zu migrieren."
+				</div>
+			</v-card-text>
+			<v-card-actions>
+				<v-btn
+					color="primary"
+					@click="
+						toggleShowStartWarning();
+						setMigration(true, false);
+					"
+				>
+					"Ja, Migration starten"
+				</v-btn>
 
-        <v-btn color="primary" @click="toggleShowStartWarning">
-          "Nein, Migration nicht starten"
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+				<v-btn color="primary" @click="toggleShowStartWarning">
+					"Nein, Migration nicht starten"
+				</v-btn>
+			</v-card-actions>
+		</v-card>
 
 		<v-card v-if="showEndWarning">
 			<v-card-title>{{
@@ -140,21 +144,26 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationEnabled: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigration ?? false
+		const isMigrationEnabled: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigration ?? false
 		);
 
-		const isMigrationAvailable: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationAvailable ?? false
+		const isMigrationAvailable: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigrationAvailable ?? false
 		);
 
-		const isMigrationMandatory: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationMandatory ?? false
+		const isMigrationMandatory: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigrationMandatory ?? false
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
-      console.log("available im setup: ", available, "mandatory im setup: ", mandatory) // this works
-      const migrationFlags: IOauthMigrationRequest = { available, mandatory }
+			console.log(
+				"available im setup: ",
+				available,
+				"mandatory im setup: ",
+				mandatory
+			); // this works
+			const migrationFlags: IOauthMigrationRequest = { available, mandatory };
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
@@ -168,11 +177,11 @@ export default defineComponent({
 			showEndWarning.value = !showEndWarning.value;
 		};
 
-    const showStartWarning: Ref<boolean> = ref(false);
+		const showStartWarning: Ref<boolean> = ref(false);
 
-    const toggleShowStartWarning = () => {
-      showStartWarning.value = !showStartWarning.value;
-    };
+		const toggleShowStartWarning = () => {
+			showStartWarning.value = !showStartWarning.value;
+		};
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -199,8 +208,8 @@ export default defineComponent({
 			migrationSwitchLabel,
 			showEndWarning,
 			toggleShowEndWarning,
-      showStartWarning,
-      toggleShowStartWarning,
+			showStartWarning,
+			toggleShowStartWarning,
 			endMigration,
 		};
 	},
