@@ -3,7 +3,12 @@ import CKEditor from "@components/task-form/CKEditor.vue";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 
-// TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
+class ResizeObserver {
+	observe() {}
+	unobserve() {}
+	disconnect() {}
+}
+
 describe("@components/task-form/CKEditor", () => {
 	const getWrapper: any = (attrs = {}) => {
 		const wrapper = mount(CKEditor, {
@@ -22,6 +27,7 @@ describe("@components/task-form/CKEditor", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		window.ResizeObserver = ResizeObserver;
 	});
 
 	it("should render component", () => {
@@ -41,12 +47,27 @@ describe("@components/task-form/CKEditor", () => {
 		fail("No error on invalid prop");
 	});
 
-	it("should render ckeditor component", () => {
-		const wrapper = getWrapper();
-		expect(wrapper.findComponent({ ref: "ck" }).exists()).toBe(true);
+	it("should have reduced toolbar items in simple mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "simple" } });
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(3);
 	});
 
-	/*it("should emit input on content changes", async () => {
+	it("should have reduced plugins available in simple mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "simple" } });
+		expect(wrapper.vm.config.plugins).toHaveLength(5);
+	});
+
+	it("should have all toolbar items in regular mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "regular" } });
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(23);
+	});
+
+	it("should have all plugins available in regular mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "regular" } });
+		expect(wrapper.vm.config.plugins).toHaveLength(19);
+	});
+
+	it("should emit input on content changes", async () => {
 		const wrapper = getWrapper();
 
 		const ck = wrapper.findComponent({
@@ -55,5 +76,5 @@ describe("@components/task-form/CKEditor", () => {
 
 		await ck.vm.$emit("input");
 		expect(wrapper.emitted("input")).toHaveLength(1);
-	});*/
+	});
 });

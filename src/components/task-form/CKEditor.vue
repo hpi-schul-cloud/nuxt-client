@@ -48,13 +48,71 @@ export default defineComponent({
 		const content = ref(props.value);
 		const language = (() => {
 			// map ua to correct uk
-			// todo remove if language code is fixed
+			// TODO remove if language code is fixed
 			if (i18n.locale === "ua") {
 				return "uk";
 			}
 
 			return i18n.locale;
 		})();
+
+		const toolbarItems = [];
+		toolbarItems["simple"] = ["bold", "italic", "underline"];
+		toolbarItems["regular"] = [
+			"undo",
+			"redo",
+			"|",
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"underline",
+			"strikethrough",
+			"highlight",
+			"code",
+			"superscript",
+			"subscript",
+			"|",
+			"link",
+			"bulletedList",
+			"numberedList",
+			"horizontalLine",
+			"|",
+			"blockQuote",
+			"insertTable",
+			"specialCharacters",
+			"removeFormat",
+		];
+
+		const plugins = [];
+		plugins["simple"] = [
+			"Essentials",
+			"Bold",
+			"Italic",
+			"Paragraph",
+			"Underline",
+		];
+		plugins["regular"] = [
+			"Essentials",
+			"BlockQuote",
+			"Bold",
+			"Code",
+			"Heading",
+			"Highlight",
+			"HorizontalLine",
+			"Italic",
+			"Link",
+			"List",
+			"Paragraph",
+			"RemoveFormat",
+			"SpecialCharacters",
+			"Strikethrough",
+			"Subscript",
+			"Superscript",
+			"Table",
+			"TableToolbar",
+			"Underline",
+		];
 
 		watch(
 			() => props.value,
@@ -65,65 +123,9 @@ export default defineComponent({
 
 		const config = {
 			toolbar: {
-				items: (() => {
-					if (props.mode === "simple") {
-						return ["bold", "italic", "underline"];
-					}
-
-					return [
-						"undo",
-						"redo",
-						"|",
-						"heading",
-						"|",
-						"bold",
-						"italic",
-						"underline",
-						"strikethrough",
-						"highlight",
-						"code",
-						"superscript",
-						"subscript",
-						"|",
-						"link",
-						"bulletedList",
-						"numberedList",
-						"horizontalLine",
-						"|",
-						"blockQuote",
-						"insertTable",
-						"specialCharacters",
-						"removeFormat",
-					];
-				})(),
+				items: toolbarItems[props.mode],
 			},
-			plugins: (() => {
-				if (props.mode === "simple") {
-					return ["Essentials", "Bold", "Italic", "Paragraph", "Underline"];
-				}
-
-				return [
-					"Essentials",
-					"BlockQuote",
-					"Bold",
-					"Code",
-					"Heading",
-					"Highlight",
-					"HorizontalLine",
-					"Italic",
-					"Link",
-					"List",
-					"Paragraph",
-					"RemoveFormat",
-					"SpecialCharacters",
-					"Strikethrough",
-					"Subscript",
-					"Superscript",
-					"Table",
-					"TableToolbar",
-					"Underline",
-				];
-			})(),
+			plugins: plugins[props.mode],
 			highlight: {
 				options: [
 					{
