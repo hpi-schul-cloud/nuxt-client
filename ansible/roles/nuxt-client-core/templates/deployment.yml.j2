@@ -22,11 +22,11 @@ spec:
         app: nuxtclient
       annotations:
     spec:
-#      securityContext:
-#        runAsUser: 1000
-#        runAsGroup: 1000
-#        fsGroup: 1000
-#        runAsNonRoot: true
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
       containers:
       - name: nuxtclient
         image: {{ NUXT_CLIENT_IMAGE }}-{{ SC_THEME }}:{{ NUXT_CLIENT_IMAGE_TAG }}
@@ -40,9 +40,11 @@ spec:
             name: nuxtclient-configmap
         volumeMounts:
         - mountPath: /var/run
-          name: tmpfs-1
+          name: pid-dir
         - mountPath: /var/cache/nginx
-          name: tmpfs-2
+          name: cache-dir
+        - mountPath: /etc/nginx/conf.d
+          name: conf-dir
         readinessProbe:
           httpGet:
             path: /nuxtversion
@@ -72,7 +74,9 @@ spec:
             cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
             memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("32Mi", true) }}
       volumes:
-      - name: tmpfs-1
+      - name: pid-dir
         emptyDir: {}
-      - name: tmpfs-2
+      - name: cache-dir
+        emptyDir: {}
+      - name: conf-dir
         emptyDir: {}
