@@ -6,7 +6,6 @@ export default async ({ app, route }) => {
 	const isPopulateNeeded = route.meta.some((meta) => meta.populateNeeded);
 
 	if (isPopulateNeeded || !isPublic) {
-		const redirectUrl = composeRedirectUrl(envConfigModule.getEnv.SC_THEME);
 		try {
 			const jwt = app.$cookies.get("jwt");
 			if (jwt) {
@@ -14,19 +13,22 @@ export default async ({ app, route }) => {
 
 				await authModule.populateUser();
 			} else if (!isPublic) {
-				window.location.assign(redirectUrl);
+				const loginUrl = composeLoginUrlWithRedirect();
+				window.location.assign(loginUrl);
 			}
 		} catch (error) {
-			authModule.logout(redirectUrl);
+			const loginUrl = composeLoginUrlWithRedirect();
+			authModule.logout(loginUrl);
 		}
 	}
 };
 
-
-function composeRedirectUrl(themeName = 'default' ) {
-	const currentUrl = encodeURIComponent(window.location.href);
-	if (themeName === 'thr') {
-		return `/tsp-login?redirect=${currentUrl}`;
+function composeLoginUrlWithRedirect() {
+	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
+	const currentUrl = encodeURIComponent(encodeURIComponent(window.location.href));
+	if (themeName === 'thr' &&  envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
+		const baseUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
+		return `${baseUrl}?service=https%3A%2F%2Fschulcloud-thueringen.de%2Ftsp-login%3Fredirect=${currentUrl}`;
 	}
 	return `/login?redirect=${currentUrl}`;
 }
