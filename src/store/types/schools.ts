@@ -73,3 +73,13 @@ export type OauthMigrationResponse = {
 	oauthMigrationMandatory: boolean;
 	enableMigrationStart: boolean;
 };
+
+export type OauthMigrationRequest = {
+	oauthMigrationPossible: boolean;
+	oauthMigrationMandatory: boolean;
+};
+
+export type IOauthMigrationRequest = {
+	available: boolean;
+	mandatory: boolean;
+};

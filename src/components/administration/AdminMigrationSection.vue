@@ -7,12 +7,12 @@
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
 		<v-btn
-			v-if="!isMigrationAvailable && !showWarning"
+			v-if="!isMigrationAvailable && !showEndWarning && !showStartWarning"
 			class="my-5 button-start"
 			color="primary"
 			depressed
 			:disabled="!isMigrationEnabled"
-			@click="setMigration(true, false)"
+			@click="toggleShowStartWarning"
 		>
 			{{
 				t(
@@ -22,12 +22,12 @@
 		</v-btn>
 
 		<v-btn
-			v-if="isMigrationAvailable && !showWarning"
+			v-if="isMigrationAvailable && !showEndWarning && !showStartWarning"
 			class="my-5 button-end"
 			color="primary"
 			depressed
 			:disabled="!isMigrationAvailable"
-			@click="toggleShowWarning"
+			@click="toggleShowEndWarning"
 		>
 			{{
 				t(
@@ -37,7 +37,7 @@
 		</v-btn>
 
 		<v-switch
-			v-if="!showWarning"
+			v-if="!showEndWarning && !showStartWarning"
 			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
@@ -46,7 +46,28 @@
 			@change="setMigration(true, true)"
 		></v-switch>
 
-		<v-card v-if="showWarning">
+    <v-card v-if="showStartWarning">
+      <v-card-title>"Wollen Sie die Migration wirklich starten?"</v-card-title>
+      <v-card-text>
+        <div>
+          "Nutzer werden somit in der Lage sein ihren Account auf das neue Login-System zu migrieren."
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+            color="primary"
+            @click="toggleShowStartWarning(); setMigration(true, false);"
+        >
+          "Ja, Migration starten"
+        </v-btn>
+
+        <v-btn color="primary" @click="toggleShowStartWarning">
+          "Nein, Migration nicht starten"
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+
+		<v-card v-if="showEndWarning">
 			<v-card-title>{{
 				t("components.administration.adminMigrationSection.warningCard.title")
 			}}</v-card-title>
@@ -63,8 +84,8 @@
 				<v-btn
 					color="primary"
 					@click="
-						toggleShowWarning;
-						endMigration;
+						toggleShowEndWarning();
+						endMigration();
 					"
 				>
 					{{
@@ -74,7 +95,7 @@
 					}}
 				</v-btn>
 
-				<v-btn color="primary" @click="toggleShowWarning">
+				<v-btn color="primary" @click="toggleShowEndWarning">
 					{{
 						t(
 							"components.administration.adminMigrationSection.warningCard.disagree"
@@ -97,6 +118,7 @@ import {
 } from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
+import { IOauthMigrationRequest } from "@store/types/schools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -118,31 +140,39 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationEnabled: Ref<boolean> = ref(
+		const isMigrationEnabled: ComputedRef<boolean> = computed( () =>
 			schoolsModule.getOauthMigration ?? false
 		);
 
-		const isMigrationAvailable: Ref<boolean> = ref(
+		const isMigrationAvailable: ComputedRef<boolean> = computed( () =>
 			schoolsModule.getOauthMigrationAvailable ?? false
 		);
 
-		const isMigrationMandatory: Ref<boolean> = ref(
+		const isMigrationMandatory: ComputedRef<boolean> = computed( () =>
 			schoolsModule.getOauthMigrationMandatory ?? false
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
-			schoolsModule.setSchoolOauthMigration(available, mandatory);
+      console.log("available im setup: ", available, "mandatory im setup: ", mandatory) // this works
+      const migrationFlags: IOauthMigrationRequest = { available, mandatory }
+			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
 		const endMigration = () => {
 			schoolsModule.endMigration();
 		};
 
-		const showWarning: Ref<boolean> = ref(false);
+		const showEndWarning: Ref<boolean> = ref(false);
 
-		const toggleShowWarning = () => {
-			showWarning.value = !showWarning.value;
+		const toggleShowEndWarning = () => {
+			showEndWarning.value = !showEndWarning.value;
 		};
+
+    const showStartWarning: Ref<boolean> = ref(false);
+
+    const toggleShowStartWarning = () => {
+      showStartWarning.value = !showStartWarning.value;
+    };
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -167,8 +197,10 @@ export default defineComponent({
 			isMigrationMandatory,
 			t,
 			migrationSwitchLabel,
-			showWarning,
-			toggleShowWarning,
+			showEndWarning,
+			toggleShowEndWarning,
+      showStartWarning,
+      toggleShowStartWarning,
 			endMigration,
 		};
 	},

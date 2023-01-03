@@ -1,9 +1,17 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import { authModule } from "@/store";
-import {Year, FederalState, School, IOauthMigration, OauthMigrationResponse} from "./types/schools";
+import {
+	Year,
+	FederalState,
+	School,
+	IOauthMigration,
+	OauthMigrationResponse,
+	OauthMigrationRequest, IOauthMigrationRequest
+} from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
 import {useOAuthMigration} from "@pages/administration/oauth-migration.composable";
+import {availableActions} from "hygen";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -81,7 +89,6 @@ export default class SchoolsModule extends VuexModule {
 		id: "",
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
-		oauthUserMigration: false,
 	};
 	currentYear: Year = {
 		_id: "",
@@ -100,6 +107,7 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
+	oauthUserMigration: boolean = true;
 	oauthMigrationAvailable: boolean = false;
 	oauthMigrationMandatory: boolean = false;
 	systems: any[] = [];
@@ -133,7 +141,7 @@ export default class SchoolsModule extends VuexModule {
 
 	@Mutation
 	setOauthMigration(enabled: boolean): void {
-		this.school.oauthUserMigration = enabled;
+		this.oauthUserMigration = enabled;
 	}
 
 	@Mutation
@@ -191,14 +199,14 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get getOauthMigration(): boolean  | undefined {
-		return this.school.oauthUserMigration;
+		return this.oauthUserMigration;
 	}
 
-	get getOauthMigrationAvailable(): boolean {
+	get getOauthMigrationAvailable(): boolean | undefined{
 		return this.oauthMigrationAvailable;
 	}
 
-	get getOauthMigrationMandatory(): boolean {
+	get getOauthMigrationMandatory(): boolean | undefined {
 		return this.oauthMigrationMandatory;
 	}
 
@@ -362,10 +370,11 @@ export default class SchoolsModule extends VuexModule {
 		try {
 			const oauthMigration: OauthMigrationResponse = await $axios.$get(`v3/school/${this.school._id}/migration`);
 			const mappedOauthMigration: IOauthMigration =
-				useOAuthMigration(oauthMigration).getMappedOAuthMigration()
-			this.setOauthMigrationAvailable(mappedOauthMigration.available)
+				useOAuthMigration(oauthMigration, { available: false, mandatory: false}).getMappedOAuthMigration()
 			this.setOauthMigration(mappedOauthMigration.enabled)
+			this.setOauthMigrationAvailable(mappedOauthMigration.available)
 			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory)
+			console.log("available: ", mappedOauthMigration.available, "mandatory: ", mappedOauthMigration.mandatory, "enabled: ", mappedOauthMigration.enabled)
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
@@ -374,13 +383,18 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolOauthMigration(available: boolean, mandatory: boolean): Promise<void> {
+	async setSchoolOauthMigration(migrationFlags: IOauthMigrationRequest): Promise<void> {
+		console.log("Start here: >>>> available: ", migrationFlags.available, "mandatory: ", migrationFlags.mandatory)
+		const available = migrationFlags.available;
+		const mandatory = migrationFlags.mandatory;
 		if(!this.school._id) {
 			return;
 		}
 
 		try {
-			await $axios.$post(`v3/school/${this.school._id}/migration`, { available, mandatory });
+			const mapOauthMigration: OauthMigrationRequest = useOAuthMigration({oauthMigrationMandatory: false, oauthMigrationPossible: false, enableMigrationStart: false}, {available, mandatory}).mapOAuthMigration()
+			console.log("put data: ", mapOauthMigration)
+			await $axios.$put(`v3/school/${this.school._id}/migration`, { mapOauthMigration });
 			this.setOauthMigrationAvailable(available);
 			this.setOauthMigrationMandatory(mandatory);
 		} catch (error: unknown) {
