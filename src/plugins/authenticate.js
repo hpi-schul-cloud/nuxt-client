@@ -28,9 +28,16 @@ function composeLoginUrlWithRedirect() {
 
 	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
 	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
-		const schulPortalUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
-		const schulCloudLoginUrl = `https://${envConfigModule.getEnv.DOMAIN}/tsp-login?redirect=${encodeURIComponent(currentUrl)}`;
-		return `${schulPortalUrl}?service=${encodeURIComponent(schulCloudLoginUrl)}`;
+		const schulCloudLoginUrl = composeUrl(envConfigModule.getEnv.DOMAIN, '/tsp-login', { redirect: currentUrl });
+		const schulPortalLoginUrl = composeUrl(envConfigModule.getEnv.TSP_API_BASE_URL, '/cas/login', { service: schulCloudLoginUrl });
+		return schulPortalLoginUrl;
 	}
-	return `/login?redirect=${currentUrl}`;
+	return composeUrl(currentUrl, '/login', { redirect: currentUrl });
+}
+
+export function composeUrl(baseUrl, path = '', params = {}) {
+	const urlObject = new URL(path, baseUrl);
+	const paramObject = new URLSearchParams(params);
+	urlObject.search = paramObject.toString();
+	return urlObject.toString();
 }
