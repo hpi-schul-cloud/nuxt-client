@@ -24,11 +24,13 @@ export default async ({ app, route }) => {
 };
 
 function composeLoginUrlWithRedirect() {
+	const currentUrl = window.location.href;
+
 	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
-	const currentUrl = encodeURIComponent(encodeURIComponent(window.location.href));
-	if (themeName === 'thr' &&  envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
-		const baseUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
-		return `${baseUrl}?service=https%3A%2F%2Fschulcloud-thueringen.de%2Ftsp-login%3Fredirect=${currentUrl}`;
+	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
+		const schulPortalUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
+		const schulCloudLoginUrl = `https://${envConfigModule.getEnv.DOMAIN}/tsp-login?redirect=${encodeURIComponent(currentUrl)}`;
+		return `${schulPortalUrl}?service=${encodeURIComponent(schulCloudLoginUrl)}`;
 	}
 	return `/login?redirect=${currentUrl}`;
 }
