@@ -7,7 +7,8 @@
 			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
-			:headers="headers">
+			:headers="headers"
+		>
 			<template #[`item.name`]="{ item }">
 				<span :class="getColor(item)">
 					{{ item.name }}
@@ -19,36 +20,34 @@
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
-				<v-icon
-					@click="editTool(item)">
+				<v-icon @click="editTool(item)">
 					{{ mdiPencilOutline }}
 				</v-icon>
-				<v-icon
-					@click="openDeleteDialog(item)">
+				<v-icon @click="openDeleteDialog(item)">
 					{{ mdiTrashCanOutline }}
 				</v-icon>
 			</template>
 		</v-data-table>
-		<v-btn
-			class="my-5 button-save"
-			color="primary"
-			depressed
-			@click="addTool">
+		<v-btn class="my-5 button-save" color="primary" depressed @click="addTool">
 			{{ $t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog
-			v-model="isDeleteDialogOpen"
-			max-width="450">
+		<v-dialog v-model="isDeleteDialogOpen" max-width="450">
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
-						{{ $t("components.administration.externalToolsSection.dialog.title") }}
+						{{
+							$t("components.administration.externalToolsSection.dialog.title")
+						}}
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<p class="text-md mt-2">
-						{{ $t("components.administration.externalToolsSection.dialog.content") }}
+						{{
+							$t(
+								"components.administration.externalToolsSection.dialog.content"
+							)
+						}}
 					</p>
 				</v-card-text>
 				<v-card-actions>
@@ -58,7 +57,8 @@
 						class="dialog-closed"
 						depressed
 						text
-						@click="closeDeleteDialog">
+						@click="closeDeleteDialog"
+					>
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
@@ -66,7 +66,8 @@
 						class="dialog-confirmed px-6"
 						color="primary"
 						depressed
-						@click="deleteTool">
+						@click="deleteTool"
+					>
 						{{ $t("common.actions.confirm") }}
 					</v-btn>
 				</v-card-actions>
@@ -78,9 +79,18 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import { computed, ComputedRef, inject, onMounted, Ref } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+} from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
-import { SchoolExternalTool, ExternalToolStatus } from "@store/types/school-external-tool";
+import {
+	SchoolExternalTool,
+	ExternalToolStatus,
+} from "@store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 
@@ -120,20 +130,33 @@ export default defineComponent({
 				value: "name",
 			},
 			{
-				text: t("components.administration.externalToolsSection.table.header.status"),
+				text: t(
+					"components.administration.externalToolsSection.table.header.status"
+				),
 				value: "status",
 			},
-			{ text: "", value: "actions", sortable: false, align: "end", width: "90px" },
+			{
+				text: "",
+				value: "actions",
+				sortable: false,
+				align: "end",
+				width: "90px",
+			},
 		];
 
 		const items: ComputedRef<ExternalToolItem[]> = computed(() => {
 			return externalToolsModule.getSchoolExternalTools.map(
 				(tool: SchoolExternalTool) => {
 					const outdated: boolean = tool.status === ExternalToolStatus.Outdated;
-					const status: string = tool.status === ExternalToolStatus.Latest
-						? t("components.administration.externalToolsSection.table.header.status.latest")
-						: t("components.administration.externalToolsSection.table.header.status.outdated");
-					return { name: tool.name, status: status, outdated }
+					const status: string =
+						tool.status === ExternalToolStatus.Latest
+							? t(
+									"components.administration.externalToolsSection.table.header.status.latest"
+							  )
+							: t(
+									"components.administration.externalToolsSection.table.header.status.outdated"
+							  );
+					return { name: tool.name, status: status, outdated };
 				}
 			);
 		});
@@ -144,16 +167,16 @@ export default defineComponent({
 
 		const addTool = () => {
 			console.log("addTool() called");
-		}
+		};
 
 		const editTool = () => {
 			console.log("editTool() called");
-		}
+		};
 
 		const deleteTool = () => {
 			console.log(itemToDelete.value);
 			closeDeleteDialog();
-		}
+		};
 
 		const itemToDelete: Ref<ExternalToolItem | undefined> = ref();
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
@@ -161,12 +184,12 @@ export default defineComponent({
 		const openDeleteDialog = (item: ExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
-		}
+		};
 
 		const closeDeleteDialog = () => {
 			itemToDelete.value = undefined;
 			isDeleteDialogOpen.value = false;
-		}
+		};
 
 		return {
 			t,
@@ -198,6 +221,6 @@ $arrow-offset: 8px;
 }
 
 .outdated {
-	color: var(--v-primary-base)
+	color: var(--v-primary-base);
 }
 </style>
