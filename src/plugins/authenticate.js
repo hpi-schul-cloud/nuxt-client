@@ -26,16 +26,27 @@ export default async ({ app, route }) => {
 function composeLoginUrlWithRedirect() {
 	const currentUrl = window.location.href;
 
-	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
-	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
-		const schulCloudLoginUrl = composeUrl(envConfigModule.getEnv.DOMAIN, '/tsp-login', { redirect: currentUrl });
-		const schulPortalLoginUrl = composeUrl(envConfigModule.getEnv.TSP_API_BASE_URL, '/cas/login', { service: schulCloudLoginUrl });
+	const themeName = envConfigModule.getEnv.SC_THEME ?? "default";
+	if (
+		themeName === "thr" &&
+		envConfigModule.getEnv.FEATURE_TSP_ENABLED === true
+	) {
+		const schulCloudLoginUrl = composeUrl(
+			envConfigModule.getEnv.DOMAIN,
+			"/tsp-login",
+			{ redirect: currentUrl }
+		);
+		const schulPortalLoginUrl = composeUrl(
+			envConfigModule.getEnv.TSP_API_BASE_URL,
+			"/cas/login",
+			{ service: schulCloudLoginUrl }
+		);
 		return schulPortalLoginUrl;
 	}
-	return composeUrl(currentUrl, '/login', { redirect: currentUrl });
+	return composeUrl(currentUrl, "/login", { redirect: currentUrl });
 }
 
-export function composeUrl(baseUrl, path = '', params = {}) {
+export function composeUrl(baseUrl, path = "", params = {}) {
 	const urlObject = new URL(path, baseUrl);
 	const paramObject = new URLSearchParams(params);
 	urlObject.search = paramObject.toString();
