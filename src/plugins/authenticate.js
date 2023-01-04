@@ -23,30 +23,29 @@ export default async ({ app, route }) => {
 };
 
 function composeLoginUrlWithRedirect() {
-	const currentUrl = window.location.href;
-
-	const themeName = envConfigModule.getEnv.SC_THEME ?? "default";
 	if (
-		themeName === "thr" &&
+		envConfigModule.getEnv.SC_THEME === "thr" &&
 		envConfigModule.getEnv.FEATURE_TSP_ENABLED === true
 	) {
-		return composeThuringiaLoginUrl(currentUrl);
+		return composeThuringiaLoginUrl(window.location.href);
 	}
-	return composeUrl(currentUrl, "/login", { redirect: currentUrl });
+	return composeUrl(window.location.href, "/login", {
+		redirect: window.location.href,
+	});
 }
 
-function composeThuringiaLoginUrl(currentUrl) {
-	const schulCloudLoginUrl = composeUrl(
-		envConfigModule.getEnv.DOMAIN,
-		"/tsp-login",
-		{ redirect: currentUrl }
-	);
-	const schulPortalLoginUrl = composeUrl(
-		envConfigModule.getEnv.TSP_API_BASE_URL,
-		"/cas/login",
-		{ service: schulCloudLoginUrl }
-	);
-	return schulPortalLoginUrl;
+function composeThuringiaLoginUrl(url) {
+	const schulcloudUrl = envConfigModule.getEnv.DOMAIN;
+	const schulcloudLoginUrl = composeUrl(schulcloudUrl, "/tsp-login", {
+		redirect: url,
+	});
+
+	const schulportalUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
+	const schulportalLoginUrl = composeUrl(schulportalUrl, "/cas/login", {
+		service: schulcloudLoginUrl,
+	});
+
+	return schulportalLoginUrl;
 }
 
 function composeUrl(baseUrl, path = "", params = {}) {

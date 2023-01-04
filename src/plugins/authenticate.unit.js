@@ -21,14 +21,14 @@ function mockWindowLocation(location) {
 function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
 	let jwt;
 	if (hasValidJwt) {
-		jwt = 'valid-jwt';
+		jwt = "valid-jwt";
 	}
 	if (hasInvalidJwt) {
-		jwt = 'invalid-jwt';
+		jwt = "invalid-jwt";
 	}
 
 	const cookies = {
-		jwt
+		jwt,
 	};
 
 	const contextMock = {
@@ -37,7 +37,7 @@ function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
 		},
 		app: {
 			$cookies: {
-				get: (name) =>  cookies[name],
+				get: (name) => cookies[name],
 			},
 		},
 		store: {
@@ -141,10 +141,9 @@ describe("@plugins/authenticate", () => {
 
 				await authenticate(contextMock);
 
-				const expectedRedirectUrl = `https://${SCHULCLOUD_URL}/login?redirect=${encodeURIComponent(
-					URL
-				)}`;
-				expect(windowLocationAssign).toHaveBeenCalledWith(expectedRedirectUrl);
+				const redirect = encodeURIComponent(URL);
+				const expectedUrl = `https://${SCHULCLOUD_URL}/login?redirect=${redirect}`;
+				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
 			});
 
 			it("should redirect to thuringia schulportal - if instance is thuringia", async () => {
@@ -158,13 +157,11 @@ describe("@plugins/authenticate", () => {
 
 				await authenticate(contextMock);
 
-				const serviceUrl = `https://${SCHULCLOUD_URL}/tsp-login?redirect=${encodeURIComponent(
-					URL
-				)}`;
-				const expectedRedirectUrl = `${SCHULPORTAL_URL}/cas/login?service=${encodeURIComponent(
-					serviceUrl
-				)}`;
-				expect(windowLocationAssign).toHaveBeenCalledWith(expectedRedirectUrl);
+				const redirect = encodeURIComponent(URL);
+				const schulcloudLoginUrl = `https://${SCHULCLOUD_URL}/login?redirect=${redirect}`;
+				const expectedUrl =
+					`${SCHULPORTAL_URL}/cas/login?service=` + encodeURIComponent(schulcloudLoginUrl);
+				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
 			});
 		});
 
