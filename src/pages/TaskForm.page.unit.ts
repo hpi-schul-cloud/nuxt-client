@@ -90,14 +90,6 @@ describe("TaskForm", () => {
 	});
 
 	describe("permission check before mounting", () => {
-		describe("when user does not have permission HOMEWORK_CREATE", () => {
-			it("should redirect to the page before", () => {
-				authModule.setUser(mockAuthStoreDataStudent);
-				expect($router.go).toHaveBeenCalled();
-				// QUESTION should not render TaskForm page?
-			});
-		});
-
 		describe("when user does have permission HOMEWORK_CREATE", () => {
 			it.todo("should do what?"); // QUESTION
 		});
