@@ -4,7 +4,6 @@ import { provide } from "vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@/store/schools";
-import VueI18n from "vue-i18n";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -18,12 +17,10 @@ describe("AdminMigrationSection", () => {
 		}) as jest.Mocked<SchoolsModule>;
 
 		const wrapper: Wrapper<any> = shallowMount(AdminMigrationSection, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("schoolsModule", schoolsModule);
+			...createComponentMocks({}),
+			provide: {
+				i18n: { t: (key: string) => key },
+				schoolsModule,
 			},
 		});
 
@@ -43,8 +40,8 @@ describe("AdminMigrationSection", () => {
 		it("should throw an error when schoolsModule injection fails", () => {
 			try {
 				shallowMount(AdminMigrationSection, {
-					setup() {
-						provide("i18n", VueI18n);
+					provide: {
+						i18n: { t: (key: string) => key },
 					},
 				});
 			} catch (e) {
@@ -57,8 +54,8 @@ describe("AdminMigrationSection", () => {
 		it("should throw an error when i18n injection fails", () => {
 			try {
 				shallowMount(AdminMigrationSection, {
-					setup() {
-						provide("schoolsModule", SchoolsModule);
+					provide: {
+						schoolsModule,
 					},
 				});
 			} catch (e) {
