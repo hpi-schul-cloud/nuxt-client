@@ -25,16 +25,27 @@ export default async ({ app, route }) => {
 function composeLoginUrlWithRedirect() {
 	const currentUrl = window.location.href;
 
-	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
-	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
+	const themeName = envConfigModule.getEnv.SC_THEME ?? "default";
+	if (
+		themeName === "thr" &&
+		envConfigModule.getEnv.FEATURE_TSP_ENABLED === true
+	) {
 		return composeThuringiaLoginUrl();
 	}
 	return composeUrl(currentUrl, "/login", { redirect: currentUrl });
 }
 
 function composeThuringiaLoginUrl(currentUrl) {
-	const schulCloudLoginUrl = composeUrl(envConfigModule.getEnv.DOMAIN, '/tsp-login', { redirect: currentUrl });
-	const schulPortalLoginUrl = composeUrl(envConfigModule.getEnv.TSP_API_BASE_URL, '/cas/login', { service: schulCloudLoginUrl });
+	const schulCloudLoginUrl = composeUrl(
+		envConfigModule.getEnv.DOMAIN,
+		"/tsp-login",
+		{ redirect: currentUrl }
+	);
+	const schulPortalLoginUrl = composeUrl(
+		envConfigModule.getEnv.TSP_API_BASE_URL,
+		"/cas/login",
+		{ service: schulCloudLoginUrl }
+	);
 	return schulPortalLoginUrl;
 }
 
