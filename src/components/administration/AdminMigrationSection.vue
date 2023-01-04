@@ -47,7 +47,7 @@
 		></v-switch>
 
     <p v-if="migrationCompletionDate">
-      Die Migration wurde zuletzt beendet am {{migrationCompletionDate}}
+      {{ t("components.administration.adminMigrationSection.migrationCompletionDate.text") + migrationCompletionDate}}
     </p>
 
     <v-card v-if="showStartWarning">

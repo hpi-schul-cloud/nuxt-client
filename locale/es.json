@@ -113,7 +113,7 @@
 	"components.administration.adminMigrationSection.infoText": "Tenga en cuenta que la migración sólo puede tener lugar si se introduce el número oficial de la escuela.",
 	"components.administration.adminMigrationSection.mandatorySwitch.disable": "Retirar la migración obligatoria",
 	"components.administration.adminMigrationSection.mandatorySwitch.enable": "Facilitar la migración",
-	"components.administration.adminMigrationSection.migrationCompletionDate.text": "La migración se completó por última vez el {migrationCompletionDate}",
+	"components.administration.adminMigrationSection.migrationCompletionDate.text": "La migración se completó por última vez el ",
 	"components.administration.adminMigrationSection.migrationEnableButton.label": "Iniciar la migración",
 	"components.administration.adminMigrationSection.migrationEndButton.label": "Completar la migración",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Sí, iniciar migración",

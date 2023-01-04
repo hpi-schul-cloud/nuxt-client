@@ -114,7 +114,7 @@
 	"components.administration.adminMigrationSection.infoText": "Bitte beachten Sie, dass die Migration nur dann erfolgen kann, wenn die offizielle Schulnummer eingetragen ist.",
 	"components.administration.adminMigrationSection.mandatorySwitch.disable": "Migrationspflicht aufheben",
 	"components.administration.adminMigrationSection.mandatorySwitch.enable": "Migration verpfilchtend machen",
-	"components.administration.adminMigrationSection.migrationCompletionDate.text": "Die Migration wurde zuletzt beendet am {migrationCompletionDate}",
+	"components.administration.adminMigrationSection.migrationCompletionDate.text": "Die Migration wurde zuletzt beendet am ",
 	"components.administration.adminMigrationSection.migrationEnableButton.label": "Migration starten",
 	"components.administration.adminMigrationSection.migrationEndButton.label": "Migration abschliessen",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Ja, Migration starten",
