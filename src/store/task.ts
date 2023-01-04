@@ -29,7 +29,7 @@ export default class TaskModule extends VuexModule {
 		name: "",
 		description: { content: "", type: RichTextTypeEnum.RichtextCk5 },
 	};
-	loading: boolean = false;
+	loading = false;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",

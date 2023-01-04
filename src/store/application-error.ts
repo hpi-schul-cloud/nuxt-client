@@ -8,7 +8,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 })
 export default class ApplicationErrorModule extends VuexModule {
 	private statusCode: HttpStatusCode | null = null;
-	private translationKey: string = "";
+	private translationKey = "";
 
 	@Action({ rawError: true })
 	setError(payload: {
