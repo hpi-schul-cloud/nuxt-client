@@ -158,7 +158,7 @@ describe("@plugins/authenticate", () => {
 				await authenticate(contextMock);
 
 				const redirect = encodeURIComponent(URL);
-				const schulcloudLoginUrl = `https://${SCHULCLOUD_URL}/login?redirect=${redirect}`;
+				const schulcloudLoginUrl = `https://${SCHULCLOUD_URL}/tsp-login?redirect=${redirect}`;
 				const expectedUrl =
 					`${SCHULPORTAL_URL}/cas/login?service=` + encodeURIComponent(schulcloudLoginUrl);
 				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
