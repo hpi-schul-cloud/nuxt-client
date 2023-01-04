@@ -1,4 +1,4 @@
-import createComponentMocksJS from "../unit/setup-new";
+import createComponentMocksJS from "../unit/setup";
 
 type componentMockOptions = {
 	i18n?: boolean;
