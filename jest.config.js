@@ -14,6 +14,5 @@ module.exports = {
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
 
-	// setupFiles: ["./tests/unit/setup.js"],
-	setupFiles: ["./tests/unit/setup-new.js"],
+	setupFiles: ["./tests/unit/setup.js"],
 };
