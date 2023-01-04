@@ -63,6 +63,38 @@ describe("@components/share-course/ImportFlow", () => {
 
 			expect(copyModuleMock.validateShareToken).toHaveBeenCalledWith(token);
 		});
+		it("shouldn't call validateShareToken if isActive is false", () => {
+			mountComponent({ propsData: { isActive: false } });
+
+			expect(copyModuleMock.validateShareToken).not.toHaveBeenCalled();
+		});
+
+		describe("failure notifier", () => {
+			it("is shown for invalid token", async () => {
+				copyModuleMock.validateShareToken = () => Promise.reject({});
+				mountComponent();
+				await Vue.nextTick();
+
+				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+					expect.objectContaining({
+						text: "components.molecules.importCourse.options.failure.invalidToken",
+					})
+				);
+			});
+
+			it("is shown for insufficient permissions", async () => {
+				copyModuleMock.validateShareToken = () =>
+					Promise.reject({ response: { status: 403 } });
+				mountComponent();
+				await Vue.nextTick();
+
+				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+					expect.objectContaining({
+						text: "components.molecules.importCourse.options.failure.permissionError",
+					})
+				);
+			});
+		});
 
 		describe("valid token", () => {
 			const originalName = "Nihilismus";

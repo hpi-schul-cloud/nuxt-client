@@ -30,7 +30,7 @@ export default defineComponent({
 	props: {
 		token: {
 			type: String,
-			default: () => ''
+			default: ""
 		},
 		isActive: {
 			type: Boolean,
@@ -64,7 +64,6 @@ export default defineComponent({
 		const closeModals = () => openModal('none');
 
 		// notifiers
-
 
 		const showFailureBackend = (name) => {
 			notifier?.show({
