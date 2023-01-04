@@ -10,7 +10,6 @@ export default async ({ app, route }) => {
 			const jwt = app.$cookies.get("jwt");
 			if (jwt) {
 				authModule.setAccessToken(jwt);
-
 				await authModule.populateUser();
 			} else if (!isPublic) {
 				const loginUrl = composeLoginUrlWithRedirect();
@@ -28,11 +27,15 @@ function composeLoginUrlWithRedirect() {
 
 	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
 	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
-		const schulCloudLoginUrl = composeUrl(envConfigModule.getEnv.DOMAIN, '/tsp-login', { redirect: currentUrl });
-		const schulPortalLoginUrl = composeUrl(envConfigModule.getEnv.TSP_API_BASE_URL, '/cas/login', { service: schulCloudLoginUrl });
-		return schulPortalLoginUrl;
+		return composeThuringiaLoginUrl();
 	}
 	return composeUrl(currentUrl, '/login', { redirect: currentUrl });
+}
+
+function composeThuringiaLoginUrl(currentUrl) {
+	const schulCloudLoginUrl = composeUrl(envConfigModule.getEnv.DOMAIN, '/tsp-login', { redirect: currentUrl });
+	const schulPortalLoginUrl = composeUrl(envConfigModule.getEnv.TSP_API_BASE_URL, '/cas/login', { service: schulCloudLoginUrl });
+	return schulPortalLoginUrl;
 }
 
 export function composeUrl(baseUrl, path = '', params = {}) {
