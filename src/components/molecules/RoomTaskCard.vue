@@ -171,36 +171,11 @@ export default {
 			return this.task.status.submitted && !this.task.status.graded;
 		},
 		isPlanned() {
-			console.log("computed isPlaned:");
-			const currentDate = new Date();
 			const scheduledDate = this.task.availableDate;
-			const milliseconds = 30 * 1000; // 30 seconds = 30000 milliseconds
-			// const testedgetTime = scheduledDate.getTime();
-			console.log("scheduledDate", scheduledDate);
-			console.log("only dategetTime", new Date(scheduledDate).getTime());
-			// console.log("test", testedgetTime);
-			const calculatedDate = new Date(
-				new Date(scheduledDate).getTime() - milliseconds
-			);
-			console.log(
-				"new Date(scheduledDate.getTime() + milliseconds)",
-				calculatedDate
-			);
-			console.log("new Date()", currentDate);
-			console.log("return", scheduledDate && calculatedDate > currentDate);
-			// console.log(
-			// 	"scheduledDate && new Date(scheduledDate.getTime() + milliseconds) > new Date()",
-			// 	scheduledDate &&
-			// 		new Date(scheduledDate.getTime() + milliseconds) > new Date()
-			// );
-			console.log("END ------ computed isPlaned:");
-			// return (
-			// 	scheduledDate &&
-			// 	new Date(new Date(scheduledDate).getTime() + milliseconds) > new Date()
-			// );
+			const delay = 30 * 1000;
 			return (
 				scheduledDate &&
-				new Date(new Date(scheduledDate).getTime() - milliseconds) > new Date()
+				new Date(new Date(scheduledDate).getTime() - delay) > new Date()
 			);
 		},
 		cardActions() {
@@ -211,24 +186,12 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
-					// console.log(
-					// 	"this.isPlanned || (this.isDraft && !this.isFinished",
-					// 	this.isPlanned,
-					// 	this.isDraft,
-					// 	this.isFinished
-					// );
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
-					// console.log(
-					// 	"!this.isPlanned && !this.isDraft && !this.isFinished",
-					// 	this.isPlanned,
-					// 	this.isDraft,
-					// 	this.isFinished
-					// );
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
@@ -244,7 +207,6 @@ export default {
 					});
 				}
 			}
-			// console.log("roleBasedActions", roleBasedActions);
 			return roleBasedActions;
 		},
 		chipItems() {
@@ -450,13 +412,6 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			// console.log(
-			// 	"getStyleClasses",
-			// 	this.isPlanned,
-			// 	this.isDraft,
-			// 	this.isFinished,
-			// 	this.isPlanned || (this.isDraft && !this.isFinished)
-			// );
 			return this.isPlanned || (this.isDraft && !this.isFinished)
 				? "task-hidden"
 				: "";
