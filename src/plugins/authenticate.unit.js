@@ -18,14 +18,26 @@ function mockWindowLocation(location) {
 	return assignMock;
 }
 
-function mockContext(isPublic) {
+function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
+	let jwt;
+	if (hasValidJwt) {
+		jwt = 'valid-jwt';
+	}
+	if (hasInvalidJwt) {
+		jwt = 'invalid-jwt';
+	}
+
+	const cookies = {
+		jwt
+	};
+
 	const contextMock = {
 		route: {
 			meta: [{ isPublic }],
 		},
 		app: {
 			$cookies: {
-				get: (name) => name,
+				get: (name) =>  cookies[name],
 			},
 		},
 		store: {
