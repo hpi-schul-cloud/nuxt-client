@@ -25,12 +25,9 @@ export default async ({ app, route }) => {
 function composeLoginUrlWithRedirect() {
 	const currentUrl = window.location.href;
 
-	const themeName = envConfigModule.getEnv.SC_THEME ?? "default";
-	if (
-		themeName === "thr" &&
-		envConfigModule.getEnv.FEATURE_TSP_ENABLED === true
-	) {
-		return composeThuringiaLoginUrl();
+	const themeName = envConfigModule.getEnv.SC_THEME ?? 'default';
+	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
+		return composeThuringiaLoginUrl(currentUrl);
 	}
 	return composeUrl(currentUrl, "/login", { redirect: currentUrl });
 }
@@ -49,8 +46,9 @@ function composeThuringiaLoginUrl(currentUrl) {
 	return schulPortalLoginUrl;
 }
 
-export function composeUrl(baseUrl, path = "", params = {}) {
-	const urlObject = new URL(path, baseUrl);
+function composeUrl(baseUrl, path = "", params = {}) {
+	const protocol = baseUrl.match(/^http/i) ? '' : 'https://';
+	const urlObject = new URL(path, protocol + baseUrl);
 	const paramObject = new URLSearchParams(params);
 	urlObject.search = paramObject.toString();
 	return urlObject.toString();
