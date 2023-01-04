@@ -114,7 +114,7 @@
 					color="primary"
 					@click="
 						toggleShowEndWarning();
-						endMigration();
+						setMigration(false, isMigrationMandatory);
 					"
 				>
 					{{
@@ -190,10 +190,6 @@ export default defineComponent({
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
-		const endMigration = () => {
-			schoolsModule.endMigration();
-		};
-
 		const showEndWarning: Ref<boolean> = ref(false);
 
 		const toggleShowEndWarning = () => {
@@ -233,7 +229,6 @@ export default defineComponent({
 			toggleShowEndWarning,
 			showStartWarning,
 			toggleShowStartWarning,
-			endMigration,
 			migrationCompletionDate,
 		};
 	},

@@ -9,7 +9,7 @@ export const mapOauthMigrationRequestToApi = (request: OauthMigrationRequest): O
     const migration: OauthMigrationApiRequest = {
         oauthMigrationPossible: request.available,
         oauthMigrationMandatory: request.mandatory,
-        oauthMigrationFinished: false,
+        oauthMigrationFinished: !request.available,
     }
 
     return migration;

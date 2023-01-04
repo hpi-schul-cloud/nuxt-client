@@ -399,26 +399,11 @@ export default class SchoolsModule extends VuexModule {
 
 		try {
 			const mapOauthMigration: OauthMigrationApiRequest = mapOauthMigrationRequestToApi(migrationFlags);
-			await $axios.$put(`v3/school/${this.school._id}/migration`, { oauthMigrationPossible: mapOauthMigration.oauthMigrationPossible, oauthMigrationMandatory: mapOauthMigration.oauthMigrationMandatory, oauthMigrationFinished: mapOauthMigration.oauthMigrationFinished });
-			this.setOauthMigrationAvailable(migrationFlags.available);
-			this.setOauthMigrationMandatory(migrationFlags.mandatory);
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
-			}
-		}
-	}
-	@Action
-	async endMigration(): Promise<void> {
-		if(!this.school._id) {
-			return;
-		}
-
-		try {
-			// const date: Date = await $axios.$post(`v3/school/${this.school._id}/end-migration`); // {available: false, mandatory, migrationCompletionDate: true}
-			this.setOauthMigrationAvailable(false);
-			const date = new Date();
-			this.setMigrationCompletionDate(date);
+			const oauthMigration = await $axios.$put(`v3/school/${this.school._id}/migration`, { oauthMigrationPossible: mapOauthMigration.oauthMigrationPossible, oauthMigrationMandatory: mapOauthMigration.oauthMigrationMandatory, oauthMigrationFinished: mapOauthMigration.oauthMigrationFinished });
+			const mappedOauthMigration: OauthMigrationResponse = mapApiToOauthMigrationResponse(oauthMigration);
+			this.setOauthMigrationAvailable(mappedOauthMigration.available);
+			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory);
+			this.setMigrationCompletionDate(mappedOauthMigration.migrationCompletionDate)
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
