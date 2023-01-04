@@ -51,31 +51,38 @@ describe("@plugins/authenticate", () => {
 	});
 
 	describe("composeUrl", () => {
-	  it("should work if no path or params are given", () => {
-		const url = composeUrl('https://example.com');
-		expect(url).toBe('https://example.com/');
-	  });
+		it("should work if no path or params are given", () => {
+			const url = composeUrl("https://example.com");
+			expect(url).toBe("https://example.com/");
+		});
 
-	  it("should use given path", () => {
-		const url = composeUrl('https://example.com', 'login');
-		expect(url).toBe('https://example.com/login');
-	  });
+		it("should use given path", () => {
+			const url = composeUrl("https://example.com", "login");
+			expect(url).toBe("https://example.com/login");
+		});
 
-	  it("should add given parameters", () => {
-		const url = composeUrl('https://example.com', 'login', { foo: "bar", route: 66 });
-		expect(url).toBe('https://example.com/login?foo=bar&route=66');
-	  });
+		it("should add given parameters", () => {
+			const url = composeUrl("https://example.com", "login", {
+				foo: "bar",
+				route: 66,
+			});
+			expect(url).toBe("https://example.com/login?foo=bar&route=66");
+		});
 
-	  it("should ignore parameters in path", () => {
-		const url = composeUrl('https://example.com', 'login?baz=ra', { foo: "bar", route: 66 });
-		expect(url).toBe('https://example.com/login?foo=bar&route=66');
-	  });
+		it("should ignore parameters in path", () => {
+			const url = composeUrl("https://example.com", "login?baz=ra", {
+				foo: "bar",
+				route: 66,
+			});
+			expect(url).toBe("https://example.com/login?foo=bar&route=66");
+		});
 
-	  it("should ignore path in baseUrl", () => {
-		const url = composeUrl('https://example.com/some-other-path', 'login', { foo: "bar", route: 66 });
-		expect(url).toBe('https://example.com/login?foo=bar&route=66');
-	  });
+		it("should ignore path in baseUrl", () => {
+			const url = composeUrl("https://example.com/some-other-path", "login", {
+				foo: "bar",
+				route: 66,
+			});
+			expect(url).toBe("https://example.com/login?foo=bar&route=66");
+		});
 	});
-
-
 });

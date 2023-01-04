@@ -29,7 +29,7 @@ function composeLoginUrlWithRedirect() {
 	if (themeName === 'thr' && envConfigModule.getEnv.FEATURE_TSP_ENABLED === true) {
 		return composeThuringiaLoginUrl();
 	}
-	return composeUrl(currentUrl, '/login', { redirect: currentUrl });
+	return composeUrl(currentUrl, "/login", { redirect: currentUrl });
 }
 
 function composeThuringiaLoginUrl(currentUrl) {
@@ -38,7 +38,7 @@ function composeThuringiaLoginUrl(currentUrl) {
 	return schulPortalLoginUrl;
 }
 
-export function composeUrl(baseUrl, path = '', params = {}) {
+export function composeUrl(baseUrl, path = "", params = {}) {
 	const urlObject = new URL(path, baseUrl);
 	const paramObject = new URLSearchParams(params);
 	urlObject.search = paramObject.toString();
