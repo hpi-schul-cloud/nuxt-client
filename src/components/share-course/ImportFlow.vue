@@ -44,8 +44,6 @@ export default defineComponent({
 
 		const parentName = ref("");
 
-		// modals
-
 		const isImportModalOpen = ref(false);
 
 		const isCopyResultModalOpen = computed({

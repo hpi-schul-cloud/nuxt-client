@@ -78,7 +78,7 @@ const getWrapper = (props: object, options?: object) => {
 describe("vRoomGroupAvatar", () => {
 	it("should display the title", () => {
 		const wrapper = getWrapper(propsData);
-		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
+		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
 		expect(labelElement.innerHTML.trim()).toStrictEqual("Fourth");

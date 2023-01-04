@@ -22,6 +22,7 @@ const routes = [
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
+	`^/login-instances/?`,
 	`^/news/new`,
 	`^/news/${mongoId}/edit`,
 	`^/poc-files/?$`,
@@ -29,8 +30,10 @@ const routes = [
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/tasks/?$`,
+	`^/tasks/${mongoId}/edit/?$`,
 	`^/tasks/new/?$`,
 	`^/termsofuse/?`,
+	`^/error/?`,
 ];
 
 const uuid =

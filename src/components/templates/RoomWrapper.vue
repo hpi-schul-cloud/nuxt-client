@@ -19,7 +19,7 @@
 				/>
 			</v-container>
 		</template>
-		<template v-if="!isLoading && !hasRooms">
+		<template v-if="!isLoading && !hasRooms && !hasImportToken">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
@@ -62,6 +62,10 @@ export default Vue.extend({
 		hasRooms: {
 			type: Boolean,
 			required: true,
+		},
+		hasImportToken: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {

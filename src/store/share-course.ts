@@ -9,8 +9,8 @@ import {
 } from "../serverApi/v3/api";
 
 export interface ShareOptions {
-	schoolInternally: boolean;
-	expiresInSevenDays: boolean;
+	isSchoolInternal: boolean;
+	hasExpiryDate: boolean;
 }
 
 export interface SharePayload extends ShareOptions {
@@ -38,8 +38,8 @@ export default class ShareCourseModule extends VuexModule {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			parentId: this.courseId,
-			expiresInDays: payload.expiresInSevenDays ? 7 : null,
-			schoolExclusive: payload.schoolInternally,
+			expiresInDays: payload.hasExpiryDate ? 21 : null,
+			schoolExclusive: payload.isSchoolInternal,
 		};
 		try {
 			const shareTokenResult =

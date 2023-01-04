@@ -1,11 +1,12 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Editor from "@/components/molecules/Editor.vue";
+import CKEditor from "@/components/task-form/CKEditor.vue";
 import { provide } from "vue";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 
-describe("@/components/molecules/Editor", () => {
+// TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
+describe("@components/task-form/CKEditor", () => {
 	const getWrapper: any = (attrs = {}) => {
-		const wrapper = shallowMount(Editor, {
+		const wrapper = mount(CKEditor, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -25,7 +26,7 @@ describe("@/components/molecules/Editor", () => {
 
 	it("should render component", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(Editor).exists()).toBe(true);
+		expect(wrapper.findComponent(CKEditor).exists()).toBe(true);
 	});
 
 	it("should not render with invalid mode property", () => {

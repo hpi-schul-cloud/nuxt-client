@@ -287,7 +287,7 @@ export default {
 			this.lessonShare.token = sharedLesson.code;
 			this.lessonShare.lessonName = sharedLesson.lessonName;
 			this.lessonShare.status = sharedLesson.status;
-			this.lessonShare.message = sharedLesson.message;
+			this.lessonShare.messageTranslationKey = sharedLesson.message;
 
 			this.lessonShare.isOpen = true;
 		},

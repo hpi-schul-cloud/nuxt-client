@@ -18,6 +18,7 @@ const testProps = {
 		classNames: ["6a"],
 	},
 	isDialog: true,
+	ldapSource: "LDAP",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -153,6 +154,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		};
 		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
+			ldapSource: "LDAP",
 		});
 
 		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");

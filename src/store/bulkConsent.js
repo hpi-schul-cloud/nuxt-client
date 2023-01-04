@@ -10,16 +10,10 @@ export const actions = {
 			const promiseResult = await Promise.allSettled(
 				payload.forEach((user) => {
 					registered.push(user._id);
-					$axios
-						.patch("/v1/users/admin/students/" + user._id, user)
-						.then((userData) => {
-							const accountModel = {
-								activated: true,
-								username: userData.data.email,
-								password: user.password,
-								userId: user._id,
-							};
-							$axios.post("/v1/accounts/", accountModel);
+					this.$axios
+						.$patch("/v1/users/admin/students/" + user._id, {
+							...user,
+							createAccount: true,
 						})
 						.catch((error) => errors.push({ updateError: error }));
 				})

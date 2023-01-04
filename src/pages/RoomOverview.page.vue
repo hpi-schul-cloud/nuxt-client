@@ -2,6 +2,7 @@
 	<room-wrapper
 		:header-aria-label="sectionAriaLabel"
 		:has-rooms="hasCurrentRooms"
+		:has-import-token="importToken"
 	>
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
@@ -33,7 +34,7 @@
 				<v-text-field
 					ref="search"
 					v-model="searchText"
-					class="room-search"
+					class="room-search px-1"
 					solo
 					rounded
 					:label="$t('pages.rooms.index.search.label')"

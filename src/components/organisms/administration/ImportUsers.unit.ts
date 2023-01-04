@@ -1,13 +1,14 @@
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { importUsersModule } from "@/store";
+import { importUsersModule, envConfigModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import ImportUsers from "./ImportUsers.vue";
 import {
 	ImportUserListResponse,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 
 declare let createComponentMocks: Function;
 const mockImportUsers: ImportUserListResponse = {
@@ -116,8 +117,10 @@ describe("@/components/molecules/importUsers", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,
+			envConfigModule: EnvConfigModule,
 		});
 		importUsersModule.setImportUsersList(mockImportUsers);
+		envConfigModule.env.SC_THEME = "default";
 	});
 
 	it("should have correct props", () => {

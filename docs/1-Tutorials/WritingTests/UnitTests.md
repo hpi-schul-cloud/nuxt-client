@@ -6,7 +6,7 @@
 
 Für das Unit-Testing verwenden wir [jest](https://jestjs.io/docs/en/using-matchers) mit den [vue-test-utils](https://vue-test-utils.vuejs.org/guides/#getting-started) und zusätzlichen Matchern von [jest-extended](https://github.com/jest-community/jest-extended).
 
-Alle Tests liegen direkt neben den Componenten und müssen nach dem folgenden Schema benannt werden `[ComponentName].unit.js` (Bspw. `BaseCard.unit.js` für die Komponente `BaseCard.vue`).
+Alle Tests liegen direkt neben den Componenten und müssen nach dem folgenden Schema benannt werden `[ComponentName].unit.js` (Bspw. `ContentCard.unit.js` für die Komponente `ContentCard.vue`).
 
 Zusätzlich haben wir einige global verfügbare Matcher eingeführt.
 
@@ -35,14 +35,14 @@ Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.jso
 
 ```js
 // Importieren der zu testenden Komponente
-import BaseCard from "./BaseCard";
+import ContentCard from "./ContentCard";
 
 // Beschreibung, welche Komponente wir testen
-describe("@components/base/BaseCard", () => {
+describe("@components/base/ContentCard", () => {
 	// Allgemeiner default-test für Komponenten.
 	// Testet nur ob die Komponente valide definiert ist.
 	it("exports a valid component", () => {
-		expect(BaseCard).toBeAComponent();
+		expect(ContentCard).toBeAComponent();
 	});
 
 	// Beschreibung: "Was wird getestet?"
@@ -50,7 +50,7 @@ describe("@components/base/BaseCard", () => {
 		// Testdaten definieren
 		const slotContent = "<p>Hello!</p>";
 		// Mounten/Rendern der Komponente, mit Eigenschaften
-		const wrapper = shallowMount(BaseCard, {
+		const wrapper = shallowMount(ContentCard, {
 			slots: {
 				default: slotContent,
 			},
@@ -66,10 +66,11 @@ describe("@components/base/BaseCard", () => {
 Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgelagert haben. Die Nutzung ist folgendermaßen möglich:
 
 ```js {4-5}
-import BaseCard from "./BaseCard";
+import ContentCard from "./ContentCard";
 
-describe("@components/base/BaseCard", () => {
-	it(...rendersSlotContent(BaseCard));
+describe("@components/base/ContentCard", () => {
+	it(...isValidComponent(ContentCard));
+	it(...rendersSlotContent(ContentCard));
 });
 ```
 

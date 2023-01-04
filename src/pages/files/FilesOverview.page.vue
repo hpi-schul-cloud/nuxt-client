@@ -46,7 +46,6 @@ import { FilesPageConfig } from "@/pages/files/file-page-config.type";
 import { useRoute, useRouter } from "vue-router/composables";
 import { fromNow } from "@/plugins/datetime";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {

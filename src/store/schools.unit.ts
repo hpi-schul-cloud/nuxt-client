@@ -17,7 +17,10 @@ const axiosInitializer = () => {
 			receivedRequests.push({ path });
 			return { data: getRequestReturn };
 		},
-		post: async (path: string) => ({ data: {} }),
+		post: async (path: string) => {
+			receivedRequests.push({ path });
+			return { data: getRequestReturn };
+		},
 	} as AxiosInstance);
 };
 axiosInitializer();
@@ -28,7 +31,7 @@ describe("schools module", () => {
 			initializeAxios({
 				get: async (path: string) => {
 					receivedRequests.push({ path });
-					return getRequestReturn;
+					return { data: getRequestReturn };
 				},
 				post: async (path: string) => {},
 			} as AxiosInstance);
@@ -620,6 +623,120 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+		describe("fetchSchoolOauthMigrationAvailable", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should trigger call to backend and return state of oauthMigrationAvailable", async () => {
+				getRequestReturn = { available: true };
+				axiosInitializer();
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"v3/schools/mockSchoolId/migration-available"
+				);
+				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true);
+			});
+
+			it("should not set OauthMigrationAvailable ", async () => {
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					_id: "",
+				});
+
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+
+				expect(receivedRequests.length).toBe(0);
+				expect(schoolsModule.getOauthMigrationAvailable).toEqual(false);
+			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					$get: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+
+				await schoolsModule.fetchSchoolOauthMigrationAvailable();
+
+				expect(receivedRequests).toHaveLength(0);
+				expect(schoolsModule.getError).toStrictEqual(new Error(""));
+			});
+		});
+
+		describe("setSchoolOauthMigration", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should trigger call to backend and return state of oauthMigration", async () => {
+				axiosInitializer();
+				getRequestReturn = true;
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"v3/schools/mockSchoolId/migration"
+				);
+				expect(schoolsModule.getOauthMigration).toStrictEqual(true);
+			});
+
+			it("should not set OauthMigration ", async () => {
+				initializeAxios({
+					$post: async (path: string) => {
+						return false;
+					},
+				} as NuxtAxiosInstance);
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					_id: "",
+				});
+
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests.length).toBe(0);
+				expect(schoolsModule.getOauthMigration).toStrictEqual(false);
+			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					$post: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
+
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+				});
+
+				await schoolsModule.setSchoolOauthMigration(true);
+
+				expect(receivedRequests).toHaveLength(0);
+				expect(schoolsModule.getError).toStrictEqual(new Error(""));
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -690,6 +807,30 @@ describe("schools module", () => {
 				expect(schoolsModule.getLoading).not.toBe(loadingValue);
 				schoolsModule.setLoading(loadingValue);
 				expect(schoolsModule.getLoading).toBe(loadingValue);
+			});
+		});
+
+		describe("setOauthMigration", () => {
+			it("should set oauth migration data", () => {
+				const schoolsModule = new SchoolsModule({});
+				const oauthMigrationValue = true;
+				expect(schoolsModule.getOauthMigration).not.toBe(oauthMigrationValue);
+				schoolsModule.setOauthMigration(oauthMigrationValue);
+				expect(schoolsModule.getOauthMigration).toBe(oauthMigrationValue);
+			});
+		});
+
+		describe("setOauthMigrationAvailable", () => {
+			it("should set oauth migration available data", () => {
+				const schoolsModule = new SchoolsModule({});
+				const oauthMigrationValue = true;
+				expect(schoolsModule.getOauthMigrationAvailable).not.toBe(
+					oauthMigrationValue
+				);
+				schoolsModule.setOauthMigrationAvailable(oauthMigrationValue);
+				expect(schoolsModule.getOauthMigrationAvailable).toBe(
+					oauthMigrationValue
+				);
 			});
 		});
 	});
@@ -836,6 +977,26 @@ describe("schools module", () => {
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
+		});
+
+		describe("getOauthMigration", () => {
+			it("should return if oauth Migration is enabled", () => {
+				const schoolsModule = new SchoolsModule({});
+				expect(schoolsModule.getOauthMigration).not.toStrictEqual(true);
+				schoolsModule.setOauthMigration(true);
+				expect(schoolsModule.getOauthMigration).toStrictEqual(true);
+			});
+		});
+
+		describe("getOauthMigrationAvailable", () => {
+			it("should return if oauth Migration is available", () => {
+				const schoolsModule = new SchoolsModule({});
+				expect(schoolsModule.getOauthMigrationAvailable).not.toStrictEqual(
+					true
+				);
+				schoolsModule.setOauthMigrationAvailable(true);
+				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true);
 			});
 		});
 	});

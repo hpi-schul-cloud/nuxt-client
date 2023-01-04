@@ -91,7 +91,7 @@ describe("@/components/share-course/ShareModal", () => {
 	it("should call 'onShareOptionsChange' method when sub component emits 'share-options-change'", () => {
 		const wrapper = getWrapper();
 		const form = wrapper.findComponent(ShareModalOptionsForm);
-		const payload = { schoolInternally: true, expiresInSevenDays: false };
+		const payload = { isSchoolInternal: true, hasExpiryDate: false };
 
 		form.vm.$emit("share-options-change", payload);
 

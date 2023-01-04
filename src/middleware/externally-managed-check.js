@@ -1,6 +1,8 @@
 import { authModule } from "@/store";
+import { createApplicationError } from "@utils/create-application-error.factory";
+import { HttpStatusCode } from "@store/types/http-status-code.enum";
 
-export default async ({ app, route }) => {
+export default async ({ route }) => {
 	const user = authModule.getUser;
 
 	const userExternallyManaged = authModule.userIsExternallyManaged;
@@ -10,12 +12,12 @@ export default async ({ app, route }) => {
 			return allowed;
 		}
 		if (!user) {
-			throw new Error(app.i18n.t("error.401"));
+			return false;
 		}
 		return !userExternallyManaged;
 	}, true);
 	if (ACCESS_ALLOWED) {
-		return true; // Access allowed
+		return true;
 	}
-	throw new Error(app.i18n.t("error.401"));
+	throw createApplicationError(HttpStatusCode.Unauthorized);
 };

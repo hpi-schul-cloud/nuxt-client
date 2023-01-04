@@ -165,6 +165,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="toggle_chat"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
@@ -188,6 +189,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="toggle_video_conference"
 					@input-changed="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')

@@ -10,6 +10,7 @@
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
+				:ldap-source="ldapSourceTranslation"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
@@ -215,7 +216,7 @@
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 
@@ -224,7 +225,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 				<br />
@@ -232,7 +233,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 				<br />
@@ -240,7 +241,7 @@
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.short_name,
-						source: $t("pages.administration.migration.ldapSource"),
+						source: ldapSourceTranslation,
 					})
 				}}
 			</p>
@@ -252,9 +253,9 @@
 
 <script>
 /* eslint-disable max-lines */
-import { importUsersModule, schoolsModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
+import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
+import { MatchedBy } from "@store/import-users";
+import vImportUsersMatchSearch from "@components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -281,15 +282,15 @@ export default {
 			loading: false,
 			roles: [
 				{
-					text: this.$t("components.organisms.importUsers.roleStudent"),
+					text: this.$t("common.roleName.student"),
 					value: ImportUserResponseRoleNamesEnum.Student,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.roleTeacher"),
+					text: this.$t("common.roleName.teacher"),
 					value: ImportUserResponseRoleNamesEnum.Teacher,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.roleAdministrator"),
+					text: this.$t("common.roleName.administrator"),
 					value: ImportUserResponseRoleNamesEnum.Admin,
 				},
 			],
@@ -348,7 +349,9 @@ export default {
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableMatch"),
+					text: this.$t("components.organisms.importUsers.tableMatch", {
+						instance: this.$theme.short_name,
+					}),
 					value: "match",
 					sortable: false,
 				},
@@ -364,6 +367,13 @@ export default {
 		},
 		canFinishMigration() {
 			return false;
+		},
+		ldapSourceTranslation() {
+			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
+				return this.$t("pages.administration.migration.brbSchulportal");
+			} else {
+				return this.$t("pages.administration.migration.ldapSource");
+			}
 		},
 		editedItem() {
 			if (this.editedIndex < 0) {
@@ -432,19 +442,13 @@ export default {
 			const rolesLables = [];
 			if (Array.isArray(roles) && roles.length > 0) {
 				if (roles.includes("student")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleStudent")
-					);
+					rolesLables.push(this.$t("common.roleName.student"));
 				}
 				if (roles.includes("teacher")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleTeacher")
-					);
+					rolesLables.push(this.$t("common.roleName.teacher"));
 				}
 				if (roles.includes("admin")) {
-					rolesLables.push(
-						this.$t("components.organisms.importUsers.roleAdministrator")
-					);
+					rolesLables.push(this.$t("common.roleName.administrator"));
 				}
 			}
 			return rolesLables.join(", ");

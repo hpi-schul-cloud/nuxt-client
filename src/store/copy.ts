@@ -87,7 +87,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
@@ -122,7 +122,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return this.copyResultFailedItems;
