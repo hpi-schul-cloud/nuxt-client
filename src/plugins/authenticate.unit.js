@@ -49,6 +49,19 @@ function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
 	return contextMock;
 }
 
+function mockAuthModule(hasValidJwt, hasInvalidJwt) {
+	if (hasValidJwt === true) {
+		jest.spyOn(authModule, "populateUser").mockImplementation();
+	}
+
+	if (hasInvalidJwt === false) {
+		jest.spyOn(authModule, "populateUser").mockRejectedValue("not allowed...");
+	}
+
+	const authModuleLogout = jest.spyOn(authModule, "logout").mockResolvedValue();
+	return authModuleLogout;
+}
+
 function setup({ isPublic = false, isThuringia = false, hasValidJwt = false, hasInvalidJwt = false }) {
 	let SCHULPORTAL_URL;
 	let SCHULCLOUD_URL;
@@ -73,15 +86,7 @@ function setup({ isPublic = false, isThuringia = false, hasValidJwt = false, has
 
  	const contextMock = mockContext(isPublic, hasValidJwt, hasInvalidJwt);
 
-	if (hasValidJwt === true) {
-		jest.spyOn(authModule, "populateUser").mockImplementation();
-	}
-
-	if (hasInvalidJwt === false) {
-		jest.spyOn(authModule, "populateUser").mockRejectedValue("not allowed...");
-	}
-
-	const authModuleLogout = jest.spyOn(authModule, "logout").mockResolvedValue();
+	const authModuleLogout = mockAuthModule(hasValidJwt, hasInvalidJwt);
 
 	return { contextMock, windowLocationAssign, authModuleLogout, SCHULPORTAL_URL, SCHULCLOUD_URL, URL };
 };
