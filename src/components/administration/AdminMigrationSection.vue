@@ -46,34 +46,59 @@
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
-    <p v-if="migrationCompletionDate">
-      {{ t("components.administration.adminMigrationSection.migrationCompletionDate.text") + migrationCompletionDate}}
-    </p>
+		<p v-if="migrationCompletionDate">
+			{{
+				t(
+					"components.administration.adminMigrationSection.migrationCompletionDate.text"
+				) + migrationCompletionDate
+			}}
+		</p>
 
-    <v-card v-if="showStartWarning">
-      <v-card-title>{{ t("components.administration.adminMigrationSection.startWarningCard.title") }}</v-card-title>
-      <v-card-text>
-        <div>
-          {{ t("components.administration.adminMigrationSection.startWarningCard.text") }}
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-            color="primary"
-            @click="toggleShowStartWarning(); setMigration(true, false);"
-        >
-          {{ t("components.administration.adminMigrationSection.startWarningCard.agree") }}
-        </v-btn>
+		<v-card v-if="showStartWarning">
+			<v-card-title>{{
+				t(
+					"components.administration.adminMigrationSection.startWarningCard.title"
+				)
+			}}</v-card-title>
+			<v-card-text>
+				<div>
+					{{
+						t(
+							"components.administration.adminMigrationSection.startWarningCard.text"
+						)
+					}}
+				</div>
+			</v-card-text>
+			<v-card-actions>
+				<v-btn
+					color="primary"
+					@click="
+						toggleShowStartWarning();
+						setMigration(true, false);
+					"
+				>
+					{{
+						t(
+							"components.administration.adminMigrationSection.startWarningCard.agree"
+						)
+					}}
+				</v-btn>
 
-        <v-btn color="primary" @click="toggleShowStartWarning">
-          {{ t("components.administration.adminMigrationSection.startWarningCard.disagree") }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+				<v-btn color="primary" @click="toggleShowStartWarning">
+					{{
+						t(
+							"components.administration.adminMigrationSection.startWarningCard.disagree"
+						)
+					}}
+				</v-btn>
+			</v-card-actions>
+		</v-card>
 
 		<v-card v-if="showEndWarning">
 			<v-card-title>{{
-				t("components.administration.adminMigrationSection.endWarningCard.title")
+				t(
+					"components.administration.adminMigrationSection.endWarningCard.title"
+				)
 			}}</v-card-title>
 			<v-card-text>
 				<div>
@@ -144,24 +169,24 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationEnabled: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigration
+		const isMigrationEnabled: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigration
 		);
 
-		const isMigrationAvailable: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationAvailable
+		const isMigrationAvailable: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigrationAvailable
 		);
 
-		const isMigrationMandatory: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationMandatory
+		const isMigrationMandatory: ComputedRef<boolean> = computed(
+			() => schoolsModule.getOauthMigrationMandatory
 		);
 
-    const migrationCompletionDate: ComputedRef<Date | undefined> = computed(() =>
-      schoolsModule.getMigrationCompletionDate
-    )
+		const migrationCompletionDate: ComputedRef<Date | undefined> = computed(
+			() => schoolsModule.getMigrationCompletionDate
+		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
-      const migrationFlags: OauthMigrationRequest = { available, mandatory }
+			const migrationFlags: OauthMigrationRequest = { available, mandatory };
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
@@ -175,11 +200,11 @@ export default defineComponent({
 			showEndWarning.value = !showEndWarning.value;
 		};
 
-    const showStartWarning: Ref<boolean> = ref(false);
+		const showStartWarning: Ref<boolean> = ref(false);
 
-    const toggleShowStartWarning = () => {
-      showStartWarning.value = !showStartWarning.value;
-    };
+		const toggleShowStartWarning = () => {
+			showStartWarning.value = !showStartWarning.value;
+		};
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -206,10 +231,10 @@ export default defineComponent({
 			migrationSwitchLabel,
 			showEndWarning,
 			toggleShowEndWarning,
-      showStartWarning,
-      toggleShowStartWarning,
+			showStartWarning,
+			toggleShowStartWarning,
 			endMigration,
-      migrationCompletionDate,
+			migrationCompletionDate,
 		};
 	},
 });
