@@ -5,13 +5,11 @@ import {
 	Year,
 	FederalState,
 	School,
-	IOauthMigration,
 	OauthMigrationResponse,
-	OauthMigrationRequest, IOauthMigrationRequest
+	OauthMigrationRequest, OauthMigrationApiResponse, OauthMigrationApiRequest
 } from "./types/schools";
 import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
-import {useOAuthMigration} from "@pages/administration/oauth-migration.composable";
-import {availableActions} from "hygen";
+import {mapApiToOauthMigrationResponse, mapOauthMigrationRequestToApi} from "@store/school/oauth-migration.mapper";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -107,9 +105,10 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
-	oauthUserMigration: boolean = true;
+	oauthUserMigration: boolean = false;
 	oauthMigrationAvailable: boolean = false;
 	oauthMigrationMandatory: boolean = false;
+	migrationCompletionDate: Date | undefined = undefined;
 	systems: any[] = [];
 	loading: boolean = false;
 	error: null | {} = null;
@@ -152,6 +151,11 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setOauthMigrationMandatory(mandatory: boolean): void {
 		this.oauthMigrationMandatory = mandatory;
+	}
+
+	@Mutation
+	setMigrationCompletionDate(date: Date | undefined): void {
+		this.migrationCompletionDate = date;
 	}
 
 	@Mutation
@@ -198,16 +202,20 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): boolean  | undefined {
+	get getOauthMigration(): boolean{
 		return this.oauthUserMigration;
 	}
 
-	get getOauthMigrationAvailable(): boolean | undefined{
+	get getOauthMigrationAvailable(): boolean{
 		return this.oauthMigrationAvailable;
 	}
 
-	get getOauthMigrationMandatory(): boolean | undefined {
+	get getOauthMigrationMandatory(): boolean{
 		return this.oauthMigrationMandatory;
+	}
+
+	get getMigrationCompletionDate(): Date | undefined{
+		return this.migrationCompletionDate;
 	}
 
 	@Action
@@ -368,12 +376,12 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			const oauthMigration: OauthMigrationResponse = await $axios.$get(`v3/school/${this.school._id}/migration`);
-			const mappedOauthMigration: IOauthMigration =
-				useOAuthMigration(oauthMigration, { available: false, mandatory: false}).getMappedOAuthMigration()
-			this.setOauthMigration(mappedOauthMigration.enabled)
-			this.setOauthMigrationAvailable(mappedOauthMigration.available)
-			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory)
+			const oauthMigration: OauthMigrationApiResponse = await $axios.$get(`v3/school/${this.school._id}/migration`);
+			const mappedOauthMigration: OauthMigrationResponse = mapApiToOauthMigrationResponse(oauthMigration);
+			this.setOauthMigration(mappedOauthMigration.enabled);
+			this.setOauthMigrationAvailable(mappedOauthMigration.available);
+			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory);
+
 			console.log("available: ", mappedOauthMigration.available, "mandatory: ", mappedOauthMigration.mandatory, "enabled: ", mappedOauthMigration.enabled)
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -383,20 +391,16 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolOauthMigration(migrationFlags: IOauthMigrationRequest): Promise<void> {
-		console.log("Start here: >>>> available: ", migrationFlags.available, "mandatory: ", migrationFlags.mandatory)
-		const available = migrationFlags.available;
-		const mandatory = migrationFlags.mandatory;
+	async setSchoolOauthMigration(migrationFlags: OauthMigrationRequest): Promise<void> {
 		if(!this.school._id) {
 			return;
 		}
 
 		try {
-			const mapOauthMigration: OauthMigrationRequest = useOAuthMigration({oauthMigrationMandatory: false, oauthMigrationPossible: false, enableMigrationStart: false}, {available, mandatory}).mapOAuthMigration()
-			console.log("put data: ", mapOauthMigration)
-			await $axios.$put(`v3/school/${this.school._id}/migration`, { mapOauthMigration });
-			this.setOauthMigrationAvailable(available);
-			this.setOauthMigrationMandatory(mandatory);
+			const mapOauthMigration: OauthMigrationApiRequest = mapOauthMigrationRequestToApi(migrationFlags);
+			await $axios.$put(`v3/school/${this.school._id}/migration`, { oauthMigrationPossible: mapOauthMigration.oauthMigrationPossible, oauthMigrationMandatory: mapOauthMigration.oauthMigrationMandatory });
+			this.setOauthMigrationAvailable(migrationFlags.available);
+			this.setOauthMigrationMandatory(migrationFlags.mandatory);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
@@ -410,9 +414,10 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			await $axios.$post(`v3/school/${this.school._id}/end-migration`, { });
+			// await $axios.$post(`v3/school/${this.school._id}/end-migration`); // {available: false, mandatory, migrationCompletionDate: true}
 			this.setOauthMigrationAvailable(false);
-			this.setOauthMigrationMandatory(false);
+			const mappedDate = new Date();
+			this.setMigrationCompletionDate(mappedDate);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);

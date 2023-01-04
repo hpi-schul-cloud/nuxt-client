@@ -43,14 +43,18 @@
 			:true-value="true"
 			:false-value="false"
 			:value="isMigrationMandatory"
-			@change="setMigration(true, true)"
+			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
+    <p v-if="migrationCompletionDate">
+      Die Migration wurde zuletzt beendet am {{migrationCompletionDate}}
+    </p>
+
     <v-card v-if="showStartWarning">
-      <v-card-title>"Wollen Sie die Migration wirklich starten?"</v-card-title>
+      <v-card-title>{{ t("components.administration.adminMigrationSection.startWarningCard.title") }}</v-card-title>
       <v-card-text>
         <div>
-          "Nutzer werden somit in der Lage sein ihren Account auf das neue Login-System zu migrieren."
+          {{ t("components.administration.adminMigrationSection.startWarningCard.text") }}
         </div>
       </v-card-text>
       <v-card-actions>
@@ -58,24 +62,24 @@
             color="primary"
             @click="toggleShowStartWarning(); setMigration(true, false);"
         >
-          "Ja, Migration starten"
+          {{ t("components.administration.adminMigrationSection.startWarningCard.agree") }}
         </v-btn>
 
         <v-btn color="primary" @click="toggleShowStartWarning">
-          "Nein, Migration nicht starten"
+          {{ t("components.administration.adminMigrationSection.startWarningCard.disagree") }}
         </v-btn>
       </v-card-actions>
     </v-card>
 
 		<v-card v-if="showEndWarning">
 			<v-card-title>{{
-				t("components.administration.adminMigrationSection.warningCard.title")
+				t("components.administration.adminMigrationSection.endWarningCard.title")
 			}}</v-card-title>
 			<v-card-text>
 				<div>
 					{{
 						t(
-							"components.administration.adminMigrationSection.warningCard.text"
+							"components.administration.adminMigrationSection.endWarningCard.text"
 						)
 					}}
 				</div>
@@ -90,7 +94,7 @@
 				>
 					{{
 						t(
-							"components.administration.adminMigrationSection.warningCard.agree"
+							"components.administration.adminMigrationSection.endWarningCard.agree"
 						)
 					}}
 				</v-btn>
@@ -98,7 +102,7 @@
 				<v-btn color="primary" @click="toggleShowEndWarning">
 					{{
 						t(
-							"components.administration.adminMigrationSection.warningCard.disagree"
+							"components.administration.adminMigrationSection.endWarningCard.disagree"
 						)
 					}}
 				</v-btn>
@@ -118,7 +122,7 @@ import {
 } from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
-import { IOauthMigrationRequest } from "@store/types/schools";
+import { OauthMigrationRequest } from "@store/types/schools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -141,20 +145,23 @@ export default defineComponent({
 		};
 
 		const isMigrationEnabled: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigration ?? false
+			schoolsModule.getOauthMigration
 		);
 
 		const isMigrationAvailable: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationAvailable ?? false
+			schoolsModule.getOauthMigrationAvailable
 		);
 
 		const isMigrationMandatory: ComputedRef<boolean> = computed( () =>
-			schoolsModule.getOauthMigrationMandatory ?? false
+			schoolsModule.getOauthMigrationMandatory
 		);
 
+    const migrationCompletionDate: ComputedRef<Date | undefined> = computed(() =>
+      schoolsModule.getMigrationCompletionDate
+    )
+
 		const setMigration = (available: boolean, mandatory: boolean) => {
-      console.log("available im setup: ", available, "mandatory im setup: ", mandatory) // this works
-      const migrationFlags: IOauthMigrationRequest = { available, mandatory }
+      const migrationFlags: OauthMigrationRequest = { available, mandatory }
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
@@ -202,6 +209,7 @@ export default defineComponent({
       showStartWarning,
       toggleShowStartWarning,
 			endMigration,
+      migrationCompletionDate,
 		};
 	},
 });

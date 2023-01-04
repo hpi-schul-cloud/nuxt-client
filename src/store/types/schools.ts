@@ -60,26 +60,30 @@ export type School = {
 	oauthUserMigration?: boolean;
 	oauthMigrationAvailable?: boolean;
 	oauthMigrationMandatory?: boolean;
-};
-
-export type IOauthMigration = {
-	available: boolean;
-	mandatory: boolean;
-	enabled: boolean;
+	migrationCompletionDate?: string;
 };
 
 export type OauthMigrationResponse = {
+	available: boolean;
+	mandatory: boolean;
+	enabled: boolean;
+	migrationCompletionDate?: Date
+};
+
+export type OauthMigrationApiResponse = {
+	oauthMigrationPossible: Date;
+	oauthMigrationMandatory: Date;
+	enableMigrationStart: boolean;
+	oauthMigrationFinished: Date
+};
+
+export type OauthMigrationApiRequest = {
 	oauthMigrationPossible: boolean;
 	oauthMigrationMandatory: boolean;
-	enableMigrationStart: boolean;
+	oauthMigrationFinished: boolean;
 };
 
 export type OauthMigrationRequest = {
-	oauthMigrationPossible: boolean;
-	oauthMigrationMandatory: boolean;
-};
-
-export type IOauthMigrationRequest = {
 	available: boolean;
 	mandatory: boolean;
 };
