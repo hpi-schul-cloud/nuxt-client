@@ -51,7 +51,7 @@ export default class TasksModule extends VuexModule {
 				const response =
 					skip === 0
 						? await this.taskApi.taskControllerFindAll()
-						: await this.taskApi.taskControllerFindAll(skip, (total - skip));
+						: await this.taskApi.taskControllerFindAll(skip, total - skip);
 				tasks.push(...response.data.data);
 				skip = skip + response.data.limit;
 				limit = response.data.limit;

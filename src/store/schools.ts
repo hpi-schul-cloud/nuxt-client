@@ -97,7 +97,7 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
-	oauthMigrationAvailable: boolean = false;
+	oauthMigrationAvailable = false;
 	systems: any[] = [];
 	loading = false;
 	error: null | {} = null;
