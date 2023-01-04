@@ -235,9 +235,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.isOauthMigrationEnabled).toBeTrue();
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(true);
 	});
 
 	it("tests env var school oauth migration being false", () => {
@@ -251,9 +256,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.isOauthMigrationEnabled).toBeFalse();
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(false);
 	});
 
 	it("tests whether current school year is computed right", () => {
@@ -296,6 +306,11 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(
@@ -332,11 +347,16 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(
-			wrapper.findComponent({ name: "v-skeleton-loader" }).exists()
-		).toBeTrue();
+		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBe(
+			true
+		);
 	});
 
 	it("error image should visible if schoolError occured", () => {

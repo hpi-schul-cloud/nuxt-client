@@ -13,7 +13,6 @@ import consentVersions from "@/store/consent-versions";
 // import contentSearch from "@/store/content-search"; // NUXT_REMOVAL unused
 // import courseGroups from "@/store/courseGroups"; // NUXT_REMOVAL unused
 import courses from "@/store/courses";
-import error from "@/store/error";
 // import ghost from "@/store/ghost"; // NUXT_REMOVAL unused
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
@@ -47,7 +46,6 @@ export default new Store({
 		// "content-search": contentSearch, // NUXT_REMOVAL unused
 		// courseGroups, // NUXT_REMOVAL unused
 		courses,
-		error,
 		// ghost, // NUXT_REMOVAL unused
 		"ldap-config": ldapConfig,
 		lessons,

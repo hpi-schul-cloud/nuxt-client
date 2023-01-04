@@ -2,7 +2,7 @@ import ErrorContent from "./ErrorContent.vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
-describe("@components/error-handling/ErrorContent.vue", () => {
+describe("@/components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (props?: object) => {
 		return mount<any>(ErrorContent, {
 			...createComponentMocks({

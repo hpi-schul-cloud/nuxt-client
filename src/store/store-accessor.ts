@@ -6,6 +6,7 @@
 // into the actual stores, and then re-export them.
 
 import AccountsModule from "@/store/accounts";
+import ApplicationErrorModule from "./application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import CollaborativeFilesModule from "@/store/collaborative-files";
@@ -24,6 +25,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
+import TaskModule from "@/store/task";
 import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -32,6 +34,7 @@ import { getModule } from "vuex-module-decorators";
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
 export let accountsModule: AccountsModule;
+export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
 export let collaborativeFilesModule: CollaborativeFilesModule;
@@ -49,12 +52,14 @@ export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
 export let statusAlertsModule: StatusAlertsModule;
+export let taskModule: TaskModule;
 export let tasksModule: TasksModule;
 export let shareCourseModule: ShareCourseModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
+	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
@@ -69,6 +74,7 @@ export function initializeStores(store: Store<any>): void {
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
+	taskModule = getModule(TaskModule, store);
 	tasksModule = getModule(TasksModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
@@ -81,6 +87,7 @@ export function initializeStores(store: Store<any>): void {
 // (This is required!)
 export const modules = {
 	accountsModule: AccountsModule,
+	applicationErrorModule: ApplicationErrorModule,
 	authModule: AuthModule,
 	autoLogoutModule: AutoLogoutModule,
 	collaborativeFilesModule: CollaborativeFilesModule,
@@ -95,6 +102,7 @@ export const modules = {
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,
 	statusAlertsModule: StatusAlertsModule,
+	taskModule: TaskModule,
 	tasksModule: TasksModule,
 	notifierModule: NotifierModule,
 	copyModule: CopyModule,

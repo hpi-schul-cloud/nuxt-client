@@ -18,16 +18,11 @@
 	</div>
 </template>
 <script lang="ts">
-import ApplicationErrorModule from "@store/application-error";
-import {
-	computed,
-	inject,
-	defineComponent,
-	useMeta,
-} from "@nuxtjs/composition-api";
+import ApplicationErrorModule from "@/store/application-error";
+import { computed, inject, defineComponent } from "vue";
 import VueI18n from "vue-i18n";
-import Theme from "@theme/config";
-import ErrorContent from "@components/error-handling/ErrorContent.vue";
+import Theme from "@/theme.config";
+import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -37,7 +32,7 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const permissionErrors: Array<Number> = [400, 401, 403];
+		const permissionErrors: Array<number> = [400, 401, 403];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
@@ -46,9 +41,7 @@ export default defineComponent({
 			return;
 		}
 
-		useMeta({
-			title: i18n?.t("error.generic") + " - " + Theme.short_name,
-		});
+		document.title = i18n?.t("error.generic") + " - " + Theme.short_name;
 
 		const onBackClick = () => {
 			window.location.assign("/dashboard");

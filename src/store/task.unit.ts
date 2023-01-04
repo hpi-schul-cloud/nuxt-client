@@ -1,4 +1,4 @@
-import TaskModule from "@store/task";
+import TaskModule from "@/store/task";
 import * as serverApi from "../serverApi/v3/api";
 import { RichTextTypeEnum } from "../serverApi/v3/api";
 

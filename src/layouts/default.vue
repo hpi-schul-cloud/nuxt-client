@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import Snackbar from "@components/molecules/Alert";
-import LoadingStateDialog from "@components/molecules/LoadingStateDialog";
-import ApplicationErrorRouting from "@components/molecules/ApplicationErrorRouting";
+import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
+import Snackbar from "@/components/molecules/Alert";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
+import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
 
 export default {
 	components: {

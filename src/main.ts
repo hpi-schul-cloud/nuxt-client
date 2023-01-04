@@ -1,7 +1,9 @@
 import {
 	accountsModule,
+	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
+	collaborativeFilesModule,
 	contentModule,
 	copyModule,
 	envConfigModule,
@@ -17,6 +19,7 @@ import {
 	schoolsModule,
 	shareCourseModule,
 	statusAlertsModule,
+	taskModule,
 	tasksModule,
 } from "@/store";
 import Vue from "vue";
@@ -98,8 +101,10 @@ import { initializeAxios } from "./utils/api";
 		// NUXT_REMOVAL get rid of store DI
 		provide: {
 			accountsModule,
+			applicationErrorModule,
 			authModule,
 			autoLogoutModule,
+			collaborativeFilesModule,
 			contentModule,
 			copyModule,
 			envConfigModule,
@@ -115,6 +120,7 @@ import { initializeAxios } from "./utils/api";
 			schoolsModule,
 			shareCourseModule,
 			statusAlertsModule,
+			taskModule,
 			tasksModule,
 			i18n,
 		},

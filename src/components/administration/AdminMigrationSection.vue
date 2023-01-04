@@ -18,9 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
-import { inject, Ref } from "@nuxtjs/composition-api";
-import SchoolsModule from "@store/schools";
+import { defineComponent, ref, inject, Ref } from "vue";
+import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export

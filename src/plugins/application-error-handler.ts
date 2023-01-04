@@ -1,4 +1,4 @@
-import { ApplicationError } from "@store/types/application-error";
+import { ApplicationError } from "@/store/types/application-error";
 import { applicationErrorModule } from "@/store";
 import Vue from "vue";
 

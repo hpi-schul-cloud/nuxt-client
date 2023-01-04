@@ -58,10 +58,10 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import GeneralSettings from "@components/organisms/administration/GeneralSettings";
-import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
-import AuthSystems from "@components/organisms/administration/AuthSystems";
-import AdminMigrationSection from "@components/administration/AdminMigrationSection";
+import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
+import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies";
+import AuthSystems from "@/components/organisms/administration/AuthSystems";
+import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 
 export default {
 	components: {

@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 @Module({
 	name: "application-error",

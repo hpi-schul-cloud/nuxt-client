@@ -15,11 +15,11 @@ const axiosInitializer = () => {
 	initializeAxios({
 		get: async (path: string) => {
 			receivedRequests.push({ path });
-			return { data: getRequestReturn };
+			return getRequestReturn;
 		},
 		post: async (path: string) => {
 			receivedRequests.push({ path });
-			return { data: getRequestReturn };
+			return getRequestReturn;
 		},
 	} as AxiosInstance);
 };
@@ -31,7 +31,7 @@ describe("schools module", () => {
 			initializeAxios({
 				get: async (path: string) => {
 					receivedRequests.push({ path });
-					return { data: getRequestReturn };
+					return getRequestReturn;
 				},
 				post: async (path: string) => {},
 			} as AxiosInstance);
@@ -204,9 +204,9 @@ describe("schools module", () => {
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setCurrentYearSpy).toHaveBeenCalled();
-				expect(setCurrentYearSpy.mock.calls[0][0]).toStrictEqual({
-					data: "dummy response",
-				});
+				expect(setCurrentYearSpy.mock.calls[0][0]).toStrictEqual(
+					"dummy response"
+				);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 			it("should trigger error and goes into the catch block", async () => {
@@ -241,7 +241,7 @@ describe("schools module", () => {
 			});
 			it("should call backend and sets state correctly", async () => {
 				axiosInitializer();
-				getRequestReturn = "dummy response";
+				getRequestReturn = { data: "dummy response" };
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -660,11 +660,11 @@ describe("schools module", () => {
 
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$get: async (path: string) => {
+					get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -702,10 +702,10 @@ describe("schools module", () => {
 
 			it("should not set OauthMigration ", async () => {
 				initializeAxios({
-					$post: async (path: string) => {
+					post: async (path: string) => {
 						return false;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -720,11 +720,11 @@ describe("schools module", () => {
 
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$post: async (path: string) => {
+					post: async (path: string) => {
 						throw new Error("");
 						return;
 					},
-				} as NuxtAxiosInstance);
+				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({

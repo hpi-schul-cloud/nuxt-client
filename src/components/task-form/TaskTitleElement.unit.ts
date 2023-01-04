@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskTitleElement from "@components/task-form/TaskTitleElement.vue";
+import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
 	return mount(TaskTitleElement, {

@@ -1,7 +1,7 @@
 import ErrorPage from "./Error.page.vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";

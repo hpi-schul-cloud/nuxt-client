@@ -1,11 +1,11 @@
 import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 
-describe("@components/molecules/ApplicationErrorRouting.vue", () => {
+describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	const $router = { replace: jest.fn() };
 	let applicationErrorModuleMock: ApplicationErrorModule;
 	const useApplicationErrorMock = jest.mock(

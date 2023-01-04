@@ -155,7 +155,7 @@ describe("User Migration / Index", () => {
 			source: "LDAP",
 			instance: $theme.short_name,
 		});
-		expect(wrapper.vm.$metaInfo.title).toBe(title);
+		expect(document.title).toBe(title);
 	});
 
 	it("shows business error", () => {

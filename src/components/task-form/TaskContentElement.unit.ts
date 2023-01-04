@@ -1,4 +1,4 @@
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
@@ -16,7 +16,7 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@components/task-form/TaskContentElement", () => {
+describe("@/components/task-form/TaskContentElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent(TaskContentElement).exists()).toBe(true);

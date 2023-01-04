@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export class ApplicationError extends Error {
 	public readonly name = "ApplicationError";

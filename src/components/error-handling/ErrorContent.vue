@@ -10,7 +10,7 @@
 		<img
 			v-if="isGenericError"
 			:alt="errorText"
-			src="@assets/img/pc_repair.png"
+			src="@/assets/img/pc_repair.png"
 			class="pa-4"
 			data-testid="img-generic"
 		/>
@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import PermissionErrorSvg from "@assets/img/PermissionErrorSvg.vue";
+import { defineComponent } from "vue";
+import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

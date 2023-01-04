@@ -131,8 +131,13 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
+		path: `/tasks/:id(${REGEX_ID})/edit`,
+		component: () => import("../pages/TaskForm.page.vue"),
+		name: "task-edit",
+	},
+	{
 		path: "/tasks/new",
-		component: () => import("../pages/TaskCreate.page.vue"),
+		component: () => import("../pages/TaskForm.page.vue"),
 		name: "task-new",
 	},
 	// deprecated?
@@ -149,12 +154,17 @@ export const routes: Array<RouteConfig> = [
 		path: "/cfiles",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "files",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
 	},
 	{
 		path: "/cfiles/teams/:catchAll(.*)",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files", "/dashboard"),
+		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
+	},
+	{
+		path: "/error",
+		component: () => import("@/pages/Error.page.vue"),
+		name: "error",
 	},
 ];

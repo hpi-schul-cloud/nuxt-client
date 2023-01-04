@@ -349,7 +349,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			const oauthMigration: IOauthMigration = await $axios.$get(
+			const oauthMigration: IOauthMigration = await $axios.get(
 				`v3/schools/${this.school._id}/migration-available`
 			);
 			this.setOauthMigrationAvailable(oauthMigration.available);
@@ -367,7 +367,7 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			await $axios.$post(`v3/schools/${this.school._id}/migration`, {
+			await $axios.post(`v3/schools/${this.school._id}/migration`, {
 				enabled,
 			});
 			this.setOauthMigration(enabled);

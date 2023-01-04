@@ -1,5 +1,5 @@
 import { applicationErrorModule, authModule } from "@/store";
-import { createApplicationError } from "@utils/create-application-error.factory";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 const unrecoverableErrorCodes = [401, 403, 404, 500];
 

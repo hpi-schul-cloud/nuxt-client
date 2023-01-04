@@ -50,13 +50,13 @@ import {
 	// computed,
 	onBeforeMount,
 	onMounted,
-} from "@vue/composition-api";
-import { useRouter, useRoute } from "@nuxtjs/composition-api";
+} from "vue";
+import { useRoute, useRouter } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
 import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import CKEditor from "@/components/task-form/CKEditor.vue";
@@ -102,7 +102,7 @@ export default defineComponent({
 
 		const name = ref("");
 		const children = ref<Element[]>([]);
-		const route = useRoute().value;
+		const route = useRoute();
 
 		onMounted(async () => {
 			const taskId = route.name === "task-edit" ? route.params.id : undefined;

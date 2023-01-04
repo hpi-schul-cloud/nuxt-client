@@ -1,6 +1,6 @@
 import { authModule } from "@/store";
-import { createApplicationError } from "@utils/create-application-error.factory";
-import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export default async ({ route }) => {
 	const user = authModule.getUser;
