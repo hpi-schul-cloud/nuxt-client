@@ -160,7 +160,8 @@ describe("@plugins/authenticate", () => {
 				const redirect = encodeURIComponent(URL);
 				const schulcloudLoginUrl = `https://${SCHULCLOUD_URL}/tsp-login?redirect=${redirect}`;
 				const expectedUrl =
-					`${SCHULPORTAL_URL}/cas/login?service=` + encodeURIComponent(schulcloudLoginUrl);
+					`${SCHULPORTAL_URL}/cas/login?service=` +
+					encodeURIComponent(schulcloudLoginUrl);
 				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
 			});
 		});
