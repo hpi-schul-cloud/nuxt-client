@@ -26,12 +26,6 @@ export default {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,
 	},
-	layout({ query }) {
-		return String(query.isCollection) === "true" &&
-			contentModule.getCollectionsFeatureFlag === true
-			? "default"
-			: "plain";
-	},
 	computed: {
 		resource() {
 			return contentModule.getCurrentResource;
@@ -47,7 +41,7 @@ export default {
 		},
 	},
 	async created() {
-		await contentModule.getResourceMetadata(this.$route.params.id);
+		// await contentModule.getResourceMetadata(this.$route.params.id);
 		document.title = this.$t("common.words.lernstore");
 	},
 };

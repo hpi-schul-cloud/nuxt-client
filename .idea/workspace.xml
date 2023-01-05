@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Error.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Error.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,9 +18,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Vue Single File Component" />
         <option value="TypeScript File" />
         <option value="JavaScript File" />
+        <option value="Vue Single File Component" />
       </list>
     </option>
   </component>
@@ -74,7 +76,7 @@
       <recent name="C:\dev\repositories\nuxt-client\src\router" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.@/components/molecules/Editor.should emit input on content changes">
+  <component name="RunManager" selected="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error">
     <configuration name="@/components/molecules/Editor" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
@@ -102,54 +104,56 @@
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="@/components/molecules/Editor.should not render with invalid mode property" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
-      <test-names>
-        <test-name value="@/components/molecules/Editor" />
-        <test-name value="should not render with invalid mode property" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="@/components/molecules/Editor.should render ckeditor component" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
-      <test-names>
-        <test-name value="@/components/molecules/Editor" />
-        <test-name value="should render ckeditor component" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="PermissionGuard" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="@pages/Error.page.vue" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="SUITE" />
-      <test-file value="$PROJECT_DIR$/src/router/guards/permission.guard.unit.ts" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
       <test-names>
-        <test-name value="PermissionGuard" />
+        <test-name value="@pages/Error.page.vue" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
+      <test-names>
+        <test-name value="@pages/Error.page.vue" />
+        <test-name value="when the '/error' route has been called" />
+        <test-name value="should set 'is-generic-error' prop to 'true' on generic error" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true'" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
+      <test-names>
+        <test-name value="@pages/Error.page.vue" />
+        <test-name value="when the '/error' route has been called" />
+        <test-name value="should set 'is-generic-error' prop to 'true'" />
       </test-names>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error" />
+        <item itemvalue="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true'" />
+        <item itemvalue="Jest.@pages/Error.page.vue" />
         <item itemvalue="Jest.@/components/molecules/Editor.should emit input on content changes" />
         <item itemvalue="Jest.@/components/molecules/Editor" />
-        <item itemvalue="Jest.@/components/molecules/Editor.should not render with invalid mode property" />
-        <item itemvalue="Jest.@/components/molecules/Editor.should render ckeditor component" />
-        <item itemvalue="Jest.PermissionGuard" />
       </list>
     </recent_temporary>
   </component>
@@ -216,6 +220,7 @@
       <workItem from="1667483716446" duration="6255000" />
       <workItem from="1669901447274" duration="4623000" />
       <workItem from="1671110692663" duration="1782000" />
+      <workItem from="1672844346813" duration="4144000" />
     </task>
     <servers />
   </component>
