@@ -31,8 +31,8 @@ describe("@pages/Error.page.vue", () => {
 
 	it("should assign 'window.location' when back button is clicked", async () => {
 		const wrapper = mountComponent();
-		const btnElement = await wrapper.find("[data-testid='btn-back']");
-		await btnElement.trigger("click");
+		const btnElement = wrapper.find("[data-testid='btn-back']");
+		btnElement.vm.$emit("click");
 		expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
 	});
 
