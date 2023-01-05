@@ -19,7 +19,7 @@
 				/>
 			</v-container>
 		</template>
-		<template v-if="!isLoading && !hasRooms && !hasImportToken">
+		<template v-else-if="!isLoading && !hasRooms && !hasImportToken">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
 				image="@assets/img/empty-state/rooms-empty-state.svg"
@@ -27,7 +27,7 @@
 				class="mt-16"
 			/>
 		</template>
-		<template v-if="!isLoading">
+		<template v-else>
 			<slot name="page-content"></slot>
 		</template>
 		<import-modal
