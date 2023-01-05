@@ -12,46 +12,58 @@ export default async ({ app, route }) => {
 				authModule.setAccessToken(jwt);
 				await authModule.populateUser();
 			} else if (!isPublic) {
-				const loginUrl = composeLoginUrlWithRedirect();
+				const loginUrl = getLoginUrlWithRedirect();
 				window.location.assign(loginUrl);
 			}
 		} catch (error) {
-			const loginUrl = composeLoginUrlWithRedirect();
+			const loginUrl = getLoginUrlWithRedirect();
 			authModule.logout(loginUrl);
 		}
 	}
 };
 
-function composeLoginUrlWithRedirect() {
-	if (
-		envConfigModule.getEnv.SC_THEME === "thr" &&
-		envConfigModule.getEnv.FEATURE_TSP_ENABLED === true
-	) {
-		return composeThuringiaLoginUrl(window.location.href);
+function getLoginUrlWithRedirect() {
+	if (isSchulcloudUrl()) {
+		return `/login?redirect=${encodeURIComponent(window.location.href)}`;
 	}
-	return composeUrl(window.location.href, "/login", {
-		redirect: window.location.href,
-	});
+
+	return addRedirectToUrlParams();
 }
 
-function composeThuringiaLoginUrl(url) {
-	const schulcloudUrl = envConfigModule.getEnv.DOMAIN;
-	const schulcloudLoginUrl = composeUrl(schulcloudUrl, "/tsp-login", {
-		redirect: url,
-	});
+function isSchulcloudUrl() {
+	const authUrl = envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL;
+	if (authUrl[0] === "/") {
+		return true;
+	}
 
-	const schulportalUrl = envConfigModule.getEnv.TSP_API_BASE_URL;
-	const schulportalLoginUrl = composeUrl(schulportalUrl, "/cas/login", {
-		service: schulcloudLoginUrl,
-	});
+	const currentUrl = new URL(window.location.href);
+	if (authUrl.indexOf(currentUrl.origin) === 0) {
+		return true;
+	}
 
-	return schulportalLoginUrl;
+	return false;
 }
 
-function composeUrl(baseUrl, path = "", params = {}) {
-	const protocol = baseUrl.match(/^http/i) ? "" : "https://";
-	const urlObject = new URL(path, protocol + baseUrl);
-	const paramObject = new URLSearchParams(params);
-	urlObject.search = paramObject.toString();
-	return urlObject.toString();
+function addRedirectToUrlParams() {
+	const authUrl = envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL;
+	const currentUrl = new URL(window.location.href);
+
+	const containsSchulcloudUrl = (s) => {
+		return s.includes(currentUrl.origin);
+	};
+
+	const setRedirectParam = (url) => {
+		const urlInParams = new URL(url);
+		urlInParams.searchParams.set("redirect", currentUrl.toString());
+		return urlInParams.toString();
+	};
+
+	const externalUrl = new URL(authUrl, currentUrl.origin);
+	for (const [name, value] of externalUrl.searchParams.entries()) {
+		if (containsSchulcloudUrl(value)) {
+			externalUrl.searchParams.set(name, setRedirectParam(value));
+		}
+	}
+
+	return externalUrl.toString();
 }

@@ -4,7 +4,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import authenticate from "./authenticate";
 import { authModule, envConfigModule } from "@/store";
 
-function mockWindowLocation(location) {
+function mockWindowLocation(location: any) {
 	const assignMock = jest.fn();
 	Object.defineProperty(global, "window", {
 		value: {
@@ -18,18 +18,18 @@ function mockWindowLocation(location) {
 	return assignMock;
 }
 
-function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
-	let jwt;
+function mockContext(
+	isPublic: boolean,
+	hasValidJwt: boolean,
+	hasInvalidJwt: boolean
+) {
+	const cookies: Record<string, string> = {};
 	if (hasValidJwt) {
-		jwt = "valid-jwt";
+		cookies.jwt = "valid-jwt";
 	}
 	if (hasInvalidJwt) {
-		jwt = "invalid-jwt";
+		cookies.jwt = "invalid-jwt";
 	}
-
-	const cookies = {
-		jwt,
-	};
 
 	const contextMock = {
 		route: {
@@ -37,19 +37,14 @@ function mockContext(isPublic, hasValidJwt, hasInvalidJwt) {
 		},
 		app: {
 			$cookies: {
-				get: (name) => cookies[name],
-			},
-		},
-		store: {
-			dispatch: () => {
-				if (eventName === "env-config/get") return;
+				get: (name: string) => cookies[name],
 			},
 		},
 	};
 	return contextMock;
 }
 
-function mockAuthModule(hasValidJwt, hasInvalidJwt) {
+function mockAuthModule(hasValidJwt: boolean, hasInvalidJwt: boolean) {
 	if (hasValidJwt === true) {
 		jest.spyOn(authModule, "populateUser").mockImplementation();
 	}
@@ -58,36 +53,18 @@ function mockAuthModule(hasValidJwt, hasInvalidJwt) {
 		jest.spyOn(authModule, "populateUser").mockRejectedValue("not allowed...");
 	}
 
-	const authModuleLogout = jest.spyOn(authModule, "logout").mockResolvedValue();
+	const authModuleLogout = jest.spyOn(authModule, "logout").mockReturnValue();
 	return authModuleLogout;
 }
 
 function setup({
 	isPublic = false,
-	isThuringia = false,
 	hasValidJwt = false,
 	hasInvalidJwt = false,
 }) {
-	let SCHULPORTAL_URL;
-	let SCHULCLOUD_URL;
-
-	if (isThuringia) {
-		SCHULPORTAL_URL = "https://unit-test.schulportal-thueringen.de";
-		SCHULCLOUD_URL = "unit-test.schulcloud-thueringen.de";
-	} else {
-		SCHULCLOUD_URL = "unit-test.one-schulcloud.de";
-	}
-
-	const URL = `https://${SCHULCLOUD_URL}/my-url-to-authenticate`;
+	const URL = `https://schulcloud.de/my-url-to-authenticate`;
 
 	const windowLocationAssign = mockWindowLocation({ href: URL });
-
-	envConfigModule.setEnvs({
-		SC_THEME: isThuringia ? "thr" : undefined,
-		FEATURE_TSP_ENABLED: isThuringia,
-		TSP_API_BASE_URL: SCHULPORTAL_URL,
-		DOMAIN: SCHULCLOUD_URL,
-	});
 
 	const contextMock = mockContext(isPublic, hasValidJwt, hasInvalidJwt);
 
@@ -97,9 +74,32 @@ function setup({
 		contextMock,
 		windowLocationAssign,
 		authModuleLogout,
-		SCHULPORTAL_URL,
-		SCHULCLOUD_URL,
 		URL,
+	};
+}
+
+function setupThuringia({
+	isPublic = false,
+	hasValidJwt = false,
+	hasInvalidJwt = false,
+}) {
+	const vars = setup({ isPublic, hasValidJwt, hasInvalidJwt });
+
+	const URL = `https://schulcloud.de/my-url-to-authenticate`;
+	const windowLocationAssign = mockWindowLocation({ href: URL });
+	const NOT_AUTHENTICATED_REDIRECT_URL =
+		"https://test.schulportal-thueringen.de/cas/login?service=https%3A%2F%2Fschulcloud.de%2Ftsp-login";
+
+	// @ts-ignore
+	envConfigModule.setEnvs({
+		NOT_AUTHENTICATED_REDIRECT_URL,
+	});
+
+	return {
+		...vars,
+		windowLocationAssign,
+		URL,
+		NOT_AUTHENTICATED_REDIRECT_URL,
 	};
 }
 
@@ -112,7 +112,6 @@ describe("@plugins/authenticate", () => {
 		it("should do nothing if url is public", async () => {
 			const { contextMock, windowLocationAssign } = setup({
 				isPublic: true,
-				isThuringia: false,
 			});
 
 			await authenticate(contextMock);
@@ -123,7 +122,6 @@ describe("@plugins/authenticate", () => {
 		it("should do nothing if url is public - also if jwt is set", async () => {
 			const { contextMock, windowLocationAssign } = setup({
 				isPublic: true,
-				isThuringia: false,
 				hasValidJwt: true,
 			});
 
@@ -135,42 +133,43 @@ describe("@plugins/authenticate", () => {
 
 	describe("authenticate private url", () => {
 		describe("without JWT", () => {
-			it("should redirect to login page ", async () => {
-				const { contextMock, windowLocationAssign, SCHULCLOUD_URL, URL } =
-					setup({ isPublic: false, isThuringia: false });
+			it("should redirect to login page", async () => {
+				const { contextMock, windowLocationAssign, URL } = setup({
+					isPublic: false,
+				});
 
 				await authenticate(contextMock);
 
 				const redirect = encodeURIComponent(URL);
-				const expectedUrl = `https://${SCHULCLOUD_URL}/login?redirect=${redirect}`;
-				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
+				expect(windowLocationAssign).toHaveBeenCalledWith(
+					`/login?redirect=${redirect}`
+				);
 			});
 
-			it("should redirect to thuringia schulportal - if instance is thuringia", async () => {
+			it("should redirect to configured external auth-system", async () => {
 				const {
 					contextMock,
 					windowLocationAssign,
-					SCHULPORTAL_URL,
-					SCHULCLOUD_URL,
+					NOT_AUTHENTICATED_REDIRECT_URL,
 					URL,
-				} = setup({ isPublic: false, isThuringia: true });
+				} = setupThuringia({ isPublic: false });
 
 				await authenticate(contextMock);
 
-				const redirect = encodeURIComponent(URL);
-				const schulcloudLoginUrl = `https://${SCHULCLOUD_URL}/tsp-login?redirect=${redirect}`;
-				const expectedUrl =
-					`${SCHULPORTAL_URL}/cas/login?service=` +
-					encodeURIComponent(schulcloudLoginUrl);
-				expect(windowLocationAssign).toHaveBeenCalledWith(expectedUrl);
+				const redirect = encodeURIComponent(encodeURIComponent(URL));
+				expect(windowLocationAssign).toHaveBeenCalledWith(
+					expect.stringContaining(NOT_AUTHENTICATED_REDIRECT_URL)
+				);
+				expect(windowLocationAssign).toHaveBeenCalledWith(
+					expect.stringContaining(redirect)
+				);
 			});
 		});
 
 		describe("with valid JWT", () => {
-			it("should check jwt and not redirect", async () => {
+			it("should not redirect", async () => {
 				const { contextMock, windowLocationAssign } = setup({
 					isPublic: false,
-					isThuringia: false,
 					hasValidJwt: true,
 				});
 
@@ -182,15 +181,14 @@ describe("@plugins/authenticate", () => {
 
 		describe("with invalid JWT", () => {
 			it("should check jwt and redirect to login if it fails", async () => {
-				const { contextMock, authModuleLogout, SCHULCLOUD_URL, URL } = setup({
+				const { contextMock, authModuleLogout, URL } = setup({
 					isPublic: false,
-					isThuringia: false,
 					hasInvalidJwt: true,
 				});
 
 				await authenticate(contextMock);
 
-				const expectedRedirectUrl = `https://${SCHULCLOUD_URL}/login?redirect=${encodeURIComponent(
+				const expectedRedirectUrl = `/login?redirect=${encodeURIComponent(
 					URL
 				)}`;
 				expect(authModuleLogout).toHaveBeenCalledWith(expectedRedirectUrl);
