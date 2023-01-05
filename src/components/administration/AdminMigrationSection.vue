@@ -46,7 +46,7 @@
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
-		<p v-if="migrationCompletionDate">
+		<p v-if="migrationCompletionDate" class="migration-completion-date">
 			{{
 				t(
 					"components.administration.adminMigrationSection.migrationCompletionDate.text"

@@ -260,7 +260,7 @@ describe("AdminMigrationSection", () => {
             await cardButtonAgree.vm.$emit('click');
 
             expect(cardComponent.exists()).toBe(false);
-            //expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true)
+            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({available: true, mandatory: false});
         });
 
         it("should not render the card and not start migration, when disagree-button is clicked", async () => {
@@ -327,8 +327,8 @@ describe("AdminMigrationSection", () => {
             await cardButtonAgree.vm.$emit('click');
 
             expect(cardComponent.exists()).toBe(false);
-            //expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(false)
-            });
+            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({available: false, mandatory: wrapper.vm.getOauthMigrationMandatory});
+        });
 
         it("should not render the card and not complete migration, when disagree-button is clicked", async () => {
             const {wrapper} = setup({
@@ -348,32 +348,27 @@ describe("AdminMigrationSection", () => {
     });
 
     describe("Date paragraph", () => {
-        it.skip("should exist when migration has been completed", async () => {
+        it("should exist when migration has been completed", async () => {
+            const date: Date = new Date();
             const { wrapper } = setup({
                 getOauthMigration: true,
-                getOauthMigrationAvailable: true
+                getMigrationCompletionDate: date
             });
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-            const cardButtonAgree = cardComponent.find('.disagree-btn-end');
-            await cardButtonAgree.vm.$emit('click');
 
-            const paragraph = wrapper.findComponent({name:"p"});
+            const paragraph = wrapper.find('.migration-completion-date');
 
             expect(paragraph.exists()).toBe(true);
-            expect(paragraph).toContain(
-                "components.administration.adminMigrationSection.migrationCompletionDate.text"
+            expect(paragraph.text()).toEqual(
+                `components.administration.adminMigrationSection.migrationCompletionDate.text${date}`
             );
-            // TODO check if date is shown
         });
 
         it("should not exist when migration has not been completed", async () => {
             const { wrapper } = setup({
-                getOauthMigration: true,
+                getOauthMigration: true
             });
 
-            const paragraph = wrapper.findComponent({name:"p"});
+            const paragraph = wrapper.find('.migration-completion-date');
 
             expect(paragraph.exists()).toBe(false);
         });
