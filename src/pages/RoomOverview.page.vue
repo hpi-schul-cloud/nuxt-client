@@ -430,7 +430,7 @@ export default {
 
 	.toggle-div {
 		display: inline-block;
-		margin-left: 35px; // stylelint-disable sh-waqar/declaration-use-variable
+		margin-left: var(--space-xl-3);
 	}
 }
 
@@ -439,7 +439,6 @@ export default {
 }
 
 ::v-deep .v-input {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin-top: 0 !important;
+	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
 }
 </style>
