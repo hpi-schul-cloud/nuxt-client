@@ -71,6 +71,9 @@ export const routes: Array<RouteConfig> = [
 		path: `/content/:id(${REGEX_UUID})`,
 		component: () => import("../pages/LernStoreDetails.page.vue"),
 		name: "content-id",
+		meta: {
+			layout: Layouts.LERN_STORE,
+		},
 	},
 	{
 		path: "/error/proxy",
