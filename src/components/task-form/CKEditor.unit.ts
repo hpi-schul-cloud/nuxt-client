@@ -64,7 +64,7 @@ describe("@components/task-form/CKEditor", () => {
 
 	it("should have all plugins available in regular mode", () => {
 		const wrapper = getWrapper({ propsData: { mode: "regular" } });
-		expect(wrapper.vm.config.plugins).toHaveLength(19);
+		expect(wrapper.vm.config.plugins).toHaveLength(20);
 	});
 
 	it("should emit input on content changes", async () => {
