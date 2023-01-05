@@ -4,7 +4,7 @@ import {
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
-import CopyModule, { CopyParams } from "./copy";
+import CopyModule, { CopyParams, CopyParamsTypeEnum } from "./copy";
 
 const serverDataPartial: CopyApiResponse = {
 	title: "Aufgabe",
@@ -74,7 +74,7 @@ describe("copy module", () => {
 				it("should send with courseId", async () => {
 					const payload: CopyParams = {
 						id: "taskId",
-						type: "task",
+						type: CopyParamsTypeEnum.Task,
 						courseId: "testCourseId",
 					};
 					await copyModule.copy(payload);
@@ -88,7 +88,7 @@ describe("copy module", () => {
 				it("should send with NO courseId", async () => {
 					const payload: CopyParams = {
 						id: "taskId",
-						type: "task",
+						type: CopyParamsTypeEnum.Task,
 					};
 
 					await copyModule.copy(payload);
@@ -115,7 +115,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload: CopyParams = {
 					id: "courseId-value",
-					type: "course",
+					type: CopyParamsTypeEnum.Course,
 					courseId: "courseId-value",
 				};
 
@@ -140,7 +140,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				await copyModule.copy({
 					id: "testLessonId",
-					type: "lesson",
+					type: CopyParamsTypeEnum.Lesson,
 					courseId: "testCourseId",
 				});
 				expect(roomCopyMockApi.roomsControllerCopyLesson).toHaveBeenCalledWith(
