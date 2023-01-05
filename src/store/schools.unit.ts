@@ -758,7 +758,7 @@ describe("schools module", () => {
 
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
-					$post: async (path: string) => {
+					$put: async (path: string) => {
 						throw new Error("");
 						return;
 					},
