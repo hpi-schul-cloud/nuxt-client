@@ -12,6 +12,9 @@
 			:true-value="true"
 			:false-value="false"
 			:value="isMigrationEnabled"
+			inset
+			dense
+			class="ml-1"
 			@change="setMigration"
 		></v-switch>
 	</div>
