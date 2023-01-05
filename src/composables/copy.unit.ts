@@ -90,17 +90,15 @@ describe("copy composable", () => {
 		expect(isLoadingDialogOpenStates).toEqual([true, false]);
 	});
 
-	it("should open success alert notification on successfull copy", async () => {
-		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
+	it("should open copyResultModal on successfull copy", async () => {
+		const { copy, copyModuleMock, payload } = setup();
 		copyModuleMock.copy = jest
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "success" })
-		);
+		expect(copyModuleMock.setResultModalOpen).toBeCalledWith(true);
 	});
 
 	it("should open failure alert notification on failed copy", async () => {
