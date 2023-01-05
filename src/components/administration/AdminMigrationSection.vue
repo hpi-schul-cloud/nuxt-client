@@ -71,7 +71,7 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-btn
-          class="agree-btn-start"
+					class="agree-btn-start"
 					color="primary"
 					@click="
 						toggleShowStartWarning();
@@ -85,7 +85,11 @@
 					}}
 				</v-btn>
 
-				<v-btn class="disagree-btn-start" color="primary" @click="toggleShowStartWarning">
+				<v-btn
+					class="disagree-btn-start"
+					color="primary"
+					@click="toggleShowStartWarning"
+				>
 					{{
 						t(
 							"components.administration.adminMigrationSection.startWarningCard.disagree"
@@ -112,7 +116,7 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-btn
-          class="agree-btn-end"
+					class="agree-btn-end"
 					color="primary"
 					@click="
 						toggleShowEndWarning();
@@ -126,7 +130,11 @@
 					}}
 				</v-btn>
 
-				<v-btn class="disagree-btn-end" color="primary" @click="toggleShowEndWarning">
+				<v-btn
+					class="disagree-btn-end"
+					color="primary"
+					@click="toggleShowEndWarning"
+				>
 					{{
 						t(
 							"components.administration.adminMigrationSection.endWarningCard.disagree"
