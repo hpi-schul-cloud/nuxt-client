@@ -173,6 +173,12 @@ export default {
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
 			const delay = 30 * 1000;
+			console.log("scheduledDate", scheduledDate);
+			console.log(
+				"new Date(new Date(scheduledDate).getTime() - delay), new Date()",
+				new Date(new Date(scheduledDate).getTime() - delay),
+				new Date()
+			);
 			return (
 				scheduledDate &&
 				new Date(new Date(scheduledDate).getTime() - delay) > new Date()
