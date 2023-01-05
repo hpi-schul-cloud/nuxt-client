@@ -107,10 +107,10 @@ const spyMocks = {
 	savePositionMock: jest.spyOn(RoomOverview.methods, "savePosition"),
 	dragFromGroupMock: jest.spyOn(RoomOverview.methods, "dragFromGroup"),
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
-	isTeacher:jest.spyOn(RoomOverview.methods, "isTeacher"),
+	isTeacher: jest.spyOn(RoomOverview.methods, "isTeacher"),
 	storeModuleFetchAllMock: jest
-		.spyOn(authModule, "getUserRoles", 'get')
-		.mockReturnValue(['student']),
+		.spyOn(authModule, "getUserRoles", "get")
+		.mockReturnValue(["student"]),
 };
 
 let copyModuleMock;
@@ -151,7 +151,7 @@ const getWrapper = (
 			provide("notifierModule", notifierModuleMock);
 		},
 		propsData: {
-			role: "student"
+			role: "student",
 		},
 		...attrs,
 	});
