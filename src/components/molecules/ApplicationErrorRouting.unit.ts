@@ -1,7 +1,6 @@
 import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "vue";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 
@@ -19,9 +18,9 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	const mountComponent: any = () => {
 		return mount(ApplicationErrorRouting, {
 			...createComponentMocks({ i18n: true, $router }),
-			setup() {
-				provide("applicationErrorModule", applicationErrorModuleMock);
-				provide("useApplicationError", useApplicationErrorMock);
+			provide: {
+				applicationErrorModule: applicationErrorModuleMock,
+				useApplicationError: useApplicationErrorMock,
 			},
 		});
 	};
