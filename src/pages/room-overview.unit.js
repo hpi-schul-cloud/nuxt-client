@@ -108,10 +108,10 @@ const spyMocks = {
 	dragFromGroupMock: jest.spyOn(RoomOverview.methods, "dragFromGroup"),
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 	isTeacher: jest.spyOn(RoomOverview.methods, "isTeacher"),
-	isTeacherMock:jest.spyOn(RoomOverview.methods, "isTeacher"),
+	isTeacherMock: jest.spyOn(RoomOverview.methods, "isTeacher"),
 	getUserRolesMock: jest
-		.spyOn(authModule, "getUserRoles", 'get')
-		.mockReturnValue(['student']),
+		.spyOn(authModule, "getUserRoles", "get")
+		.mockReturnValue(["student"]),
 };
 
 let copyModuleMock;
