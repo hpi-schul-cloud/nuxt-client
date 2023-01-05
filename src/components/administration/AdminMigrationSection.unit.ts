@@ -1,6 +1,5 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@/store/schools";
@@ -38,31 +37,41 @@ describe("AdminMigrationSection", () => {
 
 	describe("inject", () => {
 		it("should throw an error when schoolsModule injection fails", () => {
+			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
 			try {
 				shallowMount(AdminMigrationSection, {
 					provide: {
 						i18n: { t: (key: string) => key },
 					},
 				});
-			} catch (e) {
-				expect(
-					(e as Error).message.includes('Injection "schoolsModule" not found')
-				).toBeTruthy();
-			}
+			} catch (e) {}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringMatching(
+					/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+				)
+			);
+
+			consoleErrorSpy.mockRestore();
 		});
 
 		it("should throw an error when i18n injection fails", () => {
+			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
 			try {
 				shallowMount(AdminMigrationSection, {
 					provide: {
 						schoolsModule,
 					},
 				});
-			} catch (e) {
-				expect(
-					(e as Error).message.includes('Injection "i18n" not found')
-				).toBeTruthy();
-			}
+			} catch (e) {}
+
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect.stringMatching(/injection "i18n" not found/)
+			);
+
+			consoleErrorSpy.mockRestore();
 		});
 	});
 
