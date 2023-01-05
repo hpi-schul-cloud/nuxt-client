@@ -8,12 +8,21 @@
 		<div class="element-content mr-4">
 			<slot />
 		</div>
-		<div class="element-actions">
+		<v-card-actions class="element-actions">
 			<v-btn
 				icon
 				outlined
 				color="secondary"
-				absolute
+				class="drag-element-btn handle"
+				:class="{ 'd-sr-only': isHidden }"
+				data-testid="drag-element-btn"
+			>
+				<v-icon>{{ mdiDrag }}</v-icon>
+			</v-btn>
+			<v-btn
+				icon
+				outlined
+				color="secondary"
 				class="delete-element-btn"
 				:class="{ 'd-sr-only': isHidden }"
 				data-testid="delete-element-btn"
@@ -21,33 +30,23 @@
 			>
 				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 			</v-btn>
-			<v-btn
-				icon
-				outlined
-				color="secondary"
-				absolute
-				class="drag-element-btn handle"
-				:class="{ 'd-sr-only': isHidden }"
-				data-testid="drag-element-btn"
-			>
-				<v-icon>{{ mdiDrag }}</v-icon>
-			</v-btn>
-		</div>
+		</v-card-actions>
 	</v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "@vue/composition-api";
-import { useDrag } from "@/composables/drag";
+//import { useDrag } from "@/composables/drag";
 import { mdiTrashCanOutline, mdiDrag } from "@mdi/js";
 
 export default defineComponent({
 	name: "TaskContentElement",
 	setup() {
-		const { isTouchDevice } = useDrag();
+		//const { isTouchDevice } = useDrag();
 
 		const hover = ref(false);
-		const isHidden = computed(() => !hover.value && !isTouchDevice());
+		//const isHidden = computed(() => !hover.value && !isTouchDevice());
+		const isHidden = computed(() => false);
 
 		return {
 			hover,
@@ -60,30 +59,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/components/VBtn/_variables.scss";
-@import "~vuetify/src/components/VCard/_variables.scss";
-
 .element {
 	display: flex;
 	align-items: flex-start;
+	border: solid thin var(--v-white-base);
 }
 
 .element-content {
 	flex-basis: 100%;
-}
-
-.element-actions {
-	position: relative;
-	flex-basis: #{map-get($btn-sizes, "default")}px;
 	flex-shrink: 1;
 }
 
-.delete-element-btn {
+.element-actions {
 	z-index: var(--layer-page);
-}
-
-.drag-element-btn {
-	top: #{map-get($btn-sizes, "default") + $card-actions-padding};
-	z-index: var(--layer-page);
+	flex-basis: 100px;
+	flex-grow: 0;
+	flex-shrink: 0;
 }
 </style>
