@@ -1,6 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CKEditor from "@/components/task-form/CKEditor.vue";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 
 // TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
@@ -10,8 +9,8 @@ describe("@/components/task-form/CKEditor", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

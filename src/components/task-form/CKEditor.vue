@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject } from "vue";
+import { defineComponent, ref, inject, watch } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 require("@hpi-schul-cloud/ckeditor/build/translations/en");
 require("@hpi-schul-cloud/ckeditor/build/translations/es");
