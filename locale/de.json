@@ -82,6 +82,8 @@
 	"common.roleName.teacher": "Lehrkraft",
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
+	"common.table.nodata": "Keine Daten vorhanden",
+	"common.table.loading.text": "Daten werden geladen...",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.url": "Gib bitte eine valide URL ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",

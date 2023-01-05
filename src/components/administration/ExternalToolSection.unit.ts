@@ -4,7 +4,7 @@ import { createModuleMocks } from "@utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
-import { ExternalToolStatus } from "@store/types/school-external-tool";
+import { SchoolExternalToolStatus } from "@store/types/school-external-tool";
 
 describe("ExternalToolSection", () => {
 	let wrapper: Wrapper<any>;
@@ -129,8 +129,8 @@ describe("ExternalToolSection", () => {
 			const secondToolName = "Test2";
 			setup({
 				getSchoolExternalTools: [
-					{ id: "testId", name: firstToolName, status: ExternalToolStatus.Latest },
-					{ id: "testId2", name: secondToolName, status: ExternalToolStatus.Outdated }
+					{ id: "testId", name: firstToolName, status: SchoolExternalToolStatus.Latest, version: 1 },
+					{ id: "testId2", name: secondToolName, status: SchoolExternalToolStatus.Outdated, version: 1 }
 				]
 			});
 			return {
@@ -219,7 +219,7 @@ describe("ExternalToolSection", () => {
 				setup();
 
 				const expectedName = "Name";
-				wrapper.vm.itemToDelete = { name: expectedName, status: ExternalToolStatus.Latest, outdated: false };
+				wrapper.vm.itemToDelete = { name: expectedName, status: SchoolExternalToolStatus.Latest, outdated: false };
 
 				const itemName: string = wrapper.vm.getItemName;
 

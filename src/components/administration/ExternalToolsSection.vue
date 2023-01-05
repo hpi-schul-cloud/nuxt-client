@@ -8,6 +8,9 @@
 			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
+			:loading="isLoading"
+			:loading-text="t('common.table.loading.text')"
+			:no-data-text="t('common.table.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
 				<span :class="getColor(item)">
@@ -81,31 +84,16 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
-import {
-	SchoolExternalTool,
-	ExternalToolStatus,
-} from "@store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-
-export interface ExternalToolItem {
-	name: string;
-	status: string;
-	outdated: boolean;
-}
+import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolsSection",
-	components: {},
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
@@ -118,6 +106,7 @@ export default defineComponent({
 			await externalToolsModule.loadSchoolExternalTools();
 		});
 
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
 			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
@@ -126,44 +115,17 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const headers: DataTableHeader[] = [
-			{
-				text: t("common.labels.name"),
-				value: "name",
-			},
-			{
-				text: t(
-					"components.administration.externalToolsSection.table.header.status"
-				),
-				value: "status",
-			},
-			{
-				text: "",
-				value: "actions",
-				sortable: false,
-				align: "end",
-				width: "90px",
-			},
-		];
+		const headers: DataTableHeader[] = useSchoolExternalToolUtils(t).getHeaders;
 
-		const items: ComputedRef<ExternalToolItem[]> = computed(() => {
-			return externalToolsModule.getSchoolExternalTools.map(
-				(tool: SchoolExternalTool) => {
-					const outdated: boolean = tool.status === ExternalToolStatus.Outdated;
-					const status: string =
-						tool.status === ExternalToolStatus.Latest
-							? t(
-									"components.administration.externalToolsSection.table.header.status.latest"
-							  )
-							: t(
-									"components.administration.externalToolsSection.table.header.status.outdated"
-							  );
-					return { name: tool.name, status: status, outdated };
-				}
-			);
+		const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
+			return useSchoolExternalToolUtils(t).getItems(externalToolsModule);
 		});
 
-		const getColor = (item: ExternalToolItem): string => {
+		const isLoading: ComputedRef<boolean> = computed(() => {
+			return externalToolsModule.getLoading;
+		});
+
+		const getColor = (item: SchoolExternalToolItem): string => {
 			return item.outdated ? "outdated" : "";
 		};
 
@@ -176,18 +138,18 @@ export default defineComponent({
 		};
 
 		const deleteTool = () => {
-			console.log(itemToDelete.value);
+			console.log("deleteTool() called");
 			closeDeleteDialog();
 		};
 
-		const itemToDelete: Ref<ExternalToolItem | undefined> = ref();
+		const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
 		const getItemName: ComputedRef<string> = computed(() => {
 			return itemToDelete.value ? itemToDelete.value?.name : "";
 		});
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
-		const openDeleteDialog = (item: ExternalToolItem) => {
+		const openDeleteDialog = (item: SchoolExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
 		};
@@ -201,6 +163,7 @@ export default defineComponent({
 			t,
 			headers,
 			items,
+			isLoading,
 			mdiPencilOutline,
 			mdiTrashCanOutline,
 			getColor,

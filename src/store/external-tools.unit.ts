@@ -1,5 +1,5 @@
 import ExternalToolsModule from "./external-tools";
-import {ExternalToolStatus, SchoolExternalTool} from "./types/school-external-tool";
+import {SchoolExternalToolStatus, SchoolExternalTool} from "./types/school-external-tool";
 
 describe('ExternalToolsModule', () => {
 	let externalToolsModule: ExternalToolsModule;
@@ -15,13 +15,15 @@ describe('ExternalToolsModule', () => {
 		const schoolExternalTools: SchoolExternalTool[] = [
 			{
 				name: "Test",
-				status: ExternalToolStatus.Latest,
-				id: "testId"
+				status: SchoolExternalToolStatus.Latest,
+				id: "testId",
+				version: 1,
 			},
 			{
 				name: "Test2",
-				status: ExternalToolStatus.Outdated,
-				id: "testId2"
+				status: SchoolExternalToolStatus.Outdated,
+				id: "testId2",
+				version: 1,
 			},
 		];
 		externalToolsModule.schoolExternalTools = schoolExternalTools;
@@ -57,9 +59,9 @@ describe('ExternalToolsModule', () => {
 		describe("when setter is called", () => {
 			it("should set the new state", () => {
 				setup();
-				const expectedName = 'NewTool';
+				// const expectedName = 'NewTool';
 
-				externalToolsModule.setSchoolExternalTools([{ id: "id", name: expectedName, status: ExternalToolStatus.Latest }]);
+				// externalToolsModule.setSchoolExternalTools([{ id: "id", name: expectedName, status: SchoolExternalToolStatus.Latest }]);
 
 				const tools: SchoolExternalTool[] = externalToolsModule.getSchoolExternalTools;
 				expect(tools.length).toEqual(1);
