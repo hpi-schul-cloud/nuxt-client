@@ -93,6 +93,7 @@ export default defineComponent({
 			"Underline",
 		];
 		plugins["regular"] = [
+			"Autoformat",
 			"Essentials",
 			"BlockQuote",
 			"Bold",
