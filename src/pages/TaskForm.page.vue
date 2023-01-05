@@ -15,6 +15,9 @@
 				:animation="400"
 				:delay="touchDelay"
 				handle=".handle"
+				ghost-class="ghost"
+				chosen-class="chosen"
+				drag-class="drag"
 				@start="startDragging"
 				@end="endDragging"
 			>
@@ -197,3 +200,18 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.chosen {
+	border: dashed thin var(--v-grey-base);
+}
+
+.drag {
+	border: dashed thin var(--v-grey-lighten2);
+	opacity: 1;
+}
+
+.ghost {
+	opacity: 1;
+}
+</style>
