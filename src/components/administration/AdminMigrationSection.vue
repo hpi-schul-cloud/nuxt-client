@@ -199,7 +199,11 @@ export default defineComponent({
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
-			const migrationFlags: MigrationBody = { oauthMigrationPossible: available, oauthMigrationMandatory: mandatory, oauthMigrationFinished: !available };
+			const migrationFlags: MigrationBody = {
+				oauthMigrationPossible: available,
+				oauthMigrationMandatory: mandatory,
+				oauthMigrationFinished: !available,
+			};
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
@@ -215,17 +219,23 @@ export default defineComponent({
 			showStartWarning.value = !showStartWarning.value;
 		};
 
-    const showStartButton: ComputedRef<boolean> = computed(
-        () => !isMigrationAvailable.value && !showEndWarning.value && !showStartWarning.value
-    );
+		const showStartButton: ComputedRef<boolean> = computed(
+			() =>
+				!isMigrationAvailable.value &&
+				!showEndWarning.value &&
+				!showStartWarning.value
+		);
 
-    const showEndButton: ComputedRef<boolean> = computed(
-        () => isMigrationAvailable.value && !showEndWarning.value && !showStartWarning.value
-    );
+		const showEndButton: ComputedRef<boolean> = computed(
+			() =>
+				isMigrationAvailable.value &&
+				!showEndWarning.value &&
+				!showStartWarning.value
+		);
 
-    const showMandatorySwitch: ComputedRef<boolean> = computed(
-        () => !showEndWarning.value && !showStartWarning.value
-    );
+		const showMandatorySwitch: ComputedRef<boolean> = computed(
+			() => !showEndWarning.value && !showStartWarning.value
+		);
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -255,9 +265,9 @@ export default defineComponent({
 			showStartWarning,
 			toggleShowStartWarning,
 			migrationCompletionDate,
-      showStartButton,
-      showEndButton,
-      showMandatorySwitch
+			showStartButton,
+			showEndButton,
+			showMandatorySwitch,
 		};
 	},
 });
