@@ -29,6 +29,7 @@ import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 import { contentModule } from "@/store";
 
 export default {
+	name: "lernStoreLayout",
 	components: {
 		LoadingStateDialog,
 		LegacyLoggedIn,

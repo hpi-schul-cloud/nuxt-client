@@ -268,7 +268,6 @@ export default class ContentModule extends VuexModule {
 				params: query,
 			});
 
-			// @ts-ignore
 			this.setResources({ hash: queryHash, result: res.data });
 		} catch (e) {
 			console.error(e);
@@ -284,7 +283,7 @@ export default class ContentModule extends VuexModule {
 			const res = await $axios.get("/v1/edu-sharing", {
 				params: payload,
 			});
-			// @ts-ignore
+
 			this.addResourcesMutation(res.data);
 		} catch (e) {
 			console.error("Error: ", e);
@@ -308,7 +307,6 @@ export default class ContentModule extends VuexModule {
 				params: query,
 			});
 
-			// @ts-ignore
 			this.setElements({ hash: queryHash, result: res.data });
 		} catch (e) {
 			console.error(e);
@@ -324,7 +322,6 @@ export default class ContentModule extends VuexModule {
 			const res = await $axios.get("/v1/edu-sharing", {
 				params: payload,
 			});
-			// @ts-ignore
 			this.addElementsMutation(res.data);
 		} catch (e) {
 			console.error("Error: ", e);
@@ -341,7 +338,6 @@ export default class ContentModule extends VuexModule {
 		if (params.courseId) {
 			//only search if courseId is existing
 			const res = await $axios.get("/v1/lessons", { params });
-			// @ts-ignore
 			this.setLessons(res.data);
 		}
 	}
@@ -363,7 +359,6 @@ export default class ContentModule extends VuexModule {
 	async getResourceMetadata(id: string) {
 		this.setStatus("pending");
 		const metadata = (await $axios.get(`/v1/edu-sharing/${id}`)).data;
-		// @ts-ignore
 		this.setCurrentResource(metadata);
 		this.setStatus("completed");
 	}
