@@ -1,5 +1,5 @@
 import { envConfigModule, finishedTasksModule } from "@/store";
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
@@ -207,7 +207,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 						{
 							id: "59cce2c61113d1132c98dc06",
 							courseId: "18",
-							type: "task",
+							type: CopyParamsTypeEnum.Task,
 						},
 					],
 				]);
@@ -233,7 +233,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 						{
 							courseId: undefined,
 							id: "59cce2c61113d1132c98dc06",
-							type: "task",
+							type: CopyParamsTypeEnum.Task,
 						},
 					],
 				]);

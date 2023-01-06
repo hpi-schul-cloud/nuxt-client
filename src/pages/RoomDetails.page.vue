@@ -138,6 +138,7 @@ import {
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
+import { CopyParamsTypeEnum } from "@/store/copy";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -353,7 +354,11 @@ export default defineComponent({
 			const loadingText = this.$t(
 				"components.molecules.copyResult.title.loading"
 			);
-			const payload = { id: courseId, courseId, type: "course" };
+			const payload = {
+				id: courseId,
+				courseId,
+				type: CopyParamsTypeEnum.Course,
+			};
 			await this.copy(payload, loadingText);
 			const copyResult = this.copyModule.getCopyResult;
 
