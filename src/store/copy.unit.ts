@@ -192,7 +192,7 @@ describe("copy module", () => {
 				const newName = "My Course";
 				const payload = {
 					token,
-					type: "course",
+					type: CopyParamsTypeEnum.Course,
 					newName,
 				};
 
@@ -416,8 +416,10 @@ describe("copy module", () => {
 		it("should have correct getters results", () => {
 			const copyModule = new CopyModule({});
 			copyModule.setCopyResult(serverDataPartial);
+			copyModule.setResultModalOpen(true);
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");
+			expect(copyModule.getIsResultModalOpen).toBe(true);
 		});
 	});
 });
