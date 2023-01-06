@@ -37,7 +37,7 @@
 		</v-btn>
 
 		<v-switch
-			v-if="!showEndWarning && !showStartWarning"
+			v-show="!showEndWarning && !showStartWarning"
 			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"

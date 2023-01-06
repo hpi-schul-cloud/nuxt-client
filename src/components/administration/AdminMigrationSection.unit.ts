@@ -104,7 +104,7 @@ describe("AdminMigrationSection", () => {
             });
             const switchComponent = wrapper.findComponent({ name: "v-switch" });
 
-            expect(switchComponent.exists()).toBe(true);
+            expect(switchComponent.isVisible()).toBe(true);
             expect(switchComponent.props('disabled')).toBeFalsy();
         });
 
@@ -113,7 +113,7 @@ describe("AdminMigrationSection", () => {
 
             const switchComponent = wrapper.findComponent({ name: "v-switch" });
 
-            expect(switchComponent.exists()).toBe(true);
+            expect(switchComponent.isVisible()).toBe(true);
             expect(switchComponent.props('disabled')).toBeTruthy();
         });
 
@@ -179,7 +179,7 @@ describe("AdminMigrationSection", () => {
             await buttonComponent.vm.$emit('click');
 
             expect(buttonComponent.exists()).toBe(false);
-            expect(switchComponent.exists()).toBe(false);
+            expect(switchComponent.isVisible()).toBe(false);
         });
     });
 
@@ -211,7 +211,7 @@ describe("AdminMigrationSection", () => {
             await buttonComponent.vm.$emit('click');
 
             expect(buttonComponent.exists()).toBe(false);
-            expect(switchComponent.exists()).toBe(false);
+            expect(switchComponent.isVisible()).toBe(false);
         });
     });
 
