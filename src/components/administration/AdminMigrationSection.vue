@@ -43,6 +43,9 @@
 			:true-value="true"
 			:false-value="false"
 			:value="isMigrationMandatory"
+			inset
+			dense
+			class="ml-1"
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 

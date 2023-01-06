@@ -1,6 +1,7 @@
-import { authModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	RichText,
+	RichTextTypeEnum,
 	TaskApiFactory,
 	TaskApiInterface,
 	TaskCreateParams,
@@ -9,17 +10,24 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
+type TempTask = {
+	id: string;
+	courseId?: string;
+	name: string;
+	description: RichText;
+};
+
 @Module({
 	name: "task",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class TaskModule extends VuexModule {
-	taskData: Object = {
-		taskId: "",
-		courseId: "",
-		title: "",
-		description: "",
+	// TODO - implement/use proper type
+	taskData: TempTask = {
+		id: "",
+		name: "",
+		description: { content: "", type: RichTextTypeEnum.RichtextCk5 },
 	};
 	loading: boolean = false;
 	businessError: BusinessError = {
@@ -37,43 +45,60 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async createTask(params: TaskCreateParams): Promise<void> {
-		// check for permission here or in page?
-		// probably checked in server?
-
+	async findTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
 		this.setLoading(true);
+
 		try {
-			console.log(params);
-			const { data } = await this.taskApi.taskControllerCreate({
-				name: params.name,
-				courseId: params.courseId,
-				description: params.description,
-			});
+			const { data } = await this.taskApi.taskControllerFindTask(taskId);
+
 			this.setTaskData(data);
-			console.log(params, data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
+			this.setBusinessError(error);
 		}
 	}
 
 	@Action
-	async updateTask(taskId: string, params: TaskUpdateParams): Promise<void> {
-		// check for permission here or in page?
-		// probably checked in server?
-
+	async createTask(params: TaskCreateParams): Promise<void> {
+		this.resetBusinessError();
 		this.setLoading(true);
+
 		try {
-			const { data } = await this.taskApi.taskControllerUpdate(taskId, params);
+			const { data } = await this.taskApi.taskControllerCreate({
+				name: params.name,
+				description: params.description,
+			});
+
 			this.setTaskData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
+			this.setBusinessError(error);
+		}
+	}
+
+	@Action
+	async updateTask(params: TaskUpdateParams): Promise<void> {
+		this.resetBusinessError();
+		this.setLoading(true);
+
+		try {
+			const { data } = await this.taskApi.taskControllerUpdate(
+				this.taskData.id,
+				params
+			);
+			this.setTaskData(data);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setLoading(false);
+			this.setBusinessError(error);
 		}
 	}
 
 	@Mutation
-	setTaskData(payload: Object): void {
+	setTaskData(payload: any): void {
 		this.taskData = payload;
 	}
 
@@ -100,7 +125,7 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getTaskData(): Object {
+	get getTaskData(): TempTask {
 		return this.taskData;
 	}
 
