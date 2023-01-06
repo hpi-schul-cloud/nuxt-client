@@ -1,4 +1,6 @@
 import {
+	CopyApiResponse,
+	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	ShareTokenInfoResponseParentTypeEnum,
 } from "@/serverApi/v3";
@@ -18,6 +20,7 @@ describe("@components/share-course/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
+	let copyResultResponse: CopyApiResponse | undefined = undefined;
 
 	const token = "ACoolToken";
 	const mountComponent = (attrs = {}) => {
@@ -46,6 +49,7 @@ describe("@components/share-course/ImportFlow", () => {
 		document.body.setAttribute("data-app", "true");
 		copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
+			getCopyResult: copyResultResponse,
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
@@ -139,40 +143,21 @@ describe("@components/share-course/ImportFlow", () => {
 				});
 			});
 
-			describe("copyResult: success", () => {
-				it("should show success notifier", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					copyModuleMock.copyByShareToken = jest.fn().mockResolvedValue([]);
-					copyModuleMock.setResultModalOpen = jest.fn();
-					const wrapper = mountComponent();
-					await Vue.nextTick();
+			it("shows failure notifier for failed copy", async () => {
+				copyModuleMock.validateShareToken = validateShareTokenMock;
+				copyModuleMock.copyByShareToken = () => Promise.reject();
+				const wrapper = mountComponent();
+				await Vue.nextTick();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
-					await dialog.vm.$emit("dialog-confirmed");
-					await new Promise((time) => setTimeout(time, 1000));
+				const dialog = wrapper.findComponent(vCustomDialog);
+				await dialog.vm.$emit("dialog-confirmed");
 
-					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
-					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
-				});
+				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error" })
+				);
 			});
 
-			describe("copyResult: failure", () => {
-				it("should show failure notifier", async () => {
-					copyModuleMock.validateShareToken = validateShareTokenMock;
-					copyModuleMock.copyByShareToken = () => Promise.reject();
-					const wrapper = mountComponent();
-					await Vue.nextTick();
-
-					const dialog = wrapper.findComponent(vCustomDialog);
-					await dialog.vm.$emit("dialog-confirmed");
-
-					expect(notifierModuleMock.show).toHaveBeenCalledWith(
-						expect.objectContaining({ status: "error" })
-					);
-				});
-			});
-
-			describe("copyResult: partial", () => {
+			describe("for partial or successful copy", () => {
 				beforeEach(() => {
 					copyModuleMock.validateShareToken = validateShareTokenMock;
 					const copyResults: CopyResultItem[] = [
@@ -192,9 +177,14 @@ describe("@components/share-course/ImportFlow", () => {
 					copyModuleMock.copyByShareToken = jest
 						.fn()
 						.mockResolvedValue(copyResults);
+
+					copyResultResponse = {
+						type: CopyApiResponseTypeEnum.Course,
+						status: CopyApiResponseStatusEnum.Partial,
+					};
 				});
 
-				it("should open copy result modal", async () => {
+				it("opens copy result modal", async () => {
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
@@ -206,7 +196,7 @@ describe("@components/share-course/ImportFlow", () => {
 					expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 				});
 
-				it("should close copy result modal on close button click", async () => {
+				it("emits success when modal is closed", async () => {
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
