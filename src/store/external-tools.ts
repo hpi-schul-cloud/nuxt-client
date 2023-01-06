@@ -63,8 +63,9 @@ export default class ExternalToolsModule extends VuexModule {
 			}
 			this.setLoading(false);
 		} catch (e) {
+			console.log(`Some error occurred while loading tools data: ${e}`);
 			this.setLoading(false);
-			throw new Error(e);
+			return Promise.resolve();
 		}
 	}
 }

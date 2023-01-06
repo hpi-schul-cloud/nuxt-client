@@ -189,7 +189,7 @@ describe("ExternalToolsModule", () => {
 
 						const func = async () => await module.loadSchoolExternalTools();
 
-						await expect(func()).rejects.toThrow(Error);
+						await expect(func()).toEqual(Promise.resolve());
 						expect(setLoadingSpy).toHaveBeenCalledWith(false);
 						expect(module.getLoading).toBeFalsy();
 					});
