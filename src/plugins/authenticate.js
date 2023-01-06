@@ -23,47 +23,35 @@ export default async ({ app, route }) => {
 };
 
 function getLoginUrlWithRedirect() {
-	if (isSchulcloudUrl()) {
-		return `/login?redirect=${encodeURIComponent(window.location.href)}`;
+	const currentUrl = new URL(window.location.href);
+	const loginUrl = new URL(
+		envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL,
+		currentUrl.origin // fallback origin, if a relative url is configured
+	);
+
+	const isInteralUrl = currentUrl.origin === loginUrl.origin;
+
+	if (isInteralUrl) {
+		return addRedirectAsParam(loginUrl, currentUrl);
 	}
 
-	return addRedirectToUrlParams();
+	return addRedirectAsParamToUrlParams(loginUrl, currentUrl);
 }
 
-function isSchulcloudUrl() {
-	const authUrl = envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL;
-	if (authUrl[0] === "/") {
-		return true;
-	}
-
-	const currentUrl = new URL(window.location.href);
-	if (authUrl.indexOf(currentUrl.origin) === 0) {
-		return true;
-	}
-
-	return false;
+function addRedirectAsParam(loginUrl, currentUrl) {
+	loginUrl.searchParams.set("redirect", currentUrl.toString());
+	return loginUrl.toString();
 }
 
-function addRedirectToUrlParams() {
-	const authUrl = envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL;
-	const currentUrl = new URL(window.location.href);
-
-	const containsSchulcloudUrl = (s) => {
-		return s.includes(currentUrl.origin);
-	};
-
-	const setRedirectParam = (url) => {
-		const urlInParams = new URL(url);
-		urlInParams.searchParams.set("redirect", currentUrl.toString());
-		return urlInParams.toString();
-	};
-
-	const externalUrl = new URL(authUrl, currentUrl.origin);
-	for (const [name, value] of externalUrl.searchParams.entries()) {
-		if (containsSchulcloudUrl(value)) {
-			externalUrl.searchParams.set(name, setRedirectParam(value));
+function addRedirectAsParamToUrlParams(loginUrl, currentUrl) {
+	for (const [name, value] of loginUrl.searchParams.entries()) {
+		const isSchulcloudUrl = value.indexOf(currentUrl.origin) === 0;
+		if (isSchulcloudUrl) {
+			const urlInParameters = new URL(value);
+			urlInParameters.searchParams.set("redirect", currentUrl.toString());
+			loginUrl.searchParams.set(name, urlInParameters.toString());
 		}
 	}
 
-	return externalUrl.toString();
+	return loginUrl.toString();
 }

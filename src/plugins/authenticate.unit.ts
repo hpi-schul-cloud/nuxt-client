@@ -18,19 +18,7 @@ function mockWindowLocation(location: any) {
 	return assignMock;
 }
 
-function mockContext(
-	isPublic: boolean,
-	hasValidJwt: boolean,
-	hasInvalidJwt: boolean
-) {
-	const cookies: Record<string, string> = {};
-	if (hasValidJwt) {
-		cookies.jwt = "valid-jwt";
-	}
-	if (hasInvalidJwt) {
-		cookies.jwt = "invalid-jwt";
-	}
-
+function mockContext(isPublic: boolean, cookies: Record<string, string> = {}) {
 	const contextMock = {
 		route: {
 			meta: [{ isPublic }],
@@ -44,62 +32,24 @@ function mockContext(
 	return contextMock;
 }
 
-function mockAuthModule(hasValidJwt: boolean, hasInvalidJwt: boolean) {
-	if (hasValidJwt === true) {
-		jest.spyOn(authModule, "populateUser").mockImplementation();
-	}
-
-	if (hasInvalidJwt === false) {
-		jest.spyOn(authModule, "populateUser").mockRejectedValue("not allowed...");
-	}
-
-	const authModuleLogout = jest.spyOn(authModule, "logout").mockReturnValue();
-	return authModuleLogout;
-}
-
 function setup({
 	isPublic = false,
-	hasValidJwt = false,
-	hasInvalidJwt = false,
+	cookies = {},
+}: {
+	isPublic: boolean;
+	cookies?: Record<string, string>;
 }) {
 	const URL = `https://schulcloud.de/my-url-to-authenticate`;
-
 	const windowLocationAssign = mockWindowLocation({ href: URL });
 
-	const contextMock = mockContext(isPublic, hasValidJwt, hasInvalidJwt);
-
-	const authModuleLogout = mockAuthModule(hasValidJwt, hasInvalidJwt);
+	const contextMock = mockContext(isPublic, cookies);
+	const authModuleLogout = jest.spyOn(authModule, "logout").mockReturnValue();
 
 	return {
 		contextMock,
 		windowLocationAssign,
 		authModuleLogout,
 		URL,
-	};
-}
-
-function setupThuringia({
-	isPublic = false,
-	hasValidJwt = false,
-	hasInvalidJwt = false,
-}) {
-	const vars = setup({ isPublic, hasValidJwt, hasInvalidJwt });
-
-	const URL = `https://schulcloud.de/my-url-to-authenticate`;
-	const windowLocationAssign = mockWindowLocation({ href: URL });
-	const NOT_AUTHENTICATED_REDIRECT_URL =
-		"https://test.schulportal-thueringen.de/cas/login?service=https%3A%2F%2Fschulcloud.de%2Ftsp-login";
-
-	// @ts-ignore
-	envConfigModule.setEnvs({
-		NOT_AUTHENTICATED_REDIRECT_URL,
-	});
-
-	return {
-		...vars,
-		windowLocationAssign,
-		URL,
-		NOT_AUTHENTICATED_REDIRECT_URL,
 	};
 }
 
@@ -122,8 +72,8 @@ describe("@plugins/authenticate", () => {
 		it("should do nothing if url is public - also if jwt is set", async () => {
 			const { contextMock, windowLocationAssign } = setup({
 				isPublic: true,
-				hasValidJwt: true,
 			});
+			jest.spyOn(authModule, "populateUser").mockImplementation();
 
 			await authenticate(contextMock);
 
@@ -142,17 +92,48 @@ describe("@plugins/authenticate", () => {
 
 				const redirect = encodeURIComponent(URL);
 				expect(windowLocationAssign).toHaveBeenCalledWith(
-					`/login?redirect=${redirect}`
+					expect.stringContaining(`/login?redirect=${redirect}`)
+				);
+			});
+
+			it("should redirect to configured internal auth-url", async () => {
+				const {
+					contextMock,
+					windowLocationAssign,
+					URL: urlString,
+				} = setup({
+					isPublic: false,
+				});
+
+				const urlObject = new URL(urlString);
+				const NOT_AUTHENTICATED_REDIRECT_URL = `${urlObject.origin}/login?service=https%3A%2F%2Fschulcloud.de%2Ftsp-login`;
+				// @ts-ignore
+				envConfigModule.setEnvs({
+					NOT_AUTHENTICATED_REDIRECT_URL,
+				});
+
+				await authenticate(contextMock);
+
+				const redirect = encodeURIComponent(urlString);
+				expect(windowLocationAssign).toHaveBeenCalledWith(
+					expect.stringContaining(NOT_AUTHENTICATED_REDIRECT_URL)
+				);
+				expect(windowLocationAssign).toHaveBeenCalledWith(
+					expect.stringContaining(redirect)
 				);
 			});
 
 			it("should redirect to configured external auth-system", async () => {
-				const {
-					contextMock,
-					windowLocationAssign,
+				const { contextMock, windowLocationAssign, URL } = setup({
+					isPublic: false,
+				});
+
+				const NOT_AUTHENTICATED_REDIRECT_URL =
+					"https://test.schulportal-thueringen.de/cas/login?service=https%3A%2F%2Fschulcloud.de%2Ftsp-login";
+				// @ts-ignore
+				envConfigModule.setEnvs({
 					NOT_AUTHENTICATED_REDIRECT_URL,
-					URL,
-				} = setupThuringia({ isPublic: false });
+				});
 
 				await authenticate(contextMock);
 
@@ -170,8 +151,9 @@ describe("@plugins/authenticate", () => {
 			it("should not redirect", async () => {
 				const { contextMock, windowLocationAssign } = setup({
 					isPublic: false,
-					hasValidJwt: true,
+					cookies: { jwt: "some-jwt" },
 				});
+				jest.spyOn(authModule, "populateUser").mockImplementation();
 
 				await authenticate(contextMock);
 
@@ -183,12 +165,13 @@ describe("@plugins/authenticate", () => {
 			it("should check jwt and redirect to login if it fails", async () => {
 				const { contextMock, authModuleLogout, URL } = setup({
 					isPublic: false,
-					hasInvalidJwt: true,
+					cookies: { jwt: "some-jwt" },
 				});
+				jest.spyOn(authModule, "populateUser").mockRejectedValue(false);
 
 				await authenticate(contextMock);
 
-				const expectedRedirectUrl = `/login?redirect=${encodeURIComponent(
+				const expectedRedirectUrl = `https://schulcloud.de/login?redirect=${encodeURIComponent(
 					URL
 				)}`;
 				expect(authModuleLogout).toHaveBeenCalledWith(expectedRedirectUrl);
