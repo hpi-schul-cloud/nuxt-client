@@ -2,7 +2,7 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenInfoResponseParentTypeEnum,
 } from "@/serverApi/v3";
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -134,7 +134,7 @@ describe("@components/share-course/ImportFlow", () => {
 
 				expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 					token,
-					type: "course",
+					type: CopyParamsTypeEnum.Course,
 					newName: originalName,
 				});
 			});

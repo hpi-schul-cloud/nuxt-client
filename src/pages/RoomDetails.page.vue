@@ -107,6 +107,7 @@
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
+			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -304,6 +305,9 @@ export default defineComponent({
 		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
+		},
+		copyResultRootItemType() {
+			return this.copyModule.getCopyResult?.type;
 		},
 		copyResultError() {
 			return this.copyModule.getBusinessError;
