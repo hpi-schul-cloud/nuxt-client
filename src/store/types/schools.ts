@@ -57,33 +57,17 @@ export type School = {
 	years: {};
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
-	oauthUserMigration?: boolean;
-	oauthMigrationAvailable?: boolean;
-	oauthMigrationMandatory?: boolean;
-	migrationCompletionDate?: string;
+	oauthMigration: {
+		oauthUserMigration?: boolean;
+		oauthMigrationAvailable?: boolean;
+		oauthMigrationMandatory?: boolean;
+		migrationCompletionDate?: string;
+	}
 };
 
-export type OauthMigrationResponse = {
-	available: boolean;
-	mandatory: boolean;
-	enabled: boolean;
-	migrationCompletionDate?: Date
-};
-
-export type OauthMigrationApiResponse = {
-	oauthMigrationPossible: Date;
-	oauthMigrationMandatory: Date;
-	enableMigrationStart: boolean;
-	oauthMigrationFinished: Date
-};
-
-export type OauthMigrationApiRequest = {
-	oauthMigrationPossible: boolean;
+export type OauthMigration = {
+	oauthUserMigration: boolean;
+	oauthMigrationAvailable: boolean;
 	oauthMigrationMandatory: boolean;
-	oauthMigrationFinished: boolean;
-};
-
-export type OauthMigrationRequest = {
-	available: boolean;
-	mandatory: boolean;
-};
+	migrationCompletionDate: string;
+}

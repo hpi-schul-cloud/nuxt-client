@@ -7,7 +7,8 @@ import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "./auth";
-import {OauthMigrationApiResponse} from "@store/types/schools";
+import {OauthMigration} from "@store/types/schools";
+import {SchoolApiInterface, ShareTokenApiInterface} from "@/serverApi/v3/api";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -635,10 +636,15 @@ describe("schools module", () => {
 		describe("fetchSchoolOAuthMigration", () => {
 			beforeEach(() => {
 				receivedRequests = [];
+				const spy = jest.spyOn(serverApi, "SchoolApiFactory")
+				const schoolMockApi = {
+					schoolControllerGetMigration: jest.fn(async () => {}),
+				};
+				spy.mockReturnValue(schoolMockApi as unknown as SchoolApiInterface);
 			});
 
 			it('should trigger call to backend and return state of oauthMigrationEnabled and timestamps for oauthMigrationMandatory and oauthMigrationAvailable', async () => {
-				const date: Date = new Date()
+				const date: string = new Date().toDateString()
 				getRequestReturn = { oauthMigrationPossible: date, enableMigrationStart: true, oauthMigrationMandatory: date, oauthMigrationFinished: date };
 				axiosInitializer();
 				const schoolsModule = new SchoolsModule({});
@@ -652,10 +658,13 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/school/mockSchoolId/migration"
 				);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true)
-				expect(schoolsModule.getOauthMigration).toStrictEqual(true)
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(true)
-				expect(schoolsModule.getMigrationCompletionDate).toStrictEqual(date)
+				//expect(schoolMockApi.schoolControllerGetMigration()).toHaveBeenCalledTimes(1)
+				expect(schoolsModule.getOauthMigration).toStrictEqual({
+					oauthUserMigration: true,
+					oauthMigrationAvailable: true,
+					oauthMigrationMandatory: true,
+					migrationCompletionDate: date,
+				});
 			});
 
 			it("should not set any migration flags ", async () => {
@@ -667,10 +676,12 @@ describe("schools module", () => {
 				await schoolsModule.fetchSchoolOAuthMigration();
 
 				expect(receivedRequests.length).toBe(0);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(false)
-				expect(schoolsModule.getOauthMigration).toStrictEqual(false)
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(false)
-				expect(schoolsModule.getMigrationCompletionDate).toStrictEqual(undefined)
+				expect(schoolsModule.getOauthMigration).toStrictEqual({
+					oauthUserMigration: false,
+					oauthMigrationAvailable: false,
+					oauthMigrationMandatory: false,
+					migrationCompletionDate: "",
+				});
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
@@ -699,7 +710,7 @@ describe("schools module", () => {
 			});
 
 			it('should trigger call to backend and return state of migration flags', async () => {
-				const date: Date = new Date()
+				const date: string = new Date().toDateString();
 				getRequestReturn = { oauthMigrationPossible: date, enableMigrationStart: true, oauthMigrationMandatory: undefined, oauthMigrationFinished: undefined };
 				axiosInitializer();
 				const schoolsModule = new SchoolsModule({});
@@ -707,19 +718,21 @@ describe("schools module", () => {
 					...mockSchool
 				});
 
-				await schoolsModule.setSchoolOauthMigration({available: true, mandatory: false});
+				await schoolsModule.setSchoolOauthMigration({oauthMigrationPossible: true, oauthMigrationMandatory: false, oauthMigrationFinished: false});
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/school/mockSchoolId/migration"
 				);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true)
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(false)
-				expect(schoolsModule.getMigrationCompletionDate).toBe(undefined)
+				expect(schoolsModule.getOauthMigration).toStrictEqual({
+					oauthMigrationAvailable: true,
+					oauthMigrationMandatory: false,
+					migrationCompletionDate: "",
+				});
 			});
 
 			it('should trigger call to backend and return state of migration flags with existing MigrationCompletionDate', async () => {
-				const date: Date = new Date()
+				const date: string = new Date().toDateString()
 				getRequestReturn = { oauthMigrationPossible: undefined, enableMigrationStart: true, oauthMigrationMandatory: date, oauthMigrationFinished: date };
 				axiosInitializer();
 				const schoolsModule = new SchoolsModule({});
@@ -727,20 +740,22 @@ describe("schools module", () => {
 					...mockSchool
 				});
 
-				await schoolsModule.setSchoolOauthMigration({available: false, mandatory: true});
+				await schoolsModule.setSchoolOauthMigration({oauthMigrationPossible: false, oauthMigrationMandatory: true, oauthMigrationFinished: true});
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
 					"v3/school/mockSchoolId/migration"
 				);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(false)
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(true)
-				expect(schoolsModule.getMigrationCompletionDate).toStrictEqual(date)
+				expect(schoolsModule.getOauthMigration).toStrictEqual({
+					oauthMigrationAvailable: false,
+					oauthMigrationMandatory: true,
+					migrationCompletionDate: date,
+				});
 			})
 
 			it("should not set migration flags ", async () => {
 				initializeAxios({
-					$post: async (path: string) => {
+					$put: async (path: string) => {
 						return false;
 					},
 				} as NuxtAxiosInstance);
@@ -749,11 +764,15 @@ describe("schools module", () => {
 					...mockSchool, _id: '',
 				});
 
-				await schoolsModule.setSchoolOauthMigration({available: true, mandatory: true});
+				await schoolsModule.setSchoolOauthMigration({oauthMigrationPossible: true, oauthMigrationMandatory: true, oauthMigrationFinished: false});
 
 				expect(receivedRequests.length).toBe(0);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(false)
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(false)
+				expect(schoolsModule.getOauthMigration).toStrictEqual({
+					oauthUserMigration: false,
+					oauthMigrationAvailable: false,
+					oauthMigrationMandatory: false,
+					migrationCompletionDate: "",
+				});
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
@@ -769,7 +788,7 @@ describe("schools module", () => {
 					...mockSchool,
 				});
 
-				await schoolsModule.setSchoolOauthMigration({available: true, mandatory: false});
+				await schoolsModule.setSchoolOauthMigration({oauthMigrationPossible: true, oauthMigrationMandatory: false, oauthMigrationFinished: false});
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(schoolsModule.getError).toStrictEqual(new Error(""))
@@ -847,39 +866,17 @@ describe("schools module", () => {
 		describe("setOauthMigration", () => {
 			it("should set oauth migration data", () => {
 				const schoolsModule = new SchoolsModule({});
-				const oauthMigrationValue = true;
-				expect(schoolsModule.getOauthMigration).not.toBe(oauthMigrationValue)
+				const oauthMigrationValue = {
+					oauthUserMigration: true,
+					oauthMigrationAvailable: true,
+					oauthMigrationMandatory: true,
+					migrationCompletionDate: new Date().toDateString(),
+				}
+				expect(schoolsModule.getOauthMigration).not.toStrictEqual(oauthMigrationValue)
 				schoolsModule.setOauthMigration(oauthMigrationValue);
-				expect(schoolsModule.getOauthMigration).toBe(oauthMigrationValue)
+				expect(schoolsModule.getOauthMigration).toStrictEqual(oauthMigrationValue)
 			})
 		})
-		describe("setOauthMigrationAvailable", () => {
-			it("should set oauth migration available data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const oauthMigrationValue = true;
-				expect(schoolsModule.getOauthMigrationAvailable).not.toBe(oauthMigrationValue)
-				schoolsModule.setOauthMigrationAvailable(oauthMigrationValue);
-				expect(schoolsModule.getOauthMigrationAvailable).toBe(oauthMigrationValue)
-			})
-		});
-		describe("setOauthMigrationMandatory", () => {
-			it("should set oauth migration mandatory data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const oauthMigrationValue = true;
-				expect(schoolsModule.getOauthMigrationMandatory).not.toBe(oauthMigrationValue)
-				schoolsModule.setOauthMigrationMandatory(oauthMigrationValue);
-				expect(schoolsModule.getOauthMigrationMandatory).toBe(oauthMigrationValue)
-			})
-		});
-		describe("setMigrationCompletionDate", () => {
-			it("should set oauth migration completion date", () => {
-				const schoolsModule = new SchoolsModule({});
-				const setMigrationCompletionDate = new Date();
-				expect(schoolsModule.getMigrationCompletionDate).not.toBe(setMigrationCompletionDate)
-				schoolsModule.setMigrationCompletionDate(setMigrationCompletionDate);
-				expect(schoolsModule.getMigrationCompletionDate).toBe(setMigrationCompletionDate)
-			})
-		});
 	});
 
 	describe("getters", () => {
@@ -1034,39 +1031,17 @@ describe("schools module", () => {
 		});
 
 		describe("getOauthMigration", () => {
-			it("should return if oauth Migration is enabled", () => {
+			it("should return oauth migration data", () => {
 				const schoolsModule = new SchoolsModule({});
-				expect(schoolsModule.getOauthMigration).not.toStrictEqual(true);
-				schoolsModule.setOauthMigration(true);
-				expect(schoolsModule.getOauthMigration).toStrictEqual(true);
-			})
-		})
-
-		describe("getOauthMigrationAvailable", () => {
-			it("should return if oauth Migration is available", () => {
-				const schoolsModule = new SchoolsModule({});
-				expect(schoolsModule.getOauthMigrationAvailable).not.toStrictEqual(true);
-				schoolsModule.setOauthMigrationAvailable(true);
-				expect(schoolsModule.getOauthMigrationAvailable).toStrictEqual(true);
-			})
-		})
-
-		describe("getOauthMigrationMandatory", () => {
-			it("should return if oauth Migration is mandatory", () => {
-				const schoolsModule = new SchoolsModule({});
-				expect(schoolsModule.getOauthMigrationMandatory).not.toStrictEqual(true);
-				schoolsModule.setOauthMigrationMandatory(true);
-				expect(schoolsModule.getOauthMigrationMandatory).toStrictEqual(true);
-			})
-		})
-
-		describe("getMigrationCompletionDate", () => {
-			it("should return date when oauth Migration was completed", () => {
-				const schoolsModule = new SchoolsModule({});
-				const date: Date = new Date()
-				expect(schoolsModule.getMigrationCompletionDate).not.toStrictEqual(date);
-				schoolsModule.setMigrationCompletionDate(date);
-				expect(schoolsModule.getMigrationCompletionDate).toStrictEqual(date);
+				const oauthMigrationValue = {
+					oauthUserMigration: true,
+					oauthMigrationAvailable: true,
+					oauthMigrationMandatory: true,
+					migrationCompletionDate: new Date().toDateString(),
+				}
+				expect(schoolsModule.getOauthMigration).not.toStrictEqual(oauthMigrationValue)
+				schoolsModule.setOauthMigration(oauthMigrationValue);
+				expect(schoolsModule.getOauthMigration).toStrictEqual(oauthMigrationValue)
 			})
 		})
 	});

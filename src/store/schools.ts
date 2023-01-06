@@ -5,11 +5,14 @@ import {
 	Year,
 	FederalState,
 	School,
-	OauthMigrationResponse,
-	OauthMigrationRequest, OauthMigrationApiResponse, OauthMigrationApiRequest
+	OauthMigration
 } from "./types/schools";
-import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
-import {mapApiToOauthMigrationResponse, mapOauthMigrationRequestToApi} from "@store/school/oauth-migration.mapper";
+import {
+	MigrationBody, SchoolApiFactory,
+	SchoolApiInterface,
+	UserImportApiFactory,
+	UserImportApiInterface
+} from "@/serverApi/v3";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -50,6 +53,13 @@ function transformSchoolClientToServer(school: any): School {
 })
 export default class SchoolsModule extends VuexModule {
 	private _importUserApi?: UserImportApiInterface;
+	private _schoolApi?: SchoolApiInterface;
+	private get schoolApi(): SchoolApiInterface {
+		if (!this._schoolApi) {
+			this._schoolApi = SchoolApiFactory(undefined, "v3", $axios);
+		}
+		return this._schoolApi;
+	};
 
 	school: School = {
 		_id: "",
@@ -87,6 +97,12 @@ export default class SchoolsModule extends VuexModule {
 		id: "",
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
+		oauthMigration: {
+			oauthUserMigration: undefined,
+			oauthMigrationAvailable: undefined,
+			oauthMigrationMandatory: undefined,
+			migrationCompletionDate: undefined,
+		},
 	};
 	currentYear: Year = {
 		_id: "",
@@ -105,10 +121,12 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
-	oauthUserMigration: boolean = false;
-	oauthMigrationAvailable: boolean = false;
-	oauthMigrationMandatory: boolean = false;
-	migrationCompletionDate: Date | undefined = undefined;
+	oauthMigration = {
+		oauthUserMigration: false,
+		oauthMigrationAvailable: false,
+		oauthMigrationMandatory: false,
+		migrationCompletionDate: "",
+	};
 	systems: any[] = [];
 	loading: boolean = false;
 	error: null | {} = null;
@@ -139,23 +157,13 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setOauthMigration(enabled: boolean): void {
-		this.oauthUserMigration = enabled;
-	}
-
-	@Mutation
-	setOauthMigrationAvailable(available: boolean): void {
-		this.oauthMigrationAvailable = available;
-	}
-
-	@Mutation
-	setOauthMigrationMandatory(mandatory: boolean): void {
-		this.oauthMigrationMandatory = mandatory;
-	}
-
-	@Mutation
-	setMigrationCompletionDate(date: Date | undefined): void {
-		this.migrationCompletionDate = date;
+	setOauthMigration(state: OauthMigration): void {
+		this.oauthMigration = {
+			oauthUserMigration: state.oauthUserMigration,
+			oauthMigrationAvailable: state.oauthMigrationAvailable,
+			oauthMigrationMandatory: state.oauthMigrationMandatory,
+			migrationCompletionDate: state.migrationCompletionDate,
+		};
 	}
 
 	@Mutation
@@ -202,20 +210,8 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): boolean{
-		return this.oauthUserMigration;
-	}
-
-	get getOauthMigrationAvailable(): boolean{
-		return this.oauthMigrationAvailable;
-	}
-
-	get getOauthMigrationMandatory(): boolean{
-		return this.oauthMigrationMandatory;
-	}
-
-	get getMigrationCompletionDate(): Date | undefined{
-		return this.migrationCompletionDate;
+	get getOauthMigration(): OauthMigration{
+		return this.oauthMigration
 	}
 
 	@Action
@@ -376,14 +372,14 @@ export default class SchoolsModule extends VuexModule {
 		}
 
 		try {
-			const oauthMigration: OauthMigrationApiResponse = await $axios.$get(`v3/school/${this.school._id}/migration`);
-			const mappedOauthMigration: OauthMigrationResponse = mapApiToOauthMigrationResponse(oauthMigration);
-			this.setOauthMigration(mappedOauthMigration.enabled);
-			this.setOauthMigrationAvailable(mappedOauthMigration.available);
-			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory);
-			this.setMigrationCompletionDate(mappedOauthMigration.migrationCompletionDate)
+			const oauthMigration = await this.schoolApi.schoolControllerGetMigration(this.school._id)
+			this.setOauthMigration({
+				oauthUserMigration: oauthMigration.data.enableMigrationStart,
+				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished
+			});
 
-			console.log("available: ", mappedOauthMigration.available, "mandatory: ", mappedOauthMigration.mandatory, "enabled: ", mappedOauthMigration.enabled)
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
@@ -392,18 +388,19 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolOauthMigration(migrationFlags: OauthMigrationRequest): Promise<void> {
+	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
 		if(!this.school._id) {
 			return;
 		}
 
 		try {
-			const mapOauthMigration: OauthMigrationApiRequest = mapOauthMigrationRequestToApi(migrationFlags);
-			const oauthMigration = await $axios.$put(`v3/school/${this.school._id}/migration`, { oauthMigrationPossible: mapOauthMigration.oauthMigrationPossible, oauthMigrationMandatory: mapOauthMigration.oauthMigrationMandatory, oauthMigrationFinished: mapOauthMigration.oauthMigrationFinished });
-			const mappedOauthMigration: OauthMigrationResponse = mapApiToOauthMigrationResponse(oauthMigration);
-			this.setOauthMigrationAvailable(mappedOauthMigration.available);
-			this.setOauthMigrationMandatory(mappedOauthMigration.mandatory);
-			this.setMigrationCompletionDate(mappedOauthMigration.migrationCompletionDate)
+			const oauthMigration = await this.schoolApi.schoolControllerSetMigration(this.school._id, migrationFlags)
+			this.setOauthMigration({
+				oauthUserMigration: oauthMigration.data.enableMigrationStart,
+				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished
+			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);

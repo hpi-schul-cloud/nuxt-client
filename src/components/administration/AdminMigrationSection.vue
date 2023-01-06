@@ -7,7 +7,7 @@
 			{{ t("components.administration.adminMigrationSection.infoText") }}
 		</v-alert>
 		<v-btn
-			v-if="!isMigrationAvailable && !showEndWarning && !showStartWarning"
+			v-if="showStartButton"
 			class="my-5 button-start"
 			color="primary"
 			depressed
@@ -22,7 +22,7 @@
 		</v-btn>
 
 		<v-btn
-			v-if="isMigrationAvailable && !showEndWarning && !showStartWarning"
+			v-if="showEndButton"
 			class="my-5 button-end"
 			color="primary"
 			depressed
@@ -37,7 +37,7 @@
 		</v-btn>
 
 		<v-switch
-			v-show="!showEndWarning && !showStartWarning"
+			v-show="showMandatorySwitch"
 			:label="migrationSwitchLabel"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
@@ -160,7 +160,7 @@ import {
 } from "@nuxtjs/composition-api";
 import SchoolsModule from "@store/schools";
 import VueI18n from "vue-i18n";
-import { OauthMigrationRequest } from "@store/types/schools";
+import { MigrationBody } from "@/serverApi/v3";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -183,23 +183,23 @@ export default defineComponent({
 		};
 
 		const isMigrationEnabled: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigration
+			() => schoolsModule.getOauthMigration.oauthUserMigration
 		);
 
 		const isMigrationAvailable: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigrationAvailable
+			() => schoolsModule.getOauthMigration.oauthMigrationAvailable
 		);
 
 		const isMigrationMandatory: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigrationMandatory
+			() => schoolsModule.getOauthMigration.oauthMigrationMandatory
 		);
 
-		const migrationCompletionDate: ComputedRef<Date | undefined> = computed(
-			() => schoolsModule.getMigrationCompletionDate
+		const migrationCompletionDate: ComputedRef<string> = computed(
+			() => schoolsModule.getOauthMigration.migrationCompletionDate
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
-			const migrationFlags: OauthMigrationRequest = { available, mandatory };
+			const migrationFlags: MigrationBody = { oauthMigrationPossible: available, oauthMigrationMandatory: mandatory, oauthMigrationFinished: !available };
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
@@ -214,6 +214,18 @@ export default defineComponent({
 		const toggleShowStartWarning = () => {
 			showStartWarning.value = !showStartWarning.value;
 		};
+
+    const showStartButton: ComputedRef<boolean> = computed(
+        () => !isMigrationAvailable.value && !showEndWarning.value && !showStartWarning.value
+    );
+
+    const showEndButton: ComputedRef<boolean> = computed(
+        () => isMigrationAvailable.value && !showEndWarning.value && !showStartWarning.value
+    );
+
+    const showMandatorySwitch: ComputedRef<boolean> = computed(
+        () => !showEndWarning.value && !showStartWarning.value
+    );
 
 		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
 			if (isMigrationMandatory.value) {
@@ -243,6 +255,9 @@ export default defineComponent({
 			showStartWarning,
 			toggleShowStartWarning,
 			migrationCompletionDate,
+      showStartButton,
+      showEndButton,
+      showMandatorySwitch
 		};
 	},
 });
