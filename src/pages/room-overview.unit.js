@@ -174,7 +174,7 @@ describe("@/pages/RoomOverview", () => {
 			displayColor: "purple",
 			xPosition: 1,
 			yPosition: 1,
-			href: "/courses/1",
+			to: "/rooms/1",
 		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
 		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
@@ -285,7 +285,7 @@ describe("@/pages/RoomOverview", () => {
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				href: "/courses/3",
+				to: "/rooms/3",
 				xPosition: 0,
 				yPosition: 0,
 			},
@@ -328,7 +328,7 @@ describe("@/pages/RoomOverview", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				href: "/courses/1",
+				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -374,7 +374,7 @@ describe("@/pages/RoomOverview", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				href: "/courses/1",
+				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
 			},

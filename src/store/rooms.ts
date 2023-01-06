@@ -46,33 +46,33 @@ export default class RoomsModule extends VuexModule {
 	@Mutation
 	setRoomData(data: DashboardGridElementResponse[]): void {
 		this.roomsData = data.map((item) => {
-			let href = "";
+			let to = "";
 			if (item.groupElements) {
 				item.groupElements = item.groupElements.map((groupItem) => {
 					if (groupItem.id) {
-						href = `/courses/${groupItem.id}`;
+						to = `/rooms/${groupItem.id}`;
 					}
-					return { ...groupItem, href };
+					return { ...groupItem, to };
 				});
 			}
 			if (item.id) {
-				href = `/courses/${item.id}`;
+				to = `/rooms/${item.id}`;
 			}
-			return { ...item, href };
+			return { ...item, to };
 		});
 	}
 
 	@Mutation
 	setAllElements(data: CourseMetadataResponse[]): void {
 		this.allElements = data.map((item: CourseMetadataResponse) => {
-			let href = null;
+			let to = null;
 			if (item.id) {
-				href = `/courses/${item.id}`;
+				to = `/rooms/${item.id}`;
 			}
 			const isArchived =
 				item.untilDate && fromUTC(item.untilDate || "") < currentDate();
 			if (!isArchived) {
-				return { ...item, searchText: item.title, isArchived, href };
+				return { ...item, searchText: item.title, isArchived, to };
 			}
 
 			const startDate = item.startDate ? item.startDate.substring(0, 4) : "";
@@ -93,7 +93,7 @@ export default class RoomsModule extends VuexModule {
 				titleDate: titleDate,
 				searchText: `${item.title} ${titleDate}`,
 				isArchived,
-				href,
+				to,
 			};
 		});
 	}

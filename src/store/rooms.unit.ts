@@ -350,7 +350,7 @@ describe("rooms module", () => {
 						displayColor: "#f23f76",
 						xPosition: 2,
 						yPosition: 5,
-						href: "/courses/someId",
+						to: "/rooms/someId",
 					},
 				];
 				expect(roomsModule.getRoomsData).not.toStrictEqual(
@@ -413,7 +413,7 @@ describe("rooms module", () => {
 					displayColor: "#f23f76",
 					xPosition: 5,
 					yPosition: 2,
-					href: "/courses/123",
+					to: "/rooms/123",
 				};
 				roomsModule.setRoomData(mockData.gridElements as any);
 				roomsModule.setPosition(draggedObject);
@@ -454,7 +454,7 @@ describe("rooms module", () => {
 						titleDate: "2019/20",
 						searchText: "Mathe 2019/20",
 						isArchived: true,
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -466,7 +466,7 @@ describe("rooms module", () => {
 						titleDate: "2015-2018",
 						searchText: "History 2015-2018",
 						isArchived: true,
-						href: "/courses/234",
+						to: "/rooms/234",
 					},
 				];
 				roomsModule.setAllElements(itemsToBeSet);
@@ -550,7 +550,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -559,7 +559,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
-						href: "/courses/234",
+						to: "/rooms/234",
 					},
 				];
 
@@ -631,7 +631,7 @@ describe("rooms module", () => {
 						titleDate: "2019/20",
 						searchText: "Mathe 2019/20",
 						isArchived: true,
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -643,7 +643,7 @@ describe("rooms module", () => {
 						titleDate: "2015-2018",
 						searchText: "History 2015-2018",
 						isArchived: true,
-						href: "/courses/234",
+						to: "/rooms/234",
 					},
 				];
 				expect(roomsModule.getAllElements).toStrictEqual([]);

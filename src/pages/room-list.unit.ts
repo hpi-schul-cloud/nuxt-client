@@ -11,8 +11,6 @@ const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {
 		...createComponentMocks({
 			i18n: true,
-			//@ts-ignore
-			vuetify: true,
 		}),
 		computed: {
 			$mq: () => device,
@@ -100,7 +98,7 @@ describe("@/pages/room-list.vue", () => {
 				titleDate: "2019/20",
 				searchText: "Mathe 2019/20",
 				isArchived: true,
-				href: "/courses/123",
+				to: "/rooms/123",
 			};
 			// tslint ignored because it gives
 			// "Property 'items' does not exist on type 'Vue'" error
@@ -144,7 +142,7 @@ describe("@/pages/room-list.vue", () => {
 					titleDate: "2015-2018",
 					searchText: "History 2015-2018",
 					isArchived: true,
-					href: "/courses/234",
+					to: "/rooms/234",
 				});
 
 				wrapper.destroy();
