@@ -57,9 +57,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-::v-deep .ck {
-	margin-left: calc(-1 * var(--ck-spacing-standard));
-}
-</style>

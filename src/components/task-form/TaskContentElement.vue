@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		flat
-		class="element"
+		class="element mb-2"
 		@mouseover="hover = true"
 		@mouseleave="hover = false"
 	>
@@ -62,6 +62,7 @@ export default defineComponent({
 .element {
 	display: flex;
 	align-items: flex-start;
+	margin-left: calc(-1 * var(--ck-spacing-standard));
 	border: solid thin var(--v-white-base);
 }
 
