@@ -18,6 +18,7 @@
 				ghost-class="ghost"
 				chosen-class="chosen"
 				drag-class="drag"
+				force-fallback="true"
 				@start="startDragging"
 				@end="endDragging"
 			>
@@ -202,16 +203,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.chosen {
-	border: dashed thin var(--v-grey-base);
-}
-
+.chosen,
 .drag {
-	border: dashed thin var(--v-grey-lighten2);
-	opacity: 1;
+	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+		0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+	opacity: 1 !important;
 }
 
 .ghost {
-	opacity: 1;
+	opacity: 0 !important;
 }
 </style>
