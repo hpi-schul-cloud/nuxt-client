@@ -48,7 +48,7 @@ export default defineComponent({
 		useTitle(i18n.tc("error.generic") + " - " + Theme.short_name);
 
 		const onBackClick = () => {
-			console.log('CALLED ----- onBackClick');
+			console.log("CALLED ----- onBackClick");
 			window.location.assign("/dashboard");
 		};
 
