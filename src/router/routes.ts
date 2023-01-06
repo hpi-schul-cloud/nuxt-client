@@ -76,6 +76,15 @@ export const routes: Array<RouteConfig> = [
 		},
 	},
 	{
+		path: "/error",
+		component: () => import("@/pages/Error.page.vue"),
+		name: "error",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
 		path: "/error/proxy",
 		component: () => import("../pages/ProxyError.page.vue"),
 		name: "error-proxy",
@@ -164,10 +173,5 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "teamfiles",
 		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
-	},
-	{
-		path: "/error",
-		component: () => import("@/pages/Error.page.vue"),
-		name: "error",
 	},
 ];

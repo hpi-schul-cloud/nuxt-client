@@ -4,6 +4,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 
 describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
@@ -24,42 +25,31 @@ describe("@pages/Error.page.vue", () => {
 					getStatusCode: statusCode,
 					getTranslationKey: translationKey,
 				}),
-				i18n: { t: (key: string) => key, tc: (key: string) => key },
+				i18n: {
+					t: (key: string) => "translated_" + key,
+					tc: (key: string) => "translated_" + key,
+				},
 			},
 		});
 	};
 
 	it("should assign 'window.location' when back button is clicked", async () => {
 		const wrapper = mountComponent();
-		const btnElement = wrapper.find("[data-testid='btn-back']");
-		btnElement.vm.$emit("click");
+		// const btnElement = await wrapper.find("[data-testid='btn-back']");
+		const btnElement = await wrapper.findComponent({ ref: "btn-back" });
+		console.log(btnElement.exists());
+		await btnElement.vm.$emit("click");
 		expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
 	});
 
 	describe("when the '/error' route has been called", () => {
-		// NUXT_REMOVAL TODO Olli will fix this tomorrow
-		// it("should set 'is-permission-error' prop to 'true' on unauthorized", async () => {
-		// 	const wrapper = mountComponent(401, "error.401");
-		// 	const errorComponent = await wrapper.find(
-		// 		"[data-testid='error-content']"
-		// 	);
-		// 	expect(errorComponent.vm.$props.isPermissionError).toBe(true);
-		// });
-		//
-		// it("should set 'is-generic-error' prop to 'true' on generic error", async () => {
-		// 	const wrapper = mountComponent(500, "generic.error");
-		// 	const errorComponent = await wrapper.findComponent(ErrorContent);
-		// 	// console.log(errorComponent.element.attributes.getNamedItem('isgenericerror')?.value);
-		// 	// expect(errorComponent.vm.$props.isGenericError).toBe(true);
-		// 	expect(false).toBeTruthy();
-		// });
-		//
-		// it("should set 'is-generic-error' prop to 'true' even if there is no error in the store", async () => {
-		// 	const wrapper = mountComponent(null, "");
-		// 	const errorComponent = await wrapper.find(
-		// 		"[data-testid='error-content']"
-		// 	);
-		// 	expect(errorComponent.vm.$props.isGenericError).toBe(true);
-		// });
+		it("should pass error-message and statuscode to content component", async () => {
+			const wrapper = mountComponent(401, "error.401");
+			const errorComponent = await wrapper.findComponent(ErrorContent);
+			expect(errorComponent.attributes("statuscode")).toBe("401");
+			expect(errorComponent.attributes("errortext")).toBe(
+				"translated_error.401"
+			);
+		});
 	});
 });

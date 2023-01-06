@@ -1,8 +1,7 @@
 <template>
 	<div class="text-centered mt-8">
 		<error-content
-			:is-generic-error="isGenericError"
-			:is-permission-error="isPermissionError"
+			:status-code="appErrorStatusCode"
 			:error-text="translatedErrorMessage"
 			data-testid="error-content"
 		/>
@@ -10,6 +9,7 @@
 			class="mt-4"
 			color="primary"
 			depressed
+			ref="btn-back"
 			data-testid="btn-back"
 			@click="onBackClick"
 		>
@@ -17,6 +17,7 @@
 		</v-btn>
 	</div>
 </template>
+
 <script lang="ts">
 import ApplicationErrorModule from "@/store/application-error";
 import { computed, defineComponent, inject } from "vue";
@@ -24,6 +25,7 @@ import VueI18n from "vue-i18n";
 import Theme from "@/theme.config";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
+import { useTitle } from "@vueuse/core";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -32,7 +34,6 @@ export default defineComponent({
 		ErrorContent,
 	},
 	setup() {
-		const permissionErrors: Array<number> = [400, 401, 403];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
@@ -43,9 +44,11 @@ export default defineComponent({
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			throw createApplicationError(500);
 		}
-		document.title = i18n.t("error.generic") + " - " + Theme.short_name;
+
+		useTitle(i18n.tc("error.generic") + " - " + Theme.short_name);
 
 		const onBackClick = () => {
+			console.log('CALLED ----- onBackClick');
 			window.location.assign("/dashboard");
 		};
 
@@ -54,16 +57,6 @@ export default defineComponent({
 		});
 		const appErrorStatusCode = computed(() => {
 			return applicationErrorModule.getStatusCode;
-		});
-
-		const isPermissionError = computed(() => {
-			return permissionErrors.includes(Number(appErrorStatusCode.value));
-		});
-
-		const isGenericError = computed(() => {
-			return (
-				appErrorStatusCode.value === 500 || appErrorStatusCode.value === null
-			);
 		});
 
 		const translatedErrorMessage = computed(() => {
@@ -75,13 +68,10 @@ export default defineComponent({
 				? translatedError
 				: i18n.tc("error.generic");
 		});
-		const testValue = "";
+
 		return {
-			testValue,
 			appErrorStatusCode,
 			translatedErrorMessage,
-			isPermissionError,
-			isGenericError,
 			onBackClick,
 		};
 	},

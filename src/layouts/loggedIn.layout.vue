@@ -7,6 +7,7 @@
 			</v-main>
 			<loading-state-dialog />
 		</legacy-logged-in>
+		<application-error-routing> </application-error-routing>
 	</v-app>
 </template>
 
@@ -14,6 +15,7 @@
 import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
 import Snackbar from "@/components/molecules/Alert";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
+import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
 
 export default {
 	name: "LoggedInLayout",
@@ -22,6 +24,7 @@ export default {
 		LoadingStateDialog,
 		LegacyLoggedIn,
 		Snackbar,
+		ApplicationErrorRouting,
 	},
 };
 </script>

@@ -39,6 +39,7 @@ const vueRoutes = [
 	`^/tasks/new/?$`,
 	`^/termsofuse/?`,
 	`^/login-instances/?$`,
+	`^/error/?$`,
 ];
 
 const isVueClient = (path) => {

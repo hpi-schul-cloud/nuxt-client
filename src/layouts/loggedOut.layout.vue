@@ -22,6 +22,7 @@
 				<slot />
 			</div>
 			<the-footer class="footer" />
+			<application-error-routing> </application-error-routing>
 		</div>
 	</v-app>
 </template>
@@ -29,6 +30,7 @@
 <script>
 import NavigationBar from "@/components/legacy/NavigationBar";
 import TheFooter from "@/components/legacy/TheFooter";
+import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
 
 export default {
 	name: "LoggedOutLayout",
@@ -36,6 +38,7 @@ export default {
 	components: {
 		NavigationBar,
 		TheFooter,
+		ApplicationErrorRouting,
 	},
 
 	inject: ["envConfigModule"],

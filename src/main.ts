@@ -31,6 +31,8 @@ import store from "./plugins/store";
 
 Vue.config.productionTip = false;
 
+Vue.config.errorHandler = handleApplicationError;
+
 // NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
@@ -71,6 +73,7 @@ import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { initializeAxios } from "./utils/api";
+import { handleApplicationError } from "./plugins/application-error-handler";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
