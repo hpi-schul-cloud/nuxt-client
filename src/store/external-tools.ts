@@ -1,8 +1,14 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {SchoolExternalTool} from "./types/school-external-tool";
-import {$axios} from "@utils/api";
-import {authModule} from "@utils/store-accessor";
-import {useSchoolExternalToolUtils} from "@components/administration/school-external-tool-utils.composable";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { SchoolExternalTool } from "./types/school-external-tool";
+import { $axios } from "@utils/api";
+import { authModule } from "@utils/store-accessor";
+import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
+import {
+	SchoolExternalToolSearchListResponse,
+	ToolApiFactory,
+	ToolApiInterface,
+} from "../serverApi/v3";
+import { AxiosPromise } from "axios";
 
 @Module({
 	name: "external-tools",
@@ -10,9 +16,17 @@ import {useSchoolExternalToolUtils} from "@components/administration/school-exte
 	stateFactory: true,
 })
 export default class ExternalToolsModule extends VuexModule {
-	schoolExternalTools: SchoolExternalTool[] = [];
-	loading: boolean = false;
-	private readonly PATH: string = "/v3/tools/school";
+	private schoolExternalTools: SchoolExternalTool[] = [];
+	private loading: boolean = false;
+
+	private _toolApi?: ToolApiInterface;
+
+	private get toolApi(): ToolApiInterface {
+		if (!this._toolApi) {
+			this._toolApi = ToolApiFactory(undefined, "v3", $axios);
+		}
+		return this._toolApi;
+	}
 
 	@Mutation
 	setLoading(loading: boolean): void {
@@ -37,10 +51,15 @@ export default class ExternalToolsModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			if (authModule.getUser?.schoolId) {
-				const resp = await $axios.$get(
-					`${this.PATH}?schoolId=${authModule.getUser.schoolId}`
-				);
-				this.setSchoolExternalTools(useSchoolExternalToolUtils().mapSchoolExternalToolSearchListResponse(resp));
+				const resp =
+					await this.toolApi.toolSchoolControllerGetSchoolExternalTools(
+						authModule.getUser.schoolId
+					);
+				const schoolExternalTools: SchoolExternalTool[] =
+					useSchoolExternalToolUtils().mapSchoolExternalToolSearchListResponse(
+						resp.data
+					);
+				this.setSchoolExternalTools(schoolExternalTools);
 			}
 			this.setLoading(false);
 		} catch (e) {

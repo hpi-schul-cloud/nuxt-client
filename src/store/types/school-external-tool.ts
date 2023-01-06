@@ -1,12 +1,12 @@
 export enum SchoolExternalToolStatus {
-	Latest,
-	Outdated,
-	Unknown,
+	Latest = "Latest",
+	Outdated = "Outdated",
+	Unknown = "Unknown",
 }
 
 export interface SchoolExternalTool {
-	id: string,
-	name: string,
-	status: SchoolExternalToolStatus,
-	version: number,
+	id: string;
+	name: string;
+	status: SchoolExternalToolStatus;
+	version: number;
 }

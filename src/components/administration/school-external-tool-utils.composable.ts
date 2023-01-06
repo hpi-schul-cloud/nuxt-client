@@ -1,18 +1,18 @@
-import {
-	SchoolExternalToolSearchListResponse
-} from "@store/school-external-tool/school-external-tool-search-list.response";
 import { SchoolExternalToolStatus, SchoolExternalTool } from "@store/types/school-external-tool";
-import { SchoolExternalToolResponse } from "@store/school-external-tool/school-external-tool.response";
-import { SchoolExternalToolStatusResponse } from "@store/school-external-tool/school-external-tool-status.response";
 import { DataTableHeader } from "vuetify";
 import ExternalToolsModule from "@store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import {
+	SchoolExternalToolResponse,
+	SchoolExternalToolResponseStatusEnum,
+	SchoolExternalToolSearchListResponse
+} from "../../serverApi/v3";
 
 export function useSchoolExternalToolUtils(t: (key: string) => string = () => "") {
-	const statusMapping: Record<SchoolExternalToolStatusResponse, SchoolExternalToolStatus> = {
-		[SchoolExternalToolStatusResponse.LATEST]: SchoolExternalToolStatus.Latest,
-		[SchoolExternalToolStatusResponse.OUTDATED]: SchoolExternalToolStatus.Outdated,
-		[SchoolExternalToolStatusResponse.UNKNOWN]: SchoolExternalToolStatus.Unknown,
+	const statusMapping: Record<SchoolExternalToolResponseStatusEnum, SchoolExternalToolStatus> = {
+		[SchoolExternalToolResponseStatusEnum.Latest]: SchoolExternalToolStatus.Latest,
+		[SchoolExternalToolResponseStatusEnum.Outdated]: SchoolExternalToolStatus.Outdated,
+		[SchoolExternalToolResponseStatusEnum.Unknown]: SchoolExternalToolStatus.Unknown,
 	};
 
 	const mapSchoolExternalToolSearchListResponse = (
