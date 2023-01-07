@@ -325,7 +325,6 @@ describe("@pages/RoomOverview", () => {
 		);
 	});
 
-
 	it("should call 'addGroupElements' method for grouping after avatar-to-groupAvatar drag&drop", async () => {
 		const wrapper = getWrapper();
 		const expectedPayload = {
