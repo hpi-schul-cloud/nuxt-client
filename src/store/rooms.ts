@@ -209,7 +209,7 @@ export default class RoomsModule extends VuexModule {
 	@Action
 	async fetch(params?: {
 		device: string;
-		showSubstitute: boolean;
+		showAll: boolean;
 	}): Promise<void> {
 		console.log(params);
 		// device parameter will be used to fetch data specified for device
@@ -217,7 +217,7 @@ export default class RoomsModule extends VuexModule {
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser(
 				undefined,
-				params?.showSubstitute
+				params?.showAll
 			);
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);

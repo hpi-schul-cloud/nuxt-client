@@ -7,6 +7,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import flushPromises from "flush-promises";
+import { nextTick } from "vue";
 import CopyModule from "../store/copy";
 import LoadingStateModule from "../store/loading-state";
 import NotifierModule from "../store/notifier";
@@ -324,6 +325,7 @@ describe("@pages/RoomOverview", () => {
 			expectedPayload
 		);
 	});
+
 
 	it("should call 'addGroupElements' method for grouping after avatar-to-groupAvatar drag&drop", async () => {
 		const wrapper = getWrapper();

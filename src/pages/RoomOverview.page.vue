@@ -22,7 +22,7 @@
 				<user-has-role :role="isTeacher">
 					<div class="toggle-div">
 						<v-custom-switch
-							v-model="showSubstitute"
+							v-model="showAll"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
 						></v-custom-switch>
@@ -183,7 +183,7 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
-			showSubstitute: false,
+			showAll: false,
 		};
 	},
 	computed: {
@@ -224,15 +224,15 @@ export default {
 		},
 	},
 	watch: {
-		showSubstitute: async function (showSubstitute) {
-			await roomsModule.fetch({ device: undefined, showSubstitute }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		showAll: async function (showAll) {
+			await roomsModule.fetch({ device: undefined, showAll }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		},
 	},
 	async created() {
 		const showSubstituteCourses = !this.isTeacher(authModule.getUserRoles);
 		await roomsModule.fetch({
 			device: undefined,
-			showSubstitute: showSubstituteCourses,
+			showAll: showSubstituteCourses,
 		}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
