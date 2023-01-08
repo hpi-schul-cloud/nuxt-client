@@ -179,6 +179,11 @@ export default {
 				new Date(new Date(scheduledDate).getTime() - delay),
 				new Date()
 			);
+			console.log(
+				"new Date(scheduledDate).getTime(), new Date().get.time()",
+				new Date(scheduledDate).getTime(),
+				new Date().getTime()
+			);
 			return (
 				scheduledDate &&
 				new Date(new Date(scheduledDate).getTime() - delay) > new Date()
