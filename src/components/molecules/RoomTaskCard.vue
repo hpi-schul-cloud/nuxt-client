@@ -180,10 +180,9 @@ export default {
 				new Date()
 			);
 			console.log(
-				"new Date(scheduledDate).getTime(), new Date().get.time(), now()",
+				"new Date(scheduledDate).getTime(), new Date().get.time()",
 				new Date(scheduledDate).getTime(),
-				new Date().getTime(),
-				now()
+				new Date().getTime()
 			);
 			return (
 				scheduledDate &&
