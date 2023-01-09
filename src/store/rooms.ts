@@ -211,7 +211,6 @@ export default class RoomsModule extends VuexModule {
 		device: string;
 		showAll: boolean;
 	}): Promise<void> {
-		console.log(params);
 		// device parameter will be used to fetch data specified for device
 		this.setLoading(true);
 		try {
