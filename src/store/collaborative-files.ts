@@ -8,7 +8,7 @@ import { FileTypeResponse } from "@/store/collaborative-files/file-meta.response
 import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 
 @Module({
-	name: "collaborative-files",
+	name: "collaborativeFilesModule",
 	namespaced: true,
 	stateFactory: true,
 })
