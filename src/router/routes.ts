@@ -81,7 +81,6 @@ export const routes: Array<RouteConfig> = [
 		name: "error",
 		meta: {
 			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	{
@@ -90,7 +89,6 @@ export const routes: Array<RouteConfig> = [
 		name: "error-proxy",
 		meta: {
 			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	{
@@ -99,7 +97,6 @@ export const routes: Array<RouteConfig> = [
 		name: "imprint",
 		meta: {
 			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	// deprecated?

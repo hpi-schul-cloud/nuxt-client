@@ -17,10 +17,10 @@ export default {
 		layout() {
 			let layout = defaultLayout;
 
-			if (this.$route.path.match("^/imprint\\/?$")) {
-				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
+			if (this.$route.meta?.layout) {
+				layout = this.$route.meta?.layout;
 			} else {
-				layout = this.$route.meta?.layout || defaultLayout;
+				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
 			}
 
 			return () => import(`@/layouts/${layout}.layout.vue`);
