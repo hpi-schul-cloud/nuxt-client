@@ -137,14 +137,17 @@ export default defineComponent({
 
 		const addTool = () => {
 			console.log("addTool() called");
+			// https://ticketsystem.dbildungscloud.de/browse/N21-241
 		};
 
 		const editTool = () => {
 			console.log("editTool() called");
+			// https://ticketsystem.dbildungscloud.de/browse/N21-508
 		};
 
 		const deleteTool = () => {
 			console.log("deleteTool() called");
+			// https://ticketsystem.dbildungscloud.de/browse/N21-470
 			closeDeleteDialog();
 		};
 
