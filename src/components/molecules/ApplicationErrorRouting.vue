@@ -29,7 +29,10 @@ export default defineComponent({
 		}
 
 		const routeToErrorPage = () => {
-			router.replace("/error");
+			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
+			if (router.currentRoute.path !== "/error") {
+				router.replace("/error");
+			}
 		};
 
 		watch(
