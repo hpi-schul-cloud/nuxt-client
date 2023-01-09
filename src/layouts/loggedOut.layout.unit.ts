@@ -1,49 +1,53 @@
+import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
+import VueRouter from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 
 declare let createComponentMocks: Function;
 
 describe("loggedOutLayout", () => {
-	let envConfigModuleMock: EnvConfigModule;
-	let wrapper: Wrapper<Vue>;
-
 	const mountComponent = (attrs = {}) => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			filePathsModule: FilePathsModule,
+		});
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getGhostBaseUrl: "https://works-like-charm.com",
+		});
+		const applicationErrorModuleMock = createModuleMocks(
+			ApplicationErrorModule
+		);
+
+		const componentOptions = createComponentMocks({ i18n: true });
+		const { localVue } = componentOptions;
+		localVue.use(VueRouter);
+		const router = new VueRouter({ routes: [{ path: "home" }] });
+
 		const wrapper = mount(loggedOut, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
+			...componentOptions,
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+			},
 			provide: {
 				envConfigModule: envConfigModuleMock,
+				applicationErrorModule: applicationErrorModuleMock,
 			},
+			router,
 			...attrs,
-			stubs: {
-				Nuxt: true,
-				NuxtLink: true,
-				TheFooter: true,
-				RouterLink: true,
-			},
 		});
 
 		return wrapper;
 	};
 
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-			filePathsModule: FilePathsModule,
-		});
-		envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getGhostBaseUrl: "https://works-like-charm.com",
-		});
-	});
-
 	it("should contain composed urls", () => {
-		wrapper = mountComponent();
+		const wrapper = mountComponent();
+
 		const links = wrapper
 			.findAll('[data-testid="logged-out-top-bar"] .link-container > a')
 			.wrappers.map((el: Wrapper<Vue>) => el.element as HTMLLinkElement);

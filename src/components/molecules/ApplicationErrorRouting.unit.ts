@@ -3,25 +3,25 @@ import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import VueRouter from "vue-router";
 
 describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
-	const $router = { replace: jest.fn() };
+	let router: VueRouter;
 	let applicationErrorModuleMock: ApplicationErrorModule;
-	const useApplicationErrorMock = jest.mock(
-		"@/composables/application-error.composable"
-	);
-	const errorModuleMocks: Partial<ApplicationErrorModule> = {
-		getStatusCode: 401,
-		getTranslationKey: "error.401",
-	};
 
 	const mountComponent: any = () => {
+		const componentOptions = createComponentMocks({ i18n: true });
+		const { localVue } = componentOptions;
+		localVue.use(VueRouter);
+		router = new VueRouter({ routes: [{ path: "home" }] });
+		jest.spyOn(router, "replace");
+
 		return mount(ApplicationErrorRouting, {
-			...createComponentMocks({ i18n: true, $router }),
+			...componentOptions,
 			provide: {
 				applicationErrorModule: applicationErrorModuleMock,
-				useApplicationError: useApplicationErrorMock,
 			},
+			router,
 		});
 	};
 
@@ -32,16 +32,16 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 		});
 		mountComponent();
 
-		expect($router.replace).not.toHaveBeenCalledWith("/error");
+		expect(router.replace).not.toHaveBeenCalledWith("/error");
 	});
 
 	it("should routeToErrorPage has been called when an error set in the store", () => {
-		applicationErrorModuleMock = createModuleMocks(
-			ApplicationErrorModule,
-			errorModuleMocks
-		);
+		applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
+			getStatusCode: 401,
+			getTranslationKey: "error.401",
+		});
 		mountComponent();
 
-		expect($router.replace).toHaveBeenCalledWith("/error");
+		expect(router.replace).toHaveBeenCalledWith("/error");
 	});
 });
