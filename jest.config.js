@@ -15,4 +15,6 @@ module.exports = {
 	},
 
 	setupFiles: ["./tests/unit/setup.js"],
+
+	maxWorkers: 2, // limited for not taking all workers within of a single github action
 };
