@@ -1,25 +1,37 @@
-import { SchoolExternalToolStatus, SchoolExternalTool } from "@store/types/school-external-tool";
+import {
+	SchoolExternalToolStatus,
+	SchoolExternalTool,
+} from "@store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import ExternalToolsModule from "@store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolSearchListResponse
+	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 
-export function useSchoolExternalToolUtils(t: (key: string) => string = () => "") {
-	const statusMapping: Record<SchoolExternalToolResponseStatusEnum, SchoolExternalToolStatus> = {
-		[SchoolExternalToolResponseStatusEnum.Latest]: SchoolExternalToolStatus.Latest,
-		[SchoolExternalToolResponseStatusEnum.Outdated]: SchoolExternalToolStatus.Outdated,
-		[SchoolExternalToolResponseStatusEnum.Unknown]: SchoolExternalToolStatus.Unknown,
+export function useSchoolExternalToolUtils(
+	t: (key: string) => string = () => ""
+) {
+	const statusMapping: Record<
+		SchoolExternalToolResponseStatusEnum,
+		SchoolExternalToolStatus
+	> = {
+		[SchoolExternalToolResponseStatusEnum.Latest]:
+			SchoolExternalToolStatus.Latest,
+		[SchoolExternalToolResponseStatusEnum.Outdated]:
+			SchoolExternalToolStatus.Outdated,
+		[SchoolExternalToolResponseStatusEnum.Unknown]:
+			SchoolExternalToolStatus.Unknown,
 	};
 
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
 		const tools: SchoolExternalTool[] = response.data.map(
-			(toolResponse: SchoolExternalToolResponse) => mapSchoolExternalToolResponse(toolResponse)
+			(toolResponse: SchoolExternalToolResponse) =>
+				mapSchoolExternalToolResponse(toolResponse)
 		);
 		return tools;
 	};
@@ -32,7 +44,7 @@ export function useSchoolExternalToolUtils(t: (key: string) => string = () => ""
 			name: toolResponse.name,
 			version: toolResponse.toolVersion,
 			status: statusMapping[toolResponse.status],
-		}
+		};
 	};
 
 	const getHeaders: DataTableHeader[] = [
@@ -55,26 +67,29 @@ export function useSchoolExternalToolUtils(t: (key: string) => string = () => ""
 		},
 	];
 
-	const getItems = (externalToolsModule: ExternalToolsModule): SchoolExternalToolItem[] => {
-		return externalToolsModule.getSchoolExternalTools.map(
-			(tool: SchoolExternalTool) => {
-				const outdated: boolean = tool.status === SchoolExternalToolStatus.Outdated;
-				const status: string =
-					tool.status === SchoolExternalToolStatus.Latest
-						? t(
+	const getItems = (
+		externalToolsModule: ExternalToolsModule
+	): SchoolExternalToolItem[] => {
+		const schoolExternalTools: SchoolExternalTool[] =
+			externalToolsModule.getSchoolExternalTools;
+		return schoolExternalTools.map((tool: SchoolExternalTool) => {
+			const outdated: boolean =
+				tool.status === SchoolExternalToolStatus.Outdated;
+			const status: string =
+				tool.status === SchoolExternalToolStatus.Latest
+					? t(
 							"components.administration.externalToolsSection.table.header.status.latest"
-						)
-						: t(
+					  )
+					: t(
 							"components.administration.externalToolsSection.table.header.status.outdated"
-						);
-				return { id: tool.id, name: tool.name, status: status, outdated };
-			}
-		);
-	}
+					  );
+			return { id: tool.id, name: tool.name, status: status, outdated };
+		});
+	};
 
 	return {
 		mapSchoolExternalToolSearchListResponse,
 		getHeaders,
 		getItems,
-	}
+	};
 }

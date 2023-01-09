@@ -3,12 +3,7 @@ import { SchoolExternalTool } from "./types/school-external-tool";
 import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
 import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
-import {
-	SchoolExternalToolSearchListResponse,
-	ToolApiFactory,
-	ToolApiInterface,
-} from "../serverApi/v3";
-import { AxiosPromise } from "axios";
+import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 
 @Module({
 	name: "external-tools",
