@@ -181,7 +181,7 @@ export default {
 			);
 			return (
 				scheduledDate &&
-				new Date(scheduledDate).getTime() < new Date().getTime()
+				new Date(scheduledDate).getTime() > new Date().getTime()
 			);
 		},
 		cardActions() {
