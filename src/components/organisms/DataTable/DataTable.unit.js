@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-commented-out-tests */
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
 import { localDataPrefix } from "@/mixins/controllableData";

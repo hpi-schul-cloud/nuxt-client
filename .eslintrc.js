@@ -32,6 +32,7 @@ module.exports = {
 		"prettier/prettier": NUXT_REMOVAL ? "warn" : "error",
 		"no-var": NUXT_REMOVAL ? "warn" : "error",
 		"vue/no-v-text-v-html-on-component": NUXT_REMOVAL ? "warn" : "error",
+		"no-prototype-builtins": NUXT_REMOVAL ? "warn" : "error",
 	},
 	overrides: [
 		{

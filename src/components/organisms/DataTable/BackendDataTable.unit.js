@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-commented-out-tests */
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 
