@@ -172,13 +172,8 @@ export default {
 		},
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
-			const delay = 30 * 1000;
+			// const delay = 30 * 1000;
 			console.log("scheduledDate", scheduledDate);
-			console.log(
-				"new Date(new Date(scheduledDate).getTime() - delay), new Date()",
-				new Date(new Date(scheduledDate).getTime() - delay),
-				new Date()
-			);
 			console.log(
 				"new Date(scheduledDate).getTime(), new Date().get.time()",
 				new Date(scheduledDate).getTime(),
@@ -186,7 +181,7 @@ export default {
 			);
 			return (
 				scheduledDate &&
-				new Date(new Date(scheduledDate).getTime() - delay) > new Date()
+				new Date(scheduledDate).getTime() < new Date().getTime()
 			);
 		},
 		cardActions() {
@@ -218,6 +213,7 @@ export default {
 					});
 				}
 			}
+
 			return roleBasedActions;
 		},
 		chipItems() {
