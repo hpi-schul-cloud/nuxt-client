@@ -25,7 +25,7 @@
 		"lint:ci": "run-s lint:all:*",
 		"lint": "run-s lint:fix:all:*",
 		"test:unit": "jest",
-		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=2",
+		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
 		"test:unit:file": "npm run test:unit -- --bail --findRelatedTests",
 		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
 		"test:ci": "run-s test:*:ci",
