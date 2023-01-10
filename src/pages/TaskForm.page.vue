@@ -5,13 +5,13 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<task-title-element
-				v-model="name"
-				:editable="editable"
-				:placeholder="$t('common.labels.title')"
+			<component
+				:is="title.component"
+				v-bind="title.props"
+				v-model="title.model"
 			/>
 			<draggable
-				v-model="children"
+				v-model="elements"
 				:animation="400"
 				:delay="touchDelay"
 				handle=".handle"
@@ -23,14 +23,14 @@
 				@end="endDragging"
 			>
 				<task-content-element
-					v-for="(child, index) in children"
+					v-for="(element, index) in elements"
 					:key="index"
 					@delete-element="deleteElement(index)"
 				>
 					<component
-						:is="child.component"
-						v-bind="child.props"
-						v-model="child.model"
+						:is="element.component"
+						v-bind="element.props"
+						v-model="element.model"
 						:disabled="dragInProgress"
 					/>
 				</task-content-element>
@@ -55,13 +55,18 @@ import {
 	defineComponent,
 	inject,
 	ref,
-	// computed,
 	onBeforeMount,
 	onMounted,
 } from "@vue/composition-api";
 import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
+import {
+	CreateTaskCardParams,
+	UpdateTaskCardParams,
+	CardElementUpdateParams,
+	CardElementResponseCardElementTypeEnum,
+} from "../serverApi/v3/api";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
@@ -69,25 +74,21 @@ import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
 import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
 import { mdiPlus } from "@mdi/js";
-
-type Element = {
-	component: string;
-	model: string;
-	props: Object;
-};
+import { Element, ElementComponentEnum } from "@/store/types/task";
 
 // TODO - unit tests!
 export default defineComponent({
 	name: "TaskForm",
 	components: {
 		DefaultWireframe,
-		TaskTitleElement,
 		TaskContentElement,
+		TaskTitleElement,
 		TaskTextElement,
 		draggable,
 	},
 	setup() {
 		const router = useRouter();
+
 		// TODO - FIX THIS, can this be a navigation guard?
 		onBeforeMount(() => {
 			if (
@@ -108,11 +109,13 @@ export default defineComponent({
 			},
 		];
 
-		const name = ref("");
-		const children = ref<Element[]>([]);
+		const title = ref<Element>({
+			component: ElementComponentEnum.Title,
+			id: "",
+			model: "",
+		});
+		const elements = ref<Element[]>([]);
 		const route = useRoute().value;
-
-		const editable = true;
 
 		onMounted(async () => {
 			const taskId = route.name === "task-edit" ? route.params.id : undefined;
@@ -121,44 +124,85 @@ export default defineComponent({
 			}
 
 			const taskData = taskModule.getTaskData;
-			name.value = taskData.name;
-			const desc = taskData.description.content;
 
-			// TODO - iterate
-			createChild(desc);
+			taskData.cardElements.forEach((cardElement) => {
+				if (
+					cardElement.cardElementType ===
+					CardElementResponseCardElementTypeEnum.Title
+				) {
+					title.value = {
+						component: ElementComponentEnum.Title,
+						id: cardElement.id,
+						model: cardElement.content.value,
+						props: {
+							placeholder: i18n.t("common.labels.title"),
+							editable: true,
+						},
+					};
+					return;
+				}
+
+				createElement(cardElement.id, cardElement.content.value);
+			});
 		});
 
-		const createChild = (desc: string) => {
-			const child = {
-				component: "TaskTextElement",
+		const createElement = (id: string, desc: string) => {
+			const element: Element = {
+				component: ElementComponentEnum.RichText,
+				id: id,
 				model: desc,
 				props: {
 					placeholder: i18n.t("common.labels.description"),
-					editable: editable,
+					editable: true,
 				},
 			};
 
-			children.value.push(child);
+			elements.value.push(element);
 		};
 
 		const addElement = () => {
-			createChild("");
+			createElement("", "");
 		};
 
 		const deleteElement = (index: number) => {
-			children.value.splice(index, 1);
+			elements.value.splice(index, 1);
 		};
 
 		const save = () => {
-			const newTaskData = {
-				name: name.value,
-				description: children.value[0].model,
-			};
-
 			if (route.name === "task-new") {
+				const text: Array<string> = [];
+				elements.value.forEach((element) => {
+					text.push(element.model);
+				});
+				const newTaskData: CreateTaskCardParams = {
+					title: title.value.model,
+					text: text,
+				};
+
 				taskModule.createTask(newTaskData);
 			} else {
-				taskModule.updateTask(newTaskData);
+				const cardElements: Array<CardElementUpdateParams> = [];
+				cardElements.push({
+					id: title.value.id,
+					content: {
+						type: new String("title"),
+						value: title.value.model,
+					},
+				});
+				elements.value.forEach((element) => {
+					cardElements.push({
+						id: element.id,
+						content: {
+							type: new String("richText"),
+							value: element.model,
+						},
+					});
+				});
+				const updateTaskData: UpdateTaskCardParams = {
+					cardElements: cardElements,
+				};
+
+				taskModule.updateTask(updateTaskData);
 			}
 
 			//router.go(-1);
@@ -172,14 +216,12 @@ export default defineComponent({
 			useDrag();
 
 		// TODO - why is length not reactive when children is reactive not ref
-		// TODO - is this necessary?
-		// const isDraggable = computed(() => children.value.length > 1);
 
 		return {
 			mdiPlus,
 			breadcrumbs,
-			name,
-			children,
+			title,
+			elements,
 			save,
 			cancel,
 			addElement,
@@ -188,8 +230,6 @@ export default defineComponent({
 			startDragging,
 			endDragging,
 			dragInProgress,
-			// isDraggable,
-			editable,
 		};
 	},
 	// TODO - should not use this, because it's nuxt
