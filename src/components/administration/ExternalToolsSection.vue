@@ -84,18 +84,13 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { SchoolExternalTool } from "@store/types/school-external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -145,9 +140,11 @@ export default defineComponent({
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
 		};
 
-		const deleteTool = () => {
-			console.log("deleteTool() called");
-			// https://ticketsystem.dbildungscloud.de/browse/N21-470
+		const deleteTool = async () => {
+			if (itemToDelete.value) {
+				const schoolExternalTool: SchoolExternalTool = useSchoolExternalToolUtils(t).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
+				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
+			}
 			closeDeleteDialog();
 		};
 
@@ -165,6 +162,7 @@ export default defineComponent({
 
 		const closeDeleteDialog = () => {
 			itemToDelete.value = undefined;
+			externalToolsModule.setLoading(false);
 			isDeleteDialogOpen.value = false;
 		};
 

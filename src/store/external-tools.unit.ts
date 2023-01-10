@@ -35,6 +35,7 @@ describe("ExternalToolsModule", () => {
 		const searchListResponse: SchoolExternalToolSearchListResponse = {
 			data: [
 				{
+					id: schoolExternalToolMock.id ?? "id",
 					schoolId: schoolExternalToolMock.schoolId ?? "schoolId",
 					name: schoolExternalToolMock.name ?? "schoolName",
 					toolId: schoolExternalToolMock.toolId ?? "toolId",
@@ -64,9 +65,26 @@ describe("ExternalToolsModule", () => {
 			return promise;
 		});
 
+		const toolSchoolControllerDeleteSchoolExternalToolMock = jest.fn(
+			async () => {
+				if (throwError) {
+					throw new Error();
+				}
+				return Promise.resolve({
+					data: undefined,
+					status: 200,
+					statusText: "OK",
+					headers: {},
+					config: {},
+				});
+			}
+		);
+
 		const toolApiMock: Partial<ToolApi> = {
 			toolSchoolControllerGetSchoolExternalTools:
 				toolSchoolControllerGetSchoolExternalToolsMock,
+			toolSchoolControllerDeleteSchoolExternalTool:
+				toolSchoolControllerDeleteSchoolExternalToolMock,
 		};
 		jest
 			.spyOn(serverApi, "ToolApiFactory")
@@ -154,6 +172,20 @@ describe("ExternalToolsModule", () => {
 				const tools: SchoolExternalTool[] = module.getSchoolExternalTools;
 				expect(tools.length).toEqual(1);
 				expect(tools[0].name).toEqual("NewTool");
+			});
+		});
+
+		describe("removeSchoolExternalTool is called", () => {
+			it("should remove the given tool from the state", () => {
+				const { schoolExternalTool } = setup();
+
+				let tools: SchoolExternalTool[] = module.getSchoolExternalTools;
+				expect(tools.length).toEqual(2);
+
+				module.removeSchoolExternalTool(schoolExternalTool);
+
+				tools = module.getSchoolExternalTools;
+				expect(tools.length).toEqual(1);
 			});
 		});
 	});
@@ -251,6 +283,66 @@ describe("ExternalToolsModule", () => {
 							version: searchListResponse.data[0].toolVersion,
 						},
 					]);
+				});
+			});
+		});
+
+		describe("deleteSchoolExternalTool is called", () => {
+			describe("when loading", () => {
+				it("should set loading to true and after operation to false", async () => {
+					const { schoolExternalTool } = setup();
+					const setLoadingSpy = jest.spyOn(module, "setLoading");
+					mockToolApi({}, false);
+
+					await module.deleteSchoolExternalTool(schoolExternalTool);
+
+					expect(setLoadingSpy).toHaveBeenCalledWith(true);
+					expect(setLoadingSpy).toHaveBeenCalledWith(false);
+					expect(module.getLoading).toBeFalsy();
+				});
+
+				describe("when an error occurs", () => {
+					it("should set loading to false", async () => {
+						const { schoolExternalTool } = setup();
+						const setLoadingSpy = jest.spyOn(module, "setLoading");
+						mockToolApi({}, true);
+
+						const func = async () =>
+							await module.deleteSchoolExternalTool(schoolExternalTool);
+
+						await expect(func()).toEqual(Promise.resolve());
+						expect(setLoadingSpy).toHaveBeenCalledWith(false);
+						expect(module.getLoading).toBeFalsy();
+					});
+				});
+			});
+
+			describe("when toolToDelete is given", () => {
+				it("should call the api with id of given tool", async () => {
+					const { schoolExternalTool } = setup();
+					const { toolApiMock } = mockToolApi();
+
+					await module.deleteSchoolExternalTool(schoolExternalTool);
+
+					expect(
+						toolApiMock.toolSchoolControllerDeleteSchoolExternalTool
+					).toHaveBeenCalledWith(schoolExternalTool.id);
+				});
+
+				it("should call the mutation removeSchoolExternalTool", async () => {
+					const { schoolExternalTool } = setup();
+					mockToolApi();
+
+					const removeSchoolExternalToolSpy = jest.spyOn(
+						module,
+						"removeSchoolExternalTool"
+					);
+
+					await module.deleteSchoolExternalTool(schoolExternalTool);
+
+					expect(removeSchoolExternalToolSpy).toHaveBeenCalledWith(
+						schoolExternalTool
+					);
 				});
 			});
 		});

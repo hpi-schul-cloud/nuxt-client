@@ -1,6 +1,6 @@
 import {
-	SchoolExternalToolStatus,
 	SchoolExternalTool,
+	SchoolExternalToolStatus,
 } from "@store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import ExternalToolsModule from "@store/external-tools";
@@ -11,21 +11,21 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 
+const responseStatusMapping: Record<
+	SchoolExternalToolResponseStatusEnum,
+	SchoolExternalToolStatus
+> = {
+	[SchoolExternalToolResponseStatusEnum.Latest]:
+		SchoolExternalToolStatus.Latest,
+	[SchoolExternalToolResponseStatusEnum.Outdated]:
+		SchoolExternalToolStatus.Outdated,
+	[SchoolExternalToolResponseStatusEnum.Unknown]:
+		SchoolExternalToolStatus.Unknown,
+};
+
 export function useSchoolExternalToolUtils(
 	t: (key: string) => string = () => ""
 ) {
-	const statusMapping: Record<
-		SchoolExternalToolResponseStatusEnum,
-		SchoolExternalToolStatus
-	> = {
-		[SchoolExternalToolResponseStatusEnum.Latest]:
-			SchoolExternalToolStatus.Latest,
-		[SchoolExternalToolResponseStatusEnum.Outdated]:
-			SchoolExternalToolStatus.Outdated,
-		[SchoolExternalToolResponseStatusEnum.Unknown]:
-			SchoolExternalToolStatus.Unknown,
-	};
-
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -40,10 +40,19 @@ export function useSchoolExternalToolUtils(
 		toolResponse: SchoolExternalToolResponse
 	): SchoolExternalTool => {
 		return {
-			id: toolResponse.toolId,
+			id: toolResponse.id,
 			name: toolResponse.name,
 			version: toolResponse.toolVersion,
-			status: statusMapping[toolResponse.status],
+			status: responseStatusMapping[toolResponse.status],
+		};
+	};
+
+	const mapSchoolExternalToolItemToSchoolExternalTool = (
+		schoolExternalToolItem: SchoolExternalToolItem
+	): SchoolExternalTool => {
+		return {
+			id: schoolExternalToolItem.id,
+			name: schoolExternalToolItem.name,
 		};
 	};
 
@@ -91,5 +100,6 @@ export function useSchoolExternalToolUtils(
 		mapSchoolExternalToolSearchListResponse,
 		getHeaders,
 		getItems,
+		mapSchoolExternalToolItemToSchoolExternalTool,
 	};
 }

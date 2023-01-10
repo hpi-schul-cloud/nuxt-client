@@ -37,8 +37,17 @@ export default class ExternalToolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setSchoolExternalTools(externalTools: SchoolExternalTool[]): void {
-		this.schoolExternalTools = [...externalTools];
+	setSchoolExternalTools(schoolExternalTools: SchoolExternalTool[]): void {
+		this.schoolExternalTools = [...schoolExternalTools];
+	}
+
+	@Mutation
+	removeSchoolExternalTool(schoolExternalTool: SchoolExternalTool): void {
+		this.schoolExternalTools = [
+			...this.schoolExternalTools.filter(
+				(tool: SchoolExternalTool) => tool.id !== schoolExternalTool.id
+			),
+		];
 	}
 
 	@Action
@@ -59,6 +68,26 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (e) {
 			console.log(`Some error occurred while loading tools data: ${e}`);
+			this.setLoading(false);
+			return Promise.resolve();
+		}
+	}
+
+	@Action
+	async deleteSchoolExternalTool(
+		toolToDelete: SchoolExternalTool
+	): Promise<void> {
+		this.setLoading(true);
+		try {
+			await this.toolApi.toolSchoolControllerDeleteSchoolExternalTool(
+				toolToDelete.id
+			);
+			this.removeSchoolExternalTool(toolToDelete);
+			this.setLoading(false);
+		} catch (e) {
+			console.log(
+				`Some error occurred while deleting tool with id ${toolToDelete.id}: ${e}`
+			);
 			this.setLoading(false);
 			return Promise.resolve();
 		}

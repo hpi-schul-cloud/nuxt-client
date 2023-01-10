@@ -16,7 +16,7 @@ jest.mock("@utils/store-accessor", () => ({
 	externalToolsModule: {
 		getSchoolExternalTools: [
 			{
-				id: "toolId",
+				id: "id",
 				name: "toolName",
 				version: 1,
 				status: SchoolExternalToolStatus.Latest,
@@ -30,10 +30,15 @@ describe("useSchoolExternalToolUtils", () => {
 		const expectedTranslation = "translated";
 		const tMock = jest.fn().mockReturnValue(expectedTranslation);
 
-		const { mapSchoolExternalToolSearchListResponse, getHeaders, getItems } =
-			useSchoolExternalToolUtils(tMock);
+		const {
+			mapSchoolExternalToolSearchListResponse,
+			getHeaders,
+			getItems,
+			mapSchoolExternalToolItemToSchoolExternalTool,
+		} = useSchoolExternalToolUtils(tMock);
 
 		const toolResponse: SchoolExternalToolResponse = {
+			id: "id",
 			name: "toolName",
 			toolId: "toolId",
 			toolVersion: 1,
@@ -50,7 +55,15 @@ describe("useSchoolExternalToolUtils", () => {
 			data: [toolResponse],
 		};
 
+		const schoolExternaToolItem: SchoolExternalToolItem = {
+			name: toolResponse.name,
+			id: toolResponse.id,
+			status: SchoolExternalToolStatus.Latest,
+			outdated: false,
+		};
+
 		return {
+			mapSchoolExternalToolItemToSchoolExternalTool,
 			mapSchoolExternalToolSearchListResponse,
 			getHeaders,
 			getItems,
@@ -58,6 +71,7 @@ describe("useSchoolExternalToolUtils", () => {
 			toolResponse,
 			tMock,
 			expectedTranslation,
+			schoolExternaToolItem,
 		};
 	};
 
@@ -86,7 +100,7 @@ describe("useSchoolExternalToolUtils", () => {
 				expect(schoolExternalTools).toEqual(
 					expect.objectContaining<SchoolExternalTool[]>([
 						{
-							id: toolResponse.toolId,
+							id: toolResponse.id,
 							name: toolResponse.name,
 							version: toolResponse.toolVersion,
 							status: SchoolExternalToolStatus.Latest,
@@ -157,12 +171,31 @@ describe("useSchoolExternalToolUtils", () => {
 
 			expect(items).toEqual([
 				{
-					id: "toolId",
+					id: "id",
 					name: "toolName",
 					status: "translated",
 					outdated: false,
 				},
 			]);
+		});
+	});
+
+	describe("mapSchoolExternalToolItemToSchoolExternalTool is called", () => {
+		it("should return mapped schoolExternalTool", () => {
+			const {
+				mapSchoolExternalToolItemToSchoolExternalTool,
+				schoolExternaToolItem,
+			} = setup();
+
+			const schoolExternalTool: SchoolExternalTool =
+				mapSchoolExternalToolItemToSchoolExternalTool(schoolExternaToolItem);
+
+			expect(schoolExternalTool).toEqual(
+				expect.objectContaining<SchoolExternalTool>({
+					id: schoolExternaToolItem.id,
+					name: schoolExternaToolItem.name,
+				})
+			);
 		});
 	});
 });
