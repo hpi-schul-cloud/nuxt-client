@@ -1,20 +1,22 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	RichText,
-	RichTextTypeEnum,
-	TaskApiFactory,
-	TaskApiInterface,
-	TaskCreateParams,
-	TaskUpdateParams,
+	CardsApiFactory,
+	CardsApiInterface,
+	CreateTaskCardParams,
+	UpdateTaskCardParams,
+	CardElementResponse,
+	CardElementResponseCardElementTypeEnum,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
+import { Task } from "./types/tasks";
 
-type TempTask = {
+// TODO - move to ./types && map CardElementResponse to frontend type
+type TaskCard = {
 	id: string;
-	courseId?: string;
-	name: string;
-	description: RichText;
+	cardElements: CardElementResponse[];
+	draggable: Boolean;
+	task: Task;
 };
 
 @Module({
@@ -23,11 +25,33 @@ type TempTask = {
 	stateFactory: true,
 })
 export default class TaskModule extends VuexModule {
-	// TODO - implement/use proper type
-	taskData: TempTask = {
+	taskData: TaskCard = {
 		id: "",
-		name: "",
-		description: { content: "", type: RichTextTypeEnum.RichtextCk5 },
+		cardElements: [
+			{
+				id: "",
+				cardElementType: CardElementResponseCardElementTypeEnum.Title,
+				content: {
+					value: "",
+				},
+			},
+		],
+		draggable: true,
+		task: {
+			id: "",
+			name: "",
+			courseName: "",
+			courseId: "",
+			createdAt: "",
+			updatedAt: "",
+			status: {
+				submitted: 0,
+				maxSubmissions: 0,
+				graded: 0,
+				isDraft: true,
+				isSubstitutionTeacher: true,
+			},
+		},
 	};
 	loading: boolean = false;
 	businessError: BusinessError = {
@@ -36,10 +60,10 @@ export default class TaskModule extends VuexModule {
 		error: {},
 	};
 
-	private _taskApi?: TaskApiInterface;
-	private get taskApi(): TaskApiInterface {
+	private _taskApi?: CardsApiInterface;
+	private get taskApi(): CardsApiInterface {
 		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
+			this._taskApi = CardsApiFactory(undefined, "/v3", $axios);
 		}
 		return this._taskApi;
 	}
@@ -50,7 +74,7 @@ export default class TaskModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskControllerFindTask(taskId);
+			const { data } = await this.taskApi.taskCardControllerFindOne(taskId);
 
 			this.setTaskData(data);
 			this.setLoading(false);
@@ -61,15 +85,12 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async createTask(params: TaskCreateParams): Promise<void> {
+	async createTask(params: CreateTaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskControllerCreate({
-				name: params.name,
-				description: params.description,
-			});
+			const { data } = await this.taskApi.taskCardControllerCreate(params);
 
 			this.setTaskData(data);
 			this.setLoading(false);
@@ -80,12 +101,13 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async updateTask(params: TaskUpdateParams): Promise<void> {
+	async updateTask(params: UpdateTaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskControllerUpdate(
+			console.log(this.taskData.id);
+			const { data } = await this.taskApi.taskCardControllerUpdate(
 				this.taskData.id,
 				params
 			);
@@ -125,7 +147,7 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getTaskData(): TempTask {
+	get getTaskData(): TaskCard {
 		return this.taskData;
 	}
 
