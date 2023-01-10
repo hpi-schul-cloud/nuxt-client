@@ -4,34 +4,42 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 
-const defaultResultItems = () => {
+const geoGebraItem = {
+	title: "GeoGebra Element Title",
+	type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+};
+const etherpadItem = {
+	title: "Etherpad Element Title",
+	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
+};
+const nexboardItem = {
+	title: "Nexboard Element Title",
+	type: CopyApiResponseTypeEnum.LessonContentNexboard,
+};
+const courseGroupItem = {
+	title: "CourseGroup Group Example",
+	type: CopyApiResponseTypeEnum.CoursegroupGroup,
+};
+const fileItem = {
+	title: "File Error Example",
+	type: CopyApiResponseTypeEnum.File,
+};
+
+const mockResultItems = (
+	elements = [
+		geoGebraItem,
+		etherpadItem,
+		nexboardItem,
+		courseGroupItem,
+		fileItem,
+	]
+) => {
 	return [
 		{
 			type: CopyApiResponseTypeEnum.Lesson,
 			title: "Lesson Title",
 			elementId: "mockId",
-			elements: [
-				{
-					title: "GeoGebra Element Title",
-					type: CopyApiResponseTypeEnum.LessonContentGeogebra,
-				},
-				{
-					title: "Etherpad Element Title",
-					type: CopyApiResponseTypeEnum.LessonContentEtherpad,
-				},
-				{
-					title: "Nexboard Element Title",
-					type: CopyApiResponseTypeEnum.LessonContentNexboard,
-				},
-				{
-					title: "CourseGroup Group Example",
-					type: CopyApiResponseTypeEnum.CoursegroupGroup,
-				},
-				{
-					title: "File Error Example",
-					type: CopyApiResponseTypeEnum.File,
-				},
-			],
+			elements,
 			url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 		},
 	];
@@ -44,7 +52,7 @@ const getWrapper = (props?: any) => {
 		}),
 		propsData: {
 			isLoading: false,
-			copyResultItems: defaultResultItems(),
+			copyResultItems: mockResultItems(),
 			...props,
 		},
 	});
@@ -102,37 +110,30 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	});
 
 	describe("copy result notifications", () => {
-		it("should not render by default", () => {
-			const copyResultItems = defaultResultItems();
-			copyResultItems[0].elements = [];
+		it("should render coursefiles info", () => {
+			const copyResultItems = mockResultItems([]);
 
 			const wrapper = getWrapper({ isOpen: true, copyResultItems });
 
 			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').exists()
-			).toBe(false);
+				wrapper.find('[data-testid="copy-result-notifications"]').text()
+			).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.courseFiles.info")
+			);
 		});
 
-		it.each([
-			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
-			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
-			["NeXboard", CopyApiResponseTypeEnum.LessonContentNexboard],
-			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
-			["File Error", CopyApiResponseTypeEnum.File],
-		])("should render if there is a typed notification", (title, type) => {
-			const copyResultItems = defaultResultItems();
-			copyResultItems[0].elements = [
-				{
-					title,
-					type,
-				},
-			];
+		it("should merge files and coursefiles info", () => {
+			const copyResultItems = mockResultItems([fileItem]);
 
 			const wrapper = getWrapper({ isOpen: true, copyResultItems });
 
 			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').exists()
-			).toBe(true);
+				wrapper.find('[data-testid="copy-result-notifications"]').text()
+			).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.courseFiles.info") +
+					" " +
+					wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+			);
 		});
 
 		it.each([
@@ -142,7 +143,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a typed notification item", (title, type) => {
-			const copyResultItems = defaultResultItems();
+			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{
 					title,
@@ -152,9 +153,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 			const wrapper = getWrapper({ isOpen: true, copyResultItems });
 
-			expect(wrapper.find('[data-testid="warning-title"]').text()).toContain(
-				title
-			);
+			expect(
+				wrapper.find('[data-testid="copy-result-notifications"]').text()
+			).toContain(title);
 		});
 	});
 });

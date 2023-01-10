@@ -138,17 +138,12 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal("loading");
 			try {
-				const copyResultFailedItems = await copyModule.copyByShareToken({
+				await copyModule.copyByShareToken({
 					token: props.token,
 					type: "course",
 					newName,
 				});
-				if (copyResultFailedItems.length === 0) {
-					showSuccess();
-					emit("success");
-				} else {
-					openModal("result");
-				}
+				openModal("result");
 			} catch (error) {
 				showFailureBackend(newName);
 			}

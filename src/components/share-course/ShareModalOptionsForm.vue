@@ -9,7 +9,9 @@
 				data-testid="isSchoolInternal"
 				color="primary"
 				input-value="true"
-				class="ma-0"
+				class="my-0 mr-n3"
+				inset
+				dense
 			></v-switch>
 		</div>
 		<div class="d-flex justify-space-between">
@@ -21,7 +23,9 @@
 				data-testid="hasExpiryDate"
 				color="primary"
 				input-value="true"
-				class="ma-0"
+				class="my-0 mr-n3"
+				inset
+				dense
 			></v-switch>
 		</div>
 	</div>
