@@ -114,7 +114,6 @@
 	"components.administration.externalToolsSection.table.header.status": "Estado",
 	"components.administration.externalToolsSection.table.header.status.latest": "Actual",
 	"components.administration.externalToolsSection.table.header.status.outdated": "Anticuado",
-	"components.administration.externalToolsSection.table.loading.text": "Los datos se están cargando...",
 	"components.administration.externalToolsSection.action.add": "Agregar Herramienta externa",
 	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta externa",
 	"components.administration.externalToolsSection.dialog.content": "¿Le gustaría eliminar la Herramienta externa <b>{itemName}</b> de su escuela? </br></br> Si elimina la Herramienta externa de su escuela, se eliminará de todos los cursos de su escuela. La herramienta ya no se puede utilizar.",
