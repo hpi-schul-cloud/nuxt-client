@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<v-btn icon role="button" @click="$emit('edit')">
-			<span class="d-sr-only">{{ $t('common.actions.edit') }}</span>
+			<span class="d-sr-only">{{ $t("common.actions.edit") }}</span>
 			<v-icon>
 				{{ mdiPencilOutline }}
 			</v-icon>
 		</v-btn>
 		<v-btn icon role="button" @click="$emit('delete')">
-			<span class="d-sr-only">{{ $t('common.actions.remove') }}</span>
+			<span class="d-sr-only">{{ $t("common.actions.remove") }}</span>
 			<v-icon>
 				{{ mdiTrashCanOutline }}
 			</v-icon>
