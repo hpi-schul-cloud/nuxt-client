@@ -53,6 +53,7 @@ export function useSchoolExternalToolUtils(
 		return {
 			id: schoolExternalToolItem.id,
 			name: schoolExternalToolItem.name,
+			status: SchoolExternalToolStatus.Unknown,
 		};
 	};
 

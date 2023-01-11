@@ -1,7 +1,7 @@
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import {
-	SchoolExternalToolStatus,
 	SchoolExternalTool,
+	SchoolExternalToolStatus,
 } from "@store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import { externalToolsModule } from "@utils/store-accessor";
@@ -194,6 +194,7 @@ describe("useSchoolExternalToolUtils", () => {
 				expect.objectContaining<SchoolExternalTool>({
 					id: schoolExternaToolItem.id,
 					name: schoolExternaToolItem.name,
+					status: SchoolExternalToolStatus.Unknown,
 				})
 			);
 		});

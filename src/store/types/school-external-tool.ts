@@ -7,6 +7,6 @@ export enum SchoolExternalToolStatus {
 export interface SchoolExternalTool {
 	id: string;
 	name: string;
-	status?: SchoolExternalToolStatus;
+	status: SchoolExternalToolStatus;
 	version?: number;
 }

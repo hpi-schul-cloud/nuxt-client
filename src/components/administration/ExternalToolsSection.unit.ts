@@ -6,11 +6,11 @@ import { provide } from "@vue/composition-api";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
 import { SchoolExternalToolStatus } from "@store/types/school-external-tool";
 
-describe("ExternalToolSection", () => {
+describe("ExternalToolsSection", () => {
 	let wrapper: Wrapper<any>;
 	let externalToolsModule: ExternalToolsModule;
 
-	function setup(getters: Partial<ExternalToolsModule> = {}) {
+	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getSchoolExternalTools: [],
@@ -27,7 +27,7 @@ describe("ExternalToolSection", () => {
 		});
 
 		return {};
-	}
+	};
 
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
@@ -46,10 +46,10 @@ describe("ExternalToolSection", () => {
 						},
 					});
 				} catch (e) {
-					expect(e.message.includes("Injection \"i18n\" not found")).toBeTruthy();
+					expect(e.message.includes('Injection "i18n" not found')).toBeTruthy();
 				}
 			});
-		})
+		});
 
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
@@ -61,11 +61,11 @@ describe("ExternalToolSection", () => {
 					});
 				} catch (e) {
 					expect(
-						e.message.includes("Injection \"externalToolsModule\" not found")
+						e.message.includes('Injection "externalToolsModule" not found')
 					).toBeTruthy();
 				}
 			});
-		})
+		});
 	});
 
 	describe("onMounted is called", () => {
@@ -74,7 +74,7 @@ describe("ExternalToolSection", () => {
 				setup();
 				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
 			});
-		})
+		});
 	});
 
 	describe("t is called", () => {
@@ -87,7 +87,7 @@ describe("ExternalToolSection", () => {
 
 				expect(result).toEqual(testKey);
 			});
-		})
+		});
 
 		describe("when tranlsation key not exists", () => {
 			it("should return unknown translation-key", () => {
@@ -98,7 +98,7 @@ describe("ExternalToolSection", () => {
 
 				expect(result.includes("unknown translation-key:")).toBeTruthy();
 			});
-		})
+		});
 	});
 
 	describe("headers is called", () => {
@@ -116,11 +116,9 @@ describe("ExternalToolSection", () => {
 				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status"
 				);
-				expect(vueWrapperArray.at(2).find("span").text()).toEqual(
-					""
-				);
+				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
 			});
-		})
+		});
 	});
 
 	describe("items is called", () => {
@@ -129,106 +127,168 @@ describe("ExternalToolSection", () => {
 			const secondToolName = "Test2";
 			setup({
 				getSchoolExternalTools: [
-					{ id: "testId", name: firstToolName, status: SchoolExternalToolStatus.Latest, version: 1 },
-					{ id: "testId2", name: secondToolName, status: SchoolExternalToolStatus.Outdated, version: 1 }
-				]
+					{
+						id: "testId",
+						name: firstToolName,
+						status: SchoolExternalToolStatus.Latest,
+						version: 1,
+					},
+					{
+						id: "testId2",
+						name: secondToolName,
+						status: SchoolExternalToolStatus.Outdated,
+						version: 1,
+					},
+				],
 			});
 			return {
 				firstToolName,
 				secondToolName,
-			}
-		}
+			};
+		};
 
 		describe("when external tools were loaded", () => {
 			it("names should be rendered in the datatable", () => {
 				const { firstToolName, secondToolName } = setupItems();
 
-				const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+				const tableRows: WrapperArray<any> = wrapper
+					.find("tbody")
+					.findAll("tr");
 				const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
 				const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(0).text()).toEqual(firstToolName);
 				expect(secondRow.at(0).text()).toEqual(secondToolName);
-			})
+			});
 
-			it("names should be rendered in the datatable", () => {
+			it("status should be rendered in the datatable", () => {
 				setupItems();
 
-				const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+				const tableRows: WrapperArray<any> = wrapper
+					.find("tbody")
+					.findAll("tr");
 				const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
 				const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
 
-				expect(firstRow.at(1).text()).toEqual("components.administration.externalToolsSection.table.header.status.latest");
-				expect(secondRow.at(1).text()).toEqual("components.administration.externalToolsSection.table.header.status.outdated");
-			})
+				expect(firstRow.at(1).text()).toEqual(
+					"components.administration.externalToolsSection.table.header.status.latest"
+				);
+				expect(secondRow.at(1).text()).toEqual(
+					"components.administration.externalToolsSection.table.header.status.outdated"
+				);
+			});
 
 			describe("when actions buttons are rendered", () => {
 				it("the buttons should be displayed", () => {
 					setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+					const tableRows: WrapperArray<any> = wrapper
+						.find("tbody")
+						.findAll("tr");
 
-					const firstRowButtons: WrapperArray<any> = tableRows.at(1).findAll("button");
-					expect(firstRowButtons.at(0).classes().includes('v-icon')).toBeTruthy();
-					expect(firstRowButtons.at(1).classes().includes('v-icon')).toBeTruthy();
-				})
+					const firstRowButtons: WrapperArray<any> = tableRows
+						.at(1)
+						.findAll("button");
+					expect(
+						firstRowButtons.at(0).classes().includes("v-icon")
+					).toBeTruthy();
+					expect(
+						firstRowButtons.at(1).classes().includes("v-icon")
+					).toBeTruthy();
+				});
 
 				it("a dialog should be displayed with click on delete", async () => {
 					setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-					const firstRowButtons: WrapperArray<any> = tableRows.at(0).findAll("button");
+					const tableRows: WrapperArray<any> = wrapper
+						.find("tbody")
+						.findAll("tr");
+					const firstRowButtons: WrapperArray<any> = tableRows
+						.at(0)
+						.findAll("button");
 					const deleteButton = firstRowButtons.at(1);
 
-					deleteButton.trigger("click");
-					await wrapper.vm.$nextTick()
+					await deleteButton.trigger("click");
 
-					expect(wrapper.find('div[role="dialog"]').text()).toBeDefined();
+					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
-				})
+				});
+
+				describe("when dialog is rendered", () => {
+					it("should have tool name in text", async () => {
+						const { firstToolName } = setupItems();
+
+						const tableRows: WrapperArray<any> = wrapper
+							.find("tbody")
+							.findAll("tr");
+						const firstRowButtons: WrapperArray<any> = tableRows
+							.at(0)
+							.findAll("button");
+						const deleteButton = firstRowButtons.at(1);
+
+						await deleteButton.trigger("click");
+
+						expect(wrapper.find("p").text()).toContain(firstToolName);
+					});
+				});
 			});
 
 			describe("when status is rendered", () => {
 				it("should have a red text color when status is outdated", () => {
 					setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+					const tableRows: WrapperArray<any> = wrapper
+						.find("tbody")
+						.findAll("tr");
 
 					const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
-					expect(secondRow.at(0).find("span").classes().includes("outdated")).toBeTruthy();
-					expect(secondRow.at(1).find("span").classes().includes("outdated")).toBeTruthy();
-				})
-
+					expect(
+						secondRow.at(0).find("span").classes().includes("outdated")
+					).toBeTruthy();
+					expect(
+						secondRow.at(1).find("span").classes().includes("outdated")
+					).toBeTruthy();
+				});
 
 				it("should have a normal text color when status is latest", () => {
 					setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
+					const tableRows: WrapperArray<any> = wrapper
+						.find("tbody")
+						.findAll("tr");
 
 					const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
-					expect(firstRow.at(0).find("span").classes().includes("outdated")).toBeFalsy();
-					expect(firstRow.at(1).find("span").classes().includes("outdated")).toBeFalsy();
-				})
-			})
-		})
-	})
+					expect(
+						firstRow.at(0).find("span").classes().includes("outdated")
+					).toBeFalsy();
+					expect(
+						firstRow.at(1).find("span").classes().includes("outdated")
+					).toBeFalsy();
+				});
+			});
+		});
+	});
 
 	describe("getItemName is called", () => {
 		describe("when itemToDelete is set", () => {
-			it('should return the name', () => {
+			it("should return the name", () => {
 				setup();
 
 				const expectedName = "Name";
-				wrapper.vm.itemToDelete = { name: expectedName, status: SchoolExternalToolStatus.Latest, outdated: false };
+				wrapper.vm.itemToDelete = {
+					name: expectedName,
+					status: SchoolExternalToolStatus.Latest,
+					outdated: false,
+				};
 
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
-			})
+			});
 		});
 
-		describe('when itemToDelete is not set', () => {
-			it('should return an empty string', () => {
+		describe("when itemToDelete is not set", () => {
+			it("should return an empty string", () => {
 				setup();
 
 				wrapper.vm.itemToDelete = undefined;
@@ -236,7 +296,7 @@ describe("ExternalToolSection", () => {
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual("");
-			})
-		})
-	})
+			});
+		});
+	});
 });

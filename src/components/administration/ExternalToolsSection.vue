@@ -23,12 +23,7 @@
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
-				<v-icon @click="editTool(item)">
-					{{ mdiPencilOutline }}
-				</v-icon>
-				<v-icon @click="openDeleteDialog(item)">
-					{{ mdiTrashCanOutline }}
-				</v-icon>
+				<external-tool-toolbar @delete="openDeleteDialog(item)" @edit="editTool(item)"/>
 			</template>
 		</v-data-table>
 		<v-btn class="my-5 button-save" color="primary" depressed @click="addTool">
@@ -84,23 +79,18 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalTool } from "@store/types/school-external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolsSection",
+	components: { ExternalToolToolbar },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
@@ -122,10 +112,12 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const headers: DataTableHeader[] = useSchoolExternalToolUtils(t).getHeaders;
+		const { getHeaders, getItems } = useSchoolExternalToolUtils(t);
+
+		const headers: DataTableHeader[] = getHeaders;
 
 		const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
-			return useSchoolExternalToolUtils(t).getItems(externalToolsModule);
+			return getItems(externalToolsModule);
 		});
 
 		const isLoading: ComputedRef<boolean> = computed(() => {
@@ -141,17 +133,17 @@ export default defineComponent({
 			// https://ticketsystem.dbildungscloud.de/browse/N21-241
 		};
 
-		const editTool = () => {
-			console.log("editTool() called");
+		const editTool = (item: SchoolExternalToolItem) => {
+			console.log(`editTool() called with ${item}`);
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
 		};
 
-		const deleteTool = async () => {
-			if (itemToDelete.value) {
+		const deleteTool = async (item: SchoolExternalToolItem) => {
+			if (item) {
 				const schoolExternalTool: SchoolExternalTool =
 					useSchoolExternalToolUtils(
 						t
-					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
+					).mapSchoolExternalToolItemToSchoolExternalTool(item);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
 			closeDeleteDialog();
@@ -180,8 +172,6 @@ export default defineComponent({
 			headers,
 			items,
 			isLoading,
-			mdiPencilOutline,
-			mdiTrashCanOutline,
 			getColor,
 			addTool,
 			editTool,
