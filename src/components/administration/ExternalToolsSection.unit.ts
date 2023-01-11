@@ -190,10 +190,10 @@ describe("ExternalToolsSection", () => {
 						.at(1)
 						.findAll("button");
 					expect(
-						firstRowButtons.at(0).classes().includes("v-icon")
+						firstRowButtons.at(0).classes().includes("v-btn--icon")
 					).toBeTruthy();
 					expect(
-						firstRowButtons.at(1).classes().includes("v-icon")
+						firstRowButtons.at(1).classes().includes("v-btn--icon")
 					).toBeTruthy();
 				});
 

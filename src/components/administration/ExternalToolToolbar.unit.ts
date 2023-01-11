@@ -1,4 +1,4 @@
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, Wrapper } from "@vue/test-utils";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 
@@ -28,8 +28,8 @@ describe("ExternalToolToolbar", () => {
 			const actions = wrapper.findAll("button");
 
 			expect(actions.length).toEqual(2);
-			expect(actions.at(0).classes()).toContain("v-icon");
-			expect(actions.at(1).classes()).toContain("v-icon");
+			expect(actions.at(0).classes().includes("v-btn--icon")).toBeTruthy();
+			expect(actions.at(1).classes().includes("v-btn--icon")).toBeTruthy();
 		});
 
 		describe("when action button is clicked", () => {
