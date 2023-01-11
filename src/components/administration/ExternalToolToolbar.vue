@@ -13,13 +13,13 @@ import { defineComponent } from "@vue/composition-api";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 
 export default defineComponent({
-	name: 'ExternalToolToolbar',
+	name: "ExternalToolToolbar",
 	emits: ["delete", "edit"],
 	setup() {
 		return {
 			mdiPencilOutline,
 			mdiTrashCanOutline,
-		}
-	}
+		};
+	},
 });
 </script>
