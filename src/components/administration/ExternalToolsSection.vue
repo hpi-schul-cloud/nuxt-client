@@ -23,7 +23,10 @@
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
-				<external-tool-toolbar @delete="openDeleteDialog(item)" @edit="editTool(item)"/>
+				<external-tool-toolbar
+					@delete="openDeleteDialog(item)"
+					@edit="editTool(item)"
+				/>
 			</template>
 		</v-data-table>
 		<v-btn class="my-5 button-save" color="primary" depressed @click="addTool">
@@ -79,7 +82,13 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
+import {
+	computed,
+	ComputedRef,
+	inject,
+	onMounted,
+	Ref,
+} from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
