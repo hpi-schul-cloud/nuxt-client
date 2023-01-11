@@ -1,12 +1,13 @@
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import { shallowMount } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
+import Vue from "vue";
 
 describe("@/components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (errorText: string, statusCode: HttpStatusCode) => {
-		return shallowMount(ErrorContent, {
+		return shallowMount(ErrorContent as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
 				errorText,

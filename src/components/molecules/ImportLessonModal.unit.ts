@@ -2,13 +2,14 @@ import { roomModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ImportLessonModal from "./ImportLessonModal.vue";
+import Vue from "vue";
 
 declare let createComponentMocks: Function;
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(ImportLessonModal, {
+	return mount(ImportLessonModal as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,

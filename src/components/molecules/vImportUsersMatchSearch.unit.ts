@@ -1,9 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
+import Vue from "vue";
 
 declare let createComponentMocks: Function;
 
@@ -22,7 +23,7 @@ const testProps = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(vImportUsersMatchSearch, {
+	return mount(vImportUsersMatchSearch as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,

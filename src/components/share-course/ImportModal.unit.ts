@@ -1,10 +1,11 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ImportModal from "@/components/share-course/ImportModal.vue";
+import Vue from "vue";
 
 describe("@/components/share-course/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),

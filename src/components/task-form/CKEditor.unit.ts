@@ -1,11 +1,12 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CKEditor from "@/components/task-form/CKEditor.vue";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
+import Vue from "vue";
 
 // TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
 describe("@/components/task-form/CKEditor", () => {
 	const getWrapper: any = (attrs = {}) => {
-		const wrapper = mount(CKEditor, {
+		const wrapper = mount(CKEditor as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),

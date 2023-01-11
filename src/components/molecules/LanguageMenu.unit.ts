@@ -4,6 +4,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
+import Vue from "vue";
 
 describe("@/components/templates/LanguageMenu", () => {
 	let envConfigModuleMock: EnvConfigModule;

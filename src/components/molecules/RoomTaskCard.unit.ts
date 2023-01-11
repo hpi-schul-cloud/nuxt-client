@@ -1,8 +1,9 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
+import Vue from "vue";
 
 declare let createComponentMocks: Function;
 
@@ -207,7 +208,7 @@ const studentTestProps = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(RoomTaskCard, {
+	return mount(RoomTaskCard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,

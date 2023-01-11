@@ -1,11 +1,12 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
+import Vue from "vue";
 
 describe("@/components/share-course/ShareModalResult", () => {
 	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ShareModalResult, {
+		const wrapper = mount(ShareModalResult as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
