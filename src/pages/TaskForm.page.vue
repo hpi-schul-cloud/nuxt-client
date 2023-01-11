@@ -5,11 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<component
-				:is="title.component"
-				v-bind="title.props"
-				v-model="title.model"
-			/>
+			<task-element v-model="title.model" v-bind="title.props" />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -22,18 +18,14 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<task-content-element
+				<task-element
 					v-for="(element, index) in elements"
 					:key="index"
+					v-model="element.model"
+					v-bind="element.props"
+					:disabled="dragInProgress"
 					@delete-element="deleteElement(index)"
-				>
-					<component
-						:is="element.component"
-						v-bind="element.props"
-						v-model="element.model"
-						:disabled="dragInProgress"
-					/>
-				</task-content-element>
+				/>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
 				<v-icon>{{ mdiPlus }}</v-icon>
@@ -61,29 +53,20 @@ import {
 import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
-import {
-	CreateTaskCardParams,
-	UpdateTaskCardParams,
-	CardElementUpdateParams,
-	CardElementResponseCardElementTypeEnum,
-} from "../serverApi/v3/api";
 import { useDrag } from "@/composables/drag";
-import draggable from "vuedraggable";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
-import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
-import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
-import { mdiPlus } from "@mdi/js";
+import TaskElement from "@/components/task-form/TaskElement.vue";
 import { Element, ElementComponentEnum } from "@/store/types/task";
+import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
+import { mdiPlus } from "@mdi/js";
+import draggable from "vuedraggable";
 
 // TODO - unit tests!
 export default defineComponent({
 	name: "TaskForm",
 	components: {
 		DefaultWireframe,
-		TaskContentElement,
-		TaskTitleElement,
-		TaskTextElement,
+		TaskElement,
 		draggable,
 	},
 	setup() {
@@ -110,8 +93,8 @@ export default defineComponent({
 		];
 
 		const title = ref<Element>({
-			component: ElementComponentEnum.Title,
 			id: "",
+			type: CardElementResponseCardElementTypeEnum.Title,
 			model: "",
 		});
 		const elements = ref<Element[]>([]);
@@ -122,19 +105,18 @@ export default defineComponent({
 			if (taskId) {
 				await taskModule.findTask(taskId);
 			}
-
 			const taskData = taskModule.getTaskData;
-
 			taskData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
 				) {
 					title.value = {
-						component: ElementComponentEnum.Title,
 						id: cardElement.id,
+						type: CardElementResponseCardElementTypeEnum.Title,
 						model: cardElement.content.value,
 						props: {
+							component: ElementComponentEnum.Title,
 							placeholder: i18n.t("common.labels.title"),
 							editable: true,
 						},
@@ -142,26 +124,30 @@ export default defineComponent({
 					return;
 				}
 
-				createElement(cardElement.id, cardElement.content.value);
+				elements.value.push({
+					id: cardElement.id,
+					type: CardElementResponseCardElementTypeEnum.RichText,
+					model: cardElement.content.value,
+					props: {
+						component: ElementComponentEnum.RichText,
+						placeholder: i18n.t("common.labels.description"),
+						editable: true,
+					},
+				});
 			});
 		});
 
-		const createElement = (id: string, desc: string) => {
-			const element: Element = {
-				component: ElementComponentEnum.RichText,
-				id: id,
-				model: desc,
+		const addElement = () => {
+			elements.value.push({
+				id: "",
+				type: CardElementResponseCardElementTypeEnum.RichText,
+				model: "",
 				props: {
+					component: ElementComponentEnum.RichText,
 					placeholder: i18n.t("common.labels.description"),
 					editable: true,
 				},
-			};
-
-			elements.value.push(element);
-		};
-
-		const addElement = () => {
-			createElement("", "");
+			});
 		};
 
 		const deleteElement = (index: number) => {
@@ -174,37 +160,37 @@ export default defineComponent({
 				elements.value.forEach((element) => {
 					text.push(element.model);
 				});
-				const newTaskData: CreateTaskCardParams = {
+
+				taskModule.createTask({
 					title: title.value.model,
 					text: text,
-				};
-
-				taskModule.createTask(newTaskData);
+				});
 			} else {
-				const cardElements: Array<CardElementUpdateParams> = [];
+				const cardElements = [];
 				cardElements.push({
 					id: title.value.id,
 					content: {
-						type: new String("title"),
+						type: title.value.type,
 						value: title.value.model,
 					},
 				});
 				elements.value.forEach((element) => {
 					cardElements.push({
-						id: element.id,
+						...(element.id && { id: element.id }),
 						content: {
-							type: new String("richText"),
+							type: element.type,
 							value: element.model,
+							inputFormat: "richtext_ck5",
 						},
 					});
 				});
-				const updateTaskData: UpdateTaskCardParams = {
-					cardElements: cardElements,
-				};
 
-				taskModule.updateTask(updateTaskData);
+				taskModule.updateTask({
+					cardElements: cardElements,
+				});
 			}
 
+			// TODO decide where to route after saving
 			//router.go(-1);
 		};
 
@@ -214,8 +200,6 @@ export default defineComponent({
 
 		const { touchDelay, startDragging, endDragging, dragInProgress } =
 			useDrag();
-
-		// TODO - why is length not reactive when children is reactive not ref
 
 		return {
 			mdiPlus,
