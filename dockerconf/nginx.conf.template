@@ -13,6 +13,10 @@ server {
         add_header Content-Type application/json;
     }
 
+    location = / {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
     location ~ '^/login/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
