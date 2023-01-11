@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<v-icon data-testid="editAction" role="button" @click="$emit('edit')">
+		<v-icon data-testId="editAction" role="button" @click="$emit('edit')">
 			{{ mdiPencilOutline }}
 		</v-icon>
-		<v-icon data-testid="deleteAction" role="button" @click="$emit('delete')">
+		<v-icon data-testId="deleteAction" role="button" @click="$emit('delete')">
 			{{ mdiTrashCanOutline }}
 		</v-icon>
 	</div>

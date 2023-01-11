@@ -14,6 +14,13 @@ describe("ExternalToolToolbar", () => {
 		});
 	};
 
+	describe("when component is used", () => {
+		it("should be found in the dom", () => {
+			setup();
+			expect(wrapper.findComponent(ExternalToolToolbar).exists()).toBeTruthy();
+		});
+	});
+
 	describe("component is rendered", () => {
 		it("should have to v-icon buttons for actions", () => {
 			setup();
@@ -29,7 +36,7 @@ describe("ExternalToolToolbar", () => {
 			it("should emit edit event", async () => {
 				setup();
 
-				const editButton = wrapper.findAll("[data-testid=editAction]");
+				const editButton = wrapper.find("[data-testId=editAction]");
 				await editButton.trigger("click");
 
 				expect(wrapper.emitted("edit")).toHaveLength(1);
@@ -38,7 +45,7 @@ describe("ExternalToolToolbar", () => {
 			it("should emit delete event", async () => {
 				setup();
 
-				const editButton = wrapper.findAll("[data-testid=deleteAction]");
+				const editButton = wrapper.find("[data-testId=deleteAction]");
 				await editButton.trigger("click");
 
 				expect(wrapper.emitted("delete")).toHaveLength(1);

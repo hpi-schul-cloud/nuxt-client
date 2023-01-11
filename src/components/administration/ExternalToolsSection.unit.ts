@@ -32,7 +32,7 @@ describe("ExternalToolsSection", () => {
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
 			setup();
-			expect(wrapper.findComponent(ExternalToolsSection).exists()).toBe(true);
+			expect(wrapper.findComponent(ExternalToolsSection).exists()).toBeTruthy();
 		});
 	});
 
@@ -229,6 +229,39 @@ describe("ExternalToolsSection", () => {
 						await deleteButton.trigger("click");
 
 						expect(wrapper.find("p").text()).toContain(firstToolName);
+					});
+				});
+
+				describe("when deletion is confirmed", () => {
+					it("should call externalToolsModule.deleteSchoolExternalTool", async () => {
+						setup({
+							getSchoolExternalTools: [
+								{
+									id: "testId",
+									name: "firstToolName",
+									status: SchoolExternalToolStatus.Latest,
+									version: 1,
+								},
+							],
+						});
+
+						const tableRows: WrapperArray<any> = wrapper
+							.find("tbody")
+							.findAll("tr");
+
+						const firstRowButtons: WrapperArray<any> = tableRows
+							.at(0)
+							.findAll("button");
+
+						const deleteButton = firstRowButtons.at(1);
+						await deleteButton.trigger("click");
+
+						const confirmButton = wrapper.find("[data-testId=dialog-confirm]");
+						await confirmButton.trigger("click");
+
+						expect(
+							externalToolsModule.deleteSchoolExternalTool
+						).toHaveBeenCalled();
 					});
 				});
 			});
