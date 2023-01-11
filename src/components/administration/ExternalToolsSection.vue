@@ -147,12 +147,12 @@ export default defineComponent({
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
 		};
 
-		const deleteTool = async (item: SchoolExternalToolItem) => {
-			if (item) {
+		const deleteTool = async () => {
+			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
 					useSchoolExternalToolUtils(
 						t
-					).mapSchoolExternalToolItemToSchoolExternalTool(item);
+					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
 			closeDeleteDialog();
