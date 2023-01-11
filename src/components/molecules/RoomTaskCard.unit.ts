@@ -493,7 +493,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should return false value after calculated isPlanned() method", () => {
-				const dueDate = new Date();
+				const availableDate = new Date();
 				const localProps = {
 					...testProps,
 					task: {
@@ -510,7 +510,7 @@ describe("@components/molecules/RoomTaskCard", () => {
 							isSubstitutionTeacher: false,
 						},
 						courseName: "Mathe",
-						availableDate: dueDate.toISOString(),
+						availableDate: availableDate.toISOString(),
 						duedate: "2300-09-28T15:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
@@ -519,6 +519,35 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...localProps, role });
 				const { vm } = wrapper;
 				expect(vm.isPlanned).toBe(false);
+			});
+
+			it("should return true value after calculated isPlanned() method", () => {
+				const inFutureDate = new Date(Date.now() + 3600 * 1000 * 24);
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 0,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: inFutureDate.toISOString(),
+						duedate: "2300-09-28T15:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const { vm } = wrapper;
+				expect(vm.isPlanned).toBe(true);
 			});
 
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
