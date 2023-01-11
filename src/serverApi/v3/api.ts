@@ -270,7 +270,7 @@ export interface CardElementUpdateParams {
      * @type {string}
      * @memberof CardElementUpdateParams
      */
-    id: string;
+    id?: string;
     /**
      * Content of the element, depending on its type
      * @type {TitleCardElementParam | RichTextCardElementParam}
@@ -2279,11 +2279,11 @@ export enum RichTextTypeEnum {
  */
 export interface RichTextCardElementParam {
     /**
-     * type of element, needed for discriminator
-     * @type {object}
+     * type of element, i.e. richText (needed for discriminator)
+     * @type {string}
      * @memberof RichTextCardElementParam
      */
-    type: object;
+    type: string;
     /**
      * Content of the rich text element
      * @type {string}
@@ -2970,11 +2970,11 @@ export interface TeamPermissionsBody {
  */
 export interface TitleCardElementParam {
     /**
-     * type of element, needed for discriminator
-     * @type {object}
+     * type of element, i.e. text (needed for discriminator)
+     * @type {string}
      * @memberof TitleCardElementParam
      */
-    type: object;
+    type: string;
     /**
      * Title of the card
      * @type {string}
