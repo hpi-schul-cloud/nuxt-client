@@ -6,7 +6,12 @@
 				{{ mdiPencilOutline }}
 			</v-icon>
 		</v-btn>
-		<v-btn icon data-testId="deleteAction" role="button" @click="$emit('delete')">
+		<v-btn
+			icon
+			data-testId="deleteAction"
+			role="button"
+			@click="$emit('delete')"
+		>
 			<span class="d-sr-only">{{ $t("common.actions.remove") }}</span>
 			<v-icon>
 				{{ mdiTrashCanOutline }}
