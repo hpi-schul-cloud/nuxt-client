@@ -277,7 +277,7 @@ describe("ExternalToolsModule", () => {
 
 					expect(setSchoolExternalToolsSpy).toHaveBeenCalledWith([
 						{
-							id: searchListResponse.data[0].toolId,
+							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
 							status: SchoolExternalToolStatus.Latest,
 							version: searchListResponse.data[0].toolVersion,
