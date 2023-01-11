@@ -3,8 +3,7 @@ import StatusAlerts from "./StatusAlerts.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -14,7 +13,6 @@ const getWrapper: any = (props: object, options?: object) => {
 	return mount(StatusAlerts as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

@@ -5,8 +5,7 @@ import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
 import Vue from "vue";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const testProps = {
 	editedItem: {
@@ -26,7 +25,6 @@ const getWrapper: any = (props: object, options?: object) => {
 	return mount(vImportUsersMatchSearch as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		mocks: {

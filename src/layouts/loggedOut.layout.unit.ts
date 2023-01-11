@@ -2,12 +2,11 @@ import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
 import VueRouter from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
-
-declare let createComponentMocks: Function;
 
 describe("loggedOutLayout", () => {
 	const mountComponent = (attrs = {}) => {
