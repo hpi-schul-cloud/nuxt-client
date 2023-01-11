@@ -60,7 +60,7 @@
 						class="dialog-closed"
 						depressed
 						text
-						@click="closeDeleteDialog"
+						@click="onCloseDeleteDialog"
 					>
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
@@ -69,7 +69,7 @@
 						class="dialog-confirmed px-6"
 						color="primary"
 						depressed
-						@click="deleteTool"
+						@click="onDeleteTool"
 					>
 						{{ $t("common.actions.confirm") }}
 					</v-btn>
@@ -184,10 +184,10 @@ export default defineComponent({
 			getColor,
 			addTool,
 			editTool,
-			deleteTool,
+			onDeleteTool: deleteTool,
 			isDeleteDialogOpen,
 			openDeleteDialog,
-			closeDeleteDialog,
+			onCloseDeleteDialog: closeDeleteDialog,
 			itemToDelete,
 			getItemName,
 		};

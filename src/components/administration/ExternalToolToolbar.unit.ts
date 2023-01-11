@@ -1,4 +1,4 @@
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 

@@ -1,11 +1,17 @@
 <template>
 	<div>
-		<v-icon data-testId="editAction" role="button" @click="$emit('edit')">
-			{{ mdiPencilOutline }}
-		</v-icon>
-		<v-icon data-testId="deleteAction" role="button" @click="$emit('delete')">
-			{{ mdiTrashCanOutline }}
-		</v-icon>
+		<v-btn icon role="button" @click="$emit('edit')">
+			<span class="d-sr-only">{{ $t('common.actions.edit') }}</span>
+			<v-icon>
+				{{ mdiPencilOutline }}
+			</v-icon>
+		</v-btn>
+		<v-btn icon role="button" @click="$emit('delete')">
+			<span class="d-sr-only">{{ $t('common.actions.remove') }}</span>
+			<v-icon>
+				{{ mdiTrashCanOutline }}
+			</v-icon>
+		</v-btn>
 	</div>
 </template>
 <script lang="ts">

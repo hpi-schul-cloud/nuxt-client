@@ -325,7 +325,7 @@ describe("ExternalToolsModule", () => {
 					await module.deleteSchoolExternalTool(schoolExternalTool);
 
 					expect(
-						toolApiMock.toolControllerDeleteExternalTool
+						toolApiMock.toolSchoolControllerDeleteSchoolExternalTool
 					).toHaveBeenCalledWith(schoolExternalTool.id);
 				});
 
