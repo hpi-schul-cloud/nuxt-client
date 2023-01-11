@@ -5,14 +5,12 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
 import Vue from "vue";
 import { AlertPayload } from "@/store/types/alert-payload";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper: any = (device = "desktop", options?: object) => {
 	return mount(Alert, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		computed: {
 			$mq: () => device,

@@ -5,8 +5,7 @@ import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
 import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { mount, shallowMount } from "@vue/test-utils";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const $theme = {
 	short_name: "instance name",
@@ -17,7 +16,6 @@ const getWrapper: any = (props: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 			vueMeta: true,
-			vuetify: true,
 			mocks: {
 				$theme,
 			},
@@ -32,7 +30,6 @@ const getWrapperShallow: any = (props: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 			vueMeta: true,
-			vuetify: true,
 			mocks: { $theme },
 		}),
 		propsData: props,
