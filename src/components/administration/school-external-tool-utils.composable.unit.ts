@@ -158,7 +158,6 @@ describe("useSchoolExternalToolUtils", () => {
 				value: "actions",
 				sortable: false,
 				align: "end",
-				width: "90px",
 			});
 		});
 	});
