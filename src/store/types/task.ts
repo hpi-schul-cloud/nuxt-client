@@ -6,10 +6,11 @@ export enum ElementComponentEnum {
 }
 
 export type Element = {
-	component: ElementComponentEnum;
 	id: string;
+	type: string;
 	model: string;
 	props?: {
+		component: ElementComponentEnum;
 		placeholder: TranslateResult;
 		editable: Boolean;
 	};
