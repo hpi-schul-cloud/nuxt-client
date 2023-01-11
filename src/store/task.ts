@@ -1,23 +1,14 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	TaskCardResponse,
 	CardsApiFactory,
 	CardsApiInterface,
 	CreateTaskCardParams,
 	UpdateTaskCardParams,
-	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
-} from "../serverApi/v3/api";
+} from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
-import { Task } from "./types/tasks";
-
-// TODO - move to ./types && map CardElementResponse to frontend type
-type TaskCard = {
-	id: string;
-	cardElements: CardElementResponse[];
-	draggable: Boolean;
-	task: Task;
-};
 
 @Module({
 	name: "task",
@@ -25,7 +16,7 @@ type TaskCard = {
 	stateFactory: true,
 })
 export default class TaskModule extends VuexModule {
-	taskData: TaskCard = {
+	taskData: TaskCardResponse = {
 		id: "",
 		cardElements: [
 			{
@@ -44,12 +35,14 @@ export default class TaskModule extends VuexModule {
 			courseId: "",
 			createdAt: "",
 			updatedAt: "",
+			lessonHidden: false,
 			status: {
 				submitted: 0,
 				maxSubmissions: 0,
 				graded: 0,
 				isDraft: true,
 				isSubstitutionTeacher: true,
+				isFinished: false,
 			},
 		},
 	};
@@ -106,7 +99,6 @@ export default class TaskModule extends VuexModule {
 		this.setLoading(true);
 
 		try {
-			console.log(this.taskData.id);
 			const { data } = await this.taskApi.taskCardControllerUpdate(
 				this.taskData.id,
 				params
@@ -147,7 +139,7 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getTaskData(): TaskCard {
+	get getTaskData(): TaskCardResponse {
 		return this.taskData;
 	}
 
