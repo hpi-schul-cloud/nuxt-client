@@ -167,7 +167,6 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		it("should open the import-modal", async () => {
-			//@ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const wrapper = getWrapper();
 

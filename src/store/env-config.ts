@@ -29,21 +29,21 @@ const retryLimit = 10;
 	stateFactory: true,
 })
 export default class EnvConfigModule extends VuexModule {
-	env: Envs = {
+	env: Partial<Envs> = {
 		...requiredVars,
 		...configsFromEnvironmentVars,
-		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-		I18N__AVAILABLE_LANGUAGES: "",
-		I18N__DEFAULT_LANGUAGE: "",
-		I18N__DEFAULT_TIMEZONE: "",
-		I18N__FALLBACK_LANGUAGE: "",
 		DOCUMENT_BASE_DIR: "",
-		SC_TITLE: "",
-		SC_SHORT_TITLE: "",
-		GHOST_BASE_URL: "",
+		FALLBACK_DISABLED: false,
 		FEATURE_CONSENT_NECESSARY: true,
 		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+		GHOST_BASE_URL: "",
+		I18N__AVAILABLE_LANGUAGES: "",
+		I18N__FALLBACK_LANGUAGE: "",
+		I18N__DEFAULT_LANGUAGE: "",
+		I18N__DEFAULT_TIMEZONE: "",
+		SC_TITLE: "",
+		SC_SHORT_TITLE: "",
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -53,7 +53,7 @@ export default class EnvConfigModule extends VuexModule {
 	};
 
 	@Mutation
-	setEnvs(env: Envs): void {
+	setEnvs(env: Partial<Envs>): void {
 		this.env = { ...requiredVars, ...env };
 	}
 
@@ -130,7 +130,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.GHOST_BASE_URL;
 	}
 
-	get getEnv(): Envs {
+	get getEnv(): Partial<Envs> {
 		return this.env;
 	}
 
@@ -142,12 +142,10 @@ export default class EnvConfigModule extends VuexModule {
 
 			const envs = (await $axios.get("/v1/config/app/public")).data;
 			Object.entries(requiredVars).forEach(([key]) => {
-				// @ts-ignore
 				if (envs[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);
 				}
 			});
-			// @ts-ignore
 			this.setEnvs({ ...configsFromEnvironmentVars, ...envs });
 
 			contentModule.init();

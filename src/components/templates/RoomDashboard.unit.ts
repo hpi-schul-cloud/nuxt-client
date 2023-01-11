@@ -111,7 +111,6 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
-		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 	});
 	describe("common features", () => {
@@ -491,7 +490,6 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 
@@ -528,7 +526,6 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 		});
 

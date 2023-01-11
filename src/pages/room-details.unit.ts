@@ -229,7 +229,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
-		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
@@ -274,7 +273,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have the headline menu items", () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({
 				FEATURE_COPY_SERVICE_ENABLED: true,
 				FEATURE_COURSE_SHARE: true,
@@ -303,7 +301,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
@@ -332,7 +329,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const wrapper = getWrapper();
 				const menuItems = wrapper.vm.headlineMenuItems;
@@ -343,7 +339,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({
 					FEATURE_COPY_SERVICE_ENABLED: true,
 				});
@@ -361,7 +356,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
@@ -376,7 +370,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true });
 			// const createCourseShareTokenSpy = jest.fn();
 			// shareCourseModule.createCourseShareToken = createCourseShareTokenSpy;

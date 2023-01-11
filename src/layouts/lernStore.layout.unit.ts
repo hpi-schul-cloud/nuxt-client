@@ -36,7 +36,6 @@ describe("lernStoreLayout", () => {
 			isCollection: "true",
 		};
 		it("should render 'legacy-logged-in' layout if feature flag set true", async () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true });
 			contentModule.init();
 			const mocks = {
@@ -51,7 +50,6 @@ describe("lernStoreLayout", () => {
 		});
 
 		it("should not render 'legacy-logged-in' layout if feature flag set false", async () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: false });
 			contentModule.init();
 			const mocks = {
@@ -68,7 +66,6 @@ describe("lernStoreLayout", () => {
 
 	describe("when 'isCollection' queryString is set", () => {
 		beforeEach(() => {
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true });
 		});
 		it("should render any layout if 'isCollection' queryString is set true", async () => {

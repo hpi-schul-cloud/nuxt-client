@@ -112,7 +112,7 @@ export default class FilePathsModule extends VuexModule {
 			const baseDir =
 				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
 				"https://s3.hidrive.strato.com/cloud-instances/";
-			const theme = envConfigModule.getEnv.SC_THEME;
+			const theme = envConfigModule.getEnv.SC_THEME || "default";
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			this.setDocumentBaseDir({ baseDir, theme });

@@ -171,7 +171,6 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
@@ -184,7 +183,6 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should not have 'copy' more action if copying feature is not enabled", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
@@ -197,7 +195,6 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
@@ -228,7 +225,6 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
