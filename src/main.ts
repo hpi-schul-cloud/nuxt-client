@@ -90,7 +90,15 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 
 	if (jwt) {
 		axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
-		await authModule.login(jwt);
+		// NUXT_REMOVAL TODO
+		// catch invalid jwt error and
+		// const loginUrl = getLoginUrlWithRedirect(<current location>);
+		// authModule.logout(loginUrl);
+		try {
+			await authModule.login(jwt);
+		} catch (e) {
+			console.log("### JWT invalid: ", e);
+		}
 	}
 
 	// creation of i18n relies on envConfigModule authModule

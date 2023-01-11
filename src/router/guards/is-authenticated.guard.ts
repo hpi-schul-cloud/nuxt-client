@@ -1,5 +1,6 @@
 import { NavigationGuardNext, Route } from "vue-router";
 import { authModule } from "@/store";
+import { getLoginUrlWithRedirect } from "../login-redirect-url";
 
 export const isAuthenticatedGuard = (
 	to: Route,
@@ -11,7 +12,8 @@ export const isAuthenticatedGuard = (
 	if (userIsLoggedIn || isRoutePublic(to)) {
 		next();
 	} else {
-		window.location.assign(`/login?redirect=${to.fullPath}`);
+		const loginUrl = getLoginUrlWithRedirect(to);
+		window.location.assign(loginUrl);
 	}
 };
 
