@@ -9,7 +9,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ImportFlow from "@/components/share-course/ImportFlow.vue";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 
@@ -20,7 +20,7 @@ describe("@/components/share-course/ImportFlow", () => {
 
 	const token = "ACoolToken";
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(ImportFlow, {
+		const wrapper = mount(ImportFlow as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),

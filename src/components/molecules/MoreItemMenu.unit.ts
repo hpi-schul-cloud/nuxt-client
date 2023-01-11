@@ -1,7 +1,7 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import MoreItemMenu from "./MoreItemMenu.vue";
-
-declare let createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const action = jest.fn();
 const testProps = {
@@ -16,10 +16,9 @@ const testProps = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(MoreItemMenu, {
+	return mount(MoreItemMenu as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

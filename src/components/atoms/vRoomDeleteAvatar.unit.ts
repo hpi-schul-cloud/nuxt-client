@@ -1,14 +1,12 @@
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import vRoomDeleteAvatar from "./vRoomDeleteAvatar.vue";
-
-declare let createComponentMocks: Function;
 
 describe("vRoomDeleteAvatar", () => {
 	it("should emit 'deleteAvatar' event when an element drops onto it", async () => {
 		const wrapper = mount(vRoomDeleteAvatar, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 		});
 		const avatarComponent = wrapper.find(".delete-avatar");
@@ -24,7 +22,6 @@ describe("vRoomDeleteAvatar", () => {
 		const wrapper = mount(vRoomDeleteAvatar, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 		});
 		const avatarComponent = wrapper.find(".delete-avatar");

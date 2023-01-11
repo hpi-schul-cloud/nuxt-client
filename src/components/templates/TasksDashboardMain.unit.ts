@@ -8,7 +8,7 @@ import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
@@ -49,7 +49,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		return mount(TasksDashboardMain, {
+		return mount(TasksDashboardMain as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 				$router,

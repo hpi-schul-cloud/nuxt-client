@@ -1,6 +1,6 @@
 import LoadingStateModule from "@/store/loading-state";
 import { Ref, unref, watch } from "vue";
-import { inject, InjectionKey, ref } from "vue";
+import { inject, ref } from "vue";
 
 const isLoadingDialogOpen = ref(false);
 

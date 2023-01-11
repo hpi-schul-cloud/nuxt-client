@@ -1,17 +1,16 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import vRoomEmptyAvatar from "./vRoomEmptyAvatar.vue";
-
-declare let createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const propsData = {
 	size: "4em",
 };
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(vRoomEmptyAvatar, {
+	return mount(vRoomEmptyAvatar as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

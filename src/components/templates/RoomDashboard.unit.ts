@@ -5,8 +5,9 @@ import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TasksModule from "@/store/tasks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
+import Vue from "vue";
 
 declare let createComponentMocks: Function;
 
@@ -92,7 +93,7 @@ const emptyMockData = {
 };
 
 const getWrapper = (props: object, options?: object) => {
-	return mount<any>(RoomDashboard, {
+	return mount<any>(RoomDashboard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,

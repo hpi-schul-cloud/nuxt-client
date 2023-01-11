@@ -9,7 +9,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import Vue from "vue";
 
@@ -28,7 +28,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksDashboardTeacher, {
+		const wrapper = mount(TasksDashboardTeacher as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),

@@ -10,7 +10,7 @@ import mocks from "@@/tests/test-utils/mockDataTasks";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
@@ -24,7 +24,7 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksDashboardStudent, {
+		const wrapper = mount(TasksDashboardStudent as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
