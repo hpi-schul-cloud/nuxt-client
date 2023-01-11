@@ -38,10 +38,20 @@ export default defineComponent({
 	head: {},
 	setup() {
 		const permissionErrors: Array<Number> = [400, 401, 403];
-		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-			"applicationErrorModule"
-		);
+    let applicationErrorModule: ApplicationErrorModule | undefined;
+
+    if ("applicationErrorModule" in localStorage) {
+      if (window.performance.getEntriesByType("navigation")[0].type === 'reload') {
+        applicationErrorModule = JSON.parse(localStorage.getItem("applicationErrorModule"));
+      }
+      localStorage.removeItem("applicationErrorModule");
+    } else {
+      applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+          "applicationErrorModule"
+      );
+    }
 		const i18n = inject<VueI18n | undefined>("i18n");
+
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
 		}
@@ -60,6 +70,10 @@ export default defineComponent({
 		const appErrorStatusCode = computed(() => {
 			return applicationErrorModule.getStatusCode;
 		});
+
+    window.onbeforeunload = function () {
+      localStorage.setItem("applicationErrorModule", JSON.stringify(applicationErrorModule));
+    }
 
 		const isPermissionError = computed(() => {
 			return permissionErrors.includes(Number(appErrorStatusCode.value));
