@@ -26,6 +26,8 @@
 						</div>
 						<div>
 							{{ $t("components.molecules.shareCourse.options.infoText") }}
+							<br />
+							{{ $t("components.molecules.copyResult.courseFiles.info") }}
 						</div>
 					</div>
 					<share-modal-options-form
