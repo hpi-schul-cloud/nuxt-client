@@ -40,7 +40,13 @@
 		</template>
 		<template slot="page-content">
 			<!-- TODO -->
-			<v-alert v-if="showNotificationCannotArrangeSubstitute" dense dismissible type="info" color="rgb(225,239,248)">
+			<v-alert
+				v-if="showNotificationCannotArrangeSubstitute"
+				dense
+				dismissible
+				type="info"
+				color="rgb(225,239,248)"
+			>
 				{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
 			</v-alert>
 			<div class="rooms-container">
