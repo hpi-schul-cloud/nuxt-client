@@ -49,6 +49,7 @@
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
 					<auth-systems v-else :systems="systems"></auth-systems>
+					<external-tools-section></external-tools-section>
 				</v-col>
 			</v-row>
 		</div>
@@ -62,9 +63,11 @@ import GeneralSettings from "@components/organisms/administration/GeneralSetting
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@components/administration/AdminMigrationSection";
+import ExternalToolsSection from "@components/administration/ExternalToolsSection";
 
 export default {
 	components: {
+		ExternalToolsSection,
 		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicies,
