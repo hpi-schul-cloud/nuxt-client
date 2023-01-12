@@ -18,7 +18,7 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@components/task-form/TaskElement", () => {
+describe("@components/task-form/TaskContentElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent(TaskContentElement).exists()).toBe(true);
