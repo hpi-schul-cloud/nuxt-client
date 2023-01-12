@@ -133,6 +133,7 @@
 				class="notification"
 				:close-icon="mdiClose"
 				:icon="mdiInformation"
+				@input="onCloseNotificationCannotArrangeSubstitute"
 			>
 				<div class="alert_text mr-2">
 					{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
@@ -260,6 +261,9 @@ export default {
 				? roles.some((role) => role.startsWith("teacher"))
 				: this.role;
 		},
+		onCloseNotificationCannotArrangeSubstitute() {
+			roomsModule.setShowNotificationCannotArrangeSubstitute(false);
+		},
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
@@ -359,6 +363,7 @@ export default {
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
+				this.dragging = false;
 			}
 		},
 		addGroupElements(pos) {
