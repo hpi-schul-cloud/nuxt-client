@@ -22,6 +22,7 @@ import TaskModule from "@/store/task";
 import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import ExternalToolsModule from "@store/external-tools";
 
 let accountsModule: AccountsModule;
 let applicationErrorModule: ApplicationErrorModule;
@@ -31,6 +32,7 @@ let collaborativeFilesModule: CollaborativeFilesModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
+let externalToolsModule: ExternalToolsModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTasksModule: FinishedTasksModule;
@@ -55,6 +57,7 @@ function initializeStores(store: Store<any>): void {
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
+	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
@@ -85,6 +88,7 @@ export {
 	contentModule,
 	copyModule,
 	envConfigModule,
+	externalToolsModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,

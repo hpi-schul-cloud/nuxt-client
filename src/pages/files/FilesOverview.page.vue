@@ -64,6 +64,7 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
 			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
