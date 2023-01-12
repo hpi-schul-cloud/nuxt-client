@@ -147,7 +147,7 @@ export default defineComponent({
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
 		};
 
-		const deleteTool = async () => {
+		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
 					useSchoolExternalToolUtils(
@@ -155,7 +155,7 @@ export default defineComponent({
 					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
-			closeDeleteDialog();
+			onCloseDeleteDialog();
 		};
 
 		const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
@@ -170,7 +170,7 @@ export default defineComponent({
 			isDeleteDialogOpen.value = true;
 		};
 
-		const closeDeleteDialog = () => {
+		const onCloseDeleteDialog = () => {
 			itemToDelete.value = undefined;
 			externalToolsModule.setLoading(false);
 			isDeleteDialogOpen.value = false;
@@ -184,10 +184,10 @@ export default defineComponent({
 			getColor,
 			addTool,
 			editTool,
-			onDeleteTool: deleteTool,
+			onDeleteTool,
 			isDeleteDialogOpen,
 			openDeleteDialog,
-			onCloseDeleteDialog: closeDeleteDialog,
+			onCloseDeleteDialog,
 			itemToDelete,
 			getItemName,
 		};
