@@ -39,16 +39,6 @@
 			</div>
 		</template>
 		<template slot="page-content">
-			<!-- TODO -->
-			<v-alert
-				v-if="showNotificationCannotArrangeSubstitute"
-				dense
-				dismissible
-				type="info"
-				color="rgb(225,239,248)"
-			>
-				{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
-			</v-alert>
 			<div class="rooms-container">
 				<v-text-field
 					ref="search"
@@ -135,6 +125,19 @@
 				:token="importToken"
 				@success="onImportSuccess"
 			></import-flow>
+			<v-alert
+				v-if="showNotificationCannotArrangeSubstitute"
+				dismissible
+				type="info"
+				text
+				class="notification"
+				:close-icon="mdiClose"
+				:icon="mdiInformation"
+			>
+				<div class="alert_text mr-2">
+					{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
+				</div>
+			</v-alert>
 		</template>
 	</room-wrapper>
 </template>
@@ -148,7 +151,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
 import UserHasRole from "@components/helpers/UserHasRole";
 import { authModule } from "@/store";
 
@@ -194,6 +197,8 @@ export default {
 			dragging: false,
 			allowDragging: false,
 			showAll: false,
+			mdiClose,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -453,5 +458,29 @@ export default {
 
 ::v-deep .v-input {
 	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
+}
+
+.notification {
+	position: fixed;
+	right: 52px;
+	bottom: 37px;
+	gap: 16px;
+	width: 354px;
+	height: 86px;
+	padding: 16px;
+	background: rgba(10, 122, 201, 0.12);
+	border-radius: 4px;
+}
+
+.alert_text {
+	align-items: center;
+	width: 242px;
+	height: 48px;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 24px;
+	color: #1b1b1b;
+	letter-spacing: 0.03px;
 }
 </style>
