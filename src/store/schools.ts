@@ -1,18 +1,16 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "@utils/api";
 import { authModule } from "@/store";
+import { Year, FederalState, School, OauthMigration } from "./types/schools";
 import {
-	Year,
-	FederalState,
-	School,
-	OauthMigration
-} from "./types/schools";
-import {
-	MigrationBody, SchoolApiFactory,
+	MigrationBody,
+	MigrationResponse,
+	SchoolApiFactory,
 	SchoolApiInterface,
 	UserImportApiFactory,
-	UserImportApiInterface
+	UserImportApiInterface,
 } from "@/serverApi/v3";
+import { AxiosResponse } from "axios";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -59,7 +57,7 @@ export default class SchoolsModule extends VuexModule {
 			this._schoolApi = SchoolApiFactory(undefined, "v3", $axios);
 		}
 		return this._schoolApi;
-	};
+	}
 
 	school: School = {
 		_id: "",
@@ -97,12 +95,6 @@ export default class SchoolsModule extends VuexModule {
 		id: "",
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
-		oauthMigration: {
-			oauthUserMigration: undefined,
-			oauthMigrationAvailable: undefined,
-			oauthMigrationMandatory: undefined,
-			migrationCompletionDate: undefined,
-		},
 	};
 	currentYear: Year = {
 		_id: "",
@@ -121,7 +113,7 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
-	oauthMigration = {
+	oauthMigration: OauthMigration = {
 		oauthUserMigration: false,
 		oauthMigrationAvailable: false,
 		oauthMigrationMandatory: false,
@@ -158,12 +150,7 @@ export default class SchoolsModule extends VuexModule {
 
 	@Mutation
 	setOauthMigration(state: OauthMigration): void {
-		this.oauthMigration = {
-			oauthUserMigration: state.oauthUserMigration,
-			oauthMigrationAvailable: state.oauthMigrationAvailable,
-			oauthMigrationMandatory: state.oauthMigrationMandatory,
-			migrationCompletionDate: state.migrationCompletionDate,
-		};
+		this.oauthMigration = state;
 	}
 
 	@Mutation
@@ -210,8 +197,8 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): OauthMigration{
-		return this.oauthMigration
+	get getOauthMigration(): OauthMigration {
+		return this.oauthMigration;
 	}
 
 	@Action
@@ -367,19 +354,19 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async fetchSchoolOAuthMigration(): Promise<void> {
-		if(!this.school._id) {
+		if (!this.school._id) {
 			return;
 		}
 
 		try {
-			const oauthMigration = await this.schoolApi.schoolControllerGetMigration(this.school._id)
+			const oauthMigration: AxiosResponse<MigrationResponse> =
+				await this.schoolApi.schoolControllerGetMigration(this.school._id);
 			this.setOauthMigration({
 				oauthUserMigration: oauthMigration.data.enableMigrationStart,
 				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished
+				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
 			});
-
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				this.setError(error);
@@ -389,17 +376,21 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
-		if(!this.school._id) {
+		if (!this.school._id) {
 			return;
 		}
 
 		try {
-			const oauthMigration = await this.schoolApi.schoolControllerSetMigration(this.school._id, migrationFlags)
+			const oauthMigration: AxiosResponse<MigrationResponse> =
+				await this.schoolApi.schoolControllerSetMigration(
+					this.school._id,
+					migrationFlags
+				);
 			this.setOauthMigration({
 				oauthUserMigration: oauthMigration.data.enableMigrationStart,
 				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished
+				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
 			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {
