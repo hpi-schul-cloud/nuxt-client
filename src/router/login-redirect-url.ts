@@ -1,10 +1,12 @@
 import { envConfigModule } from "@/store";
 
-export const getLoginUrlWithRedirect = (targetUrl) => {
-	const currentUrl = new URL(targetUrl);
+export const getLoginUrlWithRedirect = (targetPath: string) => {
+	const currentOrigin = window.location.origin;
+
+	const currentUrl = new URL(currentOrigin + targetPath);
 	const loginUrl = new URL(
 		envConfigModule.getEnv.NOT_AUTHENTICATED_REDIRECT_URL,
-		currentUrl.origin // fallback origin, if a relative url is configured
+		currentOrigin // fallback to current origin, if a relative url is configured
 	);
 
 	const isInteralUrl = currentUrl.origin === loginUrl.origin;
@@ -16,12 +18,12 @@ export const getLoginUrlWithRedirect = (targetUrl) => {
 	return addRedirectAsParamToUrlParams(loginUrl, currentUrl);
 };
 
-const addRedirectAsParam = (loginUrl, currentUrl) => {
+const addRedirectAsParam = (loginUrl: URL, currentUrl: URL) => {
 	loginUrl.searchParams.set("redirect", currentUrl.toString());
 	return loginUrl.toString();
 };
 
-const addRedirectAsParamToUrlParams = (loginUrl, currentUrl) => {
+const addRedirectAsParamToUrlParams = (loginUrl: URL, currentUrl: URL) => {
 	for (const [name, value] of loginUrl.searchParams.entries()) {
 		const isSchulcloudUrl = value.indexOf(currentUrl.origin) === 0;
 		if (isSchulcloudUrl) {

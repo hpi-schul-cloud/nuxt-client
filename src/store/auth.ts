@@ -1,3 +1,4 @@
+import { getLoginUrlWithRedirect } from "@/router/login-redirect-url";
 import {
 	ChangeLanguageParamsLanguageEnum,
 	UserApiFactory,
@@ -23,7 +24,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	stateFactory: true,
 })
 export default class AuthModule extends VuexModule {
-	accesToken: string | null = "";
+	accessToken: string | null = "";
 	payload = null;
 	user: User | null = {
 		_id: "",
@@ -96,7 +97,7 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	setAccessToken(payload: string): void {
-		this.accesToken = payload;
+		this.accessToken = payload;
 	}
 
 	@Mutation
@@ -106,7 +107,7 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	clearAuthData(): void {
-		this.accesToken = null;
+		this.accessToken = null;
 		this.user = null;
 	}
 
@@ -150,7 +151,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get getAccessToken(): string | null {
-		return this.accesToken;
+		return this.accessToken;
 	}
 
 	get getUserRoles(): string[] {
@@ -164,7 +165,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get getAuthenticated(): string | boolean {
-		return this.accesToken || false;
+		return this.accessToken || false;
 	}
 
 	// TODO - why are we using toLowerCase() on permissions here?
@@ -179,7 +180,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get isLoggedIn(): boolean {
-		return !!this.accesToken;
+		return !!this.accessToken;
 	}
 
 	// @Action
@@ -216,24 +217,30 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	async login(jwt: string) {
-		const user = (await $axios.get("/v1/me")).data;
-		// @ts-ignore
-		const roles = (await $axios.get(`/v1/roles/user/${user.id}`)).data;
-
-		// @ts-ignore
-		user.permissions = roles.reduce(
-			(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
-			[]
+		const user: User | undefined = await $axios.get("/v1/me").then(
+			(resp) => resp.data,
+			() => undefined
 		);
-		// @ts-ignore
+
+		if (user === undefined) {
+			this.clearAuthData();
+			return;
+		}
+
+		const roles: { permissions: string[] }[] = (
+			await $axios.get(`/v1/roles/user/${user.id}`)
+		).data;
+
+		user.permissions = roles.reduce(
+			(acc, role) => [...new Set(acc.concat(role.permissions))],
+			[] as string[]
+		);
 		this.setUser(user);
-		// @ts-ignore
+
 		if (user.schoolId) {
 			schoolsModule.fetchSchool();
 		}
-		// @ts-ignore
 		if (user.language) {
-			// @ts-ignore
 			this.setLocale(user.language);
 		}
 

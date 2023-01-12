@@ -4,7 +4,7 @@ import { getLoginUrlWithRedirect } from "../login-redirect-url";
 
 export const isAuthenticatedGuard = (
 	to: Route,
-	_: Route,
+	from: Route,
 	next: NavigationGuardNext
 ) => {
 	const userIsLoggedIn = authModule.isLoggedIn;
@@ -12,7 +12,7 @@ export const isAuthenticatedGuard = (
 	if (userIsLoggedIn || isRoutePublic(to)) {
 		next();
 	} else {
-		const loginUrl = getLoginUrlWithRedirect(to);
+		const loginUrl = getLoginUrlWithRedirect(to.fullPath);
 		window.location.assign(loginUrl);
 	}
 };
