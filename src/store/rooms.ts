@@ -42,6 +42,7 @@ export default class RoomsModule extends VuexModule {
 		message: "",
 		error: {},
 	};
+	showNotificationCannotArrangeSubstitute: boolean = false;
 	private _dashboardApi?: DashboardApiInterface;
 	private _coursesApi?: CoursesApiInterface;
 
@@ -87,7 +88,7 @@ export default class RoomsModule extends VuexModule {
 				const symbol = difference > 1 ? "-" : "/";
 				titleDate = `${startDate}${symbol}${
 					symbol == "/" ? shortenedUntilDate : untilDate
-				}`;
+					}`;
 			}
 
 			return {
@@ -152,6 +153,11 @@ export default class RoomsModule extends VuexModule {
 		};
 	}
 
+	@Mutation
+	setShowNotificationCannotArrangeSubstitute(visible: boolean): void {
+		this.showNotificationCannotArrangeSubstitute = visible;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -190,6 +196,10 @@ export default class RoomsModule extends VuexModule {
 
 	get hasCurrentRooms(): boolean {
 		return this.roomsData.length > 0;
+	}
+
+	get getShowNotificationCannotArrangeSubstitute(): boolean {
+		return this.showNotificationCannotArrangeSubstitute;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -246,6 +256,12 @@ export default class RoomsModule extends VuexModule {
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
+			if (error.response.data.code === 400 &&
+				error.response.data.message === 'substitute courses cannot be arranged') {
+				this.setShowNotificationCannotArrangeSubstitute(true);
+				this.setLoading(false);
+				return;
+			}
 			this.setError(error);
 			this.setLoading(false);
 		}
