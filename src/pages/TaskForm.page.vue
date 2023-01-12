@@ -5,7 +5,7 @@
 		headline="Task Form"
 	>
 		<v-form class="d-flex flex-column">
-			<task-element v-model="title.model" v-bind="title.props" />
+			<task-content-element v-model="title.model" v-bind="title.props" />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -18,7 +18,7 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<task-element
+				<task-content-element
 					v-for="(element, index) in elements"
 					:key="index"
 					v-model="element.model"
@@ -55,7 +55,7 @@ import VueI18n from "vue-i18n";
 import { taskModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import TaskElement from "@/components/task-form/TaskElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import { Element, ElementComponentEnum } from "@/store/types/task";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
@@ -66,7 +66,7 @@ export default defineComponent({
 	name: "TaskForm",
 	components: {
 		DefaultWireframe,
-		TaskElement,
+		TaskContentElement,
 		draggable,
 	},
 	setup() {

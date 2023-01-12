@@ -45,7 +45,7 @@ import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
 import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
 
 export default defineComponent({
-	name: "TaskElement",
+	name: "TaskContentElement",
 	components: {
 		TaskTitleElement,
 		TaskTextElement,

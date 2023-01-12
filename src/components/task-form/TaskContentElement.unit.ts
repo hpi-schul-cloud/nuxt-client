@@ -1,12 +1,12 @@
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskElement from "@/components/task-form/TaskElement.vue";
+import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
 import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
 import { ElementComponentEnum } from "@/store/types/task";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TaskElement, {
+	return mount(TaskContentElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -21,7 +21,7 @@ const getWrapper = (props?: object, options?: object) => {
 describe("@components/task-form/TaskElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TaskElement).exists()).toBe(true);
+		expect(wrapper.findComponent(TaskContentElement).exists()).toBe(true);
 	});
 
 	it("should emit delete-element event for rich text", async () => {
