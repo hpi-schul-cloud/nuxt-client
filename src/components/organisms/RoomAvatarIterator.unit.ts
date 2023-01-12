@@ -1,7 +1,6 @@
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
-
-declare let createComponentMocks: Function;
 
 const propsData = {
 	itemSize: "4em",
@@ -39,7 +38,6 @@ const getWrapper = (props: object, options?: object) => {
 	return mount(RoomAvatarIterator, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

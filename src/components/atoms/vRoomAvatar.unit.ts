@@ -1,8 +1,7 @@
 import { mount, MountOptions } from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
 import Vue from "vue";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	id: "456",

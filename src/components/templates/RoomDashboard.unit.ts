@@ -8,8 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import Vue from "vue";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	roomId: "123",
@@ -96,7 +95,6 @@ const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

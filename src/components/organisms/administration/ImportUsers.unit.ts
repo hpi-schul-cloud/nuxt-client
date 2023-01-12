@@ -9,8 +9,8 @@ import {
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
-declare let createComponentMocks: Function;
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
 	skip: 0,
@@ -99,7 +99,6 @@ const getWrapper: any = (data?: object, options?: object) => {
 	return mount(ImportUsers, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		data: () => data,
 		mocks: {

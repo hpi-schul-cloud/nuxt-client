@@ -5,14 +5,12 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, MountOptions } from "@vue/test-utils";
 import ImportLessonModal from "./ImportLessonModal.vue";
 import Vue from "vue";
-
-declare let createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(ImportLessonModal as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
