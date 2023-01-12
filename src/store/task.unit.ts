@@ -178,36 +178,36 @@ describe("task store", () => {
 				expect(taskModule.businessError).toStrictEqual(error);
 			});
 		});
+	});
 
-		describe("getters", () => {
-			describe("getLoading", () => {
-				it("should return loading state", () => {
-					const taskModule = new TaskModule({});
+	describe("getters", () => {
+		describe("getLoading", () => {
+			it("should return loading state", () => {
+				const taskModule = new TaskModule({});
 
-					expect(taskModule.getLoading).toStrictEqual(false);
-					taskModule.setLoading(true);
-					expect(taskModule.getLoading).toStrictEqual(true);
-				});
+				expect(taskModule.getLoading).toStrictEqual(false);
+				taskModule.setLoading(true);
+				expect(taskModule.getLoading).toStrictEqual(true);
+			});
+		});
+
+		describe("getBusinessError", () => {
+			it("should return business error", () => {
+				const taskModule = new TaskModule({});
+				taskModule.businessError = {
+					statusCode: "404",
+					message: "not found",
+				};
+
+				expect(taskModule.getBusinessError).toBe(taskModule.businessError);
 			});
 
-			describe("getBusinessError", () => {
-				it("should return business error", () => {
+			describe("getTaskData", () => {
+				it("should return task data", () => {
 					const taskModule = new TaskModule({});
-					taskModule.businessError = {
-						statusCode: "404",
-						message: "not found",
-					};
+					taskModule.taskData = mockTaskData;
 
-					expect(taskModule.getBusinessError).toBe(taskModule.businessError);
-				});
-
-				describe("getTaskData", () => {
-					it("should return task data", () => {
-						const taskModule = new TaskModule({});
-						taskModule.taskData = mockTaskData;
-
-						expect(taskModule.getTaskData).toStrictEqual(mockTaskData);
-					});
+					expect(taskModule.getTaskData).toStrictEqual(mockTaskData);
 				});
 			});
 		});
