@@ -1,12 +1,17 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CKEditor from "@components/task-form/CKEditor.vue";
+import CkEditor from "@components/editor/CKEditor.vue";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 
-// TODO Promise rejection - CKEditorError: bo.window.ResizeObserver is not a constructor
-describe("@components/task-form/CKEditor", () => {
+class ResizeObserver {
+	observe() {}
+	unobserve() {}
+	disconnect() {}
+}
+
+describe("@components/editor/CKEditor", () => {
 	const getWrapper: any = (attrs = {}) => {
-		const wrapper = mount(CKEditor, {
+		const wrapper = mount(CkEditor, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -22,11 +27,12 @@ describe("@components/task-form/CKEditor", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		window.ResizeObserver = ResizeObserver;
 	});
 
 	it("should render component", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(CKEditor).exists()).toBe(true);
+		expect(wrapper.findComponent(CkEditor).exists()).toBe(true);
 	});
 
 	it("should not render with invalid mode property", () => {
@@ -41,9 +47,24 @@ describe("@components/task-form/CKEditor", () => {
 		fail("No error on invalid prop");
 	});
 
-	it("should render ckeditor component", () => {
-		const wrapper = getWrapper();
-		expect(wrapper.findComponent({ ref: "ck" }).exists()).toBe(true);
+	it("should have reduced toolbar items in simple mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "simple" } });
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(3);
+	});
+
+	it("should have reduced plugins available in simple mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "simple" } });
+		expect(wrapper.vm.config.plugins).toHaveLength(5);
+	});
+
+	it("should have all toolbar items in regular mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "regular" } });
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(23);
+	});
+
+	it("should have all plugins available in regular mode", () => {
+		const wrapper = getWrapper({ propsData: { mode: "regular" } });
+		expect(wrapper.vm.config.plugins).toHaveLength(20);
 	});
 
 	it("should emit input on content changes", async () => {
