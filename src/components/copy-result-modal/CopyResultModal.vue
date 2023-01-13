@@ -66,6 +66,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		copyResultRootItemType: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -97,8 +101,8 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
-					isShow: true,
-					text: this.fileInfoText,
+					isShow: this.hasFileElement || this.isCourse,
+					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
@@ -138,16 +142,17 @@ export default {
 		hasErrors() {
 			return this.items.length > 0;
 		},
-		fileInfoText() {
-			if (this.hasFileElement) {
-				return (
-					this.$t("components.molecules.copyResult.courseFiles.info") +
-					" " +
-					this.$t("components.molecules.copyResult.fileCopy.error")
-				);
-			} else {
-				return this.$t("components.molecules.copyResult.courseFiles.info");
-			}
+		isCourse() {
+			return this.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
+		},
+		filesInfoText() {
+			const courseFilesText = this.isCourse
+				? this.$t("components.molecules.copyResult.courseFiles.info")
+				: "";
+			const fileErrorText = this.hasFileElement
+				? this.$t("components.molecules.copyResult.fileCopy.error")
+				: "";
+			return `${courseFilesText} ${fileErrorText}`.trim();
 		},
 	},
 	methods: {
