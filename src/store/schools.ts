@@ -355,13 +355,13 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async fetchSchoolOAuthMigration(): Promise<void> {
-		if (!this.getSchool._id) {
+		if (!this.getSchool.id) {
 			await this.fetchSchool();
 		}
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerGetMigration(this.getSchool._id);
+				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
 			this.setOauthMigration({
 				oauthUserMigration: oauthMigration.data.enableMigrationStart,
 				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
@@ -369,7 +369,6 @@ export default class SchoolsModule extends VuexModule {
 				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
 			});
 		} catch (error: unknown) {
-			console.log("error");
 			if (error instanceof Error) {
 				this.setError(error);
 			}

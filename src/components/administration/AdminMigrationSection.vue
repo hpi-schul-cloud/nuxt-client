@@ -38,7 +38,7 @@
 
 		<v-switch
 			v-show="showMandatorySwitch"
-			:label="migrationSwitchLabel"
+			:label="t('components.administration.adminMigrationSection.mandatorySwitch.enable')"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
 			:false-value="false"
@@ -174,6 +174,10 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
+		onMounted(async () => {
+			await schoolsModule.fetchSchoolOAuthMigration();
+		});
+
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
 			const translateResult = i18n.t(key);
@@ -238,29 +242,12 @@ export default defineComponent({
 			() => !showEndWarning.value && !showStartWarning.value
 		);
 
-		const migrationSwitchLabel: ComputedRef<string> = computed(() => {
-			if (isMigrationMandatory.value) {
-				return t(
-					"components.administration.adminMigrationSection.mandatorySwitch.disable"
-				);
-			} else {
-				return t(
-					"components.administration.adminMigrationSection.mandatorySwitch.enable"
-				);
-			}
-		});
-
-		onMounted(async () => {
-			await schoolsModule.fetchSchoolOAuthMigration();
-		});
-
 		return {
 			isMigrationEnabled,
 			setMigration,
 			isMigrationAvailable,
 			isMigrationMandatory,
 			t,
-			migrationSwitchLabel,
 			showEndWarning,
 			toggleShowEndWarning,
 			showStartWarning,

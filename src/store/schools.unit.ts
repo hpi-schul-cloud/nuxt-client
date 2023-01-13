@@ -691,7 +691,9 @@ describe("schools module", () => {
 
 					await schoolsModule.fetchSchoolOAuthMigration();
 
-					expect(schoolControllerGetMigration).toHaveBeenCalledTimes(1);
+					expect(schoolControllerGetMigration).toHaveBeenCalledWith(
+						mockSchool.id
+					);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						oauthUserMigration: true,
 						oauthMigrationAvailable: true,
@@ -712,7 +714,7 @@ describe("schools module", () => {
 
 					await schoolsModule.fetchSchoolOAuthMigration();
 
-					expect(schoolControllerGetMigration).toHaveBeenCalledTimes(0);
+					expect(schoolControllerGetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						oauthUserMigration: false,
 						oauthMigrationAvailable: false,
