@@ -2,10 +2,10 @@
 	<default-wireframe
 		:full-width="false"
 		:breadcrumbs="breadcrumbs"
-		headline="Task Form"
+		headline="Task Card"
 	>
 		<v-form class="d-flex flex-column">
-			<task-content-element v-model="title.model" v-bind="title.props" />
+			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -18,7 +18,7 @@
 				@start="startDragging"
 				@end="endDragging"
 			>
-				<task-content-element
+				<card-element-wrapper
 					v-for="(element, index) in elements"
 					:key="index"
 					v-model="element.model"
@@ -52,21 +52,24 @@ import {
 } from "@vue/composition-api";
 import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
-import { taskModule, authModule } from "@/store";
+import { taskCardModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
-import { Element, ElementComponentEnum } from "@/store/types/task";
+import CardElementWrapper from "@/components/card-elements/CardElement.vue";
+import {
+	CardElement,
+	CardElementComponentEnum,
+} from "@/store/types/card-element";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
 import draggable from "vuedraggable";
 
 // TODO - unit tests!
 export default defineComponent({
-	name: "TaskForm",
+	name: "TaskCard",
 	components: {
 		DefaultWireframe,
-		TaskContentElement,
+		CardElementWrapper,
 		draggable,
 	},
 	setup() {
@@ -92,21 +95,22 @@ export default defineComponent({
 			},
 		];
 
-		const title = ref<Element>({
+		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
 			model: "",
 		});
-		const elements = ref<Element[]>([]);
+		const elements = ref<CardElement[]>([]);
 		const route = useRoute().value;
 
 		onMounted(async () => {
-			const taskId = route.name === "task-edit" ? route.params.id : undefined;
-			if (taskId) {
-				await taskModule.findTask(taskId);
+			const taskCardId =
+				route.name === "task-card-edit" ? route.params.id : undefined;
+			if (taskCardId) {
+				await taskCardModule.findTaskCard(taskCardId);
 			}
-			const taskData = taskModule.getTaskData;
-			taskData.cardElements.forEach((cardElement) => {
+			const taskCardData = taskCardModule.getTaskCardData;
+			taskCardData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
@@ -116,7 +120,7 @@ export default defineComponent({
 						type: CardElementResponseCardElementTypeEnum.Title,
 						model: cardElement.content.value,
 						props: {
-							component: ElementComponentEnum.Title,
+							component: CardElementComponentEnum.Title,
 							placeholder: i18n.t("common.labels.title"),
 							editable: true,
 						},
@@ -129,7 +133,7 @@ export default defineComponent({
 					type: CardElementResponseCardElementTypeEnum.RichText,
 					model: cardElement.content.value,
 					props: {
-						component: ElementComponentEnum.RichText,
+						component: CardElementComponentEnum.RichText,
 						placeholder: i18n.t("common.labels.description"),
 						editable: true,
 					},
@@ -143,7 +147,7 @@ export default defineComponent({
 				type: CardElementResponseCardElementTypeEnum.RichText,
 				model: "",
 				props: {
-					component: ElementComponentEnum.RichText,
+					component: CardElementComponentEnum.RichText,
 					placeholder: i18n.t("common.labels.description"),
 					editable: true,
 				},
@@ -155,13 +159,13 @@ export default defineComponent({
 		};
 
 		const save = () => {
-			if (route.name === "task-new") {
+			if (route.name === "task-card-new") {
 				const text: Array<string> = [];
 				elements.value.forEach((element) => {
 					text.push(element.model);
 				});
 
-				taskModule.createTask({
+				taskCardModule.createTaskCard({
 					title: title.value.model,
 					text: text,
 				});
@@ -185,12 +189,11 @@ export default defineComponent({
 					});
 				});
 
-				taskModule.updateTask({
+				taskCardModule.updateTaskCard({
 					cardElements: cardElements,
 				});
 			}
-
-			// TODO decide where to route after saving
+			// TODO
 			//router.go(-1);
 		};
 

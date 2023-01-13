@@ -11,12 +11,12 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
 @Module({
-	name: "task",
+	name: "task-card",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class TaskModule extends VuexModule {
-	taskData: TaskCardResponse = {
+export default class TaskCardModule extends VuexModule {
+	taskCardData: TaskCardResponse = {
 		id: "",
 		cardElements: [
 			{
@@ -53,23 +53,25 @@ export default class TaskModule extends VuexModule {
 		error: {},
 	};
 
-	private _taskApi?: CardsApiInterface;
-	private get taskApi(): CardsApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = CardsApiFactory(undefined, "/v3", $axios);
+	private _cardsApi?: CardsApiInterface;
+	private get cardsApi(): CardsApiInterface {
+		if (!this._cardsApi) {
+			this._cardsApi = CardsApiFactory(undefined, "/v3", $axios);
 		}
-		return this._taskApi;
+		return this._cardsApi;
 	}
 
 	@Action
-	async findTask(taskId: string): Promise<void> {
+	async findTaskCard(taskCardId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskCardControllerFindOne(taskId);
+			const { data } = await this.cardsApi.taskCardControllerFindOne(
+				taskCardId
+			);
 
-			this.setTaskData(data);
+			this.setTaskCardData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -78,14 +80,14 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async createTask(params: CreateTaskCardParams): Promise<void> {
+	async createTaskCard(params: CreateTaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskCardControllerCreate(params);
+			const { data } = await this.cardsApi.taskCardControllerCreate(params);
 
-			this.setTaskData(data);
+			this.setTaskCardData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -94,16 +96,16 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Action
-	async updateTask(params: UpdateTaskCardParams): Promise<void> {
+	async updateTaskCard(params: UpdateTaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			const { data } = await this.taskApi.taskCardControllerUpdate(
-				this.taskData.id,
+			const { data } = await this.cardsApi.taskCardControllerUpdate(
+				this.taskCardData.id,
 				params
 			);
-			this.setTaskData(data);
+			this.setTaskCardData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
@@ -112,8 +114,8 @@ export default class TaskModule extends VuexModule {
 	}
 
 	@Mutation
-	setTaskData(payload: any): void {
-		this.taskData = payload;
+	setTaskCardData(payload: any): void {
+		this.taskCardData = payload;
 	}
 
 	@Mutation
@@ -139,8 +141,8 @@ export default class TaskModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getTaskData(): TaskCardResponse {
-		return this.taskData;
+	get getTaskCardData(): TaskCardResponse {
+		return this.taskCardData;
 	}
 
 	get getBusinessError() {

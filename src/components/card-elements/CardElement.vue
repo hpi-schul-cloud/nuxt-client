@@ -11,7 +11,7 @@
 			></component>
 		</div>
 		<v-card-actions
-			v-if="component !== ElementComponentEnum.Title"
+			v-if="component !== CardElementComponentEnum.Title"
 			class="element-actions"
 		>
 			<v-btn
@@ -40,21 +40,21 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "@vue/composition-api";
 import { mdiTrashCanOutline, mdiDrag } from "@mdi/js";
-import { ElementComponentEnum } from "@/store/types/task";
-import TaskTitleElement from "@/components/task-form/TaskTitleElement.vue";
-import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
+import { CardElementComponentEnum } from "@/store/types/card-element";
+import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
+import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
-	name: "TaskContentElement",
+	name: "CardElement",
 	components: {
-		TaskTitleElement,
-		TaskTextElement,
+		TitleCardElement,
+		RichTextCardElement,
 	},
 	emits: ["input", "delete"],
 	props: {
 		component: {
 			type: String,
-			default: ElementComponentEnum.Title,
+			default: CardElementComponentEnum.Title,
 		},
 		value: {
 			type: String,
@@ -86,7 +86,7 @@ export default defineComponent({
 		return {
 			model,
 			handleInput,
-			ElementComponentEnum,
+			CardElementComponentEnum,
 			mdiTrashCanOutline,
 			mdiDrag,
 		};
@@ -114,7 +114,7 @@ export default defineComponent({
 }
 
 /* stylelint-disable-next-line selector-class-pattern */
-.TaskTextElement {
+.RichTextCardElement {
 	margin-left: calc(-1 * var(--ck-spacing-standard));
 }
 </style>

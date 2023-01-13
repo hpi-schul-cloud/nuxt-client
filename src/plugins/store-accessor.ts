@@ -17,7 +17,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
 import TasksModule from "@/store/tasks";
-import TaskModule from "@/store/task";
+import TaskCardModule from "@/store/task-card";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import LoadingStateModule from "@store/loading-state";
 import ShareCourseModule from "@store/share-course";
@@ -53,6 +53,6 @@ export default () => {
 		provide("shareCourseModule", getModule(ShareCourseModule, store));
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("tasksModule", getModule(TasksModule, store));
-		provide("taskModule", getModule(TaskModule, store));
+		provide("taskCardModule", getModule(TaskCardModule, store));
 	});
 };

@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskTextElement from "@components/task-form/TaskTextElement.vue";
+import TitleCardElement from "@components/card-elements/TitleCardElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TaskTextElement, {
+	return mount(TitleCardElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -12,9 +12,9 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("TaskTextElement", () => {
+describe("TitleCardElement", () => {
 	it("should render component with defaults", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TaskTextElement).exists()).toBe(true);
+		expect(wrapper.findComponent(TitleCardElement).exists()).toBe(true);
 	});
 });

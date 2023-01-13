@@ -15,11 +15,11 @@
 
 <script>
 import { defineComponent, ref, watch } from "@vue/composition-api";
-import CkEditor from "@/components/task-form/CKEditor.vue";
+import CkEditor from "@/components/editor/CKEditor.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "TaskTextElement",
+	name: "RichTextCardElement",
 	components: { CkEditor },
 	emits: ["input"],
 	props: {

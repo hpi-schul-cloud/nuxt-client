@@ -1,12 +1,12 @@
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskContentElement from "@/components/task-form/TaskContentElement.vue";
-import TaskTextElement from "@/components/task-form/TaskTextElement.vue";
-import { ElementComponentEnum } from "@/store/types/task";
+import CardElement from "@/components/card-elements/CardElement.vue";
+import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
+import { CardElementComponentEnum } from "@/store/types/card-element";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TaskContentElement, {
+	return mount(CardElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -18,15 +18,15 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@components/task-form/TaskContentElement", () => {
+describe("@components/card-elements/CardElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TaskContentElement).exists()).toBe(true);
+		expect(wrapper.findComponent(CardElement).exists()).toBe(true);
 	});
 
 	it("should emit delete-element event for rich text", async () => {
 		const wrapper = getWrapper({
-			component: ElementComponentEnum.RichText,
+			component: CardElementComponentEnum.RichText,
 		});
 		const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
 
@@ -38,7 +38,7 @@ describe("@components/task-form/TaskContentElement", () => {
 
 	it("should render drag handle for rich text", async () => {
 		const wrapper = getWrapper({
-			component: ElementComponentEnum.RichText,
+			component: CardElementComponentEnum.RichText,
 		});
 		const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
 
@@ -47,7 +47,7 @@ describe("@components/task-form/TaskContentElement", () => {
 
 	it("should not render drag handle for title", async () => {
 		const wrapper = getWrapper({
-			component: ElementComponentEnum.Title,
+			component: CardElementComponentEnum.Title,
 		});
 		const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
 
@@ -56,9 +56,9 @@ describe("@components/task-form/TaskContentElement", () => {
 
 	it("should render dynamic component", async () => {
 		const wrapper = getWrapper({
-			component: ElementComponentEnum.RichText,
+			component: CardElementComponentEnum.RichText,
 		});
 
-		expect(wrapper.findComponent(TaskTextElement).exists()).toBe(true);
+		expect(wrapper.findComponent(RichTextCardElement).exists()).toBe(true);
 	});
 });

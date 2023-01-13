@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "@vue/composition-api";
 export default defineComponent({
-	name: "TaskTitleElement",
+	name: "TitleCardElement",
 	props: {
 		value: {
 			type: String,
