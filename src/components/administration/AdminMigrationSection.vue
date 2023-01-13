@@ -38,7 +38,11 @@
 
 		<v-switch
 			v-show="showMandatorySwitch"
-			:label="t('components.administration.adminMigrationSection.mandatorySwitch.enable')"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.mandatorySwitch.enable'
+				)
+			"
 			:disabled="!isMigrationAvailable"
 			:true-value="true"
 			:false-value="false"
