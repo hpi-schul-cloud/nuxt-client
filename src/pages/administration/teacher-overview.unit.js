@@ -373,7 +373,7 @@ describe("teachers/index", () => {
 
 	it("editBtn's to property should have the expected URL", () => {
 		const expectedURL =
-			"/administration/teachers/0000d231816abba584714c9e/edit";
+			"/administration/teachers/0000d231816abba584714c9e/edit?returnUrl=/administration/teachers";
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -381,7 +381,7 @@ describe("teachers/index", () => {
 			}),
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
-		expect(editBtn.vm.to).toStrictEqual(expectedURL);
+		expect(editBtn.vm.href).toStrictEqual(expectedURL);
 	});
 
 	it("should render the fab-floating component if user has TEACHER_CREATE permission", () => {
