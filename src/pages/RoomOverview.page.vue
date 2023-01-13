@@ -25,7 +25,7 @@
 							v-model="showAll"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
-							:append-icon="mdiAccountSyncOutline"
+							:prepend-icon="mdiAccountSyncOutline"
 						></v-custom-switch>
 						<!-- TODO fix icon -->
 					</div>
