@@ -154,7 +154,12 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import { mdiMagnify, mdiClose, mdiInformation, mdiAccountSyncOutline } from "@mdi/js";
+import {
+	mdiMagnify,
+	mdiClose,
+	mdiInformation,
+	mdiAccountSyncOutline,
+} from "@mdi/js";
 import UserHasRole from "@components/helpers/UserHasRole";
 import { authModule } from "@/store";
 
