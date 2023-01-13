@@ -1,15 +1,35 @@
 import TaskCardModule from "@store/task-card";
 import * as serverApi from "../serverApi/v3/api";
+import {
+	CardElementResponseCardElementTypeEnum,
+	CardRichTextElementResponseInputFormatEnum,
+} from "../serverApi/v3";
 
 const mockTaskCardData = {
 	id: "123",
-	cardElements: [],
+	cardElements: [
+		{
+			id: "456",
+			cardElementType: CardElementResponseCardElementTypeEnum.Title,
+			content: {
+				value: "The Title",
+			},
+		},
+		{
+			id: "789",
+			cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+			content: {
+				value: "<p>some editor content</p>",
+				inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+			},
+		},
+	],
 	draggable: true,
 	task: {
 		id: "456",
-		name: "",
-		courseName: "",
-		courseId: "",
+		name: "task",
+		courseName: "course",
+		courseId: "789",
 		createdAt: "",
 		updatedAt: "",
 		lessonHidden: false,
