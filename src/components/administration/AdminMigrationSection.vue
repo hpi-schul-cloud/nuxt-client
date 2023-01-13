@@ -196,7 +196,7 @@ export default defineComponent({
 		);
 
 		const migrationCompletionDate: ComputedRef<string> = computed(
-			() => schoolsModule.getOauthMigration.migrationCompletionDate
+			() => schoolsModule.getOauthMigration.migrationCompletionDate ?? ''
 		);
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
