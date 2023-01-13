@@ -52,12 +52,6 @@ function transformSchoolClientToServer(school: any): School {
 export default class SchoolsModule extends VuexModule {
 	private _importUserApi?: UserImportApiInterface;
 	private _schoolApi?: SchoolApiInterface;
-	private get schoolApi(): SchoolApiInterface {
-		if (!this._schoolApi) {
-			this._schoolApi = SchoolApiFactory(undefined, "v3", $axios);
-		}
-		return this._schoolApi;
-	}
 
 	school: School = {
 		_id: "",
@@ -122,6 +116,13 @@ export default class SchoolsModule extends VuexModule {
 	systems: any[] = [];
 	loading: boolean = false;
 	error: null | {} = null;
+
+	private get schoolApi(): SchoolApiInterface {
+		if (!this._schoolApi) {
+			this._schoolApi = SchoolApiFactory(undefined, "v3", $axios);
+		}
+		return this._schoolApi;
+	}
 
 	@Mutation
 	setSchool(updatedSchool: School): void {
@@ -354,13 +355,13 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async fetchSchoolOAuthMigration(): Promise<void> {
-		if (!this.school._id) {
-			return;
+		if (!this.getSchool._id) {
+			await this.fetchSchool();
 		}
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerGetMigration(this.school._id);
+				await this.schoolApi.schoolControllerGetMigration(this.getSchool._id);
 			this.setOauthMigration({
 				oauthUserMigration: oauthMigration.data.enableMigrationStart,
 				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
@@ -368,6 +369,7 @@ export default class SchoolsModule extends VuexModule {
 				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
 			});
 		} catch (error: unknown) {
+			console.log("error");
 			if (error instanceof Error) {
 				this.setError(error);
 			}
