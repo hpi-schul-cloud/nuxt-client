@@ -158,40 +158,48 @@ export default defineComponent({
 			elements.value.splice(index, 1);
 		};
 
-		const save = () => {
-			if (route.name === "task-card-new") {
-				const text: Array<string> = [];
-				elements.value.forEach((element) => {
-					text.push(element.model);
-				});
+		const createTaskCard = () => {
+			const text: Array<string> = [];
+			elements.value.forEach((element) => {
+				text.push(element.model);
+			});
 
-				taskCardModule.createTaskCard({
-					title: title.value.model,
-					text: text,
-				});
-			} else {
-				const cardElements = [];
+			taskCardModule.createTaskCard({
+				title: title.value.model,
+				text: text,
+			});
+		};
+
+		const updateTaskCard = () => {
+			const cardElements = [];
+			cardElements.push({
+				id: title.value.id,
+				content: {
+					type: title.value.type,
+					value: title.value.model,
+				},
+			});
+			elements.value.forEach((element) => {
 				cardElements.push({
-					id: title.value.id,
+					...(element.id && { id: element.id }),
 					content: {
-						type: title.value.type,
-						value: title.value.model,
+						type: element.type,
+						value: element.model,
+						inputFormat: "richtext_ck5",
 					},
 				});
-				elements.value.forEach((element) => {
-					cardElements.push({
-						...(element.id && { id: element.id }),
-						content: {
-							type: element.type,
-							value: element.model,
-							inputFormat: "richtext_ck5",
-						},
-					});
-				});
+			});
 
-				taskCardModule.updateTaskCard({
-					cardElements: cardElements,
-				});
+			taskCardModule.updateTaskCard({
+				cardElements: cardElements,
+			});
+		};
+
+		const save = () => {
+			if (route.name === "task-card-new") {
+				createTaskCard();
+			} else {
+				updateTaskCard();
 			}
 			// TODO
 			//router.go(-1);
