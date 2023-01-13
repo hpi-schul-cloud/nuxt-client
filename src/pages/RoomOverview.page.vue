@@ -25,7 +25,9 @@
 							v-model="showAll"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
+							:append-icon="mdiAccountSyncOutline"
 						></v-custom-switch>
+						<!-- TODO fix icon -->
 					</div>
 				</user-has-role>
 				<div class="toggle-div">
@@ -152,7 +154,7 @@ import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@components/molecules/RoomModal";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
+import { mdiMagnify, mdiClose, mdiInformation, mdiAccountSyncOutline } from "@mdi/js";
 import UserHasRole from "@components/helpers/UserHasRole";
 import { authModule } from "@/store";
 
@@ -200,6 +202,7 @@ export default {
 			showAll: false,
 			mdiClose,
 			mdiInformation,
+			mdiAccountSyncOutline,
 		};
 	},
 	computed: {
