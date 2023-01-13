@@ -1,4 +1,4 @@
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
@@ -140,7 +140,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: "task",
+			type: CopyParamsTypeEnum.Task,
 		};
 		oneTasksList.vm.$emit("copy-task", payload);
 

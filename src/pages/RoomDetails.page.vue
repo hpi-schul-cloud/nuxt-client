@@ -107,6 +107,7 @@
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
+			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -137,6 +138,7 @@ import {
 import { defineComponent, inject } from "@vue/composition-api";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
+import { CopyParamsTypeEnum } from "@/store/copy";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -305,6 +307,9 @@ export default defineComponent({
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
 		},
+		copyResultRootItemType() {
+			return this.copyModule.getCopyResult?.type;
+		},
 		copyResultError() {
 			return this.copyModule.getBusinessError;
 		},
@@ -349,7 +354,11 @@ export default defineComponent({
 			const loadingText = this.$t(
 				"components.molecules.copyResult.title.loading"
 			);
-			const payload = { id: courseId, courseId, type: "course" };
+			const payload = {
+				id: courseId,
+				courseId,
+				type: CopyParamsTypeEnum.Course,
+			};
 			await this.copy(payload, loadingText);
 			const copyResult = this.copyModule.getCopyResult;
 

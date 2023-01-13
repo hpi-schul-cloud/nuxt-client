@@ -1,4 +1,4 @@
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -85,7 +85,7 @@ describe("@components/molecules/TaskItemTeacher", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: "task",
+			type: CopyParamsTypeEnum.Task,
 		};
 
 		const oneTaskItemMenu = wrapper.findComponent(TaskItemMenu);

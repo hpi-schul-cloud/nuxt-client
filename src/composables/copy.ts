@@ -1,5 +1,5 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
-import CopyModule, { CopyParams } from "@/store/copy";
+import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 import { inject, InjectionKey, Ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
@@ -21,6 +21,13 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
+	const showSuccess = () =>
+		notifierModule?.show({
+			text: t("components.molecules.copyResult.successfullyCopied"),
+			status: "success",
+			timeout: 10000,
+		});
+
 	const showFailure = () =>
 		notifierModule?.show({
 			text: t("components.molecules.copyResult.failedCopy"),
@@ -39,7 +46,12 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		isLoadingDialogOpen.value = true;
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
-			if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
+			if (
+				copyParams.type !== CopyParamsTypeEnum.Course &&
+				copyResult?.status === CopyApiResponseStatusEnum.Success
+			) {
+				showSuccess();
+			} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
 				showFailure();
 			} else {
 				openResultModal();
