@@ -12,7 +12,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationEnabled"
-			@click="toggleShowStartWarning"
+			@click="onToggleShowStartWarning"
 		>
 			{{
 				t(
@@ -27,7 +27,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationAvailable"
-			@click="toggleShowEndWarning"
+			@click="onToggleShowEndWarning"
 		>
 			{{
 				t(
@@ -81,7 +81,7 @@
 					class="agree-btn-start"
 					color="primary"
 					@click="
-						toggleShowStartWarning();
+						onToggleShowStartWarning();
 						setMigration(true, false);
 					"
 				>
@@ -95,7 +95,7 @@
 				<v-btn
 					class="disagree-btn-start"
 					color="primary"
-					@click="toggleShowStartWarning"
+					@click="onToggleShowStartWarning"
 				>
 					{{
 						t(
@@ -126,7 +126,7 @@
 					class="agree-btn-end"
 					color="primary"
 					@click="
-						toggleShowEndWarning();
+						onToggleShowEndWarning();
 						setMigration(false, isMigrationMandatory);
 					"
 				>
@@ -140,7 +140,7 @@
 				<v-btn
 					class="disagree-btn-end"
 					color="primary"
-					@click="toggleShowEndWarning"
+					@click="onToggleShowEndWarning"
 				>
 					{{
 						t(
@@ -218,13 +218,13 @@ export default defineComponent({
 
 		const showEndWarning: Ref<boolean> = ref(false);
 
-		const toggleShowEndWarning = () => {
+		const onToggleShowEndWarning = () => {
 			showEndWarning.value = !showEndWarning.value;
 		};
 
 		const showStartWarning: Ref<boolean> = ref(false);
 
-		const toggleShowStartWarning = () => {
+		const onToggleShowStartWarning = () => {
 			showStartWarning.value = !showStartWarning.value;
 		};
 
@@ -253,9 +253,9 @@ export default defineComponent({
 			isMigrationMandatory,
 			t,
 			showEndWarning,
-			toggleShowEndWarning,
+			onToggleShowEndWarning,
 			showStartWarning,
-			toggleShowStartWarning,
+			onToggleShowStartWarning,
 			migrationCompletionDate,
 			showStartButton,
 			showEndButton,
