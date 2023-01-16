@@ -39,7 +39,7 @@ export default defineComponent({
 	setup() {
 		const permissionErrors: Array<Number> = [400, 401, 403];
 		const applicationErrorModuleString = localStorage.getItem("applicationErrorModule");
-		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming; // eslint-disable-line no-use-before-define
+		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
 		const i18n = inject<VueI18n | undefined>("i18n");
 		let applicationErrorModule: ApplicationErrorModule | undefined;
 		localStorage.removeItem("applicationErrorModule");

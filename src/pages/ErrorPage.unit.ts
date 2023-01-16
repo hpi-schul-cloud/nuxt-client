@@ -69,6 +69,7 @@ describe("@pages/Error.page.vue", () => {
 				getStatusCode: null,
 				getTranslationKey: "",
 			});
+			localStorage.clear();
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isGenericError).toBe(true);
