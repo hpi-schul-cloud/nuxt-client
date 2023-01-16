@@ -38,12 +38,26 @@ export default defineComponent({
 	head: {},
 	setup() {
 		const permissionErrors: Array<Number> = [400, 401, 403];
-		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-			"applicationErrorModule"
-		);
+		const applicationErrorModuleString = localStorage.getItem("applicationErrorModule");
+		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
 		const i18n = inject<VueI18n | undefined>("i18n");
+		let applicationErrorModule: ApplicationErrorModule | undefined;
+		localStorage.removeItem("applicationErrorModule");
+
+		if (applicationErrorModuleString !== null && performanceNavigation.type === "reload"){
+			applicationErrorModule = JSON.parse(applicationErrorModuleString)
+		} else {
+			applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+					"applicationErrorModule"
+			)
+		}
+
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
+		}
+
+		window.onbeforeunload = function () {
+			localStorage.setItem("applicationErrorModule", applicationErrorModule);
 		}
 
 		useMeta({
