@@ -46,9 +46,9 @@ export default defineComponent({
     if (applicationErrorModuleString !== null && reloadType === 'reload') {
 			applicationErrorModule = JSON.parse(applicationErrorModuleString);
 		} else {
-      applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-          "applicationErrorModule"
-      );
+			applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+					"applicationErrorModule"
+			);
     }
 
 		const i18n = inject<VueI18n | undefined>("i18n");
