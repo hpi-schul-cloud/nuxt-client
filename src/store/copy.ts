@@ -16,15 +16,14 @@ import { $axios } from "../utils/api";
 
 export type CopyParams = {
 	id: string;
-	type: "task" | "lesson" | "course";
+	type: CopyParamsTypeEnum;
 	courseId?: string;
 };
 
-interface ShareTokenValidationResult {
-	payload: {
-		parentType: "course";
-		parentName: string;
-	};
+export enum CopyParamsTypeEnum {
+	Task = "task",
+	Lesson = "lesson",
+	Course = "course",
 }
 
 interface CopyByShareTokenPayload {
@@ -75,19 +74,19 @@ export default class CopyModule extends VuexModule {
 	}: CopyParams): Promise<CopyApiResponse | undefined> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === "task") {
+		if (type === CopyParamsTypeEnum.Task) {
 			copyResult = await this.taskApi
 				.taskControllerCopyTask(id, { courseId })
 				.then((response) => response.data);
 		}
 
-		if (type === "lesson") {
+		if (type === CopyParamsTypeEnum.Lesson) {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyLesson(id, { courseId })
 				.then((response) => response.data);
 		}
 
-		if (type === "course") {
+		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
@@ -122,7 +121,7 @@ export default class CopyModule extends VuexModule {
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === "course") {
+		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);
