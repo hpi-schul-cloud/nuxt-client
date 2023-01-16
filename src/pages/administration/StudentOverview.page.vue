@@ -98,7 +98,7 @@
 						'row-selected': selected,
 						'row-highlighted': highlighted,
 					}"
-					:to="`/administration/students/${data}/edit`"
+					:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
 					data-testid="edit_student_button"
 				>
 					<v-icon size="20">{{ mdiPencil }}</v-icon>

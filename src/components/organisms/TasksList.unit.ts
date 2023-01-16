@@ -1,4 +1,4 @@
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
@@ -234,7 +234,7 @@ describe("@components/organisms/TasksList", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: "task",
+			type: CopyParamsTypeEnum.Task,
 		};
 
 		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);

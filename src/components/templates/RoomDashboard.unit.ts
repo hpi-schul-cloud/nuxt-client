@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { envConfigModule, roomModule, tasksModule } from "@/store";
-import CopyModule from "@/store/copy";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import TasksModule from "@/store/tasks";
@@ -519,7 +519,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				[
 					{
 						id: "1234",
-						type: "task",
+						type: CopyParamsTypeEnum.Task,
 						courseId: "123",
 					},
 				],
@@ -556,7 +556,7 @@ describe("@components/templates/RoomDashboard.vue", () => {
 				[
 					{
 						id: "3456",
-						type: "lesson",
+						type: CopyParamsTypeEnum.Lesson,
 						courseId: "123",
 					},
 				],

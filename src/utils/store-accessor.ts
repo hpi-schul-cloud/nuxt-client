@@ -18,10 +18,11 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
-import TaskModule from "@/store/task";
+import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import ExternalToolsModule from "@store/external-tools";
 
 let accountsModule: AccountsModule;
 let applicationErrorModule: ApplicationErrorModule;
@@ -31,6 +32,7 @@ let collaborativeFilesModule: CollaborativeFilesModule;
 let contentModule: ContentModule;
 let copyModule: CopyModule;
 let envConfigModule: EnvConfigModule;
+let externalToolsModule: ExternalToolsModule;
 let filePathsModule: FilePaths;
 let filesPOCModule: FilesPOCModule;
 let finishedTasksModule: FinishedTasksModule;
@@ -44,7 +46,7 @@ let schoolsModule: SchoolsModule;
 let shareCourseModule: ShareCourseModule;
 let statusAlertsModule: StatusAlertsModule;
 let tasksModule: TasksModule;
-let taskModule: TaskModule;
+let taskCardModule: TaskCardModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -55,6 +57,7 @@ function initializeStores(store: Store<any>): void {
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
+	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
@@ -68,7 +71,7 @@ function initializeStores(store: Store<any>): void {
 	shareCourseModule = getModule(ShareCourseModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	taskModule = getModule(TaskModule, store);
+	taskCardModule = getModule(TaskCardModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
@@ -85,6 +88,7 @@ export {
 	contentModule,
 	copyModule,
 	envConfigModule,
+	externalToolsModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,
@@ -98,5 +102,5 @@ export {
 	shareCourseModule,
 	statusAlertsModule,
 	tasksModule,
-	taskModule,
+	taskCardModule,
 };
