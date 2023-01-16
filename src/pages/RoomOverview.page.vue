@@ -24,7 +24,6 @@
 						<v-custom-switch
 							v-model="showAll"
 							class="enable-disable"
-							:label="$t('pages.courses.index.courses.substituteCourses')"
 						>
 							<template #label>
 								<v-icon class="icon">{{ mdiAccountSyncOutline }}</v-icon>
