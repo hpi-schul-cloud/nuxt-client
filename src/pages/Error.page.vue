@@ -19,15 +19,11 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import {
-	computed,
-	inject,
-	defineComponent,
-	useMeta,
-} from "@nuxtjs/composition-api";
+import {computed, defineComponent, inject, useMeta,} from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
+import {HttpStatusCode} from "@store/types/http-status-code.enum";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -38,14 +34,19 @@ export default defineComponent({
 	head: {},
 	setup() {
 		const permissionErrors: Array<Number> = [400, 401, 403];
-		const applicationErrorModuleString = localStorage.getItem("applicationErrorModule");
+		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
+		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
 		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
 		const i18n = inject<VueI18n | undefined>("i18n");
 		let applicationErrorModule: ApplicationErrorModule | undefined;
 		localStorage.removeItem("applicationErrorModule");
 
-		if (applicationErrorModuleString !== null && performanceNavigation.type === "reload"){
-			applicationErrorModule = JSON.parse(applicationErrorModuleString)
+		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
+			applicationErrorModule = new ApplicationErrorModule({});
+			if (applicationErrorStatusCode) {
+				applicationErrorModule.setStatusCode(HttpStatusCode[applicationErrorStatusCode as keyof typeof HttpStatusCode]);
+			}
+			applicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
 		} else {
 			applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 					"applicationErrorModule"
@@ -57,7 +58,11 @@ export default defineComponent({
 		}
 
 		window.onbeforeunload = function () {
-			localStorage.setItem("applicationErrorModule", JSON.stringify(applicationErrorModule));
+			if (applicationErrorModule?.getStatusCode)
+				localStorage.setItem("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
+
+			if (applicationErrorModule?.getTranslationKey)
+				localStorage.setItem("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
 		}
 
 		useMeta({
