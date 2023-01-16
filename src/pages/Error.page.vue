@@ -39,28 +39,19 @@ export default defineComponent({
 	setup() {
 		const permissionErrors: Array<Number> = [400, 401, 403];
     let applicationErrorModule: ApplicationErrorModule | undefined;
+		const applicationErrorModuleString = localStorage.getItem("applicationErrorModule");
+		const reloadType = (<PerformanceNavigationTiming> window.performance.getEntries()[0]).type;
+		localStorage.removeItem("applicationErrorModule");
 
-    if ('applicationErrorModule' in localStorage) {
-      if ((<PerformanceNavigationTiming> window.performance.getEntries()[0]).type  === 'reload') {
-        applicationErrorModule = JSON.parse(
-            localStorage.getItem("applicationErrorModule") ?? 'null'
-        );
-
-        if (applicationErrorModule === null) {
-          applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-              "applicationErrorModule"
-          );
-        }
-      }
-      localStorage.removeItem("applicationErrorModule");
-    } else {
+    if (applicationErrorModuleString !== null && reloadType === 'reload') {
+			applicationErrorModule = JSON.parse(applicationErrorModuleString);
+		} else {
       applicationErrorModule = inject<ApplicationErrorModule | undefined>(
           "applicationErrorModule"
       );
     }
 
 		const i18n = inject<VueI18n | undefined>("i18n");
-
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
 		}
@@ -74,7 +65,7 @@ export default defineComponent({
 		};
 
     window.onbeforeunload = function () {
-      localStorage.setItem('applicationErrorModule', JSON.stringify(applicationErrorModule));
+			localStorage.setItem('applicationErrorModule', JSON.stringify(applicationErrorModule));
     }
 
 		const appErrorTranslationKey = computed(() => {
