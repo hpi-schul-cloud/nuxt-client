@@ -40,9 +40,17 @@ export default defineComponent({
 		const permissionErrors: Array<Number> = [400, 401, 403];
     let applicationErrorModule: ApplicationErrorModule | undefined;
 
-    if ("applicationErrorModule" in localStorage) {
-      if (window.performance.getEntriesByType("navigation")[0].type === 'reload') {
-        applicationErrorModule = JSON.parse(localStorage.getItem("applicationErrorModule"));
+    if ('applicationErrorModule' in localStorage) {
+      if ((<PerformanceNavigationTiming> window.performance.getEntries()[0]).type  === 'reload') {
+        applicationErrorModule = JSON.parse(
+            localStorage.getItem("applicationErrorModule") ?? 'null'
+        );
+
+        if (applicationErrorModule === null) {
+          applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+              "applicationErrorModule"
+          );
+        }
       }
       localStorage.removeItem("applicationErrorModule");
     } else {
@@ -50,6 +58,7 @@ export default defineComponent({
           "applicationErrorModule"
       );
     }
+
 		const i18n = inject<VueI18n | undefined>("i18n");
 
 		if (applicationErrorModule === undefined || i18n === undefined) {
@@ -64,16 +73,16 @@ export default defineComponent({
 			window.location.assign("/dashboard");
 		};
 
+    window.onbeforeunload = function () {
+      localStorage.setItem('applicationErrorModule', JSON.stringify(applicationErrorModule));
+    }
+
 		const appErrorTranslationKey = computed(() => {
-			return applicationErrorModule.getTranslationKey;
+			return applicationErrorModule!.getTranslationKey;
 		});
 		const appErrorStatusCode = computed(() => {
-			return applicationErrorModule.getStatusCode;
+			return applicationErrorModule!.getStatusCode;
 		});
-
-    window.onbeforeunload = function () {
-      localStorage.setItem("applicationErrorModule", JSON.stringify(applicationErrorModule));
-    }
 
 		const isPermissionError = computed(() => {
 			return permissionErrors.includes(Number(appErrorStatusCode.value));
@@ -88,12 +97,12 @@ export default defineComponent({
 		const translatedErrorMessage = computed(() => {
 			const translationKey = appErrorTranslationKey.value;
 
-			const translatedError = i18n.t(translationKey).toString();
+			const translatedError = i18n!.t(translationKey).toString();
 
 			const result =
 				translatedError !== translationKey
 					? translatedError
-					: i18n.t("error.generic").toString();
+					: i18n!.t("error.generic").toString();
 			return result;
 		});
 
