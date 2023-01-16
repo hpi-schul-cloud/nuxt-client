@@ -25,9 +25,14 @@
 							v-model="showAll"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
-							:prepend-icon="mdiAccountSyncOutline"
-						></v-custom-switch>
-						<!-- TODO fix icon -->
+						>
+							<template #label>
+								<v-icon class="icon">{{ mdiAccountSyncOutline }}</v-icon>
+								<span>{{
+									$t("pages.courses.index.courses.substituteCourses")
+								}}</span>
+							</template>
+						</v-custom-switch>
 					</div>
 				</user-has-role>
 				<div class="toggle-div">
@@ -462,6 +467,10 @@ export default {
 	.toggle-div {
 		display: inline-block;
 		margin-left: var(--space-xl-3);
+
+		.icon{
+			margin-right: var(--space-xs-3);
+		}
 	}
 }
 

@@ -9,7 +9,12 @@
 		:color="color"
 		v-bind="$attrs"
 		@change="($event) => $emit('input-changed', $event)"
-	></v-switch>
+	>
+		<template #label>
+			<slot name="label"></slot>
+		</template>
+		></v-switch
+	>
 </template>
 
 <script>
