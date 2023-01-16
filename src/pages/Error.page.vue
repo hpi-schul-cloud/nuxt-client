@@ -69,10 +69,10 @@ export default defineComponent({
 		};
 
 		const appErrorTranslationKey = computed(() => {
-			return applicationErrorModule.getTranslationKey;
+			return applicationErrorModule!.getTranslationKey;
 		});
 		const appErrorStatusCode = computed(() => {
-			return applicationErrorModule.getStatusCode;
+			return applicationErrorModule!.getStatusCode;
 		});
 
 		const isPermissionError = computed(() => {
