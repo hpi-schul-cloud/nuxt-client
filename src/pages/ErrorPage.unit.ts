@@ -12,6 +12,12 @@ describe("@pages/Error.page.vue", () => {
 			configurable: true,
 			value: { assign: jest.fn() },
 		});
+		Object.defineProperty(window, "performance", {
+			value: {
+				getEntries: jest.fn().mockReturnValue([{ type: 'navigate' }]),
+				measure: jest.fn(),
+			}
+		});
 	});
 	let applicationErrorModuleMock: ApplicationErrorModule;
 	const errorModuleMocks: Partial<ApplicationErrorModule> = {
@@ -69,7 +75,6 @@ describe("@pages/Error.page.vue", () => {
 				getStatusCode: null,
 				getTranslationKey: "",
 			});
-			localStorage.clear();
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isGenericError).toBe(true);
