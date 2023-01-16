@@ -1,5 +1,5 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
-import CopyModule, { CopyParams } from "@/store/copy";
+import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -33,7 +33,10 @@ const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 
 describe("copy composable", () => {
 	const setup = () => {
-		const payload: CopyParams = { id: "testId", type: "lesson" };
+		const payload: CopyParams = {
+			id: "testId",
+			type: CopyParamsTypeEnum.Lesson,
+		};
 
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
@@ -90,8 +93,33 @@ describe("copy composable", () => {
 		expect(isLoadingDialogOpenStates).toEqual([true, false]);
 	});
 
-	it("should open copyResultModal on successfull copy", async () => {
-		const { copy, copyModuleMock, payload } = setup();
+	it.each([[CopyParamsTypeEnum.Lesson], [CopyParamsTypeEnum.Task]])(
+		"should open success alert notification on a successful %s copy",
+		async (copyParamsType: CopyParamsTypeEnum) => {
+			const { copy, copyModuleMock, notifierModuleMock } = setup();
+			const payload: CopyParams = {
+				id: "testId",
+				type: copyParamsType,
+			};
+			copyModuleMock.copy = jest
+				.fn()
+				.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+
+			await copy(payload);
+
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "success" })
+			);
+		}
+	);
+
+	it("should open copyResultModal on a successful course copy", async () => {
+		const { copy, copyModuleMock } = setup();
+		const payload: CopyParams = {
+			id: "testId",
+			type: CopyParamsTypeEnum.Course,
+		};
+
 		copyModuleMock.copy = jest
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
