@@ -39,7 +39,9 @@ export default defineComponent({
 		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
 		const i18n = inject<VueI18n | undefined>("i18n");
 		let applicationErrorModule: ApplicationErrorModule | undefined;
-		localStorage.removeItem("applicationErrorModule");
+		localStorage.removeItem("applicationErrorStatusCode");
+		localStorage.removeItem("applicationErrorTranslationKey");
+
 
 		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
 			applicationErrorModule = new ApplicationErrorModule({});
