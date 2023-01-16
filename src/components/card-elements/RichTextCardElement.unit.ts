@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TaskTitleElement from "@components/task-form/TaskTitleElement.vue";
+import RichTextCardElement from "@components/card-elements/RichTextCardElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TaskTitleElement, {
+	return mount(RichTextCardElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -12,9 +12,9 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("TaskTitleElemnt", () => {
+describe("RichTextCardElement", () => {
 	it("should render component with defaults", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TaskTitleElement).exists()).toBe(true);
+		expect(wrapper.findComponent(RichTextCardElement).exists()).toBe(true);
 	});
 });

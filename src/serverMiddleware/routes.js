@@ -30,7 +30,8 @@ const routes = [
 	`^/rooms/${mongoId}/?$`,
 	`^/tasks/?$`,
 	`^/tasks/${mongoId}/edit/?$`,
-	`^/tasks/new/?$`,
+	`^/task-cards/new/?$`,
+	`^/task-cards/${mongoId}/edit/?$`,
 	`^/termsofuse/?`,
 	`^/error/?`,
 ];

@@ -137,14 +137,14 @@ export const routes = [
 		name: "tasks",
 	},
 	{
-		path: `/tasks/:id(${REGEX_ID})/edit`,
-		component: () => interopDefault(import("../pages/TaskForm.page.vue")),
-		name: "task-edit",
+		path: `/task-cards/:id(${REGEX_ID})/edit`,
+		component: () => interopDefault(import("../pages/TaskCard.page.vue")),
+		name: "task-card-edit",
 	},
 	{
-		path: "/tasks/new",
-		component: () => interopDefault(import("../pages/TaskForm.page.vue")),
-		name: "task-new",
+		path: "/task-cards/new",
+		component: () => interopDefault(import("../pages/TaskCard.page.vue")),
+		name: "task-card-new",
 	},
 	// deprecated?
 	{
