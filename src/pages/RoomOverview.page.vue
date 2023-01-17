@@ -127,17 +127,24 @@
 			></import-flow>
 			<v-alert
 				v-if="showNotificationCannotArrangeSubstitute"
-				dismissible
-				type="info"
-				text
 				class="notification"
-				:close-icon="mdiClose"
-				:icon="mdiInformation"
-				@input="onCloseNotificationCannotArrangeSubstitute"
+				color="rgb(225,239,248)"
 			>
+				<template #prepend>
+					<v-icon color="rgb(10,122,201)" class="icon">{{
+						mdiInformation
+					}}</v-icon>
+				</template>
 				<div class="alert_text mr-2">
 					{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
 				</div>
+				<template #close>
+					<v-icon
+						color="rgb(10,122,201)"
+						@click="onCloseNotificationCannotArrangeSubstitute"
+						>{{ mdiClose }}</v-icon
+					>
+				</template>
 			</v-alert>
 		</template>
 	</room-wrapper>
@@ -473,8 +480,11 @@ export default {
 	width: 354px;
 	height: 86px;
 	padding: 16px;
-	background: rgba(10, 122, 201, 0.12);
 	border-radius: 4px;
+
+	.icon {
+		margin-right: var(--space-md);
+	}
 }
 
 .alert_text {
