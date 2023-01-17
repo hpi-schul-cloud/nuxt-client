@@ -238,7 +238,7 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async align(payload: DroppedObject): Promise<void> {
+	async align(payload: DroppedObject): Promise<boolean> {
 		const { from, to } = payload;
 		const reqObject = {
 			from,
@@ -255,15 +255,17 @@ export default class RoomsModule extends VuexModule {
 			this.setPosition(payload);
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
+			return true;
 		} catch (error: any) {
 			if (error.response.data.code === 400 &&
 				error.response.data.message === 'substitute courses cannot be arranged') {
 				this.setShowNotificationCannotArrangeSubstitute(true);
 				this.setLoading(false);
-				return;
+				return false;
 			}
 			this.setError(error);
 			this.setLoading(false);
+			return false;
 		}
 	}
 

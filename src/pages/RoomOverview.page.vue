@@ -368,8 +368,9 @@ export default {
 					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
-				await this.savePosition();
-				this.defaultNaming(pos);
+				if (await this.savePosition()) {
+					this.defaultNaming(pos);
+				}
 				this.dragging = false;
 			}
 		},
@@ -410,8 +411,9 @@ export default {
 			this.dragging = true;
 		},
 		async savePosition() {
-			await roomsModule.align(this.draggedElement);
+			const successfull = await roomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
+			return successfull;
 		},
 		defaultNaming(pos) {
 			const title = this.$t("pages.rooms.groupName");
