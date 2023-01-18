@@ -29,7 +29,7 @@ const retryLimit = 10;
 	stateFactory: true,
 })
 export default class EnvConfigModule extends VuexModule {
-	env: Partial<Envs> = {
+	env: Envs = {
 		...requiredVars,
 		...configsFromEnvironmentVars,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
@@ -53,7 +53,7 @@ export default class EnvConfigModule extends VuexModule {
 	};
 
 	@Mutation
-	setEnvs(env: Partial<Envs>): void {
+	setEnvs(env: Envs): void {
 		this.env = { ...requiredVars, ...env };
 	}
 
@@ -130,7 +130,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.GHOST_BASE_URL;
 	}
 
-	get getEnv(): Partial<Envs> {
+	get getEnv(): Envs {
 		return this.env;
 	}
 

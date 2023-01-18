@@ -8,6 +8,20 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 
+const envs = {
+	FALLBACK_DISABLED: false,
+	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
+	JWT_TIMEOUT_SECONDS: 7200,
+	SC_THEME: process.env.SC_THEME || "default",
+	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__DEFAULT_LANGUAGE: "",
+	I18N__DEFAULT_TIMEZONE: "",
+	I18N__FALLBACK_LANGUAGE: "",
+	DOCUMENT_BASE_DIR: "",
+	SC_TITLE: "",
+	SC_SHORT_TITLE: "",
+};
 const mockData = [
 	{
 		_id: "0000d231816abba584714c9e",

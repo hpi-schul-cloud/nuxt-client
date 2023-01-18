@@ -491,6 +491,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
+						// @ts-ignore
 						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ ...testProps, role });
@@ -510,6 +511,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
+						// @ts-ignore
 						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 						const wrapper = getWrapper({ ...testProps, role });
 
