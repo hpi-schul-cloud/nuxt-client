@@ -96,6 +96,8 @@ describe("@pages/Error.page.vue", () => {
 				value: { assign: jest.fn() },
 			});
 			Object.defineProperty(window, "performance", {
+				configurable: true,
+				enumerable: true,
 				value: {
 					getEntriesByType: jest.fn().mockReturnValue([{ type: 'reload' }]),
 					measure: jest.fn(),
