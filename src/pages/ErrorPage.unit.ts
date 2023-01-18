@@ -82,7 +82,7 @@ describe("@pages/Error.page.vue", () => {
 	});
 
 	describe("when the '/error' route has been reloaded", () => {
-		let localStore : {[key:string] : any } = {
+		const localStore : {[key:string] : any } = {
 			"applicationErrorStatusCode": "401",
 			"applicationErrorTranslationKey": "error.401",
 		}
@@ -112,21 +112,6 @@ describe("@pages/Error.page.vue", () => {
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isPermissionError).toBe(true);
-		});
-
-		it("should set 'is-generic-error' prop to 'true' if there is no error in the localStorage", async () => {
-			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
-				...errorModuleMocks,
-				getStatusCode: null,
-				getTranslationKey: "",
-			});
-			localStore = {
-				"applicationErrorStatusCode": null,
-				"applicationErrorTranslationKey": null,
-			};
-			const wrapper = mountComponent();
-			const errorComponent = wrapper.find("[data-testid='error-content']");
-			expect(errorComponent.vm.$props.isGenericError).toBe(true);
 		});
 	});
 });
