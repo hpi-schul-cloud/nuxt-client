@@ -6,6 +6,7 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
+			<date-time-picker enable-date-picker enable-time-picker />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -27,7 +28,12 @@
 					@delete-element="deleteElement(index)"
 				/>
 			</draggable>
-			<v-btn fab color="primary" class="align-self-center" @click="addElement">
+			<v-btn
+				fab
+				color="primary"
+				class="align-self-center mt-4 mb-16"
+				@click="addElement"
+			>
 				<v-icon>{{ mdiPlus }}</v-icon>
 			</v-btn>
 			<div>
@@ -60,6 +66,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
+import DateTimePicker from "@/components/molecules/DateTimePicker.vue";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
 import draggable from "vuedraggable";
@@ -71,6 +78,7 @@ export default defineComponent({
 		DefaultWireframe,
 		CardElementWrapper,
 		draggable,
+		DateTimePicker,
 	},
 	setup() {
 		const router = useRouter();

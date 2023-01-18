@@ -1,6 +1,6 @@
 <template>
 	<v-row>
-		<v-col class="col-3">
+		<v-col v-if="enableDatePicker" class="col-3">
 			<v-menu
 				v-model="showDatePicker"
 				:close-on-content-click="false"
@@ -27,7 +27,7 @@
 				></v-date-picker>
 			</v-menu>
 		</v-col>
-		<v-col class="col-2">
+		<v-col v-if="enableTimePicker" class="col-2">
 			<v-menu
 				v-model="showTimePicker"
 				:close-on-content-click="false"
@@ -41,15 +41,14 @@
 				</template>
 				<v-list height="200">
 					<v-list-item-group v-model="selectedItem" color="primary">
-						<template v-for="(time, index) in timesOfDayList">
-							<v-list-item
-								:key="index"
-								class="time-list-item"
-								@click="selectTime(time)"
-							>
-								<v-list-item-title>{{ time }}</v-list-item-title>
-							</v-list-item>
-						</template>
+						<v-list-item
+							v-for="(time, index) in timesOfDayList"
+							:key="index"
+							class="time-list-item"
+							@click="selectTime(time)"
+						>
+							<v-list-item-title>{{ time }}</v-list-item-title>
+						</v-list-item>
 					</v-list-item-group>
 				</v-list>
 			</v-menu>
@@ -57,24 +56,30 @@
 	</v-row>
 </template>
 
-<script>
-import { inject, ref, computed, watch } from "@vue/composition-api";
+<script lang="ts">
+import VueI18n from "vue-i18n";
+import {
+	defineComponent,
+	inject,
+	ref,
+	computed,
+	watch,
+} from "@vue/composition-api";
 import moment from "moment";
 import { mdiCalendar } from "@mdi/js";
-export default {
+export default defineComponent({
 	name: "DateTimePicker",
 	props: {
-		required: {
+		// required: {
+		// 	type: Boolean,
+		// },
+		// TODO - make either or required
+		enableDatePicker: {
 			type: Boolean,
 		},
-		// enableDatePicker: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
-		// enableTimePicker: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
+		enableTimePicker: {
+			type: Boolean,
+		},
 		// date: {
 		// 	type: string,
 		// 	default: "",
@@ -86,7 +91,11 @@ export default {
 	},
 	emits: ["updateDateTime"],
 	setup(props, context) {
-		const i18n = inject("i18n");
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
 		const date = ref("");
 		const time = ref("");
 		const showDatePicker = ref(false);
@@ -113,7 +122,7 @@ export default {
 			return date.value ? moment(date.value).format(i18n.t("format.date")) : "";
 		});
 
-		const selectTime = (selectedTime) => {
+		const selectTime = (selectedTime: string) => {
 			time.value = selectedTime;
 			showTimePicker.value = false;
 		};
@@ -138,7 +147,7 @@ export default {
 			selectTime,
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
