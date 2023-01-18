@@ -14,7 +14,7 @@ describe("@pages/Error.page.vue", () => {
 		});
 		Object.defineProperty(window, "performance", {
 			value: {
-				getEntries: jest.fn().mockReturnValue([{ type: 'navigate' }]),
+				getEntriesByType: jest.fn().mockReturnValue([{ type: 'navigate' }]),
 				measure: jest.fn(),
 			}
 		});
@@ -97,7 +97,7 @@ describe("@pages/Error.page.vue", () => {
 			});
 			Object.defineProperty(window, "performance", {
 				value: {
-					getEntries: jest.fn().mockReturnValue([{ type: 'reload' }]),
+					getEntriesByType: jest.fn().mockReturnValue([{ type: 'reload' }]),
 					measure: jest.fn(),
 				}
 			});

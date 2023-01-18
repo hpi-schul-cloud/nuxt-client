@@ -34,7 +34,7 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
+		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
 		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
 
