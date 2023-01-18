@@ -178,4 +178,11 @@ export const routes = [
 		component: () => interopDefault(import("../pages/Error.page.vue")),
 		name: "error",
 	},
+	{
+		path: "/migration",
+		component: () =>
+			interopDefault(import("../pages/user-migration/UserMigration.page")),
+		name: "user-migration",
+		props: true,
+	},
 ];
