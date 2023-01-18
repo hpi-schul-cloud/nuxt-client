@@ -121,8 +121,8 @@ describe("@pages/Error.page.vue", () => {
 				getTranslationKey: "",
 			});
 			localStore = {
-				"applicationErrorStatusCode": "null",
-				"applicationErrorTranslationKey": "null",
+				"applicationErrorStatusCode": null,
+				"applicationErrorTranslationKey": null,
 			};
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
