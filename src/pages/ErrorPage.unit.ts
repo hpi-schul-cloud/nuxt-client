@@ -87,12 +87,10 @@ describe("@pages/Error.page.vue", () => {
 			"applicationErrorTranslationKey": "error.401",
 		}
 
-		// @ts-ignore
-		spyOn(window.localStorage, 'getItem').and.callFake((key) =>
-			key in localStore ? localStore[key] : null
-		);
-
 		beforeEach(() => {
+			spyOn(window.localStorage, 'getItem').and.callFake((key) =>
+				key in localStore ? localStore[key] : null
+			);
 			Object.defineProperty(window, "location", {
 				configurable: true,
 				value: { assign: jest.fn() },
