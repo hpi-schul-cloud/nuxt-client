@@ -45,17 +45,17 @@ export default class TasksModule extends VuexModule {
 		this.setStatus("pending");
 		try {
 			const tasks: Task[] = [];
+			const backendLimit = 100;
 			let skip = 0;
-			let limit = 10;
 			let total: number;
 			do {
 				// use initial request to get default page size from api
 				const response =
 					skip === 0
 						? await this.taskApi.taskControllerFindAll()
-						: await this.taskApi.taskControllerFindAll(skip, limit);
+						: await this.taskApi.taskControllerFindAll(skip, backendLimit);
 				tasks.push(...response.data.data);
-				skip = skip + limit;
+				skip = skip + response.data.limit;
 				total = response.data.total;
 			} while (skip < total);
 			this.setTasks(tasks);
