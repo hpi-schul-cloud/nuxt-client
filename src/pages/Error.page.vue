@@ -19,11 +19,12 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import {computed, defineComponent, inject, useMeta,} from "@nuxtjs/composition-api";
+import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,} from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
 import {HttpStatusCode} from "@store/types/http-status-code.enum";
+import {onBeforeMount, provide} from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -33,27 +34,38 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const permissionErrors: Array<Number> = [400, 401, 403];
+		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
 		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
-		const performanceNavigation = window.performance.getEntries()[0] as PerformanceNavigationTiming;
-		const i18n = inject<VueI18n | undefined>("i18n");
-		let applicationErrorModule: ApplicationErrorModule | undefined;
-		localStorage.removeItem("applicationErrorStatusCode");
-		localStorage.removeItem("applicationErrorTranslationKey");
-
 
 		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
-			applicationErrorModule = new ApplicationErrorModule({});
+			const storedApplicationErrorModule = new ApplicationErrorModule({});
 			if (applicationErrorStatusCode) {
-				applicationErrorModule.setStatusCode(HttpStatusCode[applicationErrorStatusCode as keyof typeof HttpStatusCode]);
+				storedApplicationErrorModule.setStatusCode(HttpStatusCode[applicationErrorStatusCode as keyof typeof HttpStatusCode]);
 			}
-			applicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
-		} else {
-			applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-					"applicationErrorModule"
-			)
+			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
+
+			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
 		}
+
+		const permissionErrors: Array<Number> = [400, 401, 403];
+		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+				"applicationErrorModule"
+		)
+		const i18n = inject<VueI18n | undefined>("i18n");
+
+		onMounted(() => {
+			localStorage.removeItem("applicationErrorStatusCode");
+			localStorage.removeItem("applicationErrorTranslationKey");
+		});
+
+		onBeforeUnmount(() => {
+			if (applicationErrorModule?.getStatusCode)
+				localStorage.setItem("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
+
+			if (applicationErrorModule?.getTranslationKey)
+				localStorage.setItem("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
+		})
 
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
