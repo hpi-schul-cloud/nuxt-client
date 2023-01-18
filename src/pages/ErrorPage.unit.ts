@@ -80,4 +80,39 @@ describe("@pages/Error.page.vue", () => {
 			expect(errorComponent.vm.$props.isGenericError).toBe(true);
 		});
 	});
+
+	describe("when the '/error' route has been reloaded", () => {
+		const localStore = {
+			applicationErrorStatusCode: "401",
+			applicationErrorTranslationKey: "error.401",
+		}
+
+		// @ts-ignore
+		spyOn(window.localStorage, 'getItem').and.callFake((key) =>
+			key in localStore ? localStore[key] : null
+		);
+
+		beforeEach(() => {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: { assign: jest.fn() },
+			});
+			Object.defineProperty(window, "performance", {
+				value: {
+					getEntries: jest.fn().mockReturnValue([{ type: 'reload' }]),
+					measure: jest.fn(),
+				}
+			});
+		});
+
+		it("should get errorModule from localStorage", async () => {
+			applicationErrorModuleMock = createModuleMocks(
+				ApplicationErrorModule,
+				errorModuleMocks
+			);
+			const wrapper = mountComponent();
+			const errorComponent = wrapper.find("[data-testid='error-content']");
+			expect(errorComponent.vm.$props.isPermissionError).toBe(true);
+		});
+	});
 });
