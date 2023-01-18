@@ -22,7 +22,6 @@ const envs = {
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
 };
-
 const mockData = [
 	{
 		_id: "0000d231816abba584714c9e",
@@ -576,7 +575,6 @@ describe("students/index", () => {
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
 		const wrapper = mount(StudentPage, {
@@ -600,7 +598,6 @@ describe("students/index", () => {
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
 		const wrapper = mount(StudentPage, {
@@ -624,7 +621,6 @@ describe("students/index", () => {
 
 	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 			FEATURE_CONSENT_NECESSARY: false,
 		});

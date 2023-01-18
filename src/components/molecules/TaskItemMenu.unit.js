@@ -9,6 +9,8 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
+import { mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const { tasksTeacher } = mocks;
 
@@ -26,7 +28,7 @@ let copyModuleMock;
 let loadingStateModuleMock;
 let notifierModuleMock;
 
-const getWrapper = (props, options) => {
+const getWrapper = (props, options = {}) => {
 	return mount(TaskItemMenu, {
 		...createComponentMocks({
 			i18n: true,
@@ -188,7 +190,6 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.find("#task-menu-btn");
@@ -214,7 +215,6 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsFinished: task.status.isFinished,
 					userRole: "teacher",
 				});
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.find("#task-menu-btn");
@@ -242,7 +242,6 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsFinished: task.status.isFinished,
 				userRole: "teacher",
 			});
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 
 			const menuBtn = wrapper.find("#task-menu-btn");
