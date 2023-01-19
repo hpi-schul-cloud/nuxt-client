@@ -77,7 +77,7 @@ export default defineComponent({
 		}
 
 		console.log(applicationErrorModule!.getTranslationKey);
-		console.log(applicationErrorModule!.getStatusCode);it 
+		console.log(applicationErrorModule!.getStatusCode);
 		console.log(applicationErrorModule!.getStatusCode.value);
 		window.onbeforeunload = function () {
 			if (applicationErrorModule?.getStatusCode)
