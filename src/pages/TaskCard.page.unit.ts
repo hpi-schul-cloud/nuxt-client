@@ -3,20 +3,20 @@ import { Route } from "vue-router";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import TaskModule from "@/store/task";
+import TaskCardModule from "@/store/task-card";
 import AuthModule from "@/store/auth";
-import { authModule, taskModule } from "@/store";
+import { authModule, taskCardModule } from "@/store";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import TaskForm from "./TaskForm.page.vue";
+import TaskCard from "./TaskCard.page.vue";
 
 const $router = { go: jest.fn() };
 const taskCreateRoute: Route = {
-	path: "/tasks/new",
+	path: "/task-cards/new",
 } as Route;
-const taskEditRoute: Route = {
-	path: "/tasks/new",
-} as Route;
+// const taskEditRoute: Route = {
+// 	path: "/tasks/new",
+// } as Route;
 
 const mockAuthStoreDataStudent: User = {
 	__v: 1,
@@ -46,21 +46,12 @@ const mockTaskStoreData = {
 	description: "",
 };
 
-// const taskModuleGetters: Partial<TaskModule> = {
-// 	getTaskData: {
-// 		id: "",
-// 		courseId: "",
-// 		name: "",
-// 		description: "",
-// 	},
-// };
-
 const getWrapper = (
 	$route: Route = taskCreateRoute,
 	props?: object,
 	options?: object
 ) => {
-	return mount(TaskForm, {
+	return mount(TaskCard, {
 		...createComponentMocks({
 			i18n: true,
 			$router,
@@ -74,19 +65,19 @@ const getWrapper = (
 	});
 };
 
-describe("TaskForm", () => {
+describe("TaskCard", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			task: TaskModule,
+			task: TaskCardModule,
 			auth: AuthModule,
 		});
 	});
 
 	it("should render component page", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TaskForm).exists()).toBe(true);
+		expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 	});
 
 	describe("permission check before mounting", () => {

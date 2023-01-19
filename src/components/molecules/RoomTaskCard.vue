@@ -172,7 +172,11 @@ export default {
 		},
 		isPlanned() {
 			const scheduledDate = this.task.availableDate;
-			return scheduledDate && new Date(scheduledDate) > new Date();
+			const delay = 5 * 1000;
+			return (
+				scheduledDate &&
+				new Date(scheduledDate).getTime() - delay > new Date().getTime()
+			);
 		},
 		cardActions() {
 			const roleBasedActions = {

@@ -169,6 +169,8 @@ import {
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import topicsEmptyStateImage from "@/assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
@@ -228,7 +230,7 @@ export default {
 		},
 		roomIsEmpty: () => roomModule.roomIsEmpty,
 		emptyState() {
-			const image = "topics-empty-state";
+			const image = topicsEmptyStateImage;
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
 			const maxHeight = "200px";
 			return {
@@ -318,14 +320,14 @@ export default {
 		async copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
-				type: "task",
+				type: CopyParamsTypeEnum.Task,
 				courseId: this.roomData.roomId,
 			});
 		},
 		async copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
-				type: "lesson",
+				type: CopyParamsTypeEnum.Lesson,
 				courseId: this.roomData.roomId,
 			});
 		},

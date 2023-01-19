@@ -13,6 +13,7 @@ import CollaborativeFilesModule from "@/store/collaborative-files";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import ExternalToolsModule from "@/store/external-tools";
 import FilePaths from "@/store/filePaths";
 import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -25,7 +26,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
-import TaskModule from "@/store/task";
+import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -41,6 +42,7 @@ export let collaborativeFilesModule: CollaborativeFilesModule;
 export let contentModule: ContentModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
+export let externalToolsModule: ExternalToolsModule;
 export let filePathsModule: FilePaths;
 export let filesPOCModule: FilesPOCModule;
 export let finishedTasksModule: FinishedTasksModule;
@@ -52,7 +54,7 @@ export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
 export let statusAlertsModule: StatusAlertsModule;
-export let taskModule: TaskModule;
+export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let shareCourseModule: ShareCourseModule;
 
@@ -65,6 +67,7 @@ export function initializeStores(store: Store<any>): void {
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
+	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
@@ -74,7 +77,7 @@ export function initializeStores(store: Store<any>): void {
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
-	taskModule = getModule(TaskModule, store);
+	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	copyModule = getModule(CopyModule, store);
@@ -93,6 +96,7 @@ export const modules = {
 	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
 	envConfigModule: EnvConfigModule,
+	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
 	filesPOCModule: FilesPOCModule,
 	finishedTasksModule: FinishedTasksModule,
@@ -102,7 +106,7 @@ export const modules = {
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,
 	statusAlertsModule: StatusAlertsModule,
-	taskModule: TaskModule,
+	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	notifierModule: NotifierModule,
 	copyModule: CopyModule,

@@ -140,13 +140,13 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
-		path: `/tasks/:id(${REGEX_ID})/edit`,
-		component: () => import("../pages/TaskForm.page.vue"),
+		path: `/task-cards/:id(${REGEX_ID})/edit`,
+		component: () => import("../pages/TaskCard.page.vue"),
 		name: "task-edit",
 	},
 	{
-		path: "/tasks/new",
-		component: () => import("../pages/TaskForm.page.vue"),
+		path: "/task-cards/new",
+		component: () => import("../pages/TaskCard.page.vue"),
 		name: "task-new",
 	},
 	// deprecated?

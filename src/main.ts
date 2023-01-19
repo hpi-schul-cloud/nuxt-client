@@ -7,6 +7,7 @@ import {
 	contentModule,
 	copyModule,
 	envConfigModule,
+	externalToolsModule,
 	filePathsModule,
 	filesPOCModule,
 	finishedTasksModule,
@@ -19,7 +20,7 @@ import {
 	schoolsModule,
 	shareCourseModule,
 	statusAlertsModule,
-	taskModule,
+	taskCardModule,
 	tasksModule,
 } from "@/store";
 import Vue from "vue";
@@ -119,6 +120,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			contentModule,
 			copyModule,
 			envConfigModule,
+			externalToolsModule,
 			filePathsModule,
 			filesPOCModule,
 			finishedTasksModule,
@@ -131,7 +133,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			schoolsModule,
 			shareCourseModule,
 			statusAlertsModule,
-			taskModule,
+			taskCardModule,
 			tasksModule,
 			i18n,
 		},

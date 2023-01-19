@@ -9,6 +9,7 @@
 		<copy-result-modal
 			:is-open="isCopyResultModalOpen"
 			:copy-result-items="copyResultModalItems"
+			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</div>
@@ -53,6 +54,9 @@ export default defineComponent({
 
 		const copyResultModalItems = computed(
 			() => copyModule.getCopyResultFailedItems
+		);
+		const copyResultRootItemType = computed(
+			() => copyModule.getCopyResult?.type
 		);
 
 		const { isLoadingDialogOpen } = useLoadingState(
@@ -162,6 +166,7 @@ export default defineComponent({
 			isImportModalOpen,
 			isCopyResultModalOpen,
 			copyResultModalItems,
+			copyResultRootItemType,
 			parentName,
 			onCopyResultModalClosed,
 			onImport,

@@ -111,10 +111,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	});
 
 	describe("copy result notifications", () => {
-		it("should render coursefiles info", () => {
+		it("should render coursefiles info if root item is a Course and has no failed file ", () => {
 			const copyResultItems = mockResultItems([]);
 
-			const wrapper = getWrapper({ isOpen: true, copyResultItems });
+			const wrapper = getWrapper({
+				isOpen: true,
+				copyResultItems,
+				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+			});
 
 			expect(
 				wrapper.find('[data-testid="copy-result-notifications"]').text()
@@ -123,10 +127,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should merge files and coursefiles info", () => {
+		it("should merge file error and coursefiles info if root item is a Course and has a failed file ", () => {
 			const copyResultItems = mockResultItems([fileItem]);
 
-			const wrapper = getWrapper({ isOpen: true, copyResultItems });
+			const wrapper = getWrapper({
+				isOpen: true,
+				copyResultItems,
+				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+			});
 
 			expect(
 				wrapper.find('[data-testid="copy-result-notifications"]').text()
@@ -137,13 +145,32 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
+		it.each([[CopyApiResponseTypeEnum.Lesson], [CopyApiResponseTypeEnum.Task]])(
+			"should render file error info if root item is a %s and has a failed file",
+			(copyResultRootItemType) => {
+				const copyResultItems = mockResultItems([fileItem]);
+
+				const wrapper = getWrapper({
+					isOpen: true,
+					copyResultItems,
+					copyResultRootItemType,
+				});
+
+				expect(
+					wrapper.find('[data-testid="copy-result-notifications"]').text()
+				).toContain(
+					wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+				);
+			}
+		);
+
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
 			["NeXboard", CopyApiResponseTypeEnum.LessonContentNexboard],
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
-		])("should render if there is a typed notification item", (title, type) => {
+		])("should render if there is a %s item", (title, type) => {
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

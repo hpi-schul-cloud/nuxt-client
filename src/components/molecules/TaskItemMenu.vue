@@ -117,6 +117,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
+import { CopyParamsTypeEnum } from "@/store/copy";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -202,7 +203,7 @@ export default defineComponent({
 			const payload = {
 				id: this.taskId,
 				courseId: this.courseId === "" ? undefined : this.courseId,
-				type: "task",
+				type: CopyParamsTypeEnum.Task,
 			};
 
 			this.$emit("copy-task", payload);

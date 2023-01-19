@@ -402,7 +402,7 @@ describe("students/index", () => {
 
 	it("editBtn's to property should have the expected URL", () => {
 		const expectedURL =
-			"/administration/students/0000d231816abba584714c9e/edit";
+			"/administration/students/0000d231816abba584714c9e/edit?returnUrl=/administration/students";
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
