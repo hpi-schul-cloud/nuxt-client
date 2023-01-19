@@ -21,6 +21,8 @@ import TaskCardModule from "@/store/task-card";
 import { onGlobalSetup, provide, useContext } from "@nuxtjs/composition-api";
 import LoadingStateModule from "@store/loading-state";
 import ShareCourseModule from "@store/share-course";
+import SystemsModule from "@store/systems";
+import UserMigrationModule from "@store/user-migration";
 import { getModule } from "vuex-module-decorators";
 import ExternalToolsModule from "@store/external-tools";
 
@@ -54,5 +56,7 @@ export default () => {
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("tasksModule", getModule(TasksModule, store));
 		provide("taskCardModule", getModule(TaskCardModule, store));
+		provide("systemsModule", getModule(SystemsModule, store));
+		provide("userMigrationModule", getModule(UserMigrationModule, store));
 	});
 };

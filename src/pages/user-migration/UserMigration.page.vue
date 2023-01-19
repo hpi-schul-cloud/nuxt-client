@@ -27,9 +27,9 @@
       <div v-show="!loading">
         <p
             class="text-left pa-4"
-            v-html="$t(descriptionText, {
-              sourceSystem: sourceSystemName,
-              targetSystem: targetSystemName,
+            v-html="$t(mandatory ? 'pages.userMigration.descriptionMandatory' : 'pages.userMigration.description', {
+              sourceSystem: getSystemName(sourceSystem),
+              targetSystem: getSystemName(targetSystem),
             })"
         >
         </p>
@@ -39,9 +39,9 @@
             color="primary"
             depressed
             data-testid="btn-proceed"
-            :to="proceedLink"
+            :href="proceedLink"
           >
-            {{ $t(proceedButtonText) }}
+            {{ $t("pages.userMigration.button.startMigration") }}
           </v-btn>
           <v-btn
             class="mx-8 mb-8"
@@ -50,7 +50,7 @@
             data-testid="btn-cancel"
             :to="cancelLink"
           >
-            {{ $t(cancelButtonText) }}
+            {{ $t(mandatory ? "pages.userMigration.button.logout" : "pages.userMigration.button.skip") }}
           </v-btn>
         </div>
       </div>
@@ -59,10 +59,13 @@
 </template>
 
 <script lang="ts">
+import { useApplicationError } from "@/composables/application-error.composable";
 import SystemsModule from "@/store/systems";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import UserMigrationModule from "@/store/user-migration";
+import { System } from '@store/types/system';
 import { MigrationPageOrigin } from '@store/types/user-migration';
-import { computed, ComputedRef, defineComponent, inject, onMounted } from "@vue/composition-api";
+import { computed, ComputedRef, ref, Ref, defineComponent, inject, onMounted } from "@vue/composition-api";
 
 export default defineComponent({
   name: "UserMigration",
@@ -71,45 +74,41 @@ export default defineComponent({
     sourceSystem: {
       type: String,
       required: true,
+      default: "0000d186816abba584714c92",
     },
     targetSystem: {
       type: String,
       required: true,
+      default: "0000d186816abba584714c93",
     },
     origin: {
       type: String,
       required: true,
+      default: "0000d186816abba584714c92",
     },
     mandatory: {
       type: Boolean,
     }
   },
-  meta: {
-    isPublic: true,
-  },
   setup(props) {
+    const { createApplicationError } = useApplicationError();
+    if (!props.targetSystem || !props.sourceSystem || !props.origin) {
+      throw createApplicationError(HttpStatusCode.BadRequest);
+    }
+
     const systemsModule: SystemsModule | undefined = inject<SystemsModule>("systemsModule");
     const userMigrationModule: UserMigrationModule | undefined = inject<UserMigrationModule>("userMigrationModule");
     if (!systemsModule || !userMigrationModule) {
-      throw new Error("Injection of dependencies failed");
+      throw createApplicationError(HttpStatusCode.InternalServerError, "error.generic","Injection of dependencies failed");
     }
 
-    const loading: ComputedRef<boolean> = computed(() => false);
-    const sourceSystemName: ComputedRef<string> = computed(() => {
-      return systemsModule.findSystem(props.sourceSystem)?.name ?? "???"
-    });
-    const targetSystemName: ComputedRef<string> = computed(() => {
-      return systemsModule.findSystem(props.targetSystem)?.name ?? "???"
-    });
+    const getSystemName = (id: string): string => {
+      return systemsModule.getSystems.find((system: System): boolean => system.id === id)?.name ?? "";
+    };
 
     const proceedLink: ComputedRef<string> = computed(() => userMigrationModule.getMigrationLinks.proceedLink);
     const cancelLink: ComputedRef<string> = computed(() => userMigrationModule.getMigrationLinks.cancelLink);
-
-    const proceedButtonText = "pages.userMigration.startMigration";
-    const cancelButtonText = "pages.userMigration.logout";
-    const descriptionText = "pages.userMigration.description.startFromTargetSystem";
-
-    const subjectName = "Schüler Lernend";
+    const loading: Ref<boolean> = ref(true);
 
     let pageType: MigrationPageOrigin;
     if (props.origin === props.sourceSystem) {
@@ -117,7 +116,7 @@ export default defineComponent({
     } else if (props.origin === props.targetSystem) {
       pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
     } else {
-      throw new Error(`Unknown origin system ${props.origin}. Expected ${props.sourceSystem} or ${props.targetSystem}`);
+      throw createApplicationError(HttpStatusCode.BadRequest, "error.400", `Unknown origin system ${props.origin}. Expected ${props.sourceSystem} or ${props.targetSystem}`);
     }
 
     onMounted(async () => {
@@ -127,18 +126,16 @@ export default defineComponent({
         sourceSystem: props.sourceSystem,
         targetSystem: props.targetSystem,
       });
+
+      loading.value = false;
     });
 
     return {
       loading,
-      subjectName,
-      sourceSystemName,
-      targetSystemName,
       proceedLink,
       cancelLink,
-      proceedButtonText,
-      cancelButtonText,
-      descriptionText
+      getSystemName,
+      subjectName: "Schüler Lernend",
     };
   },
 });

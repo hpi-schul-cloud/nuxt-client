@@ -1,6 +1,11 @@
 import { $axios } from "@utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import {
+	PageContentResponse,
+	UserMigrationApiFactory,
+	UserMigrationApiInterface,
+} from "@/serverApi/v3";
 import { MigrationLinkRequest, MigrationLinks } from "./types/user-migration";
 
 @Module({
@@ -15,9 +20,9 @@ export default class UserMigrationModule extends VuexModule {
 	};
 	private loading: boolean = false;
 
-	private _userMigrationApi?: unknown;
+	private _userMigrationApi?: UserMigrationApiInterface;
 
-	private get userMigrationApi(): unknown {
+	private get userMigrationApi(): UserMigrationApiInterface {
 		if (!this._userMigrationApi) {
 			this._userMigrationApi = UserMigrationApiFactory(undefined, "v3", $axios);
 		}
@@ -46,8 +51,12 @@ export default class UserMigrationModule extends VuexModule {
 	async fetchMigrationLinks(request: MigrationLinkRequest): Promise<void> {
 		this.setLoading(true);
 		try {
-			const links: AxiosResponse<unknown> =
-				await this.userMigrationApi.userMigrationControllerPageContent(request);
+			const links: AxiosResponse<PageContentResponse> =
+				await this.userMigrationApi.userMigrationControllerGetMigrationPageDetails(
+					request.pageType,
+					request.sourceSystem,
+					request.targetSystem
+				);
 
 			const mappedLinks: MigrationLinks = {
 				proceedLink: links.data.proceedButtonUrl,

@@ -6,7 +6,7 @@ import {
 	SystemApiInterface,
 	SystemOauthResponse,
 	SystemResponse,
-} from "../serverApi/v3";
+} from "@/serverApi/v3";
 import { System } from "./types/system";
 
 @Module({
@@ -43,10 +43,6 @@ export default class SystemsModule extends VuexModule {
 
 	get getSystems(): System[] {
 		return this.systems;
-	}
-
-	findSystem(id: string): System | undefined {
-		return this.systems.find((system: System): boolean => system.id === id);
 	}
 
 	@Action

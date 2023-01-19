@@ -21,6 +21,7 @@ import StatusAlertsModule from "@/store/status-alerts";
 import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
 import SystemsModule from "@store/systems";
+import UserMigrationModule from "@store/user-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ExternalToolsModule from "@store/external-tools";
@@ -49,6 +50,7 @@ let statusAlertsModule: StatusAlertsModule;
 let tasksModule: TasksModule;
 let taskCardModule: TaskCardModule;
 let systemsModule: SystemsModule;
+let userMigrationModule: UserMigrationModule;
 
 function initializeStores(store: Store<any>): void {
 	accountsModule = getModule(AccountsModule, store);
@@ -79,6 +81,7 @@ function initializeStores(store: Store<any>): void {
 	loadingStateModule = getModule(LoadingStateModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
 	systemsModule = getModule(SystemsModule, store);
+	userMigrationModule = getModule(UserMigrationModule, store);
 }
 
 export {
@@ -107,4 +110,5 @@ export {
 	tasksModule,
 	taskCardModule,
 	systemsModule,
+	userMigrationModule,
 };

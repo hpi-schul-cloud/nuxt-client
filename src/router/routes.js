@@ -181,8 +181,11 @@ export const routes = [
 	{
 		path: "/migration",
 		component: () =>
-			interopDefault(import("../pages/user-migration/UserMigration.page")),
+			interopDefault(import("@pages/user-migration/UserMigration.page")),
 		name: "user-migration",
-		props: true,
+		props: (route) => ({ ...route.query }),
+		meta: {
+			isPublic: true,
+		},
 	},
 ];

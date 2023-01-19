@@ -2226,6 +2226,25 @@ export interface OidcContextResponse {
 /**
  * 
  * @export
+ * @interface PageContentResponse
+ */
+export interface PageContentResponse {
+    /**
+     * The URL for the proceed button
+     * @type {string}
+     * @memberof PageContentResponse
+     */
+    proceedButtonUrl: string;
+    /**
+     * The URL for the cancel button
+     * @type {string}
+     * @memberof PageContentResponse
+     */
+    cancelButtonUrl: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -11009,6 +11028,149 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(importUserId, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserMigrationApi - axios parameter creator
+ * @export
+ */
+export const UserMigrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMigrationControllerGetMigrationPageDetails: async (pageType: any, sourceSystem: string, targetSystem: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageType' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'pageType', pageType)
+            // verify required parameter 'sourceSystem' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'sourceSystem', sourceSystem)
+            // verify required parameter 'targetSystem' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'targetSystem', targetSystem)
+            const localVarPath = `/user-migration/page-content`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (pageType !== undefined) {
+                localVarQueryParameter['pageType'] = pageType;
+            }
+
+            if (sourceSystem !== undefined) {
+                localVarQueryParameter['sourceSystem'] = sourceSystem;
+            }
+
+            if (targetSystem !== undefined) {
+                localVarQueryParameter['targetSystem'] = targetSystem;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserMigrationApi - functional programming interface
+ * @export
+ */
+export const UserMigrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserMigrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageContentResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserMigrationApi - factory interface
+ * @export
+ */
+export const UserMigrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserMigrationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): AxiosPromise<PageContentResponse> {
+            return localVarFp.userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserMigrationApi - interface
+ * @export
+ * @interface UserMigrationApi
+ */
+export interface UserMigrationApiInterface {
+    /**
+     * 
+     * @param {any} pageType The Type of Page that is displayed
+     * @param {string} sourceSystem The Source System
+     * @param {string} targetSystem The Target System
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserMigrationApiInterface
+     */
+    userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): AxiosPromise<PageContentResponse>;
+
+}
+
+/**
+ * UserMigrationApi - object-oriented interface
+ * @export
+ * @class UserMigrationApi
+ * @extends {BaseAPI}
+ */
+export class UserMigrationApi extends BaseAPI implements UserMigrationApiInterface {
+    /**
+     * 
+     * @param {any} pageType The Type of Page that is displayed
+     * @param {string} sourceSystem The Source System
+     * @param {string} targetSystem The Target System
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserMigrationApi
+     */
+    public userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any) {
+        return UserMigrationApiFp(this.configuration).userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
