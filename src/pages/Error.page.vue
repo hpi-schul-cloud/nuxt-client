@@ -76,6 +76,9 @@ export default defineComponent({
 			return;
 		}
 
+		console.log(applicationErrorModule!.getTranslationKey);
+		console.log(applicationErrorModule!.getStatusCode);it 
+		console.log(applicationErrorModule!.getStatusCode.value);
 		window.onbeforeunload = function () {
 			if (applicationErrorModule?.getStatusCode)
 				localStorage.setItem("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
