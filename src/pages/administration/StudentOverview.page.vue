@@ -67,12 +67,12 @@
 			<template #datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
-      <template #datacolumn-lastLoginSystemChange="{ data }">
-        <span v-if="data" class="text-content">{{ printDate(data) }}</span>
-      </template>
-      <template #datacolumn-outdated="{ data }">
-        <span v-if="data" class="text-content">{{ printDate(data) }}</span>
-      </template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-outdated="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
@@ -221,16 +221,16 @@ export default {
 					label: this.$t("common.labels.createdAt"),
 					sortable: true,
 				},
-        {
-          field: "lastLoginSystemChange",
-          label: this.$t("common.labels.migrated"),
-          sortable: true,
-        },
-        {
-          field: "outdated",
-          label: this.$t("common.labels.outdated"),
-          sortable: true,
-        },
+				{
+					field: "lastLoginSystemChange",
+					label: this.$t("common.labels.migrated"),
+					sortable: true,
+				},
+				{
+					field: "outdated",
+					label: this.$t("common.labels.outdated"),
+					sortable: true,
+				},
 				{
 					// edit column
 					field: "_id",
