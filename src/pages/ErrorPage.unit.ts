@@ -84,7 +84,7 @@ describe("@pages/Error.page.vue", () => {
 
 	describe("when the '/error' route has been reloaded", () => {
 		const localStore : {[key:string] : any } = {
-			"applicationErrorStatusCode": "401",
+			"applicationErrorStatusCode": 401,
 			"applicationErrorTranslationKey": "error.401",
 		}
 		navigationType = 'reload';
