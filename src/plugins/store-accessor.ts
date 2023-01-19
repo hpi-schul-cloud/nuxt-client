@@ -23,6 +23,7 @@ import LoadingStateModule from "@store/loading-state";
 import ShareCourseModule from "@store/share-course";
 import { getModule } from "vuex-module-decorators";
 import ExternalToolsModule from "@store/external-tools";
+import ShareLessonModule from "@/store/share-lesson";
 
 export default () => {
 	onGlobalSetup(() => {
@@ -54,5 +55,6 @@ export default () => {
 		provide("statusAlertsModule", getModule(StatusAlertsModule, store));
 		provide("tasksModule", getModule(TasksModule, store));
 		provide("taskCardModule", getModule(TaskCardModule, store));
+		provide("shareLessonModule", getModule(ShareLessonModule, store));
 	});
 };

@@ -54,7 +54,7 @@ describe("@components/share-course/ShareModal", () => {
 		const title = wrapper.vm.$refs.textTitle as HTMLElement;
 
 		expect(title.textContent).toContain(
-			"components.molecules.shareCourse.options.title"
+			"components.molecules.share.options.title"
 		);
 	});
 

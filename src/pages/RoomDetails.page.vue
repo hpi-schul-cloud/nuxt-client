@@ -102,7 +102,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal></share-modal>
+		<share-modal type="course"></share-modal>
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -225,7 +225,10 @@ export default defineComponent({
 						},
 					],
 				};
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				if (
+					envConfigModule.getEnv.FEATURE_LESSON_SHARE &&
+					!envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW
+				) {
 					items.actions.push({
 						label: this.$t("pages.rooms.fab.import.lesson"),
 						icon: mdiCloudDownload,
