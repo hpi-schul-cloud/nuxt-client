@@ -63,7 +63,7 @@ describe("@pages/Error.page.vue", () => {
 		it("should set 'is-generic-error' prop to 'true'", async () => {
 			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 				...errorModuleMocks,
-				getStatusCode: JSON.stringify(HttpStatusCode.Unauthorized),
+				getStatusCode: 500,
 				getTranslationKey: "generic error",
 			});
 			const wrapper = mountComponent();
@@ -85,7 +85,7 @@ describe("@pages/Error.page.vue", () => {
 
 	describe("when the '/error' route has been reloaded", () => {
 		const localStore : {[key:string] : any } = {
-			"applicationErrorStatusCode": 401,
+			"applicationErrorStatusCode": JSON.stringify(HttpStatusCode.Unauthorized),
 			"applicationErrorTranslationKey": "error.401",
 		}
 		navigationType = 'reload';
