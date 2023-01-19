@@ -7,6 +7,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";
 
 describe("@pages/Error.page.vue", () => {
+	let navigationType = 'navigate';
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
 			configurable: true,
@@ -14,7 +15,7 @@ describe("@pages/Error.page.vue", () => {
 		});
 		Object.defineProperty(window, "performance", {
 			value: {
-				getEntriesByType: jest.fn().mockReturnValue([{ type: 'navigate' }]),
+				getEntriesByType: jest.fn().mockReturnValue([{ type: navigationType }]),
 				measure: jest.fn(),
 			}
 		});
@@ -86,23 +87,24 @@ describe("@pages/Error.page.vue", () => {
 			"applicationErrorStatusCode": "401",
 			"applicationErrorTranslationKey": "error.401",
 		}
+		navigationType = 'reload';
 
 		beforeEach(() => {
 			spyOn(window.localStorage, 'getItem').and.callFake((key) =>
 				key in localStore ? localStore[key] : null
 			);
-			Object.defineProperty(window, "location", {
-				configurable: true,
-				value: { assign: jest.fn() },
-			});
-			Object.defineProperty(window, "performance", {
-				configurable: true,
-				enumerable: true,
-				value: {
-					getEntriesByType: jest.fn().mockReturnValue([{ type: 'reload' }]),
-					measure: jest.fn(),
-				}
-			});
+			// Object.defineProperty(window, "location", {
+			// 	configurable: true,
+			// 	value: { assign: jest.fn() },
+			// });
+			// Object.defineProperty(window, "performance", {
+			// 	configurable: true,
+			// 	enumerable: true,
+			// 	value: {
+			// 		getEntriesByType: jest.fn().mockReturnValue([{ type: navigationType }]),
+			// 		measure: jest.fn(),
+			// 	}
+			// });
 		});
 
 		it("should get errorModule from localStorage", async () => {
