@@ -37,6 +37,9 @@ export default defineComponent({
 		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
 		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
+		console.log(performanceNavigation.type);
+		console.log(applicationErrorStatusCode);
+		console.log(applicationErrorTranslationKey);
 
 		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
 			const storedApplicationErrorModule = new ApplicationErrorModule({});
@@ -45,6 +48,7 @@ export default defineComponent({
 			}
 			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
 
+			console.log("provide error module")
 			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
 		}
 
@@ -55,6 +59,7 @@ export default defineComponent({
 		const i18n = inject<VueI18n | undefined>("i18n");
 
 		onMounted(() => {
+			console.log("clear localStorage");
 			localStorage.removeItem("applicationErrorStatusCode");
 			localStorage.removeItem("applicationErrorTranslationKey");
 		});
