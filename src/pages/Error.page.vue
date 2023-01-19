@@ -102,6 +102,7 @@ export default defineComponent({
 			return applicationErrorModule!.getStatusCode;
 		});
 
+		console.log(appErrorStatusCode.value);
 		const isPermissionError = computed(() => {
 			return permissionErrors.includes(Number(appErrorStatusCode.value));
 		});
