@@ -5,6 +5,7 @@ import { provide } from "@vue/composition-api";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";
+import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
 describe("@pages/Error.page.vue", () => {
 	let navigationType = 'navigate';
@@ -62,7 +63,7 @@ describe("@pages/Error.page.vue", () => {
 		it("should set 'is-generic-error' prop to 'true'", async () => {
 			applicationErrorModuleMock = createModuleMocks(ApplicationErrorModule, {
 				...errorModuleMocks,
-				getStatusCode: 500,
+				getStatusCode: JSON.stringify(HttpStatusCode.Unauthorized),
 				getTranslationKey: "generic error",
 			});
 			const wrapper = mountComponent();
