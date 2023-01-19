@@ -23,7 +23,7 @@ import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,}
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
-import {onBeforeMount, provide} from "@vue/composition-api";
+import {provide} from "@vue/composition-api";
 import {HttpStatusCode} from "../store/types/http-status-code.enum";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -37,14 +37,11 @@ export default defineComponent({
 		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
 		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
-		console.log(performanceNavigation.type);
-		console.log(applicationErrorStatusCode);
-		console.log(applicationErrorTranslationKey);
 
 		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
 			const storedApplicationErrorModule = new ApplicationErrorModule({});
 			if (applicationErrorStatusCode) {
-				storedApplicationErrorModule.setStatusCode(HttpStatusCode[applicationErrorStatusCode as keyof typeof HttpStatusCode]);
+				storedApplicationErrorModule.setStatusCode(Number(applicationErrorStatusCode) as HttpStatusCode);
 			}
 			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
 
@@ -52,7 +49,7 @@ export default defineComponent({
 			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
 		}
 
-		const permissionErrors: Array<Number> = [400, 401, 403];
+		const permissionErrors: Array<HttpStatusCode> = [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 				"applicationErrorModule"
 		)
@@ -76,17 +73,6 @@ export default defineComponent({
 			return;
 		}
 
-		console.log(applicationErrorModule!.getTranslationKey);
-		console.log(applicationErrorModule!.getStatusCode);
-		console.log(applicationErrorModule!.getStatusCode.value);
-		window.onbeforeunload = function () {
-			if (applicationErrorModule?.getStatusCode)
-				localStorage.setItem("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
-
-			if (applicationErrorModule?.getTranslationKey)
-				localStorage.setItem("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
-		}
-
 		useMeta({
 			title: i18n?.t("error.generic") + " - " + Theme.short_name,
 		});
@@ -102,7 +88,6 @@ export default defineComponent({
 			return applicationErrorModule!.getStatusCode;
 		});
 
-		console.log(appErrorStatusCode.value);
 		const isPermissionError = computed(() => {
 			return permissionErrors.includes(Number(appErrorStatusCode.value));
 		});

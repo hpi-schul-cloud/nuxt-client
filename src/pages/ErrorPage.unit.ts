@@ -5,7 +5,6 @@ import { provide } from "@vue/composition-api";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";
-import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
 describe("@pages/Error.page.vue", () => {
 	let navigationType = 'navigate';
@@ -85,7 +84,7 @@ describe("@pages/Error.page.vue", () => {
 
 	describe("when the '/error' route has been reloaded", () => {
 		const localStore : {[key:string] : any } = {
-			"applicationErrorStatusCode": JSON.stringify(HttpStatusCode.Unauthorized),
+			"applicationErrorStatusCode": 401,
 			"applicationErrorTranslationKey": "error.401",
 		}
 		navigationType = 'reload';
