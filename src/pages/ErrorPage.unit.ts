@@ -93,18 +93,6 @@ describe("@pages/Error.page.vue", () => {
 			spyOn(window.localStorage, 'getItem').and.callFake((key) =>
 				key in localStore ? localStore[key] : null
 			);
-			// Object.defineProperty(window, "location", {
-			// 	configurable: true,
-			// 	value: { assign: jest.fn() },
-			// });
-			// Object.defineProperty(window, "performance", {
-			// 	configurable: true,
-			// 	enumerable: true,
-			// 	value: {
-			// 		getEntriesByType: jest.fn().mockReturnValue([{ type: navigationType }]),
-			// 		measure: jest.fn(),
-			// 	}
-			// });
 		});
 
 		it("should get errorModule from localStorage", async () => {
