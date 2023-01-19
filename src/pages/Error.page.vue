@@ -23,8 +23,8 @@ import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,}
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
-import {HttpStatusCode} from "@store/types/http-status-code.enum";
 import {onBeforeMount, provide} from "@vue/composition-api";
+import {HttpStatusCode} from "../store/types/http-status-code.enum";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
