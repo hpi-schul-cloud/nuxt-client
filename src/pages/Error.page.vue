@@ -19,12 +19,13 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import { computed, defineComponent, inject, useMeta, } from "@nuxtjs/composition-api";
+import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,} from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "../store/types/http-status-code.enum";
-import { restore, store } from "../utils/store-error";
+import {provide} from "@vue/composition-api";
+import {useStorage} from "@/composables/locale-storage.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -34,7 +35,24 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		restore();
+		const { get, set , remove} = useStorage();
+		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+		const applicationErrorStatusCode = get("applicationErrorStatusCode");
+		const applicationErrorTranslationKey = get("applicationErrorTranslationKey")
+
+		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload") {
+			const storedApplicationErrorModule = new ApplicationErrorModule({});
+			if (applicationErrorStatusCode) {
+				storedApplicationErrorModule.setStatusCode(Number(applicationErrorStatusCode) as HttpStatusCode);
+			}
+			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
+
+			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
+		}
+
+		remove("applicationErrorStatusCode");
+		remove("applicationErrorTranslationKey");
+
 		const permissionErrors: Array<HttpStatusCode> = [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 				"applicationErrorModule"
@@ -45,7 +63,13 @@ export default defineComponent({
 			return;
 		}
 
-		store(applicationErrorModule);
+		onBeforeUnmount(() => {
+			if (applicationErrorModule?.getStatusCode)
+				set("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
+
+			if (applicationErrorModule?.getTranslationKey)
+				set("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
+		})
 
 		useMeta({
 			title: i18n?.t("error.generic") + " - " + Theme.short_name,
