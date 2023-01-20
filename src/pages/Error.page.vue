@@ -63,13 +63,13 @@ export default defineComponent({
 			return;
 		}
 
-		onBeforeUnmount(() => {
+		window.onbeforeunload = function() {
 			if (applicationErrorModule?.getStatusCode)
-				set("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
+				set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule?.getStatusCode));
 
 			if (applicationErrorModule?.getTranslationKey)
 				set("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
-		})
+		};
 
 		useMeta({
 			title: i18n?.t("error.generic") + " - " + Theme.short_name,
