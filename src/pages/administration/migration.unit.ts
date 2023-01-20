@@ -365,9 +365,7 @@ describe("User Migration / Index", () => {
 
 		it("should show text", async () => {
 			const stepperContent = wrapper.find("[data-testid=migration_finish]");
-			const endTransferPhase = wrapper.vm.$i18n
-				.t("pages.administration.migration.endTransferPhase")
-				.replace(/<(.|\n)*?>/g, "");
+
 			expect(stepperContent.element.textContent).toContain(
 				wrapper.vm.$i18n.t(
 					"pages.administration.migration.step4.linkingFinished",
