@@ -17,10 +17,11 @@
 			icon="mdi-lock"
 			overlap
 			:value="displayBadge"
+			:class="{ stillBeingCopied: 'still-being-copied' }"
 		>
 			<v-avatar
 				:color="item.displayColor"
-				:aria-label="`${$t('common.labels.course')} ${item.title}`"
+				:aria-label="ariaLabel"
 				:size="size"
 				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
@@ -34,11 +35,12 @@
 					:class="
 						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
-					>{{ item.shortTitle }}</span
+				>
+					{{ item.shortTitle }}</span
 				>
 			</v-avatar>
 			<div v-if="showOnlyTitle" class="justify-center mt-2 mb-7 subtitle">
-				{{ item.title }}
+				{{ item.title }} {{ copyingFor }}
 			</div>
 			<div
 				v-if="showArchiveDateAndTitle"
@@ -46,11 +48,14 @@
 			>
 				{{ item.title }}
 				{{ item.titleDate }}
+				{{ copyingFor }}
 			</div>
 		</v-badge>
 	</div>
 </template>
 <script>
+import { fromNow } from "../../plugins/datetime";
+
 export default {
 	props: {
 		item: {
@@ -87,10 +92,24 @@ export default {
 		showArchiveDateAndTitle() {
 			return !this.condenseLayout && this.item.titleDate;
 		},
+		stillBeingCopied() {
+			return this.item.copyingSince !== undefined;
+		},
+		copyingFor() {
+			return this.stillBeingCopied ? fromNow(this.item.copyingSince) : "";
+		},
+		ariaLabel() {
+			if (this.stillBeingCopied) {
+				return `${this.$t("common.labels.course")} ${
+					this.item.title
+				} wird noch kopiert...`;
+			}
+			return `${this.$t("common.labels.course")} ${this.item.title}`;
+		},
 	},
 	methods: {
 		onClick() {
-			if (!this.condenseLayout) {
+			if (!this.condenseLayout && this.stillBeingCopied === false) {
 				if (this.item.to) {
 					this.$router.push({
 						path: `/rooms/${this.item.id}`,
@@ -125,6 +144,7 @@ export default {
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 @import "@utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
@@ -189,5 +209,9 @@ export default {
 
 .dragging {
 	opacity: 0.5;
+}
+
+.still-being-copied {
+	opacity: 0.4;
 }
 </style>

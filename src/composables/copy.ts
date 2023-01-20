@@ -1,7 +1,7 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import { inject, InjectionKey, Ref } from "@vue/composition-api";
+import { inject, InjectionKey, Ref, reactive } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
 
 export const USE_COPY: InjectionKey<typeof useCopy> = Symbol();
@@ -18,6 +18,14 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		}
 		return "unknown translation-key:" + key;
 	};
+
+	const backgroundCopyProcesses: CopyParams[] = reactive([]);
+
+	const markBackgroundCopyProcess = (data: CopyParams) =>
+		backgroundCopyProcesses.push(data);
+
+	const isCopyProcessInBackground = (copyParams: CopyParams) =>
+		backgroundCopyProcesses.includes(copyParams);
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
@@ -57,6 +65,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 				openResultModal();
 			}
 		} catch (error) {
+			markBackgroundCopyProcess(copyParams);
 			showTimeout();
 		} finally {
 			isLoadingDialogOpen.value = false;
@@ -65,5 +74,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 
 	return {
 		copy,
+		isCopyProcessInBackground,
+		backgroundCopyProcesses,
 	};
 }
