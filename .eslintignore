@@ -4,4 +4,4 @@
 dist
 .nuxt
 /src/serverApi/**
-/src/pages/Error.page.vue
+/src/utils/store-error.ts

@@ -19,12 +19,12 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,} from "@nuxtjs/composition-api";
+import { computed, defineComponent, inject, useMeta, } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
-import {provide} from "@vue/composition-api";
-import {HttpStatusCode} from "../store/types/http-status-code.enum";
+import { HttpStatusCode } from "../store/types/http-status-code.enum";
+import { restore, store } from "../utils/store-error";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -34,44 +34,18 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
-		const applicationErrorStatusCode = localStorage.getItem("applicationErrorStatusCode");
-		const applicationErrorTranslationKey = localStorage.getItem("applicationErrorTranslationKey")
-
-		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload"){
-			const storedApplicationErrorModule = new ApplicationErrorModule({});
-			if (applicationErrorStatusCode) {
-				storedApplicationErrorModule.setStatusCode(Number(applicationErrorStatusCode) as HttpStatusCode);
-			}
-			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
-
-			console.log("provide error module")
-			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
-		}
-
+		restore();
 		const permissionErrors: Array<HttpStatusCode> = [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 				"applicationErrorModule"
 		)
 		const i18n = inject<VueI18n | undefined>("i18n");
 
-		onMounted(() => {
-			console.log("clear localStorage");
-			localStorage.removeItem("applicationErrorStatusCode");
-			localStorage.removeItem("applicationErrorTranslationKey");
-		});
-
-		onBeforeUnmount(() => {
-			if (applicationErrorModule?.getStatusCode)
-				localStorage.setItem("applicationErrorStatusCode", HttpStatusCode[applicationErrorModule?.getStatusCode]);
-
-			if (applicationErrorModule?.getTranslationKey)
-				localStorage.setItem("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
-		})
-
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
 		}
+
+		store(applicationErrorModule);
 
 		useMeta({
 			title: i18n?.t("error.generic") + " - " + Theme.short_name,
@@ -82,10 +56,10 @@ export default defineComponent({
 		};
 
 		const appErrorTranslationKey = computed(() => {
-			return applicationErrorModule!.getTranslationKey;
+			return applicationErrorModule.getTranslationKey;
 		});
 		const appErrorStatusCode = computed(() => {
-			return applicationErrorModule!.getStatusCode;
+			return applicationErrorModule.getStatusCode;
 		});
 
 		const isPermissionError = computed(() => {
