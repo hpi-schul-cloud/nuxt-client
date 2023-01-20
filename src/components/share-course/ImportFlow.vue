@@ -3,6 +3,7 @@
 		<import-modal
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
+			:parent-type="parentType"
 			@import="onImport"
 			@cancel="onCancel"
 		></import-modal>
@@ -44,6 +45,7 @@ export default defineComponent({
 		const notifier = inject("notifierModule");
 
 		const parentName = ref("");
+		const parentType = ref("");
 
 		const isImportModalOpen = ref(false);
 
@@ -55,7 +57,7 @@ export default defineComponent({
 		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 		const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage"))
+		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.import.options.loadingMessage", { type: parentType.value }))
 
 		const openModal = (modalName) => {
 			isImportModalOpen.value = modalName === 'import';
@@ -69,7 +71,7 @@ export default defineComponent({
 
 		const showFailureBackend = (name) => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.backendError", { name }),
+				text: i18n?.t("components.molecules.import.options.failure.backendError", { name }),
 				status: "error",
 				timeout: 10000,
 			})
@@ -78,7 +80,7 @@ export default defineComponent({
 
 		const showFailureInvalidToken = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.invalidToken"),
+				text: i18n?.t("components.molecules.import.options.failure.invalidToken"),
 				status: "error",
 				timeout: 10000,
 			})
@@ -87,7 +89,7 @@ export default defineComponent({
 
 		const showFailurePermission = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.permissionError"),
+				text: i18n?.t("components.molecules.import.options.failure.permissionError"),
 				status: "error",
 				timeout: 10000,
 			})
@@ -104,6 +106,7 @@ export default defineComponent({
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
+				parentType.value = validateResult.parentType.slice(0, -1);
 				openModal('import');
 			} catch (error) {
 				if (error.response?.status === 403) {
@@ -118,7 +121,7 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal('loading');
 			try {
-				await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
+				await copyModule.copyByShareToken({ token: props.token, type: parentType.value, newName , destinationCourseId: '63ca720cd0900148bc091731' }); //TODO Fix hardcode
 				openModal('result');
 			} catch (error) {
 				showFailureBackend(newName);
@@ -140,6 +143,7 @@ export default defineComponent({
 			copyResultModalItems,
 			copyResultRootItemType,
 			parentName,
+			parentType,
 			onCopyResultModalClosed,
 			onImport,
 			onCancel

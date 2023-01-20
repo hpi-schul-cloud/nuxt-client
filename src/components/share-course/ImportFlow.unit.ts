@@ -81,7 +81,7 @@ describe("@components/share-course/ImportFlow", () => {
 
 				expect(notifierModuleMock.show).toHaveBeenCalledWith(
 					expect.objectContaining({
-						text: "components.molecules.importCourse.options.failure.invalidToken",
+						text: "components.molecules.import.options.failure.invalidToken",
 					})
 				);
 			});
@@ -94,7 +94,7 @@ describe("@components/share-course/ImportFlow", () => {
 
 				expect(notifierModuleMock.show).toHaveBeenCalledWith(
 					expect.objectContaining({
-						text: "components.molecules.importCourse.options.failure.permissionError",
+						text: "components.molecules.import.options.failure.permissionError",
 					})
 				);
 			});

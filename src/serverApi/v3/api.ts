@@ -1464,13 +1464,50 @@ export interface MigrationBody {
      * @type {boolean}
      * @memberof MigrationBody
      */
-    oauthMigrationPossible: boolean;
+    oauthMigrationPossible?: boolean | null;
     /**
      * Set if migration is mandatory in this school
      * @type {boolean}
      * @memberof MigrationBody
      */
-    oauthMigrationMandatory: boolean;
+    oauthMigrationMandatory?: boolean | null;
+    /**
+     * Set if migration is finished in this school
+     * @type {boolean}
+     * @memberof MigrationBody
+     */
+    oauthMigrationFinished?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface MigrationResponse
+ */
+export interface MigrationResponse {
+    /**
+     * Date from when Migration is possible
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationPossible?: string;
+    /**
+     * Date from when Migration is mandatory
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationMandatory?: string;
+    /**
+     * Date from when Migration is finished
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationFinished?: string;
+    /**
+     * Enable the Migration
+     * @type {boolean}
+     * @memberof MigrationResponse
+     */
+    enableMigrationStart: boolean;
 }
 /**
  * 
@@ -2494,6 +2531,12 @@ export interface ShareTokenImportBodyParams {
      * @memberof ShareTokenImportBodyParams
      */
     newName: string;
+    /**
+     * Id of the course to which the lesson/task will be added
+     * @type {string}
+     * @memberof ShareTokenImportBodyParams
+     */
+    destinationCourseId?: string | null;
 }
 /**
  * 
@@ -7628,6 +7671,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -7698,7 +7745,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMigration(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7718,7 +7765,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMigration(schoolId, migrationBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7738,7 +7785,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<object> {
+        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7756,7 +7803,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<object> {
+        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -7775,7 +7822,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<object>;
+    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
 
     /**
      * 
@@ -7793,7 +7840,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<object>;
+    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
 
 }
 
