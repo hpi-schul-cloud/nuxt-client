@@ -74,17 +74,14 @@ export default defineComponent({
     sourceSystem: {
       type: String,
       required: true,
-      default: "0000d186816abba584714c92",
     },
     targetSystem: {
       type: String,
       required: true,
-      default: "0000d186816abba584714c93",
     },
     origin: {
       type: String,
       required: true,
-      default: "0000d186816abba584714c92",
     },
     mandatory: {
       type: Boolean,
