@@ -12,7 +12,7 @@ import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 })
 export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
-	private loading: boolean = false;
+	private loading = false;
 
 	private _toolApi?: ToolApiInterface;
 

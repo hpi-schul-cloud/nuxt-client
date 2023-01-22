@@ -12,8 +12,8 @@ import {
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
-jest.mock("@/store/store-accessor", () => ({
-	externalToolsModule: {
+const externalToolsModuleMock = () => {
+	return {
 		getSchoolExternalTools: [
 			{
 				id: "id",
@@ -22,7 +22,11 @@ jest.mock("@/store/store-accessor", () => ({
 				status: SchoolExternalToolStatus.Latest,
 			},
 		],
-	},
+	};
+};
+
+jest.mock("@/store", () => ({
+	externalToolsModule: externalToolsModuleMock(),
 }));
 
 describe("useSchoolExternalToolUtils", () => {

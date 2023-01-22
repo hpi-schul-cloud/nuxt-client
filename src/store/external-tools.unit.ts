@@ -4,7 +4,6 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
-	ToolApi,
 } from "../serverApi/v3";
 import {
 	SchoolExternalTool,
@@ -21,7 +20,7 @@ describe("ExternalToolsModule", () => {
 
 	beforeEach(() => {
 		module = new ExternalToolsModule({});
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	afterEach(() => {
@@ -30,7 +29,7 @@ describe("ExternalToolsModule", () => {
 
 	const mockToolApi = (
 		schoolExternalToolMock: Partial<SchoolExternalToolResponse> = {},
-		throwError: boolean = false
+		throwError = false
 	) => {
 		const searchListResponse: SchoolExternalToolSearchListResponse = {
 			data: [
@@ -80,7 +79,7 @@ describe("ExternalToolsModule", () => {
 			}
 		);
 
-		const toolApiMock: Partial<ToolApi> = {
+		const toolApiMock = {
 			toolSchoolControllerGetSchoolExternalTools:
 				toolSchoolControllerGetSchoolExternalToolsMock,
 			toolSchoolControllerDeleteSchoolExternalTool:
@@ -94,7 +93,7 @@ describe("ExternalToolsModule", () => {
 	};
 
 	const setup = () => {
-		const schoolId: string = "schoolId";
+		const schoolId = "schoolId";
 
 		const schoolExternalTool: SchoolExternalTool = {
 			name: "Test",

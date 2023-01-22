@@ -1,13 +1,10 @@
-import { provide } from "vue";
 import { Route } from "vue-router";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TaskCardModule from "@/store/task-card";
 import AuthModule from "@/store/auth";
-import { authModule, taskCardModule } from "@/store";
 import { User } from "@/store/types/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import TaskCard from "./TaskCard.page.vue";
 
 const $router = { go: jest.fn() };
@@ -57,8 +54,8 @@ const getWrapper = (
 			$router,
 			$route,
 		}),
-		setup() {
-			provide("i18n", { t: (key: string) => key });
+		provide: {
+			i18n: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,
