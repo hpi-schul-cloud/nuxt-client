@@ -37,7 +37,6 @@ describe("@pages/Error.page.vue", () => {
 		const wrapper = mountComponent();
 		// const btnElement = await wrapper.find("[data-testid='btn-back']");
 		const btnElement = await wrapper.findComponent({ ref: "btn-back" });
-		console.log(btnElement.exists());
 		await btnElement.vm.$emit("click");
 		expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
 	});
