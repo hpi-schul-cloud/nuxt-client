@@ -123,7 +123,7 @@ export default Vue.extend({
 			return roomsModule.getLoading;
 		},
 		isEmptyState() {
-			return !this.isLoading && !this.hasRooms && !this.hasImportToken;
+			return !roomsModule.getLoading && !this.hasRooms && !this.hasImportToken;
 		},
 	},
 	methods: {
