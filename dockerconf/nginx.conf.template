@@ -29,6 +29,10 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
+    location ~ '^/administration/students/import/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
     location ~ '^/administration/teachers/[a-z0-9]{24}/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
