@@ -30,17 +30,12 @@
 						}}
 					</div>
 				</div>
-				<!-- TODO remove hardcoded items -->
 				<v-select
 					v-model="selectedCourse"
 					return-object
-					item-value="_id"
-					item-text="name"
-					:items="[
-						{ name: 'AAA', _id: 'id1' },
-						{ name: 'BBB', _id: 'id2' },
-						{ name: 'CCC', _id: 'id3' },
-					]"
+					item-value="id"
+					item-text="title"
+					:items="rooms"
 					:label="$t('common.labels.course')"
 					:rules="[rules.required]"
 					:error="!selectedCourse"
@@ -53,7 +48,8 @@
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
-import { defineComponent, inject, reactive } from "@vue/composition-api";
+import { defineComponent, inject, reactive, ref, onMounted } from "@vue/composition-api";
+import { roomsModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -75,21 +71,25 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
+		const rooms = ref([]);
+		onMounted(async () => {
+			await roomsModule.fetch();
+			rooms.value = roomsModule.getRoomsData;
+    	});
+
 		const rules = reactive({
           required: value => !!value || i18n?.t("common.validation.required"),
 		});
 
 		const onNext = (selectedCourse) => {
-			console.log(!!selectedCourse)
-			if (rules.required(selectedCourse._id) === true) {
-				emit('next', selectedCourse._id);
-			} else {
-				console.error("Nie powinno przejść dalej")
+			if (rules.required(selectedCourse?.id) === true) {
+				emit('next', selectedCourse.id);
 			}
 		}
 		const onCancel = () => emit('cancel')
 
 		return {
+			rooms,
 			onNext,
 			onCancel,
 			mdiInformation,

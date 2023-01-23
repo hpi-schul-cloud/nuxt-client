@@ -55,6 +55,7 @@ export default defineComponent({
 
 		const parentName = ref("");
 		const parentType = ref("");
+		const destinationCourseId = ref(undefined);
 
 		const isSelectCourseModalOpen = ref(false);
 		const isImportModalOpen = ref(false);
@@ -136,7 +137,7 @@ export default defineComponent({
 		async function startImport(newName) {
 			openModal('loading');
 			try {
-				await copyModule.copyByShareToken({ token: props.token, type: parentType.value, newName , destinationCourseId: '63ca720cd0900148bc091731' }); //TODO Fix hardcode
+				await copyModule.copyByShareToken({ token: props.token, type: parentType.value, newName , destinationCourseId: destinationCourseId.value });
 				openModal('result');
 			} catch (error) {
 				showFailureBackend(newName);
@@ -145,8 +146,7 @@ export default defineComponent({
 
 		// event handlers
 		const onCourseSelected = (courseId) => {
-			// Todo save courseId
-			console.log({ courseId });
+			destinationCourseId.value = courseId;
 			openModal('import');
 		}
 
