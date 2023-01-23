@@ -18,15 +18,10 @@
         src="@assets/img/svgImageExample.svg"
         alt=""
       />
-      <div v-show="loading">
-        <v-progress-circular
-          indeterminate
-          class="mt-8"
-        ></v-progress-circular>
-      </div>
-      <div v-show="!loading">
+      <div>
         <p
             class="text-left pa-4"
+            data-testId="text-description"
             v-html="$t(mandatory ? 'pages.userMigration.descriptionMandatory' : 'pages.userMigration.description', {
               sourceSystem: getSystemName(sourceSystem),
               targetSystem: getSystemName(targetSystem),
@@ -38,7 +33,7 @@
             class="mx-8 mb-8"
             color="primary"
             depressed
-            data-testid="btn-proceed"
+            data-testId="btn-proceed"
             :href="proceedLink"
           >
             {{ $t("pages.userMigration.button.startMigration") }}
@@ -47,7 +42,7 @@
             class="mx-8 mb-8"
             color="primary"
             depressed
-            data-testid="btn-cancel"
+            data-testId="btn-cancel"
             :to="cancelLink"
           >
             {{ $t(mandatory ? "pages.userMigration.button.logout" : "pages.userMigration.button.skip") }}
@@ -65,7 +60,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import UserMigrationModule from "@/store/user-migration";
 import { System } from '@store/types/system';
 import { MigrationPageOrigin } from '@store/types/user-migration';
-import { computed, ComputedRef, ref, Ref, defineComponent, inject, onMounted } from "@vue/composition-api";
+import { computed, ComputedRef, defineComponent, inject, onMounted } from "@vue/composition-api";
 
 export default defineComponent({
   name: "UserMigration",
@@ -105,7 +100,6 @@ export default defineComponent({
 
     const proceedLink: ComputedRef<string> = computed(() => userMigrationModule.getMigrationLinks.proceedLink);
     const cancelLink: ComputedRef<string> = computed(() => userMigrationModule.getMigrationLinks.cancelLink);
-    const loading: Ref<boolean> = ref(true);
 
     let pageType: MigrationPageOrigin;
     if (props.origin === props.sourceSystem) {
@@ -123,12 +117,9 @@ export default defineComponent({
         sourceSystem: props.sourceSystem,
         targetSystem: props.targetSystem,
       });
-
-      loading.value = false;
     });
 
     return {
-      loading,
       proceedLink,
       cancelLink,
       getSystemName,
