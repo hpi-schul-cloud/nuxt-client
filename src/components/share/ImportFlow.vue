@@ -1,5 +1,12 @@
 <template>
 	<div>
+		<select-course-modal
+			:is-open="isSelectCourseModalOpen"
+			:parent-name="parentName"
+			:parent-type="parentType"
+			@next="onCourseSelected"
+			@cancel="onCancel"
+		></select-course-modal>
 		<import-modal
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
@@ -21,13 +28,15 @@ import ImportModal from "@components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
+import SelectCourseModal from "./SelectCourseModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: 'ImportFlow',
 	components: {
 		ImportModal,
-		CopyResultModal
+		CopyResultModal,
+		SelectCourseModal,
 	},
 	props: {
 		token: {
@@ -37,7 +46,7 @@ export default defineComponent({
 		isActive: {
 			type: Boolean,
 			required: true
-		}
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
@@ -47,6 +56,7 @@ export default defineComponent({
 		const parentName = ref("");
 		const parentType = ref("");
 
+		const isSelectCourseModalOpen = ref(false);
 		const isImportModalOpen = ref(false);
 
 		const isCopyResultModalOpen = computed({
@@ -60,6 +70,7 @@ export default defineComponent({
 		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.import.options.loadingMessage"))
 
 		const openModal = (modalName) => {
+			isSelectCourseModalOpen.value = modalName === 'selectCourse';
 			isImportModalOpen.value = modalName === 'import';
 			isLoadingDialogOpen.value = modalName === 'loading';
 			isCopyResultModalOpen.value = modalName === 'result';
@@ -107,7 +118,11 @@ export default defineComponent({
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
 				parentType.value = validateResult.parentType.slice(0, -1);
-				openModal('import');
+				if (parentType.value==='course'){
+					openModal('import');
+				} else {
+					openModal('selectCourse');
+				}
 			} catch (error) {
 				if (error.response?.status === 403) {
 					showFailurePermission();
@@ -129,6 +144,11 @@ export default defineComponent({
 		}
 
 		// event handlers
+		const onCourseSelected = (courseId) => {
+			// Todo save courseId
+			console.log({ courseId });
+			openModal('import');
+		}
 
 		const onImport = (courseName) => startImport(courseName);
 		const onCancel = () => closeModals();
@@ -138,6 +158,7 @@ export default defineComponent({
 		}
 
 		return {
+			isSelectCourseModalOpen,
 			isImportModalOpen,
 			isCopyResultModalOpen,
 			copyResultModalItems,
@@ -145,6 +166,7 @@ export default defineComponent({
 			parentName,
 			parentType,
 			onCopyResultModalClosed,
+			onCourseSelected,
 			onImport,
 			onCancel
 		}

@@ -497,6 +497,7 @@
 	"components.molecules.import.course.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
 	"components.molecules.import.lesson.options.title": "Thema importieren",
 	"components.molecules.import.lesson.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Das Thema kann im Folgenden umbenannt werden.",
+	"components.molecules.import.lesson.options.selectCourse": "Wählen Sie den Kurs, in den Sie die Lektion importieren möchten.",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",

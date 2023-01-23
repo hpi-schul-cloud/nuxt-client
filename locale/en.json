@@ -495,6 +495,7 @@
 	"components.molecules.import.course.options.infoText": "Participant-related data will not be copied. The course can be renamed below.",
 	"components.molecules.import.lesson.options.title": "Import topic",
 	"components.molecules.import.lesson.options.infoText": "Participant-related data will not be copied. The topic can be renamed below.",
+	"components.molecules.import.lesson.options.selectCourse": "Choose the course where you want to import the lesson.",
 	"pages.administration.printQr.emptyUser": "The selected user(s) have already been registered",
 	"pages.administration.printQr.error": "The registration links could not be generated",
 	"pages.administration.remove.error": "Failed to delete users",
