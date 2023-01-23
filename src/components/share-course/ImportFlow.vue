@@ -57,7 +57,7 @@ export default defineComponent({
 		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 		const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.import.options.loadingMessage", { type: parentType.value }))
+		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.import.options.loadingMessage"))
 
 		const openModal = (modalName) => {
 			isImportModalOpen.value = modalName === 'import';

@@ -16,7 +16,11 @@
 		</div>
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
-				{{ $t(`components.molecules.share.${type}.options.expiresInDays`) }}
+				{{
+					$t("components.molecules.share.options.expiresInDays", {
+						days: type === "course" ? 21 : 7,
+					})
+				}}
 			</div>
 			<v-switch
 				v-model="shareOptions.hasExpiryDate"

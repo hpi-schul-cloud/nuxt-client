@@ -10,11 +10,7 @@
 		@dialog-canceled="onCancel"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{
-				$t("components.molecules.import.options.title", {
-					type: parentType,
-				})
-			}}
+			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
 		</div>
 
 		<template slot="content">
@@ -29,9 +25,7 @@
 					</div>
 					<div>
 						{{
-							$t("components.molecules.import.options.infoText", {
-								type: parentType,
-							})
+							$t(`components.molecules.import.${parentType}.options.infoText`)
 						}}
 					</div>
 				</div>
