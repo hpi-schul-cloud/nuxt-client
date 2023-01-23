@@ -19,7 +19,7 @@
 				/>
 			</v-container>
 		</template>
-		<template v-else-if="!isLoading && !hasRooms && !hasImportToken">
+		<template v-else-if="isEmptyState">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
 				image="@assets/img/empty-state/rooms-empty-state.svg"
@@ -121,6 +121,9 @@ export default Vue.extend({
 		},
 		isLoading(): boolean {
 			return roomsModule.getLoading;
+		},
+		isEmptyState() {
+			return !this.isLoading && !this.hasRooms && !this.hasImportToken;
 		},
 	},
 	methods: {
