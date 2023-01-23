@@ -25,7 +25,7 @@
 							v-model="showSubstitute"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
-						></v-custom-switch>
+						/>
 					</div>
 				</user-has-role>
 				<div class="toggle-div">
@@ -34,7 +34,7 @@
 						v-model="allowDragging"
 						class="enable-disable"
 						:label="$t('pages.courses.index.courses.arrangeCourses')"
-					></v-custom-switch>
+					/>
 				</div>
 			</div>
 		</template>
