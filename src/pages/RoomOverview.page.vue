@@ -22,7 +22,7 @@
 				<user-has-role :role="isTeacher">
 					<div class="toggle-div">
 						<v-custom-switch
-							v-model="showAll"
+							v-model="showSubstitute"
 							class="enable-disable"
 							:label="$t('pages.courses.index.courses.substituteCourses')"
 						></v-custom-switch>
@@ -161,7 +161,6 @@ import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import RoomWrapper from "@components/templates/RoomWrapper.vue";
 import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
 import UserHasRole from "@components/helpers/UserHasRole";
-import { authModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -204,7 +203,7 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
-			showAll: false,
+			showSubstitute: false,
 			mdiClose,
 			mdiInformation,
 		};
@@ -250,15 +249,14 @@ export default {
 		},
 	},
 	watch: {
-		showAll: async function (showAll) {
-			await roomsModule.fetch({ device: undefined, showAll }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		showSubstitute: async function (showSubstitute) {
+			await roomsModule.fetch({ device: undefined, showSubstitute }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		},
 	},
 	async created() {
-		const showSubstituteCourses = !this.isTeacher(authModule.getUserRoles);
 		await roomsModule.fetch({
 			device: undefined,
-			showAll: showSubstituteCourses,
+			showSubstitute: false,
 		}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
