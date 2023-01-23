@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import ImportFlow from "@components/share/ImportFlow.vue";
 import { roomsModule } from "@/store";
 import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";

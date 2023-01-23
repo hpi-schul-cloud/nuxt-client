@@ -1,16 +1,16 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.administration.students.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
+		:headline="$t('pages.administration.teachers.index.title')"
 		:fab-items="fab"
 	>
 		<progress-modal
 			:active="isDeleting"
 			:percent="deletedPercent"
-			:title="$t('pages.administration.students.index.remove.progress.title')"
+			:title="$t('pages.administration.teachers.index.remove.progress.title')"
 			:description="
-				$t('pages.administration.students.index.remove.progress.description')
+				$t('pages.administration.teachers.index.remove.progress.description')
 			"
 			data-testid="progress-modal"
 		/>
@@ -19,7 +19,7 @@
 			v-model="searchQuery"
 			type="text"
 			:placeholder="
-				$t('pages.administration.students.index.searchbar.placeholder')
+				$t('pages.administration.teachers.index.searchbar.placeholder')
 			"
 			class="search-section"
 			label=""
@@ -40,30 +40,24 @@
 			:actions="filteredActions"
 			:columns="filteredColumns"
 			:current-page.sync="page"
-			:data="students"
+			:data="teachers"
 			:paginated="true"
+			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			:total="pagination.total"
 			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
-			:show-external-text="schoolIsExternallyManaged"
-			data-testid="students_table"
+			data-testid="teachers_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
-			<template #datacolumn-birthday="{ data }">
-				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
-			</template>
 			<template #datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template #headcolumn-consent> </template>
-			<template #columnlabel-consent></template>
 			<template #datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
@@ -71,16 +65,9 @@
 				<span class="text-content">
 					<base-icon
 						v-if="status === 'ok'"
-						source="custom"
-						icon="doublecheck"
-						color="var(--v-success-base)"
-					/>
-
-					<base-icon
-						v-else-if="status === 'parentsAgreed'"
 						source="material"
 						icon="check"
-						color="var(--v-warning-base)"
+						color="var(--v-success-base)"
 					/>
 					<base-icon
 						v-else-if="status === 'missing'"
@@ -90,6 +77,7 @@
 					/>
 				</span>
 			</template>
+
 			<template #datacolumn-_id="{ data, selected, highlighted }">
 				<v-btn
 					icon
@@ -98,8 +86,8 @@
 						'row-selected': selected,
 						'row-highlighted': highlighted,
 					}"
-					:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-					data-testid="edit_student_button"
+					:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
+					data-testid="edit_teacher_button"
 				>
 					<v-icon size="20">{{ mdiPencil }}</v-icon>
 				</v-btn>
@@ -112,19 +100,18 @@
 		/>
 	</default-wireframe>
 </template>
-
 <script>
 /* eslint-disable max-lines */
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
-import { envConfigModule, schoolsModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import { studentFilter } from "@utils/adminFilter";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDateFromDeUTC, printDate } from "@plugins/datetime";
+import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
 import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
 
@@ -142,6 +129,9 @@ export default {
 			type: Boolean,
 		},
 	},
+	meta: {
+		requiredPermissions: ["TEACHER_LIST"],
+	},
 	data() {
 		return {
 			mdiPlus,
@@ -150,34 +140,76 @@ export default {
 			mdiPencil,
 			currentFilterQuery: this.$uiState.get(
 				"filter",
-				"pages.administration.students.index"
+				"pages.administration.teachers.index"
 			),
+			test: this.$uiState,
 			page:
 				(this.$uiState.get(
 					"pagination",
-					"pages.administration.students.index"
+					"pages.administration.teachers.index"
 				) &&
-					this.$uiState.get("pagination", "pages.administration.students.index")
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
 						.page) ||
 				1,
 			limit:
 				(this.$uiState.get(
 					"pagination",
-					"pages.administration.students.index"
+					"pages.administration.teachers.index"
 				) &&
-					this.$uiState.get("pagination", "pages.administration.students.index")
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
 						.limit) ||
 				25,
 			sortBy:
-				(this.$uiState.get("sorting", "pages.administration.students.index") &&
-					this.$uiState.get("sorting", "pages.administration.students.index")
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
 						.sortBy) ||
 				"firstName",
 			sortOrder:
-				(this.$uiState.get("sorting", "pages.administration.students.index") &&
-					this.$uiState.get("sorting", "pages.administration.students.index")
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
 						.sortOrder) ||
 				"asc",
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.teachers.index.title"),
+					disabled: true,
+				},
+			],
+
+			tableActions: [
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
+				},
+				{
+					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+					dataTestId: "qr_code",
+				},
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+					permission: "TEACHER_DELETE",
+					dataTestId: "delete_action",
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -187,11 +219,6 @@ export default {
 				{
 					field: "lastName",
 					label: this.$t("common.labels.lastName"),
-					sortable: true,
-				},
-				{
-					field: "birthday",
-					label: this.$t("common.labels.birthday"),
 					sortable: true,
 				},
 				{
@@ -208,7 +235,6 @@ export default {
 					field: "consentStatus",
 					label: this.$t("common.labels.registration"),
 					sortable: true,
-					infobox: true,
 				},
 				{
 					field: "createdAt",
@@ -221,96 +247,51 @@ export default {
 					label: "",
 				},
 			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
-			breadcrumbs: [
+			icons: [
 				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					icon: "check",
+					color: "var(--v-success-base)",
+					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
-					disabled: true,
+					icon: "clear",
+					color: "var(--v-error-base)",
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
-			filters: studentFilter(this),
-			active: false,
+			filters: teacherFilter(this),
 			searchQuery:
-				(this.$uiState.get("filter", "pages.administration.students.index") &&
-					this.$uiState.get("filter", "pages.administration.students.index")
+				(this.$uiState.get("filter", "pages.administration.teachers.index") &&
+					this.$uiState.get("filter", "pages.administration.teachers.index")
 						.searchQuery) ||
 				"",
 		};
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
 	computed: {
 		...mapGetters("users", {
-			students: "getList",
+			teachers: "getList",
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
-			registrationLinks: "getRegistrationLinks",
 		}),
+		user() {
+			return authModule.getUser;
+		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
-		tableActions() {
-			return [
-				{
-					label: this.isConsentNecessary
-						? this.$t(
-								"pages.administration.students.index.tableActions.consent"
-						  )
-						: this.$t(
-								"pages.administration.students.index.tableActions.registration"
-						  ),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-					dataTestId: "consent_action",
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.email"
-					),
-					icon: "mail_outline",
-					"icon-source": "material",
-					action: this.handleBulkEMail,
-					dataTestId: "registration_link",
-				},
-				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
-					icon: "qrcode",
-					action: this.handleBulkQR,
-					dataTestId: "qr_code",
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.delete"
-					),
-					icon: "delete_outline",
-					"icon-source": "material",
-					action: this.handleBulkDelete,
-					permission: "STUDENT_DELETE",
-					dataTestId: "delete_action",
-				},
-			];
+		env() {
+			return envConfigModule.getEnv;
 		},
-		isConsentNecessary() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
-			);
+		tableData: {
+			get() {
+				if (this.takeOverTableData) return this.searchData;
+				return this.teachers;
+			},
 		},
 		showConsent() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
-			);
+			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -320,12 +301,21 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 
+			// filters out the QR bulk action is user is not an admin
+			if (!this.user.roles.some((role) => role.name === "administrator")) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.teachers.index.tableActions.qr")
+				);
+			}
+
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
-						this.$t("pages.administration.students.index.tableActions.delete")
+						this.$t("pages.administration.teachers.index.tableActions.delete")
 				);
 			}
 
@@ -333,10 +323,13 @@ export default {
 		},
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
-			// filters out edit column if school is external
-			if (this.schoolIsExternallyManaged) {
+			// filters out edit column if school is external or if user is not an admin
+			if (
+				this.schoolIsExternallyManaged ||
+				!this.user.roles.some((role) => role.name === "administrator")
+			) {
 				editedColumns = this.tableColumns.filter(
-					//_id field sets the edit column
+					// _id field sets the edit column
 					(col) => col.field !== "_id"
 				);
 			}
@@ -350,38 +343,10 @@ export default {
 
 			return editedColumns;
 		},
-		icons() {
-			const instanceBasedIcons = [];
-
-			instanceBasedIcons.push({
-				icon: "doublecheck",
-				color: "var(--v-success-base)",
-				style: "margin: -3px 3px",
-				label: this.$t("pages.administration.students.legend.icon.success"),
-			});
-
-			if (this.isConsentNecessary) {
-				instanceBasedIcons.push({
-					icon: "check",
-					color: "var(--v-warning-base)",
-					label: this.$t(
-						"utils.adminFilter.consent.label.parentsAgreementMissing"
-					),
-				});
-			}
-
-			instanceBasedIcons.push({
-				icon: "clear",
-				color: "var(--v-error-base)",
-				label: this.$t("utils.adminFilter.consent.label.missing"),
-			});
-
-			return instanceBasedIcons;
-		},
 		fab() {
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("STUDENT_CREATE")
+				!this.$_userHasPermission("TEACHER_CREATE")
 			) {
 				return null;
 			}
@@ -389,22 +354,22 @@ export default {
 			return {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
-				testId: "fab_button_students_table",
+				testId: "fab_button_teachers_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
-						label: this.$t("pages.administration.students.fab.add"),
+						label: this.$t("pages.administration.teachers.fab.add"),
 						icon: mdiAccountPlus,
-						to: "/administration/students/new",
-						dataTestid: "fab_button_add_students",
-						ariaLabel: this.$t("pages.administration.students.fab.add"),
+						to: "/administration/teachers/new",
+						dataTestid: "fab_button_add_teachers",
+						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
 					},
 					{
-						label: this.$t("pages.administration.students.fab.import"),
+						label: this.$t("pages.administration.teachers.fab.import"),
 						icon: mdiCloudDownload,
-						href: "/administration/students/import",
-						dataTestid: "fab_button_import_students",
-						ariaLabel: this.$t("pages.administration.students.fab.import"),
+						href: "/administration/teachers/import",
+						dataTestid: "fab_button_import_teachers",
+						ariaLabel: this.$t("pages.administration.teachers.fab.import"),
 					},
 				],
 			};
@@ -412,24 +377,23 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.$uiState.get(
+			var temp = this.$uiState.get(
 				"filter",
-				"pages.administration.students.index"
+				"pages.administration.teacher.index"
 			);
 
-			if (uiState && uiState.searchQuery)
-				query.searchQuery = uiState.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
 				JSON.stringify(
-					this.$uiState.get("filter", "pages.administration.students.index")
+					this.$uiState.get("filter", "pages.administration.teachers.index")
 				)
 			) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.$uiState.set("filter", "pages.administration.students.index", {
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
 				query,
 			});
 		},
@@ -447,14 +411,14 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findStudents", {
+			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.$uiState.set("sorting", "pages.administration.students.index", {
+			this.$uiState.set("sorting", "pages.administration.teachers.index", {
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
@@ -462,39 +426,28 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.$uiState.set("pagination", "pages.administration.students.index", {
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				currentPage: page,
 			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			//this.page = 1;
+			// this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.set("pagination", "pages.administration.students.index", {
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
 				currentPage: this.page,
 			});
 			this.find();
 		},
 		printDate,
-		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
 				selectionType,
 				_ids: rowIds,
 			};
-		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
-				students: this.tableSelection,
-				selectionType: selectionType,
-			});
-
-			this.$router.push({
-				path: "/administration/students/consent",
-			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -503,17 +456,10 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					this.$toast.success(
-						this.$tc("pages.administration.sendMail.success", rowIds.length)
-					);
-				} else {
-					this.$toast.info(
-						this.$tc("pages.administration.sendMail.alreadyRegistered")
-					);
-				}
+				this.$toast.success(
+					this.$tc("pages.administration.sendMail.success", rowIds.length)
+				);
 			} catch (error) {
-				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.sendMail.error", rowIds.length)
 				);
@@ -524,7 +470,7 @@ export default {
 				await this.$store.dispatch("users/getQrRegistrationLinks", {
 					userIds: rowIds,
 					selectionType,
-					roleName: "student",
+					roleName: "teacher",
 				});
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
@@ -543,7 +489,7 @@ export default {
 					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
-						userType: "student",
+						userType: "teacher",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();
@@ -558,26 +504,26 @@ export default {
 			let message;
 			if (selectionType === "inclusive") {
 				message = this.$tc(
-					"pages.administration.students.index.remove.confirm.message.some",
+					"pages.administration.teachers.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }
 				);
 			} else {
 				if (rowIds.length) {
 					message = this.$t(
-						"pages.administration.students.index.remove.confirm.message.many",
+						"pages.administration.teachers.index.remove.confirm.message.many",
 						{ number: rowIds.length }
 					);
 				} else {
 					message = this.$t(
-						"pages.administration.students.index.remove.confirm.message.all"
+						"pages.administration.teachers.index.remove.confirm.message.all"
 					);
 				}
 			}
 			this.$dialog.confirm({
 				message,
 				confirmText: this.$t(
-					"pages.administration.students.index.remove.confirm.btnText"
+					"pages.administration.teachers.index.remove.confirm.btnText"
 				),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
@@ -594,21 +540,20 @@ export default {
 
 			const query = this.currentFilterQuery;
 
-			this.$uiState.set("filter", "pages.administration.students.index", {
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
 				query,
 			});
 
 			setTimeout(() => {
-				this.$store.dispatch("users/findStudents", {
+				this.$store.dispatch("users/findTeachers", {
 					query,
-					action: "find",
 				});
 			}, 400);
 		},
 	},
 	head() {
 		return {
-			title: `${this.$t("pages.administration.students.index.title")} - ${
+			title: `${this.$t("pages.administration.teachers.index.title")} - ${
 				this.$theme.short_name
 			}`,
 		};
@@ -636,6 +581,16 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+
+span {
+	font-weight: var(--font-weight-normal);
+}
+
+.content {
+	max-height: 35vh;
+	overflow-y: scroll;
+	font-weight: var(--font-weight-normal);
 }
 
 .list {

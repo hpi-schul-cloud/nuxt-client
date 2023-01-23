@@ -177,7 +177,7 @@ import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
-import ShareModal from "@components/share-course/ShareModal.vue";
+import ShareModal from "@components/share/ShareModal.vue";
 
 export default {
 	components: {

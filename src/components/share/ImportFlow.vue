@@ -17,7 +17,7 @@
 </template>
 
 <script type="ts">
-import ImportModal from "@/components/share-course/ImportModal.vue";
+import ImportModal from "@components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "@vue/composition-api";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
