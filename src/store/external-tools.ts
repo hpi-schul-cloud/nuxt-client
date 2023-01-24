@@ -6,7 +6,7 @@ import { useSchoolExternalToolUtils } from "@/components/administration/school-e
 import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 
 @Module({
-	name: "external-tools",
+	name: "externalToolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
