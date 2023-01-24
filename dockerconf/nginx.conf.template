@@ -41,6 +41,10 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
+        location ~ '^/administration/teachers/import/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
