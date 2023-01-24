@@ -19,13 +19,13 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import {computed, defineComponent, inject, onBeforeUnmount, onMounted, useMeta,} from "@nuxtjs/composition-api";
+import { computed, defineComponent, inject, useMeta } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
-import { HttpStatusCode } from "../store/types/http-status-code.enum";
-import {provide} from "@vue/composition-api";
-import {useStorage} from "@/composables/locale-storage.composable";
+import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import { provide } from "@vue/composition-api";
+import { useStorage } from "@/composables/locale-storage.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -35,7 +35,7 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const { get, set , remove} = useStorage();
+		const { get, set , remove } = useStorage();
 		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = get("applicationErrorStatusCode");
 		const applicationErrorTranslationKey = get("applicationErrorTranslationKey")
@@ -63,13 +63,17 @@ export default defineComponent({
 			return;
 		}
 
-		window.onbeforeunload = function() {
-			if (applicationErrorModule?.getStatusCode)
-				set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule?.getStatusCode));
+		addEventListener('pagehide', (event) => {
+			console.log("pagehide event");
+			if (!event.persisted) {
+				console.log("set localStorage");
+				if (applicationErrorModule?.getStatusCode)
+					set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule?.getStatusCode));
 
-			if (applicationErrorModule?.getTranslationKey)
-				set("applicationErrorTranslationKey", applicationErrorModule!.getTranslationKey);
-		};
+				if (applicationErrorModule?.getTranslationKey)
+					set("applicationErrorTranslationKey", applicationErrorModule?.getTranslationKey);
+			}
+		});
 
 		useMeta({
 			title: i18n?.t("error.generic") + " - " + Theme.short_name,
