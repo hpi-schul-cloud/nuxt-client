@@ -17,6 +17,8 @@ import {
 } from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
 import { BusinessError } from "./types/commons";
+import { notifierModule } from "@/store";
+
 
 @Module({
 	name: "rooms",
@@ -42,7 +44,7 @@ export default class RoomsModule extends VuexModule {
 		message: "",
 		error: {},
 	};
-	showNotificationCannotArrangeSubstitute: boolean = false;
+	alignedSuccessfully: boolean = false;
 	private _dashboardApi?: DashboardApiInterface;
 	private _coursesApi?: CoursesApiInterface;
 
@@ -154,8 +156,8 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Mutation
-	setShowNotificationCannotArrangeSubstitute(visible: boolean): void {
-		this.showNotificationCannotArrangeSubstitute = visible;
+	setAlignedSuccessfully(success: boolean): void {
+		this.alignedSuccessfully = success;;
 	}
 
 	get getRoomsData(): Array<RoomsData> {
@@ -198,8 +200,8 @@ export default class RoomsModule extends VuexModule {
 		return this.roomsData.length > 0;
 	}
 
-	get getShowNotificationCannotArrangeSubstitute(): boolean {
-		return this.showNotificationCannotArrangeSubstitute;
+	get isAlignedSuccessfully(): boolean {
+		return this.alignedSuccessfully;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -238,7 +240,7 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async align(payload: DroppedObject): Promise<boolean> {
+	async align(payload: DroppedObject): Promise<void> {
 		const { from, to } = payload;
 		const reqObject = {
 			from,
@@ -246,6 +248,7 @@ export default class RoomsModule extends VuexModule {
 		};
 
 		this.setLoading(true);
+		this.setAlignedSuccessfully(true);
 		try {
 			const response = await this.dashboardApi.dashboardControllerMoveElement(
 				this.getRoomsId,
@@ -255,17 +258,23 @@ export default class RoomsModule extends VuexModule {
 			this.setPosition(payload);
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
-			return true;
 		} catch (error: any) {
 			if (error.response.data.code === 400 &&
 				error.response.data.message === 'substitute courses cannot be arranged') {
-				this.setShowNotificationCannotArrangeSubstitute(true);
+				notifierModule?.show({
+					text: "pages.courses.index.courses.cannotArrangeSubstitute",
+					status: "info",
+					timeout: 10000,
+					position: "bottom",
+				});
 				this.setLoading(false);
-				return false;
+				this.setAlignedSuccessfully(false);
+				return;
 			}
 			this.setError(error);
 			this.setLoading(false);
-			return false;
+			this.setAlignedSuccessfully(false);
+
 		}
 	}
 

@@ -125,27 +125,6 @@
 				:token="importToken"
 				@success="onImportSuccess"
 			></import-flow>
-			<v-alert
-				v-if="showNotificationCannotArrangeSubstitute"
-				class="notification"
-				color="rgb(225,239,248)"
-			>
-				<template #prepend>
-					<v-icon color="rgb(10,122,201)" class="icon">{{
-						mdiInformation
-					}}</v-icon>
-				</template>
-				<div class="alert_text mr-2">
-					{{ $t("pages.courses.index.courses.cannotArrangeSubstitute") }}
-				</div>
-				<template #close>
-					<v-icon
-						color="rgb(10,122,201)"
-						@click="onCloseNotificationCannotArrangeSubstitute"
-						>{{ mdiClose }}</v-icon
-					>
-				</template>
-			</v-alert>
 		</template>
 	</room-wrapper>
 </template>
@@ -241,9 +220,6 @@ export default {
 		importToken() {
 			return this.$route.query.import;
 		},
-		showNotificationCannotArrangeSubstitute() {
-			return roomsModule.getShowNotificationCannotArrangeSubstitute;
-		},
 	},
 	watch: {
 		showSubstitute: async function (showSubstitute) {
@@ -260,9 +236,6 @@ export default {
 	methods: {
 		isTeacher(roles) {
 			return roles.some((role) => role.startsWith("teacher"));
-		},
-		onCloseNotificationCannotArrangeSubstitute() {
-			roomsModule.setShowNotificationCannotArrangeSubstitute(false);
 		},
 		getDeviceDims() {
 			this.device = this.$mq;
@@ -361,9 +334,11 @@ export default {
 					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
-				if (await this.savePosition()) {
+				await this.savePosition();
+				if (roomsModule.isAlignedSuccessfully) {
 					this.defaultNaming(pos);
 				}
+
 				this.dragging = false;
 			}
 		},
@@ -404,9 +379,8 @@ export default {
 			this.dragging = true;
 		},
 		async savePosition() {
-			const successfull = await roomsModule.align(this.draggedElement);
+			await roomsModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
-			return successfull;
 		},
 		defaultNaming(pos) {
 			const title = this.$t("pages.rooms.groupName");
@@ -465,32 +439,5 @@ export default {
 
 ::v-deep .v-input {
 	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
-}
-
-.notification {
-	position: fixed;
-	right: 52px;
-	bottom: 37px;
-	gap: 16px;
-	width: 354px;
-	height: 86px;
-	padding: 16px;
-	border-radius: 4px;
-
-	.icon {
-		margin-right: var(--space-md);
-	}
-}
-
-.alert_text {
-	align-items: center;
-	width: 242px;
-	height: 48px;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: 24px;
-	color: #1b1b1b;
-	letter-spacing: 0.03px;
 }
 </style>
