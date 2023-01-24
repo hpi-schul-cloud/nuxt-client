@@ -22,7 +22,7 @@
         <p
             class="text-left pa-4"
             data-testId="text-description"
-            v-html="$t(mandatory ? 'pages.userMigration.descriptionMandatory' : 'pages.userMigration.description', {
+            v-html="$t(migrationDescription, {
               sourceSystem: getSystemName(sourceSystem),
               targetSystem: getSystemName(targetSystem),
             })"
@@ -102,10 +102,13 @@ export default defineComponent({
     const cancelLink: ComputedRef<string> = computed(() => userMigrationModule.getMigrationLinks.cancelLink);
 
     let pageType: MigrationPageOrigin;
+    let migrationDescription: string;
     if (props.origin === props.sourceSystem) {
       pageType = props.mandatory ? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY : MigrationPageOrigin.START_FROM_SOURCE_SYSTEM;
+      migrationDescription = props.mandatory ? "pages.userMigration.description.fromSourceMandatory" : "pages.userMigration.description.fromSource";
     } else if (props.origin === props.targetSystem) {
       pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
+      migrationDescription = "pages.userMigration.description.fromTarget";
     } else {
       throw createApplicationError(HttpStatusCode.BadRequest, "error.400", `Unknown origin system ${props.origin}. Expected ${props.sourceSystem} or ${props.targetSystem}`);
     }
@@ -120,6 +123,7 @@ export default defineComponent({
     });
 
     return {
+      migrationDescription,
       proceedLink,
       cancelLink,
       getSystemName,

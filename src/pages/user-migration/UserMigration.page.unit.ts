@@ -163,7 +163,7 @@ describe("UserMigration", () => {
 			});
 		});
 
-		describe("when mandatory is not set", () => {
+		describe("when origin is equal to sourceSystemId and mandatory is not set", () => {
 			it("should show the normal description text", () => {
 				const { wrapper } = setup({
 					sourceSystem: "sourceSystemId",
@@ -176,7 +176,7 @@ describe("UserMigration", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.description.fromSource {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
 				);
 			});
 
@@ -209,7 +209,7 @@ describe("UserMigration", () => {
 			});
 		});
 
-		describe("when mandatory is set", () => {
+		describe("when origin is equal to sourceSystemId and when mandatory is set", () => {
 			it("should show the mandatory description text", () => {
 				const { wrapper } = setup({
 					sourceSystem: "sourceSystemId",
@@ -223,7 +223,7 @@ describe("UserMigration", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.descriptionMandatory {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.description.fromSourceMandatory {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
 				);
 			});
 
@@ -239,6 +239,24 @@ describe("UserMigration", () => {
 
 				expect(button.text()).toEqual("pages.userMigration.button.logout");
 				expect(button.props().to).toEqual(migrationLinksMock.cancelLink);
+			});
+		});
+
+		describe("when origin is equal to targetSystem", () => {
+			it("should show the mandatory description text", () => {
+				const { wrapper } = setup({
+					sourceSystem: "sourceSystemId",
+					targetSystem: "targetSystemId",
+					origin: "targetSystemId",
+				});
+
+				const descriptionText: string = wrapper
+					.find("[data-testId=text-description]")
+					.text();
+
+				expect(descriptionText).toEqual(
+					'pages.userMigration.description.fromTarget {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+				);
 			});
 		});
 	});
