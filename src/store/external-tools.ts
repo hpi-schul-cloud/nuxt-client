@@ -1,9 +1,19 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { SchoolExternalTool } from "./types/school-external-tool";
+import { SchoolExternalTool } from "./external-tool/school-external-tool";
 import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
 import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
-import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
+import {
+	ExternalToolConfigurationTemplateResponse,
+	ToolApiFactory,
+	ToolApiInterface,
+	ToolConfigurationEntryResponse,
+	ToolConfigurationListResponse,
+} from "../serverApi/v3";
+import { ToolConfigurationScope } from "./external-tool/tool-configuration-scope";
+import { AxiosResponse } from "axios";
+import { ToolConfiguration } from "./external-tool/tool-configuration";
+import { ToolConfigurationTemplate } from "./external-tool/tool-configuration-template";
 
 @Module({
 	name: "external-tools",
@@ -12,6 +22,17 @@ import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 })
 export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
+
+	private toolConfigurations: ToolConfiguration[] = [];
+
+	private toolConfigurationTemplate: ToolConfigurationTemplate = {
+		id: "",
+		parameters: [],
+		version: 0,
+		logoUrl: undefined,
+		name: "",
+	};
+
 	private loading: boolean = false;
 
 	private _toolApi?: ToolApiInterface;
@@ -23,17 +44,25 @@ export default class ExternalToolsModule extends VuexModule {
 		return this._toolApi;
 	}
 
-	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
-
 	get getLoading(): boolean {
 		return this.loading;
 	}
 
 	get getSchoolExternalTools(): SchoolExternalTool[] {
 		return this.schoolExternalTools;
+	}
+
+	get getToolConfigurations(): ToolConfiguration[] {
+		return this.toolConfigurations;
+	}
+
+	get getToolConfigurationTemplate(): ToolConfigurationTemplate {
+		return this.toolConfigurationTemplate;
+	}
+
+	@Mutation
+	setLoading(loading: boolean): void {
+		this.loading = loading;
 	}
 
 	@Mutation
@@ -48,6 +77,18 @@ export default class ExternalToolsModule extends VuexModule {
 				(tool: SchoolExternalTool) => tool.id !== schoolExternalTool.id
 			),
 		];
+	}
+
+	@Mutation
+	setToolConfigurations(toolConfigurations: ToolConfiguration[]): void {
+		this.toolConfigurations = [...toolConfigurations];
+	}
+
+	@Mutation
+	setToolConfigurationTemplate(
+		toolConfigTemplate: ToolConfigurationTemplate
+	): void {
+		this.toolConfigurationTemplate = { ...toolConfigTemplate };
 	}
 
 	@Action
@@ -91,5 +132,66 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 			return Promise.resolve();
 		}
+	}
+
+	@Action
+	async loadAvailableToolConfigurations(): Promise<void> {
+		this.setLoading(true);
+		try {
+			if (authModule.getUser?.schoolId) {
+				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
+					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
+						ToolConfigurationScope.SCHOOL,
+						authModule.getUser.schoolId
+					);
+				const mappedToolConfigurations: ToolConfiguration[] =
+					availableTools.data.data.map(
+						(
+							toolConfigResponse: ToolConfigurationEntryResponse
+						): ToolConfiguration => ({
+							id: toolConfigResponse.id,
+							name: toolConfigResponse.name,
+							logoUrl: toolConfigResponse.logoUrl,
+						})
+					);
+				this.setToolConfigurations(mappedToolConfigurations);
+			}
+			this.setLoading(false);
+		} catch (e) {
+			console.log(
+				`Some error occurred while loading available tools for scope SCHOOL and schoolId ${authModule.getUser?.schoolId}: ${e}`
+			);
+			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async loadToolConfigurationTemplateFromExternalTool(
+		toolId: string
+	): Promise<void> {
+		this.setLoading(true);
+		try {
+			console.log("TOOLID");
+			console.log(toolId);
+			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
+				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
+					toolId
+				);
+			console.log(configTemplate.data);
+			this.setToolConfigurationTemplate({
+				id: configTemplate.data.id,
+				name: configTemplate.data.name,
+				logoUrl: configTemplate.data.logoUrl,
+				version: configTemplate.data.version,
+				parameters: [...configTemplate.data.parameters],
+			});
+			this.setLoading(false);
+		} catch (e) {
+			console.log(
+				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${e}`
+			);
+			this.setLoading(false);
+		}
+		this.setLoading(false);
 	}
 }

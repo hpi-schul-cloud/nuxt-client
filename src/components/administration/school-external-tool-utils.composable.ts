@@ -1,7 +1,4 @@
-import {
-	SchoolExternalTool,
-	SchoolExternalToolStatus,
-} from "@store/types/school-external-tool";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import ExternalToolsModule from "@store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
@@ -10,6 +7,7 @@ import {
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
+import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
 
 const responseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,

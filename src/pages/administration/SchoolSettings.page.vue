@@ -49,7 +49,7 @@
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
 					<auth-systems v-else :systems="systems"></auth-systems>
-					<external-tools-section></external-tools-section>
+					<external-tools-section id="tools"></external-tools-section>
 				</v-col>
 			</v-row>
 		</div>
@@ -64,6 +64,7 @@ import SchoolPolicies from "@components/organisms/administration/SchoolPolicies"
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@components/administration/ExternalToolsSection";
+import { nextTick, onMounted, useRouter } from "@nuxtjs/composition-api";
 
 export default {
 	components: {
@@ -143,5 +144,14 @@ export default {
 			}`,
 		};
 	},
+	setup() {
+		const router = useRouter();
+		onMounted( () => {
+			const section = router.currentRoute.hash.replace("#", "");
+			if (section) {
+				nextTick(() => window.document.getElementById(section)?.scrollIntoView());
+			}
+		});
+	}
 };
 </script>

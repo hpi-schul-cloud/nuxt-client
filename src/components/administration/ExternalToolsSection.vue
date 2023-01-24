@@ -87,14 +87,15 @@ import {
 	ComputedRef,
 	inject,
 	onMounted,
-	Ref,
+	Ref, useRouter,
 } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalTool } from "@store/types/school-external-tool";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
+import VueRouter from "vue-router";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -137,9 +138,9 @@ export default defineComponent({
 			return item.outdated ? "outdated" : "";
 		};
 
+		const router: VueRouter = useRouter();
 		const addTool = () => {
-			console.log("addTool() called");
-			// https://ticketsystem.dbildungscloud.de/browse/N21-241
+			router.push({ name: "administration-tool-config-overview" });
 		};
 
 		const editTool = (item: SchoolExternalToolItem) => {

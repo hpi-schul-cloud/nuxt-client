@@ -40,6 +40,17 @@ export const routes = [
 		name: "administration-school-settings",
 	},
 	{
+		path: "/administration/school-settings/tool",
+		component: () =>
+			interopDefault(
+				import(
+					"@pages/administration/external-tool/ExternalToolConfigOverview.page"
+				)
+			),
+		name: "administration-tool-config-overview",
+		beforeEnter: createPermissionGuard("school_tool_admin", "/tasks"),
+	},
+	{
 		path: "/administration/students",
 		component: () =>
 			interopDefault(

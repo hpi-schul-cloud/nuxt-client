@@ -1,8 +1,5 @@
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
-import {
-	SchoolExternalTool,
-	SchoolExternalToolStatus,
-} from "@store/types/school-external-tool";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
 import { DataTableHeader } from "vuetify";
 import { externalToolsModule } from "@utils/store-accessor";
 import {
@@ -11,6 +8,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
 
 jest.mock("@utils/store-accessor", () => ({
 	externalToolsModule: {
@@ -174,6 +172,7 @@ describe("useSchoolExternalToolUtils", () => {
 					name: "toolName",
 					status: "translated",
 					outdated: false,
+					version: undefined,
 				},
 			]);
 		});
@@ -194,6 +193,7 @@ describe("useSchoolExternalToolUtils", () => {
 					id: schoolExternaToolItem.id,
 					name: schoolExternaToolItem.name,
 					status: SchoolExternalToolStatus.Unknown,
+					version: undefined,
 				})
 			);
 		});

@@ -4,7 +4,7 @@ import { createModuleMocks } from "@utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
-import { SchoolExternalToolStatus } from "@store/types/school-external-tool";
+import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
 
 describe("ExternalToolsSection", () => {
 	let wrapper: Wrapper<any>;

@@ -6,15 +6,13 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolApi,
 } from "../serverApi/v3";
-import {
-	SchoolExternalTool,
-	SchoolExternalToolStatus,
-} from "./types/school-external-tool";
+import { SchoolExternalTool } from "./external-tool/school-external-tool";
 import setupStores from "../../tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@utils/store-accessor";
 import * as schoolExternalToolUtilsComposable from "@components/administration/school-external-tool-utils.composable";
+import { SchoolExternalToolStatus } from "./external-tool/school-external-tool-status";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
