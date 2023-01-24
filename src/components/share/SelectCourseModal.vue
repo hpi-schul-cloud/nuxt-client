@@ -38,7 +38,7 @@
 					:items="rooms"
 					:label="$t('common.labels.course')"
 					:rules="[rules.required]"
-					:error="!selectedCourse"
+					:error="showError()"
 				/>
 			</div>
 		</template>
@@ -63,27 +63,29 @@ export default defineComponent({
 		parentName: { type: String, required: true },
 		parentType: { type: String, required: true },
 	},
-	data() {
-		return {
-			selectedCourse: undefined,
-		};
-	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
 		const rooms = ref([]);
+		const selectedCourse = ref(undefined);
+
+		const showErrorOnEmpty = ref(false);
+		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
+
 		onMounted(async () => {
-			await roomsModule.fetch();
-			rooms.value = roomsModule.getRoomsData;
+			await roomsModule.fetchAllElements();
+			rooms.value = roomsModule.allElements;
     	});
 
 		const rules = reactive({
           required: value => !!value || i18n?.t("common.validation.required"),
 		});
 
-		const onNext = (selectedCourse) => {
-			if (rules.required(selectedCourse?.id) === true) {
-				emit('next', selectedCourse.id);
+		const onNext = () => {
+			showErrorOnEmpty.value = true;
+			const id = selectedCourse.value?.id;
+			if (rules.required(id) === true) {
+				emit('next', id);
 			}
 		}
 		const onCancel = () => emit('cancel')
@@ -94,6 +96,8 @@ export default defineComponent({
 			onCancel,
 			mdiInformation,
 			rules,
+			showError,
+			selectedCourse
 		};
 	},
 });
