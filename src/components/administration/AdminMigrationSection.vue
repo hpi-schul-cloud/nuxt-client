@@ -144,20 +144,12 @@ export default defineComponent({
 
 		const onToggleShowEndWarning = () => {
 			isShowEndWarning.value = !isShowEndWarning.value;
-			console.log(
-				"toggleEnd has been triggered. ShowEnd is: ",
-				isShowEndWarning.value
-			);
 		};
 
 		const isShowStartWarning: Ref<boolean> = ref(false);
 
 		const onToggleShowStartWarning = () => {
 			isShowStartWarning.value = !isShowStartWarning.value;
-			console.log(
-				"toggleEnd has been triggered. ShowEnd is: ",
-				isShowEndWarning.value
-			);
 		};
 
 		const isShowStartButton: ComputedRef<boolean> = computed(
