@@ -64,9 +64,7 @@ export default defineComponent({
 		}
 
 		addEventListener('pagehide', (event) => {
-			console.log("pagehide event");
 			if (!event.persisted) {
-				console.log("set localStorage");
 				if (applicationErrorModule?.getStatusCode)
 					set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule?.getStatusCode));
 
