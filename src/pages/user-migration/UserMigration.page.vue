@@ -5,10 +5,7 @@
 			src="@assets/img/logo/logo-image-mono.svg"
 			alt="Schulcloud Logo"
 		/>
-		<div
-				v-show="hasData"
-				class="text-center mt-16 mx-auto container-max-width"
-		>
+		<div v-show="hasData" class="text-center mt-16 mx-auto container-max-width">
 			<h1 class="pl-4 pr-4">
 				{{
 					$t("pages.userMigration.title", {
@@ -158,7 +155,7 @@ export default defineComponent({
 					pageType,
 					sourceSystem: props.sourceSystem,
 					targetSystem: props.targetSystem,
-				})
+				}),
 			]);
 			hasData.value = true;
 		});
