@@ -5,7 +5,7 @@ export interface ToolConfigurationTemplate {
 
 	logoUrl?: string;
 
-	parameters: Array<string>;
+	parameters: string[];
 
 	version: number;
 }

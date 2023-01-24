@@ -10,6 +10,7 @@
 			Durch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>
 			Weitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden.
 		</p>
+		<v-spacer class="mt-10"></v-spacer>
 		<v-select v-model="toolConfig" label="Tool auswahl" item-text="name" :items="items" :no-data-text="$t('common.table.nodata')"
 				  return-object :loading="loading">
 			<template #selection="{ item }">
