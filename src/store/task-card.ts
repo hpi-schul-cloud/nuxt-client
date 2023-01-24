@@ -3,8 +3,7 @@ import {
 	TaskCardResponse,
 	CardsApiFactory,
 	CardsApiInterface,
-	CreateTaskCardParams,
-	UpdateTaskCardParams,
+	TaskCardParams,
 	CardElementResponseCardElementTypeEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
@@ -45,6 +44,8 @@ export default class TaskCardModule extends VuexModule {
 				isFinished: false,
 			},
 		},
+		dueDate: "",
+		visibleAtDate: "",
 	};
 	loading: boolean = false;
 	businessError: BusinessError = {
@@ -80,7 +81,7 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Action
-	async createTaskCard(params: CreateTaskCardParams): Promise<void> {
+	async createTaskCard(params: TaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
@@ -96,7 +97,7 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Action
-	async updateTaskCard(params: UpdateTaskCardParams): Promise<void> {
+	async updateTaskCard(params: TaskCardParams): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 

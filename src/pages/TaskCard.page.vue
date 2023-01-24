@@ -159,14 +159,25 @@ export default defineComponent({
 		};
 
 		const createTaskCard = () => {
-			const text: Array<string> = [];
+			const cardElements = [];
+			cardElements.push({
+				content: {
+					type: title.value.type,
+					value: title.value.model,
+				},
+			});
 			elements.value.forEach((element) => {
-				text.push(element.model);
+				cardElements.push({
+					content: {
+						type: element.type,
+						value: element.model,
+						inputFormat: "richtext_ck5",
+					},
+				});
 			});
 
 			taskCardModule.createTaskCard({
-				title: title.value.model,
-				text: text,
+				cardElements: cardElements,
 			});
 		};
 

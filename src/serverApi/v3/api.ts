@@ -227,6 +227,25 @@ export interface BoardResponse {
 /**
  * 
  * @export
+ * @interface CardElementParams
+ */
+export interface CardElementParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof CardElementParams
+     */
+    id?: string;
+    /**
+     * Content of the card element, depending on its type
+     * @type {TitleCardElementParam | RichTextCardElementParam}
+     * @memberof CardElementParams
+     */
+    content: TitleCardElementParam | RichTextCardElementParam;
+}
+/**
+ * 
+ * @export
  * @interface CardElementResponse
  */
 export interface CardElementResponse {
@@ -259,25 +278,6 @@ export enum CardElementResponseCardElementTypeEnum {
     RichText = 'richText'
 }
 
-/**
- * 
- * @export
- * @interface CardElementUpdateParams
- */
-export interface CardElementUpdateParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof CardElementUpdateParams
-     */
-    id?: string;
-    /**
-     * Content of the card element, depending on its type
-     * @type {TitleCardElementParam | RichTextCardElementParam}
-     * @memberof CardElementUpdateParams
-     */
-    content: TitleCardElementParam | RichTextCardElementParam;
-}
 /**
  * 
  * @export
@@ -722,25 +722,6 @@ export enum CreateNewsParamsTargetModelEnum {
     Teams = 'teams'
 }
 
-/**
- * 
- * @export
- * @interface CreateTaskCardParams
- */
-export interface CreateTaskCardParams {
-    /**
-     * Title of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    title: string;
-    /**
-     * Description of the card (ck5)
-     * @type {Array<string>}
-     * @memberof CreateTaskCardParams
-     */
-    text?: Array<string>;
-}
 /**
  * 
  * @export
@@ -1464,13 +1445,50 @@ export interface MigrationBody {
      * @type {boolean}
      * @memberof MigrationBody
      */
-    oauthMigrationPossible: boolean;
+    oauthMigrationPossible?: boolean | null;
     /**
      * Set if migration is mandatory in this school
      * @type {boolean}
      * @memberof MigrationBody
      */
-    oauthMigrationMandatory: boolean;
+    oauthMigrationMandatory?: boolean | null;
+    /**
+     * Set if migration is finished in this school
+     * @type {boolean}
+     * @memberof MigrationBody
+     */
+    oauthMigrationFinished?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface MigrationResponse
+ */
+export interface MigrationResponse {
+    /**
+     * Date from when Migration is possible
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationPossible?: string;
+    /**
+     * Date from when Migration is mandatory
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationMandatory?: string;
+    /**
+     * Date from when Migration is finished
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationFinished?: string;
+    /**
+     * Enable the Migration
+     * @type {boolean}
+     * @memberof MigrationResponse
+     */
+    enableMigrationStart: boolean;
 }
 /**
  * 
@@ -2116,6 +2134,25 @@ export interface OidcContextResponse {
 /**
  * 
  * @export
+ * @interface PageContentResponse
+ */
+export interface PageContentResponse {
+    /**
+     * The URL for the proceed button
+     * @type {string}
+     * @memberof PageContentResponse
+     */
+    proceedButtonUrl: string;
+    /**
+     * The URL for the cancel button
+     * @type {string}
+     * @memberof PageContentResponse
+     */
+    cancelButtonUrl: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -2677,6 +2714,31 @@ export interface TargetInfoResponse {
 /**
  * 
  * @export
+ * @interface TaskCardParams
+ */
+export interface TaskCardParams {
+    /**
+     * Visible at date of the card
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    visibleAtDate?: string;
+    /**
+     * Due date of the card
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    dueDate?: string;
+    /**
+     * Card elements array
+     * @type {Array<CardElementParams>}
+     * @memberof TaskCardParams
+     */
+    cardElements: Array<CardElementParams>;
+}
+/**
+ * 
+ * @export
  * @interface TaskCardResponse
  */
 export interface TaskCardResponse {
@@ -2704,6 +2766,18 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     task: TaskResponse;
+    /**
+     * Visible at date of the task card
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    visibleAtDate: string;
+    /**
+     * Due date of the task card
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    dueDate: string;
 }
 /**
  * 
@@ -3002,19 +3076,6 @@ export interface UpdateNewsParams {
      * @memberof UpdateNewsParams
      */
     displayAt?: string;
-}
-/**
- * 
- * @export
- * @interface UpdateTaskCardParams
- */
-export interface UpdateTaskCardParams {
-    /**
-     * Card elements array
-     * @type {Array<CardElementUpdateParams>}
-     * @memberof UpdateTaskCardParams
-     */
-    cardElements: Array<CardElementUpdateParams>;
 }
 /**
  * 
@@ -3783,13 +3844,13 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerCreate: async (createTaskCardParams: CreateTaskCardParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createTaskCardParams' is not null or undefined
-            assertParamExists('taskCardControllerCreate', 'createTaskCardParams', createTaskCardParams)
+        taskCardControllerCreate: async (taskCardParams: TaskCardParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskCardParams' is not null or undefined
+            assertParamExists('taskCardControllerCreate', 'taskCardParams', taskCardParams)
             const localVarPath = `/cards/task`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3813,7 +3874,7 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createTaskCardParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCardParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3897,15 +3958,15 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerUpdate: async (id: string, updateTaskCardParams: UpdateTaskCardParams, options: any = {}): Promise<RequestArgs> => {
+        taskCardControllerUpdate: async (id: string, taskCardParams: TaskCardParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('taskCardControllerUpdate', 'id', id)
-            // verify required parameter 'updateTaskCardParams' is not null or undefined
-            assertParamExists('taskCardControllerUpdate', 'updateTaskCardParams', updateTaskCardParams)
+            // verify required parameter 'taskCardParams' is not null or undefined
+            assertParamExists('taskCardControllerUpdate', 'taskCardParams', taskCardParams)
             const localVarPath = `/cards/task/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3930,7 +3991,7 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateTaskCardParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCardParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3949,12 +4010,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerCreate(createTaskCardParams, options);
+        async taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerCreate(taskCardParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3980,12 +4041,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerUpdate(id, updateTaskCardParams, options);
+        async taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerUpdate(id, taskCardParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4000,12 +4061,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
-            return localVarFp.taskCardControllerCreate(createTaskCardParams, options).then((request) => request(axios, basePath));
+        taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
+            return localVarFp.taskCardControllerCreate(taskCardParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4028,12 +4089,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
-            return localVarFp.taskCardControllerUpdate(id, updateTaskCardParams, options).then((request) => request(axios, basePath));
+        taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
+            return localVarFp.taskCardControllerUpdate(id, taskCardParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4046,12 +4107,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
 export interface CardsApiInterface {
     /**
      * 
-     * @param {CreateTaskCardParams} createTaskCardParams 
+     * @param {TaskCardParams} taskCardParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApiInterface
      */
-    taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
+    taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
 
     /**
      * 
@@ -4074,12 +4135,12 @@ export interface CardsApiInterface {
     /**
      * 
      * @param {string} id The id of the task card.
-     * @param {UpdateTaskCardParams} updateTaskCardParams 
+     * @param {TaskCardParams} taskCardParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApiInterface
      */
-    taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
+    taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
 
 }
 
@@ -4092,13 +4153,13 @@ export interface CardsApiInterface {
 export class CardsApi extends BaseAPI implements CardsApiInterface {
     /**
      * 
-     * @param {CreateTaskCardParams} createTaskCardParams 
+     * @param {TaskCardParams} taskCardParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any) {
-        return CardsApiFp(this.configuration).taskCardControllerCreate(createTaskCardParams, options).then((request) => request(this.axios, this.basePath));
+    public taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any) {
+        return CardsApiFp(this.configuration).taskCardControllerCreate(taskCardParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4126,13 +4187,13 @@ export class CardsApi extends BaseAPI implements CardsApiInterface {
     /**
      * 
      * @param {string} id The id of the task card.
-     * @param {UpdateTaskCardParams} updateTaskCardParams 
+     * @param {TaskCardParams} taskCardParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any) {
-        return CardsApiFp(this.configuration).taskCardControllerUpdate(id, updateTaskCardParams, options).then((request) => request(this.axios, this.basePath));
+    public taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any) {
+        return CardsApiFp(this.configuration).taskCardControllerUpdate(id, taskCardParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -7628,6 +7689,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -7698,7 +7763,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMigration(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7718,7 +7783,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMigration(schoolId, migrationBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7738,7 +7803,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<object> {
+        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7756,7 +7821,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<object> {
+        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -7775,7 +7840,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<object>;
+    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
 
     /**
      * 
@@ -7793,7 +7858,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<object>;
+    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
 
 }
 
@@ -10839,6 +10904,149 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(importUserId, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserMigrationApi - axios parameter creator
+ * @export
+ */
+export const UserMigrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMigrationControllerGetMigrationPageDetails: async (pageType: any, sourceSystem: string, targetSystem: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageType' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'pageType', pageType)
+            // verify required parameter 'sourceSystem' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'sourceSystem', sourceSystem)
+            // verify required parameter 'targetSystem' is not null or undefined
+            assertParamExists('userMigrationControllerGetMigrationPageDetails', 'targetSystem', targetSystem)
+            const localVarPath = `/user-migration/page-content`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (pageType !== undefined) {
+                localVarQueryParameter['pageType'] = pageType;
+            }
+
+            if (sourceSystem !== undefined) {
+                localVarQueryParameter['sourceSystem'] = sourceSystem;
+            }
+
+            if (targetSystem !== undefined) {
+                localVarQueryParameter['targetSystem'] = targetSystem;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserMigrationApi - functional programming interface
+ * @export
+ */
+export const UserMigrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserMigrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageContentResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserMigrationApi - factory interface
+ * @export
+ */
+export const UserMigrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserMigrationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {any} pageType The Type of Page that is displayed
+         * @param {string} sourceSystem The Source System
+         * @param {string} targetSystem The Target System
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): AxiosPromise<PageContentResponse> {
+            return localVarFp.userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserMigrationApi - interface
+ * @export
+ * @interface UserMigrationApi
+ */
+export interface UserMigrationApiInterface {
+    /**
+     * 
+     * @param {any} pageType The Type of Page that is displayed
+     * @param {string} sourceSystem The Source System
+     * @param {string} targetSystem The Target System
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserMigrationApiInterface
+     */
+    userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any): AxiosPromise<PageContentResponse>;
+
+}
+
+/**
+ * UserMigrationApi - object-oriented interface
+ * @export
+ * @class UserMigrationApi
+ * @extends {BaseAPI}
+ */
+export class UserMigrationApi extends BaseAPI implements UserMigrationApiInterface {
+    /**
+     * 
+     * @param {any} pageType The Type of Page that is displayed
+     * @param {string} sourceSystem The Source System
+     * @param {string} targetSystem The Target System
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserMigrationApi
+     */
+    public userMigrationControllerGetMigrationPageDetails(pageType: any, sourceSystem: string, targetSystem: string, options?: any) {
+        return UserMigrationApiFp(this.configuration).userMigrationControllerGetMigrationPageDetails(pageType, sourceSystem, targetSystem, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
