@@ -1,22 +1,18 @@
-import { mount, shallowMount, Wrapper, WrapperArray } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
-import { provide } from "vue";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
 import { SchoolExternalToolStatus } from "@/store/types/school-external-tool";
 
 describe("ExternalToolsSection", () => {
-	let wrapper: Wrapper<any>;
-	let externalToolsModule: ExternalToolsModule;
-
 	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
 		document.body.setAttribute("data-app", "true");
-		externalToolsModule = createModuleMocks(ExternalToolsModule, {
+		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getSchoolExternalTools: [],
 			...getters,
 		});
-		wrapper = mount(ExternalToolsSection, {
+		const wrapper = mount(ExternalToolsSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -26,12 +22,12 @@ describe("ExternalToolsSection", () => {
 			},
 		});
 
-		return {};
+		return { wrapper, externalToolsModule };
 	};
 
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(ExternalToolsSection).exists()).toBeTruthy();
 		});
 	});
@@ -41,44 +37,48 @@ describe("ExternalToolsSection", () => {
 			it("should throw an error", () => {
 				const consoleErrorSpy = jest
 					.spyOn(console, "error")
-					.mockImplementation();
+					.mockImplementation((e) => {
+						throw e;
+					});
 
-				wrapper = shallowMount(ExternalToolsSection, {
-					provide: {
-						externalToolsModule,
-					},
+				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+					getSchoolExternalTools: [],
 				});
 
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
+				expect(() => {
+					shallowMount(ExternalToolsSection, {
+						provide: {
+							externalToolsModule,
+						},
+					});
+				}).toThrow(
 					expect.stringMatching(/\[Vue warn\]: injection "i18n" not found./)
 				);
 
 				consoleErrorSpy.mockRestore();
-
-				// } catch (e) {
-				// 	console.log("--- Error: ", e);
-				// 	expect(
-				// 		(e as Error).message.includes('Injection "i18n" not found')
-				// 	).toBeTruthy();
-				// }
 			});
 		});
 
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
-				try {
-					wrapper = shallowMount(ExternalToolsSection, {
-						setup() {
-							provide("i18n", { t: (key: string) => key });
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation((e) => {
+						throw e;
+					});
+
+				expect(() => {
+					shallowMount(ExternalToolsSection, {
+						provide: {
+							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {
-					expect(
-						(e as Error).message.includes(
-							'Injection "externalToolsModule" not found'
-						)
-					).toBeTruthy();
-				}
+				}).toThrow(
+					expect.stringMatching(
+						/\[Vue warn\]: injection "externalToolsModule" not found./
+					)
+				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});
@@ -86,7 +86,7 @@ describe("ExternalToolsSection", () => {
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
-				setup();
+				const { externalToolsModule } = setup();
 				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
 			});
 		});
@@ -95,9 +95,10 @@ describe("ExternalToolsSection", () => {
 	describe("t is called", () => {
 		describe("when translation key exists", () => {
 			it("should return translation", () => {
-				setup();
+				const { wrapper } = setup();
 				const testKey = "testKey";
 
+				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
 				expect(result).toEqual(testKey);
@@ -106,9 +107,10 @@ describe("ExternalToolsSection", () => {
 
 		describe("when tranlsation key not exists", () => {
 			it("should return unknown translation-key", () => {
-				setup();
+				const { wrapper } = setup();
 				const testKey = 123;
 
+				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
 				expect(result.includes("unknown translation-key:")).toBeTruthy();
@@ -119,9 +121,9 @@ describe("ExternalToolsSection", () => {
 	describe("headers is called", () => {
 		describe("when table is rendered", () => {
 			it("should display dataTableHeaders in v-data-table", () => {
-				setup();
+				const { wrapper } = setup();
 
-				const vueWrapperArray: WrapperArray<any> = wrapper
+				const vueWrapperArray = wrapper
 					.find(".v-data-table-header")
 					.findAll("th");
 
@@ -140,7 +142,7 @@ describe("ExternalToolsSection", () => {
 		const setupItems = () => {
 			const firstToolName = "Test";
 			const secondToolName = "Test2";
-			setup({
+			const { wrapper, externalToolsModule } = setup({
 				getSchoolExternalTools: [
 					{
 						id: "testId",
@@ -157,6 +159,8 @@ describe("ExternalToolsSection", () => {
 				],
 			});
 			return {
+				wrapper,
+				externalToolsModule,
 				firstToolName,
 				secondToolName,
 			};
@@ -164,26 +168,22 @@ describe("ExternalToolsSection", () => {
 
 		describe("when external tools were loaded", () => {
 			it("names should be rendered in the datatable", () => {
-				const { firstToolName, secondToolName } = setupItems();
+				const { wrapper, firstToolName, secondToolName } = setupItems();
 
-				const tableRows: WrapperArray<any> = wrapper
-					.find("tbody")
-					.findAll("tr");
-				const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
-				const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
+				const tableRows = wrapper.find("tbody").findAll("tr");
+				const firstRow = tableRows.at(0).findAll("td");
+				const secondRow = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(0).text()).toEqual(firstToolName);
 				expect(secondRow.at(0).text()).toEqual(secondToolName);
 			});
 
 			it("status should be rendered in the datatable", () => {
-				setupItems();
+				const { wrapper } = setupItems();
 
-				const tableRows: WrapperArray<any> = wrapper
-					.find("tbody")
-					.findAll("tr");
-				const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
-				const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
+				const tableRows = wrapper.find("tbody").findAll("tr");
+				const firstRow = tableRows.at(0).findAll("td");
+				const secondRow = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(1).text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status.latest"
@@ -195,15 +195,11 @@ describe("ExternalToolsSection", () => {
 
 			describe("when actions buttons are rendered", () => {
 				it("the buttons should be displayed", () => {
-					setupItems();
+					const { wrapper } = setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper
-						.find("tbody")
-						.findAll("tr");
+					const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const firstRowButtons: WrapperArray<any> = tableRows
-						.at(1)
-						.findAll("button");
+					const firstRowButtons = tableRows.at(1).findAll("button");
 					expect(
 						firstRowButtons.at(0).classes().includes("v-btn--icon")
 					).toBeTruthy();
@@ -213,35 +209,29 @@ describe("ExternalToolsSection", () => {
 				});
 
 				it("a dialog should be displayed with click on delete", async () => {
-					setupItems();
+					const { wrapper } = setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper
-						.find("tbody")
-						.findAll("tr");
-					const firstRowButtons: WrapperArray<any> = tableRows
-						.at(0)
-						.findAll("button");
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const firstRowButtons = tableRows.at(0).findAll("button");
 					const deleteButton = firstRowButtons.at(1);
 
 					await deleteButton.trigger("click");
 
 					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
+					//@ts-ignore
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
 					it("should have tool name in text", async () => {
-						const { firstToolName } = setupItems();
+						const { wrapper, firstToolName } = setupItems();
 
-						const tableRows: WrapperArray<any> = wrapper
-							.find("tbody")
-							.findAll("tr");
-						const firstRowButtons: WrapperArray<any> = tableRows
-							.at(0)
-							.findAll("button");
+						const tableRows = wrapper.find("tbody").findAll("tr");
+						const firstRowButtons = tableRows.at(0).findAll("button");
 						const deleteButton = firstRowButtons.at(1);
 
 						await deleteButton.trigger("click");
+						await wrapper.vm.$nextTick();
 
 						expect(wrapper.find("p").text()).toContain(firstToolName);
 					});
@@ -249,7 +239,7 @@ describe("ExternalToolsSection", () => {
 
 				describe("when deletion is confirmed", () => {
 					it("should call externalToolsModule.deleteSchoolExternalTool", async () => {
-						setup({
+						const { wrapper, externalToolsModule } = setup({
 							getSchoolExternalTools: [
 								{
 									id: "testId",
@@ -260,13 +250,9 @@ describe("ExternalToolsSection", () => {
 							],
 						});
 
-						const tableRows: WrapperArray<any> = wrapper
-							.find("tbody")
-							.findAll("tr");
+						const tableRows = wrapper.find("tbody").findAll("tr");
 
-						const firstRowButtons: WrapperArray<any> = tableRows
-							.at(0)
-							.findAll("button");
+						const firstRowButtons = tableRows.at(0).findAll("button");
 
 						const deleteButton = firstRowButtons.at(1);
 						await deleteButton.trigger("click");
@@ -283,13 +269,11 @@ describe("ExternalToolsSection", () => {
 
 			describe("when status is rendered", () => {
 				it("should have a red text color when status is outdated", () => {
-					setupItems();
+					const { wrapper } = setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper
-						.find("tbody")
-						.findAll("tr");
+					const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const secondRow: WrapperArray<any> = tableRows.at(1).findAll("td");
+					const secondRow = tableRows.at(1).findAll("td");
 					expect(
 						secondRow.at(0).find("span").classes().includes("outdated")
 					).toBeTruthy();
@@ -299,13 +283,11 @@ describe("ExternalToolsSection", () => {
 				});
 
 				it("should have a normal text color when status is latest", () => {
-					setupItems();
+					const { wrapper } = setupItems();
 
-					const tableRows: WrapperArray<any> = wrapper
-						.find("tbody")
-						.findAll("tr");
+					const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const firstRow: WrapperArray<any> = tableRows.at(0).findAll("td");
+					const firstRow = tableRows.at(0).findAll("td");
 					expect(
 						firstRow.at(0).find("span").classes().includes("outdated")
 					).toBeFalsy();
@@ -320,15 +302,17 @@ describe("ExternalToolsSection", () => {
 	describe("getItemName is called", () => {
 		describe("when itemToDelete is set", () => {
 			it("should return the name", () => {
-				setup();
+				const { wrapper } = setup();
 
 				const expectedName = "Name";
+				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
 					status: SchoolExternalToolStatus.Latest,
 					outdated: false,
 				};
 
+				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
@@ -337,10 +321,12 @@ describe("ExternalToolsSection", () => {
 
 		describe("when itemToDelete is not set", () => {
 			it("should return an empty string", () => {
-				setup();
+				const { wrapper } = setup();
 
+				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
+				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual("");
