@@ -171,13 +171,10 @@ export default class ExternalToolsModule extends VuexModule {
 	): Promise<void> {
 		this.setLoading(true);
 		try {
-			console.log("TOOLID");
-			console.log(toolId);
 			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
 				);
-			console.log(configTemplate.data);
 			this.setToolConfigurationTemplate({
 				id: configTemplate.data.id,
 				name: configTemplate.data.name,

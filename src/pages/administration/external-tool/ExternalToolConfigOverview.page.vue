@@ -19,7 +19,15 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<external-tool-config-settings v-if="toolConfig" :external-tool="toolConfig"></external-tool-config-settings>
+		<external-tool-config-settings :v-show="toolConfig && toolConfig.parameters > 0" :external-tool="toolConfig"></external-tool-config-settings>
+		<v-row class="justify-end mt-10">
+			<v-btn class="mr-2" color="secondary" outlined @click="toolConfig === null">
+				{{ $t("common.actions.cancel") }}
+			</v-btn>
+			<v-btn class="mr-2" color="primary" depressed>
+				{{ $t("common.actions.save") }}
+			</v-btn>
+		</v-row>
 	</default-wireframe>
 </template>
 
@@ -76,9 +84,9 @@ export default defineComponent({
 			}
 		];
 
-		const toolConfig: Ref<ToolConfigurationTemplate> = ref(externalToolsModule.getToolConfigurationTemplate);
+		const toolConfig: Ref<ToolConfigurationTemplate | null> = ref(null);
 
-		const items: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
+		const items: ComputedRef<ToolConfiguration[]> = computed(() => Array.from(externalToolsModule.getToolConfigurations.values()));
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
