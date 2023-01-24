@@ -13,10 +13,10 @@ describe("AdminMigrationSection", () => {
         document.body.setAttribute("data-app", "true");
         schoolsModule = createModuleMocks(SchoolsModule, {
             getOauthMigration: {
-                oauthUserMigration: false,
-                oauthMigrationAvailable: false,
+                enableMigrationStart: false,
+                oauthMigrationPossible: false,
                 oauthMigrationMandatory: false,
-                migrationCompletionDate: "",
+                oauthMigrationFinished: "",
             },
             ...schoolGetters
         }) as jest.Mocked<SchoolsModule>;
@@ -93,10 +93,10 @@ describe("AdminMigrationSection", () => {
         it('should display the info text', ()=> {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -110,10 +110,10 @@ describe("AdminMigrationSection", () => {
         it("should be enabled when migration is available", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const switchComponent = wrapper.findComponent({ name: "v-switch" });
@@ -125,10 +125,10 @@ describe("AdminMigrationSection", () => {
         it("should be disabled when migration is not available", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -141,10 +141,10 @@ describe("AdminMigrationSection", () => {
         it("should set school oauth migration to mandatory, when click have been triggered", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -157,10 +157,10 @@ describe("AdminMigrationSection", () => {
         it("should set school oauth migration to optional, when click has been triggered again", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: true,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -175,10 +175,10 @@ describe("AdminMigrationSection", () => {
         it("should be enabled when migration is enabled", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -194,10 +194,10 @@ describe("AdminMigrationSection", () => {
         it("should be disabled when migration is not enabled", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: false,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: false,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -214,10 +214,10 @@ describe("AdminMigrationSection", () => {
         it("should not render migration start button and migration mandatory switch, when click has been triggered", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -234,10 +234,10 @@ describe("AdminMigrationSection", () => {
         it("should exist and be enabled when migration has started", () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -253,10 +253,10 @@ describe("AdminMigrationSection", () => {
 
         it("should should not render migration end button and migration mandatory switch, when click has been triggered", async () => {
             const { wrapper } = setup({getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }});
 
             const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -272,10 +272,10 @@ describe("AdminMigrationSection", () => {
         it("should exist with 2 buttons", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -294,10 +294,10 @@ describe("AdminMigrationSection", () => {
         it("should have the right text elements ", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -314,10 +314,10 @@ describe("AdminMigrationSection", () => {
         it("should not render the card and start migration, when agree-button is clicked", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -334,10 +334,10 @@ describe("AdminMigrationSection", () => {
         it("should not render the card and not start migration, when disagree-button is clicked", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -348,7 +348,7 @@ describe("AdminMigrationSection", () => {
             await cardButtonDisagree.vm.$emit('click');
 
             expect(cardComponent.exists()).toBe(false);
-            expect(schoolsModule.getOauthMigration).toStrictEqual({oauthMigrationAvailable: false, oauthMigrationMandatory: false, migrationCompletionDate: "", oauthUserMigration: true})
+            expect(schoolsModule.getOauthMigration).toStrictEqual({oauthMigrationPossible: false, oauthMigrationMandatory: false, oauthMigrationFinished: "", enableMigrationStart: true})
         });
     });
 
@@ -356,10 +356,10 @@ describe("AdminMigrationSection", () => {
         it("should exist with 2 buttons", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -379,10 +379,10 @@ describe("AdminMigrationSection", () => {
         it("should have the right text elements ", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 
@@ -400,10 +400,10 @@ describe("AdminMigrationSection", () => {
         it("should not render the card and complete migration, when agree-button is clicked", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -420,10 +420,10 @@ describe("AdminMigrationSection", () => {
         it("should not render the card and not complete migration, when disagree-button is clicked", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: true,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: true,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
             const buttonComponent = wrapper.findComponent({name: "v-btn"});
@@ -434,7 +434,7 @@ describe("AdminMigrationSection", () => {
             await cardButtonDisagree.vm.$emit('click');
 
             expect(cardComponent.exists()).toBe(false);
-            expect(schoolsModule.getOauthMigration).toStrictEqual({oauthMigrationAvailable: true, oauthMigrationMandatory: false, migrationCompletionDate: "", oauthUserMigration: true})
+            expect(schoolsModule.getOauthMigration).toStrictEqual({oauthMigrationPossible: true, oauthMigrationMandatory: false, oauthMigrationFinished: "", enableMigrationStart: true})
         });
     });
 
@@ -443,10 +443,10 @@ describe("AdminMigrationSection", () => {
             const date: string = new Date().toDateString();
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: date,
+                    oauthMigrationFinished: date,
                 }
             });
 
@@ -454,17 +454,17 @@ describe("AdminMigrationSection", () => {
 
             expect(paragraph.exists()).toBe(true);
             expect(paragraph.text()).toEqual(
-                `components.administration.adminMigrationSection.migrationCompletionDate.text${date}`
+                `components.administration.adminMigrationSection.oauthMigrationFinished.text${date}`
             );
         });
 
         it("should not exist when migration has not been completed", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
-                    oauthUserMigration: true,
-                    oauthMigrationAvailable: false,
+                    enableMigrationStart: true,
+                    oauthMigrationPossible: false,
                     oauthMigrationMandatory: false,
-                    migrationCompletionDate: "",
+                    oauthMigrationFinished: "",
                 }
             });
 

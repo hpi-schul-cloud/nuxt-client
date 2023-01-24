@@ -695,10 +695,10 @@ describe("schools module", () => {
 						mockSchool.id
 					);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						oauthUserMigration: true,
-						oauthMigrationAvailable: true,
+						enableMigrationStart: true,
+						oauthMigrationPossible: true,
 						oauthMigrationMandatory: true,
-						migrationCompletionDate: date,
+						oauthMigrationFinished: date,
 					});
 				});
 			});
@@ -716,10 +716,10 @@ describe("schools module", () => {
 
 					expect(schoolControllerGetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						oauthUserMigration: false,
-						oauthMigrationAvailable: false,
+						enableMigrationStart: false,
+						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
-						migrationCompletionDate: "",
+						oauthMigrationFinished: "",
 					});
 				});
 			});
@@ -768,15 +768,15 @@ describe("schools module", () => {
 
 					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						oauthUserMigration: true,
-						oauthMigrationAvailable: true,
+						enableMigrationStart: true,
+						oauthMigrationPossible: true,
 						oauthMigrationMandatory: false,
-						migrationCompletionDate: undefined,
+						oauthMigrationFinished: undefined,
 					});
 				});
 			});
 
-			describe("when school id is give and MigrationCompletionDate exists", () => {
+			describe("when school id is give and oauthMigrationFinished exists", () => {
 				it("should call schoolControllerSetMigration and return state of OauthMigration", async () => {
 					const { schoolControllerSetMigration } = setupApi();
 					const date: string = new Date().toDateString();
@@ -802,10 +802,10 @@ describe("schools module", () => {
 
 					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						oauthUserMigration: true,
-						oauthMigrationAvailable: false,
+						enableMigrationStart: true,
+						oauthMigrationPossible: false,
 						oauthMigrationMandatory: true,
-						migrationCompletionDate: date,
+						oauthMigrationFinished: date,
 					});
 				});
 			});
@@ -827,10 +827,10 @@ describe("schools module", () => {
 
 					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(0);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						oauthUserMigration: false,
-						oauthMigrationAvailable: false,
+						enableMigrationStart: false,
+						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
-						migrationCompletionDate: "",
+						oauthMigrationFinished: "",
 					});
 				});
 			});
@@ -928,10 +928,10 @@ describe("schools module", () => {
 			it("should set oauth migration data", () => {
 				const schoolsModule = new SchoolsModule({});
 				const oauthMigrationValue = {
-					oauthUserMigration: true,
-					oauthMigrationAvailable: true,
+					enableMigrationStart: true,
+					oauthMigrationPossible: true,
 					oauthMigrationMandatory: true,
-					migrationCompletionDate: new Date().toDateString(),
+					oauthMigrationFinished: new Date().toDateString(),
 				};
 				expect(schoolsModule.getOauthMigration).not.toStrictEqual(
 					oauthMigrationValue
@@ -1099,10 +1099,10 @@ describe("schools module", () => {
 			it("should return oauth migration data", () => {
 				const schoolsModule = new SchoolsModule({});
 				const oauthMigrationValue = {
-					oauthUserMigration: true,
-					oauthMigrationAvailable: true,
+					enableMigrationStart: true,
+					oauthMigrationPossible: true,
 					oauthMigrationMandatory: true,
-					migrationCompletionDate: new Date().toDateString(),
+					oauthMigrationFinished: new Date().toDateString(),
 				};
 				expect(schoolsModule.getOauthMigration).not.toStrictEqual(
 					oauthMigrationValue

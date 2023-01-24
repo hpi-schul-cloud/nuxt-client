@@ -115,7 +115,7 @@
 	"components.administration.adminMigrationSection.headers": "міграція",
 	"components.administration.adminMigrationSection.infoText": "Зверніть увагу, що міграція можлива лише за умови введення офіційного номера школи.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label": "Міграція обов'язкова",
-	"components.administration.adminMigrationSection.migrationCompletionDate.text": "Востаннє міграція було завершено ",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text": "Востаннє міграція було завершено ",
 	"components.administration.adminMigrationSection.migrationEnableButton.label": "Розпочати міграцію",
 	"components.administration.adminMigrationSection.migrationEndButton.label": "повна міграція",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Так, почати міграцію",

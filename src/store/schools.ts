@@ -108,10 +108,10 @@ export default class SchoolsModule extends VuexModule {
 		__v: 0,
 	};
 	oauthMigration: OauthMigration = {
-		oauthUserMigration: false,
-		oauthMigrationAvailable: false,
+		enableMigrationStart: false,
+		oauthMigrationPossible: false,
 		oauthMigrationMandatory: false,
-		migrationCompletionDate: "",
+		oauthMigrationFinished: "",
 	};
 	systems: any[] = [];
 	loading: boolean = false;
@@ -363,10 +363,10 @@ export default class SchoolsModule extends VuexModule {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
 				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
 			this.setOauthMigration({
-				oauthUserMigration: oauthMigration.data.enableMigrationStart,
-				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
 			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -388,10 +388,10 @@ export default class SchoolsModule extends VuexModule {
 					migrationFlags
 				);
 			this.setOauthMigration({
-				oauthUserMigration: oauthMigration.data.enableMigrationStart,
-				oauthMigrationAvailable: !!oauthMigration.data.oauthMigrationPossible,
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				migrationCompletionDate: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
 			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {

@@ -115,7 +115,7 @@
 	"components.administration.adminMigrationSection.headers": "Migration",
 	"components.administration.adminMigrationSection.infoText": "Please note that migration can only take place if the official school number is entered.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label": "Migration mandatory",
-	"components.administration.adminMigrationSection.migrationCompletionDate.text": "The migration was last completed on ",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text": "The migration was last completed on ",
 	"components.administration.adminMigrationSection.migrationEnableButton.label": "Start migration",
 	"components.administration.adminMigrationSection.migrationEndButton.label": "Complete migration",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Yes, start migration",
