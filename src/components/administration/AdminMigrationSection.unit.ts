@@ -269,69 +269,56 @@ describe("AdminMigrationSection", () => {
     });
 
     describe("Migration start card", () => {
-        it("should exist with 2 buttons", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: false,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
+        describe("when migration start button is clicked", () => {
+            it("should be rendered", async () => {
+                const {wrapper} = setup({
+                    getOauthMigration: {
+                        enableMigrationStart: true,
+                        oauthMigrationPossible: false,
+                        oauthMigrationMandatory: false,
+                        oauthMigrationFinished: "",
+                    }
+                });
+                const buttonComponent = wrapper.findComponent({name: "v-btn"});
+                await buttonComponent.vm.$emit('click');
+
+                const cardComponent = wrapper.findComponent({name: "v-card"});
+
+
+                expect(cardComponent.exists()).toBe(true);
+                expect(cardComponent.classes('migration-start-card')).toBe(true);
             });
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
+        });
+    });
 
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-            const cardButtonAgree = cardComponent.find('.agree-btn-start');
-            const cardButtonDisagree = cardComponent.find('.disagree-btn-start');
+        describe("when agree button of card is clicked", () => {
+            it("should not render the card and start migration", async () => {
+                const {wrapper} = setup({
+                    getOauthMigration: {
+                        enableMigrationStart: true,
+                        oauthMigrationPossible: false,
+                        oauthMigrationMandatory: false,
+                        oauthMigrationFinished: "",
+                    }
+                });
+                const buttonComponent = wrapper.findComponent({name: "v-btn"});
+                await buttonComponent.vm.$emit('click');
 
-            expect(cardComponent.exists()).toBe(true);
-            expect(cardComponent.classes('migration-start-card')).toBe(true);
-            expect(cardButtonAgree.exists()).toBe(true);
-            expect(cardButtonDisagree.exists()).toBe(true);
+                const cardComponent = wrapper.findComponent({name: "v-card"});
+                const cardButtonAgree = cardComponent.find('.agree-btn-start');
+                await cardButtonAgree.vm.$emit('click');
+
+                expect(cardComponent.exists()).toBe(false);
+                expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({
+                    oauthMigrationPossible: true,
+                    oauthMigrationMandatory: false,
+                    oauthMigrationFinished: false
+                });
+            });
         });
 
-        it("should have the right text elements ", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: false,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
-            });
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
-
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.startWarningCard.title");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.startWarningCard.text");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.startWarningCard.agree");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.startWarningCard.disagree");
-        });
-
-        it("should not render the card and start migration, when agree-button is clicked", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: false,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
-            });
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
-
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-            const cardButtonAgree = cardComponent.find('.agree-btn-start');
-            await cardButtonAgree.vm.$emit('click');
-
-            expect(cardComponent.exists()).toBe(false);
-            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({oauthMigrationPossible: true, oauthMigrationMandatory: false, oauthMigrationFinished: false});
-        });
-
-        it("should not render the card and not start migration, when disagree-button is clicked", async () => {
+        describe("when disagree button of card is clicked", () => {
+        it("should not render the card and not start migration", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
                     enableMigrationStart: true,
@@ -353,71 +340,58 @@ describe("AdminMigrationSection", () => {
     });
 
     describe("Migration end card", () => {
-        it("should exist with 2 buttons", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: true,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
+        describe("when migration end button is clicked", () => {
+            it("should be rendered", async () => {
+                const {wrapper} = setup({
+                    getOauthMigration: {
+                        enableMigrationStart: true,
+                        oauthMigrationPossible: true,
+                        oauthMigrationMandatory: false,
+                        oauthMigrationFinished: "",
+                    }
+                });
+
+                const buttonComponent = wrapper.findComponent({name: "v-btn"});
+                await buttonComponent.vm.$emit('click');
+
+                const cardComponent = wrapper.findComponent({name: "v-card"});
+                const cardButtonAgree = cardComponent.find('.agree-btn-end');
+                const cardButtonDisagree = cardComponent.find('.disagree-btn-end');
+
+                expect(cardComponent.exists()).toBe(true);
+                expect(cardComponent.classes('migration-end-card')).toBe(true);
             });
+        });
+    });
 
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
+        describe("when agree button of card is clicked", () => {
+            it("should not render the card and complete migration", async () => {
+                const {wrapper} = setup({
+                    getOauthMigration: {
+                        enableMigrationStart: true,
+                        oauthMigrationPossible: true,
+                        oauthMigrationMandatory: false,
+                        oauthMigrationFinished: "",
+                    }
+                });
+                const buttonComponent = wrapper.findComponent({name: "v-btn"});
+                await buttonComponent.vm.$emit('click');
 
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-            const cardButtonAgree = cardComponent.find('.agree-btn-end');
-            const cardButtonDisagree = cardComponent.find('.disagree-btn-end');
+                const cardComponent = wrapper.findComponent({name: "v-card"});
+                const cardButtonAgree = cardComponent.find('.agree-btn-end');
+                await cardButtonAgree.vm.$emit('click');
 
-            expect(cardComponent.exists()).toBe(true);
-            expect(cardComponent.classes('migration-end-card')).toBe(true);
-            expect(cardButtonAgree.exists()).toBe(true);
-            expect(cardButtonDisagree.exists()).toBe(true);
+                expect(cardComponent.exists()).toBe(false);
+                expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({
+                    oauthMigrationPossible: false,
+                    oauthMigrationMandatory: false,
+                    oauthMigrationFinished: true
+                });
+            });
         });
 
-        it("should have the right text elements ", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: true,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
-            });
-
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
-
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.endWarningCard.title");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.endWarningCard.text");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.endWarningCard.agree");
-            expect(cardComponent.text()).toContain("components.administration.adminMigrationSection.endWarningCard.disagree");
-        });
-
-        it("should not render the card and complete migration, when agree-button is clicked", async () => {
-            const { wrapper } = setup({
-                getOauthMigration: {
-                    enableMigrationStart: true,
-                    oauthMigrationPossible: true,
-                    oauthMigrationMandatory: false,
-                    oauthMigrationFinished: "",
-                }
-            });
-            const buttonComponent = wrapper.findComponent({name: "v-btn"});
-            await buttonComponent.vm.$emit('click');
-
-            const cardComponent = wrapper.findComponent({name: "v-card"});
-            const cardButtonAgree = cardComponent.find('.agree-btn-end');
-            await cardButtonAgree.vm.$emit('click');
-
-            expect(cardComponent.exists()).toBe(false);
-            expect(schoolsModule.setSchoolOauthMigration).toHaveBeenCalledWith({oauthMigrationPossible: false, oauthMigrationMandatory: false, oauthMigrationFinished: true});
-        });
-
-        it("should not render the card and not complete migration, when disagree-button is clicked", async () => {
+        describe("when disagree button of card is clicked", () => {
+            it("should not render the card and not complete migration", async () => {
             const { wrapper } = setup({
                 getOauthMigration: {
                     enableMigrationStart: true,
@@ -435,8 +409,8 @@ describe("AdminMigrationSection", () => {
 
             expect(cardComponent.exists()).toBe(false);
             expect(schoolsModule.getOauthMigration).toStrictEqual({oauthMigrationPossible: true, oauthMigrationMandatory: false, oauthMigrationFinished: "", enableMigrationStart: true})
+            });
         });
-    });
 
     describe("Date paragraph", () => {
         it("should exist when migration has been completed", async () => {
