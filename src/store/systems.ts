@@ -61,7 +61,7 @@ export default class SystemsModule extends VuexModule {
 			this.setSystems(mappedSystems);
 			this.setLoading(false);
 		} catch (e) {
-			console.error(`Some error occurred while loading system data: ${e}`);
+			console.log(`Some error occurred while loading system data: ${e}`);
 			this.setLoading(false);
 		}
 	}

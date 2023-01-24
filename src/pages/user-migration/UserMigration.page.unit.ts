@@ -261,8 +261,7 @@ describe("UserMigration", () => {
 		});
 	});
 
-	// TODO
-	/*describe("Api", () => {
+	describe("Api", () => {
 		describe("when origin is equal to sourceSystem", () => {
 			it("should call the api to load the migrations links", () => {
 				setup({
@@ -324,5 +323,5 @@ describe("UserMigration", () => {
 				expect(func).toThrow("Unknown origin system");
 			});
 		});
-	});*/
+	});
 });

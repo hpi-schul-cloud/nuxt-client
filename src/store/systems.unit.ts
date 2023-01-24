@@ -112,6 +112,18 @@ describe("SystemsModule", () => {
 
 				expect(module.getSystems).toEqual([system]);
 			});
+
+			it("should log an error", async () => {
+				const { apiMock } = setup();
+				apiMock.systemControllerFind.mockRejectedValue(new Error());
+				jest.spyOn(console, "log");
+
+				await module.fetchSystems();
+
+				expect(console.log).toHaveBeenCalledWith(
+					expect.stringContaining("error")
+				);
+			});
 		});
 	});
 });

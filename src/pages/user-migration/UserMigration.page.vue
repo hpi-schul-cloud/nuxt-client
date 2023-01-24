@@ -5,7 +5,10 @@
 			src="@assets/img/logo/logo-image-mono.svg"
 			alt="Schulcloud Logo"
 		/>
-		<div class="text-center mt-16 mx-auto container-max-width">
+		<div
+				v-show="hasData"
+				class="text-center mt-16 mx-auto container-max-width"
+		>
 			<h1 class="pl-4 pr-4">
 				{{
 					$t("pages.userMigration.title", {
@@ -66,6 +69,8 @@ import { MigrationPageOrigin } from "@store/types/user-migration";
 import {
 	computed,
 	ComputedRef,
+	ref,
+	Ref,
 	defineComponent,
 	inject,
 	onMounted,
@@ -144,16 +149,22 @@ export default defineComponent({
 			);
 		}
 
+		const hasData: Ref<boolean> = ref(false);
+
 		onMounted(async () => {
-			await systemsModule.fetchSystems();
-			await userMigrationModule.fetchMigrationLinks({
-				pageType,
-				sourceSystem: props.sourceSystem,
-				targetSystem: props.targetSystem,
-			});
+			await Promise.all([
+				systemsModule.fetchSystems(),
+				userMigrationModule.fetchMigrationLinks({
+					pageType,
+					sourceSystem: props.sourceSystem,
+					targetSystem: props.targetSystem,
+				})
+			]);
+			hasData.value = true;
 		});
 
 		return {
+			hasData,
 			migrationDescription,
 			proceedLink,
 			cancelLink,

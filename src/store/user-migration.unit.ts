@@ -127,6 +127,20 @@ describe("UserMigrationModule", () => {
 					cancelLink: response.cancelButtonUrl,
 				});
 			});
+
+			it("should log an error", async () => {
+				const { apiMock, migrationLinkRequest } = setup();
+				apiMock.userMigrationControllerGetMigrationPageDetails.mockRejectedValue(
+					new Error()
+				);
+				jest.spyOn(console, "log");
+
+				await module.fetchMigrationLinks(migrationLinkRequest);
+
+				expect(console.log).toHaveBeenCalledWith(
+					expect.stringContaining("error")
+				);
+			});
 		});
 	});
 });

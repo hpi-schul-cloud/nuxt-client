@@ -65,7 +65,7 @@ export default class UserMigrationModule extends VuexModule {
 			this.setMigrationLinks(mappedLinks);
 			this.setLoading(false);
 		} catch (e) {
-			console.error(`Some error occurred while loading migration links: ${e}`);
+			console.log(`Some error occurred while loading migration links: ${e}`);
 			this.setLoading(false);
 		}
 	}
