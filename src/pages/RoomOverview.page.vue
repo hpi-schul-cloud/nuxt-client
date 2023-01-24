@@ -175,9 +175,6 @@ export default {
 		UserHasRole,
 	},
 	layout: "defaultVuetify",
-	props: {
-		role: { type: String, default: "" },
-	},
 	data() {
 		return {
 			device: "mobile",
@@ -262,9 +259,7 @@ export default {
 	},
 	methods: {
 		isTeacher(roles) {
-			return this.role === ""
-				? roles.some((role) => role.startsWith("teacher"))
-				: this.role;
+			return roles.some((role) => role.startsWith("teacher"));
 		},
 		onCloseNotificationCannotArrangeSubstitute() {
 			roomsModule.setShowNotificationCannotArrangeSubstitute(false);
