@@ -10,8 +10,8 @@ export const actions = {
 			const promiseResult = await Promise.allSettled(
 				payload.forEach((user) => {
 					registered.push(user._id);
-					this.$axios
-						.$patch("/v1/users/admin/students/" + user._id, {
+					$axios
+						.patch("/v1/users/admin/students/" + user._id, {
 							...user,
 							createAccount: true,
 						})
