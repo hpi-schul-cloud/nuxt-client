@@ -1,5 +1,6 @@
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
+import Pagination from "@/components/organisms/Pagination.vue";
 
 const defaultData = tableData(5);
 
@@ -87,6 +88,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				currentPage: 1,
 			});
 			wrapper.find(`[aria-label="Go to next page"]`).trigger("click");
+			console.log(wrapper.emitted("update:current-page"));
 			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});
@@ -287,28 +289,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				"inclusive",
 			]);
 		});
-
-		// disabled until its implementation is completed
-
-		// it("can select all values from all page", async () => {
-		// 	const rowsPerPage = testData.length;
-		// 	const wrapper = getWrapper({
-		// 		data: testData,
-		// 		paginated: true,
-		// 		rowsPerPage,
-		// 		rowsSelectable: true,
-		// 		total,
-		// 	});
-		// 	expect(await getVisibleSelections(wrapper)).toHaveLength(0);
-		// 	wrapper.find("thead tr input[type=checkbox]").trigger("click");
-		// 	await wrapper.vm.$nextTick();
-		// 	wrapper.find("button.select-all-rows").trigger("click");
-		// 	await wrapper.vm.$nextTick();
-		// 	expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
-		// 		[],
-		// 		"exclusive",
-		// 	]);
-		// });
 
 		it("can preselect values", async () => {
 			const totalSelections = testData.length;
