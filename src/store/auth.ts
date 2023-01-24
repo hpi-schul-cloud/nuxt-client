@@ -1,4 +1,3 @@
-import { getLoginUrlWithRedirect } from "@/router/login-redirect-url";
 import {
 	ChangeLanguageParamsLanguageEnum,
 	UserApiFactory,

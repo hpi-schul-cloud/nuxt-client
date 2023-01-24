@@ -1,19 +1,26 @@
-import { Route } from "vue-router";
-import { mount } from "@vue/test-utils";
+import VueRouter from "vue-router";
+import { createLocalVue, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import setupStores from "@@/tests/test-utils/setupStores";
-import TaskCardModule from "@/store/task-card";
-import AuthModule from "@/store/auth";
 import { User } from "@/store/types/auth";
 import TaskCard from "./TaskCard.page.vue";
 
-const $router = { go: jest.fn() };
-const taskCreateRoute: Route = {
-	path: "/task-cards/new",
-} as Route;
-// const taskEditRoute: Route = {
-// 	path: "/tasks/new",
-// } as Route;
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+
+const authModuleMock = () => {
+	return {
+		getUserPermissions: ["HOMEWORK_CREATE"],
+	};
+};
+
+const taskCardModuleMock = () => {
+	return { getTaskCardData: { cardElements: [] } };
+};
+
+jest.mock("@/store", () => ({
+	authModule: authModuleMock(),
+	taskCardModule: taskCardModuleMock(),
+}));
 
 const mockAuthStoreDataStudent: User = {
 	__v: 1,
@@ -43,20 +50,19 @@ const mockTaskStoreData = {
 	description: "",
 };
 
-const getWrapper = (
-	$route: Route = taskCreateRoute,
-	props?: object,
-	options?: object
-) => {
+const getWrapper = (props?: object, options?: object) => {
+	const componentOptions = createComponentMocks({ i18n: true });
+	const { localVue } = componentOptions;
+	localVue.use(VueRouter);
+	const router = new VueRouter({ routes: [{ path: "/tasks/new" }] });
+
 	return mount(TaskCard, {
-		...createComponentMocks({
-			i18n: true,
-			$router,
-			$route,
-		}),
+		...componentOptions,
 		provide: {
 			i18n: { t: (key: string) => key },
 		},
+		localVue,
+		router,
 		propsData: props,
 		...options,
 	});
@@ -66,10 +72,6 @@ describe("TaskCard", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({
-			task: TaskCardModule,
-			auth: AuthModule,
-		});
 	});
 
 	it("should render component page", () => {

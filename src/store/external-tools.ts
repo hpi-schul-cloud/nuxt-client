@@ -6,7 +6,7 @@ import { useSchoolExternalToolUtils } from "@/components/administration/school-e
 import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 
 @Module({
-	name: "external-tools",
+	name: "externalToolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -14,13 +14,8 @@ export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
 	private loading = false;
 
-	private _toolApi?: ToolApiInterface;
-
 	private get toolApi(): ToolApiInterface {
-		if (!this._toolApi) {
-			this._toolApi = ToolApiFactory(undefined, "v3", $axios);
-		}
-		return this._toolApi;
+		return ToolApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation

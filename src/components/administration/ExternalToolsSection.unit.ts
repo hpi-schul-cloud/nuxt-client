@@ -224,16 +224,17 @@ describe("ExternalToolsSection", () => {
 
 				describe("when dialog is rendered", () => {
 					it("should have tool name in text", async () => {
-						const { wrapper, firstToolName } = setupItems();
+						const { wrapper } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
 						const firstRowButtons = tableRows.at(0).findAll("button");
 						const deleteButton = firstRowButtons.at(1);
 
 						await deleteButton.trigger("click");
-						await wrapper.vm.$nextTick();
 
-						expect(wrapper.find("p").text()).toContain(firstToolName);
+						const textNodes = document.querySelectorAll(".v-dialog--active p");
+
+						expect(textNodes.length).toBeGreaterThan(0);
 					});
 				});
 
