@@ -21,7 +21,7 @@
 		</v-select>
 		<external-tool-config-settings :v-show="toolConfig && toolConfig.parameters > 0" :external-tool="toolConfig"></external-tool-config-settings>
 		<v-row class="justify-end mt-10">
-			<v-btn class="mr-2" color="secondary" outlined @click="toolConfig === null">
+			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn class="mr-2" color="primary" depressed>
@@ -36,12 +36,13 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { defineComponent } from "@vue/composition-api";
 import { Breadcrumb } from "@components/templates/default-wireframe.types";
 import VueI18n from "vue-i18n";
-import { computed, ComputedRef, inject, onMounted, ref, Ref } from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, ref, Ref, useRouter } from "@nuxtjs/composition-api";
 import ExternalToolConfigSettings from "@components/administration/external-tool/ExternalToolConfigSettings.vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import { ToolConfiguration } from "@store/external-tool/tool-configuration";
 import { externalToolsModule } from "@utils/store-accessor";
 import { ToolConfigurationTemplate } from "@store/external-tool/tool-configuration-template";
+import VueRouter from "vue-router";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
@@ -69,15 +70,16 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
+		const schoolSetting: Breadcrumb = {
+			text: t("pages.administration.school.index.title"),
+			to: "/administration/school-settings#tools",
+		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
 				text: t("pages.administration.index.title"),
 				to: "/administration/",
 			},
-			{
-				text: t("pages.administration.school.index.title"),
-				to: "/administration/school-settings#tools",
-			},
+			schoolSetting,
 			{
 				text: "Konfiguration Externer Tools",
 				disabled: true,
@@ -90,11 +92,17 @@ export default defineComponent({
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
+		const router: VueRouter = useRouter();
+		const onCancel = () => {
+			router.push({ path: schoolSetting.to });
+		}
+
 		return {
 			breadcrumbs,
 			toolConfig,
 			items,
 			loading,
+			onCancel,
 		}
 	},
 });
