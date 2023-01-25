@@ -32,7 +32,6 @@
 import { defineComponent, inject, ref, computed } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
-import moment from "moment";
 import { mdiCalendar } from "@mdi/js";
 
 // TODO - Accessibility
@@ -53,6 +52,7 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
+		// TODO - use end of school year
 		const today = new Date().toISOString().substr(0, 10);
 		const date = ref(today);
 		const showDateDialog = ref(false);
@@ -62,7 +62,7 @@ export default defineComponent({
 			dayjs(dateValue).format(i18n.t("format.dateMedium"));
 
 		const formattedDate = computed(() => {
-			return date.value ? moment(date.value).format(i18n.t("format.date")) : "";
+			return dayjs(date.value).format(i18n.t("format.date"));
 		});
 
 		const allowedDates = (value: string) =>
