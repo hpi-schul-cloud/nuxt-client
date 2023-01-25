@@ -1,3 +1,5 @@
+import { ToolParameter } from "./tool-parameter";
+
 export interface ToolConfigurationTemplate {
 	id: string;
 
@@ -5,7 +7,7 @@ export interface ToolConfigurationTemplate {
 
 	logoUrl?: string;
 
-	parameters: string[];
+	parameters: ToolParameter[];
 
 	version: number;
 }

@@ -29,7 +29,7 @@
 				/>
 			</template>
 		</v-data-table>
-		<v-btn class="my-5 button-save" color="primary" depressed @click="addTool">
+		<v-btn class="my-5 button-save" color="primary" depressed to="/administration/school-settings/tool">
 			{{ $t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
@@ -82,20 +82,13 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref, useRouter,
-} from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
-import VueRouter from "vue-router";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -138,11 +131,6 @@ export default defineComponent({
 			return item.outdated ? "outdated" : "";
 		};
 
-		const router: VueRouter = useRouter();
-		const addTool = () => {
-			router.push({ name: "administration-tool-config-overview" });
-		};
-
 		const editTool = (item: SchoolExternalToolItem) => {
 			console.log(`editTool() called with ${item}`);
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
@@ -183,7 +171,6 @@ export default defineComponent({
 			items,
 			isLoading,
 			getColor,
-			addTool,
 			editTool,
 			onDeleteTool,
 			isDeleteDialogOpen,

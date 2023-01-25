@@ -4,7 +4,7 @@ import { createModuleMocks } from "@utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
-import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
+import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
 describe("ExternalToolsSection", () => {
 	let wrapper: Wrapper<any>;
@@ -130,13 +130,13 @@ describe("ExternalToolsSection", () => {
 					{
 						id: "testId",
 						name: firstToolName,
-						status: SchoolExternalToolStatus.Latest,
+						status: SchoolExternalToolStatusEnum.Latest,
 						version: 1,
 					},
 					{
 						id: "testId2",
 						name: secondToolName,
-						status: SchoolExternalToolStatus.Outdated,
+						status: SchoolExternalToolStatusEnum.Outdated,
 						version: 1,
 					},
 				],
@@ -239,7 +239,7 @@ describe("ExternalToolsSection", () => {
 								{
 									id: "testId",
 									name: "firstToolName",
-									status: SchoolExternalToolStatus.Latest,
+									status: SchoolExternalToolStatusEnum.Latest,
 									version: 1,
 								},
 							],
@@ -310,7 +310,7 @@ describe("ExternalToolsSection", () => {
 				const expectedName = "Name";
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: SchoolExternalToolStatus.Latest,
+					status: SchoolExternalToolStatusEnum.Latest,
 					outdated: false,
 				};
 

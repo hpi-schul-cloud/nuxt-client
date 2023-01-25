@@ -1,5 +1,10 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { SchoolExternalTool } from "./external-tool/school-external-tool";
+import {
+	SchoolExternalTool,
+	ToolConfiguration,
+	ToolConfigurationScope,
+	ToolConfigurationTemplate,
+} from "./external-tool";
 import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
 import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
@@ -7,13 +12,10 @@ import {
 	ExternalToolConfigurationTemplateResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
 } from "../serverApi/v3";
-import { ToolConfigurationScope } from "./external-tool/tool-configuration-scope";
 import { AxiosResponse } from "axios";
-import { ToolConfiguration } from "./external-tool/tool-configuration";
-import { ToolConfigurationTemplate } from "./external-tool/tool-configuration-template";
+import { useExternalToolUtils } from "@pages/administration/external-tool/external-tool-utils.composable";
 
 @Module({
 	name: "external-tools",
@@ -144,17 +146,12 @@ export default class ExternalToolsModule extends VuexModule {
 						ToolConfigurationScope.SCHOOL,
 						authModule.getUser.schoolId
 					);
-				const mappedToolConfigurations: ToolConfiguration[] =
-					availableTools.data.data.map(
-						(
-							toolConfigResponse: ToolConfigurationEntryResponse
-						): ToolConfiguration => ({
-							id: toolConfigResponse.id,
-							name: toolConfigResponse.name,
-							logoUrl: toolConfigResponse.logoUrl,
-						})
-					);
-				this.setToolConfigurations(mappedToolConfigurations);
+
+				this.setToolConfigurations(
+					useExternalToolUtils().mapToolConfigurationListResponse(
+						availableTools.data
+					)
+				);
 			}
 			this.setLoading(false);
 		} catch (e) {
@@ -175,13 +172,12 @@ export default class ExternalToolsModule extends VuexModule {
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
 				);
-			this.setToolConfigurationTemplate({
-				id: configTemplate.data.id,
-				name: configTemplate.data.name,
-				logoUrl: configTemplate.data.logoUrl,
-				version: configTemplate.data.version,
-				parameters: [...configTemplate.data.parameters],
-			});
+
+			this.setToolConfigurationTemplate(
+				useExternalToolUtils().mapExternalToolConfigurationTemplateResponse(
+					configTemplate.data
+				)
+			);
 			this.setLoading(false);
 		} catch (e) {
 			console.log(

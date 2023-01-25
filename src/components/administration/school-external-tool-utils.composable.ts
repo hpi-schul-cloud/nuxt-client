@@ -1,4 +1,4 @@
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
 import { DataTableHeader } from "vuetify";
 import ExternalToolsModule from "@store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
@@ -7,18 +7,18 @@ import {
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
-import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
+import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
 const responseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolStatus
+	SchoolExternalToolStatusEnum
 > = {
 	[SchoolExternalToolResponseStatusEnum.Latest]:
-		SchoolExternalToolStatus.Latest,
+		SchoolExternalToolStatusEnum.Latest,
 	[SchoolExternalToolResponseStatusEnum.Outdated]:
-		SchoolExternalToolStatus.Outdated,
+		SchoolExternalToolStatusEnum.Outdated,
 	[SchoolExternalToolResponseStatusEnum.Unknown]:
-		SchoolExternalToolStatus.Unknown,
+		SchoolExternalToolStatusEnum.Unknown,
 };
 
 export function useSchoolExternalToolUtils(
@@ -51,7 +51,7 @@ export function useSchoolExternalToolUtils(
 		return {
 			id: schoolExternalToolItem.id,
 			name: schoolExternalToolItem.name,
-			status: SchoolExternalToolStatus.Unknown,
+			status: SchoolExternalToolStatusEnum.Unknown,
 		};
 	};
 
@@ -81,9 +81,9 @@ export function useSchoolExternalToolUtils(
 			externalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
 			const outdated: boolean =
-				tool.status === SchoolExternalToolStatus.Outdated;
+				tool.status === SchoolExternalToolStatusEnum.Outdated;
 			const status: string =
-				tool.status === SchoolExternalToolStatus.Latest
+				tool.status === SchoolExternalToolStatusEnum.Latest
 					? t(
 							"components.administration.externalToolsSection.table.header.status.latest"
 					  )

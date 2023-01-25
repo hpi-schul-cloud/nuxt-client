@@ -1,5 +1,5 @@
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool";
+import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
 import { DataTableHeader } from "vuetify";
 import { externalToolsModule } from "@utils/store-accessor";
 import {
@@ -8,7 +8,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolStatus } from "@store/external-tool/school-external-tool-status";
+import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
 jest.mock("@utils/store-accessor", () => ({
 	externalToolsModule: {
@@ -17,7 +17,7 @@ jest.mock("@utils/store-accessor", () => ({
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: SchoolExternalToolStatus.Latest,
+				status: SchoolExternalToolStatusEnum.Latest,
 			},
 		],
 	},
@@ -56,7 +56,7 @@ describe("useSchoolExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: SchoolExternalToolStatus.Latest,
+			status: SchoolExternalToolStatusEnum.Latest,
 			outdated: false,
 		};
 
@@ -101,7 +101,7 @@ describe("useSchoolExternalToolUtils", () => {
 							id: toolResponse.id,
 							name: toolResponse.name,
 							version: toolResponse.toolVersion,
-							status: SchoolExternalToolStatus.Latest,
+							status: SchoolExternalToolStatusEnum.Latest,
 						},
 					])
 				);
@@ -192,7 +192,7 @@ describe("useSchoolExternalToolUtils", () => {
 				expect.objectContaining<SchoolExternalTool>({
 					id: schoolExternaToolItem.id,
 					name: schoolExternaToolItem.name,
-					status: SchoolExternalToolStatus.Unknown,
+					status: SchoolExternalToolStatusEnum.Unknown,
 					version: undefined,
 				})
 			);

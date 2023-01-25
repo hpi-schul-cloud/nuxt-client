@@ -6,13 +6,13 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolApi,
 } from "../serverApi/v3";
-import { SchoolExternalTool } from "./external-tool/school-external-tool";
+import { SchoolExternalTool } from "./external-tool/school-external-tool.enum";
 import setupStores from "../../tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@utils/store-accessor";
 import * as schoolExternalToolUtilsComposable from "@components/administration/school-external-tool-utils.composable";
-import { SchoolExternalToolStatus } from "./external-tool/school-external-tool-status";
+import { SchoolExternalToolStatusEnum } from "./external-tool/school-external-tool-status.enum";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -96,7 +96,7 @@ describe("ExternalToolsModule", () => {
 
 		const schoolExternalTool: SchoolExternalTool = {
 			name: "Test",
-			status: SchoolExternalToolStatus.Latest,
+			status: SchoolExternalToolStatusEnum.Latest,
 			id: "testId",
 			version: 1,
 		};
@@ -104,7 +104,7 @@ describe("ExternalToolsModule", () => {
 			schoolExternalTool,
 			{
 				name: "Test2",
-				status: SchoolExternalToolStatus.Outdated,
+				status: SchoolExternalToolStatusEnum.Outdated,
 				id: "testId2",
 				version: 1,
 			},
@@ -162,7 +162,7 @@ describe("ExternalToolsModule", () => {
 					{
 						id: "id",
 						name: expectedName,
-						status: SchoolExternalToolStatus.Latest,
+						status: SchoolExternalToolStatusEnum.Latest,
 						version: 1,
 					},
 				]);
@@ -277,7 +277,7 @@ describe("ExternalToolsModule", () => {
 						{
 							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
-							status: SchoolExternalToolStatus.Latest,
+							status: SchoolExternalToolStatusEnum.Latest,
 							version: searchListResponse.data[0].toolVersion,
 						},
 					]);

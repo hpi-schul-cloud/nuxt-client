@@ -11,8 +11,9 @@
 			Weitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden.
 		</p>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-select v-model="toolConfig" label="Tool auswahl" item-text="name" :items="items" :no-data-text="$t('common.table.nodata')"
-				  return-object :loading="loading">
+		<v-select label="Tool auswahl" item-text="name" :items="items"
+				  :no-data-text="$t('common.table.nodata')"
+				  return-object :loading="loading" @change="onSelectTemplate">
 			<template #selection="{ item }">
 				<external-tool-selection-row :item="item" max-height="20" max-width="20"/>
 			</template>
@@ -20,13 +21,16 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<external-tool-config-settings :v-show="toolConfig && toolConfig.parameters > 0" :external-tool="toolConfig"></external-tool-config-settings>
+		<external-tool-config-settings :v-show="toolTemplate && toolTemplate.parameters > 0"
+									   :tool-template="toolTemplate"
+									   :tool-config="toolConfig">
+		</external-tool-config-settings>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn class="mr-2" color="primary" depressed>
-				{{ $t("common.actions.save") }}
+			<v-btn class="mr-2" color="primary" depressed :disabled="!toolTemplate">
+				Tool hinzufügen
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -87,24 +91,31 @@ export default defineComponent({
 			}
 		];
 
-		const toolConfig: Ref<ToolConfigurationTemplate | null> = ref(null);
-
-		const items: ComputedRef<ToolConfiguration[]> = computed(() => Array.from(externalToolsModule.getToolConfigurations.values()));
-
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
+
+		const items: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
+
+		const toolTemplate: ComputedRef<ToolConfigurationTemplate> = computed(() => externalToolsModule.getToolConfigurationTemplate);
+		const toolConfig: Ref = ref({});
+
+		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
+			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
+		};
 
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
 			router.push({ path: schoolSetting.to });
-		}
+		};
 
 		return {
 			breadcrumbs,
+			toolTemplate,
 			toolConfig,
 			items,
 			loading,
 			onCancel,
-		}
+			onSelectTemplate
+		};
 	},
 });
 </script>
