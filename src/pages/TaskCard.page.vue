@@ -6,7 +6,7 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<date-time-picker enable-date-picker enable-time-picker />
+			<date-time-picker />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -62,11 +62,11 @@ import { taskCardModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElement.vue";
+import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import DateTimePicker from "@/components/molecules/DateTimePicker.vue";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
 import draggable from "vuedraggable";
@@ -235,12 +235,10 @@ export default defineComponent({
 			dragInProgress,
 		};
 	},
-	// TODO - should not use this, because it's nuxt
-	// @ts-ignore
-	head() {
-		return {
-			title: this.$t("common.words.tasks"),
-		};
+	mounted() {
+		document.title = `${this.$t("common.words.tasks")} - ${
+			this.$theme.short_name
+		}`;
 	},
 });
 </script>
