@@ -18,9 +18,9 @@
 		</template>
 		<v-date-picker
 			v-model="date"
-			no-title
 			color="primary"
 			:locale="locale"
+			:title-date-format="titleDateFormat"
 			first-day-of-week="1"
 			:allowed-dates="allowedDates"
 			@input="onInput"
@@ -31,6 +31,7 @@
 <script lang="ts">
 import { defineComponent, inject, ref, computed } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
+import dayjs from "dayjs";
 import moment from "moment";
 import { mdiCalendar } from "@mdi/js";
 
@@ -52,8 +53,13 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		const date = ref("");
+		const today = new Date().toISOString().substr(0, 10);
+		const date = ref(today);
 		const showDateDialog = ref(false);
+
+		// TODO locale not properly working for es and uk
+		const titleDateFormat = (dateValue: string) =>
+			dayjs(dateValue).format(i18n.t("format.dateMedium"));
 
 		const formattedDate = computed(() => {
 			return date.value ? moment(date.value).format(i18n.t("format.date")) : "";
@@ -70,6 +76,7 @@ export default defineComponent({
 		return {
 			mdiCalendar,
 			locale,
+			titleDateFormat,
 			date,
 			showDateDialog,
 			formattedDate,
