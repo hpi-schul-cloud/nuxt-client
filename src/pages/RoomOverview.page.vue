@@ -227,10 +227,7 @@ export default {
 		},
 	},
 	async created() {
-		await roomsModule.fetch({
-			device: undefined,
-			showSubstitute: false,
-		}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 	},
 	methods: {
