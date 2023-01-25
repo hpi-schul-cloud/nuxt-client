@@ -141,6 +141,7 @@ export default defineComponent({
 				if (parentType.value === 'course'){
 					openModal('result');
 				} else {
+					openModal('');
 					emit('success');
 					copyModule.reset();
 				}
