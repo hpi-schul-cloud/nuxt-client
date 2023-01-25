@@ -20,6 +20,7 @@ const envs = {
 	DOCUMENT_BASE_DIR: "",
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
+	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 };
 
 const mockData = [
@@ -29,12 +30,14 @@ const mockData = [
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
 		birthday: "01.01.2000",
+		lastLoginSystemChange: "01.01.2022"
 	},
 	{
 		firstName: "Waldemar",
 		lastName: "Wunderlich",
 		birthday: "01.01.1989",
 		email: "waldemar.wunderlich@schul-cloud.org",
+		outdatedSince: "02.02.2020"
 	},
 ];
 
