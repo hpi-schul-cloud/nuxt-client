@@ -119,7 +119,7 @@ export default defineComponent({
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
 				parentType.value = validateResult.parentType.slice(0, -1);
-				if (parentType.value==='course'){
+				if (parentType.value === 'course'){
 					openModal('import');
 				} else {
 					openModal('selectCourse');
@@ -138,7 +138,12 @@ export default defineComponent({
 			openModal('loading');
 			try {
 				await copyModule.copyByShareToken({ token: props.token, type: parentType.value, newName , destinationCourseId: destinationCourseId.value });
-				openModal('result');
+				if (parentType.value === 'course'){
+					openModal('result');
+				} else {
+					emit('success');
+					copyModule.reset();
+				}
 			} catch (error) {
 				showFailureBackend(newName);
 			}
