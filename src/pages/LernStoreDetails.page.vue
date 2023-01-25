@@ -39,10 +39,20 @@ export default {
 		isCollection() {
 			return contentModule.isCollection;
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+		documentTitle() {
+			return this.isInline
+				? this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+				  })
+				: this.$t("common.words.lernstore");
+		},
 	},
 	async created() {
-		// await contentModule.getResourceMetadata(this.$route.params.id);
-		document.title = this.$t("common.words.lernstore");
+		await contentModule.getResourceMetadata(this.$route.params.id);
+		document.title = this.documentTitle;
 	},
 };
 </script>

@@ -43,9 +43,6 @@ export default {
 			);
 		},
 	},
-	async created() {
-		await contentModule.getResourceMetadata(this.$route.params.id);
-	},
 };
 </script>
 
