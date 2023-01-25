@@ -17,7 +17,7 @@
 			/>
 		</template>
 		<v-date-picker
-			v-model="date"
+			v-model="selectedDate"
 			color="primary"
 			:locale="locale"
 			:title-date-format="titleDateFormat"
@@ -37,6 +37,9 @@ import { mdiCalendar } from "@mdi/js";
 // TODO - Accessibility
 export default defineComponent({
 	name: "DatePicker",
+	props: {
+		date: { type: String, required: true },
+	},
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -52,9 +55,8 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		// TODO - use end of school year
-		const today = new Date().toISOString().substr(0, 10);
-		const date = ref(today);
+		console.log("d", props.date);
+		const selectedDate = ref(props.date);
 		const showDateDialog = ref(false);
 
 		// TODO locale not properly working for es and uk
@@ -62,14 +64,14 @@ export default defineComponent({
 			dayjs(dateValue).format(i18n.t("format.dateMedium"));
 
 		const formattedDate = computed(() => {
-			return dayjs(date.value).format(i18n.t("format.date"));
+			return dayjs(selectedDate.value).format(i18n.t("format.date"));
 		});
 
 		const allowedDates = (value: string) =>
 			value >= new Date().toISOString().substr(0, 10);
 
 		const onInput = () => {
-			emit("input", date.value);
+			emit("input", selectedDate.value);
 			showDateDialog.value = false;
 		};
 
@@ -77,7 +79,7 @@ export default defineComponent({
 			mdiCalendar,
 			locale,
 			titleDateFormat,
-			date,
+			selectedDate,
 			showDateDialog,
 			formattedDate,
 			allowedDates,

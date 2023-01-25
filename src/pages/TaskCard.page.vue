@@ -6,7 +6,7 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<date-time-picker />
+			<date-time-picker :date="date" @date-input="handleDateInput" />
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -103,6 +103,13 @@ export default defineComponent({
 			},
 		];
 
+		// TODO - use end of school year
+		const today = new Date().toISOString().substr(0, 10);
+		const date = ref(today);
+
+		const handleDateInput = (selectedDate: string) =>
+			(date.value = selectedDate);
+
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -114,9 +121,11 @@ export default defineComponent({
 		onMounted(async () => {
 			const taskCardId =
 				route.name === "task-card-edit" ? route.params.id : undefined;
+
 			if (taskCardId) {
 				await taskCardModule.findTaskCard(taskCardId);
 			}
+
 			const taskCardData = taskCardModule.getTaskCardData;
 			taskCardData.cardElements.forEach((cardElement) => {
 				if (
@@ -175,6 +184,7 @@ export default defineComponent({
 			taskCardModule.createTaskCard({
 				title: title.value.model,
 				text: text,
+				// dueDate: new Date().toISOString(), // Unauthorized error?
 			});
 		};
 
@@ -224,6 +234,7 @@ export default defineComponent({
 			mdiPlus,
 			breadcrumbs,
 			title,
+			date,
 			elements,
 			save,
 			cancel,
@@ -233,6 +244,7 @@ export default defineComponent({
 			startDragging,
 			endDragging,
 			dragInProgress,
+			handleDateInput,
 		};
 	},
 	mounted() {

@@ -1,7 +1,7 @@
 <template>
 	<v-row>
 		<v-col class="col-sm-4">
-			<date-picker required @input="handleInput" />
+			<date-picker :date="date" required @input="handleInput" />
 		</v-col>
 		<v-col v-if="enableTimePicker" class="col-sm-3">
 			<v-menu
@@ -52,18 +52,17 @@ export default defineComponent({
 		enableTimePicker: {
 			type: Boolean,
 		},
-		// date: {
-		// 	type: string,
-		// 	default: "",
-		// },
+		date: {
+			type: String,
+			required: true,
+		},
 		// time: {
 		// 	type: string,
 		// 	default: "",
 		// },
 	},
 	emits: ["updateDateTime"],
-	setup(props, context) {
-		const date = ref("");
+	setup(props, { emit }) {
 		const time = ref("");
 		const showTimePicker = ref(false);
 		const selectedItem = ref(null);
@@ -90,21 +89,20 @@ export default defineComponent({
 		};
 
 		const dateTime = computed(() => {
-			return date.value + " " + time.value;
+			return props.date + " " + time.value;
 		});
 
 		watch(dateTime, () => {
-			context.emit("update-date-time", dateTime.value);
+			emit("update-date-time", dateTime.value);
 		});
 
-		const handleInput = (selectedDate) => {
-			console.log(selectedDate);
-			date.value = selectedDate;
+		const handleInput = (selectedDate: string) => {
+			console.log("dt", selectedDate);
+			emit("date-input", selectedDate);
 		};
 
 		return {
 			showTimePicker,
-			date,
 			time,
 			timesOfDayList,
 			selectedItem,
