@@ -36,9 +36,13 @@
 					item-value="id"
 					item-text="title"
 					:items="rooms"
-					:label="$t('common.labels.course')"
+					:placeholder="$t('pages.content.label.choose')"
 					:rules="[rules.required]"
 					:error="showError()"
+					:hint="$t('common.labels.course')"
+					persistent-hint
+					:append-icon="mdiTriangleSmallDown"
+					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
 		</template>
@@ -47,7 +51,7 @@
 
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import { mdiInformation } from "@mdi/js";
+import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
 import { defineComponent, inject, reactive, ref, onMounted } from "@vue/composition-api";
 import { roomsModule } from "@/store";
 
@@ -95,6 +99,7 @@ export default defineComponent({
 			onNext,
 			onCancel,
 			mdiInformation,
+			mdiTriangleSmallDown,
 			rules,
 			showError,
 			selectedCourse
