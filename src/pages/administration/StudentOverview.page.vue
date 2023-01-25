@@ -270,6 +270,9 @@ export default {
 			qrLinks: "getQrLinks",
 			registrationLinks: "getRegistrationLinks",
 		}),
+		getFeatureSchoolSanisUserMigrationEnabled() {
+			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled
+		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
@@ -361,6 +364,16 @@ export default {
 			if (!this.showConsent) {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
+				);
+			}
+
+			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED env is disabled
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns.filter(
+						(col) => col.field !== "lastLoginSystemChange"
+				);
+				editedColumns = editedColumns.filter(
+						(col) => col.field !== "outdatedSince"
 				);
 			}
 
