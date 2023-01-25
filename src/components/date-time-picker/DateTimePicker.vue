@@ -1,45 +1,20 @@
 <template>
 	<v-row>
-		<v-col class="col-3">
-			<v-menu
-				v-model="showDatePicker"
-				:close-on-content-click="false"
-				:nudge-right="40"
-				transition="scale-transition"
-				offset-y
-				min-width="auto"
-			>
-				<template #activator="{ on, attrs }">
-					<v-text-field
-						:value="formattedDate"
-						label="Zu erledigen bis"
-						:append-icon="mdiCalendar"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-					></v-text-field>
-				</template>
-				<v-date-picker
-					v-model="date"
-					no-title
-					color="primary"
-					@input="showDatePicker = false"
-				></v-date-picker>
-			</v-menu>
+		<v-col class="col-sm-4">
+			<date-picker required @input="handleInput" />
 		</v-col>
-		<v-col class="col-2">
+		<v-col v-if="enableTimePicker" class="col-sm-3">
 			<v-menu
 				v-model="showTimePicker"
 				:close-on-content-click="false"
-				:nudge-right="40"
 				transition="scale-transition"
 				offset-y
-				min-width="auto"
+				min-width="100"
 			>
 				<template #activator="{ on, attrs }">
 					<v-text-field v-model="time" type="time" v-bind="attrs" v-on="on" />
 				</template>
-				<v-list height="200">
+				<v-list height="200" class="col-12">
 					<v-list-item-group v-model="selectedItem" color="primary">
 						<template v-for="(time, index) in timesOfDayList">
 							<v-list-item
@@ -58,23 +33,25 @@
 </template>
 
 <script>
-import { inject, ref, computed, watch } from "@vue/composition-api";
+import { ref, computed, watch } from "@vue/composition-api";
 import moment from "moment";
-import { mdiCalendar } from "@mdi/js";
+import DatePicker from "@/components/date-time-picker/DatePicker.vue";
+
 export default {
 	name: "DateTimePicker",
+	components: {
+		DatePicker,
+	},
 	props: {
 		required: {
 			type: Boolean,
 		},
-		// enableDatePicker: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
-		// enableTimePicker: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
+		enableDatePicker: {
+			type: Boolean,
+		},
+		enableTimePicker: {
+			type: Boolean,
+		},
 		// date: {
 		// 	type: string,
 		// 	default: "",
@@ -86,10 +63,8 @@ export default {
 	},
 	emits: ["updateDateTime"],
 	setup(props, context) {
-		const i18n = inject("i18n");
 		const date = ref("");
 		const time = ref("");
-		const showDatePicker = ref(false);
 		const showTimePicker = ref(false);
 		const selectedItem = ref(null);
 
@@ -109,10 +84,6 @@ export default {
 			return times;
 		});
 
-		const formattedDate = computed(() => {
-			return date.value ? moment(date.value).format(i18n.t("format.date")) : "";
-		});
-
 		const selectTime = (selectedTime) => {
 			time.value = selectedTime;
 			showTimePicker.value = false;
@@ -126,16 +97,19 @@ export default {
 			context.emit("update-date-time", dateTime.value);
 		});
 
+		const handleInput = (selectedDate) => {
+			console.log(selectedDate);
+			date.value = selectedDate;
+		};
+
 		return {
-			mdiCalendar,
-			showDatePicker,
 			showTimePicker,
 			date,
-			formattedDate,
 			time,
 			timesOfDayList,
 			selectedItem,
 			selectTime,
+			handleInput,
 		};
 	},
 };
@@ -148,6 +122,8 @@ export default {
 }
 
 .time-list-item {
-	min-height: 24px;
+	min-height: 36px;
+	text-align: center;
+	letter-spacing: $btn-letter-spacing;
 }
 </style>
