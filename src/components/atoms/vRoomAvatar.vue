@@ -35,8 +35,7 @@
 					:class="
 						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
-				>
-					{{ item.shortTitle }}</span
+					>{{ item.shortTitle }}</span
 				>
 			</v-avatar>
 			<div v-if="!condenseLayout" :class="titleClasses">{{ title }}</div>

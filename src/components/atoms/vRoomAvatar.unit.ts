@@ -38,6 +38,7 @@ describe("vRoomAvatar", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 	});
+
 	it("should display the title but NOT the date title", () => {
 		const wrapper = getWrapper({ ...propsData });
 		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
@@ -54,7 +55,7 @@ describe("vRoomAvatar", () => {
 		expect(labelElement).toBeFalsy();
 	});
 
-	it("should display the short Title", () => {
+	it("should display the short title", () => {
 		const wrapper = getWrapper(propsData);
 		const shortLabelElement = wrapper.find(".single-avatar")
 			.element as HTMLElement;
@@ -169,6 +170,7 @@ describe("vRoomAvatar", () => {
 
 		expect(emitted["startDrag"]).toBe(undefined);
 	});
+
 	it("should display the title AND the date title", () => {
 		const propData = {
 			item: {
@@ -188,7 +190,7 @@ describe("vRoomAvatar", () => {
 		};
 
 		const wrapper = getWrapper({ ...propData });
-		const element = wrapper.find(".date-title").element as HTMLElement;
+		const element = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(element).toBeTruthy();
 		expect(element.innerHTML.trim()).toContain("History");
