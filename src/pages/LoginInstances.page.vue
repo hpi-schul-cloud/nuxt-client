@@ -26,7 +26,7 @@
 import InstanceTile from "@/components/molecules/InstanceTile.vue";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useTitle } from "@vueuse/core";
-import { computed, defineComponent, inject, ref } from "vue";
+import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 
 export default defineComponent({
@@ -46,8 +46,8 @@ export default defineComponent({
 			throw new Error("i18n module undefined"); // NUXT_REMOVAL throw createApplicationError instead
 		}
 
-		const isTablet = computed(() => useMediaQuery(DeviceMediaQuery.Tablet));
-		const isMobile = computed(() => useMediaQuery(DeviceMediaQuery.Mobile));
+		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
+		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 
 		const tiles = ref<{ icon: string; url: string }[]>([
 			{
