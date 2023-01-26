@@ -49,6 +49,8 @@ describe("@pages/Error.page.vue", () => {
 	});
 
 	describe("when the '/error' route has been called", () => {
+		navigationType = 'reload';
+
 		it("should set 'is-permission-error' prop to 'true'", async () => {
 			applicationErrorModuleMock = createModuleMocks(
 				ApplicationErrorModule,
