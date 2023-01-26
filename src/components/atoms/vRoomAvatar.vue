@@ -17,14 +17,14 @@
 			icon="mdi-lock"
 			overlap
 			:value="displayBadge"
-			:class="{ stillBeingCopied: 'still-being-copied' }"
 		>
 			<v-avatar
-				:color="item.displayColor"
-				:aria-label="ariaLabel"
+				:color="avatarColor"
+				:aria-label="avatarAriaLabel"
 				:size="size"
 				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
+				:class="avatarClass"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
@@ -39,23 +39,11 @@
 					{{ item.shortTitle }}</span
 				>
 			</v-avatar>
-			<div v-if="showOnlyTitle" class="justify-center mt-2 mb-7 subtitle">
-				{{ item.title }} {{ copyingFor }}
-			</div>
-			<div
-				v-if="showArchiveDateAndTitle"
-				class="justify-center subtitle date-title mt-2 mb-5"
-			>
-				{{ item.title }}
-				{{ item.titleDate }}
-				{{ copyingFor }}
-			</div>
+			<div v-if="!condenseLayout" :class="titleClasses">{{ title }}</div>
 		</v-badge>
 	</div>
 </template>
 <script>
-import { fromNow } from "../../plugins/datetime";
-
 export default {
 	props: {
 		item: {
@@ -95,16 +83,41 @@ export default {
 		stillBeingCopied() {
 			return this.item.copyingSince !== undefined;
 		},
-		copyingFor() {
-			return this.stillBeingCopied ? fromNow(this.item.copyingSince) : "";
-		},
-		ariaLabel() {
+		avatarAriaLabel() {
+			const course = this.$t("common.labels.course");
 			if (this.stillBeingCopied) {
-				return `${this.$t("common.labels.course")} ${
-					this.item.title
-				} wird noch kopiert...`;
+				const ariaLabelSuffix = this.$t(
+					"components.molecules.copyResult.courseCopy.ariaLabelSuffix"
+				);
+				return `${course} ${this.item.title}: ${ariaLabelSuffix}`;
 			}
-			return `${this.$t("common.labels.course")} ${this.item.title}`;
+			return `${course} ${this.item.title}`;
+		},
+		avatarClass() {
+			return this.stillBeingCopied ? "still-being-copied" : "";
+		},
+		avatarColor() {
+			return this.stillBeingCopied ? "#d9d9d9" : this.item.displayColor;
+		},
+		title() {
+			if (this.item.copyingSince) {
+				return this.$t("components.molecules.copyResult.courseCopy.info");
+			}
+			if (this.item.titleDate) {
+				return `${this.item.title}\n${this.item.titleDate}`;
+			}
+			return this.item.title;
+		},
+		titleClasses() {
+			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
+			const copyingClass = this.stillBeingCopied ? ["copy-info"] : [];
+			return [
+				"justify-center",
+				"mt-2",
+				"subtitle",
+				marginClass,
+				...copyingClass,
+			];
 		},
 	},
 	methods: {
@@ -173,6 +186,7 @@ export default {
 	color: var(--v-black-base);
 	text-align: center;
 	overflow-wrap: break-word;
+	white-space: pre-wrap;
 
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
@@ -211,7 +225,12 @@ export default {
 	opacity: 0.5;
 }
 
-.still-being-copied {
-	opacity: 0.4;
+.still-being-copied span {
+	color: var(--v-black-base) !important;
+	opacity: 0.7;
+}
+
+.copy-info {
+	opacity: 0.6;
 }
 </style>
