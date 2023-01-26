@@ -31,7 +31,7 @@
 				@keypress.enter="onClick"
 			>
 				<span
-					class="white--text text-h7"
+					class="text-h7"
 					:class="
 						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
 					"
@@ -226,11 +226,10 @@ export default {
 }
 
 .still-being-copied span {
-	color: var(--v-black-base) !important;
-	opacity: 0.7;
+	color: var(--v-grey-medium);
 }
 
 .copy-info {
-	opacity: 0.6;
+	color: var(--v-grey-medium);
 }
 </style>

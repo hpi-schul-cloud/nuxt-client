@@ -43,6 +43,7 @@ export default {
 					lighten1: colors.grey.lighten3,
 					lighten2: colors.grey.lighten2,
 					darken1: colors.grey.darken3,
+					medium: colors.grey.darken1,
 				},
 				info: {
 					base: "#0a7ac9",
