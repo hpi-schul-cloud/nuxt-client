@@ -7,7 +7,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";
 
 describe("@pages/Error.page.vue", () => {
-	let navigationType = 'navigate';
+	// let navigationType = 'navigate';
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
 			configurable: true,
@@ -15,7 +15,7 @@ describe("@pages/Error.page.vue", () => {
 		});
 		Object.defineProperty(window, "performance", {
 			value: {
-				getEntriesByType: jest.fn().mockReturnValue([{ type: navigationType }]),
+				getEntriesByType: jest.fn(), //.mockReturnValue([{ type: navigationType }]),
 				measure: jest.fn(),
 			}
 		});
@@ -42,6 +42,7 @@ describe("@pages/Error.page.vue", () => {
 			ApplicationErrorModule,
 			errorModuleMocks
 		);
+		(window.performance.getEntriesByType as jest.Mock).mockReturnValue([{ type: 'navigate' }]);
 		const wrapper = mountComponent();
 		const btnElement = wrapper.find("[data-testid='btn-back']");
 		await btnElement.trigger("click");
@@ -49,13 +50,13 @@ describe("@pages/Error.page.vue", () => {
 	});
 
 	describe("when the '/error' route has been called", () => {
-		navigationType = 'reload';
 
 		it("should set 'is-permission-error' prop to 'true'", async () => {
 			applicationErrorModuleMock = createModuleMocks(
 				ApplicationErrorModule,
 				errorModuleMocks
 			);
+			(window.performance.getEntriesByType as jest.Mock).mockReturnValue([{ type: 'navigate' }]);
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isPermissionError).toBe(true);
@@ -67,6 +68,7 @@ describe("@pages/Error.page.vue", () => {
 				getStatusCode: 500,
 				getTranslationKey: "generic error",
 			});
+			(window.performance.getEntriesByType as jest.Mock).mockReturnValue([{ type: 'navigate' }]);
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isGenericError).toBe(true);
@@ -78,6 +80,7 @@ describe("@pages/Error.page.vue", () => {
 				getStatusCode: null,
 				getTranslationKey: "",
 			});
+			(window.performance.getEntriesByType as jest.Mock).mockReturnValue([{ type: 'navigate' }]);
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isGenericError).toBe(true);
@@ -89,7 +92,6 @@ describe("@pages/Error.page.vue", () => {
 			"applicationErrorStatusCode": 401,
 			"applicationErrorTranslationKey": "error.401",
 		}
-		navigationType = 'reload';
 
 		beforeEach(() => {
 			spyOn(window.localStorage, 'getItem').and.callFake((key) =>
@@ -103,6 +105,7 @@ describe("@pages/Error.page.vue", () => {
 				getStatusCode: null,
 				getTranslationKey: "",
 			});
+			(window.performance.getEntriesByType as jest.Mock).mockReturnValue([{ type: 'reload' }]);
 			const wrapper = mountComponent();
 			const errorComponent = wrapper.find("[data-testid='error-content']");
 			expect(errorComponent.vm.$props.isPermissionError).toBe(true);
