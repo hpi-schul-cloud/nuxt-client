@@ -20,7 +20,7 @@ const envs = {
 	DOCUMENT_BASE_DIR: "",
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true
+	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 };
 
 const mockData = [
@@ -356,7 +356,9 @@ describe("students/index", () => {
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED).toBe(true)
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(true);
 		expect(column1.exists()).toBe(true);
 		expect(column2.exists()).toBe(true);
 	});
@@ -375,7 +377,9 @@ describe("students/index", () => {
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED).toBe(false)
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(false);
 		expect(column1.exists()).toBe(false);
 		expect(column2.exists()).toBe(false);
 	});
