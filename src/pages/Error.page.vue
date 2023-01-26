@@ -19,7 +19,12 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@store/application-error";
-import { computed, defineComponent, inject, useMeta } from "@nuxtjs/composition-api";
+import {
+	computed,
+	defineComponent,
+	inject,
+	useMeta,
+} from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
@@ -35,41 +40,65 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const { get, set , remove } = useStorage();
-		const performanceNavigation = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+		const { get, set, remove } = useStorage();
+		const performanceNavigation = window.performance.getEntriesByType(
+			"navigation"
+		)[0] as PerformanceNavigationTiming;
 		const applicationErrorStatusCode = get("applicationErrorStatusCode");
-		const applicationErrorTranslationKey = get("applicationErrorTranslationKey")
+		const applicationErrorTranslationKey = get(
+			"applicationErrorTranslationKey"
+		);
 
-		if ((applicationErrorStatusCode || applicationErrorTranslationKey) && performanceNavigation.type === "reload") {
+		if (
+			(applicationErrorStatusCode || applicationErrorTranslationKey) &&
+			performanceNavigation.type === "reload"
+		) {
 			const storedApplicationErrorModule = new ApplicationErrorModule({});
 			if (applicationErrorStatusCode) {
-				storedApplicationErrorModule.setStatusCode(Number(applicationErrorStatusCode) as HttpStatusCode);
+				storedApplicationErrorModule.setStatusCode(
+					Number(applicationErrorStatusCode) as HttpStatusCode
+				);
 			}
-			storedApplicationErrorModule.setTranslationKey(applicationErrorTranslationKey);
+			storedApplicationErrorModule.setTranslationKey(
+				applicationErrorTranslationKey
+			);
 
-			provide<ApplicationErrorModule>("applicationErrorModule", storedApplicationErrorModule);
+			provide<ApplicationErrorModule>(
+				"applicationErrorModule",
+				storedApplicationErrorModule
+			);
 		}
 
 		remove("applicationErrorStatusCode");
 		remove("applicationErrorTranslationKey");
 
-		const permissionErrors: Array<HttpStatusCode> = [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden];
+		const permissionErrors: Array<HttpStatusCode> = [
+			HttpStatusCode.BadRequest,
+			HttpStatusCode.Unauthorized,
+			HttpStatusCode.Forbidden,
+		];
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-				"applicationErrorModule"
-		)
+			"applicationErrorModule"
+		);
 		const i18n = inject<VueI18n | undefined>("i18n");
 
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
 		}
 
-		addEventListener('pagehide', (event) => {
+		addEventListener("pagehide", (event) => {
 			if (!event.persisted) {
 				if (applicationErrorModule?.getStatusCode)
-					set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule?.getStatusCode));
+					set(
+						"applicationErrorStatusCode",
+						JSON.stringify(applicationErrorModule?.getStatusCode)
+					);
 
 				if (applicationErrorModule?.getTranslationKey)
-					set("applicationErrorTranslationKey", applicationErrorModule?.getTranslationKey);
+					set(
+						"applicationErrorTranslationKey",
+						applicationErrorModule?.getTranslationKey
+					);
 			}
 		});
 
