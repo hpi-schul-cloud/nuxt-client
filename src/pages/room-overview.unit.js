@@ -484,7 +484,9 @@ describe("@pages/RoomOverview", () => {
 	});
 
 	it("should call 'setGroupElements' method for grouping after avatar-to-avatar drag&drop", async () => {
-		spyMocks.storeRoomAlignMock.mockResolvedValue(roomsModule.setAlignedSuccessfully(true));
+		spyMocks.storeRoomAlignMock.mockResolvedValue(
+			roomsModule.setAlignedSuccessfully(true)
+		);
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
