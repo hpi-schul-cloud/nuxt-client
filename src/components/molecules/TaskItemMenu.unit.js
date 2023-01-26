@@ -200,8 +200,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 				const copyBtn = wrapper.find("#task-action-copy");
 				await copyBtn.trigger("click");
 
-				console.log(wrapper.emitted("copy-task"));
-
 				expect(wrapper.emitted("copy-task")).toStrictEqual([
 					[
 						{
@@ -212,6 +210,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 					],
 				]);
 			});
+
 			it("should emit 'copy-task' event without courseId if NOT present", async () => {
 				const task = tasksTeacher[1];
 				const wrapper = getWrapper({
