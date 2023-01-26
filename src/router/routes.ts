@@ -154,7 +154,7 @@ export const routes: Array<RouteConfig> = [
 	{
 		path: `/task-cards/:id(${REGEX_ID})/edit`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "tastask-edit",
+		name: "task-edit",
 	},
 	{
 		path: "/task-cards/new",
