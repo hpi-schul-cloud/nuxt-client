@@ -29,7 +29,6 @@ import VueI18n from "vue-i18n";
 import Theme from "@theme/config";
 import ErrorContent from "@components/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@store/types/http-status-code.enum";
-import { provide } from "@vue/composition-api";
 import { useStorage } from "@/composables/locale-storage.composable";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -40,66 +39,58 @@ export default defineComponent({
 	},
 	head: {},
 	setup() {
-		const { get, set, remove } = useStorage();
-		const performanceNavigation = window.performance.getEntriesByType(
-			"navigation"
-		)[0] as PerformanceNavigationTiming;
-		const applicationErrorStatusCode = get("applicationErrorStatusCode");
-		const applicationErrorTranslationKey = get(
-			"applicationErrorTranslationKey"
-		);
-
-		if (
-			(applicationErrorStatusCode || applicationErrorTranslationKey) &&
-			performanceNavigation.type === "reload"
-		) {
-			const storedApplicationErrorModule = new ApplicationErrorModule({});
-			if (applicationErrorStatusCode) {
-				storedApplicationErrorModule.setStatusCode(
-					Number(applicationErrorStatusCode) as HttpStatusCode
-				);
-			}
-			storedApplicationErrorModule.setTranslationKey(
-				applicationErrorTranslationKey
-			);
-
-			provide<ApplicationErrorModule>(
-				"applicationErrorModule",
-				storedApplicationErrorModule
-			);
-		}
-
-		remove("applicationErrorStatusCode");
-		remove("applicationErrorTranslationKey");
-
+		const storage = useStorage();
 		const permissionErrors: Array<HttpStatusCode> = [
 			HttpStatusCode.BadRequest,
 			HttpStatusCode.Unauthorized,
 			HttpStatusCode.Forbidden,
 		];
+		const i18n = inject<VueI18n | undefined>("i18n");
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);
-		const i18n = inject<VueI18n | undefined>("i18n");
+		const performanceNavigation = window.performance.getEntriesByType(
+			"navigation"
+		)[0] as PerformanceNavigationTiming;
+
+		const getError = () => {
+			if (performanceNavigation.type === "reload") {
+				const [statusCode, translationKey] = storage.getMultiple([
+					"applicationErrorStatusCode",
+					"applicationErrorTranslationKey",
+				]);
+				return {
+					statusCode,
+					translationKey,
+				};
+			}
+
+			storage.remove("applicationErrorStatusCode");
+			storage.remove("applicationErrorTranslationKey");
+			return {
+				statusCode: applicationErrorModule?.getStatusCode,
+				translationKey: applicationErrorModule?.getTranslationKey,
+			};
+		};
 
 		if (applicationErrorModule === undefined || i18n === undefined) {
 			return;
 		}
 
 		addEventListener("pagehide", (event) => {
-			if (!event.persisted) {
-				if (applicationErrorModule?.getStatusCode)
-					set(
-						"applicationErrorStatusCode",
-						JSON.stringify(applicationErrorModule?.getStatusCode)
-					);
+			if (event.persisted) return;
 
-				if (applicationErrorModule?.getTranslationKey)
-					set(
-						"applicationErrorTranslationKey",
-						applicationErrorModule?.getTranslationKey
-					);
-			}
+			if (applicationErrorModule?.getStatusCode)
+				storage.set(
+					"applicationErrorStatusCode",
+					JSON.stringify(applicationErrorModule?.getStatusCode)
+				);
+
+			if (applicationErrorModule?.getTranslationKey)
+				storage.set(
+					"applicationErrorTranslationKey",
+					applicationErrorModule?.getTranslationKey
+				);
 		});
 
 		useMeta({
@@ -111,10 +102,10 @@ export default defineComponent({
 		};
 
 		const appErrorTranslationKey = computed(() => {
-			return applicationErrorModule.getTranslationKey;
+			return getError().translationKey;
 		});
 		const appErrorStatusCode = computed(() => {
-			return applicationErrorModule.getStatusCode;
+			return getError().statusCode;
 		});
 
 		const isPermissionError = computed(() => {
@@ -130,7 +121,7 @@ export default defineComponent({
 		const translatedErrorMessage = computed(() => {
 			const translationKey = appErrorTranslationKey.value;
 
-			const translatedError = i18n.t(translationKey).toString();
+			const translatedError = i18n.t(translationKey!).toString();
 
 			const result =
 				translatedError !== translationKey
