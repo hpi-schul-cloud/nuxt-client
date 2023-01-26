@@ -46,7 +46,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const showTimeout = () =>
 		notifierModule?.show({
 			text: t("components.molecules.copyResult.timeoutCopy"),
-			status: "error",
+			status: "info",
 			autoClose: false,
 		});
 
