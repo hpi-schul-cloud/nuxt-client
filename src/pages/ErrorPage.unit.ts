@@ -7,7 +7,6 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import i18n from "vue-i18n";
 
 describe("@pages/Error.page.vue", () => {
-	// let navigationType = 'navigate';
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
 			configurable: true,
@@ -15,7 +14,7 @@ describe("@pages/Error.page.vue", () => {
 		});
 		Object.defineProperty(window, "performance", {
 			value: {
-				getEntriesByType: jest.fn(), //.mockReturnValue([{ type: navigationType }]),
+				getEntriesByType: jest.fn(),
 				measure: jest.fn(),
 			}
 		});
