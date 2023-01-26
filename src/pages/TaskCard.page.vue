@@ -103,9 +103,7 @@ export default defineComponent({
 			},
 		];
 
-		// TODO - use end of school year
-		const today = new Date().toISOString().substr(0, 10);
-		const date = ref(today);
+		const date = ref("");
 
 		const handleDateInput = (selectedDate: string) =>
 			(date.value = selectedDate);
@@ -181,10 +179,12 @@ export default defineComponent({
 				text.push(element.model);
 			});
 
+			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
+			const dueDate = date.value || endOfSchoolYear;
 			taskCardModule.createTaskCard({
 				title: title.value.model,
 				text: text,
-				// dueDate: new Date().toISOString(), // Unauthorized error?
+				dueDate,
 			});
 		};
 

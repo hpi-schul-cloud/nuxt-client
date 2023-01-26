@@ -19,6 +19,7 @@
 		<v-date-picker
 			v-model="selectedDate"
 			color="primary"
+			no-title
 			:locale="locale"
 			:title-date-format="titleDateFormat"
 			first-day-of-week="1"
@@ -64,7 +65,9 @@ export default defineComponent({
 			dayjs(dateValue).format(i18n.t("format.dateMedium"));
 
 		const formattedDate = computed(() => {
-			return dayjs(selectedDate.value).format(i18n.t("format.date"));
+			return selectedDate.value
+				? dayjs(selectedDate.value).format(i18n.t("format.date"))
+				: selectedDate.value;
 		});
 
 		const allowedDates = (value: string) =>
