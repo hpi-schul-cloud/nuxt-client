@@ -1,9 +1,11 @@
 import {
+	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
 	CustomParameterResponseScopeEnum,
 	CustomParameterResponseTypeEnum,
 	ExternalToolConfigurationTemplateResponse,
+	SchoolExternalToolPostParams,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
 } from "../../../serverApi/v3";
@@ -101,8 +103,34 @@ export function useExternalToolUtils() {
 		);
 	};
 
+	const mapToolConfigurationTemplateToSchoolExternalToolPostParams = (
+		template: ToolConfigurationTemplate,
+		schoolId: string
+	): SchoolExternalToolPostParams => {
+		return {
+			toolId: template.id,
+			version: template.version,
+			schoolId,
+			parameters: mapToolParametersToCustomParameterEntryParams(
+				template.parameters
+			),
+		};
+	};
+
+	const mapToolParametersToCustomParameterEntryParams = (
+		params: ToolParameter[]
+	) => {
+		return params.map((param: ToolParameter): CustomParameterEntryParam => {
+			return {
+				name: param.name,
+				value: param.value ?? "",
+			};
+		});
+	};
+
 	return {
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
+		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 	};
 }

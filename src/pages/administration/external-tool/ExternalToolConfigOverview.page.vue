@@ -1,18 +1,13 @@
 <template>
 	<default-wireframe
-		headline="Konfiguration Externer Tools"
+		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<p>
-			Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.
-			Nach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>
-			Durch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>
-			Weitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden.
-		</p>
+		<p v-html="t('pages.tool.description')"></p>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-select label="Tool auswahl" item-text="name" :items="items"
-				  :no-data-text="$t('common.table.nodata')"
+		<v-select :label="t(pages.tool.select.label)" item-text="name" :items="items"
+				  :no-data-text="$t('common.nodata')"
 				  return-object :loading="loading" @change="onSelectTemplate">
 			<template #selection="{ item }">
 				<external-tool-selection-row :item="item" max-height="20" max-width="20"/>
@@ -21,16 +16,14 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<external-tool-config-settings :v-show="toolTemplate && toolTemplate.parameters > 0"
-									   :tool-template="toolTemplate"
-									   :tool-config="toolConfig">
+		<external-tool-config-settings :tool-parameters="toolParameters" @parametersUpdated="onUpdateParameters">
 		</external-tool-config-settings>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn class="mr-2" color="primary" depressed :disabled="!toolTemplate">
-				Tool hinzufügen
+			<v-btn class="mr-2" color="primary" depressed :disabled="!isToolAddActive" @click="addTool">
+				{{ t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -48,6 +41,7 @@ import { ToolConfiguration } from "@store/external-tool/tool-configuration";
 import { externalToolsModule } from "@utils/store-accessor";
 import { ToolConfigurationTemplate } from "@store/external-tool/tool-configuration-template";
 import VueRouter from "vue-router";
+import { ToolParameter } from "@store/external-tool";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
@@ -96,10 +90,16 @@ export default defineComponent({
 		const items: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
 
 		const toolTemplate: ComputedRef<ToolConfigurationTemplate> = computed(() => externalToolsModule.getToolConfigurationTemplate);
-		const toolConfig: Ref = ref({});
+
+		const isToolAddActive: ComputedRef<boolean> = computed(() => {
+			return !!toolTemplate.value.id && (toolParameters.value.every((param: ToolParameter) => param.value))
+		})
+
+		const toolParameters: Ref<ToolParameter[]> = ref([]);
 
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
+			toolParameters.value = [...externalToolsModule.getToolConfigurationTemplate.parameters];
 		};
 
 		const router: VueRouter = useRouter();
@@ -107,14 +107,28 @@ export default defineComponent({
 			router.push({ path: schoolSetting.to });
 		};
 
+		const onUpdateParameters = (updatedParameters: ToolParameter[]) => {
+			toolParameters.value = [...updatedParameters];
+		}
+
+		const addTool = () => {
+			externalToolsModule.saveSchoolExternalTool();
+			toolParameters.value = [];
+			router.push({ path: schoolSetting.to });
+		}
+
 		return {
+			t,
 			breadcrumbs,
 			toolTemplate,
-			toolConfig,
+			isToolAddActive,
+			toolParameters,
 			items,
 			loading,
 			onCancel,
-			onSelectTemplate
+			onSelectTemplate,
+			onUpdateParameters,
+			addTool,
 		};
 	},
 });

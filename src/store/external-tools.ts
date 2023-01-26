@@ -10,6 +10,7 @@ import { authModule } from "@utils/store-accessor";
 import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
 import {
 	ExternalToolConfigurationTemplateResponse,
+	SchoolExternalToolPostParams,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolConfigurationListResponse,
@@ -27,13 +28,8 @@ export default class ExternalToolsModule extends VuexModule {
 
 	private toolConfigurations: ToolConfiguration[] = [];
 
-	private toolConfigurationTemplate: ToolConfigurationTemplate = {
-		id: "",
-		parameters: [],
-		version: 0,
-		logoUrl: undefined,
-		name: "",
-	};
+	private toolConfigurationTemplate: ToolConfigurationTemplate =
+		new ToolConfigurationTemplate();
 
 	private loading: boolean = false;
 
@@ -182,6 +178,32 @@ export default class ExternalToolsModule extends VuexModule {
 		} catch (e) {
 			console.log(
 				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${e}`
+			);
+			this.setLoading(false);
+		}
+		this.setLoading(false);
+	}
+
+	@Action
+	async saveSchoolExternalTool(): Promise<void> {
+		this.setLoading(true);
+		try {
+			if (authModule.getUser?.schoolId) {
+				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
+					useExternalToolUtils().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
+						this.getToolConfigurationTemplate,
+						authModule.getUser.schoolId
+					);
+
+				await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(
+					schoolExternalToolPostParams
+				);
+				this.setToolConfigurationTemplate(new ToolConfigurationTemplate());
+			}
+			this.setLoading(false);
+		} catch (e) {
+			console.log(
+				`Some error occurred while saving schoolExternalTool for externalTool with id ${this.getToolConfigurationTemplate.id}: ${e}`
 			);
 			this.setLoading(false);
 		}
