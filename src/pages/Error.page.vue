@@ -18,17 +18,13 @@
 	</div>
 </template>
 <script lang="ts">
-import ApplicationErrorModule from "@store/application-error";
-import {
-	computed,
-	defineComponent,
-	inject,
-	useMeta,
-} from "@nuxtjs/composition-api";
+import ApplicationErrorModule from "@/store/application-error";
+import { computed, defineComponent, inject } from "vue";
 import VueI18n from "vue-i18n";
-import Theme from "@theme/config";
-import ErrorContent from "@components/error-handling/ErrorContent.vue";
-import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import Theme from "@/theme.config";
+import ErrorContent from "@/components/error-handling/ErrorContent.vue";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useTitle } from "@vueuse/core";
 import { useStorage } from "@/composables/locale-storage.composable";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -60,7 +56,7 @@ export default defineComponent({
 					"applicationErrorTranslationKey",
 				]);
 				return {
-					statusCode,
+					statusCode: Number(statusCode),
 					translationKey,
 				};
 			}
@@ -68,7 +64,7 @@ export default defineComponent({
 			storage.remove("applicationErrorStatusCode");
 			storage.remove("applicationErrorTranslationKey");
 			return {
-				statusCode: applicationErrorModule?.getStatusCode,
+				statusCode: Number(applicationErrorModule?.getStatusCode),
 				translationKey: applicationErrorModule?.getTranslationKey,
 			};
 		};
@@ -80,22 +76,20 @@ export default defineComponent({
 		addEventListener("pagehide", (event) => {
 			if (event.persisted) return;
 
-			if (applicationErrorModule?.getStatusCode)
+			if (applicationErrorModule?.getStatusCode) {
 				storage.set(
 					"applicationErrorStatusCode",
 					JSON.stringify(applicationErrorModule?.getStatusCode)
 				);
 
-			if (applicationErrorModule?.getTranslationKey)
 				storage.set(
 					"applicationErrorTranslationKey",
 					applicationErrorModule?.getTranslationKey
 				);
+			}
 		});
 
-		useMeta({
-			title: i18n?.t("error.generic") + " - " + Theme.short_name,
-		});
+		useTitle(i18n.tc("error.generic") + " - " + Theme.short_name);
 
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
@@ -113,15 +107,13 @@ export default defineComponent({
 		});
 
 		const isGenericError = computed(() => {
-			return (
-				appErrorStatusCode.value === 500 || appErrorStatusCode.value === null
-			);
+			return appErrorStatusCode.value === 500 || appErrorStatusCode === null;
 		});
 
 		const translatedErrorMessage = computed(() => {
-			const translationKey = appErrorTranslationKey.value;
+			const translationKey = appErrorTranslationKey.value || "";
 
-			const translatedError = i18n.t(translationKey!).toString();
+			const translatedError = i18n.t(translationKey).toString();
 
 			const result =
 				translatedError !== translationKey

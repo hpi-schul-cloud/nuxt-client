@@ -17,6 +17,6 @@ export function createPermissionGuard(
 			return next(fallbackRoute);
 		}
 
-		applicationErrorModule.setError(createApplicationError(403));
+		applicationErrorModule.setError(createApplicationError(401));
 	};
 }
