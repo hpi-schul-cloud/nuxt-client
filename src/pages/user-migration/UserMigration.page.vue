@@ -154,7 +154,6 @@ export default defineComponent({
 			proceedLink,
 			cancelLink,
 			getSystemName,
-			subjectName: "Schüler Lernend",
 		};
 	},
 });
