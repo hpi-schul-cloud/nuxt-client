@@ -25,6 +25,7 @@
 					v-bind="element.props"
 					:disabled="dragInProgress"
 					@delete-element="deleteElement(index)"
+					@add-element="addElementAfter(index)"
 				/>
 			</draggable>
 			<v-btn fab color="primary" class="align-self-center" @click="addElement">
@@ -154,6 +155,19 @@ export default defineComponent({
 			});
 		};
 
+		const addElementAfter = (index: number) => {
+			elements.value.splice(index + 1, 0, {
+				id: "",
+				type: CardElementResponseCardElementTypeEnum.RichText,
+				model: "",
+				props: {
+					component: CardElementComponentEnum.RichText,
+					placeholder: i18n.t("common.labels.description"),
+					editable: true,
+				},
+			});
+		};
+
 		const deleteElement = (index: number) => {
 			elements.value.splice(index, 1);
 		};
@@ -220,6 +234,7 @@ export default defineComponent({
 			save,
 			cancel,
 			addElement,
+			addElementAfter,
 			deleteElement,
 			touchDelay,
 			startDragging,
