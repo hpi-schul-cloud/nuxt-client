@@ -89,6 +89,10 @@
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.required": "Bitte füll dieses Feld aus",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.regex": "Die Eingabe entspricht nicht dem erwarteten regulären Ausdruck: {comment}",
+	"common.validation.number": "Die Eingabe muss einer Zahlenfolge entsprechen",
+	"common.validation.boolean": "Die Eingabe muss einem der Wahrheitswerte \"true\" oder \"false\" entsprechen",
+	"common.validation.string": "Die Eingabe muss einer Zeichenkette entsprechen",
 	"common.words.and": "und",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",
@@ -860,8 +864,7 @@
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"pages.files.title": "Dateien",
 	"pages.tool.title": "Konfiguration Externer Tools",
-	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden."
+	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.select.label": "Tool auswahl",
 	"pages.tool.addBtn.label": "Tool hinzufügen"
-
 }

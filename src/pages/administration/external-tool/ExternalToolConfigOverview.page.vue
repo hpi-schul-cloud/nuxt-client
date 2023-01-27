@@ -6,7 +6,7 @@
 	>
 		<p v-html="t('pages.tool.description')"></p>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-select :label="t(pages.tool.select.label)" item-text="name" :items="items"
+		<v-select :label="t('pages.tool.select.label')" item-text="name" :items="items"
 				  :no-data-text="$t('common.nodata')"
 				  return-object :loading="loading" @change="onSelectTemplate">
 			<template #selection="{ item }">
@@ -16,13 +16,19 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<external-tool-config-settings :tool-parameters="toolParameters" @parametersUpdated="onUpdateParameters">
+		<external-tool-config-settings :tool-parameters="toolParameters"
+									   @parametersValid="(boolean) => parametersValid = boolean"
+									   @parametersUpdated="onUpdateParameters">
 		</external-tool-config-settings>
+		<v-spacer class="mt-10"></v-spacer>
+		<v-alert v-if="apiError.message" light prominent text type="error">
+			{{ apiError.response.data.message }}
+		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn class="mr-2" color="primary" depressed :disabled="!isToolAddActive" @click="addTool">
+			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="addTool">
 				{{ t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
@@ -42,6 +48,7 @@ import { externalToolsModule } from "@utils/store-accessor";
 import { ToolConfigurationTemplate } from "@store/external-tool/tool-configuration-template";
 import VueRouter from "vue-router";
 import { ToolParameter } from "@store/external-tool";
+import { BusinessError } from "@store/types/commons";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
@@ -80,7 +87,7 @@ export default defineComponent({
 			},
 			schoolSetting,
 			{
-				text: "Konfiguration Externer Tools",
+				text: t("pages.tool.title"),
 				disabled: true,
 			}
 		];
@@ -91,11 +98,11 @@ export default defineComponent({
 
 		const toolTemplate: ComputedRef<ToolConfigurationTemplate> = computed(() => externalToolsModule.getToolConfigurationTemplate);
 
-		const isToolAddActive: ComputedRef<boolean> = computed(() => {
-			return !!toolTemplate.value.id && (toolParameters.value.every((param: ToolParameter) => param.value))
-		})
-
 		const toolParameters: Ref<ToolParameter[]> = ref([]);
+
+		const apiError: ComputedRef<BusinessError> = computed(() => externalToolsModule.getBusinessError);
+
+		const parametersValid: Ref<boolean> = ref(false);
 
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
@@ -109,19 +116,19 @@ export default defineComponent({
 
 		const onUpdateParameters = (updatedParameters: ToolParameter[]) => {
 			toolParameters.value = [...updatedParameters];
-		}
+		};
 
-		const addTool = () => {
-			externalToolsModule.saveSchoolExternalTool();
-			toolParameters.value = [];
-			router.push({ path: schoolSetting.to });
-		}
+		const addTool = async () => {
+			await externalToolsModule.saveSchoolExternalTool();
+			if (!externalToolsModule.getBusinessError.message) {
+				router.push({ path: schoolSetting.to });
+			}
+		};
 
 		return {
 			t,
 			breadcrumbs,
 			toolTemplate,
-			isToolAddActive,
 			toolParameters,
 			items,
 			loading,
@@ -129,6 +136,8 @@ export default defineComponent({
 			onSelectTemplate,
 			onUpdateParameters,
 			addTool,
+			apiError,
+			parametersValid,
 		};
 	},
 });

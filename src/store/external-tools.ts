@@ -17,6 +17,7 @@ import {
 } from "../serverApi/v3";
 import { AxiosResponse } from "axios";
 import { useExternalToolUtils } from "@pages/administration/external-tool/external-tool-utils.composable";
+import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "external-tools",
@@ -32,6 +33,12 @@ export default class ExternalToolsModule extends VuexModule {
 		new ToolConfigurationTemplate();
 
 	private loading: boolean = false;
+
+	private businessError: BusinessError = {
+		statusCode: "",
+		message: "",
+		error: undefined,
+	};
 
 	private _toolApi?: ToolApiInterface;
 
@@ -56,6 +63,24 @@ export default class ExternalToolsModule extends VuexModule {
 
 	get getToolConfigurationTemplate(): ToolConfigurationTemplate {
 		return this.toolConfigurationTemplate;
+	}
+
+	get getBusinessError() {
+		return this.businessError;
+	}
+
+	@Mutation
+	setBusinessError(businessError: BusinessError): void {
+		this.businessError = businessError;
+	}
+
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+			error: undefined,
+		};
 	}
 
 	@Mutation
@@ -91,8 +116,8 @@ export default class ExternalToolsModule extends VuexModule {
 
 	@Action
 	async loadSchoolExternalTools(): Promise<void> {
-		this.setLoading(true);
 		try {
+			this.setLoading(true);
 			if (authModule.getUser?.schoolId) {
 				const resp =
 					await this.toolApi.toolSchoolControllerGetSchoolExternalTools(
@@ -107,8 +132,12 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (e) {
 			console.log(`Some error occurred while loading tools data: ${e}`);
+			this.setBusinessError({
+				statusCode: e?.response?.status,
+				message: e?.response?.statusText,
+				...e,
+			});
 			this.setLoading(false);
-			return Promise.resolve();
 		}
 	}
 
@@ -116,8 +145,8 @@ export default class ExternalToolsModule extends VuexModule {
 	async deleteSchoolExternalTool(
 		toolToDelete: SchoolExternalTool
 	): Promise<void> {
-		this.setLoading(true);
 		try {
+			this.setLoading(true);
 			await this.toolApi.toolSchoolControllerDeleteSchoolExternalTool(
 				toolToDelete.id
 			);
@@ -128,14 +157,14 @@ export default class ExternalToolsModule extends VuexModule {
 				`Some error occurred while deleting tool with id ${toolToDelete.id}: ${e}`
 			);
 			this.setLoading(false);
-			return Promise.resolve();
 		}
 	}
 
 	@Action
 	async loadAvailableToolConfigurations(): Promise<void> {
-		this.setLoading(true);
 		try {
+			this.setLoading(true);
+			this.resetBusinessError();
 			if (authModule.getUser?.schoolId) {
 				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
 					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
@@ -154,6 +183,11 @@ export default class ExternalToolsModule extends VuexModule {
 			console.log(
 				`Some error occurred while loading available tools for scope SCHOOL and schoolId ${authModule.getUser?.schoolId}: ${e}`
 			);
+			this.setBusinessError({
+				statusCode: e?.response?.status,
+				message: e?.response?.statusText,
+				...e,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -162,8 +196,9 @@ export default class ExternalToolsModule extends VuexModule {
 	async loadToolConfigurationTemplateFromExternalTool(
 		toolId: string
 	): Promise<void> {
-		this.setLoading(true);
 		try {
+			this.setLoading(true);
+			this.resetBusinessError();
 			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
@@ -179,15 +214,20 @@ export default class ExternalToolsModule extends VuexModule {
 			console.log(
 				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${e}`
 			);
+			this.setBusinessError({
+				statusCode: e?.response?.status,
+				message: e?.response?.statusText,
+				...e,
+			});
 			this.setLoading(false);
 		}
-		this.setLoading(false);
 	}
 
 	@Action
 	async saveSchoolExternalTool(): Promise<void> {
-		this.setLoading(true);
 		try {
+			this.setLoading(true);
+			this.resetBusinessError();
 			if (authModule.getUser?.schoolId) {
 				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
 					useExternalToolUtils().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
@@ -205,8 +245,12 @@ export default class ExternalToolsModule extends VuexModule {
 			console.log(
 				`Some error occurred while saving schoolExternalTool for externalTool with id ${this.getToolConfigurationTemplate.id}: ${e}`
 			);
+			this.setBusinessError({
+				statusCode: e?.response?.status,
+				message: e?.response?.statusText,
+				...e,
+			});
 			this.setLoading(false);
 		}
-		this.setLoading(false);
 	}
 }
