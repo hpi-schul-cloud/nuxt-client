@@ -107,7 +107,9 @@ export default defineComponent({
 		});
 
 		const isGenericError = computed(() => {
-			return appErrorStatusCode.value === 500 || appErrorStatusCode === null;
+			return (
+				appErrorStatusCode.value === 500 || appErrorStatusCode.value === null
+			);
 		});
 
 		const translatedErrorMessage = computed(() => {
