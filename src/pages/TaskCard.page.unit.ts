@@ -70,7 +70,7 @@ describe("TaskCard", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			task: TaskCardModule,
+			"task-card": TaskCardModule,
 			auth: AuthModule,
 		});
 	});
