@@ -156,7 +156,7 @@ describe("room module", () => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: [] });
+								return (returned = { data: { data: [] } });
 							}
 						},
 					} as AxiosInstance);
@@ -183,7 +183,7 @@ describe("room module", () => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: ["123", "465"] });
+								return (returned = { data: { data: ["123", "465"] } });
 							}
 						},
 						post: async (path: string, params: {}) => {
@@ -217,7 +217,7 @@ describe("room module", () => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return { data: ["123", "465"] };
+								return { data: { data: ["123", "465"] } };
 							}
 						},
 						post: async (path: string, params: {}) => {

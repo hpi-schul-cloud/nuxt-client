@@ -1,10 +1,11 @@
 import ErrorPage from "./Error.page.vue";
-import { shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
+import { useStorage } from "@/composables/locale-storage.composable";
 
 describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
@@ -12,6 +13,15 @@ describe("@pages/Error.page.vue", () => {
 			configurable: true,
 			value: { assign: jest.fn() },
 		});
+		Object.defineProperty(window, "performance", {
+			value: {
+				getEntriesByType: jest.fn(),
+				measure: jest.fn(),
+			},
+		});
+		(window.performance.getEntriesByType as jest.Mock).mockReturnValue([
+			{ type: "navigate" },
+		]);
 	});
 
 	const mountComponent = (

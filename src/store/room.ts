@@ -143,7 +143,7 @@ export default class RoomModule extends VuexModule {
 				params: { shareToken },
 			});
 
-			if (!lesson.data.length) {
+			if (!lesson.data.data.length) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-found",
@@ -153,7 +153,7 @@ export default class RoomModule extends VuexModule {
 
 			const copiedLesson = (
 				await $axios.post("/v1/lessons/copy", {
-					lessonId: lesson.data[0]._id,
+					lessonId: lesson.data.data[0]._id,
 					newCourseId: this.roomData.roomId,
 					shareToken,
 				})

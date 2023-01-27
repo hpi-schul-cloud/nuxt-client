@@ -21,11 +21,13 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/ldap/activate",
 		component: () => import("../pages/administration/LDAPActivate.page.vue"),
 		name: "administration-ldap-activate",
+		beforeEnter: createPermissionGuard(["admin_view", "school_edit"]),
 	},
 	{
 		path: "/administration/ldap/config",
 		component: () => import("../pages/administration/LDAPConfig.page.vue"),
 		name: "administration-ldap-config",
+		beforeEnter: createPermissionGuard(["admin_view", "school_edit"]),
 	},
 	{
 		path: "/administration/migration",
@@ -36,36 +38,43 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/school-settings",
 		component: () => import("../pages/administration/SchoolSettings.page.vue"),
 		name: "administration-school-settings",
+		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
 		path: "/administration/students",
 		component: () => import("../pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
+		beforeEnter: createPermissionGuard(["student_list"]),
 	},
 	{
 		path: "/administration/students/consent",
 		component: () => import("../pages/administration/StudentConsent.page.vue"),
 		name: "administration-students-consent",
+		beforeEnter: createPermissionGuard(["student_edit", "student_list"]),
 	},
 	{
 		path: "/administration/students/new",
 		component: () => import("../pages/administration/StudentCreate.page.vue"),
 		name: "administration-students-new",
+		beforeEnter: createPermissionGuard(["student_create"]),
 	},
 	{
 		path: "/administration/teachers",
 		component: () => import("../pages/administration/TeacherOverview.page.vue"),
 		name: "administration-teachers",
+		beforeEnter: createPermissionGuard(["teacher_list"]),
 	},
 	{
 		path: "/administration/teachers/new",
 		component: () => import("../pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
+		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
 		path: "/content",
 		component: () => import("../pages/LernStoreOverview.page.vue"),
 		name: "content",
+		beforeEnter: createPermissionGuard(["lernstore_view"]),
 	},
 	{
 		path: `/content/:id(${REGEX_UUID})`,
@@ -74,6 +83,7 @@ export const routes: Array<RouteConfig> = [
 		meta: {
 			layout: Layouts.LERN_STORE,
 		},
+		beforeEnter: createPermissionGuard(["lernstore_view"]),
 	},
 	{
 		path: "/error",
@@ -113,11 +123,13 @@ export const routes: Array<RouteConfig> = [
 		path: "/news/new",
 		component: () => import("../pages/NewsCreate.page.vue"),
 		name: "news-new",
+		beforeEnter: createPermissionGuard(["news_create"]),
 	},
 	{
 		path: `/news/:id(${REGEX_ID})/edit`,
 		component: () => import("../pages/NewsEdit.page.vue"),
 		name: "news-id-edit",
+		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
@@ -163,12 +175,12 @@ export const routes: Array<RouteConfig> = [
 		path: "/cfiles",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "files",
-		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
 	},
 	{
 		path: "/cfiles/teams/:catchAll(.*)",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "teamfiles",
-		beforeEnter: createPermissionGuard("collaborative_files", "/tasks"),
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
 	},
 ];
