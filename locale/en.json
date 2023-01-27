@@ -841,7 +841,7 @@
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
 	"pages.room.copy.task.message.BigFile": "It could be that the copying process takes longer because larger files are included. In that case, the copied item should already exist and the files should become available later.",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
-	"pages.userMigration.title": "Hello {subject}!",
+	"pages.userMigration.title": "Migration of the login system",
 	"pages.userMigration.button.startMigration": "Start",
 	"pages.userMigration.button.logout": "Logout",
 	"pages.userMigration.button.skip": "Not now",

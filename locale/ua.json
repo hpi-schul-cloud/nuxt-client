@@ -867,7 +867,7 @@
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.tasks.teacher.title": "",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
-	"pages.userMigration.title": "Привіт, {subject}!",
+	"pages.userMigration.title": "Міграція системи входу",
 	"pages.userMigration.button.startMigration": "почати рухатися",
 	"pages.userMigration.button.logout": "Вийти з аккаунта",
 	"pages.userMigration.button.skip": "Не зараз",

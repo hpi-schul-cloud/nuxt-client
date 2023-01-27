@@ -1,56 +1,44 @@
 <template>
-	<div>
-		<img
-			class="logo logo-full"
-			src="@assets/img/logo/logo-image-mono.svg"
-			alt="Schulcloud Logo"
-		/>
-		<div v-show="hasData" class="text-center mt-16 mx-auto container-max-width">
-			<h1 class="pl-4 pr-4">
-				{{
-					$t("pages.userMigration.title", {
-						subject: subjectName,
+	<div v-show="hasData" class="text-center mx-auto">
+		<img src="@assets/img/migration/migration.svg" alt=""/>
+		<h1 class="pl-4 pr-4">
+			{{ $t("pages.userMigration.title") }}
+		</h1>
+		<div>
+			<p
+				class="text-left pa-4"
+				data-testId="text-description"
+				v-html="
+					$t(migrationDescription, {
+						sourceSystem: getSystemName(sourceSystem),
+						targetSystem: getSystemName(targetSystem),
 					})
-				}}
-			</h1>
-			<img width="200px" src="@assets/img/svgImageExample.svg" alt="" />
-			<div>
-				<p
-					class="text-left pa-4"
-					data-testId="text-description"
-					v-html="
-						$t(migrationDescription, {
-							sourceSystem: getSystemName(sourceSystem),
-							targetSystem: getSystemName(targetSystem),
-						})
-					"
-				></p>
-				<div class="d-flex flex-wrap justify-space-around mt-8">
-					<v-btn
+				"
+			></p>
+			<div class="d-flex flex-wrap justify-center mt-8">
+				<v-btn
 						class="mx-8 mb-8"
-						color="primary"
-						depressed
-						data-testId="btn-proceed"
-						:href="proceedLink"
-					>
-						{{ $t("pages.userMigration.button.startMigration") }}
-					</v-btn>
-					<v-btn
-						class="mx-8 mb-8"
-						color="primary"
 						depressed
 						data-testId="btn-cancel"
 						:to="cancelLink"
-					>
-						{{
-							$t(
+				>
+					{{
+						$t(
 								mandatory
-									? "pages.userMigration.button.logout"
-									: "pages.userMigration.button.skip"
-							)
-						}}
-					</v-btn>
-				</div>
+										? "pages.userMigration.button.logout"
+										: "pages.userMigration.button.skip"
+						)
+					}}
+				</v-btn>
+				<v-btn
+					class="mx-8 mb-8"
+					color="primary"
+					depressed
+					data-testId="btn-proceed"
+					:href="proceedLink"
+				>
+					{{ $t("pages.userMigration.button.startMigration") }}
+				</v-btn>
 			</div>
 		</div>
 	</div>
@@ -75,7 +63,7 @@ import {
 
 export default defineComponent({
 	name: "UserMigration",
-	layout: "plain",
+	layout: "loggedOut",
 	props: {
 		sourceSystem: {
 			type: String,

@@ -832,7 +832,7 @@
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
 	"pages.room.copy.task.message.BigFile": "Puede ser que el proceso de copia tarde más tiempo porque se incluyen archivos más grandes. En ese caso, el elemento copiado ya debería existir y los archivos deberían estar disponibles más tarde.",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
-	"pages.userMigration.title": "¡Hola {subject}!",
+	"pages.userMigration.title": "Migración del sistema de inicio de sesión",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
 	"pages.userMigration.button.logout": "Desconectar",
 	"pages.userMigration.button.skip": "No ahora",
