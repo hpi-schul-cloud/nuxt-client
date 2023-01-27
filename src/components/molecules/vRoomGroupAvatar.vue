@@ -147,7 +147,7 @@ export default {
 	}
 }
 
-.card-component {
+.group-avatar .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }
