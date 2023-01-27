@@ -95,11 +95,13 @@ export default {
 			}
 			if (this.stillBeingCopied) {
 				classes.push("grey--text", "text--darken-1");
+			} else {
+				classes.push("white--text");
 			}
 			return classes;
 		},
 		avatarClass() {
-			return this.stillBeingCopied ? ["grey lighten-3"] : [];
+			return this.stillBeingCopied ? ["grey lighten-2"] : [];
 		},
 		avatarColor() {
 			return this.stillBeingCopied ? undefined : this.item.displayColor;
