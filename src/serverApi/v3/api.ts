@@ -746,18 +746,6 @@ export interface CreateTaskCardParams {
      * @memberof CreateTaskCardParams
      */
     text?: Array<string>;
-    /**
-     * Visible at date of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    visibleAtDate?: string;
-    /**
-     * Due date of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    dueDate?: string;
 }
 /**
  * 
