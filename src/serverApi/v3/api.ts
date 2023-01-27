@@ -2772,18 +2772,6 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     task: TaskResponse;
-    /**
-     * Visible at date of the task card
-     * @type {string}
-     * @memberof TaskCardResponse
-     */
-    visibleAtDate: string;
-    /**
-     * Due date of the task card
-     * @type {string}
-     * @memberof TaskCardResponse
-     */
-    dueDate: string;
 }
 /**
  * 
