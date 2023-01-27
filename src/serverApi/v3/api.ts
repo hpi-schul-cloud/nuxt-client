@@ -3078,18 +3078,6 @@ export interface UpdateNewsParams {
  */
 export interface UpdateTaskCardParams {
     /**
-     * Visible at date of the card
-     * @type {string}
-     * @memberof UpdateTaskCardParams
-     */
-    visibleAtDate?: string;
-    /**
-     * Due date of the card
-     * @type {string}
-     * @memberof UpdateTaskCardParams
-     */
-    dueDate?: string;
-    /**
      * Card elements array
      * @type {Array<CardElementUpdateParams>}
      * @memberof UpdateTaskCardParams
