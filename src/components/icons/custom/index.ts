@@ -8,12 +8,10 @@ import check from "./check.vue";
 import checkBox from "./check_box.vue";
 import checkBoxOutlineBlank from "./check_box_outline_blank.vue";
 import classIcon from "./class.vue";
-import clear from "./clear.vue";
 import clock from "./clock.vue";
 import close from "./close.vue";
 import create from "./create.vue";
 import dBildungscloud from "./dBildungscloud.vue";
-import deleteIcon from "./delete.vue";
 import doublecheck from "./doublecheck.vue";
 import edit from "./edit.vue";
 import filter from "./filter.vue";
@@ -115,9 +113,6 @@ const customIcons = {
 	class: {
 		component: classIcon,
 	},
-	clear: {
-		component: clear,
-	},
 	clock: {
 		component: clock,
 	},
@@ -129,9 +124,6 @@ const customIcons = {
 	},
 	dBildungscloud: {
 		component: dBildungscloud,
-	},
-	delete: {
-		component: deleteIcon,
 	},
 	doublecheck: {
 		component: doublecheck,
