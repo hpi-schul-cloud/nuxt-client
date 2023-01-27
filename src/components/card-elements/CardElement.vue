@@ -33,13 +33,23 @@
 			>
 				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 			</v-btn>
+			<v-btn
+				icon
+				outlined
+				color="secondary"
+				class="add-element-btn"
+				data-testid="add-element-btn"
+				@click="() => $emit('add-element')"
+			>
+				<v-icon>{{ mdiPlus }}</v-icon>
+			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "@vue/composition-api";
-import { mdiTrashCanOutline, mdiDrag } from "@mdi/js";
+import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
@@ -50,7 +60,7 @@ export default defineComponent({
 		TitleCardElement,
 		RichTextCardElement,
 	},
-	emits: ["input", "delete"],
+	emits: ["input", "delete-element", "add-element"],
 	props: {
 		component: {
 			type: String,
@@ -89,6 +99,7 @@ export default defineComponent({
 			CardElementComponentEnum,
 			mdiTrashCanOutline,
 			mdiDrag,
+			mdiPlus,
 		};
 	},
 });
