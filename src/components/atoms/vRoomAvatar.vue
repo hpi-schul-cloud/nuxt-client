@@ -20,23 +20,17 @@
 		>
 			<v-avatar
 				:color="avatarColor"
+				:class="avatarClass"
 				:aria-label="avatarAriaLabel"
 				:size="size"
 				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
-				:class="avatarClass"
 				@click="onClick"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
 			>
-				<span
-					class="text-h7"
-					:class="
-						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
-					"
-					>{{ item.shortTitle }}</span
-				>
+				<span :class="avatarTextClass">{{ item.shortTitle }}</span>
 			</v-avatar>
 			<div v-if="!condenseLayout" :class="titleClasses">{{ title }}</div>
 		</v-badge>
@@ -92,11 +86,23 @@ export default {
 			}
 			return `${course} ${this.item.title}`;
 		},
+		avatarTextClass() {
+			const classes = ["text-h7"];
+			if (this.condenseLayout) {
+				classes.push("group-avatar", "text-h7");
+			} else {
+				classes.push("single-avatar", "text-h3");
+			}
+			if (this.stillBeingCopied) {
+				classes.push("grey--text", "text--darken-1");
+			}
+			return classes;
+		},
 		avatarClass() {
-			return this.stillBeingCopied ? "still-being-copied" : "";
+			return this.stillBeingCopied ? ["grey lighten-3"] : [];
 		},
 		avatarColor() {
-			return this.stillBeingCopied ? "#d9d9d9" : this.item.displayColor;
+			return this.stillBeingCopied ? undefined : this.item.displayColor;
 		},
 		title() {
 			if (this.item.copyingSince) {
@@ -109,7 +115,9 @@ export default {
 		},
 		titleClasses() {
 			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
-			const copyingClass = this.stillBeingCopied ? ["copy-info"] : [];
+			const copyingClass = this.stillBeingCopied
+				? ["grey--text", "text--darken-1"]
+				: [];
 			return [
 				"justify-center",
 				"mt-2",
@@ -222,13 +230,5 @@ export default {
 
 .dragging {
 	opacity: 0.5;
-}
-
-.still-being-copied span {
-	color: var(--v-grey-medium);
-}
-
-.copy-info {
-	color: var(--v-grey-medium);
 }
 </style>
