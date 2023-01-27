@@ -15,7 +15,7 @@ const router = new VueRouter({
 	fallback: false,
 });
 
-router.beforeEach(isAuthenticatedGuard);
 router.beforeEach(legacyCompatibilityGuard);
+router.beforeEach(isAuthenticatedGuard);
 
 export default router;

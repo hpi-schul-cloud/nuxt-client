@@ -9,7 +9,7 @@ export const legacyCompatibilityGuard: NavigationGuard = (
 	next: NavigationGuardNext
 ) => {
 	if (isLegacyClient(to.path)) {
-		window.location.replace(to.path);
+		window.location.assign(to.path);
 	} else {
 		next();
 	}
