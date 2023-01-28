@@ -45,8 +45,8 @@ export default class TaskCardModule extends VuexModule {
 				isFinished: false,
 			},
 		},
-		visibleAtDate: "",
 		dueDate: "",
+		visibleAtDate: "",
 	};
 	loading: boolean = false;
 	businessError: BusinessError = {

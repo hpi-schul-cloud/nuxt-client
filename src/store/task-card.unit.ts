@@ -4,8 +4,9 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
+import { TaskCardResponse } from "../serverApi/v3/api";
 
-const mockTaskCardData = {
+const mockTaskCardData: TaskCardResponse = {
 	id: "123",
 	cardElements: [
 		{
@@ -42,8 +43,8 @@ const mockTaskCardData = {
 			isFinished: false,
 		},
 	},
-	visibleAtDate: "",
-	dueDate: "",
+	visibleAtDate: "2023-01-24T11:53:55.003Z",
+	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
 describe("task-card store", () => {
