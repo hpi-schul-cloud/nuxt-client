@@ -213,7 +213,6 @@
 	"format.dateYY": "DD/MM/YY",
 	"format.dateUTC": "AAAA-MM-DD",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
-	"format.dateMedium": "ddd, DD. MMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
 	"format.dateTimeYY": "DD/MM/YY HH:mm",
 	"format.time": "HH:mm",

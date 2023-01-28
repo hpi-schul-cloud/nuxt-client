@@ -21,7 +21,6 @@
 			color="primary"
 			no-title
 			:locale="locale"
-			:title-date-format="titleDateFormat"
 			first-day-of-week="1"
 			:allowed-dates="allowedDates"
 			@input="onInput"
@@ -60,10 +59,6 @@ export default defineComponent({
 		const selectedDate = ref(props.date);
 		const showDateDialog = ref(false);
 
-		// TODO locale not properly working for es and uk
-		const titleDateFormat = (dateValue: string) =>
-			dayjs(dateValue).format(i18n.t("format.dateMedium"));
-
 		const formattedDate = computed(() => {
 			return selectedDate.value
 				? dayjs(selectedDate.value).format(i18n.t("format.date"))
@@ -81,7 +76,6 @@ export default defineComponent({
 		return {
 			mdiCalendar,
 			locale,
-			titleDateFormat,
 			selectedDate,
 			showDateDialog,
 			formattedDate,

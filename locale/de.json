@@ -216,7 +216,6 @@
 	"format.dateTime": "DD.MM.YYYY HH:mm",
 	"format.dateTimeYY": "DD.MM.YY HH:mm",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
-	"format.dateMedium": "dd, DD. MMM YYYY",
 	"format.time": "HH:mm",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.sidebar.addons": "Add-ons",
