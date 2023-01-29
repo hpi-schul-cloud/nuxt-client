@@ -126,3 +126,10 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-input__icon--append .v-icon {
+	width: 20px;
+	height: 20px;
+}
+</style>
