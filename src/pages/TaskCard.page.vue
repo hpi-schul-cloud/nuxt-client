@@ -6,7 +6,12 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<date-time-picker :date="date" @date-input="handleDateInput" />
+			<date-time-picker
+				:date="date"
+				:date-input-label="t('pages.taskCard.labels.dateInput')"
+				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
+				@date-input="handleDateInput"
+			/>
 			<draggable
 				v-model="elements"
 				:animation="400"
@@ -96,6 +101,14 @@ export default defineComponent({
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const breadcrumbs = [
 			{
 				text: i18n.t("common.words.tasks"),
@@ -245,6 +258,7 @@ export default defineComponent({
 			endDragging,
 			dragInProgress,
 			handleDateInput,
+			t,
 		};
 	},
 	mounted() {

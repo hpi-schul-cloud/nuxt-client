@@ -9,7 +9,8 @@
 		<template #activator="{ on, attrs }">
 			<v-text-field
 				:value="formattedDate"
-				label="Zu erledigen bis"
+				:label="label"
+				:aria-label="ariaLabel"
 				:append-icon="mdiCalendar"
 				readonly
 				v-bind="attrs"
@@ -39,6 +40,8 @@ export default defineComponent({
 	name: "DatePicker",
 	props: {
 		date: { type: String, required: true },
+		label: { type: String, default: "" },
+		ariaLabel: { type: String, required: true },
 	},
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");

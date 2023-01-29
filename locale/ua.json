@@ -866,6 +866,7 @@
 	"pages.tasks.teacher.subtitleNoDue": "",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.tasks.teacher.title": "",
+	"pages.taskCard.labels.dateInput": "Для редагування поки",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent": "Форма згоди:",

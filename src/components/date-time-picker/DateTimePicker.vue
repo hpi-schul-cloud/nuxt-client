@@ -1,7 +1,12 @@
 <template>
 	<v-row>
 		<v-col class="col-sm-4">
-			<date-picker :date="date" required @input="handleInput" />
+			<date-picker
+				:date="date"
+				:label="dateInputLabel"
+				:aria-label="dateInputAriaLabel"
+				@input="handleInput"
+			/>
 		</v-col>
 		<v-col v-if="enableTimePicker" class="col-sm-3">
 			<v-menu
@@ -42,6 +47,8 @@ export default defineComponent({
 		DatePicker,
 	},
 	props: {
+		dateInputLabel: { type: String, default: "" },
+		dateInputAriaLabel: { type: String, default: "" },
 		// required: {
 		// 	type: Boolean,
 		// },

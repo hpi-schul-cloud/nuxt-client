@@ -831,6 +831,7 @@
 	"pages.room.copy.lesson.message.copied": "El tema se ha copiado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
 	"pages.room.copy.task.message.BigFile": "Puede ser que el proceso de copia tarde más tiempo porque se incluyen archivos más grandes. En ese caso, el elemento copiado ya debería existir y los archivos deberían estar disponibles más tarde.",
+	"pages.taskCard.labels.dateInput": "Hacer por",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",
