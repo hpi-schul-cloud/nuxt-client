@@ -45,7 +45,7 @@ import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendar } from "@mdi/js";
 
-// TODO - Accessibility
+// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3?
 // TODO - data-testids
 export default defineComponent({
 	name: "DatePicker",
@@ -97,10 +97,14 @@ export default defineComponent({
 		const focusDateWithKeyBoard = () => {
 			setTimeout(() => {
 				const focusedDate = selectedDate.value
-					? document.querySelector(".v-btn--active")
-					: document.querySelector(".v-date-picker-table__current");
+					? document.querySelector<HTMLElement>(".v-btn--active")
+					: document.querySelector<HTMLElement>(
+							".v-date-picker-table__current"
+					  );
 
-				focusedDate.focus();
+				if (focusedDate) {
+					focusedDate.focus();
+				}
 			}, "100");
 		};
 
