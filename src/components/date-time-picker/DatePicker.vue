@@ -45,7 +45,7 @@ import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendar } from "@mdi/js";
 
-// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3?
+// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3 (vuetify will increase accessibility in vuetify 3)?
 // TODO - data-testids
 export default defineComponent({
 	name: "DatePicker",
