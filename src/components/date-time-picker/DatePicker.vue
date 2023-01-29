@@ -15,27 +15,38 @@
 				readonly
 				v-bind="attrs"
 				v-on="on"
+				@keydown.space="showDateDialog = true"
+				@keydown.prevent.enter="showDateDialog = true"
 			/>
 		</template>
 		<v-date-picker
 			v-model="selectedDate"
+			:aria-expanded="showDateDialog"
 			color="primary"
 			no-title
 			:locale="locale"
 			first-day-of-week="1"
 			:allowed-dates="allowedDates"
+			show-adjacent-months
 			@input="onInput"
 		/>
 	</v-menu>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, computed } from "@vue/composition-api";
+import {
+	defineComponent,
+	inject,
+	ref,
+	computed,
+	watch,
+} from "@vue/composition-api";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendar } from "@mdi/js";
 
 // TODO - Accessibility
+// TODO - data-testids
 export default defineComponent({
 	name: "DatePicker",
 	props: {
@@ -58,13 +69,20 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		console.log("d", props.date);
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const selectedDate = ref(props.date);
 		const showDateDialog = ref(false);
 
 		const formattedDate = computed(() => {
 			return selectedDate.value
-				? dayjs(selectedDate.value).format(i18n.t("format.date"))
+				? dayjs(selectedDate.value).format(t("format.date"))
 				: selectedDate.value;
 		});
 
@@ -75,6 +93,22 @@ export default defineComponent({
 			emit("input", selectedDate.value);
 			showDateDialog.value = false;
 		};
+
+		const focusDateWithKeyBoard = () => {
+			setTimeout(() => {
+				const focusedDate = selectedDate.value
+					? document.querySelector(".v-btn--active")
+					: document.querySelector(".v-date-picker-table__current");
+
+				focusedDate.focus();
+			}, "100");
+		};
+
+		watch(showDateDialog, (newValue) => {
+			if (newValue === true) {
+				focusDateWithKeyBoard();
+			}
+		});
 
 		return {
 			mdiCalendar,
