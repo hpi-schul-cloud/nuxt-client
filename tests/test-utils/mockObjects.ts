@@ -87,5 +87,4 @@ export const mockSchool: School = {
 	id: "mockSchoolId",
 	years: {},
 	isTeamCreationByStudentsEnabled: false,
-	oauthUserMigration: false,
 };
