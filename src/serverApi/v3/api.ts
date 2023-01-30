@@ -666,13 +666,19 @@ export interface CourseMetadataResponse {
      * @type {string}
      * @memberof CourseMetadataResponse
      */
-    startDate: string;
+    startDate?: string;
     /**
      * End date of the course. After this the course counts as archived
      * @type {string}
      * @memberof CourseMetadataResponse
      */
-    untilDate: string;
+    untilDate?: string;
+    /**
+     * Start of the copying process if it is still ongoing - otherwise property is not set.
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    copyingSince?: string;
 }
 /**
  * 
@@ -740,6 +746,18 @@ export interface CreateTaskCardParams {
      * @memberof CreateTaskCardParams
      */
     text?: Array<string>;
+    /**
+     * Visible at date of the card
+     * @type {string}
+     * @memberof CreateTaskCardParams
+     */
+    visibleAtDate?: string;
+    /**
+     * Due date of the card
+     * @type {string}
+     * @memberof CreateTaskCardParams
+     */
+    dueDate?: string;
 }
 /**
  * 
@@ -814,6 +832,12 @@ export interface DashboardGridElementResponse {
      * @memberof DashboardGridElementResponse
      */
     groupElements: Array<DashboardGridSubElementResponse>;
+    /**
+     * Start of the copying process if it is still ongoing - otherwise property is not set.
+     * @type {string}
+     * @memberof DashboardGridElementResponse
+     */
+    copyingSince: string;
 }
 /**
  * 
@@ -2760,6 +2784,18 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     task: TaskResponse;
+    /**
+     * Visible at date of the task card
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    visibleAtDate: string;
+    /**
+     * Due date of the task card
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    dueDate: string;
 }
 /**
  * 
@@ -3065,6 +3101,18 @@ export interface UpdateNewsParams {
  * @interface UpdateTaskCardParams
  */
 export interface UpdateTaskCardParams {
+    /**
+     * Visible at date of the card
+     * @type {string}
+     * @memberof UpdateTaskCardParams
+     */
+    visibleAtDate?: string;
+    /**
+     * Due date of the card
+     * @type {string}
+     * @memberof UpdateTaskCardParams
+     */
+    dueDate?: string;
     /**
      * Card elements array
      * @type {Array<CardElementUpdateParams>}
