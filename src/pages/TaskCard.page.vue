@@ -7,7 +7,7 @@
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<date-time-picker
-				:date="date"
+				:date="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
 				@date-input="handleDateInput"
@@ -121,7 +121,7 @@ export default defineComponent({
 			type: CardElementResponseCardElementTypeEnum.Title,
 			model: "",
 		});
-		const date = ref("");
+		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute().value;
 
@@ -134,7 +134,7 @@ export default defineComponent({
 			}
 
 			const taskCardData = taskCardModule.getTaskCardData;
-			date.value = taskCardData.dueDate;
+			dueDate.value = taskCardData.dueDate;
 			taskCardData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
@@ -167,7 +167,7 @@ export default defineComponent({
 		});
 
 		const handleDateInput = (selectedDate: string) =>
-			(date.value = selectedDate);
+			(dueDate.value = selectedDate);
 
 		const addElement = () => {
 			elements.value.push({
@@ -193,11 +193,11 @@ export default defineComponent({
 			});
 
 			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
-			const dueDate = date.value || endOfSchoolYear;
+			// const dueDate = date.value || endOfSchoolYear;
 			taskCardModule.createTaskCard({
 				title: title.value.model,
 				text: text,
-				dueDate,
+				dueDate: dueDate.value || endOfSchoolYear,
 			});
 		};
 
@@ -247,7 +247,7 @@ export default defineComponent({
 			mdiPlus,
 			breadcrumbs,
 			title,
-			date,
+			dueDate,
 			elements,
 			save,
 			cancel,
