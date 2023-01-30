@@ -1,5 +1,3 @@
-import { TranslateResult } from "vue-i18n";
-
 export enum CardElementComponentEnum {
 	Title = "TitleCardElement",
 	RichText = "RichTextCardElement",
@@ -11,7 +9,7 @@ export type CardElement = {
 	model: string;
 	props?: {
 		component: CardElementComponentEnum;
-		placeholder: TranslateResult;
-		editable: Boolean;
+		placeholder: string;
+		editable: boolean;
 	};
 };
