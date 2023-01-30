@@ -194,7 +194,7 @@ export default {
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
 		$line-height: var(--line-height-lg),
-		$lines-to-show: 2
+		$lines-to-show: 4
 	);
 }
 
