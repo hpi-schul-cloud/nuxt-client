@@ -96,11 +96,14 @@ describe("rooms module", () => {
 				const roomsModule = new RoomsModule({});
 
 				roomsModule
-					.fetch({ indicateLoading: true ,device: "mobile", showSubstitute: true })
+					.fetch({
+						indicateLoading: true,
+						device: "mobile",
+						showSubstitute: true,
+					})
 					.then(() => {
 						expect(roomsModule.getLoading).toBe(false);
 					});
-
 
 				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();

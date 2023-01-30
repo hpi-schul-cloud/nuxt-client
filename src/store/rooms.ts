@@ -19,7 +19,6 @@ import { currentDate, fromUTC } from "@/plugins/datetime";
 import { BusinessError } from "./types/commons";
 import { notifierModule } from "@/store";
 
-
 @Module({
 	name: "rooms",
 	namespaced: true,
@@ -90,7 +89,7 @@ export default class RoomsModule extends VuexModule {
 				const symbol = difference > 1 ? "-" : "/";
 				titleDate = `${startDate}${symbol}${
 					symbol == "/" ? shortenedUntilDate : untilDate
-					}`;
+				}`;
 			}
 
 			return {
@@ -157,7 +156,7 @@ export default class RoomsModule extends VuexModule {
 
 	@Mutation
 	setAlignedSuccessfully(success: boolean): void {
-		this.alignedSuccessfully = success;;
+		this.alignedSuccessfully = success;
 	}
 
 	get getRoomsData(): Array<RoomsData> {
@@ -225,7 +224,8 @@ export default class RoomsModule extends VuexModule {
 		showSubstitute: boolean;
 	}): Promise<void> {
 		// device parameter will be used to fetch data specified for device
-		const indicateLoading = params?.indicateLoading === undefined ? true :params.indicateLoading
+		const indicateLoading =
+			params?.indicateLoading === undefined ? true : params.indicateLoading;
 		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser(
@@ -261,8 +261,10 @@ export default class RoomsModule extends VuexModule {
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
-			if (error.response.data.code === 400 &&
-				error.response.data.message === 'substitute courses cannot be arranged') {
+			if (
+				error.response.data.code === 400 &&
+				error.response.data.message === "substitute courses cannot be arranged"
+			) {
 				notifierModule?.show({
 					text: "pages.courses.index.courses.cannotArrangeSubstitute",
 					status: "info",
@@ -276,7 +278,6 @@ export default class RoomsModule extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 			this.setAlignedSuccessfully(false);
-
 		}
 	}
 
