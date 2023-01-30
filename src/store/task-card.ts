@@ -6,6 +6,7 @@ import {
 	CreateTaskCardParams,
 	UpdateTaskCardParams,
 	CardElementResponseCardElementTypeEnum,
+	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -24,6 +25,14 @@ export default class TaskCardModule extends VuexModule {
 				cardElementType: CardElementResponseCardElementTypeEnum.Title,
 				content: {
 					value: "",
+				},
+			},
+			{
+				id: "",
+				cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+				content: {
+					value: "",
+					inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
 				},
 			},
 		],
