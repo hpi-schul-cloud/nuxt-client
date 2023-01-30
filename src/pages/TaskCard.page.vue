@@ -37,7 +37,11 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
+import {
+	CardElementResponseCardElementTypeEnum,
+	RichTextCardElementParamInputFormatEnum,
+	CardElementUpdateParams,
+} from "@/serverApi/v3";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -129,7 +133,7 @@ export default defineComponent({
 		};
 
 		const updateTaskCard = () => {
-			const cardElements = [];
+			const cardElements: Array<CardElementUpdateParams> = [];
 			cardElements.push({
 				id: title.value.id,
 				content: {
@@ -138,14 +142,17 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				cardElements.push({
-					...(element.id && { id: element.id }),
+				const cardElement: CardElementUpdateParams = {
 					content: {
 						type: element.type,
 						value: element.model,
-						inputFormat: "richtext_ck5",
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
 					},
-				});
+				};
+				if (element.id) {
+					cardElement.id = element.id;
+				}
+				cardElements.push(cardElement);
 			});
 
 			taskCardModule.updateTaskCard({
