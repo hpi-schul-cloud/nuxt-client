@@ -1,4 +1,5 @@
-import { authModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -13,6 +14,7 @@ import {
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
+import { HttpStatusCode } from "./types/http-status-code.enum";
 import { SharedLessonObject } from "./types/room";
 
 @Module({
@@ -324,6 +326,19 @@ export default class RoomModule extends VuexModule {
 	@Mutation
 	setError(error: {}): void {
 		this.error = error;
+		const handledApplicationErrors: Array<HttpStatusCode> = [
+			HttpStatusCode.BadRequest,
+			HttpStatusCode.Unauthorized,
+			HttpStatusCode.Forbidden,
+			HttpStatusCode.NotFound,
+			HttpStatusCode.RequestTimeout,
+			HttpStatusCode.InternalServerError,
+		];
+		// NUXT_REMOVAL: This error handling should be centralized later to manage business errors better.
+		// @ts-ignore
+		const errorCode = error.response?.data.code;
+		if (errorCode && handledApplicationErrors.includes(errorCode))
+			applicationErrorModule.setError(createApplicationError(errorCode));
 	}
 
 	@Mutation

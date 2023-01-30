@@ -2,10 +2,12 @@ import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import AuthModule from "@/store/auth";
+import ApplicationErrorModule from "@/store/application-error";
 import setupStores from "@@/tests/test-utils/setupStores";
 
 import { AxiosInstance } from "axios";
-import { authModule } from "@/store";
+import { authModule, applicationErrorModule } from "@/store";
+import { HttpStatusCode } from "./types/http-status-code.enum";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -34,7 +36,10 @@ axiosInitializer();
 
 describe("room module", () => {
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule });
+		setupStores({
+			authModule: AuthModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 	});
 	describe("actions", () => {
 		beforeEach(() => {
@@ -729,6 +734,21 @@ describe("room module", () => {
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
 				expect(roomModule.error).toBe(errorData);
+			});
+
+			it.each([
+				HttpStatusCode.BadRequest,
+				HttpStatusCode.Unauthorized,
+				HttpStatusCode.Forbidden,
+				HttpStatusCode.NotFound,
+				HttpStatusCode.RequestTimeout,
+				HttpStatusCode.InternalServerError,
+			])("should create an application-error for http-error(%p)", (code) => {
+				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const roomModule = new RoomModule({});
+				const errorData = { response: { data: { code } } };
+				roomModule.setError(errorData);
+				expect(setErrorSpy).toHaveBeenCalled();
 			});
 		});
 
