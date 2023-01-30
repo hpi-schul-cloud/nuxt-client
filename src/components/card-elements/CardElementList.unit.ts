@@ -8,7 +8,7 @@ import {
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
 
-const getMockData = (): CardElement[] => [
+const getCardElementsMockData = (): CardElement[] => [
 	{
 		id: "123",
 		type: CardElementResponseCardElementTypeEnum.RichText,
@@ -30,7 +30,6 @@ const getMockData = (): CardElement[] => [
 		},
 	},
 ];
-let cardElementsMock: CardElement[] = getMockData();
 
 class ResizeObserver {
 	observe() {}
@@ -55,20 +54,20 @@ describe("@components/card-elements/CardElementList", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		window.ResizeObserver = ResizeObserver;
-		cardElementsMock = getMockData();
 	});
 
 	describe("basic functions", () => {
 		it("should render component", () => {
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: getCardElementsMockData(),
 			});
 			expect(wrapper.findComponent(CardElementList).exists()).toBe(true);
 		});
 
 		it("Should render the correct number of card elements", () => {
+			const cardElementsMockData = getCardElementsMockData();
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: cardElementsMockData,
 			});
 			const cardElements = wrapper.findAllComponents({
 				ref: "card-element",
@@ -76,10 +75,10 @@ describe("@components/card-elements/CardElementList", () => {
 			expect(cardElements.length).toBe(2);
 
 			expect(cardElements.at(0).props().value).toStrictEqual(
-				cardElementsMock[0].model
+				cardElementsMockData[0].model
 			);
 			expect(cardElements.at(1).props().value).toStrictEqual(
-				cardElementsMock[1].model
+				cardElementsMockData[1].model
 			);
 		});
 	});
@@ -87,7 +86,7 @@ describe("@components/card-elements/CardElementList", () => {
 	describe("event handling", () => {
 		it("Should emit input event after dragging elements", async () => {
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: getCardElementsMockData(),
 			});
 			const draggable = wrapper.findComponent({
 				ref: "draggable",
@@ -99,7 +98,7 @@ describe("@components/card-elements/CardElementList", () => {
 
 		it("Should add card element", async () => {
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: getCardElementsMockData(),
 			});
 			const firstCardElement = wrapper
 				.findAllComponents({
@@ -117,8 +116,9 @@ describe("@components/card-elements/CardElementList", () => {
 		});
 
 		it("Should add new card element below", async () => {
+			const cardElementsMockData = getCardElementsMockData();
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: cardElementsMockData,
 			});
 			const firstCardElement = wrapper
 				.findAllComponents({
@@ -135,17 +135,17 @@ describe("@components/card-elements/CardElementList", () => {
 
 			expect(cardElements.length).toBe(3);
 			expect(cardElements.at(0).props().value).toEqual(
-				cardElementsMock[0].model
+				cardElementsMockData[0].model
 			);
 			expect(cardElements.at(1).props().value).toEqual("");
 			expect(cardElements.at(2).props().value).toEqual(
-				cardElementsMock[2].model
+				cardElementsMockData[2].model
 			);
 		});
 
 		it("Should delete card element", async () => {
 			const wrapper = getWrapper({
-				value: cardElementsMock,
+				value: getCardElementsMockData(),
 			});
 			const firstCardElement = wrapper
 				.findAllComponents({
