@@ -100,7 +100,7 @@
 		"vuex-module-decorators": "^1.2.0"
 	},
 	"engines": {
-		"node": "16",
+		"node": "18",
 		"npm": "8"
 	}
 }
