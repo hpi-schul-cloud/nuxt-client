@@ -57,9 +57,11 @@ export type School = {
 	years: {};
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
-	oauthUserMigration?: boolean;
 };
 
-export type IOauthMigration = {
-	available: boolean;
+export type OauthMigration = {
+	enableMigrationStart: boolean;
+	oauthMigrationPossible: boolean;
+	oauthMigrationMandatory: boolean;
+	oauthMigrationFinished?: string;
 };
