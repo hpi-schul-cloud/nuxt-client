@@ -2,9 +2,13 @@
 import { envConfigModule, roomModule, tasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
+import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { provide } from "@nuxtjs/composition-api";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 
@@ -91,12 +95,22 @@ const emptyMockData = {
 	elements: [],
 };
 
+const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
+	getIsShareModalOpen: true,
+});
+const notifierModuleMock = createModuleMocks(NotifierModule);
+
 const getWrapper = (props: object, options?: object) => {
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 			vuetify: true,
 		}),
+		setup() {
+			provide("i18n", { t: (key: string) => key });
+			provide("notifierModule", notifierModuleMock);
+			provide("shareLessonModule", shareLessonModuleMock);
+		},
 		propsData: props,
 		...options,
 	});

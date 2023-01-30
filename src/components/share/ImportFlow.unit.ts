@@ -4,13 +4,17 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenInfoResponseParentTypeEnum,
 } from "@/serverApi/v3";
+import { roomsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import RoomsModule from "@/store/rooms";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ImportFlow from "@components/share/ImportFlow.vue";
+import ImportModal from "@components/share/ImportModal.vue";
 import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
@@ -53,6 +57,8 @@ describe("@components/share/ImportFlow", () => {
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
+		setupStores({ rooms: RoomsModule });
+		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
 	});
 
 	describe("token is provided", () => {
@@ -133,7 +139,9 @@ describe("@components/share/ImportFlow", () => {
 				const wrapper = mountComponent();
 				await Vue.nextTick();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper
+					.findComponent(ImportModal)
+					.findComponent(vCustomDialog);
 				dialog.vm.$emit("dialog-confirmed");
 
 				expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
@@ -149,7 +157,9 @@ describe("@components/share/ImportFlow", () => {
 				const wrapper = mountComponent();
 				await Vue.nextTick();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper
+					.findComponent(ImportModal)
+					.findComponent(vCustomDialog);
 				await dialog.vm.$emit("dialog-confirmed");
 
 				expect(notifierModuleMock.show).toHaveBeenCalledWith(
@@ -188,7 +198,9 @@ describe("@components/share/ImportFlow", () => {
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
 					await new Promise((time) => setTimeout(time, 1000));
 
@@ -200,7 +212,9 @@ describe("@components/share/ImportFlow", () => {
 					const wrapper = mountComponent();
 					await Vue.nextTick();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
 					await new Promise((time) => setTimeout(time, 1000));
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();

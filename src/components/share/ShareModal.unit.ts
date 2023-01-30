@@ -12,7 +12,7 @@ describe("@components/share/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
 	const showMock = jest.fn();
 
-	const getWrapper = (attrs = {}) => {
+	const getWrapper = (attrs = { propsData: { type: "course" } }) => {
 		const wrapper = mount(ShareModal, {
 			...createComponentMocks({
 				i18n: true,

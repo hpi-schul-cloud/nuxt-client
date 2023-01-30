@@ -40,6 +40,7 @@ describe("@components/share/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		expect(wrapper).toBeTruthy();
@@ -50,6 +51,7 @@ describe("@components/share/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const nameInput = wrapper.findComponent({
@@ -65,6 +67,7 @@ describe("@components/share/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const dialog = wrapper.findComponent({
@@ -87,6 +90,7 @@ describe("@components/share/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const dialog = wrapper.findComponent({
@@ -102,6 +106,7 @@ describe("@components/share/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 
