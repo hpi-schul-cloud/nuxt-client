@@ -215,7 +215,7 @@ export default {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
-			this.reloadCourses(0, new Date());
+			this.initCoursePolling(0, new Date());
 		}
 	},
 	methods: {
