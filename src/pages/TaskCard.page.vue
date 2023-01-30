@@ -116,16 +116,12 @@ export default defineComponent({
 			},
 		];
 
-		const date = ref("");
-
-		const handleDateInput = (selectedDate: string) =>
-			(date.value = selectedDate);
-
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
 			model: "",
 		});
+		const date = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute().value;
 
@@ -138,6 +134,7 @@ export default defineComponent({
 			}
 
 			const taskCardData = taskCardModule.getTaskCardData;
+			date.value = taskCardData.dueDate;
 			taskCardData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
@@ -168,6 +165,9 @@ export default defineComponent({
 				});
 			});
 		});
+
+		const handleDateInput = (selectedDate: string) =>
+			(date.value = selectedDate);
 
 		const addElement = () => {
 			elements.value.push({

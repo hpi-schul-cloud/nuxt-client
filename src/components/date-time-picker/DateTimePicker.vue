@@ -2,7 +2,7 @@
 	<v-row>
 		<v-col class="col-sm-4">
 			<date-picker
-				:date="date"
+				:date="dateTime"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
 				@input="handleDateInput"
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from "@vue/composition-api";
+import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 
@@ -37,13 +37,6 @@ export default defineComponent({
 		// required: {
 		// 	type: Boolean,
 		// },
-		// TODO - make either or required
-		// enableDatePicker: {
-		// 	type: Boolean,
-		// },
-		// enableTimePicker: {
-		// 	type: Boolean,
-		// },
 		date: {
 			type: String,
 			required: true,
@@ -55,13 +48,14 @@ export default defineComponent({
 	},
 	emits: ["updateDateTime"],
 	setup(props, { emit }) {
-		const dateTime = computed(() => {
-			return props.date + " " + props.time;
-		});
+		watch(
+			() => props.date,
+			(newValue) => {
+				dateTime.value = newValue;
+			}
+		);
 
-		watch(dateTime, () => {
-			emit("update-date-time", dateTime.value);
-		});
+		const dateTime = ref(props.date);
 
 		const handleDateInput = (selectedDate: string) => {
 			emit("date-input", selectedDate);
@@ -71,7 +65,16 @@ export default defineComponent({
 			console.log("blub", selectedTime);
 		};
 
+		const dateTsime = computed(() => {
+			return props.date + " " + props.time;
+		});
+
+		watch(dateTsime, () => {
+			emit("update-date-time", dateTsime.value);
+		});
+
 		return {
+			dateTime,
 			handleDateInput,
 			handleTimeInput,
 		};

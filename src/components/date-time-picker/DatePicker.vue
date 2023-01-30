@@ -108,6 +108,13 @@ export default defineComponent({
 			}, "100");
 		};
 
+		watch(
+			() => props.date,
+			(newValue) => {
+				selectedDate.value = newValue;
+			}
+		);
+
 		watch(showDateDialog, (newValue) => {
 			if (newValue === true) {
 				focusDateWithKeyBoard();
