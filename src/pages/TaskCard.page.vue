@@ -6,31 +6,7 @@
 	>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<draggable
-				v-model="elements"
-				:animation="400"
-				:delay="touchDelay"
-				handle=".handle"
-				ghost-class="ghost"
-				chosen-class="chosen"
-				drag-class="drag"
-				force-fallback="true"
-				@start="startDragging"
-				@end="endDragging"
-			>
-				<card-element-wrapper
-					v-for="(element, index) in elements"
-					:key="index"
-					v-model="element.model"
-					v-bind="element.props"
-					:disabled="dragInProgress"
-					@delete-element="deleteElement(index)"
-					@add-element="addElementAfter(index)"
-				/>
-			</draggable>
-			<v-btn fab color="primary" class="align-self-center" @click="addElement">
-				<v-icon>{{ mdiPlus }}</v-icon>
-			</v-btn>
+			<card-element-list v-model="elements" />
 			<div>
 				<v-btn color="secondary" outlined @click="cancel">
 					{{ $t("common.actions.cancel") }}
@@ -54,16 +30,14 @@ import {
 import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import { taskCardModule, authModule } from "@/store";
-import { useDrag } from "@/composables/drag";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElement.vue";
+import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
-import { mdiPlus } from "@mdi/js";
-import draggable from "vuedraggable";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -71,7 +45,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		CardElementWrapper,
-		draggable,
+		CardElementList,
 	},
 	setup() {
 		const router = useRouter();
@@ -122,7 +96,7 @@ export default defineComponent({
 						model: cardElement.content.value,
 						props: {
 							component: CardElementComponentEnum.Title,
-							placeholder: i18n.t("common.labels.title"),
+							placeholder: "common.labels.title",
 							editable: true,
 						},
 					};
@@ -135,42 +109,12 @@ export default defineComponent({
 					model: cardElement.content.value,
 					props: {
 						component: CardElementComponentEnum.RichText,
-						placeholder: i18n.t("common.labels.description"),
+						placeholder: "common.labels.description",
 						editable: true,
 					},
 				});
 			});
 		});
-
-		const addElement = () => {
-			elements.value.push({
-				id: "",
-				type: CardElementResponseCardElementTypeEnum.RichText,
-				model: "",
-				props: {
-					component: CardElementComponentEnum.RichText,
-					placeholder: i18n.t("common.labels.description"),
-					editable: true,
-				},
-			});
-		};
-
-		const addElementAfter = (index: number) => {
-			elements.value.splice(index + 1, 0, {
-				id: "",
-				type: CardElementResponseCardElementTypeEnum.RichText,
-				model: "",
-				props: {
-					component: CardElementComponentEnum.RichText,
-					placeholder: i18n.t("common.labels.description"),
-					editable: true,
-				},
-			});
-		};
-
-		const deleteElement = (index: number) => {
-			elements.value.splice(index, 1);
-		};
 
 		const createTaskCard = () => {
 			const text: Array<string> = [];
@@ -223,23 +167,12 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		const { touchDelay, startDragging, endDragging, dragInProgress } =
-			useDrag();
-
 		return {
-			mdiPlus,
 			breadcrumbs,
 			title,
 			elements,
 			save,
 			cancel,
-			addElement,
-			addElementAfter,
-			deleteElement,
-			touchDelay,
-			startDragging,
-			endDragging,
-			dragInProgress,
 		};
 	},
 	// TODO - should not use this, because it's nuxt
@@ -251,16 +184,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.chosen,
-.drag {
-	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-		0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
-	opacity: 1 !important;
-}
-
-.ghost {
-	opacity: 0 !important;
-}
-</style>
