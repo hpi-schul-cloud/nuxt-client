@@ -42,6 +42,8 @@ const mockTaskCardData = {
 			isFinished: false,
 		},
 	},
+	visibleAtDate: "",
+	dueDate: "",
 };
 
 describe("task-card store", () => {
