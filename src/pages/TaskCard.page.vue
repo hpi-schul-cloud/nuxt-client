@@ -167,15 +167,15 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-        if (element.model && element.model.length > 2) {
-          cardElements.push({
-            content: {
-              type: element.type,
-              value: element.model,
-              inputFormat: "richtext_ck5",
-            },
-          });
-        }
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			taskCardModule.createTaskCard({
@@ -193,16 +193,16 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-        if (element.model && element.model.length > 2) {
-          cardElements.push({
-            ...(element.id && { id: element.id }),
-            content: {
-              type: element.type,
-              value: element.model,
-              inputFormat: "richtext_ck5",
-            },
-          });
-        }
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						...(element.id && { id: element.id }),
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			taskCardModule.updateTaskCard({
