@@ -369,9 +369,9 @@ export default {
 
 			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED env is disabled
 			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
-				editedColumns = editedColumns.filter(
-					(col) => col.field !== "lastLoginSystemChange").filter((col) => col.field !== "outdatedSince"
-				);
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			return editedColumns;
