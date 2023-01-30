@@ -101,6 +101,7 @@ describe("rooms module", () => {
 						expect(roomsModule.getLoading).toBe(false);
 					});
 
+
 				expect(roomsModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});

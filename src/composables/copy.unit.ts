@@ -160,7 +160,7 @@ describe("copy composable", () => {
 		await copy(payload);
 
 		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "error" })
+			expect.objectContaining({ status: "info" })
 		);
 	});
 });

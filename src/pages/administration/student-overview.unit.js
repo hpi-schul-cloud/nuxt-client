@@ -88,6 +88,7 @@ describe("students/index", () => {
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
+					getRegistrationLinks: () => [],
 				},
 			},
 			uiState: {
