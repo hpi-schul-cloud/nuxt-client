@@ -96,7 +96,7 @@ describe("rooms module", () => {
 				const roomsModule = new RoomsModule({});
 
 				roomsModule
-					.fetch({ device: "mobile", showSubstitute: true })
+					.fetch({ indicateLoading: true ,device: "mobile", showSubstitute: true })
 					.then(() => {
 						expect(roomsModule.getLoading).toBe(false);
 					});

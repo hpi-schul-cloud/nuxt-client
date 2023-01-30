@@ -219,11 +219,13 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async fetch(indicateLoading = true , params?: {
+	async fetch(params?: {
+		indicateLoading: boolean;
 		device: string;
 		showSubstitute: boolean;
 	}): Promise<void> {
 		// device parameter will be used to fetch data specified for device
+		const indicateLoading = params?.indicateLoading === undefined ? true :params.indicateLoading
 		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser(

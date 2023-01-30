@@ -227,7 +227,11 @@ export default {
 	},
 	watch: {
 		showSubstitute: async function (showSubstitute) {
-			await roomsModule.fetch({ device: undefined, showSubstitute }); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+			await roomsModule.fetch({
+				indicateLoading: undefined,
+				device: undefined,
+				showSubstitute,
+			}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		},
 	},
 	async created() {
@@ -402,7 +406,7 @@ export default {
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(async () => {
-				await roomsModule.fetch(false);
+				await roomsModule.fetch({ indicateLoading: false });
 				if (this.hasRoomsBeingCopied) {
 					this.initCoursePolling(count + 1, started ?? new Date());
 				} else {
