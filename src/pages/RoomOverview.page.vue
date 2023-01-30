@@ -373,12 +373,12 @@ export default {
 			this.$router.replace({ path: "/rooms-overview" });
 			roomsModule.fetch();
 		},
-		reloadCourses(count = 0, started) {
+		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(async () => {
 				await roomsModule.fetch(false);
 				if (this.hasRoomsBeingCopied) {
-					this.reloadCourses(count + 1, started ?? new Date());
+					this.initCoursePolling(count + 1, started ?? new Date());
 				} else {
 					this.notifierModule?.show({
 						text: this.$t("components.molecules.copyResult.timeoutSuccess"),
