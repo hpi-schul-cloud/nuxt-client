@@ -196,4 +196,45 @@ describe("vRoomAvatar", () => {
 		expect(element.innerHTML.trim()).toContain("History");
 		expect(element.innerHTML.trim()).toContain("2015-2018");
 	});
+
+	describe("on long running course copies", () => {
+		const setup = () => {
+			const propData = {
+				item: {
+					id: "123",
+					title: "History (1)",
+					shortTitle: "Hi",
+					displayColor: "#EF6C00",
+					startDate: "2023-01-30T22:00:00.000Z",
+					untilDate: "2023-02-15T22:00:00.000Z",
+					copyingSince: "2023-01-30T22:00:00.000Z",
+					searchText: "History (1)",
+					isArchived: true,
+				},
+				size: "4em",
+				showBadge: true,
+				draggable: true,
+			};
+
+			const wrapper = getWrapper({ ...propData });
+			return wrapper;
+		};
+
+		it("should display info and not title", () => {
+			const wrapper = setup();
+			const element = wrapper.find(".subtitle").element as HTMLElement;
+
+			expect(element.innerHTML.trim()).toContain("Kurs wird erstellt");
+			expect(element.className).toContain("grey--text");
+			expect(element.className).toContain("text--darken-1");
+		});
+
+		it("should display avatar in grey", () => {
+			const wrapper = setup();
+			const element = wrapper.find(".v-avatar").element as HTMLElement;
+			console.log(element.className);
+			expect(element.className.split(" ")).toContain("grey");
+			expect(element.className.split(" ")).toContain("lighten-2");
+		});
+	});
 });
