@@ -19,7 +19,7 @@
 </template>
 <script lang="ts">
 import ApplicationErrorModule from "@/store/application-error";
-import { computed, defineComponent, inject } from "vue";
+import { computed, defineComponent, inject, onUnmounted } from "vue";
 import VueI18n from "vue-i18n";
 import Theme from "@/theme.config";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
@@ -122,6 +122,10 @@ export default defineComponent({
 					? translatedError
 					: i18n.t("error.generic").toString();
 			return result;
+		});
+
+		onUnmounted(() => {
+			applicationErrorModule?.resetError();
 		});
 
 		return {

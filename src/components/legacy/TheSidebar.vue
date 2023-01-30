@@ -299,7 +299,7 @@ export default defineComponent({
 
 						@include breakpoint(desktop) {
 							display: initial;
-							margin-top: 5px;
+							margin-top: 4px;
 						}
 					}
 
