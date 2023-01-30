@@ -283,12 +283,10 @@ export default defineComponent({
 					border-bottom: none;
 
 					.icon {
-						margin-right: 18px;
 						text-align: center;
 					}
 
 					.icon svg {
-						width: 25px;
 						font-size: 20px;
 					}
 
@@ -324,5 +322,11 @@ export default defineComponent({
 			}
 		}
 	}
+}
+</style>
+<style>
+.sidebar .contents .list .list-item .list-content .icon {
+	width: 25px;
+	margin-right: 6px;
 }
 </style>
