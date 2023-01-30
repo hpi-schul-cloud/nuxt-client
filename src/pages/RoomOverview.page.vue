@@ -142,6 +142,7 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
+	inject: ["notifierModule"],
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -192,6 +193,9 @@ export default {
 				}
 			);
 		},
+		hasRoomsBeingCopied() {
+			return this.rooms.some((item) => item.copyingSince !== undefined);
+		},
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
 		},
@@ -210,6 +214,9 @@ export default {
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
+		if (this.hasRoomsBeingCopied) {
+			this.initCoursePolling(0, new Date());
+		}
 	},
 	methods: {
 		getDeviceDims() {
@@ -365,6 +372,22 @@ export default {
 		onImportSuccess() {
 			this.$router.replace({ path: "/rooms-overview" });
 			roomsModule.fetch();
+		},
+		initCoursePolling(count = 0, started) {
+			const nextTimeout = count * count * 1000 + 5000;
+			setTimeout(async () => {
+				await roomsModule.fetch(false);
+				if (this.hasRoomsBeingCopied) {
+					this.initCoursePolling(count + 1, started ?? new Date());
+				} else {
+					this.notifierModule?.show({
+						text: this.$t("components.molecules.copyResult.timeoutSuccess"),
+						status: "success",
+						autoClose: true,
+						timeout: 10000,
+					});
+				}
+			}, Math.min(nextTimeout, 30000));
 		},
 	},
 	head() {

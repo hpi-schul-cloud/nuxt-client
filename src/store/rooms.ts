@@ -207,17 +207,17 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async fetch(device: string): Promise<void> {
+	async fetch(indicateLoading = true, device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
-		this.setLoading(true);
+		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);
-			this.setLoading(false);
+			if (indicateLoading) this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
-			this.setLoading(false);
+			if (indicateLoading) this.setLoading(false);
 		}
 	}
 
