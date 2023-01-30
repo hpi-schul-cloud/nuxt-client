@@ -96,7 +96,7 @@ const emptyMockData = {
 };
 
 const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
-	getIsShareModalOpen: true,
+	getIsShareModalOpen: false,
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
