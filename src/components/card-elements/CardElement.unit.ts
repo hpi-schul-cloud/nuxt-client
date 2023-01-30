@@ -36,6 +36,18 @@ describe("@components/card-elements/CardElement", () => {
 		expect(wrapper.emitted("delete-element")).toBeTruthy();
 	});
 
+	it("should emit add-element event for rich text", async () => {
+		const wrapper = getWrapper({
+			component: CardElementComponentEnum.RichText,
+		});
+		const addBtn = wrapper.find('[data-testid="add-element-btn"]');
+
+		expect(addBtn.exists()).toBe(true);
+		await addBtn.trigger("click");
+
+		expect(wrapper.emitted("add-element")).toBeTruthy();
+	});
+
 	it("should render drag handle for rich text", async () => {
 		const wrapper = getWrapper({
 			component: CardElementComponentEnum.RichText,
