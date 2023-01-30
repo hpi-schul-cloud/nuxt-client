@@ -1,6 +1,10 @@
 <template>
 	<div
-		:class="{ 'alert-wrapper-mobile': isMobile, 'alert-wrapper': !isMobile }"
+		:class="{
+			'alert-wrapper-mobile': isMobile,
+			'alert-wrapper': !isMobile,
+			'alert-wrapper-bottom': !isMobile && !isTop,
+		}"
 	>
 		<v-alert
 			v-model="show"
@@ -16,7 +20,7 @@
 			border="left"
 		>
 			<div class="alert_text mr-2">
-				{{ text }}
+				{{ $t(text) }}
 			</div>
 		</v-alert>
 	</div>
@@ -60,6 +64,9 @@ export default {
 			if (this.status === "info") return mdiInformation;
 			return undefined;
 		},
+		isTop() {
+			return this.notifierData?.position === "top";
+		},
 	},
 	watch: {
 		notifierData() {
@@ -78,6 +85,14 @@ export default {
 .alert-wrapper {
 	position: fixed;
 	right: 0;
+	z-index: var(--layer-tooltip);
+	overflow: visible;
+}
+
+.alert-wrapper-bottom {
+	position: fixed;
+	right: 52px;
+	bottom: 37px;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
 }

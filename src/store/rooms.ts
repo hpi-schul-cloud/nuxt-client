@@ -17,6 +17,7 @@ import {
 } from "./types/rooms";
 import { currentDate, fromUTC } from "@/plugins/datetime";
 import { BusinessError } from "./types/commons";
+import { notifierModule } from "@/store";
 
 @Module({
 	name: "rooms",
@@ -42,6 +43,7 @@ export default class RoomsModule extends VuexModule {
 		message: "",
 		error: {},
 	};
+	alignedSuccessfully: boolean = false;
 	private _dashboardApi?: DashboardApiInterface;
 	private _coursesApi?: CoursesApiInterface;
 
@@ -152,6 +154,11 @@ export default class RoomsModule extends VuexModule {
 		};
 	}
 
+	@Mutation
+	setAlignedSuccessfully(success: boolean): void {
+		this.alignedSuccessfully = success;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -192,6 +199,10 @@ export default class RoomsModule extends VuexModule {
 		return this.roomsData.length > 0;
 	}
 
+	get isAlignedSuccessfully(): boolean {
+		return this.alignedSuccessfully;
+	}
+
 	private get dashboardApi(): DashboardApiInterface {
 		if (!this._dashboardApi) {
 			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
@@ -207,11 +218,20 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async fetch(indicateLoading = true, device: string): Promise<void> {
+	async fetch(params?: {
+		indicateLoading: boolean;
+		device: string;
+		showSubstitute: boolean;
+	}): Promise<void> {
 		// device parameter will be used to fetch data specified for device
+		const indicateLoading =
+			params?.indicateLoading === undefined ? true : params.indicateLoading;
 		if (indicateLoading) this.setLoading(true);
 		try {
-			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
+			const { data } = await this.dashboardApi.dashboardControllerFindForUser(
+				undefined,
+				params?.showSubstitute
+			);
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);
 			if (indicateLoading) this.setLoading(false);
@@ -230,6 +250,7 @@ export default class RoomsModule extends VuexModule {
 		};
 
 		this.setLoading(true);
+		this.setAlignedSuccessfully(true);
 		try {
 			const response = await this.dashboardApi.dashboardControllerMoveElement(
 				this.getRoomsId,
@@ -240,8 +261,23 @@ export default class RoomsModule extends VuexModule {
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
+			if (
+				error.response.data.code === 400 &&
+				error.response.data.message === "substitute courses cannot be arranged"
+			) {
+				notifierModule?.show({
+					text: "pages.courses.index.courses.cannotArrangeSubstitute",
+					status: "info",
+					timeout: 10000,
+					position: "bottom",
+				});
+				this.setLoading(false);
+				this.setAlignedSuccessfully(false);
+				return;
+			}
 			this.setError(error);
 			this.setLoading(false);
+			this.setAlignedSuccessfully(false);
 		}
 	}
 

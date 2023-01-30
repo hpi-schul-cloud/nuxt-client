@@ -60,17 +60,25 @@ const mockData = [
 	},
 ];
 
+setupStores({
+    rooms: RoomsModule,
+    auth: AuthModule,
+    "env-config": EnvConfigModule,
+});
+
+
+const spyMocks = {
+    storeModuleFetchAllMock: jest
+        .spyOn(roomsModule, "fetchAllElements")
+        .mockImplementation(async () => {}),
+};
+
 describe("@pages/room-list.vue", () => {
 	let wrapper: Wrapper<Vue>;
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({
-			rooms: RoomsModule,
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-		});
 		roomsModule.setAllElements(mockData as any);
 	});
 
@@ -81,6 +89,7 @@ describe("@pages/room-list.vue", () => {
 
 		afterEach(() => {
 			wrapper.destroy();
+			jest.clearAllMocks();
 		});
 
 		it("should fetch data", async () => {
