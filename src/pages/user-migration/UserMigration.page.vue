@@ -1,6 +1,6 @@
 <template>
 	<div v-show="hasData" class="text-center mx-auto">
-		<img src="@assets/img/migration/migration.svg" alt=""/>
+		<img src="@assets/img/migration/migration.svg" alt="" />
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
@@ -17,16 +17,16 @@
 			></p>
 			<div class="d-flex flex-wrap justify-center mt-8">
 				<v-btn
-						class="mx-8 mb-8"
-						depressed
-						data-testId="btn-cancel"
-						:to="cancelLink"
+					class="mx-8 mb-8"
+					depressed
+					data-testId="btn-cancel"
+					:to="cancelLink"
 				>
 					{{
 						$t(
-								mandatory
-										? "pages.userMigration.button.logout"
-										: "pages.userMigration.button.skip"
+							mandatory
+								? "pages.userMigration.button.logout"
+								: "pages.userMigration.button.skip"
 						)
 					}}
 				</v-btn>
