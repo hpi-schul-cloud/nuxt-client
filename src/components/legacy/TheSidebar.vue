@@ -299,7 +299,7 @@ export default defineComponent({
 
 						@include breakpoint(desktop) {
 							display: initial;
-							margin-top: 4px;
+							margin-top: 5px;
 						}
 					}
 
@@ -324,9 +324,24 @@ export default defineComponent({
 	}
 }
 </style>
-<style>
+<style lang="scss">
 .sidebar .contents .list .list-item .list-content .icon {
 	width: 25px;
 	margin-right: 6px;
+	vertical-align: middle;
+
+	.v-icon {
+		width: 25px;
+		height: 19px;
+
+		&.custom-icon {
+			height: 18px;
+		}
+	}
+
+	svg {
+		width: 25px;
+		height: 20px;
+	}
 }
 </style>
