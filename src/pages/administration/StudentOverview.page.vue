@@ -67,6 +67,12 @@
 			<template #datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-outdatedSince="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
@@ -216,6 +222,16 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "lastLoginSystemChange",
+					label: this.$t("common.labels.migrated"),
+					sortable: true,
+				},
+				{
+					field: "outdatedSince",
+					label: this.$t("common.labels.outdated"),
+					sortable: true,
+				},
+				{
 					// edit column
 					field: "_id",
 					label: "",
@@ -254,6 +270,9 @@ export default {
 			qrLinks: "getQrLinks",
 			registrationLinks: "getRegistrationLinks",
 		}),
+		getFeatureSchoolSanisUserMigrationEnabled() {
+			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
+		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
@@ -346,6 +365,13 @@ export default {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
+			}
+
+			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED env is disabled
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			return editedColumns;
