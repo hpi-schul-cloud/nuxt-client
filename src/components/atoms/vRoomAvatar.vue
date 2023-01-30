@@ -67,12 +67,6 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
-		showOnlyTitle() {
-			return !this.condenseLayout && !this.item.titleDate;
-		},
-		showArchiveDateAndTitle() {
-			return !this.condenseLayout && this.item.titleDate;
-		},
 		stillBeingCopied() {
 			return this.item.copyingSince !== undefined;
 		},
