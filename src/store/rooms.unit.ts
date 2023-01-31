@@ -115,8 +115,8 @@ describe("rooms module", () => {
 		describe("align", () => {
 			it("should call server and 'setPosition' mutation", async () => {
 				const mockApi = {
-					dashboardControllerMoveElement: jest.fn((align) => ({
-						data: { ...align },
+					dashboardControllerMoveElement: jest.fn(() => ({
+						data: { id: "42", gridElements: [] },
 					})),
 				};
 
