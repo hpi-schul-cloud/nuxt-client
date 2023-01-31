@@ -45,11 +45,13 @@ describe("AdminMigrationSection", () => {
 		it("should throw an error when schoolsModule injection fails", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
-			shallowMount(AdminMigrationSection, {
-				provide: {
-					i18n: { t: (key: string) => key },
-				},
-			});
+			try {
+				shallowMount(AdminMigrationSection, {
+					provide: {
+						i18n: { t: (key: string) => key },
+					},
+				});
+			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching(
@@ -63,11 +65,13 @@ describe("AdminMigrationSection", () => {
 		it("should throw an error when i18n injection fails", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
-			shallowMount(AdminMigrationSection, {
-				provide: {
-					schoolsModule,
-				},
-			});
+			try {
+				shallowMount(AdminMigrationSection, {
+					provide: {
+						schoolsModule,
+					},
+				});
+			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching(/injection "i18n" not found/)
