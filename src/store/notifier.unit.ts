@@ -65,6 +65,7 @@ describe("notifier store", () => {
 					status: "success",
 					autoClose: true,
 					timeout: 1000,
+					position: "top",
 				};
 				notifierModule.show(payload);
 

@@ -119,17 +119,15 @@ describe("@/pages/room-list.vue", () => {
 				});
 				await wrapper.vm.$nextTick();
 
-				const searchInput = wrapper.vm.$refs["search"] as any;
-
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				searchInput.$emit("input", "math");
+				wrapper.vm.$data.searchText = "math";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
-				searchInput.$emit("input", "");
+				wrapper.vm.$data.searchText = "";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				searchInput.$emit("input", "15");
+				wrapper.vm.$data.searchText = "15";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
 				// @ts-ignore

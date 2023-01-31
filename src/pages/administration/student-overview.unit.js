@@ -380,6 +380,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -401,6 +406,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -604,6 +614,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		mockStore.uiState.mutations.set.mockClear();

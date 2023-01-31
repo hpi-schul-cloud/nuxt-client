@@ -70,9 +70,9 @@ export default {
 			set() {
 				this.closeNotification();
 			},
-			isTop() {
-				return this.notifierData?.position === "top";
-			},
+		},
+		isTop() {
+			return this.notifierData?.position === "top";
 		},
 	},
 	methods: {

@@ -70,7 +70,7 @@ const mockAuthStoreData = {
 	firstName: "Arthur",
 	lastName: "Dent",
 	email: "arthur.dent@hitchhiker.org",
-	roles: ["student"],
+	roles: [{ name: "student", displayName: "Student" }],
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
@@ -107,9 +107,6 @@ const spyMocks = {
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 	isTeacher: jest.spyOn(RoomOverview.methods, "isTeacher"),
 	isTeacherMock: jest.spyOn(RoomOverview.methods, "isTeacher"),
-	getUserRolesMock: jest
-		.spyOn(authModule, "getUserRoles", "get")
-		.mockReturnValue(["student"]),
 };
 
 let copyModuleMock;
@@ -497,7 +494,7 @@ describe("@/pages/RoomOverview", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				href: "/courses/1",
+				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -506,7 +503,7 @@ describe("@/pages/RoomOverview", () => {
 				y: 2,
 			},
 		};
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -520,7 +517,7 @@ describe("@/pages/RoomOverview", () => {
 		const toAvatarComponent = wrapper.findComponent({ ref: "2-2" });
 		await toAvatarComponent.trigger("drop");
 
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
