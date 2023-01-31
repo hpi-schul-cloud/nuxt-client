@@ -83,6 +83,7 @@ describe("@/pages/room-list.vue", () => {
 
 		afterEach(() => {
 			wrapper.destroy();
+			jest.clearAllMocks();
 		});
 
 		it("should fetch data", async () => {

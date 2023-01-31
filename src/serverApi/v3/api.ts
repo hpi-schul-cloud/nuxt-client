@@ -227,6 +227,25 @@ export interface BoardResponse {
 /**
  * 
  * @export
+ * @interface CardElementParams
+ */
+export interface CardElementParams {
+    /**
+     *
+     * @type {string}
+     * @memberof CardElementParams
+     */
+    id?: string;
+    /**
+     * Content of the card element, depending on its type
+     * @type {TitleCardElementParam | RichTextCardElementParam}
+     * @memberof CardElementParams
+     */
+    content: TitleCardElementParam | RichTextCardElementParam;
+}
+/**
+ *
+ * @export
  * @interface CardElementResponse
  */
 export interface CardElementResponse {
@@ -259,25 +278,6 @@ export enum CardElementResponseCardElementTypeEnum {
     RichText = 'richText'
 }
 
-/**
- * 
- * @export
- * @interface CardElementUpdateParams
- */
-export interface CardElementUpdateParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof CardElementUpdateParams
-     */
-    id?: string;
-    /**
-     * Content of the card element, depending on its type
-     * @type {TitleCardElementParam | RichTextCardElementParam}
-     * @memberof CardElementUpdateParams
-     */
-    content: TitleCardElementParam | RichTextCardElementParam;
-}
 /**
  * 
  * @export
@@ -723,38 +723,7 @@ export enum CreateNewsParamsTargetModelEnum {
 }
 
 /**
- * 
- * @export
- * @interface CreateTaskCardParams
- */
-export interface CreateTaskCardParams {
-    /**
-     * Title of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    title: string;
-    /**
-     * Description of the card (ck5)
-     * @type {Array<string>}
-     * @memberof CreateTaskCardParams
-     */
-    text?: Array<string>;
-    /**
-     * Visible at date of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    visibleAtDate?: string;
-    /**
-     * Due date of the card
-     * @type {string}
-     * @memberof CreateTaskCardParams
-     */
-    dueDate?: string;
-}
-/**
- * 
+ *
  * @export
  * @interface CustomParameterEntryResponse
  */
@@ -2745,6 +2714,31 @@ export interface TargetInfoResponse {
 /**
  * 
  * @export
+ * @interface TaskCardParams
+ */
+export interface TaskCardParams {
+    /**
+     * Visible at date of the card
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    visibleAtDate?: string;
+    /**
+     * Due date of the card
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    dueDate?: string;
+    /**
+     * Card elements array
+     * @type {Array<CardElementParams>}
+     * @memberof TaskCardParams
+     */
+    cardElements: Array<CardElementParams>;
+}
+/**
+ *
+ * @export
  * @interface TaskCardResponse
  */
 export interface TaskCardResponse {
@@ -3020,7 +3014,7 @@ export interface TitleCardElementParam {
     value: string;
 }
 /**
- * 
+ *
  * @export
  * @interface ToolConfigurationListResponse
  */
@@ -3084,32 +3078,7 @@ export interface UpdateNewsParams {
     displayAt?: string;
 }
 /**
- * 
- * @export
- * @interface UpdateTaskCardParams
- */
-export interface UpdateTaskCardParams {
-    /**
-     * Visible at date of the card
-     * @type {string}
-     * @memberof UpdateTaskCardParams
-     */
-    visibleAtDate?: string;
-    /**
-     * Due date of the card
-     * @type {string}
-     * @memberof UpdateTaskCardParams
-     */
-    dueDate?: string;
-    /**
-     * Card elements array
-     * @type {Array<CardElementUpdateParams>}
-     * @memberof UpdateTaskCardParams
-     */
-    cardElements: Array<CardElementUpdateParams>;
-}
-/**
- * 
+ *
  * @export
  * @interface UserInfoResponse
  */
@@ -3875,13 +3844,13 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerCreate: async (createTaskCardParams: CreateTaskCardParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createTaskCardParams' is not null or undefined
-            assertParamExists('taskCardControllerCreate', 'createTaskCardParams', createTaskCardParams)
+        taskCardControllerCreate: async (taskCardParams: TaskCardParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskCardParams' is not null or undefined
+            assertParamExists('taskCardControllerCreate', 'taskCardParams', taskCardParams)
             const localVarPath = `/cards/task`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3905,7 +3874,7 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createTaskCardParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCardParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3989,15 +3958,15 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerUpdate: async (id: string, updateTaskCardParams: UpdateTaskCardParams, options: any = {}): Promise<RequestArgs> => {
+        taskCardControllerUpdate: async (id: string, taskCardParams: TaskCardParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('taskCardControllerUpdate', 'id', id)
-            // verify required parameter 'updateTaskCardParams' is not null or undefined
-            assertParamExists('taskCardControllerUpdate', 'updateTaskCardParams', updateTaskCardParams)
+            // verify required parameter 'taskCardParams' is not null or undefined
+            assertParamExists('taskCardControllerUpdate', 'taskCardParams', taskCardParams)
             const localVarPath = `/cards/task/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -4022,7 +3991,7 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateTaskCardParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(taskCardParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4041,12 +4010,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerCreate(createTaskCardParams, options);
+        async taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerCreate(taskCardParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4072,12 +4041,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerUpdate(id, updateTaskCardParams, options);
+        async taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskCardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskCardControllerUpdate(id, taskCardParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4092,12 +4061,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {CreateTaskCardParams} createTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
-            return localVarFp.taskCardControllerCreate(createTaskCardParams, options).then((request) => request(axios, basePath));
+        taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
+            return localVarFp.taskCardControllerCreate(taskCardParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4120,12 +4089,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} id The id of the task card.
-         * @param {UpdateTaskCardParams} updateTaskCardParams 
+         * @param {TaskCardParams} taskCardParams
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
-            return localVarFp.taskCardControllerUpdate(id, updateTaskCardParams, options).then((request) => request(axios, basePath));
+        taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse> {
+            return localVarFp.taskCardControllerUpdate(id, taskCardParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4138,12 +4107,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
 export interface CardsApiInterface {
     /**
      * 
-     * @param {CreateTaskCardParams} createTaskCardParams 
+     * @param {TaskCardParams} taskCardParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApiInterface
      */
-    taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
+    taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
 
     /**
      * 
@@ -4166,12 +4135,12 @@ export interface CardsApiInterface {
     /**
      * 
      * @param {string} id The id of the task card.
-     * @param {UpdateTaskCardParams} updateTaskCardParams 
+     * @param {TaskCardParams} taskCardParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApiInterface
      */
-    taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
+    taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any): AxiosPromise<TaskCardResponse>;
 
 }
 
@@ -4184,13 +4153,13 @@ export interface CardsApiInterface {
 export class CardsApi extends BaseAPI implements CardsApiInterface {
     /**
      * 
-     * @param {CreateTaskCardParams} createTaskCardParams 
+     * @param {TaskCardParams} taskCardParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public taskCardControllerCreate(createTaskCardParams: CreateTaskCardParams, options?: any) {
-        return CardsApiFp(this.configuration).taskCardControllerCreate(createTaskCardParams, options).then((request) => request(this.axios, this.basePath));
+    public taskCardControllerCreate(taskCardParams: TaskCardParams, options?: any) {
+        return CardsApiFp(this.configuration).taskCardControllerCreate(taskCardParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4218,13 +4187,13 @@ export class CardsApi extends BaseAPI implements CardsApiInterface {
     /**
      * 
      * @param {string} id The id of the task card.
-     * @param {UpdateTaskCardParams} updateTaskCardParams 
+     * @param {TaskCardParams} taskCardParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public taskCardControllerUpdate(id: string, updateTaskCardParams: UpdateTaskCardParams, options?: any) {
-        return CardsApiFp(this.configuration).taskCardControllerUpdate(id, updateTaskCardParams, options).then((request) => request(this.axios, this.basePath));
+    public taskCardControllerUpdate(id: string, taskCardParams: TaskCardParams, options?: any) {
+        return CardsApiFp(this.configuration).taskCardControllerUpdate(id, taskCardParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4588,7 +4557,7 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser: async (options: any = {}): Promise<RequestArgs> => {
+        dashboardControllerFindForUser: async (options: any = {}, showSubstitute?: boolean): Promise<RequestArgs> => {
             const localVarPath = `/dashboard`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4599,7 +4568,10 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
+            const localVarQueryParameter =
+				showSubstitute === undefined
+					? ({} as any)
+					: ({ showSubstitute } as any);
 
             // authentication bearer required
             // http bearer authentication required
@@ -4731,8 +4703,12 @@ export const DashboardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerFindForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
+        async dashboardControllerFindForUser(options?: any, showSubstitute?: boolean): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs =
+				await localVarAxiosParamCreator.dashboardControllerFindForUser(
+					options,
+					showSubstitute
+				);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4774,8 +4750,8 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerFindForUser(options).then((request) => request(axios, basePath));
+        dashboardControllerFindForUser(options?: any, showSubstitute?: boolean): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerFindForUser(options, showSubstitute).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4814,7 +4790,7 @@ export interface DashboardApiInterface {
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerFindForUser(options?: any, showSubstitute?: boolean): AxiosPromise<DashboardResponse>;
 
     /**
      * 
@@ -4853,8 +4829,8 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerFindForUser(options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerFindForUser(options?: any, showSubstitute?: boolean) {
+        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(options, showSubstitute).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4892,7 +4868,7 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4910,7 +4886,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
 
-    
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4921,7 +4897,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4939,7 +4915,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
 
-    
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4989,7 +4965,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4998,7 +4974,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5026,7 +5002,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DefaultApiFp(configuration)
     return {
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5034,7 +5010,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.loginControllerLoginLdap(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         *
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5059,7 +5035,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  */
 export interface DefaultApiInterface {
     /**
-     * 
+     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -5067,7 +5043,7 @@ export interface DefaultApiInterface {
     loginControllerLoginLdap(options?: any): AxiosPromise<void>;
 
     /**
-     * 
+     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -5092,7 +5068,7 @@ export interface DefaultApiInterface {
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     /**
-     * 
+     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -5102,7 +5078,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -9616,7 +9592,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         *
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9725,7 +9701,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.toolControllerUpdateExternalTool(toolId, externalToolPostParams, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         *
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}

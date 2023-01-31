@@ -19,13 +19,22 @@
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
+				<user-has-role :role="isTeacher">
+					<div class="toggle-div">
+						<v-custom-switch
+							v-model="showSubstitute"
+							class="enable-disable"
+							:label="$t('pages.courses.index.courses.substituteCourses')"
+						/>
+					</div>
+				</user-has-role>
 				<div class="toggle-div">
 					<v-custom-switch
 						v-if="isTouchDevice"
 						v-model="allowDragging"
 						class="enable-disable"
 						:label="$t('pages.courses.index.courses.arrangeCourses')"
-					></v-custom-switch>
+					/>
 				</div>
 			</div>
 		</template>
@@ -129,7 +138,8 @@ import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
 import { roomsModule } from "@/store";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -141,6 +151,7 @@ export default {
 		RoomModal,
 		vCustomSwitch,
 		ImportFlow,
+		UserHasRole,
 	},
 	inject: ["notifierModule"],
 	layout: "defaultVuetify",
@@ -169,6 +180,9 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
+			showSubstitute: false,
+			mdiClose,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -211,6 +225,15 @@ export default {
 			return this.$route.query.import;
 		},
 	},
+	watch: {
+		showSubstitute: async function (showSubstitute) {
+			await roomsModule.fetch({
+				indicateLoading: undefined,
+				device: undefined,
+				showSubstitute,
+			}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		},
+	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
@@ -219,6 +242,9 @@ export default {
 		}
 	},
 	methods: {
+		isTeacher(roles) {
+			return roles.some((role) => role.startsWith("teacher"));
+		},
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
@@ -317,7 +343,11 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
-				this.defaultNaming(pos);
+				if (roomsModule.isAlignedSuccessfully) {
+					this.defaultNaming(pos);
+				}
+
+				this.dragging = false;
 			}
 		},
 		addGroupElements(pos) {
@@ -376,7 +406,7 @@ export default {
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(async () => {
-				await roomsModule.fetch(false);
+				await roomsModule.fetch({ indicateLoading: false });
 				if (this.hasRoomsBeingCopied) {
 					this.initCoursePolling(count + 1, started ?? new Date());
 				} else {
@@ -421,6 +451,7 @@ export default {
 
 	.toggle-div {
 		display: inline-block;
+		margin-left: var(--space-xl-3);
 	}
 }
 
@@ -429,7 +460,6 @@ export default {
 }
 
 ::v-deep .v-input {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin-top: 0 !important;
+	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
 }
 </style>

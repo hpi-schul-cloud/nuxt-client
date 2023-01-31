@@ -2,7 +2,7 @@
 	<default-wireframe
 		ref="main"
 		headline=""
-		:full-width="true"
+		:full-width="isLoading"
 		:aria-label="$t('pages.courses.index.courses.all')"
 		:fab-items="fabItems"
 		@fabButtonEvent="fabClick"
@@ -19,7 +19,7 @@
 				/>
 			</v-container>
 		</template>
-		<template v-if="!isLoading && !hasRooms && !hasImportToken">
+		<template v-else-if="isEmptyState">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
@@ -120,6 +120,9 @@ export default Vue.extend({
 		},
 		isLoading() {
 			return roomsModule.getLoading;
+		},
+		isEmptyState() {
+			return !roomsModule.getLoading && !this.hasRooms && !this.hasImportToken;
 		},
 	},
 	methods: {
