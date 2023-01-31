@@ -54,12 +54,12 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have all toolbar items in regular mode", () => {
 		const wrapper = getWrapper({ propsData: { mode: "regular" } });
-		expect(wrapper.vm.config.toolbar.items).toHaveLength(23);
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(24);
 	});
 
 	it("should have all plugins available in regular mode", () => {
 		const wrapper = getWrapper({ propsData: { mode: "regular" } });
-		expect(wrapper.vm.config.plugins).toHaveLength(20);
+		expect(wrapper.vm.config.plugins).toHaveLength(21);
 	});
 
 	// TODO: find out how to mock a component and trigger an event by this mock

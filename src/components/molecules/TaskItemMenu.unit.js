@@ -208,6 +208,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					],
 				]);
 			});
+
 			it("should emit 'copy-task' event without courseId if NOT present", async () => {
 				const task = tasksTeacher[1];
 				const wrapper = getWrapper({

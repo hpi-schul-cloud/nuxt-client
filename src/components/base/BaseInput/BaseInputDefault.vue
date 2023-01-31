@@ -318,13 +318,13 @@ export default {
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: var(--v-grey-darken1);
+		color: var(--v-grey-darken3);
 	}
 
 	&:focus {
-		color: var(--v-grey-darken1);
+		color: var(--v-grey-darken3);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-grey-darken1);
+		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-grey-darken3);
 	}
 }
 

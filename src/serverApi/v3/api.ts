@@ -666,19 +666,13 @@ export interface CourseMetadataResponse {
      * @type {string}
      * @memberof CourseMetadataResponse
      */
-    startDate?: string;
+    startDate: string;
     /**
      * End date of the course. After this the course counts as archived
      * @type {string}
      * @memberof CourseMetadataResponse
      */
-    untilDate?: string;
-    /**
-     * Start of the copying process if it is still ongoing - otherwise property is not set.
-     * @type {string}
-     * @memberof CourseMetadataResponse
-     */
-    copyingSince?: string;
+    untilDate: string;
 }
 /**
  * 
@@ -832,12 +826,6 @@ export interface DashboardGridElementResponse {
      * @memberof DashboardGridElementResponse
      */
     groupElements: Array<DashboardGridSubElementResponse>;
-    /**
-     * Start of the copying process if it is still ongoing - otherwise property is not set.
-     * @type {string}
-     * @memberof DashboardGridElementResponse
-     */
-    copyingSince: string;
 }
 /**
  * 

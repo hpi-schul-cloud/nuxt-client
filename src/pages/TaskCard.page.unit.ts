@@ -3,6 +3,9 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { User } from "@/store/types/auth";
 import TaskCard from "./TaskCard.page.vue";
+import setupStores from "@@/tests/test-utils/setupStores";
+import TaskCardModule from "@/store/task-card";
+import AuthModule from "@/store/auth";
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -72,6 +75,10 @@ describe("TaskCard", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({
+			taskCardModule: TaskCardModule,
+			auth: AuthModule,
+		});
 	});
 
 	it("should render component page", () => {

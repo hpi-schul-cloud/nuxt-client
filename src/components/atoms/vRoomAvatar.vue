@@ -19,8 +19,9 @@
 			:value="displayBadge"
 		>
 			<v-avatar
-				:color="item.displayColor"
-				:aria-label="`${$t('common.labels.course')} ${item.title}`"
+				:color="avatarColor"
+				:class="avatarClass"
+				:aria-label="avatarAriaLabel"
 				:size="size"
 				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
@@ -29,24 +30,9 @@
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
 			>
-				<span
-					class="white--text text-h7"
-					:class="
-						condenseLayout ? 'group-avatar text-h7' : 'single-avatar text-h3'
-					"
-					>{{ item.shortTitle }}</span
-				>
+				<span :class="avatarTextClass">{{ item.shortTitle }}</span>
 			</v-avatar>
-			<div v-if="showOnlyTitle" class="justify-center mt-2 mb-7 subtitle">
-				{{ item.title }}
-			</div>
-			<div
-				v-if="showArchiveDateAndTitle"
-				class="justify-center subtitle date-title mt-2 mb-5"
-			>
-				{{ item.title }}
-				{{ item.titleDate }}
-			</div>
+			<div v-if="!condenseLayout" :class="titleClasses">{{ title }}</div>
 		</v-badge>
 	</div>
 </template>
@@ -81,16 +67,65 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
-		showOnlyTitle() {
-			return !this.condenseLayout && !this.item.titleDate;
+		stillBeingCopied() {
+			return this.item.copyingSince !== undefined;
 		},
-		showArchiveDateAndTitle() {
-			return !this.condenseLayout && this.item.titleDate;
+		avatarAriaLabel() {
+			const course = this.$t("common.labels.course");
+			if (this.stillBeingCopied) {
+				const ariaLabelSuffix = this.$t(
+					"components.molecules.copyResult.courseCopy.ariaLabelSuffix"
+				);
+				return `${course} ${this.item.title}: ${ariaLabelSuffix}`;
+			}
+			return `${course} ${this.item.title}`;
+		},
+		avatarTextClass() {
+			const classes = ["text-h7"];
+			if (this.condenseLayout) {
+				classes.push("group-avatar", "text-h7");
+			} else {
+				classes.push("single-avatar", "text-h3");
+			}
+			if (this.stillBeingCopied) {
+				classes.push("grey--text", "text--darken-1");
+			} else {
+				classes.push("white--text");
+			}
+			return classes;
+		},
+		avatarClass() {
+			return this.stillBeingCopied ? ["grey lighten-2"] : [];
+		},
+		avatarColor() {
+			return this.stillBeingCopied ? undefined : this.item.displayColor;
+		},
+		title() {
+			if (this.item.copyingSince) {
+				return this.$t("components.molecules.copyResult.courseCopy.info");
+			}
+			if (this.item.titleDate) {
+				return `${this.item.title}\n${this.item.titleDate}`;
+			}
+			return this.item.title;
+		},
+		titleClasses() {
+			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
+			const copyingClass = this.stillBeingCopied
+				? ["grey--text", "text--darken-1"]
+				: [];
+			return [
+				"justify-center",
+				"mt-2",
+				"subtitle",
+				marginClass,
+				...copyingClass,
+			];
 		},
 	},
 	methods: {
 		onClick() {
-			if (!this.condenseLayout) {
+			if (!this.condenseLayout && this.stillBeingCopied === false) {
 				if (this.item.to) {
 					this.$router.push({
 						path: `/rooms/${this.item.id}`,
@@ -125,6 +160,7 @@ export default {
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 @import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
@@ -153,11 +189,12 @@ export default {
 	color: var(--v-black-base);
 	text-align: center;
 	overflow-wrap: break-word;
+	white-space: pre-wrap;
 
 	@include excerpt(
 		$font-size: calc(var(--space-base-vuetify) * 4),
 		$line-height: var(--line-height-lg),
-		$lines-to-show: 2
+		$lines-to-show: 4
 	);
 }
 
