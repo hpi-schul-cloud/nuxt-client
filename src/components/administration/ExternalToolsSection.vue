@@ -9,8 +9,8 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="t('common.loading.text')"
-			:no-data-text="t('common.nodata')"
+			:loading-text="$t('common.loading.text')"
+			:no-data-text="$t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
 				<span :class="getColor(item)">
