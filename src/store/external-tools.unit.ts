@@ -11,7 +11,7 @@ import setupStores from "../../tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@utils/store-accessor";
-import * as schoolExternalToolUtilsComposable from "@components/administration/school-external-tool-utils.composable";
+import * as schoolExternalToolUtilsComposable from "@components/administration/external-tool-section-utils.composable";
 import { SchoolExternalToolStatusEnum } from "./external-tool/school-external-tool-status.enum";
 
 describe("ExternalToolsModule", () => {
@@ -247,10 +247,10 @@ describe("ExternalToolsModule", () => {
 					jest
 						.spyOn(
 							schoolExternalToolUtilsComposable,
-							"useSchoolExternalToolUtils"
+							"useExternalToolsSectionUtils"
 						)
 						.mockReturnValue({
-							...schoolExternalToolUtilsComposable.useSchoolExternalToolUtils(),
+							...schoolExternalToolUtilsComposable.useExternalToolsSectionUtils(),
 							mapSchoolExternalToolSearchListResponse:
 								mapSchoolExternalToolSearchListResponseMock,
 						});

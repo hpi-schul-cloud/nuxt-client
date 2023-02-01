@@ -49,7 +49,7 @@ import { ToolConfigurationTemplate } from "@store/external-tool/tool-configurati
 import VueRouter from "vue-router";
 import { ToolParameter } from "@store/external-tool";
 import { BusinessError } from "@store/types/commons";
-import { useExternalToolUtils } from "./external-tool-utils.composable";
+import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",

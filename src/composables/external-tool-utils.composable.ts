@@ -6,19 +6,37 @@ import {
 	CustomParameterResponseTypeEnum,
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
+	SchoolExternalToolResponse,
+	SchoolExternalToolResponseStatusEnum,
+	SchoolExternalToolSearchListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
-} from "../../../serverApi/v3";
+} from "../serverApi/v3";
 import { ToolParameterLocationEnum } from "@store/external-tool/tool-parameter-location.enum";
 import { ToolParameterTypeEnum } from "@store/external-tool/tool-parameter-type.enum";
 import { ToolParameterScopeEnum } from "@store/external-tool/tool-parameter-scope.enum";
 import { ToolParameter } from "@store/external-tool/tool-parameter";
 import {
+	SchoolExternalTool,
+	SchoolExternalToolStatusEnum,
 	ToolConfiguration,
 	ToolConfigurationTemplate,
 } from "@store/external-tool";
 import { externalToolsModule } from "@utils/store-accessor";
 import VueI18n from "vue-i18n";
+import { SchoolExternalToolItem } from "@components/administration/school-external-tool-item";
+
+const ResponseStatusMapping: Record<
+	SchoolExternalToolResponseStatusEnum,
+	SchoolExternalToolStatusEnum
+> = {
+	[SchoolExternalToolResponseStatusEnum.Latest]:
+		SchoolExternalToolStatusEnum.Latest,
+	[SchoolExternalToolResponseStatusEnum.Outdated]:
+		SchoolExternalToolStatusEnum.Outdated,
+	[SchoolExternalToolResponseStatusEnum.Unknown]:
+		SchoolExternalToolStatusEnum.Unknown,
+};
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -62,8 +80,39 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 ]);
 
 export function useExternalToolUtils(
-	t: (key: string, values?: VueI18n.Values | undefined) => string
+	t: (key: string, values?: VueI18n.Values | undefined) => string = () => ""
 ) {
+	const mapSchoolExternalToolSearchListResponse = (
+		response: SchoolExternalToolSearchListResponse
+	): SchoolExternalTool[] => {
+		const tools: SchoolExternalTool[] = response.data.map(
+			(toolResponse: SchoolExternalToolResponse) =>
+				mapSchoolExternalToolResponse(toolResponse)
+		);
+		return tools;
+	};
+
+	const mapSchoolExternalToolResponse = (
+		toolResponse: SchoolExternalToolResponse
+	): SchoolExternalTool => {
+		return {
+			id: toolResponse.id,
+			name: toolResponse.name,
+			version: toolResponse.toolVersion,
+			status: ResponseStatusMapping[toolResponse.status],
+		};
+	};
+
+	const mapSchoolExternalToolItemToSchoolExternalTool = (
+		schoolExternalToolItem: SchoolExternalToolItem
+	): SchoolExternalTool => {
+		return {
+			id: schoolExternalToolItem.id,
+			name: schoolExternalToolItem.name,
+			status: SchoolExternalToolStatusEnum.Unknown,
+		};
+	};
+
 	const mapCustomParameterResponse = (
 		parameters: CustomParameterResponse[]
 	): ToolParameter[] => {
@@ -201,9 +250,12 @@ export function useExternalToolUtils(
 	};
 
 	return {
+		mapSchoolExternalToolSearchListResponse,
+		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+		mapSchoolExternalToolItemToSchoolExternalTool,
 		translateBusinessError,
 		validateParameter,
 	};

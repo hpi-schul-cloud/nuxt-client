@@ -1,5 +1,4 @@
-import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { DataTableHeader } from "vuetify";
 import { externalToolsModule } from "@utils/store-accessor";
 import {
@@ -28,12 +27,7 @@ describe("useSchoolExternalToolUtils", () => {
 		const expectedTranslation = "translated";
 		const tMock = jest.fn().mockReturnValue(expectedTranslation);
 
-		const {
-			mapSchoolExternalToolSearchListResponse,
-			getHeaders,
-			getItems,
-			mapSchoolExternalToolItemToSchoolExternalTool,
-		} = useSchoolExternalToolUtils(tMock);
+		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
 
 		const toolResponse: SchoolExternalToolResponse = {
 			id: "id",
@@ -61,8 +55,6 @@ describe("useSchoolExternalToolUtils", () => {
 		};
 
 		return {
-			mapSchoolExternalToolItemToSchoolExternalTool,
-			mapSchoolExternalToolSearchListResponse,
 			getHeaders,
 			getItems,
 			listResponse,
@@ -72,42 +64,6 @@ describe("useSchoolExternalToolUtils", () => {
 			schoolExternaToolItem,
 		};
 	};
-
-	describe("mapSchoolExternalToolSearchListResponse is called", () => {
-		describe("when maps the response", () => {
-			it("should return a schoolExternalTool array", () => {
-				const { mapSchoolExternalToolSearchListResponse, listResponse } =
-					setup();
-
-				const schoolExternalTools: SchoolExternalTool[] =
-					mapSchoolExternalToolSearchListResponse(listResponse);
-
-				expect(Array.isArray(schoolExternalTools)).toBeTruthy();
-			});
-
-			it("should map the response correctly", () => {
-				const {
-					mapSchoolExternalToolSearchListResponse,
-					listResponse,
-					toolResponse,
-				} = setup();
-
-				const schoolExternalTools: SchoolExternalTool[] =
-					mapSchoolExternalToolSearchListResponse(listResponse);
-
-				expect(schoolExternalTools).toEqual(
-					expect.objectContaining<SchoolExternalTool[]>([
-						{
-							id: toolResponse.id,
-							name: toolResponse.name,
-							version: toolResponse.toolVersion,
-							status: SchoolExternalToolStatusEnum.Latest,
-						},
-					])
-				);
-			});
-		});
-	});
 
 	describe("getHeaders is called", () => {
 		it("should return a dataTableHeader array", () => {
@@ -175,27 +131,6 @@ describe("useSchoolExternalToolUtils", () => {
 					version: undefined,
 				},
 			]);
-		});
-	});
-
-	describe("mapSchoolExternalToolItemToSchoolExternalTool is called", () => {
-		it("should return mapped schoolExternalTool", () => {
-			const {
-				mapSchoolExternalToolItemToSchoolExternalTool,
-				schoolExternaToolItem,
-			} = setup();
-
-			const schoolExternalTool: SchoolExternalTool =
-				mapSchoolExternalToolItemToSchoolExternalTool(schoolExternaToolItem);
-
-			expect(schoolExternalTool).toEqual(
-				expect.objectContaining<SchoolExternalTool>({
-					id: schoolExternaToolItem.id,
-					name: schoolExternaToolItem.name,
-					status: SchoolExternalToolStatusEnum.Unknown,
-					version: undefined,
-				})
-			);
 		});
 	});
 });

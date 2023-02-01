@@ -30,7 +30,7 @@ import { externalToolsModule } from "@utils/store-accessor";
 import { computed, ComputedRef, inject, Ref, toRef, watch } from "@nuxtjs/composition-api";
 import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
-import { useExternalToolUtils } from "@pages/administration/external-tool/external-tool-utils.composable";
+import { useExternalToolUtils } from "../../../composables/external-tool-utils.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

@@ -4,13 +4,10 @@ import {
 	ToolConfiguration,
 	ToolConfigurationScope,
 	ToolConfigurationTemplate,
-	ToolParameter,
 } from "./external-tool";
 import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
-import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
 import {
-	ApiValidationError,
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	ToolApiFactory,
@@ -18,7 +15,7 @@ import {
 	ToolConfigurationListResponse,
 } from "../serverApi/v3";
 import { AxiosResponse } from "axios";
-import { useExternalToolUtils } from "@pages/administration/external-tool/external-tool-utils.composable";
+import { useExternalToolUtils } from "../composables/external-tool-utils.composable";
 import { BusinessError } from "./types/commons";
 
 @Module({
@@ -126,7 +123,7 @@ export default class ExternalToolsModule extends VuexModule {
 						authModule.getUser.schoolId
 					);
 				const schoolExternalTools: SchoolExternalTool[] =
-					useSchoolExternalToolUtils().mapSchoolExternalToolSearchListResponse(
+					useExternalToolUtils().mapSchoolExternalToolSearchListResponse(
 						resp.data
 					);
 				this.setSchoolExternalTools(schoolExternalTools);

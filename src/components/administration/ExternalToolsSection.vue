@@ -85,7 +85,7 @@ import VueI18n from "vue-i18n";
 import { computed, ComputedRef, inject, onMounted, Ref, } from "@nuxtjs/composition-api";
 import ExternalToolsModule from "@store/external-tools";
 import { DataTableHeader } from "vuetify";
-import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
@@ -115,7 +115,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const { getHeaders, getItems } = useSchoolExternalToolUtils(t);
+		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 
 		const headers: DataTableHeader[] = getHeaders;
 
@@ -139,7 +139,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useSchoolExternalToolUtils(
+					useExternalToolsSectionUtils(
 						t
 					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
