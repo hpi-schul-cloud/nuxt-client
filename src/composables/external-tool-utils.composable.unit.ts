@@ -32,6 +32,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
+			translateBusinessError,
 		} = useExternalToolUtils(tMock);
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -68,8 +69,11 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
+			translateBusinessError,
 		};
 	};
+
+	describe("translateBusinessError is called", () => {});
 
 	describe("mapSchoolExternalToolSearchListResponse is called", () => {
 		describe("when maps the response", () => {

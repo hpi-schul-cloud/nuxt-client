@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.externalToolsSection.header") }}
+			{{ $t("components.administration.externalToolsSection.header") }}
 		</h2>
 		<v-data-table
 			:disable-pagination="true"
@@ -89,6 +89,7 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
+import { useExternalToolUtils } from "../../composables/external-tool-utils.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -139,7 +140,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useExternalToolsSectionUtils(
+					useExternalToolUtils(
 						t
 					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
@@ -166,7 +167,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			headers,
 			items,
 			isLoading,

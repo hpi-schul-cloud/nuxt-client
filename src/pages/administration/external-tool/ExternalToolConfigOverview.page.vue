@@ -1,12 +1,12 @@
 <template>
 	<default-wireframe
-		:headline="t('pages.tool.title')"
+		:headline="$t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<p v-html="t('pages.tool.description')"></p>
+		<p v-html="$t('pages.tool.description')"></p>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-select :label="t('pages.tool.select.label')" item-text="name" :items="items"
+		<v-select :label="$t('pages.tool.select.label')" item-text="name" :items="items"
 				  :no-data-text="$t('common.nodata')"
 				  return-object :loading="loading" @change="onSelectTemplate">
 			<template #selection="{ item }">
@@ -29,7 +29,7 @@
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="saveTool">
-				{{ t('pages.tool.addBtn.label') }}
+				{{ $t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -138,7 +138,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			breadcrumbs,
 			toolTemplate,
 			toolParameters,
