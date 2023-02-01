@@ -6,10 +6,18 @@
 			</h2>
 			<v-form v-model="parametersValid">
 				<!-- :rules="parameterValidations(param)" -->
-				<v-text-field v-for="(param, index) in parameters" :key="param.name"
-							  :label="getParamLabelText(param)"
-							  @input="updateParameters($event, index)"
-				></v-text-field>
+				<div v-for="(param, index) in parameters" :key="param.name">
+					<template v-if="param.type !== toolParameterTypeEnumBoolean">
+						<v-text-field :label="getParamLabelText(param)" @input="updateParameters($event, index)"
+						></v-text-field>
+					</template>
+					<template v-if="param.type === toolParameterTypeEnumBoolean">
+						<v-checkbox
+							:label="getParamLabelText(param)"
+							@change="updateParameters($event, index)"
+						></v-checkbox>
+					</template>
+				</div>
 			</v-form>
 		</div>
 		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
@@ -109,6 +117,7 @@ export default defineComponent({
 			parameterValidations,
 			getParamLabelText,
 			parametersValid,
+			toolParameterTypeEnumBoolean: ToolParameterTypeEnum.Boolean,
 		};
 	}
 });

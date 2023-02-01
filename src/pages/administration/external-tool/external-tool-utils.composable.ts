@@ -52,6 +52,10 @@ const ToolParamScopeMapping: Record<
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScopeEnum.School,
 };
 
+const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
+	["tool_param_value_regex", "pages.tool.apiError.tool_param_duplicate"],
+]);
+
 export function useExternalToolUtils() {
 	const mapCustomParameterResponse = (
 		parameters: CustomParameterResponse[]
@@ -129,13 +133,18 @@ export function useExternalToolUtils() {
 		});
 	};
 
-	// TODO: translate all possible errors
-	const translateBusinessError = (t: (key: string) => string) => {
-		const businessError = externalToolsModule.getBusinessError;
-		if (businessError.message.startsWith("tool_param_value_regex")) {
-			return t("pages.tool.apiError.tool_param_duplicate");
+	// TODO: translate all possible errors + map
+	const translateBusinessError = (t: (key: string | undefined) => string) => {
+		const { message } = externalToolsModule.getBusinessError;
+
+		const translationKey = Array.from(
+			BusinessErrorMessageTranslationKeyMap.entries()
+		).find(([key]) => message.startsWith(key))?.[1];
+
+		if (translationKey) {
+			return t(translationKey);
 		}
-		return businessError.message;
+		return message;
 	};
 
 	return {

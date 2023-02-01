@@ -10,6 +10,7 @@ import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
 import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
 import {
+	ApiValidationError,
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	ToolApiFactory,
