@@ -9,5 +9,6 @@ export default function mock$objects(wrapper, options = null) {
 			? jest.fn(options.$toast.error)
 			: jest.fn();
 	wrapper.vm.$toast.error = jest.fn();
+	wrapper.vm.$toast.info = jest.fn();
 	wrapper.vm.$router = { push: jest.fn() };
 }
