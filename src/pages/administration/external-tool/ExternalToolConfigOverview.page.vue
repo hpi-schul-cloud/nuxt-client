@@ -22,13 +22,14 @@
 		</external-tool-config-settings>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ apiError.response.data.message }}
+			{{ translateBusinessError(t) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="saveTool">
+			<!-- :disabled="!parametersValid" -->
+			<v-btn class="mr-2" color="primary" depressed @click="saveTool">
 				{{ t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
@@ -49,6 +50,7 @@ import { ToolConfigurationTemplate } from "@store/external-tool/tool-configurati
 import VueRouter from "vue-router";
 import { ToolParameter } from "@store/external-tool";
 import { BusinessError } from "@store/types/commons";
+import { useExternalToolUtils } from "./external-tool-utils.composable";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
@@ -91,6 +93,8 @@ export default defineComponent({
 				disabled: true,
 			}
 		];
+
+		const { translateBusinessError } = useExternalToolUtils();
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
@@ -147,6 +151,7 @@ export default defineComponent({
 			saveTool,
 			apiError,
 			parametersValid,
+			translateBusinessError,
 		};
 	},
 });

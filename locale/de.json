@@ -879,5 +879,6 @@
 	"pages.tool.title": "Konfiguration Externer Tools",
 	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a>Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.select.label": "Tool Auswahl",
-	"pages.tool.addBtn.label": "Tool hinzufügen"
+	"pages.tool.addBtn.label": "Tool hinzufügen",
+	"pages.tool.apiError.tool_param_duplicate": "ToolParam error"
 }

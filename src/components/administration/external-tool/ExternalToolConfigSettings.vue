@@ -5,8 +5,9 @@
 				Einstellungen
 			</h2>
 			<v-form v-model="parametersValid">
+				<!-- :rules="parameterValidations(param)" -->
 				<v-text-field v-for="(param, index) in parameters" :key="param.name"
-							  :label="getParamLabelText(param)" :rules="parameterValidations(param)"
+							  :label="getParamLabelText(param)"
 							  @input="updateParameters($event, index)"
 				></v-text-field>
 			</v-form>

@@ -17,6 +17,7 @@ import {
 	ToolConfiguration,
 	ToolConfigurationTemplate,
 } from "@store/external-tool";
+import { externalToolsModule } from "@utils/store-accessor";
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -128,9 +129,19 @@ export function useExternalToolUtils() {
 		});
 	};
 
+	// TODO: translate all possible errors
+	const translateBusinessError = (t: (key: string) => string) => {
+		const businessError = externalToolsModule.getBusinessError;
+		if (businessError.message.startsWith("tool_param_value_regex")) {
+			return t("pages.tool.apiError.tool_param_duplicate");
+		}
+		return businessError.message;
+	};
+
 	return {
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+		translateBusinessError,
 	};
 }

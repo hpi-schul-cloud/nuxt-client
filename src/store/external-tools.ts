@@ -186,7 +186,7 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				statusCode: e?.response?.status,
-				message: e?.response?.statusText,
+				message: e?.response?.data.message,
 				...e,
 			});
 			this.setLoading(false);
@@ -217,7 +217,7 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				statusCode: e?.response?.status,
-				message: e?.response?.statusText,
+				message: e?.response?.data.message,
 				...e,
 			});
 			this.setLoading(false);
@@ -248,7 +248,7 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				statusCode: e?.response?.status,
-				message: e?.response?.statusText,
+				message: e?.response?.data.message,
 				...e,
 			});
 			this.setLoading(false);
