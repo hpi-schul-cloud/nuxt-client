@@ -3,10 +3,10 @@ import ExternalToolsModule from "@store/external-tools";
 import { createModuleMocks } from "@utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
-import ExternalToolsSection from "./ExternalToolSection.vue";
+import ExternalToolSection from "./ExternalToolSection.vue";
 import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
-describe("ExternalToolsSection", () => {
+describe("ExternalToolSection", () => {
 	let wrapper: Wrapper<any>;
 	let externalToolsModule: ExternalToolsModule;
 
@@ -16,7 +16,7 @@ describe("ExternalToolsSection", () => {
 			getSchoolExternalTools: [],
 			...getters,
 		});
-		wrapper = mount(ExternalToolsSection, {
+		wrapper = mount(ExternalToolSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -32,7 +32,7 @@ describe("ExternalToolsSection", () => {
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
 			setup();
-			expect(wrapper.findComponent(ExternalToolsSection).exists()).toBeTruthy();
+			expect(wrapper.findComponent(ExternalToolSection).exists()).toBeTruthy();
 		});
 	});
 
@@ -40,7 +40,7 @@ describe("ExternalToolsSection", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
 				try {
-					wrapper = shallowMount(ExternalToolsSection, {
+					wrapper = shallowMount(ExternalToolSection, {
 						setup() {
 							provide("externalToolsModule", externalToolsModule);
 						},
@@ -54,7 +54,7 @@ describe("ExternalToolsSection", () => {
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
 				try {
-					wrapper = shallowMount(ExternalToolsSection, {
+					wrapper = shallowMount(ExternalToolSection, {
 						setup() {
 							provide("i18n", { t: (key: string) => key });
 						},
@@ -83,13 +83,13 @@ describe("ExternalToolsSection", () => {
 				setup();
 				const testKey = "testKey";
 
-				const result: string = wrapper.vm.t(testKey);
+				const result: string = wrapper.vm.$t(testKey);
 
 				expect(result).toEqual(testKey);
 			});
 		});
 
-		describe("when tranlsation key not exists", () => {
+		describe("when translation key not exists", () => {
 			it("should return unknown translation-key", () => {
 				setup();
 				const testKey = 123;

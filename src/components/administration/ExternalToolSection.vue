@@ -93,7 +93,7 @@ import { useExternalToolUtils } from "../../composables/external-tool-utils.comp
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "ExternalToolsSection",
+	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -167,6 +167,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			headers,
 			items,
 			isLoading,
