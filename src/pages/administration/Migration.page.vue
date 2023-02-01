@@ -159,6 +159,7 @@
 								>{{ $t("pages.administration.migration.back") }}
 							</v-btn>
 							<v-btn
+								class="ml-2"
 								id="migration_importUsers_next"
 								color="primary"
 								:disabled="!canPerformMigration"
@@ -211,6 +212,7 @@
 										</v-btn>
 
 										<v-btn
+											class="ml-2"
 											color="primary"
 											:disabled="!isMigrationConfirm || isLoading"
 											data-testid="migration_performMigration"
