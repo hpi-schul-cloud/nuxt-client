@@ -41,6 +41,7 @@ describe("@components/share/ImportFlow", () => {
 			propsData: {
 				token,
 				isActive: true,
+				courses: [],
 			},
 			...attrs,
 		});
@@ -74,7 +75,7 @@ describe("@components/share/ImportFlow", () => {
 			expect(copyModuleMock.validateShareToken).toHaveBeenCalledWith(token);
 		});
 		it("shouldn't call validateShareToken if isActive is false", () => {
-			mountComponent({ propsData: { isActive: false } });
+			mountComponent({ propsData: { isActive: false, courses: [] } });
 
 			expect(copyModuleMock.validateShareToken).not.toHaveBeenCalled();
 		});
