@@ -870,5 +870,10 @@
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.tool.description": "Aquí se configuran los parámetros específicos de la escuela para la herramienta externa.\nUna vez guardada la configuración, la herramienta estará disponible en la escuela.<br><br>\nAl borrar una configuración, la herramienta vuelve a desaparecer de la escuela.<br><br>\nEncontrará más información en nuestra <a>Sección de ayuda sobre herramientas externas</a>.",
 	"pages.tool.select.label": "Selección de herramientas",
-	"pages.tool.addBtn.label": "Agregar herramienta"
+	"pages.tool.addBtn.label": "Agregar herramienta",
+	"pages.tool.apiError.tool_param_duplicate": "Esta herramienta tiene al menos un parámetro duplicado. Póngase en contacto con un superhéroe.",
+	"pages.tool.apiError.tool_version_mismatch":"La versión de esta herramienta utilizada ya no está actualizada. Por favor, inserte la nueva versión.",
+	"pages.tool.apiError.tool_param_required": "Esta herramienta requiere un valor de parámetro que no se ha incluido. Por favor, añada el valor.",
+	"pages.tool.apiError.tool_param_type_mismatch":"El tipo de un parámetro no coincide con el tipo de destino. Póngase en contacto con Superhero.",
+	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor."
 }

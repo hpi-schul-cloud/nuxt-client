@@ -53,7 +53,11 @@ const ToolParamScopeMapping: Record<
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
-	["tool_param_value_regex", "pages.tool.apiError.tool_param_duplicate"],
+	["tool_param_duplicate", "pages.tool.apiError.tool_param_duplicate"],
+	["tool_version_mismatch", "pages.tool.apiError.tool_version_mismatch"],
+	["tool_param_required", "pages.tool.apiError.tool_param_required"],
+	["tool_param_type_mismatch", "pages.tool.apiError.tool_param_type_mismatch"],
+	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
 
 export function useExternalToolUtils() {
