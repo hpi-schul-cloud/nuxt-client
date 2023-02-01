@@ -159,14 +159,27 @@ export default defineComponent({
 		};
 
 		const createTaskCard = () => {
-			const text: Array<string> = [];
+			const cardElements = [];
+			cardElements.push({
+				content: {
+					type: title.value.type,
+					value: title.value.model,
+				},
+			});
 			elements.value.forEach((element) => {
-				text.push(element.model);
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			taskCardModule.createTaskCard({
-				title: title.value.model,
-				text: text,
+				cardElements: cardElements,
 			});
 		};
 
@@ -180,14 +193,16 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				cardElements.push({
-					...(element.id && { id: element.id }),
-					content: {
-						type: element.type,
-						value: element.model,
-						inputFormat: "richtext_ck5",
-					},
-				});
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						...(element.id && { id: element.id }),
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			taskCardModule.updateTaskCard({

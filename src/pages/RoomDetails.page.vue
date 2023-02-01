@@ -148,10 +148,13 @@ export default defineComponent({
 			i18n.t("components.molecules.copyResult.title.loading")
 		);
 
-		const { copy } = useCopy(isLoadingDialogOpen);
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
+			useCopy(isLoadingDialogOpen);
 
 		return {
 			copy,
+			backgroundCopyProcesses,
+			isCopyProcessInBackground,
 		};
 	},
 	components: {
@@ -357,18 +360,23 @@ export default defineComponent({
 			const loadingText = this.$t(
 				"components.molecules.copyResult.title.loading"
 			);
-			const payload = {
+
+			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
-			await this.copy(payload, loadingText);
+
+			await this.copy(copyParams, loadingText);
+
 			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
 				await this.$router.push(
 					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
 				);
+			} else {
+				await this.$router.push("/rooms-overview");
 			}
 		},
 		async onCopyBoardElement(payload) {
