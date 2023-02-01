@@ -2,7 +2,7 @@
 	<div>
 		<div v-if="parameters.length > 0">
 			<h2 class="text-h4 mb-10">
-				Einstellungen
+				{{ "$t('pages.tool.settings')" }}
 			</h2>
 			<v-form v-model="parametersValid">
 				<div v-for="(param, index) in parameters" :key="param.name">

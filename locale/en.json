@@ -878,6 +878,7 @@
 	"pages.files.title": "Files",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.tool.description": "The school-specific parameters for the external tool are configured here.\nAfter saving the configuration, the tool is available inside the school.<br><br>\nDeleting a configuration removes the tool from the school.<br><br>\nMore information can be found in our <a>Help section on external tools</a>.",
+	"pages.tool.settings": "Settings",
 	"pages.tool.select.label": "Tool selection",
 	"pages.tool.addBtn.label": "Add tool",
 	"pages.tool.apiError.tool_param_duplicate": "This tool has at least one duplicate parameter. Please contact a Superhero.",

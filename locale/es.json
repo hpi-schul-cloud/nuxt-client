@@ -869,6 +869,7 @@
 	"pages.files.title": "Archivos",
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.tool.description": "Aquí se configuran los parámetros específicos de la escuela para la herramienta externa.\nUna vez guardada la configuración, la herramienta estará disponible en la escuela.<br><br>\nAl borrar una configuración, la herramienta vuelve a desaparecer de la escuela.<br><br>\nEncontrará más información en nuestra <a>Sección de ayuda sobre herramientas externas</a>.",
+	"pages.tool.settings": "Configuración",
 	"pages.tool.select.label": "Selección de herramientas",
 	"pages.tool.addBtn.label": "Agregar herramienta",
 	"pages.tool.apiError.tool_param_duplicate": "Esta herramienta tiene al menos un parámetro duplicado. Póngase en contacto con un superhéroe.",
