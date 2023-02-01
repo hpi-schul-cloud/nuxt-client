@@ -28,7 +28,7 @@
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="addTool">
+			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="saveTool">
 				{{ t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
@@ -107,6 +107,9 @@ export default defineComponent({
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
 			toolParameters.value = [...externalToolsModule.getToolConfigurationTemplate.parameters];
+			if (toolParameters.value.length == 0) {
+				parametersValid.value = true;
+			}
 		};
 
 		const router: VueRouter = useRouter();
@@ -118,10 +121,16 @@ export default defineComponent({
 			toolParameters.value = [...updatedParameters];
 		};
 
-		const addTool = async () => {
+		const saveTool = async () => {
+			externalToolsModule.setToolConfigurationTemplate({
+				...externalToolsModule.getToolConfigurationTemplate,
+				parameters: toolParameters.value
+			});
+
 			await externalToolsModule.saveSchoolExternalTool();
+
 			if (!externalToolsModule.getBusinessError.message) {
-				router.push({ path: schoolSetting.to });
+				await router.push({ path: schoolSetting.to });
 			}
 		};
 
@@ -135,7 +144,7 @@ export default defineComponent({
 			onCancel,
 			onSelectTemplate,
 			onUpdateParameters,
-			addTool,
+			saveTool,
 			apiError,
 			parametersValid,
 		};

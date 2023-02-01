@@ -4,6 +4,7 @@ import {
 	ToolConfiguration,
 	ToolConfigurationScope,
 	ToolConfigurationTemplate,
+	ToolParameter,
 } from "./external-tool";
 import { $axios } from "@utils/api";
 import { authModule } from "@utils/store-accessor";
