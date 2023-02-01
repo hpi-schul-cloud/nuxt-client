@@ -3,7 +3,7 @@ import ExternalToolsModule from "@store/external-tools";
 import { createModuleMocks } from "@utils/mock-store-module";
 import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
-import ExternalToolsSection from "./ExternalToolsSection.vue";
+import ExternalToolsSection from "./ExternalToolSection.vue";
 import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
 describe("ExternalToolsSection", () => {
