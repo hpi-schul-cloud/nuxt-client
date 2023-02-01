@@ -25,7 +25,7 @@
 					<div>
 						{{
 							$t(
-								`components.molecules.import.${parentType}.options.selectCourse`
+								`components.molecules.import.${parentType}.options.selectCourse.infoText`
 							)
 						}}
 					</div>
@@ -36,7 +36,9 @@
 					item-value="id"
 					item-text="title"
 					:items="courses"
-					:placeholder="$t('pages.content.label.choose')"
+					:placeholder="
+						$t(`components.molecules.import.${parentType}.options.selectCourse`)
+					"
 					:rules="[rules.required]"
 					:error="showError()"
 					:hint="$t('common.labels.course')"

@@ -238,7 +238,7 @@ describe("@components/molecules/RoomLessonCard", () => {
 					(item: any) => {
 						return (
 							item.name ===
-							wrapper.vm.$i18n.t("pages.room.lessonCard.label.share")
+							wrapper.vm.$i18n.t("pages.room.lessonCard.label.shareLesson")
 						);
 					}
 				);

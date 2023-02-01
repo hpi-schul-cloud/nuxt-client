@@ -33,7 +33,7 @@ export default class ShareLessonModule extends VuexModule {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			parentId: this.lessonId,
-			expiresInDays: payload.hasExpiryDate ? 7 : null,
+			expiresInDays: payload.hasExpiryDate ? 21 : null,
 			schoolExclusive: payload.isSchoolInternal,
 		};
 		try {
