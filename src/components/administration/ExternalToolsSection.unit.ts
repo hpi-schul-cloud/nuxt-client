@@ -38,56 +38,52 @@ describe("ExternalToolsSection", () => {
 		});
 	});
 
-	describe.skip("inject is called", () => {
+	describe("inject is called", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation((e) => {
-						throw e;
-					});
-
 				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 					getSchoolExternalTools: [],
 				});
-
 				try {
 					shallowMount(ExternalToolsSection, {
+						...createComponentMocks({
+							i18n: true,
+						}),
 						provide: {
 							externalToolsModule,
+							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/\[Vue warn\]: injection "i18n" not found./)
-				);
-				consoleErrorSpy.mockRestore();
+				} catch (e) {
+					expect(
+						(e as Error).message.includes('Injection "i18n" not found')
+					).toBeTruthy();
+				}
 			});
 		});
 
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation((e) => {
-						throw e;
-					});
-
+				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+					getSchoolExternalTools: [],
+				});
 				try {
 					shallowMount(ExternalToolsSection, {
+						...createComponentMocks({
+							i18n: true,
+						}),
 						provide: {
+							externalToolsModule,
 							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn\]: injection "externalToolsModule" not found./
-					)
-				);
-				consoleErrorSpy.mockRestore();
+				} catch (e) {
+					expect(
+						(e as Error).message.includes(
+							'Injection "externalToolsModule" not found'
+						)
+					).toBeTruthy();
+				}
 			});
 		});
 	});
