@@ -1,9 +1,11 @@
 <template>
 	<div>
 		<select-course-modal
+			v-if="isSelectCourseModalOpen"
 			:is-open="isSelectCourseModalOpen"
 			:parent-name="parentName"
 			:parent-type="parentType"
+			:courses="courses"
 			@next="onCourseSelected"
 			@cancel="onCancel"
 		></select-course-modal>
@@ -47,6 +49,10 @@ export default defineComponent({
 			type: Boolean,
 			required: true
 		},
+		courses: {
+			type: Array,
+			required: true
+		}
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
@@ -54,7 +60,7 @@ export default defineComponent({
 		const notifier = inject("notifierModule");
 
 		const parentName = ref("");
-		const parentType = ref("");
+		const parentType = ref("course");
 		const destinationCourseId = ref(undefined);
 
 		const isSelectCourseModalOpen = ref(false);
@@ -108,6 +114,15 @@ export default defineComponent({
 			closeModals();
 		}
 
+		const showCopySuccess = (name) => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.import.options.success", { name }),
+				status: "success",
+				timeout: 10000,
+			})
+			closeModals();
+		}
+
 		// business logic
 
 		if (props.isActive) {
@@ -141,8 +156,8 @@ export default defineComponent({
 				if (parentType.value === 'course'){
 					openModal('result');
 				} else {
-					openModal('');
-					emit('success');
+					showCopySuccess(newName);
+					emit('success', false);
 					copyModule.reset();
 				}
 			} catch (error) {
@@ -159,7 +174,7 @@ export default defineComponent({
 		const onImport = (courseName) => startImport(courseName);
 		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
-			emit('success');
+			emit('success', true);
 			copyModule.reset();
 		}
 

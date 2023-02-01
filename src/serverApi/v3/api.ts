@@ -1458,7 +1458,6 @@ export interface MigrationBody {
      * @memberof MigrationBody
      */
     oauthMigrationPossible?: boolean | null;
-    oauthMigrationPossible?: boolean | null;
     /**
      * Set if migration is mandatory in this school
      * @type {boolean}
@@ -1474,44 +1473,6 @@ export interface MigrationBody {
 }
 /**
  * 
- * @export
- * @interface MigrationResponse
- */
-export interface MigrationResponse {
-    /**
-     * Date from when Migration is possible
-     * @type {string}
-     * @memberof MigrationResponse
-     */
-    oauthMigrationPossible?: string;
-    /**
-     * Date from when Migration is mandatory
-     * @type {string}
-     * @memberof MigrationResponse
-     */
-    oauthMigrationMandatory?: string;
-    /**
-     * Date from when Migration is finished
-     * @type {string}
-     * @memberof MigrationResponse
-     */
-    oauthMigrationFinished?: string;
-    /**
-     * Enable the Migration
-     * @type {boolean}
-     * @memberof MigrationResponse
-     */
-    enableMigrationStart: boolean;
-    oauthMigrationMandatory?: boolean | null;
-    /**
-     * Set if migration is finished in this school
-     * @type {boolean}
-     * @memberof MigrationBody
-     */
-    oauthMigrationFinished?: boolean | null;
-}
-/**
- *
  * @export
  * @interface MigrationResponse
  */
@@ -11436,3 +11397,5 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+

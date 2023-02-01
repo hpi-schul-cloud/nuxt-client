@@ -35,7 +35,7 @@
 					return-object
 					item-value="id"
 					item-text="title"
-					:items="rooms"
+					:items="courses"
 					:placeholder="$t('pages.content.label.choose')"
 					:rules="[rules.required]"
 					:error="showError()"
@@ -52,8 +52,7 @@
 <script type="ts">
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
-import { defineComponent, inject, reactive, ref, onMounted } from "@vue/composition-api";
-import { roomsModule } from "@/store";
+import { defineComponent, inject, reactive, ref } from "@vue/composition-api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -66,20 +65,15 @@ export default defineComponent({
 		isOpen: { type: Boolean },
 		parentName: { type: String, required: true },
 		parentType: { type: String, required: true },
+		courses: { type:Array, required: true }
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
-		const rooms = ref([]);
 		const selectedCourse = ref(undefined);
 
 		const showErrorOnEmpty = ref(false);
 		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
-
-		onMounted(async () => {
-			await roomsModule.fetchAllElements();
-			rooms.value = roomsModule.allElements;
-    	});
 
 		const rules = reactive({
           required: value => !!value || i18n?.t("common.validation.required"),
@@ -95,7 +89,6 @@ export default defineComponent({
 		const onCancel = () => emit('cancel')
 
 		return {
-			rooms,
 			onNext,
 			onCancel,
 			mdiInformation,

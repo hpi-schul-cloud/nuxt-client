@@ -123,6 +123,7 @@
 			<import-flow
 				:is-active="isImportMode"
 				:token="importToken"
+				:courses="courses"
 				@success="onImportSuccess"
 			></import-flow>
 		</template>
@@ -207,6 +208,9 @@ export default {
 				}
 			);
 		},
+		courses() {
+			return roomsModule.getAllElements;
+		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
 		},
@@ -236,6 +240,7 @@ export default {
 	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await roomsModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(0, new Date());
@@ -399,9 +404,11 @@ export default {
 			};
 			roomsModule.update(payload);
 		},
-		onImportSuccess() {
+		onImportSuccess(shouldFetchRooms) {
 			this.$router.replace({ path: "/rooms-overview" });
-			roomsModule.fetch();
+			if (shouldFetchRooms) {
+				roomsModule.fetch();
+			}
 		},
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
