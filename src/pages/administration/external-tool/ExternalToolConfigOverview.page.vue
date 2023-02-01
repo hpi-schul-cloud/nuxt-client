@@ -22,14 +22,13 @@
 		</external-tool-config-settings>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ translateBusinessError(t) }}
+			{{ translateBusinessError() }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
-			<!-- :disabled="!parametersValid" -->
-			<v-btn class="mr-2" color="primary" depressed @click="saveTool">
+			<v-btn class="mr-2" color="primary" depressed :disabled="!parametersValid" @click="saveTool">
 				{{ t('pages.tool.addBtn.label') }}
 			</v-btn>
 		</v-row>
@@ -94,7 +93,7 @@ export default defineComponent({
 			}
 		];
 
-		const { translateBusinessError } = useExternalToolUtils();
+		const { translateBusinessError } = useExternalToolUtils(t);
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 

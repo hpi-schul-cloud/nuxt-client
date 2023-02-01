@@ -5,16 +5,16 @@
 				Einstellungen
 			</h2>
 			<v-form v-model="parametersValid">
-				<!-- :rules="parameterValidations(param)" -->
 				<div v-for="(param, index) in parameters" :key="param.name">
 					<template v-if="param.type !== toolParameterTypeEnumBoolean">
-						<v-text-field :label="getParamLabelText(param)" @input="updateParameters($event, index)"
+						<v-text-field :label="getParamLabelText(param)" :rules="validateParameter(param)"
+									  @input="updateParameters($event, index)"
 						></v-text-field>
 					</template>
 					<template v-if="param.type === toolParameterTypeEnumBoolean">
-						<v-checkbox
-							:label="getParamLabelText(param)"
-							@change="updateParameters($event, index)"
+						<v-checkbox :rules="validateParameter(param)"
+									:label="getParamLabelText(param)"
+									@change="updateParameters($event, index)"
 						></v-checkbox>
 					</template>
 				</div>
@@ -30,6 +30,7 @@ import { externalToolsModule } from "@utils/store-accessor";
 import { computed, ComputedRef, inject, Ref, toRef, watch } from "@nuxtjs/composition-api";
 import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
+import { useExternalToolUtils } from "@pages/administration/external-tool/external-tool-utils.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -55,6 +56,7 @@ export default defineComponent({
 			}
 			return "unknown translation-key:" + key;
 		};
+		const { validateParameter } = useExternalToolUtils(t);
 
 		const parameters: Ref<ToolParameter[]> = toRef(props, "toolParameters");
 
@@ -71,38 +73,6 @@ export default defineComponent({
 			emit("parametersValid", parametersValid.value);
 		});
 
-		const parameterValidations = (param: ToolParameter): Array<() => boolean | string> => {
-			const rules = []
-			if (!param.isOptional && !param.value) {
-				rules.push(() => t('common.validation.required'));
-			}
-			if (param.regex) {
-				const regex = new RegExp(param.regex);
-				rules.push(() => {
-					if (param.value) {
-						return regex.test(param.value) || t('common.validation.regex', { comment: param.regexComment });
-					}
-					return true;
-				})
-			}
-			if (param.value && param.type) {
-				switch (param.type) {
-					case ToolParameterTypeEnum.String:
-						rules.push(() => (typeof param.value == 'string') || t('common.validation.string'));
-						break;
-					case ToolParameterTypeEnum.Number:
-						rules.push(() => !isNaN(Number(param.value)) || t('common.validation.number'))
-						break;
-					case ToolParameterTypeEnum.Boolean:
-						rules.push(() => (param.value === 'true' || param.value === 'false') || t('common.validation.boolean'))
-						break;
-					default:
-						break;
-				}
-			}
-			return rules;
-		};
-
 		const getParamLabelText = (param: ToolParameter): string => {
 			if (param.isOptional) {
 				return param.name;
@@ -114,7 +84,7 @@ export default defineComponent({
 			parameters,
 			loading,
 			updateParameters,
-			parameterValidations,
+			validateParameter,
 			getParamLabelText,
 			parametersValid,
 			toolParameterTypeEnumBoolean: ToolParameterTypeEnum.Boolean,

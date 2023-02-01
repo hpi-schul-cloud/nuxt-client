@@ -18,6 +18,7 @@ import {
 	ToolConfigurationTemplate,
 } from "@store/external-tool";
 import { externalToolsModule } from "@utils/store-accessor";
+import VueI18n from "vue-i18n";
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -60,7 +61,9 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
 
-export function useExternalToolUtils() {
+export function useExternalToolUtils(
+	t: (key: string, values?: VueI18n.Values | undefined) => string
+) {
 	const mapCustomParameterResponse = (
 		parameters: CustomParameterResponse[]
 	): ToolParameter[] => {
@@ -137,8 +140,7 @@ export function useExternalToolUtils() {
 		});
 	};
 
-	// TODO: translate all possible errors + map
-	const translateBusinessError = (t: (key: string | undefined) => string) => {
+	const translateBusinessError = () => {
 		const { message } = externalToolsModule.getBusinessError;
 
 		const translationKey = Array.from(
@@ -151,10 +153,58 @@ export function useExternalToolUtils() {
 		return message;
 	};
 
+	const validateParameter = (
+		param: ToolParameter
+	): Array<() => boolean | string> => {
+		const rules = [];
+		if (!param.isOptional && !param.value) {
+			rules.push(() => t("common.validation.required"));
+		}
+		if (param.regex) {
+			const regex = new RegExp(param.regex);
+			rules.push(() => {
+				if (param.value) {
+					return (
+						regex.test(param.value) ||
+						t("common.validation.regex", { comment: param.regexComment })
+					);
+				}
+				return true;
+			});
+		}
+		if (param.value && param.type) {
+			switch (param.type) {
+				case ToolParameterTypeEnum.String:
+					rules.push(
+						() =>
+							typeof param.value == "string" || t("common.validation.string")
+					);
+					break;
+				case ToolParameterTypeEnum.Number:
+					rules.push(
+						() => !isNaN(Number(param.value)) || t("common.validation.number")
+					);
+					break;
+				case ToolParameterTypeEnum.Boolean:
+					rules.push(
+						() =>
+							Boolean(param.value) ||
+							!Boolean(param.value) ||
+							t("common.validation.boolean")
+					);
+					break;
+				default:
+					break;
+			}
+		}
+		return rules;
+	};
+
 	return {
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		translateBusinessError,
+		validateParameter,
 	};
 }
