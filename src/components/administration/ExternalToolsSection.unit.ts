@@ -4,7 +4,6 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
 import { SchoolExternalToolStatus } from "@/store/types/school-external-tool";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
 
 describe("ExternalToolsSection", () => {
 	let el: HTMLDivElement;
@@ -41,49 +40,53 @@ describe("ExternalToolsSection", () => {
 	describe("inject is called", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
 				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 					getSchoolExternalTools: [],
 				});
+
 				try {
 					shallowMount(ExternalToolsSection, {
-						...createComponentMocks({
-							i18n: true,
-						}),
 						provide: {
 							externalToolsModule,
-							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {
-					expect(
-						(e as Error).message.includes('Injection "i18n" not found')
-					).toBeTruthy();
-				}
+				} catch (e) {}
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(
+						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					)
+				);
+
+				consoleErrorSpy.mockRestore();
 			});
 		});
 
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
-				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-					getSchoolExternalTools: [],
-				});
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
 				try {
 					shallowMount(ExternalToolsSection, {
-						...createComponentMocks({
-							i18n: true,
-						}),
 						provide: {
-							externalToolsModule,
 							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {
-					expect(
-						(e as Error).message.includes(
-							'Injection "externalToolsModule" not found'
-						)
-					).toBeTruthy();
-				}
+				} catch (e) {}
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(
+						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					)
+				);
+
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});
@@ -235,8 +238,7 @@ describe("ExternalToolsSection", () => {
 						const firstRowButtons = tableRows.at(0).findAll("button");
 						const deleteButton = firstRowButtons.at(1);
 
-						deleteButton.trigger("click");
-						await Vue.nextTick();
+						await deleteButton.trigger("click");
 
 						expect(wrapper.find("p").text()).toContain(firstToolName);
 					});
