@@ -32,16 +32,13 @@ const axiosInitializer = () => {
 };
 axiosInitializer();
 
-const createAxiosReponse = <T>(data: T) => {
-	const config: AxiosRequestConfig = { headers: {} };
-	return {
-		data,
-		status: 200,
-		statusText: "OK",
-		headers: {},
-		config,
-	};
-};
+// const createAxiosReponse = <T>(data: T) => {
+// 	return {
+// 		data,
+// 		status: 200,
+// 		statusText: "OK",
+// 	};
+// };
 
 describe("schools module", () => {
 	const setupApi = () => {
@@ -486,7 +483,6 @@ describe("schools module", () => {
 		});
 
 		describe("endMaintenance", () => {
-			let importUserModule: ImportUsersModule;
 			let spy: any;
 			let mockApi: any;
 			let schoolsModule: SchoolsModule;
@@ -494,7 +490,6 @@ describe("schools module", () => {
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
 			beforeEach(() => {
-				importUserModule = new ImportUsersModule({});
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
@@ -573,7 +568,6 @@ describe("schools module", () => {
 			});
 		});
 		describe("Set school in user migration mode", () => {
-			let importUserModule: ImportUsersModule;
 			let spy: any;
 			let mockApi: any;
 			let schoolsModule: SchoolsModule;
@@ -581,7 +575,6 @@ describe("schools module", () => {
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
 			beforeEach(() => {
-				importUserModule = new ImportUsersModule({});
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
@@ -666,25 +659,32 @@ describe("schools module", () => {
 		describe("fetchSchoolOAuthMigration is called", () => {
 			describe("when school id is given", () => {
 				it("should return state of OauthMigration", async () => {
-					const { schoolControllerGetMigration } = setupApi();
 					const date: string = new Date().toDateString();
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
 					});
 
-					schoolControllerGetMigration.mockResolvedValue(
-						createAxiosReponse<MigrationResponse>({
-							oauthMigrationPossible: date,
-							enableMigrationStart: true,
-							oauthMigrationMandatory: date,
-							oauthMigrationFinished: date,
-						})
-					);
+					const mockApi = {
+						schoolControllerGetMigration: jest.fn().mockResolvedValue({
+							data: {
+								oauthMigrationPossible: date,
+								enableMigrationStart: true,
+								oauthMigrationMandatory: date,
+								oauthMigrationFinished: date,
+							},
+						}),
+					};
+
+					jest
+						.spyOn(serverApi, "SchoolApiFactory")
+						.mockReturnValue(
+							mockApi as unknown as serverApi.SchoolApiInterface
+						);
 
 					await schoolsModule.fetchSchoolOAuthMigration();
 
-					expect(schoolControllerGetMigration).toHaveBeenCalledWith(
+					expect(mockApi.schoolControllerGetMigration).toHaveBeenCalledWith(
 						mockSchool.id
 					);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
@@ -737,29 +737,35 @@ describe("schools module", () => {
 		describe("setSchoolOauthMigration is called", () => {
 			describe("when school id is given", () => {
 				it("should call schoolControllerSetMigration and return state of OauthMigration", async () => {
-					const { schoolControllerSetMigration } = setupApi();
 					const date: string = new Date().toDateString();
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
 					});
 
-					schoolControllerSetMigration.mockResolvedValue(
-						createAxiosReponse<MigrationResponse>({
-							oauthMigrationPossible: date,
-							enableMigrationStart: true,
-							oauthMigrationMandatory: undefined,
-							oauthMigrationFinished: undefined,
-						})
-					);
+					const mockApi = {
+						schoolControllerSetMigration: jest.fn().mockResolvedValue({
+							data: {
+								oauthMigrationPossible: date,
+								enableMigrationStart: true,
+								oauthMigrationMandatory: undefined,
+								oauthMigrationFinished: undefined,
+							},
+						}),
+					};
+
+					jest
+						.spyOn(serverApi, "SchoolApiFactory")
+						.mockReturnValue(
+							mockApi as unknown as serverApi.SchoolApiInterface
+						);
 
 					await schoolsModule.setSchoolOauthMigration({
 						oauthMigrationPossible: true,
 						oauthMigrationMandatory: false,
 						oauthMigrationFinished: false,
 					});
-
-					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(1);
+					expect(mockApi.schoolControllerSetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						enableMigrationStart: true,
 						oauthMigrationPossible: true,
@@ -771,29 +777,35 @@ describe("schools module", () => {
 
 			describe("when school id is give and oauthMigrationFinished exists", () => {
 				it("should call schoolControllerSetMigration and return state of OauthMigration", async () => {
-					const { schoolControllerSetMigration } = setupApi();
 					const date: string = new Date().toDateString();
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
 					});
 
-					schoolControllerSetMigration.mockResolvedValue(
-						createAxiosReponse<MigrationResponse>({
-							oauthMigrationPossible: undefined,
-							enableMigrationStart: true,
-							oauthMigrationMandatory: date,
-							oauthMigrationFinished: date,
-						})
-					);
+					const mockApi = {
+						schoolControllerSetMigration: jest.fn().mockResolvedValue({
+							data: {
+								oauthMigrationPossible: undefined,
+								enableMigrationStart: true,
+								oauthMigrationMandatory: date,
+								oauthMigrationFinished: date,
+							},
+						}),
+					};
+
+					jest
+						.spyOn(serverApi, "SchoolApiFactory")
+						.mockReturnValue(
+							mockApi as unknown as serverApi.SchoolApiInterface
+						);
 
 					await schoolsModule.setSchoolOauthMigration({
 						oauthMigrationPossible: false,
 						oauthMigrationMandatory: true,
 						oauthMigrationFinished: true,
 					});
-
-					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(1);
+					expect(mockApi.schoolControllerSetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						enableMigrationStart: true,
 						oauthMigrationPossible: false,
