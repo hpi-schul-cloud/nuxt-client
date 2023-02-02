@@ -40,10 +40,6 @@ export default defineComponent({
 		toolParameters: {
 			type: Array,
 			required: true,
-		},
-		modelValue: {
-			type: Array,
-			required: true,
 		}
 	},
 	setup(props: any, { emit }) {
