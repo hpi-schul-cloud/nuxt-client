@@ -4,16 +4,17 @@
 			{{ $t("pages.tool.settings") }}
 		</h2>
 		<v-form v-model="parametersValid">
-			<div v-for="(param, index) in computedValue" :key="param.name">
+			<div v-for="(param, index) in template.parameters" :key="param.name">
 				<template v-if="param.type !== toolParameterTypeEnumBoolean">
-					<v-text-field :label="getParamLabelText(param)" :rules="validateParameter(param)"
-								  @input="updateParameters(computedValue, $event, index)"
+					<v-text-field v-model="param.value" :label="getParamLabelText(param)"
+								  :rules="validateParameter(param)"
+								  @input:value="updateParameter(template, $event, index)"
 					></v-text-field>
 				</template>
 				<template v-if="param.type === toolParameterTypeEnumBoolean">
-					<v-checkbox :rules="validateParameter(param)"
+					<v-checkbox v-model="param.value" :rules="validateParameter(param)"
 								:label="getParamLabelText(param)"
-								@change="updateParameters(computedValue, $event, index)"
+								@input:value="updateParameter(template, $event, index)"
 					></v-checkbox>
 				</template>
 			</div>
@@ -25,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
 import { computed, ComputedRef, inject, Ref, watch } from "@nuxtjs/composition-api";
-import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
+import { ToolConfigurationTemplate, ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
 import ExternalToolsModule from "@store/external-tools";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
@@ -33,11 +34,11 @@ import { useExternalToolValidation } from "./external-tool-validation.composable
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigSettings",
-	emits: ["update:modelValue", "parametersValid"],
+	emits: ["update:value", "parametersValid"],
 	props: {
 		value: {
-			type: Array,
-			default: () => [],
+			type: Object,
+			default: () => new ToolConfigurationTemplate(),
 		}
 	},
 	setup(props: any, { emit }) {
@@ -47,12 +48,12 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const computedValue = computed<ToolParameter[]>({
+		const template = computed<ToolConfigurationTemplate>({
 			get() {
 				return props.value
 			},
-			set(v: ToolParameter[]) {
-				emit("update:value", v);
+			set(value: ToolConfigurationTemplate) {
+				emit("update:value", value);
 			}
 		});
 
@@ -65,15 +66,15 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const { validateParameter } = useExternalToolValidation(t);
-
 		const loading: ComputedRef<boolean> = computed(() => externalToolsModule.getLoading);
 
-		const updateParameters = (model: ToolParameter[], paramValue: string, index: number) => {
-			const newModel: ToolParameter[] = [...model];
-			newModel[index] = { ...newModel[index], value: paramValue };
-			computedValue.value = newModel;
+		const updateParameter = (model: ToolConfigurationTemplate, newValue: string, index: number) => {
+			const newModel: ToolConfigurationTemplate = { ...model };
+			newModel.parameters[index] = { ...newModel.parameters[index], value: newValue };
+			emit("update:value", newModel);
 		};
+
+		const { validateParameter } = useExternalToolValidation(t);
 
 		const parametersValid: Ref<boolean> = ref(true);
 		watch(parametersValid, () => {
@@ -89,9 +90,9 @@ export default defineComponent({
 
 		return {
 			t,
-			computedValue,
+			template,
+			updateParameter,
 			loading,
-			updateParameters,
 			validateParameter,
 			getParamLabelText,
 			parametersValid,

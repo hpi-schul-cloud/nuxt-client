@@ -6,7 +6,7 @@
 	>
 		<p v-html="$t('pages.tool.description')"></p>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-select :label="$t('pages.tool.select.label')" item-text="name" :items="items"
+		<v-select :label="$t('pages.tool.select.label')" item-text="name" :items="configurationItems"
 				  :no-data-text="$t('common.nodata')"
 				  return-object :loading="loading" @change="onSelectTemplate">
 			<template #selection="{ item }">
@@ -17,9 +17,9 @@
 			</template>
 		</v-select>
 		<template v-if="toolTemplate.parameters.length > 0">
-			<external-tool-config-settings v-model="toolTemplate.parameters"
+			<external-tool-config-settings v-model="toolTemplate"
 										   @parametersValid="(boolean) => parametersValid = boolean"
-										   @update:value="(value) => toolTemplate.parameters = value">
+										   @update:value="(value) => toolTemplate = value">
 			</external-tool-config-settings>
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
@@ -98,7 +98,7 @@ export default defineComponent({
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
-		const items: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
+		const configurationItems: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
 
 		const apiError: ComputedRef<BusinessError> = computed(() => externalToolsModule.getBusinessError);
 
@@ -128,7 +128,7 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			toolTemplate,
-			items,
+			configurationItems,
 			loading,
 			onCancel,
 			onSelectTemplate,
