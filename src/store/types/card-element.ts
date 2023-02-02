@@ -12,6 +12,6 @@ export type CardElement = {
 	props?: {
 		component: CardElementComponentEnum;
 		placeholder: TranslateResult;
-		editable: Boolean;
+		editable: boolean;
 	};
 };
