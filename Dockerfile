@@ -15,7 +15,7 @@ COPY src ./src
 COPY webpack-config ./webpack-config
 ARG SC_THEME=default
 ENV SC_THEME ${SC_THEME}
-RUN NODE_ENV=production npm run vue:build
+RUN NODE_ENV=production npm run build
 
 COPY .git ./
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > ./dist/nuxtversion
