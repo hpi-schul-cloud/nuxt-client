@@ -1,32 +1,30 @@
 <template>
 	<div>
-		<div v-if="parameters.length > 0">
-			<h2 class="text-h4 mb-10">
-				{{ $t("pages.tool.settings") }}
-			</h2>
-			<v-form v-model="parametersValid">
-				<div v-for="(param, index) in parameters" :key="param.name">
-					<template v-if="param.type !== toolParameterTypeEnumBoolean">
-						<v-text-field :label="getParamLabelText(param)" :rules="validateParameter(param)"
-									  @input="updateParameters($event, index)"
-						></v-text-field>
-					</template>
-					<template v-if="param.type === toolParameterTypeEnumBoolean">
-						<v-checkbox :rules="validateParameter(param)"
-									:label="getParamLabelText(param)"
-									@change="updateParameters($event, index)"
-						></v-checkbox>
-					</template>
-				</div>
-			</v-form>
-		</div>
+		<h2 class="text-h4 mb-10">
+			{{ $t("pages.tool.settings") }}
+		</h2>
+		<v-form v-model="parametersValid">
+			<div v-for="(param, index) in computedValue" :key="param.name">
+				<template v-if="param.type !== toolParameterTypeEnumBoolean">
+					<v-text-field :label="getParamLabelText(param)" :rules="validateParameter(param)"
+								  @input="updateParameters(computedValue, $event, index)"
+					></v-text-field>
+				</template>
+				<template v-if="param.type === toolParameterTypeEnumBoolean">
+					<v-checkbox :rules="validateParameter(param)"
+								:label="getParamLabelText(param)"
+								@change="updateParameters(computedValue, $event, index)"
+					></v-checkbox>
+				</template>
+			</div>
+		</v-form>
 		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
-import { computed, ComputedRef, inject, Ref, toRef, watch } from "@nuxtjs/composition-api";
+import { computed, ComputedRef, inject, Ref, watch } from "@nuxtjs/composition-api";
 import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
 import { useExternalToolUtils } from "../../../composables/external-tool-utils.composable";
@@ -35,11 +33,11 @@ import ExternalToolsModule from "@store/external-tools";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigSettings",
-	emits: ["parametersUpdated", "parametersValid"],
+	emits: ["update:modelValue", "parametersValid"],
 	props: {
-		toolParameters: {
+		value: {
 			type: Array,
-			required: true,
+			default: () => [],
 		}
 	},
 	setup(props: any, { emit }) {
@@ -48,6 +46,15 @@ export default defineComponent({
 		if (!i18n || !externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
+
+		const computedValue = computed<ToolParameter[]>({
+			get() {
+				return props.value
+			},
+			set(v: ToolParameter[]) {
+				emit("update:value", v);
+			}
+		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values | undefined) => {
@@ -59,14 +66,13 @@ export default defineComponent({
 		};
 		const { validateParameter } = useExternalToolUtils(t);
 
-		const parameters: Ref<ToolParameter[]> = toRef(props, "toolParameters");
 
 		const loading: ComputedRef<boolean> = computed(() => externalToolsModule.getLoading);
 
-		const updateParameters = (paramValue: string, index: number) => {
-			// vue change detection for arrays does not work very well, so we have to set the value manually
-			parameters.value[index] = { ...parameters.value[index], value: paramValue };
-			emit("parametersUpdated", parameters.value);
+		const updateParameters = (model: ToolParameter[], paramValue: string, index: number) => {
+			const newModel: ToolParameter[] = [...model];
+			newModel[index] = { ...newModel[index], value: paramValue };
+			computedValue.value = newModel;
 		};
 
 		const parametersValid: Ref<boolean> = ref(true);
@@ -83,7 +89,8 @@ export default defineComponent({
 
 		return {
 			t,
-			parameters,
+			// parameters,
+			computedValue,
 			loading,
 			updateParameters,
 			validateParameter,

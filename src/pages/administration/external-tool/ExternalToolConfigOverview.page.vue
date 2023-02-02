@@ -16,10 +16,12 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<external-tool-config-settings :tool-parameters="toolParameters"
-									   @parametersValid="(boolean) => parametersValid = boolean"
-									   @parametersUpdated="onUpdateParameters">
-		</external-tool-config-settings>
+		<template v-if="toolParameters.length > 0">
+			<external-tool-config-settings v-model="toolParameters"
+										   @parametersValid="(boolean) => parametersValid = boolean"
+										   @update:value="(value) => toolParameters = value">
+			</external-tool-config-settings>
+		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
 			{{ translateBusinessError() }}
@@ -101,7 +103,17 @@ export default defineComponent({
 
 		const toolTemplate: ComputedRef<ToolConfigurationTemplate> = computed(() => externalToolsModule.getToolConfigurationTemplate);
 
-		const toolParameters: Ref<ToolParameter[]> = ref([]);
+		const toolParameters: ComputedRef<ToolParameter[]> = computed<ToolParameter[]>({
+			get() {
+				return externalToolsModule.getToolConfigurationTemplate.parameters;
+			},
+			set(v: ToolParameter[]) {
+				externalToolsModule.setToolConfigurationTemplate({
+					...externalToolsModule.getToolConfigurationTemplate,
+					parameters: v
+				});
+			}
+		});
 
 		const apiError: ComputedRef<BusinessError> = computed(() => externalToolsModule.getBusinessError);
 
@@ -109,7 +121,6 @@ export default defineComponent({
 
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
-			toolParameters.value = [...externalToolsModule.getToolConfigurationTemplate.parameters];
 			if (toolParameters.value.length == 0) {
 				parametersValid.value = true;
 			}
@@ -118,10 +129,6 @@ export default defineComponent({
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
 			router.push({ path: schoolSetting.to });
-		};
-
-		const onUpdateParameters = (updatedParameters: ToolParameter[]) => {
-			toolParameters.value = [...updatedParameters];
 		};
 
 		const saveTool = async () => {
@@ -145,7 +152,6 @@ export default defineComponent({
 			loading,
 			onCancel,
 			onSelectTemplate,
-			onUpdateParameters,
 			saveTool,
 			apiError,
 			parametersValid,
