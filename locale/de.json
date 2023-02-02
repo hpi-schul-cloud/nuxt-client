@@ -93,8 +93,6 @@
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.regex": "Die Eingabe entspricht nicht dem erwarteten regulären Ausdruck: {comment}",
 	"common.validation.number": "Die Eingabe muss einer Zahlenfolge entsprechen",
-	"common.validation.boolean": "Die Eingabe muss einem der Wahrheitswerte \"true\" oder \"false\" entsprechen",
-	"common.validation.string": "Die Eingabe muss einer Zeichenkette entsprechen",
 	"common.words.and": "und",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",

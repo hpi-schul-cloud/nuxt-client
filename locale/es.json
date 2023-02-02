@@ -92,8 +92,6 @@
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.validation.regex": "La entrada no coincide con la expresión regular esperada: {comment}",
 	"common.validation.number": "La entrada debe corresponder a una secuencia de números",
-	"common.validation.boolean": "La entrada debe corresponder a uno de los valores booleanos \"true\" o \"false\"",
-	"common.validation.string": "La entrada debe corresponder a una cadena",
 	"common.words.and": "y",
 	"common.words.draft": "borrador",
 	"common.words.drafts": "borradores",

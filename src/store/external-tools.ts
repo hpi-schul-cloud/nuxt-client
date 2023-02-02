@@ -188,7 +188,6 @@ export default class ExternalToolsModule extends VuexModule {
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
 				);
-
 			const toolConfigurationTemplate: ToolConfigurationTemplate =
 				useExternalToolUtils().mapExternalToolConfigurationTemplateResponse(
 					configTemplate.data

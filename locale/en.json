@@ -92,8 +92,6 @@
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.validation.regex": "The input does not match the expected regular expression: {comment}",
 	"common.validation.number": "The input must correspond to a sequence of numbers",
-	"common.validation.boolean": "The input must correspond to one of the boolean values \"true\" or \"false\"",
-	"common.validation.string": "The input must match a string",
 	"common.words.and": "and",
 	"common.words.draft": "draft",
 	"common.words.drafts": "drafts",

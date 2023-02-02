@@ -41,30 +41,10 @@ export function useExternalToolValidation(
 		param: ToolParameter,
 		rules: Array<() => boolean | string>
 	): void => {
-		if (param.value && param.type) {
-			switch (param.type) {
-				case ToolParameterTypeEnum.String:
-					rules.push(
-						() =>
-							typeof param.value == "string" || t("common.validation.string")
-					);
-					break;
-				case ToolParameterTypeEnum.Number:
-					rules.push(
-						() => !isNaN(Number(param.value)) || t("common.validation.number")
-					);
-					break;
-				case ToolParameterTypeEnum.Boolean:
-					rules.push(
-						() =>
-							Boolean(param.value) ||
-							!Boolean(param.value) ||
-							t("common.validation.boolean")
-					);
-					break;
-				default:
-					break;
-			}
+		if (param.value && param.type === ToolParameterTypeEnum.Number) {
+			rules.push(
+				() => !isNaN(Number(param.value)) || t("common.validation.number")
+			);
 		}
 	};
 

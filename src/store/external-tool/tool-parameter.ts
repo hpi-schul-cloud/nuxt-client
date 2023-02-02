@@ -5,7 +5,7 @@ import { ToolParameterTypeEnum } from "./tool-parameter-type.enum";
 export interface ToolParameter {
 	name: string;
 
-	_default?: string;
+	default?: string;
 
 	regex?: string;
 

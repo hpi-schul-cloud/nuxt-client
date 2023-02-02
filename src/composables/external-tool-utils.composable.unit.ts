@@ -126,7 +126,6 @@ describe("useExternalToolUtils", () => {
 					id: schoolExternaToolItem.id,
 					name: schoolExternaToolItem.name,
 					status: SchoolExternalToolStatusEnum.Unknown,
-					version: undefined,
 				})
 			);
 		});

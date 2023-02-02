@@ -119,15 +119,16 @@ export function useExternalToolUtils(
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
-				// eslint-disable-next-line no-underscore-dangle
-				_default: resp._default,
+				// @ts-ignore
+				default: resp.default,
 				isOptional: resp.isOptional,
 				regexComment: resp.regexComment,
 				location: ToolParamLocationMapping[resp.location],
 				regex: resp.regex,
 				type: ToolParamTypeMapping[resp.type],
 				scope: ToolParamScopeMapping[resp.scope],
-				value: undefined,
+				// @ts-ignore
+				value: resp.default ? resp.default : undefined,
 			};
 		});
 	};
@@ -184,7 +185,7 @@ export function useExternalToolUtils(
 		return params.map((param: ToolParameter): CustomParameterEntryParam => {
 			return {
 				name: param.name,
-				value: param.value ?? "",
+				value: param.value ?? param.default ?? "",
 			};
 		});
 	};
