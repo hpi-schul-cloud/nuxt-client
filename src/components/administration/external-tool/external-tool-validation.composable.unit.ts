@@ -15,13 +15,13 @@ describe("useExternalToolValidation", () => {
 		const toolParameter: ToolParameter = {
 			name: "ToolParameter",
 			isOptional: true,
-			value: undefined,
+			value: "x",
 			type: ToolParameterTypeEnum.String,
 			regexComment: "comment",
 			location: ToolParameterLocationEnum.Path,
 			regex: "[x]",
 			scope: ToolParameterScopeEnum.School,
-			default: "defaultValue",
+			default: undefined,
 		};
 
 		return {
@@ -31,6 +31,15 @@ describe("useExternalToolValidation", () => {
 	};
 
 	describe("validateParameter is called", () => {
+		it("should return true when validation passed", () => {
+			const { validateParameter, toolParameter } = setup();
+
+			const rules: (() => string | boolean)[] =
+				validateParameter(toolParameter);
+
+			expect(rules[0]()).toBeTruthy();
+		});
+
 		it("should add required rule when parameter is required value is missing", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.isOptional = false;
