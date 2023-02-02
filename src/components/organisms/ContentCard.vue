@@ -20,7 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="margin-bottom: 0; color: var(--v-white-base)"
+									style="color: var(--v-white-base); margin: -1px 8px 4px -4px"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -298,5 +298,20 @@ export default {
 
 .title-link {
 	border: none;
+}
+.v-input--selection-controls__input {
+	margin-right: 0 !important;
+}
+.v-input__control {
+	margin: 0;
+	padding: 0;
+}
+
+.v-messages {
+	min-height: 0px;
+}
+
+.theme--light {
+	min-height: 0px;
 }
 </style>
