@@ -21,7 +21,7 @@
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
 import TheFooter from "@components/legacy/TheFooter";
-import ApplicationErrorRouting from '@components/molecules/ApplicationErrorRouting';
+import ApplicationErrorRouting from "@components/molecules/ApplicationErrorRouting";
 
 export default {
 	components: {
