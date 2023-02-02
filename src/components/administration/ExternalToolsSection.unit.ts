@@ -1,13 +1,18 @@
 import { mount, shallowMount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "../../../tests/test-utils/componentMocks";
 import ExternalToolsSection from "./ExternalToolsSection.vue";
 import { SchoolExternalToolStatus } from "@/store/types/school-external-tool";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("ExternalToolsSection", () => {
+	let el: HTMLDivElement;
+
 	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
-		document.body.setAttribute("data-app", "true");
+		el = document.createElement("div");
+		el.setAttribute("data-app", "true");
+		document.body.appendChild(el);
+
 		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getSchoolExternalTools: [],
 			...getters,
@@ -37,22 +42,24 @@ describe("ExternalToolsSection", () => {
 			it("should throw an error", () => {
 				const consoleErrorSpy = jest
 					.spyOn(console, "error")
-					.mockImplementation((e) => {
-						throw e;
-					});
+					.mockImplementation();
 
 				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 					getSchoolExternalTools: [],
 				});
 
-				expect(() => {
+				try {
 					shallowMount(ExternalToolsSection, {
 						provide: {
 							externalToolsModule,
 						},
 					});
-				}).toThrow(
-					expect.stringMatching(/\[Vue warn\]: injection "i18n" not found./)
+				} catch (e) {}
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(
+						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					)
 				);
 
 				consoleErrorSpy.mockRestore();
@@ -63,21 +70,22 @@ describe("ExternalToolsSection", () => {
 			it("should throw an error", () => {
 				const consoleErrorSpy = jest
 					.spyOn(console, "error")
-					.mockImplementation((e) => {
-						throw e;
-					});
+					.mockImplementation();
 
-				expect(() => {
+				try {
 					shallowMount(ExternalToolsSection, {
 						provide: {
 							i18n: { t: (key: string) => key },
 						},
 					});
-				}).toThrow(
+				} catch (e) {}
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: injection "externalToolsModule" not found./
+						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
+
 				consoleErrorSpy.mockRestore();
 			});
 		});
@@ -224,7 +232,7 @@ describe("ExternalToolsSection", () => {
 
 				describe("when dialog is rendered", () => {
 					it("should have tool name in text", async () => {
-						const { wrapper } = setupItems();
+						const { wrapper, firstToolName } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
 						const firstRowButtons = tableRows.at(0).findAll("button");
@@ -232,9 +240,7 @@ describe("ExternalToolsSection", () => {
 
 						await deleteButton.trigger("click");
 
-						const textNodes = document.querySelectorAll(".v-dialog--active p");
-
-						expect(textNodes.length).toBeGreaterThan(0);
+						expect(wrapper.find("p").text()).toContain(firstToolName);
 					});
 				});
 

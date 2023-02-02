@@ -134,3 +134,10 @@ export default defineComponent({
 	margin-bottom: var(--space-lg) !important;
 }
 </style>
+<style langs="scss">
+.boxes .link.is-external > svg {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+</style>

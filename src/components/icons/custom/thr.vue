@@ -2,8 +2,7 @@
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
-		width="160"
-		height="160"
+		viewBox="0 0 160 160"
 	>
 		<defs>
 			<filter x="-5.3%" y="-4.7%" width="110.7%" height="110.7%" id="a">
