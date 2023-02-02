@@ -228,10 +228,7 @@ export default defineComponent({
 						},
 					],
 				};
-				if (
-					envConfigModule.getEnv.FEATURE_LESSON_SHARE &&
-					!envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW
-				) {
+				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					items.actions.push({
 						label: this.$t("pages.rooms.fab.import.lesson"),
 						icon: mdiCloudDownload,

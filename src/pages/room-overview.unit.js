@@ -568,6 +568,7 @@ describe("@pages/RoomOverview", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
 		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});
 });
