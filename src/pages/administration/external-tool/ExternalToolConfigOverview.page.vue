@@ -128,6 +128,7 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
+			toolParameters.value = [];
 			router.push({ path: schoolSetting.to });
 		};
 
