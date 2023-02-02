@@ -2,7 +2,7 @@
 	<div>
 		<div v-if="parameters.length > 0">
 			<h2 class="text-h4 mb-10">
-				{{ $t('pages.tool.settings') }}
+				{{ $t("pages.tool.settings") }}
 			</h2>
 			<v-form v-model="parametersValid">
 				<div v-for="(param, index) in parameters" :key="param.name">
@@ -26,11 +26,11 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "@vue/composition-api";
-import { externalToolsModule } from "@utils/store-accessor";
 import { computed, ComputedRef, inject, Ref, toRef, watch } from "@nuxtjs/composition-api";
 import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
 import { useExternalToolUtils } from "../../../composables/external-tool-utils.composable";
+import ExternalToolsModule from "@store/external-tools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -40,11 +40,16 @@ export default defineComponent({
 		toolParameters: {
 			type: Array,
 			required: true,
+		},
+		modelValue: {
+			type: Array,
+			required: true,
 		}
 	},
 	setup(props: any, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const externalToolsModule: ExternalToolsModule | undefined = inject<ExternalToolsModule>("externalToolsModule")
+		if (!i18n || !externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -81,6 +86,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			parameters,
 			loading,
 			updateParameters,
@@ -92,7 +98,3 @@ export default defineComponent({
 	}
 });
 </script>
-
-<style scoped>
-
-</style>

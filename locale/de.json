@@ -884,6 +884,6 @@
 	"pages.tool.apiError.tool_param_duplicate": "Dieses Tool hat mindestens einen doppelten Paramter. Bitte an einen Superhero wenden.",
 	"pages.tool.apiError.tool_version_mismatch": "Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Neuerungen einfügen.",
 	"pages.tool.apiError.tool_param_required": "Für dieses Tool wird ein Parameterwert benötigt, der nicht mit angegeben wurde. Bitte den Wert hinzufügen.",
-	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines parameters stimmt nicht mit dem Soll-Typ überein. Bitte an Superhero wenden.",
+	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines parameters stimmt nicht mit dem Soll-Typ überein. Bitte an einen Superhero wenden.",
 	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren."
 }
