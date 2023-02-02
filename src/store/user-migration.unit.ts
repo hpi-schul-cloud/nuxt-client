@@ -76,6 +76,22 @@ describe("UserMigrationModule", () => {
 				expect(module.getMigrationLinks).toEqual(migrationLinks);
 			});
 		});
+
+		describe("Error", () => {
+			it("should return the default state", () => {
+				const error: {} | null = module.getError;
+
+				expect(error).toEqual(null);
+			});
+
+			it("should return the changed state", () => {
+				const error: {} | null = new Error();
+
+				module.setError(error);
+
+				expect(module.getError).toEqual(error);
+			});
+		});
 	});
 
 	describe("actions", () => {

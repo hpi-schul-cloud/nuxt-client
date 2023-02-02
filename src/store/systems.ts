@@ -17,6 +17,7 @@ import { System } from "./types/system";
 export default class SystemsModule extends VuexModule {
 	private systems: System[] = [];
 	private loading: boolean = false;
+	private error: {} | null = null;
 
 	private _systemApi?: SystemApiInterface;
 
@@ -37,12 +38,21 @@ export default class SystemsModule extends VuexModule {
 		this.systems = systems;
 	}
 
+	@Mutation
+	setError(error: {} | null): void {
+		this.error = error;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
 
 	get getSystems(): System[] {
 		return this.systems;
+	}
+
+	get getError(): {} | null {
+		return this.error;
 	}
 
 	@Action
@@ -60,8 +70,8 @@ export default class SystemsModule extends VuexModule {
 			);
 			this.setSystems(mappedSystems);
 			this.setLoading(false);
-		} catch (e) {
-			console.log(`Some error occurred while loading system data: ${e}`);
+		} catch (error) {
+			this.setError(error);
 			this.setLoading(false);
 		}
 	}

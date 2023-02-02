@@ -19,6 +19,7 @@ export default class UserMigrationModule extends VuexModule {
 		cancelLink: "",
 	};
 	private loading: boolean = false;
+	private error: {} | null = null;
 
 	private _userMigrationApi?: UserMigrationApiInterface;
 
@@ -39,12 +40,21 @@ export default class UserMigrationModule extends VuexModule {
 		this.migrationLinks = migrationLinks;
 	}
 
+	@Mutation
+	setError(error: {} | null): void {
+		this.error = error;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
 
 	get getMigrationLinks(): MigrationLinks {
 		return this.migrationLinks;
+	}
+
+	get getError(): {} | null {
+		return this.error;
 	}
 
 	@Action
@@ -64,8 +74,8 @@ export default class UserMigrationModule extends VuexModule {
 			};
 			this.setMigrationLinks(mappedLinks);
 			this.setLoading(false);
-		} catch (e) {
-			console.log(`Some error occurred while loading migration links: ${e}`);
+		} catch (error) {
+			this.setError(error);
 			this.setLoading(false);
 		}
 	}

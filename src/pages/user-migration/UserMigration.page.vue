@@ -1,6 +1,6 @@
 <template>
 	<div v-show="hasData" class="text-center mx-auto">
-		<img src="@assets/img/migration/migration.svg" alt="" />
+		<img src="@assets/img/migration/migration.svg" alt="migration logo"/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
@@ -25,7 +25,7 @@
 					{{
 						$t(
 							mandatory
-								? "pages.userMigration.button.logout"
+								? "common.actions.logout"
 								: "pages.userMigration.button.skip"
 						)
 					}}
