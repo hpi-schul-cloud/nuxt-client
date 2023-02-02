@@ -131,14 +131,12 @@ describe("SystemsModule", () => {
 
 			it("should log an error", async () => {
 				const { apiMock } = setup();
-				apiMock.systemControllerFind.mockRejectedValue(new Error());
-				jest.spyOn(console, "log");
+				const error: Error = new Error();
+				apiMock.systemControllerFind.mockRejectedValue(error);
 
 				await module.fetchSystems();
 
-				expect(console.log).toHaveBeenCalledWith(
-					expect.stringContaining("error")
-				);
+				expect(module.getError).toEqual(error);
 			});
 		});
 	});

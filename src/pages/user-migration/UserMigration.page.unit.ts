@@ -237,7 +237,7 @@ describe("UserMigration", () => {
 
 				const button = wrapper.find("[data-testId=btn-cancel]");
 
-				expect(button.text()).toEqual("pages.userMigration.button.logout");
+				expect(button.text()).toEqual("common.actions.logout");
 				expect(button.props().to).toEqual(migrationLinksMock.cancelLink);
 			});
 		});

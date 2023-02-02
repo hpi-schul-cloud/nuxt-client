@@ -69,10 +69,9 @@ export default class SystemsModule extends VuexModule {
 				})
 			);
 			this.setSystems(mappedSystems);
-			this.setLoading(false);
 		} catch (error) {
 			this.setError(error);
-			this.setLoading(false);
 		}
+		this.setLoading(false);
 	}
 }

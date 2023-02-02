@@ -144,18 +144,16 @@ describe("UserMigrationModule", () => {
 				});
 			});
 
-			it("should log an error", async () => {
+			it("should set an error", async () => {
 				const { apiMock, migrationLinkRequest } = setup();
+				const error: Error = new Error();
 				apiMock.userMigrationControllerGetMigrationPageDetails.mockRejectedValue(
-					new Error()
+					error
 				);
-				jest.spyOn(console, "log");
 
 				await module.fetchMigrationLinks(migrationLinkRequest);
 
-				expect(console.log).toHaveBeenCalledWith(
-					expect.stringContaining("error")
-				);
+				expect(module.getError).toEqual(error);
 			});
 		});
 	});
