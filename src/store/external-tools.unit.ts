@@ -6,13 +6,15 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolApi,
 } from "../serverApi/v3";
-import { SchoolExternalTool } from "./external-tool/school-external-tool.enum";
+import {
+	SchoolExternalTool,
+	SchoolExternalToolStatusEnum,
+} from "./external-tool";
 import setupStores from "../../tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@utils/store-accessor";
-import * as schoolExternalToolUtilsComposable from "@components/administration/external-tool-section-utils.composable";
-import { SchoolExternalToolStatusEnum } from "./external-tool/school-external-tool-status.enum";
+import * as useExternalToolUtilsComposable from "@/composables/external-tool-utils.composable";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -238,19 +240,16 @@ describe("ExternalToolsModule", () => {
 					).toHaveBeenCalledWith(schoolId);
 				});
 
-				it("should call useSchoolExternalToolUtils().mapSchoolExternalToolSearchListResponse", async () => {
+				it("should call useExternalToolsSectionUtils().mapSchoolExternalToolSearchListResponse", async () => {
 					setupWithAuth();
 					const { searchListResponse } = mockToolApi();
 					const mapSchoolExternalToolSearchListResponseMock = jest
 						.fn()
 						.mockReturnValue([{ id: "toolId" }]);
 					jest
-						.spyOn(
-							schoolExternalToolUtilsComposable,
-							"useExternalToolsSectionUtils"
-						)
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
 						.mockReturnValue({
-							...schoolExternalToolUtilsComposable.useExternalToolsSectionUtils(),
+							...useExternalToolUtilsComposable.useExternalToolUtils(),
 							mapSchoolExternalToolSearchListResponse:
 								mapSchoolExternalToolSearchListResponseMock,
 						});

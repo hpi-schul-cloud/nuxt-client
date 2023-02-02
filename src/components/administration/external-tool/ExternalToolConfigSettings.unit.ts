@@ -34,7 +34,7 @@ describe("ExternalToolConfigSettings", () => {
 				provide("externalToolsModule", externalToolsModule);
 			},
 			propsData: {
-				toolParameters: toolParams,
+				value: toolParams,
 			},
 		});
 
@@ -113,16 +113,6 @@ describe("ExternalToolConfigSettings", () => {
 			const h2 = wrapper.find("h2");
 
 			expect(h2.exists()).toBeTruthy();
-		});
-
-		it("should not render component content when parameters length is zero", () => {
-			const { wrapper } = setup({}, []);
-
-			const h2 = wrapper.find("h2");
-			expect(h2.exists()).toBeFalsy();
-
-			const inputs = wrapper.findAll("input");
-			expect(inputs.exists()).toBeFalsy();
 		});
 	});
 

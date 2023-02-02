@@ -27,8 +27,8 @@ import { defineComponent, ref } from "@vue/composition-api";
 import { computed, ComputedRef, inject, Ref, watch } from "@nuxtjs/composition-api";
 import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
-import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
 import ExternalToolsModule from "@store/external-tools";
+import { useExternalToolValidation } from "./external-tool-validation.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -42,7 +42,7 @@ export default defineComponent({
 	},
 	setup(props: any, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const externalToolsModule: ExternalToolsModule | undefined = inject<ExternalToolsModule>("externalToolsModule")
+		const externalToolsModule: ExternalToolsModule | undefined = inject<ExternalToolsModule>("externalToolsModule");
 		if (!i18n || !externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
@@ -65,7 +65,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const { validateParameter } = useExternalToolUtils(t);
+		const { validateParameter } = useExternalToolValidation(t);
 
 		const loading: ComputedRef<boolean> = computed(() => externalToolsModule.getLoading);
 

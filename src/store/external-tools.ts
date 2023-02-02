@@ -28,9 +28,6 @@ export default class ExternalToolsModule extends VuexModule {
 
 	private toolConfigurations: ToolConfiguration[] = [];
 
-	private toolConfigurationTemplate: ToolConfigurationTemplate =
-		new ToolConfigurationTemplate();
-
 	private loading: boolean = false;
 
 	private businessError: BusinessError = {
@@ -58,10 +55,6 @@ export default class ExternalToolsModule extends VuexModule {
 
 	get getToolConfigurations(): ToolConfiguration[] {
 		return this.toolConfigurations;
-	}
-
-	get getToolConfigurationTemplate(): ToolConfigurationTemplate {
-		return this.toolConfigurationTemplate;
 	}
 
 	get getBusinessError() {
@@ -104,13 +97,6 @@ export default class ExternalToolsModule extends VuexModule {
 	@Mutation
 	setToolConfigurations(toolConfigurations: ToolConfiguration[]): void {
 		this.toolConfigurations = [...toolConfigurations];
-	}
-
-	@Mutation
-	setToolConfigurationTemplate(
-		toolConfigTemplate: ToolConfigurationTemplate
-	): void {
-		this.toolConfigurationTemplate = { ...toolConfigTemplate };
 	}
 
 	@Action
@@ -194,7 +180,7 @@ export default class ExternalToolsModule extends VuexModule {
 	@Action
 	async loadToolConfigurationTemplateFromExternalTool(
 		toolId: string
-	): Promise<void> {
+	): Promise<ToolConfigurationTemplate> {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
@@ -203,12 +189,13 @@ export default class ExternalToolsModule extends VuexModule {
 					toolId
 				);
 
-			this.setToolConfigurationTemplate(
+			const toolConfigurationTemplate: ToolConfigurationTemplate =
 				useExternalToolUtils().mapExternalToolConfigurationTemplateResponse(
 					configTemplate.data
-				)
-			);
+				);
 			this.setLoading(false);
+
+			return toolConfigurationTemplate;
 		} catch (e) {
 			console.log(
 				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${e}`
@@ -219,30 +206,32 @@ export default class ExternalToolsModule extends VuexModule {
 				...e,
 			});
 			this.setLoading(false);
+			return new ToolConfigurationTemplate();
 		}
 	}
 
 	@Action
-	async saveSchoolExternalTool(): Promise<void> {
+	async saveSchoolExternalTool(
+		toolTemplate: ToolConfigurationTemplate
+	): Promise<void> {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
 			if (authModule.getUser?.schoolId) {
 				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
 					useExternalToolUtils().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
-						this.getToolConfigurationTemplate,
+						toolTemplate,
 						authModule.getUser.schoolId
 					);
 
 				await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(
 					schoolExternalToolPostParams
 				);
-				this.setToolConfigurationTemplate(new ToolConfigurationTemplate());
 			}
 			this.setLoading(false);
 		} catch (e) {
 			console.log(
-				`Some error occurred while saving schoolExternalTool for externalTool with id ${this.getToolConfigurationTemplate.id}: ${e}`
+				`Some error occurred while saving schoolExternalTool for externalTool with id ${toolTemplate.id}: ${e}`
 			);
 			this.setBusinessError({
 				statusCode: e?.response?.status,

@@ -202,53 +202,6 @@ export function useExternalToolUtils(
 		return message;
 	};
 
-	const validateParameter = (
-		param: ToolParameter
-	): Array<() => boolean | string> => {
-		const rules = [];
-		if (!param.isOptional && !param.value) {
-			rules.push(() => t("common.validation.required"));
-		}
-		if (param.regex) {
-			const regex = new RegExp(param.regex);
-			rules.push(() => {
-				if (param.value) {
-					return (
-						regex.test(param.value) ||
-						t("common.validation.regex", { comment: param.regexComment })
-					);
-				}
-				return true;
-			});
-		}
-		if (param.value && param.type) {
-			switch (param.type) {
-				case ToolParameterTypeEnum.String:
-					rules.push(
-						() =>
-							typeof param.value == "string" || t("common.validation.string")
-					);
-					break;
-				case ToolParameterTypeEnum.Number:
-					rules.push(
-						() => !isNaN(Number(param.value)) || t("common.validation.number")
-					);
-					break;
-				case ToolParameterTypeEnum.Boolean:
-					rules.push(
-						() =>
-							Boolean(param.value) ||
-							!Boolean(param.value) ||
-							t("common.validation.boolean")
-					);
-					break;
-				default:
-					break;
-			}
-		}
-		return rules;
-	};
-
 	return {
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
@@ -257,6 +210,5 @@ export function useExternalToolUtils(
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		mapSchoolExternalToolItemToSchoolExternalTool,
 		translateBusinessError,
-		validateParameter,
 	};
 }

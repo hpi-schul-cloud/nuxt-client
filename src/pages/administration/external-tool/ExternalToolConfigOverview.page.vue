@@ -16,10 +16,10 @@
 				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
-		<template v-if="toolParameters.length > 0">
-			<external-tool-config-settings v-model="toolParameters"
+		<template v-if="toolTemplate.parameters.length > 0">
+			<external-tool-config-settings v-model="toolTemplate.parameters"
 										   @parametersValid="(boolean) => parametersValid = boolean"
-										   @update:value="(value) => toolParameters = value">
+										   @update:value="(value) => toolTemplate.parameters = value">
 			</external-tool-config-settings>
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
@@ -49,7 +49,6 @@ import { ToolConfiguration } from "@store/external-tool/tool-configuration";
 import { externalToolsModule } from "@utils/store-accessor";
 import { ToolConfigurationTemplate } from "@store/external-tool/tool-configuration-template";
 import VueRouter from "vue-router";
-import { ToolParameter } from "@store/external-tool";
 import { BusinessError } from "@store/types/commons";
 import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
 
@@ -101,44 +100,25 @@ export default defineComponent({
 
 		const items: ComputedRef<ToolConfiguration[]> = computed(() => externalToolsModule.getToolConfigurations);
 
-		const toolTemplate: ComputedRef<ToolConfigurationTemplate> = computed(() => externalToolsModule.getToolConfigurationTemplate);
-
-		const toolParameters: ComputedRef<ToolParameter[]> = computed<ToolParameter[]>({
-			get() {
-				return externalToolsModule.getToolConfigurationTemplate.parameters;
-			},
-			set(v: ToolParameter[]) {
-				externalToolsModule.setToolConfigurationTemplate({
-					...externalToolsModule.getToolConfigurationTemplate,
-					parameters: v
-				});
-			}
-		});
-
 		const apiError: ComputedRef<BusinessError> = computed(() => externalToolsModule.getBusinessError);
 
 		const parametersValid: Ref<boolean> = ref(false);
 
+		const toolTemplate: Ref<ToolConfigurationTemplate> = ref(new ToolConfigurationTemplate());
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
-			await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
-			if (toolParameters.value.length == 0) {
+			toolTemplate.value = await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
+			if (toolTemplate.value.parameters.length == 0) {
 				parametersValid.value = true;
 			}
 		};
 
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
-			toolParameters.value = [];
 			router.push({ path: schoolSetting.to });
 		};
 
 		const saveTool = async () => {
-			externalToolsModule.setToolConfigurationTemplate({
-				...externalToolsModule.getToolConfigurationTemplate,
-				parameters: toolParameters.value
-			});
-
-			await externalToolsModule.saveSchoolExternalTool();
+			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
 
 			if (!externalToolsModule.getBusinessError.message) {
 				await router.push({ path: schoolSetting.to });
@@ -148,7 +128,6 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			toolTemplate,
-			toolParameters,
 			items,
 			loading,
 			onCancel,
