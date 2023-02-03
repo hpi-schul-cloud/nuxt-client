@@ -1,18 +1,16 @@
 import ExternalToolsModule from "@store/external-tools";
 import { createModuleMocks } from "@utils/mock-store-module";
-import { createLocalVue, mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import createComponentMocks from "../../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
 import {
 	ToolConfigurationTemplate,
-	ToolParameter,
 	ToolParameterLocationEnum,
 	ToolParameterScopeEnum,
 	ToolParameterTypeEnum,
 } from "@store/external-tool";
-import Vuetify from "vuetify";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -27,7 +25,7 @@ describe("ExternalToolConfigSettings", () => {
 			...getter,
 		}) as jest.Mocked<ExternalToolsModule>;
 
-		const wrapper: Wrapper<any> = mount(ExternalToolConfigSettings, {
+		const wrapper: Wrapper<any> = shallowMount(ExternalToolConfigSettings, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -55,53 +53,14 @@ describe("ExternalToolConfigSettings", () => {
 	});
 
 	describe("inject", () => {
-		it("should throw an error when schoolsModule injection fails", () => {
+		it("should throw an error when externalToolsModule injection fails", () => {
 			try {
-				shallowMount(ExternalToolConfigSettings, {
-					setup() {
-						provide("i18n", VueI18n);
-					},
-				});
+				shallowMount(ExternalToolConfigSettings);
 			} catch (e) {
 				expect(
 					e.message.includes('Injection "externalToolsModule" not found')
 				).toBeTruthy();
 			}
-		});
-
-		it("should throw an error when i18n injection fails", () => {
-			try {
-				shallowMount(ExternalToolConfigSettings, {
-					setup() {
-						provide("externalToolsModule", ExternalToolsModule);
-					},
-					propsData: {
-						toolParameters: [],
-					},
-				});
-			} catch (e) {
-				expect(e.message.includes('Injection "i18n" not found')).toBeTruthy();
-			}
-		});
-	});
-
-	describe("t", () => {
-		it("should return translation", () => {
-			const { wrapper } = setup({});
-			const testKey = "testKey";
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result).toEqual(testKey);
-		});
-
-		it("should return 'unknown translation-key'", () => {
-			const { wrapper } = setup({});
-			const testKey = 123;
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result.includes("unknown translation-key:")).toBeTruthy();
 		});
 	});
 
@@ -156,14 +115,6 @@ describe("ExternalToolConfigSettings", () => {
 					location: ToolParameterLocationEnum.Path,
 					regexComment: "Kommentar zu regex",
 				},
-				{
-					name: "Parameter2",
-					type: ToolParameterTypeEnum.Boolean,
-					value: undefined,
-					isOptional: true,
-					scope: ToolParameterScopeEnum.School,
-					location: ToolParameterLocationEnum.Path,
-				},
 			];
 			return template;
 		};
@@ -172,36 +123,9 @@ describe("ExternalToolConfigSettings", () => {
 			const template = setupTemplate();
 			const { wrapper } = setup({}, template);
 
-			template.parameters.forEach((param: ToolParameter) =>
-				expectParameter(wrapper, param)
+			expect(wrapper.findAll("external-tool-parameter-stub").length).toEqual(
+				template.parameters.length
 			);
 		});
-
-		it("should emit event on value change", async () => {
-			const template = setupTemplate();
-			const requiredParam = template.parameters[0];
-			const { wrapper } = setup({}, template);
-
-			const input = wrapper.find(`[data-testId=${requiredParam.name}]`);
-			input.setValue("notValidRegex");
-			wrapper.find("form").trigger("submit");
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.find("transition-group-stub").exists()).toBeTruthy();
-			expect(wrapper.emitted("update:value")).toBeTruthy();
-		});
-
-		const expectParameter = (wrapper: Wrapper<any>, param: ToolParameter) => {
-			if (ToolParameterTypeEnum.String === param.type) {
-				const textfield = wrapper.find(".v-text-field__slot");
-				textfield.find("input[type=text]");
-			} else if (ToolParameterTypeEnum.Boolean === param.type) {
-				const checkbox = wrapper.find(".v-input--checkbox");
-				checkbox.find("input[type=checkbox]");
-			}
-			wrapper
-				.text()
-				.includes(param.isOptional ? param.name : `${param.name} *`);
-		};
 	});
 });

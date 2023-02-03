@@ -14,7 +14,6 @@
 import { defineComponent } from "@vue/composition-api";
 import { computed, ComputedRef, inject } from "@nuxtjs/composition-api";
 import { ToolConfigurationTemplate } from "@store/external-tool";
-import VueI18n from "vue-i18n";
 import ExternalToolsModule from "@store/external-tools";
 import ExternalToolParameter from "./ExternalToolParameter.vue";
 
@@ -30,9 +29,8 @@ export default defineComponent({
 		}
 	},
 	setup(props: any, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined = inject<ExternalToolsModule>("externalToolsModule");
-		if (!i18n || !externalToolsModule) {
+		if (!externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
