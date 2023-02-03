@@ -3,17 +3,17 @@
 		<h2 class="text-h4 mb-10">
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<v-form v-model="parametersValid">
+		<v-form>
 			<div v-for="(param, index) in template.parameters" :key="param.name">
 				<template v-if="param.type !== toolParameterTypeEnumBoolean">
 					<v-text-field v-model="param.value" :label="getParamLabelText(param)"
-								  :rules="validateParameter(param)"
+								  :rules="validateParameter(param)" validate-on-blur
 								  @input:value="updateParameter(template, $event, index)"
 					></v-text-field>
 				</template>
 				<template v-if="param.type === toolParameterTypeEnumBoolean">
-					<v-checkbox v-model="param.value" :rules="validateParameter(param)"
-								:label="getParamLabelText(param)"
+					<v-checkbox v-model="param.value" :label="getParamLabelText(param)"
+								:rules="validateParameter(param)" validate-on-blur
 								@input:value="updateParameter(template, $event, index)"
 					></v-checkbox>
 				</template>
@@ -24,8 +24,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
-import { computed, ComputedRef, inject, Ref, watch } from "@nuxtjs/composition-api";
+import { defineComponent } from "@vue/composition-api";
+import { computed, ComputedRef, inject } from "@nuxtjs/composition-api";
 import { ToolConfigurationTemplate, ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
 import ExternalToolsModule from "@store/external-tools";
@@ -34,7 +34,7 @@ import { useExternalToolValidation } from "./external-tool-validation.composable
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigSettings",
-	emits: ["update:value", "parametersValid"],
+	emits: ["update:value"],
 	props: {
 		value: {
 			type: Object,
@@ -76,11 +76,6 @@ export default defineComponent({
 
 		const { validateParameter } = useExternalToolValidation(t);
 
-		const parametersValid: Ref<boolean> = ref(true);
-		watch(parametersValid, () => {
-			emit("parametersValid", parametersValid.value);
-		});
-
 		const getParamLabelText = (param: ToolParameter): string => {
 			if (param.isOptional) {
 				return param.name;
@@ -95,7 +90,6 @@ export default defineComponent({
 			loading,
 			validateParameter,
 			getParamLabelText,
-			parametersValid,
 			toolParameterTypeEnumBoolean: ToolParameterTypeEnum.Boolean,
 		};
 	}

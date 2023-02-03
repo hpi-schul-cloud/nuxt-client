@@ -6,6 +6,7 @@ import createComponentMocks from "../../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
 import {
+	ToolConfigurationTemplate,
 	ToolParameter,
 	ToolParameterLocationEnum,
 	ToolParameterScopeEnum,
@@ -17,7 +18,7 @@ describe("ExternalToolConfigSettings", () => {
 
 	const setup = (
 		getter: Partial<ExternalToolsModule> = {},
-		toolParams: ToolParameter[] = []
+		template: ToolConfigurationTemplate = new ToolConfigurationTemplate()
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
@@ -34,7 +35,7 @@ describe("ExternalToolConfigSettings", () => {
 				provide("externalToolsModule", externalToolsModule);
 			},
 			propsData: {
-				value: toolParams,
+				value: template,
 			},
 		});
 
@@ -58,9 +59,6 @@ describe("ExternalToolConfigSettings", () => {
 				shallowMount(ExternalToolConfigSettings, {
 					setup() {
 						provide("i18n", VueI18n);
-					},
-					propsData: {
-						toolParameters: [],
 					},
 				});
 			} catch (e) {
@@ -118,12 +116,9 @@ describe("ExternalToolConfigSettings", () => {
 
 	describe("progressbar", () => {
 		it("should display progressbar when loading in store is set", () => {
-			const { wrapper } = setup(
-				{
-					getLoading: true,
-				},
-				[]
-			);
+			const { wrapper } = setup({
+				getLoading: true,
+			});
 
 			const progressbar = wrapper.find(
 				".v-progress-linear__indeterminate--active"
@@ -133,12 +128,9 @@ describe("ExternalToolConfigSettings", () => {
 		});
 
 		it("should not display progressbar when loading in store is not set", () => {
-			const { wrapper } = setup(
-				{
-					getLoading: false,
-				},
-				[]
-			);
+			const { wrapper } = setup({
+				getLoading: false,
+			});
 
 			const progressbar = wrapper.find(
 				".v-progress-linear__indeterminate--active"
@@ -149,8 +141,10 @@ describe("ExternalToolConfigSettings", () => {
 	});
 
 	describe("parameters", () => {
-		const setupToolParameters = (): ToolParameter[] => {
-			return [
+		const setupTemplate = (): ToolConfigurationTemplate => {
+			const template: ToolConfigurationTemplate =
+				new ToolConfigurationTemplate();
+			template.parameters = [
 				{
 					name: "Parameter1",
 					type: ToolParameterTypeEnum.String,
@@ -170,13 +164,14 @@ describe("ExternalToolConfigSettings", () => {
 					location: ToolParameterLocationEnum.Path,
 				},
 			];
+			return template;
 		};
 
 		it("should render given toolParameters", () => {
-			let parameters = setupToolParameters();
-			const { wrapper } = setup({}, parameters);
+			let template = setupTemplate();
+			const { wrapper } = setup({}, template);
 
-			parameters.forEach((param: ToolParameter) =>
+			template.parameters.forEach((param: ToolParameter) =>
 				expectParameter(wrapper, param)
 			);
 		});

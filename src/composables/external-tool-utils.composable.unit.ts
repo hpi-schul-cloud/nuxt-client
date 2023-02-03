@@ -25,15 +25,12 @@ jest.mock("@utils/store-accessor", () => ({
 
 describe("useExternalToolUtils", () => {
 	const setup = () => {
-		const expectedTranslation = "translated";
-		const tMock = jest.fn().mockReturnValue(expectedTranslation);
-
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
 			translateBusinessError,
-		} = useExternalToolUtils(tMock);
+		} = useExternalToolUtils();
 
 		const toolResponse: SchoolExternalToolResponse = {
 			id: "id",
@@ -63,8 +60,6 @@ describe("useExternalToolUtils", () => {
 		return {
 			listResponse,
 			toolResponse,
-			tMock,
-			expectedTranslation,
 			schoolExternaToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,

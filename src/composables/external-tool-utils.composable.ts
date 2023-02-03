@@ -79,9 +79,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
 
-export function useExternalToolUtils(
-	t: (key: string, values?: VueI18n.Values | undefined) => string = () => ""
-) {
+export function useExternalToolUtils() {
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -196,9 +194,9 @@ export function useExternalToolUtils(
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
 		).find(([key]) => message.startsWith(key))?.[1];
-
+		console.log(translationKey);
 		if (translationKey) {
-			return t(translationKey);
+			return translationKey;
 		}
 		return message;
 	};

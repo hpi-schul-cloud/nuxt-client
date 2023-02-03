@@ -18,13 +18,12 @@
 		</v-select>
 		<template v-if="toolTemplate.parameters.length > 0">
 			<external-tool-config-settings v-model="toolTemplate"
-										   @parametersValid="(boolean) => parametersValid = boolean"
 										   @update:value="(value) => toolTemplate = value">
 			</external-tool-config-settings>
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ translateBusinessError() }}
+			{{ $t(translateBusinessError()) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
@@ -94,7 +93,7 @@ export default defineComponent({
 			}
 		];
 
-		const { translateBusinessError } = useExternalToolUtils(t);
+		const { translateBusinessError } = useExternalToolUtils();
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
@@ -107,9 +106,7 @@ export default defineComponent({
 		const toolTemplate: Ref<ToolConfigurationTemplate> = ref(new ToolConfigurationTemplate());
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			toolTemplate.value = await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(selectedTool.id);
-			if (toolTemplate.value.parameters.length == 0) {
-				parametersValid.value = true;
-			}
+			parametersValid.value = true;
 		};
 
 		const router: VueRouter = useRouter();

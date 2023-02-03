@@ -140,9 +140,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useExternalToolUtils(
-						t
-					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
+					useExternalToolUtils().mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
 			onCloseDeleteDialog();
