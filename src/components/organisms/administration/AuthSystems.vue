@@ -52,9 +52,7 @@
 								readonly
 								dense
 								:append-icon="
-									getCopyStatus(system._id)
-										? iconMdiCheckCircle
-										: iconMdiContentCopy
+									getCopyStatus(system._id) ? 'check-circle' : 'clone'
 								"
 								@click:append="copyLoginLink(system._id)"
 								@blur="linkCopyFinished"
@@ -119,7 +117,6 @@
 import { envConfigModule, schoolsModule } from "@/store";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
-import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
 
 export default {
 	components: {
@@ -139,8 +136,6 @@ export default {
 			},
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
-			iconMdiContentCopy: mdiContentCopy,
-			iconMdiCheckCircle: mdiCheckCircle,
 			copiedElement: "",
 		};
 	},
