@@ -1,5 +1,33 @@
 <template>
-	<v-card flat class="element mb-2" :class="component">
+	<v-card flat outlined class="element mb-6" :class="component">
+		<v-card-actions
+			v-if="component !== CardElementComponentEnum.Title"
+			class="element-actions"
+		>
+			<v-col class="text-right">
+				<v-btn
+					icon
+					absolute
+					outlined
+					color="secondary"
+					class="delete-element-btn"
+					data-testid="delete-element-btn"
+					@click="() => $emit('delete-element')"
+				>
+					<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+				</v-btn>
+				<v-btn
+					icon
+					absolute
+					outlined
+					color="secondary"
+					class="drag-element-btn handle"
+					data-testid="drag-element-btn"
+				>
+					<v-icon>{{ mdiDrag }}</v-icon>
+				</v-btn>
+			</v-col>
+		</v-card-actions>
 		<div class="element-content mr-4">
 			<component
 				:is="component"
@@ -10,40 +38,19 @@
 				@input="handleInput"
 			></component>
 		</div>
-		<v-card-actions
+
+		<v-btn
 			v-if="component !== CardElementComponentEnum.Title"
-			class="element-actions"
+			icon
+			absolute
+			outlined
+			color="secondary"
+			class="add-element-btn"
+			data-testid="add-element-btn"
+			@click="() => $emit('add-element')"
 		>
-			<v-btn
-				icon
-				outlined
-				color="secondary"
-				class="drag-element-btn handle"
-				data-testid="drag-element-btn"
-			>
-				<v-icon>{{ mdiDrag }}</v-icon>
-			</v-btn>
-			<v-btn
-				icon
-				outlined
-				color="secondary"
-				class="delete-element-btn"
-				data-testid="delete-element-btn"
-				@click="() => $emit('delete-element')"
-			>
-				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
-			</v-btn>
-			<v-btn
-				icon
-				outlined
-				color="secondary"
-				class="add-element-btn"
-				data-testid="add-element-btn"
-				@click="() => $emit('add-element')"
-			>
-				<v-icon>{{ mdiPlus }}</v-icon>
-			</v-btn>
-		</v-card-actions>
+			<v-icon>{{ mdiPlus }}</v-icon>
+		</v-btn>
 	</v-card>
 </template>
 
@@ -112,26 +119,34 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.element {
-	display: flex;
-	align-items: flex-start;
-	border: solid thin var(--v-white-base);
-}
+// .add-element-btn {
+// 	bottom: -17px;
+// 	left: 50%;
+// }
 
-.element-content {
-	flex-basis: 100%;
-	flex-shrink: 1;
-}
+// .element {
+// 	display: flex;
+// 	align-items: flex-start;
+// }
 
-.element-actions {
-	z-index: var(--layer-page);
-	flex-basis: 100px;
-	flex-grow: 0;
-	flex-shrink: 0;
-}
+// .element-content {
+// 	flex-basis: 100%;
+// 	flex-shrink: 1;
+// }
+
+// .element-actions {
+// 	z-index: var(--layer-page);
+// 	flex-basis: 100px;
+// 	flex-grow: 0;
+// 	flex-shrink: 0;
+// }
 
 /* stylelint-disable-next-line selector-class-pattern */
-.RichTextCardElement {
-	margin-left: calc(-1 * var(--ck-spacing-standard));
-}
+// .RichTextCardElement {
+// 	margin-left: calc(-1 * var(--ck-spacing-standard));
+// }
+
+// .TitleCardElement {
+// 	border: solid thin var(--v-white-base);
+// }
 </style>
