@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { envConfigModule, roomModule, tasksModule } from "@/store";
+import { envConfigModule, roomModule, roomsModule, tasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
@@ -318,26 +318,55 @@ describe("@components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("Sharing Lesson", () => {
-		it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			const lessonCard = wrapper.find(".lesson-card");
+		describe("old flow", () => {
+			it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "teacher",
+				});
+				const lessonCard = wrapper.find(".lesson-card");
 
-			expect(wrapper.vm.lessonShare.isOpen).toBe(false);
-			lessonCard.vm.$emit("open-modal", "12345");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.lessonShare.isOpen).toBe(true);
+				expect(wrapper.vm.lessonShare.isOpen).toBe(false);
+				lessonCard.vm.$emit("open-modal", "12345");
+				await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
+				expect(wrapper.vm.lessonShare.isOpen).toBe(true);
+			});
+
+			it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "teacher",
+				});
+				const shareModal: any = wrapper.find(".room-dialog");
+
+				expect(shareModal.vm.isOpen).toBe(false);
+				wrapper.vm.lessonShare.isOpen = true;
+				await wrapper.vm.$nextTick();
+				expect(shareModal.vm.isOpen).toBe(true);
+			});
 		});
 
-		it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			const shareModal: any = wrapper.find(".room-dialog");
+		describe("new flow", () => {
+			beforeEach(() => {
+				// @ts-ignore
+				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE_NEW: true });
+			});
 
-			expect(shareModal.vm.isOpen).toBe(false);
-			wrapper.vm.lessonShare.isOpen = true;
-			await wrapper.vm.$nextTick();
-			expect(shareModal.vm.isOpen).toBe(true);
+			it("should call startShareFlow when share lesson item clicked", async () => {
+				const wrapper = getWrapper({
+					roomDataObject: mockData,
+					role: "teacher",
+				});
+				const lessonCard = wrapper.find(".lesson-card");
+
+				lessonCard.vm.$emit("open-modal", "12345");
+				await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
+				expect(shareLessonModuleMock.startShareFlow).toBeCalledWith("12345");
+			});
 		});
 	});
 

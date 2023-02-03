@@ -32,7 +32,7 @@
 				<v-text-field
 					ref="nameInputText"
 					v-model="newName"
-					:label="$t(getLabel(parentType))"
+					:label="$t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
 				></v-text-field>
 			</div>
@@ -77,21 +77,12 @@ export default defineComponent({
 		}
 		const onCancel = () => emit('cancel')
 
-		const getLabel = (type) => {
-			switch (type) {
-				case 'course': return 'common.labels.course';
-				case 'lesson': return 'common.words.topic';
-				default: return ''
-			}
-		}
-
 		return {
 			onConfirm,
 			onCancel,
 			mdiInformation,
 			rules,
       		newName,
-			getLabel,
 		};
 	},
 });
