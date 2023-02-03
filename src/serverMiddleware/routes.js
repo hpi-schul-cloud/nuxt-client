@@ -34,6 +34,7 @@ const routes = [
 	`^/task-cards/${mongoId}/edit/?$`,
 	`^/termsofuse/?`,
 	`^/error/?`,
+	`^/migration/?$`,
 ];
 
 const uuid =
