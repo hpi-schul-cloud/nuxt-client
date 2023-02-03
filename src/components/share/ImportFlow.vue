@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<select-course-modal
-			v-if="isSelectCourseModalOpen"
 			:is-open="isSelectCourseModalOpen"
 			:parent-name="parentName"
 			:parent-type="parentType"
