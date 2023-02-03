@@ -271,10 +271,12 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+
 		describe("fetchSystems", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
+
 			it("should call backend and sets state correctly", async () => {
 				axiosInitializer();
 				getRequestReturn = { data: "dummy response" };
@@ -297,12 +299,11 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSystemsSpy).toHaveBeenCalled();
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual([
-					{
-						data: "dummy response",
-					},
+					"dummy response",
 				]);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
+
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
@@ -329,10 +330,12 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+
 		describe("update", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
+
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
 					id: "id_123",
@@ -375,6 +378,7 @@ describe("schools module", () => {
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(uploadData);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
+
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					patch: async (path: string) => {
@@ -410,10 +414,12 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+
 		describe("deleteSystem", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
+
 			it("should call backend and sets state correctly", async () => {
 				const systemId = "id_1";
 				initializeAxios({
@@ -459,6 +465,7 @@ describe("schools module", () => {
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expect.any(Array));
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 			});
+
 			it("should trigger error and goes into the catch block", async () => {
 				const systemId = "id_1";
 				initializeAxios({
@@ -489,6 +496,7 @@ describe("schools module", () => {
 			let setLoadingSpy: jest.SpyInstance;
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
+
 			beforeEach(() => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
@@ -502,6 +510,7 @@ describe("schools module", () => {
 				setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 			});
+
 			afterEach((done) => {
 				done();
 				spy.mockRestore();
@@ -509,6 +518,7 @@ describe("schools module", () => {
 				setErrorSpy.mockRestore();
 				setSchoolSpy.mockRestore();
 			});
+
 			it("should not call backend if inMaintenance is false", async () => {
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -519,6 +529,7 @@ describe("schools module", () => {
 					mockApi.importUserControllerEndSchoolInMaintenance
 				).not.toHaveBeenCalled();
 			});
+
 			it("should call backend and set state correctly", async () => {
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -540,6 +551,7 @@ describe("schools module", () => {
 					inMaintenance: false,
 				});
 			});
+
 			it("should trigger error and goes into the catch block", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				mockApi = {
@@ -567,6 +579,7 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
+
 		describe("Set school in user migration mode", () => {
 			let spy: any;
 			let mockApi: any;
@@ -574,6 +587,7 @@ describe("schools module", () => {
 			let setLoadingSpy: jest.SpyInstance;
 			let setErrorSpy: jest.SpyInstance;
 			let setSchoolSpy: jest.SpyInstance;
+
 			beforeEach(() => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
@@ -587,6 +601,7 @@ describe("schools module", () => {
 				setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 			});
+
 			afterEach((done) => {
 				done();
 				spy.mockRestore();
@@ -594,6 +609,7 @@ describe("schools module", () => {
 				setErrorSpy.mockRestore();
 				setSchoolSpy.mockRestore();
 			});
+
 			it("should not call backend if inUserMigration flag is not true", async () => {
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -604,6 +620,7 @@ describe("schools module", () => {
 					mockApi.importUserControllerStartSchoolInUserMigration
 				).not.toHaveBeenCalled();
 			});
+
 			it("should call backend and set state", async () => {
 				schoolsModule.setSchool({
 					...mockSchool,
@@ -628,6 +645,7 @@ describe("schools module", () => {
 					inMaintenance: true,
 				});
 			});
+
 			it("should handle error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				mockApi = {
