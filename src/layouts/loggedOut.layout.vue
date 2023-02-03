@@ -26,9 +26,9 @@ export default {
 	name: "LoggedOutLayout",
 
 	components: {
+		ApplicationErrorRouting,
 		NavigationBar,
 		TheFooter,
-		ApplicationErrorRouting,
 	},
 
 	inject: ["envConfigModule"],

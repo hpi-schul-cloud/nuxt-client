@@ -41,6 +41,7 @@ const vueRoutes = [
 	`^/termsofuse/?`,
 	`^/login-instances/?$`,
 	`^/error/?$`,
+	`^/migration/?$`,
 ];
 
 const isVueClient = (path) => {

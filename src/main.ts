@@ -20,8 +20,10 @@ import {
 	schoolsModule,
 	shareCourseModule,
 	statusAlertsModule,
+	systemsModule,
 	taskCardModule,
 	tasksModule,
+	userMigrationModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -133,8 +135,10 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			schoolsModule,
 			shareCourseModule,
 			statusAlertsModule,
+			systemsModule,
 			taskCardModule,
 			tasksModule,
+			userMigrationModule,
 			i18n,
 		},
 		render: (h) => h(App),

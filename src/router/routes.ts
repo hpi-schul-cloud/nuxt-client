@@ -183,4 +183,20 @@ export const routes: Array<RouteConfig> = [
 		name: "teamfiles",
 		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
 	},
+
+	{
+		path: "/migration",
+		component: () => import("@/pages/user-migration/UserMigration.page.vue"),
+		name: "user-migration",
+		props: (route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+			origin: route.query.origin,
+			mandatory: route.query.mandatory === "true",
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
 ];

@@ -26,8 +26,10 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
+import SystemsModule from "@/store/systems";
 import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
+import UserMigrationModule from "@/store/user-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -53,10 +55,12 @@ export let notifierModule: NotifierModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
+export let shareCourseModule: ShareCourseModule;
 export let statusAlertsModule: StatusAlertsModule;
+export let systemsModule: SystemsModule;
 export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
-export let shareCourseModule: ShareCourseModule;
+export let userMigrationModule: UserMigrationModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -66,23 +70,25 @@ export function initializeStores(store: Store<any>): void {
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
+	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
+	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
+	notifierModule = getModule(NotifierModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
+	shareCourseModule = getModule(ShareCourseModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
+	systemsModule = getModule(SystemsModule, store);
 	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
-	notifierModule = getModule(NotifierModule, store);
-	copyModule = getModule(CopyModule, store);
-	loadingStateModule = getModule(LoadingStateModule, store);
-	shareCourseModule = getModule(ShareCourseModule, store);
+	userMigrationModule = getModule(UserMigrationModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -95,21 +101,23 @@ export const modules = {
 	autoLogoutModule: AutoLogoutModule,
 	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
+	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
 	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
 	filesPOCModule: FilesPOCModule,
 	finishedTasksModule: FinishedTasksModule,
 	importUsersModule: ImportUsersModule,
+	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
+	notifierModule: NotifierModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,
+	shareCourseModule: ShareCourseModule,
 	statusAlertsModule: StatusAlertsModule,
+	systemsModule: SystemsModule,
 	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
-	notifierModule: NotifierModule,
-	copyModule: CopyModule,
-	loadingStateModule: LoadingStateModule,
-	shareCourseModule: ShareCourseModule,
+	userMigrationModule: UserMigrationModule,
 };

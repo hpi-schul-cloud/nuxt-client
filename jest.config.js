@@ -16,5 +16,18 @@ module.exports = {
 
 	setupFiles: ["./tests/unit/setup.js"],
 
+	collectCoverageFrom: [
+		// Include
+		"<rootDir>/src/components/**/*.{js,vue}",
+		// "<rootDir>/src/pages/**/*.{js,vue}",
+		"<rootDir>/src/mixins/**/*.js",
+		"<rootDir>/src/plugins/**/*.js",
+		"<rootDir>/src/store/**/*.(js|ts)",
+		"<rootDir>/src/utils/**/*.js",
+		// Exclude
+		"!<rootDir>/src/components/base/_globals.js",
+		"!<rootDir>/src/components/icons/**/*",
+	],
+
 	// maxWorkers: 2, // limited for not taking all workers within of a single github action
 };
