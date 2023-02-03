@@ -229,8 +229,8 @@ export default class RoomsModule extends VuexModule {
 		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser(
-				undefined,
-				params?.showSubstitute
+				params?.showSubstitute,
+				undefined
 			);
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);
