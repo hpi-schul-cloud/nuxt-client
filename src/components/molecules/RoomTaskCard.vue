@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
+import { fromNow } from "@/plugins/datetime";
 import MoreItemMenu from "./MoreItemMenu";
 import {
 	mdiPencilOutline,
@@ -101,9 +101,9 @@ import {
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
 } from "@mdi/js";
-import { printDateFromStringUTC, fromNowToFuture } from "@plugins/datetime";
+import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
+import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
 import { envConfigModule } from "@/store";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];

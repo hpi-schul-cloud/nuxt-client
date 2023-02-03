@@ -1,39 +1,45 @@
 import RoomModule from "./room";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import AuthModule from "@/store/auth";
-import { authModule } from ".";
+import ApplicationErrorModule from "@/store/application-error";
 import setupStores from "@@/tests/test-utils/setupStores";
 
+import { AxiosInstance } from "axios";
+import { authModule, applicationErrorModule } from "@/store";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string, params: {}) => {
+		get: async (path: string, params: {}) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-		$post: async (path: string) => {},
-		$patch: async (path: string, params: {}) => {
+		post: async (path: string) => {},
+		patch: async (path: string, params: {}) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-		$delete: async (path: string) => {
+		delete: async (path: string) => {
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 
 axiosInitializer();
 
 describe("room module", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({
+			authModule: AuthModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 	});
 	describe("actions", () => {
 		beforeEach(() => {
@@ -146,19 +152,19 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if server couldn't find any lesson", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: [] });
+								return (returned = { data: { data: [] } });
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -173,26 +179,26 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if the server sends nothing after creating lesson ", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: ["123", "465"] });
+								return (returned = { data: { data: ["123", "465"] } });
 							}
 						},
-						$post: async (path: string, params: {}) => {
+						post: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons/copy") {
 								return (returned = undefined);
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -207,26 +213,26 @@ describe("room module", () => {
 			});
 
 			it("should trigger fetchContent method after copying lesson", async () => {
-				let received: any[] = [];
-				let returned: any = {};
+				const received: any[] = [];
+				const returned: any = {};
 
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: ["123", "465"] });
+								return { data: { data: ["123", "465"] } };
 							}
 						},
-						$post: async (path: string, params: {}) => {
+						post: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons/copy") {
-								return (returned = { _id: "123456" });
+								return { data: { _id: "123456" } };
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -237,20 +243,20 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
 								return (returned = Promise.reject({ ...error }));
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -313,13 +319,13 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
@@ -340,18 +346,14 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if server response does not contain 'shareToken'", async () => {
-				let received: any[] = [];
-				let returned: any = {};
-
 				(() => {
 					initializeAxios({
-						$get: async (path: string) => {
-							received.push({ path });
+						get: async (path: string) => {
 							if (path === "/v1/courses-share/123456") {
-								return (returned = {});
+								return { data: {} };
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const createCourseShareTokenSpy = jest.spyOn(
@@ -375,19 +377,16 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				let received: any[] = [];
-				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
-						$get: async (path: string) => {
-							received.push({ path });
+						get: async (path: string) => {
 							if (path === "/v1/courses-share/123456") {
-								return (returned = Promise.reject({ ...error }));
+								return Promise.reject({ ...error });
 							}
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -422,7 +421,9 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await expect(roomModule.downloadImsccCourse()).resolves.not.toBeDefined();
+				await expect(
+					roomModule.downloadImsccCourse()
+				).resolves.not.toBeDefined();
 
 				spy.mockRestore();
 			});
@@ -430,7 +431,9 @@ describe("room module", () => {
 				const roomModule = new RoomModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					courseControllerExportCourse: jest.fn(() => Promise.reject({ ...error })),
+					courseControllerExportCourse: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
 				};
 				const spy = jest
 					.spyOn(serverApi, "CoursesApiFactory")
@@ -451,20 +454,22 @@ describe("room module", () => {
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$patch: async (path: string, params: {}) => {
-							return { _id: "returnId" };
+						patch: async (path: string, params: {}) => {
+							return { data: { _id: "returnId" } };
 						},
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							return {
-								archived: ["testUserId"],
+								data: {
+									archived: ["testUserId"],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
@@ -485,20 +490,22 @@ describe("room module", () => {
 			});
 
 			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$patch: async (path: string, params: {}) => {
-							return { _id: "returnId" };
+						patch: async (path: string, params: {}) => {
+							return { data: { _id: "returnId" } };
 						},
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							return {
-								incorrectResponse: [],
+								data: {
+									incorrectResponse: [],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
@@ -519,20 +526,22 @@ describe("room module", () => {
 			});
 
 			it("should make a 'PATCH' call to the backend with archived list", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
-							return { _id: "returnId" };
+							return { data: { _id: "returnId" } };
 						},
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							return {
-								archived: ["firstId"],
+								data: {
+									archived: ["firstId"],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
@@ -551,20 +560,22 @@ describe("room module", () => {
 			});
 
 			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
-							return { someValue: "some value for error case" };
+							return { data: { someValue: "some value for error case" } };
 						},
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							return {
-								archived: ["firstId"],
+								data: {
+									archived: ["firstId"],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
@@ -585,23 +596,25 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				let received: any[] = [];
-				let returned: any = {};
+				const received: any[] = [];
+				const returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
-						$patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							return Promise.reject({ ...error });
 						},
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							return {
-								archived: ["firstId"],
+								data: {
+									archived: ["firstId"],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 
 				const roomModule = new RoomModule({});
@@ -630,17 +643,19 @@ describe("room module", () => {
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
-				let received: any[] = [];
+				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						$get: async (path: string, params: {}) => {
+						get: async (path: string, params: {}) => {
 							received.push({ path });
 							received.push({ params });
 							return {
-								userId: ["testScopedPermission"],
+								data: {
+									userId: ["testScopedPermission"],
+								},
 							};
 						},
-					} as NuxtAxiosInstance);
+					} as AxiosInstance);
 				})();
 				const roomModule = new RoomModule({});
 				const fetchScopePermissionSpy = jest.spyOn(
@@ -719,6 +734,21 @@ describe("room module", () => {
 				expect(roomModule.getError).not.toBe(errorData);
 				roomModule.setError(errorData);
 				expect(roomModule.error).toBe(errorData);
+			});
+
+			it.each([
+				HttpStatusCode.BadRequest,
+				HttpStatusCode.Unauthorized,
+				HttpStatusCode.Forbidden,
+				HttpStatusCode.NotFound,
+				HttpStatusCode.RequestTimeout,
+				HttpStatusCode.InternalServerError,
+			])("should create an application-error for http-error(%p)", (code) => {
+				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const roomModule = new RoomModule({});
+				const errorData = { response: { data: { code } } };
+				roomModule.setError(errorData);
+				expect(setErrorSpy).toHaveBeenCalled();
 			});
 		});
 

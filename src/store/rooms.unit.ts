@@ -1,26 +1,26 @@
 import RoomsModule from "./rooms";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import { RoomsData } from "./types/rooms";
+import { AxiosInstance } from "axios";
 
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		$get: async (path: string, data?: object) => {
+		get: async (path: string, data?: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
-		$post: async (path: string) => {},
-		$patch: async (path: string, params: {}) => {
+		post: async (path: string) => {},
+		patch: async (path: string, params: {}) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 
 const mockData = {
@@ -84,7 +84,9 @@ describe("rooms module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
-					dashboardControllerFindForUser: jest.fn(),
+					dashboardControllerFindForUser: jest
+						.fn()
+						.mockResolvedValue({ data: {} }),
 				};
 
 				jest
@@ -113,8 +115,8 @@ describe("rooms module", () => {
 		describe("align", () => {
 			it("should call server and 'setPosition' mutation", async () => {
 				const mockApi = {
-					dashboardControllerMoveElement: jest.fn((align) => ({
-						data: { ...align },
+					dashboardControllerMoveElement: jest.fn(() => ({
+						data: { id: "42", gridElements: [] },
 					})),
 				};
 
@@ -253,7 +255,7 @@ describe("rooms module", () => {
 				).toStrictEqual(100); // $limit: 100
 			});
 
-			it("handle error", async (done) => {
+			it("handle error", (done) => {
 				const error = { status: 418, statusText: "I'm not a teapot" };
 				const mockApi = {
 					courseControllerFindForUser: jest.fn(() =>
@@ -354,7 +356,7 @@ describe("rooms module", () => {
 						displayColor: "#f23f76",
 						xPosition: 2,
 						yPosition: 5,
-						href: "/courses/someId",
+						to: "/rooms/someId",
 					},
 				];
 				expect(roomsModule.getRoomsData).not.toStrictEqual(
@@ -417,7 +419,7 @@ describe("rooms module", () => {
 					displayColor: "#f23f76",
 					xPosition: 5,
 					yPosition: 2,
-					href: "/courses/123",
+					to: "/rooms/123",
 				};
 				roomsModule.setRoomData(mockData.gridElements as any);
 				roomsModule.setPosition(draggedObject);
@@ -443,7 +445,7 @@ describe("rooms module", () => {
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
+						untilDate: "2300-07-30T22:00:00.000Z",
 					},
 				];
 
@@ -458,7 +460,7 @@ describe("rooms module", () => {
 						titleDate: "2019/20",
 						searchText: "Mathe 2019/20",
 						isArchived: true,
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -466,33 +468,32 @@ describe("rooms module", () => {
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
-						titleDate: "2015-2018",
-						searchText: "History 2015-2018",
-						isArchived: true,
-						href: "/courses/234",
+						untilDate: "2300-07-30T22:00:00.000Z",
+						searchText: "History",
+						isArchived: false,
+						to: "/rooms/234",
 					},
 				];
 				roomsModule.setAllElements(itemsToBeSet);
 				expect(roomsModule.allElements).toStrictEqual(expectedData);
 			});
+		});
 
-			describe("setSharedCourseData, setImportedCourseId", () => {
-				it("should set the state", () => {
-					const roomsModule = new RoomsModule({});
-					const sharedCourseData = {
-						code: "123",
-						courseName: "Mathe",
-						status: "success",
-						message: "",
-					};
-					const importedCourseId = "456789";
+		describe("setSharedCourseData, setImportedCourseId", () => {
+			it("should set the state and imported course id", () => {
+				const roomsModule = new RoomsModule({});
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+				const importedCourseId = "456789";
 
-					roomsModule.setSharedCourseData(sharedCourseData);
-					roomsModule.setImportedCourseId(importedCourseId);
-					expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
-					expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
-				});
+				roomsModule.setSharedCourseData(sharedCourseData);
+				roomsModule.setImportedCourseId(importedCourseId);
+				expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
+				expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
 			});
 		});
 
@@ -554,7 +555,7 @@ describe("rooms module", () => {
 						displayColor: "#54616e",
 						startDate: "2019-12-07T23:00:00.000Z",
 						untilDate: "2020-12-16T23:00:00.000Z",
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -563,7 +564,7 @@ describe("rooms module", () => {
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
 						untilDate: "2018-07-30T22:00:00.000Z",
-						href: "/courses/234",
+						to: "/rooms/234",
 					},
 				];
 
@@ -602,6 +603,33 @@ describe("rooms module", () => {
 			});
 		});
 
+		describe("getCourseSharingStatus", () => {
+			it("should return shared course data", () => {
+				const roomsModule = new RoomsModule({});
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+
+				roomsModule.setSharedCourseData(sharedCourseData);
+				expect(roomsModule.getCourseSharingStatus).toStrictEqual(
+					sharedCourseData
+				);
+			});
+		});
+
+		describe("getImportedCourseId", () => {
+			it("should return imported course id", () => {
+				const roomsModule = new RoomsModule({});
+				const sampleId = "sample_id";
+				expect(roomsModule.getImportedCourseId).toStrictEqual("");
+				roomsModule.setImportedCourseId(sampleId);
+				expect(roomsModule.getImportedCourseId).toStrictEqual(sampleId);
+			});
+		});
+
 		describe("getAllElements", () => {
 			it("should return rooms-list AllElements", () => {
 				const roomsModule = new RoomsModule({});
@@ -635,7 +663,7 @@ describe("rooms module", () => {
 						titleDate: "2019/20",
 						searchText: "Mathe 2019/20",
 						isArchived: true,
-						href: "/courses/123",
+						to: "/rooms/123",
 					},
 					{
 						id: "234",
@@ -647,7 +675,7 @@ describe("rooms module", () => {
 						titleDate: "2015-2018",
 						searchText: "History 2015-2018",
 						isArchived: true,
-						href: "/courses/234",
+						to: "/rooms/234",
 					},
 				];
 				expect(roomsModule.getAllElements).toStrictEqual([]);

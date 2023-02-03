@@ -1,26 +1,18 @@
-  - name: Service
-    kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config 
-      namespace: "{{ NAMESPACE }}"
-      template: svc.yml.j2
-      
-  - name: Configmap
-    kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config 
-      namespace: "{{ NAMESPACE }}"
-      template: configmap.yml.j2
-      apply: yes
-      
-  - name: Configmap File
-    kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config 
-      namespace: "{{ NAMESPACE }}"
-      template: configmap-files.yml.j2
-      apply: yes
-      
-  - name: Deployment
-    kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config 
-      namespace: "{{ NAMESPACE }}"
-      template: deployment.yml.j2
-      
+- name: Service
+  kubernetes.core.k8s:
+    kubeconfig: ~/.kube/config
+    namespace: "{{ NAMESPACE }}"
+    template: svc.yml.j2
+
+- name: Configmap
+  kubernetes.core.k8s:
+    kubeconfig: ~/.kube/config
+    namespace: "{{ NAMESPACE }}"
+    template: configmap.yml.j2
+    apply: yes
+
+- name: Deployment
+  kubernetes.core.k8s:
+    kubeconfig: ~/.kube/config
+    namespace: "{{ NAMESPACE }}"
+    template: deployment.yml.j2

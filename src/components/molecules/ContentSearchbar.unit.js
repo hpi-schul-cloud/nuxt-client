@@ -8,9 +8,7 @@ const getWrapper = () => {
 	});
 };
 
-describe("@components/molecules/ContentSearchbar", () => {
-	it(...isValidComponent(ContentSearchbar));
-
+describe("@/components/molecules/ContentSearchbar", () => {
 	it("Defaults render", async () => {
 		const wrapper = getWrapper();
 		expect(wrapper.find("input").exists()).toBe(true);

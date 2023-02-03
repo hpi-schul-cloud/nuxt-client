@@ -8,8 +8,9 @@ import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@vue/composition-api";
 import TaskItemMenu from "./TaskItemMenu";
+import { mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const { tasksTeacher } = mocks;
 
@@ -27,7 +28,7 @@ let copyModuleMock;
 let loadingStateModuleMock;
 let notifierModuleMock;
 
-const getWrapper = (props, options) => {
+const getWrapper = (props, options = {}) => {
 	return mount(TaskItemMenu, {
 		...createComponentMocks({
 			i18n: true,
@@ -35,23 +36,23 @@ const getWrapper = (props, options) => {
 		}),
 		propsData: props,
 		attachTo: document.body,
-		setup() {
-			provide("tasksModule", tasksModuleMock);
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key) => key });
+		provide: {
+			tasksModule: tasksModuleMock,
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		...options,
 	});
 };
 
-describe("@components/molecules/TaskItemMenu", () => {
+describe("@/components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			"finished-tasks": FinishedTasksModule,
-			"env-config": EnvConfigModule,
+			finishedTasksModule: FinishedTasksModule,
+			envConfigModule: EnvConfigModule,
 		});
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
@@ -60,8 +61,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 	});
 
 	defineWindowWidth(1264);
-
-	it(...isValidComponent(TaskItemMenu));
 
 	describe("props", () => {
 		it("should accept valid userRole prop", () => {
@@ -191,7 +190,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.find("#task-menu-btn");
@@ -218,7 +216,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 					taskIsFinished: task.status.isFinished,
 					userRole: "teacher",
 				});
-				// @ts-ignore
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 				const menuBtn = wrapper.find("#task-menu-btn");
@@ -246,7 +243,6 @@ describe("@components/molecules/TaskItemMenu", () => {
 				taskIsFinished: task.status.isFinished,
 				userRole: "teacher",
 			});
-			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 
 			const menuBtn = wrapper.find("#task-menu-btn");

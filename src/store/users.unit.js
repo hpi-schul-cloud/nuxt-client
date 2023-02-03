@@ -1,4 +1,5 @@
 import { actions, mutations } from "./users";
+import { initializeAxios } from "@/utils/api";
 
 describe("store/users", () => {
 	describe("actions", () => {
@@ -8,12 +9,12 @@ describe("store/users", () => {
 				const ctxMock = {
 					commit: jest.fn(),
 				};
-				actions.$axios = {
-					$get: async (url, params) => {
+				initializeAxios({
+					get: async (url, params) => {
 						receivedRequests.push({ url, params });
 						return { data: "dummy response" };
 					},
-				};
+				});
 
 				await actions.findStudents(ctxMock);
 				expect(ctxMock.commit.mock.calls).toHaveLength(4);
@@ -33,12 +34,12 @@ describe("store/users", () => {
 				const ctxMock = {
 					commit: jest.fn(),
 				};
-				actions.$axios = {
-					$get: async (url, params) => {
+				initializeAxios({
+					get: async (url, params) => {
 						receivedRequests.push({ url, params });
 						return { data: "dummy response" };
 					},
-				};
+				});
 
 				await actions.findTeachers(ctxMock);
 				expect(ctxMock.commit.mock.calls).toHaveLength(4);
@@ -63,11 +64,12 @@ describe("store/users", () => {
 					lastName: "Mathe",
 				};
 
-				actions.$axios = {
-					$post: async (url, params) => {
+				initializeAxios({
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
-				};
+				});
 
 				await actions.createTeacher(ctxMock, teacherDataMock);
 				expect(receivedRequests[0].url).toStrictEqual(
@@ -86,11 +88,12 @@ describe("store/users", () => {
 					someProperty: "some value",
 				};
 
-				actions.$axios = {
-					$post: async (url, params) => {
+				initializeAxios({
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
-				};
+				});
 
 				await actions.sendRegistrationLink(ctxMock, payloadMock);
 				expect(receivedRequests[0].url).toStrictEqual(
@@ -103,17 +106,18 @@ describe("store/users", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
 				const ctxMock = {
-					commit: () => {},
+					commit: () => ({}),
 				};
 				const payloadMock = {
 					someProperty: "some value",
 				};
 
-				actions.$axios = {
-					$post: async (url, params) => {
+				initializeAxios({
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
-				};
+				});
 
 				await actions.getQrRegistrationLinks(ctxMock, payloadMock);
 				expect(receivedRequests[0].url).toStrictEqual(
@@ -133,17 +137,14 @@ describe("store/users", () => {
 				};
 				const payloadMock = {
 					...studentData,
-					successMessage: "display this if post was successful",
 				};
 
-				actions.$axios = {
-					$post: async (url, params) => {
+				initializeAxios({
+					post: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: {} };
 					},
-				};
-				actions.$toast = {
-					success: jest.fn(),
-				};
+				});
 				actions.$router = {
 					push: jest.fn(),
 				};
@@ -169,11 +170,11 @@ describe("store/users", () => {
 
 				const errorMock = { response: { data: "dummy error message" } };
 
-				actions.$axios = {
-					$post: async () => {
+				initializeAxios({
+					post: async () => {
 						throw { response: { data: "dummy error message" } };
 					},
-				};
+				});
 
 				await actions.createStudent(ctxMock, payloadMock);
 				expect(spyCommit.mock.calls[1][0]).toStrictEqual("setBusinessError");
@@ -185,11 +186,11 @@ describe("store/users", () => {
 		describe("deleteUsers", () => {
 			it("triggers commit", async () => {
 				const receivedRequests = [];
-				actions.$axios = {
-					$delete: async (url, { params }) => {
+				initializeAxios({
+					delete: async (url, { params }) => {
 						receivedRequests.push({ url, params });
 					},
-				};
+				});
 				const spyCommit = jest.fn();
 				const payload = {
 					ids: ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"],

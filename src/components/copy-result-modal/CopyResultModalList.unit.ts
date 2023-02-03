@@ -1,9 +1,10 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import CopyResultModalList from "./CopyResultModalList.vue";
 import CopyResultModalListItem from "./CopyResultModalListItem.vue";
 import { CopyResultItem } from "./types/CopyResultItem";
+import Vue from "vue";
 
 const mockItems: CopyResultItem[] = [
 	{
@@ -33,7 +34,7 @@ const mockItems: CopyResultItem[] = [
 ];
 
 const getWrapper = (opts = {}) => {
-	return mount<any>(CopyResultModalList, {
+	return mount<any>(CopyResultModalList as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -44,7 +45,7 @@ const getWrapper = (opts = {}) => {
 	});
 };
 
-describe("@components/copy-result-modal/CopyResultModalList", () => {
+describe("@/components/copy-result-modal/CopyResultModalList", () => {
 	it("Should render component", () => {
 		const wrapper = getWrapper({ propsData: { items: mockItems } });
 

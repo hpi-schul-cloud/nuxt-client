@@ -1,4 +1,4 @@
-import { Breadcrumb } from "@components/templates/default-wireframe.types";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 
 export type FilesPageConfig = {
 	title: string;

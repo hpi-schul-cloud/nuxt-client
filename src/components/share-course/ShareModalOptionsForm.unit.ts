@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
+import Vue from "vue";
 
-describe("@components/share-course/ShareModalOptionsForm", () => {
+describe("@/components/share-course/ShareModalOptionsForm", () => {
 	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ShareModalOptionsForm, {
+		const wrapper = mount(ShareModalOptionsForm as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {},
 			...attrs,
 		});
 

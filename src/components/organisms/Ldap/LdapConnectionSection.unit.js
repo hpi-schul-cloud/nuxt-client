@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import LdapConnectionSection from "./LdapConnectionSection";
 
-describe("@components/organisms/LdapConnectionSection", () => {
+describe("@/components/organisms/LdapConnectionSection", () => {
 	const ldapConfigData = {
 		url: "ldaps://url.u",
 		rootPath: "cn=schueler,ou=rolle",
@@ -9,7 +9,6 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		searchUser: "cn=schueler,ou=rolle",
 		searchUserPassword: "pass",
 	};
-	it(...isValidComponent(LdapConnectionSection));
 
 	it("has correct child components", () => {
 		const wrapper = mount(LdapConnectionSection, {
@@ -105,7 +104,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
@@ -156,7 +155,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputUrl = wrapper.find("input[data-testid=ldapDataConnectionUrl]");
 		expect(inputUrl.exists()).toBe(true);
@@ -168,6 +167,6 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

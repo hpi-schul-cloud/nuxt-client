@@ -1,119 +1,134 @@
 <template>
-	<default-wireframe
-		:breadcrumbs="breadcrumbs"
-		:full-width="true"
-		:headline="$t('pages.administration.teachers.index.title')"
-		:fab-items="fab"
-	>
-		<progress-modal
-			:active="isDeleting"
-			:percent="deletedPercent"
-			:title="$t('pages.administration.teachers.index.remove.progress.title')"
-			:description="
-				$t('pages.administration.teachers.index.remove.progress.description')
-			"
-			data-testid="progress-modal"
-		/>
-
-		<base-input
-			v-model="searchQuery"
-			type="text"
-			:placeholder="
-				$t('pages.administration.teachers.index.searchbar.placeholder')
-			"
-			class="search-section"
-			label=""
-			data-testid="searchbar"
-			@update:vmodel="barSearch"
+	<div>
+		<default-wireframe
+			:breadcrumbs="breadcrumbs"
+			:full-width="true"
+			:headline="$t('pages.administration.teachers.index.title')"
+			:fab-items="fab"
 		>
-			<template #icon> <base-icon source="material" icon="search" /></template>
-		</base-input>
+			<progress-modal
+				:active="isDeleting"
+				:percent="deletedPercent"
+				:title="$t('pages.administration.teachers.index.remove.progress.title')"
+				:description="
+					$t('pages.administration.teachers.index.remove.progress.description')
+				"
+				data-testid="progress-modal"
+			/>
 
-		<data-filter
-			:filters="filters"
-			:backend-filtering="true"
-			:active-filters.sync="currentFilterQuery"
-			data-testid="data_filter"
+			<base-input
+				v-model="searchQuery"
+				type="text"
+				:placeholder="
+					$t('pages.administration.teachers.index.searchbar.placeholder')
+				"
+				class="search-section"
+				label=""
+				data-testid="searchbar"
+				@update:vmodel="barSearch"
+			>
+				<template #icon>
+					<base-icon source="material" icon="search"
+				/></template>
+			</base-input>
+
+			<data-filter
+				:filters="filters"
+				:backend-filtering="true"
+				:active-filters.sync="currentFilterQuery"
+				data-testid="data_filter"
+			/>
+
+			<backend-data-table
+				:actions="filteredActions"
+				:columns="filteredColumns"
+				:current-page.sync="page"
+				:data="teachers"
+				:paginated="true"
+				:total="pagination.total"
+				:rows-per-page.sync="limit"
+				:rows-selectable="true"
+				track-by="_id"
+				:selected-row-ids.sync="tableSelection"
+				:selection-type.sync="tableSelectionType"
+				:sort-by="sortBy"
+				:sort-order="sortOrder"
+				data-testid="teachers_table"
+				@update:sort="onUpdateSort"
+				@update:current-page="onUpdateCurrentPage"
+				@update:rows-per-page="onUpdateRowsPerPage"
+			>
+				<template #datacolumn-classes="{ data }">
+					{{ (data || []).join(", ") }}
+				</template>
+				<template #datacolumn-createdAt="{ data }">
+					<span class="text-content">{{ printDate(data) }}</span>
+				</template>
+				<template #datacolumn-consentStatus="{ data: status }">
+					<span class="text-content">
+						<base-icon
+							v-if="status === 'ok'"
+							source="material"
+							icon="check"
+							color="var(--v-success-base)"
+						/>
+						<base-icon
+							v-else-if="status === 'missing'"
+							source="material"
+							icon="close"
+							color="var(--v-error-base)"
+						/>
+					</span>
+				</template>
+
+				<template #datacolumn-_id="{ data, selected, highlighted }">
+					<v-btn
+						icon
+						:class="{
+							'action-button': true,
+							'row-selected': selected,
+							'row-highlighted': highlighted,
+						}"
+						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
+						data-testid="edit_teacher_button"
+					>
+						<v-icon size="20">{{ mdiPencil }}</v-icon>
+					</v-btn>
+				</template>
+			</backend-data-table>
+			<admin-table-legend
+				:icons="icons"
+				:show-icons="showConsent"
+				:show-external-sync-hint="schoolIsExternallyManaged"
+			/>
+		</default-wireframe>
+		<base-dialog
+			v-if="isConfirmDialogActive"
+			:active="isConfirmDialogActive"
+			v-bind="confirmDialogProps"
+			@update:active="isConfirmDialogActive = false"
 		/>
-
-		<backend-data-table
-			:actions="filteredActions"
-			:columns="filteredColumns"
-			:current-page.sync="page"
-			:data="teachers"
-			:paginated="true"
-			:total="pagination.total"
-			:rows-per-page.sync="limit"
-			:rows-selectable="true"
-			track-by="_id"
-			:selected-row-ids.sync="tableSelection"
-			:selection-type.sync="tableSelectionType"
-			:sort-by="sortBy"
-			:sort-order="sortOrder"
-			data-testid="teachers_table"
-			@update:sort="onUpdateSort"
-			@update:current-page="onUpdateCurrentPage"
-			@update:rows-per-page="onUpdateRowsPerPage"
-		>
-			<template #datacolumn-classes="{ data }">
-				{{ (data || []).join(", ") }}
-			</template>
-			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
-			</template>
-			<template #datacolumn-consentStatus="{ data: status }">
-				<span class="text-content">
-					<base-icon
-						v-if="status === 'ok'"
-						source="material"
-						icon="check"
-						color="var(--v-success-base)"
-					/>
-					<base-icon
-						v-else-if="status === 'missing'"
-						source="material"
-						icon="close"
-						color="var(--v-error-base)"
-					/>
-				</span>
-			</template>
-
-			<template #datacolumn-_id="{ data, selected, highlighted }">
-				<v-btn
-					icon
-					:class="{
-						'action-button': true,
-						'row-selected': selected,
-						'row-highlighted': highlighted,
-					}"
-					:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
-					data-testid="edit_teacher_button"
-				>
-					<v-icon size="20">{{ mdiPencil }}</v-icon>
-				</v-btn>
-			</template>
-		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-			:show-icons="showConsent"
-			:show-external-sync-hint="schoolIsExternallyManaged"
-		/>
-	</default-wireframe>
+	</div>
 </template>
 <script>
 /* eslint-disable max-lines */
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import {
+	authModule,
+	envConfigModule,
+	schoolsModule,
+	notifierModule,
+} from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import { teacherFilter } from "@utils/adminFilter";
-import print from "@mixins/print";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter";
+import { teacherFilter } from "@/utils/adminFilter";
+import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate } from "@plugins/datetime";
-import ProgressModal from "@components/molecules/ProgressModal";
-import { mdiPlus, mdiAccountPlus, mdiCloudDownload, mdiPencil } from "@mdi/js";
+import { printDate } from "@/plugins/datetime";
+import ProgressModal from "@/components/molecules/ProgressModal";
+import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
@@ -138,41 +153,35 @@ export default {
 			mdiAccountPlus,
 			mdiCloudDownload,
 			mdiPencil,
-			currentFilterQuery: this.$uiState.get(
+			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
 			),
-			test: this.$uiState,
+			// test: this.$uiState,
 			page:
-				(this.$uiState.get(
-					"pagination",
-					"pages.administration.teachers.index"
-				) &&
-					this.$uiState.get("pagination", "pages.administration.teachers.index")
+				(this.getUiState("pagination", "pages.administration.teachers.index") &&
+					this.getUiState("pagination", "pages.administration.teachers.index")
 						.page) ||
 				1,
 			limit:
-				(this.$uiState.get(
-					"pagination",
-					"pages.administration.teachers.index"
-				) &&
-					this.$uiState.get("pagination", "pages.administration.teachers.index")
+				(this.getUiState("pagination", "pages.administration.teachers.index") &&
+					this.getUiState("pagination", "pages.administration.teachers.index")
 						.limit) ||
 				25,
 			sortBy:
-				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
-					this.$uiState.get("sorting", "pages.administration.teachers.index")
+				(this.getUiState("sorting", "pages.administration.teachers.index") &&
+					this.getUiState("sorting", "pages.administration.teachers.index")
 						.sortBy) ||
 				"firstName",
 			sortOrder:
-				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
-					this.$uiState.get("sorting", "pages.administration.teachers.index")
+				(this.getUiState("sorting", "pages.administration.teachers.index") &&
+					this.getUiState("sorting", "pages.administration.teachers.index")
 						.sortOrder) ||
 				"asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.teachers.index.title"),
@@ -261,10 +270,12 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				(this.$uiState.get("filter", "pages.administration.teachers.index") &&
-					this.$uiState.get("filter", "pages.administration.teachers.index")
+				(this.getUiState("filter", "pages.administration.teachers.index") &&
+					this.getUiState("filter", "pages.administration.teachers.index")
 						.searchQuery) ||
 				"",
+			confirmDialogProps: {},
+			isConfirmDialogActive: false,
 		};
 	},
 	computed: {
@@ -377,7 +388,7 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			var temp = this.$uiState.get(
+			const temp = this.getUiState(
 				"filter",
 				"pages.administration.teacher.index"
 			);
@@ -388,17 +399,17 @@ export default {
 			if (
 				JSON.stringify(query) !==
 				JSON.stringify(
-					this.$uiState.get("filter", "pages.administration.teachers.index")
+					this.getUiState("filter", "pages.administration.teachers.index")
 				)
 			) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.$uiState.set("filter", "pages.administration.teachers.index", {
+			this.setUiState("filter", "pages.administration.teachers.index", {
 				query,
 			});
 		},
 	},
-	created(ctx) {
+	created() {
 		this.find();
 	},
 	methods: {
@@ -418,7 +429,7 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.$uiState.set("sorting", "pages.administration.teachers.index", {
+			this.setUiState("sorting", "pages.administration.teachers.index", {
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
@@ -426,7 +437,7 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+			this.setUiState("pagination", "pages.administration.teachers.index", {
 				currentPage: page,
 			});
 			this.find();
@@ -435,7 +446,7 @@ export default {
 			// this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+			this.setUiState("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
 				currentPage: this.page,
 			});
@@ -456,13 +467,20 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				this.$toast.success(
-					this.$tc("pages.administration.sendMail.success", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc(
+						"pages.administration.sendMail.success",
+						rowIds.length
+					),
+					status: "success",
+					timeout: 10000,
+				});
 			} catch (error) {
-				this.$toast.error(
-					this.$tc("pages.administration.sendMail.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -475,26 +493,39 @@ export default {
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
 				} else {
-					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+					notifierModule.show({
+						text: this.$tc("pages.administration.printQr.emptyUser"),
+						status: "info",
+						timeout: 10000,
+					});
 				}
 			} catch (error) {
-				this.$toast.error(
-					this.$tc("pages.administration.printQr.error", rowIds.length)
-				);
+				notifierModule.show({
+					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "teacher",
 					});
-					this.$toast.success(this.$t("pages.administration.remove.success"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					this.find();
 				} catch (error) {
-					this.$toast.error(this.$t("pages.administration.remove.error"));
+					notifierModule.show({
+						text: this.$t("pages.administration.remove.error"),
+						status: "error",
+						timeout: 10000,
+					});
 				}
 			};
 			const onCancel = () => {
@@ -520,7 +551,7 @@ export default {
 					);
 				}
 			}
-			this.$dialog.confirm({
+			this.dialogConfirm({
 				message,
 				confirmText: this.$t(
 					"pages.administration.teachers.index.remove.confirm.btnText"
@@ -540,7 +571,7 @@ export default {
 
 			const query = this.currentFilterQuery;
 
-			this.$uiState.set("filter", "pages.administration.teachers.index", {
+			this.setUiState("filter", "pages.administration.teachers.index", {
 				query,
 			});
 
@@ -550,19 +581,31 @@ export default {
 				});
 			}, 400);
 		},
+		setUiState(key, identifier, data) {
+			this.$store?.commit("uiState/set", {
+				key,
+				identifier,
+				object: data,
+			});
+		},
+		getUiState(key, identifier) {
+			return this.$store?.getters["uiState/get"]({ key, identifier });
+		},
+		dialogConfirm(confirmDialogProps) {
+			this.confirmDialogProps = confirmDialogProps;
+			this.isConfirmDialogActive = true;
+		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.teachers.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t(
+			"pages.administration.teachers.index.title"
+		)} - ${this.$theme.short_name}`;
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 ::v-deep .row-highlighted.theme--light.v-btn:hover::before {
 	opacity: 0;

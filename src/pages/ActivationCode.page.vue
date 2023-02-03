@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
+import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
 import { mapGetters } from "vuex";
 
 export default {

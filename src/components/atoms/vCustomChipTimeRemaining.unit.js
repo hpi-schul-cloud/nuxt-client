@@ -3,16 +3,15 @@ import VCustomChipTimeRemaining from "./VCustomChipTimeRemaining";
 
 let vuetify;
 
-describe("@components/atoms/vCustomChipTimeRemaining", () => {
+describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 	beforeEach(() => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(VCustomChipTimeRemaining));
-
 	it("should render an orange v-chip component, with n hours left", () => {
 		const dueDate = new Date();
-		dueDate.setHours(dueDate.getHours() + 3);
+		const addHour = 3;
+		dueDate.setHours(dueDate.getHours() + addHour);
 
 		const wrapper = mount(VCustomChipTimeRemaining, {
 			...createComponentMocks({
@@ -26,12 +25,19 @@ describe("@components/atoms/vCustomChipTimeRemaining", () => {
 			},
 		});
 
-		expect(wrapper.html()).toMatchSnapshot();
+		const expectedResult = `${wrapper.vm.$t(
+			"components.atoms.VCustomChipTimeRemaining.hintDueTime"
+		)}${addHour - 1} ${wrapper.vm.$tc(
+			"components.atoms.VCustomChipTimeRemaining.hintHours",
+			addHour - 1
+		)}`;
+		expect(wrapper.element.textContent).toContain(expectedResult);
 	});
 
 	it("should render an orange v-chip component, with n minutes left", () => {
 		const dueDate = new Date();
-		dueDate.setMinutes(dueDate.getMinutes() + 20);
+		const addMinute = 20;
+		dueDate.setMinutes(dueDate.getMinutes() + addMinute);
 
 		const wrapper = mount(VCustomChipTimeRemaining, {
 			...createComponentMocks({
@@ -45,7 +51,14 @@ describe("@components/atoms/vCustomChipTimeRemaining", () => {
 			},
 		});
 
-		expect(wrapper.html()).toMatchSnapshot();
+		const expectedResult = `${wrapper.vm.$t(
+			"components.atoms.VCustomChipTimeRemaining.hintDueTime"
+		)}${addMinute - 1} ${wrapper.vm.$tc(
+			"components.atoms.VCustomChipTimeRemaining.hintMinutes",
+			addMinute - 1
+		)}`;
+
+		expect(wrapper.element.textContent).toContain(expectedResult);
 	});
 
 	it("hintDueDate() method return the right label dependent on date", () => {

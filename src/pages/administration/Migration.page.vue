@@ -159,6 +159,7 @@
 								>{{ $t("pages.administration.migration.back") }}
 							</v-btn>
 							<v-btn
+								class="ml-2"
 								id="migration_importUsers_next"
 								color="primary"
 								:disabled="!canPerformMigration"
@@ -211,6 +212,7 @@
 										</v-btn>
 
 										<v-btn
+											class="ml-2"
 											color="primary"
 											:disabled="!isMigrationConfirm || isLoading"
 											data-testid="migration_performMigration"
@@ -396,8 +398,9 @@ import { mdiClose, mdiLoading } from "@mdi/js";
 
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import ImportUsers from "@components/organisms/administration/ImportUsers";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ImportUsers from "@/components/organisms/administration/ImportUsers";
+
 export default {
 	components: { DefaultWireframe, ImportUsers },
 	data() {
@@ -408,7 +411,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.migration.title"),
@@ -499,6 +502,11 @@ export default {
 		this.checkTotalInterval();
 	},
 	mounted() {
+		document.title = this.$t("pages.administration.migration.title", {
+			source: this.ldapSourceTranslation,
+			instance: this.$theme.short_name,
+		}).toString();
+
 		this.breadcrumbs = [
 			{
 				text: this.$t("pages.administration.index.title"),
@@ -642,14 +650,6 @@ export default {
 			}
 			this.migrationStep = nextStep;
 		},
-	},
-	head() {
-		return {
-			title: this.$t("pages.administration.migration.title", {
-				source: this.ldapSourceTranslation,
-				instance: this.$theme.short_name,
-			}),
-		};
 	},
 };
 </script>

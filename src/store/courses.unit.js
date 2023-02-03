@@ -1,10 +1,16 @@
 import coursesStore from "./courses";
+import NotifierModule from "@/store/notifier";
+import { notifierModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("courses store", () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		setupStores({ notifierModule: NotifierModule });
+	});
 	describe("removeCourseItem action", () => {
 		const dispatch = jest.fn();
-		const success = jest.fn();
-		const error = jest.fn();
+
 		const storeContext = {
 			dispatch,
 		};
@@ -13,15 +19,9 @@ describe("courses store", () => {
 				t: jest.fn(),
 			},
 		};
-		coursesStore.actions.$toast = {
-			success,
-			error,
-		};
 
 		afterEach(() => {
 			dispatch.mockReset();
-			success.mockReset();
-			error.mockReset();
 		});
 
 		it("should call dispatch under 'homeworks/remove' action if courseItem is a homework", () => {
@@ -135,6 +135,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a homework", async () => {
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -145,10 +146,12 @@ describe("courses store", () => {
 			await coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(success).toHaveBeenCalled();
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a lesson", async () => {
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",
@@ -159,10 +162,12 @@ describe("courses store", () => {
 			await coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(success).toHaveBeenCalled();
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a homework", async () => {
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -173,10 +178,12 @@ describe("courses store", () => {
 			await coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(error).toHaveBeenCalled();
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a lesson", async () => {
+			const notifierMock = jest.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",
@@ -187,7 +194,8 @@ describe("courses store", () => {
 			await coursesStore.actions.removeCourseItem(storeContext, courseItem);
 
 			// then
-			expect(error).toHaveBeenCalled();
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 		});
 	});
 });

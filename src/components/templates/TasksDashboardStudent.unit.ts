@@ -7,15 +7,15 @@ import { OpenTasksForStudent } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import TasksList from "@components/organisms/TasksList.vue";
-import TasksDashboardStudent from "@components/templates/TasksDashboardStudent.vue";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
+import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
-describe("@components/templates/TasksDashboardStudent", () => {
+describe("@/components/templates/TasksDashboardStudent", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
@@ -24,17 +24,17 @@ describe("@components/templates/TasksDashboardStudent", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksDashboardStudent, {
+		const wrapper = mount(TasksDashboardStudent as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("tasksModule", tasksModuleMock);
-				provide("copyModule", copyModuleMock);
-				provide("finishedTasksModule", finishedTasksModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				tasksModule: tasksModuleMock,
+				copyModule: copyModuleMock,
+				finishedTasksModule: finishedTasksModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

@@ -1,5 +1,5 @@
 import { initializeAxios } from "@/utils/api";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 import AccountsModule from "./accounts";
 
 const URL = "/v1/accounts/jwtTimer";
@@ -13,10 +13,10 @@ describe("accounts module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
-				$post: async (path: string) => {
+				post: async (path: string) => {
 					requestPath = path;
 				},
-			} as NuxtAxiosInstance);
+			} as AxiosInstance);
 		});
 
 		it("getTTL action should make a post request to the right path", async () => {

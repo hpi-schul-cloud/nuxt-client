@@ -72,26 +72,30 @@ describe("ldap/activate", () => {
 			},
 		},
 	};
+	const short_name = "instance name";
 
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			"env-config": EnvConfigModule,
-			schools: SchoolsModule,
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
 		});
 		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
-
-	it(...isValidComponent(ldapActivate));
 
 	it("should push to router when clicking the back button", async () => {
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
 				$router: { push: routerPushStub },
 				$route,
-			}),
+			},
 		});
 		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
 		expect(backBtn.exists()).toBe(true);
@@ -106,9 +110,14 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
 				$router: { push: routerPushStub },
 				$route: { query: {} },
-			}),
+			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
@@ -123,9 +132,14 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
 				$router: { push: routerPushStub },
 				$route,
-			}),
+			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
@@ -145,9 +159,14 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
 				$router: { push: routerPushStub },
 				$route,
-			}),
+			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
@@ -163,8 +182,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+				$router: { push: routerPushStub },
+			},
 		});
 		const confirmModal = wrapper.find(`[data-testid="confirmModal"]`);
 		expect(confirmModal.exists()).toBe(true);
@@ -180,8 +204,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
-				$router: { push: routerPushStub },
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+				$router: { push: routerPushStub },
+			},
 		});
 
 		const confirmBtn = wrapper.find(
@@ -210,9 +239,14 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: customMockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
 				$router: { push: routerPushStub },
 				$route,
-			}),
+			},
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
@@ -231,6 +265,11 @@ describe("ldap/activate", () => {
 				$router: { push: routerPushStub },
 				$route,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
 		expect(section.exists()).toBe(false);
@@ -247,6 +286,11 @@ describe("ldap/activate", () => {
 				$router: { push: routerPushStub },
 				$route: $routeNewLdap,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
 		expect(section.exists()).toBe(true);

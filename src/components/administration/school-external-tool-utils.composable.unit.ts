@@ -2,9 +2,9 @@ import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composa
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
-} from "@store/types/school-external-tool";
+} from "@/store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
-import { externalToolsModule } from "@utils/store-accessor";
+import { externalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
@@ -12,8 +12,8 @@ import {
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
-jest.mock("@utils/store-accessor", () => ({
-	externalToolsModule: {
+const externalToolsModuleMock = () => {
+	return {
 		getSchoolExternalTools: [
 			{
 				id: "id",
@@ -22,7 +22,11 @@ jest.mock("@utils/store-accessor", () => ({
 				status: SchoolExternalToolStatus.Latest,
 			},
 		],
-	},
+	};
+};
+
+jest.mock("@/store", () => ({
+	externalToolsModule: externalToolsModuleMock(),
 }));
 
 describe("useSchoolExternalToolUtils", () => {

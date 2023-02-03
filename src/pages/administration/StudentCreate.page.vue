@@ -14,9 +14,8 @@
 					data-testid="input_create-student_birthdate"
 					type="date"
 				></v-text-field>
-				<base-input
+				<v-checkbox
 					v-model="sendRegistration"
-					type="checkbox"
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.students.new.checkbox.label')"
@@ -35,10 +34,11 @@
 </template>
 
 <script>
-import FormCreateUser from "@components/organisms/FormCreateUser";
-import InfoMessage from "@components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { inputRangeDate } from "@plugins/datetime";
+import { inputRangeDate } from "@/plugins/datetime";
+import { notifierModule } from "@/store";
 
 import { mapGetters } from "vuex";
 
@@ -62,7 +62,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
@@ -85,8 +85,8 @@ export default {
 		this.$store.commit("users/resetBusinessError");
 	},
 	methods: {
-		createStudent(userData) {
-			this.$store.dispatch("users/createStudent", {
+		async createStudent(userData) {
+			await this.$store.dispatch("users/createStudent", {
 				firstName: userData.firstName,
 				lastName: userData.lastName,
 				email: userData.email,
@@ -94,16 +94,23 @@ export default {
 				roles: ["student"],
 				schoolId: this.$user.schoolId,
 				sendRegistration: this.sendRegistration,
-				successMessage: this.$t("pages.administration.students.new.success"),
 			});
+			if (!this.businessError) {
+				notifierModule.show({
+					text: this.$t("pages.administration.students.new.success"),
+					status: "success",
+					timeout: 10000,
+				});
+				this.$router.push({
+					path: `/administration/students`,
+				});
+			}
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.students.new.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.students.new.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

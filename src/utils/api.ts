@@ -1,9 +1,11 @@
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
+import Vue from "vue";
 
-let $axios: NuxtAxiosInstance;
+let $axios: AxiosInstance;
 
-export function initializeAxios(axiosInstance: NuxtAxiosInstance) {
-	$axios = axiosInstance;
+export function initializeAxios(axios: AxiosInstance) {
+	$axios = axios;
+	Vue.prototype.$axios = axios;
 }
 
 export { $axios };

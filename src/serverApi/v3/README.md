@@ -1,19 +1,45 @@
-# OpenApi Client for Server v3
-
 ## restClient@3.0
 
-This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios).
+This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
-It can be used in both TypeScript and JavaScript.
+Environment
+* Node.js
+* Webpack
+* Browserify
 
-### Rebuild the client
+Language level
+* ES5 - you must have a Promises/A+ library installed
+* ES6
 
-To update the openapi client, start the server locally and apply
+Module system
+* CommonJS
+* ES6 module system
 
-```Bash
-npm run generate-client:server
+It can be used in both TypeScript and JavaScript. In TypeScript, the definition should be automatically resolved via `package.json`. ([Reference](http://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html))
+
+### Building
+
+To build and compile the typescript sources to javascript use:
+```
+npm install
+npm run build
 ```
 
-### Commit the client changes
+### Publishing
 
-Commit all changes of the generated client in this project. Ensure, it matches the server api version which is in use.
+First build the package then run ```npm publish```
+
+### Consuming
+
+navigate to the folder of your consuming project and run one of the following commands.
+
+_published:_
+
+```
+npm install restClient@3.0 --save
+```
+
+_unPublished (not recommended):_
+
+```
+npm install PATH_TO_GENERATED_PACKAGE --save
