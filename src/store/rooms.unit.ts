@@ -478,23 +478,23 @@ describe("rooms module", () => {
 				roomsModule.setAllElements(itemsToBeSet);
 				expect(roomsModule.allElements).toStrictEqual(expectedData);
 			});
+		});
 
-			describe("setSharedCourseData, setImportedCourseId", () => {
-				it("should set the state", () => {
-					const roomsModule = new RoomsModule({});
-					const sharedCourseData = {
-						code: "123",
-						courseName: "Mathe",
-						status: "success",
-						message: "",
-					};
-					const importedCourseId = "456789";
+		describe("setSharedCourseData, setImportedCourseId", () => {
+			it("should set the state and imported course id", () => {
+				const roomsModule = new RoomsModule({});
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+				const importedCourseId = "456789";
 
-					roomsModule.setSharedCourseData(sharedCourseData);
-					roomsModule.setImportedCourseId(importedCourseId);
-					expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
-					expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
-				});
+				roomsModule.setSharedCourseData(sharedCourseData);
+				roomsModule.setImportedCourseId(importedCourseId);
+				expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
+				expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
 			});
 		});
 
@@ -601,6 +601,33 @@ describe("rooms module", () => {
 				expect(roomsModule.getRoomsId).toStrictEqual("");
 				roomsModule.setRoomDataId(sampleId);
 				expect(roomsModule.getRoomsId).toStrictEqual(sampleId);
+			});
+		});
+
+		describe("getCourseSharingStatus", () => {
+			it("should return shared course data", () => {
+				const roomsModule = new RoomsModule({});
+				const sharedCourseData = {
+					code: "123",
+					courseName: "Mathe",
+					status: "success",
+					message: "",
+				};
+
+				roomsModule.setSharedCourseData(sharedCourseData);
+				expect(roomsModule.getCourseSharingStatus).toStrictEqual(
+					sharedCourseData
+				);
+			});
+		});
+
+		describe("getImportedCourseId", () => {
+			it("should return imported course id", () => {
+				const roomsModule = new RoomsModule({});
+				const sampleId = "sample_id";
+				expect(roomsModule.getImportedCourseId).toStrictEqual("");
+				roomsModule.setImportedCourseId(sampleId);
+				expect(roomsModule.getImportedCourseId).toStrictEqual(sampleId);
 			});
 		});
 
