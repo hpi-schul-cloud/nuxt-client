@@ -26,16 +26,28 @@ describe("@components/date-time-picker/DatePicker", () => {
 	});
 
 	// HELP
-	// it("should emit event on input", async () => {
-	// 	const wrapper = getWrapper({
-	// 		date: new Date().toISOString(),
-	// 		ariaLabel: "aria label",
-	// 	});
+	it("should emit event on input", async () => {
+		const wrapper = getWrapper({
+			date: new Date().toISOString(),
+			ariaLabel: "aria label",
+		});
 
-	// 	wrapper.vm.showDateDialog = true;
-	// 	const v = wrapper.find("[data-testid='v']");
+		// wrapper.vm.showDateDialog = true;
+		// const v = wrapper.find("[data-testid='v']");
+		// v.vm.$emit("input");
+		// expect(wrapper.emitted("input")).toHaveLength(1);
 
-	// 	v.vm.$emit("input");
-	// 	expect(wrapper.emitted("input")).toHaveLength(1);
-	// });
+		const textField = wrapper
+			.findComponent({ name: "v-text-field" })
+			.find("input");
+		expect(textField.exists()).toBe(true);
+		await textField.trigger("click");
+
+		const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
+		expect(dateSelector.exists()).toBe(true);
+		dateSelector.vm.$emit("input");
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.emitted("input")).toHaveLength(1);
+	});
 });
