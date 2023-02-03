@@ -58,7 +58,7 @@ export default defineComponent({
 }
 
 ::v-deep .v-textarea .v-input__slot {
-	padding: 0 !important;
+	padding: 0 0 0 var(--ck-spacing-standard) !important;
 	margin-bottom: 0;
 }
 
