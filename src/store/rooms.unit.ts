@@ -445,7 +445,7 @@ describe("rooms module", () => {
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
+						untilDate: "2300-07-30T22:00:00.000Z",
 					},
 				];
 
@@ -468,10 +468,9 @@ describe("rooms module", () => {
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
 						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
-						titleDate: "2015-2018",
-						searchText: "History 2015-2018",
-						isArchived: true,
+						untilDate: "2300-07-30T22:00:00.000Z",
+						searchText: "History",
+						isArchived: false,
 						to: "/rooms/234",
 					},
 				];
