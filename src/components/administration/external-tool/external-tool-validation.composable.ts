@@ -1,5 +1,5 @@
-import { ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
 import VueI18n from "vue-i18n";
+import { ToolParameter, ToolParameterTypeEnum } from "@/store/external-tool";
 
 export function useExternalToolValidation(
 	t: (key: string, values?: VueI18n.Values | undefined) => string

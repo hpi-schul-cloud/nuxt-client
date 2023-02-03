@@ -4,58 +4,56 @@
 			{{ $t("pages.tool.settings") }}
 		</h2>
 		<div v-for="(param, index) in template.parameters" :key="param.name">
-			<external-tool-parameter v-model="template.parameters[index]" @input:value="updateParameter(template, $event, index)"/>
+			<external-tool-parameter
+				v-model="template.parameters[index]"
+				@input:value="updateParameter(template, $event, index)"
+			/>
 		</div>
 		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import { computed, ComputedRef, inject } from "@nuxtjs/composition-api";
-import { ToolConfigurationTemplate } from "@store/external-tool";
-import ExternalToolsModule from "@store/external-tools";
+<script setup lang="ts">
 import ExternalToolParameter from "./ExternalToolParameter.vue";
+import { ToolConfigurationTemplate } from "@/store/external-tool";
+import { computed, ComputedRef, inject, WritableComputedRef } from "vue";
+import ExternalToolsModule from "@/store/external-tools";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "ExternalToolConfigSettings",
-	components: { ExternalToolParameter },
-	emits: ["update:value"],
-	props: {
-		value: {
-			type: Object,
-			default: () => new ToolConfigurationTemplate(),
-		}
+const emit = defineEmits(["update:value"]);
+const props = defineProps({
+	value: {
+		type: Object,
+		required: true,
+		default: () => new ToolConfigurationTemplate(),
 	},
-	setup(props: any, { emit }) {
-		const externalToolsModule: ExternalToolsModule | undefined = inject<ExternalToolsModule>("externalToolsModule");
-		if (!externalToolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
-
-		const template = computed<ToolConfigurationTemplate>({
-			get() {
-				return props.value
-			},
-			set(value: ToolConfigurationTemplate) {
-				emit("update:value", value);
-			}
-		});
-
-		const loading: ComputedRef<boolean> = computed(() => externalToolsModule.getLoading);
-
-		const updateParameter = (model: ToolConfigurationTemplate, newValue: string, index: number) => {
-			const newModel: ToolConfigurationTemplate = { ...model };
-			newModel.parameters[index] = { ...newModel.parameters[index], value: newValue };
-			template.value = newModel;
-		};
-
-		return {
-			template,
-			updateParameter,
-			loading,
-		};
-	}
 });
+
+const externalToolsModule: ExternalToolsModule | undefined =
+	inject<ExternalToolsModule>("externalToolsModule");
+if (!externalToolsModule) {
+	throw new Error("Injection of dependencies failed");
+}
+
+const template: WritableComputedRef<ToolConfigurationTemplate> = computed({
+	get: (): ToolConfigurationTemplate =>
+		props.value as ToolConfigurationTemplate,
+	set: (value) => emit("update:value", value),
+});
+
+const loading: ComputedRef<boolean> = computed(
+	() => externalToolsModule.getLoading
+);
+
+const updateParameter = (
+	model: ToolConfigurationTemplate,
+	newValue: string,
+	index: number
+) => {
+	const newModel: ToolConfigurationTemplate = { ...model };
+	newModel.parameters[index] = {
+		...newModel.parameters[index],
+		value: newValue,
+	};
+	template.value = newModel;
+};
 </script>

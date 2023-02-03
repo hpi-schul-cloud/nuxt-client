@@ -1,8 +1,10 @@
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
 import { DataTableHeader } from "vuetify";
-import ExternalToolsModule from "@store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
+import ExternalToolsModule from "@/store/external-tools";
+import {
+	SchoolExternalTool,
+	SchoolExternalToolStatusEnum,
+} from "@/store/external-tool";
 
 export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => ""

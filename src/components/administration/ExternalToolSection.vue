@@ -29,7 +29,12 @@
 				/>
 			</template>
 		</v-data-table>
-		<v-btn class="my-5 button-save" color="primary" depressed to="/administration/school-settings/tool">
+		<v-btn
+			class="my-5 button-save"
+			color="primary"
+			depressed
+			to="/administration/school-settings/tool"
+		>
 			{{ $t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
@@ -80,18 +85,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import VueI18n from "vue-i18n";
-import { computed, ComputedRef, inject, onMounted, Ref } from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalTool } from "@store/external-tool/school-external-tool.enum";
 import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
+import { SchoolExternalTool } from "@/store/external-tool";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
@@ -140,7 +151,9 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useExternalToolUtils().mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
+					useExternalToolUtils().mapSchoolExternalToolItemToSchoolExternalTool(
+						itemToDelete.value
+					);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
 			onCloseDeleteDialog();

@@ -11,19 +11,19 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
-} from "../serverApi/v3";
-import { ToolParameterLocationEnum } from "@store/external-tool/tool-parameter-location.enum";
-import { ToolParameterTypeEnum } from "@store/external-tool/tool-parameter-type.enum";
-import { ToolParameterScopeEnum } from "@store/external-tool/tool-parameter-scope.enum";
-import { ToolParameter } from "@store/external-tool/tool-parameter";
+} from "@/serverApi/v3";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatusEnum,
 	ToolConfiguration,
 	ToolConfigurationTemplate,
-} from "@store/external-tool";
-import { externalToolsModule } from "@utils/store-accessor";
-import { SchoolExternalToolItem } from "@components/administration/school-external-tool-item";
+	ToolParameter,
+	ToolParameterLocationEnum,
+	ToolParameterScopeEnum,
+	ToolParameterTypeEnum,
+} from "@/store/external-tool";
+import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
+import { BusinessError } from "../store/types/commons";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -82,11 +82,9 @@ export function useExternalToolUtils() {
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
-		const tools: SchoolExternalTool[] = response.data.map(
-			(toolResponse: SchoolExternalToolResponse) =>
-				mapSchoolExternalToolResponse(toolResponse)
+		return response.data.map((toolResponse: SchoolExternalToolResponse) =>
+			mapSchoolExternalToolResponse(toolResponse)
 		);
-		return tools;
 	};
 
 	const mapSchoolExternalToolResponse = (
@@ -116,6 +114,7 @@ export function useExternalToolUtils() {
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				default: resp.default,
 				isOptional: resp.isOptional,
@@ -124,6 +123,7 @@ export function useExternalToolUtils() {
 				regex: resp.regex,
 				type: ToolParamTypeMapping[resp.type],
 				scope: ToolParamScopeMapping[resp.scope],
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				value: resp.default ? resp.default : undefined,
 			};
@@ -187,16 +187,15 @@ export function useExternalToolUtils() {
 		});
 	};
 
-	const translateBusinessError = () => {
-		const { message } = externalToolsModule.getBusinessError;
-
+	const getTranslationKey = (businessError: BusinessError) => {
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
-		).find(([key]) => message.startsWith(key))?.[1];
+		).find(([key]) => businessError.message.startsWith(key))?.[1];
+
 		if (translationKey) {
 			return translationKey;
 		}
-		return message;
+		return businessError.message;
 	};
 
 	return {
@@ -206,6 +205,6 @@ export function useExternalToolUtils() {
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		mapSchoolExternalToolItemToSchoolExternalTool,
-		translateBusinessError,
+		getTranslationKey,
 	};
 }

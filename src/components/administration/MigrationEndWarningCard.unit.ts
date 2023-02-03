@@ -1,6 +1,6 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
+import MigrationEndWarningCard from "./MigrationEndWarningCard.vue";
 
 describe("MigrationEndWarningCard", () => {
 	let wrapper: Wrapper<any>;

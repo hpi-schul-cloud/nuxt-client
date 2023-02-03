@@ -2,8 +2,8 @@ import { mount, shallowMount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
-import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { SchoolExternalToolStatusEnum } from "@/store/external-tool";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -23,7 +23,7 @@ describe("ExternalToolSection", () => {
 			}),
 			provide: {
 				i18n: { t: (key: string) => key },
-				externalToolModule,
+				externalToolsModule,
 			},
 		});
 
@@ -49,9 +49,9 @@ describe("ExternalToolSection", () => {
 				});
 
 				try {
-					shallowMount(ExternalToolsSection, {
+					shallowMount(ExternalToolSection, {
 						provide: {
-							externalToolModule,
+							externalToolsModule,
 						},
 					});
 				} catch (e) {}
@@ -94,7 +94,7 @@ describe("ExternalToolSection", () => {
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
-				const { externalToolModule } = setup();
+				const { externalToolsModule } = setup();
 				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
 			});
 		});

@@ -1,14 +1,14 @@
 import {
-	SchoolExternalTool,
-	SchoolExternalToolStatusEnum,
-} from "@store/external-tool";
-import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "../serverApi/v3";
-import { SchoolExternalToolItem } from "@components/administration/school-external-tool-item";
 import { useExternalToolUtils } from "./external-tool-utils.composable";
+import {
+	SchoolExternalTool,
+	SchoolExternalToolStatusEnum,
+} from "@/store/external-tool";
+import { SchoolExternalToolItem } from "../components/administration/school-external-tool-item";
 
 jest.mock("@utils/store-accessor", () => ({
 	externalToolsModule: {
@@ -29,7 +29,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
-			translateBusinessError,
+			getTranslationKey,
 		} = useExternalToolUtils();
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -64,7 +64,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
-			translateBusinessError,
+			getTranslationKey,
 		};
 	};
 

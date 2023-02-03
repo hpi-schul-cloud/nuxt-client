@@ -35,3 +35,6 @@ nuxt.config.js
 .vscode/launch.json
 
 __snapshots__
+
+# IntelliJ
+.idea

@@ -41,6 +41,15 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
+		path: "/administration/school-settings/tool",
+		component: () =>
+			import(
+				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
+			),
+		name: "administration-tool-config-overview",
+		beforeEnter: createPermissionGuard(["school_tool_admin"]),
+	},
+	{
 		path: "/administration/students",
 		component: () => import("../pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",

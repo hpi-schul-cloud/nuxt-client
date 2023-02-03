@@ -64,7 +64,8 @@ import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies
 import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection";
-import { nextTick, onMounted, useRouter } from "@nuxtjs/composition-api";
+import { nextTick, onMounted } from "vue";
+import { useRouter } from "vue-router/composables";
 
 export default {
 	components: {
@@ -144,12 +145,14 @@ export default {
 	},
 	setup() {
 		const router = useRouter();
-		onMounted( () => {
+		onMounted(() => {
 			const section = router.currentRoute.hash.replace("#", "");
 			if (section) {
-				nextTick(() => window.document.getElementById(section)?.scrollIntoView());
+				nextTick(() =>
+					window.document.getElementById(section)?.scrollIntoView()
+				);
 			}
 		});
-	}
+	},
 };
 </script>
