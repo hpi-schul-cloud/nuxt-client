@@ -56,7 +56,11 @@
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
-		<p v-if="oauthMigrationFinished" class="migration-completion-date" data-testId="migration-finished-timestamp">
+		<p
+			v-if="oauthMigrationFinished"
+			class="migration-completion-date"
+			data-testId="migration-finished-timestamp"
+		>
 			{{
 				t(
 					"components.administration.adminMigrationSection.oauthMigrationFinished.text"

@@ -33,7 +33,12 @@
 				}}
 			</v-btn>
 
-			<v-btn class="disagree-btn-end" color="secondary" data-testId="migration-end-disagree-button" @click="$emit('end')">
+			<v-btn
+				class="disagree-btn-end"
+				color="secondary"
+				data-testId="migration-end-disagree-button"
+				@click="$emit('end')"
+			>
 				{{
 					$t(
 						"components.administration.adminMigrationSection.endWarningCard.disagree"
