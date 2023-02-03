@@ -9,7 +9,7 @@ export function useExternalToolValidation(
 	): Array<() => boolean | string> => {
 		const rules = [];
 		if (!param.isOptional && !param.value) {
-			rules.push(() => t("common.validation.required"));
+			rules.push(() => t("common.validation.required2"));
 		}
 
 		validateRegex(param, rules);

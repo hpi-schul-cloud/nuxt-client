@@ -49,7 +49,7 @@ describe("useExternalToolValidation", () => {
 				validateParameter(toolParameter);
 
 			const requiredRuleExists = rules.some(
-				(rule) => rule() === "common.validation.required"
+				(rule) => rule() === "common.validation.required2"
 			);
 
 			expect(requiredRuleExists).toBeTruthy();
