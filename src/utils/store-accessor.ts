@@ -20,6 +20,8 @@ import ShareCourseModule from "@/store/share-course";
 import StatusAlertsModule from "@/store/status-alerts";
 import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
+import SystemsModule from "@store/systems";
+import UserMigrationModule from "@store/user-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ExternalToolsModule from "@store/external-tools";
@@ -48,6 +50,8 @@ let shareCourseModule: ShareCourseModule;
 let statusAlertsModule: StatusAlertsModule;
 let tasksModule: TasksModule;
 let taskCardModule: TaskCardModule;
+let systemsModule: SystemsModule;
+let userMigrationModule: UserMigrationModule;
 let shareLessonModule: ShareLessonModule;
 
 function initializeStores(store: Store<any>): void {
@@ -78,6 +82,8 @@ function initializeStores(store: Store<any>): void {
 	copyModule = getModule(CopyModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	shareCourseModule = getModule(ShareCourseModule, store);
+	systemsModule = getModule(SystemsModule, store);
+	userMigrationModule = getModule(UserMigrationModule, store);
 	shareLessonModule = getModule(ShareLessonModule, store);
 }
 
@@ -106,5 +112,7 @@ export {
 	statusAlertsModule,
 	tasksModule,
 	taskCardModule,
+	systemsModule,
+	userMigrationModule,
 	shareLessonModule,
 };

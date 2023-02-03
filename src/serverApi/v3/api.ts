@@ -2109,6 +2109,79 @@ export interface OauthClientResponse {
 /**
  * 
  * @export
+ * @interface OauthConfigResponse
+ */
+export interface OauthConfigResponse {
+    /**
+     * Client id
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    clientId: string;
+    /**
+     * Redirect uri
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    redirectUri: string;
+    /**
+     * Grant type
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    grantType: string;
+    /**
+     * Token endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    tokenEndpoint: string;
+    /**
+     * Auth endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    authEndpoint: string;
+    /**
+     * Response type
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    responseType: string;
+    /**
+     * Scope
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    scope: string;
+    /**
+     * Provider
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    provider: string;
+    /**
+     * Logout endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    logoutEndpoint: string;
+    /**
+     * Issuer
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    issuer: string;
+    /**
+     * Jwks endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    jwksEndpoint: string;
+}
+/**
+ *
+ * @export
  * @interface OidcContextResponse
  */
 export interface OidcContextResponse {
@@ -2712,6 +2785,62 @@ export interface SuccessfulResponse {
 }
 /**
  * 
+ * @export
+ * @interface SystemOauthResponse
+ */
+export interface SystemOauthResponse {
+    /**
+     *
+     * @type {Array<SystemResponse>}
+     * @memberof SystemOauthResponse
+     */
+    data: Array<SystemResponse>;
+}
+/**
+ *
+ * @export
+ * @interface SystemResponse
+ */
+export interface SystemResponse {
+    /**
+     * Id of the system.
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    id: string;
+    /**
+     * Flag to request only systems with oauth-config.
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    type?: string | null;
+    /**
+     * Url of the system.
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    url?: string | null;
+    /**
+     * Alias of the system.
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    alias?: string | null;
+    /**
+     * Display name of the system.
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    displayName?: string | null;
+    /**
+     * Oauth config of the system.
+     * @type {OauthConfigResponse}
+     * @memberof SystemResponse
+     */
+    oauthConfig?: OauthConfigResponse | null;
+}
+/**
+ *
  * @export
  * @interface TargetInfoResponse
  */
@@ -8492,7 +8621,7 @@ export const SystemApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SystemOauthResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -8514,7 +8643,7 @@ export const SystemApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object> {
+        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<SystemOauthResponse> {
             return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
         },
     };
@@ -8535,7 +8664,7 @@ export interface SystemApiInterface {
      * @throws {RequiredError}
      * @memberof SystemApiInterface
      */
-    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object>;
+    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<SystemOauthResponse>;
 
 }
 

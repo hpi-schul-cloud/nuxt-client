@@ -1,27 +1,31 @@
 <template>
 	<v-app>
-		<div class="page">
-			<div class="topbar" data-testid="logged-out-top-bar">
-				<navigation-bar
-					:buttons="true"
-					:img="require('@assets/img/logo/logo-image-mono.svg')"
-					:links="navbarItems"
-				/>
+		<application-error-routing>
+			<div class="page">
+				<div class="topbar" data-testid="logged-out-top-bar">
+					<navigation-bar
+						:buttons="true"
+						:img="require('@assets/img/logo/logo-image-mono.svg')"
+						:links="navbarItems"
+					/>
+				</div>
+				<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
+					<Nuxt />
+				</div>
+				<the-footer class="footer" />
 			</div>
-			<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
-				<Nuxt />
-			</div>
-			<the-footer class="footer" />
-		</div>
+		</application-error-routing>
 	</v-app>
 </template>
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
 import TheFooter from "@components/legacy/TheFooter";
+import ApplicationErrorRouting from "@components/molecules/ApplicationErrorRouting";
 
 export default {
 	components: {
+		ApplicationErrorRouting,
 		NavigationBar,
 		TheFooter,
 	},

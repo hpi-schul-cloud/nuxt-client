@@ -39,7 +39,7 @@ const mockActions = <M>(
 export function createModuleMocks<M extends VuexModule>(
 	moduleClass: ConstructorOf<M>,
 	getters: Partial<M> = {}
-): M {
+): jest.Mocked<M> {
 	const module: Function & Mod<M, any> = moduleClass;
 
 	const statics: StaticsType = {};
@@ -58,5 +58,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return statics as M;
+	return statics as jest.Mocked<M>;
 }
