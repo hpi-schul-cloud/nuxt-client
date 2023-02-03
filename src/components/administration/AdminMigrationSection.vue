@@ -12,6 +12,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationEnabled"
+			data-testId="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
 			{{
@@ -27,6 +28,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationAvailable"
+			data-testId="migration-end-button"
 			@click="onToggleShowEndWarning"
 		>
 			{{
@@ -50,10 +52,11 @@
 			inset
 			dense
 			class="ml-1"
+			data-testId="migration-mandatory-switch"
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
-		<p v-if="oauthMigrationFinished" class="migration-completion-date">
+		<p v-if="oauthMigrationFinished" class="migration-completion-date" data-testId="migration-finished-timestamp">
 			{{
 				t(
 					"components.administration.adminMigrationSection.oauthMigrationFinished.text"
@@ -63,12 +66,14 @@
 
 		<migration-start-warning-card
 			v-if="isShowStartWarning"
+			data-testId="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
 			@set="setMigration(true, isMigrationMandatory)"
 		></migration-start-warning-card>
 
 		<migration-end-warning-card
 			v-if="isShowEndWarning"
+			data-testId="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, isMigrationMandatory)"
 		></migration-end-warning-card>
