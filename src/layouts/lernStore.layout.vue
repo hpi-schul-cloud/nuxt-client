@@ -1,15 +1,5 @@
 <template>
 	<v-app>
-		<!-- NUXT_REMOVAL: Testival alert -->
-		<v-alert
-			color="red lighten-2"
-			dark
-			dense
-			class="ma-2"
-			style="text-align: center"
-		>
-			Bug Hunt: You are on a Vue page
-		</v-alert>
 		<legacy-logged-in v-if="legacyLayout">
 			<v-main id="main-content" class="content">
 				<snackbar />
