@@ -23,6 +23,7 @@
 						dense
 						:readonly="!hasSchoolEditPermission"
 						:disabled="isSyncedSchool"
+						data-testId="school-number"
 					></v-text-field>
 				</v-col>
 			</v-row>
