@@ -262,9 +262,9 @@ export default class SchoolsModule extends VuexModule {
 			const requests = systemIds.map((systemId) =>
 				$axios.get(`v1/systems/${systemId}`)
 			);
-			const response = await Promise.all(requests);
+			const responses = await Promise.all(requests);
 
-			this.setSystems(response);
+			this.setSystems(responses.map((response) => response.data));
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
