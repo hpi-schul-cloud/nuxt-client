@@ -11,6 +11,7 @@
 			solo
 			flat
 			:placeholder="placeholder"
+			:aria-label="$t('components.cardElement.titleElement')"
 			@input="handleInput"
 		/>
 	</div>

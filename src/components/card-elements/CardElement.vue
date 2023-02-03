@@ -19,6 +19,7 @@
 				outlined
 				color="secondary"
 				class="drag-element-btn handle"
+				:aria-label="$t('components.cardElement.dragElement')"
 				data-testid="drag-element-btn"
 			>
 				<v-icon>{{ mdiDrag }}</v-icon>
@@ -28,6 +29,7 @@
 				outlined
 				color="secondary"
 				class="delete-element-btn"
+				:aria-label="$t('components.cardElement.deleteElement')"
 				data-testid="delete-element-btn"
 				@click="() => $emit('delete-element')"
 			>

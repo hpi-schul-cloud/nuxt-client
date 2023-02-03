@@ -27,14 +27,31 @@
 					@delete-element="deleteElement(index)"
 				/>
 			</draggable>
-			<v-btn fab color="primary" class="align-self-center" @click="addElement">
+			<v-btn
+				fab
+				color="primary"
+				class="align-self-center"
+				:aria-label="$t('pages.taskCard.addElement')"
+				@click="addElement"
+			>
 				<v-icon>{{ mdiPlus }}</v-icon>
 			</v-btn>
 			<div>
-				<v-btn color="secondary" outlined @click="cancel">
+				<v-btn
+					color="secondary"
+					outlined
+					:aria-label="$t('common.actions.cancel')"
+					@click="cancel"
+				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn class="float-right" color="primary" depressed @click="save">
+				<v-btn
+					class="float-right"
+					color="primary"
+					depressed
+					:aria-label="$t('common.actions.save')"
+					@click="save"
+				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
 			</div>

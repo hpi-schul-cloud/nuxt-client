@@ -7,6 +7,7 @@
 			v-model="content"
 			:placeholder="placeholder"
 			:disabled="disabled"
+			:aria-label="$t('components.cardElement.richTextElement')"
 			mode="regular"
 			@input="handleInput"
 		/>
