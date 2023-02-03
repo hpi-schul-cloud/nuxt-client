@@ -34,8 +34,8 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import FormNews from "@components/organisms/FormNews";
-import { newsModule } from "@/store";
+import FormNews from "@/components/organisms/FormNews";
+import { newsModule, notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -53,6 +53,12 @@ export default {
 	},
 	mounted() {
 		newsModule.fetchNews(this.$route.params.id);
+		const hasTitle = (this.news || {}).title;
+		document.title = (
+			hasTitle
+				? `${(this.news || {}).title} bearbeiten`
+				: this.$t("pages.news._id.edit.title")
+		).toString();
 	},
 	methods: {
 		save: async function (newsToPatch) {
@@ -63,31 +69,39 @@ export default {
 					content: newsToPatch.content,
 					displayAt: newsToPatch.displayAt,
 				});
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.patch")
-				);
+				notifierModule.show({
+					text: this.$t("components.organisms.FormNews.success.patch"),
+					status: "success",
+					timeout: 10000,
+				});
 				await this.$router.push({
 					path: `/news/${this.news.id}`,
 				});
 			} catch (e) {
 				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.patch")
-				);
+				notifierModule.show({
+					text: this.$t("components.organisms.FormNews.errors.patch"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		deleteHandler: async function () {
 			try {
 				await newsModule.removeNews(this.news.id);
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.remove")
-				);
+				notifierModule.show({
+					text: this.$t("components.organisms.FormNews.success.remove"),
+					status: "success",
+					timeout: 10000,
+				});
 				this.$router.push({ name: "news" });
 			} catch (e) {
 				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.remove")
-				);
+				notifierModule.show({
+					text: this.$t("components.organisms.FormNews.errors.remove"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async cancelHandler() {
@@ -96,14 +110,6 @@ export default {
 				params: { id: this.$route.params.id },
 			});
 		},
-	},
-	head() {
-		const hasTitle = (this.news || {}).title;
-		return {
-			title: hasTitle
-				? `${(this.news || {}).title} bearbeiten`
-				: this.$t("pages.news._id.edit.title"),
-		};
 	},
 };
 </script>

@@ -6,9 +6,8 @@
 	>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
 			<template #inputs>
-				<base-input
+				<v-checkbox
 					v-model="sendRegistration"
-					type="checkbox"
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
@@ -26,9 +25,10 @@
 </template>
 
 <script>
-import FormCreateUser from "@components/organisms/FormCreateUser";
-import InfoMessage from "@components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -46,7 +46,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.teachers.index.title"),
@@ -62,7 +62,6 @@ export default {
 	methods: {
 		createTeacher(teacherData) {
 			this.error = false;
-			// TODO wrong use of store (not so bad)
 			this.$store
 				.dispatch("users/createTeacher", {
 					firstName: teacherData.firstName,
@@ -74,9 +73,11 @@ export default {
 					generateRegistrationLink: true,
 				})
 				.then(() => {
-					this.$toast.success(
-						this.$t("pages.administration.teachers.new.success")
-					);
+					notifierModule.show({
+						text: this.$t("pages.administration.teachers.new.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					this.$router.push({
 						path: `/administration/teachers`,
 					});
@@ -86,12 +87,10 @@ export default {
 				});
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.teachers.new.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.teachers.new.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

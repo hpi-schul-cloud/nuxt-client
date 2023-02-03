@@ -1,6 +1,6 @@
 <template>
 	<div v-show="hasData" class="text-center mx-auto">
-		<img src="@assets/img/migration/migration.svg" alt="migration logo" />
+		<img src="@/assets/img/migration/migration.svg" alt="migration logo" />
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
@@ -49,8 +49,8 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import SystemsModule from "@/store/systems";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import UserMigrationModule from "@/store/user-migration";
-import { System } from "@store/types/system";
-import { MigrationPageOrigin } from "@store/types/user-migration";
+import { System } from "@/store/types/system";
+import { MigrationPageOrigin } from "@/store/types/user-migration";
 import {
 	computed,
 	ComputedRef,
@@ -59,7 +59,7 @@ import {
 	defineComponent,
 	inject,
 	onMounted,
-} from "@vue/composition-api";
+} from "vue";
 
 export default defineComponent({
 	name: "UserMigration",

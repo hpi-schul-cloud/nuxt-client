@@ -2,11 +2,11 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@nuxtjs/composition-api";
 import { mount, Wrapper } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
+import Vue from "vue";
 
-describe("@components/templates/LanguageMenu", () => {
+describe("@/components/templates/LanguageMenu", () => {
 	let envConfigModuleMock: EnvConfigModule;
 	let authModuleMock: AuthModule;
 
@@ -15,9 +15,9 @@ describe("@components/templates/LanguageMenu", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("envConfigModule", envConfigModuleMock);
-				provide("authModule", authModuleMock);
+			provide: {
+				authModule: authModuleMock,
+				envConfigModule: envConfigModuleMock,
 			},
 			...attrs,
 		});

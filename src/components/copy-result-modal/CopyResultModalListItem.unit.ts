@@ -1,8 +1,9 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CopyResultModalListItem from "@components/copy-result-modal/CopyResultModalListItem.vue";
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
-import { mount } from "@vue/test-utils";
+import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem.vue";
+import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
+import { mount, MountOptions } from "@vue/test-utils";
+import Vue from "vue";
 
 const mockItem: CopyResultItem = {
 	type: CopyApiResponseTypeEnum.Lesson,
@@ -22,7 +23,7 @@ const mockItem: CopyResultItem = {
 };
 
 const getWrapper = (props: object) => {
-	return mount<any>(CopyResultModalListItem, {
+	return mount<any>(CopyResultModalListItem as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -31,7 +32,7 @@ const getWrapper = (props: object) => {
 	});
 };
 
-describe("@components/copy-result-modal/CopyResultModalListItem", () => {
+describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 	it("Should render component", () => {
 		const wrapper = getWrapper({ item: mockItem });
 

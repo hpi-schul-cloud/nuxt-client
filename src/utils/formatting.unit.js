@@ -1,6 +1,6 @@
 import { upperCaseFirstChar, toKebabCase } from "./formatting";
 
-describe("@utils/formatting", () => {
+describe("@/utils/formatting", () => {
 	describe("upperCaseFirstChar", () => {
 		it.each([
 			["alllowercase", "Alllowercase"],

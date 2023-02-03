@@ -1,13 +1,12 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { tasksModule } from "@/store";
-import { $axios } from "../utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
-import { BusinessError, Status, Pagination } from "./types/commons";
+import { $axios } from "../utils/api";
+import { BusinessError, Pagination, Status } from "./types/commons";
 import { Task } from "./types/tasks";
-import { envConfigModule } from "@/store";
 
 @Module({
-	name: "finished-tasks",
+	name: "finishedTasksModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -27,9 +26,7 @@ export default class FinishedTasksModule extends VuexModule {
 
 	status: Status = "";
 
-	isInitialized: boolean = false;
-
-	_taskApi?: TaskApiInterface;
+	isInitialized = false;
 
 	@Action
 	async fetchFinishedTasks(): Promise<void> {
@@ -173,14 +170,7 @@ export default class FinishedTasksModule extends VuexModule {
 		return this.status === "completed";
 	}
 
-	private get taskApi() {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(
-				undefined,
-				"/v3", //`${envConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._taskApi;
+	private get taskApi(): TaskApiInterface {
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 }

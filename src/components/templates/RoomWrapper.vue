@@ -22,7 +22,7 @@
 		<template v-else-if="isEmptyState">
 			<v-custom-empty-state
 				ref="rooms-empty-state"
-				image="@assets/img/empty-state/rooms-empty-state.svg"
+				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>
@@ -39,12 +39,12 @@
 	</default-wireframe>
 </template>
 
-<script lang="ts">
+<script>
 import { authModule, envConfigModule, roomsModule } from "@/store";
-import ImportModal from "@components/molecules/ImportModal.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState.vue";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import { mdiCloudDownload, mdiPlus, mdiSchool } from "@mdi/js";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import ImportModal from "@/components/molecules/ImportModal.vue";
+import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -80,7 +80,6 @@ export default Vue.extend({
 			if (
 				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				// @ts-ignore
 				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					return {
 						icon: mdiPlus,
@@ -119,7 +118,7 @@ export default Vue.extend({
 
 			return null;
 		},
-		isLoading(): boolean {
+		isLoading() {
 			return roomsModule.getLoading;
 		},
 		isEmptyState() {
@@ -131,7 +130,6 @@ export default Vue.extend({
 			this.$data.importDialog.isOpen = true;
 		},
 		async updateRooms() {
-			// @ts-ignore
 			await roomsModule.fetchAllElements();
 		},
 	},

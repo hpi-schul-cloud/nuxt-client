@@ -1,26 +1,25 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import StatusAlerts from "./StatusAlerts.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(StatusAlerts, {
+	return mount(StatusAlerts as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/molecules/StatusAlerts", () => {
+describe("@/components/molecules/StatusAlerts", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores();

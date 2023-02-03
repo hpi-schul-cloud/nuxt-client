@@ -1,16 +1,16 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
-import { authModule } from "@/store";
-import { BusinessError, Status } from "./types/commons";
-import { downloadFile } from "@utils/fileHelper";
 import {
-	FileRecordResponse as FileRecord,
-	FileApiInterface,
 	FileApiFactory,
+	FileApiInterface,
+	FileRecordResponse as FileRecord,
 } from "@/fileStorageApi/v3";
+import { authModule } from "@/store";
+import { downloadFile } from "@/utils/fileHelper";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { $axios } from "../utils/api";
+import { BusinessError, Status } from "./types/commons";
 
 @Module({
-	name: "files-poc",
+	name: "filesPOCModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -23,7 +23,6 @@ export default class FilesPOCModule extends VuexModule {
 	};
 
 	status: Status = "";
-	private _fileStorageApi?: FileApiInterface;
 
 	@Action
 	async fetchFiles(): Promise<void> {
@@ -160,10 +159,7 @@ export default class FilesPOCModule extends VuexModule {
 		return this.businessError;
 	}
 
-	private get fileStorageApi() {
-		if (!this._fileStorageApi) {
-			this._fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
-		}
-		return this._fileStorageApi;
+	get fileStorageApi(): FileApiInterface {
+		return FileApiFactory(undefined, "/v3", $axios);
 	}
 }

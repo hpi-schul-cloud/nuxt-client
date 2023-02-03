@@ -25,7 +25,7 @@ const ressources = [
 ];
 
 const axiosHelper = (data = ressources) => ({
-	$get: async (url, { params }) => {
+	get: async (url, { params }) => {
 		// paramsSerializer as second input
 		const { skip = 0 } = params;
 		const limit = 3;
@@ -40,7 +40,7 @@ const axiosHelper = (data = ressources) => ({
 });
 
 const axiosHelperWithoutPagination = (data = ressources) => ({
-	$get: async () => data,
+	get: async () => data,
 });
 
 const mockAxiosError = new Error();
@@ -53,12 +53,12 @@ mockAxiosError.response = {
 };
 
 const axiosHelperThrowError = () => ({
-	$get: async () => {
+	get: async () => {
 		throw mockAxiosError;
 	},
 });
 
-describe("@utils/fetchAll", () => {
+describe("@/utils/fetchAll", () => {
 	describe("file exports works", () => {
 		it("default export works", () => {
 			expect(typeof fetchAllFromDefault).toBe("function");

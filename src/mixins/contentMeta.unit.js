@@ -51,7 +51,7 @@ const contentMetaTypes = {
 	},
 };
 
-describe("@mixins/contentMeta", () => {
+describe("@/mixins/contentMeta", () => {
 	it("should return valid content defaultly", () => {
 		expect(contentMeta.methods.getType("nonesence")).toStrictEqual(
 			expect.objectContaining({

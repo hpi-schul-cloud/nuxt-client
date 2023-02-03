@@ -9,9 +9,7 @@ const button = {
 	components: { ModalFooterConfirm },
 };
 
-describe("@components/molecules/ModalFooterConfirm", () => {
-	it(...isValidComponent(ModalFooterConfirm, {}));
-
+describe("@/components/molecules/ModalFooterConfirm", () => {
 	it("pressing the ok button should close the modal", () => {
 		const wrapper = mount(button);
 		expect(wrapper.find("#confirm").exists()).toBe(true);

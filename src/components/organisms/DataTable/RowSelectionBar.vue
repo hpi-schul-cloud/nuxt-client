@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import ContextMenu from "@components/molecules/ContextMenu";
+import ContextMenu from "@/components/molecules/ContextMenu";
 import { mdiClose } from "@mdi/js";
 
 export default {
@@ -113,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .row-selection-info {
 	display: flex;

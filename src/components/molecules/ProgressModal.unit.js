@@ -1,9 +1,11 @@
 import ProgressModal from "./ProgressModal";
 
-describe("@components/molecules/ProgressModal", () => {
-	it(...isValidComponent(ProgressModal));
+describe("@/components/molecules/ProgressModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(ProgressModal, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
 			propsData: {
 				title: "title",
 				description: "description",

@@ -92,8 +92,8 @@
 	</div>
 </template>
 <script>
-import { inputRangeDate } from "@plugins/datetime";
-import uidMixin from "@mixins/uid";
+import { inputRangeDate } from "@/plugins/datetime";
+import uidMixin from "@/mixins/uid";
 import { mdiEyeOff, mdiEye } from "@mdi/js";
 
 export const supportedTypes = [

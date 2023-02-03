@@ -1,12 +1,10 @@
 import EmptyState from "./EmptyState";
 
-describe("@components/molecules/EmptyState", () => {
-	it(...isValidComponent(EmptyState));
-
+describe("@/components/molecules/EmptyState", () => {
 	it("renders its classes", () => {
 		const wrapper = mount(EmptyState, {
 			propsData: {
-				image: "@assets/icons/emptystate.svg",
+				image: "content-initial",
 				alt: "Alt Text",
 			},
 		});
@@ -18,20 +16,17 @@ describe("@components/molecules/EmptyState", () => {
 	it("renders image", () => {
 		const wrapper = mount(EmptyState, {
 			propsData: {
-				image: "@assets/icons/emptystate.svg",
+				image: "content-initial",
 				alt: "Alt Text",
 			},
 		});
-		expect(wrapper.find("img").exists()).toBe(true);
-		expect(wrapper.find("img").attributes("src")).toBe(
-			"@assets/icons/emptystate.svg"
-		);
+		expect(wrapper.find("svg").exists()).toBe(true);
 	});
 
 	it(
 		...rendersSlotContent(EmptyState, ["description"], {
 			propsData: {
-				image: "@assets/icons/emptystate.svg",
+				image: "content-initial",
 				alt: "Alt Text",
 			},
 		})

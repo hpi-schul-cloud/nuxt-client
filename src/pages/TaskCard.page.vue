@@ -43,18 +43,12 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	onBeforeMount,
-	onMounted,
-} from "@vue/composition-api";
-import { useRouter, useRoute } from "@nuxtjs/composition-api";
+import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElement.vue";
 import {
 	CardElement,
@@ -101,7 +95,7 @@ export default defineComponent({
 			model: "",
 		});
 		const elements = ref<CardElement[]>([]);
-		const route = useRoute().value;
+		const route = useRoute();
 
 		onMounted(async () => {
 			const taskCardId =
@@ -242,12 +236,8 @@ export default defineComponent({
 			dragInProgress,
 		};
 	},
-	// TODO - should not use this, because it's nuxt
-	// @ts-ignore
-	head() {
-		return {
-			title: this.$t("common.words.tasks"),
-		};
+	mounted() {
+		document.title = this.$t("common.words.tasks") as string;
 	},
 });
 </script>

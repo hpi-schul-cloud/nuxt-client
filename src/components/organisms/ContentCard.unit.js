@@ -8,15 +8,13 @@ const localVue = createLocalVue();
 localVue.use(VueRouter);
 
 const router = new VueRouter();
-describe("@components/organisms/ContentCard", () => {
+describe("@/components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
 		router,
 		localVue,
 		propsData: { resource: Resource },
 	});
-
-	it(...isValidComponent(ContentCard));
 
 	it("Sets inline attribute to query when the prop is set to true", () => {
 		wrapper.setProps({ inline: true });
@@ -50,15 +48,13 @@ describe("@components/organisms/ContentCard", () => {
 	});
 });
 
-describe("@components/organisms/ContentCard Collection", () => {
+describe("@/components/organisms/ContentCard Collection", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
 		router,
 		localVue,
 		propsData: { resource: Collection },
 	});
-
-	it(...isValidComponent(ContentCard));
 
 	it("Renders head of contentCard as a link", () => {
 		expect(wrapper.find(".title-link").exists()).toBe(true);

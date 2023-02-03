@@ -2,6 +2,8 @@ import { default as NewTeacher } from "./TeacherCreate.page.vue";
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
+import NotifierModule from "@/store/notifier";
+import { notifierModule } from "@/store";
 
 describe("teachers/new", () => {
 	const createTeacherStub = jest.fn();
@@ -22,14 +24,18 @@ describe("teachers/new", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule, notifierModule: NotifierModule });
 	});
-
-	it(...isValidComponent(NewTeacher));
 
 	it("should call 'createTeacher' action", async () => {
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
@@ -51,9 +57,16 @@ describe("teachers/new", () => {
 		expect(createTeacherStub).toHaveBeenCalled();
 	});
 
-	it("should call toast successful", async () => {
+	it("should call notifier successful", async () => {
+		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
@@ -73,7 +86,7 @@ describe("teachers/new", () => {
 
 		await wrapper.vm.$nextTick(); // trigger dispatch
 		await wrapper.vm.$nextTick(); // trigger then clause of dispatch
-		expect(wrapper.vm.$toast.success).toHaveBeenCalled();
+		expect(notifierModuleMock).toHaveBeenCalled();
 	});
 
 	it("should show error", async () => {
@@ -87,6 +100,12 @@ describe("teachers/new", () => {
 		};
 		const wrapper = mount(NewTeacher, {
 			...createComponentMocks({ i18n: true, store: customMockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(
@@ -99,7 +118,7 @@ describe("teachers/new", () => {
 			'input[data-testid="input_create-user_email"]'
 		);
 		let errorMessageComponent = wrapper.find(".info-message.bc-error");
-		expect(errorMessageComponent.exists()).toBeFalse();
+		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
@@ -110,6 +129,6 @@ describe("teachers/new", () => {
 		await wrapper.vm.$nextTick(); // trigger catch clause of dispatch
 		await wrapper.vm.$nextTick(); // display error component
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
-		expect(errorMessageComponent.exists()).toBeTrue();
+		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

@@ -216,9 +216,9 @@ export default {
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 
-::v-deep .v-btn--has-bg {
-	background-color: var(--v-white-base) !important;
-}
+// ::v-deep .v-btn--has-bg {
+// 	background-color: var(--v-white-base) !important;
+// }
 
 .fab-action-icon {
 	color: var(--v-primary-base) !important;

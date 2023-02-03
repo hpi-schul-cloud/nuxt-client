@@ -24,7 +24,7 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				:class="`menu-action menu-action-${item.name.split(' ').join('-')}`"
+				class="menu-action"
 				:data-testid="item.dataTestId || ''"
 				@click.stop="handleClick(item)"
 			>

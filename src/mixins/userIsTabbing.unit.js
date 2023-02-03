@@ -1,6 +1,6 @@
-import userIsTabbingMixin from "@mixins/userIsTabbing";
+import userIsTabbingMixin from "@/mixins/userIsTabbing";
 
-describe("@mixins/userIsTabbing", () => {
+describe("@/mixins/userIsTabbing", () => {
 	it("$userIsTabbing is true when user has pressed tab key and not clicked since that", () => {
 		const Component = {
 			template: "<div/>",

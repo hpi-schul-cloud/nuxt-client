@@ -3,7 +3,7 @@ import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
-	name: "accounts",
+	name: "accountsModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -37,7 +37,7 @@ export default class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/v1/accounts/jwtTimer");
+			$axios.post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
@@ -49,7 +49,7 @@ export default class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/v1/accounts/jwtTimer");
+			$axios.post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);

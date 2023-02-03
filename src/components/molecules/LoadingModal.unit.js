@@ -1,7 +1,6 @@
 import LoadingModal from "./LoadingModal";
 
-describe("@components/molecules/LoadingModal", () => {
-	it(...isValidComponent(LoadingModal));
+describe("@/components/molecules/LoadingModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(LoadingModal, {
 			...createComponentMocks({

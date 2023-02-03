@@ -5,32 +5,12 @@ import Vuex from "vuex";
 import Vuetify from "vuetify";
 import fs from "fs";
 import path from "path";
-import commonTest from "./commonTests.js";
-// https://vue-test-utils.vuejs.org/
-import * as vueTestUtils from "@vue/test-utils";
-import { RouterLinkStub } from "@vue/test-utils";
-import "@plugins/global";
-import { mountBaseComponents } from "@basecomponents/_globals";
-import { i18n as i18nConfig } from "@plugins/i18n.js";
-import authStoreModule from "@/store/auth";
-import { mixin as userMixin } from "@plugins/user.js";
+import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
+// import { mixin as userMixin } from "@/plugins/user.js";
+import { mountBaseComponents } from "@/components/base/_globals";
+import { setupI18n } from "@/plugins/i18n-test.js";
+import "@/plugins/directives";
 import globalStubs from "./stubs.js";
-import VueMeta from "vue-meta";
-
-// make object properties configurable in tests
-// so they can be mocked
-// https://stackoverflow.com/questions/58852549/error-spyonproperty-function-is-not-declared-configurable
-const { defineProperty } = Object;
-Object.defineProperty = (o, p, c) =>
-	defineProperty(o, p, Object.assign({}, c ?? {}, { configurable: true }));
-
-// ===
-// Utility functions
-// ===
-
-// ===
-// Configure Vue
-// ===
 
 // Don't warn about not using the production build of Vue, as
 // we care more about the quality of errors than performance
@@ -129,33 +109,15 @@ Object.defineProperty(window, "location", {
 // ===
 
 // https://vue-test-utils.vuejs.org/api/#mount
-global.mount = vueTestUtils.mount;
+global.mount = mount;
 
 // https://vue-test-utils.vuejs.org/api/#shallowmount
-global.shallowMount = vueTestUtils.shallowMount;
+global.shallowMount = shallowMount;
 
-global.wait = (duration) =>
-	new Promise((resolve) => {
-		setTimeout(resolve, duration);
-	});
-
-/*
-// A special version of `shallowMount` for view components
-global.shallowMountView = (Component, options = {}) => {
-	return global.shallowMount(Component, {
-		...options,
-		stubs: {
-			Layout: {
-				functional: true,
-				render(h, { slots }) {
-					return <div>{slots().default}</div>;
-				},
-			},
-			...(options.stubs || {}),
-		},
-	});
-};
-*/
+// global.wait = (duration) =>
+// 	new Promise((resolve) => {
+// 		setTimeout(resolve, duration);
+// 	});
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
@@ -166,7 +128,7 @@ global.createComponentMocks = ({
 	$route,
 	$router,
 	router,
-	uiState,
+	// uiState,
 	dialog,
 	/*style,*/ mocks,
 	stubs,
@@ -175,7 +137,7 @@ global.createComponentMocks = ({
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
 	// https://vue-test-utils.vuejs.org/api/#createlocalvue
-	const localVue = vueTestUtils.createLocalVue();
+	const localVue = createLocalVue();
 	const returnOptions = { localVue };
 
 	// https://vue-test-utils.vuejs.org/api/options.html#stubs
@@ -189,7 +151,7 @@ global.createComponentMocks = ({
 			stubs[name] = globalStubs[name]();
 		}
 	});
-	returnOptions.stubs.NuxtLink = RouterLinkStub;
+	// returnOptions.stubs.NuxtLink = RouterLinkStub;
 
 	// Converts a `store` option shaped like:
 	//
@@ -210,9 +172,9 @@ global.createComponentMocks = ({
 	if (store || i18n || user || vueMeta) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
-		if (user) {
-			storeModules.auth = authStoreModule;
-		}
+		// if (user) {
+		// 	WIP: storeModules.auth = authStoreModule;
+		// }
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)
 				.map(([moduleName, storeModule]) => {
@@ -233,44 +195,13 @@ global.createComponentMocks = ({
 	//Set `i18n: true` to enable localization and make `this.$i18n` available
 	if (i18n) {
 		localVue.use(VueI18n);
-		returnOptions.i18n = i18nConfig(returnOptions.store);
+		returnOptions.i18n = setupI18n();
 	}
 
 	Vue.use(Vuetify);
 	returnOptions.vuetify = new Vuetify();
 
-	//Set 'vueMeta: true' for accessing nuxt page meta infos
-	if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
-
-	if (user) {
-		localVue.mixin(userMixin);
-	}
 	localVue.use(Vuelidate);
-
-	// Set uiState like:
-	// {
-	// 		get: (key, identifier) => {},
-	// 		set: (key, identifier) => {},
-	// }
-	if (uiState) {
-		localVue.use({
-			install: (Vue) => {
-				Vue.prototype.$uiState = uiState;
-			},
-		});
-	}
-
-	// Set (confirmation) dialog like:
-	// {
-	//		confirm: (params) => {}
-	// }
-	if (dialog) {
-		localVue.use({
-			install: (Vue) => {
-				Vue.prototype.$dialog = dialog;
-			},
-		});
-	}
 
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
@@ -295,42 +226,27 @@ global.createComponentMocks = ({
 	return returnOptions;
 };
 
-/*
-global.createModuleStore = (vuexModule, options = {}) => {
-	vueTestUtils.createLocalVue().use(Vuex);
-	const store = new Vuex.Store({
-		..._.cloneDeep(vuexModule),
-		modules: {
-			auth: {
-				namespaced: true,
-				state: {
-					currentUser: options.currentUser,
-				},
-			},
+global.rendersSlotContent = (
+	component,
+	slotNames = ["default"],
+	mountOptions
+) => {
+	return [
+		"renders his slot(s) content(s)",
+		() => {
+			slotNames.forEach((slotName) => {
+				const slots = {};
+				slots[slotName] = `<p>Test-Slot: ${slotName}</p>`;
+				const { element } = shallowMount(component, {
+					...mountOptions,
+					slots,
+				});
+				global.expect(element.innerHTML).toContain(slots[slotName]);
+			});
 		},
-	});
-	axios.defaults.headers.common.Authorization = options.currentUser
-		? options.currentUser.token
-		: "";
-	if (vuexModule.actions.init) {
-		store.dispatch("init");
-	}
-	return store;
+	];
 };
-*/
 
-// ===
-// Let tests fail on console.error
-// ===
-console.error = jest.fn((message) => {
-	throw message instanceof Error ? `${message}` : new Error(`${message}`);
-});
-
-// ===
-// Common tests
-// ===
-for (name in commonTest) {
-	global[name] = commonTest[name];
-}
-
+// is imported by @@/tests/test-utils/componentMocks.ts
+// please refactor
 export default global.createComponentMocks;
