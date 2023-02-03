@@ -89,6 +89,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -100,6 +101,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -113,6 +115,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -126,13 +129,14 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
 
-			const finishBtn = wrapper.find("#task-action-finish");
+			const finishBtn = wrapper.find("#task-action-revert");
 			await finishBtn.trigger("click");
 
 			expect(tasksModuleMock.revertPublishedTask).toHaveBeenCalled();
@@ -152,7 +156,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const menuBtn = wrapper.find("#task-menu-btn");
 			await menuBtn.trigger("click");
 
-			const finishBtn = wrapper.find("#task-action-revert");
+			const finishBtn = wrapper.find("#task-action-finish");
 			await finishBtn.trigger("click");
 
 			expect(tasksModuleMock.finishTask).toHaveBeenCalled();
@@ -166,6 +170,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -185,6 +190,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -208,6 +214,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 				const wrapper = getWrapper({
 					taskId: task.id,
 					taskIsFinished: task.status.isFinished,
+					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 					courseId: "18",
 				});
@@ -236,6 +243,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 				const wrapper = getWrapper({
 					taskId: task.id,
 					taskIsFinished: task.status.isFinished,
+					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
 				// @ts-ignore
@@ -264,6 +272,7 @@ describe("@components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 			// @ts-ignore
