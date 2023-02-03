@@ -131,6 +131,40 @@ describe("task store", () => {
 			});
 		});
 
+		describe("revertPublishedTask", () => {
+			beforeEach(() => {
+				setupStores({
+					"finished-tasks": FinishedTasksModule,
+				});
+			});
+
+			it("should call api to revert a published task", (done) => {
+				const mockApi = {
+					taskControllerRevertPublished: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const tasksModule = new TasksModule({});
+				const tasks = taskFactory.buildList(3);
+				tasksModule.setTasks(tasks);
+				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
+
+				tasksModule.revertPublishedTask(tasks[0].id).then(() => {
+					expect(tasksModule.getStatus).toBe("completed");
+					expect(mockApi.taskControllerRevertPublished).toHaveBeenCalledTimes(
+						1
+					);
+					expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
+					done();
+				});
+				expect(tasksModule.getStatus).toBe("pending");
+
+				spy.mockRestore();
+			});
+		});
+
 		// TODO - implement when we figured out how to correctly mock stores
 		describe("finishTask", () => {
 			it.todo("should call finish task api and refetch all tasks");

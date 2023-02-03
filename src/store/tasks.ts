@@ -86,6 +86,25 @@ export default class TasksModule extends VuexModule {
 	}
 
 	@Action
+	async revertPublishedTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+		try {
+			await this.taskApi.taskControllerRevertPublished(taskId);
+
+			await this.fetchAllTasks();
+			if (finishedTasksModule.isInitialized) {
+				await finishedTasksModule.refetchTasks();
+			}
+
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
+
+	@Action
 	async deleteTask(taskId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");

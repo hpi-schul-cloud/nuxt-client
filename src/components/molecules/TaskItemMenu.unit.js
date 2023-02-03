@@ -120,8 +120,8 @@ describe("@components/molecules/TaskItemMenu", () => {
 		});
 	});
 
-	describe("when finishing a task", () => {
-		it("should call finishTask of TasksModule", async () => {
+	describe("when reverting a published task", () => {
+		it("should call revertPublishedTask of TasksModule", async () => {
 			const task = tasksTeacher[0];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -133,6 +133,26 @@ describe("@components/molecules/TaskItemMenu", () => {
 			await menuBtn.trigger("click");
 
 			const finishBtn = wrapper.find("#task-action-finish");
+			await finishBtn.trigger("click");
+
+			expect(tasksModuleMock.revertPublishedTask).toHaveBeenCalled();
+		});
+	});
+
+	describe("when finishing a task", () => {
+		it("should call finishTask of TasksModule", async () => {
+			const task = tasksTeacher[0];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
+				userRole: "teacher",
+			});
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const finishBtn = wrapper.find("#task-action-revert");
 			await finishBtn.trigger("click");
 
 			expect(tasksModuleMock.finishTask).toHaveBeenCalled();
