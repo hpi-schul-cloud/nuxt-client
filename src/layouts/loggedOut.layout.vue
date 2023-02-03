@@ -2,16 +2,6 @@
 	<v-app>
 		<div class="page">
 			<div class="topbar" data-testid="logged-out-top-bar">
-				<!-- NUXT_REMOVAL: Testival alert -->
-				<v-alert
-					color="red lighten-2"
-					dark
-					dense
-					class="ma-2"
-					style="text-align: center"
-				>
-					Bug Hunt: You are on a Vue page
-				</v-alert>
 				<navigation-bar
 					:buttons="true"
 					:img="require('@/assets/img/logo/logo-image-mono.svg')"
