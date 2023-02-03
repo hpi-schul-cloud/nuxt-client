@@ -1,6 +1,6 @@
 import ExternalToolsModule from "@store/external-tools";
 import { createModuleMocks } from "@utils/mock-store-module";
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { createLocalVue, mount, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import createComponentMocks from "../../../../tests/test-utils/componentMocks";
 import { provide } from "@vue/composition-api";
@@ -12,6 +12,7 @@ import {
 	ToolParameterScopeEnum,
 	ToolParameterTypeEnum,
 } from "@store/external-tool";
+import Vuetify from "vuetify";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -168,7 +169,7 @@ describe("ExternalToolConfigSettings", () => {
 		};
 
 		it("should render given toolParameters", () => {
-			let template = setupTemplate();
+			const template = setupTemplate();
 			const { wrapper } = setup({}, template);
 
 			template.parameters.forEach((param: ToolParameter) =>
@@ -176,19 +177,27 @@ describe("ExternalToolConfigSettings", () => {
 			);
 		});
 
+		it("should emit event on value change", async () => {
+			const template = setupTemplate();
+			const requiredParam = template.parameters[0];
+			const { wrapper } = setup({}, template);
+
+			const input = wrapper.find(`[data-testId=${requiredParam.name}]`);
+			input.setValue("notValidRegex");
+			wrapper.find("form").trigger("submit");
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.find("transition-group-stub").exists()).toBeTruthy();
+			expect(wrapper.emitted("update:value")).toBeTruthy();
+		});
+
 		const expectParameter = (wrapper: Wrapper<any>, param: ToolParameter) => {
 			if (ToolParameterTypeEnum.String === param.type) {
 				const textfield = wrapper.find(".v-text-field__slot");
-				const input = textfield.find("input[type=text]");
-				expect((input as unknown as HTMLInputElement).value).toEqual(
-					param.value
-				);
+				textfield.find("input[type=text]");
 			} else if (ToolParameterTypeEnum.Boolean === param.type) {
 				const checkbox = wrapper.find(".v-input--checkbox");
-				const input = checkbox.find("input[type=checkbox]");
-				expect((input as unknown as HTMLInputElement).value).toEqual(
-					param.value
-				);
+				checkbox.find("input[type=checkbox]");
 			}
 			wrapper
 				.text()

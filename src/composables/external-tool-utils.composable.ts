@@ -23,7 +23,6 @@ import {
 	ToolConfigurationTemplate,
 } from "@store/external-tool";
 import { externalToolsModule } from "@utils/store-accessor";
-import VueI18n from "vue-i18n";
 import { SchoolExternalToolItem } from "@components/administration/school-external-tool-item";
 
 const ResponseStatusMapping: Record<
@@ -194,7 +193,6 @@ export function useExternalToolUtils() {
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
 		).find(([key]) => message.startsWith(key))?.[1];
-		console.log(translationKey);
 		if (translationKey) {
 			return translationKey;
 		}

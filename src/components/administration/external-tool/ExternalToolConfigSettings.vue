@@ -3,22 +3,9 @@
 		<h2 class="text-h4 mb-10">
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<v-form>
-			<div v-for="(param, index) in template.parameters" :key="param.name">
-				<template v-if="param.type !== toolParameterTypeEnumBoolean">
-					<v-text-field v-model="param.value" :label="getParamLabelText(param)"
-								  :rules="validateParameter(param)" validate-on-blur
-								  @input:value="updateParameter(template, $event, index)"
-					></v-text-field>
-				</template>
-				<template v-if="param.type === toolParameterTypeEnumBoolean">
-					<v-checkbox v-model="param.value" :label="getParamLabelText(param)"
-								:rules="validateParameter(param)" validate-on-blur
-								@input:value="updateParameter(template, $event, index)"
-					></v-checkbox>
-				</template>
-			</div>
-		</v-form>
+		<div v-for="(param, index) in template.parameters" :key="param.name">
+			<external-tool-parameter v-model="template.parameters[index]" @input:value="updateParameter(template, $event, index)"/>
+		</div>
 		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
 	</div>
 </template>
@@ -26,14 +13,15 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import { computed, ComputedRef, inject } from "@nuxtjs/composition-api";
-import { ToolConfigurationTemplate, ToolParameter, ToolParameterTypeEnum } from "@store/external-tool";
+import { ToolConfigurationTemplate } from "@store/external-tool";
 import VueI18n from "vue-i18n";
 import ExternalToolsModule from "@store/external-tools";
-import { useExternalToolValidation } from "./external-tool-validation.composable";
+import ExternalToolParameter from "./ExternalToolParameter.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigSettings",
+	components: { ExternalToolParameter },
 	emits: ["update:value"],
 	props: {
 		value: {
@@ -57,40 +45,18 @@ export default defineComponent({
 			}
 		});
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined) => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
-
 		const loading: ComputedRef<boolean> = computed(() => externalToolsModule.getLoading);
 
 		const updateParameter = (model: ToolConfigurationTemplate, newValue: string, index: number) => {
 			const newModel: ToolConfigurationTemplate = { ...model };
 			newModel.parameters[index] = { ...newModel.parameters[index], value: newValue };
-			emit("update:value", newModel);
-		};
-
-		const { validateParameter } = useExternalToolValidation(t);
-
-		const getParamLabelText = (param: ToolParameter): string => {
-			if (param.isOptional) {
-				return param.name;
-			}
-			return `${param.name} *`
+			template.value = newModel;
 		};
 
 		return {
-			t,
 			template,
 			updateParameter,
 			loading,
-			validateParameter,
-			getParamLabelText,
-			toolParameterTypeEnumBoolean: ToolParameterTypeEnum.Boolean,
 		};
 	}
 });
