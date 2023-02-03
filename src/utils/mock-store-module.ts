@@ -21,7 +21,6 @@ const mockMutations = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.mutations as MutationTree<M>).forEach((key) => {
-		// eslint-disable-next-line jest/prefer-spy-on
 		statics[key] = jest.fn();
 	});
 };
@@ -31,7 +30,6 @@ const mockActions = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.actions as ActionTree<M, any>).forEach((key) => {
-		// eslint-disable-next-line jest/prefer-spy-on
 		statics[key] = jest.fn();
 	});
 };
@@ -39,7 +37,7 @@ const mockActions = <M>(
 export function createModuleMocks<M extends VuexModule>(
 	moduleClass: ConstructorOf<M>,
 	getters: Partial<M> = {}
-): M {
+): jest.Mocked<M> {
 	const module: Function & Mod<M, any> = moduleClass;
 
 	const statics: StaticsType = {};
@@ -58,5 +56,5 @@ export function createModuleMocks<M extends VuexModule>(
 		mockActions(module, statics);
 	}
 
-	return statics as M;
+	return statics as jest.Mocked<M>;
 }

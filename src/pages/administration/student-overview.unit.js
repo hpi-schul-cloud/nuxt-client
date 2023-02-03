@@ -6,6 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -22,7 +23,6 @@ const envs = {
 	SC_SHORT_TITLE: "",
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 };
-
 const mockData = [
 	{
 		_id: "0000d231816abba584714c9e",
@@ -55,9 +55,10 @@ describe("students/index", () => {
 		process.env = { ...OLD_ENV }; // make a copy
 
 		setupStores({
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-			schools: SchoolsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
+			notifierModule: NotifierModule,
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
@@ -88,6 +89,7 @@ describe("students/index", () => {
 					getActive: () => false,
 					getPercent: () => 0,
 					getQrLinks: () => [],
+					getRegistrationLinks: () => [],
 				},
 			},
 			uiState: {
@@ -115,18 +117,9 @@ describe("students/index", () => {
 		set: (key, identifier) => {},
 	};
 
-	// always confirm
-	const mockDialog = {
-		confirm: (params) => {
-			params.onConfirm();
-		},
-	};
-
 	afterAll(() => {
 		process.env = OLD_ENV; // restore old environment
 	});
-
-	it(...isValidComponent(StudentPage));
 
 	it("should call 'deleteUsers' action", async () => {
 		authModule.setUser({
@@ -142,8 +135,12 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 				uiState: mockUiState,
-				dialog: mockDialog,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -170,7 +167,10 @@ describe("students/index", () => {
 		const deleteBtn = wrapper
 			.findAll(".row-selection-info .context-menu button")
 			.at(3);
-		deleteBtn.trigger("click");
+		await deleteBtn.trigger("click");
+
+		const confirmBtn = wrapper.find("[data-testid='btn-dialog-confirm']");
+		await confirmBtn.trigger("click");
 
 		expect(deleteUsersStub.mock.calls).toHaveLength(1);
 		expect(deleteUsersStub.mock.calls[0][1]).toStrictEqual({
@@ -185,6 +185,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
 	});
@@ -195,6 +200,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		mock$objects(wrapper);
 		authModule.addUserPermmission("STUDENT_DELETE");
@@ -206,6 +216,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		jest.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
@@ -242,6 +253,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -252,6 +268,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -290,6 +307,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		mock$objects(wrapper);
 
@@ -300,6 +322,7 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
+		await dataRow.vm.$emit("update:selected", true);
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -337,6 +360,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const table = wrapper.find(`[data-testid="students_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
@@ -352,6 +380,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -373,6 +406,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -390,6 +428,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(true);
@@ -402,6 +445,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(false);
@@ -415,6 +463,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.vm.href).toStrictEqual(expectedURL);
@@ -427,6 +480,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -449,6 +507,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: customMockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		const fabComponent = wrapper.find(
@@ -465,6 +528,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -480,6 +548,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 
@@ -492,6 +565,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 		expect(externalHint.exists()).toBe(false);
@@ -503,6 +581,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		//run all existing timers
@@ -531,6 +614,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		mockStore.uiState.mutations.set.mockClear();
@@ -547,7 +635,6 @@ describe("students/index", () => {
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
 		const wrapper = mount(StudentPage, {
@@ -555,6 +642,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -566,7 +658,6 @@ describe("students/index", () => {
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
 		const wrapper = mount(StudentPage, {
@@ -574,6 +665,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
@@ -585,7 +681,6 @@ describe("students/index", () => {
 
 	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
 		envConfigModule.setEnvs({
-			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 			FEATURE_CONSENT_NECESSARY: false,
 		});
@@ -594,6 +689,11 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name: "nbc",
+				},
+			},
 		});
 
 		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);

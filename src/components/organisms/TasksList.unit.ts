@@ -6,14 +6,14 @@ import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
 
-const { tasks, overDueTasks, openTasks } = mocks;
+const { tasks } = mocks;
 
-describe("@components/organisms/TasksList", () => {
+describe("@/components/organisms/TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
@@ -21,16 +21,16 @@ describe("@components/organisms/TasksList", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksList, {
+		const wrapper = mount(TasksList as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("copyModule", copyModuleMock);
-				provide("tasksModule", tasksModuleMock);
-				provide("finishedTasksModule", finishedTasksModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				copyModule: copyModuleMock,
+				tasksModule: tasksModuleMock,
+				finishedTasksModule: finishedTasksModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

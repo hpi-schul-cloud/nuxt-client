@@ -1,5 +1,5 @@
 import ApplicationErrorModule from "./application-error";
-import { HttpStatusCode } from "@store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const errorModule = new ApplicationErrorModule({});
 describe("ApplicationErrorModule store", () => {

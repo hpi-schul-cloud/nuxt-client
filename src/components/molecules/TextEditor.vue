@@ -165,6 +165,7 @@ import {
 	Underline,
 	Placeholder,
 } from "tiptap-extensions";
+import { notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -239,7 +240,11 @@ export default {
 			const content = getHTML();
 			const error = this.isInvalid(content);
 			if (error) {
-				this.$toast.error(error);
+				notifierModule.show({
+					text: String(error),
+					status: "error",
+					timeout: 10000,
+				});
 				this.editor.commands.undo();
 			} else {
 				this.content = content;

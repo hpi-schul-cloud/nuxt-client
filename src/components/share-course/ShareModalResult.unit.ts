@@ -1,17 +1,17 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import BaseQrCode from "@basecomponents/BaseQrCode.vue";
-import ShareModalResult from "@components/share-course/ShareModalResult.vue";
-import { provide } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
+import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
+import BaseQrCode from "@/components/base/BaseQrCode.vue";
+import Vue from "vue";
 
-describe("@components/share-course/ShareModalResult", () => {
+describe("@/components/share-course/ShareModalResult", () => {
 	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ShareModalResult, {
+		const wrapper = mount(ShareModalResult as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -25,28 +25,19 @@ describe("@components/share-course/ShareModalResult", () => {
 	});
 
 	it("should not render without required props", () => {
-		try {
-			getWrapper();
-		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain('Missing required prop: "shareUrl"');
-			}
-			return;
-		}
-		fail("No error on required props");
+		console.error = jest.fn();
+
+		getWrapper();
+
+		expect(console.error).toBeCalledWith(
+			expect.stringContaining('Missing required prop: "shareUrl"')
+		);
 	});
 
 	it("should render with required props", () => {
 		const shareUrl = "http://example.com";
-		try {
-			const wrapper = getWrapper({ propsData: { shareUrl } });
-			expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
-		} catch (e) {
-			if (e instanceof Error) {
-				fail(e.message);
-			}
-			return;
-		}
+		const wrapper = getWrapper({ propsData: { shareUrl } });
+		expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
 	});
 
 	it("should render QR-Code if onShowQrCode is called", async () => {

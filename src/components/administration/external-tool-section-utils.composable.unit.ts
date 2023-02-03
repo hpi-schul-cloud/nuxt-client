@@ -1,6 +1,6 @@
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { DataTableHeader } from "vuetify";
-import { externalToolsModule } from "@utils/store-accessor";
+import { externalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
@@ -9,8 +9,8 @@ import {
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
 
-jest.mock("@utils/store-accessor", () => ({
-	externalToolsModule: {
+const externalToolsModuleMock = () => {
+	return {
 		getSchoolExternalTools: [
 			{
 				id: "id",
@@ -19,7 +19,11 @@ jest.mock("@utils/store-accessor", () => ({
 				status: SchoolExternalToolStatusEnum.Latest,
 			},
 		],
-	},
+	};
+};
+
+jest.mock("@/store", () => ({
+	externalToolsModule: externalToolsModuleMock(),
 }));
 
 describe("useSchoolExternalToolUtils", () => {

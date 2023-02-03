@@ -12,7 +12,7 @@
 			class="school-error-image"
 			role="presentation"
 			alt=""
-			src="@assets/img/pc_repair.png"
+			src="@/assets/img/pc_repair.png"
 		/>
 		<div v-if="!schoolError" class="no-school-error">
 			<v-alert light prominent text type="info">
@@ -59,11 +59,11 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import GeneralSettings from "@components/organisms/administration/GeneralSettings";
-import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
-import AuthSystems from "@components/organisms/administration/AuthSystems";
-import AdminMigrationSection from "@components/administration/AdminMigrationSection";
-import ExternalToolsSection from "@components/administration/ExternalToolSection";
+import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
+import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies";
+import AuthSystems from "@/components/organisms/administration/AuthSystems";
+import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
+import ExternalToolsSection from "@/components/administration/ExternalToolSection";
 import { nextTick, onMounted, useRouter } from "@nuxtjs/composition-api";
 
 export default {
@@ -80,7 +80,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.school.index.title"),
@@ -137,12 +137,10 @@ export default {
 			immediate: true,
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.school.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.school.index.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 	setup() {
 		const router = useRouter();

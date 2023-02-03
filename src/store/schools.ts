@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
 import { Year, FederalState, School, OauthMigration } from "./types/schools";
 import {
@@ -45,14 +45,11 @@ function transformSchoolClientToServer(school: any): School {
 }
 
 @Module({
-	name: "schools",
+	name: "schoolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class SchoolsModule extends VuexModule {
-	private _importUserApi?: UserImportApiInterface;
-	private _schoolApi?: SchoolApiInterface;
-
 	school: School = {
 		_id: "",
 		name: "",
@@ -114,14 +111,11 @@ export default class SchoolsModule extends VuexModule {
 		oauthMigrationFinished: "",
 	};
 	systems: any[] = [];
-	loading: boolean = false;
+	loading = false;
 	error: null | {} = null;
 
 	private get schoolApi(): SchoolApiInterface {
-		if (!this._schoolApi) {
-			this._schoolApi = SchoolApiFactory(undefined, "v3", $axios);
-		}
-		return this._schoolApi;
+		return SchoolApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation
@@ -208,9 +202,9 @@ export default class SchoolsModule extends VuexModule {
 
 		if (authModule.getUser?.schoolId) {
 			try {
-				const school = await $axios.$get(
-					`/v1/schools/${authModule.getUser?.schoolId} `
-				);
+				const school = (
+					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
+				).data;
 
 				this.setSchool(transformSchoolServerToClient(school));
 
@@ -227,11 +221,12 @@ export default class SchoolsModule extends VuexModule {
 	async fetchFederalState(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await $axios.$get(
-				`/v1/federalStates/${this.school.federalState}`
-			);
+			const data = (
+				await $axios.get(`/v1/federalStates/${this.school.federalState}`)
+			).data;
 
-			this.setFederalState(response);
+			// @ts-ignore
+			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -244,9 +239,10 @@ export default class SchoolsModule extends VuexModule {
 	async fetchCurrentYear(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const currentYear = await $axios.$get(
-				`/v1/years/${this.school.currentYear}`
-			);
+			const currentYear = (
+				await $axios.get(`/v1/years/${this.school.currentYear}`)
+			).data;
+			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -264,11 +260,11 @@ export default class SchoolsModule extends VuexModule {
 			const systemIds = this.school.systems;
 
 			const requests = systemIds.map((systemId) =>
-				$axios.$get(`v1/systems/${systemId}`)
+				$axios.get(`v1/systems/${systemId}`)
 			);
-			const response = await Promise.all(requests);
+			const responses = await Promise.all(requests);
 
-			this.setSystems(response);
+			this.setSystems(responses.map((response) => response.data));
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -282,7 +278,8 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload);
 		try {
-			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
+			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
+				.data;
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
@@ -296,7 +293,7 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await $axios.$delete(`v1/systems/${systemId}`);
+			await $axios.delete(`v1/systems/${systemId}`);
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
@@ -401,9 +398,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
+		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
 }

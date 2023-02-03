@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import CenterSlot from "@components/atoms/CenterSlot";
-import { autoLogoutModule } from "@/store";
+import CenterSlot from "@/components/atoms/CenterSlot";
+import { autoLogoutModule, notifierModule } from "@/store";
 
 const toast = {
 	error401: -1,
@@ -79,7 +79,7 @@ export default {
 			this.showToast(value);
 		},
 	},
-	created(ctx) {
+	created() {
 		autoLogoutModule.init();
 	},
 	methods: {
@@ -89,21 +89,27 @@ export default {
 		showToast(state) {
 			switch (state) {
 				case toast.success:
-					this.$toast.success(
-						this.$t("components.organisms.AutoLogoutWarning.success")
-					);
+					notifierModule.show({
+						text: this.$t("components.organisms.AutoLogoutWarning.success"),
+						status: "success",
+						timeout: 10000,
+					});
 					break;
 
 				case toast.error:
-					this.$toast.error(
-						this.$t("components.organisms.AutoLogoutWarning.error.retry")
-					);
+					notifierModule.show({
+						text: this.$t("components.organisms.AutoLogoutWarning.error.retry"),
+						status: "error",
+						timeout: 10000,
+					});
 					break;
 
 				case toast.error401:
-					this.$toast.error(
-						this.$t("components.organisms.AutoLogoutWarning.error.401")
-					);
+					notifierModule.show({
+						text: this.$t("components.organisms.AutoLogoutWarning.error.401"),
+						status: "error",
+						timeout: 10000,
+					});
 					break;
 
 				default:
@@ -115,7 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .wrapper {
 	width: 100%;

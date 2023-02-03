@@ -30,9 +30,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 		},
 	});
 
-describe("@components/organisms/FormCreateUser", () => {
-	it(...isValidComponent(FormCreateUser));
-
+describe("@/components/organisms/FormCreateUser", () => {
 	describe("create", () => {
 		it("emits create-user event on form submit", async () => {
 			const actions = getMockActionsErrorCreate();

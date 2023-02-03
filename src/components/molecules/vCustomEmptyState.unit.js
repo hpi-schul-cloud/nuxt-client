@@ -1,15 +1,14 @@
 import Vuetify from "vuetify";
 import vCustomEmptyState from "./vCustomEmptyState";
-import BaseImage from "@basecomponents/BaseImage";
 
 let vuetify;
 let wrapper;
 
 const title = "Test title";
 const subtitle = "Test subtitle";
-const image = "@assets/img/empty-state/tasks-empty-state.svg";
+const image = "@/assets/img/empty-state/tasks-empty-state.svg";
 
-describe("@components/molecules/vCustomEmptyState", () => {
+describe("@/components/molecules/vCustomEmptyState", () => {
 	beforeEach(() => {
 		vuetify = new Vuetify();
 
@@ -30,12 +29,6 @@ describe("@components/molecules/vCustomEmptyState", () => {
 
 	afterEach(() => {
 		wrapper.destroy();
-	});
-
-	it(...isValidComponent(vCustomEmptyState));
-
-	it("should render Base Image component", () => {
-		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
 	});
 
 	it("should render a title", () => {

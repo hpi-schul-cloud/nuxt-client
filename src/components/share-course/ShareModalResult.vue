@@ -99,14 +99,14 @@
 </template>
 
 <script>
-import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseQrCode from "@/components/base/BaseQrCode";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariant,
 } from "@mdi/js";
-import { defineComponent, inject, ref } from "@vue/composition-api";
+import { defineComponent, inject, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -120,7 +120,6 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["i18n"],
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
@@ -181,7 +180,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 
 .subtitle {

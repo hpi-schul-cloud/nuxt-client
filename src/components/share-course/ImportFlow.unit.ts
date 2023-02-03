@@ -9,14 +9,13 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ImportFlow from "@components/share-course/ImportFlow.vue";
-import { provide } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 
-describe("@components/share-course/ImportFlow", () => {
+describe("@/components/share-course/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
@@ -24,15 +23,15 @@ describe("@components/share-course/ImportFlow", () => {
 
 	const token = "ACoolToken";
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(ImportFlow, {
+		const wrapper = mount(ImportFlow as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("copyModule", copyModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
+			provide: {
+				copyModule: copyModuleMock,
+				notifierModule: notifierModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			propsData: {
 				token,

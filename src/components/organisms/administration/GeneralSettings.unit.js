@@ -127,23 +127,22 @@ const mockData = {
 describe("GeneralSettings", () => {
 	beforeEach(() => {
 		setupStores({
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-			schools: SchoolsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
 		});
 
 		schoolsModule.setSchool(school);
 		schoolsModule.setFederalState(federalState);
 		schoolsModule.setSystems(syncedSystem);
-	});
 
-	it(...isValidComponent(GeneralSettings));
+		envConfigModule.setEnvs({
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+	});
 
 	describe("env-config", () => {
 		it("should display select element with available languages", async () => {
-			envConfigModule.setEnvs({
-				I18N__AVAILABLE_LANGUAGES: "de,en,es",
-			});
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -191,7 +190,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
-			expect(ele.vm.disabled).toBeTrue();
+			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("should be possible to edit the school name if the school is not synced", async () => {
@@ -212,7 +211,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(localMockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
-			expect(ele.vm.disabled).toBeFalse();
+			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("should be possible to edit the school name if the school is not attached to a system", async () => {
@@ -227,7 +226,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
-			expect(ele.vm.disabled).toBeFalse();
+			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {
@@ -242,7 +241,7 @@ describe("GeneralSettings", () => {
 
 			const ele = wrapper.find(searchStrings.schoolNumber);
 			expect(ele.vm.value).toStrictEqual("123");
-			expect(ele.vm.disabled).toBeTrue();
+			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("school number text should not be disabled if the number is not set", async () => {
@@ -258,7 +257,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolNumber);
-			expect(ele.vm.disabled).toBeFalse();
+			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("county select element should be disabled if the value is set", async () => {
@@ -272,7 +271,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolCounties);
-			expect(ele.vm.disabled).toBeTrue();
+			expect(ele.vm.disabled).toBeTruthy();
 			expect(ele.vm.$props.items).toHaveLength(2);
 		});
 

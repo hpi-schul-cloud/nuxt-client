@@ -1,8 +1,10 @@
-import mergeDeep from "@utils/merge-deep";
-import serviceTemplate from "@utils/service-template";
+import mergeDeep from "@/utils/merge-deep";
+import serviceTemplate from "@/utils/service-template";
+import { notifierModule } from "@/store";
+
 const base = serviceTemplate("courses");
 
-const module = mergeDeep(base, {
+const coursesModule = mergeDeep(base, {
 	actions: {
 		async removeCourseItem({ dispatch }, courseItem) {
 			let successDeleteNotification;
@@ -25,9 +27,17 @@ const module = mergeDeep(base, {
 						"pages.courses._id.editorDocument.deleteError"
 					);
 				}
-				this.$toast.success(successDeleteNotification);
+				notifierModule.show({
+					text: successDeleteNotification,
+					status: "success",
+					timeout: 10000,
+				});
 			} catch (err) {
-				this.$toast.error(unsuccesfullDeleteNotification);
+				notifierModule.show({
+					text: unsuccesfullDeleteNotification,
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 	},
@@ -45,4 +55,4 @@ const module = mergeDeep(base, {
 	},
 });
 
-export default module;
+export default coursesModule;

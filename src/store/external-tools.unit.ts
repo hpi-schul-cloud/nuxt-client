@@ -4,7 +4,6 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
-	ToolApi,
 } from "../serverApi/v3";
 import {
 	SchoolExternalTool,
@@ -13,7 +12,7 @@ import {
 import setupStores from "../../tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
-import { authModule } from "@utils/store-accessor";
+import { authModule } from "@/store";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-utils.composable";
 
 describe("ExternalToolsModule", () => {
@@ -21,7 +20,7 @@ describe("ExternalToolsModule", () => {
 
 	beforeEach(() => {
 		module = new ExternalToolsModule({});
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule });
 	});
 
 	afterEach(() => {
@@ -30,7 +29,7 @@ describe("ExternalToolsModule", () => {
 
 	const mockToolApi = (
 		schoolExternalToolMock: Partial<SchoolExternalToolResponse> = {},
-		throwError: boolean = false
+		throwError = false
 	) => {
 		const searchListResponse: SchoolExternalToolSearchListResponse = {
 			data: [
@@ -80,7 +79,7 @@ describe("ExternalToolsModule", () => {
 			}
 		);
 
-		const toolApiMock: Partial<ToolApi> = {
+		const toolApiMock = {
 			toolSchoolControllerGetSchoolExternalTools:
 				toolSchoolControllerGetSchoolExternalToolsMock,
 			toolSchoolControllerDeleteSchoolExternalTool:
@@ -94,7 +93,7 @@ describe("ExternalToolsModule", () => {
 	};
 
 	const setup = () => {
-		const schoolId: string = "schoolId";
+		const schoolId = "schoolId";
 
 		const schoolExternalTool: SchoolExternalTool = {
 			name: "Test",

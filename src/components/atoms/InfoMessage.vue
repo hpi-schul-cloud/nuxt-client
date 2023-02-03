@@ -1,11 +1,16 @@
 <template>
 	<div class="info-message" :class="type">
-		<base-icon source="custom" :icon="icon" class="icon"></base-icon>
+		<base-icon
+			source="custom"
+			:icon="icon"
+			class="icon"
+			:fill="iconColor"
+		></base-icon>
 		<div class="message">{{ message }}</div>
 	</div>
 </template>
 <script>
-import BaseIcon from "@components/base/BaseIcon";
+import BaseIcon from "@/components/base/BaseIcon";
 export default {
 	components: { BaseIcon },
 	props: {
@@ -27,6 +32,10 @@ export default {
 				return "warning";
 			}
 			return this.type.substring(3);
+		},
+		iconColor() {
+			const typeStr = this.type.substring(3);
+			return `var(--v-${typeStr}-base)`;
 		},
 	},
 };

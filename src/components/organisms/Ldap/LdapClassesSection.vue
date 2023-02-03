@@ -3,13 +3,12 @@
 		<h3 class="title-class">
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
-		<base-input
+		<v-switch
 			v-model="checked"
-			type="switch"
-			datatest-id="ldapDataClassesCheckbox"
+			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
-		>
-		</base-input>
+			dense
+		></v-switch>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
@@ -28,7 +27,11 @@
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" />
+				<base-icon
+					source="custom"
+					icon="account_tree"
+					:fill="classesActivatedColor"
+				/>
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -47,7 +50,7 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="class" />
+				<base-icon source="custom" icon="class" :fill="classesActivatedColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -65,7 +68,11 @@
 			"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="gruppen" />
+				<base-icon
+					source="custom"
+					icon="gruppen"
+					:fill="classesActivatedColor"
+				/>
 			</template>
 		</base-input>
 	</div>
@@ -73,7 +80,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathRegexValidatior } from "@utils/ldapConstants";
+import { ldapPathRegexValidatior } from "@/utils/ldapConstants";
 
 export default {
 	props: {
@@ -89,6 +96,7 @@ export default {
 	},
 	data() {
 		return {
+			classesActivatedColor: "currentColor",
 			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -120,7 +128,12 @@ export default {
 		},
 		checked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
-			if (this.checked === false) this.$emit("update:inputs");
+			if (this.checked === false) {
+				this.classesActivatedColor = "currentColor";
+				this.$emit("update:inputs");
+			} else {
+				this.classesActivatedColor = "var(--v-black-base)";
+			}
 		},
 		classPathChanged: function () {
 			this.checked = !!this.value.classPath;

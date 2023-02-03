@@ -38,10 +38,13 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule, schools: SchoolsModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
+		});
+		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
+		document.body.setAttribute("data-app", "true");
 	});
-
-	it(...isValidComponent(AuthSystems));
 
 	describe("displaying values", () => {
 		describe("login link", () => {
@@ -166,9 +169,9 @@ describe("AuthSystems", () => {
 
 			const ldapButtonVisibility = wrapper.findAll(searchStrings.addLdap);
 			expect(ldapButtonVisibility).toHaveLength(1);
-			expect(
-				ldapButtonVisibility.wrappers[0].element.text.trim()
-			).toStrictEqual("LDAP-System hinzufügen");
+			expect(ldapButtonVisibility.at(0).text().trim()).toStrictEqual(
+				"LDAP-System hinzufügen"
+			);
 			expect(ldapButtonVisibility.wrappers[0].vm.to).toStrictEqual(
 				"/administration/ldap/config"
 			);

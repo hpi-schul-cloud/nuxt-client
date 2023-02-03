@@ -1,6 +1,5 @@
-import { ApplicationError } from "@store/types/application-error";
+import { ApplicationError } from "@/store/types/application-error";
 import { applicationErrorModule } from "@/store";
-import Vue from "vue";
 
 export const handleApplicationError = (err: Error) => {
 	/**
@@ -20,5 +19,3 @@ export const handleApplicationError = (err: Error) => {
 		translationKey: "error.generic",
 	});
 };
-
-Vue.config.errorHandler = handleApplicationError;

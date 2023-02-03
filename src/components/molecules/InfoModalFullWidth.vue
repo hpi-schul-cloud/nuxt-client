@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import CenterSlot from "@components/atoms/CenterSlot";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import CenterSlot from "@/components/atoms/CenterSlot";
 
 export default {
 	components: {

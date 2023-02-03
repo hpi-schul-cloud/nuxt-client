@@ -5,8 +5,9 @@ import {
 	ToolConfigurationScope,
 	ToolConfigurationTemplate,
 } from "./external-tool";
-import { $axios } from "@utils/api";
-import { authModule } from "@utils/store-accessor";
+import { $axios } from "@/utils/api";
+import { authModule } from "@/store";
+import { useExternalToolUtils } from "../composables/external-tool-utils.composable";
 import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
@@ -14,17 +15,16 @@ import {
 	ToolApiInterface,
 	ToolConfigurationListResponse,
 } from "../serverApi/v3";
-import { AxiosResponse } from "axios";
-import { useExternalToolUtils } from "../composables/external-tool-utils.composable";
 import { BusinessError } from "./types/commons";
 
 @Module({
-	name: "external-tools",
+	name: "externalToolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
+	private loading = false;
 
 	private toolConfigurations: ToolConfiguration[] = [];
 
@@ -39,10 +39,7 @@ export default class ExternalToolsModule extends VuexModule {
 	private _toolApi?: ToolApiInterface;
 
 	private get toolApi(): ToolApiInterface {
-		if (!this._toolApi) {
-			this._toolApi = ToolApiFactory(undefined, "v3", $axios);
-		}
-		return this._toolApi;
+		return ToolApiFactory(undefined, "v3", $axios);
 	}
 
 	get getLoading(): boolean {

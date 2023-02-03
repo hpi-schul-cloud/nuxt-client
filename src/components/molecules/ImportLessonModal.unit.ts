@@ -2,27 +2,29 @@ import { roomModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import RoomModule from "@/store/room";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ImportLessonModal from "./ImportLessonModal.vue";
-
-declare let createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(ImportLessonModal, {
+	return mount(ImportLessonModal as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/molecules/RoomLessonModal", () => {
+describe("@/components/molecules/RoomLessonModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ "env-config": EnvConfigModule, room: RoomModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			roomModule: RoomModule,
+		});
 	});
 
 	it("should open and close on property change", async () => {
