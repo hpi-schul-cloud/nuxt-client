@@ -31,7 +31,7 @@ import { useRouter, useRoute } from "@nuxtjs/composition-api";
 import VueI18n from "vue-i18n";
 import { taskCardModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import CardElementWrapper from "@/components/card-elements/CardElement.vue";
+import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
