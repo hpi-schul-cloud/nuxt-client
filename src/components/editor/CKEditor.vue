@@ -11,7 +11,15 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject, watch } from "@vue/composition-api";
+import {
+	defineComponent,
+	ref,
+	nextTick,
+	inject,
+	watch,
+	onMounted,
+	onBeforeUnmount,
+} from "@vue/composition-api";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 require("@hpi-schul-cloud/ckeditor/build/translations/en");
 require("@hpi-schul-cloud/ckeditor/build/translations/es");
@@ -23,7 +31,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input"],
+	emits: ["input", "focus", "blur"],
 	props: {
 		value: {
 			type: String,
@@ -45,6 +53,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
+		const ck = ref(null);
 		const content = ref(props.value);
 		const language = (() => {
 			// map ua to correct uk
@@ -165,7 +174,40 @@ export default defineComponent({
 
 		const handleInput = () => emit("input", content.value);
 
+		// as the blur event of the editor also gets triggered when eg focus is on the editor toolbar,
+		// we implement focus handling ourselve by watching the classes of the editor instance
+		const onClassChange = (classAttrValue) => {
+			const classList = classAttrValue.split(" ");
+			if (classList.includes("ck-focused")) {
+				emit("focus");
+			}
+			if (classList.includes("ck-blurred")) {
+				setTimeout(() => emit("blur"), 100);
+			}
+		};
+
+		const observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+				const classes = mutation.target.getAttribute(mutation.attributeName);
+				nextTick(() => {
+					onClassChange(classes);
+				});
+			});
+		});
+
+		onMounted(() => {
+			observer.observe(ck.value.$el, {
+				attributes: true,
+				attributeFilter: ["class"],
+			});
+		});
+
+		onBeforeUnmount(() => {
+			observer.disconnect();
+		});
+
 		return {
+			ck,
 			content,
 			CustomCKEditor,
 			config,
@@ -174,3 +216,16 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss">
+// TODO move to ckbuild
+.ck-focused {
+	border: dashed 1px var(--v-grey-base) !important;
+	box-shadow: none !important;
+}
+
+.ck.ck-editor__editable_inline > :last-child {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	margin-bottom: 30px;
+}
+</style>
