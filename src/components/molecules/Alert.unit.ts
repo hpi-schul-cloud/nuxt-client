@@ -4,15 +4,13 @@ import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
 import Vue from "vue";
-import { AlertPayload } from "@store/types/alert-payload";
-
-declare var createComponentMocks: Function;
+import { AlertPayload } from "@/store/types/alert-payload";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper: any = (device = "desktop", options?: object) => {
 	return mount(Alert, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		computed: {
 			$mq: () => device,
@@ -24,17 +22,17 @@ const getWrapper: any = (device = "desktop", options?: object) => {
 describe("Alert", () => {
 	beforeEach(() => {
 		setupStores({
-			notifier: NotifierModule,
+			notifierModule: NotifierModule,
 		});
 	});
 
-	it("should watch 'notifierData' and set 'show' to true", async () => {
+	it("should observe the store and set 'showNotifier' to true", async () => {
 		const wrapper = getWrapper();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 		notifierModule.setNotifier({ text: "some text", status: "success" });
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should be visible when set", async () => {
@@ -46,7 +44,7 @@ describe("Alert", () => {
 		notifierModule.show(data);
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when no timeout is given", async () => {
@@ -59,10 +57,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after default timeout when autoClose is false", async () => {
@@ -76,10 +74,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when autoClose is set", async () => {
@@ -95,15 +93,15 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should disappear after specific timeout when autoClose is not set", async () => {
 		jest.useFakeTimers();
-		const testTimeout = 10000;
+		const testTimeout = 1000;
 
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
@@ -114,10 +112,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(testTimeout);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after any time when autoClose is false", async () => {
@@ -131,12 +129,36 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.show).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
+	});
+
+	it("should set store 'undefined' when close button clicked", async () => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+		const data: AlertPayload = {
+			text: "hello world",
+			status: "success",
+			autoClose: false,
+		};
+		notifierModule.show(data);
+
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(true);
+
+		jest.runAllTimers();
+
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(true);
+
+		const alertComponent = wrapper.find(".alert");
+		await alertComponent.vm.$emit("input");
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should set mobile position-class as default if the device is mobile", async () => {

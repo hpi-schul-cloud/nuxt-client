@@ -1,4 +1,5 @@
 import module from "./consent-versions";
+import { initializeAxios } from "@/utils/api";
 
 const { actions, mutations, getters } = module;
 
@@ -15,24 +16,26 @@ describe("store/consent-versions", () => {
 					consentTypes: "privacy",
 				};
 
-				actions.$axios = {
-					$get: async (url) => {
+				initializeAxios({
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
-							total: 1,
-							limit: 100,
-							skip: 0,
-							data: [
-								{
-									_id: "611a75856cfbb2aded54eae4",
-									versionNumber: "testversion",
-									consentText: "lorem ipsum",
-									date: "2017-01-01T00:06:40.150Z",
-								},
-							],
+							data: {
+								total: 1,
+								limit: 100,
+								skip: 0,
+								data: [
+									{
+										_id: "611a75856cfbb2aded54eae4",
+										versionNumber: "testversion",
+										consentText: "lorem ipsum",
+										date: "2017-01-01T00:06:40.150Z",
+									},
+								],
+							},
 						};
 					},
-				};
+				});
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);
@@ -62,25 +65,27 @@ describe("store/consent-versions", () => {
 					withFile: true,
 				};
 
-				actions.$axios = {
-					$get: async (url) => {
+				initializeAxios({
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
-							total: 1,
-							limit: 100,
-							skip: 0,
-							data: [
-								{
-									_id: "611a75856cfbb2aded54eae4",
-									versionNumber: "testversion",
-									consentText: "lorem ipsum",
-									date: "2017-01-01T00:06:40.150Z",
-									consentDataId: "id_123",
-								},
-							],
+							data: {
+								total: 1,
+								limit: 100,
+								skip: 0,
+								data: [
+									{
+										_id: "611a75856cfbb2aded54eae4",
+										versionNumber: "testversion",
+										consentText: "lorem ipsum",
+										date: "2017-01-01T00:06:40.150Z",
+										consentDataId: "id_123",
+									},
+								],
+							},
 						};
 					},
-				};
+				});
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);
@@ -95,9 +100,9 @@ describe("store/consent-versions", () => {
 				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual(
 					expect.any(Array)
 				);
-				expect(
-					Object.keys(ctxMock.commit.mock.calls[1][1][0]).includes("fileData")
-				).toBeTrue();
+				expect(Object.keys(ctxMock.commit.mock.calls[1][1][0])).toContain(
+					"fileData"
+				);
 				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[2][1]).toStrictEqual(false);
 			});
@@ -114,24 +119,26 @@ describe("store/consent-versions", () => {
 					consentTypes: "privacy",
 				};
 
-				actions.$axios = {
-					$get: async (url) => {
+				initializeAxios({
+					get: async (url) => {
 						receivedRequests.push({ url });
 						return {
-							total: 1,
-							limit: 100,
-							skip: 0,
-							data: [
-								{
-									_id: "611a75856cfbb2aded54eae4",
-									versionNumber: "testversion",
-									consentText: "lorem ipsum",
-									date: "2017-01-01T00:06:40.150Z",
-								},
-							],
+							data: {
+								total: 1,
+								limit: 100,
+								skip: 0,
+								data: [
+									{
+										_id: "611a75856cfbb2aded54eae4",
+										versionNumber: "testversion",
+										consentText: "lorem ipsum",
+										date: "2017-01-01T00:06:40.150Z",
+									},
+								],
+							},
 						};
 					},
-				};
+				});
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);

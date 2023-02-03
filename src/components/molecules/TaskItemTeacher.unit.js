@@ -3,7 +3,6 @@ import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { provide } from "@vue/composition-api";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
 
@@ -34,11 +33,11 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
-		setup() {
-			provide("tasksModule", tasksModuleMock);
-			provide("copyModule", copyModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key) => key });
+		provide: {
+			tasksModule: tasksModuleMock,
+			copyModule: copyModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		propsData: props,
 		attachTo: document.body,
@@ -46,7 +45,7 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/molecules/TaskItemTeacher", () => {
+describe("@/components/molecules/TaskItemTeacher", () => {
 	defineWindowWidth(1264);
 
 	beforeEach(() => {
@@ -54,8 +53,6 @@ describe("@components/molecules/TaskItemTeacher", () => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
-
-	it(...isValidComponent(TaskItemTeacher));
 
 	it("accepts valid task props", () => {
 		const { validator } = TaskItemTeacher.props.task;

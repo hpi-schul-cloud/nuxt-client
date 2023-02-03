@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getValueByPath } from "@utils/helpers";
+import { getValueByPath } from "@/utils/helpers";
 
 export default {
 	props: {

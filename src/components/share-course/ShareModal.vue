@@ -47,12 +47,12 @@
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@components/share-course/ShareModalOptionsForm";
-import ShareModalResult from "@components/share-course/ShareModalResult";
+<script>
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -124,7 +124,7 @@ export default defineComponent({
 				status: "success",
 				timeout: 10000,
 			});
-		}
+		};
 
 		return {
 			onShareOptionsChange,
@@ -138,7 +138,7 @@ export default defineComponent({
 			isOpen,
 			shareOptions,
 			mdiInformation,
-			onCopy
+			onCopy,
 		};
 	},
 });

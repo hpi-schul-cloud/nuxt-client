@@ -40,7 +40,7 @@ class TaskFactory {
 	}
 
 	buildList(number: number, params: TaskParams = {}): Task[] {
-		let list: Task[] = [];
+		const list: Task[] = [];
 		for (let i = 0; i < number; i++) {
 			list.push(this.build(params));
 		}

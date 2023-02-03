@@ -83,9 +83,9 @@
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
@@ -258,7 +258,6 @@ export default {
 			return null;
 		},
 		emptyState() {
-			const image = "@assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 
@@ -282,7 +281,7 @@ export default {
 			}
 
 			return {
-				image,
+				image: "tasks-empty-state",
 				title,
 				subtitle,
 			};

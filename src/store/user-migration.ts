@@ -1,4 +1,4 @@
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -18,7 +18,7 @@ export default class UserMigrationModule extends VuexModule {
 		proceedLink: "",
 		cancelLink: "",
 	};
-	private loading: boolean = false;
+	private loading = false;
 	private error: {} | null = null;
 
 	private _userMigrationApi?: UserMigrationApiInterface;
@@ -74,7 +74,7 @@ export default class UserMigrationModule extends VuexModule {
 			};
 			this.setMigrationLinks(mappedLinks);
 		} catch (error) {
-			this.setError(error);
+			this.setError(error as Error);
 		}
 		this.setLoading(false);
 	}

@@ -2,18 +2,19 @@ import { roomsModule } from "@/store";
 import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ImportModal from "./ImportModal.vue";
+import Vue from "vue";
 
-describe("@components/molecules/RoomModal", () => {
+describe("@/components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-		setupStores({ rooms: RoomsModule });
+		setupStores({ roomsModule: RoomsModule });
 	});
 
 	it("should open and close on property change", async () => {
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -36,7 +37,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should emit event if vuetify modal is closed", async () => {
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -52,7 +53,7 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("stepper should work by setting step value", async () => {
-		const wrapper: any = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -84,7 +85,7 @@ describe("@components/molecules/RoomModal", () => {
 			status: "success",
 			message: "",
 		};
-		const wrapper: any = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -107,7 +108,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 		};
-		const wrapper: any = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -127,7 +128,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 		};
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -146,7 +147,7 @@ describe("@components/molecules/RoomModal", () => {
 			isOpen: true,
 		};
 
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -166,7 +167,7 @@ describe("@components/molecules/RoomModal", () => {
 		const testProps = {
 			isOpen: true,
 		};
-		const wrapper: any = mount(ImportModal, {
+		const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -187,7 +188,7 @@ describe("@components/molecules/RoomModal", () => {
 			const getSharedCourseDataMock = jest
 				.spyOn(roomsModule, "getSharedCourseData")
 				.mockImplementation();
-			const wrapper: any = mount(ImportModal, {
+			const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 				...createComponentMocks({
 					i18n: true,
 				}),
@@ -221,7 +222,7 @@ describe("@components/molecules/RoomModal", () => {
 		});
 
 		it("should not go to step#3 if there is a code error", async () => {
-			const wrapper: any = mount(ImportModal, {
+			const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 				...createComponentMocks({
 					i18n: true,
 				}),
@@ -243,7 +244,7 @@ describe("@components/molecules/RoomModal", () => {
 		});
 
 		it("should show import-error section if server sends import-error", async () => {
-			const wrapper: any = mount(ImportModal, {
+			const wrapper: any = mount(ImportModal as MountOptions<Vue>, {
 				...createComponentMocks({
 					i18n: true,
 				}),

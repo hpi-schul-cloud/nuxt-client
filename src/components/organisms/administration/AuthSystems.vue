@@ -66,7 +66,6 @@
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
-								nuxt
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
@@ -88,7 +87,6 @@
 			class="my-8 add-ldap"
 			depressed
 			to="/administration/ldap/config"
-			nuxt
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
@@ -119,9 +117,13 @@
 
 <script>
 import { envConfigModule, schoolsModule } from "@/store";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import vCustomDialog from "@components/organisms/vCustomDialog";
-import { mdiContentCopy, mdiCheckCircle } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiContentCopy,
+	mdiCheckCircle,
+} from "@mdi/js";
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 
 export default {
 	components: {

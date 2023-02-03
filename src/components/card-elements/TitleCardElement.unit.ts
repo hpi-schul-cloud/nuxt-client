@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TitleCardElement from "@components/card-elements/TitleCardElement.vue";
+import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
 	return mount(TitleCardElement, {

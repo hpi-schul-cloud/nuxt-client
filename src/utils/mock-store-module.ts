@@ -21,7 +21,6 @@ const mockMutations = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.mutations as MutationTree<M>).forEach((key) => {
-		// eslint-disable-next-line jest/prefer-spy-on
 		statics[key] = jest.fn();
 	});
 };
@@ -31,7 +30,6 @@ const mockActions = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.actions as ActionTree<M, any>).forEach((key) => {
-		// eslint-disable-next-line jest/prefer-spy-on
 		statics[key] = jest.fn();
 	});
 };

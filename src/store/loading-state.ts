@@ -1,8 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { LoadingStatePayload } from "@store/types/loading-state-payload";
+import { LoadingStatePayload } from "@/store/types/loading-state-payload";
 
 @Module({
-	name: "loading-state",
+	name: "loadingStateModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -17,7 +17,7 @@ export default class LoadingStateModule extends VuexModule {
 		...this._defaultPayload,
 	};
 
-	_isOpen: boolean = false;
+	_isOpen = false;
 
 	get getLoadingState(): Required<LoadingStatePayload> {
 		return this._loadingState;

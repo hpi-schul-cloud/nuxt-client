@@ -2,18 +2,18 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CollaborativeFile,
 	CollaborativeFileType,
-} from "@store/types/collaborative-file";
-import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
-import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
-import { useFileTableUtils } from "@pages/files/file-table-utils.composable";
+} from "@/store/types/collaborative-file";
+import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
+import { FileTypeResponse } from "@/store/collaborative-files/file-meta.response";
+import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 
 @Module({
-	name: "collaborative-files",
+	name: "collaborativeFilesModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class CollaborativeFilesModule extends VuexModule {
-	loading: boolean = false;
+	loading = false;
 
 	files: CollaborativeFile[] = [];
 

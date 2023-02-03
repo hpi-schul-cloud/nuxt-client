@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-@import "@styles";
+@import "@/styles/mixins";
 
 .popup {
 	position: relative;

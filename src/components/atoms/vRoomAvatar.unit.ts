@@ -1,7 +1,6 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
-
-declare var createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	id: "456",
@@ -27,7 +26,6 @@ const getWrapper = (props: object, options?: object): Wrapper<any> => {
 	return mount(vRoomAvatar, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,

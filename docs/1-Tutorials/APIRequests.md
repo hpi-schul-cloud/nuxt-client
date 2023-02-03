@@ -203,6 +203,10 @@ this.$store
 	})
 	.catch((error) => {
 		console.error(error);
-		this.$toast.error(this.$t("error.load"));
+		notifierModule.show({
+			text: this.$t("error.load"),
+			status: "error", // "success" | "error" | "warning" | "info"
+			timeout: 10000,
+		});
 	});
 ```

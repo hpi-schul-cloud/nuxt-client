@@ -1,16 +1,14 @@
-import { SystemApiInterface, SystemOauthResponse } from "../serverApi/v3";
 import * as serverApi from "../serverApi/v3/api";
 import SystemsModule from "./systems";
 import { System } from "./types/system";
-import { AxiosResponse } from "axios";
 
-const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-	data,
-	status: 200,
-	statusText: "OK",
-	headers: {},
-	config: {},
-});
+// const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
+// 	data,
+// 	status: 200,
+// 	statusText: "OK",
+// 	headers: {},
+// 	config: {},
+// });
 
 describe("SystemsModule", () => {
 	let module: SystemsModule;
@@ -23,15 +21,15 @@ describe("SystemsModule", () => {
 		jest.resetAllMocks();
 	});
 
-	const mockApi = () => {
-		const apiMock: jest.Mocked<SystemApiInterface> = {
-			systemControllerFind: jest.fn(),
-		};
+	// const mockApi = () => {
+	// 	const apiMock: jest.Mocked<SystemApiInterface> = {
+	// 		systemControllerFind: jest.fn(),
+	// 	};
 
-		jest.spyOn(serverApi, "SystemApiFactory").mockReturnValue(apiMock);
+	// 	jest.spyOn(serverApi, "SystemApiFactory").mockReturnValue(apiMock);
 
-		return { apiMock };
-	};
+	// 	return { apiMock };
+	// };
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
@@ -89,26 +87,30 @@ describe("SystemsModule", () => {
 	describe("actions", () => {
 		describe("fetchSystems", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
 				const system: System = {
 					id: "systemId",
 					name: "systemName",
 				};
-				const response: SystemOauthResponse = {
-					data: [
-						{
-							id: "systemId",
-							displayName: "systemName",
+
+				const mockApi = {
+					systemControllerFind: jest.fn().mockResolvedValue({
+						data: {
+							data: [
+								{
+									id: "systemId",
+									displayName: "systemName",
+								},
+							],
 						},
-					],
+					}),
 				};
 
-				apiMock.systemControllerFind.mockResolvedValue(
-					createAxiosResponse(response)
-				);
+				jest
+					.spyOn(serverApi, "SystemApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.SystemApiInterface);
 
 				return {
-					apiMock,
+					apiMock: mockApi,
 					system,
 				};
 			};

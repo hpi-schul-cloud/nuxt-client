@@ -51,7 +51,7 @@
 	</div>
 </template>
 <script>
-import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 export default {
 	components: {
 		RoomAvatarIterator,
@@ -120,7 +120,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 
 .subtitle {
@@ -147,7 +147,7 @@ export default {
 	}
 }
 
-.card-component {
+.group-avatar .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }

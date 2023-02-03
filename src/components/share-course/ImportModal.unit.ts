@@ -1,16 +1,16 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
-import ImportModal from "@components/share-course/ImportModal.vue";
+import { mount, MountOptions } from "@vue/test-utils";
+import ImportModal from "@/components/share-course/ImportModal.vue";
+import Vue from "vue";
 
-describe("@components/share-course/ImportModal", () => {
+describe("@/components/share-course/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ImportModal, {
+		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -24,15 +24,13 @@ describe("@components/share-course/ImportModal", () => {
 	});
 
 	it("should not render without required props", () => {
-		try {
-			getWrapper();
-		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain("Missing required prop:");
-			}
-			return;
-		}
-		fail("No error on required props");
+		console.error = jest.fn();
+
+		getWrapper();
+
+		expect(console.error).toBeCalledWith(
+			expect.stringContaining('Missing required prop: "parentName"')
+		);
 	});
 
 	it("should render with props", () => {

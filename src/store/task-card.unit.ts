@@ -1,4 +1,4 @@
-import TaskCardModule from "@store/task-card";
+import TaskCardModule from "@/store/task-card";
 import * as serverApi from "../serverApi/v3/api";
 import {
 	CardElementResponseCardElementTypeEnum,

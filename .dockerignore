@@ -8,3 +8,5 @@ Dockerfile.*
 
 **/*.unit.ts
 **/*.unit.js
+
+public/runtime.config.json

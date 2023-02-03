@@ -85,19 +85,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
 import {
+	defineComponent,
+	ref,
 	computed,
 	ComputedRef,
 	inject,
 	onMounted,
 	Ref,
-} from "@nuxtjs/composition-api";
-import SchoolsModule from "@store/schools";
+} from "vue";
+import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 import { MigrationBody } from "@/serverApi/v3";
-import MigrationStartWarningCard from "@components/administration/MigrationStartWarningCard.vue";
-import MigrationEndWarningCard from "@components/administration/MigrationEndWarningCard.vue";
+import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
+import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

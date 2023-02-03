@@ -3,6 +3,16 @@ import Vuex from "vuex";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import VueRouter from "vue-router";
 import { createLocalVue } from "@vue/test-utils";
+import ContentModule from "@/store/content";
+import NotifierModule from "@/store/notifier";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { initializeAxios } from "@/utils/api";
+
+initializeAxios({
+	get: async () => {
+		return { data: [] };
+	},
+});
 
 const testProps = {
 	resource: Collection,
@@ -16,7 +26,12 @@ localVue.use(Vuex);
 
 const router = new VueRouter();
 
-describe("@components/organisms/LernstoreCollectionDetailView", () => {
+setupStores({
+	contentModule: ContentModule,
+	notifierModule: NotifierModule,
+});
+
+describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 	let wrapper;
 
 	beforeEach(() => {
@@ -35,15 +50,8 @@ describe("@components/organisms/LernstoreCollectionDetailView", () => {
 				elements: {},
 				selected: [],
 			},
-			mocks: {
-				$toast: {
-					error: jest.fn(),
-				},
-			},
 		});
 	});
-
-	it(...isValidComponent(LernstoreCollectionDetailView));
 
 	it("Gets collection UUID", () => {
 		expect(wrapper.vm.collectionUUID).toBe(

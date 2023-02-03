@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
-import DefaultWireframe from "@components/templates/DefaultWireframe";
+import CommonTermsOfUse from "@/components/templates/CommonTermsOfUse";
+import DefaultWireframe from "@/components/templates/DefaultWireframe";
 
 export default {
 	components: { CommonTermsOfUse, DefaultWireframe },
@@ -28,9 +28,8 @@ export default {
 	},
 	methods: {
 		async download() {
-			const data = await this.$axios.$get(
-				`/v1/base64Files/${this.consentVersion.consentDataId}`
-			);
+			const requestUrl = `/v1/base64Files/${this.consentVersion.consentDataId}`;
+			const data = (await this.$axios.get(requestUrl)).data;
 			const downloadLink = document.createElement("a");
 			downloadLink.href = data.data;
 			downloadLink.download = "Datenschutzerklärung-der-Schule.pdf";

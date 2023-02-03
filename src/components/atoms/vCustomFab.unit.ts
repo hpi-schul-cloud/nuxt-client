@@ -1,22 +1,20 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import { mdiPlus, mdiAccountPlus, mdiAccountMultipleMinus } from "@mdi/js";
 import vCustomFab from "./vCustomFab.vue";
-import { vuetify } from "@@/nuxt.config";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(vCustomFab, {
+	return mount(vCustomFab as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/atoms/vCustomFab", () => {
+describe("@/components/atoms/vCustomFab", () => {
 	describe("when fab is simple (icon only)", () => {
 		const simpleFab = {
 			actions: [],
@@ -47,8 +45,6 @@ describe("@components/atoms/vCustomFab", () => {
 				...simpleFab,
 				ariaLabel: "dummy aria label",
 			});
-
-			const attributes = wrapper.element.attributes;
 
 			expect(wrapper.element.getAttribute("aria-label")).toContain(
 				"dummy aria label"

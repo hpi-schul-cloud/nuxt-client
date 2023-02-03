@@ -1,6 +1,6 @@
 import { envConfigModule, schoolsModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mockUser } from "../../tests/test-utils/mockObjects";
+import { mockUser } from "@@/tests/test-utils/mockObjects";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
@@ -72,8 +72,8 @@ describe("auth store module", () => {
 		describe("locale", () => {
 			beforeEach(() => {
 				setupStores({
-					schools: SchoolsModule,
-					"env-config": EnvConfigModule,
+					schoolsModule: SchoolsModule,
+					envConfigModule: EnvConfigModule,
 				});
 			});
 
