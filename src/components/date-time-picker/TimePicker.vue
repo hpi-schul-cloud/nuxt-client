@@ -4,11 +4,12 @@
 		:close-on-content-click="false"
 		transition="scale-transition"
 		offset-y
-		min-width="100"
+		min-width="85"
 	>
 		<template #activator="{ on, attrs }">
 			<v-text-field
-				v-model="time"
+				v-model="inputTime"
+				data-testid="time-input"
 				placeholder="--:--"
 				:label="label"
 				:aria-label="ariaLabel"
@@ -18,38 +19,37 @@
 				@input="onInput"
 			/>
 		</template>
-		<v-list height="200" class="col-12">
+		<v-list height="200" class="col-12 pt-1">
 			<v-list-item-group v-model="selectedTime" color="primary">
-				<v-list-item
-					v-for="(time, index) in timesOfDayList"
-					:key="index"
-					class="time-list-item"
-					@click="selectTime(time)"
+				<div
+					v-for="(timeOfDay, index) in timesOfDayList"
+					:key="`time-select-${index}`"
+					:data-testid="`time-select-${index}`"
 				>
-					<v-list-item-title>{{ time }}</v-list-item-title>
-				</v-list-item>
+					<v-list-item class="time-list-item" @click="selectTime(timeOfDay)">
+						<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+					</v-list-item>
+					<v-divider v-if="index < timesOfDayList.length - 1" />
+				</div>
 			</v-list-item-group>
 		</v-list>
 	</v-menu>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "@vue/composition-api";
+import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import dayjs from "dayjs";
 import { mdiClockOutline } from "@mdi/js";
 
+// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3 (vuetify will increase accessibility in vuetify 3)?
 export default defineComponent({
 	name: "TimePicker",
 	props: {
-		// date: { type: String, required: true },
+		time: { type: String, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, required: true },
 	},
 	setup(props, { emit }) {
-		const time = ref("");
-		const showTimeDialog = ref(false);
-		const selectedTime = ref(null);
-
 		const timesOfDayList = computed(() => {
 			const times = [];
 
@@ -61,24 +61,37 @@ export default defineComponent({
 			return times;
 		});
 
+		const inputTime = ref(props.time);
+		const showTimeDialog = ref(false);
+		const selectedTime = ref(null);
+
 		const selectTime = (selected: string) => {
-			time.value = selected;
+			inputTime.value = selected;
 			showTimeDialog.value = false;
-			emit("input", time.value);
+			emit("input", inputTime.value);
 		};
 
-		const onInput = (inputTime: string) => {
-			time.value = inputTime;
-			emit("input", time.value);
+		const onInput = (input: string) => {
+			inputTime.value = input;
+			showTimeDialog.value = false;
+			emit("input", new Date(inputTime.value).toISOString());
 		};
+
+		watch(
+			() => props.time,
+			(newValue) => {
+				inputTime.value = newValue;
+				console.log("t", inputTime.value);
+			}
+		);
 
 		return {
+			mdiClockOutline,
 			showTimeDialog,
-			time,
 			timesOfDayList,
+			inputTime,
 			selectedTime,
 			selectTime,
-			mdiClockOutline,
 			onInput,
 		};
 	},
