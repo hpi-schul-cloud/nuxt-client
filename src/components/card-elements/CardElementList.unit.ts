@@ -1,4 +1,3 @@
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
@@ -42,8 +41,8 @@ const getWrapper = (props?: object) => {
 		...createComponentMocks({
 			i18n: true,
 		}),
-		setup() {
-			provide("i18n", { t: (key: string) => key });
+		provide: {
+			i18n: { t: (key: string) => key },
 		},
 		propsData: props,
 	});
