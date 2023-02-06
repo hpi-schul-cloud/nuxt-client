@@ -182,7 +182,7 @@ export default defineComponent({
 				emit("focus");
 			}
 			if (classList.includes("ck-blurred")) {
-				setTimeout(() => emit("blur"), 100);
+				setTimeout(() => emit("blur"), 200);
 			}
 		};
 
@@ -218,14 +218,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-// TODO move to ckbuild
+// TODO move all style to ckbuild
+.ck-blurred {
+	border: none !important;
+	// box-shadow: none !important;
+}
+
 .ck-focused {
-	border: dashed 1px var(--v-grey-base) !important;
+	border: none !important;
 	box-shadow: none !important;
 }
 
 .ck.ck-editor__editable_inline > :last-child {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin-bottom: 30px;
+	margin-bottom: 34px !important;
 }
 </style>

@@ -25,28 +25,15 @@
 				@add-element="addElementAfter(index)"
 			/>
 		</draggable>
-		<v-card flat class="mb-6 ck-focused">
-			<v-col class="text-center">
-				<v-btn
-					icon
-					outlined
-					color="secondary"
-					class="add-element-btn"
-					data-testid="add-element-btn"
-					@click="addElement"
-				>
-					<v-icon>{{ mdiPlus }}</v-icon>
-				</v-btn>
-			</v-col>
-		</v-card>
+		<add-card-element @click="addElement" />
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, inject, ref } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-import { mdiPlus } from "@mdi/js";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
+import AddCardElement from "@/components/card-elements/AddCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import { useDrag } from "@/composables/drag";
@@ -56,6 +43,7 @@ export default defineComponent({
 	name: "CardElement",
 	components: {
 		CardElementWrapper,
+		AddCardElement,
 		draggable,
 	},
 	emits: ["input"],
@@ -104,7 +92,6 @@ export default defineComponent({
 			addElement,
 			addElementAfter,
 			deleteElement,
-			mdiPlus,
 			touchDelay,
 			startDragging,
 			endDragging,

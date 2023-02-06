@@ -1,26 +1,28 @@
 <template>
-	<v-card flat class="mb-6" :class="component">
-		<v-btn
-			v-show="actionable && elementActive"
-			icon
-			outlined
-			color="secondary"
-			class="drag-element-btn handle"
-			data-testid="drag-element-btn"
-		>
-			<v-icon>{{ mdiDrag }}</v-icon>
-		</v-btn>
-		<v-btn
-			v-show="actionable && elementActive"
-			icon
-			outlined
-			color="secondary"
-			class="delete-element-btn"
-			data-testid="delete-element-btn"
-			@click="handleDelete"
-		>
-			<v-icon>{{ mdiTrashCanOutline }}</v-icon>
-		</v-btn>
+	<v-card flat class="card mb-6" :class="{ active: isActive }">
+		<div class="card-actions">
+			<v-btn
+				v-show="actionable"
+				icon
+				outlined
+				color="secondary"
+				class="drag-element-btn handle"
+				data-testid="drag-element-btn"
+			>
+				<v-icon>{{ mdiDrag }}</v-icon>
+			</v-btn>
+			<v-btn
+				v-show="actionable && isActive"
+				icon
+				outlined
+				color="secondary"
+				class="delete-element-btn"
+				data-testid="delete-element-btn"
+				@click="handleDelete"
+			>
+				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+			</v-btn>
+		</div>
 		<component
 			:is="component"
 			v-model="model"
@@ -32,7 +34,7 @@
 			@blur="handleBlur"
 		></component>
 		<v-btn
-			v-show="actionable && elementActive"
+			v-show="actionable && isActive"
 			icon
 			outlined
 			color="secondary"
@@ -101,7 +103,7 @@ export default defineComponent({
 			}
 		);
 
-		const elementActive = ref(false);
+		const isActive = ref(false);
 		const actionable = computed(
 			() => props.component !== CardElementComponentEnum.Title
 		);
@@ -109,8 +111,12 @@ export default defineComponent({
 		const handleInput = () => emit("input", model.value);
 		const handleAdd = () => emit("add-element");
 		const handleDelete = () => emit("delete-element");
-		const handleFocus = () => (elementActive.value = true);
-		const handleBlur = () => (elementActive.value = false);
+		const handleFocus = () => {
+			isActive.value = true;
+		};
+		const handleBlur = () => {
+			isActive.value = false;
+		};
 
 		return {
 			model,
@@ -120,7 +126,7 @@ export default defineComponent({
 			handleFocus,
 			handleBlur,
 			actionable,
-			elementActive,
+			isActive,
 			mdiTrashCanOutline,
 			mdiDrag,
 			mdiPlus,
@@ -130,30 +136,41 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+$btn-radius: 18;
+
+.card {
+	border: dashed thin var(--v-white-base);
+}
+
+.active {
+	border: dashed thin var(--v-grey-base);
+}
+
+.card-actions {
+	position: relative;
+	float: right;
+	width: $btn-radius + px;
+}
+
 .v-btn {
-	position: absolute;
 	background-color: var(--v-white-base);
 }
 
-.delete-element-btn {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	top: 26px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	right: -28px;
+.drag-element-btn {
+	position: relative;
+	top: -#{$btn-radius} + px;
 }
 
-.drag-element-btn {
+.delete-element-btn {
+	position: relative;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	top: -18px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	right: -28px;
+	top: -8px;
 }
 
 .add-element-btn {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	bottom: -18px;
+	position: absolute;
+	bottom: -#{$btn-radius} + px;
 	left: 50%;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin-left: -18px;
+	// margin-left: -#{$btn-radius} + px;
 }
 </style>
