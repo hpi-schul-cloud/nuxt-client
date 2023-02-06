@@ -37,4 +37,4 @@ nuxt.config.js
 __snapshots__
 
 # IntelliJ
-.idea
+.idea/
