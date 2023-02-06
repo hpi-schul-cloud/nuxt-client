@@ -35,13 +35,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	computed,
-	watch,
-} from "@vue/composition-api";
+import { defineComponent, inject, ref, computed, watch } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendar } from "@mdi/js";
@@ -105,18 +99,18 @@ export default defineComponent({
 				if (focusedDate) {
 					focusedDate.focus();
 				}
-			}, "100");
+			}, 100);
 		};
 
 		watch(
 			() => props.date,
-			(newValue) => {
+			(newValue: string) => {
 				selectedDate.value = newValue;
 			}
 		);
 
-		watch(showDateDialog, (newValue) => {
-			if (newValue === true) {
+		watch(showDateDialog, (newValue: boolean) => {
+			if (newValue) {
 				focusDateWithKeyBoard();
 			}
 		});

@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "@vue/composition-api";
+import { defineComponent, ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 import { mdiClockOutline } from "@mdi/js";
 

@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch } from "@vue/composition-api";
+import { defineComponent, inject, ref, watch } from "vue";
 import VueI18n from "vue-i18n";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
@@ -85,13 +85,19 @@ export default defineComponent({
 				dateTimes.value = new Date(newDate);
 				if (newTime !== "") {
 					const hoursAndMinutes = newTime.split(":");
-					dateTimes.value.setHours(hoursAndMinutes[0], hoursAndMinutes[1]);
+					dateTimes.value.setHours(
+						parseInt(hoursAndMinutes[0]),
+						parseInt(hoursAndMinutes[1])
+					);
 				}
 			}
 
 			if (newTime !== prevTime) {
 				const hoursAndMinutes = newTime.split(":");
-				dateTimes.value.setHours(hoursAndMinutes[0], hoursAndMinutes[1]);
+				dateTimes.value.setHours(
+					parseInt(hoursAndMinutes[0]),
+					parseInt(hoursAndMinutes[1])
+				);
 				date.value = dateTimes.value.toISOString();
 			}
 
