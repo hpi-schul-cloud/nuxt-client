@@ -83,7 +83,6 @@ export default defineComponent({
 			() => props.time,
 			(newValue) => {
 				inputTime.value = newValue;
-				console.log("t", inputTime.value);
 			}
 		);
 

@@ -22,7 +22,6 @@
 <script lang="ts">
 import { defineComponent, inject, ref, watch } from "@vue/composition-api";
 import VueI18n from "vue-i18n";
-// import dayjs from "dayjs";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 
@@ -33,10 +32,14 @@ export default defineComponent({
 		TimePicker,
 	},
 	props: {
-		// dateTime: {
-		// 	type: String,
-		// 	required: true,
-		// },
+		dateTime: {
+			type: String,
+			required: true,
+		},
+		defaultDate: {
+			type: String,
+			default: new Date().toISOString(),
+		},
 		dateInputLabel: { type: String, default: "" },
 		dateInputAriaLabel: { type: String, default: "" },
 		timeInputLabel: { type: String, default: "" },
@@ -51,34 +54,31 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		// const locale = (() => {
-		// 	// TODO remove if language code for ukraine is fixed
-		// 	if (i18n.locale === "ua") {
-		// 		return "uk";
-		// 	}
+		const locale = (() => {
+			// TODO remove if language code for ukraine is fixed
+			if (i18n.locale === "ua") {
+				return "uk";
+			}
 
-		// 	return i18n.locale;
-		// })();
-		// console.log(locale);
+			return i18n.locale;
+		})();
 
-		// watch(
-		// 	() => props.dateTime,
-		// 	(newValue) => {
-		// 		console.log(newValue, locale);
-		// 		// dateTimes.value = newValue;
-		// 		// date.value = newValue.substr(0, 10);
-		// 		// time.value = new Date(newValue).toLocaleTimeString(locale, {
-		// 		// 	timeStyle: "short",
-		// 		// 	hour12: false,
-		// 		// });
-		// 		// console.log(time.value, date.value);
-		// 	}
-		// );
-
-		// const dateTimes = ref(props.dateTime);
-		const dateTimes = ref(new Date());
+		const initDate = props.dateTime || props.defaultDate;
+		const dateTimes = ref(new Date(initDate));
 		const date = ref("");
 		const time = ref("");
+
+		watch(
+			() => props.dateTime,
+			(newValue) => {
+				dateTimes.value = new Date(newValue);
+				date.value = newValue;
+				time.value = new Date(newValue).toLocaleTimeString(locale, {
+					timeStyle: "short",
+					hour12: false,
+				});
+			}
+		);
 
 		watch([date, time], ([newDate, newTime], [prevDate, prevTime]) => {
 			if (newDate !== prevDate) {
@@ -101,12 +101,10 @@ export default defineComponent({
 		});
 
 		const handleDateInput = (selectedDate: string) => {
-			console.log("dt", selectedDate);
 			date.value = selectedDate;
 		};
 
 		const handleTimeInput = (selectedTime: string) => {
-			console.log("blub", selectedTime);
 			time.value = selectedTime;
 		};
 

@@ -112,7 +112,6 @@ export default defineComponent({
 			() => props.date,
 			(newValue) => {
 				selectedDate.value = newValue;
-				console.log("d", selectedDate.value);
 			}
 		);
 

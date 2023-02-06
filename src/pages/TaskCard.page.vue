@@ -7,10 +7,10 @@
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<date-time-picker
-				:date="dueDate"
+				:date-time="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
-				@date-input="handleDateInput"
+				@input="handleDateTimeInput"
 			/>
 			<draggable
 				v-model="elements"
@@ -166,8 +166,9 @@ export default defineComponent({
 			});
 		});
 
-		const handleDateInput = (selectedDate: string) =>
-			(dueDate.value = selectedDate);
+		const handleDateTimeInput = (dateTime: string) => {
+			dueDate.value = dateTime;
+		};
 
 		const addElement = () => {
 			elements.value.push({
@@ -193,7 +194,6 @@ export default defineComponent({
 			});
 
 			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
-			// const dueDate = date.value || endOfSchoolYear;
 			taskCardModule.createTaskCard({
 				title: title.value.model,
 				text: text,
@@ -222,6 +222,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.updateTaskCard({
+				dueDate: dueDate.value,
 				cardElements: cardElements,
 			});
 		};
@@ -257,7 +258,7 @@ export default defineComponent({
 			startDragging,
 			endDragging,
 			dragInProgress,
-			handleDateInput,
+			handleDateTimeInput,
 			t,
 		};
 	},
