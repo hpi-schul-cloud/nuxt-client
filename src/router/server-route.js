@@ -1,5 +1,5 @@
 const isServer = (path) => {
-	return path.startsWith("/api/v");
+	return path.startsWith("/api/v") && !isFileStorage(path);
 };
 const isFileStorage = (path) => {
 	return path.startsWith("/api/v3/file");
