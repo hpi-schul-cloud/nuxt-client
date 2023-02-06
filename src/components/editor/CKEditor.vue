@@ -19,7 +19,7 @@ import {
 	watch,
 	onMounted,
 	onBeforeUnmount,
-} from "@vue/composition-api";
+} from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";

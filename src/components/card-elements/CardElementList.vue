@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from "@vue/composition-api";
+import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import AddCardElement from "@/components/card-elements/AddCardElement.vue";

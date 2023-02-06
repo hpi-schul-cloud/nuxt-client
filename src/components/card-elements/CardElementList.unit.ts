@@ -1,4 +1,4 @@
-import { provide } from "@vue/composition-api";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";

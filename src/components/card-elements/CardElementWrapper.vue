@@ -48,13 +48,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	ref,
-	watch,
-	inject,
-	computed,
-} from "@vue/composition-api";
+import { defineComponent, ref, watch, inject, computed } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
