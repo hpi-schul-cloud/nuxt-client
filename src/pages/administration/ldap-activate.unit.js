@@ -37,10 +37,6 @@ const $route = {
 	},
 };
 
-const $routeNewLdap = {
-	query: {},
-};
-
 describe("ldap/activate", () => {
 	const routerPushStub = jest.fn();
 	const submitStub = jest.fn();
@@ -284,7 +280,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: mockStore,
 				$router: { push: routerPushStub },
-				$route: $routeNewLdap,
+				$route: { query: {} },
 			}),
 			mocks: {
 				$theme: {

@@ -231,7 +231,7 @@ export default {
 		showUserMigrationOption() {
 			return (
 				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
-				!this.$route.query.id
+				!this.$route?.query?.id
 			);
 		},
 		schoolErrors() {
