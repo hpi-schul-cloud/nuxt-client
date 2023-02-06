@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "@vue/composition-api";
+import { defineComponent, ref, watch } from "vue";
 import CkEditor from "@/components/editor/CKEditor.vue";
 
 // eslint-disable-next-line vue/require-direct-export

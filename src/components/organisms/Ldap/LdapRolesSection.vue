@@ -51,7 +51,7 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="person" />
+				<base-icon source="material" icon="person" :fill="ldapActivatedColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -69,7 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="student" />
+				<base-icon source="custom" icon="student" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -86,7 +86,7 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="teacher" />
+				<base-icon source="custom" icon="teacher" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -101,7 +101,11 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="admin_panel_settings" />
+				<base-icon
+					source="custom"
+					icon="admin_panel_settings"
+					:fill="fillColor"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -114,7 +118,7 @@
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="person_ignore" />
+				<base-icon source="custom" icon="person_ignore" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>
@@ -122,7 +126,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathRegexValidatior } from "@utils/ldapConstants";
+import { ldapPathRegexValidatior } from "@/utils/ldapConstants";
 
 export default {
 	props: {
@@ -138,6 +142,7 @@ export default {
 	},
 	data() {
 		return {
+			ldapActivatedColor: "currentColor",
 			memberValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
@@ -153,6 +158,10 @@ export default {
 		groupOption() {
 			return this.value.groupOption || "undefined";
 		},
+
+		fillColor() {
+			return "var(--v-black-base)";
+		},
 	},
 	watch: {
 		validate: function () {
@@ -160,6 +169,10 @@ export default {
 			this.$emit("update:errors", this.$v.$invalid, "roles");
 		},
 		groupOption: function () {
+			this.groupOption === "user_attribute"
+				? (this.ldapActivatedColor = this.fillColor)
+				: (this.ldapActivatedColor = "currentColor");
+
 			this.$emit("update:errors", this.$v.$invalid, "roles");
 		},
 	},

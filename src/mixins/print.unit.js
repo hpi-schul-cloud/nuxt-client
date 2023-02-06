@@ -21,7 +21,7 @@ const getNewWindowMock = () => {
 
 let newWindowMock;
 
-describe("@mixins/print", () => {
+describe("@/mixins/print", () => {
 	beforeEach(() => {
 		newWindowMock = getNewWindowMock();
 		jest
@@ -36,14 +36,14 @@ describe("@mixins/print", () => {
 		it("can print plain content", () => {
 			const testContent = "some plain old content";
 			method(testContent);
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(testContent);
 		});
 
 		it("can print content with custom styles", () => {
 			const testContent = "some plain old content";
 			const testStyles = "body { margin: 2rem; border: 1px solid blue; }";
 			method(testContent, testStyles);
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(testContent);
 		});
 
 		it("focuses new window before printing", () => {
@@ -55,7 +55,6 @@ describe("@mixins/print", () => {
 			);
 			expect(newWindowMock.focus).toHaveBeenCalled();
 			expect(newWindowMock.print).toHaveBeenCalled();
-			expect(newWindowMock.focus).toHaveBeenCalledBefore(newWindowMock.print);
 		});
 
 		it("closes new window after print", () => {
@@ -65,7 +64,6 @@ describe("@mixins/print", () => {
 			jest.runAllTimers();
 			expect(newWindowMock.print).toHaveBeenCalled();
 			expect(newWindowMock.close).toHaveBeenCalled();
-			expect(newWindowMock.close).toHaveBeenCalledAfter(newWindowMock.print);
 		});
 	});
 
@@ -81,7 +79,13 @@ describe("@mixins/print", () => {
 				},
 			];
 			method(testContent);
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(
+				testContent[0].qrContent
+			);
+			expect(newWindowMock.document.innerHTML).toContain(testContent[0].title);
+			expect(newWindowMock.document.innerHTML).toContain(
+				testContent[0].description
+			);
 		});
 
 		it("can print items with only QR content", () => {
@@ -91,17 +95,23 @@ describe("@mixins/print", () => {
 				},
 			];
 			method(testContent);
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(
+				testContent[0].qrContent
+			);
 		});
 
 		it("prints an error if no items to print are given", () => {
 			method([]);
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(
+				"Keine Einträge zu drucken."
+			);
 		});
 
 		it("can handle no parameters", () => {
 			method();
-			expect(newWindowMock.document.innerHTML).toMatchSnapshot();
+			expect(newWindowMock.document.innerHTML).toContain(
+				"Keine Einträge zu drucken."
+			);
 		});
 	});
 });

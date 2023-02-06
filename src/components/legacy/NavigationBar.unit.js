@@ -23,20 +23,18 @@ const getWrapper = () => {
 		...createComponentMocks({ i18n: true }),
 		propsData: {
 			links: navbarLinks,
-			img: "@assets/img/logo/logo-dBildungscloud.svg",
+			img: "@/assets/img/logo/logo-dBildungscloud.svg",
 			buttons: true,
 		},
 	});
 };
 
-describe("@components/legacy/NavigationBar", () => {
+describe("@/components/legacy/NavigationBar", () => {
 	beforeEach(() => {
 		setupStores({
-			"env-config": EnvConfigModule,
+			envConfigModule: EnvConfigModule,
 		});
 	});
-
-	it(...isValidComponent(NavigationBar));
 
 	it("renders logo, links and buttons for default theme", () => {
 		const wrapper = getWrapper();

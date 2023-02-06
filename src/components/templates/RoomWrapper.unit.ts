@@ -78,9 +78,9 @@ describe("@templates/RoomWrapper.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			rooms: RoomsModule,
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
+			roomsModule: RoomsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
 		});
 		roomsModule.setAllElements(mockData as any);
 	});
@@ -167,7 +167,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		it("should open the import-modal", async () => {
-			//@ts-ignore
+			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
 			const wrapper = getWrapper();
 

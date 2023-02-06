@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Error.page.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Error.page.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="JavaScript File" />
+        <option value="Vue Single File Component" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectId" id="2ByH6KPaABfokODSIyg9RM6ZvVX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/dev/repositories/schulcloud-client&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;C:/dev/repositories/nuxt-client/node_modules/@vue/cli-service&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\dev\\repositories\\nuxt-client\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\dev\repositories\nuxt-client\src\components\share-course" />
+      <recent name="C:\dev\repositories\nuxt-client\src\store" />
+      <recent name="C:\dev\repositories\nuxt-client\src\components\share-modal" />
+      <recent name="C:\dev\repositories\nuxt-client\vue3_poc\src" />
+      <recent name="C:\dev\repositories\nuxt-client\src\components\copy-result-modal" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\repositories\nuxt-client\src\router" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error">
+    <configuration name="@/components/molecules/Editor" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
+      <test-names>
+        <test-name value="@/components/molecules/Editor" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@/components/molecules/Editor.should emit input on content changes" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/components/molecules/Editor.unit.ts" />
+      <test-names>
+        <test-name value="@/components/molecules/Editor" />
+        <test-name value="should emit input on content changes" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@pages/Error.page.vue" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
+      <test-names>
+        <test-name value="@pages/Error.page.vue" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
+      <test-names>
+        <test-name value="@pages/Error.page.vue" />
+        <test-name value="when the '/error' route has been called" />
+        <test-name value="should set 'is-generic-error' prop to 'true' on generic error" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true'" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/@vue/cli-service" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/pages/ErrorPage.unit.ts" />
+      <test-names>
+        <test-name value="@pages/Error.page.vue" />
+        <test-name value="when the '/error' route has been called" />
+        <test-name value="should set 'is-generic-error' prop to 'true'" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true' on generic error" />
+        <item itemvalue="Jest.@pages/Error.page.vue.when the '/error' route has been called.should set 'is-generic-error' prop to 'true'" />
+        <item itemvalue="Jest.@pages/Error.page.vue" />
+        <item itemvalue="Jest.@/components/molecules/Editor.should emit input on content changes" />
+        <item itemvalue="Jest.@/components/molecules/Editor" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b0a1b7c3-5c8b-4b5e-a45b-3708ffb75c3b" name="Changes" comment="" />
+      <created>1657871227728</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657871227728</updated>
+      <workItem from="1657871228899" duration="1930000" />
+      <workItem from="1657878709614" duration="17000" />
+      <workItem from="1658134104174" duration="645000" />
+      <workItem from="1658758188155" duration="1427000" />
+      <workItem from="1658908871061" duration="11910000" />
+      <workItem from="1658994716193" duration="13167000" />
+      <workItem from="1659079989767" duration="13340000" />
+      <workItem from="1659344816596" duration="13342000" />
+      <workItem from="1659428214929" duration="5473000" />
+      <workItem from="1659512393636" duration="5780000" />
+      <workItem from="1659520787543" duration="9639000" />
+      <workItem from="1659598565200" duration="8929000" />
+      <workItem from="1659691301705" duration="1935000" />
+      <workItem from="1659698647674" duration="3402000" />
+      <workItem from="1659944943924" duration="7722000" />
+      <workItem from="1659965084731" duration="16000" />
+      <workItem from="1660035931630" duration="10008000" />
+      <workItem from="1660118371357" duration="17570000" />
+      <workItem from="1660203483990" duration="3928000" />
+      <workItem from="1660295698063" duration="3735000" />
+      <workItem from="1661329275416" duration="136000" />
+      <workItem from="1661329645383" duration="63000" />
+      <workItem from="1661329718405" duration="573000" />
+      <workItem from="1661330728013" duration="3258000" />
+      <workItem from="1661412783738" duration="6202000" />
+      <workItem from="1661431650229" duration="44000" />
+      <workItem from="1662540844655" duration="13639000" />
+      <workItem from="1662622503669" duration="1255000" />
+      <workItem from="1663140807573" duration="10335000" />
+      <workItem from="1663661501687" duration="10115000" />
+      <workItem from="1663767666856" duration="1502000" />
+      <workItem from="1663838331170" duration="6503000" />
+      <workItem from="1663921545142" duration="3625000" />
+      <workItem from="1664356632380" duration="17000" />
+      <workItem from="1664356658900" duration="7515000" />
+      <workItem from="1664449741925" duration="10781000" />
+      <workItem from="1664528752727" duration="5185000" />
+      <workItem from="1664871249540" duration="13209000" />
+      <workItem from="1664889784100" duration="582000" />
+      <workItem from="1665042811636" duration="3856000" />
+      <workItem from="1665133101384" duration="3590000" />
+      <workItem from="1665138049228" duration="6238000" />
+      <workItem from="1665392554853" duration="1615000" />
+      <workItem from="1665474248979" duration="625000" />
+      <workItem from="1665563923104" duration="4115000" />
+      <workItem from="1665994556725" duration="12214000" />
+      <workItem from="1666082272406" duration="6087000" />
+      <workItem from="1666166013389" duration="2697000" />
+      <workItem from="1666257672864" duration="1921000" />
+      <workItem from="1666342664027" duration="1871000" />
+      <workItem from="1666873142914" duration="3112000" />
+      <workItem from="1667308745692" duration="3657000" />
+      <workItem from="1667483716446" duration="6255000" />
+      <workItem from="1669901447274" duration="4623000" />
+      <workItem from="1671110692663" duration="1782000" />
+      <workItem from="1672844346813" duration="4144000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/nuxt_client$application_error_composable.info" NAME="application-error composable Coverage Results" MODIFIED="1669302489127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

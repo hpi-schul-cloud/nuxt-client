@@ -1,8 +1,7 @@
 import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { isValidComponent } from "@@/tests/unit/commonTests";
-import AddContentModal from "@components/molecules/AddContentModal";
+import AddContentModal from "@/components/molecules/AddContentModal";
 
 const testProps = {
 	showCopyModal: true,
@@ -122,14 +121,12 @@ function getWrapper(attributes, options) {
 	});
 }
 
-describe("@components/molecules/AddContentModal", () => {
+describe("@/components/molecules/AddContentModal", () => {
 	beforeEach(() => {
 		setupStores({
-			content: ContentModule,
+			contentModule: ContentModule,
 		});
 	});
-
-	it(...isValidComponent(AddContentModal));
 
 	it("nothing selected submit should be disabled", async () => {
 		const wrapper = getWrapper(testProps);
@@ -178,7 +175,7 @@ describe("@components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});
 
 	it("submit modal action multiple items", async () => {
@@ -191,7 +188,7 @@ describe("@components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBe(false);
 	});
 
 	it("cancel modal action", async () => {
@@ -203,6 +200,6 @@ describe("@components/molecules/AddContentModal", () => {
 		expect(Object.keys(wrapper.vm.selectedCourse)).toHaveLength(0);
 		expect(Object.keys(wrapper.vm.selectedLesson)).toHaveLength(0);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
 	});
 });

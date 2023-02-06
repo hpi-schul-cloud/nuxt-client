@@ -18,7 +18,7 @@
 			:key="index"
 			class="th-slot"
 			cellspacing="0"
-			:data-testid="column.label"
+			:data-testid="column.field"
 		>
 			<slot
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
@@ -222,7 +222,7 @@
 </template>
 
 <script>
-import InfoBox from "@components/molecules/InfoBox";
+import InfoBox from "@/components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
 import { mdiInformation } from "@mdi/js";
 
@@ -323,7 +323,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .table__row {
 	font-weight: var(--font-weight-bold);

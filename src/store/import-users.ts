@@ -1,14 +1,14 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@utils/api";
 import {
-	UserImportApiFactory,
 	ImportUserListResponse,
-	UserMatchListResponse,
 	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum,
+	UserImportApiFactory,
 	UserImportApiInterface,
+	UserMatchListResponse,
 } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {
 	Admin = "admin",
@@ -18,7 +18,7 @@ export enum MatchedBy {
 
 // @ts-ignore
 @Module({
-	name: "import-users",
+	name: "importUsersModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -29,23 +29,23 @@ export default class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private firstName: string = "";
-	private lastName: string = "";
-	private loginName: string = "";
+	private firstName = "";
+	private lastName = "";
+	private loginName = "";
 	private role: ImportUserResponseRoleNamesEnum | "" = "";
-	private classes: string = "";
+	private classes = "";
 	private match: Array<MatchedBy> = [
 		MatchedBy.Admin,
 		MatchedBy.Auto,
 		MatchedBy.None,
 	];
-	private flagged: boolean = false;
-	private limit: number = 25;
-	private skip: number = 0;
-	private sortBy: string = "";
+	private flagged = false;
+	private limit = 25;
+	private skip = 0;
+	private sortBy = "";
 	private sortOrder: any = "asc";
-	private total: number = 0;
-	private totalMatched: number = 0;
+	private total = 0;
+	private totalMatched = 0;
 
 	private userList: UserMatchListResponse = {
 		data: [],
@@ -53,14 +53,12 @@ export default class ImportUsersModule extends VuexModule {
 		skip: 0,
 		limit: 0,
 	};
-	private userSearch: string = "";
-	private usersLimit: number = 1;
-	private usersSkip: number = 0;
-	private totalUnmatched: number = 0;
+	private userSearch = "";
+	private usersLimit = 1;
+	private usersSkip = 0;
+	private totalUnmatched = 0;
 
 	private businessError: BusinessError | null = null;
-
-	private _importUserApi?: UserImportApiInterface;
 
 	@Mutation
 	setFirstName(firstName: string): void {
@@ -403,9 +401,6 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
-		}
-		return this._importUserApi;
+		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
 }

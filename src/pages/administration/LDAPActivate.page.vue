@@ -15,17 +15,17 @@
 			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="student" />
+					<base-icon source="custom" icon="student" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="teacher" />
+					<base-icon source="custom" icon="teacher" />
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="admin_panel_settings" />
+					<base-icon source="custom" icon="admin_panel_settings" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
@@ -194,11 +194,11 @@
 <script>
 import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@utils/ldapErrorHandling";
-import { unchangedPassword } from "@utils/ldapConstants";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
-import InfoMessage from "@components/atoms/InfoMessage";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { unchangedPassword } from "@/utils/ldapConstants";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import { mdiChevronLeft } from "@mdi/js";
 
 const redirectToConfigPage = (page) => {
@@ -245,6 +245,10 @@ export default {
 	},
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
+
+		document.title = `${this.$t("pages.administration.ldap.save.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 	methods: {
 		backButtonHandler() {
@@ -265,13 +269,11 @@ export default {
 			}
 
 			if (id) {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("ldap-config/patchData", {
 					systemData: temporaryConfigData,
 					systemId: id,
 				});
 			} else {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch(
 					"ldap-config/submitData",
 					temporaryConfigData
@@ -284,18 +286,11 @@ export default {
 			});
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.ldap.save.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
-	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .subtitle-text {
 	margin-top: var(--space-xl);

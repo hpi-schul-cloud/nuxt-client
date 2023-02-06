@@ -1,9 +1,9 @@
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { default as ConsentPage } from "./StudentConsent.page.vue";
-import { envConfigModule } from "@/store";
+import { envConfigModule, notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-// import mock$objects from "../../../../tests/test-utils/pageStubs";
+import NotifierModule from "@/store/notifier";
 
 const mockData = [
 	{
@@ -51,6 +51,12 @@ const specificFilesMock = {
 		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
+const mocks = {
+	$theme: {
+		short_name: "nbc",
+	},
+};
+
 describe("students/consent", () => {
 	let mockStore;
 
@@ -86,8 +92,9 @@ describe("students/consent", () => {
 			},
 		};
 		setupStores({
-			filePaths: FilePathsModule,
-			"env-config": EnvConfigModule,
+			filePathsModule: FilePathsModule,
+			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
 		});
 	});
 
@@ -95,14 +102,13 @@ describe("students/consent", () => {
 		mockData[0].birthday = null;
 	});
 
-	it(...isValidComponent(ConsentPage));
-
 	it("should dispatch the users findConsentUsers action on load", async () => {
 		mount(ConsentPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks,
 		});
 
 		expect(mockStore.bulkConsent.actions.findConsentUsers).toHaveBeenCalled();
@@ -114,6 +120,7 @@ describe("students/consent", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks,
 		});
 
 		const item = wrapper.find(`[data-testid="step_progress"]`);
@@ -127,6 +134,7 @@ describe("students/consent", () => {
 				i18n: true,
 				store: mockStore,
 			}),
+			mocks,
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
@@ -141,6 +149,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
@@ -155,6 +164,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -173,6 +183,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -191,6 +202,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -212,6 +224,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -231,6 +244,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -251,6 +265,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -273,6 +288,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -294,6 +310,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -315,6 +332,7 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -333,6 +351,7 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
+		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		envConfigModule.setEnvs({
 			FEATURE_CONSENT_NECESSARY: false,
 		});
@@ -341,10 +360,8 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
+			mocks,
 		});
-		const toastStub = jest.fn();
-		wrapper.vm.$toast = {};
-		wrapper.vm.$toast.success = toastStub;
 
 		mockData[0].birthday = "10.10.2010";
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
@@ -357,6 +374,6 @@ describe("students/consent", () => {
 		nextButton_2.trigger("click");
 		await wrapper.vm.$nextTick();
 
-		expect(toastStub).toHaveBeenCalled();
+		expect(notifierModuleMock).toHaveBeenCalled();
 	});
 });

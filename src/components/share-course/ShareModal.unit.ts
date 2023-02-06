@@ -1,14 +1,13 @@
 import ShareCourseModule from "@/store/share-course";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@components/share-course/ShareModalOptionsForm.vue";
-import ShareModalResult from "@components/share-course/ShareModalResult.vue";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
 
-describe("@components/share-course/ShareModal", () => {
+describe("@/components/share-course/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
 	const showMock = jest.fn();
 
@@ -17,12 +16,12 @@ describe("@components/share-course/ShareModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("shareCourseModule", shareCourseModuleMock);
-				provide("i18n", { t: (key: string) => key });
-				provide("notifierModule", {
+			provide: {
+				notifierModule: {
 					show: showMock,
-				});
+				},
+				shareCourseModule: shareCourseModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

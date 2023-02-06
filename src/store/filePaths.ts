@@ -34,12 +34,12 @@ const globalFiles = {
 };
 
 @Module({
-	name: "filePaths",
+	name: "filePathsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class FilePathsModule extends VuexModule {
-	documentBaseDir: string = "";
+	documentBaseDir = "";
 	specificFiles: SpecificFiles = {
 		accessibilityStatement: "",
 		privacyExemplary: "",

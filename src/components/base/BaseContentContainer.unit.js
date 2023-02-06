@@ -1,7 +1,6 @@
 import BaseContentContainer from "./BaseContentContainer";
 
-describe("@components/base/BaseContentContainer", () => {
-	it(...isValidComponent(BaseContentContainer));
+describe("@/components/base/BaseContentContainer", () => {
 	it(...rendersSlotContent(BaseContentContainer));
 
 	it("renders prop size default", () => {

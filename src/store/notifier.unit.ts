@@ -1,5 +1,5 @@
 import NotifierModule from "./notifier";
-import { AlertPayload } from "@store/types/alert-payload";
+import { AlertPayload } from "@/store/types/alert-payload";
 
 describe("notifier store", () => {
 	describe("actions", () => {
@@ -11,6 +11,7 @@ describe("notifier store", () => {
 					text: "hello world",
 					status: "success",
 					autoClose: true,
+					position: "top",
 					timeout: 5000,
 				};
 				notifierModule.show(payload);
@@ -24,12 +25,14 @@ describe("notifier store", () => {
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
+					position: "top",
 					autoClose: true,
 				};
 				notifierModule.show(payload);
 
 				const payloadWithDefaults: AlertPayload = {
 					text: "hello world",
+					position: "top",
 					status: "success",
 					autoClose: true,
 					timeout: 5000,
@@ -45,11 +48,30 @@ describe("notifier store", () => {
 					text: "hello world",
 					status: "success",
 					autoClose: false,
+					position: "top",
 					timeout: 10000,
 				};
 				notifierModule.show(payload);
 
 				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+			});
+
+			it("should call setNotifier when timeout reached", () => {
+				jest.useFakeTimers();
+				const notifierModule = new NotifierModule({});
+				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 1000,
+					position: "top",
+				};
+				notifierModule.show(payload);
+
+				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+				jest.advanceTimersByTime(1000);
+				expect(setNotifierMock).toHaveBeenCalledWith(undefined);
 			});
 		});
 	});

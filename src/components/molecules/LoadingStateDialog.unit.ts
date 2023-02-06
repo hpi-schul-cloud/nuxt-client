@@ -1,19 +1,16 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 
-describe("@components/molecules/LoadingModal", () => {
+describe("@/components/molecules/LoadingModal", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(LoadingStateDialog, {
 			...createComponentMocks({}),
-			setup() {
-				provide("loadingStateModule", loadingStateModuleMock);
-			},
+			provide: { loadingStateModule: loadingStateModuleMock },
 			...attrs,
 		});
 

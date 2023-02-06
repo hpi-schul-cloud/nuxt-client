@@ -10,7 +10,7 @@ const getInstance = () => {
 		}
 	);
 };
-describe("@mixins/uid", () => {
+describe("@/mixins/uid", () => {
 	it("exposes $uid on component", () => {
 		expect(getInstance().vm.$uid).toBeDefined();
 	});

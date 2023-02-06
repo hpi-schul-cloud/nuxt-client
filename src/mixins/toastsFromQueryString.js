@@ -1,3 +1,5 @@
+import { notifierModule } from "@/store";
+
 export default {
 	mounted() {
 		if (
@@ -17,6 +19,11 @@ export default {
 			this.$route.query["toast-duration"] || "5000",
 			10
 		);
-		this.$toast[type](decodeURI(message), { duration });
+
+		notifierModule.show({
+			text: decodeURI(message),
+			status: type,
+			timeout: duration || 5000,
+		});
 	},
 };

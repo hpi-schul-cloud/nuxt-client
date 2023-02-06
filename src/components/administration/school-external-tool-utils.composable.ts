@@ -1,9 +1,9 @@
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
-} from "@store/types/school-external-tool";
+} from "@/store/types/school-external-tool";
 import { DataTableHeader } from "vuetify";
-import ExternalToolsModule from "@store/external-tools";
+import ExternalToolsModule from "@/store/external-tools";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import {
 	SchoolExternalToolResponse,

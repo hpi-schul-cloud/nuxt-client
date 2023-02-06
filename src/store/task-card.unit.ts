@@ -1,11 +1,15 @@
-import TaskCardModule from "@store/task-card";
+import TaskCardModule from "@/store/task-card";
 import * as serverApi from "../serverApi/v3/api";
 import {
 	CardElementResponseCardElementTypeEnum,
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
+import {
+	RichTextCardElementParamInputFormatEnum,
+	TaskCardResponse,
+} from "../serverApi/v3/api";
 
-const mockTaskCardData = {
+const mockTaskCardData: TaskCardResponse = {
 	id: "123",
 	cardElements: [
 		{
@@ -42,6 +46,8 @@ const mockTaskCardData = {
 			isFinished: false,
 		},
 	},
+	visibleAtDate: "2023-01-24T11:53:55.003Z",
+	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
 describe("task-card store", () => {
@@ -128,8 +134,22 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
-					title: "abc",
-					text: ["Lorem ipsum"],
+					cardElements: [
+						{
+							content: {
+								type: "title",
+								value: "abc",
+							},
+						},
+						{
+							content: {
+								type: "richtext",
+								inputFormat:
+									RichTextCardElementParamInputFormatEnum.RichtextCk5,
+								value: "Lorem ipsum",
+							},
+						},
+					],
 				});
 
 				expect(taskCardApiMock.taskCardControllerCreate).toHaveBeenCalledTimes(
@@ -152,8 +172,7 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
-					title: "abc",
-					text: ["Lorem ipsum"],
+					cardElements: [],
 				});
 
 				expect(taskCardApiMock.taskCardControllerCreate).toHaveBeenCalledTimes(

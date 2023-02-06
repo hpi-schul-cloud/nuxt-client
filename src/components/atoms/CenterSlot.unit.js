@@ -1,7 +1,5 @@
 import CenterSlot from "./CenterSlot";
 
-describe("@components/atoms/CenterSlot", () => {
-	it(...isValidComponent(CenterSlot));
-
+describe("@/components/atoms/CenterSlot", () => {
 	it(...rendersSlotContent(CenterSlot));
 });

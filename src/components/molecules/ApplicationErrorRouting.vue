@@ -1,11 +1,12 @@
 <template>
-	<div><slot></slot></div>
+	<div></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from "@vue/composition-api";
-import ApplicationErrorModule from "@store/application-error";
-import { useRouter, watch } from "@nuxtjs/composition-api";
+import { defineComponent, inject } from "vue";
+import ApplicationErrorModule from "@/store/application-error";
+import { watch } from "vue";
+import { useRouter } from "vue-router/composables";
 import { useApplicationError } from "@/composables/application-error.composable";
 
 /**
@@ -28,7 +29,10 @@ export default defineComponent({
 		}
 
 		const routeToErrorPage = () => {
-			router.replace("/error");
+			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
+			if (router.currentRoute.path !== "/error") {
+				router.replace("/error");
+			}
 		};
 
 		watch(

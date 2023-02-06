@@ -20,14 +20,8 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	onBeforeMount,
-	onMounted,
-} from "@vue/composition-api";
-import { useRouter, useRoute } from "@nuxtjs/composition-api";
+import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, authModule } from "@/store";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
@@ -40,7 +34,7 @@ import {
 import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
-	CardElementUpdateParams,
+	CardElementParams,
 } from "@/serverApi/v3";
 
 // TODO - unit tests!
@@ -80,7 +74,7 @@ export default defineComponent({
 			model: "",
 		});
 		const elements = ref<CardElement[]>([]);
-		const route = useRoute().value;
+		const route = useRoute();
 
 		onMounted(async () => {
 			const taskCardId =
@@ -121,19 +115,32 @@ export default defineComponent({
 		});
 
 		const createTaskCard = () => {
-			const text: Array<string> = [];
+			const cardElements: Array<CardElementParams> = [];
+			cardElements.push({
+				content: {
+					type: title.value.type,
+					value: title.value.model,
+				},
+			});
 			elements.value.forEach((element) => {
-				text.push(element.model);
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+						},
+					});
+				}
 			});
 
 			taskCardModule.createTaskCard({
-				title: title.value.model,
-				text: text,
+				cardElements: cardElements,
 			});
 		};
 
 		const updateTaskCard = () => {
-			const cardElements: Array<CardElementUpdateParams> = [];
+			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				id: title.value.id,
 				content: {
@@ -142,7 +149,7 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				const cardElement: CardElementUpdateParams = {
+				const cardElement: CardElementParams = {
 					content: {
 						type: element.type,
 						value: element.model,
@@ -182,12 +189,8 @@ export default defineComponent({
 			cancel,
 		};
 	},
-	// TODO - should not use this, because it's nuxt
-	// @ts-ignore
-	head() {
-		return {
-			title: this.$t("common.words.tasks"),
-		};
+	mounted() {
+		document.title = this.$t("common.words.tasks") as string;
 	},
 });
 </script>

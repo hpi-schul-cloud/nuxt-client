@@ -1,6 +1,6 @@
-/* eslint-disable jest/no-commented-out-tests */
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
+import Pagination from "@/components/organisms/Pagination.vue";
 
 const defaultData = tableData(5);
 
@@ -24,16 +24,14 @@ const getTableRowsContent = async (wrapper) => {
 	});
 };
 
-describe("@components/organisms/DataTable/BackendDataTable", () => {
+describe("@/components/organisms/DataTable/BackendDataTable", () => {
 	beforeEach(() => {
 		jest.spyOn(window, "scrollTo").mockImplementation();
 	});
 
-	it(...isValidComponent(BackendDataTable));
-
 	describe("rendering", () => {
 		it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
-			var wrapper = getWrapper();
+			const wrapper = getWrapper();
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(defaultData.length);
 			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
@@ -90,6 +88,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				currentPage: 1,
 			});
 			wrapper.find(`[aria-label="Go to next page"]`).trigger("click");
+			console.log(wrapper.emitted("update:current-page"));
 			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});
@@ -178,7 +177,8 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 	describe("selection", () => {
 		const total = 10;
-		const testData = tableData(Math.floor(total / 2), (index) => ({
+		const testData = tableData(Math.floor(total / 2)).map((item, index) => ({
+			...item,
 			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
@@ -219,9 +219,15 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				data: testData,
 				rowsSelectable: true,
 			});
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			const checkboxElement = wrapper.find("tbody tr input[type=checkbox]");
+
+			await checkboxElement.trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
-			expect(wrapper.emitted("update:selection")).toStrictEqual([
+
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", true);
+
+			expect(await wrapper.emitted("update:selection")).toStrictEqual([
 				[[testData[0]._id], "inclusive"],
 			]);
 			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
@@ -236,9 +242,15 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				selectedRowIds: ["0"],
 				rowsSelectable: true,
 			});
+
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+
+			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			await dataRow.vm.$emit("update:selected", false);
+
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[["0"], "inclusive"],
 				[[], "inclusive"],
@@ -261,7 +273,14 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			});
 			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
-			await wrapper.vm.$nextTick();
+
+			const rowSelectionBarElement = wrapper.find(
+				'[data-testid="table-data-head"]'
+			);
+			await rowSelectionBarElement.vm.$emit(
+				"update:current-page-selection-state",
+				"all"
+			);
 			expect(
 				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);
@@ -270,28 +289,6 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				"inclusive",
 			]);
 		});
-
-		// disabled until its implementation is completed
-
-		// it("can select all values from all page", async () => {
-		// 	const rowsPerPage = testData.length;
-		// 	const wrapper = getWrapper({
-		// 		data: testData,
-		// 		paginated: true,
-		// 		rowsPerPage,
-		// 		rowsSelectable: true,
-		// 		total,
-		// 	});
-		// 	expect(await getVisibleSelections(wrapper)).toHaveLength(0);
-		// 	wrapper.find("thead tr input[type=checkbox]").trigger("click");
-		// 	await wrapper.vm.$nextTick();
-		// 	wrapper.find("button.select-all-rows").trigger("click");
-		// 	await wrapper.vm.$nextTick();
-		// 	expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
-		// 		[],
-		// 		"exclusive",
-		// 	]);
-		// });
 
 		it("can preselect values", async () => {
 			const totalSelections = testData.length;
@@ -417,7 +414,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				const selection = [...Array(totalSelections).keys()].map(String);
 				const testAction = jest.fn();
 				const actionLabel = "TestAction";
-				var wrapper = getWrapper(
+				const wrapper = getWrapper(
 					{
 						rowsSelectable: true,
 						selectedRowIds: selection,

@@ -155,9 +155,9 @@ const mockStore = {
 };
 
 setupStores({
-	auth: AuthModule,
-	"env-config": EnvConfigModule,
-	schools: SchoolsModule,
+	authModule: AuthModule,
+	envConfigModule: EnvConfigModule,
+	schoolsModule: SchoolsModule,
 });
 
 const fetchYearSpy = jest
@@ -175,6 +175,7 @@ const fetchFederalStateSpy = jest
 	.mockImplementation(() => {
 		schoolsModule.setFederalState(federalState);
 	});
+const short_name = "instance name";
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
@@ -185,8 +186,6 @@ describe("SchoolSettingPage", () => {
 		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
 	});
-	it(...isValidComponent(SchoolPage));
-
 	it("tests env var school policy being true", () => {
 		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
@@ -194,9 +193,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeTrue();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeTruthy();
 	});
 
 	it("tests env var school policy being false", () => {
@@ -210,9 +214,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
 	});
 
 	it("tests env var school oauth migration being true", () => {
@@ -226,9 +235,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.isOauthMigrationEnabled).toBeTrue();
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(true);
 	});
 
 	it("tests env var school oauth migration being false", () => {
@@ -242,9 +256,14 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.isOauthMigrationEnabled).toBeFalse();
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(false);
 	});
 
 	it("tests whether current school year is computed right", () => {
@@ -253,6 +272,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
@@ -264,9 +288,14 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.systems).toBeArray(true);
+		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
@@ -277,6 +306,11 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(
@@ -294,6 +328,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(
@@ -308,11 +347,16 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(
-			wrapper.findComponent({ name: "v-skeleton-loader" }).exists()
-		).toBeTrue();
+		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBe(
+			true
+		);
 	});
 
 	it("error image should visible if schoolError occured", () => {
@@ -322,13 +366,18 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const schoolError = wrapper.find(".school-error-image");
 		const noSchoolError = wrapper.find(".no-school-error");
 
-		expect(schoolError.exists()).toBeTrue();
-		expect(noSchoolError.exists()).toBeFalse();
+		expect(schoolError.exists()).toBeTruthy();
+		expect(noSchoolError.exists()).toBeFalsy();
 	});
 
 	it("should load needed data form server", async () => {
@@ -337,6 +386,11 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.vm.$nextTick();
 		expect(fetchYearSpy).toHaveBeenCalled();

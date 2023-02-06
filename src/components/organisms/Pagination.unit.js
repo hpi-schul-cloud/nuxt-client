@@ -22,9 +22,7 @@ function getLastPageWrapper() {
 	});
 }
 
-describe("@components/organisms/Pagination", () => {
-	it(...isValidComponent(Pagination));
-
+describe("@/components/organisms/Pagination", () => {
 	it("renders only a next page link on the first page", () => {
 		const wrapper = getFirstPageWrapper();
 		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);
@@ -75,8 +73,6 @@ describe("@components/organisms/Pagination", () => {
 		});
 		const secondOption = wrapper.vm.perPageOptions[2].value;
 		wrapper.vm.setPagination(secondOption);
-		expect(wrapper.emitted("update:per-page")).toStrictEqual([
-			[secondOption.value],
-		]);
+		expect(wrapper.emitted("update:per-page")).toStrictEqual([[secondOption]]);
 	});
 });

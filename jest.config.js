@@ -1,42 +1,33 @@
-process.env.TZ = "Europe/Berlin";
+// process.env.TZ = "Europe/Berlin";
 
 module.exports = {
-	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
-	setupFilesAfterEnv: [
-		"jest-extended",
-		"<rootDir>/tests/unit/matchers",
-		"<rootDir>/tests/unit/jestMatchers",
-		"<rootDir>/tests/unit/requireAssertions",
-	],
-	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
-	testMatch: ["**/(*.)unit.(js|ts)"],
-	moduleFileExtensions: ["ts", "js", "json", "vue"],
-	transform: {
-		"^.+\\.ts$": "ts-jest",
-		".*\\.(vue)$": "vue-jest",
-		"^.+\\.js$": "babel-jest",
-	},
-	transformIgnorePatterns: ["<roodDir>/node_modules/(?!vue-ripple-directive)"],
+	// NUXT_REMOVAL we have to remove babel later.
+	// we have to keep it for now as a migration path for compatibility with legacy js components / tests
+	// dependencies that can be removed later after fully moving to typescript:
+	// @vue/cli-plugin-babel, babel-jest
+	// (do not forget to remove babel.config.js as well)
+	preset: "@vue/cli-plugin-unit-jest/presets/typescript-and-babel",
+	testMatch: ["**/*.unit.{j,t}s?(x)"],
+
 	moduleNameMapper: {
-		// Transform any static assets to empty strings
-		"\\.(jpe?g|png|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf|css)$":
-			"<rootDir>/tests/unit/fixtures/empty-string.js",
-		...require("./aliases.config").jest,
+		"^axios$": require.resolve("axios"),
+		"^@@/(.*)$": "<rootDir>/$1",
 	},
-	snapshotSerializers: ["jest-serializer-vue"],
-	coverageDirectory: "<rootDir>/dist/coverage",
+
+	setupFiles: ["./tests/unit/setup.js"],
+
 	collectCoverageFrom: [
 		// Include
 		"<rootDir>/src/components/**/*.{js,vue}",
 		// "<rootDir>/src/pages/**/*.{js,vue}",
-		"<rootDir>/src/middleware/**/*.js",
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.js",
-		"<rootDir>/src/serverMiddleware/**/*.js",
 		"<rootDir>/src/store/**/*.(js|ts)",
 		"<rootDir>/src/utils/**/*.js",
 		// Exclude
 		"!<rootDir>/src/components/base/_globals.js",
-		"!<rootDir>/src/serverMiddleware/routes.js",
+		"!<rootDir>/src/components/icons/**/*",
 	],
+
+	// maxWorkers: 2, // limited for not taking all workers within of a single github action
 };

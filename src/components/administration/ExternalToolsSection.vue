@@ -80,21 +80,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref } from "vue";
 import VueI18n from "vue-i18n";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-} from "@nuxtjs/composition-api";
-import ExternalToolsModule from "@store/external-tools";
+import { computed, ComputedRef, inject, onMounted, Ref } from "vue";
+import ExternalToolsModule from "@/store/external-tools";
 import { DataTableHeader } from "vuetify";
 import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalTool } from "@store/types/school-external-tool";
+import { SchoolExternalTool } from "@/store/types/school-external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

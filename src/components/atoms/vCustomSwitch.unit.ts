@@ -1,14 +1,13 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import vCustomSwitch from "./vCustomSwitch.vue";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("vCustomSwitch", () => {
 	it("should take property value true", () => {
-		const wrapper = mount(vCustomSwitch, {
+		const wrapper = mount(vCustomSwitch as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: {
 				value: true,
@@ -19,10 +18,9 @@ describe("vCustomSwitch", () => {
 		expect(customSwitch.checked).toBeTruthy();
 	});
 	it("should take property value false", () => {
-		const wrapper = mount(vCustomSwitch, {
+		const wrapper = mount(vCustomSwitch as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: {
 				value: false,
@@ -34,10 +32,9 @@ describe("vCustomSwitch", () => {
 	});
 
 	it("should display externally changing value", async () => {
-		const wrapper = mount(vCustomSwitch, {
+		const wrapper = mount(vCustomSwitch as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: {
 				value: true,
@@ -55,10 +52,9 @@ describe("vCustomSwitch", () => {
 	});
 
 	it("should show the label", () => {
-		const wrapper = mount(vCustomSwitch, {
+		const wrapper = mount(vCustomSwitch as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: {
 				value: false,
@@ -71,10 +67,9 @@ describe("vCustomSwitch", () => {
 	});
 
 	it("should emit events", async () => {
-		const wrapper = mount(vCustomSwitch, {
+		const wrapper = mount(vCustomSwitch as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: {
 				value: false,

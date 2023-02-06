@@ -25,7 +25,7 @@
 	</label>
 </template>
 <script>
-import BaseIcon from "@components/base/BaseIcon";
+import BaseIcon from "@/components/base/BaseIcon";
 export const supportedTypes = ["checkbox", "switch"];
 
 export default {

@@ -1,26 +1,21 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { SchoolExternalTool } from "./types/school-external-tool";
-import { $axios } from "@utils/api";
-import { authModule } from "@utils/store-accessor";
-import { useSchoolExternalToolUtils } from "@components/administration/school-external-tool-utils.composable";
+import { $axios } from "@/utils/api";
+import { authModule } from "@/store";
+import { useSchoolExternalToolUtils } from "@/components/administration/school-external-tool-utils.composable";
 import { ToolApiFactory, ToolApiInterface } from "../serverApi/v3";
 
 @Module({
-	name: "external-tools",
+	name: "externalToolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
-	private loading: boolean = false;
-
-	private _toolApi?: ToolApiInterface;
+	private loading = false;
 
 	private get toolApi(): ToolApiInterface {
-		if (!this._toolApi) {
-			this._toolApi = ToolApiFactory(undefined, "v3", $axios);
-		}
-		return this._toolApi;
+		return ToolApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation

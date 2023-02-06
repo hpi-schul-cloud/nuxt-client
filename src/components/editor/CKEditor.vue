@@ -21,10 +21,11 @@ import {
 	onBeforeUnmount,
 } from "@vue/composition-api";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
-require("@hpi-schul-cloud/ckeditor/build/translations/en");
-require("@hpi-schul-cloud/ckeditor/build/translations/es");
-require("@hpi-schul-cloud/ckeditor/build/translations/uk");
+import "@hpi-schul-cloud/ckeditor/build/translations/en";
+import "@hpi-schul-cloud/ckeditor/build/translations/es";
+import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+window.katex = require("katex");
 
 export default defineComponent({
 	name: "CkEditor",
@@ -85,6 +86,7 @@ export default defineComponent({
 			"link",
 			"bulletedList",
 			"numberedList",
+			"math",
 			"horizontalLine",
 			"|",
 			"blockQuote",
@@ -113,6 +115,7 @@ export default defineComponent({
 			"Italic",
 			"Link",
 			"List",
+			"Math",
 			"Paragraph",
 			"RemoveFormat",
 			"SpecialCharacters",
@@ -218,6 +221,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import "katex/dist/katex.min.css";
+
 // TODO move all style to ckbuild
 .ck-blurred {
 	border: none !important;

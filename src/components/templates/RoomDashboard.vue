@@ -170,11 +170,11 @@ import {
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import topicsEmptyStateImage from "@assets/img/empty-state/topics-empty-state.svg";
-import RoomLessonCard from "@components/molecules/RoomLessonCard.vue";
-import RoomTaskCard from "@components/molecules/RoomTaskCard.vue";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import topicsEmptyStateImage from "@/assets/img/empty-state/topics-empty-state.svg";
+import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
+import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 
 export default {

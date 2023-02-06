@@ -74,10 +74,10 @@
 </template>
 
 <script>
-import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import TasksList from "@components/organisms/TasksList";
-import { defineComponent, inject } from "@vue/composition-api";
+import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
+import TasksList from "@/components/organisms/TasksList";
+import { defineComponent, inject } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 

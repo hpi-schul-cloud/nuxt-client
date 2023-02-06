@@ -19,13 +19,22 @@
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
 				</div>
+				<user-has-role :role="isTeacher">
+					<div class="toggle-div">
+						<v-custom-switch
+							v-model="showSubstitute"
+							class="enable-disable"
+							:label="$t('pages.courses.index.courses.substituteCourses')"
+						/>
+					</div>
+				</user-has-role>
 				<div class="toggle-div">
 					<v-custom-switch
 						v-if="isTouchDevice"
 						v-model="allowDragging"
 						class="enable-disable"
 						:label="$t('pages.courses.index.courses.arrangeCourses')"
-					></v-custom-switch>
+					/>
 				</div>
 			</div>
 		</template>
@@ -122,14 +131,15 @@
 
 <script>
 import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar";
+import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
+import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import RoomModal from "@/components/molecules/RoomModal";
 import { roomsModule } from "@/store";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import vRoomAvatar from "@components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
-import RoomModal from "@components/molecules/RoomModal";
-import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import { mdiMagnify } from "@mdi/js";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -141,7 +151,9 @@ export default {
 		RoomModal,
 		vCustomSwitch,
 		ImportFlow,
+		UserHasRole,
 	},
+	inject: ["notifierModule"],
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -168,6 +180,9 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
+			showSubstitute: false,
+			mdiClose,
+			mdiInformation,
 		};
 	},
 	computed: {
@@ -192,6 +207,9 @@ export default {
 				}
 			);
 		},
+		hasRoomsBeingCopied() {
+			return this.rooms.some((item) => item.copyingSince !== undefined);
+		},
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
 		},
@@ -207,11 +225,26 @@ export default {
 			return this.$route.query.import;
 		},
 	},
+	watch: {
+		showSubstitute: async function (showSubstitute) {
+			await roomsModule.fetch({
+				indicateLoading: undefined,
+				device: undefined,
+				showSubstitute,
+			}); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		},
+	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.getDeviceDims();
+		if (this.hasRoomsBeingCopied) {
+			this.initCoursePolling(0, new Date());
+		}
 	},
 	methods: {
+		isTeacher(roles) {
+			return roles.some((role) => role.startsWith("teacher"));
+		},
 		getDeviceDims() {
 			this.device = this.$mq;
 			switch (this.$mq) {
@@ -310,7 +343,11 @@ export default {
 				toElementName == "vRoomAvatar"
 			) {
 				await this.savePosition();
-				this.defaultNaming(pos);
+				if (roomsModule.isAlignedSuccessfully) {
+					this.defaultNaming(pos);
+				}
+
+				this.dragging = false;
 			}
 		},
 		addGroupElements(pos) {
@@ -366,13 +403,27 @@ export default {
 			this.$router.replace({ path: "/rooms-overview" });
 			roomsModule.fetch();
 		},
+		initCoursePolling(count = 0, started) {
+			const nextTimeout = count * count * 1000 + 5000;
+			setTimeout(async () => {
+				await roomsModule.fetch({ indicateLoading: false });
+				if (this.hasRoomsBeingCopied) {
+					this.initCoursePolling(count + 1, started ?? new Date());
+				} else {
+					this.notifierModule?.show({
+						text: this.$t("components.molecules.copyResult.timeoutSuccess"),
+						status: "success",
+						autoClose: true,
+						timeout: 10000,
+					});
+				}
+			}, Math.min(nextTimeout, 30000));
+		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.courses.index.courses.active")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.courses.index.courses.active")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>
@@ -400,6 +451,7 @@ export default {
 
 	.toggle-div {
 		display: inline-block;
+		margin-left: var(--space-xl-3);
 	}
 }
 
@@ -408,7 +460,6 @@ export default {
 }
 
 ::v-deep .v-input {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin-top: 0 !important;
+	margin-top: 0 !important; // stylelint-disable sh-waqar/declaration-use-variable
 }
 </style>

@@ -5,8 +5,7 @@ const qrCode = {
 	template: `<base-qr-code url="testUrl"/>`,
 };
 
-describe("@components/base/BaseQrCode", () => {
-	it(...isValidComponent(BaseQrCode));
+describe("@/components/base/BaseQrCode", () => {
 	it("Generates a qrCode image", () => {
 		const wrapper = mount(qrCode);
 		expect(wrapper.find("div").exists()).toBe(true);

@@ -4,12 +4,12 @@
 			<base-link to="/" href="/" :no-styles="true">
 				<img
 					class="logo logo-full"
-					src="@assets/img/logo/logo-image-mono.svg"
+					src="@/assets/img/logo/logo-image-mono.svg"
 					alt="Schulcloud Logo"
 				/>
 				<img
 					class="logo logo-small"
-					src="@assets/img/logo/logo-transparent-mono-48-48.svg"
+					src="@/assets/img/logo/logo-transparent-mono-48-48.svg"
 					alt="Schulcloud Logo"
 				/>
 			</base-link>
@@ -87,10 +87,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useRoute, watch } from "@nuxtjs/composition-api";
-import baseLink from "@basecomponents/BaseLink.vue";
-import baseIcon from "@basecomponents/BaseIcon.vue";
-import { SidebarItem } from "@utils/sidebar-base-items";
+import { defineComponent, ref, watch } from "vue";
+import baseLink from "@/components/base/BaseLink.vue";
+import baseIcon from "@/components/base/BaseIcon.vue";
+import { SidebarItem } from "@/utils/sidebar-base-items";
+import { useRoute } from "vue-router/composables";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -118,7 +119,7 @@ export default defineComponent({
 
 		const isItemActiveForRoute = (item: SidebarItem) =>
 			item.activeForUrls.some((activeFor) =>
-				new RegExp(activeFor).test(route.value.path)
+				new RegExp(activeFor).test(route.path)
 			);
 
 		const updateActiveItems = () => {
@@ -159,7 +160,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
 
-@import "@styles";
+@import "@/styles/mixins";
 
 @keyframes menu-expand {
 	from {
@@ -282,10 +283,11 @@ export default defineComponent({
 					border-bottom: none;
 
 					.icon {
-						width: 25px;
-						margin-right: 6px;
-						font-size: 20px;
 						text-align: center;
+					}
+
+					.icon svg {
+						font-size: 20px;
 					}
 
 					.side-bar-title {
@@ -319,6 +321,27 @@ export default defineComponent({
 				}
 			}
 		}
+	}
+}
+</style>
+<style lang="scss">
+.sidebar .contents .list .list-item .list-content .icon {
+	width: 25px;
+	margin-right: 6px;
+	vertical-align: middle;
+
+	.v-icon {
+		width: 25px;
+		height: 19px;
+
+		&.custom-icon {
+			height: 18px;
+		}
+	}
+
+	svg {
+		width: 25px;
+		height: 20px;
 	}
 }
 </style>

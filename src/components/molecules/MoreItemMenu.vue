@@ -24,7 +24,7 @@
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				:class="`menu-action menu-action-${item.name.split(' ').join('-')}`"
+				class="menu-action"
 				:data-testid="item.dataTestId || ''"
 				@click.stop="handleClick(item)"
 			>
@@ -84,6 +84,6 @@ export default {
 	height: var(--space-md);
 	margin-top: calc(-0.5 + var(--space-base-vuetify));
 	font-size: var(--space-md);
-	color: var(--v-grey-darken1);
+	color: var(--v-grey-darken3);
 }
 </style>

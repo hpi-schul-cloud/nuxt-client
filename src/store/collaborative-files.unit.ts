@@ -1,15 +1,15 @@
-import CollaborativeFilesModule from "@store/collaborative-files";
+import CollaborativeFilesModule from "@/store/collaborative-files";
 import {
 	CollaborativeFile,
 	CollaborativeFileType,
 	FileIcon,
-} from "@store/types/collaborative-file";
-import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
+} from "@/store/types/collaborative-file";
+import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
-} from "@store/collaborative-files/file-meta.response";
-import * as fileTableComposable from "@pages/files/file-table-utils.composable";
+} from "@/store/collaborative-files/file-meta.response";
+import * as fileTableComposable from "@/pages/files/file-table-utils.composable";
 
 describe("CollaborativeFilesModule", () => {
 	let collaborativeFilesModule: CollaborativeFilesModule;
@@ -82,7 +82,7 @@ describe("CollaborativeFilesModule", () => {
 		it("should return loading from store", async () => {
 			setup();
 
-			let loading: boolean = await collaborativeFilesModule.getLoading;
+			const loading: boolean = await collaborativeFilesModule.getLoading;
 
 			expect(loading).toEqual(collaborativeFilesModule.loading);
 		});
