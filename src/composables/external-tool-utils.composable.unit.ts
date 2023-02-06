@@ -8,16 +8,17 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolStatusEnum,
 } from "@/store/external-tool";
-import { SchoolExternalToolItem } from "../components/administration/school-external-tool-item";
+import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
+import { BusinessError } from "@/store/types/commons";
 
-jest.mock("@utils/store-accessor", () => ({
+jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
 		getSchoolExternalTools: [
 			{
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: SchoolExternalToolStatusEnum.Latest,
+				status: "Latest",
 			},
 		],
 	},
@@ -123,6 +124,32 @@ describe("useExternalToolUtils", () => {
 					status: SchoolExternalToolStatusEnum.Unknown,
 				})
 			);
+		});
+	});
+
+	describe("getTranslationKey", () => {
+		it("should return translation key when message was found", () => {
+			const { getTranslationKey } = setup();
+			const error: BusinessError = {
+				statusCode: "400",
+				message: "tool_param_duplicate: Some validationError was thrown",
+			};
+
+			const translationKey = getTranslationKey(error);
+			expect(translationKey).toEqual(
+				"pages.tool.apiError.tool_param_duplicate"
+			);
+		});
+
+		it("should return original message when key was not found", () => {
+			const { getTranslationKey } = setup();
+			const error: BusinessError = {
+				statusCode: "400",
+				message: "some_error: which is not defined in map",
+			};
+
+			const translationKey = getTranslationKey(error);
+			expect(translationKey).toEqual(error.message);
 		});
 	});
 });

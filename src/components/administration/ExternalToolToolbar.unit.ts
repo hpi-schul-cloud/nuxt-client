@@ -1,6 +1,6 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import createComponentMocks from "../../../tests/test-utils/componentMocks";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("ExternalToolToolbar", () => {
 	let wrapper: Wrapper<any>;
@@ -11,6 +11,9 @@ describe("ExternalToolToolbar", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 		});
 	};
 

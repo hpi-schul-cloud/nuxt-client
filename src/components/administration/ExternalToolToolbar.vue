@@ -19,18 +19,8 @@
 		</v-btn>
 	</div>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 
-export default defineComponent({
-	name: "ExternalToolToolbar",
-	emits: ["delete", "edit"],
-	setup() {
-		return {
-			mdiPencilOutline,
-			mdiTrashCanOutline,
-		};
-	},
-});
+defineEmits(["delete", "edit"]);
 </script>
