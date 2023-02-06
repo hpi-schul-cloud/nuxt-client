@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ErrorPage from "@pages/Error.page.vue";
+import ErrorPage from "@/pages/Error.page.vue";
 export default {
 	components: {
 		ErrorPage,

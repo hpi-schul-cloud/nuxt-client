@@ -8,8 +8,8 @@ import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@nuxtjs/composition-api";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
@@ -40,7 +40,7 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
-describe("@components/templates/TasksDashboardMain", () => {
+describe("@/components/templates/TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
@@ -49,19 +49,19 @@ describe("@components/templates/TasksDashboardMain", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
-		return mount(TasksDashboardMain, {
+		return mount(TasksDashboardMain as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 				$router,
 				$route,
 			}),
-			setup() {
-				provide("tasksModule", tasksModuleMock);
-				provide("copyModule", copyModuleMock);
-				provide("finishedTasksModule", finishedTasksModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				tasksModule: tasksModuleMock,
+				copyModule: copyModuleMock,
+				finishedTasksModule: finishedTasksModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				notifierModule: notifierModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -187,7 +187,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			});
 
 			setupStores({
-				copy: CopyModule,
+				copyModule: CopyModule,
 			});
 
 			wrapper = mountComponent({

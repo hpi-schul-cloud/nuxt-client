@@ -54,18 +54,12 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	onBeforeMount,
-	onMounted,
-} from "@vue/composition-api";
-import { useRouter, useRoute } from "@nuxtjs/composition-api";
+import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, authModule } from "@/store";
 import { useDrag } from "@/composables/drag";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElement.vue";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import {
@@ -123,7 +117,7 @@ export default defineComponent({
 		});
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
-		const route = useRoute().value;
+		const route = useRoute();
 
 		onMounted(async () => {
 			const taskCardId =
@@ -188,15 +182,28 @@ export default defineComponent({
 		};
 
 		const createTaskCard = () => {
-			const text: Array<string> = [];
+			const cardElements = [];
+			cardElements.push({
+				content: {
+					type: title.value.type,
+					value: title.value.model,
+				},
+			});
 			elements.value.forEach((element) => {
-				text.push(element.model);
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
 			taskCardModule.createTaskCard({
-				title: title.value.model,
-				text: text,
+				cardElements: cardElements,
 				dueDate: dueDate.value || endOfSchoolYear,
 			});
 		};
@@ -211,14 +218,16 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				cardElements.push({
-					...(element.id && { id: element.id }),
-					content: {
-						type: element.type,
-						value: element.model,
-						inputFormat: "richtext_ck5",
-					},
-				});
+				if (element.model && element.model.length > 2) {
+					cardElements.push({
+						...(element.id && { id: element.id }),
+						content: {
+							type: element.type,
+							value: element.model,
+							inputFormat: "richtext_ck5",
+						},
+					});
+				}
 			});
 
 			taskCardModule.updateTaskCard({

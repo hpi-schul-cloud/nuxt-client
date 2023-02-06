@@ -1,8 +1,10 @@
 import FormNews from "./FormNews";
-import { DATETIME_FORMAT } from "@plugins/datetime";
+import { notifierModule } from "@/store";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 import dayjs from "dayjs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
@@ -58,9 +60,13 @@ const getMocks = ({
 		},
 	});
 
-describe("@components/organisms/FormNews", () => {
+describe("@/components/organisms/FormNews", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
+		});
+		jest.clearAllMocks();
 	});
 
 	it("converts date correctly", async () => {
@@ -87,7 +93,7 @@ describe("@components/organisms/FormNews", () => {
 					news: { ...validNews },
 				},
 			});
-			wrapper.trigger("submit");
+			wrapper.find("form").trigger("submit");
 			await wrapper.vm.$nextTick();
 			const events = wrapper.emitted();
 			expect(events.save).toHaveLength(1);
@@ -96,6 +102,8 @@ describe("@components/organisms/FormNews", () => {
 		});
 
 		it("shows validation error before submiting", async () => {
+			const notifierMock = jest.spyOn(notifierModule, "show");
+
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormNews, {
@@ -104,11 +112,10 @@ describe("@components/organisms/FormNews", () => {
 					news: invalidNews,
 				},
 			});
-			const toastStubs = { error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
 
-			wrapper.trigger("submit");
-			expect(toastStubs.error.mock.calls).toHaveLength(1); // error toast was shown
+			wrapper.find("form").trigger("submit");
+			expect(notifierMock).toHaveBeenCalled();
+			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
 			expect(actions.create.mock.calls).toHaveLength(0); // and no dispatch happend
 		});
 	});
@@ -130,8 +137,6 @@ describe("@components/organisms/FormNews", () => {
 			expect(actions.patch.mock.calls).toHaveLength(0);
 			expect(actions.remove.mock.calls).toHaveLength(1);
 			expect((await routerPushSpy).mock.calls).toHaveLength(1);
-			expect(toastStubs.error.mock.calls).toHaveLength(0);
-			expect(toastStubs.success.mock.calls).toHaveLength(1);
 		});
 	});
 });

@@ -116,14 +116,14 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
-import ImportLessonModal from "@components/molecules/ImportLessonModal";
-import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModal from "@components/share-course/ShareModal.vue";
-import DefaultWireframe from "@components/templates/DefaultWireframe";
-import RoomDashboard from "@components/templates/RoomDashboard";
+import BaseQrCode from "@/components/base/BaseQrCode.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import ImportLessonModal from "@/components/molecules/ImportLessonModal";
+import MoreItemMenu from "@/components/molecules/MoreItemMenu";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModal from "@/components/share-course/ShareModal.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe";
+import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
 	mdiCloudDownload,
 	mdiContentCopy,
@@ -135,7 +135,7 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
-import { defineComponent, inject } from "@vue/composition-api";
+import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -148,10 +148,13 @@ export default defineComponent({
 			i18n.t("components.molecules.copyResult.title.loading")
 		);
 
-		const { copy } = useCopy(isLoadingDialogOpen);
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
+			useCopy(isLoadingDialogOpen);
 
 		return {
 			copy,
+			backgroundCopyProcesses,
+			isCopyProcessInBackground,
 		};
 	},
 	components: {
@@ -354,18 +357,23 @@ export default defineComponent({
 			const loadingText = this.$t(
 				"components.molecules.copyResult.title.loading"
 			);
-			const payload = {
+
+			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
-			await this.copy(payload, loadingText);
+
+			await this.copy(copyParams, loadingText);
+
 			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
 				await this.$router.push(
 					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
 				);
+			} else {
+				await this.$router.push("/rooms-overview");
 			}
 		},
 		async onCopyBoardElement(payload) {
@@ -379,10 +387,8 @@ export default defineComponent({
 			this.copyModule.reset();
 		},
 	},
-	head() {
-		return {
-			title: `${this.roomData.title} - ${this.$theme.short_name}`,
-		};
+	mounted() {
+		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
 	},
 });
 </script>

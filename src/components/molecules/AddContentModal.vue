@@ -59,8 +59,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { contentModule } from "@/store";
-import ModalFooter from "@components/molecules/ModalFooter";
-
+import ModalFooter from "@/components/molecules/ModalFooter";
 export default {
 	components: {
 		ModalFooter,
@@ -71,7 +70,6 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		merlinReference: { type: String, default: "" },
 		items: { type: Array, default: () => [] },
-
 		showCopyModal: {
 			type: Boolean,
 			required: true,
@@ -167,28 +165,23 @@ export default {
 .modal {
 	width: 100%;
 }
-
 .content-modal {
 	&__body {
 		min-height: 300px;
 		color: var(--v-black-base) !important;
-
 		&--select {
 			margin-top: var(--space-xl);
 		}
 	}
 }
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity var(--duration-transition-slow);
 }
-
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
 }
-
 ::v-deep .v-input__icon .v-icon {
 	font-size: var(--text-base-size);
 }

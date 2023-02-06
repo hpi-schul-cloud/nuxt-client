@@ -1,18 +1,18 @@
 import { DataTableHeader } from "vuetify";
-import { Breadcrumb } from "@components/templates/default-wireframe.types";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { Route } from "vue-router";
-import { collaborativeFilesModule } from "@utils/store-accessor";
-import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
-import { FileTypeResponse } from "@store/collaborative-files/file-meta.response";
+import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
+import { FileTypeResponse } from "@/store/collaborative-files/file-meta.response";
 import {
 	CollaborativeFile,
 	CollaborativeFileType,
 	FileIcon,
-} from "@store/types/collaborative-file";
-import { useFileTableUtils } from "@pages/files/file-table-utils.composable";
-import { FilesPageConfig } from "@pages/files/file-page-config.type";
+} from "@/store/types/collaborative-file";
+import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
+import { FilesPageConfig } from "@/pages/files/file-page-config.type";
+import { collaborativeFilesModule } from "@/store";
 
-jest.mock("@utils/store-accessor", () => ({
+jest.mock("@/store", () => ({
 	collaborativeFilesModule: {
 		fetchFilesOverview: jest.fn(),
 		fetchTeams: jest.fn(),
@@ -24,7 +24,7 @@ describe("UseFileTableUtils", () => {
 	function setup() {
 		const expectedTranslation = "translated";
 		const tMock = jest.fn().mockReturnValue(expectedTranslation);
-		let {
+		const {
 			getHeaders,
 			getFilesPageForRoute,
 			getFileCategory,

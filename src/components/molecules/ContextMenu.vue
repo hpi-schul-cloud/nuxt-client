@@ -195,7 +195,7 @@ export default {
 		emitEvent(event, args) {
 			setTimeout(() => {
 				this.closeMenu();
-			}, 300); // wait 500ms for the ripple animation to finish
+			}, 300);
 			/**
 			 * your custom event for each menu item
 			 *
@@ -209,7 +209,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .context-menu {
 	--transition-duration: var(--duration-transition-fast);
@@ -286,5 +286,12 @@ export default {
 
 .v-btn {
 	font-weight: var(--font-weight-normal) !important;
+	font-family: var(--font-accent);
+}
+</style>
+
+<style lang="scss">
+.context-menu .context-menu__button-icon .v-icon.v-icon {
+	font-size: var(--text-md);
 }
 </style>

@@ -1,10 +1,14 @@
 import setupStores from "@@/tests/test-utils/setupStores";
+import AccountsModule from "./accounts";
 import AutoLogoutModule from "./autoLogout";
 import EnvConfigModule from "./env-config";
 
 describe("autoLogout module", () => {
 	beforeEach(() => {
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			accountsModule: AccountsModule,
+		});
 	});
 
 	describe("actions", () => {

@@ -1,5 +1,5 @@
-import LoadingStateModule from "@store/loading-state";
-import { LoadingStatePayload } from "@store/types/loading-state-payload";
+import LoadingStateModule from "@/store/loading-state";
+import { LoadingStatePayload } from "@/store/types/loading-state-payload";
 
 describe("loading-state store", () => {
 	describe("actions", () => {
