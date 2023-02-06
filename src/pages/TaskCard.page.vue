@@ -201,6 +201,7 @@ export default defineComponent({
 				}
 			});
 
+			//@ts-ignore
 			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
 			taskCardModule.createTaskCard({
 				cardElements: cardElements,
