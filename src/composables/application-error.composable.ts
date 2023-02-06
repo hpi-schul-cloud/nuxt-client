@@ -1,4 +1,4 @@
-import { createApplicationError } from "@utils/create-application-error.factory";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 /**
  * Composable for creating ApplicationErrors.

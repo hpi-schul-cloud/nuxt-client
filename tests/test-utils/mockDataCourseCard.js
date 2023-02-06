@@ -40,7 +40,6 @@ export const defaultCourse = {
 	alert: "",
 	teacherName: "Mustermenschkindundkind",
 	notification: 1,
-	alert: "",
 };
 
 export const courseOldDataFormat = {

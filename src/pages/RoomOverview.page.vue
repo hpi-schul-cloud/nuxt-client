@@ -133,14 +133,9 @@
 <script>
 import ImportFlow from "@components/share/ImportFlow.vue";
 import { roomsModule } from "@/store";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import vRoomAvatar from "@components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
-import RoomModal from "@components/molecules/RoomModal";
-import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
-import UserHasRole from "@components/helpers/UserHasRole";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -427,12 +422,10 @@ export default {
 			}, Math.min(nextTimeout, 30000));
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.courses.index.courses.active")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.courses.index.courses.active")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

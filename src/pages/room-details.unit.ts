@@ -11,9 +11,10 @@ import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
+import { initializeAxios } from "@/utils/api";
+import { AxiosInstance } from "axios";
 
 const mockData = {
 	roomId: "123",
@@ -114,31 +115,36 @@ let shareLessonModuleMock: ShareLessonModule;
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
 	return mount(Room, {
-		...createComponentMocks({
-			i18n: true,
+		...createComponentMocks({}),
+		mocks: {
+			$theme: {
+				short_name: "instance name",
+			},
 			$router,
 			$route,
+		},
+		...createComponentMocks({
+			i18n: true,
 		}),
-		setup() {
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key: string) => key });
-			provide("shareCourseModule", shareCourseModuleMock);
-			provide("shareLessonModule", shareLessonModuleMock);
+		provide: {
+			notifierModule: notifierModuleMock,
+			shareLessonModule: shareLessonModuleMock,
+			shareCourseModule: shareCourseModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			copyModule: copyModuleMock,
 		},
 	});
 };
 
-describe("@pages/RoomDetails.page.vue", () => {
+describe("@/pages/RoomDetails.page.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 
 		setupStores({
-			auth: AuthModule,
-			"env-config": EnvConfigModule,
-			room: RoomModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+			roomModule: RoomModule,
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
@@ -157,6 +163,12 @@ describe("@pages/RoomDetails.page.vue", () => {
 		shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
 			getIsShareModalOpen: true,
 		});
+
+		initializeAxios({
+			get: async (path) => {
+				return { data: [] };
+			},
+		} as AxiosInstance);
 	});
 
 	it("should fetch data", async () => {

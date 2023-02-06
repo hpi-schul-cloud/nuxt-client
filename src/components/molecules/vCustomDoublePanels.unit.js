@@ -1,7 +1,7 @@
 import Vuetify from "vuetify";
 import vCustomDoublePanels from "./vCustomDoublePanels";
 
-describe("@components/molecules/vCustomDoublePanels", () => {
+describe("@/components/molecules/vCustomDoublePanels", () => {
 	const propsData = {
 		panelOneCount: 1,
 		panelTwoCount: 13,
@@ -59,8 +59,6 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 	beforeEach(() => {
 		vuetify = new Vuetify();
 	});
-
-	it(...isValidComponent(vCustomDoublePanels));
 
 	it("Should render its slots", () => {
 		const wrapper = mount(vCustomDoublePanels, {

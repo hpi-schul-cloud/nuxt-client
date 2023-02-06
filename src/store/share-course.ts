@@ -1,4 +1,3 @@
-import { roomModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -19,20 +18,17 @@ export interface SharePayload extends ShareOptions {
 }
 
 @Module({
-	name: "share-course",
+	name: "shareCourseModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class ShareCourseModule extends VuexModule {
-	private isShareModalOpen: boolean = false;
-	private courseId: string = "";
+	private isShareModalOpen = false;
+	private courseId = "";
 	private shareUrl: string | undefined = undefined;
-	private _shareApi?: ShareTokenApiInterface;
+
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
-		}
-		return this._shareApi;
+		return ShareTokenApiFactory(undefined, "v3", $axios);
 	}
 
 	@Action

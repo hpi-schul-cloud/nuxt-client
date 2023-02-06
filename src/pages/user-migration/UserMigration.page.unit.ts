@@ -1,16 +1,16 @@
-import UserMigration from "@pages/user-migration/UserMigration.page.vue";
-import SystemsModule from "@store/systems";
-import UserMigrationModule from "@store/user-migration";
-import { System } from "@store/types/system";
+import UserMigration from "@/pages/user-migration/UserMigration.page.vue";
+import SystemsModule from "@/store/systems";
+import UserMigrationModule from "@/store/user-migration";
+import { System } from "@/store/types/system";
 import {
 	MigrationLinks,
 	MigrationPageOrigin,
-} from "@store/types/user-migration";
+} from "@/store/types/user-migration";
 import { mount, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
-import { createModuleMocks } from "@utils/mock-store-module";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
+import { ApplicationError } from "@/store/types/application-error";
 
 describe("UserMigration", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
@@ -45,9 +45,9 @@ describe("UserMigration", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("systemsModule", systemsModule);
-				provide("userMigrationModule", userMigrationModule);
+			provide: {
+				systemsModule,
+				userMigrationModule,
 			},
 			propsData: props,
 			mocks: {
@@ -65,37 +65,61 @@ describe("UserMigration", () => {
 	describe("Prop validation", () => {
 		describe("when prop sourceSystem is missing", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					setup({
 						targetSystem: "targetSystemId",
 						origin: "sourceSystemId",
 					});
+				} catch (e) {}
 
-				expect(func).toThrow("ApplicationError");
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
+				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 
 		describe("when prop targetSystem is missing", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					setup({
 						sourceSystem: "sourceSystemId",
 						origin: "sourceSystemId",
 					});
+				} catch (e) {}
 
-				expect(func).toThrow("ApplicationError");
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
+				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 
 		describe("when prop origin is missing", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					setup({
 						sourceSystem: "sourceSystemId",
 						targetSystem: "targetSystemId",
 					});
+				} catch (e) {}
 
-				expect(func).toThrow("ApplicationError");
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
+				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});
@@ -103,13 +127,17 @@ describe("UserMigration", () => {
 	describe("Injection", () => {
 		describe("when injection userMigrationModule is missing", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					shallowMount(UserMigration, {
 						...createComponentMocks({
 							i18n: true,
 						}),
-						setup() {
-							provide("systemsModule", systemsModule);
+						provide: {
+							systemsModule,
 						},
 						propsData: {
 							sourceSystem: "sourceSystemId",
@@ -117,22 +145,28 @@ describe("UserMigration", () => {
 							origin: "sourceSystemId",
 						},
 					});
+				} catch (e) {}
 
-				expect(func).toThrow(
-					"ApplicationError: Injection of dependencies failed"
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
 				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 
 		describe("when injection systemsModule is missing", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					shallowMount(UserMigration, {
 						...createComponentMocks({
 							i18n: true,
 						}),
-						setup() {
-							provide("userMigrationModule", userMigrationModule);
+						provide: {
+							userMigrationModule,
 						},
 						propsData: {
 							sourceSystem: "sourceSystemId",
@@ -140,10 +174,12 @@ describe("UserMigration", () => {
 							origin: "sourceSystemId",
 						},
 					});
+				} catch (e) {}
 
-				expect(func).toThrow(
-					"ApplicationError: Injection of dependencies failed"
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
 				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});
@@ -313,14 +349,22 @@ describe("UserMigration", () => {
 
 		describe("when origin does not equal the sourceSystem or targetSystem", () => {
 			it("should throw an error", () => {
-				const func = () =>
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
 					setup({
 						sourceSystem: "sourceSystemId",
 						targetSystem: "targetSystemId",
 						origin: "otherId",
 					});
+				} catch (e) {}
 
-				expect(func).toThrow("Unknown origin system");
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.any(ApplicationError)
+				);
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});

@@ -2,7 +2,6 @@ import { roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
-import flushPromises from "flush-promises";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
@@ -12,12 +11,15 @@ const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {
 		...createComponentMocks({
 			i18n: true,
-			//@ts-ignore
-			vuetify: true,
 		}),
 		computed: {
 			$mq: () => device,
 			...computed,
+		},
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
 		},
 	});
 };
@@ -60,25 +62,17 @@ const mockData = [
 	},
 ];
 
-setupStores({
-    rooms: RoomsModule,
-    auth: AuthModule,
-    "env-config": EnvConfigModule,
-});
-
-
-const spyMocks = {
-    storeModuleFetchAllMock: jest
-        .spyOn(roomsModule, "fetchAllElements")
-        .mockImplementation(async () => {}),
-};
-
-describe("@pages/room-list.vue", () => {
+describe("@/pages/room-list.vue", () => {
 	let wrapper: Wrapper<Vue>;
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({
+			roomsModule: RoomsModule,
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+		});
 		roomsModule.setAllElements(mockData as any);
 	});
 
@@ -93,7 +87,7 @@ describe("@pages/room-list.vue", () => {
 		});
 
 		it("should fetch data", async () => {
-			await flushPromises();
+			await wrapper.vm.$nextTick();
 
 			const expectedItem = {
 				id: "123",
@@ -105,7 +99,7 @@ describe("@pages/room-list.vue", () => {
 				titleDate: "2019/20",
 				searchText: "Mathe 2019/20",
 				isArchived: true,
-				href: "/courses/123",
+				to: "/rooms/123",
 			};
 			// tslint ignored because it gives
 			// "Property 'items' does not exist on type 'Vue'" error
@@ -123,19 +117,17 @@ describe("@pages/room-list.vue", () => {
 					isLoading: () => false,
 					hasRooms: () => true,
 				});
-				await flushPromises();
-
-				const searchInput = wrapper.vm.$refs["search"] as any;
+				await wrapper.vm.$nextTick();
 
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				searchInput.$emit("input", "math");
+				wrapper.vm.$data.searchText = "math";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
-				searchInput.$emit("input", "");
+				wrapper.vm.$data.searchText = "";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				searchInput.$emit("input", "15");
+				wrapper.vm.$data.searchText = "15";
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
 				// @ts-ignore
@@ -149,7 +141,7 @@ describe("@pages/room-list.vue", () => {
 					titleDate: "2015-2018",
 					searchText: "History 2015-2018",
 					isArchived: true,
-					href: "/courses/234",
+					to: "/rooms/234",
 				});
 
 				wrapper.destroy();

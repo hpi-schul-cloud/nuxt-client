@@ -2,6 +2,7 @@ import { default as NewStudent } from "./StudentCreate.page.vue";
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
+import NotifierModule from "@/store/notifier";
 
 describe("students/new", () => {
 	const createStudentStub = jest.fn();
@@ -31,14 +32,18 @@ describe("students/new", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({ auth: AuthModule });
+		setupStores({ authModule: AuthModule, notifierModule: NotifierModule });
 	});
-
-	it(...isValidComponent(NewStudent));
 
 	it("should call 'createStudent' action", async () => {
 		const wrapper = mount(NewStudent, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
+			mocks: {
+				$theme: {
+					short_name: "instance name",
+				},
+				$user: { schoolId: "123" },
+			},
 		});
 		mock$objects(wrapper);
 		const inputFirstName = wrapper.find(

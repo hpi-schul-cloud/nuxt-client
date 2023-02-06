@@ -40,10 +40,10 @@
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+<script>
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, reactive, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -62,20 +62,20 @@ export default defineComponent({
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-          required: value => !!value || i18n?.t("common.validation.required"),
+			required: (value) => !!value || i18n?.t("common.validation.required"),
 		});
 
 		const newName = computed({
 			get: () => nameInput.value ?? props.parentName,
-			set: (value) => nameInput.value = value,
+			set: (value) => (nameInput.value = value),
 		});
 
 		const onConfirm = () => {
 			if (rules.required(newName.value) === true) {
-				emit('import', newName.value);
+				emit("import", newName.value);
 			}
-		}
-		const onCancel = () => emit('cancel')
+		};
+		const onCancel = () => emit("cancel");
 
 		return {
 			onConfirm,

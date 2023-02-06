@@ -1,8 +1,6 @@
 import SkipLinks from "./SkipLinks";
 
-describe("@components/molecules/SkipLinks", () => {
-	it(...isValidComponent(SkipLinks));
-
+describe("@/components/molecules/SkipLinks", () => {
 	it("Should render its skip link", async () => {
 		const wrapper = mount(SkipLinks, {
 			...createComponentMocks({

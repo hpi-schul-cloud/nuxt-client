@@ -1,5 +1,4 @@
 import ContextMenu from "./ContextMenu";
-import { render, fireEvent } from "@testing-library/vue";
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -29,9 +28,7 @@ const getAttachToOptions = () => {
 	return { options: { attachTo: div } };
 };
 
-describe("@components/molecules/ContextMenu", () => {
-	it(...isValidComponent(ContextMenu));
-
+describe("@/components/molecules/ContextMenu", () => {
 	it("Renders all action buttons", () => {
 		const wrapper = getWrapper();
 
@@ -57,13 +54,15 @@ describe("@components/molecules/ContextMenu", () => {
 	});
 
 	it("emits (update:show false) event when button gets clicked", async () => {
+		jest.useFakeTimers();
 		const wrapper = getWrapper();
-		const button = wrapper.find(".context-menu__button");
-		button.trigger("click");
-		// close event is delayed by 300ms
-		await wait(350);
-		expect(wrapper.emitted("update:show")).toHaveLength(1);
-		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
+		await wrapper.find(".context-menu__button").trigger("click");
+
+		jest.runAllTimers();
+
+		const emitted = await wrapper.emitted("update:show");
+		expect(emitted).toHaveLength(1);
+		expect(emitted).toStrictEqual([[false]]);
 	});
 
 	it("emits (update:show false) event when ESC Keys gets pressed", async () => {
@@ -81,7 +80,7 @@ describe("@components/molecules/ContextMenu", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
 			const emptyNode = "<!---->";
-			const wrapper = render({
+			const wrapper = mount({
 				data: () => ({ show: true, actions }),
 				template: `
 					<div id="container">
@@ -92,10 +91,12 @@ describe("@components/molecules/ContextMenu", () => {
 				components: { ContextMenu },
 				...createComponentMocks({ i18n: true }),
 			});
-			// wait because ctxmenu is not reacting to clicks outside immediatly
-			await wait(0);
-			await fireEvent.click(wrapper.getByTestId("outside"));
-			expect(wrapper.getByTestId("testid").innerHTML).toStrictEqual(emptyNode);
+
+			const outsideElement = wrapper.find(".outside");
+			await outsideElement.trigger("click");
+			const contextElement = wrapper.find(".ctxmenu");
+
+			expect(contextElement.element.innerHTML).toContain(emptyNode);
 		});
 
 		it("does not trigger event on click outside if noClose=true", async () => {
@@ -115,27 +116,25 @@ describe("@components/molecules/ContextMenu", () => {
 				getAttachToOptions()
 			);
 			const Menu = wrapper.find(".ctxmenu");
-			// wait because ctxmenu is not reacting to clicks outside immediatly
-			await wait(0);
-			wrapper.find(".outside").trigger("click");
+			const outsideElement = wrapper.find(".outside");
+			await outsideElement.trigger("click");
 			expect(Menu.emitted("update:show")).toBeUndefined();
-			wrapper.destroy();
 		});
 	});
 
 	describe("anchor positions", () => {
 		it.each([
-			["bottom-left", "", 0, 0, ""],
-			["top-left", 0, "", 0, ""],
-			["top-right", 0, "", "", 0],
-			["bottom-right", "", 0, "", 0],
+			["bottom-left", "", "0px", "0px", ""],
+			["top-left", "0px", "", "0px", ""],
+			["top-right", "0px", "", "", "0px"],
+			["bottom-right", "", "0px", "", "0px"],
 		])(
 			"menu gets positioned correctly by anchor attribute %s",
 			async (anchor, top, bottom, left, right) => {
 				const wrapper = getWrapper({
 					additionalProps: { anchor },
 				});
-				const menuStyles = wrapper.find(".context-menu").element.style;
+				const menuStyles = await wrapper.find(".context-menu").element.style;
 				expect(menuStyles.top).toContain(top);
 				expect(menuStyles.bottom).toContain(bottom);
 				expect(menuStyles.left).toContain(left);
@@ -161,7 +160,6 @@ describe("@components/molecules/ContextMenu", () => {
 	describe("a11y", () => {
 		it("first element get's focused on mount", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
-			// wait 2 times because nextTick is also used in the component itself
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");

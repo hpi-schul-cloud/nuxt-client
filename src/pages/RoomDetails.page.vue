@@ -135,7 +135,7 @@ import {
 	mdiSquareEditOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
-import { defineComponent, inject } from "@vue/composition-api";
+import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -387,10 +387,8 @@ export default defineComponent({
 			this.copyModule.reset();
 		},
 	},
-	head() {
-		return {
-			title: `${this.roomData.title} - ${this.$theme.short_name}`,
-		};
+	mounted() {
+		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
 	},
 });
 </script>

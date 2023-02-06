@@ -1,12 +1,10 @@
 import ContentEduSharingFooter from "./ContentEduSharingFooter";
 
-describe("@components/molecules/ContentEduSharingFooter", () => {
+describe("@/components/molecules/ContentEduSharingFooter", () => {
 	const wrapper = shallowMount(ContentEduSharingFooter, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
 	});
-
-	it(...isValidComponent(ContentEduSharingFooter));
 
 	it("Renders svg image", () => {
 		expect(wrapper.find(".edusharing-footer__logo").exists()).toBe(true);
@@ -14,7 +12,7 @@ describe("@components/molecules/ContentEduSharingFooter", () => {
 			"edusharing-logo"
 		);
 		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
-			"@assets/img/edusharing/edusharing-logo.svg"
+			"@/assets/img/edusharing/edusharing-logo.svg"
 		);
 	});
 

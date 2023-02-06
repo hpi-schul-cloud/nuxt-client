@@ -1,10 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
-
-declare let createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const baseTestProps = {
 	room: {
@@ -46,21 +46,20 @@ const hiddenTestProps = {
 	dragInProgress: false,
 };
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(RoomLessonCard, {
+	return mount(RoomLessonCard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/molecules/RoomLessonCard", () => {
+describe("@/components/molecules/RoomLessonCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -203,14 +202,13 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				wrapper.vm.copyCard = copyCard;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.copy"
-				)}`;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-lesson-menu-copy"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(copyCard).toHaveBeenCalled();
@@ -249,11 +247,10 @@ describe("@components/molecules/RoomLessonCard", () => {
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
-				const selectorName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.remove"
-				)}`;
 
-				const moreActionButton = wrapper.find(selectorName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-lesson-menu-remove"]`
+				);
 				await moreActionButton.trigger("click");
 				await wrapper.vm.$nextTick();
 				const emitted = wrapper.emitted("delete-lesson");

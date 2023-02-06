@@ -1,4 +1,4 @@
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -16,7 +16,7 @@ import { System } from "./types/system";
 })
 export default class SystemsModule extends VuexModule {
 	private systems: System[] = [];
-	private loading: boolean = false;
+	private loading = false;
 	private error: {} | null = null;
 
 	private _systemApi?: SystemApiInterface;
@@ -70,7 +70,7 @@ export default class SystemsModule extends VuexModule {
 			);
 			this.setSystems(mappedSystems);
 		} catch (error) {
-			this.setError(error);
+			this.setError(error as Error);
 		}
 		this.setLoading(false);
 	}

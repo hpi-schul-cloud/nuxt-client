@@ -1,5 +1,4 @@
-import setupStores from "@@/tests/test-utils/setupStores";
-import { NuxtAxiosInstance } from "@nuxtjs/axios";
+import { AxiosInstance } from "axios";
 import { initializeAxios } from "../utils/api";
 import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
@@ -36,13 +35,13 @@ let requestPath: string;
 
 const axiosInitializer = (envs?: any, error?: boolean) => {
 	initializeAxios({
-		$get: async (path: string) => {
+		get: async (path: string) => {
 			if (error) throw new Error();
 
 			requestPath = path;
-			return envs;
+			return { data: envs };
 		},
-	} as NuxtAxiosInstance);
+	} as AxiosInstance);
 };
 
 jest.useFakeTimers();
@@ -53,7 +52,7 @@ describe("env-config module", () => {
 	beforeEach(() => {
 		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-		setupStores({ "env-config": EnvConfigModule });
+		// setupStores({ envConfigModule: EnvConfigModule });
 	});
 	afterEach(() => {
 		consoleWarnSpy.mockRestore();

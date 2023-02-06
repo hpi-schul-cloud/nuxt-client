@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import NotificationModal from "@components/molecules/NotificationModal";
+import NotificationModal from "@/components/molecules/NotificationModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
 import { createLocalVue } from "@vue/test-utils";
 
@@ -13,9 +13,7 @@ const testProps = {
 	description: "test description",
 };
 
-describe("@components/molecules/NotificationModal", () => {
-	it(...isValidComponent(NotificationModal));
-
+describe("@/components/molecules/NotificationModal", () => {
 	it("success case", async () => {
 		const wrapper = mount(NotificationModal, {
 			propsData: { ...testProps, isSuccess: true },

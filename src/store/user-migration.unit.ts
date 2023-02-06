@@ -1,7 +1,3 @@
-import {
-	PageContentResponse,
-	UserMigrationApiInterface,
-} from "../serverApi/v3";
 import * as serverApi from "../serverApi/v3/api";
 import {
 	MigrationLinkRequest,
@@ -9,15 +5,14 @@ import {
 	MigrationPageOrigin,
 } from "./types/user-migration";
 import UserMigrationModule from "./user-migration";
-import { AxiosResponse } from "axios";
 
-const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-	data,
-	status: 200,
-	statusText: "OK",
-	headers: {},
-	config: {},
-});
+// const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
+// 	data,
+// 	status: 200,
+// 	statusText: "OK",
+// 	headers: {},
+// 	config: {},
+// });
 
 describe("UserMigrationModule", () => {
 	let module: UserMigrationModule;
@@ -30,15 +25,15 @@ describe("UserMigrationModule", () => {
 		jest.resetAllMocks();
 	});
 
-	const mockApi = () => {
-		const apiMock: jest.Mocked<UserMigrationApiInterface> = {
-			userMigrationControllerGetMigrationPageDetails: jest.fn(),
-		};
+	// const mockApi = () => {
+	// 	const apiMock: jest.Mocked<UserMigrationApiInterface> = {
+	// 		userMigrationControllerGetMigrationPageDetails: jest.fn(),
+	// 	};
 
-		jest.spyOn(serverApi, "UserMigrationApiFactory").mockReturnValue(apiMock);
+	// 	jest.spyOn(serverApi, "UserMigrationApiFactory").mockReturnValue(apiMock);
 
-		return { apiMock };
-	};
+	// 	return { apiMock };
+	// };
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
@@ -97,23 +92,33 @@ describe("UserMigrationModule", () => {
 	describe("actions", () => {
 		describe("fetchMigrationLinks", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
 				const migrationLinkRequest: MigrationLinkRequest = {
 					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
 					targetSystem: "targetSystemId",
 					sourceSystem: "sourceSystemId",
 				};
-				const response: PageContentResponse = {
+
+				const response = {
 					proceedButtonUrl: "proceedLink",
 					cancelButtonUrl: "cancelLink",
 				};
 
-				apiMock.userMigrationControllerGetMigrationPageDetails.mockResolvedValue(
-					createAxiosResponse(response)
-				);
+				const mockApi = {
+					userMigrationControllerGetMigrationPageDetails: jest
+						.fn()
+						.mockResolvedValue({
+							data: response,
+						}),
+				};
+
+				jest
+					.spyOn(serverApi, "UserMigrationApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.UserMigrationApiInterface
+					);
 
 				return {
-					apiMock,
+					apiMock: mockApi,
 					migrationLinkRequest,
 					response,
 				};

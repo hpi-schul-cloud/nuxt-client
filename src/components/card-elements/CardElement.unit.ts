@@ -1,4 +1,3 @@
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CardElement from "@/components/card-elements/CardElement.vue";
@@ -10,15 +9,15 @@ const getWrapper = (props?: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 		}),
-		setup() {
-			provide("i18n", { t: (key: string) => key });
+		provide: {
+			i18n: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/card-elements/CardElement", () => {
+describe("@/components/card-elements/CardElement", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent(CardElement).exists()).toBe(true);

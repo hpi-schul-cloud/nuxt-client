@@ -1,14 +1,15 @@
-import serviceTemplate from "@utils/service-template";
+import serviceTemplate from "@/utils/service-template";
 import mergeDeep from "@/utils/merge-deep";
 const baseUrl = "calendar";
 const base = serviceTemplate(baseUrl);
+import { $axios } from "@/utils/api";
 
-const module = mergeDeep(base, {
+const calendarModule = mergeDeep(base, {
 	actions: {
 		removeDate: async function (ctx, payload) {
-			await this.$axios.$delete("/v1/" + baseUrl + "/" + payload.id);
+			(await $axios.delete("/v1/" + baseUrl + "/" + payload.id)).data;
 		},
 	},
 });
 
-export default module;
+export default calendarModule;

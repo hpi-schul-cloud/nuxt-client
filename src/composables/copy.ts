@@ -1,7 +1,7 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import { inject, Ref, reactive } from "@vue/composition-api";
+import { inject, Ref, reactive } from "vue";
 import VueI18n from "vue-i18n";
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {

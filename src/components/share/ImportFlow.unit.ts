@@ -16,8 +16,7 @@ import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ImportFlow from "@components/share/ImportFlow.vue";
 import ImportModal from "@components/share/ImportModal.vue";
 import SelectCourseModal from "@components/share/SelectCourseModal.vue";
-import { provide } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 
@@ -35,15 +34,15 @@ describe("@components/share/ImportFlow", () => {
 		displayColor: "#54616e",
 	};
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(ImportFlow, {
+		const wrapper = mount(ImportFlow as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("copyModule", copyModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("notifierModule", notifierModuleMock);
+			provide: {
+				copyModule: copyModuleMock,
+				notifierModule: notifierModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			propsData: {
 				token,

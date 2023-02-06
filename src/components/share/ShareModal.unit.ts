@@ -4,7 +4,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@components/share/ShareModalResult.vue";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 
@@ -17,12 +16,12 @@ describe("@components/share/ShareModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("shareCourseModule", shareCourseModuleMock);
-				provide("i18n", { t: (key: string) => key });
-				provide("notifierModule", {
+			provide: {
+				notifierModule: {
 					show: showMock,
-				});
+				},
+				shareCourseModule: shareCourseModuleMock,
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});

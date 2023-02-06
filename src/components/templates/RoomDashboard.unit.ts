@@ -8,11 +8,10 @@ import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@nuxtjs/composition-api";
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	roomId: "123",
@@ -101,30 +100,28 @@ const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (props: object, options?: object) => {
-	return mount<any>(RoomDashboard, {
+	return mount<any>(RoomDashboard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
-		setup() {
-			provide("i18n", { t: (key: string) => key });
-			provide("notifierModule", notifierModuleMock);
-			provide("shareLessonModule", shareLessonModuleMock);
+		provide: {
+			notifierModule: notifierModuleMock,
+			shareLessonModule: shareLessonModuleMock,
 		},
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/templates/RoomDashboard.vue", () => {
+describe("@/components/templates/RoomDashboard.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			tasks: TasksModule,
-			room: RoomModule,
-			"env-config": EnvConfigModule,
-			copy: CopyModule,
+			tasksModule: TasksModule,
+			roomModule: RoomModule,
+			envConfigModule: EnvConfigModule,
+			copyModule: CopyModule,
 		});
 		// @ts-ignore
 		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });

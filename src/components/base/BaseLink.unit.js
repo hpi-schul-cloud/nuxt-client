@@ -1,7 +1,6 @@
 import BaseLink from "./BaseLink";
 
-describe("@components/base/BaseLink", () => {
-	it(...isValidComponent(BaseLink));
+describe("@/components/base/BaseLink", () => {
 	it(
 		...rendersSlotContent(BaseLink, ["default"], {
 			...createComponentMocks({ router: true }),

@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import uidMixin from "@mixins/uid";
-import ModalFooter from "@components/molecules/ModalFooter";
+import uidMixin from "@/mixins/uid";
+import ModalFooter from "@/components/molecules/ModalFooter";
 export default {
 	components: {
 		ModalFooter,
@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .line {
 	border: 1px solid black;

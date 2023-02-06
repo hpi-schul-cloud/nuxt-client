@@ -1,5 +1,5 @@
-import { defineComponent } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
+import { defineComponent, provide } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { HttpStatusCode } from "../store/types/http-status-code.enum";
 
@@ -9,19 +9,31 @@ export interface MountOptions {
 	provider?: () => void;
 }
 
-const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
-	const TestComponent = defineComponent({
-		template: `<div></div>`,
+const mountComposable = <R>(
+	composable: () => R,
+	providers: Record<string, unknown>
+): R => {
+	const ParentComponent = defineComponent({
+		setup() {
+			for (const [key, mockFn] of Object.entries(providers)) {
+				provide(key, mockFn);
+			}
+		},
 	});
 
-	const wrapper = mount(TestComponent, {
+	const TestComponent = {
+		template: "<div></div>",
+	};
+
+	const wrapper = shallowMount(TestComponent, {
 		setup() {
-			options.provider?.();
 			const result = composable();
 			return { result };
 		},
+		parentComponent: ParentComponent,
 	});
-	// @ts-ignore
+
+	//@ts-ignore
 	return wrapper.vm.result;
 };
 
