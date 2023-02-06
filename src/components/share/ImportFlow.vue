@@ -1,8 +1,17 @@
 <template>
 	<div>
+		<select-course-modal
+			:is-open="isSelectCourseModalOpen"
+			:parent-name="parentName"
+			:parent-type="parentType"
+			:courses="courses"
+			@next="onCourseSelected"
+			@cancel="onCancel"
+		></select-course-modal>
 		<import-modal
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
+			:parent-type="parentType"
 			@import="onImport"
 			@cancel="onCancel"
 		></import-modal>
@@ -15,28 +24,33 @@
 	</div>
 </template>
 
-<script type="ts">
-import ImportModal from "@/components/share-course/ImportModal.vue";
+<script>
+import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
-import { computed, defineComponent, inject, ref } from "@vue/composition-api";
+import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
-
+import SelectCourseModal from "./SelectCourseModal.vue";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: 'ImportFlow',
+	name: "ImportFlow",
 	components: {
 		ImportModal,
-		CopyResultModal
+		CopyResultModal,
+		SelectCourseModal,
 	},
 	props: {
 		token: {
 			type: String,
-			default: ""
+			default: () => "",
 		},
 		isActive: {
 			type: Boolean,
-			required: true
-		}
+			required: true,
+		},
+		courses: {
+			type: Array,
+			required: true,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
@@ -44,55 +58,82 @@ export default defineComponent({
 		const notifier = inject("notifierModule");
 
 		const parentName = ref("");
+		const parentType = ref("course");
+
+		const destinationCourseId = ref(undefined);
+		const isSelectCourseModalOpen = ref(false);
 
 		const isImportModalOpen = ref(false);
 
 		const isCopyResultModalOpen = computed({
 			get: () => copyModule.getIsResultModalOpen,
-			set: (bool) => copyModule.setResultModalOpen(bool)
+			set: (bool) => copyModule.setResultModalOpen(bool),
 		});
 
-		const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
-		const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+		const copyResultModalItems = computed(
+			() => copyModule.getCopyResultFailedItems
+		);
+		const copyResultRootItemType = computed(
+			() => copyModule.getCopyResult?.type
+		);
 
-		const { isLoadingDialogOpen } = useLoadingState(i18n?.t("components.molecules.importCourse.options.loadingMessage"))
+		const { isLoadingDialogOpen } = useLoadingState(
+			i18n?.t("components.molecules.import.options.loadingMessage")
+		);
 
 		const openModal = (modalName) => {
-			isImportModalOpen.value = modalName === 'import';
-			isLoadingDialogOpen.value = modalName === 'loading';
-			isCopyResultModalOpen.value = modalName === 'result';
-		}
+			isSelectCourseModalOpen.value = modalName === "selectCourse";
+			isImportModalOpen.value = modalName === "import";
+			isLoadingDialogOpen.value = modalName === "loading";
+			isCopyResultModalOpen.value = modalName === "result";
+		};
 
-		const closeModals = () => openModal('none');
+		const closeModals = () => openModal("none");
 
 		// notifiers
 
+		const showSuccess = (name) => {
+			notifier?.show({
+				text: i18n?.t("components.molecules.import.options.success", { name }),
+				status: "success",
+				timeout: 10000,
+			});
+			closeModals();
+		};
+
 		const showFailureBackend = (name) => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.backendError", { name }),
+				text: i18n?.t(
+					"components.molecules.import.options.failure.backendError",
+					{ name }
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		const showFailureInvalidToken = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.invalidToken"),
+				text: i18n?.t(
+					"components.molecules.import.options.failure.invalidToken"
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		const showFailurePermission = () => {
 			notifier?.show({
-				text: i18n?.t("components.molecules.importCourse.options.failure.permissionError"),
+				text: i18n?.t(
+					"components.molecules.import.options.failure.permissionError"
+				),
 				status: "error",
 				timeout: 10000,
-			})
+			});
 			closeModals();
-		}
+		};
 
 		// business logic
 
@@ -104,7 +145,12 @@ export default defineComponent({
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
-				openModal('import');
+				parentType.value = validateResult.parentType.slice(0, -1);
+				if (parentType.value === "course") {
+					openModal("import");
+				} else {
+					openModal("selectCourse");
+				}
 			} catch (error) {
 				if (error.response?.status === 403) {
 					showFailurePermission();
@@ -116,10 +162,21 @@ export default defineComponent({
 		}
 
 		async function startImport(newName) {
-			openModal('loading');
+			openModal("loading");
 			try {
-				await copyModule.copyByShareToken({ token: props.token, type:'course', newName });
-				openModal('result');
+				await copyModule.copyByShareToken({
+					token: props.token,
+					type: parentType.value,
+					newName,
+					destinationCourseId: destinationCourseId.value,
+				});
+				if (parentType.value === "course") {
+					openModal("result");
+				} else {
+					showSuccess(newName);
+					emit("success", false);
+					copyModule.reset();
+				}
 			} catch (error) {
 				showFailureBackend(newName);
 			}
@@ -127,23 +184,30 @@ export default defineComponent({
 
 		// event handlers
 
+		const onCourseSelected = (courseId) => {
+			destinationCourseId.value = courseId;
+			openModal("import");
+		}
 		const onImport = (courseName) => startImport(courseName);
 		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
-			emit('success');
+			emit("success", true);
 			copyModule.reset();
-		}
+		};
 
 		return {
+			isSelectCourseModalOpen,
 			isImportModalOpen,
 			isCopyResultModalOpen,
 			copyResultModalItems,
 			copyResultRootItemType,
 			parentName,
+			parentType,
 			onCopyResultModalClosed,
+			onCourseSelected,
 			onImport,
-			onCancel
-		}
-	}
-})
+			onCancel,
+		};
+	},
+});
 </script>

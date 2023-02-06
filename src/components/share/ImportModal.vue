@@ -82,7 +82,7 @@ export default defineComponent({
 			onCancel,
 			mdiInformation,
 			rules,
-      		newName,
+			newName,
 		};
 	},
 });

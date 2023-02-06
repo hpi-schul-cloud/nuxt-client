@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { envConfigModule, roomModule, roomsModule, tasksModule } from "@/store";
+import { envConfigModule, roomModule, tasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";

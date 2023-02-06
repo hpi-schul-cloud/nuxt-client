@@ -52,7 +52,7 @@
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
-import ShareModalResult from "@components/share/ShareModalResult.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
@@ -84,7 +84,7 @@ export default defineComponent({
 		};
 
 		let shareModule;
-		switch (props.type){
+		switch (props.type) {
 			case "course":
 				shareModule = inject("shareCourseModule");
 				break;

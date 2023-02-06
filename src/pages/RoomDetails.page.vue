@@ -116,14 +116,14 @@
 <script>
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import BaseQrCode from "@components/base/BaseQrCode.vue";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
-import ImportLessonModal from "@components/molecules/ImportLessonModal";
-import MoreItemMenu from "@components/molecules/MoreItemMenu";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
-import ShareModal from "@components/share/ShareModal.vue";
-import DefaultWireframe from "@components/templates/DefaultWireframe";
-import RoomDashboard from "@components/templates/RoomDashboard";
+import BaseQrCode from "@/components/base/BaseQrCode.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import ImportLessonModal from "@/components/molecules/ImportLessonModal";
+import MoreItemMenu from "@/components/molecules/MoreItemMenu";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe";
+import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
 	mdiCloudDownload,
 	mdiContentCopy,

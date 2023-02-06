@@ -131,7 +131,12 @@
 </template>
 
 <script>
-import ImportFlow from "@components/share/ImportFlow.vue";
+import ImportFlow from "@/components/share/ImportFlow.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar";
+import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
+import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import RoomModal from "@/components/molecules/RoomModal";
 import { roomsModule } from "@/store";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";

@@ -52,9 +52,9 @@
 </template>
 
 <script type="ts">
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
-import { defineComponent, inject, reactive, ref } from "@vue/composition-api";
+import { defineComponent, inject, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

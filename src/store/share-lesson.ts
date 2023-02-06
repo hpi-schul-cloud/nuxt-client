@@ -10,20 +10,17 @@ import {
 import { SharePayload } from "./share-course";
 
 @Module({
-	name: "share-lesson",
+	name: "shareLessonModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class ShareLessonModule extends VuexModule {
-	private isShareModalOpen: boolean = false;
-	private lessonId: string = "";
+	private isShareModalOpen = false;
+	private lessonId = "";
 	private shareUrl: string | undefined = undefined;
-	private _shareApi?: ShareTokenApiInterface;
+
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "v3", $axios);
-		}
-		return this._shareApi;
+		return ShareTokenApiFactory(undefined, "v3", $axios);
 	}
 
 	@Action
