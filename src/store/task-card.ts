@@ -11,7 +11,7 @@ import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
 @Module({
-	name: "task-card",
+	name: "taskCardModule",
 	namespaced: true,
 	stateFactory: true,
 })
