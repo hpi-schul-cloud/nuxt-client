@@ -8,18 +8,14 @@ actionLink: /0-GettingStarted/
 footer: Copyright © 2019-present HPI Schul-Cloud
 ---
 
-/* TODO: --- WIP
 
-Add:
-- What is this (sub-)project and how to contribute (remove 3-BeginnerGuide)
+### overview over subpages
 
-- 0-GettingStarted => into a single file
 
-- Accessibility-paragraph (vuetify)
--- link to good general tutorial (e.g. look here [W3.org aria practices](https://www.w3.org/TR/wai-aria-practices-1.1/))
--- link to a18n-page of vuetify
--- link to good tutorial on how to test a18n
-- If we establish special a18n-components and/or tools - they should be described here
+## Accessibility
+// TODO: describe that we try to use vuetify's accessible components and the stuff described on the a18n-page of vuetify
+// TODO: link to a18n-page of vuetify
+// TODO: link to good general tutorial (e.g. look here [W3.org aria practices](https://www.w3.org/TR/wai-aria-practices-1.1/))
+// TODO: link to good tutorial on how to test a18n
 
-- Content Security Policy (Current State)
-*/
+// REMINDER: If we establish special a18n-components and/or tools - they should be described here
