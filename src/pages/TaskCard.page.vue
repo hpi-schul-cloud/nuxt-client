@@ -78,7 +78,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			const taskCardId =
-				route.name === "task-card-edit" ? route.params.id : undefined;
+				route.name === "task-edit" ? route.params.id : undefined;
 			if (taskCardId) {
 				await taskCardModule.findTaskCard(taskCardId);
 			}
@@ -168,7 +168,7 @@ export default defineComponent({
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "task-new") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
