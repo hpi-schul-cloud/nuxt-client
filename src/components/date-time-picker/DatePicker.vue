@@ -9,6 +9,7 @@
 		<template #activator="{ on, attrs }">
 			<v-text-field
 				:value="formattedDate"
+				data-testid="date-input"
 				:label="label"
 				:aria-label="ariaLabel"
 				:append-icon="mdiCalendar"
@@ -45,8 +46,6 @@ import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendar } from "@mdi/js";
 
-// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3 (vuetify will increase accessibility in vuetify 3)?
-// TODO - data-testids
 export default defineComponent({
 	name: "DatePicker",
 	props: {
@@ -90,10 +89,11 @@ export default defineComponent({
 			value >= new Date().toISOString().substr(0, 10);
 
 		const onInput = () => {
-			emit("input", selectedDate.value);
+			emit("input", new Date(selectedDate.value).toISOString());
 			showDateDialog.value = false;
 		};
 
+		// TODO - clarify is this is good or bad accessibility
 		const focusDateWithKeyBoard = () => {
 			setTimeout(() => {
 				const focusedDate = selectedDate.value
@@ -112,6 +112,7 @@ export default defineComponent({
 			() => props.date,
 			(newValue) => {
 				selectedDate.value = newValue;
+				console.log("d", selectedDate.value);
 			}
 		);
 
