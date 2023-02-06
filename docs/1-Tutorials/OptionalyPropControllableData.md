@@ -1,5 +1,7 @@
 # Optionaly Prop Controllable Data using the `controllableData` Mixin
 
+!!! DEPRECATED - dont use dark magic !!! This mixin will be removed (hopefully very soon).
+
 ## Use-Case
 
 If you want to provide a prop named `A` that will eventually be updated with an `$emit` to control some kind of behaviour of your component, but do not want to enforce that the parent sets the `.sync` modifier you need a fair amount of hacking.

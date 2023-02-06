@@ -1,7 +1,19 @@
-# The next Level of HPI Schul-Cloud
+# SchulCloud - Frontend
 
-## Tools
+!!! WIP - DO NOT MERGE !!! // TODO: remove this notice after completing / fixing all ToDos
 
-[![Mergify Status](https://gh.mergify.io/badges/hpi-schul-cloud/nuxt-client.png?style=cut)](https://mergify.io) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier) <a href="https://lokalise.com/" ><img height="18px" src="https://lokalise.com/img/lokalise_logo_black.png" style="padding: 2px 8px; border: 1px solid lightgrey; border-radius: 4px;" alt="Lokalise Logo"></a> [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=hpi-schul-cloud/nuxt-client)](https://dependabot.com)
+## The Repository
+// TODO: What is this repository?
 
-Read our: [Getting started Guide](./docs/0-GettingStarted)
+## The "SchulCloud"
+// TODO: Write some sentences regarding the project (or take them partly from one of the other repositories or some description from dataport or from Matthias or Sophie or Ingwert or Susi)
+
+## Contributing
+
+## Feedback
+
+## Related Projects
+
+## Code of Conduct
+
+## License
