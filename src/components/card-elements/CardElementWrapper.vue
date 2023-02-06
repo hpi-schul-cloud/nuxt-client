@@ -149,7 +149,7 @@ $btn-radius: 18;
 .card-actions {
 	position: relative;
 	float: right;
-	width: $btn-radius + px;
+	width: #{$btn-radius}px;
 }
 
 .v-btn {
@@ -158,7 +158,7 @@ $btn-radius: 18;
 
 .drag-element-btn {
 	position: relative;
-	top: -#{$btn-radius} + px;
+	top: -#{$btn-radius}px;
 }
 
 .delete-element-btn {
@@ -169,8 +169,9 @@ $btn-radius: 18;
 
 .add-element-btn {
 	position: absolute;
-	bottom: -#{$btn-radius} + px;
+	bottom: -#{$btn-radius}px;
 	left: 50%;
-	// margin-left: -#{$btn-radius} + px;
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	margin-left: -#{$btn-radius}px;
 }
 </style>
