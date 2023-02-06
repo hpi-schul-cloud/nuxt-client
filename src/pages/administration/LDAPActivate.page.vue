@@ -212,9 +212,6 @@ const redirectToConfigPage = (page) => {
 
 export default {
 	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage },
-	meta: {
-		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-	},
 	data() {
 		return {
 			migrateUsersCheckbox: false,
