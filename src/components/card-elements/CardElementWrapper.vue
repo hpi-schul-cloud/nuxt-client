@@ -1,5 +1,5 @@
 <template>
-	<v-card flat class="card mb-6" :class="{ active: isActive }">
+	<v-card flat class="card mb-7" :class="{ active: isActive }">
 		<div class="card-actions">
 			<v-btn
 				v-show="actionable"
