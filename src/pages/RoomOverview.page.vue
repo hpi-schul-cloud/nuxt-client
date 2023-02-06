@@ -239,8 +239,10 @@ export default {
 		},
 	},
 	async created() {
-		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		await roomsModule.fetchAllElements();
+		await Promise.all([
+			roomsModule.fetch(), // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+			roomsModule.fetchAllElements(),
+		]);
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(0, new Date());

@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
-import ImportModal from "@components/share/ImportModal.vue";
+import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
 
 describe("@components/share/ImportModal", () => {

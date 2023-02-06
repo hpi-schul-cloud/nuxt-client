@@ -11,6 +11,7 @@ import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
@@ -123,15 +124,13 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		},
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			notifierModule: notifierModuleMock,
-			shareLessonModule: shareLessonModuleMock,
-			shareCourseModule: shareCourseModuleMock,
-			loadingStateModule: loadingStateModuleMock,
-			copyModule: copyModuleMock,
+		setup() {
+			provide("copyModule", copyModuleMock);
+			provide("loadingStateModule", loadingStateModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide("i18n", { t: (key: string) => key });
+			provide("shareCourseModule", shareCourseModuleMock);
+			provide("shareLessonModule", shareLessonModuleMock);
 		},
 	});
 };

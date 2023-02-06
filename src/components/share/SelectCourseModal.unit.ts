@@ -1,7 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
-import SelectCourseModal from "@components/share/SelectCourseModal.vue";
+import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 
 describe("@components/share/SelectCourseModal", () => {
 	const course = {
@@ -22,9 +21,6 @@ describe("@components/share/SelectCourseModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-			},
 			...attrs,
 		});
 
@@ -37,15 +33,13 @@ describe("@components/share/SelectCourseModal", () => {
 	});
 
 	it("should not render without required props", () => {
-		try {
-			getWrapper({});
-		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain("Missing required prop:");
-			}
-			return;
-		}
-		fail("No error on required props");
+		console.error = jest.fn();
+
+		getWrapper({});
+
+		expect(console.error).toBeCalledWith(
+			expect.stringContaining("Missing required prop:")
+		);
 	});
 
 	it("should render with props", () => {
