@@ -4,7 +4,7 @@ import {
 	ToolParameterLocationEnum,
 	ToolParameterScopeEnum,
 	ToolParameterTypeEnum,
-} from "@store/external-tool";
+} from "@/store/external-tool";
 
 describe("useExternalToolValidation", () => {
 	const setup = () => {

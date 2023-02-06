@@ -10,31 +10,33 @@
 		<span> {{ item.name }} </span>
 	</v-row>
 </template>
+
 <script lang="ts">
+import { PropType } from "vue";
+import { ToolConfiguration } from "@/store/external-tool";
 
 export default {
-	name: 'ExternalToolSelectionRow',
+	name: "ExternalToolSelectionRow",
 	props: {
 		item: {
-			type: Object,
+			type: Object as PropType<ToolConfiguration>,
 			required: true,
 			default() {
-				return {
-				}
-			}
+				return {};
+			},
 		},
 		maxHeight: {
 			type: String,
 			default() {
 				return "30";
-			}
+			},
 		},
 		maxWidth: {
 			type: String,
 			default() {
 				return "30";
-			}
+			},
 		},
-	}
-}
+	},
+};
 </script>

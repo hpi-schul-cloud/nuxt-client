@@ -7,7 +7,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolStatusEnum } from "@store/external-tool/school-external-tool-status.enum";
+import { SchoolExternalToolStatusEnum } from "@/store/external-tool/school-external-tool-status.enum";
 
 const externalToolsModuleMock = () => {
 	return {

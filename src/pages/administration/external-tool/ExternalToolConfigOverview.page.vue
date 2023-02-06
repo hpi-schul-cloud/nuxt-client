@@ -54,13 +54,19 @@
 	</default-wireframe>
 </template>
 
-<script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+<script lang="ts">
 import VueI18n from "vue-i18n";
-import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import VueRouter from "vue-router";
 import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
-import { computed, ComputedRef, inject, onMounted, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import { externalToolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import {
@@ -70,76 +76,102 @@ import {
 import { useRouter } from "vue-router/composables";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
+import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import DefaultWireframe from "../../../components/templates/DefaultWireframe.vue";
 
-const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-if (!i18n) {
-	throw new Error("Injection of dependencies failed");
-}
-
-onMounted(async () => {
-	await externalToolsModule.loadAvailableToolConfigurations();
-});
-
-// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-const t = (key: string) => {
-	const translateResult = i18n.t(key);
-	if (typeof translateResult === "string") {
-		return translateResult;
-	}
-	return "unknown translation-key:" + key;
-};
-
-const schoolSetting: Breadcrumb = {
-	text: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings#tools",
-};
-const breadcrumbs: Breadcrumb[] = [
-	{
-		text: t("pages.administration.index.title"),
-		to: "/administration/",
+// eslint-disable-next-line vue/require-direct-export
+export default defineComponent({
+	name: "ExternalToolConfigOverview",
+	components: {
+		DefaultWireframe,
+		ExternalToolConfigSettings,
+		ExternalToolSelectionRow,
 	},
-	schoolSetting,
-	{
-		text: t("pages.tool.title"),
-		disabled: true,
-	},
-];
+	setup() {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
 
-const { getTranslationKey } = useExternalToolUtils();
+		onMounted(async () => {
+			await externalToolsModule.loadAvailableToolConfigurations();
+		});
 
-const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
 
-const configurationItems: ComputedRef<ToolConfiguration[]> = computed(
-	() => externalToolsModule.getToolConfigurations
-);
+		const schoolSetting: Breadcrumb = {
+			text: t("pages.administration.school.index.title"),
+			to: "/administration/school-settings#tools",
+		};
+		const breadcrumbs: Breadcrumb[] = [
+			{
+				text: t("pages.administration.index.title"),
+				to: "/administration/",
+			},
+			schoolSetting,
+			{
+				text: t("pages.tool.title"),
+				disabled: true,
+			},
+		];
 
-const apiError: ComputedRef<BusinessError> = computed(
-	() => externalToolsModule.getBusinessError
-);
+		const { getTranslationKey } = useExternalToolUtils();
 
-const parametersValid: Ref<boolean> = ref(false);
+		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
-const toolTemplate: Ref<ToolConfigurationTemplate> = ref(
-	new ToolConfigurationTemplate()
-);
-const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
-	toolTemplate.value =
-		await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(
-			selectedTool.id
+		const configurationItems: ComputedRef<ToolConfiguration[]> = computed(
+			() => externalToolsModule.getToolConfigurations
 		);
-	parametersValid.value = true;
-};
 
-const router: VueRouter = useRouter();
-const onCancel = () => {
-	router.push({ path: schoolSetting.to });
-};
+		const apiError: ComputedRef<BusinessError> = computed(
+			() => externalToolsModule.getBusinessError
+		);
 
-const saveTool = async () => {
-	await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
+		const parametersValid: Ref<boolean> = ref(false);
 
-	if (!externalToolsModule.getBusinessError.message) {
-		await router.push({ path: schoolSetting.to });
-	}
-};
+		const toolTemplate: Ref<ToolConfigurationTemplate> = ref(
+			new ToolConfigurationTemplate()
+		);
+		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
+			toolTemplate.value =
+				await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(
+					selectedTool.id
+				);
+			parametersValid.value = true;
+		};
+
+		const router: VueRouter = useRouter();
+		const onCancel = () => {
+			router.push({ path: schoolSetting.to });
+		};
+
+		const saveTool = async () => {
+			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
+
+			if (!externalToolsModule.getBusinessError.message) {
+				await router.push({ path: schoolSetting.to });
+			}
+		};
+
+		return {
+			breadcrumbs,
+			getTranslationKey,
+			loading,
+			configurationItems,
+			apiError,
+			parametersValid,
+			toolTemplate,
+			onSelectTemplate,
+			onCancel,
+			saveTool,
+		};
+	},
+});
 </script>

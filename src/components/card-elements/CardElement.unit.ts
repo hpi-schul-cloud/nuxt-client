@@ -1,11 +1,12 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CardElement from "@/components/card-elements/CardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
+import Vue from "vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(CardElement, {
+	return mount(CardElement as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 		}),

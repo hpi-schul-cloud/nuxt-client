@@ -1,16 +1,15 @@
-import ExternalToolsModule from "@store/external-tools";
-import { createModuleMocks } from "@utils/mock-store-module";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
-import createComponentMocks from "../../../../tests/test-utils/componentMocks";
-import { provide } from "@vue/composition-api";
-import VueI18n from "vue-i18n";
 import {
 	ToolConfigurationTemplate,
 	ToolParameterLocationEnum,
 	ToolParameterScopeEnum,
 	ToolParameterTypeEnum,
-} from "@store/external-tool";
+} from "@/store/external-tool";
+import ExternalToolsModule from "@/store/external-tools";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import Vue from "vue";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -25,18 +24,21 @@ describe("ExternalToolConfigSettings", () => {
 			...getter,
 		}) as jest.Mocked<ExternalToolsModule>;
 
-		const wrapper: Wrapper<any> = shallowMount(ExternalToolConfigSettings, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
-				provide("externalToolsModule", externalToolsModule);
-			},
-			propsData: {
-				value: template,
-			},
-		});
+		const wrapper: Wrapper<any> = shallowMount(
+			ExternalToolConfigSettings as MountOptions<Vue>,
+			{
+				...createComponentMocks({
+					i18n: true,
+				}),
+				provide: {
+					i18n: { t: (key: string) => key },
+					externalToolsModule,
+				},
+				propsData: {
+					value: template,
+				},
+			}
+		);
 
 		return {
 			wrapper,
@@ -53,14 +55,25 @@ describe("ExternalToolConfigSettings", () => {
 	});
 
 	describe("inject", () => {
-		it("should throw an error when externalToolsModule injection fails", () => {
-			try {
-				shallowMount(ExternalToolConfigSettings);
-			} catch (e) {
-				expect(
-					e.message.includes('Injection "externalToolsModule" not found')
-				).toBeTruthy();
-			}
+		describe("when externalToolsModule injection fails", () => {
+			it("should throw an error", () => {
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+
+				try {
+					shallowMount(ExternalToolConfigSettings as MountOptions<Vue>);
+					// eslint-disable-next-line no-empty
+				} catch (e) {}
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(
+						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					)
+				);
+
+				consoleErrorSpy.mockRestore();
+			});
 		});
 	});
 
@@ -80,11 +93,9 @@ describe("ExternalToolConfigSettings", () => {
 				getLoading: true,
 			});
 
-			const progressbar = wrapper.find(
-				".v-progress-linear__indeterminate--active"
-			);
+			const progressbar = wrapper.find("v-progress-linear-stub");
 
-			expect(progressbar.exists()).toBeTruthy();
+			expect(progressbar.attributes().active).toBeTruthy();
 		});
 
 		it("should not display progressbar when loading in store is not set", () => {
@@ -92,11 +103,9 @@ describe("ExternalToolConfigSettings", () => {
 				getLoading: false,
 			});
 
-			const progressbar = wrapper.find(
-				".v-progress-linear__indeterminate--active"
-			);
+			const progressbar = wrapper.find("v-progress-linear-stub");
 
-			expect(progressbar.exists()).toBeFalsy();
+			expect(progressbar.attributes().active).toBeFalsy();
 		});
 	});
 
@@ -104,18 +113,14 @@ describe("ExternalToolConfigSettings", () => {
 		const setupTemplate = (): ToolConfigurationTemplate => {
 			const template: ToolConfigurationTemplate =
 				new ToolConfigurationTemplate();
-			template.parameters = [
-				{
-					name: "Parameter1",
-					type: ToolParameterTypeEnum.String,
-					value: undefined,
-					isOptional: false,
-					scope: ToolParameterScopeEnum.School,
-					regex: "[x]",
-					location: ToolParameterLocationEnum.Path,
-					regexComment: "Kommentar zu regex",
-				},
-			];
+			const param1 = {
+				name: "Parameter1",
+				type: ToolParameterTypeEnum.String,
+				isOptional: false,
+				scope: ToolParameterScopeEnum.School,
+				location: ToolParameterLocationEnum.Path,
+			};
+			template.parameters = [param1, { ...param1, name: "Param2" }];
 			return template;
 		};
 
@@ -123,9 +128,9 @@ describe("ExternalToolConfigSettings", () => {
 			const template = setupTemplate();
 			const { wrapper } = setup({}, template);
 
-			expect(wrapper.findAll("external-tool-parameter-stub").length).toEqual(
-				template.parameters.length
-			);
+			expect(
+				wrapper.findAll("external-tool-config-parameter-stub").length
+			).toEqual(template.parameters.length);
 		});
 	});
 });
