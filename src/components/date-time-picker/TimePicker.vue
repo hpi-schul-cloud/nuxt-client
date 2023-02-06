@@ -17,6 +17,8 @@
 				v-bind="attrs"
 				v-on="on"
 				@input="onInput"
+				@keydown.prevent.space="showTimeDialog = true"
+				@keydown.prevent.enter="showTimeDialog = true"
 			/>
 		</template>
 		<v-list height="200" class="col-12 pt-1">
@@ -41,7 +43,7 @@ import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import dayjs from "dayjs";
 import { mdiClockOutline } from "@mdi/js";
 
-// TODO - Accessibility - wait for nuxt removal (vueuse), vue 3 (vuetify will increase accessibility in vuetify 3)?
+// TODO - validation (numbers, colon)
 export default defineComponent({
 	name: "TimePicker",
 	props: {
@@ -74,7 +76,7 @@ export default defineComponent({
 		const onInput = (input: string) => {
 			inputTime.value = input;
 			showTimeDialog.value = false;
-			emit("input", new Date(inputTime.value).toISOString());
+			emit("input", inputTime.value);
 		};
 
 		watch(
