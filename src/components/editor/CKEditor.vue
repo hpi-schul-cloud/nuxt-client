@@ -7,19 +7,13 @@
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@input="handleInput"
+		@focus="handleFocus"
+		@blur="handleBlur"
 	/>
 </template>
 
 <script>
-import {
-	defineComponent,
-	ref,
-	nextTick,
-	inject,
-	watch,
-	onMounted,
-	onBeforeUnmount,
-} from "vue";
+import { defineComponent, ref, inject, watch } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
@@ -176,38 +170,12 @@ export default defineComponent({
 		};
 
 		const handleInput = () => emit("input", content.value);
+		const handleFocus = () => emit("focus");
 
-		// as the blur event of the editor also gets triggered when eg focus is on the editor toolbar,
-		// we implement focus handling ourselve by watching the classes of the editor instance
-		const onClassChange = (classAttrValue) => {
-			const classList = classAttrValue.split(" ");
-			if (classList.includes("ck-focused")) {
-				emit("focus");
-			}
-			if (classList.includes("ck-blurred")) {
-				setTimeout(() => emit("blur"), 200);
-			}
+		const blurDelay = 200;
+		const handleBlur = () => {
+			setTimeout(() => emit("blur"), blurDelay);
 		};
-
-		const observer = new MutationObserver((mutations) => {
-			mutations.forEach((mutation) => {
-				const classes = mutation.target.getAttribute(mutation.attributeName);
-				nextTick(() => {
-					onClassChange(classes);
-				});
-			});
-		});
-
-		onMounted(() => {
-			observer.observe(ck.value.$el, {
-				attributes: true,
-				attributeFilter: ["class"],
-			});
-		});
-
-		onBeforeUnmount(() => {
-			observer.disconnect();
-		});
 
 		return {
 			ck,
@@ -215,6 +183,8 @@ export default defineComponent({
 			CustomCKEditor,
 			config,
 			handleInput,
+			handleFocus,
+			handleBlur,
 		};
 	},
 });
@@ -226,7 +196,6 @@ export default defineComponent({
 // TODO move all style to ckbuild
 .ck-blurred {
 	border: none !important;
-	// box-shadow: none !important;
 }
 
 .ck-focused {
