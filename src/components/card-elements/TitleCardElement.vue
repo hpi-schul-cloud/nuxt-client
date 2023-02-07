@@ -10,6 +10,7 @@
 			auto-grow
 			solo
 			flat
+			:aria-label="$t('components.cardElement.titleElement')"
 			:placeholder="placeholder"
 			@input="handleInput"
 		/>

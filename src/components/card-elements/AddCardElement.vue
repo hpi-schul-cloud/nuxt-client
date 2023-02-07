@@ -6,6 +6,7 @@
 				outlined
 				color="secondary"
 				class="add-element-btn"
+				:aria-label="$t('pages.taskCard.addElement')"
 				data-testid="add-element-btn"
 				@click="addElement"
 			>
