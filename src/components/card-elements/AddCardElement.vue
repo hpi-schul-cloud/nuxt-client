@@ -21,14 +21,7 @@ import { mdiPlus } from "@mdi/js";
 
 export default defineComponent({
 	name: "AddCardElement",
-	components: {},
 	emits: ["click"],
-	props: {
-		value: {
-			type: Array,
-			default: () => [],
-		},
-	},
 	setup(props, { emit }) {
 		const addElement = () => emit("click");
 
