@@ -7,7 +7,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "../../serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolStatusEnum } from "@/store/external-tool/school-external-tool-status.enum";
+import { SchoolExternalToolStatus } from "@/store/external-tool/school-external-tool-status.enum";
 
 const externalToolsModuleMock = () => {
 	return {
@@ -16,7 +16,7 @@ const externalToolsModuleMock = () => {
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: SchoolExternalToolStatusEnum.Latest,
+				status: SchoolExternalToolStatus.Latest,
 			},
 		],
 	};
@@ -54,7 +54,7 @@ describe("useSchoolExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: SchoolExternalToolStatusEnum.Latest,
+			status: SchoolExternalToolStatus.Latest,
 			outdated: false,
 		};
 

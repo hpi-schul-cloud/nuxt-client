@@ -1,5 +1,5 @@
 import VueI18n from "vue-i18n";
-import { ToolParameter, ToolParameterTypeEnum } from "@/store/external-tool";
+import { ToolParameter, ToolParameterType } from "@/store/external-tool";
 
 export function useExternalToolValidation(
 	t: (key: string, values?: VueI18n.Values | undefined) => string
@@ -41,7 +41,7 @@ export function useExternalToolValidation(
 		param: ToolParameter,
 		rules: Array<() => boolean | string>
 	): void => {
-		if (param.value && param.type === ToolParameterTypeEnum.Number) {
+		if (param.value && param.type === ToolParameterType.Number) {
 			rules.push(
 				() => !isNaN(Number(param.value)) || t("common.validation.number")
 			);

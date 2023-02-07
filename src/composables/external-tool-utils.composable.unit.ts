@@ -6,7 +6,7 @@ import {
 import { useExternalToolUtils } from "./external-tool-utils.composable";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolStatusEnum,
+	SchoolExternalToolStatus,
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
@@ -54,7 +54,7 @@ describe("useExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: SchoolExternalToolStatusEnum.Latest,
+			status: SchoolExternalToolStatus.Latest,
 			outdated: false,
 		};
 
@@ -68,8 +68,6 @@ describe("useExternalToolUtils", () => {
 			getTranslationKey,
 		};
 	};
-
-	describe("translateBusinessError is called", () => {});
 
 	describe("mapSchoolExternalToolSearchListResponse is called", () => {
 		describe("when maps the response", () => {
@@ -99,7 +97,7 @@ describe("useExternalToolUtils", () => {
 							id: toolResponse.id,
 							name: toolResponse.name,
 							version: toolResponse.toolVersion,
-							status: SchoolExternalToolStatusEnum.Latest,
+							status: SchoolExternalToolStatus.Latest,
 						},
 					])
 				);
@@ -121,7 +119,7 @@ describe("useExternalToolUtils", () => {
 				expect.objectContaining<SchoolExternalTool>({
 					id: schoolExternaToolItem.id,
 					name: schoolExternaToolItem.name,
-					status: SchoolExternalToolStatusEnum.Unknown,
+					status: SchoolExternalToolStatus.Unknown,
 				})
 			);
 		});

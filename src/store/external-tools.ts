@@ -35,8 +35,6 @@ export default class ExternalToolsModule extends VuexModule {
 		error: undefined,
 	};
 
-	private _toolApi?: ToolApiInterface;
-
 	private get toolApi(): ToolApiInterface {
 		return ToolApiFactory(undefined, "v3", $axios);
 	}

@@ -2,9 +2,9 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import {
 	ToolConfigurationTemplate,
-	ToolParameterLocationEnum,
-	ToolParameterScopeEnum,
-	ToolParameterTypeEnum,
+	ToolParameterLocation,
+	ToolParameterScope,
+	ToolParameterType,
 } from "@/store/external-tool";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -68,7 +68,7 @@ describe("ExternalToolConfigSettings", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -115,10 +115,10 @@ describe("ExternalToolConfigSettings", () => {
 				new ToolConfigurationTemplate();
 			const param1 = {
 				name: "Parameter1",
-				type: ToolParameterTypeEnum.String,
+				type: ToolParameterType.String,
 				isOptional: false,
-				scope: ToolParameterScopeEnum.School,
-				location: ToolParameterLocationEnum.Path,
+				scope: ToolParameterScope.School,
+				location: ToolParameterLocation.Path,
 			};
 			template.parameters = [param1, { ...param1, name: "Param2" }];
 			return template;

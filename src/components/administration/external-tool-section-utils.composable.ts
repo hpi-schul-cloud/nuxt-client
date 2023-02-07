@@ -3,7 +3,7 @@ import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolsModule from "@/store/external-tools";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolStatusEnum,
+	SchoolExternalToolStatus,
 } from "@/store/external-tool";
 
 export function useExternalToolsSectionUtils(
@@ -35,9 +35,9 @@ export function useExternalToolsSectionUtils(
 			externalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
 			const outdated: boolean =
-				tool.status === SchoolExternalToolStatusEnum.Outdated;
+				tool.status === SchoolExternalToolStatus.Outdated;
 			const status: string =
-				tool.status === SchoolExternalToolStatusEnum.Latest
+				tool.status === SchoolExternalToolStatus.Latest
 					? t(
 							"components.administration.externalToolsSection.table.header.status.latest"
 					  )

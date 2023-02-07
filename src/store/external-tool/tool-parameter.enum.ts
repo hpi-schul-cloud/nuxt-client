@@ -1,4 +1,4 @@
-export enum ToolParameterTypeEnum {
+export enum ToolParameterType {
 	String = "string",
 	Number = "number",
 	Boolean = "boolean",

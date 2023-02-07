@@ -1,6 +1,6 @@
-import { ToolParameterScopeEnum } from "./tool-parameter-scope.enum";
-import { ToolParameterLocationEnum } from "./tool-parameter-location.enum";
-import { ToolParameterTypeEnum } from "./tool-parameter-type.enum";
+import { ToolParameterScope } from "./tool-parameter-scope.enum";
+import { ToolParameterLocation } from "./tool-parameter-location.enum";
+import { ToolParameterType } from "./tool-parameter.enum";
 
 export interface ToolParameter {
 	name: string;
@@ -11,11 +11,11 @@ export interface ToolParameter {
 
 	regexComment?: string;
 
-	scope: ToolParameterScopeEnum;
+	scope: ToolParameterScope;
 
-	location: ToolParameterLocationEnum;
+	location: ToolParameterLocation;
 
-	type: ToolParameterTypeEnum;
+	type: ToolParameterType;
 
 	isOptional: boolean;
 

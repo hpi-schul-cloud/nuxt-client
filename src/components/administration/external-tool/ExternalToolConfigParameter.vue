@@ -2,8 +2,8 @@
 	<div>
 		<template
 			v-if="
-				parameter.type !== toolParameterTypeEnumNumber &&
-				parameter.type !== toolParameterTypeEnumBoolean
+				parameter.type !== ToolParameterType.Number &&
+				parameter.type !== ToolParameterType.Boolean
 			"
 		>
 			<v-text-field
@@ -15,7 +15,7 @@
 				@input:value="$emit('update:value', parameter)"
 			></v-text-field>
 		</template>
-		<template v-if="parameter.type === toolParameterTypeEnumBoolean">
+		<template v-if="parameter.type === ToolParameterType.Boolean">
 			<v-select
 				v-model="selectItem"
 				:label="getLabelText()"
@@ -28,7 +28,7 @@
 				@change:value="$emit('update:value', parameter)"
 			></v-select>
 		</template>
-		<template v-if="parameter.type === toolParameterTypeEnumNumber">
+		<template v-if="parameter.type === ToolParameterType.Number">
 			<v-text-field
 				v-model="parameter.value"
 				:label="getLabelText()"
@@ -55,7 +55,10 @@ import {
 	watch,
 	WritableComputedRef,
 } from "vue";
-import { ToolParameter, ToolParameterTypeEnum } from "@/store/external-tool";
+import {
+	ToolParameter,
+	ToolParameterType as toolParameterType,
+} from "@/store/external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -96,12 +99,8 @@ export default defineComponent({
 			return `${parameter.value.name} *`;
 		};
 
-		const toolParameterTypeEnumNumber = ToolParameterTypeEnum.Number;
-		const toolParameterTypeEnumBoolean = ToolParameterTypeEnum.Boolean;
-
 		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);
 		watch(selectItem, () => {
-			console.log("watch");
 			parameter.value.value = selectItem.value ?? undefined;
 		});
 		const booleanSelectItems: Ref = ref([
@@ -111,20 +110,21 @@ export default defineComponent({
 			},
 			{
 				text: t("common.words.yes"),
-				value: true,
+				value: "true",
 			},
 			{
 				text: t("common.words.no"),
-				value: false,
+				value: "false",
 			},
 		]);
+
+		const ToolParameterType = toolParameterType;
 
 		return {
 			parameter,
 			validateParameter,
 			getLabelText,
-			toolParameterTypeEnumNumber,
-			toolParameterTypeEnumBoolean,
+			ToolParameterType,
 			selectItem,
 			booleanSelectItems,
 		};

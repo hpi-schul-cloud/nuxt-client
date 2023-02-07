@@ -3,7 +3,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { SchoolExternalToolStatusEnum } from "@/store/external-tool";
+import { SchoolExternalToolStatus } from "@/store/external-tool";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -58,7 +58,7 @@ describe("ExternalToolSection", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -82,7 +82,7 @@ describe("ExternalToolSection", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -155,13 +155,13 @@ describe("ExternalToolSection", () => {
 					{
 						id: "testId",
 						name: firstToolName,
-						status: SchoolExternalToolStatusEnum.Latest,
+						status: SchoolExternalToolStatus.Latest,
 						version: 1,
 					},
 					{
 						id: "testId2",
 						name: secondToolName,
-						status: SchoolExternalToolStatusEnum.Outdated,
+						status: SchoolExternalToolStatus.Outdated,
 						version: 1,
 					},
 				],
@@ -251,7 +251,7 @@ describe("ExternalToolSection", () => {
 								{
 									id: "testId",
 									name: "firstToolName",
-									status: SchoolExternalToolStatusEnum.Latest,
+									status: SchoolExternalToolStatus.Latest,
 									version: 1,
 								},
 							],
@@ -315,7 +315,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: SchoolExternalToolStatusEnum.Latest,
+					status: SchoolExternalToolStatus.Latest,
 					outdated: false,
 				};
 

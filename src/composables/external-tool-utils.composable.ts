@@ -14,60 +14,60 @@ import {
 } from "@/serverApi/v3";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolStatusEnum,
+	SchoolExternalToolStatus,
 	ToolConfiguration,
 	ToolConfigurationTemplate,
 	ToolParameter,
-	ToolParameterLocationEnum,
-	ToolParameterScopeEnum,
-	ToolParameterTypeEnum,
+	ToolParameterLocation,
+	ToolParameterScope,
+	ToolParameterType,
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "../store/types/commons";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolStatusEnum
+	SchoolExternalToolStatus
 > = {
 	[SchoolExternalToolResponseStatusEnum.Latest]:
-		SchoolExternalToolStatusEnum.Latest,
+		SchoolExternalToolStatus.Latest,
 	[SchoolExternalToolResponseStatusEnum.Outdated]:
-		SchoolExternalToolStatusEnum.Outdated,
+		SchoolExternalToolStatus.Outdated,
 	[SchoolExternalToolResponseStatusEnum.Unknown]:
-		SchoolExternalToolStatusEnum.Unknown,
+		SchoolExternalToolStatus.Unknown,
 };
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
-	ToolParameterLocationEnum
+	ToolParameterLocation
 > = {
-	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocationEnum.Path,
-	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocationEnum.Query,
-	[CustomParameterResponseLocationEnum.Token]: ToolParameterLocationEnum.Token,
+	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocation.Path,
+	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocation.Query,
+	[CustomParameterResponseLocationEnum.Token]: ToolParameterLocation.Token,
 };
 
 const ToolParamTypeMapping: Record<
 	CustomParameterResponseTypeEnum,
-	ToolParameterTypeEnum
+	ToolParameterType
 > = {
-	[CustomParameterResponseTypeEnum.String]: ToolParameterTypeEnum.String,
-	[CustomParameterResponseTypeEnum.Boolean]: ToolParameterTypeEnum.Boolean,
-	[CustomParameterResponseTypeEnum.Number]: ToolParameterTypeEnum.Number,
+	[CustomParameterResponseTypeEnum.String]: ToolParameterType.String,
+	[CustomParameterResponseTypeEnum.Boolean]: ToolParameterType.Boolean,
+	[CustomParameterResponseTypeEnum.Number]: ToolParameterType.Number,
 	[CustomParameterResponseTypeEnum.AutoCourseid]:
-		ToolParameterTypeEnum.AutoCourseid,
+		ToolParameterType.AutoCourseid,
 	[CustomParameterResponseTypeEnum.AutoCoursename]:
-		ToolParameterTypeEnum.AutoCoursename,
+		ToolParameterType.AutoCoursename,
 	[CustomParameterResponseTypeEnum.AutoSchoolid]:
-		ToolParameterTypeEnum.AutoSchoolid,
+		ToolParameterType.AutoSchoolid,
 };
 
 const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
-	ToolParameterScopeEnum
+	ToolParameterScope
 > = {
-	[CustomParameterResponseScopeEnum.Course]: ToolParameterScopeEnum.Course,
-	[CustomParameterResponseScopeEnum.Global]: ToolParameterScopeEnum.Global,
-	[CustomParameterResponseScopeEnum.School]: ToolParameterScopeEnum.School,
+	[CustomParameterResponseScopeEnum.Course]: ToolParameterScope.Course,
+	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
+	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
@@ -104,7 +104,7 @@ export function useExternalToolUtils() {
 		return {
 			id: schoolExternalToolItem.id,
 			name: schoolExternalToolItem.name,
-			status: SchoolExternalToolStatusEnum.Unknown,
+			status: SchoolExternalToolStatus.Unknown,
 		};
 	};
 

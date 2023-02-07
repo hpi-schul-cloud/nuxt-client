@@ -1,18 +1,14 @@
-import {
-	ToolParameter,
-	ToolParameterLocationEnum,
-	ToolParameterScopeEnum,
-	ToolParameterTypeEnum,
-} from "@/store/external-tool";
+import { ToolParameter, ToolParameterType } from "@/store/external-tool";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolConfigParameter from "@/components/administration/external-tool/ExternalToolConfigParameter.vue";
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
+import { toolParameterFactory } from "@@/tests/test-utils/factory";
 
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;
 
-	const setup = (parameter: ToolParameter = setupToolParameter()) => {
+	const setup = (parameter: ToolParameter = toolParameterFactory()) => {
 		document.body.setAttribute("data-app", "true");
 
 		wrapper = mount(ExternalToolConfigParameter as MountOptions<Vue>, {
@@ -26,18 +22,6 @@ describe("ExternalToolConfigParameter", () => {
 				value: parameter,
 			},
 		});
-	};
-
-	const setupToolParameter = (): ToolParameter => {
-		return {
-			value: undefined,
-			default: undefined,
-			scope: ToolParameterScopeEnum.School,
-			type: ToolParameterTypeEnum.String,
-			location: ToolParameterLocationEnum.Path,
-			name: "Parameter1",
-			isOptional: true,
-		};
 	};
 
 	describe("inject", () => {
@@ -54,7 +38,7 @@ describe("ExternalToolConfigParameter", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -75,43 +59,32 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type boolean", () => {
 		it("should render a tri state select", () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.Boolean;
-			setup(parameter);
+			setup(toolParameterFactory({ type: ToolParameterType.Boolean }));
 
 			expect(wrapper.find(".v-select__slot"));
 		});
 
-		it("should set default when parameter has no value", () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.Boolean;
-			parameter.value = undefined;
+		it("should use default selectItem when parameter value is undefined", async () => {
+			const parameter: ToolParameter = toolParameterFactory({
+				type: ToolParameterType.Boolean,
+				value: undefined,
+			});
 			setup(parameter);
+
+			await wrapper.find(`[data-testId=${parameter.name}]`).trigger("click");
 
 			expect(wrapper.find(".v-select__selection").text()).toEqual(
 				"common.words.noChoice"
 			);
 		});
 
-		it("should set value from parameter", () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.Boolean;
-			parameter.value = "false";
+		it("should watch selectItem and emit event when select input value changes", async () => {
+			const parameter: ToolParameter = toolParameterFactory({
+				type: ToolParameterType.Boolean,
+			});
 			setup(parameter);
 
-			expect(wrapper.find(".v-select__selection").text()).toEqual(
-				"common.words.no"
-			);
-		});
-
-		it("should watch selectItem and emit event", async () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.Boolean;
-			setup(parameter);
-
-			const input = wrapper.find(`[data-testId=${parameter.name}]`);
-			input.setValue(false);
-			await input.trigger("change");
+			await wrapper.find(`[data-testId=${parameter.name}]`).setValue(false);
 
 			expect(wrapper.vm.value.value).toEqual("false");
 			expect(wrapper.emitted("updated"));
@@ -119,24 +92,49 @@ describe("ExternalToolConfigParameter", () => {
 	});
 
 	describe("when parameter has type string", () => {
-		it("should render a textfield", () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.String;
-			setup(parameter);
+		it("should render a text-field", () => {
+			setup(toolParameterFactory({ type: ToolParameterType.String }));
 
 			expect(wrapper.find(".v-text-field__slot"));
 		});
 
-		it("should emit event on parameter value change", async () => {
-			const parameter: ToolParameter = setupToolParameter();
-			parameter.type = ToolParameterTypeEnum.String;
+		it("should emit event when parameter value changes", async () => {
+			const parameter: ToolParameter = toolParameterFactory({
+				type: ToolParameterType.String,
+			});
 			setup(parameter);
 
-			const input = wrapper.find(`[data-testId=${parameter.name}]`);
-			input.setValue("newValue");
-			await input.trigger("change");
+			await wrapper
+				.find(`[data-testId=${parameter.name}]`)
+				.setValue("newValue");
 
 			expect(wrapper.vm.value.value).toEqual("newValue");
+			expect(wrapper.emitted("updated"));
+		});
+	});
+
+	describe("when parameter has type number", () => {
+		it("should render a text-field with type number", () => {
+			const parameter: ToolParameter = toolParameterFactory({
+				type: ToolParameterType.Number,
+			});
+			setup(parameter);
+
+			expect(wrapper.find(".v-text-field__slot"));
+			expect(
+				wrapper.find(`[data-testId=${parameter.name}]`).attributes("type")
+			).toEqual("number");
+		});
+
+		it("should emit event when parameter value changes", async () => {
+			const parameter: ToolParameter = toolParameterFactory({
+				type: ToolParameterType.Number,
+			});
+			setup(parameter);
+
+			await wrapper.find(`[data-testId=${parameter.name}]`).setValue("1234");
+
+			expect(wrapper.vm.value.value).toEqual("1234");
 			expect(wrapper.emitted("updated"));
 		});
 	});

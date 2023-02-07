@@ -5,15 +5,13 @@ import {
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "../serverApi/v3";
-import {
-	SchoolExternalTool,
-	SchoolExternalToolStatusEnum,
-} from "./external-tool";
-import setupStores from "../../tests/test-utils/setupStores";
+import { SchoolExternalTool, SchoolExternalToolStatus } from "./external-tool";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@/store";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-utils.composable";
+import { schoolExternalToolFactory } from "@@/tests/test-utils/factory/schoolExternaToolFactory";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -95,20 +93,20 @@ describe("ExternalToolsModule", () => {
 	const setup = () => {
 		const schoolId = "schoolId";
 
-		const schoolExternalTool: SchoolExternalTool = {
+		const schoolExternalTool: SchoolExternalTool = schoolExternalToolFactory({
 			name: "Test",
-			status: SchoolExternalToolStatusEnum.Latest,
+			status: SchoolExternalToolStatus.Latest,
 			id: "testId",
 			version: 1,
-		};
+		});
 		const schoolExternalTools: SchoolExternalTool[] = [
 			schoolExternalTool,
-			{
+			schoolExternalToolFactory({
 				name: "Test2",
-				status: SchoolExternalToolStatusEnum.Outdated,
+				status: SchoolExternalToolStatus.Outdated,
 				id: "testId2",
 				version: 1,
-			},
+			}),
 		];
 		module.setSchoolExternalTools(schoolExternalTools);
 
@@ -160,12 +158,12 @@ describe("ExternalToolsModule", () => {
 				const expectedName = "NewTool";
 
 				module.setSchoolExternalTools([
-					{
+					schoolExternalToolFactory({
 						id: "id",
 						name: expectedName,
-						status: SchoolExternalToolStatusEnum.Latest,
+						status: SchoolExternalToolStatus.Latest,
 						version: 1,
-					},
+					}),
 				]);
 
 				const tools: SchoolExternalTool[] = module.getSchoolExternalTools;
@@ -272,12 +270,12 @@ describe("ExternalToolsModule", () => {
 					await module.loadSchoolExternalTools();
 
 					expect(setSchoolExternalToolsSpy).toHaveBeenCalledWith([
-						{
+						schoolExternalToolFactory({
 							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
-							status: SchoolExternalToolStatusEnum.Latest,
+							status: SchoolExternalToolStatus.Latest,
 							version: searchListResponse.data[0].toolVersion,
-						},
+						}),
 					]);
 				});
 			});

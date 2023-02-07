@@ -1,9 +1,9 @@
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 import {
 	ToolParameter,
-	ToolParameterLocationEnum,
-	ToolParameterScopeEnum,
-	ToolParameterTypeEnum,
+	ToolParameterLocation,
+	ToolParameterScope,
+	ToolParameterType,
 } from "@/store/external-tool";
 
 describe("useExternalToolValidation", () => {
@@ -16,11 +16,11 @@ describe("useExternalToolValidation", () => {
 			name: "ToolParameter",
 			isOptional: true,
 			value: "x",
-			type: ToolParameterTypeEnum.String,
+			type: ToolParameterType.String,
 			regexComment: "comment",
-			location: ToolParameterLocationEnum.Path,
+			location: ToolParameterLocation.Path,
 			regex: "[x]",
-			scope: ToolParameterScopeEnum.School,
+			scope: ToolParameterScope.School,
 			default: undefined,
 		};
 
@@ -73,7 +73,7 @@ describe("useExternalToolValidation", () => {
 		it("should add number rule when parameter value does not match the parameter type", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.value = "noNumber2123";
-			toolParameter.type = ToolParameterTypeEnum.Number;
+			toolParameter.type = ToolParameterType.Number;
 
 			const rules: (() => string | boolean)[] =
 				validateParameter(toolParameter);
