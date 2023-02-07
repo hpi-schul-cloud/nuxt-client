@@ -32,7 +32,7 @@
 			@input="handleInput"
 			@focus="handleFocus"
 			@blur="handleBlur"
-		></component>
+		/>
 		<v-btn
 			v-show="actionable && isActive"
 			icon
