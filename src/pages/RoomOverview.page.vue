@@ -404,11 +404,9 @@ export default {
 			};
 			roomsModule.update(payload);
 		},
-		onImportSuccess(shouldFetchRooms) {
+		onImportSuccess() {
 			this.$router.replace({ path: "/rooms-overview" });
-			if (shouldFetchRooms) {
-				roomsModule.fetch();
-			}
+			roomsModule.fetch();
 		},
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;

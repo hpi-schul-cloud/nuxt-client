@@ -53,12 +53,13 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
+		console.log("DUPA");
 		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
 		const notifier = inject("notifierModule");
 
 		const parentName = ref("");
-		const parentType = ref("course");
+		const parentType = ref("lesson");
 
 		const destinationCourseId = ref(undefined);
 		const isSelectCourseModalOpen = ref(false);
@@ -146,11 +147,7 @@ export default defineComponent({
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
 				parentType.value = validateResult.parentType.slice(0, -1);
-				if (parentType.value === "course") {
-					openModal("import");
-				} else {
-					openModal("selectCourse");
-				}
+				openModal(parentType.value === "course" ? "import" : "selectCourse");
 			} catch (error) {
 				if (error.response?.status === 403) {
 					showFailurePermission();
@@ -170,13 +167,7 @@ export default defineComponent({
 					newName,
 					destinationCourseId: destinationCourseId.value,
 				});
-				if (parentType.value === "course") {
-					openModal("result");
-				} else {
-					showSuccess(newName);
-					emit("success", false);
-					copyModule.reset();
-				}
+				openModal("result");
 			} catch (error) {
 				showFailureBackend(newName);
 			}
@@ -187,11 +178,11 @@ export default defineComponent({
 		const onCourseSelected = (courseId) => {
 			destinationCourseId.value = courseId;
 			openModal("import");
-		}
+		};
 		const onImport = (courseName) => startImport(courseName);
 		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
-			emit("success", true);
+			emit("success");
 			copyModule.reset();
 		};
 
