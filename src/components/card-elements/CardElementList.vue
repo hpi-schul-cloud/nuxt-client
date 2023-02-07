@@ -25,7 +25,7 @@
 				@add-element="addElementAfter(index)"
 			/>
 		</draggable>
-		<add-card-element @click="addElement" />
+		<add-card-element @click="addElementAfter()" />
 	</div>
 </template>
 
@@ -61,7 +61,7 @@ export default defineComponent({
 
 		const elements = ref(props.value);
 
-		const addElementAfter = (index: number) => {
+		const addElementAfter = (index: number = elements.value.length) => {
 			elements.value.splice(index + 1, 0, {
 				id: "",
 				type: CardElementResponseCardElementTypeEnum.RichText,
@@ -72,10 +72,6 @@ export default defineComponent({
 					editable: true,
 				},
 			});
-		};
-
-		const addElement = () => {
-			addElementAfter(elements.value.length);
 		};
 
 		const deleteElement = (index: number) => {
@@ -89,7 +85,6 @@ export default defineComponent({
 
 		return {
 			elements,
-			addElement,
 			addElementAfter,
 			deleteElement,
 			touchDelay,
