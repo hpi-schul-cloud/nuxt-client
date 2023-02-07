@@ -40,7 +40,7 @@ import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 
 export default defineComponent({
-	name: "CardElement",
+	name: "CardElemenList",
 	components: {
 		CardElementWrapper,
 		AddCardElement,
