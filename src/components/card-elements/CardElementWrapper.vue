@@ -55,7 +55,7 @@ import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
-	name: "CardElement",
+	name: "CardElementWrapper",
 	components: {
 		TitleCardElement,
 		RichTextCardElement,
