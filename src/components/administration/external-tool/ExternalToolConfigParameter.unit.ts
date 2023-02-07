@@ -65,12 +65,79 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
-			const parameter: ToolParameter = setupToolParameter();
-			setup(parameter);
+			setup();
 
 			expect(
 				wrapper.findComponent(ExternalToolConfigParameter).exists()
 			).toBeTruthy();
+		});
+	});
+
+	describe("when parameter has type boolean", () => {
+		it("should render a tri state select", () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.Boolean;
+			setup(parameter);
+
+			expect(wrapper.find(".v-select__slot"));
+		});
+
+		it("should set default when parameter has no value", () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.Boolean;
+			parameter.value = undefined;
+			setup(parameter);
+
+			expect(wrapper.find(".v-select__selection").text()).toEqual(
+				"common.words.noChoice"
+			);
+		});
+
+		it("should set value from parameter", () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.Boolean;
+			parameter.value = "false";
+			setup(parameter);
+
+			expect(wrapper.find(".v-select__selection").text()).toEqual(
+				"common.words.no"
+			);
+		});
+
+		it("should watch selectItem and emit event", async () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.Boolean;
+			setup(parameter);
+
+			const input = wrapper.find(`[data-testId=${parameter.name}]`);
+			input.setValue(false);
+			await input.trigger("change");
+
+			expect(wrapper.vm.value.value).toEqual("false");
+			expect(wrapper.emitted("updated"));
+		});
+	});
+
+	describe("when parameter has type string", () => {
+		it("should render a textfield", () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.String;
+			setup(parameter);
+
+			expect(wrapper.find(".v-text-field__slot"));
+		});
+
+		it("should emit event on parameter value change", async () => {
+			const parameter: ToolParameter = setupToolParameter();
+			parameter.type = ToolParameterTypeEnum.String;
+			setup(parameter);
+
+			const input = wrapper.find(`[data-testId=${parameter.name}]`);
+			input.setValue("newValue");
+			await input.trigger("change");
+
+			expect(wrapper.vm.value.value).toEqual("newValue");
+			expect(wrapper.emitted("updated"));
 		});
 	});
 });

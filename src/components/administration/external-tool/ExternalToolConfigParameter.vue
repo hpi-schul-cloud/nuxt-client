@@ -101,19 +101,20 @@ export default defineComponent({
 
 		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);
 		watch(selectItem, () => {
+			console.log("watch");
 			parameter.value.value = selectItem.value ?? undefined;
 		});
 		const booleanSelectItems: Ref = ref([
 			{
-				text: "Keine Auswahl",
+				text: t("common.words.noChoice"),
 				value: null,
 			},
 			{
-				text: "Ja",
+				text: t("common.words.yes"),
 				value: true,
 			},
 			{
-				text: "Nein",
+				text: t("common.words.no"),
 				value: false,
 			},
 		]);
