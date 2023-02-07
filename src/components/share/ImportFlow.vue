@@ -92,15 +92,6 @@ export default defineComponent({
 
 		// notifiers
 
-		const showSuccess = (name) => {
-			notifier?.show({
-				text: i18n?.t("components.molecules.import.options.success", { name }),
-				status: "success",
-				timeout: 10000,
-			});
-			closeModals();
-		};
-
 		const showFailureBackend = (name) => {
 			notifier?.show({
 				text: i18n?.t(
