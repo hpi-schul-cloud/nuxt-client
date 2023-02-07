@@ -44,7 +44,6 @@ $btn-radius: 18;
 	position: absolute;
 	top: -#{$btn-radius / 3}px;
 	left: 50%;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-left: -#{$btn-radius}px;
 	background-color: var(--v-white-base);
 }
