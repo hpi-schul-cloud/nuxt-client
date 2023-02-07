@@ -204,7 +204,6 @@ export default defineComponent({
 }
 
 .ck.ck-editor__editable_inline > :last-child {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-bottom: 34px !important;
 }
 </style>
