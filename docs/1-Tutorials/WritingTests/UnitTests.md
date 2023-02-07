@@ -1,12 +1,23 @@
-# Writing "Unit"-Tests
+# Writing "Unit"-Tests (v0.3)
 
 This doc is meant to help you write valuable, reliable tests, that are easy to maintain.
 
 ## Basics
 
-We think the **Vue Test Utils-documentation** is a valuable resource for learning how to test Vue-Components and a very good starting point. Ensure that you worked your way through these.
+Vue Test Utils is a library that provides methods to help you write tests for your Vue components. It provides methods to mount, shallow mount, and render components, as well as methods to simulate events and find elements in the rendered output.
 
-- **VueTestUtils**: https://test-utils.vuejs.org/guide/
+Some functionality it provides:
+
+- **mount()**: create a wrapper around the component and instantiate it
+- **shallowMount()**: create a shallow wrapper of the component being tested with childcomponents being mocked
+- **setMethods()**: mock function on the component
+- **setProps()**: set a specific set of props on the component
+- **find()**: search for specific elements in the component
+- **findComponent()**: finds a component by it's class, name or ref
+- **setData()**: set specific data on the component
+- **trigger()** + **emit()**: test events and the flow of data
+
+We think the **Vue Test Utils-documentation** is a valuable resource for learning how to test Vue-Components and a very good starting point on how to test certain aspects of your component. Please have a look at https://test-utils.vuejs.org/guide
 
 ### Use TypeScript
 
@@ -26,7 +37,7 @@ HelloWorld.unit.ts
 Especially in large test-files it is very helpful for the reader to have a tree-like structure grouping the tests. So use describe blocks to group tests that are related to the same aspect of your code/the functionality.
 
 1. describe block that contains the filename in the root-level of the test-file
-2. sub-describe-blocks for groups of tests focussing the same aspects of your code (maybe you should extract functionality if this is needed)
+2. sub-describe-blocks for groups of tests focussing the same aspects of your code 
 
 *example:* **HelloWorld.unit.ts**
 ```JavaScript
@@ -43,13 +54,19 @@ describe('HelloWorld', () => {
 });
 ```
 
+**Idea**: *maybe you should extract functionality from your component if this is needed e.g. to find a certain test in your file*
 
-### Write the test like a sentence "it should..."
+### Name the test like a sentence "it should..."
 
-There is a reason we use the it-method for writing our code and not the test-method: we want to describe the aspect that is tested in a natural sentence. That's why it is best practice to start your test with: it('should ...');
+There is a reason we use the it-alias for writing our code and not the test-method: we want to describe the aspect that is tested in a natural sentence. That's why it is best practice to start your test with: it('should ...');
 
 *example:*
 ```TypeScript
+Bad:
+it('name changes on button click')
+...
+
+Good:
 it('should display the info text', ... );
 it('should not render migration start button', ... );
 it('should return the translation', ... );
@@ -68,10 +85,11 @@ it('should return the translation', ... );
 - ensure that the **public interface** of the component (aka it's methods, parameters, events etc.) is stable
 - enable you to **refactor** your component in a reliable way
 
-### Positive & Negative Tests
-- **positive tests** test the default cases of your code - **how it should work**
+### Positive & negative Tests
+- **positive tests** test the default cases of your code = **how it should work**
 - **negative tests** test **error-cases** or **exception**-behaviour
-- write both with edge-cases in mind e.g.
+- you need to write both to ensure your component works correctly
+- think of edge-cases that might break your component e.g. when providing input to the component:
   - **numbers**: high numbers, negative numbers, float<->integer, at the edge of a range that is expected...
   - **dates**: none existing dates e.g. 30th February 2023, far away future,...
   - **strings**: umlauts, url-special-characters (?, &, =, \/\/: ), very long strings for names, long strings without linebreaks
@@ -99,7 +117,7 @@ Use the trigger()-method to simulate a events
 
 #### Testing Asynchronous Behavior
 
-You can test asynchronous behavior by using ***nextTick*** OR+ by ***trigger***ing an effect and ***await***ing this effect to take place:
+You can test asynchronous behavior by using ***nextTick*** OR by ***trigger***ing an effect and ***await***ing this effect to take place:
 
 ```TypeScript
 await Vue.nextTick();
@@ -110,11 +128,23 @@ await button.trigger('click');
 
 ### Exceptions
 
-{{ UserMigration.page.unit.ts }}
+...
 
 ### console.error
 
-{{ tbd }}
+```TypeScript
+    // UserMigration.page.unit.ts
+    const consoleErrorSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation();
+
+    ...
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.any(ApplicationError)
+    );
+    consoleErrorSpy.mockRestore();
+```
 
 ## Mocking
 
