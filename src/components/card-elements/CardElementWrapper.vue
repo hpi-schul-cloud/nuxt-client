@@ -28,7 +28,7 @@
 			v-model="model"
 			:editable="editable"
 			:disabled="disabled"
-			:placeholder="`${$t(placeholder)}`"
+			:placeholder="placeholder"
 			@input="handleInput"
 			@focus="handleFocus"
 			@blur="handleBlur"
@@ -48,12 +48,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, inject, computed } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
-import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "CardElement",
@@ -83,11 +82,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
-
 		const model = ref(props.value);
 
 		watch(

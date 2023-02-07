@@ -94,7 +94,7 @@ export default defineComponent({
 						model: cardElement.content.value,
 						props: {
 							component: CardElementComponentEnum.Title,
-							placeholder: "common.labels.title",
+							placeholder: i18n.t("common.labels.title") as string,
 							editable: true,
 						},
 					};
@@ -107,7 +107,7 @@ export default defineComponent({
 					model: cardElement.content.value,
 					props: {
 						component: CardElementComponentEnum.RichText,
-						placeholder: "common.labels.description",
+						placeholder: i18n.t("common.labels.description") as string,
 						editable: true,
 					},
 				});
