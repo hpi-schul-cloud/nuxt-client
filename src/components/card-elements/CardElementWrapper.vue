@@ -64,7 +64,7 @@ export default defineComponent({
 	props: {
 		component: {
 			type: String,
-			default: CardElementComponentEnum.Title,
+			default: CardElementComponentEnum.RichText,
 		},
 		value: {
 			type: String,
@@ -151,7 +151,6 @@ $btn-radius: 18;
 
 .delete-element-btn {
 	position: relative;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	top: -8px;
 }
 
@@ -159,7 +158,6 @@ $btn-radius: 18;
 	position: absolute;
 	bottom: -#{$btn-radius}px;
 	left: 50%;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-left: -#{$btn-radius}px;
 }
 </style>
