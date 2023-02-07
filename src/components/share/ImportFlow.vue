@@ -53,7 +53,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		console.log("DUPA");
 		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
 		const notifier = inject("notifierModule");
