@@ -1,12 +1,11 @@
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CardElement from "@/components/card-elements/CardElement.vue";
+import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
-import Vue from "vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(CardElement as MountOptions<Vue>, {
+	return mount(CardElementWrapper, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -18,10 +17,10 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@/components/card-elements/CardElement", () => {
+describe("@components/card-elements/CardElementWrapper", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(CardElement).exists()).toBe(true);
+		expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
 	});
 
 	it("should emit delete-element event for rich text", async () => {
@@ -34,6 +33,18 @@ describe("@/components/card-elements/CardElement", () => {
 		await deleteBtn.trigger("click");
 
 		expect(wrapper.emitted("delete-element")).toBeTruthy();
+	});
+
+	it("should emit add-element event for rich text", async () => {
+		const wrapper = getWrapper({
+			component: CardElementComponentEnum.RichText,
+		});
+		const addBtn = wrapper.find('[data-testid="add-element-btn"]');
+
+		expect(addBtn.exists()).toBe(true);
+		await addBtn.trigger("click");
+
+		expect(wrapper.emitted("add-element")).toBeTruthy();
 	});
 
 	it("should render drag handle for rich text", async () => {
@@ -51,7 +62,7 @@ describe("@/components/card-elements/CardElement", () => {
 		});
 		const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
 
-		expect(dragBtn.exists()).toBe(false);
+		expect(dragBtn.isVisible()).toBe(false);
 	});
 
 	it("should render dynamic component", async () => {
