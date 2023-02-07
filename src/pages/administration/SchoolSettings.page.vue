@@ -64,8 +64,6 @@ import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies
 import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection";
-import { nextTick, onMounted } from "vue";
-import { useRouter } from "vue-router/composables";
 
 export default {
 	components: {
@@ -142,17 +140,6 @@ export default {
 		document.title = `${this.$t("pages.administration.school.index.title")} - ${
 			this.$theme.short_name
 		}`;
-	},
-	setup() {
-		const router = useRouter();
-		onMounted(() => {
-			const section = router.currentRoute.hash.replace("#", "");
-			if (section) {
-				nextTick(() =>
-					window.document.getElementById(section)?.scrollIntoView()
-				);
-			}
-		});
 	},
 };
 </script>

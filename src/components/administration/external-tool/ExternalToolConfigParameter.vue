@@ -16,14 +16,17 @@
 			></v-text-field>
 		</template>
 		<template v-if="parameter.type === toolParameterTypeEnumBoolean">
-			<v-checkbox
-				v-model="parameter.value"
-				:label="parameter.name"
-				:rules="validateParameter(parameter)"
+			<v-select
+				v-model="selectItem"
+				:label="getLabelText()"
 				validate-on-blur
+				:rules="validateParameter(parameter)"
 				:data-testId="parameter.name"
+				:items="booleanSelectItems"
+				item-value="value"
+				item-text="text"
 				@change:value="$emit('update:value', parameter)"
-			></v-checkbox>
+			></v-select>
 		</template>
 		<template v-if="parameter.type === toolParameterTypeEnumNumber">
 			<v-text-field
@@ -47,6 +50,9 @@ import {
 	defineComponent,
 	inject,
 	PropType,
+	ref,
+	Ref,
+	watch,
 	WritableComputedRef,
 } from "vue";
 import { ToolParameter, ToolParameterTypeEnum } from "@/store/external-tool";
@@ -93,12 +99,33 @@ export default defineComponent({
 		const toolParameterTypeEnumNumber = ToolParameterTypeEnum.Number;
 		const toolParameterTypeEnumBoolean = ToolParameterTypeEnum.Boolean;
 
+		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);
+		watch(selectItem, () => {
+			parameter.value.value = selectItem.value ?? undefined;
+		});
+		const booleanSelectItems: Ref = ref([
+			{
+				text: "Keine Auswahl",
+				value: null,
+			},
+			{
+				text: "Ja",
+				value: true,
+			},
+			{
+				text: "Nein",
+				value: false,
+			},
+		]);
+
 		return {
 			parameter,
 			validateParameter,
 			getLabelText,
 			toolParameterTypeEnumNumber,
 			toolParameterTypeEnumBoolean,
+			selectItem,
+			booleanSelectItems,
 		};
 	},
 });

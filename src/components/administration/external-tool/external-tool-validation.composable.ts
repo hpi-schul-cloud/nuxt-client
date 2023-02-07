@@ -8,11 +8,7 @@ export function useExternalToolValidation(
 		param: ToolParameter
 	): Array<() => boolean | string> => {
 		const rules = [];
-		if (
-			!param.isOptional &&
-			param.type !== ToolParameterTypeEnum.Boolean &&
-			!param.value
-		) {
+		if (!param.isOptional && !param.value) {
 			rules.push(() => t("common.validation.required2"));
 		}
 
