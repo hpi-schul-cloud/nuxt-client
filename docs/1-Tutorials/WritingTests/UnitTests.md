@@ -12,7 +12,8 @@ Some functionality it provides:
 - **shallowMount()**: create a shallow wrapper of the component being tested with childcomponents being mocked
 - **setMethods()**: mock function on the component
 - **setProps()**: set a specific set of props on the component
-- **find()**: search for specific elements in the component
+- **find()**: search for specific elements in the component (**find() and findAll() -> deprecated**)
+    - https://v1.test-utils.vuejs.org/api/wrapper/#find
 - **findComponent()**: finds a component by it's class, name or ref
 - **setData()**: set specific data on the component
 - **trigger()** + **emit()**: test events and the flow of data
