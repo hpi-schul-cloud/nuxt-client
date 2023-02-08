@@ -12,7 +12,10 @@ Some functionality it provides:
 - **shallowMount()**: create a shallow wrapper of the component being tested with childcomponents being mocked
 - **setMethods()**: mock function on the component
 - **setProps()**: set a specific set of props on the component
-- **find()**: search for specific elements in the component
+- **find() / findAll()**: search for specific elements **(not components)** in a component (**find() and findAll() -> deprecated for finding Copmponents**) 
+    - https://v1.test-utils.vuejs.org/api/wrapper/#find
+    - Using find to search for a **Component** is deprecated and will be removed. Use findComponent instead.
+    - The find method will continue to work for finding **elements** using any valid selector.
 - **findComponent()**: finds a component by it's class, name or ref
 - **setData()**: set specific data on the component
 - **trigger()** + **emit()**: test events and the flow of data
@@ -248,8 +251,15 @@ it("should set something", () => {
 Discuss/have a workshop on "How to write components that are easy to test?" results => BrownBag {{ tbd }}
 
 ### Mocking Composables
-Composables 
-{{ tbd }}
+- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html
+
+- Example #1:
+  -   src/composables/drag.unit.ts
+        for simple composable file
+
+- Example #2:
+  -   src/composables/copy.unit.ts
+        for complex composable files which use `lifecycle hooks` or `provide/inject` handling
 
 ### data-testids
 
