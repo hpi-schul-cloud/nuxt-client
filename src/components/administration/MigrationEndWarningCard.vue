@@ -20,7 +20,7 @@
 			<v-btn
 				class="agree-btn-end"
 				color="primary"
-				data-testId="migration-end-agree-button"
+				data-testid="migration-end-agree-button"
 				@click="
 					$emit('set');
 					$emit('end');
@@ -36,7 +36,7 @@
 			<v-btn
 				class="disagree-btn-end"
 				color="secondary"
-				data-testId="migration-end-disagree-button"
+				data-testid="migration-end-disagree-button"
 				@click="$emit('end')"
 			>
 				{{
