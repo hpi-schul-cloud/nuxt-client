@@ -102,6 +102,7 @@ Separate your setup from your actual tests: If you need a more complex setup to 
 ## Testing
 
 ### Events
+
 Use the trigger()-method to simulate a events
 [Testing Key, Mouse and other DOM events](https://v1.test-utils.vuejs.org/guides/#testing-key-mouse-and-other-dom-events)
 - **Mouse-Click**: https://v1.test-utils.vuejs.org/guides/#trigger-events
@@ -144,27 +145,40 @@ expect(consoleErrorSpy).toHaveBeenCalledWith(
 consoleErrorSpy.mockRestore();
 ```
 
+### Others
+
+- [Composables](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#testing-composables)
+- [Provide / inject](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#provide-inject)
+
 ## Mocking
+
 Replaces methods, instances of classes (e.g. stores) with some functionality, that e.g. simply returns a value you want to use in your test. By mocking you can easily simulate certain scenarios like failing requests or certain return values from any "external" (as in "not part of the code i am currently testing") functionality.
 Jest provides very helpful methods for that.
 Examples from our codebase:
+
 ```TypeScript
 const mock = jest.fn().mockReturnValue(expectedTranslation);
 ```
+
 ```TypeScript
 copyModuleMock.copyByShareToken = jest.fn()
     .mockResolvedValue(copyResults);
 ```
+
 They can easily be tested like this:
+
 ```TypeScript
 expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 ```
+
 Or more specific like this:
+
 ```TypeScript
 expect(addFileMetaDataSpy).toHaveBeenCalledWith(
     expect.objectContaining<FileMetaListResponse>({	size: 2 } as FileMetaListResponse)
 );
 ```
+
 See also here: [VueTestUtils mount - mocks and stubs are now in global](https://test-utils.vuejs.org/migration/)
 
 
@@ -234,7 +248,7 @@ it("should set something", () => {
 Discuss/have a workshop on "How to write components that are easy to test?" results => BrownBag {{ tbd }}
 
 ### Mocking Composables
-
+Composables 
 {{ tbd }}
 
 ### data-testids
