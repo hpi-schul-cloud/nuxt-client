@@ -77,7 +77,7 @@
 
 		<migration-end-warning-card
 			v-if="isShowEndWarning"
-			i="migration-end-warning-card"
+      data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, isMigrationMandatory)"
 		></migration-end-warning-card>

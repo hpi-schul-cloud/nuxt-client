@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { isVueClient } = require("../src/router/vue-client-route");
-const { isServer } = require("../src/router/server-route");
+const { isServer, isFileStorage } = require("../src/router/server-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
@@ -19,9 +19,18 @@ const createServerProxy = () => {
 	return serverProxy;
 };
 
+const createFileStorageProxy = () => {
+	const fileStorageProxy = createProxyMiddleware({
+		target: "http://localhost:4444",
+		changeOrigin: true,
+	});
+	return fileStorageProxy;
+};
+
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
+	const fileStorageProxy = createFileStorageProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -35,7 +44,10 @@ const createDevServerConfig = () => {
 				middleware: (req, res, next) => {
 					const path = url.parse(req.originalUrl).pathname;
 
-					if (isServer(path)) {
+					if (isFileStorage(path)) {
+						// console.log("--- serverPath: ", path);
+						fileStorageProxy(req, res, next);
+					} else if (isServer(path)) {
 						// console.log("--- serverPath: ", path);
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
@@ -59,4 +71,5 @@ module.exports = {
 	createLegacyClientProxy,
 	createServerProxy,
 	createDevServerConfig,
+	createFileStorageProxy,
 };
