@@ -154,7 +154,60 @@ https://v1.test-utils.vuejs.org/guides/#mocking-injections
 
 ### Mocking Vuex-Store
 
-createModuleMock() jest.mocked() {{ tbd }}
+#### Mocking a vuex-store in a component:
+
+Example file: `src/components/administration/AdminMigrationSection.unit.ts`
+
+```
+import { createModuleMocks } from "@/utils/mock-store-module";
+import YourModule from "@/store/YourModule";
+
+let yourModule: jest.Mocked<YourModule>;
+
+schoolsModule = createModuleMocks(YourModule, {
+    yourMethodName: {
+        ...
+    },
+    ...yourGetters,
+}) as jest.Mocked<YourModule>;
+
+
+mount(YourComponentToBeTested, {
+    ...createComponentMocks({
+        ...
+    }),
+    provide: {
+        yourModule,
+    },
+});
+
+expect(yourModule.<yourMethodName>).toHaveBeenCalledWith(...);
+```
+
+#### Testing a store:
+
+```
+import YourModule from "./your-module";
+
+const yourModule = new YourModule({});
+
+.
+.
+.
+
+// using `jest.spyOn()`
+it("should call something", () => {
+    const yourActionNameMock = jest.spyOn(yourModule, "yourActionName");
+    yourModule.yourActionName();
+    expect(yourActionNameMock).toHaveBeenCalled();
+});
+
+// or using a method directly
+it("should set something", () => {
+    yourModule.setLoading(true);
+    expect(yourModule.getLoading).toBe(true);
+});
+```
 
 ### Mocking Pinia-Stores
 
