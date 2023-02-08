@@ -5,7 +5,7 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
-} from "../../serverApi/v3";
+} from "@/serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalToolStatus } from "@/store/external-tool/school-external-tool-status.enum";
 
@@ -16,7 +16,7 @@ const externalToolsModuleMock = () => {
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: SchoolExternalToolStatus.Latest,
+				status: "Latest",
 			},
 		],
 	};

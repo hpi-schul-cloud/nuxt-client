@@ -113,8 +113,8 @@ export default class ExternalToolsModule extends VuexModule {
 			console.log(`Some error occurred while loading tools data: ${e}`);
 			this.setBusinessError({
 				...e,
-				statusCode: e.response.status,
-				message: e.response.data.message,
+				statusCode: e?.response?.status,
+				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -137,8 +137,8 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				...e,
-				statusCode: e.response.status,
-				message: e.response.data.message,
+				statusCode: e?.response?.status,
+				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -169,8 +169,8 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				...e,
-				statusCode: e.response.status,
-				message: e.response.data.message,
+				statusCode: e?.response?.status,
+				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -200,8 +200,8 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				...e,
-				statusCode: e.response.status,
-				message: e.response.data.message,
+				statusCode: e?.response?.status,
+				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
 			return new ToolConfigurationTemplate();
@@ -233,8 +233,8 @@ export default class ExternalToolsModule extends VuexModule {
 			);
 			this.setBusinessError({
 				...e,
-				statusCode: e.response.status,
-				message: e.response.data.message,
+				statusCode: e?.response?.status,
+				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
 		}

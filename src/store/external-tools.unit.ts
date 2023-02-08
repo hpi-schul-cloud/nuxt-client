@@ -4,7 +4,7 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
-} from "../serverApi/v3";
+} from "@/serverApi/v3";
 import { SchoolExternalTool, SchoolExternalToolStatus } from "./external-tool";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { User } from "./types/auth";
