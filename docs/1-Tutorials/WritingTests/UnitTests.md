@@ -12,11 +12,12 @@ Some functionality it provides:
 - **shallowMount()**: create a shallow wrapper of the component being tested with childcomponents being mocked
 - **setMethods()**: mock function on the component
 - **setProps()**: set a specific set of props on the component
+- **findComponent()**: finds a component by it's class, name or ref
+- **findAllComponents()**: similar to `findComponent` but finds all Vue Component instances that match the query. Returns an array of `VueWrapper`.
 - **find() / findAll()**: search for specific elements **(not components)** in a component (**find() and findAll() -> deprecated for finding Copmponents**) 
     - https://v1.test-utils.vuejs.org/api/wrapper/#find
     - Using find to search for a **Component** is deprecated and will be removed. Use findComponent instead.
     - The find method will continue to work for finding **elements** using any valid selector.
-- **findComponent()**: finds a component by it's class, name or ref
 - **setData()**: set specific data on the component
 - **trigger()** + **emit()**: test events and the flow of data
 
