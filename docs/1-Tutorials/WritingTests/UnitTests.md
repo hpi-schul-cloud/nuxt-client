@@ -237,8 +237,15 @@ it("should set something", () => {
 Discuss/have a workshop on "How to write components that are easy to test?" results => BrownBag {{ tbd }}
 
 ### Mocking Composables
+- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html
 
-{{ tbd }}
+- Example #1:
+  -   src/composables/drag.unit.ts
+        for simple composable file
+
+- Example #2:
+  -   src/composables/copy.unit.ts
+        for complex composable files which use `lifecycle hooks` or `provide/inject` handling
 
 ### data-testids
 
