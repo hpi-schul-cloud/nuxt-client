@@ -124,7 +124,7 @@ expect(
 );
 ```
 
-Consider using refs instead of data-testids, too but ensure not to remove them once they are in the code... as they can be used in the component-code and for testing:
+We also recommend to use refs instead of data-testids. But if you do that you ensure not to remove them once they are in the code... as they can be used in the component-code and for testing:
 
 - [VueJs - template refs](https://vuejs.org/guide/essentials/template-refs.html)
 - [VueTestUtils - ref](https://v1.test-utils.vuejs.org/api/#ref)
