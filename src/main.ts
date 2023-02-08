@@ -31,6 +31,7 @@ import { createI18n } from "./plugins/i18n";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./plugins/store";
+import { createPinia, PiniaVuePlugin } from "pinia";
 
 Vue.config.productionTip = false;
 
@@ -66,6 +67,9 @@ Vue.mixin({
 		},
 	},
 });
+
+Vue.use(PiniaVuePlugin);
+const pinia = createPinia();
 
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
@@ -112,6 +116,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 		store,
 		vuetify,
 		i18n,
+		pinia,
 		// NUXT_REMOVAL get rid of store DI
 		provide: {
 			accountsModule,

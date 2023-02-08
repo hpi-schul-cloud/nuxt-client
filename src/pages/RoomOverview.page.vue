@@ -7,6 +7,7 @@
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
 				{{ $t("pages.courses.index.courses.active") }}
+				<counter-button></counter-button>
 			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -140,6 +141,7 @@ import { roomsModule } from "@/store";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import { mdiMagnify, mdiClose, mdiInformation } from "@mdi/js";
 import UserHasRole from "@/components/helpers/UserHasRole";
+import CounterButton from "@/components/playground/CounterButton.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -152,6 +154,7 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 		UserHasRole,
+		CounterButton,
 	},
 	inject: ["notifierModule"],
 	layout: "defaultVuetify",
