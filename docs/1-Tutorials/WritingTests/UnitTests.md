@@ -4,6 +4,16 @@ This doc is meant to help you write valuable, reliable tests, that are easy to m
 
 ## Basics
 
+Writing good tests that cover all aspects of your code, leads to:
+
+- **confidence**: to refactor your code
+- **higher code quality**: as you review your code and identify problems when writing tests
+- **well documented code**: as a test describes how your code works
+
+and by that to:
+
+- **developer happiness** :-)
+
 ### Unit-Tests vs. Component-Tests
 
 #### Unit-Tests
@@ -69,7 +79,7 @@ Especially in large test-files it is very helpful for the reader to have a tree-
 
 *Example:*
 
-```JavaScript
+```TypeScript
 describe('@components/share/ImportModal', () => {
     describe('when action button is clicked', () => {
         ...
@@ -79,6 +89,21 @@ describe('@components/share/ImportModal', () => {
 
     describe("when backend returns an error", () => {
 
+    });
+});
+```
+
+Example taken from here [Vue NYC - Component Tests with Vue.js - Matt O'Connell](https://www.youtube.com/watch?v=OIpfWTThrK8)
+```TypeScript
+describe('@components/something/AddButton', () => {
+    describe(':props', () => {
+        it(':label - should render a button with the passed-in label text', () => { ... })
+    });
+
+    ...
+
+    describe("@events", () => {
+        it('@add - should emit an "add" event when the button is clicked', () => { ... })
     });
 });
 ```
