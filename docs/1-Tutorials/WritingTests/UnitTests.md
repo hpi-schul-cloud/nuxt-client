@@ -4,7 +4,7 @@ This doc is meant to help you write valuable, reliable tests, that are easy to m
 
 ## Basics
 
-Vue Test Utils is a library that provides methods to help you write tests for your Vue components. It provides methods to mount, shallow mount, and render components, as well as methods to simulate events and find elements in the rendered output.
+For testing our Vue-Components we use the **Vue Test Utils**. Vue Test Utils is a library that provides methods to help you write tests for your Vue components. It provides methods to mount, shallow mount, and render components, as well as methods to simulate events and find elements in the rendered output.
 
 Some functionality it provides:
 
@@ -55,7 +55,7 @@ describe('@components/share/ImportModal', () => {
 });
 ```
 
-**Idea**: *maybe you should extract functionality from your component if this is needed e.g. to find a certain test in your file*
+**Hint**: *maybe you should extract functionality from your component if this is needed e.g. to find a certain test in your file*
 
 ### Name the test like a sentence "it should..."
 
@@ -73,6 +73,9 @@ it('should not render migration start button', ... );
 it('should return the translation', ... );
 ````
 
+### Setup-methods
+
+Separate your setup from your actual tests: If you need a more complex setup to test something - write a scope method called "setup" for it. Write it in a reusable and configurable way, in order to reuse most of it in several groups of tests. You will get small and easily readable tests and no redudant setup-code inside your tests that contains small differences that are hard to detect.
 
 ### Unit-Tests vs. Component-Tests
 
@@ -96,13 +99,8 @@ it('should return the translation', ... );
   - **strings**: umlauts, url-special-characters (?, &, =, \/\/: ), very long strings for names, long strings without linebreaks
   - **totally incorrect data**: e.g. giving a string instead of a number
 
-### Setup-methods
-
-Separate your setup from your actual tests: If you need a more complex setup to test something - write a scope method called "setup" for it. Write it in a reusable and configurable way, in order to reuse most of it in several groups of tests. You will get small and easily readable tests and no redudant setup-code inside your tests that contains small differences that are hard to detect.
 
 ## Testing
-
-
 
 ### Events
 Use the trigger()-method to simulate a events
@@ -116,7 +114,7 @@ Use the trigger()-method to simulate a events
   wrapper.findComponent(ChildComponent).vm.$emit('custom');
   ```
 
-#### Testing Asynchronous Behavior
+### Testing Asynchronous Behavior
 
 You can test asynchronous behavior by using ***nextTick*** OR by ***trigger***ing an effect and ***await***ing this effect to take place:
 
@@ -132,22 +130,44 @@ await button.trigger('click');
 ...
 
 ### console.error
-
+Mock the console.error-method like in this test:
 ```TypeScript
-    // UserMigration.page.unit.ts
-    const consoleErrorSpy = jest
-        .spyOn(console, "error")
-        .mockImplementation();
+// UserMigration.page.unit.ts
+const consoleErrorSpy = jest
+    .spyOn(console, "error")
+    .mockImplementation();
 
-    ...
+...
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.any(ApplicationError)
-    );
-    consoleErrorSpy.mockRestore();
+expect(consoleErrorSpy).toHaveBeenCalledWith(
+    expect.any(ApplicationError)
+);
+consoleErrorSpy.mockRestore();
 ```
 
 ## Mocking
+Replaces methods, instances of classes (e.g. stores) with some functionality, that e.g. simply returns a value you want to use in your test. By mocking you can easily simulate certain scenarios like failing requests or certain return values from any "external" (as in "not part of the code i am currently testing") functionality.
+Jest provides very helpful methods for that.
+Examples from our codebase:
+```TypeScript
+const mock = jest.fn().mockReturnValue(expectedTranslation);
+```
+```TypeScript
+copyModuleMock.copyByShareToken = jest.fn()
+    .mockResolvedValue(copyResults);
+```
+They can easily be tested like this:
+```TypeScript
+expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
+```
+Or more specific like this:
+```TypeScript
+expect(addFileMetaDataSpy).toHaveBeenCalledWith(
+    expect.objectContaining<FileMetaListResponse>({	size: 2 } as FileMetaListResponse)
+);
+```
+See also here: [VueTestUtils mount - mocks and stubs are now in global](https://test-utils.vuejs.org/migration/)
+
 
 ### Mocking injections
 
