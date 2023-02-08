@@ -7,9 +7,9 @@
     rename column ✅
     move column ✅
     delete column ✅
-    create card
+    create card ✅
     move card ✅
-    delete card
+    delete card ✅
 
     Actions to support later: 
     Move cards between boards
@@ -96,6 +96,10 @@ interface CourseBoardCard {
 interface VisibilitySettings {
 	publishedAt: string | undefined; // undefined = invisible | Date specifies the visibility from
 }
+
+declare type AnyCourseBoardCard =
+	| CourseBoardLegacyLessonCard
+	| CourseBoardLegacyTaskCard; // union of all CourseBoardCard-Interfaces
 
 interface CourseBoardLegacyLessonCard extends CourseBoardCard {
 	cardType: "legacy-lesson";
@@ -239,28 +243,29 @@ interface Response {
 	version: number;
 }
 
-// POST - Create a Column
-// /boards/:boardId/column
-
 /*
-  Default title of a Column is an empty string. A translated fallback-title is created in the Frontend. 
-  This way we always have a name for a11y and we can be context aware one-dimensional / n-dimensional layout.
+  ---------------------------
+  POST - Create a Column
+  /boards/:boardId/column
 
-  column.cards will be an empty array by default.
+  - title: defaults to an empty string
+    A translated fallback-title is created in the Frontend.
+	This way we always have a name for a11y and we can be context aware one-dimensional / n-dimensional layout.
+  - cards: defaults to empty array
 
-  Validation needs to factor in a DoS-Attack by adding to many columns. Maybe limit to a 100 cols?
+  hint: Validation needs to factor in a DoS-Attack by adding to many columns. Maybe limit to a 100 cols?
 */
 
 interface Payload {}
 
 // Responses
-// 200 OK - No Conflict -> Column was renamed
+// 200 OK - No Conflict -> Column was created
 
 // interface CourseBoard {
 
 // }
 
-// 400 Bad Request - Validation Error -> Column was not renamed
+// 400 Bad Request - Validation Error -> Column was not created
 interface Response {
 	version: number;
 }
@@ -280,7 +285,52 @@ interface Response {
 
 // }
 
-// 400 Bad Request - Validation Error -> Column was not renamed
+// 400 Bad Request - Validation Error -> Column was not removed
+interface Response {
+	version: number;
+}
+
+/*
+  ---------------------------
+  POST - Create a Card
+  /boards/:boardId/column/:columnId/createcard
+  ---------------------------
+
+  - title: defaults to an empty string
+  - elements: defaults to empty array
+*/
+interface Payload {
+	type: CourseBoardCardType;
+}
+
+// Responses
+// 200 OK - No Conflict -> Card was created
+// interface AnyCourseBoardCard {
+
+// }
+
+// 400 Bad Request - Validation Error -> Card was not created
+interface Response {
+	version: number;
+}
+
+/*
+  ---------------------------
+  DELETE - Delete a Card
+  /boards/:boardId/card/:cardId
+  ---------------------------
+
+  - Deleting a Card also updates the board.
+ */
+
+// Responses
+// 200 OK - No Conflict -> Card was removed
+
+// interface CourseBoard {
+
+// }
+
+// 400 Bad Request - Validation Error -> Column was not removed
 interface Response {
 	version: number;
 }
