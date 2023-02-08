@@ -1,5 +1,5 @@
 # Integration/Acceptance/System-Tests
 
-End-to-End-Tests are developed in a seperate repository [hpi-schul-cloud/end-to-end-tests](https://github.com/hpi-schul-cloud/end-to-end-tests)
+End-to-End-Tests are developed in a seperate repository [end-to-end-tests](https://github.com/hpi-schul-cloud/end-to-end-tests)
 
-[A list of workflows to test can be found here](https://docs.dbildungscloud.de/pages/viewpage.action?pageId=81526785)
+[Documentation of e2e tests](https://docs.dbildungscloud.de/x/tAgrCg)
