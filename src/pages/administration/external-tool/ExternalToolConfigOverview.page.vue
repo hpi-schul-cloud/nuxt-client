@@ -14,6 +14,7 @@
 			return-object
 			:loading="loading"
 			@change="onSelectTemplate"
+			data-testId="configuration-select"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -163,6 +164,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			breadcrumbs,
 			getTranslationKey,
 			loading,

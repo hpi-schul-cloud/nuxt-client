@@ -7,5 +7,6 @@ export const toolConfigurationFactory = (
 		name: "name",
 		id: "id",
 		logoUrl: "logoUrl",
+		...param,
 	};
 };

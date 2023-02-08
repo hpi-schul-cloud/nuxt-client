@@ -7,5 +7,6 @@ export const businessErrorFactory = (
 		statusCode: "400",
 		error: undefined,
 		message: "message",
+		...param,
 	};
 };
