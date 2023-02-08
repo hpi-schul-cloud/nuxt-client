@@ -9,8 +9,9 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const {
 	createLegacyClientProxy,
 	createServerProxy,
+	createFileStorageProxy,
 } = require("./webpack-config/dev-server-config");
-const { isServer } = require("./src/router/server-route");
+const { isServer, isFileStorage } = require("./src/router/server-route");
 const { isVueClient } = require("./src/router/vue-client-route");
 
 const vueClientProxy = createProxyMiddleware({
@@ -20,13 +21,17 @@ const vueClientProxy = createProxyMiddleware({
 
 const legacyClientProxy = createLegacyClientProxy();
 const serverProxy = createServerProxy();
+const fileStorageProxy = createFileStorageProxy();
 
 const app = express();
 
 app.use((req, res, next) => {
 	const path = url.parse(req.originalUrl).pathname;
 
-	if (isServer(path)) {
+	if (isFileStorage(path)) {
+		// console.log("--- serverPath: ", path);
+		fileStorageProxy(req, res, next);
+	} else if (isServer(path)) {
 		// console.log("--- serverUrl: ", path);
 		serverProxy(req, res, next);
 	} else if (isVueClient(path)) {
