@@ -7,6 +7,8 @@
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@input="handleInput"
+		@focus="handleFocus"
+		@blur="handleBlur"
 	/>
 </template>
 
@@ -24,7 +26,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input"],
+	emits: ["input", "focus", "blur"],
 	props: {
 		value: {
 			type: String,
@@ -46,6 +48,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
+		const ck = ref(null);
 		const content = ref(props.value);
 		const language = (() => {
 			// map ua to correct uk
@@ -167,12 +170,21 @@ export default defineComponent({
 		};
 
 		const handleInput = () => emit("input", content.value);
+		const handleFocus = () => emit("focus");
+
+		const blurDelay = 200;
+		const handleBlur = () => {
+			setTimeout(() => emit("blur"), blurDelay);
+		};
 
 		return {
+			ck,
 			content,
 			CustomCKEditor,
 			config,
 			handleInput,
+			handleFocus,
+			handleBlur,
 		};
 	},
 });
@@ -180,4 +192,18 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
+
+// TODO move all style to ckbuild
+.ck-blurred {
+	border: none !important;
+}
+
+.ck-focused {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.ck.ck-editor__editable_inline > :last-child {
+	margin-bottom: 34px !important;
+}
 </style>
