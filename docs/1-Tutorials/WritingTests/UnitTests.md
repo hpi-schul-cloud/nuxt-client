@@ -65,9 +65,10 @@ HelloWorld.unit.ts
 Especially in large test-files it is very helpful for the reader to have a tree-like structure grouping the tests. So use describe blocks to group tests that are related to the same aspect of your code/the functionality.
 
 1. describe block that contains the filename in the root-level of the test-file
-2. sub-describe-blocks for groups of tests focussing the same aspects of your code 
+2. sub-describe-blocks for groups of tests focussing the same aspects of your code
 
 *Example:*
+
 ```JavaScript
 describe('@components/share/ImportModal', () => {
     describe('when action button is clicked', () => {
@@ -124,8 +125,9 @@ expect(
 ```
 
 Consider using refs instead of data-testids, too but ensure not to remove them once they are in the code... as they can be used in the component-code and for testing:
-- https://vuejs.org/guide/essentials/template-refs.html
-- https://v1.test-utils.vuejs.org/api/#ref
+
+- [VueJs - template refs](https://vuejs.org/guide/essentials/template-refs.html)
+- [VueTestUtils - ref](https://v1.test-utils.vuejs.org/api/#ref)
 
 ### Setup-methods
 
@@ -138,14 +140,10 @@ Separate your setup from your actual tests: If you need a more complex setup to 
 Use the trigger()-method to simulate a events
 [Testing Key, Mouse and other DOM events](https://v1.test-utils.vuejs.org/guides/#testing-key-mouse-and-other-dom-events)
 
-- **Mouse-Click**: https://v1.test-utils.vuejs.org/guides/#trigger-events
-- **Keyboard-Input**: https://v1.test-utils.vuejs.org/guides/#keyboard-example
+- **Mouse-Click**: [VueTestUtils - trigger events](https://v1.test-utils.vuejs.org/guides/#trigger-events)
+- **Keyboard-Input**: [VueTestUtils - keyboard example](https://v1.test-utils.vuejs.org/guides/#keyboard-example)
 - **Drag & Drop**: trigger the events (e.g. dragstart, drop) and check for emitted events as reaction to that
-- **Event from a child component**: https://v1.test-utils.vuejs.org/guides/#emitting-event-from-child-component
-
-  ```TypeScript
-  wrapper.findComponent(ChildComponent).vm.$emit('custom');
-  ```
+- **Event from a child component**: [VueTestUtils - emitting from child component](https://v1.test-utils.vuejs.org/guides/#emitting-event-from-child-component)
 
 ### Testing Asynchronous Behavior
 
@@ -164,9 +162,10 @@ await btnNext.trigger("click");
 ...
 ```
 
-**see also**: https://v1.test-utils.vuejs.org/guides/#testing-asynchronous-behavior
+**see also**: [VueTestUtils - Testing Asynchronous Behavior](https://v1.test-utils.vuejs.org/guides/#testing-asynchronous-behavior)
 
 ### Exceptions
+
 ```TypeScript
 await expect(() => copyModule.copy(payload)).rejects.toThrow(
     `CopyProcess unknown type: ${payload.type}`
@@ -174,6 +173,7 @@ await expect(() => copyModule.copy(payload)).rejects.toThrow(
 ```
 
 ### console.error
+
 ```TypeScript
 // UserMigration.page.unit.ts
 const consoleErrorSpy = jest
@@ -190,7 +190,7 @@ consoleErrorSpy.mockRestore();
 
 ### Testing Composables
 
-- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#testing-composables
+- [VueTestUtils - Testing composables](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#testing-composables)
 
 ## Mocking
 
@@ -226,8 +226,8 @@ See also here: [VueTestUtils mount - mocks and stubs are now in global](https://
 
 ### Mocking injections
 
-- https://v1.test-utils.vuejs.org/guides/#mocking-injections
-- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#provide-inject
+- [Vue.js - Mocking injections](https://v1.test-utils.vuejs.org/guides/#mocking-injections)
+- [VueTestUtils - provide / inject](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#provide-inject)
 
 ### Mocking Vuex-Store
 
@@ -290,16 +290,19 @@ it("should set something", () => {
 
 ### Mocking Composables
 
-- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html
+Sometimes - if a composable is simple and does not create sideeffects - it is okay to use it in the tests and avoid mocking it.
 
-- Example #1:
-  -   src/composables/drag.unit.ts
-        for simple composable file
+That's beneficial as it let's us stick to the BlackBox-Idea: we should not know what the component is using internally.
 
-- Example #2:
-  -   src/composables/copy.unit.ts
-        for complex composable files which use `lifecycle hooks` or `provide/inject` handling
+If you need to mock a composable, you can simple do this like in the following example. You only have to ensure to return everything the composable returns... but mocked versions of it.
 
+```TypeScript
+...
+jest.spyOn(ourExampleComposable, "useExample").mockReturnValue({
+  // return mocks of what the composable would have returned
+});
+...
+```
 
 
 ## Components that are hard to test
