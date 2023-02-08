@@ -4,7 +4,6 @@ module.exports = {
 	root: true,
 	env: {
 		node: true,
-		"vue/setup-compiler-macros": true,
 	},
 	extends: [
 		"plugin:vue/essential",
@@ -35,12 +34,6 @@ module.exports = {
 		"vue/no-v-text-v-html-on-component": NUXT_REMOVAL ? "warn" : "error",
 		"no-prototype-builtins": NUXT_REMOVAL ? "warn" : "error",
 		"no-empty": NUXT_REMOVAL ? "warn" : "error",
-		"vue/valid-v-slot": [
-			"error",
-			{
-				allowModifiers: true,
-			},
-		],
 	},
 	overrides: [
 		{

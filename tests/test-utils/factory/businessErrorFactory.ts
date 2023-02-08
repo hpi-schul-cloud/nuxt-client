@@ -5,7 +5,7 @@ export const businessErrorFactory = (
 ): BusinessError => {
 	return {
 		statusCode: "400",
-		error: {},
+		error: undefined,
 		message: "message",
 	};
 };

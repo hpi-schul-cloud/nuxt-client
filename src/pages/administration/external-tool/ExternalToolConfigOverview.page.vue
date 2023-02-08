@@ -67,7 +67,6 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import { externalToolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import {
 	ToolConfiguration,
@@ -77,7 +76,8 @@ import { useRouter } from "vue-router/composables";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import DefaultWireframe from "../../../components/templates/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ExternalToolsModule from "@/store/external-tools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -89,7 +89,9 @@ export default defineComponent({
 	},
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const externalToolsModule: ExternalToolsModule | undefined =
+			inject<ExternalToolsModule>("externalToolsModule");
+		if (!i18n || !externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
