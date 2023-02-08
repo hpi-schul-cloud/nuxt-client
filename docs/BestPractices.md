@@ -90,5 +90,8 @@ If you write a composable:
 - should be placed in your feature folder (see section "Vue project structure" above), if it is only used inside of your feature
 - should be placed in the global folder ``/ src / composables``, if it is used in multiple features
 
+### Using generated API and it's types
+
+{{ tbd }}
 
 // TODO: check all meeting notes older than 2022-10-14
