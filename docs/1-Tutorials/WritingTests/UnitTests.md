@@ -8,7 +8,7 @@ Writing good tests that cover all aspects of your code, leads to:
 
 - **confidence**: to refactor your code
 - **higher code quality**: as you review your code and identify problems when writing tests
-- **well documented code**: as a test describes how your code works
+- **well documented code**: as your tests describe how your code works
 
 and by that to:
 
