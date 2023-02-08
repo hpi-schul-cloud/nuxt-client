@@ -1,8 +1,33 @@
-# Writing "Unit"-Tests (v0.3)
+# Writing "Unit"-Tests
 
 This doc is meant to help you write valuable, reliable tests, that are easy to maintain.
 
 ## Basics
+
+### Unit-Tests vs. Component-Tests
+
+#### Unit-Tests
+
+Unit-Tests are **WhiteBox-Tests**. So they may use knowledge of internals of the code. They are well suited for testing e.g. **composables** and **stores**.
+
+#### Component-Tests
+
+Component-Tests are **BlackBox-Tests**. So they are not allowed to use any knowledge of the internals of the component.
+They ensure the stability of the **public interface** of the component (aka its methods, props, events etc.).
+The enable us to **refactor** the internals of our components later on.
+
+### Positive & negative Tests
+
+- **positive tests** test the default cases of your code = **how it should work**
+- **negative tests** test **error-cases** or **exception**-behaviour
+- you need to write both to ensure your component works correctly
+- think of edge-cases that might break your component e.g. when providing input to the component:
+  - **numbers**: high numbers, negative numbers, float<->integer, at the edge of a range that is expected...
+  - **dates**: none existing dates e.g. 30th February 2023, far away future,...
+  - **strings**: umlauts, url-special-characters (?, &, =, \/\/: ), very long strings for names, long strings without linebreaks
+  - **totally incorrect data**: e.g. giving a string instead of a number
+
+### Use Vue-Test-Utils
 
 For testing our Vue-Components we use the **Vue Test Utils**. Vue Test Utils is a library that provides methods to help you write tests for your Vue components. It provides methods to mount, shallow mount, and render components, as well as methods to simulate events and find elements in the rendered output.
 
@@ -12,15 +37,15 @@ Some functionality it provides:
 - **shallowMount()**: create a shallow wrapper of the component being tested with childcomponents being mocked
 - **setMethods()**: mock function on the component
 - **setProps()**: set a specific set of props on the component
-- **find() / findAll()**: search for specific elements **(not components)** in a component (**find() and findAll() -> deprecated for finding Copmponents**) 
-    - https://v1.test-utils.vuejs.org/api/wrapper/#find
-    - Using find to search for a **Component** is deprecated and will be removed. Use findComponent instead.
-    - The find method will continue to work for finding **elements** using any valid selector.
 - **findComponent()**: finds a component by it's class, name or ref
+- **findAllComponents()**: finds all components by it's class, name or ref
+- **[find() / findAll()](https://v1.test-utils.vuejs.org/api/wrapper/#find)**: search for html elements using html-selectors
+  - **deprecated for finding Copmponents**
+  - use findComponent() or findAllComponents() instead
 - **setData()**: set specific data on the component
 - **trigger()** + **emit()**: test events and the flow of data
 
-We think the **Vue Test Utils-documentation** is a valuable resource for learning how to test Vue-Components and a very good starting point on how to test certain aspects of your component. Please have a look at https://test-utils.vuejs.org/guide
+We think the **Vue Test Utils-documentation** is a valuable resource for learning how to test Vue-Components and a very good starting point on how to test certain aspects of your component. Please have a look at [https://test-utils.vuejs.org/guide](https://test-utils.vuejs.org/guide)
 
 ### Use TypeScript
 
@@ -42,7 +67,7 @@ Especially in large test-files it is very helpful for the reader to have a tree-
 1. describe block that contains the filename in the root-level of the test-file
 2. sub-describe-blocks for groups of tests focussing the same aspects of your code 
 
-*example:* **HelloWorld.unit.ts**
+*Example:*
 ```JavaScript
 describe('@components/share/ImportModal', () => {
     describe('when action button is clicked', () => {
@@ -63,7 +88,8 @@ describe('@components/share/ImportModal', () => {
 
 There is a reason we use the it-alias for writing our code and not the test-method: we want to describe the aspect that is tested in a natural sentence. That's why it is best practice to start your test with: it('should ...');
 
-*example:*
+*Example:*
+
 ```TypeScript
 Bad:
 it('name changes on button click')
@@ -73,34 +99,37 @@ Good:
 it('should display the info text', ... );
 it('should not render migration start button', ... );
 it('should return the translation', ... );
-````
+```
+
+### data-testids
+
+Data-testids are attributes to HTML-elements that are solely used to enable tests to find and check a certain aspect of that tag (often to check the contained text against some expected value).
+
+We decided to unify the way data-testid's should be named in Frontend Arch Group: [Meeting 2022-11-04](https://docs.dbildungscloud.de/x/mYHADQ)
+
+Please use ``<div ... data-testid="some-example" ...>`` in your HTML-code if you want to define a data-testid.
+
+- do not use uppercase-characters
+- only use one dash - right after data
+
+You can later on check this using:
+
+```TypeScript
+// CopyResultModal.unit.ts
+expect(
+  wrapper.find('[data-testid="copy-result-notifications"]').text()
+).toContain(
+  wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+);
+```
+
+Consider using refs instead of data-testids, too but ensure not to remove them once they are in the code... as they can be used in the component-code and for testing:
+- https://vuejs.org/guide/essentials/template-refs.html
+- https://v1.test-utils.vuejs.org/api/#ref
 
 ### Setup-methods
 
 Separate your setup from your actual tests: If you need a more complex setup to test something - write a scope method called "setup" for it. Write it in a reusable and configurable way, in order to reuse most of it in several groups of tests. You will get small and easily readable tests and no redudant setup-code inside your tests that contains small differences that are hard to detect.
-
-### Unit-Tests vs. Component-Tests
-
-#### Unit-Tests
-- are aiming for **code coverage**
-- are **WhiteBox-Tests** and may use knowledge of internals of the code
-- are well suited for testing e.g. composables and stores
-
-#### Component-Tests
-- are **BlackBox-Tests**: they are not allowed to use any knowledge of the internals of the component
-- ensure that the **public interface** of the component (aka it's methods, parameters, events etc.) is stable
-- enable you to **refactor** your component in a reliable way
-
-### Positive & negative Tests
-- **positive tests** test the default cases of your code = **how it should work**
-- **negative tests** test **error-cases** or **exception**-behaviour
-- you need to write both to ensure your component works correctly
-- think of edge-cases that might break your component e.g. when providing input to the component:
-  - **numbers**: high numbers, negative numbers, float<->integer, at the edge of a range that is expected...
-  - **dates**: none existing dates e.g. 30th February 2023, far away future,...
-  - **strings**: umlauts, url-special-characters (?, &, =, \/\/: ), very long strings for names, long strings without linebreaks
-  - **totally incorrect data**: e.g. giving a string instead of a number
-
 
 ## Testing
 
@@ -108,6 +137,7 @@ Separate your setup from your actual tests: If you need a more complex setup to 
 
 Use the trigger()-method to simulate a events
 [Testing Key, Mouse and other DOM events](https://v1.test-utils.vuejs.org/guides/#testing-key-mouse-and-other-dom-events)
+
 - **Mouse-Click**: https://v1.test-utils.vuejs.org/guides/#trigger-events
 - **Keyboard-Input**: https://v1.test-utils.vuejs.org/guides/#keyboard-example
 - **Drag & Drop**: trigger the events (e.g. dragstart, drop) and check for emitted events as reaction to that
@@ -119,21 +149,31 @@ Use the trigger()-method to simulate a events
 
 ### Testing Asynchronous Behavior
 
-You can test asynchronous behavior by using ***nextTick*** OR by ***trigger***ing an effect and ***await***ing this effect to take place:
+You can test asynchronous behavior by using ***Vue.nextTick()***:
 
 ```TypeScript
 await Vue.nextTick();
 ...
-await button.trigger('click');
 ```
-**more**: https://v1.test-utils.vuejs.org/guides/#testing-asynchronous-behavior
+
+OR by ***trigger***ing an effect and ***await***ing this effect to take place:
+
+```TypeScript
+const btnNext = wrapper.find(`[data-testid="dialog-next"]`);
+await btnNext.trigger("click");
+...
+```
+
+**see also**: https://v1.test-utils.vuejs.org/guides/#testing-asynchronous-behavior
 
 ### Exceptions
-
-...
+```TypeScript
+await expect(() => copyModule.copy(payload)).rejects.toThrow(
+    `CopyProcess unknown type: ${payload.type}`
+);
+```
 
 ### console.error
-Mock the console.error-method like in this test:
 ```TypeScript
 // UserMigration.page.unit.ts
 const consoleErrorSpy = jest
@@ -148,10 +188,9 @@ expect(consoleErrorSpy).toHaveBeenCalledWith(
 consoleErrorSpy.mockRestore();
 ```
 
-### Others
+### Testing Composables
 
-- [Composables](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#testing-composables)
-- [Provide / inject](https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#provide-inject)
+- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#testing-composables
 
 ## Mocking
 
@@ -187,7 +226,8 @@ See also here: [VueTestUtils mount - mocks and stubs are now in global](https://
 
 ### Mocking injections
 
-https://v1.test-utils.vuejs.org/guides/#mocking-injections
+- https://v1.test-utils.vuejs.org/guides/#mocking-injections
+- https://test-utils.vuejs.org/guide/advanced/reusability-composition.html#provide-inject
 
 ### Mocking Vuex-Store
 
@@ -195,7 +235,7 @@ https://v1.test-utils.vuejs.org/guides/#mocking-injections
 
 Example file: `src/components/administration/AdminMigrationSection.unit.ts`
 
-```
+```TypeScript
 import { createModuleMocks } from "@/utils/mock-store-module";
 import YourModule from "@/store/YourModule";
 
@@ -223,14 +263,12 @@ expect(yourModule.<yourMethodName>).toHaveBeenCalledWith(...);
 
 #### Testing a store:
 
-```
+```TypeScript
 import YourModule from "./your-module";
 
 const yourModule = new YourModule({});
 
-.
-.
-.
+...
 
 // using `jest.spyOn()`
 it("should call something", () => {
@@ -248,9 +286,10 @@ it("should set something", () => {
 
 ### Mocking Pinia-Stores
 
-Discuss/have a workshop on "How to write components that are easy to test?" results => BrownBag {{ tbd }}
+***{{ tbd }}** (when Pinia-Stores are enabled for the project)*
 
 ### Mocking Composables
+
 - https://test-utils.vuejs.org/guide/advanced/reusability-composition.html
 
 - Example #1:
@@ -261,9 +300,7 @@ Discuss/have a workshop on "How to write components that are easy to test?" resu
   -   src/composables/copy.unit.ts
         for complex composable files which use `lifecycle hooks` or `provide/inject` handling
 
-### data-testids
 
-data-testid vs...ä {{ tbd }}
 
 ## Components that are hard to test
 
