@@ -182,7 +182,9 @@ export default {
 						if (this.systemData.searchUserPassword === unchangedPassword) {
 							this.systemData.searchUserPassword = undefined;
 						}
+
 						const systemData = { ...this.systemData };
+
 						await this.$store.dispatch("ldap-config/verifyExisting", {
 							systemData,
 							systemId,
