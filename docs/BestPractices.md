@@ -9,7 +9,7 @@ Please use ``<div ... data-testid="some-example" ...>`` in your HTML-code if you
 - do not use uppercase-characters
 - only use one dash - right after data
 
-We also recommend to use refs instead of data-testids. But if you do that you ensure not to remove them once they are in the code... as they can be used in the component-code and for testing:
+We also recommend to use **ref**s instead of data-testids. But if you do that, you need to be careful when removing them... as they could be used in the component-code AND in tests:
 
 - [VueJs - template refs](https://vuejs.org/guide/essentials/template-refs.html)
 - [VueTestUtils - ref](https://v1.test-utils.vuejs.org/api/#ref)
