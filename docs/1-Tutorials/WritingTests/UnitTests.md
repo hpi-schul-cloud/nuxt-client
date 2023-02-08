@@ -41,7 +41,7 @@ Especially in large test-files it is very helpful for the reader to have a tree-
 
 *example:* **HelloWorld.unit.ts**
 ```JavaScript
-describe('HelloWorld', () => {
+describe('@components/share/ImportModal', () => {
     describe('when action button is clicked', () => {
         ...
     });
