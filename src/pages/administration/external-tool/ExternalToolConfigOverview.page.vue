@@ -39,7 +39,13 @@
 			{{ $t(getTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
-			<v-btn class="mr-2" color="secondary" outlined @click="onCancel">
+			<v-btn
+				class="mr-2"
+				color="secondary"
+				outlined
+				@click="onCancel"
+				data-testId="cancel-button"
+			>
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
@@ -48,6 +54,7 @@
 				depressed
 				:disabled="!parametersValid"
 				@click="saveTool"
+				data-testId="save-button"
 			>
 				{{ $t("pages.tool.addBtn.label") }}
 			</v-btn>
@@ -111,7 +118,7 @@ export default defineComponent({
 
 		const schoolSetting: Breadcrumb = {
 			text: t("pages.administration.school.index.title"),
-			to: "/administration/school-settings#tools",
+			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{

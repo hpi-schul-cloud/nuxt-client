@@ -896,7 +896,7 @@
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"pages.files.title": "Files",
 	"pages.tool.title": "External Tools Configuration",
-	"pages.tool.description": "The school-specific parameters for the External Tool are configured here.\nAfter saving the configuration, the Tool is available inside the school.<br><br>\nDeleting a configuration removes the Tool from the school.<br><br>\nMore information can be found in our <a>Help section on External Tools</a>.",
+	"pages.tool.description": "The school-specific parameters for the External Tool are configured here.\nAfter saving the configuration, the Tool is available inside the school.<br><br>\nDeleting a configuration removes the Tool from the school.<br><br>\nMore information can be found in our <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Help section on External Tools</a>.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.select.label": "Tool selection",
 	"pages.tool.addBtn.label": "Add Tool",

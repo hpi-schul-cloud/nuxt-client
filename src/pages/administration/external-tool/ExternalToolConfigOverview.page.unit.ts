@@ -27,6 +27,11 @@ describe("ExternalToolConfigOverview", () => {
 			...getters,
 		}) as jest.Mocked<ExternalToolsModule>;
 
+		const routerPush = jest.fn();
+		const $router = {
+			push: routerPush,
+		};
+
 		const wrapper: Wrapper<any> = mount(ExternalToolConfigOverviewPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -35,10 +40,14 @@ describe("ExternalToolConfigOverview", () => {
 				i18n: { t: (key: string) => key },
 				externalToolsModule,
 			},
+			mocks: {
+				$router,
+			},
 		});
 
 		return {
 			wrapper,
+			routerPush,
 		};
 	};
 
@@ -170,7 +179,7 @@ describe("ExternalToolConfigOverview", () => {
 			expect(selectionRow.find("span").text().includes(name));
 		});
 
-		it("should load template when toolConfiguration was changed", async () => {
+		it("should load template when tool configuration was changed", async () => {
 			const id = "expectedToolId";
 			const { wrapper } = setup({
 				getToolConfigurations: [toolConfigurationFactory({ id })],
@@ -183,7 +192,7 @@ describe("ExternalToolConfigOverview", () => {
 			).toHaveBeenCalledWith(id);
 		});
 
-		it("should set parameters valid on select to true", async () => {
+		it("should set parameters valid on selection", async () => {
 			const id = "expectedToolId";
 			const { wrapper } = setup({
 				getToolConfigurations: [toolConfigurationFactory({ id })],
@@ -192,6 +201,61 @@ describe("ExternalToolConfigOverview", () => {
 			await openSelect(wrapper);
 
 			expect(wrapper.vm.parametersValid).toBeTruthy();
+		});
+	});
+
+	describe("cancel button", () => {
+		it("should change page when cancel button was clicked", async () => {
+			const { wrapper, routerPush } = setup();
+
+			await wrapper.find('[data-testid="cancel-button"]').trigger("click");
+
+			expect(routerPush).toHaveBeenCalledWith({
+				path: "/administration/school-settings",
+			});
+		});
+	});
+
+	describe("save button", () => {
+		it("should call store action to save tool", async () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.parametersValid = true;
+			const saveButton = wrapper.find('[data-testid="save-button"]');
+			await saveButton.vm.$emit("click");
+
+			expect(externalToolsModule.saveSchoolExternalTool).toHaveBeenCalledWith(
+				wrapper.vm.toolTemplate
+			);
+		});
+
+		it("should redirect back to school settings page when there is no error", async () => {
+			const { wrapper, routerPush } = setup({
+				getBusinessError: businessErrorFactory({ message: undefined }),
+			});
+
+			wrapper.vm.parametersValid = true;
+			const saveButton = wrapper.find('[data-testid="save-button"]');
+			await saveButton.vm.$emit("click");
+
+			expect(routerPush).toHaveBeenCalledWith({
+				path: "/administration/school-settings",
+			});
+		});
+
+		it("should display alert when server side error on save occurred", async () => {
+			const { wrapper, routerPush } = setup({
+				getBusinessError: businessErrorFactory({
+					message: "someErrorOccurred",
+				}),
+			});
+
+			wrapper.vm.parametersValid = true;
+			const saveButton = wrapper.find('[data-testid="save-button"]');
+			await saveButton.vm.$emit("click");
+
+			expect(routerPush).not.toHaveBeenCalled();
+			expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
 		});
 	});
 });
