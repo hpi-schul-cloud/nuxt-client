@@ -100,7 +100,7 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
+import { useExternalToolMappings } from "../../composables/external-tool-mappings.composable";
 import { SchoolExternalTool } from "@/store/external-tool";
 
 export default defineComponent({
@@ -151,7 +151,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useExternalToolUtils().mapSchoolExternalToolItemToSchoolExternalTool(
+					useExternalToolMappings().mapSchoolExternalToolItemToSchoolExternalTool(
 						itemToDelete.value
 					);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);

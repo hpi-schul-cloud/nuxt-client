@@ -24,7 +24,7 @@
 				/>
 			</template>
 			<template #item="{ item }">
-				<external-tool-selection-row :item="item" />
+				<external-tool-selection-row :item="item"/>
 			</template>
 		</v-select>
 		<template v-if="toolTemplate.parameters.length > 0">
@@ -65,23 +65,12 @@
 <script lang="ts">
 import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
-import { useExternalToolUtils } from "@/composables/external-tool-utils.composable";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	onMounted,
-	ref,
-	Ref,
-} from "vue";
-import { BusinessError } from "@/store/types/commons";
-import {
-	ToolConfiguration,
-	ToolConfigurationTemplate,
-} from "@/store/external-tool";
-import { useRouter } from "vue-router/composables";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import {useExternalToolMappings} from "../../../composables/external-tool-mappings.composable";
+import {computed, ComputedRef, defineComponent, inject, onMounted, ref, Ref,} from "vue";
+import {BusinessError} from "@/store/types/commons";
+import {ToolConfiguration, ToolConfigurationTemplate,} from "@/store/external-tool";
+import {useRouter} from "vue-router/composables";
+import {Breadcrumb} from "@/components/templates/default-wireframe.types";
 import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -132,7 +121,7 @@ export default defineComponent({
 			},
 		];
 
-		const { getTranslationKey } = useExternalToolUtils();
+		const {getTranslationKey} = useExternalToolMappings();
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
@@ -147,7 +136,13 @@ export default defineComponent({
 		const parametersValid: Ref<boolean> = ref(false);
 
 		const toolTemplate: Ref<ToolConfigurationTemplate> = ref(
-			new ToolConfigurationTemplate()
+			{
+				id: "",
+				name: "",
+				logoUrl: undefined,
+				parameters: [],
+				version: 0
+			}
 		);
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			toolTemplate.value =
@@ -159,14 +154,14 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
-			router.push({ path: schoolSetting.to });
+			router.push({path: schoolSetting.to});
 		};
 
 		const saveTool = async () => {
 			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
 
 			if (!externalToolsModule.getBusinessError.message) {
-				await router.push({ path: schoolSetting.to });
+				await router.push({path: schoolSetting.to});
 			}
 		};
 

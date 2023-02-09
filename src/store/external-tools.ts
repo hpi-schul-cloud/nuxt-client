@@ -7,7 +7,7 @@ import {
 } from "./external-tool";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { useExternalToolUtils } from "../composables/external-tool-utils.composable";
+import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
 import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
@@ -103,7 +103,7 @@ export default class ExternalToolsModule extends VuexModule {
 						authModule.getUser.schoolId
 					);
 				const schoolExternalTools: SchoolExternalTool[] =
-					useExternalToolUtils().mapSchoolExternalToolSearchListResponse(
+					useExternalToolMappings().mapSchoolExternalToolSearchListResponse(
 						resp.data
 					);
 				this.setSchoolExternalTools(schoolExternalTools);
@@ -152,12 +152,12 @@ export default class ExternalToolsModule extends VuexModule {
 			if (authModule.getUser?.schoolId) {
 				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
 					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
-						ToolConfigurationScope.SCHOOL,
+						ToolConfigurationScope.school,
 						authModule.getUser.schoolId
 					);
 
 				this.setToolConfigurations(
-					useExternalToolUtils().mapToolConfigurationListResponse(
+					useExternalToolMappings().mapToolConfigurationListResponse(
 						availableTools.data
 					)
 				);
@@ -188,7 +188,7 @@ export default class ExternalToolsModule extends VuexModule {
 					toolId
 				);
 			const toolConfigurationTemplate: ToolConfigurationTemplate =
-				useExternalToolUtils().mapExternalToolConfigurationTemplateResponse(
+				useExternalToolMappings().mapExternalToolConfigurationTemplateResponse(
 					configTemplate.data
 				);
 			this.setLoading(false);
@@ -204,7 +204,13 @@ export default class ExternalToolsModule extends VuexModule {
 				message: e?.response?.data.message,
 			});
 			this.setLoading(false);
-			return new ToolConfigurationTemplate();
+			return {
+				id: "",
+				name: "",
+				logoUrl: undefined,
+				parameters: [],
+				version: 0,
+			};
 		}
 	}
 
@@ -217,7 +223,7 @@ export default class ExternalToolsModule extends VuexModule {
 			this.resetBusinessError();
 			if (authModule.getUser?.schoolId) {
 				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-					useExternalToolUtils().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
+					useExternalToolMappings().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
 						toolTemplate,
 						authModule.getUser.schoolId
 					);

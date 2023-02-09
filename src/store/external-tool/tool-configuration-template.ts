@@ -1,6 +1,6 @@
 import { ToolParameter } from "./tool-parameter";
 
-export class ToolConfigurationTemplate {
+export interface ToolConfigurationTemplate {
 	id: string;
 
 	name: string;
@@ -10,12 +10,4 @@ export class ToolConfigurationTemplate {
 	parameters: ToolParameter[];
 
 	version: number;
-
-	constructor() {
-		this.id = "";
-		this.name = "";
-		this.logoUrl = undefined;
-		this.parameters = [];
-		this.version = 0;
-	}
 }

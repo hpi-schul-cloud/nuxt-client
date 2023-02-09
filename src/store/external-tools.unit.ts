@@ -25,7 +25,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { User } from "./types/auth";
 import AuthModule from "@/store/auth";
 import { authModule } from "@/store";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-utils.composable";
+import * as useExternalToolUtilsComposable from "../composables/external-tool-mappings.composable";
 import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
@@ -489,9 +489,9 @@ describe("ExternalToolsModule", () => {
 						.fn()
 						.mockReturnValue([{ id: "toolId" }]);
 					jest
-						.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 						.mockReturnValue({
-							...useExternalToolUtilsComposable.useExternalToolUtils(),
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
 							mapSchoolExternalToolSearchListResponse:
 								mapSchoolExternalToolSearchListResponseMock,
 						});
@@ -658,7 +658,7 @@ describe("ExternalToolsModule", () => {
 
 					expect(
 						toolApiMock.toolConfigurationControllerGetAvailableToolsForSchool
-					).toHaveBeenCalledWith(ToolConfigurationScope.SCHOOL, schoolId);
+					).toHaveBeenCalledWith(ToolConfigurationScope.school, schoolId);
 				});
 
 				it("should call mapToolConfigurationListResponse", async () => {
@@ -668,9 +668,9 @@ describe("ExternalToolsModule", () => {
 						.fn()
 						.mockReturnValue([{ id: "toolId" }]);
 					jest
-						.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 						.mockReturnValue({
-							...useExternalToolUtilsComposable.useExternalToolUtils(),
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
 							mapToolConfigurationListResponse:
 								mapToolConfigurationListResponseMock,
 						});
@@ -768,9 +768,9 @@ describe("ExternalToolsModule", () => {
 					.fn()
 					.mockReturnValue([{ id: "toolId" }]);
 				jest
-					.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+					.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 					.mockReturnValue({
-						...useExternalToolUtilsComposable.useExternalToolUtils(),
+						...useExternalToolUtilsComposable.useExternalToolMappings(),
 						mapExternalToolConfigurationTemplateResponse:
 							mapExternalToolConfigurationTemplateResponseMock,
 					});
@@ -858,9 +858,9 @@ describe("ExternalToolsModule", () => {
 					const mapToolConfigurationTemplateToSchoolExternalToolPostParamsMock =
 						jest.fn().mockReturnValue([{ toolId: "toolId" }]);
 					jest
-						.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 						.mockReturnValue({
-							...useExternalToolUtilsComposable.useExternalToolUtils(),
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
 							mapToolConfigurationTemplateToSchoolExternalToolPostParams:
 								mapToolConfigurationTemplateToSchoolExternalToolPostParamsMock,
 						});
@@ -880,9 +880,9 @@ describe("ExternalToolsModule", () => {
 						toolId: "toolId",
 					} as SchoolExternalToolPostParams;
 					jest
-						.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 						.mockReturnValue({
-							...useExternalToolUtilsComposable.useExternalToolUtils(),
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
 							mapToolConfigurationTemplateToSchoolExternalToolPostParams: () =>
 								schoolExternalToolPostParams,
 						});

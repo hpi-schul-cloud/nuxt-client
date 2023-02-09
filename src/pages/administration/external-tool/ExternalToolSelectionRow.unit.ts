@@ -1,11 +1,11 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import createComponentMocks from "../../../../tests/test-utils/componentMocks";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("ExternalToolSelectionRow", () => {
 	let wrapper: Wrapper<any>;
 
-	const setup = (maxHeight?: string, maxWidth?: string) => {
+	const setup = (maxHeight?: number, maxWidth?: number) => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(ExternalToolSelectionRow, {
 			...createComponentMocks({}),
@@ -47,14 +47,16 @@ describe("ExternalToolSelectionRow", () => {
 		});
 
 		it("should have sizes from props", () => {
-			const expectedMaxHeight = "10";
-			const expectedMaxWidth = "15";
+			const expectedMaxHeight = 10;
+			const expectedMaxWidth = 15;
 			setup(expectedMaxHeight, expectedMaxWidth);
 
 			const image = wrapper.find("v-img-stub");
 
-			expect(image.attributes("maxheight")).toEqual(expectedMaxHeight);
-			expect(image.attributes("maxwidth")).toEqual(expectedMaxWidth);
+			expect(image.attributes("maxheight")).toEqual(
+				expectedMaxHeight.toString()
+			);
+			expect(image.attributes("maxwidth")).toEqual(expectedMaxWidth.toString());
 		});
 	});
 });

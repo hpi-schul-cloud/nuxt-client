@@ -7,15 +7,15 @@ import {
 	businessErrorFactory,
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-utils.composable";
+import * as useExternalToolUtilsComposable from "../../../composables/external-tool-mappings.composable";
 
 describe("ExternalToolConfigOverview", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolUtils")
+		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolUtils(),
+			...useExternalToolUtilsComposable.useExternalToolMappings(),
 			getTranslationKey: () => "",
 		});
 
@@ -40,6 +40,7 @@ describe("ExternalToolConfigOverview", () => {
 				i18n: { t: (key: string) => key },
 				externalToolsModule,
 			},
+			propsData: {},
 			mocks: {
 				$router,
 			},

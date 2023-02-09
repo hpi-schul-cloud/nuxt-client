@@ -10,13 +10,14 @@ import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
+import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	const setup = (
 		getter: Partial<ExternalToolsModule> = {},
-		template: ToolConfigurationTemplate = new ToolConfigurationTemplate()
+		template: ToolConfigurationTemplate = toolConfigurationTemplateFactory()
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
@@ -112,7 +113,7 @@ describe("ExternalToolConfigSettings", () => {
 	describe("parameters", () => {
 		const setupTemplate = (): ToolConfigurationTemplate => {
 			const template: ToolConfigurationTemplate =
-				new ToolConfigurationTemplate();
+				toolConfigurationTemplateFactory();
 			const param1 = {
 				name: "Parameter1",
 				type: ToolParameterType.String,

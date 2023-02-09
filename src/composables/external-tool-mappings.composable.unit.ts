@@ -3,7 +3,7 @@ import {
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "../serverApi/v3";
-import { useExternalToolUtils } from "./external-tool-utils.composable";
+import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
@@ -31,7 +31,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
-		} = useExternalToolUtils();
+		} = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
 			id: "id",

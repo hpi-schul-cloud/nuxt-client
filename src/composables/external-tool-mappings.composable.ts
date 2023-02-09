@@ -23,7 +23,7 @@ import {
 	ToolParameterType,
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
-import { BusinessError } from "../store/types/commons";
+import { BusinessError } from "@/store/types/commons";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -78,7 +78,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
 
-export function useExternalToolUtils() {
+export function useExternalToolMappings() {
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -114,18 +114,16 @@ export function useExternalToolUtils() {
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				default: resp.default,
+				default: resp.default, // ts-ignore needed here because we cant access _default value
 				isOptional: resp.isOptional,
 				regexComment: resp.regexComment,
 				location: ToolParamLocationMapping[resp.location],
 				regex: resp.regex,
 				type: ToolParamTypeMapping[resp.type],
 				scope: ToolParamScopeMapping[resp.scope],
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				value: resp.default ? resp.default : undefined,
+				value: resp.default ? resp.default : undefined, // ts-ignore needed here because we cant access _default value
 			};
 		});
 	};
