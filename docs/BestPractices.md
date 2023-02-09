@@ -102,14 +102,22 @@ If you write a composable:
 
 ### User-Permissions on Pages
 
+The permissions are controlled by `createPermissionGuard` middleware method that receives two parameters. The first parameter should contain an array of the `userPermission` that we want to give the users a permissions to reach the page. The second parameter is an optional fallback route. If the second parameter isn't provided and the user has no permission to reach the page, a `401` error page is shown.
+
 ```Typescript
+// src/router/routes.ts
 {
-    // src/router/routes.ts
-    path: "/administration/students/consent",
-    component: () => import("../pages/administration/StudentConsent.page.vue"),
-    name: "administration-students-consent",
-    beforeEnter: createPermissionGuard(["student_edit", "student_list"]),
+    path: "/your/route",
+    component: () => import("../pages/your.page.vue"),
+    name: "yourRouteName",
+    beforeEnter: createPermissionGuard(["permission_1", "permission_2"]),
+},
+
+// with a fallback route
+{
+    path: "/your/route",
+    component: () => import("../pages/your.page.vue"),
+    name: "yourRouteName",
+    beforeEnter: createPermissionGuard(["permission_1"], "/yourFallBackRoute"),
 },
 ```
-
-{{ tbd }}
