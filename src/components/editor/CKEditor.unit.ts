@@ -62,19 +62,43 @@ describe("@/components/editor/CKEditor", () => {
 		expect(wrapper.vm.config.plugins).toHaveLength(21);
 	});
 
-	// TODO: find out how to mock a component and trigger an event by this mock
-	// it("should emit input on content changes", async () => {
-	// 	const wrapper = getWrapper();
+	it("should emit input on content changes", async () => {
+		const wrapper = getWrapper();
 
-	// 	const ck = wrapper.findComponent({
-	// 		ref: "ck",
-	// 	});
+		const ck = wrapper.findComponent({
+			ref: "ck",
+		});
+		ck.vm.$emit("input");
+		await wrapper.vm.$nextTick();
 
-	// 	await ck.vm.$emit("input");
-	// 	// await wrapper.vm.$emit("input");
-	// 	await wrapper.vm.$nextTick();
-	// 	const emitted = wrapper.emitted();
+		const emitted = wrapper.emitted();
+		expect(emitted["input"]).toHaveLength(1);
+	});
 
-	// 	expect(emitted["input"]).toHaveLength(1);
-	// });
+	it("should emit focus on editor focus", async () => {
+		const wrapper = getWrapper();
+
+		const ck = wrapper.findComponent({
+			ref: "ck",
+		});
+		ck.vm.$emit("focus");
+		await wrapper.vm.$nextTick();
+
+		const emitted = wrapper.emitted();
+		expect(emitted["focus"]).toHaveLength(1);
+	});
+
+	it("should emit delayed blur on editor blur", async () => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+
+		const ck = wrapper.findComponent({
+			ref: "ck",
+		});
+		ck.vm.$emit("blur");
+		jest.advanceTimersByTime(200);
+
+		const emitted = wrapper.emitted();
+		expect(emitted["blur"]).toHaveLength(1);
+	});
 });

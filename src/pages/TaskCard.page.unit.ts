@@ -1,11 +1,7 @@
 import VueRouter from "vue-router";
 import { createLocalVue, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { User } from "@/store/types/auth";
 import TaskCard from "./TaskCard.page.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import TaskCardModule from "@/store/task-card";
-import AuthModule from "@/store/auth";
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -24,34 +20,6 @@ jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
 	taskCardModule: taskCardModuleMock(),
 }));
-
-const mockAuthStoreDataStudent: User = {
-	__v: 1,
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
-} as User;
-const mockAuthStoreDataTeacher: User = {
-	__v: 1,
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
-} as User;
-
-const mockTaskStoreData = {
-	id: "",
-	courseId: "",
-	name: "",
-	description: "",
-};
 
 const getWrapper = (props?: object, options?: object) => {
 	const componentOptions = createComponentMocks({ i18n: true });

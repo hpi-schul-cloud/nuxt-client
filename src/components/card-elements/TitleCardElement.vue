@@ -10,6 +10,7 @@
 			auto-grow
 			solo
 			flat
+			:aria-label="$t('components.cardElement.titleElement')"
 			:placeholder="placeholder"
 			@input="handleInput"
 		/>
@@ -58,7 +59,7 @@ export default defineComponent({
 }
 
 ::v-deep .v-textarea .v-input__slot {
-	padding: 0 !important;
+	padding: 0 0 0 var(--ck-spacing-standard) !important;
 	margin-bottom: 0;
 }
 
