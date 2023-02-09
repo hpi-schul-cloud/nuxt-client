@@ -70,10 +70,10 @@ interface CourseBoardTimestamps {
 interface CourseBoardColumn {
 	id: string;
 	title: string;
-	cards: CourseBoard_Skeleton_Card[]; // ?
+	cards: CourseBoardSkeletonCard[]; // ?
 }
 
-interface CourseBoard_Skeleton_Card {
+interface CourseBoardSkeletonCard {
 	//?
 	id: string;
 	height: number;
@@ -139,7 +139,7 @@ interface TitleContentElement {}
 // We want to prevent collisions or at least notify about collisions by versioning the board with an autoincrement ID on database manipulation
 // how we transfer the version on each request is up for debate.
 
-// PUT - Move a Card on the board
+// PATCH - Move a Card on the board
 // /boards/:boardId/movecard
 
 interface Payload {
@@ -163,7 +163,7 @@ interface Response {
 	version: number;
 }
 
-// PUT - Move a Column on the board
+// PATCH - Move a Column on the board
 // /boards/:boardId/movecolumn
 
 interface Payload {
@@ -209,7 +209,7 @@ interface Response {
 	version: number;
 }
 
-// PUT - Rename a Board
+// PATCH - Rename a Board
 // /boards/:boardId/renameboard
 
 interface Payload {
@@ -226,7 +226,7 @@ interface Response {
 	version: number;
 }
 
-// PUT - Rename a Column
+// PATCH - Rename a Column
 // /boards/:boardId/column/:columnId/rename
 
 interface Payload {
