@@ -98,7 +98,27 @@ If you write a composable:
 
 ### Consistent file names
 
-{{ tbd }}
+The File-Naming consistency should be like this.
+
+##### - Components:
+
+- `YourComponent.vue`
+
+##### - Pages:
+
+- `YourPageName.page.vue`
+
+##### - Layouts:
+
+- `yourLayoutName.layout.vue`
+
+##### - Stores / Composables / Utils:
+
+- `yourFileName.ts`
+
+##### - Test files:
+
+- `yourTestFile.unit.ts`
 
 ### User-Permissions on Pages
 
@@ -115,7 +135,8 @@ The permissions are controlled by `createPermissionGuard` middleware method that
     beforeEnter: createPermissionGuard(["permission_1"], "/yourFallBackRoute"),
 },
 
-// without a fallback, it shows a '401' file if the user doesn't have permissions
+// without a fallback, 
+// it shows a '401' file if the user doesn't have permissions
 {
     path: "/your/route",
     component: () => import("../pages/your.page.vue"),
