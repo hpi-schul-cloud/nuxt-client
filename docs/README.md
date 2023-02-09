@@ -9,7 +9,7 @@ footer: Copyright © 2019-present HPI Schul-Cloud
 ---
 
 
-### overview over subpages
+# Schulcloud Frontend - Documentation
 
 
 ## Accessibility
@@ -24,6 +24,6 @@ See: [Vuetify-Accessibility](https://vuetifyjs.com/en/features/accessibility/)
 
 // REMINDER: If we establish special a18n-components and/or tools - they should be described here
 
-
+## overview over subpages
 
 TODO: LIST ALL markdown-DOC-FILES AND DESCRIBE WHAT THEY CONTAIN

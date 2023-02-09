@@ -24,7 +24,7 @@ The so called "SchulCloud" is a plattform for all sorts of schools to organize l
 
 - Schulcloud-Client - the (partly still in use) legacy frontend
 - Schulcloud-Server - the backend of the SchulCloud-project (written in Node.js and based on Nest.js)
-// TODO: add Links (and additional repositories)
+- ... // TODO: add Links (and additional repositories)
 
 ## Code of Conduct
 
