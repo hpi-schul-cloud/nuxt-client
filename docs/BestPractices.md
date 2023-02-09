@@ -106,12 +106,6 @@ The permissions are controlled by `createPermissionGuard` middleware method that
 
 ```Typescript
 // src/router/routes.ts
-{
-    path: "/your/route",
-    component: () => import("../pages/your.page.vue"),
-    name: "yourRouteName",
-    beforeEnter: createPermissionGuard(["permission_1", "permission_2"]),
-},
 
 // with a fallback route
 {
@@ -120,4 +114,13 @@ The permissions are controlled by `createPermissionGuard` middleware method that
     name: "yourRouteName",
     beforeEnter: createPermissionGuard(["permission_1"], "/yourFallBackRoute"),
 },
+
+// without a fallback, it shows a '401' file if the user doesn't have permissions
+{
+    path: "/your/route",
+    component: () => import("../pages/your.page.vue"),
+    name: "yourRouteName",
+    beforeEnter: createPermissionGuard(["permission_1", "permission_2"]),
+},
+
 ```
