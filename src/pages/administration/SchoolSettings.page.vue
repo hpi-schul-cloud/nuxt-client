@@ -49,7 +49,7 @@
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
 					<auth-systems v-else :systems="systems"></auth-systems>
-					<external-tools-section id="tools"></external-tools-section>
+					<external-tools-section></external-tools-section>
 				</v-col>
 			</v-row>
 		</div>
