@@ -19,3 +19,7 @@ footer: Copyright © 2019-present HPI Schul-Cloud
 // TODO: link to good tutorial on how to test a18n
 
 // REMINDER: If we establish special a18n-components and/or tools - they should be described here
+
+
+
+TODO: LIST ALL markdown-DOC-FILES AND DESCRIBE WHAT THEY CONTAIN
