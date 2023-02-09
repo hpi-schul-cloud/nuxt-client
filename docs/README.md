@@ -13,6 +13,10 @@ footer: Copyright © 2019-present HPI Schul-Cloud
 
 
 ## Accessibility
+We want to use Vuetfiy Components in our project. They provide key interaction for all mouse-based-actions and utilize HTML5 semantic elements where applicable.
+
+See: [Vuetify-Accessibility](https://vuetifyjs.com/en/features/accessibility/)
+
 // TODO: describe that we try to use vuetify's accessible components and the stuff described on the a18n-page of vuetify
 // TODO: link to a18n-page of vuetify
 // TODO: link to good general tutorial (e.g. look here [W3.org aria practices](https://www.w3.org/TR/wai-aria-practices-1.1/))
