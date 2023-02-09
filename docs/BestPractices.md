@@ -100,29 +100,29 @@ If you write a composable:
 
 The File-Naming consistency should be like this.
 
-##### - Components:
+#### - Components:
 
 - `YourComponent.vue`
 
-##### - Pages:
+#### - Pages:
 
 - `YourPageName.page.vue`
 
-##### - Layouts:
+#### - Layouts:
 
 - `yourLayoutName.layout.vue`
 
-##### - Stores / Composables / Utils:
+#### - Stores / Composables / Utils:
 
 - `yourFileName.ts`
 
-##### - Test files:
+#### - Test files:
 
 - `yourTestFile.unit.ts`
 
 ### User-Permissions on Pages
 
-The permissions are controlled by `createPermissionGuard` middleware method that receives two parameters. The first parameter should contain an array of the `userPermission` that we want to give the users a permissions to reach the page. The second parameter is an optional fallback route. If the second parameter isn't provided and the user has no permission to reach the page, a `401` error page is shown.
+The permissions are controlled by `createPermissionGuard` middleware method that receives two parameters. The first parameter should contain an array of the `userPermission` that we want to give the users permission to reach the page. The second parameter is an optional fallback route. If the second parameter isn't provided and the user has no permission to reach the page, an error page `(401)` is shown.
 
 ```Typescript
 // src/router/routes.ts
@@ -135,7 +135,7 @@ The permissions are controlled by `createPermissionGuard` middleware method that
     beforeEnter: createPermissionGuard(["permission_1"], "/yourFallBackRoute"),
 },
 
-// without a fallback, 
+// without a fallback,
 // it shows a '401' file if the user doesn't have permissions
 {
     path: "/your/route",
