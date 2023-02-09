@@ -183,11 +183,9 @@ export default {
 							this.systemData.searchUserPassword = undefined;
 						}
 
-						const systemData = { ...this.systemData };
-
 						await this.$store.dispatch("ldap-config/verifyExisting", {
-							systemData,
-							systemId,
+							systemId: systemId,
+							systemData: this.systemData,
 						});
 					} else {
 						await this.$store.dispatch(
