@@ -95,3 +95,11 @@ If you write a composable:
 {{ tbd }}
 
 // TODO: check all meeting notes older than 2022-10-14
+
+### Consistent file names
+
+{{ tbd }}
+
+### User-Permissions on Pages
+
+{{ tbd }}
