@@ -102,4 +102,14 @@ If you write a composable:
 
 ### User-Permissions on Pages
 
+```Typescript
+{
+    // src/router/routes.ts
+    path: "/administration/students/consent",
+    component: () => import("../pages/administration/StudentConsent.page.vue"),
+    name: "administration-students-consent",
+    beforeEnter: createPermissionGuard(["student_edit", "student_list"]),
+},
+```
+
 {{ tbd }}
