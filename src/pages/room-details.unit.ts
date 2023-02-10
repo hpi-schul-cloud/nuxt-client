@@ -166,7 +166,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsShareModalOpen: true,
 		});
 		shareTaskModuleMock = createModuleMocks(ShareTaskModule, {
-			getIsShareModalOpen: true,
+			getIsShareModalOpen: false,
 		});
 
 		initializeAxios({

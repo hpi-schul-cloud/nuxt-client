@@ -116,8 +116,8 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
-		<share-modal type="lesson"></share-modal>
-		<share-modal type="task"></share-modal>
+		<share-modal type="lesson" />
+		<share-modal type="task" />
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"

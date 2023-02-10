@@ -102,7 +102,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal type="course"></share-modal>
+		<share-modal type="course" />
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
