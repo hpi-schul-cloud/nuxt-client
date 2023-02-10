@@ -19,6 +19,7 @@
 		</v-btn>
 	</div>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";

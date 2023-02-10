@@ -54,6 +54,5 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "MigrationEndWarningCard",
 	emits: ["end", "set"],
-	setup() {},
 });
 </script>
