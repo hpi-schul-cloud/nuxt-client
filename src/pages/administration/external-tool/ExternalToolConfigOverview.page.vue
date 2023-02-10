@@ -53,7 +53,7 @@
 				color="primary"
 				depressed
 				:disabled="!parametersValid"
-				@click="saveTool"
+				@click="onSaveTool"
 				data-testId="save-button"
 			>
 				{{ $t("pages.tool.addBtn.label") }}
@@ -121,7 +121,7 @@ export default defineComponent({
 			},
 		];
 
-		const {getTranslationKey} = useExternalToolMappings();
+		const { getTranslationKey } = useExternalToolMappings();
 
 		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
 
@@ -157,7 +157,7 @@ export default defineComponent({
 			router.push({path: schoolSetting.to});
 		};
 
-		const saveTool = async () => {
+		const onSaveTool = async () => {
 			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
 
 			if (!externalToolsModule.getBusinessError.message) {
@@ -176,7 +176,7 @@ export default defineComponent({
 			toolTemplate,
 			onSelectTemplate,
 			onCancel,
-			saveTool,
+			onSaveTool,
 		};
 	},
 });
