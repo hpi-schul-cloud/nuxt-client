@@ -302,7 +302,9 @@ export default {
 			}
 		},
 		async getSharedTask(taskId) {
+			console.warn("DUPA1");
 			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+				console.warn("DUPA1");
 				this.shareTaskModule.startShareFlow(taskId);
 			}
 		},

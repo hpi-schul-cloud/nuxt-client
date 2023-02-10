@@ -12,6 +12,7 @@ import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import ShareTaskModule from "@/store/share-task";
 
 const mockData = {
 	roomId: "123",
@@ -97,6 +98,9 @@ const emptyMockData = {
 const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
 	getIsShareModalOpen: false,
 });
+const shareTaskModuleMock = createModuleMocks(ShareTaskModule, {
+	getIsShareModalOpen: false,
+});
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (props: object, options?: object) => {
@@ -107,6 +111,7 @@ const getWrapper = (props: object, options?: object) => {
 		provide: {
 			notifierModule: notifierModuleMock,
 			shareLessonModule: shareLessonModuleMock,
+			shareTaskModule: shareTaskModuleMock,
 		},
 		propsData: props,
 		...options,
@@ -123,8 +128,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
+		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
 		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		envConfigModule.setEnvs(env);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -364,6 +370,22 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				await wrapper.vm.$nextTick();
 				expect(shareLessonModuleMock.startShareFlow).toBeCalledWith("12345");
 			});
+		});
+	});
+
+	describe("Sharing Task", () => {
+		it("should call startShareFlow when share task item clicked", async () => {
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
+			});
+			const taskCard = wrapper.find(".task-card");
+
+			taskCard.vm.$emit("share-task", "1234");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(shareTaskModuleMock.startShareFlow).toBeCalledWith("1234");
 		});
 	});
 

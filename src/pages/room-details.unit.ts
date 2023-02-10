@@ -16,6 +16,7 @@ import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
+import ShareTaskModule from "@/store/share-task";
 
 const mockData = {
 	roomId: "123",
@@ -112,6 +113,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareCourseModuleMock: ShareCourseModule;
 let shareLessonModuleMock: ShareLessonModule;
+let shareTaskModuleMock: ShareTaskModule;
 
 const $router = { push: jest.fn() };
 const getWrapper: any = () => {
@@ -131,6 +133,7 @@ const getWrapper: any = () => {
 			provide("i18n", { t: (key: string) => key });
 			provide("shareCourseModule", shareCourseModuleMock);
 			provide("shareLessonModule", shareLessonModuleMock);
+			provide("shareTaskModule", shareTaskModuleMock);
 		},
 	});
 };
@@ -160,6 +163,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			startShareFlow: jest.fn(),
 		});
 		shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
+			getIsShareModalOpen: true,
+		});
+		shareTaskModuleMock = createModuleMocks(ShareTaskModule, {
 			getIsShareModalOpen: true,
 		});
 
