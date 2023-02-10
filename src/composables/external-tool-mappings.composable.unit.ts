@@ -1,12 +1,22 @@
 import {
+	CustomParameterResponse,
+	CustomParameterResponseLocationEnum,
+	CustomParameterResponseScopeEnum,
+	CustomParameterResponseTypeEnum,
+	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
-} from "../serverApi/v3";
+} from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
+	ToolConfigurationTemplate,
+	ToolParameter,
+	ToolParameterLocation,
+	ToolParameterScope,
+	ToolParameterType,
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
@@ -31,6 +41,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
+			mapExternalToolConfigurationTemplateResponse,
 		} = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -58,6 +69,25 @@ describe("useExternalToolUtils", () => {
 			outdated: false,
 		};
 
+		const customParameterResponse: CustomParameterResponse = {
+			name: "name",
+			defaultValue: "defaultValue",
+			type: CustomParameterResponseTypeEnum.String,
+			location: CustomParameterResponseLocationEnum.Path,
+			scope: CustomParameterResponseScopeEnum.School,
+			regex: "[x]",
+			regexComment: "regexComment",
+			isOptional: true,
+		};
+		const toolConfigurationTemplateResponse: ExternalToolConfigurationTemplateResponse =
+			{
+				id: "id",
+				name: "name",
+				logoUrl: "logoUrl",
+				parameters: [customParameterResponse],
+				version: 0,
+			};
+
 		return {
 			listResponse,
 			toolResponse,
@@ -66,6 +96,9 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
+			mapExternalToolConfigurationTemplateResponse,
+			toolConfigurationTemplateResponse,
+			customParameterResponse,
 		};
 	};
 
@@ -148,6 +181,43 @@ describe("useExternalToolUtils", () => {
 
 			const translationKey = getTranslationKey(error);
 			expect(translationKey).toEqual(error.message);
+		});
+	});
+
+	describe("mapExternalToolConfigurationTemplateResponse", () => {
+		it("should return a external tool configuration template", () => {
+			const {
+				mapExternalToolConfigurationTemplateResponse,
+				toolConfigurationTemplateResponse,
+				customParameterResponse,
+			} = setup();
+
+			const configurationTemplate: ToolConfigurationTemplate =
+				mapExternalToolConfigurationTemplateResponse(
+					toolConfigurationTemplateResponse
+				);
+
+			expect(configurationTemplate).toEqual(
+				expect.objectContaining<ToolConfigurationTemplate>({
+					id: toolConfigurationTemplateResponse.id,
+					name: toolConfigurationTemplateResponse.name,
+					logoUrl: toolConfigurationTemplateResponse.logoUrl,
+					parameters: expect.arrayContaining<ToolParameter>([
+						{
+							name: customParameterResponse.name,
+							value: customParameterResponse.defaultValue,
+							type: ToolParameterType.String,
+							location: ToolParameterLocation.Path,
+							scope: ToolParameterScope.School,
+							default: customParameterResponse.defaultValue,
+							isOptional: customParameterResponse.isOptional,
+							regexComment: customParameterResponse.regexComment,
+							regex: customParameterResponse.regex,
+						},
+					]),
+					version: toolConfigurationTemplateResponse.version,
+				})
+			);
 		});
 	});
 });

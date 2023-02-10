@@ -24,11 +24,11 @@ export default {
 			default: () => ({})
 		},
 		maxHeight: {
-			type: Number,
+			type: [Number, String],
 			default: () => 30
 		},
 		maxWidth: {
-			type: Number,
+			type: [Number, String],
 			default: () => 30
 		},
 	},

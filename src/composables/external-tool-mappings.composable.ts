@@ -114,16 +114,14 @@ export function useExternalToolMappings() {
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
-				// @ts-ignore
-				default: resp.default, // ts-ignore needed here because we cant access _default value
+				default: resp.defaultValue,
 				isOptional: resp.isOptional,
 				regexComment: resp.regexComment,
 				location: ToolParamLocationMapping[resp.location],
 				regex: resp.regex,
 				type: ToolParamTypeMapping[resp.type],
 				scope: ToolParamScopeMapping[resp.scope],
-				// @ts-ignore
-				value: resp.default ? resp.default : undefined, // ts-ignore needed here because we cant access _default value
+				value: resp.defaultValue,
 			};
 		});
 	};

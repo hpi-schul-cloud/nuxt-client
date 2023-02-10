@@ -19,8 +19,8 @@
 			<template #selection="{ item }">
 				<external-tool-selection-row
 					:item="item"
-					max-height="20"
-					max-width="20"
+					max-height=20
+					max-width=20
 				/>
 			</template>
 			<template #item="{ item }">
