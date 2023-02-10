@@ -1,5 +1,5 @@
 import {
-	ldapPathRegexValidatior,
+	ldapPathRegexValidator,
 	urlRegex,
 	urlRegexDevStage,
 } from "./ldapConstants";
@@ -46,17 +46,17 @@ describe("ldapConstant", () => {
 		});
 	});
 
-	describe("ldapPathRegexValidatior", () => {
+	describe("ldapPathRegexValidator", () => {
 		it("should validate ldap path", () => {
-			const temp = ldapPathRegexValidatior;
+			const temp = ldapPathRegexValidator;
 			expect(temp("ou=groups")).toBe(true);
 			expect(temp("o=school0,dc=de,dc=example,dc=org")).toBe(true);
 		});
 		it("should fail domain", () => {
-			expect(ldapPathRegexValidatior("asdf.asdf")).toBe(false);
+			expect(ldapPathRegexValidator("asdf.asdf")).toBe(false);
 		});
 		it("should fail text only", () => {
-			expect(ldapPathRegexValidatior("asdf")).toBe(false);
+			expect(ldapPathRegexValidator("asdf")).toBe(false);
 		});
 	});
 });
