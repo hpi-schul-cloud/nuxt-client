@@ -19,7 +19,6 @@
 			<v-select
 				v-model="selectItem"
 				:label="getLabelText()"
-				validate-on-blur
 				:rules="validateParameter(parameter)"
 				:data-testId="parameter.name"
 				:items="booleanSelectItems"
