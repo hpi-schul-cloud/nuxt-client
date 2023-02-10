@@ -24,6 +24,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userMigrationModule,
+	shareLessonModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -134,6 +135,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			roomsModule,
 			schoolsModule,
 			shareCourseModule,
+			shareLessonModule,
 			statusAlertsModule,
 			systemsModule,
 			taskCardModule,

@@ -25,12 +25,13 @@
 							}}</v-icon>
 						</div>
 						<div>
-							{{ $t("components.molecules.shareCourse.options.infoText") }}
+							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
 							<br />
 							{{ $t("components.molecules.copyResult.courseFiles.info") }}
 						</div>
 					</div>
 					<share-modal-options-form
+						:type="type"
 						@share-options-change="onShareOptionsChange"
 					></share-modal-options-form>
 				</div>
@@ -38,6 +39,7 @@
 				<div v-if="step === 2 && isOpen">
 					<share-modal-result
 						:share-url="shareUrl"
+						:type="type"
 						@done="onDone"
 						@copied="onCopy"
 					></share-modal-result>
@@ -49,8 +51,8 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
-import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
+import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
@@ -62,7 +64,14 @@ export default defineComponent({
 		ShareModalResult,
 		vCustomDialog,
 	},
-	setup() {
+	props: {
+		type: {
+			type: String,
+			required: true,
+			validator: (type) => ["course", "lesson", "task"].includes(type),
+		},
+	},
+	setup(props) {
 		const i18n = inject("i18n");
 		const notifier = inject("notifierModule");
 
@@ -74,27 +83,35 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const shareCourseModule = inject("shareCourseModule");
+		let shareModule;
+		switch (props.type) {
+			case "course":
+				shareModule = inject("shareCourseModule");
+				break;
+			case "lesson":
+				shareModule = inject("shareLessonModule");
+				break;
+		}
 		const isOpen = computed({
-			get: () => shareCourseModule.getIsShareModalOpen,
-			set: () => shareCourseModule.resetShareFlow(),
+			get: () => shareModule.getIsShareModalOpen,
+			set: () => shareModule.resetShareFlow(),
 		});
 
 		const step = computed(() =>
-			shareCourseModule.getShareUrl === undefined ? 1 : 2
+			shareModule.getShareUrl === undefined ? 1 : 2
 		);
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
-			title: t("components.molecules.shareCourse.options.title"),
+			title: t("components.molecules.share.options.title"),
 			actionButtons: ["cancel", "next"],
 		});
 		modalOptions.value.set(2, {
-			title: t("components.molecules.shareCourse.result.title"),
+			title: t("components.molecules.share.result.title"),
 			actionButtons: ["close"],
 		});
 
-		const shareUrl = computed(() => shareCourseModule.getShareUrl);
+		const shareUrl = computed(() => shareModule.getShareUrl);
 
 		const actionButtons = computed(() => {
 			return modalOptions.value.get(step.value)?.actionButtons ?? [];
@@ -110,13 +127,13 @@ export default defineComponent({
 			shareOptions.value = newValue;
 		};
 		const onCloseDialog = () => {
-			shareCourseModule.resetShareFlow();
+			shareModule.resetShareFlow();
 		};
 		const onNext = (newValue) => {
-			shareCourseModule.createShareUrl(newValue);
+			shareModule.createShareUrl(newValue);
 		};
 		const onDone = () => {
-			shareCourseModule.resetShareFlow();
+			shareModule.resetShareFlow();
 		};
 		const onCopy = () => {
 			notifier?.show({

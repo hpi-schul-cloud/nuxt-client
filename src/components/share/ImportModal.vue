@@ -10,7 +10,7 @@
 		@dialog-canceled="onCancel"
 	>
 		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{ $t("components.molecules.importCourse.options.title") }}
+			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
 		</div>
 
 		<template slot="content">
@@ -24,13 +24,15 @@
 						}}</v-icon>
 					</div>
 					<div>
-						{{ $t("components.molecules.importCourse.options.infoText") }}
+						{{
+							$t(`components.molecules.import.${parentType}.options.infoText`)
+						}}
 					</div>
 				</div>
 				<v-text-field
 					ref="nameInputText"
 					v-model="newName"
-					:label="$t('common.labels.course')"
+					:label="$t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
 				></v-text-field>
 			</div>
@@ -53,6 +55,7 @@ export default defineComponent({
 	props: {
 		isOpen: { type: Boolean },
 		parentName: { type: String, required: true },
+		parentType: { type: String, required: true },
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");

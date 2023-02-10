@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.externalToolsSection.header") }}
+			{{ $t("components.administration.externalToolsSection.header") }}
 		</h2>
 		<v-data-table
 			:disable-pagination="true"
@@ -9,8 +9,8 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="t('common.table.loading.text')"
-			:no-data-text="t('common.table.nodata')"
+			:loading-text="$t('common.loading.text')"
+			:no-data-text="$t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
 				<span :class="getColor(item)">
@@ -29,7 +29,12 @@
 				/>
 			</template>
 		</v-data-table>
-		<v-btn class="my-5 button-save" color="primary" depressed @click="addTool">
+		<v-btn
+			class="my-5 button-save"
+			color="primary"
+			depressed
+			to="/administration/school-settings/tool"
+		>
 			{{ $t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
@@ -80,19 +85,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import VueI18n from "vue-i18n";
-import { computed, ComputedRef, inject, onMounted, Ref } from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { DataTableHeader } from "vuetify";
-import { useSchoolExternalToolUtils } from "./school-external-tool-utils.composable";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { SchoolExternalTool } from "@/store/types/school-external-tool";
+import { useExternalToolMappings } from "../../composables/external-tool-mappings.composable";
+import { SchoolExternalTool } from "@/store/external-tool";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "ExternalToolsSection",
+	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -115,7 +127,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const { getHeaders, getItems } = useSchoolExternalToolUtils(t);
+		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 
 		const headers: DataTableHeader[] = getHeaders;
 
@@ -131,11 +143,6 @@ export default defineComponent({
 			return item.outdated ? "outdated" : "";
 		};
 
-		const addTool = () => {
-			console.log("addTool() called");
-			// https://ticketsystem.dbildungscloud.de/browse/N21-241
-		};
-
 		const editTool = (item: SchoolExternalToolItem) => {
 			console.log(`editTool() called with ${item}`);
 			// https://ticketsystem.dbildungscloud.de/browse/N21-508
@@ -144,9 +151,9 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				const schoolExternalTool: SchoolExternalTool =
-					useSchoolExternalToolUtils(
-						t
-					).mapSchoolExternalToolItemToSchoolExternalTool(itemToDelete.value);
+					useExternalToolMappings().mapSchoolExternalToolItemToSchoolExternalTool(
+						itemToDelete.value
+					);
 				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
 			}
 			onCloseDeleteDialog();
@@ -176,7 +183,6 @@ export default defineComponent({
 			items,
 			isLoading,
 			getColor,
-			addTool,
 			editTool,
 			onDeleteTool,
 			isDeleteDialogOpen,

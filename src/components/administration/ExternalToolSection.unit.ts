@@ -1,11 +1,11 @@
 import { mount, shallowMount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import ExternalToolsSection from "./ExternalToolsSection.vue";
-import { SchoolExternalToolStatus } from "@/store/types/school-external-tool";
+import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { SchoolExternalToolStatus } from "@/store/external-tool";
 
-describe("ExternalToolsSection", () => {
+describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
 
 	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
@@ -17,7 +17,7 @@ describe("ExternalToolsSection", () => {
 			getSchoolExternalTools: [],
 			...getters,
 		});
-		const wrapper = mount(ExternalToolsSection, {
+		const wrapper = mount(ExternalToolSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -33,7 +33,7 @@ describe("ExternalToolsSection", () => {
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
-			expect(wrapper.findComponent(ExternalToolsSection).exists()).toBeTruthy();
+			expect(wrapper.findComponent(ExternalToolSection).exists()).toBeTruthy();
 		});
 	});
 
@@ -49,7 +49,7 @@ describe("ExternalToolsSection", () => {
 				});
 
 				try {
-					shallowMount(ExternalToolsSection, {
+					shallowMount(ExternalToolSection, {
 						provide: {
 							externalToolsModule,
 						},
@@ -58,7 +58,7 @@ describe("ExternalToolsSection", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -73,7 +73,7 @@ describe("ExternalToolsSection", () => {
 					.mockImplementation();
 
 				try {
-					shallowMount(ExternalToolsSection, {
+					shallowMount(ExternalToolSection, {
 						provide: {
 							i18n: { t: (key: string) => key },
 						},
@@ -82,7 +82,7 @@ describe("ExternalToolsSection", () => {
 
 				expect(consoleErrorSpy).toHaveBeenCalledWith(
 					expect.stringMatching(
-						/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 					)
 				);
 
@@ -113,7 +113,7 @@ describe("ExternalToolsSection", () => {
 			});
 		});
 
-		describe("when tranlsation key not exists", () => {
+		describe("when translation key not exists", () => {
 			it("should return unknown translation-key", () => {
 				const { wrapper } = setup();
 				const testKey = 123;

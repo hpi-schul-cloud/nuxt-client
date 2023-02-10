@@ -31,6 +31,7 @@ interface CopyByShareTokenPayload {
 	type: string;
 	token: string;
 	newName: string;
+	destinationCourseId?: string;
 }
 
 @Module({
@@ -108,12 +109,21 @@ export default class CopyModule extends VuexModule {
 		token,
 		type,
 		newName,
+		destinationCourseId,
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
+				.then((response) => response.data);
+		}
+		if (type === CopyParamsTypeEnum.Lesson) {
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, {
+					newName,
+					destinationCourseId,
+				})
 				.then((response) => response.data);
 		}
 
