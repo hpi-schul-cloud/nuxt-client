@@ -51,7 +51,8 @@ We try to keep branch names small. The Ticket Number should be in Uppercase (e.g
 Pull Requests must contain a relevant description (template provides useful information, when creating the PR).
 
 In case of UI changes also put a screenshot and talk to UX if thats fine like it is.
-All Pull Requests must be green before merge and reviewed as well as tested by QA.
+All Pull Requests Criterias (as defined in deployment pipeline) must be green before merge,
+e.g. 1 approving review, unit tests or QA checkbox in PR template.
 
 We merge by squash strategy. The squashed commit subject should start with a ticket number and end with a PR number. Write commit messages in imperative and active.
 
@@ -67,7 +68,7 @@ we would like some descriptive text here that explains what we did and why.
 - change some other things
 - refactor some existing things
 
-# I dont need to mention tests, changes that didnt make it to main, linter, or other fixups
+# We dont need to mention tests, changes that didnt make it to main, linter, or other fixups
 # only leave lines that are relevant changes compared to main
 # comments like this will not actually show up in the git history
 ```
