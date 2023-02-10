@@ -1,48 +1,48 @@
 import {
 	ldapPathRegexValidator,
-	urlRegex,
-	urlRegexDevStage,
+	ldapSecuredURLRegex,
+	ldapURLRegex,
 } from "./ldapConstants";
 
 describe("ldapConstant", () => {
-	describe("urlRegex", () => {
+	describe("ldapSecuredURLRegex", () => {
 		it("should validate domain without port", () => {
-			expect(urlRegex.test("ldaps://asdf.de")).toBe(true);
+			expect(ldapSecuredURLRegex.test("ldaps://asdf.de")).toBe(true);
 		});
 		it("should validate domain with port", () => {
-			expect(urlRegex.test("ldaps://asdf.de:123")).toBe(true);
+			expect(ldapSecuredURLRegex.test("ldaps://asdf.de:123")).toBe(true);
 		});
 		it("should validate ipv4 with port", () => {
-			expect(urlRegex.test("ldaps://127.0.0.1:123")).toBe(true);
+			expect(ldapSecuredURLRegex.test("ldaps://127.0.0.1:123")).toBe(true);
 		});
 		it("should validate ipv4 without port", () => {
-			expect(urlRegex.test("ldaps://127.0.0.1")).toBe(true);
+			expect(ldapSecuredURLRegex.test("ldaps://127.0.0.1")).toBe(true);
 		});
 		it("should fail domain with unsecure protocol", () => {
-			expect(urlRegex.test("ldap://asdf.de")).toBe(false);
+			expect(ldapSecuredURLRegex.test("ldap://asdf.de")).toBe(false);
 		});
 		it("should fail ipv4 with unsecure protocol", () => {
-			expect(urlRegex.test("ldap://127.0.0.1")).toBe(false);
+			expect(ldapSecuredURLRegex.test("ldap://127.0.0.1")).toBe(false);
 		});
 	});
-	describe("urlRegex", () => {
+	describe("ldapURLRegex", () => {
 		it("should validate domain without port", () => {
-			expect(urlRegexDevStage.test("ldaps://asdf.de")).toBe(true);
+			expect(ldapURLRegex.test("ldaps://asdf.de")).toBe(true);
 		});
 		it("should validate domain with port", () => {
-			expect(urlRegexDevStage.test("ldaps://asdf.de:123")).toBe(true);
+			expect(ldapURLRegex.test("ldaps://asdf.de:123")).toBe(true);
 		});
 		it("should validate ipv4 with port", () => {
-			expect(urlRegexDevStage.test("ldaps://127.0.0.1:123")).toBe(true);
+			expect(ldapURLRegex.test("ldaps://127.0.0.1:123")).toBe(true);
 		});
 		it("should validate ipv4 without port", () => {
-			expect(urlRegexDevStage.test("ldaps://127.0.0.1")).toBe(true);
+			expect(ldapURLRegex.test("ldaps://127.0.0.1")).toBe(true);
 		});
 		it("should validate domain with unsecure protocol", () => {
-			expect(urlRegexDevStage.test("ldap://asdf.de")).toBe(true);
+			expect(ldapURLRegex.test("ldap://asdf.de")).toBe(true);
 		});
 		it("should validate ipv4 with unsecure protocol", () => {
-			expect(urlRegexDevStage.test("ldap://127.0.0.1")).toBe(true);
+			expect(ldapURLRegex.test("ldap://127.0.0.1")).toBe(true);
 		});
 	});
 

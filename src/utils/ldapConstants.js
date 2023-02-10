@@ -1,30 +1,42 @@
 import { helpers } from "vuelidate/lib/validators";
 
 /**
- * The composition of this regex is as follows:
+ * Regex for the LDAP path.
  *
+ * The composition of this regex is as follows:
  *  attributeType = [A-Za-z][\w-]*|\d+(?:\.\d+)*
  *  attributeValue = #(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"
  *  nameComponent = (?#attributeType)=(?#attributeValue)(?:\+(?#attributeType)=(?#attributeValue))*
  *  and finally
- *  ldapPathRegexValidator = (?#nameComponent)(?:,(?#nameComponent))*
+ *  ldapPathRegex = (?#nameComponent)(?:,(?#nameComponent))*
  *
  *  It matches the following format: nameComponent[, or ;;]nameComponent
  */
 export const ldapPathRegex =
 	/^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/;
 
-export const urlRegexDevStage =
+export const ldapURLRegex =
 	/^ldaps?:\/\/(([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
 
-export const urlRegex =
+export const ldapSecuredURLRegex =
 	/^ldaps:\/\/(([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
 
+// Regex-based validator for the LDAP path.
 export const ldapPathRegexValidator = helpers.regex("alpha", ldapPathRegex);
+
+// Regex-based validator for the LDAP URL (possibly unsecured). Not recommended for use in production environment.
+export const ldapURLRegexValidator = helpers.regex("alpha", ldapURLRegex);
+
+// Regex-based validator for the secured LDAP URL. Should be used in every production environment.
+export const ldapSecuredURLRegexValidator = helpers.regex(
+	"alpha",
+	ldapSecuredURLRegex
+);
 
 export const urlRegexValidator =
 	process.env.NODE_ENV === "development"
-		? helpers.regex("alpha", urlRegexDevStage)
-		: helpers.regex("alpha", urlRegex);
+		? helpers.regex("alpha", ldapURLRegex)
+		: helpers.regex("alpha", ldapSecuredURLRegex);
 
+// Placeholder used for an unchanged password.
 export const unchangedPassword = "🐱‍👤[unchanged]**";
