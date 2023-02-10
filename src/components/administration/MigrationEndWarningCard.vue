@@ -20,6 +20,7 @@
 			<v-btn
 				class="agree-btn-end"
 				color="primary"
+				data-testid="migration-end-agree-button"
 				@click="
 					$emit('set');
 					$emit('end');
@@ -32,7 +33,12 @@
 				}}
 			</v-btn>
 
-			<v-btn class="disagree-btn-end" color="secondary" @click="$emit('end')">
+			<v-btn
+				class="disagree-btn-end"
+				color="secondary"
+				data-testid="migration-end-disagree-button"
+				@click="$emit('end')"
+			>
 				{{
 					$t(
 						"components.administration.adminMigrationSection.endWarningCard.disagree"
@@ -48,6 +54,5 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "MigrationEndWarningCard",
 	emits: ["end", "set"],
-	setup() {},
 });
 </script>
