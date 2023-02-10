@@ -91,6 +91,9 @@ export default defineComponent({
 			case "lesson":
 				shareModule = inject("shareLessonModule");
 				break;
+			case "task":
+				shareModule = inject("shareTaskModule");
+				break;
 		}
 		const isOpen = computed({
 			get: () => shareModule.getIsShareModalOpen,

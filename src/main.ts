@@ -25,6 +25,7 @@ import {
 	tasksModule,
 	userMigrationModule,
 	shareLessonModule,
+	shareTaskModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -136,6 +137,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			schoolsModule,
 			shareCourseModule,
 			shareLessonModule,
+			shareTaskModule,
 			statusAlertsModule,
 			systemsModule,
 			taskCardModule,

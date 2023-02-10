@@ -38,6 +38,7 @@
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
 						@copy-task="copyTask(item.content.id)"
+						@share-task="getSharedTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -116,6 +117,7 @@
 			class="mt-16"
 		/>
 		<share-modal type="lesson"></share-modal>
+		<share-modal type="task"></share-modal>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -196,7 +198,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareLessonModule"],
+	inject: ["shareLessonModule", "shareTaskModule"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
@@ -297,6 +299,11 @@ export default {
 				this.lessonShare.status = sharedLesson.status;
 				this.lessonShare.messageTranslationKey = sharedLesson.message;
 				this.lessonShare.isOpen = true;
+			}
+		},
+		async getSharedTask(taskId) {
+			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+				this.shareTaskModule.startShareFlow(taskId);
 			}
 		},
 		endDragging() {

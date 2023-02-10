@@ -118,7 +118,10 @@ export default class CopyModule extends VuexModule {
 				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);
 		}
-		if (type === CopyParamsTypeEnum.Lesson) {
+		if (
+			type === CopyParamsTypeEnum.Lesson ||
+			type === CopyParamsTypeEnum.Task
+		) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, {
 					newName,

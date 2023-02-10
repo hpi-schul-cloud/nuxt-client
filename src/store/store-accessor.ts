@@ -33,6 +33,7 @@ import UserMigrationModule from "@/store/user-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ShareLessonModule from "@/store/share-lesson";
+import ShareTaskModule from "@/store/share-task";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -63,6 +64,7 @@ export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userMigrationModule: UserMigrationModule;
 export let shareLessonModule: ShareLessonModule;
+export let shareTaskModule: ShareTaskModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -92,6 +94,7 @@ export function initializeStores(store: Store<any>): void {
 	tasksModule = getModule(TasksModule, store);
 	userMigrationModule = getModule(UserMigrationModule, store);
 	shareLessonModule = getModule(ShareLessonModule, store);
+	shareTaskModule = getModule(ShareTaskModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -124,4 +127,5 @@ export const modules = {
 	tasksModule: TasksModule,
 	userMigrationModule: UserMigrationModule,
 	shareLessonModule: ShareLessonModule,
+	shareTaskModule: ShareTaskModule,
 };
