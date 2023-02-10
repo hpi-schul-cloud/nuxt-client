@@ -16,6 +16,9 @@
     create board
     delete board
 
+	**Decisions**
+	 - Rename old Board entities to SingleColumnBoard to avoid conflicts
+
     Other thoughts:
         - we have to support cards being added/removed from other places (task overview)
         - we have to support cards being added/removed from legacy (tasks and lessons)
@@ -42,39 +45,31 @@
             On each board-mutation, we return the full board-skeleton and update to minimize potential conflicts.			
 */
 
-interface CourseBoardTaskCard {}
+type BoardCardType = "task" | "content" | "legacy-task" | "legacy-lesson";
 
-interface CouseBoardContentCard {}
-
-interface CourseBoardElement {}
-
-type CourseBoardCardType = "task" | "content" | "legacy-task" | "legacy-lesson";
-
-// GET - Load a CourseBoard
+// GET - Load a Board
 // /boards/:id
-
-interface CourseBoard {
+interface Board {
 	id: string;
 	title: string;
-	columns: CourseBoardColumn[];
+	columns: BoardColumn[];
 	version: number;
-	timestamps: CourseBoardTimestamps;
+	timestamps: BoardTimestamps;
 }
 
-interface CourseBoardTimestamps {
+interface BoardTimestamps {
 	lastUpdatedAt: string;
 	createdAt: string;
 	deletedAt: string;
 }
 
-interface CourseBoardColumn {
+interface BoardColumn {
 	id: string;
 	title: string;
-	cards: CourseBoardSkeletonCard[]; // ?
+	cards: BoardSkeletonCard[];
 }
 
-interface CourseBoardSkeletonCard {
-	//?
+interface BoardSkeletonCard {
 	id: string;
 	height: number;
 }
@@ -83,25 +78,24 @@ interface CourseBoardSkeletonCard {
 // /cards?ids=123,456,789
 
 // Response
-// list of CourseBoardCard
+// list of BoardCard
 
-interface CourseBoardCard {
+interface BoardCard {
 	id: string;
 	height: number;
 	elements: ContentElement[];
-	cardType: CourseBoardCardType;
+	cardType: BoardCardType;
 	visibility: VisibilitySettings;
+	title: string;
 }
 
 interface VisibilitySettings {
 	publishedAt: string | undefined; // undefined = invisible | Date specifies the visibility from
 }
 
-declare type AnyCourseBoardCard =
-	| CourseBoardLegacyLessonCard
-	| CourseBoardLegacyTaskCard; // union of all CourseBoardCard-Interfaces
+declare type AnyBoardCard = BoardLegacyLessonCard | BoardLegacyTaskCard; // union of all BoardCard-Interfaces
 
-interface CourseBoardLegacyLessonCard extends CourseBoardCard {
+interface BoardLegacyLessonCard extends BoardCard {
 	cardType: "legacy-lesson";
 	lessonId: string;
 	elements: ContentElement[]; // narrowed down to allowed Elements: LegacyLesson
@@ -109,7 +103,7 @@ interface CourseBoardLegacyLessonCard extends CourseBoardCard {
 	// some properties
 }
 
-interface CourseBoardLegacyTaskCard extends CourseBoardCard {
+interface BoardLegacyTaskCard extends BoardCard {
 	cardType: "legacy-task";
 	taskId: string;
 	elements: ContentElement[]; // narrowed down to allowed Elements: LegacyTask
@@ -135,113 +129,74 @@ interface TextContentElement {}
 
 interface TitleContentElement {}
 
-// **IDEA**
-// We want to prevent collisions or at least notify about collisions by versioning the board with an autoincrement ID on database manipulation
-// how we transfer the version on each request is up for debate.
-
 // PATCH - Move a Card on the board
 // /boards/:boardId/movecard
 
 interface Payload {
-	cardId: CourseBoard_Skeleton_Card["id"];
-	toColumnId: CourseBoardColumn["id"];
+	cardId: BoardSkeletonCard["id"];
+	toColumnId: BoardColumn["id"];
 	toIndex: number;
-	version: number;
 }
 
 // Responses
-// 200 OK - No Conflict -> Card was moved to expected position
-interface Response {
-	version: number;
-}
+// 200 OK - Card was moved to expected position
+interface Response {}
 // 400 Bad Request - some id did not exist -> Card was not moved, reload
-interface Response {
-	version: number;
-}
-// 409 Conflict - Action conflicts -> reload board, card was not moved
-interface Response {
-	version: number;
-}
+interface Response {}
 
 // PATCH - Move a Column on the board
 // /boards/:boardId/movecolumn
 
 interface Payload {
-	columnId: CourseBoardColumn["id"];
+	columnId: BoardColumn["id"];
 	toIndex: number;
-	version: number;
 }
 
 // Responses
-// 200 OK - No Conflict -> Column was moved to expected position
-interface Response {
-	version: number;
-}
+// 200 OK - Column was moved to expected position
+interface Response {}
 // 400 Bad Request - some id did not exist -> Column was not moved, reload
-interface Response {
-	version: number;
-}
-// 409 Conflict - Action conflicts -> reload board, Column was not moved
-interface Response {
-	version: number;
-}
+interface Response {}
 
 // PUT - Move a Column on the board
 // /boards/:boardId/movecolumn
 
 interface Payload {
-	columnId: CourseBoardColumn["id"];
+	columnId: BoardColumn["id"];
 	toIndex: number;
-	version: number;
 }
 
 // Responses
-// 200 OK - No Conflict -> Column was moved to expected position
-interface Response {
-	version: number;
-}
+// 200 OK - Column was moved to expected position
+interface Response {}
 // 400 Bad Request - some id did not exist -> Column was not moved, reload
-interface Response {
-	version: number;
-}
-// 409 Conflict - Action conflicts -> reload board, Column was not moved
-interface Response {
-	version: number;
-}
+interface Response {}
 
 // PATCH - Rename a Board
 // /boards/:boardId/renameboard
 
 interface Payload {
-	title: CourseBoard["title"];
+	title: Board["title"];
 }
 
 // Responses
-// 200 OK - No Conflict -> Board was renamed
-interface Response {
-	version: number;
-}
+// 200 OK - Board was renamed
+interface Response {}
 // 400 Bad Request - Validation Error -> board was not renamed
-interface Response {
-	version: number;
-}
+interface Response {}
 
 // PATCH - Rename a Column
 // /boards/:boardId/column/:columnId/rename
 
 interface Payload {
-	title: CourseBoardColumn["title"];
+	title: BoardColumn["title"];
 }
 
 // Responses
-// 200 OK - No Conflict -> Column was renamed
-interface Response {
-	version: number;
-}
+// 200 OK - Column was renamed
+interface Response {}
 // 400 Bad Request - Validation Error -> Column was not renamed
-interface Response {
-	version: number;
-}
+interface Response {}
 
 /*
   ---------------------------
@@ -259,16 +214,11 @@ interface Response {
 interface Payload {}
 
 // Responses
-// 200 OK - No Conflict -> Column was created
-
-// interface CourseBoard {
-
-// }
+// 200 OK - Column was created
+interface Response {}
 
 // 400 Bad Request - Validation Error -> Column was not created
-interface Response {
-	version: number;
-}
+interface Response {}
 
 // DELETE - Delete a Column
 // /boards/:boardId/column/:columnId
@@ -279,16 +229,12 @@ interface Response {
  */
 
 // Responses
-// 200 OK - No Conflict -> Column was removed
+// 200 OK - Column was removed
 
-// interface CourseBoard {
-
-// }
+interface Response {}
 
 // 400 Bad Request - Validation Error -> Column was not removed
-interface Response {
-	version: number;
-}
+interface Response {}
 
 /*
   ---------------------------
@@ -300,19 +246,16 @@ interface Response {
   - elements: defaults to empty array
 */
 interface Payload {
-	type: CourseBoardCardType;
+	type: BoardCardType;
 }
 
 // Responses
-// 200 OK - No Conflict -> Card was created
-// interface AnyCourseBoardCard {
-
+// 200 OK - Card was created
+// interface AnyBoardCard {
 // }
 
 // 400 Bad Request - Validation Error -> Card was not created
-interface Response {
-	version: number;
-}
+interface Response {}
 
 /*
   ---------------------------
@@ -324,13 +267,8 @@ interface Response {
  */
 
 // Responses
-// 200 OK - No Conflict -> Card was removed
-
-// interface CourseBoard {
-
-// }
+// 200 OK - Card was removed
+interface Response {}
 
 // 400 Bad Request - Validation Error -> Column was not removed
-interface Response {
-	version: number;
-}
+interface Response {}
