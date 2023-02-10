@@ -63,7 +63,7 @@ import GeneralSettings from "@/components/organisms/administration/GeneralSettin
 import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
-import ExternalToolsSection from "@/components/administration/ExternalToolsSection";
+import ExternalToolsSection from "@/components/administration/ExternalToolSection";
 
 export default {
 	components: {

@@ -1,13 +1,14 @@
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
+import MigrationEndWarningCard from "./MigrationEndWarningCard.vue";
+import Vue from "vue";
 
 describe("MigrationEndWarningCard", () => {
 	let wrapper: Wrapper<any>;
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = mount(MigrationEndWarningCard, {
+		wrapper = mount(MigrationEndWarningCard as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 				mocks: {

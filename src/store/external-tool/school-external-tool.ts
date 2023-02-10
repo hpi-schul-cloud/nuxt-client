@@ -1,12 +1,11 @@
-export enum SchoolExternalToolStatus {
-	Latest = "Latest",
-	Outdated = "Outdated",
-	Unknown = "Unknown",
-}
+import { SchoolExternalToolStatus } from "./school-external-tool-status.enum";
 
 export interface SchoolExternalTool {
 	id: string;
+
 	name: string;
+
 	status: SchoolExternalToolStatus;
+
 	version?: number;
 }
