@@ -33,10 +33,5 @@ export const ldapSecuredURLRegexValidator = helpers.regex(
 	ldapSecuredURLRegex
 );
 
-export const urlRegexValidator =
-	process.env.NODE_ENV === "development"
-		? helpers.regex("alpha", ldapURLRegex)
-		: helpers.regex("alpha", ldapSecuredURLRegex);
-
 // Placeholder used for an unchanged password.
 export const unchangedPassword = "🐱‍👤[unchanged]**";

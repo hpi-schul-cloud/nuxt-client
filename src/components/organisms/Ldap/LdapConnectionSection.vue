@@ -74,7 +74,7 @@
 import { required } from "vuelidate/lib/validators";
 import {
 	ldapPathRegexValidator,
-	urlRegexValidator,
+	ldapSecuredURLRegexValidator,
 } from "@/utils/ldapConstants";
 
 export default {
@@ -101,7 +101,7 @@ export default {
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "urlRegexValidator",
+					key: "ldapSecuredURLRegexValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
@@ -124,7 +124,7 @@ export default {
 	validations() {
 		return {
 			value: {
-				url: { required, urlRegexValidator },
+				url: { required, ldapSecuredURLRegexValidator },
 				basisPath: { required, ldapPathRegexValidator },
 				searchUser: { required, ldapPathRegexValidator },
 				searchUserPassword: { required },
