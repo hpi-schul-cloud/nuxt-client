@@ -1,5 +1,5 @@
 import { SharePayload } from "./share-course";
-import ShareLessonModule from "./share-lesson";
+import ShareTaskModule from "./share-task";
 import * as serverApi from "../serverApi/v3/api";
 import { ShareTokenApiInterface } from "../serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -46,8 +46,8 @@ describe("share-task module", () => {
 					);
 
 				it("should call the backend with the correct payload", async () => {
-					const shareModule = new ShareLessonModule({});
-					shareModule.setLessonId(id);
+					const shareModule = new ShareTaskModule({});
+					shareModule.setTaskId(id);
 
 					await shareModule.createShareUrl(sharePayload);
 
@@ -60,8 +60,8 @@ describe("share-task module", () => {
 				});
 
 				it("should call setShareUrl mutation", async () => {
-					const shareModule = new ShareLessonModule({});
-					shareModule.setLessonId(id);
+					const shareModule = new ShareTaskModule({});
+					shareModule.setTaskId(id);
 					const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(sharePayload);
@@ -71,7 +71,7 @@ describe("share-task module", () => {
 				});
 
 				it("should return undefined on error", async () => {
-					const shareModule = new ShareLessonModule({});
+					const shareModule = new ShareTaskModule({});
 					const error = { statusCode: 418, message: "server error" };
 					const shareTokenErrorMockApi = {
 						shareTokenControllerCreateShareToken: jest.fn(() =>
@@ -84,14 +84,14 @@ describe("share-task module", () => {
 							shareTokenErrorMockApi as unknown as ShareTokenApiInterface
 						);
 
-					shareModule.setLessonId(id);
+					shareModule.setTaskId(id);
 
 					const errorResult = await shareModule.createShareUrl(sharePayload);
 					expect(errorResult).toStrictEqual(undefined);
 				});
 
 				it("should return undefined if shareTokenResult is undefined", async () => {
-					const shareModule = new ShareLessonModule({});
+					const shareModule = new ShareTaskModule({});
 					const shareTokenErrorMockApi = {
 						shareTokenControllerCreateShareToken: jest.fn(() =>
 							Promise.resolve(undefined)
@@ -103,7 +103,7 @@ describe("share-task module", () => {
 							shareTokenErrorMockApi as unknown as ShareTokenApiInterface
 						);
 
-					shareModule.setLessonId(id);
+					shareModule.setTaskId(id);
 					const errorResult = await shareModule.createShareUrl(sharePayload);
 
 					expect(errorResult).toStrictEqual(undefined);
@@ -113,8 +113,8 @@ describe("share-task module", () => {
 
 		describe("startShareFlow", () => {
 			it("should call setCourseId and setShareModalOpen mutations", async () => {
-				const shareCourseModule = new ShareLessonModule({});
-				const setCourseIdMock = jest.spyOn(shareCourseModule, "setLessonId");
+				const shareCourseModule = new ShareTaskModule({});
+				const setCourseIdMock = jest.spyOn(shareCourseModule, "setTaskId");
 				const setShareModalOpenMock = jest.spyOn(
 					shareCourseModule,
 					"setShareModalOpen"
@@ -129,8 +129,8 @@ describe("share-task module", () => {
 
 		describe("resetShareFlow", () => {
 			it("should call setCourseId, setShareModalOpen and setShareUrl mutations", async () => {
-				const shareCourseModule = new ShareLessonModule({});
-				const setCourseIdMock = jest.spyOn(shareCourseModule, "setLessonId");
+				const shareCourseModule = new ShareTaskModule({});
+				const setCourseIdMock = jest.spyOn(shareCourseModule, "setTaskId");
 				const setShareUrlMock = jest.spyOn(shareCourseModule, "setShareUrl");
 				const setShareModalOpenMock = jest.spyOn(
 					shareCourseModule,
@@ -147,14 +147,14 @@ describe("share-task module", () => {
 
 	describe("mutations", () => {
 		it("setShareModalOpen should set 'setShareModalOpen' state", async () => {
-			const shareCourseModule = new ShareLessonModule({});
+			const shareCourseModule = new ShareTaskModule({});
 			shareCourseModule.setShareModalOpen(true);
 
 			expect(shareCourseModule.getIsShareModalOpen).toStrictEqual(true);
 		});
 
 		it("setShareUrl should set 'shareUrl' state", async () => {
-			const shareCourseModule = new ShareLessonModule({});
+			const shareCourseModule = new ShareTaskModule({});
 			const payload = "https://test.url.com";
 			shareCourseModule.setShareUrl(payload);
 
