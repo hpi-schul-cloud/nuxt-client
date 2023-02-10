@@ -1,10 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
-import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import Vue from "vue";
 
-describe("@/components/share-course/ShareModalResult", () => {
+describe("@/components/share/ShareModalResult", () => {
 	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ShareModalResult as MountOptions<Vue>, {
 			...createComponentMocks({
@@ -36,13 +36,15 @@ describe("@/components/share-course/ShareModalResult", () => {
 
 	it("should render with required props", () => {
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 		expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
 	});
 
 	it("should render QR-Code if onShowQrCode is called", async () => {
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 
 		expect(wrapper.findAllComponents(BaseQrCode)).toHaveLength(0);
 
@@ -56,7 +58,8 @@ describe("@/components/share-course/ShareModalResult", () => {
 
 	it("should hide buttons if qrCode is visible", async () => {
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 
 		expect(wrapper.findAll("[data-testid*=Action]")).not.toHaveLength(0);
 
@@ -77,7 +80,8 @@ describe("@/components/share-course/ShareModalResult", () => {
 		Object.assign(navigator, { clipboard: mockClipboard });
 
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 
 		const actionButton = wrapper.find("[data-testid=copyAction]");
 		await actionButton.trigger("click");
@@ -94,7 +98,8 @@ describe("@/components/share-course/ShareModalResult", () => {
 		Object.assign(window.location, mockLocation);
 
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 
 		const actionButton = wrapper.find("[data-testid=shareMailAction]");
 		await actionButton.trigger("click");
@@ -111,7 +116,8 @@ describe("@/components/share-course/ShareModalResult", () => {
 		Object.assign(navigator, { share: mockSharePromise });
 
 		const shareUrl = "http://example.com";
-		const wrapper = getWrapper({ propsData: { shareUrl } });
+		const type = "course";
+		const wrapper = getWrapper({ propsData: { shareUrl, type } });
 
 		const actionButton = wrapper.find("[data-testid=mobilePlatformAction]");
 		await actionButton.trigger("click");

@@ -63,6 +63,15 @@ const mockRoomStoreData = [
 	},
 ];
 
+const mockCourseData = [
+	{
+		id: "1234",
+		title: "Mathe",
+		shortTitle: "Ma",
+		displayColor: "#54616e",
+	},
+];
+
 const mockAuthStoreData = {
 	__v: 0,
 	_id: "asdf",
@@ -161,6 +170,7 @@ describe("@/pages/RoomOverview", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		roomsModule.setRoomData(mockRoomStoreData);
+		roomsModule.setAllElements(mockCourseData);
 		authModule.setUser(mockAuthStoreData);
 	});
 
@@ -185,8 +195,29 @@ describe("@/pages/RoomOverview", () => {
 		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
+	it("should fetch the course data", async () => {
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
+
+		const expected = [
+			{
+				id: "1234",
+				isArchived: undefined,
+				searchText: "Mathe",
+				title: "Mathe",
+				shortTitle: "Ma",
+				displayColor: "#54616e",
+				to: "/rooms/1234",
+			},
+		];
+
+		expect(spyMocks.storeModuleFetchAllMock).toHaveBeenCalled();
+		expect(wrapper.vm.courses).toStrictEqual(expected);
+	});
+
 	it("should display 6 avatars component", async () => {
 		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(6);
@@ -195,12 +226,14 @@ describe("@/pages/RoomOverview", () => {
 	it("should display 2 avatars component in 'mobile' device", async () => {
 		const wrapper = getWrapper("mobile");
 		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 1 group-avatar component", async () => {
 		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
 		expect(groupAvatarComponents).toHaveLength(1);
@@ -209,6 +242,7 @@ describe("@/pages/RoomOverview", () => {
 	it("should call 'openDialog' event if groupAvatar component clicked", async () => {
 		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
@@ -216,6 +250,7 @@ describe("@/pages/RoomOverview", () => {
 
 	it("custom-dialog component should be visible", async () => {
 		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
@@ -239,6 +274,7 @@ describe("@/pages/RoomOverview", () => {
 
 	it("'$refs' should be placed correctly for the components", async () => {
 		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
@@ -300,6 +336,7 @@ describe("@/pages/RoomOverview", () => {
 			},
 		};
 		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -342,6 +379,7 @@ describe("@/pages/RoomOverview", () => {
 				y: 3,
 			},
 		};
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
@@ -504,6 +542,7 @@ describe("@/pages/RoomOverview", () => {
 			},
 		};
 		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -563,6 +602,7 @@ describe("@/pages/RoomOverview", () => {
 		roomsModule.setRoomData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});

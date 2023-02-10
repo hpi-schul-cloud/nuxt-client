@@ -123,6 +123,7 @@
 			<import-flow
 				:is-active="isImportMode"
 				:token="importToken"
+				:courses="courses"
 				@success="onImportSuccess"
 			></import-flow>
 		</template>
@@ -130,7 +131,7 @@
 </template>
 
 <script>
-import ImportFlow from "@/components/share-course/ImportFlow.vue";
+import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
@@ -207,6 +208,9 @@ export default {
 				}
 			);
 		},
+		courses() {
+			return roomsModule.getAllElements;
+		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
 		},
@@ -236,6 +240,7 @@ export default {
 	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await roomsModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(0, new Date());

@@ -2822,12 +2822,18 @@ export enum ShareTokenBodyParamsParentTypeEnum {
  * @interface ShareTokenImportBodyParams
  */
 export interface ShareTokenImportBodyParams {
-	/**
-	 * the new name of the imported object.
-	 * @type {string}
-	 * @memberof ShareTokenImportBodyParams
-	 */
-	newName: string;
+    /**
+     * the new name of the imported object.
+     * @type {string}
+     * @memberof ShareTokenImportBodyParams
+     */
+    newName: string;
+    /**
+     * Id of the course to which the lesson/task will be added
+     * @type {string}
+     * @memberof ShareTokenImportBodyParams
+     */
+    destinationCourseId?: string | null;
 }
 /**
  *

@@ -2,7 +2,7 @@
 	<div class="black--text">
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
-				{{ $t("components.molecules.shareCourse.options.schoolInternally") }}
+				{{ $t("components.molecules.share.options.schoolInternally") }}
 			</div>
 			<v-switch
 				v-model="shareOptions.isSchoolInternal"
@@ -16,7 +16,7 @@
 		</div>
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
-				{{ $t("components.molecules.shareCourse.options.expiresInDays") }}
+				{{ $t("components.molecules.share.options.expiresInDays") }}
 			</div>
 			<v-switch
 				v-model="shareOptions.hasExpiryDate"
@@ -38,6 +38,13 @@ import { defineComponent, reactive, watch } from "vue";
 export default defineComponent({
 	name: "ShareModalOptionsForm",
 	emits: ["shareOptionsChange"],
+	props: {
+		type: {
+			type: String,
+			required: true,
+			validator: (type) => ["course", "lesson", "task"].includes(type),
+		},
+	},
 	setup(props, { emit }) {
 		const shareOptions = reactive({
 			isSchoolInternal: true,

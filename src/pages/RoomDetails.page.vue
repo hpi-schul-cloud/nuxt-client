@@ -102,7 +102,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal></share-modal>
+		<share-modal type="course"></share-modal>
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -121,7 +121,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import ImportLessonModal from "@/components/molecules/ImportLessonModal";
 import MoreItemMenu from "@/components/molecules/MoreItemMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import ShareModal from "@/components/share-course/ShareModal.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {

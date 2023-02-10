@@ -4,7 +4,7 @@
 			filled
 			:value="shareUrl"
 			readonly
-			:label="`${$t('components.molecules.shareCourse.result.linkLabel')}`"
+			:label="`${$t(`components.molecules.share.${type}.result.linkLabel`)}`"
 		></v-text-field>
 		<div class="mb-4">
 			<div
@@ -34,7 +34,7 @@
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
-					@click="onMailShareUrl(shareUrl)"
+					@click="onMailShareUrl(shareUrl, type)"
 				>
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
@@ -43,7 +43,7 @@
 							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.shareCourse.result.mailShare")
+							$t("components.molecules.share.result.mailShare")
 						}}</span>
 					</span>
 				</v-btn>
@@ -63,7 +63,7 @@
 							<v-icon large>{{ mdiContentCopy }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.shareCourse.result.copyClipboard")
+							$t("components.molecules.share.result.copyClipboard")
 						}}</span>
 					</span>
 				</v-btn>
@@ -83,7 +83,7 @@
 							<v-icon large>{{ mdiQrcode }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.shareCourse.result.qrCodeScan")
+							$t("components.molecules.share.result.qrCodeScan")
 						}}</span>
 					</span>
 				</v-btn>
@@ -119,6 +119,11 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		type: {
+			type: String,
+			required: true,
+			validator: (type) => ["course", "lesson", "task"].includes(type),
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
@@ -131,12 +136,12 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const onMailShareUrl = (shareUrl) => {
+		const onMailShareUrl = (shareUrl, type) => {
 			const subject = encodeURIComponent(
-				t("components.molecules.shareCourse.mail.subject")
+				t(`components.molecules.share.${type}.mail.subject`)
 			);
 			const body = encodeURIComponent(
-				t("components.molecules.shareCourse.mail.body") + shareUrl
+				t(`components.molecules.share.${type}.mail.body`) + shareUrl
 			);
 			window.location.assign(`mailto:?subject=${subject}&body=${body}`);
 			emit("done");

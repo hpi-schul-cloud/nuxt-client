@@ -1,9 +1,9 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
-import ImportModal from "@/components/share-course/ImportModal.vue";
+import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
 
-describe("@/components/share-course/ImportModal", () => {
+describe("@components/share/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
 		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
@@ -38,6 +38,7 @@ describe("@/components/share-course/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		expect(wrapper).toBeTruthy();
@@ -48,6 +49,7 @@ describe("@/components/share-course/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const nameInput = wrapper.findComponent({
@@ -63,6 +65,7 @@ describe("@/components/share-course/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const dialog = wrapper.findComponent({
@@ -85,6 +88,7 @@ describe("@/components/share-course/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 		const dialog = wrapper.findComponent({
@@ -100,6 +104,7 @@ describe("@/components/share-course/ImportModal", () => {
 			propsData: {
 				isOpen: true,
 				parentName: "TestParentName",
+				parentType: "course",
 			},
 		});
 

@@ -4,14 +4,14 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import ShareModalOptionsForm from "@/components/share-course/ShareModalOptionsForm.vue";
-import ShareModalResult from "@/components/share-course/ShareModalResult.vue";
+import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
+import ShareModalResult from "@/components/share/ShareModalResult.vue";
 
-describe("@/components/share-course/ShareModal", () => {
+describe("@/components/share/ShareModal", () => {
 	let shareCourseModuleMock: ShareCourseModule;
 	const showMock = jest.fn();
 
-	const getWrapper = (attrs = {}) => {
+	const getWrapper = (attrs = { propsData: { type: "course" } }) => {
 		const wrapper = mount(ShareModal, {
 			...createComponentMocks({
 				i18n: true,
@@ -53,7 +53,7 @@ describe("@/components/share-course/ShareModal", () => {
 		const title = wrapper.vm.$refs.textTitle as HTMLElement;
 
 		expect(title.textContent).toContain(
-			"components.molecules.shareCourse.options.title"
+			"components.molecules.share.options.title"
 		);
 	});
 

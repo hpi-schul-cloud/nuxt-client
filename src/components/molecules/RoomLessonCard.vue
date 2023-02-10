@@ -172,11 +172,14 @@ export default {
 					});
 				}
 
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				if (
+					envConfigModule.getEnv.FEATURE_LESSON_SHARE ||
+					envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW
+				) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiShareVariant,
 						action: () => this.$emit("open-modal", this.lesson.id),
-						name: this.$t("pages.room.lessonCard.label.share"),
+						name: this.$t("pages.room.lessonCard.label.shareLesson"),
 						dataTestId: "content-card-lesson-menu-share",
 					});
 				}
