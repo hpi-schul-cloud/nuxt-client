@@ -71,9 +71,11 @@
 	</div>
 </template>
 <script>
+import { envConfigModule } from "@/store";
 import { required } from "vuelidate/lib/validators";
 import {
 	ldapPathRegexValidator,
+	ldapURLRegexValidator,
 	ldapSecuredURLRegexValidator,
 } from "@/utils/ldapConstants";
 
@@ -101,7 +103,7 @@ export default {
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "ldapSecuredURLRegexValidator",
+					key: "ldapURLValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
@@ -114,6 +116,8 @@ export default {
 		fillColor() {
 			return "var(--v-black-base)";
 		},
+		insecureLDAPURLAllowed: () =>
+			envConfigModule && envConfigModule.getInsecureLDAPURLAllowed,
 	},
 	watch: {
 		validate: function () {
@@ -124,7 +128,12 @@ export default {
 	validations() {
 		return {
 			value: {
-				url: { required, ldapSecuredURLRegexValidator },
+				url: {
+					required,
+					ldapURLValidator: this.insecureLDAPURLAllowed
+						? ldapURLRegexValidator
+						: ldapSecuredURLRegexValidator,
+				},
 				basisPath: { required, ldapPathRegexValidator },
 				searchUser: { required, ldapPathRegexValidator },
 				searchUserPassword: { required },

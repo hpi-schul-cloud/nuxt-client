@@ -19,6 +19,9 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED:
+		process.env.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED?.toLowerCase() ==
+		"true",
 };
 
 const retryLimit = 10;
@@ -128,6 +131,10 @@ export default class EnvConfigModule extends VuexModule {
 	}
 	get getGhostBaseUrl() {
 		return this.env.GHOST_BASE_URL;
+	}
+
+	get getInsecureLDAPURLAllowed() {
+		return this.env.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED || false;
 	}
 
 	get getEnv(): Envs {

@@ -28,6 +28,7 @@ const mockEnvs: Envs = {
 	SC_SHORT_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",
 	FEATURE_CONSENT_NECESSARY: true,
+	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
 };
 
 const URL = "/v1/config/app/public";
@@ -209,6 +210,33 @@ describe("env-config module", () => {
 			expect(envConfigModule.env.I18N__DEFAULT_TIMEZONE).toBe("");
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
 		});
+
+		it(
+			"getInsecureLDAPURLAllowed() should return false " +
+				"if FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED is not defined",
+			() => {
+				const envConfigModule = new EnvConfigModule({});
+
+				expect(
+					envConfigModule.env.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED
+				).toBe(false);
+				expect(envConfigModule.getInsecureLDAPURLAllowed).toBe(false);
+			}
+		);
+
+		it(
+			"getInsecureLDAPURLAllowed() should return true " +
+				"if FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED is defined and set to true",
+			() => {
+				const envConfigModule = new EnvConfigModule({});
+				envConfigModule.env = mockEnvs;
+
+				expect(
+					envConfigModule.env.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED
+				).toBe(true);
+				expect(envConfigModule.getInsecureLDAPURLAllowed).toBe(true);
+			}
+		);
 
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
