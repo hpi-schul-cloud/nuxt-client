@@ -117,7 +117,7 @@ export default {
 			return "var(--v-black-base)";
 		},
 		insecureLDAPURLAllowed: () =>
-			envConfigModule && envConfigModule.getInsecureLDAPURLAllowed,
+			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
 	watch: {
 		validate: function () {
