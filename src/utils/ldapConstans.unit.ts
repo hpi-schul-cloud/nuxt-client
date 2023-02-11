@@ -4,8 +4,6 @@ import {
 	ldapSecuredURLRegexValidator,
 } from "./ldapConstants";
 
-const ldapURLWithProtocolOnly = "ldap://";
-const ldapsURLWithProtocolOnly = "ldaps://";
 const ldapURLDomainWithPort = "ldap://asdf.de:123";
 const ldapURLDomainWithoutPort = "ldap://asdf.de";
 const ldapURLIPv4WithPort = "ldap://127.0.0.1:123";
@@ -14,6 +12,8 @@ const ldapsURLDomainWithPort = "ldaps://asdf.de:123";
 const ldapsURLDomainWithoutPort = "ldaps://asdf.de";
 const ldapsURLIPv4WithPort = "ldaps://127.0.0.1:123";
 const ldapsURLIPv4WithoutPort = "ldaps://127.0.0.1";
+const ldapProtocol = "ldap://";
+const ldapsProtocol = "ldaps://";
 const randomDomain = "example.com";
 const randomText = "asdf";
 
@@ -72,11 +72,11 @@ describe("ldapConstant", () => {
 		});
 
 		it("should reject URL with just an ldap:// protocol", () => {
-			expect(ldapURLRegexValidator(ldapURLWithProtocolOnly)).toBe(false);
+			expect(ldapURLRegexValidator(ldapProtocol)).toBe(false);
 		});
 
 		it("should reject URL with just an ldaps:// protocol", () => {
-			expect(ldapURLRegexValidator(ldapsURLWithProtocolOnly)).toBe(false);
+			expect(ldapURLRegexValidator(ldapsProtocol)).toBe(false);
 		});
 
 		it("should reject URL with just a domain", () => {
@@ -126,13 +126,11 @@ describe("ldapConstant", () => {
 		});
 
 		it("should reject URL with just an ldaps:// protocol", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLWithProtocolOnly)).toBe(
-				false
-			);
+			expect(ldapSecuredURLRegexValidator(ldapsProtocol)).toBe(false);
 		});
 
 		it("should reject URL with just an ldap:// protocol", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLWithProtocolOnly)).toBe(false);
+			expect(ldapSecuredURLRegexValidator(ldapProtocol)).toBe(false);
 		});
 
 		it("should reject URL with just a domain", () => {
