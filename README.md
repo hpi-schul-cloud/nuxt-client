@@ -16,6 +16,12 @@ With the seamlessly integrated learning store, the cloud offers access to a wide
 
 The "Schulcloud-Verbundsoftware" is developed according to the one-for-all principle: All partners benefit from the joint further developments. Where necessary, the software is adapted to country-specific needs.
 
+## Documentation
+
+If you want to get started on how to use this project, you can start with our **[Getting Started-Document](./docs/0_GettingStarted.md)**.
+
+The complete **[documentation](./docs/README.md)** for this repository can be found here: *./docs/README.md*.
+
 ## Related repositories
 
 - [Schulcloud-Client](https://github.com/hpi-schul-cloud/schulcloud-client) - the (partly still in use) legacy frontend

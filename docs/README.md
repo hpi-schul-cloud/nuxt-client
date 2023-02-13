@@ -12,11 +12,30 @@ footer: Copyright © 2019-present HPI Schul-Cloud
 
 
 
-| filename              | content                                                 |
-|-----------------------|---------------------------------------------------------|
-| 0_GettingStarted.md   | First steps to get your Frontend-Server up and running. |
-| 1_CodeConventions.md  | Conventions defined for the project like **filenaming**, **directory structure** , **data-testid(s)** and others... |
-| 2_GitConventions.md   | Conventions on how to name your branches and how to create and name PullRequests. |
-| 3_HowTo.md            | Collection of information on how to use **Feature Flags**, the **generated API**, **user-permissions on pages**, **exception handling** and more. |
-| 4_WritingTests.md     | Detailed description on how to write unit tests.        |
-| 5_Accessibility.md    | Collection of information and links on how we want to achieve a great accessibility. |
+
+**[0_GettingStarted.md](./0_GettingStarted.md)**
+
+First steps to get your Frontend-Server up and running.
+
+
+**[1_CodeConventions.md](./1_CodeConventions.md)**
+
+Code Conventions defined for the project like **filenaming**, **directory structure** , **data-testid(s)** and others...
+
+
+**[2_GitConventions.md](./2_GitConventions.md)**
+
+Git Conventions on how to name your branches and how to create and name PullRequests.
+
+**[3_HowTo.md](./3_HowTo.md)**
+
+Collection of information on how to use **Feature Flags**, the **generated API**, **user-permissions on pages**, **exception handling** and more.
+
+**[4_WritingTests.md](./4_WritingTests.md)**
+
+Detailed description on how to write unit tests.
+
+**[5_Accessibility.md](./5_Accessibility.md)**
+
+Collection of information and links on how we want to achieve a great accessibility.
+
