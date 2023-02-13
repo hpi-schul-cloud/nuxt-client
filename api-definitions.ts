@@ -45,7 +45,7 @@
             On each board-mutation, we return the full board-skeleton and update to minimize potential conflicts.			
 */
 
-type BoardCardType = "task" | "content" | "legacy-task" | "legacy-lesson";
+type BoardCardType = "task" | "content" | "legacy-task-reference" | "legacy-lesson-reference";
 
 // GET - Load a Board
 // /boards/:id
