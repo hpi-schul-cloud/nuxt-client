@@ -16,6 +16,7 @@
 							:tasks="noDueDateTasks"
 							user-role="teacher"
 							@copy-task="onCopyTask"
+							@share-task="onShareTask"
 						/>
 					</template>
 					<template #panelTwo>
@@ -24,12 +25,14 @@
 							:title="$t('pages.tasks.teacher.subtitleOverDue')"
 							user-role="teacher"
 							@copy-task="onCopyTask"
+							@share-task="onShareTask"
 						/>
 						<tasks-list
 							:tasks="withDueDateTasks"
 							:title="$t('pages.tasks.subtitleOpen')"
 							user-role="teacher"
 							@copy-task="onCopyTask"
+							@share-task="onShareTask"
 						/>
 					</template>
 				</v-custom-double-panels>
@@ -46,6 +49,7 @@
 					:tasks="draftTasks"
 					user-role="teacher"
 					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 				<v-custom-empty-state
 					v-if="draftsForTeacherIsEmpty"
@@ -61,6 +65,7 @@
 					type="finished"
 					:has-pagination="tab === tabRoutes[2]"
 					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 				<v-custom-empty-state
 					v-if="finishedTasksIsEmpty"
@@ -70,6 +75,7 @@
 				/>
 			</v-tab-item>
 		</v-tabs-items>
+		<share-modal type="task" />
 	</section>
 </template>
 
@@ -80,6 +86,8 @@ import TasksList from "@/components/organisms/TasksList";
 import { defineComponent, inject } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
+import { envConfigModule } from "@/store";
+import ShareModal from "@/components/share/ShareModal.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -95,7 +103,7 @@ export default defineComponent({
 			copy,
 		};
 	},
-	components: { vCustomEmptyState, TasksList, vCustomDoublePanels },
+	components: { vCustomEmptyState, TasksList, vCustomDoublePanels, ShareModal },
 	props: {
 		emptyState: {
 			type: Object,
@@ -106,7 +114,12 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["tasksModule", "finishedTasksModule", "copyModule"],
+	inject: [
+		"tasksModule",
+		"finishedTasksModule",
+		"copyModule",
+		"shareTaskModule",
+	],
 	computed: {
 		openTasks() {
 			return this.tasksModule.getOpenTasksForTeacher;
@@ -159,6 +172,11 @@ export default defineComponent({
 
 			this.tasksModule.setActiveTab("drafts");
 			await this.tasksModule.fetchAllTasks();
+		},
+		async onShareTask(taskId) {
+			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+				this.shareTaskModule.startShareFlow(taskId);
+			}
 		},
 	},
 });
