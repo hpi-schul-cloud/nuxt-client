@@ -138,7 +138,7 @@ interface TitleContentElement {}
 // how we transfer the version on each request is up for debate.
 
 // PUT - Move a Card on the board
-// /boards/:boardId/card/:cardId/position
+// /boards/:boardId/cards/:cardId/position
 
 interface Payload {
 	toColumnId: CourseBoardColumn["id"];
@@ -152,7 +152,7 @@ interface Response {}
 interface Response {}
 
 // PUT - Move a Column on the board
-// /boards/:boardId/column/:columnId/position
+// /boards/:boardId/columns/:columnId/position
 
 interface Payload {
 	toIndex: number;
@@ -178,7 +178,7 @@ interface Response {}
 interface Response {}
 
 // PUT - Rename a Column
-// /boards/:boardId/column/:columnId/title
+// /boards/:boardId/columns/:columnId/title
 
 interface Payload {
 	title: BoardColumn["title"];
@@ -213,7 +213,7 @@ interface Response {}
 interface Response {}
 
 // DELETE - Delete a Column
-// /boards/:boardId/column/:columnId
+// /boards/:boardId/columns/:columnId
 
 /**
  * Deleting a Column also deletes Cards within.
@@ -231,7 +231,7 @@ interface Response {}
 /*
   ---------------------------
   POST - Create a Card
-  /boards/:boardId/column/:columnId/card
+  /boards/:boardId/columns/:columnId/card
   ---------------------------
 
   - title: defaults to an empty string
@@ -252,7 +252,7 @@ interface Response {}
 /*
   ---------------------------
   DELETE - Delete a Card
-  /boards/:boardId/card/:cardId
+  /boards/:boardId/cards/:cardId
   ---------------------------
 
   - Deleting a Card also updates the board.
