@@ -30,7 +30,82 @@ if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 
 ## <a name='UsinggeneratedAPIanditstypes'></a>Using generated API and it's types
 
-// TODO: WRITE THIS BEFORE MERGE
+We are using a generator script to create classes to access the Schulcloud-Backend-API - V3 (so Legacy-Backend endpoints (aka V1) are not covered).
+These generated classes and methods internally use axios to request data and use generated types - both for the input to the methods and for the returned types.
+
+> **HINT**
+>
+> Please use the generated types in your stores and do not redefine the same types. This way consistency between Server and Api-Access stays stable.
+
+
+### Regenerating the clients
+
+Only if the server-api or the filestore-api has changed, you need to regenerate them using the following npm-scripts:
+
+For generating the files to access the **server-api** please use:
+
+```shell
+npm run generate-client:server
+```
+
+The same is implemented for generating the backend-api to our filestore-backend.
+
+For generating the files to access the **filestore-api** please use:
+
+```shell
+npm run generate-client:filestorage
+```
+
+> **Hint**
+>
+> For regenerating the clients you need an up-to-date running backend-server running in your environment.
+
+### Using the generated api
+
+The generated APIs can easily be used. Examples can be seen in any current store-implementation - like here:
+
+```TypeScript
+src/store/share-course.ts:
+
+import {
+	ShareTokenApiFactory,
+	ShareTokenApiInterface,
+	ShareTokenBodyParams,
+	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenResponse,
+} from "../serverApi/v3/api";
+
+...
+
+export default class ShareCourseModule extends VuexModule {
+	...
+	private get shareApi(): ShareTokenApiInterface {
+		return ShareTokenApiFactory(undefined, "v3", $axios);
+	}
+
+	@Action
+	async createShareUrl(
+		payload: SharePayload
+	): Promise<ShareTokenResponse | undefined> {
+		const shareTokenPayload: ShareTokenBodyParams = {
+			parentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+			parentId: this.courseId,
+			expiresInDays: payload.hasExpiryDate ? 21 : null,
+			schoolExclusive: payload.isSchoolInternal,
+		};
+		...
+		const shareTokenResult =
+			await this.shareApi.shareTokenControllerCreateShareToken(
+				shareTokenPayload
+			);
+		...
+	}
+    ...
+}
+
+```
+
+
 
 ## <a name='User-PermissionsonPages'></a>User-Permissions on Pages
 
