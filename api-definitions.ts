@@ -45,7 +45,11 @@
             On each board-mutation, we return the full board-skeleton and update to minimize potential conflicts.			
 */
 
-type BoardCardType = "task" | "content" | "legacy-task-reference" | "legacy-lesson-reference";
+type BoardCardType =
+	| "task"
+	| "content"
+	| "legacy-task-reference"
+	| "legacy-lesson-reference";
 
 // GET - Load a Board
 // /boards/:id
@@ -129,12 +133,15 @@ interface TextContentElement {}
 
 interface TitleContentElement {}
 
-// PATCH - Move a Card on the board
-// /boards/:boardId/movecard
+// **IDEA**
+// We want to prevent collisions or at least notify about collisions by versioning the board with an autoincrement ID on database manipulation
+// how we transfer the version on each request is up for debate.
+
+// PUT - Move a Card on the board
+// /boards/:boardId/card/:cardId/position
 
 interface Payload {
-	cardId: BoardSkeletonCard["id"];
-	toColumnId: BoardColumn["id"];
+	toColumnId: CourseBoardColumn["id"];
 	toIndex: number;
 }
 
@@ -144,25 +151,10 @@ interface Response {}
 // 400 Bad Request - some id did not exist -> Card was not moved, reload
 interface Response {}
 
-// PATCH - Move a Column on the board
-// /boards/:boardId/movecolumn
-
-interface Payload {
-	columnId: BoardColumn["id"];
-	toIndex: number;
-}
-
-// Responses
-// 200 OK - Column was moved to expected position
-interface Response {}
-// 400 Bad Request - some id did not exist -> Column was not moved, reload
-interface Response {}
-
 // PUT - Move a Column on the board
-// /boards/:boardId/movecolumn
+// /boards/:boardId/column/:columnId/position
 
 interface Payload {
-	columnId: BoardColumn["id"];
 	toIndex: number;
 }
 
@@ -172,8 +164,8 @@ interface Response {}
 // 400 Bad Request - some id did not exist -> Column was not moved, reload
 interface Response {}
 
-// PATCH - Rename a Board
-// /boards/:boardId/renameboard
+// PUT - Rename a Board
+// /boards/:boardId/title
 
 interface Payload {
 	title: Board["title"];
@@ -185,8 +177,8 @@ interface Response {}
 // 400 Bad Request - Validation Error -> board was not renamed
 interface Response {}
 
-// PATCH - Rename a Column
-// /boards/:boardId/column/:columnId/rename
+// PUT - Rename a Column
+// /boards/:boardId/column/:columnId/title
 
 interface Payload {
 	title: BoardColumn["title"];
@@ -239,7 +231,7 @@ interface Response {}
 /*
   ---------------------------
   POST - Create a Card
-  /boards/:boardId/column/:columnId/createcard
+  /boards/:boardId/column/:columnId/card
   ---------------------------
 
   - title: defaults to an empty string
