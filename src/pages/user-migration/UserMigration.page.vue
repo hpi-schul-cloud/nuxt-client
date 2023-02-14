@@ -51,17 +51,9 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import UserMigrationModule from "@/store/user-migration";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-migration";
-import {
-	computed,
-	ComputedRef,
-	ref,
-	Ref,
-	defineComponent,
-	inject,
-	onMounted,
-} from "vue";
+import { computed, ComputedRef, inject, onMounted, Ref, ref } from "vue";
 
-export default defineComponent({
+export default {
 	name: "UserMigration",
 	layout: "loggedOut",
 	props: {
@@ -81,7 +73,10 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	setup(props) {
+	meta: {
+		isPublic: true,
+	},
+	setup(props: any) {
 		const { createApplicationError } = useApplicationError();
 		if (!props.targetSystem || !props.sourceSystem || !props.origin) {
 			throw createApplicationError(HttpStatusCode.BadRequest);
@@ -156,7 +151,7 @@ export default defineComponent({
 			getSystemName,
 		};
 	},
-});
+};
 </script>
 
 <style lang="scss" scoped>
