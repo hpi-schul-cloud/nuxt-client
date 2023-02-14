@@ -41,6 +41,15 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
+		path: "/administration/school-settings/tool",
+		component: () =>
+			import(
+				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
+			),
+		name: "administration-tool-config-overview",
+		beforeEnter: createPermissionGuard(["school_tool_admin"]),
+	},
+	{
 		path: "/administration/students",
 		component: () => import("../pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
@@ -154,12 +163,12 @@ export const routes: Array<RouteConfig> = [
 	{
 		path: `/task-cards/:id(${REGEX_ID})/edit`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-edit",
+		name: "task-card-edit",
 	},
 	{
 		path: "/task-cards/new",
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-new",
+		name: "task-card-new",
 	},
 	// deprecated?
 	{
