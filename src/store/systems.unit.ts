@@ -106,8 +106,8 @@ describe("SystemsModule", () => {
 				};
 
 				jest
-					.spyOn(serverApi, "SystemApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.SystemApiInterface);
+					.spyOn(serverApi, "SystemsApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.SystemsApiInterface);
 
 				return {
 					apiMock: mockApi,
