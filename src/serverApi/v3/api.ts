@@ -783,7 +783,7 @@ export interface CustomParameterResponse {
      * @type {string}
      * @memberof CustomParameterResponse
      */
-    _default?: string;
+    defaultValue?: string;
     /**
      * 
      * @type {string}
@@ -1830,7 +1830,7 @@ export interface Oauth2ToolConfigParams {
      * @type {string}
      * @memberof Oauth2ToolConfigParams
      */
-    clientSecret: string;
+    clientSecret?: string;
     /**
      * 
      * @type {boolean}
@@ -2215,6 +2215,79 @@ export interface OauthClientResponse {
 /**
  * 
  * @export
+ * @interface OauthConfigResponse
+ */
+export interface OauthConfigResponse {
+    /**
+     * Client id
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    clientId: string;
+    /**
+     * Redirect uri
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    redirectUri: string;
+    /**
+     * Grant type
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    grantType: string;
+    /**
+     * Token endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    tokenEndpoint: string;
+    /**
+     * Auth endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    authEndpoint: string;
+    /**
+     * Response type
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    responseType: string;
+    /**
+     * Scope
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    scope: string;
+    /**
+     * Provider
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    provider: string;
+    /**
+     * Logout endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    logoutEndpoint: string;
+    /**
+     * Issuer
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    issuer: string;
+    /**
+     * Jwks endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    jwksEndpoint: string;
+}
+/**
+ * 
+ * @export
  * @interface OidcContextResponse
  */
 export interface OidcContextResponse {
@@ -2362,6 +2435,62 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PublicSystemListResponse
+ */
+export interface PublicSystemListResponse {
+    /**
+     * 
+     * @type {Array<PublicSystemResponse>}
+     * @memberof PublicSystemListResponse
+     */
+    data: Array<PublicSystemResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface PublicSystemResponse
+ */
+export interface PublicSystemResponse {
+    /**
+     * Id of the system.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    id: string;
+    /**
+     * Flag to request only systems with oauth-config.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    type?: string | null;
+    /**
+     * Url of the system.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    url?: string | null;
+    /**
+     * Alias of the system.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    alias?: string | null;
+    /**
+     * Display name of the system.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    displayName?: string | null;
+    /**
+     * Oauth config of the system.
+     * @type {OauthConfigResponse}
+     * @memberof PublicSystemResponse
+     */
+    oauthConfig?: OauthConfigResponse | null;
 }
 /**
  * 
@@ -2680,6 +2809,12 @@ export interface ShareTokenImportBodyParams {
      * @memberof ShareTokenImportBodyParams
      */
     newName: string;
+    /**
+     * Id of the course to which the lesson/task will be added
+     * @type {string}
+     * @memberof ShareTokenImportBodyParams
+     */
+    destinationCourseId?: string | null;
 }
 /**
  * 
@@ -8635,21 +8770,21 @@ export class SubmissionApi extends BaseAPI implements SubmissionApiInterface {
 
 
 /**
- * SystemApi - axios parameter creator
+ * SystemsApi - axios parameter creator
  * @export
  */
-export const SystemApiAxiosParamCreator = function (configuration?: Configuration) {
+export const SystemsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary Finds all systems.
+         * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
+         * @summary Finds all publicly available systems.
          * @param {string} [type] The type of the system.
          * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         systemControllerFind: async (type?: string, onlyOauth?: boolean, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/system`;
+            const localVarPath = `/systems/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8684,21 +8819,21 @@ export const SystemApiAxiosParamCreator = function (configuration?: Configuratio
 };
 
 /**
- * SystemApi - functional programming interface
+ * SystemsApi - functional programming interface
  * @export
  */
-export const SystemApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = SystemApiAxiosParamCreator(configuration)
+export const SystemsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SystemsApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
-         * @summary Finds all systems.
+         * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
+         * @summary Finds all publicly available systems.
          * @param {string} [type] The type of the system.
          * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -8706,63 +8841,63 @@ export const SystemApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * SystemApi - factory interface
+ * SystemsApi - factory interface
  * @export
  */
-export const SystemApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = SystemApiFp(configuration)
+export const SystemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SystemsApiFp(configuration)
     return {
         /**
-         * 
-         * @summary Finds all systems.
+         * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
+         * @summary Finds all publicly available systems.
          * @param {string} [type] The type of the system.
          * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object> {
+        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
             return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * SystemApi - interface
+ * SystemsApi - interface
  * @export
- * @interface SystemApi
+ * @interface SystemsApi
  */
-export interface SystemApiInterface {
+export interface SystemsApiInterface {
     /**
-     * 
-     * @summary Finds all systems.
+     * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
+     * @summary Finds all publicly available systems.
      * @param {string} [type] The type of the system.
      * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemApiInterface
+     * @memberof SystemsApiInterface
      */
-    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<object>;
+    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
 
 }
 
 /**
- * SystemApi - object-oriented interface
+ * SystemsApi - object-oriented interface
  * @export
- * @class SystemApi
+ * @class SystemsApi
  * @extends {BaseAPI}
  */
-export class SystemApi extends BaseAPI implements SystemApiInterface {
+export class SystemsApi extends BaseAPI implements SystemsApiInterface {
     /**
-     * 
-     * @summary Finds all systems.
+     * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
+     * @summary Finds all publicly available systems.
      * @param {string} [type] The type of the system.
      * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemApi
+     * @memberof SystemsApi
      */
     public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
-        return SystemApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
+        return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9719,6 +9854,43 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolSchoolControllerGetSchoolExternalTool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolExternalToolId' is not null or undefined
+            assertParamExists('toolSchoolControllerGetSchoolExternalTool', 'schoolExternalToolId', schoolExternalToolId)
+            const localVarPath = `/tools/school/{schoolExternalToolId}`
+                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} schoolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9876,6 +10048,16 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} schoolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9993,6 +10175,15 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolResponse> {
+            return localVarFp.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} schoolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10105,6 +10296,15 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} schoolExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolResponse>;
 
     /**
      * 
@@ -10239,6 +10439,17 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} schoolExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
