@@ -68,7 +68,9 @@ export default defineComponent({
 				model: "",
 				props: {
 					component: CardElementComponentEnum.RichText,
-					placeholder: i18n.t("common.labels.description") as string,
+					placeholder: i18n.t(
+						"components.cardElement.richTextElement.placeholder"
+					) as string,
 					editable: true,
 				},
 			});
