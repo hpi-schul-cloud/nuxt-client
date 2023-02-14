@@ -6,7 +6,7 @@ import {
 	MigrationLinks,
 	MigrationPageOrigin,
 } from "@/store/types/user-migration";
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
@@ -41,7 +41,7 @@ describe("UserMigration", () => {
 			getMigrationLinks: migrationLinksMock,
 		});
 
-		const wrapper: Wrapper<any> = mount(UserMigration, {
+		const wrapper: Wrapper<any> = mount(UserMigration as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -132,7 +132,7 @@ describe("UserMigration", () => {
 					.mockImplementation();
 
 				try {
-					shallowMount(UserMigration, {
+					shallowMount(UserMigration as MountOptions<Vue>, {
 						...createComponentMocks({
 							i18n: true,
 						}),
@@ -161,7 +161,7 @@ describe("UserMigration", () => {
 					.mockImplementation();
 
 				try {
-					shallowMount(UserMigration, {
+					shallowMount(UserMigration as MountOptions<Vue>, {
 						...createComponentMocks({
 							i18n: true,
 						}),
