@@ -7,6 +7,7 @@
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<date-time-picker
+				required
 				:date-time="dueDate"
 				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
 				@input="handleDateTimeInput"
@@ -28,19 +29,20 @@
 import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, authModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
-import CardElementList from "@/components/card-elements/CardElementList.vue";
-import {
-	CardElement,
-	CardElementComponentEnum,
-} from "@/store/types/card-element";
 import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
+import {
+	CardElement,
+	CardElementComponentEnum,
+} from "@/store/types/card-element";
+import { taskCardModule, authModule } from "@/store";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
+import CardElementList from "@/components/card-elements/CardElementList.vue";
+import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -49,6 +51,7 @@ export default defineComponent({
 		DefaultWireframe,
 		CardElementWrapper,
 		CardElementList,
+		DateTimePicker,
 	},
 	setup() {
 		const router = useRouter();

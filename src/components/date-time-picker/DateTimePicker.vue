@@ -2,6 +2,7 @@
 	<v-row>
 		<v-col class="col-sm-4">
 			<date-picker
+				required
 				:date="date"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"

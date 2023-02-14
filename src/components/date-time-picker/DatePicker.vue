@@ -15,6 +15,7 @@
 				:append-icon="mdiCalendar"
 				:placeholder="$t('format.date')"
 				readonly
+				:rules="validationRules"
 				v-bind="attrs"
 				v-on="on"
 				@keydown.space="showDateDialog = true"
@@ -100,6 +101,16 @@ export default defineComponent({
 			}, 100);
 		};
 
+		const checkRequired = (v: string) => {
+			if (!props.required) {
+				return true;
+			}
+
+			return !!v || "required";
+		};
+
+		const validationRules = [checkRequired];
+
 		watch(
 			() => props.date,
 			(newValue: string) => {
@@ -116,6 +127,7 @@ export default defineComponent({
 			allowedDates,
 			onInput,
 			focusDatePicker,
+			validationRules,
 		};
 	},
 });
