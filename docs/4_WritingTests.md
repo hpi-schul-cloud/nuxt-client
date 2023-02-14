@@ -50,7 +50,7 @@ Some functionality it provides:
 - **findComponent()**: finds a component by it's class, name or ref
 - **findAllComponents()**: finds all components by it's class, name or ref
 - **[find() / findAll()](https://v1.test-utils.vuejs.org/api/wrapper/#find)**: search for html elements using html-selectors
-  - **deprecated for finding Copmponents**
+  - **deprecated for finding Components**
   - use findComponent() or findAllComponents() instead
 - **setData()**: set specific data on the component
 - **trigger()** + **emit()**: test events and the flow of data
