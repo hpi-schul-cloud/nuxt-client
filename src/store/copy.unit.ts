@@ -250,6 +250,58 @@ describe("copy module", () => {
 				).rejects.toThrow(`CopyProcess unknown type: ${payload.type}`);
 			});
 		});
+
+		describe("import a lesson", () => {
+			it("should import a lesson by using the shareApi", async () => {
+				const shareApiMock = {
+					shareTokenControllerImportShareToken: jest.fn(async () => ({
+						data: {},
+					})),
+				};
+				jest
+					.spyOn(serverApi, "ShareTokenApiFactory")
+					.mockReturnValue(
+						shareApiMock as unknown as serverApi.ShareTokenApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+				const token = "abc123a";
+				const newName = "My Lesson";
+				const payload = {
+					token,
+					type: CopyParamsTypeEnum.Lesson,
+					newName,
+				};
+
+				await copyModule.copyByShareToken(payload);
+
+				expect(
+					shareApiMock.shareTokenControllerImportShareToken
+				).toHaveBeenCalledWith(token, { newName });
+			});
+
+			it("should throw an error if copyResult is undefined", async () => {
+				const shareApiMock = {
+					shareTokenControllerImportShareToken: jest.fn(async () => ({})),
+				};
+				jest
+					.spyOn(serverApi, "ShareTokenApiFactory")
+					.mockReturnValue(
+						shareApiMock as unknown as serverApi.ShareTokenApiInterface
+					);
+
+				const copyModule = new CopyModule({});
+				const payload = {
+					token: "abc123a",
+					type: CopyParamsTypeEnum.Lesson,
+					newName: "My Lesson",
+				};
+
+				await expect(() =>
+					copyModule.copyByShareToken(payload)
+				).rejects.toThrow(`CopyProcess unknown type: ${payload.type}`);
+			});
+		});
 	});
 
 	describe("mutations", () => {

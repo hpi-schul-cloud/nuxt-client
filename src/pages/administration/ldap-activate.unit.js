@@ -280,7 +280,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: mockStore,
 				$router: { push: routerPushStub },
-				$route,
+				$route: { query: {} },
 			}),
 			mocks: {
 				$theme: {

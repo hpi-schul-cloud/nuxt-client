@@ -1,5 +1,6 @@
 # Editor Configs
 *.swp
+.idea
 .dccache
 # Local Developer Configs
 
@@ -35,3 +36,6 @@ nuxt.config.js
 .vscode/launch.json
 
 __snapshots__
+
+# IntelliJ
+.idea/

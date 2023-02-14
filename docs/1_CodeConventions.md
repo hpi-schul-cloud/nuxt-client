@@ -67,5 +67,5 @@ Composables are a great way to make our code more reusable and to extract code f
 If you write a composable:
 
 * it should have the extension ``.composable.ts``
-* should be placed in your feature folder (see section "Vue project structure" above), if it is only used inside of your feature
+* should be placed in your feature folder (see section "directory structure" above), if it is only used inside of your feature
 * should be placed in the global folder ``/ src / composables``, if it is used in multiple features
