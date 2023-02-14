@@ -9,7 +9,7 @@ import {
 import { MigrationLinkRequest, MigrationLinks } from "./types/user-migration";
 
 @Module({
-	name: "user-migration",
+	name: "userMigrationModule",
 	namespaced: true,
 	stateFactory: true,
 })

@@ -10,7 +10,7 @@ import {
 import { System } from "./types/system";
 
 @Module({
-	name: "systems",
+	name: "systemsModule",
 	namespaced: true,
 	stateFactory: true,
 })
