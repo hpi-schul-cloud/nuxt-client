@@ -13,11 +13,13 @@
 				:label="label"
 				:aria-label="ariaLabel"
 				:append-icon="mdiCalendar"
+				:placeholder="$t('format.date')"
 				readonly
 				v-bind="attrs"
 				v-on="on"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
+				@keydown.prevent.down="focusDatePicker"
 			/>
 		</template>
 		<v-date-picker
@@ -45,7 +47,8 @@ export default defineComponent({
 	props: {
 		date: { type: String, required: true },
 		label: { type: String, default: "" },
-		ariaLabel: { type: String, required: true },
+		ariaLabel: { type: String, default: "" },
+		required: { type: Boolean },
 	},
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -87,18 +90,13 @@ export default defineComponent({
 			showDateDialog.value = false;
 		};
 
-		// TODO - clarify is this is good or bad accessibility
-		const focusDateWithKeyBoard = () => {
+		const focusDatePicker = () => {
 			setTimeout(() => {
-				const focusedDate = selectedDate.value
-					? document.querySelector<HTMLElement>(".v-btn--active")
-					: document.querySelector<HTMLElement>(
-							".v-date-picker-table__current"
-					  );
+				const prevMonthBtn = document.querySelector<HTMLElement>(
+					".v-date-picker-header button"
+				);
 
-				if (focusedDate) {
-					focusedDate.focus();
-				}
+				prevMonthBtn?.focus();
 			}, 100);
 		};
 
@@ -109,12 +107,6 @@ export default defineComponent({
 			}
 		);
 
-		watch(showDateDialog, (newValue: boolean) => {
-			if (newValue) {
-				focusDateWithKeyBoard();
-			}
-		});
-
 		return {
 			mdiCalendar,
 			locale,
@@ -123,6 +115,7 @@ export default defineComponent({
 			formattedDate,
 			allowedDates,
 			onInput,
+			focusDatePicker,
 		};
 	},
 });

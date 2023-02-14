@@ -21,7 +21,7 @@
 				@keydown.prevent.enter="showTimeDialog = true"
 			/>
 		</template>
-		<v-list height="200" class="col-12 pt-1">
+		<v-list height="200" class="col-12 pt-1 px-0">
 			<v-list-item-group v-model="selectedTime" color="primary">
 				<div
 					v-for="(timeOfDay, index) in timesOfDayList"
@@ -49,7 +49,7 @@ export default defineComponent({
 	props: {
 		time: { type: String, required: true },
 		label: { type: String, default: "" },
-		ariaLabel: { type: String, required: true },
+		ariaLabel: { type: String, default: "" },
 	},
 	setup(props, { emit }) {
 		const timesOfDayList = computed(() => {
@@ -73,10 +73,16 @@ export default defineComponent({
 			emit("input", inputTime.value);
 		};
 
+		let inputTimeout: number | null = null;
 		const onInput = (input: string) => {
+			if (inputTimeout) clearTimeout(inputTimeout);
+
 			inputTime.value = input;
 			showTimeDialog.value = false;
-			emit("input", inputTime.value);
+
+			inputTimeout = setTimeout(() => {
+				emit("input", inputTime.value);
+			}, 1000);
 		};
 
 		watch(

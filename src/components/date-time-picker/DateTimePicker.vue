@@ -44,9 +44,9 @@ export default defineComponent({
 		dateInputAriaLabel: { type: String, default: "" },
 		timeInputLabel: { type: String, default: "" },
 		timeInputAriaLabel: { type: String, default: "" },
-		// required: {
-		// 	type: Boolean,
-		// },
+		required: {
+			type: Boolean,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");

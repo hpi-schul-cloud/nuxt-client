@@ -8,7 +8,6 @@
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<date-time-picker
 				:date-time="dueDate"
-				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
 				@input="handleDateTimeInput"
 			/>
