@@ -69,10 +69,10 @@ spec:
         resources:
           limits:
             cpu: {{ NUXTCLIENT_CPU_LIMITS|default("2000m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("1Gi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("256Mi", true) }}
           requests:
             cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("128Mi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("32Mi", true) }}
       volumes:
       - name: pid-dir
         emptyDir: {}
