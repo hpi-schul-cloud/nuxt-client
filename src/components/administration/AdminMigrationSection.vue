@@ -3,8 +3,13 @@
 		<h2 class="text-h4 mb-10">
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
+		<p
+			v-html="t('components.administration.adminMigrationSection.description')"
+		></p>
 		<v-alert light prominent text type="info">
-			{{ t("components.administration.adminMigrationSection.infoText") }}
+			<p
+				v-html="t('components.administration.adminMigrationSection.infoText')"
+			/>
 		</v-alert>
 		<v-btn
 			v-if="isShowStartButton"
@@ -63,8 +68,12 @@
 		>
 			{{
 				t(
-					"components.administration.adminMigrationSection.oauthMigrationFinished.text"
-				) + oauthMigrationFinished
+					"components.administration.adminMigrationSection.oauthMigrationFinished.text",
+					{
+						date: dayjs(oauthMigrationFinished).format("DD.MM.YYYY"),
+						time: dayjs(oauthMigrationFinished).format("HH:mm"),
+					}
+				)
 			}}
 		</p>
 
@@ -77,7 +86,7 @@
 
 		<migration-end-warning-card
 			v-if="isShowEndWarning"
-      data-testid="migration-end-warning-card"
+			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, isMigrationMandatory)"
 		></migration-end-warning-card>
@@ -85,12 +94,21 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 import { MigrationBody } from "@/serverApi/v3";
 import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
 import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
+import dayjs from "dayjs";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -109,8 +127,8 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
+		const t = (key: string, values?: VueI18n.Values | undefined) => {
+			const translateResult = i18n.t(key, values);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
@@ -186,6 +204,7 @@ export default defineComponent({
 			isShowStartButton,
 			isShowEndButton,
 			isShowMandatorySwitch,
+			dayjs,
 		};
 	},
 });

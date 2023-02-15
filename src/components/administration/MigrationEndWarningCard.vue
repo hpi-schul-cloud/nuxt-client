@@ -1,6 +1,6 @@
 <template>
 	<v-card class="migration-end-card">
-		<v-card-title
+		<v-card-title style="word-break: break-word"
 			>{{
 				$t(
 					"components.administration.adminMigrationSection.endWarningCard.title"
@@ -8,19 +8,39 @@
 			}}
 		</v-card-title>
 		<v-card-text>
-			<div>
-				{{
+			<p
+				v-html="
 					$t(
-						"components.administration.adminMigrationSection.endWarningCard.text"
+						'components.administration.adminMigrationSection.endWarningCard.text'
 					)
-				}}
-			</div>
+				"
+			></p>
+			<v-checkbox
+				v-model="isConfirmed"
+				:label="
+					$t(
+						'components.administration.adminMigrationSection.endWarningCard.check'
+					)
+				"
+				data-testid="migration-confirmation-checkbox"
+			></v-checkbox>
 		</v-card-text>
 		<v-card-actions>
 			<v-btn
-				class="agree-btn-end"
+				color="secondary"
+				data-testid="migration-end-disagree-button"
+				@click="$emit('end')"
+			>
+				{{
+					$t(
+						"components.administration.adminMigrationSection.endWarningCard.disagree"
+					)
+				}}
+			</v-btn>
+			<v-btn
 				color="primary"
 				data-testid="migration-end-agree-button"
+				:disabled="!isConfirmed"
 				@click="
 					$emit('set');
 					$emit('end');
@@ -32,27 +52,21 @@
 					)
 				}}
 			</v-btn>
-
-			<v-btn
-				class="disagree-btn-end"
-				color="secondary"
-				data-testid="migration-end-disagree-button"
-				@click="$emit('end')"
-			>
-				{{
-					$t(
-						"components.administration.adminMigrationSection.endWarningCard.disagree"
-					)
-				}}
-			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, Ref } from "vue";
 
+// TODO https://ticketsystem.dbildungscloud.de/browse/N21-618 Combine MigrationEndWarningCard and MigrationStartWarningCard
 export default defineComponent({
 	name: "MigrationEndWarningCard",
 	emits: ["end", "set"],
+	setup() {
+		const isConfirmed: Ref<boolean> = ref(false);
+		return {
+			isConfirmed,
+		};
+	},
 });
 </script>

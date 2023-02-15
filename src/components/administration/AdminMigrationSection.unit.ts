@@ -1,4 +1,4 @@
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
@@ -19,7 +19,7 @@ describe("AdminMigrationSection", () => {
 			...schoolGetters,
 		}) as jest.Mocked<SchoolsModule>;
 
-		const wrapper: Wrapper<any> = mount(AdminMigrationSection, {
+		const wrapper = mount(AdminMigrationSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -51,11 +51,12 @@ describe("AdminMigrationSection", () => {
 						i18n: { t: (key: string) => key },
 					},
 				});
+				// eslint-disable-next-line no-empty
 			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching(
-					/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 				)
 			);
 
@@ -71,6 +72,7 @@ describe("AdminMigrationSection", () => {
 						schoolsModule,
 					},
 				});
+				// eslint-disable-next-line no-empty
 			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -383,8 +385,8 @@ describe("AdminMigrationSection", () => {
 				await buttonComponent.vm.$emit("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonAgree = cardComponent.find(".agree-btn-end");
-				const cardButtonDisagree = cardComponent.find(".disagree-btn-end");
+				cardComponent.find(".agree-btn-end");
+				cardComponent.find(".disagree-btn-end");
 
 				expect(cardComponent.exists()).toBe(true);
 				expect(cardComponent.classes("migration-end-card")).toBe(true);
@@ -461,7 +463,7 @@ describe("AdminMigrationSection", () => {
 
 			expect(paragraph.exists()).toBe(true);
 			expect(paragraph.text()).toEqual(
-				`components.administration.adminMigrationSection.oauthMigrationFinished.text${date}`
+				`components.administration.adminMigrationSection.oauthMigrationFinished.text`
 			);
 		});
 
