@@ -1,21 +1,27 @@
 <template>
-	<div style="padding: 25px, border: 1px solid black">
-		A Card!
-		{{ id }} - {{ height }}
+	<div class="d-flex mb-6">
+		<template v-if="isLoading">
+			<CardSkeleton :height="height"></CardSkeleton>
+		</template>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import CardSkeleton from "./CardSkeleton.vue";
 
 export default defineComponent({
 	name: "CardHost",
+	components: { CardSkeleton },
 	props: {
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
 	},
 	setup() {
-		return {};
+		const isLoading = ref<boolean>(true);
+		return {
+			isLoading,
+		};
 	},
 });
 </script>

@@ -1,14 +1,19 @@
 <template>
 	<div>
-		<h2>MyColumn</h2>
-		<template v-for="card in column.cards">
-			<CardHost :key="card.id" :id="card.id" :height="card.height"></CardHost>
-		</template>
+		<h2>{{ column.title }}</h2>
+		<div
+			class="d-flex flex-column flex-grow-1 mr-4"
+			:style="{ 'min-width': colWidth + 'px' }"
+		>
+			<template v-for="card in column.cards">
+				<CardHost :key="card.id" :id="card.id" :height="card.height"></CardHost>
+			</template>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { BoardColumn } from "./types/Board";
 import CardHost from "./CardHost.vue";
 export default defineComponent({
@@ -20,8 +25,10 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup(props) {
-		return {};
+	setup() {
+		const colWidth = ref<number>(400);
+
+		return { colWidth };
 	},
 });
 </script>
