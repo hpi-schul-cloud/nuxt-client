@@ -61,10 +61,9 @@ import {
 	getMetadataAttribute,
 	getTitle,
 	getUrl,
-} from "@/utils/helpers";
 	getMediatype,
 	getID,
-} from "@utils/helpers";
+} from "@/utils/helpers";
 
 let slowAPICall;
 
