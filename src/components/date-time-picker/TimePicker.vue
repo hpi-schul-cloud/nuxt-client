@@ -5,6 +5,7 @@
 		transition="scale-transition"
 		offset-y
 		min-width="85"
+		@input="onMenuToggle"
 	>
 		<template #activator="{ on, attrs }">
 			<v-text-field
@@ -14,11 +15,14 @@
 				:label="label"
 				:aria-label="ariaLabel"
 				:append-icon="mdiClockOutline"
+				:errors="errors.length > 0"
+				:error-messages="errors"
 				v-bind="attrs"
 				v-on="on"
 				@input="onInput"
 				@keydown.prevent.space="showTimeDialog = true"
 				@keydown.prevent.enter="showTimeDialog = true"
+				@focus="resetErrors"
 			/>
 		</template>
 		<v-list height="200" class="col-12 pt-1 px-0">
@@ -50,6 +54,7 @@ export default defineComponent({
 		time: { type: String, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
+		required: { type: Boolean },
 	},
 	setup(props, { emit }) {
 		const timesOfDayList = computed(() => {
@@ -70,7 +75,11 @@ export default defineComponent({
 		const selectTime = (selected: string) => {
 			inputTime.value = selected;
 			showTimeDialog.value = false;
-			emit("input", inputTime.value);
+
+			const validated = validate(inputTime.value);
+			if (validated) {
+				emit("input", inputTime.value);
+			}
 		};
 
 		let inputTimeout: number | null = null;
@@ -83,6 +92,32 @@ export default defineComponent({
 			inputTimeout = setTimeout(() => {
 				emit("input", inputTime.value);
 			}, 1000);
+		};
+
+		////////////
+
+		const onMenuToggle = (menuOpen: boolean) => {
+			if (menuOpen === false) {
+				validate(inputTime.value);
+			}
+		};
+
+		const errors = ref<string[]>([]);
+		const validate = (timeValue: string) => {
+			if (!props.required) {
+				return true;
+			}
+
+			if (timeValue === "") {
+				errors.value.push("required");
+				return false;
+			}
+
+			return true;
+		};
+
+		const resetErrors = () => {
+			errors.value = [];
 		};
 
 		watch(
@@ -100,6 +135,10 @@ export default defineComponent({
 			selectedTime,
 			selectTime,
 			onInput,
+			onMenuToggle,
+			validate,
+			errors,
+			resetErrors,
 		};
 	},
 });

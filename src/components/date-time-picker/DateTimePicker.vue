@@ -11,6 +11,7 @@
 		</v-col>
 		<v-col class="col-sm-3">
 			<time-picker
+				required
 				:time="time"
 				:label="timeInputLabel"
 				:aria-label="timeInputAriaLabel"
