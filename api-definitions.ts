@@ -57,7 +57,6 @@ interface Board {
 	id: string;
 	title: string;
 	columns: BoardColumn[];
-	version: number;
 	timestamps: BoardTimestamps;
 }
 
