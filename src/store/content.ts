@@ -12,7 +12,6 @@ import {
 	Resource,
 	Resources,
 } from "./types/content";
-import { render } from "node-sass";
 
 const initialState = () => ({
 	resources: {
