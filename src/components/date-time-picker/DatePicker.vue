@@ -1,26 +1,29 @@
 <template>
 	<v-menu
 		v-model="showDateDialog"
-		:close-on-content-click="false"
 		transition="scale-transition"
 		offset-y
 		min-width="auto"
+		@input="onMenuToggle"
 	>
 		<template #activator="{ on, attrs }">
 			<v-text-field
 				:value="formattedDate"
-				data-testid="date-input"
 				:label="label"
 				:aria-label="ariaLabel"
-				:append-icon="mdiCalendar"
+				:prepend-icon="mdiCalendar"
 				:placeholder="$t('format.date')"
+				data-testid="date-input"
 				readonly
-				:rules="validationRules"
+				clearable
+				:error-messages="errors"
+				:error="errors.length > 0"
 				v-bind="attrs"
 				v-on="on"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
 				@keydown.prevent.down="focusDatePicker"
+				@focus="resetErrors"
 			/>
 		</template>
 		<v-date-picker
@@ -87,8 +90,13 @@ export default defineComponent({
 			value >= new Date().toISOString().substr(0, 10);
 
 		const onInput = () => {
-			emit("input", new Date(selectedDate.value).toISOString());
-			showDateDialog.value = false;
+			const validated = validate(selectedDate.value);
+
+			if (validated) {
+				emit("input", new Date(selectedDate.value).toISOString());
+				showDateDialog.value = false;
+				resetErrors();
+			}
 		};
 
 		const focusDatePicker = () => {
@@ -101,15 +109,29 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const checkRequired = (v: string) => {
+		const onMenuToggle = (menuOpen: boolean) => {
+			if (menuOpen === false) {
+				validate(selectedDate.value);
+			}
+		};
+
+		const errors = ref<string[]>([]);
+		const validate = (dateValue: string) => {
 			if (!props.required) {
 				return true;
 			}
 
-			return !!v || "required";
+			if (dateValue === "") {
+				errors.value.push("required");
+				return false;
+			}
+
+			return true;
 		};
 
-		const validationRules = [checkRequired];
+		const resetErrors = () => {
+			errors.value = [];
+		};
 
 		watch(
 			() => props.date,
@@ -127,7 +149,10 @@ export default defineComponent({
 			allowedDates,
 			onInput,
 			focusDatePicker,
-			validationRules,
+			errors,
+			validate,
+			resetErrors,
+			onMenuToggle,
 		};
 	},
 });
