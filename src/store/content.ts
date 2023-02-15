@@ -12,7 +12,6 @@ import {
 	Resource,
 	Resources,
 } from "./types/content";
-import { Status } from "./types/commons";
 import { render } from "node-sass";
 
 const initialState = () => ({
