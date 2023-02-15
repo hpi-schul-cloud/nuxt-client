@@ -1,4 +1,4 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
@@ -19,7 +19,7 @@ describe("AdminMigrationSection", () => {
 			...schoolGetters,
 		}) as jest.Mocked<SchoolsModule>;
 
-		const wrapper = mount(AdminMigrationSection, {
+		const wrapper: Wrapper<any> = mount(AdminMigrationSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -89,7 +89,6 @@ describe("AdminMigrationSection", () => {
 			const testKey = "testKey";
 
 			const result: string = wrapper.vm.t(testKey);
-
 			expect(result).toEqual(testKey);
 		});
 
@@ -408,7 +407,9 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonAgree = cardComponent.find(".agree-btn-end");
+			const cardButtonAgree = cardComponent.find(
+				"[data-testid=migration-end-agree-button]"
+			);
 			await cardButtonAgree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -434,7 +435,9 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonDisagree = cardComponent.find(".disagree-btn-end");
+			const cardButtonDisagree = cardComponent.find(
+				"[data-testid=migration-end-disagree-button]"
+			);
 			await cardButtonDisagree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);

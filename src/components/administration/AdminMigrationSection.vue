@@ -127,7 +127,7 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined) => {
+		const t = (key: string, values?: VueI18n.Values | undefined): string => {
 			const translateResult = i18n.t(key, values);
 			if (typeof translateResult === "string") {
 				return translateResult;
