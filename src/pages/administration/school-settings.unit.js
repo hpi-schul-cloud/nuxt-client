@@ -92,6 +92,7 @@ const envs = {
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 	FEATURE_SCHOOL_POLICY_ENABLED: true,
 	FEATURE_VIDEOCONFERENCE_ENABLED: true,
+	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 	ROCKETCHAT_SERVICE_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: "de,en,es",
 	I18N__DEFAULT_LANGUAGE: "de",
@@ -154,9 +155,9 @@ const mockStore = {
 };
 
 setupStores({
-	auth: AuthModule,
-	"env-config": EnvConfigModule,
-	schools: SchoolsModule,
+	authModule: AuthModule,
+	envConfigModule: EnvConfigModule,
+	schoolsModule: SchoolsModule,
 });
 
 const fetchYearSpy = jest
@@ -174,6 +175,7 @@ const fetchFederalStateSpy = jest
 	.mockImplementation(() => {
 		schoolsModule.setFederalState(federalState);
 	});
+const short_name = "instance name";
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
@@ -184,18 +186,21 @@ describe("SchoolSettingPage", () => {
 		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
 	});
-	it(...isValidComponent(SchoolPage));
-
 	it("tests env var school policy being true", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeTrue();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeTruthy();
 	});
 
 	it("tests env var school policy being false", () => {
@@ -203,74 +208,189 @@ describe("SchoolSettingPage", () => {
 			FEATURE_SCHOOL_POLICY_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
 		});
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 				store: mockStore,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
+		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
+	});
+
+	it("tests env var school oauth migration being true", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(true);
+	});
+
+	it("tests env var school oauth migration being false", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		expect(wrapper.vm.isOauthMigrationEnabled).toBe(false);
 	});
 
 	it("tests whether current school year is computed right", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
 	});
 
 	it("systems section should be visible and shows its data", () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.vm.systems).toBeArray(true);
+		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
+	});
+
+	it("AdminMigrationSection should be visible", () => {
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		expect(
+			wrapper.findComponent({ name: "admin-migration-section" }).exists()
+		).toStrictEqual(true);
+	});
+
+	it("AdminMigrationSection should not be visible", () => {
+		envConfigModule.setEnvs({
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		expect(
+			wrapper.findComponent({ name: "admin-migration-section" }).exists()
+		).toStrictEqual(false);
 	});
 
 	it("should load skeleton while loading", () => {
 		schoolsModule.setLoading(true);
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
-		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTrue();
+		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBe(
+			true
+		);
 	});
 
 	it("error image should visible if schoolError occured", () => {
 		schoolsModule.setError({ error: { message: "some errors" } });
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 
 		const schoolError = wrapper.find(".school-error-image");
 		const noSchoolError = wrapper.find(".no-school-error");
 
-		expect(schoolError.exists()).toBeTrue();
-		expect(noSchoolError.exists()).toBeFalse();
+		expect(schoolError.exists()).toBeTruthy();
+		expect(noSchoolError.exists()).toBeFalsy();
 	});
 
 	it("should load needed data form server", async () => {
-		const wrapper = mount(SchoolPage, {
+		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
 		});
 		await wrapper.vm.$nextTick();
 		expect(fetchYearSpy).toHaveBeenCalled();

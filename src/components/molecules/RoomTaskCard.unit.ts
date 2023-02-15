@@ -1,10 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const testProps = {
 	room: {
@@ -207,21 +207,20 @@ const studentTestProps = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(RoomTaskCard, {
+	return mount(RoomTaskCard as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/molecules/RoomTaskCard", () => {
+describe("@/components/molecules/RoomTaskCard", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
-		setupStores({ "env-config": EnvConfigModule });
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	describe("common behaviors and actions", () => {
@@ -378,14 +377,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const redirectAction = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.redirectAction = redirectAction;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"pages.room.taskCard.label.edit"
-				)}`;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-task-menu-edit"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(redirectAction).toHaveBeenCalled();
@@ -398,14 +396,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const revertPublishedCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n
-					.t("pages.room.cards.label.revert")
-					.split(" ")
-					.join("-")}`;
+
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-task-menu-revert"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(revertPublishedCardMock).toHaveBeenCalled();
@@ -415,13 +412,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const restoreCardMock = jest.fn();
 				const wrapper = getWrapper({ ...finishedTestProps, role });
 				wrapper.vm.restoreCard = restoreCardMock;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.labels.restore"
-				)}`;
+
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-task-menu-restore"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(restoreCardMock).toHaveBeenCalled();
@@ -431,11 +428,10 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...testProps, role });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.actions.remove"
-				)}`;
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-task-menu-remove"]`
+				);
 				await moreActionButton.trigger("click");
 
 				const emitted = wrapper.emitted("delete-task");
@@ -492,6 +488,65 @@ describe("@components/molecules/RoomTaskCard", () => {
 				);
 			});
 
+			it("should return false value after calculated isPlanned() method", () => {
+				const availableDate = new Date();
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 0,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: availableDate.toISOString(),
+						duedate: "2300-09-28T15:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const { vm } = wrapper;
+				expect(vm.isPlanned).toBe(false);
+			});
+
+			it("should return true value after calculated isPlanned() method", () => {
+				jest.useFakeTimers("modern").setSystemTime(new Date()); // this line sets a permanent fake time
+				const inFutureDate = new Date(Date.now() + 5001);
+				const localProps = {
+					...testProps,
+					task: {
+						id: "123",
+						name: "Test Name",
+						createdAt: "2017-09-28T11:58:46.601Z",
+						updatedAt: "2017-09-28T11:58:46.601Z",
+						status: {
+							submitted: 0,
+							maxSubmissions: 1,
+							graded: 0,
+							isDraft: false,
+							isFinished: false,
+							isSubstitutionTeacher: false,
+						},
+						courseName: "Mathe",
+						availableDate: inFutureDate.toISOString(),
+						duedate: "2300-09-28T15:00:00.000Z",
+						displayColor: "#54616e",
+						description: "some description here",
+					},
+				};
+				const wrapper = getWrapper({ ...localProps, role });
+				const { vm } = wrapper;
+				expect(vm.isPlanned).toBe(true);
+			});
+
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
@@ -500,14 +555,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ ...testProps, role });
 						wrapper.vm.copyCard = copyCard;
-						const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-							"common.actions.copy"
-						)}`;
 
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
 
-						const moreActionButton = wrapper.find(buttonClassName);
+						const moreActionButton = wrapper.find(
+							`[data-testid="content-card-task-menu-copy"]`
+						);
 						await moreActionButton.trigger("click");
 
 						expect(copyCard).toHaveBeenCalled();
@@ -519,14 +573,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 						// @ts-ignore
 						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
 						const wrapper = getWrapper({ ...testProps, role });
-						const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-							"common.actions.copy"
-						)}`;
 
 						const threeDotButton = wrapper.find(".three-dot-button");
 						await threeDotButton.trigger("click");
 
-						const moreActionButton = wrapper.findAll(buttonClassName);
+						const moreActionButton = wrapper.findAll(
+							`[data-testid="content-card-task-menu-copy"]`
+						);
 
 						expect(moreActionButton).toHaveLength(0);
 					});
@@ -564,13 +617,13 @@ describe("@components/molecules/RoomTaskCard", () => {
 				const restoreCardMock = jest.fn();
 				const wrapper = getWrapper({ ...studentFinishedTestProps, role });
 				wrapper.vm.restoreCard = restoreCardMock;
-				const buttonClassName = `.menu-action-${wrapper.vm.$i18n.t(
-					"common.labels.restore"
-				)}`;
+
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.find(buttonClassName);
+				const moreActionButton = wrapper.find(
+					`[data-testid="content-card-task-menu-restore"]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(restoreCardMock).toHaveBeenCalled();

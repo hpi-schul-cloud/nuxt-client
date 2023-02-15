@@ -1,10 +1,8 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
-import CopyModule, { CopyParams } from "@/store/copy";
+import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import { inject, InjectionKey, Ref } from "@vue/composition-api";
+import { inject, Ref, reactive } from "vue";
 import VueI18n from "vue-i18n";
-
-export const USE_COPY: InjectionKey<typeof useCopy> = Symbol();
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const copyModule = inject<CopyModule>("copyModule");
@@ -18,6 +16,14 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		}
 		return "unknown translation-key:" + key;
 	};
+
+	const backgroundCopyProcesses: CopyParams[] = reactive([]);
+
+	const markBackgroundCopyProcess = (data: CopyParams) =>
+		backgroundCopyProcesses.push(data);
+
+	const isCopyProcessInBackground = (copyParams: CopyParams) =>
+		backgroundCopyProcesses.includes(copyParams);
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
@@ -38,7 +44,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const showTimeout = () =>
 		notifierModule?.show({
 			text: t("components.molecules.copyResult.timeoutCopy"),
-			status: "error",
+			status: "info",
 			autoClose: false,
 		});
 
@@ -46,7 +52,10 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		isLoadingDialogOpen.value = true;
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
-			if (copyResult?.status === CopyApiResponseStatusEnum.Success) {
+			if (
+				copyParams.type !== CopyParamsTypeEnum.Course &&
+				copyResult?.status === CopyApiResponseStatusEnum.Success
+			) {
 				showSuccess();
 			} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
 				showFailure();
@@ -54,6 +63,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 				openResultModal();
 			}
 		} catch (error) {
+			markBackgroundCopyProcess(copyParams);
 			showTimeout();
 		} finally {
 			isLoadingDialogOpen.value = false;
@@ -62,5 +72,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 
 	return {
 		copy,
+		isCopyProcessInBackground,
+		backgroundCopyProcesses,
 	};
 }

@@ -8,7 +8,7 @@
 		:next-btn-title-key="nextButtonName"
 		:confirm-btn-title-key="
 			isImportError && step === 3
-				? $t('pages.rooms.importCourse.importErrorButton')
+				? 'pages.rooms.importCourse.importErrorButton'
 				: nextButtonName
 		"
 		@dialog-closed="cancel"
@@ -90,7 +90,7 @@
 </template>
 <script>
 import { roomsModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiCheck } from "@mdi/js";
 
 export default {
@@ -122,9 +122,9 @@ export default {
 	},
 	computed: {
 		nextButtonName() {
-			if (this.step < 3)
-				return this.$t("pages.rooms.importCourse.btn.continue");
-			return this.$t("common.actions.import");
+			return this.step < 3
+				? "pages.rooms.importCourse.btn.continue"
+				: "common.actions.import";
 		},
 		businessError() {
 			return roomsModule.getBusinessError;

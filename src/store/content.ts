@@ -1,15 +1,16 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
-import { isCollectionHelper } from "@utils/helpers";
 import { envConfigModule } from "@/store";
+import { isCollectionHelper } from "@/utils/helpers";
 import hash from "object-hash";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { $axios } from "../utils/api";
+import { Status } from "./types/commons";
 import {
+	AddToLessonQuery,
+	Elements,
+	Lessons,
 	Query,
 	Resource,
 	Resources,
-	Elements,
-	Lessons,
-	AddToLessonQuery,
 } from "./types/content";
 import { Status } from "./types/commons";
 import { render } from "node-sass";
@@ -76,7 +77,7 @@ const initialState = () => ({
 });
 
 @Module({
-	name: "content",
+	name: "contentModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -266,10 +267,11 @@ export default class ContentModule extends VuexModule {
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await $axios.get("/v1/edu-sharing", {
 				params: query,
 			});
-			this.setResources({ hash: queryHash, result: res });
+
+			this.setResources({ hash: queryHash, result: res.data });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -281,10 +283,11 @@ export default class ContentModule extends VuexModule {
 	async addResources(payload: Query) {
 		this.incLoading();
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await $axios.get("/v1/edu-sharing", {
 				params: payload,
 			});
-			this.addResourcesMutation(res);
+
+			this.addResourcesMutation(res.data);
 		} catch (e) {
 			console.error("Error: ", e);
 		} finally {
@@ -303,10 +306,11 @@ export default class ContentModule extends VuexModule {
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await $axios.get("/v1/edu-sharing", {
 				params: query,
 			});
-			this.setElements({ hash: queryHash, result: res });
+
+			this.setElements({ hash: queryHash, result: res.data });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -318,10 +322,10 @@ export default class ContentModule extends VuexModule {
 	async addElements(payload = {}) {
 		this.incLoading();
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await $axios.get("/v1/edu-sharing", {
 				params: payload,
 			});
-			this.addElementsMutation(res);
+			this.addElementsMutation(res.data);
 		} catch (e) {
 			console.error("Error: ", e);
 		} finally {
@@ -336,8 +340,8 @@ export default class ContentModule extends VuexModule {
 		};
 		if (params.courseId) {
 			//only search if courseId is existing
-			const res = await $axios.$get("/v1/lessons", { params });
-			this.setLessons(res);
+			const res = await $axios.get("/v1/lessons", { params });
+			this.setLessons(res.data);
 		}
 	}
 
@@ -357,7 +361,7 @@ export default class ContentModule extends VuexModule {
 	@Action
 	async getResourceMetadata(id: string) {
 		this.setStatus("pending");
-		const metadata = await $axios.$get(`/v1/edu-sharing/${id}`);
+		const metadata = (await $axios.get(`/v1/edu-sharing/${id}`)).data;
 		this.setCurrentResource(metadata);
 		this.setStatus("completed");
 	}

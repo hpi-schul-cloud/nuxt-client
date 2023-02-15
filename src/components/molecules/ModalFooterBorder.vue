@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import DefaultModalFooter from "@components/molecules/ModalFooter";
+import DefaultModalFooter from "@/components/molecules/ModalFooter";
 export default {
 	components: {
 		DefaultModalFooter,
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .border {
 	margin: 0 var(--space-md);

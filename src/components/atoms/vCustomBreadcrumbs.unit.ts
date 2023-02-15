@@ -1,20 +1,19 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import vCustomBreadcrumbs from "./vCustomBreadcrumbs.vue";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(vCustomBreadcrumbs, {
+	return mount(vCustomBreadcrumbs as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@components/atoms/vCustomBreadcrumbs", () => {
+describe("@/components/atoms/vCustomBreadcrumbs", () => {
 	const prop = {
 		breadcrumbs: [{ text: "Cursos actuales", to: "/rooms-overview" }],
 	};

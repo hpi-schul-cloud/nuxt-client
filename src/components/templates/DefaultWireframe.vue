@@ -40,11 +40,10 @@
 	</v-container>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import vCustomFab from "@components/atoms/vCustomFab.vue";
+import vCustomFab from "@/components/atoms/vCustomFab.vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {
 		vCustomBreadcrumbs,

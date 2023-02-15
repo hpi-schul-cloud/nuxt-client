@@ -5,14 +5,14 @@
 		</div>
 		<img
 			class="edusharing-footer__logo"
-			src="@assets/img/edusharing/edusharing-logo.svg"
+			src="@/assets/img/edusharing/edusharing-logo.svg"
 			:alt="$t('components.molecules.EdusharingFooter.img_alt')"
 		/>
 	</div>
 </template>
 
 <style lang="scss">
-@import "@styles";
+@import "@/styles/mixins";
 
 .edusharing-footer {
 	display: flex;

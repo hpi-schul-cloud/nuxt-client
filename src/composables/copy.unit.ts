@@ -1,11 +1,11 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
-import CopyModule, { CopyParams } from "@/store/copy";
+import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { watch } from "@nuxtjs/composition-api";
-import { defineComponent, provide, ref } from "@vue/composition-api";
-import { mount } from "@vue/test-utils";
+import { defineComponent, watch } from "vue";
+import { provide, ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import { useCopy } from "./copy";
 
 jest.mock("./loadingState");
@@ -14,17 +14,28 @@ export interface MountOptions {
 	provider?: () => void;
 }
 
-const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
-	const TestComponent = defineComponent({
-		template: `<div></div>`,
+const mountComposable = <R>(
+	composable: () => R,
+	providers: Record<string, unknown>
+): R => {
+	const ParentComponent = defineComponent({
+		setup() {
+			for (const [key, mockFn] of Object.entries(providers)) {
+				provide(key, mockFn);
+			}
+		},
 	});
 
-	const wrapper = mount(TestComponent, {
+	const TestComponent = {
+		template: "<div></div>",
+	};
+
+	const wrapper = shallowMount(TestComponent, {
 		setup() {
-			options.provider?.();
 			const result = composable();
 			return { result };
 		},
+		parentComponent: ParentComponent,
 	});
 
 	//@ts-ignore
@@ -33,7 +44,10 @@ const mountComposable = <R>(composable: () => R, options: MountOptions): R => {
 
 describe("copy composable", () => {
 	const setup = () => {
-		const payload: CopyParams = { id: "testId", type: "lesson" };
+		const payload: CopyParams = {
+			id: "testId",
+			type: CopyParamsTypeEnum.Lesson,
+		};
 
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
@@ -44,12 +58,10 @@ describe("copy composable", () => {
 		const isLoadingDialogOpen = ref(false);
 
 		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
-			provider: () => {
-				provide("copyModule", copyModuleMock);
-				provide("notifierModule", notifierModuleMock);
-				provide("loadingStateModule", loadingStateModuleMock);
-				provide("i18n", i18n);
-			},
+			copyModule: copyModuleMock,
+			notifierModule: notifierModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			i18n: i18n,
 		});
 
 		return {
@@ -90,17 +102,40 @@ describe("copy composable", () => {
 		expect(isLoadingDialogOpenStates).toEqual([true, false]);
 	});
 
-	it("should open success alert notification on successfull copy", async () => {
-		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
+	it.each([[CopyParamsTypeEnum.Lesson], [CopyParamsTypeEnum.Task]])(
+		"should open success alert notification on a successful %s copy",
+		async (copyParamsType: CopyParamsTypeEnum) => {
+			const { copy, copyModuleMock, notifierModuleMock } = setup();
+			const payload: CopyParams = {
+				id: "testId",
+				type: copyParamsType,
+			};
+			copyModuleMock.copy = jest
+				.fn()
+				.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+
+			await copy(payload);
+
+			expect(notifierModuleMock.show).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "success" })
+			);
+		}
+	);
+
+	it("should open copyResultModal on a successful course copy", async () => {
+		const { copy, copyModuleMock } = setup();
+		const payload: CopyParams = {
+			id: "testId",
+			type: CopyParamsTypeEnum.Course,
+		};
+
 		copyModuleMock.copy = jest
 			.fn()
 			.mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
 		await copy(payload);
 
-		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "success" })
-		);
+		expect(copyModuleMock.setResultModalOpen).toBeCalledWith(true);
 	});
 
 	it("should open failure alert notification on failed copy", async () => {
@@ -134,7 +169,7 @@ describe("copy composable", () => {
 		await copy(payload);
 
 		expect(notifierModuleMock.show).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "error" })
+			expect.objectContaining({ status: "info" })
 		);
 	});
 });

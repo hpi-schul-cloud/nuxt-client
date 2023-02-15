@@ -44,14 +44,14 @@
 					tabindex="-1"
 				/>
 			</v-card>
-			<div class="justify-left mt-1 sub-title">
+			<div class="justify-left mt-1 subtitle">
 				{{ data.title }}
 			</div>
 		</v-badge>
 	</div>
 </template>
 <script>
-import RoomAvatarIterator from "@components/organisms/RoomAvatarIterator.vue";
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 export default {
 	components: {
 		RoomAvatarIterator,
@@ -120,10 +120,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@/utils/multiline-ellipsis.scss";
 @import "~vuetify/src/styles/styles.sass";
 
-.sub-title {
+.subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
 	text-align: center;
@@ -137,15 +137,17 @@ export default {
 }
 
 @media #{map-get($display-breakpoints, 'xs-only')} {
-	.sub-title {
-		margin-right: calc(var(--space-base-vuetify) * -3);
-		margin-left: calc(var(--space-base-vuetify) * -3);
+	.subtitle {
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-right: unset;
+		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+		margin-left: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
 	}
 }
 
-.card-component {
+.group-avatar .card-component {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }

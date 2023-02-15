@@ -12,11 +12,7 @@
 		</div>
 
 		<template slot="content">
-			<div
-				v-if="needsInfoText"
-				ref="copy-dialog-content"
-				data-testid="copy-result-notifications"
-			>
+			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<div
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
 				>
@@ -28,7 +24,7 @@
 							<p
 								v-if="warning.isShow"
 								:key="index"
-								class="black--text mb-0"
+								class="black--text mb-0 aligned-with-icon"
 								data-testid="warning-title"
 							>
 								<strong>{{ warning.title }}</strong>
@@ -40,7 +36,7 @@
 				</div>
 			</div>
 
-			<div class="black--text">
+			<div v-if="hasErrors" class="black--text">
 				<p>{{ $t("components.molecules.copyResult.information") }}</p>
 			</div>
 			<copy-result-modal-list :items="items"></copy-result-modal-list>
@@ -50,8 +46,8 @@
 
 <script>
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import CopyResultModalList from "@components/copy-result-modal/CopyResultModalList";
-import vCustomDialog from "@components/organisms/vCustomDialog.vue";
+import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import {
 	mdiAlert,
 	mdiCheckCircle,
@@ -69,6 +65,10 @@ export default {
 		copyResultItems: {
 			type: Array,
 			default: () => [],
+		},
+		copyResultRootItemType: {
+			type: String,
+			default: "",
 		},
 	},
 	data() {
@@ -101,9 +101,9 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
-					isShow: this.hasFileElement,
-					text: this.$t("components.molecules.copyResult.label.files"),
-					title: this.$t("components.molecules.copyResult.fileCopy.error"),
+					isShow: this.hasFileElement || this.isCourse,
+					text: this.filesInfoText,
+					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
 					isShow: this.hasCourseGroup,
@@ -111,21 +111,6 @@ export default {
 					title: this.$t("common.words.courseGroups"),
 				},
 			];
-		},
-		hasTimeoutError() {
-			return (
-				this.copyResultError !== undefined &&
-				this.copyResultError.statusCode === 504
-			);
-		},
-		needsInfoText() {
-			return (
-				this.hasGeogebraElement ||
-				this.hasEtherpadElement ||
-				this.hasNexboardElement ||
-				this.hasFileElement ||
-				this.hasCourseGroup
-			);
 		},
 		hasGeogebraElement() {
 			return this.hasElementOfType(
@@ -154,6 +139,21 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
+		hasErrors() {
+			return this.items.length > 0;
+		},
+		isCourse() {
+			return this.copyResultRootItemType === CopyApiResponseTypeEnum.Course;
+		},
+		filesInfoText() {
+			const courseFilesText = this.isCourse
+				? this.$t("components.molecules.copyResult.courseFiles.info")
+				: "";
+			const fileErrorText = this.hasFileElement
+				? this.$t("components.molecules.copyResult.fileCopy.error")
+				: "";
+			return `${courseFilesText} ${fileErrorText}`.trim();
+		},
 	},
 	methods: {
 		hasElementOfType(items, types) {
@@ -176,5 +176,9 @@ export default {
 <style scoped lang="scss">
 .wordbreak-normal {
 	word-break: normal;
+}
+
+.aligned-with-icon {
+	padding-top: var(--space-xs-3);
 }
 </style>

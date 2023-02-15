@@ -1,11 +1,11 @@
-import { mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
-
-declare var createComponentMocks: Function;
+import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const testProps = {
 	editedItem: {
@@ -18,23 +18,28 @@ const testProps = {
 		classNames: ["6a"],
 	},
 	isDialog: true,
+	ldapSource: "LDAP",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(vImportUsersMatchSearch, {
+	return mount(vImportUsersMatchSearch as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 		...options,
 	});
 };
 
-describe("@components/molecules/vImportUsersMatchSearch", () => {
+describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
-		setupStores({ "import-users": ImportUsersModule });
+		setupStores({ importUsersModule: ImportUsersModule });
 	});
 
 	it("should have correct props", () => {
@@ -148,6 +153,7 @@ describe("@components/molecules/vImportUsersMatchSearch", () => {
 		};
 		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
+			ldapSource: "LDAP",
 		});
 
 		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");

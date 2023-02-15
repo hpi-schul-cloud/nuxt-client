@@ -27,7 +27,7 @@ export const isValidUri = (uri) =>
 	typeof uri === "string" && uri.charAt(0) === "/";
 
 export const requestHelper = (axios, url) => async (query) =>
-	axios.$get(url, {
+	axios.get(url, {
 		params: query,
 		paramsSerializer,
 	});

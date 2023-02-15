@@ -68,7 +68,7 @@
 				indeterminate
 				color="secondary"
 				size="115"
-				class="align-self-center"
+				class="align-self-center mt-4"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
@@ -76,14 +76,14 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
-import ContentSearchbar from "@components/molecules/ContentSearchbar";
-import ContentCard from "@components/organisms/ContentCard";
-import ContentEmptyState from "@components/molecules/ContentEmptyState";
-import infiniteScrolling from "@mixins/infiniteScrolling";
-import BaseGrid from "@components/base/BaseGrid";
-import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-import ContentInitialState from "@components/molecules/ContentInitialState";
+import { contentModule, notifierModule } from "@/store";
+import ContentSearchbar from "@/components/molecules/ContentSearchbar";
+import ContentCard from "@/components/organisms/ContentCard";
+import ContentEmptyState from "@/components/molecules/ContentEmptyState";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
+import BaseGrid from "@/components/base/BaseGrid";
+import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft } from "@mdi/js";
 
 export default {
@@ -176,6 +176,12 @@ export default {
 		},
 	},
 	mounted() {
+		document.title = this.isInline
+			? this.$t("pages.content.page.window.title", {
+					instance: this.$theme.name,
+			  })
+			: this.$t("common.words.lernstore");
+
 		const initialSearchQuery = this.$route.query.q;
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
@@ -189,18 +195,18 @@ export default {
 		async addContent() {
 			if (this.resources.data.length < this.resources.total) {
 				this.query.$skip += this.query.$limit;
-				// TODO wrong use of store (not so bad)
 				await contentModule.addResources(this.query);
 			}
 		},
 		async searchContent() {
 			try {
-				// TODO wrong use of store (not so bad)
 				await contentModule.getResources(this.query);
 			} catch (error) {
-				this.$toast.error(
-					this.$t("pages.content.notification.lernstoreNotAvailable")
-				);
+				notifierModule.show({
+					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async searchH5P() {
@@ -222,15 +228,6 @@ export default {
 		goBack() {
 			window.close();
 		},
-	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
 	},
 };
 </script>

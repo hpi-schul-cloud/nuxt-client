@@ -1,5 +1,5 @@
-import generatePassword from "@mixins/generatePassword";
-import qs from "qs";
+import generatePassword from "@/mixins/generatePassword";
+import { $axios } from "@/utils/api";
 
 export const actions = {
 	async register({ commit }, payload) {
@@ -8,24 +8,18 @@ export const actions = {
 		if (Array.isArray(payload)) {
 			const errors = [];
 			const promiseResult = await Promise.allSettled(
-				payload.map((user) => {
+				payload.forEach((user) => {
 					registered.push(user._id);
-					this.$axios
-						.$patch("/v1/users/admin/students/" + user._id, user)
-						.then((userData) => {
-							const accountModel = {
-								activated: true,
-								username: userData.email,
-								password: user.password,
-								userId: user._id,
-							};
-							this.$axios.$post("/v1/accounts/", accountModel);
+					$axios
+						.patch("/v1/users/admin/students/" + user._id, {
+							...user,
+							createAccount: true,
 						})
 						.catch((error) => errors.push({ updateError: error }));
 				})
 			);
 
-			promiseResult.map((promise) => {
+			promiseResult.forEach((promise) => {
 				if (promise.status !== "fulfilled") {
 					errors.push(promise);
 				}
@@ -41,12 +35,14 @@ export const actions = {
 
 	async findConsentUsers({ commit, state }, query) {
 		query.users = state.selectedStudents;
-		const response = await this.$axios.$get(`/v1/users/admin/students`, {
-			params: query,
-			paramsSerializer: (params) => {
-				return qs.stringify(params);
-			},
-		});
+		const response = (
+			await $axios.get(`/v1/users/admin/students`, {
+				params: query,
+				// paramsSerializer: (params) => {
+				// 	return qs.stringify(params);
+				// },
+			})
+		).data;
 
 		if (!response.data) {
 			commit("setStudentsData", []);
@@ -110,4 +106,12 @@ export const state = () => {
 		selectedStudentsData: [],
 		registerError: {},
 	};
+};
+
+export const bulkConsent = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
 };

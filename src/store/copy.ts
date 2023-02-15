@@ -1,4 +1,5 @@
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
+import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
+import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
@@ -16,60 +17,44 @@ import { $axios } from "../utils/api";
 
 export type CopyParams = {
 	id: string;
-	type: "task" | "lesson" | "course";
+	type: CopyParamsTypeEnum;
 	courseId?: string;
 };
 
-interface ShareTokenValidationResult {
-	payload: {
-		parentType: "course";
-		parentName: string;
-	};
+export enum CopyParamsTypeEnum {
+	Task = "task",
+	Lesson = "lesson",
+	Course = "course",
 }
 
 interface CopyByShareTokenPayload {
 	type: string;
 	token: string;
 	newName: string;
+	destinationCourseId?: string;
 }
 
 @Module({
-	name: "copy",
+	name: "copyModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
-	private isResultModalOpen: boolean = false;
+	private isResultModalOpen = false;
 
-	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
+		return RoomsApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _taskApi?: TaskApiInterface;
 	private get taskApi(): TaskApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		}
-		return this._taskApi;
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			const axiosWithoutErrorPage = $axios?.create();
-			this._shareApi = ShareTokenApiFactory(
-				undefined,
-				"/v3",
-				axiosWithoutErrorPage
-			);
-		}
-		return this._shareApi;
+		const axiosWithoutErrorPage = ($axios as AxiosStatic)?.create();
+		return ShareTokenApiFactory(undefined, "/v3", axiosWithoutErrorPage);
 	}
 
 	@Action
@@ -80,19 +65,19 @@ export default class CopyModule extends VuexModule {
 	}: CopyParams): Promise<CopyApiResponse | undefined> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === "task") {
+		if (type === CopyParamsTypeEnum.Task) {
 			copyResult = await this.taskApi
 				.taskControllerCopyTask(id, { courseId })
 				.then((response) => response.data);
 		}
 
-		if (type === "lesson") {
+		if (type === CopyParamsTypeEnum.Lesson) {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyLesson(id, { courseId })
 				.then((response) => response.data);
 		}
 
-		if (type === "course") {
+		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
@@ -102,7 +87,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
@@ -124,12 +109,21 @@ export default class CopyModule extends VuexModule {
 		token,
 		type,
 		newName,
+		destinationCourseId,
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === "course") {
+		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
+				.then((response) => response.data);
+		}
+		if (type === CopyParamsTypeEnum.Lesson) {
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, {
+					newName,
+					destinationCourseId,
+				})
 				.then((response) => response.data);
 		}
 
@@ -137,7 +131,7 @@ export default class CopyModule extends VuexModule {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 300)); // wip - keep the loading open for at least 300ms
+		await new Promise((resolve) => setTimeout(resolve, 300));
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return this.copyResultFailedItems;

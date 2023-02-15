@@ -81,9 +81,9 @@
 </template>
 
 <script>
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import TasksList from "@components/organisms/TasksList";
-import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
+import TasksList from "@/components/organisms/TasksList";
+import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },

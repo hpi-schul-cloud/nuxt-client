@@ -12,7 +12,7 @@
 			class="school-error-image"
 			role="presentation"
 			alt=""
-			src="@assets/img/pc_repair.png"
+			src="@/assets/img/pc_repair.png"
 		/>
 		<div v-if="!schoolError" class="no-school-error">
 			<v-alert light prominent text type="info">
@@ -42,10 +42,14 @@
 					<school-policies
 						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
 					></school-policies>
+					<admin-migration-section
+						v-if="isOauthMigrationEnabled"
+					></admin-migration-section>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
 					<auth-systems v-else :systems="systems"></auth-systems>
+					<external-tools-section></external-tools-section>
 				</v-col>
 			</v-row>
 		</div>
@@ -55,12 +59,16 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import GeneralSettings from "@components/organisms/administration/GeneralSettings";
-import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
-import AuthSystems from "@components/organisms/administration/AuthSystems";
+import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
+import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies";
+import AuthSystems from "@/components/organisms/administration/AuthSystems";
+import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
+import ExternalToolsSection from "@/components/administration/ExternalToolSection";
 
 export default {
 	components: {
+		ExternalToolsSection,
+		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicies,
 		AuthSystems,
@@ -71,7 +79,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.school.index.title"),
@@ -97,6 +105,8 @@ export default {
 			return schoolsModule.getError;
 		},
 		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
+		isOauthMigrationEnabled: () =>
+			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},
@@ -126,12 +136,10 @@ export default {
 			immediate: true,
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.school.index.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.school.index.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>

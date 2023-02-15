@@ -1,8 +1,8 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { finishedTasksModule } from "@/store";
-import { TaskFilter } from "./task.filter";
-import { $axios } from "../utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
+import { $axios } from "../utils/api";
+import { TaskFilter } from "./task.filter";
 import { BusinessError, Status } from "./types/commons";
 import {
 	CompletedTasksForStudent,
@@ -15,7 +15,7 @@ import {
 } from "./types/tasks";
 
 @Module({
-	name: "tasks",
+	name: "tasksModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -24,7 +24,7 @@ export default class TasksModule extends VuexModule {
 
 	courseFilter: string[] = [];
 
-	substituteFilter: boolean = false;
+	substituteFilter = false;
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -33,11 +33,9 @@ export default class TasksModule extends VuexModule {
 
 	status: Status = "";
 
-	loading: boolean = false;
+	loading = false;
 
-	tab: string = "";
-
-	_taskApi?: TaskApiInterface;
+	tab = "";
 
 	@Action
 	async fetchAllTasks(): Promise<void> {
@@ -45,18 +43,17 @@ export default class TasksModule extends VuexModule {
 		this.setStatus("pending");
 		try {
 			const tasks: Task[] = [];
+			const backendLimit = 100;
 			let skip = 0;
-			let limit = 10;
 			let total: number;
 			do {
 				// use initial request to get default page size from api
 				const response =
 					skip === 0
 						? await this.taskApi.taskControllerFindAll()
-						: await this.taskApi.taskControllerFindAll(skip, limit);
+						: await this.taskApi.taskControllerFindAll(skip, backendLimit);
 				tasks.push(...response.data.data);
 				skip = skip + response.data.limit;
-				limit = response.data.limit;
 				total = response.data.total;
 			} while (skip < total);
 			this.setTasks(tasks);
@@ -346,14 +343,11 @@ export default class TasksModule extends VuexModule {
 		return this.status === "completed";
 	}
 
-	private get taskApi() {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(
-				undefined,
-				"/v3", //`${envConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._taskApi;
+	private get taskApi(): TaskApiInterface {
+		return TaskApiFactory(
+			undefined,
+			"/v3", //`${envConfigModule.getApiUrl}/v3`,
+			$axios
+		);
 	}
 }

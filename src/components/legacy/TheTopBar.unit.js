@@ -1,4 +1,3 @@
-import { provide } from "@nuxtjs/composition-api";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
@@ -16,9 +15,9 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
-		setup() {
-			provide("authModule", authModuleMock);
-			provide("envConfigModule", envConfigModuleMock);
+		provide: {
+			authModule: authModuleMock,
+			envConfigModule: envConfigModuleMock,
 		},
 		propsData: props,
 		attachTo: document.body,
@@ -26,15 +25,13 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@components/legacy/TheTopBar", () => {
+describe("@/components/legacy/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
-			auth: AuthModule,
-			"status-alerts": StatusAlertsModule,
+			authModule: AuthModule,
+			statusAlertsModule: StatusAlertsModule,
 		});
 	});
-
-	it(...isValidComponent(TheTopBar));
 
 	describe("when user is logged in with no status alerts", () => {
 		let wrapper;

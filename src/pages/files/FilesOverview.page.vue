@@ -30,31 +30,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import { FileTableItem } from "@pages/files/file-table-item";
+import { defineComponent } from "vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { FileTableItem } from "@/pages/files/file-table-item";
 import { DataTableHeader } from "vuetify";
-import {
-	computed,
-	ComputedRef,
-	inject,
-	onMounted,
-	Ref,
-	ref,
-	useRoute,
-	useRouter,
-} from "@nuxtjs/composition-api";
-import { CollaborativeFile } from "@store/types/collaborative-file";
-import { useFileTableUtils } from "@pages/files/file-table-utils.composable";
+import { computed, ComputedRef, inject, onMounted, Ref, ref } from "vue";
+import { CollaborativeFile } from "@/store/types/collaborative-file";
+import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 import VueI18n, { Locale } from "vue-i18n";
-import moment from "moment/moment";
 import VueRouter, { Route } from "vue-router";
 import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
-import CollaborativeFilesModule from "@store/collaborative-files";
-import { Breadcrumb } from "@components/templates/default-wireframe.types";
-import { FilesPageConfig } from "@pages/files/file-page-config.type";
+import CollaborativeFilesModule from "@/store/collaborative-files";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { FilesPageConfig } from "@/pages/files/file-page-config.type";
+import { useRoute, useRouter } from "vue-router/composables";
+import { fromNow } from "@/plugins/datetime";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
@@ -65,6 +56,7 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
 			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
@@ -86,7 +78,7 @@ export default defineComponent({
 			);
 		});
 
-		const route: Route = useRoute().value;
+		const route: Route = useRoute();
 		const filesPage: FilesPageConfig = getFilesPageForRoute(route);
 
 		const title: Ref<string> = ref(filesPage.title);
@@ -100,7 +92,7 @@ export default defineComponent({
 		};
 
 		const timesAgo = (value: string): string => {
-			return moment(value).locale(locale()).fromNow();
+			return fromNow(value, true);
 		};
 
 		const router: VueRouter = useRouter();

@@ -52,15 +52,16 @@
 
 <script>
 import { contentModule } from "@/store";
-import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/molecules/NotificationModal";
-import LoadingModal from "@components/molecules/LoadingModal";
+import AddContentModal from "@/components/molecules/AddContentModal";
+import NotificationModal from "@/components/molecules/NotificationModal";
+import LoadingModal from "@/components/molecules/LoadingModal";
 import { mdiPlusCircleOutline } from "@mdi/js";
 import {
-	getTitle,
 	getMerlinReference,
-	getUrl,
 	getMetadataAttribute,
+	getTitle,
+	getUrl,
+} from "@/utils/helpers";
 	getMediatype,
 	getID,
 } from "@utils/helpers";
@@ -182,14 +183,15 @@ export default {
 	methods: {
 		async addResourceAndClose() {
 			const getElementInfo = async (element) => {
+				let url = element.url;
+				if (element.merlinReference) {
+					const requestUrl = `/v1/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`;
+					url = (await this.$axios.get(requestUrl)).data || element.url;
+				}
 				return {
 					title: element.title,
 					client: element.client,
-					url: element.merlinReference
-						? await this.$axios.$get(
-								`/v1/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`
-						  )
-						: element.url,
+					url,
 					merlinReference: element.merlinReference,
 				};
 			};

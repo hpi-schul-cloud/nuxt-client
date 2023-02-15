@@ -5,16 +5,21 @@ const testProps = {
 	resource: Resource,
 };
 
-describe("@components/molecules/LernstoreDetailView", () => {
+describe("@/components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
-		...createComponentMocks({ i18n: true }),
+		...createComponentMocks({
+			i18n: true,
+			$route: {
+				query: {
+					id: "mockId",
+				},
+			},
+		}),
 		propsData: { ...testProps },
 	});
 
-	it(...isValidComponent(LernstoreDetailView));
-
 	it("Renders close button", () => {
-		expect(wrapper.find(".close-transparent").exists()).toBe(true);
+		expect(wrapper.find(".close-transparent,.close-icon").exists()).toBe(true);
 	});
 
 	it("Renders Lernstore img", () => {

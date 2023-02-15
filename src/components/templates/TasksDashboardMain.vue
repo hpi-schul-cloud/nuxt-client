@@ -74,6 +74,7 @@
 			v-if="isTeacher"
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
+			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		></copy-result-modal>
 	</default-wireframe>
@@ -82,9 +83,9 @@
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
-import CopyResultModal from "@components/copy-result-modal/CopyResultModal";
+import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { mdiPlus } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
@@ -257,7 +258,6 @@ export default {
 			return null;
 		},
 		emptyState() {
-			const image = "@assets/img/empty-state/tasks-empty-state.svg";
 			let title = "";
 			let subtitle = undefined;
 
@@ -281,13 +281,16 @@ export default {
 			}
 
 			return {
-				image,
+				image: "tasks-empty-state",
 				title,
 				subtitle,
 			};
 		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;
+		},
+		copyResultRootItemType() {
+			return this.copyModule.getCopyResult?.type;
 		},
 		isCopyModalOpen() {
 			return this.copyModule.getIsResultModalOpen;

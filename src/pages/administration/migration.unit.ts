@@ -3,10 +3,9 @@ import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
-import migrationIndex from "@pages/administration/Migration.page.vue";
+import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { mount, shallowMount } from "@vue/test-utils";
-
-declare var createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const $theme = {
 	short_name: "instance name",
@@ -17,7 +16,6 @@ const getWrapper: any = (props: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 			vueMeta: true,
-			vuetify: true,
 			mocks: {
 				$theme,
 			},
@@ -32,7 +30,6 @@ const getWrapperShallow: any = (props: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 			vueMeta: true,
-			vuetify: true,
 			mocks: { $theme },
 		}),
 		propsData: props,
@@ -129,6 +126,7 @@ const schoolMock = {
 		},
 	},
 	isTeamCreationByStudentsEnabled: false,
+	enableMigrationStart: false,
 };
 
 window.scrollTo = jest.fn();
@@ -136,21 +134,25 @@ window.scrollTo = jest.fn();
 describe("User Migration / Index", () => {
 	beforeAll(() => {
 		setupStores({
-			"env-config": EnvConfigModule,
-			"import-users": ImportUsersModule,
-			schools: SchoolsModule,
+			envConfigModule: EnvConfigModule,
+			importUsersModule: ImportUsersModule,
+			schoolsModule: SchoolsModule,
 		});
 
 		document.body.setAttribute("data-app", "true");
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
+		envConfigModule.getEnv.SC_THEME = "default";
 		importUsersModule.setTotal(100);
 	});
 
 	it("should set page title", () => {
 		const wrapper = getWrapperShallow();
 
-		const title = wrapper.vm.$i18n.t("pages.administration.migration.title");
-		expect(wrapper.vm.$metaInfo.title).toBe(title);
+		const title = wrapper.vm.$i18n.t("pages.administration.migration.title", {
+			source: "LDAP",
+			instance: $theme.short_name,
+		});
+		expect(document.title).toBe(title);
 	});
 
 	it("shows business error", () => {
@@ -176,7 +178,7 @@ describe("User Migration / Index", () => {
 		const findText = wrapper.find("[data-testid=migration_tutorial]");
 
 		expect(findText.element.innerHTML).toMatch(
-			/<iframe.*https:\/\/docs\.dbildungscloud\.de\/display\/SCDOK\/Migrationsprozess\?frameable=true.*><\/iframe>/
+			/<iframe.*https:\/\/docs.dbildungscloud\.de\/x\/VAEbDg\?frameable=true.*><\/iframe>/
 		);
 	});
 
@@ -363,20 +365,16 @@ describe("User Migration / Index", () => {
 
 		it("should show text", async () => {
 			const stepperContent = wrapper.find("[data-testid=migration_finish]");
-			const endTransferPhase = wrapper.vm.$i18n
-				.t("pages.administration.migration.endTransferPhase")
-				.replace(/<(.|\n)*?>/g, "");
-			expect(stepperContent.element.textContent).toContain(endTransferPhase);
-		});
 
-		it("should disable end maintenance button, if confirm not checked", async () => {
-			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
-			expect(btn.vm.disabled).toBe(true);
-
-			const check = wrapper.find("[data-testid=isMaintenanceConfirm]");
-			check.trigger("click");
-			await wrapper.vm.$nextTick();
-			expect(btn.vm.disabled).toBe(false);
+			expect(stepperContent.element.textContent).toContain(
+				wrapper.vm.$i18n.t(
+					"pages.administration.migration.step4.linkingFinished",
+					{
+						source: "LDAP",
+						instance: $theme.short_name,
+					}
+				)
+			);
 		});
 
 		it("perform end maintenance", async () => {
@@ -391,9 +389,6 @@ describe("User Migration / Index", () => {
 				});
 				return Promise.resolve({}) as any;
 			});
-
-			wrapper.setData({ isMaintenanceConfirm: true });
-			await wrapper.vm.$nextTick();
 
 			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
 			btn.trigger("click");

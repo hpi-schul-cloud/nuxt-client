@@ -22,7 +22,14 @@
 		</v-snackbar>
 
 		<div slot="header">
-			<h1 class="text-h3">{{ $t("pages.administration.migration.title") }}</h1>
+			<h1 class="text-h3">
+				{{
+					$t("pages.administration.migration.title", {
+						source: ldapSourceTranslation,
+						instance: $theme.short_name,
+					})
+				}}
+			</h1>
 			<v-stepper v-model="migrationStep" flat class="stepper">
 				<v-stepper-header>
 					<v-stepper-step
@@ -89,10 +96,7 @@
 									indeterminate
 								></v-progress-linear>
 								<v-card-text>
-									<iframe
-										class="full"
-										src="https://docs.dbildungscloud.de/display/SCDOK/Migrationsprozess?frameable=true"
-									></iframe>
+									<iframe class="full" :src="helpPageUri"></iframe>
 									<v-alert
 										v-if="!school.inUserMigration || totalImportUsers === 0"
 										dense
@@ -155,6 +159,7 @@
 								>{{ $t("pages.administration.migration.back") }}
 							</v-btn>
 							<v-btn
+								class="ml-2"
 								id="migration_importUsers_next"
 								color="primary"
 								:disabled="!canPerformMigration"
@@ -183,9 +188,7 @@
 											v-html="
 												$t('pages.administration.migration.summary', {
 													instance: $theme.short_name,
-													source: $t(
-														'pages.administration.migration.ldapSource'
-													),
+													source: ldapSourceTranslation,
 													importUsersCount: totalMatched,
 													importUsersUnmatchedCount:
 														totalImportUsers - totalMatched,
@@ -209,6 +212,7 @@
 										</v-btn>
 
 										<v-btn
+											class="ml-2"
 											color="primary"
 											:disabled="!isMigrationConfirm || isLoading"
 											data-testid="migration_performMigration"
@@ -242,28 +246,69 @@
 								>
 									<v-card-text>
 										<v-row>
-											<div
-												v-html="
-													$t('pages.administration.migration.endTransferPhase')
-												"
-											></div>
-										</v-row>
-										<v-row>
-											<v-checkbox
-												v-model="isMaintenanceConfirm"
-												:label="
+											<p>
+												{{
 													$t(
-														'pages.administration.migration.confirmMaintenance'
+														"pages.administration.migration.step4.linkingFinished",
+														{
+															source: ldapSourceTranslation,
+															instance: $theme.short_name,
+														}
 													)
-												"
-												data-testid="isMaintenanceConfirm"
-											></v-checkbox>
+												}}
+											</p>
+											<p>
+												{{
+													$t(
+														"pages.administration.migration.step4.transferphase"
+													)
+												}}
+											</p>
+											<ul>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.linkedUsers",
+															{ source: ldapSourceTranslation }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.newUsers",
+															{ instance: $theme.short_name }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.classes",
+															{ source: ldapSourceTranslation }
+														)
+													}}
+												</li>
+												<li>
+													{{
+														$t(
+															"pages.administration.migration.step4.bullets.oldUsers"
+														)
+													}}
+												</li>
+											</ul>
+											<p class="font-weight-bold">
+												{{
+													$t(
+														"pages.administration.migration.step4.endTransferphase"
+													)
+												}}
+											</p>
 										</v-row>
 									</v-card-text>
 
 									<div class="text-right">
 										<v-btn
-											:disabled="!isMaintenanceConfirm"
 											class="primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
@@ -284,8 +329,62 @@
 								elevation="2"
 								class="pa-5 mb-10"
 								color="grey lighten-5"
-								v-html="$t('pages.administration.migration.waitForSync')"
-							></v-card>
+							>
+								<p>
+									{{ $t("pages.administration.migration.step5.syncReady1") }}
+								</p>
+								<p>
+									{{
+										$t("pages.administration.migration.step5.syncReady2", {
+											source: ldapSourceTranslation,
+											instance: $theme.short_name,
+										})
+									}}
+								</p>
+
+								<p>
+									{{
+										$t("pages.administration.migration.step5.afterSync", {
+											source: ldapSourceTranslation,
+											instance: $theme.short_name,
+										})
+									}}
+								</p>
+								<ul>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step5.afterSync.bullet1",
+												{ source: ldapSourceTranslation }
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step5.afterSync.bullet2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											$t(
+												"pages.administration.migration.step4.bullets.oldUsers"
+											)
+										}}
+									</li>
+								</ul>
+								<div class="text-right">
+									<v-btn
+										class="primary"
+										data-testid="migration_backToAdministration"
+										to="/administration"
+										>{{
+											$t("pages.administration.migration.backToAdministration")
+										}}
+									</v-btn>
+								</div>
+							</v-card>
 						</v-container>
 					</v-stepper-content>
 				</v-stepper-items>
@@ -299,8 +398,9 @@ import { mdiClose, mdiLoading } from "@mdi/js";
 
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import ImportUsers from "@components/organisms/administration/ImportUsers";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ImportUsers from "@/components/organisms/administration/ImportUsers";
+
 export default {
 	components: { DefaultWireframe, ImportUsers },
 	data() {
@@ -311,7 +411,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.migration.title"),
@@ -319,7 +419,6 @@ export default {
 				},
 			],
 			isMigrationConfirm: false,
-			isMaintenanceConfirm: false,
 			errorTimeout: 7500,
 			isLoading: false,
 			checkTotal: null,
@@ -363,6 +462,22 @@ export default {
 		totalImportUsers() {
 			return importUsersModule.getTotal;
 		},
+		isBrb() {
+			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
+		},
+		ldapSourceTranslation() {
+			if (this.isBrb) {
+				return this.$t("pages.administration.migration.brbSchulportal");
+			} else {
+				return this.$t("pages.administration.migration.ldapSource");
+			}
+		},
+		helpPageUri() {
+			if (this.isBrb) {
+				return "https://docs.dbildungscloud.de/x/DwK6Cw?frameable=true";
+			}
+			return "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
+		},
 	},
 	watch: {
 		async migrationStep(val) {
@@ -385,6 +500,26 @@ export default {
 		}
 		await this.summary();
 		this.checkTotalInterval();
+	},
+	mounted() {
+		document.title = this.$t("pages.administration.migration.title", {
+			source: this.ldapSourceTranslation,
+			instance: this.$theme.short_name,
+		}).toString();
+
+		this.breadcrumbs = [
+			{
+				text: this.$t("pages.administration.index.title"),
+				to: "/administration/",
+			},
+			{
+				text: this.$t("pages.administration.migration.title", {
+					source: this.ldapSourceTranslation,
+					instance: this.$theme.short_name,
+				}),
+				disabled: true,
+			},
+		];
 	},
 	methods: {
 		async isAllowed() {
@@ -482,9 +617,6 @@ export default {
 			}
 		},
 		async endMaintenance() {
-			if (!this.isMaintenanceConfirm) {
-				return;
-			}
 			this.isLoading = true;
 			await schoolsModule.migrationStartSync();
 			if (schoolsModule.getError) {
@@ -518,11 +650,6 @@ export default {
 			}
 			this.migrationStep = nextStep;
 		},
-	},
-	head() {
-		return {
-			title: this.$t("pages.administration.migration.title"),
-		};
 	},
 };
 </script>

@@ -1,8 +1,16 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { $axios } from "@utils/api";
+import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { Year, FederalState, School } from "./types/schools";
-import { UserImportApiFactory, UserImportApiInterface } from "@/serverApi/v3";
+import { Year, FederalState, School, OauthMigration } from "./types/schools";
+import {
+	MigrationBody,
+	MigrationResponse,
+	SchoolApiFactory,
+	SchoolApiInterface,
+	UserImportApiFactory,
+	UserImportApiInterface,
+} from "@/serverApi/v3";
+import { AxiosResponse } from "axios";
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
@@ -37,13 +45,11 @@ function transformSchoolClientToServer(school: any): School {
 }
 
 @Module({
-	name: "schools",
+	name: "schoolsModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class SchoolsModule extends VuexModule {
-	private _importUserApi?: UserImportApiInterface;
-
 	school: School = {
 		_id: "",
 		name: "",
@@ -98,9 +104,19 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
+	oauthMigration: OauthMigration = {
+		enableMigrationStart: false,
+		oauthMigrationPossible: false,
+		oauthMigrationMandatory: false,
+		oauthMigrationFinished: "",
+	};
 	systems: any[] = [];
-	loading: boolean = false;
+	loading = false;
 	error: null | {} = null;
+
+	private get schoolApi(): SchoolApiInterface {
+		return SchoolApiFactory(undefined, "v3", $axios);
+	}
 
 	@Mutation
 	setSchool(updatedSchool: School): void {
@@ -125,6 +141,11 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
+	}
+
+	@Mutation
+	setOauthMigration(state: OauthMigration): void {
+		this.oauthMigration = state;
 	}
 
 	@Mutation
@@ -171,15 +192,19 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
+	get getOauthMigration(): OauthMigration {
+		return this.oauthMigration;
+	}
+
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
 
 		if (authModule.getUser?.schoolId) {
 			try {
-				const school = await $axios.$get(
-					`/v1/schools/${authModule.getUser?.schoolId} `
-				);
+				const school = (
+					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
+				).data;
 
 				this.setSchool(transformSchoolServerToClient(school));
 
@@ -196,11 +221,12 @@ export default class SchoolsModule extends VuexModule {
 	async fetchFederalState(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await $axios.$get(
-				`/v1/federalStates/${this.school.federalState}`
-			);
+			const data = (
+				await $axios.get(`/v1/federalStates/${this.school.federalState}`)
+			).data;
 
-			this.setFederalState(response);
+			// @ts-ignore
+			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -213,9 +239,10 @@ export default class SchoolsModule extends VuexModule {
 	async fetchCurrentYear(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const currentYear = await $axios.$get(
-				`/v1/years/${this.school.currentYear}`
-			);
+			const currentYear = (
+				await $axios.get(`/v1/years/${this.school.currentYear}`)
+			).data;
+			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -233,11 +260,11 @@ export default class SchoolsModule extends VuexModule {
 			const systemIds = this.school.systems;
 
 			const requests = systemIds.map((systemId) =>
-				$axios.$get(`v1/systems/${systemId}`)
+				$axios.get(`v1/systems/${systemId}`)
 			);
-			const response = await Promise.all(requests);
+			const responses = await Promise.all(requests);
 
-			this.setSystems(response);
+			this.setSystems(responses.map((response) => response.data));
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -251,7 +278,8 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload);
 		try {
-			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
+			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
+				.data;
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
@@ -265,7 +293,7 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await $axios.$delete(`v1/systems/${systemId}`);
+			await $axios.delete(`v1/systems/${systemId}`);
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
@@ -322,10 +350,54 @@ export default class SchoolsModule extends VuexModule {
 		}
 	}
 
-	private get importUserApi(): UserImportApiInterface {
-		if (!this._importUserApi) {
-			this._importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
+	@Action
+	async fetchSchoolOAuthMigration(): Promise<void> {
+		if (!this.getSchool.id) {
+			await this.fetchSchool();
 		}
-		return this._importUserApi;
+
+		try {
+			const oauthMigration: AxiosResponse<MigrationResponse> =
+				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
+			this.setOauthMigration({
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+			});
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				this.setError(error);
+			}
+		}
+	}
+
+	@Action
+	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
+		if (!this.school._id) {
+			return;
+		}
+
+		try {
+			const oauthMigration: AxiosResponse<MigrationResponse> =
+				await this.schoolApi.schoolControllerSetMigration(
+					this.school._id,
+					migrationFlags
+				);
+			this.setOauthMigration({
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+			});
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				this.setError(error);
+			}
+		}
+	}
+
+	private get importUserApi(): UserImportApiInterface {
+		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
 }

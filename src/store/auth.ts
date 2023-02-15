@@ -13,16 +13,17 @@ import { School } from "./types/schools";
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
 	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-	let expires = "expires=" + d.toUTCString();
+	const expires = "expires=" + d.toUTCString();
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Secure; SameSite=None`;
 };
+
 @Module({
-	name: "auth",
+	name: "authModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class AuthModule extends VuexModule {
-	accesToken: string | null = "";
+	accessToken: string | null = "";
 	payload = null;
 	user: User | null = {
 		_id: "",
@@ -74,7 +75,7 @@ export default class AuthModule extends VuexModule {
 		externallyManaged: false,
 	};
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale: string = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+	locale = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -82,8 +83,6 @@ export default class AuthModule extends VuexModule {
 	};
 
 	status: Status = "";
-
-	_userApi?: UserApiInterface;
 
 	@Mutation
 	setUser(user: User): void {
@@ -97,7 +96,7 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	setAccessToken(payload: string): void {
-		this.accesToken = payload;
+		this.accessToken = payload;
 	}
 
 	@Mutation
@@ -107,7 +106,7 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	clearAuthData(): void {
-		this.accesToken = null;
+		this.accessToken = null;
 		this.user = null;
 	}
 
@@ -151,7 +150,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get getAccessToken(): string | null {
-		return this.accesToken;
+		return this.accessToken;
 	}
 
 	get getUserRoles(): string[] {
@@ -165,7 +164,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get getAuthenticated(): string | boolean {
-		return this.accesToken || false;
+		return this.accessToken || false;
 	}
 
 	// TODO - why are we using toLowerCase() on permissions here?
@@ -179,15 +178,64 @@ export default class AuthModule extends VuexModule {
 		return !!this.user?.externallyManaged;
 	}
 
+	get isLoggedIn(): boolean {
+		return !!this.accessToken;
+	}
+
+	// @Action
+	// async populateUser(): Promise<void> {
+	// 	const user = (await $axios.get("/v1/me")).data;
+	// 	// @ts-ignore
+	// 	const roles = (await $axios.get(`/v1/roles/user/${user.id}`)).data;
+
+	// 	// @ts-ignore
+	// 	user.permissions = roles.reduce(
+	// 		(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
+	// 		[]
+	// 	);
+	// 	// @ts-ignore
+	// 	this.setUser(user);
+	// 	// @ts-ignore
+	// 	if (user.schoolId) {
+	// 		schoolsModule.fetchSchool();
+	// 	}
+	// 	// @ts-ignore
+	// 	if (user.language) {
+	// 		// @ts-ignore
+	// 		this.setLocale(user.language);
+	// 	}
+
+	// 	//TODO Remove once added to User permissions SC-2401
+	// 	if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
+	// 		this.addUserPermmission("ADDONS_ENABLED");
+	// 	}
+	// 	if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
+	// 		this.addUserPermmission("TEAMS_ENABLED");
+	// 	}
+	// }
+
 	@Action
-	async populateUser(): Promise<void> {
-		const user = await $axios.$get("/v1/me");
-		const roles = await $axios.$get(`/v1/roles/user/${user.id}`);
+	async login(jwt: string) {
+		const user: User | undefined = await $axios.get("/v1/me").then(
+			(resp) => resp.data,
+			() => undefined
+		);
+
+		if (user === undefined) {
+			this.clearAuthData();
+			return;
+		}
+
+		const roles: { permissions: string[] }[] = (
+			await $axios.get(`/v1/roles/user/${user.id}`)
+		).data;
+
 		user.permissions = roles.reduce(
-			(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
-			[]
+			(acc, role) => [...new Set(acc.concat(role.permissions))],
+			[] as string[]
 		);
 		this.setUser(user);
+
 		if (user.schoolId) {
 			schoolsModule.fetchSchool();
 		}
@@ -202,6 +250,9 @@ export default class AuthModule extends VuexModule {
 		if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
 			this.addUserPermmission("TEAMS_ENABLED");
 		}
+
+		// isLoggedIn => true
+		this.setAccessToken(jwt);
 	}
 
 	@Action
@@ -242,14 +293,11 @@ export default class AuthModule extends VuexModule {
 		window.location.assign(redirectUrl);
 	}
 
-	private get userApi() {
-		if (!this._userApi) {
-			this._userApi = UserApiFactory(
-				undefined,
-				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
-				$axios
-			);
-		}
-		return this._userApi;
+	private get userApi(): UserApiInterface {
+		return UserApiFactory(
+			undefined,
+			"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+			$axios
+		);
 	}
 }

@@ -80,7 +80,7 @@ const mockSetGloablFiles = (payload: string) =>
 describe("filePaths module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ "env-config": EnvConfigModule });
+			setupStores({ envConfigModule: EnvConfigModule });
 		});
 
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {

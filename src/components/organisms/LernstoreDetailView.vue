@@ -157,7 +157,7 @@
 					</div>
 					<div v-show="collectionLink !== ''" class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="material" icon="ic_collection" />
+							<base-icon source="custom" icon="ic_collection" />
 						</div>
 						<base-link
 							design="none"
@@ -184,12 +184,12 @@
 
 <script>
 /* eslint-disable max-lines */
-import AddContentButton from "@components/organisms/AddContentButton";
-import LernStorePlayer from "@components/molecules/LernStorePlayer";
-import UserHasRole from "@components/helpers/UserHasRole";
-import contentMeta from "@mixins/contentMeta";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import UserHasRole from "@/components/helpers/UserHasRole";
+import contentMeta from "@/mixins/contentMeta";
+import LernStorePlayer from "@/components/molecules/LernStorePlayer";
 import BaseLink from "../base/BaseLink";
-import { printDateFromTimestamp } from "@plugins/datetime";
+import { printDateFromTimestamp } from "@/plugins/datetime";
 import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
@@ -200,7 +200,7 @@ import {
 	getTags,
 	isVideoContent,
 	isMerlinContent,
-} from "@utils/helpers";
+} from "@/utils/helpers";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -318,9 +318,8 @@ export default {
 	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
-			const url = await this.$axios.$get(
-				`/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
-			);
+			const requestUrl = `/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`;
+			const url = (await this.$axios.get(requestUrl)).data;
 			window.open(url, "_blank");
 		},
 		isNotStudent(roles) {
@@ -340,21 +339,22 @@ export default {
 			}
 		},
 	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
+	mounted() {
+		document.title = (
+			this.isInline
+				? {
+						title: this.$t("pages.content.page.window.title", {
+							instance: this.$theme.name,
+						}),
+				  }
+				: { title: this.$t("common.words.lernstore") }
+		).toString();
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
+@import "@/styles/mixins";
 $tablet-portrait-width: 768px;
 
 .resource {
@@ -386,7 +386,7 @@ $tablet-portrait-width: 768px;
 
 		.close-icon {
 			color: var(--v-white-base);
-			background-color: var(--v-grey-darken1);
+			background-color: var(--v-grey-darken3);
 		}
 
 		.close-transparent {
@@ -453,6 +453,7 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
+				position: absolute;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;

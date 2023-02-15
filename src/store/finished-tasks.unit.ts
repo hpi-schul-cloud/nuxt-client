@@ -1,7 +1,8 @@
 import FinishedTasksModule from "./finished-tasks";
 import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
-import { Task } from "./types/tasks";
+import { initializeAxios } from "@/utils/api";
+import { AxiosInstance } from "axios";
 
 /**
  * Spy on a TaskFilter method and mock its return value.
@@ -11,12 +12,27 @@ import { Task } from "./types/tasks";
  * @param result the result of the task filter
  * @returns
  */
+jest.mock("axios");
+initializeAxios({
+	// get: () => {
+	// 	return { data: [] };
+	// },
+} as AxiosInstance);
 
 describe("finished task store", () => {
 	describe("actions", () => {
+		const setup = (taskApiMock: any) => {
+			const spy = jest
+				.spyOn(serverApi, "TaskApiFactory")
+				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
+			const finishedTasksModule = new FinishedTasksModule({});
+
+			return { taskApiMock, finishedTasksModule };
+		};
+
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
-				const mockApi = {
+				const { taskApiMock, finishedTasksModule } = setup({
 					taskControllerFindAllFinished: jest.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
@@ -25,12 +41,7 @@ describe("finished task store", () => {
 							limit: 50,
 						},
 					})),
-				};
-
-				const spy = jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-				const finishedTasksModule = new FinishedTasksModule({});
+				});
 
 				finishedTasksModule.fetchFinishedTasks().then(() => {
 					expect(finishedTasksModule.getTasks).toStrictEqual([
@@ -39,25 +50,19 @@ describe("finished task store", () => {
 						},
 					]);
 					expect(finishedTasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-						1
-					);
+					expect(
+						taskApiMock.taskControllerFindAllFinished
+					).toHaveBeenCalledTimes(1);
 					done();
 				});
 				expect(finishedTasksModule.getStatus).toBe("pending");
-
-				spy.mockRestore();
 			});
 
 			it("should fetch the next page", (done) => {
-				const finishedTasksModule = new FinishedTasksModule({});
-				finishedTasksModule.pagination.skip = 50;
-				finishedTasksModule.pagination.total = 110;
-
 				const mockApi = {
 					taskControllerFindAllFinished: jest
 						.fn()
-						.mockReturnValueOnce({
+						.mockResolvedValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #1" }],
 								total: 110,
@@ -65,7 +70,7 @@ describe("finished task store", () => {
 								limit: 50,
 							},
 						})
-						.mockReturnValueOnce({
+						.mockResolvedValueOnce({
 							data: {
 								data: [{ mockTask: "mock task #2" }],
 								total: 110,
@@ -78,6 +83,10 @@ describe("finished task store", () => {
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination.skip = 50;
+				finishedTasksModule.pagination.total = 110;
 
 				finishedTasksModule.fetchFinishedTasks().then(() => {
 					expect(finishedTasksModule.getTasks).toStrictEqual([
@@ -172,14 +181,7 @@ describe("finished task store", () => {
 		});
 
 		describe("refetchTasks", () => {
-			it("should fetch all tasks up until current pagination", (done) => {
-				const finishedTasksModule = new FinishedTasksModule({});
-				finishedTasksModule.pagination = {
-					total: 26,
-					skip: 10,
-					limit: 10,
-				};
-
+			it("should fetch all tasks up until current pagination", async () => {
 				const mockApi = {
 					taskControllerFindAllFinished: jest
 						.fn()
@@ -213,18 +215,21 @@ describe("finished task store", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				finishedTasksModule.refetchTasks().then(() => {
-					expect(finishedTasksModule.getTasks).toStrictEqual([
-						{ mockTask: "mock task #1" },
-						{ mockTask: "mock task #2" },
-					]);
-					expect(finishedTasksModule.getStatus).toBe("completed");
-					expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(
-						2
-					);
-					done();
-				});
-				expect(finishedTasksModule.getStatus).toBe("pending");
+				const finishedTasksModule = new FinishedTasksModule({});
+				finishedTasksModule.pagination = {
+					total: 26,
+					skip: 10,
+					limit: 10,
+				};
+
+				await finishedTasksModule.refetchTasks();
+
+				expect(finishedTasksModule.getTasks).toStrictEqual([
+					{ mockTask: "mock task #1" },
+					{ mockTask: "mock task #2" },
+				]);
+				expect(finishedTasksModule.getStatus).toBe("completed");
+				expect(mockApi.taskControllerFindAllFinished).toHaveBeenCalledTimes(2);
 
 				spy.mockRestore();
 			});

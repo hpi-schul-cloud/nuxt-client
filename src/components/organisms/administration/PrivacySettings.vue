@@ -165,6 +165,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="toggle_chat"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
@@ -188,6 +189,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="toggle_video_conference"
 					@input-changed="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
@@ -207,7 +209,7 @@
 
 <script>
 import { envConfigModule } from "@/store";
-import vCustomSwitch from "@components/atoms/vCustomSwitch";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 
 export default {
 	components: {

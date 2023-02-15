@@ -130,14 +130,13 @@
 </template>
 
 <script>
-// TODO: fix scrolling, reload after coming back
-import { contentModule } from "@/store";
-import AddContentButton from "@components/organisms/AddContentButton";
-import ContentCard from "@components/organisms/ContentCard";
-import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-import UserHasRole from "@components/helpers/UserHasRole";
+import { contentModule, notifierModule } from "@/store";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import ContentCard from "@/components/organisms/ContentCard";
+import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import UserHasRole from "@/components/helpers/UserHasRole";
 
-import contentMeta from "@mixins/contentMeta";
+import contentMeta from "@/mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import {
@@ -146,13 +145,14 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
-} from "@utils/helpers";
-import { printDateFromTimestamp } from "@plugins/datetime";
-import infiniteScrolling from "@mixins/infiniteScrolling";
+} from "@/utils/helpers";
+import { printDateFromTimestamp } from "@/plugins/datetime";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
+import { defineComponent } from "vue";
 
 const DEFAULT_AUTHOR = "admin";
 
-export default {
+export default defineComponent({
 	components: {
 		AddContentButton,
 		BaseLink,
@@ -254,24 +254,29 @@ export default {
 	mounted() {
 		this.searchElements();
 		this.activateTransition = true;
+		document.title = this.isInline
+			? this.$t("pages.content.page.window.title", {
+					instance: this.$theme.name,
+			  })
+			: this.$t("common.words.lernstore");
 	},
 	methods: {
 		async searchElements() {
 			try {
 				// Clears the previous collection elements before rendering the new ones
 				contentModule.clearElements();
-				// TODO wrong use of store (not so bad)
 				await contentModule.getElements(this.query);
 			} catch (error) {
-				this.$toast.error(
-					this.$t("pages.content.notification.lernstoreNotAvailable")
-				);
+				notifierModule.show({
+					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		},
 		async addElements() {
 			if (this.query.$skip < this.elements.total) {
 				this.query.$skip += this.query.$limit;
-				// TODO wrong use of store (not so bad)
 				await contentModule.addElements(this.query);
 			}
 		},
@@ -281,16 +286,7 @@ export default {
 				: this.role;
 		},
 	},
-	head() {
-		return this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-			  }
-			: { title: this.$t("common.words.lernstore") };
-	},
-};
+});
 </script>
 
 <style>
@@ -299,8 +295,6 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@import "@styles";
-
 $tablet-portrait-width: 768px;
 
 .resource {

@@ -19,8 +19,8 @@
 
 <script>
 import { contentModule } from "@/store";
-import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
-import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
+import LernstoreDetailView from "@/components/organisms/LernstoreDetailView";
+import LernstoreCollectionDetailView from "@/components/organisms/LernstoreCollectionDetailView";
 
 export default {
 	meta: {
@@ -29,12 +29,6 @@ export default {
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,
-	},
-	layout({ query }) {
-		return String(query.isCollection) === "true" &&
-			contentModule.getCollectionsFeatureFlag === true
-			? "default"
-			: "plain";
 	},
 	computed: {
 		resource() {
@@ -49,9 +43,20 @@ export default {
 		isCollection() {
 			return contentModule.isCollection;
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+		documentTitle() {
+			return this.isInline
+				? this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+				  })
+				: this.$t("common.words.lernstore");
+		},
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
+		document.title = this.documentTitle;
 	},
 };
 </script>

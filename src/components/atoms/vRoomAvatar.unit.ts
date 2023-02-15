@@ -1,7 +1,6 @@
-import { mount } from "@vue/test-utils";
+import { mount, Wrapper } from "@vue/test-utils";
 import vRoomAvatar from "./vRoomAvatar.vue";
-
-declare var createComponentMocks: Function;
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	id: "456",
@@ -23,11 +22,10 @@ const propsData = {
 	draggable: true,
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (props: object, options?: object): Wrapper<any> => {
 	return mount(vRoomAvatar, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
@@ -38,22 +36,24 @@ describe("vRoomAvatar", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 	});
-	it("should display the title", () => {
+
+	it("should display the title but NOT the date title", () => {
 		const wrapper = getWrapper({ ...propsData });
-		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
+		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
-		expect(labelElement.innerHTML.trim()).toStrictEqual("Bio 12c");
+		expect(labelElement.innerHTML.trim()).toContain("Bio 12c");
+		expect(labelElement.innerHTML.trim()).not.toContain("2019/2020");
 	});
 
 	it("should NOT display the title", () => {
 		const wrapper = getWrapper({ ...propsData, condenseLayout: true });
-		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
+		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(labelElement).toBeFalsy();
 	});
 
-	it("should display the short Title", () => {
+	it("should display the short title", () => {
 		const wrapper = getWrapper(propsData);
 		const shortLabelElement = wrapper.find(".single-avatar")
 			.element as HTMLElement;
@@ -126,49 +126,7 @@ describe("vRoomAvatar", () => {
 		expect(location.pathname).toStrictEqual("");
 	});
 
-	it("should emit 'dragStart' event when it started dragging", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".v-avatar");
-
-		expect(wrapper.vm.$data.isDragging).toBe(false);
-		avatarComponent.trigger("dragstart");
-		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.$data.isDragging).toBe(true);
-		const emitted = wrapper.emitted();
-
-		expect(emitted["startDrag"]).toHaveLength(1);
-		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
-			mockData
-		);
-	});
-
-	it("should emit 'drop' event when an element dropped onto it", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".v-avatar");
-
-		avatarComponent.trigger("drop");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
-
-		expect(emitted["drop"]).toHaveLength(1);
-	});
-
-	it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
-		const wrapper = getWrapper({
-			item: mockData,
-			size: "4em",
-			showBadge: true,
-			draggable: false,
-		});
-		const avatarComponent = wrapper.find(".v-avatar");
-
-		avatarComponent.trigger("dragstart");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
-
-		expect(emitted["startDrag"]).toBe(undefined);
-	});
-	it("should display the date title", () => {
+	it("should display the title AND the date title", () => {
 		const propData = {
 			item: {
 				id: "123",
@@ -187,9 +145,131 @@ describe("vRoomAvatar", () => {
 		};
 
 		const wrapper = getWrapper({ ...propData });
-		const element = wrapper.find(".date-title").element as HTMLElement;
+		const element = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(element).toBeTruthy();
-		expect(element.innerHTML.trim()).toStrictEqual("2015-2018");
+		expect(element.innerHTML.trim()).toContain("History");
+		expect(element.innerHTML.trim()).toContain("2015-2018");
+	});
+
+	describe("drag and drop", () => {
+		it("should emit 'dragStart' event when it started dragging", async () => {
+			const wrapper = getWrapper(propsData);
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			expect(wrapper.vm.$data.isDragging).toBe(false);
+			avatarComponent.trigger("dragstart");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.vm.$data.isDragging).toBe(true);
+			const emitted = wrapper.emitted();
+
+			expect(emitted["startDrag"]).toHaveLength(1);
+			expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
+				mockData
+			);
+		});
+
+		it("should emit 'drop' event when an element dropped onto it", async () => {
+			const wrapper = getWrapper(propsData);
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			avatarComponent.trigger("drop");
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+
+			expect(emitted["drop"]).toHaveLength(1);
+		});
+
+		it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
+			const wrapper = getWrapper({
+				item: mockData,
+				size: "4em",
+				showBadge: true,
+				draggable: false,
+			});
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			avatarComponent.trigger("dragstart");
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+
+			expect(emitted["startDrag"]).toBe(undefined);
+		});
+
+		it("should emit 'dragenter' event when draging over component", async () => {
+			const wrapper = getWrapper(propsData);
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			avatarComponent.trigger("dragenter");
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+
+			expect(wrapper.vm.hovered).toBeTruthy();
+			expect(wrapper.vm.isDragging).toBeFalsy();
+		});
+
+		it("should emit 'dragleave' event when draging over component", async () => {
+			const wrapper = getWrapper(propsData);
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			avatarComponent.trigger("dragleave");
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+
+			expect(wrapper.vm.hovered).toBeFalsy();
+		});
+
+		it("should emit 'dragend' event when draging ended", async () => {
+			const wrapper = getWrapper(propsData);
+			const avatarComponent = wrapper.find(".v-avatar");
+
+			avatarComponent.trigger("dragend");
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+
+			expect(emitted["dragend"]).toHaveLength(1);
+			expect(wrapper.vm.isDragging).toBeFalsy();
+		});
+	});
+
+	describe("on long running course copies", () => {
+		const setup = () => {
+			const propData = {
+				item: {
+					id: "123",
+					title: "History (1)",
+					shortTitle: "Hi",
+					displayColor: "#EF6C00",
+					startDate: "2023-01-30T22:00:00.000Z",
+					untilDate: "2023-02-15T22:00:00.000Z",
+					copyingSince: "2023-01-30T22:00:00.000Z",
+					searchText: "History (1)",
+					isArchived: true,
+				},
+				size: "4em",
+				showBadge: true,
+				draggable: true,
+			};
+
+			const wrapper = getWrapper({ ...propData });
+			return wrapper;
+		};
+
+		it("should display info and not title", () => {
+			const wrapper = setup();
+			const element = wrapper.find(".subtitle").element as HTMLElement;
+
+			expect(element.innerHTML.trim()).toContain("Kurs wird erstellt");
+			expect(element.className).toContain("grey--text");
+			expect(element.className).toContain("text--darken-1");
+		});
+
+		it("should display avatar in grey", () => {
+			const wrapper = setup();
+			const element = wrapper.find(".v-avatar").element as HTMLElement;
+			console.log(element.className);
+			expect(element.className.split(" ")).toContain("grey");
+			expect(element.className.split(" ")).toContain("lighten-2");
+		});
 	});
 });
