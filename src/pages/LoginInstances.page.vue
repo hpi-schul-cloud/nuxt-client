@@ -101,7 +101,7 @@ export default defineComponent({
 
 .boxes {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 	grid-gap: var(--space-lg);
 }
 
