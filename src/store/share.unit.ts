@@ -139,7 +139,6 @@ describe("share module", () => {
 			it("should call setCourseId, setShareModalOpen and setShareUrl mutations", async () => {
 				const shareModule = new ShareModule({});
 				const setIdMock = jest.spyOn(shareModule, "setParentId");
-				const setTypeMock = jest.spyOn(shareModule, "setParentType");
 				const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
 				const setShareModalOpenMock = jest.spyOn(
 					shareModule,
@@ -148,7 +147,6 @@ describe("share module", () => {
 				shareModule.resetShareFlow();
 
 				expect(setIdMock).toHaveBeenCalledWith("");
-				expect(setTypeMock).toHaveBeenCalledWith(undefined);
 				expect(setShareModalOpenMock).toHaveBeenCalledWith(false);
 				expect(setShareUrlMock).toHaveBeenCalledWith(undefined);
 			});
