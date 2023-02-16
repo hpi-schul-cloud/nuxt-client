@@ -7,17 +7,31 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenResponse,
 } from "../serverApi/v3/api";
-import { SharePayload } from "./share-course";
+
+export interface ShareOptions {
+	isSchoolInternal: boolean;
+	hasExpiryDate: boolean;
+}
+
+export interface SharePayload extends ShareOptions {
+	id: string;
+}
+
+export interface StartFlow {
+	id: string;
+	type: ShareTokenBodyParamsParentTypeEnum;
+}
 
 @Module({
-	name: "shareTaskModule",
+	name: "shareModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class ShareTaskModule extends VuexModule {
+export default class ShareModule extends VuexModule {
 	private isShareModalOpen = false;
-	private taskId = "";
+	private parentId = "";
 	private shareUrl: string | undefined = undefined;
+	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
@@ -28,11 +42,12 @@ export default class ShareTaskModule extends VuexModule {
 		payload: SharePayload
 	): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
-			parentType: ShareTokenBodyParamsParentTypeEnum.Tasks,
-			parentId: this.taskId,
+			parentType: this.parentType,
+			parentId: this.parentId,
 			expiresInDays: payload.hasExpiryDate ? 21 : null,
 			schoolExclusive: payload.isSchoolInternal,
 		};
+		console.log(shareTokenPayload);
 		try {
 			const shareTokenResult =
 				await this.shareApi.shareTokenControllerCreateShareToken(
@@ -48,21 +63,28 @@ export default class ShareTaskModule extends VuexModule {
 	}
 
 	@Action
-	startShareFlow(id: string): void {
-		this.setTaskId(id);
+	startShareFlow({ id, type }: StartFlow): void {
+		console.log({ startShareFlow: { id, type } });
+		this.setParentId(id);
+		this.setParentType(type);
 		this.setShareModalOpen(true);
 	}
 
 	@Action
 	resetShareFlow(): void {
-		this.setTaskId("");
+		this.setParentId("");
 		this.setShareModalOpen(false);
 		this.setShareUrl(undefined);
 	}
 
 	@Mutation
-	setTaskId(id: string): void {
-		this.taskId = id;
+	setParentId(id: string): void {
+		this.parentId = id;
+	}
+
+	@Mutation
+	setParentType(type: ShareTokenBodyParamsParentTypeEnum): void {
+		this.parentType = type;
 	}
 
 	@Mutation
@@ -76,10 +98,16 @@ export default class ShareTaskModule extends VuexModule {
 	}
 
 	get getIsShareModalOpen(): boolean {
+		console.log({ isShareModalOpen: this.isShareModalOpen });
 		return this.isShareModalOpen;
 	}
 
 	get getShareUrl(): string | undefined {
 		return this.shareUrl;
+	}
+
+	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
+		console.log({ parentType: this.parentType });
+		return this.parentType;
 	}
 }

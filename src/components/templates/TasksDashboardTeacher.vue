@@ -75,7 +75,7 @@
 				/>
 			</v-tab-item>
 		</v-tabs-items>
-		<share-modal type="task" />
+		<share-modal type="tasks" />
 	</section>
 </template>
 
@@ -88,6 +88,7 @@ import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { envConfigModule } from "@/store";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -114,12 +115,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: [
-		"tasksModule",
-		"finishedTasksModule",
-		"copyModule",
-		"shareTaskModule",
-	],
+	inject: ["tasksModule", "finishedTasksModule", "copyModule", "shareModule"],
 	computed: {
 		openTasks() {
 			return this.tasksModule.getOpenTasksForTeacher;
@@ -175,7 +171,10 @@ export default defineComponent({
 		},
 		async onShareTask(taskId) {
 			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
-				this.shareTaskModule.startShareFlow(taskId);
+				this.shareModule.startShareFlow({
+					id: taskId,
+					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				});
 			}
 		},
 	},

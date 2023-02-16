@@ -30,6 +30,7 @@ import { useLoadingState } from "@/composables/loadingState";
 import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ImportFlow",
@@ -56,9 +57,11 @@ export default defineComponent({
 		const i18n = inject("i18n");
 		const copyModule = inject("copyModule");
 		const notifier = inject("notifierModule");
+		const loadingStateModule = inject("loadingStateModule");
 
 		const parentName = ref("");
-		const parentType = ref("lesson");
+		const parentType = ref("lessons");
+		const newName = ref("");
 
 		const destinationCourseId = ref(undefined);
 		const isSelectCourseModalOpen = ref(false);
@@ -136,8 +139,12 @@ export default defineComponent({
 			try {
 				const validateResult = await copyModule.validateShareToken(props.token);
 				parentName.value = validateResult.parentName;
-				parentType.value = validateResult.parentType.slice(0, -1);
-				openModal(parentType.value === "course" ? "import" : "selectCourse");
+				parentType.value = validateResult.parentType;
+				openModal(
+					parentType.value === ShareTokenBodyParamsParentTypeEnum.Courses
+						? "import"
+						: "selectCourse"
+				);
 			} catch (error) {
 				if (error.response?.status === 403) {
 					showFailurePermission();
@@ -148,18 +155,25 @@ export default defineComponent({
 			}
 		}
 
-		async function startImport(newName) {
+		async function startImport(name) {
+			newName.value = name;
 			openModal("loading");
 			try {
 				await copyModule.copyByShareToken({
 					token: props.token,
 					type: parentType.value,
-					newName,
+					newName: newName.value,
 					destinationCourseId: destinationCourseId.value,
 				});
-				openModal("result");
+				if (copyResultModalItems.value[0].elements.length === 0) {
+					loadingStateModule.close();
+					copyModule.reset();
+					emit("success", newName.value);
+				} else {
+					openModal("result");
+				}
 			} catch (error) {
-				showFailureBackend(newName);
+				showFailureBackend(newName.value);
 			}
 		}
 
@@ -169,10 +183,10 @@ export default defineComponent({
 			destinationCourseId.value = courseId;
 			openModal("import");
 		};
-		const onImport = (courseName) => startImport(courseName);
+		const onImport = (newName) => startImport(newName);
 		const onCancel = () => closeModals();
 		const onCopyResultModalClosed = () => {
-			emit("success");
+			emit("success", newName.value);
 			copyModule.reset();
 		};
 

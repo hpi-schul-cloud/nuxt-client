@@ -116,8 +116,8 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
-		<share-modal type="lesson" />
-		<share-modal type="task" />
+		<share-modal type="lessons" />
+		<share-modal type="tasks" />
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -180,6 +180,7 @@ import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -198,7 +199,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareLessonModule", "shareTaskModule"],
+	inject: ["shareModule"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
@@ -290,7 +291,10 @@ export default {
 		},
 		async getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW) {
-				this.shareLessonModule.startShareFlow(lessonId);
+				this.shareModule.startShareFlow({
+					id: lessonId,
+					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				});
 			} else if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 				await roomModule.fetchSharedLesson(lessonId);
 				const sharedLesson = roomModule.getSharedLessonData;
@@ -303,7 +307,10 @@ export default {
 		},
 		async getSharedTask(taskId) {
 			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
-				this.shareTaskModule.startShareFlow(taskId);
+				this.shareModule.startShareFlow({
+					id: taskId,
+					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				});
 			}
 		},
 		endDragging() {

@@ -2,10 +2,11 @@ import {
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
+	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenInfoResponseParentTypeEnum,
 } from "@/serverApi/v3";
 import { roomsModule } from "@/store";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
@@ -175,7 +176,72 @@ describe("@components/share/ImportFlow", () => {
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationCourseId: course.id,
 						token,
-						type: CopyParamsTypeEnum.Lesson,
+						type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+						newName: originalName,
+					});
+				});
+			});
+
+			describe("when parent is a task", () => {
+				const validateShareTokenMock = () =>
+					Promise.resolve({
+						token,
+						parentType: ShareTokenInfoResponseParentTypeEnum.Tasks,
+						parentName: originalName,
+					});
+
+				it("should open selectCourseModal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const wrapper = mountComponent();
+					await Vue.nextTick();
+
+					const selectCourseModal = wrapper.findComponent({
+						name: "select-course-modal",
+					});
+					expect(selectCourseModal.props("isOpen")).toBe(true);
+				});
+
+				it("should open the importModal after selecting the course and closing the modal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const wrapper = mountComponent();
+					await Vue.nextTick();
+
+					const select: any = wrapper.findComponent({ name: "v-select" }).vm;
+					select.selectItem(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					await Vue.nextTick();
+
+					const importModal = wrapper.findComponent({ name: "import-modal" });
+					expect(importModal.props("isOpen")).toBe(true);
+				});
+
+				it("should call copyByShareToken when import is started", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const wrapper = mountComponent();
+					await Vue.nextTick();
+
+					const select: any = wrapper.findComponent({ name: "v-select" }).vm;
+					select.selectItem(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					const imortModalDialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
+					imortModalDialog.vm.$emit("dialog-confirmed");
+
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
+						destinationCourseId: course.id,
+						token,
+						type: ShareTokenBodyParamsParentTypeEnum.Tasks,
 						newName: originalName,
 					});
 				});
@@ -219,7 +285,7 @@ describe("@components/share/ImportFlow", () => {
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						token,
-						type: CopyParamsTypeEnum.Course,
+						type: ShareTokenBodyParamsParentTypeEnum.Courses,
 						newName: originalName,
 					});
 				});
@@ -242,6 +308,25 @@ describe("@components/share/ImportFlow", () => {
 
 				describe("for partial or successful copy", () => {
 					beforeEach(() => {
+						const failedItems: CopyResultItem[] = [
+							{
+								title: "Thema",
+								type: CopyApiResponseTypeEnum.Lesson,
+								elementId: "63edd9c310b658af36648a55",
+								url: "abc.de",
+								elements: [
+									{
+										type: CopyApiResponseTypeEnum.LessonContentGroup,
+										title: "Etherpad",
+									},
+								],
+							},
+						];
+						copyModuleMock = createModuleMocks(CopyModule, {
+							getIsResultModalOpen: false,
+							getCopyResult: copyResultResponse,
+							getCopyResultFailedItems: failedItems,
+						});
 						copyModuleMock.validateShareToken = validateShareTokenMock;
 						const copyResults: CopyResultItem[] = [
 							{

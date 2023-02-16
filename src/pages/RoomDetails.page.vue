@@ -102,7 +102,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal type="course" />
+		<share-modal type="courses" />
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -114,7 +114,10 @@
 </template>
 
 <script>
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum as Roles,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
@@ -167,7 +170,7 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 	},
-	inject: ["copyModule", "shareCourseModule"],
+	inject: ["copyModule", "shareModule"],
 	data() {
 		return {
 			importDialog: {
@@ -333,7 +336,10 @@ export default defineComponent({
 		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
-				this.shareCourseModule.startShareFlow(this.courseId);
+				this.shareModule.startShareFlow({
+					id: this.courseId,
+					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				});
 			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				await roomModule.createCourseShareToken(this.courseId);
 				this.dialog.courseShareToken = roomModule.getCourseShareToken;

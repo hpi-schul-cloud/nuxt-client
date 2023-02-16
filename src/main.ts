@@ -18,14 +18,12 @@ import {
 	roomModule,
 	roomsModule,
 	schoolsModule,
-	shareCourseModule,
+	shareModule,
 	statusAlertsModule,
 	systemsModule,
 	taskCardModule,
 	tasksModule,
 	userMigrationModule,
-	shareLessonModule,
-	shareTaskModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -135,9 +133,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			roomModule,
 			roomsModule,
 			schoolsModule,
-			shareCourseModule,
-			shareLessonModule,
-			shareTaskModule,
+			shareModule,
 			statusAlertsModule,
 			systemsModule,
 			taskCardModule,

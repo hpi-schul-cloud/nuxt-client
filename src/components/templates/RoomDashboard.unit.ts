@@ -4,7 +4,6 @@ import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -12,7 +11,8 @@ import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import ShareTaskModule from "@/store/share-task";
+import ShareModule from "@/store/share";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 const mockData = {
 	roomId: "123",
@@ -95,10 +95,7 @@ const emptyMockData = {
 	elements: [],
 };
 
-const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
-	getIsShareModalOpen: false,
-});
-const shareTaskModuleMock = createModuleMocks(ShareTaskModule, {
+const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
@@ -110,8 +107,7 @@ const getWrapper = (props: object, options?: object) => {
 		}),
 		provide: {
 			notifierModule: notifierModuleMock,
-			shareLessonModule: shareLessonModuleMock,
-			shareTaskModule: shareTaskModuleMock,
+			shareModule: shareModuleMock,
 		},
 		propsData: props,
 		...options,
@@ -368,7 +364,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
-				expect(shareLessonModuleMock.startShareFlow).toBeCalledWith("12345");
+				expect(shareModuleMock.startShareFlow).toBeCalledWith({
+					id: "12345",
+					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				});
 			});
 		});
 	});
@@ -385,7 +384,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
-			expect(shareTaskModuleMock.startShareFlow).toBeCalledWith("1234");
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "1234",
+				type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+			});
 		});
 	});
 
