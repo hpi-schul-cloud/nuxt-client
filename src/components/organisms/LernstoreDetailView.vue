@@ -453,7 +453,6 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				position: absolute;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;
