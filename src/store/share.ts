@@ -47,7 +47,6 @@ export default class ShareModule extends VuexModule {
 			expiresInDays: payload.hasExpiryDate ? 21 : null,
 			schoolExclusive: payload.isSchoolInternal,
 		};
-		console.log(shareTokenPayload);
 		try {
 			const shareTokenResult =
 				await this.shareApi.shareTokenControllerCreateShareToken(
@@ -64,7 +63,6 @@ export default class ShareModule extends VuexModule {
 
 	@Action
 	startShareFlow({ id, type }: StartFlow): void {
-		console.log({ startShareFlow: { id, type } });
 		this.setParentId(id);
 		this.setParentType(type);
 		this.setShareModalOpen(true);
@@ -97,17 +95,15 @@ export default class ShareModule extends VuexModule {
 		this.shareUrl = url;
 	}
 
+	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
+		return this.parentType;
+	}
+
 	get getIsShareModalOpen(): boolean {
-		console.log({ isShareModalOpen: this.isShareModalOpen });
 		return this.isShareModalOpen;
 	}
 
 	get getShareUrl(): string | undefined {
 		return this.shareUrl;
-	}
-
-	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
-		console.log({ parentType: this.parentType });
-		return this.parentType;
 	}
 }

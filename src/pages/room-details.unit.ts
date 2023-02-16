@@ -155,7 +155,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		notifierModuleMock = createModuleMocks(NotifierModule);
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			startShareFlow: jest.fn(),
 		});
 
@@ -380,8 +380,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		it("should call store action after 'Share Course' menu clicked", async () => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true });
-			// const createCourseShareTokenSpy = jest.fn();
-			// shareModule.createCourseShareToken = createCourseShareTokenSpy;
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -397,6 +395,13 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("modal views", () => {
+			it("should open modal for sharing action", async () => {
+				const wrapper = getWrapper();
+				const modalView = wrapper.find(`[data-testid="share-dialog"]`);
+
+				expect(modalView.vm.isOpen).toBe(true);
+			});
+
 			it("should close the modal and call 'closeDialog' method", async () => {
 				const closeDialogSpy = jest.fn();
 				const wrapper = getWrapper();
