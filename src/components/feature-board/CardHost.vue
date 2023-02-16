@@ -3,11 +3,15 @@
 		<template v-if="isLoading">
 			<CardSkeleton :height="height"></CardSkeleton>
 		</template>
+		<template v-if="!isLoading && card">
+			{{ card.id }}
+		</template>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
+import { useCardState } from "./card-state.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 
 export default defineComponent({
@@ -17,10 +21,12 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
 	},
-	setup() {
-		const isLoading = ref<boolean>(true);
+	setup(props) {
+		const { isLoading, card } = useCardState(props.id);
+
 		return {
 			isLoading,
+			card,
 		};
 	},
 });

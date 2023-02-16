@@ -15,11 +15,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { VCard, VProgressCircular } from "vuetify/lib";
 
 export default defineComponent({
 	name: "CardSkeleton",
-	components: { VCard, VProgressCircular },
 	props: {
 		height: { type: Number, required: true },
 	},

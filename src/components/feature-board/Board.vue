@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import { useBoardState } from "./board-state.composable";
 import BoardColumn from "./BoardColumn.vue";
 
@@ -20,11 +20,7 @@ export default defineComponent({
 	name: "Board",
 	components: { BoardColumn },
 	setup() {
-		const { board, fetchBoard } = useBoardState();
-
-		onMounted(() => {
-			fetchBoard("989b0ff2-ad1e-11ed-afa1-0242ac120002");
-		});
+		const { board } = useBoardState("989b0ff2-ad1e-11ed-afa1-0242ac120002");
 
 		return { board };
 	},

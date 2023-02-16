@@ -1,18 +1,20 @@
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Board } from "./types/Board";
 
-export const useBoardState = () => {
+export const useBoardState = (id: string) => {
 	const fetchBoard = async (id: string): Promise<void> => {
 		await new Promise((r) => {
 			setTimeout(r, 1000);
 		});
 
-		board.value = MOCK_BOARD;
+		board.value = { ...MOCK_BOARD, id };
 	};
 
 	const isLoading = ref<boolean>(false);
 
 	const board = ref<Board | undefined>(undefined);
+
+	onMounted(() => fetchBoard(id));
 
 	return {
 		fetchBoard,
