@@ -401,8 +401,6 @@ describe("AdminMigrationSection", () => {
 				await buttonComponent.vm.$emit("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				cardComponent.find(".agree-btn-end");
-				cardComponent.find(".disagree-btn-end");
 
 				expect(cardComponent.exists()).toBe(true);
 				expect(cardComponent.classes("migration-end-card")).toBe(true);
