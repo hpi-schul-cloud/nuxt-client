@@ -165,7 +165,7 @@ export default defineComponent({
 					newName: newName.value,
 					destinationCourseId: destinationCourseId.value,
 				});
-				if (copyResultModalItems.value[0].elements.length === 0) {
+				if (copyResultModalItems.value.length === 0) {
 					loadingStateModule.close();
 					copyModule.reset();
 					emit("success", newName.value);
