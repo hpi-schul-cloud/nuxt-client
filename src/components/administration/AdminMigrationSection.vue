@@ -6,11 +6,22 @@
 		<p
 			v-html="t('components.administration.adminMigrationSection.description')"
 		></p>
-		<v-alert light prominent text type="info">
-			<p
-				v-html="t('components.administration.adminMigrationSection.infoText')"
-			/>
-		</v-alert>
+		<div v-if="!isMigrationAvailable">
+			<v-alert light prominent text type="info">
+				<span
+					v-html="t('components.administration.adminMigrationSection.infoText')"
+				/>
+			</v-alert>
+		</div>
+		<div v-else>
+			<v-alert light prominent text type="info">
+				<span
+					v-html="
+						t('components.administration.adminMigrationSection.migrationActive')
+					"
+				/>
+			</v-alert>
+		</div>
 		<v-btn
 			v-if="isShowStartButton"
 			class="my-5 button-start"

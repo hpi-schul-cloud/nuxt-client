@@ -103,7 +103,24 @@ describe("AdminMigrationSection", () => {
 	});
 
 	describe("Info Text", () => {
-		it("should display the info text", () => {
+		it("should display the info text for migration when it is not started", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: false,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: "",
+				},
+			});
+
+			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
+
+			expect(text).toStrictEqual(
+				"components.administration.adminMigrationSection.infoText"
+			);
+		});
+
+		it("should display the info text activeMigration when the admin activated the migration", () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
 					enableMigrationStart: false,
@@ -116,7 +133,7 @@ describe("AdminMigrationSection", () => {
 			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
 
 			expect(text).toStrictEqual(
-				"components.administration.adminMigrationSection.infoText"
+				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
 	});
