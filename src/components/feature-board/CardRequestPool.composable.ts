@@ -1,9 +1,15 @@
+import { CardsApiFactory } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import { createSharedComposable } from "@vueuse/core";
 import { AnyCard, LegacyTaskCard } from "./types/Card";
 
 const useCardRequestPool = () => {
 	console.log("pool init");
+
+	const cardsApi = CardsApiFactory(undefined, "/v3", $axios);
+
 	const fetchCard = async (id: string): Promise<AnyCard> => {
+		cardsApi.cardsControllerGetCards();
 		return new Promise((r) => {
 			setTimeout(
 				() => r({ ...MOCK_CARD, id }),

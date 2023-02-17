@@ -1,9 +1,12 @@
 <template>
-	<div>{{ card.id }}</div>
+	<VCardText>
+		<div>{{ card.id }}</div>
+	</VCardText>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { VCardText } from "vuetify/lib";
 import { LegacyTaskCard } from "./types/Card";
 
 export default defineComponent({
@@ -17,5 +20,6 @@ export default defineComponent({
 	setup(props) {
 		return {};
 	},
+	components: { VCardText },
 });
 </script>
