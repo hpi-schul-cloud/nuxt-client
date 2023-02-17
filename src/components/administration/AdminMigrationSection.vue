@@ -77,7 +77,7 @@
 
 		<migration-end-warning-card
 			v-if="isShowEndWarning"
-      data-testid="migration-end-warning-card"
+			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, isMigrationMandatory)"
 		></migration-end-warning-card>
@@ -85,7 +85,15 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 import { MigrationBody } from "@/serverApi/v3";

@@ -21,15 +21,15 @@ export default {
 		item: {
 			type: Object as PropType<ToolConfiguration>,
 			required: true,
-			default: () => ({})
+			default: () => ({}),
 		},
 		maxHeight: {
 			type: [Number, String],
-			default: () => 30
+			default: () => 30,
 		},
 		maxWidth: {
 			type: [Number, String],
-			default: () => 30
+			default: () => 30,
 		},
 	},
 };
