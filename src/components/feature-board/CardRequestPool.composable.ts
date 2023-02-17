@@ -9,7 +9,7 @@ const useCardRequestPool = () => {
 	const cardsApi = CardsApiFactory(undefined, "/v3", $axios);
 
 	const fetchCard = async (id: string): Promise<AnyCard> => {
-		cardsApi.cardsControllerGetCards();
+		cardsApi.cardsControllerGetCards([id]);
 		return new Promise((r) => {
 			setTimeout(
 				() => r({ ...MOCK_CARD, id }),
