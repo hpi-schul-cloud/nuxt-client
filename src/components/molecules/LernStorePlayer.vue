@@ -40,7 +40,7 @@ export default {
 	},
 	methods: {
 		async getPlayer() {
-			const response = await this.$axios.$get(
+			const response = await this.$axios.get(
 				`/v1/edu-sharing/player/${this.nodeId}`
 			);
 			this.iframeSrc = response.iframe_src;
