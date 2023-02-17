@@ -1,11 +1,17 @@
 <template>
 	<div class="d-flex mb-6">
-		<template v-if="isLoading">
-			<CardSkeleton :height="height"></CardSkeleton>
-		</template>
-		<template v-if="!isLoading && card">
-			{{ card.id }}
-		</template>
+		<VCard :height="height" class="w-100">
+			<template v-if="isLoading">
+				<CardSkeleton :height="height"></CardSkeleton>
+			</template>
+			<template v-if="!isLoading && card">
+				<CardLegacyTaskReference
+					v-if="card.cardType === 'legacy-task-reference'"
+					:card="card"
+				></CardLegacyTaskReference>
+				<div v-else>Unknown card-type {{ card.cardType }}</div>
+			</template>
+		</VCard>
 	</div>
 </template>
 
@@ -13,10 +19,11 @@
 import { defineComponent } from "vue";
 import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
+import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 
 export default defineComponent({
 	name: "CardHost",
-	components: { CardSkeleton },
+	components: { CardSkeleton, CardLegacyTaskReference },
 	props: {
 		height: { type: Number, required: true },
 		id: { type: String, required: true },

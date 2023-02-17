@@ -1,8 +1,8 @@
 import { onMounted, ref } from "vue";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { BoardCard } from "./types/BoardCard";
+import { AnyCard } from "./types/Card";
 
-export const useCardState = (id: BoardCard["id"]) => {
+export const useCardState = (id: AnyCard["id"]) => {
 	const isLoading = ref<boolean>(true);
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
@@ -12,7 +12,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		isLoading.value = false;
 	};
 
-	const card = ref<BoardCard | undefined>(undefined);
+	const card = ref<AnyCard | undefined>(undefined);
 
 	onMounted(() => fetchCard(id));
 
