@@ -19,12 +19,12 @@
 			<template #selection="{ item }">
 				<external-tool-selection-row
 					:item="item"
-					max-height=20
-					max-width=20
+					max-height="20"
+					max-width="20"
 				/>
 			</template>
 			<template #item="{ item }">
-				<external-tool-selection-row :item="item"/>
+				<external-tool-selection-row :item="item" />
 			</template>
 		</v-select>
 		<template v-if="toolTemplate.parameters.length > 0">
@@ -65,12 +65,23 @@
 <script lang="ts">
 import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
-import {useExternalToolMappings} from "../../../composables/external-tool-mappings.composable";
-import {computed, ComputedRef, defineComponent, inject, onMounted, ref, Ref,} from "vue";
-import {BusinessError} from "@/store/types/commons";
-import {ToolConfiguration, ToolConfigurationTemplate,} from "@/store/external-tool";
-import {useRouter} from "vue-router/composables";
-import {Breadcrumb} from "@/components/templates/default-wireframe.types";
+import { useExternalToolMappings } from "../../../composables/external-tool-mappings.composable";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
+import { BusinessError } from "@/store/types/commons";
+import {
+	ToolConfiguration,
+	ToolConfigurationTemplate,
+} from "@/store/external-tool";
+import { useRouter } from "vue-router/composables";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -135,15 +146,13 @@ export default defineComponent({
 
 		const parametersValid: Ref<boolean> = ref(false);
 
-		const toolTemplate: Ref<ToolConfigurationTemplate> = ref(
-			{
-				id: "",
-				name: "",
-				logoUrl: undefined,
-				parameters: [],
-				version: 0
-			}
-		);
+		const toolTemplate: Ref<ToolConfigurationTemplate> = ref({
+			id: "",
+			name: "",
+			logoUrl: undefined,
+			parameters: [],
+			version: 0,
+		});
 		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
 			toolTemplate.value =
 				await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(
@@ -154,14 +163,14 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 		const onCancel = () => {
-			router.push({path: schoolSetting.to});
+			router.push({ path: schoolSetting.to });
 		};
 
 		const onSaveTool = async () => {
 			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
 
 			if (!externalToolsModule.getBusinessError.message) {
-				await router.push({path: schoolSetting.to});
+				await router.push({ path: schoolSetting.to });
 			}
 		};
 
