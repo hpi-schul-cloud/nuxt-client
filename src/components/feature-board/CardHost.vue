@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useCardState } from "./CardState.composable;
+import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 
 export default defineComponent({

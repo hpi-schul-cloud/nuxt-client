@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useBoardState } from "./BoardState.composable;
+import { useBoardState } from "./BoardState.composable";
 import BoardColumn from "./BoardColumn.vue";
 
 export default defineComponent({

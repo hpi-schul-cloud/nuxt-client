@@ -1,14 +1,11 @@
-import { BoardResponse } from "@/serverApi/v3";
+import {
+	BoardColumnResponse,
+	BoardResponse,
+	BoardSkeletonCardReponse,
+} from "@/serverApi/v3";
 
 export type Board = BoardResponse;
 
-export interface BoardColumn {
-	id: string;
-	title: string;
-	cards: BoardSkeletonCard[];
-}
+export type BoardColumn = BoardColumnResponse;
 
-export interface BoardSkeletonCard {
-	id: string;
-	height: number;
-}
+export type BoardSkeletonCard = BoardSkeletonCardReponse;
