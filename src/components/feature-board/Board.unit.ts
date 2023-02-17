@@ -83,7 +83,7 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 	},
 };
 
-jest.mock("./board-state.composable");
+jest.mock("./BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
 describe("Board", () => {
