@@ -14,7 +14,6 @@
 				placeholder="HH:MM"
 				:label="label"
 				:aria-label="ariaLabel"
-				:append-icon="mdiClockOutline"
 				:errors="errors.length > 0"
 				:error-messages="errors"
 				v-bind="attrs"
@@ -153,11 +152,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .v-input__icon--append .v-icon {
-	width: 20px;
-	height: 20px;
-}
-
 .time-list-item {
 	min-height: 36px;
 	text-align: center;
