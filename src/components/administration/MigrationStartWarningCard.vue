@@ -1,6 +1,6 @@
 <template>
 	<v-card class="migration-start-card">
-		<v-card-title style="word-break: break-word"
+		<v-card-title class="card-title"
 			>{{
 				$t(
 					"components.administration.adminMigrationSection.startWarningCard.title"
@@ -56,3 +56,9 @@ export default defineComponent({
 	emits: ["start", "set"],
 });
 </script>
+
+<style lang="scss" scoped>
+.card-title {
+	word-break: break-word;
+}
+</style>
