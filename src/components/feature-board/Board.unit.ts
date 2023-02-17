@@ -5,7 +5,7 @@ import BoardVue from "./Board.vue";
 import { Board } from "./types/Board";
 import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
-import { useBoardState } from "./board-state.composable";
+import { useBoardState } from "./BoardState.composable";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [

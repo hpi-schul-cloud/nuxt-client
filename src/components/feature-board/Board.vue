@@ -13,14 +13,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useBoardState } from "./board-state.composable";
+import { useBoardState } from "./BoardState.composable;
 import BoardColumn from "./BoardColumn.vue";
 
 export default defineComponent({
 	name: "Board",
 	components: { BoardColumn },
 	setup() {
-		const { board } = useBoardState("989b0ff2-ad1e-11ed-afa1-0242ac120002");
+		const { board } = useBoardState("0000d213816abba584714caa");
 
 		return { board };
 	},

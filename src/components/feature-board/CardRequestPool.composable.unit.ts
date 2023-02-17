@@ -1,4 +1,4 @@
-import { useSharedCardRequestPool } from "./card-request-pool.composable";
+import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 
 describe("card-request-pool.composable", () => {
 	it("should return Card data", async () => {

@@ -1,5 +1,5 @@
 import { onMounted, ref } from "vue";
-import { useSharedCardRequestPool } from "./card-request-pool.composable";
+import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { BoardCard } from "./types/BoardCard";
 
 export const useCardState = (id: BoardCard["id"]) => {

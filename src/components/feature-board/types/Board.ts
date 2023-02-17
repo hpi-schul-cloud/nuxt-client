@@ -1,9 +1,6 @@
-export interface Board {
-	id: string;
-	title: string;
-	columns: BoardColumn[];
-	// timestamps: BoardTimestamps;
-}
+import { BoardResponse } from "@/serverApi/v3";
+
+export type Board = BoardResponse;
 
 export interface BoardColumn {
 	id: string;
