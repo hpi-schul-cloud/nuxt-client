@@ -66,28 +66,29 @@ export default defineComponent({
 		})();
 
 		const initDate = props.dateTime || props.defaultDate;
-		const dateTimes = ref(new Date(initDate));
+		const selectedDateTime = ref(new Date(initDate));
 		const date = ref("");
 		const time = ref("");
 
 		watch(
 			() => props.dateTime,
 			(newValue) => {
-				dateTimes.value = new Date(newValue);
+				selectedDateTime.value = new Date(newValue);
 				date.value = newValue;
 				time.value = new Date(newValue).toLocaleTimeString(locale, {
 					timeStyle: "short",
-					hour12: false,
+					hourCycle: "h23",
 				});
+				console.log(time.value);
 			}
 		);
 
 		watch([date, time], ([newDate, newTime], [prevDate, prevTime]) => {
 			if (newDate !== prevDate) {
-				dateTimes.value = new Date(newDate);
+				selectedDateTime.value = new Date(newDate);
 				if (newTime !== "") {
 					const hoursAndMinutes = newTime.split(":");
-					dateTimes.value.setHours(
+					selectedDateTime.value.setHours(
 						parseInt(hoursAndMinutes[0]),
 						parseInt(hoursAndMinutes[1])
 					);
@@ -96,15 +97,16 @@ export default defineComponent({
 
 			if (newTime !== prevTime) {
 				const hoursAndMinutes = newTime.split(":");
-				dateTimes.value.setHours(
+				selectedDateTime.value.setHours(
 					parseInt(hoursAndMinutes[0]),
 					parseInt(hoursAndMinutes[1])
 				);
-				date.value = dateTimes.value.toISOString();
+
+				date.value = selectedDateTime.value.toISOString();
 			}
 
 			if (newDate !== "" && newTime !== "") {
-				emit("input", dateTimes.value.toISOString());
+				emit("input", selectedDateTime.value.toISOString());
 			}
 		});
 
@@ -117,7 +119,7 @@ export default defineComponent({
 		};
 
 		return {
-			dateTimes,
+			selectedDateTime,
 			date,
 			time,
 			handleDateInput,
