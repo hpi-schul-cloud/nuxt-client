@@ -14,15 +14,15 @@ const MOCK_BOARD_ONE_COLUMN: Board = {
 			title: "Col1",
 			cards: [
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
 					height: 200,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
 					height: 250,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
 					height: 220,
 				},
 			],
@@ -30,6 +30,10 @@ const MOCK_BOARD_ONE_COLUMN: Board = {
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
 	title: "MyFirstBoard!",
+	timestamps: {
+		lastUpdatedAt: new Date().toString(),
+		createdAt: new Date().toString(),
+	},
 };
 
 const MOCK_BOARD_TWO_COLUMNS: Board = {
@@ -39,15 +43,15 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 			title: "Col1",
 			cards: [
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
 					height: 200,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
 					height: 250,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
 					height: 220,
 				},
 			],
@@ -57,15 +61,15 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 			title: "Col2",
 			cards: [
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120204",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120204",
 					height: 300,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120305",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120305",
 					height: 350,
 				},
 				{
-					id: "989b0ff2-ad1e-11ed-afa1-0242ac120406",
+					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120406",
 					height: 320,
 				},
 			],
@@ -73,6 +77,10 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
 	title: "MyFirstBoard!",
+	timestamps: {
+		lastUpdatedAt: new Date().toString(),
+		createdAt: new Date().toString(),
+	},
 };
 
 jest.mock("./board-state.composable");
