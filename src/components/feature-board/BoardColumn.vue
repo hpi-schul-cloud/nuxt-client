@@ -6,7 +6,11 @@
 			:style="{ 'min-width': colWidth + 'px' }"
 		>
 			<template v-for="card in column.cards">
-				<CardHost :key="card.id" :id="card.id" :height="card.height"></CardHost>
+				<CardHost
+					:key="card.cardId"
+					:id="card.cardId"
+					:height="card.height"
+				></CardHost>
 			</template>
 		</div>
 	</div>
