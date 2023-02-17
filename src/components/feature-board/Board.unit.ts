@@ -95,7 +95,7 @@ describe("Board", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("should b{e found in the dom", () => {
+		it("should be found in the dom", () => {
 			setup();
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
 		});
