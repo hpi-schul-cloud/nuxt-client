@@ -11,7 +11,7 @@
 			<v-text-field
 				v-model="inputTime"
 				data-testid="time-input"
-				placeholder="--:--"
+				placeholder="HH:MM"
 				:label="label"
 				:aria-label="ariaLabel"
 				:append-icon="mdiClockOutline"
@@ -76,10 +76,7 @@ export default defineComponent({
 			inputTime.value = selected;
 			showTimeDialog.value = false;
 
-			const validated = validate(inputTime.value);
-			if (validated) {
-				emit("input", inputTime.value);
-			}
+			emit("input", inputTime.value);
 		};
 
 		let inputTimeout: number | null = null;
@@ -89,12 +86,13 @@ export default defineComponent({
 			inputTime.value = input;
 			showTimeDialog.value = false;
 
+			const validated = validate(inputTime.value);
 			inputTimeout = setTimeout(() => {
-				emit("input", inputTime.value);
+				if (validated) {
+					emit("input", inputTime.value);
+				}
 			}, 1000);
 		};
-
-		////////////
 
 		const onMenuToggle = (menuOpen: boolean) => {
 			if (menuOpen === false) {
@@ -104,12 +102,22 @@ export default defineComponent({
 
 		const errors = ref<string[]>([]);
 		const validate = (timeValue: string) => {
+			resetErrors();
+
 			if (!props.required) {
 				return true;
 			}
-
+			// is empty
 			if (timeValue === "") {
 				errors.value.push("required");
+				return false;
+			}
+
+			// fits hh:mm format
+			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
+			const found = timeValue.match(regex);
+			if (!found) {
+				errors.value.push("please enter proper time format like 08:36");
 				return false;
 			}
 

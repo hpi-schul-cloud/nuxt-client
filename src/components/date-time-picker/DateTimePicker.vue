@@ -79,7 +79,6 @@ export default defineComponent({
 					timeStyle: "short",
 					hourCycle: "h23",
 				});
-				console.log(time.value);
 			}
 		);
 
