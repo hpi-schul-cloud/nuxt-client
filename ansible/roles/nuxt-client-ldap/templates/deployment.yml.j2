@@ -38,9 +38,6 @@ spec:
         envFrom:
         - configMapRef:
             name: nuxtclient-configmap
-        env:
-        - name: LEGACY_CLIENT_URL
-          value: "http://client-ldap-svc:3100"
         volumeMounts:
         - mountPath: /var/run
           name: pid-dir
