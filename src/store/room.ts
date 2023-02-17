@@ -3,7 +3,7 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	BoardResponse,
+	SingleColumnBoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
@@ -23,7 +23,7 @@ import { SharedLessonObject } from "./types/room";
 	stateFactory: true,
 })
 export default class RoomModule extends VuexModule {
-	roomData: BoardResponse = {
+	roomData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",
 		displayColor: "",
@@ -309,7 +309,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setRoomData(payload: BoardResponse): void {
+	setRoomData(payload: SingleColumnBoardResponse): void {
 		this.roomData = payload;
 	}
 
@@ -373,7 +373,7 @@ export default class RoomModule extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomData(): BoardResponse {
+	get getRoomData(): SingleColumnBoardResponse {
 		return this.roomData;
 	}
 
