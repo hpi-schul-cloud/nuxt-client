@@ -9,9 +9,9 @@ const MOCK_PROP: BoardColumn = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
 	title: "Col1",
 	cards: [
-		{ id: "989b0ff2-ad1e-11ed-afa1-0242ac120004", height: 200 },
-		{ id: "989b0ff2-ad1e-11ed-afa1-0242ac120005", height: 250 },
-		{ id: "989b0ff2-ad1e-11ed-afa1-0242ac120006", height: 220 },
+		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004", height: 200 },
+		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005", height: 250 },
+		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006", height: 220 },
 	],
 };
 
