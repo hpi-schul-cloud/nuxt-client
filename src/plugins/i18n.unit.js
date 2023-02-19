@@ -1,9 +1,8 @@
-import i18n from "./i18n";
 import { authModule, envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
-import { globalPlugin } from "@nuxtjs/composition-api";
+import { createI18n } from "./i18n";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -26,21 +25,16 @@ const envs = {
 
 describe("i18n plugin", () => {
 	beforeEach(() => {
-		setupStores({ auth: AuthModule, "env-config": EnvConfigModule });
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	it("sets locale to the locale computed in the auth store module", () => {
 		authModule.setLocale("fi");
 		envConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });
-		const mockContext = {
-			app: {},
-		};
 
-		globalPlugin(mockContext);
-		i18n(mockContext);
-		const vue18n = mockContext.app.i18n;
+		const i18n = createI18n();
 
-		expect(vue18n.locale).toBe("fi");
-		expect(vue18n.fallbackLocale).toBe("da");
+		expect(i18n.locale).toBe("fi");
+		expect(i18n.fallbackLocale).toBe("da");
 	});
 });

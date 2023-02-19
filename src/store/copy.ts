@@ -1,4 +1,5 @@
-import { CopyResultItem } from "@components/copy-result-modal/types/CopyResultItem";
+import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
+import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	CopyApiResponse,
@@ -30,40 +31,30 @@ interface CopyByShareTokenPayload {
 	type: string;
 	token: string;
 	newName: string;
+	destinationCourseId?: string;
 }
 
 @Module({
-	name: "copy",
+	name: "copyModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
-	private isResultModalOpen: boolean = false;
+	private isResultModalOpen = false;
 
-	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
+		return RoomsApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _taskApi?: TaskApiInterface;
 	private get taskApi(): TaskApiInterface {
-		if (!this._taskApi) {
-			this._taskApi = TaskApiFactory(undefined, "/v3", $axios);
-		}
-		return this._taskApi;
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _shareApi?: ShareTokenApiInterface;
 	private get shareApi(): ShareTokenApiInterface {
-		if (!this._shareApi) {
-			this._shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
-		}
-		return this._shareApi;
+		const axiosWithoutErrorPage = ($axios as AxiosStatic)?.create();
+		return ShareTokenApiFactory(undefined, "/v3", axiosWithoutErrorPage);
 	}
 
 	@Action
@@ -118,12 +109,21 @@ export default class CopyModule extends VuexModule {
 		token,
 		type,
 		newName,
+		destinationCourseId,
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
 		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
+				.then((response) => response.data);
+		}
+		if (type === CopyParamsTypeEnum.Lesson) {
+			copyResult = await this.shareApi
+				.shareTokenControllerImportShareToken(token, {
+					newName,
+					destinationCourseId,
+				})
 				.then((response) => response.data);
 		}
 

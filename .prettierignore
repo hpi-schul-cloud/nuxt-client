@@ -1,6 +1,5 @@
 /node_modules/**
-/src/legacy-client/**
-dist
-.nuxt
+/dist/**
+/coverage/**
 LICENSE.md
 .browserslistrc

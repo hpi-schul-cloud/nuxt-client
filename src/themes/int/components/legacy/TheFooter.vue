@@ -3,7 +3,7 @@
 		<div class="top-line">
 			<img
 				class="hpi-logo"
-				src="@assets/img/footer-logo.png"
+				src="@/assets/img/footer-logo.png"
 				alt="Anbieterlogo"
 			/>
 			<span class="current-year">© {{ currentYear }} </span>
@@ -53,7 +53,7 @@
 			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
 				><img
 					class="poweredby-logo"
-					src="@assets/img/lokalise_logo.svg"
+					src="@/assets/img/lokalise_logo.svg"
 					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
 			/></base-link>
 		</p>

@@ -1,8 +1,9 @@
-import { authModule } from "@/store";
+import { applicationErrorModule, authModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	BoardResponse,
+	SingleColumnBoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
@@ -13,22 +14,23 @@ import {
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
+import { HttpStatusCode } from "./types/http-status-code.enum";
 import { SharedLessonObject } from "./types/room";
 
 @Module({
-	name: "room",
+	name: "roomModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class RoomModule extends VuexModule {
-	roomData: BoardResponse = {
+	roomData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",
 		displayColor: "",
 		elements: [],
 	};
-	scopePermissions: String[] = [];
-	loading: boolean = false;
+	scopePermissions: string[] = [];
+	loading = false;
 	error: null | {} = null;
 	businessError: BusinessError = {
 		statusCode: "",
@@ -41,22 +43,14 @@ export default class RoomModule extends VuexModule {
 		status: "",
 		message: "",
 	};
-	private courseShareToken: string = "";
+	private courseShareToken = "";
 
-	private _roomsApi?: RoomsApiInterface;
 	private get roomsApi(): RoomsApiInterface {
-		if (!this._roomsApi) {
-			this._roomsApi = RoomsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._roomsApi;
+		return RoomsApiFactory(undefined, "/v3", $axios);
 	}
 
-	private _lessonApi?: LessonApiInterface;
 	private get lessonApi(): LessonApiInterface {
-		if (!this._lessonApi) {
-			this._lessonApi = LessonApiFactory(undefined, "/v3", $axios);
-		}
-		return this._lessonApi;
+		return LessonApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action
@@ -119,10 +113,11 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async fetchSharedLesson(lessonId: string): Promise<void> {
 		try {
-			const lessonShareResult = await $axios.$get(`/v1/lessons/${lessonId}`);
+			const lessonShareResult = (await $axios.get(`/v1/lessons/${lessonId}`))
+				.data;
 			if (!lessonShareResult.shareToken) {
 				lessonShareResult.shareToken = nanoid(9);
-				await $axios.$patch(
+				await $axios.patch(
 					`/v1/lessons/${lessonShareResult._id}`,
 					lessonShareResult
 				);
@@ -146,11 +141,11 @@ export default class RoomModule extends VuexModule {
 	async confirmImportLesson(shareToken: string): Promise<void> {
 		try {
 			this.resetBusinessError();
-			const lesson = await $axios.$get("/v1/lessons", {
+			const lesson = await $axios.get("/v1/lessons", {
 				params: { shareToken },
 			});
 
-			if (!lesson.data.length) {
+			if (!lesson.data.data.length) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-found",
@@ -158,11 +153,13 @@ export default class RoomModule extends VuexModule {
 				return;
 			}
 
-			const copiedLesson = await $axios.$post("/v1/lessons/copy", {
-				lessonId: lesson.data[0]._id,
-				newCourseId: this.roomData.roomId,
-				shareToken,
-			});
+			const copiedLesson = (
+				await $axios.post("/v1/lessons/copy", {
+					lessonId: lesson.data.data[0]._id,
+					newCourseId: this.roomData.roomId,
+					shareToken,
+				})
+			)?.data;
 
 			if (!copiedLesson) {
 				this.setBusinessError({
@@ -203,12 +200,18 @@ export default class RoomModule extends VuexModule {
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
-				'v3',
+				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, { responseType: "blob" });
+			).courseControllerExportCourse(this.roomData.roomId, {
+				responseType: "blob",
+			});
 			const link = document.createElement("a");
-			link.href = URL.createObjectURL(new Blob([response.data as unknown as Blob]));
-			link.download = `${this.roomData.title}-${new Date().toISOString()}.imscc`;
+			link.href = URL.createObjectURL(
+				new Blob([response.data as unknown as Blob])
+			);
+			link.download = `${
+				this.roomData.title
+			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (error: any) {
@@ -224,14 +227,16 @@ export default class RoomModule extends VuexModule {
 	async createCourseShareToken(courseId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const result = await $axios.$get(`/v1/courses-share/${courseId}`);
-			if (!result.shareToken) {
+			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
+			// @ts-ignore
+			if (!data.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
-			this.setCourseShareToken(result.shareToken);
+			// @ts-ignore
+			this.setCourseShareToken(data.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -246,7 +251,10 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		const userId = authModule.getUser?.id;
 		try {
-			const homework = await $axios.$get(`/v1/homework/${payload.itemId}`);
+			const requestUrl = `/v1/homework/${payload.itemId}`;
+			const response = await $axios.get(requestUrl);
+			const homework = response?.data;
+			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -256,17 +264,21 @@ export default class RoomModule extends VuexModule {
 			}
 			let archived = [];
 			if (payload.action === "finish") {
+				// @ts-ignore
 				archived = homework?.archived;
 				archived.push(userId);
 			}
 			if (payload.action === "restore") {
+				// @ts-ignore
 				archived = homework?.archived.filter((item: string) => item !== userId);
 			}
 
-			const patchedData = await $axios.$patch(
-				`/v1/homework/${payload.itemId}`,
-				{ archived }
-			);
+			const patchedData = (
+				await $axios.patch(`/v1/homework/${payload.itemId}`, {
+					archived,
+				})
+			).data;
+			// @ts-ignore
 			if (!patchedData._id) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -290,19 +302,19 @@ export default class RoomModule extends VuexModule {
 		courseId: string;
 		userId: string;
 	}): Promise<void> {
-		const ret_val = await $axios.$get(
-			`/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`
-		);
+		const requestUrl = `/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`;
+		const ret_val = (await $axios.get(requestUrl)).data;
+		// @ts-ignore
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
 	@Mutation
-	setRoomData(payload: BoardResponse): void {
+	setRoomData(payload: SingleColumnBoardResponse): void {
 		this.roomData = payload;
 	}
 
 	@Mutation
-	setPermissionData(payload: String[]): void {
+	setPermissionData(payload: string[]): void {
 		this.scopePermissions = payload;
 	}
 
@@ -314,6 +326,19 @@ export default class RoomModule extends VuexModule {
 	@Mutation
 	setError(error: {}): void {
 		this.error = error;
+		const handledApplicationErrors: Array<HttpStatusCode> = [
+			HttpStatusCode.BadRequest,
+			HttpStatusCode.Unauthorized,
+			HttpStatusCode.Forbidden,
+			HttpStatusCode.NotFound,
+			HttpStatusCode.RequestTimeout,
+			HttpStatusCode.InternalServerError,
+		];
+		// NUXT_REMOVAL: This error handling should be centralized later to manage business errors better.
+		// @ts-ignore
+		const errorCode = error.response?.data.code;
+		if (errorCode && handledApplicationErrors.includes(errorCode))
+			applicationErrorModule.setError(createApplicationError(errorCode));
 	}
 
 	@Mutation
@@ -348,11 +373,11 @@ export default class RoomModule extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomData(): BoardResponse {
+	get getRoomData(): SingleColumnBoardResponse {
 		return this.roomData;
 	}
 
-	get getPermissionData(): String[] {
+	get getPermissionData(): string[] {
 		return this.scopePermissions;
 	}
 

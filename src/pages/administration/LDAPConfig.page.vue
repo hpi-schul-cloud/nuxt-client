@@ -87,13 +87,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@utils/ldapErrorHandling";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { unchangedPassword } from "@/utils/ldapConstants";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
-import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
-import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
-import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
-import InfoMessage from "@components/atoms/InfoMessage";
+import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
+import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
+import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
+import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
+import InfoMessage from "@/components/atoms/InfoMessage";
+import { notifierModule } from "@/store";
 
 export default {
 	components: {
@@ -112,7 +114,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 				},
 				{
 					text: this.$t("pages.administration.ldap.index.title"),
@@ -163,7 +165,6 @@ export default {
 		if (Object.keys(this.temp).length) {
 			this.systemData = { ...this.temp };
 		} else if (id) {
-			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("ldap-config/getData", id);
 			this.systemData = { ...this.data };
 		}
@@ -178,17 +179,15 @@ export default {
 			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
-						const systemData = {
-							...this.systemData,
-							searchUserPassword: undefined,
-						};
-						// TODO wrong use of store (not so bad)
+						if (this.systemData.searchUserPassword === unchangedPassword) {
+							this.systemData.searchUserPassword = undefined;
+						}
+
 						await this.$store.dispatch("ldap-config/verifyExisting", {
-							systemData,
-							systemId,
+							systemId: systemId,
+							systemData: this.systemData,
 						});
 					} else {
-						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch(
 							"ldap-config/verifyData",
 							this.systemData
@@ -198,9 +197,11 @@ export default {
 					if (!this.verified.ok) {
 						return;
 					} else {
-						this.$toast.success(
-							this.$t("pages.administration.ldap.index.verified")
-						);
+						notifierModule.show({
+							text: this.$t("pages.administration.ldap.index.verified"),
+							status: "success",
+							timeout: 10000,
+						});
 						if (systemId) {
 							this.$router.push({
 								path: `/administration/ldap/activate?id=${systemId}`,
@@ -236,18 +237,16 @@ export default {
 			};
 		},
 	},
-	head() {
-		return {
-			title: `${this.$t("pages.administration.ldap.title")} - ${
-				this.$theme.short_name
-			}`,
-		};
+	mounted() {
+		document.title = `${this.$t("pages.administration.ldap.title")} - ${
+			this.$theme.short_name
+		}`;
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
+@import "@/styles/mixins";
 
 .link-style {
 	color: var(--v-primary-base);

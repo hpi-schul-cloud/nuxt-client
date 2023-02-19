@@ -2,18 +2,18 @@ import {
 	CollaborativeFile,
 	CollaborativeFileType,
 	FileTypeIconMapping,
-} from "@store/types/collaborative-file";
-import { FileTableItem } from "@pages/files/file-table-item";
+} from "@/store/types/collaborative-file";
+import { FileTableItem } from "@/pages/files/file-table-item";
 import { Route } from "vue-router";
 import { DataTableHeader } from "vuetify";
-import { Breadcrumb } from "@components/templates/default-wireframe.types";
-import { FileMetaListResponse } from "@store/collaborative-files/file-meta-list.response";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
 import {
 	FileMetaResponse,
 	FileTypeResponse,
-} from "@store/collaborative-files/file-meta.response";
-import { FilesPageConfig } from "@pages/files/file-page-config.type";
-import CollaborativeFilesModule from "@store/collaborative-files";
+} from "@/store/collaborative-files/file-meta.response";
+import { FilesPageConfig } from "@/pages/files/file-page-config.type";
+import CollaborativeFilesModule from "@/store/collaborative-files";
 
 export function useFileTableUtils(
 	collaborativeFilesModule: CollaborativeFilesModule,

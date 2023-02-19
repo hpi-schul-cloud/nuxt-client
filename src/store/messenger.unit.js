@@ -1,4 +1,5 @@
 import { getters, actions, mutations } from "../../src/store/messenger";
+import { initializeAxios } from "@/utils/api";
 
 describe("store/messenger", () => {
 	describe("getters", () => {
@@ -27,12 +28,12 @@ describe("store/messenger", () => {
 			it("triggers commit", async () => {
 				const dummyReturnObject = { someProperty: "dummy return message" };
 				let receivedUrl;
-				actions.$axios = {
-					$post: (url) => {
+				initializeAxios({
+					post: async (url) => {
 						receivedUrl = url;
-						return Promise.resolve(dummyReturnObject);
+						return Promise.resolve({ data: dummyReturnObject });
 					},
-				};
+				});
 				const spyCommit = jest.fn();
 
 				await actions.loadMessengerToken({ commit: spyCommit });
@@ -45,12 +46,12 @@ describe("store/messenger", () => {
 			it("triggers error", async () => {
 				const dummyErrorObject = { someProperty: "dummy error message" };
 				let receivedUrl;
-				actions.$axios = {
-					$post: (url) => {
+				initializeAxios({
+					post: async (url) => {
 						receivedUrl = url;
 						return Promise.reject(dummyErrorObject);
 					},
-				};
+				});
 				const spyCommit = jest.fn();
 
 				await actions.loadMessengerToken({ commit: spyCommit });

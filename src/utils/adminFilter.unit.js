@@ -25,7 +25,7 @@ const CTX_MOCK = {
 	},
 };
 
-setupStores({ auth: AuthModule, schools: SchoolsModule });
+setupStores({ authModule: AuthModule, schoolsModule: SchoolsModule });
 
 const filter = studentFilter(CTX_MOCK);
 const filterDateCreatedFromTo = filter[2];
@@ -52,7 +52,7 @@ const MOCK_DATA = {
 	},
 };
 
-describe("@utils/adminFilter", () => {
+describe("@/utils/adminFilter", () => {
 	describe("getFilterDateCreatedFromTo", () => {
 		it("returns UTC date values for input values", () => {
 			const expected_gte_date = dayjs.tz("2021-04-01").utc().format();

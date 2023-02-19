@@ -1,12 +1,10 @@
 import ContentEmptyState from "./ContentEmptyState";
 
-describe("@components/molecules/ContentEmptyState", () => {
+describe("@/components/molecules/ContentEmptyState", () => {
 	const wrapper = mount(ContentEmptyState, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
 	});
-
-	it(...isValidComponent(ContentEmptyState));
 
 	it("Renders an image", () => {
 		expect(wrapper.find(".img-container").exists()).toBe(true);

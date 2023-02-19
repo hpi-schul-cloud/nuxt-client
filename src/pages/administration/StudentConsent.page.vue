@@ -316,17 +316,17 @@
 
 <script>
 /* eslint-disable max-lines */
-import { envConfigModule, filePathsModule } from "@/store";
-import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
-import StepProgress from "@components/organisms/StepProgress";
-import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import SafelyConnectedImage from "@assets/img/safely_connected.png";
+import { envConfigModule, filePathsModule, notifierModule } from "@/store";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import StepProgress from "@/components/organisms/StepProgress";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import {
-	inputDateFromDeUTC,
 	inputDateFormat,
+	inputDateFromDeUTC,
 	printDateFromDeUTC,
-} from "@plugins/datetime";
+} from "@/plugins/datetime";
 import { mdiAlert } from "@mdi/js";
 
 export default {
@@ -473,6 +473,7 @@ export default {
 	},
 	mounted() {
 		this.checkTableData();
+		document.title = `${this.title} - ${this.$theme.short_name}`;
 	},
 	methods: {
 		async find() {
@@ -540,11 +541,14 @@ export default {
 					};
 				}, this);
 				this.$store.dispatch("bulkConsent/register", users);
-				this.$toast.success(
-					this.$t(
+
+				notifierModule.show({
+					text: this.$t(
 						"pages.administration.students.consent.steps.register.success"
-					)
-				);
+					),
+					status: "success",
+					timeout: 10000,
+				});
 				this.next();
 			}
 		},
@@ -560,7 +564,7 @@ export default {
 				stylesHtml += node.outerHTML;
 			}
 
-			var winPrint = window.open(
+			const winPrint = window.open(
 				"",
 				"",
 				"left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0"
@@ -601,10 +605,11 @@ export default {
 		checkTableData() {
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
-					this.$toast.error(
-						this.$t("pages.administration.students.consent.table.empty"),
-						{ position: "top-center" }
-					);
+					notifierModule.show({
+						text: this.$t("pages.administration.students.consent.table.empty"),
+						status: "error",
+						timeout: 10000,
+					});
 
 					this.$router.push({
 						path: `/administration/students`,
@@ -625,11 +630,6 @@ export default {
 				this.cancelWarning = true;
 			}
 		},
-	},
-	head() {
-		return {
-			title: `${this.title} - ${this.$theme.short_name}`,
-		};
 	},
 };
 </script>

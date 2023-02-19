@@ -10,6 +10,7 @@
 			auto-grow
 			solo
 			flat
+			:aria-label="$t('components.cardElement.titleElement')"
 			:placeholder="placeholder"
 			@input="handleInput"
 		/>
@@ -17,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "@vue/composition-api";
+import { defineComponent, ref, watch } from "vue";
 export default defineComponent({
 	name: "TitleCardElement",
 	props: {
@@ -58,7 +59,7 @@ export default defineComponent({
 }
 
 ::v-deep .v-textarea .v-input__slot {
-	padding: 0 !important;
+	padding: 0 0 0 var(--ck-spacing-standard) !important;
 	margin-bottom: 0;
 }
 

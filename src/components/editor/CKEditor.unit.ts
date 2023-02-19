@@ -1,6 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CkEditor from "@components/editor/CKEditor.vue";
-import { provide } from "@vue/composition-api";
+import CkEditor from "@/components/editor/CKEditor.vue";
 import { mount } from "@vue/test-utils";
 
 class ResizeObserver {
@@ -9,14 +8,14 @@ class ResizeObserver {
 	disconnect() {}
 }
 
-describe("@components/editor/CKEditor", () => {
+describe("@/components/editor/CKEditor", () => {
 	const getWrapper: any = (attrs = {}) => {
 		const wrapper = mount(CkEditor, {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			setup() {
-				provide("i18n", { t: (key: string) => key });
+			provide: {
+				i18n: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -39,12 +38,8 @@ describe("@components/editor/CKEditor", () => {
 		try {
 			getWrapper({ propsData: { mode: "wrong_mode" } });
 		} catch (e) {
-			if (e instanceof Error) {
-				expect(e.message).toContain("Invalid prop");
-			}
-			return;
+			expect((e as Error).message.includes("Invalid prop")).toBeTruthy();
 		}
-		fail("No error on invalid prop");
 	});
 
 	it("should have reduced toolbar items in simple mode", () => {
@@ -73,8 +68,37 @@ describe("@components/editor/CKEditor", () => {
 		const ck = wrapper.findComponent({
 			ref: "ck",
 		});
+		ck.vm.$emit("input");
+		await wrapper.vm.$nextTick();
 
-		await ck.vm.$emit("input");
-		expect(wrapper.emitted("input")).toHaveLength(1);
+		const emitted = wrapper.emitted();
+		expect(emitted["input"]).toHaveLength(1);
+	});
+
+	it("should emit focus on editor focus", async () => {
+		const wrapper = getWrapper();
+
+		const ck = wrapper.findComponent({
+			ref: "ck",
+		});
+		ck.vm.$emit("focus");
+		await wrapper.vm.$nextTick();
+
+		const emitted = wrapper.emitted();
+		expect(emitted["focus"]).toHaveLength(1);
+	});
+
+	it("should emit delayed blur on editor blur", async () => {
+		jest.useFakeTimers();
+		const wrapper = getWrapper();
+
+		const ck = wrapper.findComponent({
+			ref: "ck",
+		});
+		ck.vm.$emit("blur");
+		jest.advanceTimersByTime(200);
+
+		const emitted = wrapper.emitted();
+		expect(emitted["blur"]).toHaveLength(1);
 	});
 });

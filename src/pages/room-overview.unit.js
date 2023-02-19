@@ -4,9 +4,7 @@ import EnvConfigModule from "@/store/env-config";
 import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "@vue/composition-api";
 import { mount } from "@vue/test-utils";
-import flushPromises from "flush-promises";
 import CopyModule from "../store/copy";
 import LoadingStateModule from "../store/loading-state";
 import NotifierModule from "../store/notifier";
@@ -65,6 +63,15 @@ const mockRoomStoreData = [
 	},
 ];
 
+const mockCourseData = [
+	{
+		id: "1234",
+		title: "Mathe",
+		shortTitle: "Ma",
+		displayColor: "#54616e",
+	},
+];
+
 const mockAuthStoreData = {
 	__v: 0,
 	_id: "asdf",
@@ -72,14 +79,14 @@ const mockAuthStoreData = {
 	firstName: "Arthur",
 	lastName: "Dent",
 	email: "arthur.dent@hitchhiker.org",
-	roles: ["student"],
+	roles: [{ name: "student", displayName: "Student" }],
 	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
 setupStores({
-	auth: AuthModule,
-	"env-config": EnvConfigModule,
-	rooms: RoomsModule,
+	authModule: AuthModule,
+	envConfigModule: EnvConfigModule,
+	roomsModule: RoomsModule,
 });
 
 const spyMocks = {
@@ -109,9 +116,6 @@ const spyMocks = {
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 	isTeacher: jest.spyOn(RoomOverview.methods, "isTeacher"),
 	isTeacherMock: jest.spyOn(RoomOverview.methods, "isTeacher"),
-	getUserRolesMock: jest
-		.spyOn(authModule, "getUserRoles", "get")
-		.mockReturnValue(["student"]),
 };
 
 let copyModuleMock;
@@ -122,6 +126,9 @@ const defaultMocks = {
 	$route: { query: {} },
 	$router: { replace: jest.fn() },
 	$t: (key) => key,
+	$theme: {
+		short_name: "instance name",
+	},
 };
 
 const getWrapper = (
@@ -145,11 +152,11 @@ const getWrapper = (
 			isLoading: () => isLoading,
 		},
 		mocks: defaultMocks,
-		setup() {
-			provide("i18n", { t: (key) => key });
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
+		provide: {
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key) => key },
 		},
 		propsData: {
 			role: "student",
@@ -158,11 +165,12 @@ const getWrapper = (
 	});
 };
 
-describe("@pages/RoomOverview", () => {
+describe("@/pages/RoomOverview", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		roomsModule.setRoomData(mockRoomStoreData);
+		roomsModule.setAllElements(mockCourseData);
 		authModule.setUser(mockAuthStoreData);
 	});
 
@@ -170,11 +178,9 @@ describe("@pages/RoomOverview", () => {
 		jest.clearAllMocks();
 	});
 
-	it(...isValidComponent(RoomOverview));
-
 	it("should fetch the room data", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 
 		const expectedItem = {
 			id: "1",
@@ -183,36 +189,60 @@ describe("@pages/RoomOverview", () => {
 			displayColor: "purple",
 			xPosition: 1,
 			yPosition: 1,
-			href: "/courses/1",
+			to: "/rooms/1",
 		};
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
 		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
+	it("should fetch the course data", async () => {
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
+
+		const expected = [
+			{
+				id: "1234",
+				isArchived: undefined,
+				searchText: "Mathe",
+				title: "Mathe",
+				shortTitle: "Ma",
+				displayColor: "#54616e",
+				to: "/rooms/1234",
+			},
+		];
+
+		expect(spyMocks.storeModuleFetchAllMock).toHaveBeenCalled();
+		expect(wrapper.vm.courses).toStrictEqual(expected);
+	});
+
 	it("should display 6 avatars component", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 2 avatars component in 'mobile' device", async () => {
 		const wrapper = getWrapper("mobile");
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 1 group-avatar component", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
 		expect(groupAvatarComponents).toHaveLength(1);
 	});
 
 	it("should call 'openDialog' event if groupAvatar component clicked", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
@@ -220,30 +250,32 @@ describe("@pages/RoomOverview", () => {
 
 	it("custom-dialog component should be visible", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		const customDialog = wrapper.find(".room-dialog");
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		const headline = customDialog.find("h2");
 		expect(customDialog.vm.isOpen).toBe(true);
 		expect(headline.element.innerHTML).toContain("Fourth");
 	});
 
 	it("should call the necessary methods for positioning while the page loading", async () => {
-		getWrapper();
-		await flushPromises();
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDataObjectMock).toHaveBeenCalled();
 		expect(spyMocks.findDataByPosMock).toHaveBeenCalled();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(spyMocks.hasGroupMock).toHaveBeenCalled();
 	});
 
 	it("'$refs' should be placed correctly for the components", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -263,21 +295,21 @@ describe("@pages/RoomOverview", () => {
 
 	it("should set the column count '4' if the device is 'mobile'", async () => {
 		const wrapper = getWrapper("mobile");
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should set the column count '4' if the device is 'tablet'", async () => {
 		const wrapper = getWrapper("tablet");
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should set the column count '4' if the device is 'desktop'", async () => {
 		const wrapper = getWrapper();
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
@@ -294,7 +326,7 @@ describe("@pages/RoomOverview", () => {
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				href: "/courses/3",
+				to: "/rooms/3",
 				xPosition: 0,
 				yPosition: 0,
 			},
@@ -303,7 +335,8 @@ describe("@pages/RoomOverview", () => {
 				y: 2,
 			},
 		};
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["0-0"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -337,7 +370,7 @@ describe("@pages/RoomOverview", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				href: "/courses/1",
+				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -346,7 +379,8 @@ describe("@pages/RoomOverview", () => {
 				y: 3,
 			},
 		};
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -498,7 +532,7 @@ describe("@pages/RoomOverview", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				href: "/courses/1",
+				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -507,7 +541,8 @@ describe("@pages/RoomOverview", () => {
 				y: 2,
 			},
 		};
-		await flushPromises();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -521,7 +556,7 @@ describe("@pages/RoomOverview", () => {
 		const toAvatarComponent = wrapper.findComponent({ ref: "2-2" });
 		await toAvatarComponent.trigger("drop");
 
-		await flushPromises();
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
@@ -567,6 +602,7 @@ describe("@pages/RoomOverview", () => {
 		roomsModule.setRoomData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent({ ref: "8-0" }).exists()).toBe(false);
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});

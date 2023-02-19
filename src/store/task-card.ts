@@ -5,12 +5,13 @@ import {
 	CardsApiInterface,
 	TaskCardParams,
 	CardElementResponseCardElementTypeEnum,
+	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
 @Module({
-	name: "task-card",
+	name: "taskCardModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -23,6 +24,14 @@ export default class TaskCardModule extends VuexModule {
 				cardElementType: CardElementResponseCardElementTypeEnum.Title,
 				content: {
 					value: "",
+				},
+			},
+			{
+				id: "",
+				cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+				content: {
+					value: "",
+					inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
 				},
 			},
 		],
@@ -47,19 +56,15 @@ export default class TaskCardModule extends VuexModule {
 		dueDate: "",
 		visibleAtDate: "",
 	};
-	loading: boolean = false;
+	loading = false;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
 		error: {},
 	};
 
-	private _cardsApi?: CardsApiInterface;
 	private get cardsApi(): CardsApiInterface {
-		if (!this._cardsApi) {
-			this._cardsApi = CardsApiFactory(undefined, "/v3", $axios);
-		}
-		return this._cardsApi;
+		return CardsApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action

@@ -1,10 +1,6 @@
 import LoadingStateModule from "@/store/loading-state";
-import { Ref, unref, watch } from "@nuxtjs/composition-api";
-import { inject, InjectionKey, ref } from "@vue/composition-api";
-
-export const UseLoadingState = typeof useLoadingState;
-
-export const USE_LOADING_STATE: InjectionKey<typeof useLoadingState> = Symbol();
+import { Ref, unref, watch } from "vue";
+import { inject, ref } from "vue";
 
 const isLoadingDialogOpen = ref(false);
 

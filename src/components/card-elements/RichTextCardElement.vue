@@ -9,12 +9,14 @@
 			:disabled="disabled"
 			mode="regular"
 			@input="handleInput"
+			@focus="handleFocus"
+			@blur="handleBlur"
 		/>
 	</div>
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "@vue/composition-api";
+import { defineComponent, ref, watch } from "vue";
 import CkEditor from "@/components/editor/CKEditor.vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -49,10 +51,14 @@ export default defineComponent({
 		);
 
 		const handleInput = () => emit("input", content.value);
+		const handleFocus = () => emit("focus");
+		const handleBlur = () => emit("blur");
 
 		return {
 			content,
 			handleInput,
+			handleFocus,
+			handleBlur,
 		};
 	},
 });

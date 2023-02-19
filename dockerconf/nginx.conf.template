@@ -1,0 +1,68 @@
+server {
+    listen 4000;
+    server_name  localhost;
+
+    set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'";
+
+    location /status {
+        stub_status;
+    }
+
+    location /runtime.config.json {
+        return 200 '{ "apiURL" : "${API_URL}" }';
+        add_header Content-Type application/json;
+    }
+
+    location ~ '^/news/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/news/[a-z0-9]{24}/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+   
+    location ~ '^/administration/students/[a-z0-9]{24}/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+   
+    location ~ '^/administration/students/[a-z0-9]{24}/edit/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/students/import/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/teachers/[a-z0-9]{24}/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/teachers/[a-z0-9]{24}/edit/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+        location ~ '^/administration/teachers/import/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        add_header Content-Security-Policy "${csp}";
+        add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy 'same-origin';
+        add_header X-XSS-Protection '1; mode=block';
+        add_header X-Frame-Options 'SAMEORIGIN';
+        add_header Permissions-Policy 'fullscreen=(*), sync-xhr=(*), geolocation=(self), midi=(self), microphone=(self), camera=(self), magnetometer=(self), gyroscope=(self), payment=()';
+        sub_filter_once off;
+        sub_filter '**CSP_NONCE**' $request_id;
+        try_files $uri /index.html;
+    }
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 10240;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+    gzip_disable "MSIE [1-6]\.";
+}

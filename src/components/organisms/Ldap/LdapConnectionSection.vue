@@ -17,7 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="dns" />
+				<base-icon source="material" icon="dns" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -33,7 +33,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" />
+				<base-icon source="custom" icon="account_tree" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -49,7 +49,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" />
+				<base-icon source="custom" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -65,17 +65,19 @@
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 			><template #icon>
-				<base-icon source="material" icon="lock" />
+				<base-icon source="material" icon="lock" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>
 </template>
 <script>
+import { envConfigModule } from "@/store";
 import { required } from "vuelidate/lib/validators";
 import {
-	ldapPathRegexValidatior,
-	urlRegexValidator,
-} from "@utils/ldapConstants";
+	ldapPathRegexValidator,
+	ldapURLRegexValidator,
+	ldapSecuredURLRegexValidator,
+} from "@/utils/ldapConstants";
 
 export default {
 	props: {
@@ -94,14 +96,14 @@ export default {
 			pathSearchValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "ldapPathRegexValidatior",
+					key: "ldapPathRegexValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 			],
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "urlRegexValidator",
+					key: "ldapURLValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
@@ -109,6 +111,13 @@ export default {
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
 		};
+	},
+	computed: {
+		fillColor() {
+			return "var(--v-black-base)";
+		},
+		insecureLDAPURLAllowed: () =>
+			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
 	watch: {
 		validate: function () {
@@ -119,9 +128,14 @@ export default {
 	validations() {
 		return {
 			value: {
-				url: { required, urlRegexValidator },
-				basisPath: { required, ldapPathRegexValidatior },
-				searchUser: { required, ldapPathRegexValidatior },
+				url: {
+					required,
+					ldapURLValidator: this.insecureLDAPURLAllowed
+						? ldapURLRegexValidator
+						: ldapSecuredURLRegexValidator,
+				},
+				basisPath: { required, ldapPathRegexValidator },
+				searchUser: { required, ldapPathRegexValidator },
 				searchUserPassword: { required },
 			},
 		};

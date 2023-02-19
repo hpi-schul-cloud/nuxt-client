@@ -19,7 +19,7 @@
 	</label>
 </template>
 <script>
-import userIsTabbingMixin from "@mixins/userIsTabbing";
+import userIsTabbingMixin from "@/mixins/userIsTabbing";
 export const supportedTypes = ["radio"];
 
 export default {

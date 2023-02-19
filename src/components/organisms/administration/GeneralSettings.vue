@@ -23,6 +23,7 @@
 						dense
 						:readonly="!hasSchoolEditPermission"
 						:disabled="isSyncedSchool"
+						data-testid="school-number"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -154,9 +155,9 @@
 
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { printDate } from "@plugins/datetime";
-import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
-import PrivacySettings from "@components/organisms/administration/PrivacySettings";
+import { printDate } from "@/plugins/datetime";
+import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
+import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { mapActions } from "vuex";
 
 export default {

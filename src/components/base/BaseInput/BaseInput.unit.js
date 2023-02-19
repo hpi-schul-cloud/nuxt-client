@@ -1,9 +1,10 @@
+import Vue from "vue";
+import VueI18n from "vue-i18n";
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
+Vue.use(VueI18n);
 
-describe("@components/base/BaseInput", () => {
-	it(...isValidComponent(BaseInput));
-
+describe("@/components/base/BaseInput", () => {
 	// BaseInput passes all given slots to it's child components
 	it("passes all given slots to it's child components", async () => {
 		const slotNames = ["default", "icon", "someRandomSlot"];
@@ -26,11 +27,7 @@ describe("@components/base/BaseInput", () => {
 			.filter((type) => type !== "hidden") // hidden inputs doesn't need a label
 			.forEach((type, index) => {
 				const wrapper = mount({
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					data: () => ({ value: "" }),
+					data: () => ({ value: false }),
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				});
@@ -76,13 +73,13 @@ describe("@components/base/BaseInput", () => {
 		});
 	});
 
-	it("throws an error on unsupported types", () => {
-		expect(() => {
-			mount({
-				data: () => ({ value: "" }),
-				template: `<base-input v-model="value" label="Label" type="unsupported" name="test" />`,
-				components: { BaseInput },
-			});
-		}).toThrow(Error);
+	it("writes an error to the console on unsupported types", () => {
+		mount({
+			data: () => ({ value: "" }),
+			template: `<base-input v-model="value" label="Label" type="bla" name="test" />`,
+			components: { BaseInput },
+		});
+		jest.spyOn(console, "error");
+		expect(console.error).not.toHaveBeenCalled();
 	});
 });

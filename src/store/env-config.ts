@@ -21,10 +21,10 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 };
 
-const retryLimit: number = 10;
+const retryLimit = 10;
 
 @Module({
-	name: "env-config",
+	name: "envConfigModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -32,20 +32,20 @@ export default class EnvConfigModule extends VuexModule {
 	env: Envs = {
 		...requiredVars,
 		...configsFromEnvironmentVars,
-		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-		I18N__AVAILABLE_LANGUAGES: "",
-		I18N__DEFAULT_LANGUAGE: "",
-		I18N__DEFAULT_TIMEZONE: "",
-		I18N__FALLBACK_LANGUAGE: "",
 		DOCUMENT_BASE_DIR: "",
-		SC_TITLE: "",
-		SC_SHORT_TITLE: "",
-		GHOST_BASE_URL: "",
+		FALLBACK_DISABLED: false,
 		FEATURE_CONSENT_NECESSARY: true,
 		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+		GHOST_BASE_URL: "",
+		I18N__AVAILABLE_LANGUAGES: "",
+		I18N__FALLBACK_LANGUAGE: "",
+		I18N__DEFAULT_LANGUAGE: "",
+		I18N__DEFAULT_TIMEZONE: "",
+		SC_TITLE: "",
+		SC_SHORT_TITLE: "",
 	};
-	loadingErrorCount: number = 0;
+	loadingErrorCount = 0;
 	status: Status = "";
 	businessError: BusinessError = {
 		statusCode: "",
@@ -140,7 +140,7 @@ export default class EnvConfigModule extends VuexModule {
 			this.resetBusinessError();
 			this.setStatus("pending");
 
-			const envs = await $axios.$get("/v1/config/app/public");
+			const envs = (await $axios.get("/v1/config/app/public")).data;
 			Object.entries(requiredVars).forEach(([key]) => {
 				if (envs[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);

@@ -7,17 +7,18 @@
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@input="handleInput"
+		@focus="handleFocus"
+		@blur="handleBlur"
 	/>
 </template>
 
 <script>
-import { defineComponent, ref, inject, watch } from "@vue/composition-api";
+import { defineComponent, ref, inject, watch } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
-import "katex/dist/katex.min.css";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -25,7 +26,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input"],
+	emits: ["input", "focus", "blur"],
 	props: {
 		value: {
 			type: String,
@@ -47,6 +48,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = inject("i18n");
 
+		const ck = ref(null);
 		const content = ref(props.value);
 		const language = (() => {
 			// map ua to correct uk
@@ -168,13 +170,40 @@ export default defineComponent({
 		};
 
 		const handleInput = () => emit("input", content.value);
+		const handleFocus = () => emit("focus");
+
+		const blurDelay = 200;
+		const handleBlur = () => {
+			setTimeout(() => emit("blur"), blurDelay);
+		};
 
 		return {
+			ck,
 			content,
 			CustomCKEditor,
 			config,
 			handleInput,
+			handleFocus,
+			handleBlur,
 		};
 	},
 });
 </script>
+
+<style lang="scss">
+@import "katex/dist/katex.min.css";
+
+// TODO move all style to ckbuild
+.ck-blurred {
+	border: none !important;
+}
+
+.ck-focused {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.ck.ck-editor__editable_inline > :last-child {
+	margin-bottom: 34px !important;
+}
+</style>

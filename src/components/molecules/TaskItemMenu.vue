@@ -119,7 +119,7 @@
 
 <script>
 import { envConfigModule, finishedTasksModule } from "@/store";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import {
 	mdiContentCopy,
 	mdiDotsVertical,
@@ -127,7 +127,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
@@ -234,7 +234,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 // stylelint-disable sh-waqar/declaration-use-variable
 .task-action {
-	min-height: 25px;
+	min-height: 25px !important;
 }
 
 .task-action-icon {

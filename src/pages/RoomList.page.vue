@@ -65,10 +65,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import RoomWrapper from "@components/templates/RoomWrapper.vue";
-import vRoomAvatar from "@components/atoms/vRoomAvatar.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
-import { ListItemsObject } from "@store/types/rooms";
+import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -97,14 +97,10 @@ export default Vue.extend({
 		},
 	},
 	async mounted() {
+		document.title = `${this.$t("pages.courses.index.courses.all")} - ${
+			this.$theme.short_name
+		}`;
 		await roomsModule.fetchAllElements();
-	},
-	head() {
-		return {
-			title: `${this.$t("pages.courses.index.courses.all")} - ${
-				this.$theme.short_name
-			}`,
-		};
 	},
 });
 </script>

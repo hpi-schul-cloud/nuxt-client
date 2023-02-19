@@ -1,4 +1,6 @@
 import { unchangedPassword } from "../utils/ldapConstants";
+import { $axios } from "@/utils/api";
+import { notifierModule } from "@/store";
 
 const formatServerData = (data) => {
 	const { providerOptions } = data;
@@ -67,36 +69,40 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			commit("setStatus", "pending");
-			const { data } = await this.$axios.get(`/v1/ldap-config/${id}`);
+			const { data } = await $axios.get(`/v1/ldap-config/${id}`);
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async verifyData({ commit }, payload) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = "/v1/ldap-config?verifyOnly=true";
 			const data = formatClientData(payload);
-			const verification = await this.$axios.$post(
-				"/v1/ldap-config?verifyOnly=true",
-				data
-			);
+			const verification = (await $axios.post(requestUrl, data)).data;
 			commit("setTemp", payload);
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async verifyExisting({ commit }, { systemId, systemData }) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=true`;
 			const data = formatClientData(systemData);
-			const verification = await this.$axios.$patch(
-				`/v1/ldap-config/${systemId}?verifyOnly=true`,
-				data
-			);
+			const verification = (await $axios.patch(requestUrl, data)).data;
 			if (!systemData.searchUserPassword) {
 				systemData.searchUserPassword = unchangedPassword;
 			}
@@ -104,35 +110,43 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async submitData({ commit }, payload) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = "/v1/ldap-config?verifyOnly=false&activate=true";
 			const data = formatClientData(payload);
-			const submission = await this.$axios.$post(
-				"/v1/ldap-config?verifyOnly=false&activate=true",
-				data
-			);
+			const submission = (await $axios.post(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 	async patchData({ commit }, { systemData, systemId }) {
 		try {
 			commit("setStatus", "pending");
+			const requestUrl = `/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`;
 			const data = formatClientData(systemData);
-			const submission = await this.$axios.$patch(
-				`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`,
-				data
-			);
+			const submission = (await $axios.patch(requestUrl, data)).data;
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			this.$toast.error(error);
+			notifierModule.show({
+				text: String(error),
+				status: "error",
+				timeout: 10000,
+			});
 		}
 	},
 };
@@ -192,4 +206,12 @@ export const state = () => {
 		temp: {},
 		status: null,
 	};
+};
+
+export const ldapConfig = {
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
 };

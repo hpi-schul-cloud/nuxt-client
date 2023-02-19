@@ -12,6 +12,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationEnabled"
+			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
 			{{
@@ -27,6 +28,7 @@
 			color="primary"
 			depressed
 			:disabled="!isMigrationAvailable"
+			data-testid="migration-end-button"
 			@click="onToggleShowEndWarning"
 		>
 			{{
@@ -50,10 +52,15 @@
 			inset
 			dense
 			class="ml-1"
+			data-testid="migration-mandatory-switch"
 			@change="setMigration(true, !isMigrationMandatory)"
 		></v-switch>
 
-		<p v-if="oauthMigrationFinished" class="migration-completion-date">
+		<p
+			v-if="oauthMigrationFinished"
+			class="migration-completion-date"
+			data-testid="migration-finished-timestamp"
+		>
 			{{
 				t(
 					"components.administration.adminMigrationSection.oauthMigrationFinished.text"
@@ -63,12 +70,14 @@
 
 		<migration-start-warning-card
 			v-if="isShowStartWarning"
+			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
 			@set="setMigration(true, isMigrationMandatory)"
 		></migration-start-warning-card>
 
 		<migration-end-warning-card
 			v-if="isShowEndWarning"
+			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, isMigrationMandatory)"
 		></migration-end-warning-card>
@@ -76,19 +85,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
 import {
 	computed,
 	ComputedRef,
+	defineComponent,
 	inject,
 	onMounted,
+	ref,
 	Ref,
-} from "@nuxtjs/composition-api";
-import SchoolsModule from "@store/schools";
+} from "vue";
+import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 import { MigrationBody } from "@/serverApi/v3";
-import MigrationStartWarningCard from "@components/administration/MigrationStartWarningCard.vue";
-import MigrationEndWarningCard from "@components/administration/MigrationEndWarningCard.vue";
+import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
+import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

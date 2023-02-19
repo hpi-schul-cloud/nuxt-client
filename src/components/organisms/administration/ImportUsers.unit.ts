@@ -1,6 +1,6 @@
 import SchoolsModule from "@/store/schools";
 import setupStores from "@@/tests/test-utils/setupStores";
-import ImportUsersModule, { MatchedBy } from "@store/import-users";
+import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import { importUsersModule, envConfigModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import ImportUsers from "./ImportUsers.vue";
@@ -9,9 +9,9 @@ import {
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
-declare var createComponentMocks: Function;
-const importUsersMockData: ImportUserListResponse = {
+const mockImportUsers: ImportUserListResponse = {
 	total: 3,
 	skip: 0,
 	limit: 3,
@@ -99,29 +99,33 @@ const getWrapper: any = (data?: object, options?: object) => {
 	return mount(ImportUsers, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		data: () => data,
+		mocks: {
+			$theme: {
+				short_name: "nbc",
+			},
+		},
 		...options,
 	});
 };
 
-describe("@components/molecules/importUsers", () => {
+describe("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			schools: SchoolsModule,
-			"import-users": ImportUsersModule,
-			"env-config": EnvConfigModule,
+			schoolsModule: SchoolsModule,
+			importUsersModule: ImportUsersModule,
+			envConfigModule: EnvConfigModule,
 		});
-		importUsersModule.setImportUsersList(importUsersMockData);
+		importUsersModule.setImportUsersList(mockImportUsers);
 		envConfigModule.env.SC_THEME = "default";
 	});
 
 	it("should have correct props", () => {
 		const wrapper = getWrapper(mockData);
 
-		expect(wrapper.vm.importUsers).toStrictEqual(importUsersMockData.data);
+		expect(wrapper.vm.importUsers).toStrictEqual(mockImportUsers.data);
 		expect(wrapper.vm.options).toStrictEqual(mockData.options);
 		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
 	});
@@ -143,6 +147,26 @@ describe("@components/molecules/importUsers", () => {
 		expect(invisibleAlertElement).toHaveLength(0);
 	});
 
+	it("alert section should be visible/invisible according to 'canStartMigration' value", async () => {
+		const wrapper = getWrapper({
+			...mockData,
+		});
+
+		wrapper.vm.school.inMaintenance = false;
+		wrapper.vm.school.inUserMigration = true;
+		await wrapper.vm.$nextTick();
+
+		const visibleAlertElement = wrapper.findAll(".v-alert");
+		expect(visibleAlertElement).toHaveLength(1);
+
+		wrapper.vm.school.inMaintenance = true;
+		wrapper.vm.school.inUserMigration = true;
+		await wrapper.vm.$nextTick();
+
+		const invisibleAlertElement = wrapper.findAll(".v-alert");
+		expect(invisibleAlertElement).toHaveLength(0);
+	});
+
 	it("data table should have correct props", async () => {
 		const wrapper = getWrapper(mockData);
 
@@ -153,7 +177,7 @@ describe("@components/molecules/importUsers", () => {
 		const dataTableElement = wrapper.find(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
-		expect(dataTableElement.vm.items).toStrictEqual(importUsersMockData.data);
+		expect(dataTableElement.vm.items).toStrictEqual(mockImportUsers.data);
 	});
 
 	describe("should search with all columns", () => {

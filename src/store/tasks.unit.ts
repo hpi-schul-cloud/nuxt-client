@@ -5,6 +5,8 @@ import { TaskFilter } from "./task.filter";
 import { taskFactory } from "./task.filter.unit";
 import TasksModule from "./tasks";
 import { Task } from "./types/tasks";
+import { AxiosInstance } from "axios";
+import { initializeAxios } from "@/utils/api";
 
 type FunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
@@ -27,6 +29,8 @@ function mockTaskFilter(
 		.spyOn(TaskFilter.prototype, method)
 		.mockReturnValue(new TaskFilter(result));
 }
+
+initializeAxios({} as AxiosInstance);
 
 describe("task store", () => {
 	describe("actions", () => {
@@ -194,7 +198,7 @@ describe("task store", () => {
 		describe("deleteTask", () => {
 			beforeEach(() => {
 				setupStores({
-					"finished-tasks": FinishedTasksModule,
+					finishedTasksModule: FinishedTasksModule,
 				});
 			});
 
