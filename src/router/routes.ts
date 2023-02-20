@@ -146,6 +146,11 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-id",
 	},
 	{
+		path: `/rooms/:id(${REGEX_ID})/board`,
+		component: () => import("../components/feature-board/Board.vue"),
+		name: "rooms-board",
+	},
+	{
 		path: "/rooms-list",
 		component: () => import("../pages/RoomList.page.vue"),
 		name: "rooms-list",
