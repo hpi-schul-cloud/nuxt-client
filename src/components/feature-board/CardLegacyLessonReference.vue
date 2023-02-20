@@ -6,11 +6,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { VCardText } from "vuetify/lib";
 import { LegacyLessonCard } from "./types/Card";
 
 export default defineComponent({
-	name: "CardLegacyTaskReference",
+	name: "CardLegacyLessonReference",
 	props: {
 		card: {
 			type: Object as PropType<LegacyLessonCard>,
@@ -20,6 +19,5 @@ export default defineComponent({
 	setup(props) {
 		return {};
 	},
-	components: { VCardText },
 });
 </script>
