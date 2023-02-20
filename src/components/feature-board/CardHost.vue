@@ -7,11 +7,11 @@
 			<template v-if="!isLoading && card">
 				<VCardTitle>{{ card.title }}</VCardTitle>
 				<CardLegacyTaskReference
-					v-if="card.cardType === 'legacy-task-reference'"
+					v-if="card.cardType === BoardCardType.LegacyTask"
 					:card="card"
 				></CardLegacyTaskReference>
 				<CardLegacyLessonReference
-					v-else-if="card.cardType === 'legacy-lesson-reference'"
+					v-else-if="card.cardType === BoardCardType.LegacyLesson"
 					:card="card"
 				></CardLegacyLessonReference>
 				<div v-else>Unknown card-type</div>
@@ -26,6 +26,7 @@ import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
+import { BoardCardType } from "./types/Card";
 
 export default defineComponent({
 	name: "CardHost",
@@ -44,6 +45,7 @@ export default defineComponent({
 		return {
 			isLoading,
 			card,
+			BoardCardType,
 		};
 	},
 });

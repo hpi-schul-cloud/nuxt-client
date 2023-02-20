@@ -8,7 +8,11 @@ export const useCardState = (id: AnyCard["id"]) => {
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 
 	const fetchCard = async (id: string): Promise<void> => {
-		card.value = await fetchCardFromApi(id);
+		try {
+			card.value = await fetchCardFromApi(id);
+		} catch (error) {
+			console.error(error);
+		}
 		isLoading.value = false;
 	};
 
