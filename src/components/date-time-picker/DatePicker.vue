@@ -17,7 +17,7 @@
 				filled
 				dense
 				clearable
-				:prepend-icon="mdiCalendar"
+				:prepend-icon="mdiCalendarClock"
 				:error-messages="errors"
 				:error="errors.length > 0"
 				v-bind="attrs"
@@ -46,7 +46,7 @@
 import { defineComponent, inject, ref, computed, watch } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
-import { mdiCalendar } from "@mdi/js";
+import { mdiCalendarClock } from "@mdi/js";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -143,7 +143,7 @@ export default defineComponent({
 		);
 
 		return {
-			mdiCalendar,
+			mdiCalendarClock,
 			locale,
 			selectedDate,
 			showDateDialog,

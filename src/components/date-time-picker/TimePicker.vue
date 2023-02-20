@@ -12,7 +12,6 @@
 				v-model="inputTime"
 				data-testid="time-input"
 				placeholder="HH:MM"
-				:prepend-icon="mdiClockOutline"
 				filled
 				dense
 				clearable
@@ -48,7 +47,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
 import dayjs from "dayjs";
-import { mdiClockOutline } from "@mdi/js";
 
 // TODO - validation (numbers, colon)
 export default defineComponent({
@@ -139,7 +137,6 @@ export default defineComponent({
 		);
 
 		return {
-			mdiClockOutline,
 			showTimeDialog,
 			timesOfDayList,
 			inputTime,
