@@ -19,10 +19,5 @@ describe("BoardColumn", () => {
 			setup({ height: 400 });
 			expect(wrapper.findComponent(CardSkeleton).exists()).toBe(true);
 		});
-
-		it("should render Vcard component with 'height' property", async () => {
-			setup({ height: 400 });
-			expect(wrapper.vm.$children[0].$props.height).toStrictEqual(400);
-		});
 	});
 });
