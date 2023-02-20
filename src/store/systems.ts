@@ -19,13 +19,8 @@ export default class SystemsModule extends VuexModule {
 	private loading = false;
 	private error: {} | null = null;
 
-	private _systemApi?: SystemsApiInterface;
-
 	private get systemApi(): SystemsApiInterface {
-		if (!this._systemApi) {
-			this._systemApi = SystemsApiFactory(undefined, "v3", $axios);
-		}
-		return this._systemApi;
+		return SystemsApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation
