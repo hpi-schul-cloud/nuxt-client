@@ -35,7 +35,7 @@ const mountComposable = <R>(
 	return wrapper.vm.result;
 };
 
-describe("application-error composable", () => {
+describe("BoardState composable", () => {
 	const setup = () => {
 		const boardControllerGetBoardSkeleton = jest
 			.fn()

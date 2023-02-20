@@ -3,7 +3,6 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import { LegacyTaskCard } from "./types/Card";
-// import CardHost from "./CardHost.vue";
 
 const MOCK_PROP: LegacyTaskCard = {
 	id: "0123456789abcdef00000003",
@@ -15,7 +14,7 @@ const MOCK_PROP: LegacyTaskCard = {
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
-describe("BoardColumn", () => {
+describe("CardLegacyTaskReference", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = () => {
