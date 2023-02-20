@@ -18,6 +18,8 @@ import { BusinessError } from "./types/commons";
 export default class TaskCardModule extends VuexModule {
 	taskCardData: TaskCardResponse = {
 		id: "",
+		courseId: "",
+		courseName: "",
 		cardElements: [
 			{
 				id: "",
