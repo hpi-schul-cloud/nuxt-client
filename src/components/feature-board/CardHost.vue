@@ -2,18 +2,18 @@
 	<div class="d-flex mb-6">
 		<VCard :height="height" class="w-100">
 			<template v-if="isLoading">
-				<CardSkeleton :height="height"></CardSkeleton>
+				<CardSkeleton :height="height" />
 			</template>
 			<template v-if="!isLoading && card">
 				<VCardTitle>{{ card.title }}</VCardTitle>
 				<CardLegacyTaskReference
 					v-if="card.cardType === BoardCardType.LegacyTask"
 					:card="card"
-				></CardLegacyTaskReference>
+				/>
 				<CardLegacyLessonReference
 					v-else-if="card.cardType === BoardCardType.LegacyLesson"
 					:card="card"
-				></CardLegacyLessonReference>
+				/>
 				<div v-else>Unknown card-type</div>
 			</template>
 		</VCard>
@@ -28,6 +28,7 @@ import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 import { BoardCardType } from "./types/Card";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "CardHost",
 	components: {
