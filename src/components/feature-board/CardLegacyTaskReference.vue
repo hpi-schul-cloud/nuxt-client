@@ -1,7 +1,15 @@
 <template>
-	<VCardText>
-		<div>{{ card.id }}</div>
-	</VCardText>
+	<div>
+		<VCardText>
+			<div>CardID: {{ card.id }}</div>
+			<div>Legacy Task: {{ card.taskId }}</div>
+		</VCardText>
+		<VCardActions>
+			<VBtn color="primary" text :href="'/homeworks/' + card.taskId"
+				>Aufgabe bearbeiten</VBtn
+			>
+		</VCardActions>
+	</div>
 </template>
 
 <script lang="ts">

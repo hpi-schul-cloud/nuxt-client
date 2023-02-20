@@ -10,7 +10,11 @@
 					v-if="card.cardType === 'legacy-task-reference'"
 					:card="card"
 				></CardLegacyTaskReference>
-				<div v-else>Unknown card-type {{ card.cardType }}</div>
+				<CardLegacyLessonReference
+					v-else-if="card.cardType === 'legacy-lesson-reference'"
+					:card="card"
+				></CardLegacyLessonReference>
+				<div v-else>Unknown card-type</div>
 			</template>
 		</VCard>
 	</div>
@@ -21,11 +25,15 @@ import { defineComponent } from "vue";
 import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
-import { VCardTitle } from "vuetify/lib";
+import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 
 export default defineComponent({
 	name: "CardHost",
-	components: { CardSkeleton, CardLegacyTaskReference, VCardTitle },
+	components: {
+		CardSkeleton,
+		CardLegacyTaskReference,
+		CardLegacyLessonReference,
+	},
 	props: {
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
