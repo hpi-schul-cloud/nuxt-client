@@ -71,10 +71,12 @@
 	</div>
 </template>
 <script>
+import { envConfigModule } from "@/store";
 import { required } from "vuelidate/lib/validators";
 import {
-	ldapPathRegexValidatior,
-	urlRegexValidator,
+	ldapPathRegexValidator,
+	ldapURLRegexValidator,
+	ldapSecuredURLRegexValidator,
 } from "@/utils/ldapConstants";
 
 export default {
@@ -94,14 +96,14 @@ export default {
 			pathSearchValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "ldapPathRegexValidatior",
+					key: "ldapPathRegexValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 			],
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "urlRegexValidator",
+					key: "ldapURLValidator",
 					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
@@ -114,6 +116,8 @@ export default {
 		fillColor() {
 			return "var(--v-black-base)";
 		},
+		insecureLDAPURLAllowed: () =>
+			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
 	watch: {
 		validate: function () {
@@ -124,9 +128,14 @@ export default {
 	validations() {
 		return {
 			value: {
-				url: { required, urlRegexValidator },
-				basisPath: { required, ldapPathRegexValidatior },
-				searchUser: { required, ldapPathRegexValidatior },
+				url: {
+					required,
+					ldapURLValidator: this.insecureLDAPURLAllowed
+						? ldapURLRegexValidator
+						: ldapSecuredURLRegexValidator,
+				},
+				basisPath: { required, ldapPathRegexValidator },
+				searchUser: { required, ldapPathRegexValidator },
 				searchUserPassword: { required },
 			},
 		};
