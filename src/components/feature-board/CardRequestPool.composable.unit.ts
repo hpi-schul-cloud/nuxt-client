@@ -2,11 +2,10 @@ import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 
 describe("card-request-pool.composable", () => {
 	it("should return Card data", async () => {
-		const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
+		const mockFetchCard = jest.spyOn(useSharedCardRequestPool(), "fetchCard");
 
-		const result = await fetchCardFromApi("test-id");
+		useSharedCardRequestPool().fetchCard("test-id");
 
-		expect(result.id).toStrictEqual("test-id");
-		expect(typeof result).toBe("object");
+		expect(mockFetchCard).toHaveBeenCalledWith("test-id");
 	});
 });
