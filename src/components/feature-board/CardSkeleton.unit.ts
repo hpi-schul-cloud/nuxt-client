@@ -3,7 +3,7 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardSkeleton from "./CardSkeleton.vue";
 
-describe("BoardColumn", () => {
+describe("CardSkeleton", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (props: object) => {
