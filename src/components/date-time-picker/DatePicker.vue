@@ -1,6 +1,7 @@
 <template>
 	<v-menu
 		v-model="showDateDialog"
+		:close-on-content-click="false"
 		transition="scale-transition"
 		offset-y
 		min-width="auto"
