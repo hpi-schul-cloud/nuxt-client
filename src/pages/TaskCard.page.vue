@@ -4,6 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Card"
 	>
+		<h2>Kurs ID: {{ courseId }}</h2>
 		<v-form class="d-flex flex-column">
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<card-element-list v-model="elements" />
@@ -68,6 +69,7 @@ export default defineComponent({
 			},
 		];
 
+		const courseId = ref("");
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -79,10 +81,12 @@ export default defineComponent({
 		onMounted(async () => {
 			const taskCardId =
 				route.name === "task-card-edit" ? route.params.id : undefined;
+			courseId.value = route.name === "task-card-new" ? route.params.id : "";
 			if (taskCardId) {
 				await taskCardModule.findTaskCard(taskCardId);
 			}
 			const taskCardData = taskCardModule.getTaskCardData;
+			courseId.value = taskCardData.courseId || "";
 			taskCardData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
@@ -139,6 +143,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.createTaskCard({
+				courseId: courseId.value,
 				cardElements: cardElements,
 			});
 		};
@@ -167,6 +172,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.updateTaskCard({
+				courseId: courseId.value,
 				cardElements: cardElements,
 			});
 		};
@@ -191,6 +197,7 @@ export default defineComponent({
 			elements,
 			save,
 			cancel,
+			courseId,
 		};
 	},
 	mounted() {
