@@ -7,34 +7,6 @@ export interface MountOptions {
 	provider?: () => void;
 }
 
-const mountComposable = <R>(
-	composable: () => R,
-	providers: Record<string, unknown>
-): R => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-	});
-
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	const wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-		parentComponent: ParentComponent,
-	});
-
-	//@ts-ignore
-	return wrapper.vm.result;
-};
-
 describe("BoardState composable", () => {
 	const setup = () => {
 		const boardControllerGetBoardSkeleton = jest
