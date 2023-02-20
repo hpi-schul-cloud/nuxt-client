@@ -884,7 +884,7 @@
 	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
 	"pages.room.copy.task.message.BigFile": "It could be that the copying process takes longer because larger files are included. In that case, the copied item should already exist and the files should become available later.",
-	"pages.taskCard.labels.dateInput": "To do by",
+	"pages.taskCard.labels.dateInput": "Due Date",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"pages.userMigration.title": "Migration of the login system",
 	"pages.userMigration.button.startMigration": "Start",

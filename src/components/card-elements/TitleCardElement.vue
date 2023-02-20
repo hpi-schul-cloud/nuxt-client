@@ -67,7 +67,7 @@ export default defineComponent({
 	height: auto;
 	max-height: none;
 	padding: 0;
-	margin-top: var(--space-xl) !important;
+	// margin-top: var(--space-xl) !important;
 	margin-bottom: var(--space-sm);
 	font-family: var(--font-accent);
 	font-size: var(--heading-2);

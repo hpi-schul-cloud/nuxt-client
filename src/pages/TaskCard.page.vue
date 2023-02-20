@@ -5,13 +5,15 @@
 		headline="Task Card"
 	>
 		<v-form class="d-flex flex-column">
-			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<date-time-picker
+				class="mb-4"
 				required
 				:date-time="dueDate"
-				:date-input-aria-label="t('pages.taskCard.labels.dateInput')"
+				:date-input-label="t('pages.taskCard.labels.dateInput')"
+				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
 			/>
+			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<card-element-list v-model="elements" />
 			<div>
 				<v-btn color="secondary" outlined @click="cancel">
@@ -158,6 +160,7 @@ export default defineComponent({
 				}
 			});
 
+			// get from user? do we need to set this here, be sets it already
 			//@ts-ignore
 			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
 			taskCardModule.createTaskCard({

@@ -12,6 +12,10 @@
 				v-model="inputTime"
 				data-testid="time-input"
 				placeholder="HH:MM"
+				:prepend-icon="mdiClockOutline"
+				filled
+				dense
+				clearable
 				:label="label"
 				:aria-label="ariaLabel"
 				:errors="errors.length > 0"

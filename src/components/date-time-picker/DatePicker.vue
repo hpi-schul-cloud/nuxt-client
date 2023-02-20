@@ -11,11 +11,13 @@
 				:value="formattedDate"
 				:label="label"
 				:aria-label="ariaLabel"
-				:prepend-icon="mdiCalendar"
 				:placeholder="$t('format.date')"
 				data-testid="date-input"
 				readonly
+				filled
+				dense
 				clearable
+				:prepend-icon="mdiCalendar"
 				:error-messages="errors"
 				:error="errors.length > 0"
 				v-bind="attrs"
