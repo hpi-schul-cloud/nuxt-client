@@ -51,11 +51,12 @@ describe("AdminMigrationSection", () => {
 						i18n: { t: (key: string) => key },
 					},
 				});
+				// eslint-disable-next-line no-empty
 			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
 				expect.stringMatching(
-					/\[Vue warn\]: Error in setup: "Error: Injection of dependencies failed"/
+					/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
 				)
 			);
 
@@ -71,6 +72,7 @@ describe("AdminMigrationSection", () => {
 						schoolsModule,
 					},
 				});
+				// eslint-disable-next-line no-empty
 			} catch (e) {}
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -87,7 +89,6 @@ describe("AdminMigrationSection", () => {
 			const testKey = "testKey";
 
 			const result: string = wrapper.vm.t(testKey);
-
 			expect(result).toEqual(testKey);
 		});
 
@@ -102,7 +103,24 @@ describe("AdminMigrationSection", () => {
 	});
 
 	describe("Info Text", () => {
-		it("should display the info text", () => {
+		it("should display the info text for migration when it is not started", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: false,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: "",
+				},
+			});
+
+			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
+
+			expect(text).toStrictEqual(
+				"components.administration.adminMigrationSection.infoText"
+			);
+		});
+
+		it("should display the info text activeMigration when the admin activated the migration", () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
 					enableMigrationStart: false,
@@ -115,7 +133,7 @@ describe("AdminMigrationSection", () => {
 			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
 
 			expect(text).toStrictEqual(
-				"components.administration.adminMigrationSection.infoText"
+				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
 	});
@@ -383,8 +401,6 @@ describe("AdminMigrationSection", () => {
 				await buttonComponent.vm.$emit("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonAgree = cardComponent.find(".agree-btn-end");
-				const cardButtonDisagree = cardComponent.find(".disagree-btn-end");
 
 				expect(cardComponent.exists()).toBe(true);
 				expect(cardComponent.classes("migration-end-card")).toBe(true);
@@ -406,7 +422,9 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonAgree = cardComponent.find(".agree-btn-end");
+			const cardButtonAgree = cardComponent.find(
+				"[data-testid=migration-end-agree-button]"
+			);
 			await cardButtonAgree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -432,7 +450,9 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonDisagree = cardComponent.find(".disagree-btn-end");
+			const cardButtonDisagree = cardComponent.find(
+				"[data-testid=migration-end-disagree-button]"
+			);
 			await cardButtonDisagree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -461,7 +481,7 @@ describe("AdminMigrationSection", () => {
 
 			expect(paragraph.exists()).toBe(true);
 			expect(paragraph.text()).toEqual(
-				`components.administration.adminMigrationSection.oauthMigrationFinished.text${date}`
+				`components.administration.adminMigrationSection.oauthMigrationFinished.text`
 			);
 		});
 
