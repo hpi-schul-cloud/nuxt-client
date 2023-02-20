@@ -138,7 +138,7 @@ describe("task store", () => {
 		describe("revertPublishedTask", () => {
 			beforeEach(() => {
 				setupStores({
-					"finished-tasks": FinishedTasksModule,
+					finishedTasksModule: FinishedTasksModule,
 				});
 			});
 
