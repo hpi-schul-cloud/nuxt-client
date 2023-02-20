@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { VCardText } from "vuetify/lib";
 import { LegacyLessonCard } from "./types/Card";
 
 export default defineComponent({
@@ -17,9 +16,8 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup(props) {
+	setup() {
 		return {};
 	},
-	components: { VCardText },
 });
 </script>
