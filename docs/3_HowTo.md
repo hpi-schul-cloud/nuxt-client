@@ -119,7 +119,7 @@ The permissions are controlled by `createPermissionGuard` middleware method that
 	path: "/your/route",
 	component: () => import("../pages/your.page.vue"),
 	name: "yourRouteName",
-	beforeEnter: createPermissionGuard(["permission_1"], "/yourFallBackRoute"),
+	beforeEnter: createPermissionGuard(["ADMIN_VIEW"], "/yourFallBackRoute"),
 },
 
 // without a fallback,
@@ -128,7 +128,7 @@ The permissions are controlled by `createPermissionGuard` middleware method that
 	path: "/your/route",
 	component: () => import("../pages/your.page.vue"),
 	name: "yourRouteName",
-	beforeEnter: createPermissionGuard(["permission_1", "permission_2"]),
+	beforeEnter: createPermissionGuard(["ADMIN_VIEW", "SCHOOL_EDIT"]),
 },
 ```
 
