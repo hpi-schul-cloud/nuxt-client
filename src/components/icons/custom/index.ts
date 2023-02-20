@@ -1,4 +1,3 @@
-import hpiInt from "./HPI-Int.vue";
 import accountTree from "./account_tree.vue";
 import adminPanelSettings from "./admin_panel_settings.vue";
 import arrowDropDown from "./arrow_drop_down.vue";
@@ -83,9 +82,6 @@ import visible from "./visible.vue";
 import warning from "./warning.vue";
 
 const customIcons = {
-	"HPI-Int": {
-		component: hpiInt,
-	},
 	account_tree: {
 		component: accountTree,
 	},
