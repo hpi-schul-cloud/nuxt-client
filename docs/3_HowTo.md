@@ -109,7 +109,7 @@ export default class ShareCourseModule extends VuexModule {
 
 ## <a name='User-PermissionsonPages'></a>User-Permissions on Pages
 
-The permissions are controlled by `createPermissionGuard` middleware method that receives two parameters. The first parameter should contain an array of the `userPermission` that we want to give the users permission to reach the page. The second parameter is an optional fallback route. If the second parameter isn't provided and the user has no permission to reach the page, an error page `(401)` is shown.
+The permissions are controlled by `createPermissionGuard` middleware method that receives two parameters. The first parameter should contain an array of the `userPermission` that is required to reach the page. The second parameter is an optional fallback route. If the second parameter isn't provided and the user has no permission to reach the page, an error page `(401)` is shown.
 
 ```Typescript
 // src/router/routes.ts
