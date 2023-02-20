@@ -1,16 +1,16 @@
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	SystemApiFactory,
-	SystemApiInterface,
-	SystemOauthResponse,
-	SystemResponse,
-} from "@/serverApi/v3";
 import { System } from "./types/system";
+import {
+	PublicSystemListResponse,
+	PublicSystemResponse,
+	SystemsApiFactory,
+	SystemsApiInterface,
+} from "@/serverApi/v3";
 
 @Module({
-	name: "systems",
+	name: "systemsModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -19,13 +19,8 @@ export default class SystemsModule extends VuexModule {
 	private loading = false;
 	private error: {} | null = null;
 
-	private _systemApi?: SystemApiInterface;
-
-	private get systemApi(): SystemApiInterface {
-		if (!this._systemApi) {
-			this._systemApi = SystemApiFactory(undefined, "v3", $axios);
-		}
-		return this._systemApi;
+	private get systemApi(): SystemsApiInterface {
+		return SystemsApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation
@@ -59,11 +54,11 @@ export default class SystemsModule extends VuexModule {
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const systems: AxiosResponse<SystemOauthResponse> =
+			const systems: AxiosResponse<PublicSystemListResponse> =
 				await this.systemApi.systemControllerFind();
 
 			const mappedSystems: System[] = systems.data.data.map(
-				(system: SystemResponse): System => ({
+				(system: PublicSystemResponse): System => ({
 					id: system.id,
 					name: system.displayName || "",
 				})

@@ -9,7 +9,7 @@ import {
 import { MigrationLinkRequest, MigrationLinks } from "./types/user-migration";
 
 @Module({
-	name: "user-migration",
+	name: "userMigrationModule",
 	namespaced: true,
 	stateFactory: true,
 })
@@ -21,13 +21,8 @@ export default class UserMigrationModule extends VuexModule {
 	private loading = false;
 	private error: {} | null = null;
 
-	private _userMigrationApi?: UserMigrationApiInterface;
-
 	private get userMigrationApi(): UserMigrationApiInterface {
-		if (!this._userMigrationApi) {
-			this._userMigrationApi = UserMigrationApiFactory(undefined, "v3", $axios);
-		}
-		return this._userMigrationApi;
+		return UserMigrationApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation
