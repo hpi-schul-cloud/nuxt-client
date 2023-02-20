@@ -81,9 +81,11 @@ export default defineComponent({
 		onMounted(async () => {
 			const taskCardId =
 				route.name === "task-card-edit" ? route.params.id : undefined;
-			courseId.value = route.name === "task-card-new" ? route.params.id : "";
 			if (taskCardId) {
 				await taskCardModule.findTaskCard(taskCardId);
+			}
+			if (route.name === "task-card-new") {
+				taskCardModule.setCourseId(route.params.id);
 			}
 			const taskCardData = taskCardModule.getTaskCardData;
 			courseId.value = taskCardData.courseId || "";

@@ -127,6 +127,11 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Mutation
+	setCourseId(id: string): void {
+		this.taskCardData.courseId = id;
+	}
+
+	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
 	}
