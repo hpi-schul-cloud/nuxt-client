@@ -40,7 +40,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import { taskCardModule, authModule } from "@/store";
+import { taskCardModule, authModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -104,7 +104,8 @@ export default defineComponent({
 			}
 
 			const taskCardData = taskCardModule.getTaskCardData;
-			dueDate.value = taskCardData.dueDate;
+			dueDate.value =
+				taskCardData.dueDate || schoolsModule.getCurrentYear.endDate;
 			taskCardData.cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
@@ -160,12 +161,9 @@ export default defineComponent({
 				}
 			});
 
-			// get from user? do we need to set this here, be sets it already
-			//@ts-ignore
-			const endOfSchoolYear = authModule.getSchool.years.activeYear.endDate;
 			taskCardModule.createTaskCard({
 				cardElements: cardElements,
-				dueDate: dueDate.value || endOfSchoolYear,
+				dueDate: dueDate.value,
 			});
 		};
 
