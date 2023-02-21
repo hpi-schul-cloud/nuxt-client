@@ -28,6 +28,10 @@ server {
     location ~ '^/administration/students/[a-z0-9]{24}/edit/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
+   
+    location ~ '^/administration/students/[a-z0-9]{24}/pw/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
 
     location ~ '^/administration/students/import/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
@@ -41,7 +45,11 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
-        location ~ '^/administration/teachers/import/?$' {
+    location ~ '^/administration/teachers/[a-z0-9]{24}/pw/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/teachers/import/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
