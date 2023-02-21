@@ -940,6 +940,7 @@
 	"pages.tool.settings": "Параметри",
 	"pages.tool.select.label": "вибір інструменту",
 	"pages.tool.addBtn.label": "додати інструмент",
+	"pages.tool.editBtn.label": "інструменти оновлення",
 	"pages.tool.apiError.tool_param_duplicate": "Цей інструмент має принаймні один повторюваний параметр. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_version_mismatch": "Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_param_required": "Цей інструмент вимагає значення параметра, яке не вказано. Будь ласка, додайте значення.",

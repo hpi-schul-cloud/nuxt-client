@@ -1,11 +1,14 @@
 import VueI18n from "vue-i18n";
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import {
+	ToolConfigurationTemplateParameter,
+	ToolParameterType,
+} from "@/store/external-tool";
 
 export function useExternalToolValidation(
 	t: (key: string, values?: VueI18n.Values | undefined) => string
 ) {
 	const validateParameter = (
-		param: ToolParameter
+		param: ToolConfigurationTemplateParameter
 	): Array<() => boolean | string> => {
 		const rules = [];
 		if (!param.isOptional && !param.value) {
@@ -20,7 +23,7 @@ export function useExternalToolValidation(
 	};
 
 	const validateRegex = (
-		param: ToolParameter,
+		param: ToolConfigurationTemplateParameter,
 		rules: Array<() => boolean | string>
 	) => {
 		if (param.regex) {
@@ -38,7 +41,7 @@ export function useExternalToolValidation(
 	};
 
 	const validateType = (
-		param: ToolParameter,
+		param: ToolConfigurationTemplateParameter,
 		rules: Array<() => boolean | string>
 	): void => {
 		if (param.value && param.type === ToolParameterType.Number) {

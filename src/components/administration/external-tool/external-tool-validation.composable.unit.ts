@@ -1,6 +1,6 @@
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 import {
-	ToolParameter,
+	ToolConfigurationTemplateParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -12,7 +12,7 @@ describe("useExternalToolValidation", () => {
 
 		const { validateParameter } = useExternalToolValidation(tMock);
 
-		const toolParameter: ToolParameter = {
+		const toolParameter: ToolConfigurationTemplateParameter = {
 			name: "ToolParameter",
 			isOptional: true,
 			value: "x",

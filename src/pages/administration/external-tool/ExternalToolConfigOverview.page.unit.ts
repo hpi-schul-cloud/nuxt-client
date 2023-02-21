@@ -225,7 +225,7 @@ describe("ExternalToolConfigOverview", () => {
 			const saveButton = wrapper.find('[data-testid="save-button"]');
 			await saveButton.vm.$emit("click");
 
-			expect(externalToolsModule.saveSchoolExternalTool).toHaveBeenCalledWith(
+			expect(externalToolsModule.createSchoolExternalTool).toHaveBeenCalledWith(
 				wrapper.vm.toolTemplate
 			);
 		});

@@ -1,4 +1,7 @@
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import {
+	ToolConfigurationTemplateParameter,
+	ToolParameterType,
+} from "@/store/external-tool";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolConfigParameter from "@/components/administration/external-tool/ExternalToolConfigParameter.vue";
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
@@ -8,7 +11,9 @@ import { toolParameterFactory } from "@@/tests/test-utils/factory";
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;
 
-	const setup = (parameter: ToolParameter = toolParameterFactory()) => {
+	const setup = (
+		parameter: ToolConfigurationTemplateParameter = toolParameterFactory()
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		wrapper = mount(ExternalToolConfigParameter as MountOptions<Vue>, {
@@ -65,10 +70,11 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should use default selectItem when parameter value is undefined", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
-				type: ToolParameterType.Boolean,
-				value: undefined,
-			});
+			const parameter: ToolConfigurationTemplateParameter =
+				toolParameterFactory({
+					type: ToolParameterType.Boolean,
+					value: undefined,
+				});
 			setup(parameter);
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).trigger("click");
@@ -79,9 +85,10 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should watch selectItem and emit event when select input value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
-				type: ToolParameterType.Boolean,
-			});
+			const parameter: ToolConfigurationTemplateParameter =
+				toolParameterFactory({
+					type: ToolParameterType.Boolean,
+				});
 			setup(parameter);
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).setValue(false);
@@ -99,9 +106,10 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
-				type: ToolParameterType.String,
-			});
+			const parameter: ToolConfigurationTemplateParameter =
+				toolParameterFactory({
+					type: ToolParameterType.String,
+				});
 			setup(parameter);
 
 			await wrapper
@@ -115,9 +123,10 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type number", () => {
 		it("should render a text-field with type number", () => {
-			const parameter: ToolParameter = toolParameterFactory({
-				type: ToolParameterType.Number,
-			});
+			const parameter: ToolConfigurationTemplateParameter =
+				toolParameterFactory({
+					type: ToolParameterType.Number,
+				});
 			setup(parameter);
 
 			expect(wrapper.find(".v-text-field__slot"));
@@ -127,9 +136,10 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
-				type: ToolParameterType.Number,
-			});
+			const parameter: ToolConfigurationTemplateParameter =
+				toolParameterFactory({
+					type: ToolParameterType.Number,
+				});
 			setup(parameter);
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).setValue("1234");

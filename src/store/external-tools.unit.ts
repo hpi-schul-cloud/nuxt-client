@@ -16,10 +16,10 @@ import {
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
-	ToolConfiguration,
+	ToolConfigurationListItem,
 	ToolConfigurationScope,
 	ToolConfigurationTemplate,
-	ToolParameter,
+	ToolConfigurationTemplateParameter,
 } from "./external-tool";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { User } from "./types/auth";
@@ -208,8 +208,9 @@ describe("ExternalToolsModule", () => {
 		];
 		module.setSchoolExternalTools(schoolExternalTools);
 
-		const toolConfiguration: ToolConfiguration = toolConfigurationFactory();
-		const toolConfigurations: ToolConfiguration[] = [toolConfiguration];
+		const toolConfiguration: ToolConfigurationListItem =
+			toolConfigurationFactory();
+		const toolConfigurations: ToolConfigurationListItem[] = [toolConfiguration];
 		module.setToolConfigurations(toolConfigurations);
 
 		const businessError: BusinessError = businessErrorFactory();
@@ -276,7 +277,8 @@ describe("ExternalToolsModule", () => {
 			it("should initialized as empty array", () => {
 				module = new ExternalToolsModule({});
 
-				const configs: ToolConfiguration[] = module.getToolConfigurations;
+				const configs: ToolConfigurationListItem[] =
+					module.getToolConfigurations;
 
 				expect(configs.length).toEqual(0);
 			});
@@ -284,7 +286,7 @@ describe("ExternalToolsModule", () => {
 			it("should return the state of schoolExternalTools", () => {
 				const { toolConfigurations } = setup();
 
-				const tools: ToolConfiguration[] = module.getToolConfigurations;
+				const tools: ToolConfigurationListItem[] = module.getToolConfigurations;
 
 				expect(tools).toEqual(toolConfigurations);
 			});
@@ -398,12 +400,14 @@ describe("ExternalToolsModule", () => {
 		describe("setToolConfigurations is called", () => {
 			it("should set the given toolConfigurations array to the state", () => {
 				setup();
-				const expectedToolConfiguration: ToolConfiguration =
+				const expectedToolConfiguration: ToolConfigurationListItem =
 					toolConfigurationFactory();
 				module.setToolConfigurations([expectedToolConfiguration]);
 
 				expect(module.getToolConfigurations).toEqual(
-					expect.arrayContaining<ToolConfiguration>([expectedToolConfiguration])
+					expect.arrayContaining<ToolConfigurationListItem>([
+						expectedToolConfiguration,
+					])
 				);
 			});
 		});
@@ -793,12 +797,13 @@ describe("ExternalToolsModule", () => {
 					expect.objectContaining(
 						toolConfigurationTemplateFactory({
 							id: externalToolConfigurationTemplateResponse.id,
-							parameters: expect.arrayContaining<ToolParameter>([
-								{
-									name: externalToolConfigurationTemplateResponse.parameters[0]
-										.name,
-								} as ToolParameter,
-							]),
+							parameters:
+								expect.arrayContaining<ToolConfigurationTemplateParameter>([
+									{
+										name: externalToolConfigurationTemplateResponse
+											.parameters[0].name,
+									} as ToolConfigurationTemplateParameter,
+								]),
 						})
 					)
 				);
@@ -812,7 +817,7 @@ describe("ExternalToolsModule", () => {
 					const setLoadingSpy = jest.spyOn(module, "setLoading");
 					mockToolApi();
 
-					await module.saveSchoolExternalTool(toolConfigurationTemplate);
+					await module.createSchoolExternalTool(toolConfigurationTemplate);
 
 					expect(setLoadingSpy).toHaveBeenCalledWith(true);
 					expect(setLoadingSpy).toHaveBeenCalledWith(false);
@@ -827,7 +832,7 @@ describe("ExternalToolsModule", () => {
 					mockToolApi(axiosError);
 
 					const func = async () =>
-						await module.saveSchoolExternalTool(toolConfigurationTemplate);
+						await module.createSchoolExternalTool(toolConfigurationTemplate);
 
 					await expect(func()).toEqual(Promise.resolve());
 					expect(setLoadingSpy).toHaveBeenCalledWith(false);
@@ -841,7 +846,7 @@ describe("ExternalToolsModule", () => {
 					mockToolApi(axiosError);
 
 					const func = async () =>
-						await module.saveSchoolExternalTool(toolConfigurationTemplate);
+						await module.createSchoolExternalTool(toolConfigurationTemplate);
 
 					await expect(func()).toEqual(Promise.resolve());
 					expect(setBusinessSpy).toHaveBeenCalledWith({
@@ -865,7 +870,7 @@ describe("ExternalToolsModule", () => {
 								mapToolConfigurationTemplateToSchoolExternalToolPostParamsMock,
 						});
 
-					await module.saveSchoolExternalTool(toolConfigurationTemplate);
+					await module.createSchoolExternalTool(toolConfigurationTemplate);
 
 					expect(
 						mapToolConfigurationTemplateToSchoolExternalToolPostParamsMock
@@ -887,7 +892,7 @@ describe("ExternalToolsModule", () => {
 								schoolExternalToolPostParams,
 						});
 
-					await module.saveSchoolExternalTool(toolConfigurationTemplate);
+					await module.createSchoolExternalTool(toolConfigurationTemplate);
 
 					expect(
 						toolApiMock.toolSchoolControllerCreateSchoolExternalTool

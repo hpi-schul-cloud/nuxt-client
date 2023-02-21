@@ -914,6 +914,7 @@
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.select.label": "Tool Auswahl",
 	"pages.tool.addBtn.label": "Tool hinzufügen",
+	"pages.tool.editBtn.label": "Tool aktualisieren",
 	"pages.tool.apiError.tool_param_duplicate": "Dieses Tool hat mindestens einen doppelten Parameter. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_version_mismatch": "Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_param_required": "Für dieses Tool wird ein Parameterwert benötigt, der nicht mit angegeben wurde. Bitte den Wert hinzufügen.",

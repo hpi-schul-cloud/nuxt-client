@@ -12,7 +12,6 @@
 				:rules="validateParameter(parameter)"
 				validate-on-blur
 				:data-testId="parameter.name"
-				@input:value="$emit('update:value', parameter)"
 			></v-text-field>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
@@ -24,7 +23,6 @@
 				:items="booleanSelectItems"
 				item-value="value"
 				item-text="text"
-				@change:value="$emit('update:value', parameter)"
 			></v-select>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">
@@ -35,7 +33,6 @@
 				:rules="validateParameter(parameter)"
 				validate-on-blur
 				:data-testId="parameter.name"
-				@input:value="$emit('update:value', parameter)"
 			></v-text-field>
 		</template>
 	</div>
@@ -44,41 +41,28 @@
 <script lang="ts">
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 import VueI18n from "vue-i18n";
+import { defineComponent, inject, PropType, ref, Ref, watch } from "vue";
 import {
-	computed,
-	defineComponent,
-	inject,
-	PropType,
-	ref,
-	Ref,
-	watch,
-	WritableComputedRef,
-} from "vue";
-import {
-	ToolParameter,
+	ToolConfigurationTemplateParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigParameter",
-	emits: ["update:value"],
 	props: {
 		value: {
-			type: Object as PropType<ToolParameter>,
+			type: Object as PropType<ToolConfigurationTemplateParameter>,
 			required: true,
 		},
 	},
-	setup(props, { emit }) {
+	setup(props) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const parameter: WritableComputedRef<ToolParameter> = computed({
-			get: (): ToolParameter => props.value as ToolParameter,
-			set: (value: ToolParameter): void => emit("update:value", value),
-		});
+		const parameter: Ref<ToolConfigurationTemplateParameter> = ref(props.value);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values | undefined) => {

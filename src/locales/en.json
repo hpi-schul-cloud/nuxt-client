@@ -914,6 +914,7 @@
 	"pages.tool.settings": "Settings",
 	"pages.tool.select.label": "Tool selection",
 	"pages.tool.addBtn.label": "Add Tool",
+	"pages.tool.editBtn.label": "Update Tool",
 	"pages.tool.apiError.tool_param_duplicate": "This Tool has at least one duplicate parameter. Please contact support.",
 	"pages.tool.apiError.tool_version_mismatch": "The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_param_required": "This Tool requires a parameter value that was not included. Please add the value.",
