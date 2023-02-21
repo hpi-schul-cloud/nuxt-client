@@ -1,12 +1,7 @@
-import { defineComponent, nextTick, provide } from "vue";
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
-import * as serverApi from "../../serverApi/v3/api";
+import { shallowMount, Wrapper } from "@vue/test-utils";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
 
-export interface MountOptions {
-	provider?: () => void;
-}
 let wrapper: Wrapper<Vue>;
 
 const mountComposable = <R>(composable: () => R): R => {
@@ -42,7 +37,7 @@ describe("CardState composable", () => {
 
 		expect(fetchMock).toHaveBeenCalledWith("123124");
 	});
-	it("should return fetch function", async () => {
+	it("should return fetch function that updates card and loading state", async () => {
 		const { fetchCard, card, isLoading } = mountComposable(() =>
 			useCardState("123124")
 		);
