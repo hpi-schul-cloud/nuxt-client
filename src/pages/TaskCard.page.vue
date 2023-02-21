@@ -4,8 +4,15 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Card"
 	>
-		<h2>Kurs ID: {{ courseId }}</h2>
 		<v-form class="d-flex flex-column">
+			<v-select
+				v-model="course"
+				:items="courses"
+				item-value="id"
+				item-text="title"
+				filled
+				:label="$t('common.labels.course')"
+			></v-select>
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<card-element-list v-model="elements" />
 			<div>
@@ -24,7 +31,7 @@
 import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, authModule } from "@/store";
+import { taskCardModule, authModule, roomModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -33,6 +40,7 @@ import {
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
 import {
+	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
@@ -69,7 +77,8 @@ export default defineComponent({
 			},
 		];
 
-		const courseId = ref("");
+		const course = ref("");
+		const courses = ref<object[]>([]);
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -79,17 +88,38 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			const taskCardId =
-				route.name === "task-card-edit" ? route.params.id : undefined;
-			if (taskCardId) {
-				await taskCardModule.findTaskCard(taskCardId);
-			}
 			if (route.name === "task-card-new") {
-				taskCardModule.setCourseId(route.params.id);
+				course.value = route.params.id || "";
+				await roomModule.fetchContent(course.value);
+				const roomData = roomModule.getRoomData;
+				courses.value = [
+					{
+						id: roomData.roomId,
+						title: roomData.title,
+					},
+				];
+				const taskCardData = taskCardModule.getTaskCardData;
+				taskCardModule.setCourseId(course.value);
+				initElements(taskCardData.cardElements);
 			}
-			const taskCardData = taskCardModule.getTaskCardData;
-			courseId.value = taskCardData.courseId || "";
-			taskCardData.cardElements.forEach((cardElement) => {
+			if (route.name === "task-card-edit") {
+				const taskCardId = route.params.id;
+				await taskCardModule.findTaskCard(taskCardId);
+
+				const taskCardData = taskCardModule.getTaskCardData;
+				course.value = taskCardData.courseId || "";
+				courses.value = [
+					{
+						id: taskCardData.courseId || "",
+						title: taskCardData.courseName || "",
+					},
+				];
+				initElements(taskCardData.cardElements);
+			}
+		});
+
+		const initElements = (cardElements: Array<CardElementResponse>) => {
+			cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
@@ -122,7 +152,7 @@ export default defineComponent({
 					},
 				});
 			});
-		});
+		};
 
 		const createTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
@@ -145,7 +175,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.createTaskCard({
-				courseId: courseId.value,
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
@@ -174,7 +204,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.updateTaskCard({
-				courseId: courseId.value,
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
@@ -199,7 +229,8 @@ export default defineComponent({
 			elements,
 			save,
 			cancel,
-			courseId,
+			course,
+			courses,
 		};
 	},
 	mounted() {
