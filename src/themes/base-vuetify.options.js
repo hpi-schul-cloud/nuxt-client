@@ -5,6 +5,7 @@ export default {
 	theme: {
 		options: {
 			customProperties: true,
+			cspNonce: "**CSP_NONCE**",
 		},
 		themes: {
 			light: {
