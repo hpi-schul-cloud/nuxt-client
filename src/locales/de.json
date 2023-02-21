@@ -903,6 +903,7 @@
 	"utils.adminFilter.date.label.from": "Erstellungsdatum von",
 	"utils.adminFilter.date.label.until": "Erstellungsdatum bis",
 	"utils.adminFilter.date.title": "Erstellungsdatum",
+	"utils.adminFilter.outdatedSince.title": "Ausgelaufen xxx",
 	"utils.adminFilter.placeholder.class": "Nach Klasse filtern…",
 	"utils.adminFilter.placeholder.complete.lastname": "Nach vollständigem Nachnamen filtern...",
 	"utils.adminFilter.placeholder.complete.name": "Nach vollständigem Vornamen filtern...",

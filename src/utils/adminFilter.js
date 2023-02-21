@@ -2,7 +2,7 @@ import { authModule } from "@/store";
 import InputCheckbox from "@/components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@/components/organisms/DataFilter/inputs/Default";
 
-import { printDate, fromInputDateTime } from "@/plugins/datetime";
+import { fromInputDateTime, printDate } from "@/plugins/datetime";
 
 const defaultFilterFromDate = "1900-01-01";
 const defaultFilterToDate = "2099-12-31";
@@ -59,6 +59,68 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 		},
 		{
 			attribute: "createdAt",
+			input: InputDefault,
+			label: ctx.$t("utils.adminFilter.date.label.until"),
+			attributes: {
+				type: "date",
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
+			},
+		},
+	],
+});
+
+const getFilterDateOutdatedSinceFromTo = (ctx) => ({
+	title: ctx.$t("utils.adminFilter.outdatedSince.title"),
+	chipTemplate: (filter) => {
+		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
+			filter[0] || defaultFilterFromDate
+		)} ${ctx.$t("common.words.and")} ${printDate(
+			filter[1] || defaultFilterToDate
+		)} `;
+	},
+	dataTestid: "filter_outdatedSinceDate",
+	parser: {
+		generator: (filterGroupConfig, values) => {
+			try {
+				return {
+					outdatedSince: {
+						$gte: fromInputDateTime(
+							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
+						)
+							.utc()
+							.format(),
+						$lte: fromInputDateTime(
+							values[filterGroupConfig.filter[1].id] || defaultFilterToDate
+						)
+							.endOf("day")
+							.utc()
+							.format(),
+					},
+				};
+			} catch (error) {
+				console.warn(error);
+				return;
+			}
+		},
+		parser: (filterGroupConfig, query) => {
+			return {
+				[filterGroupConfig.filter[0].id]: query?.outdatedSince?.$gte,
+				[filterGroupConfig.filter[1].id]: query?.outdatedSince?.$lte,
+			};
+		},
+	},
+	filter: [
+		{
+			attribute: "outdatedSince",
+			input: InputDefault,
+			label: ctx.$t("utils.adminFilter.date.label.from"),
+			attributes: {
+				type: "date",
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
+			},
+		},
+		{
+			attribute: "outdatedSince",
 			input: InputDefault,
 			label: ctx.$t("utils.adminFilter.date.label.until"),
 			attributes: {
@@ -150,6 +212,7 @@ export function studentFilter(ctx) {
 			],
 		},
 		getFilterDateCreatedFromTo(ctx),
+		getFilterDateOutdatedSinceFromTo(ctx),
 	];
 }
 
