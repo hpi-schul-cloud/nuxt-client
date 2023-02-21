@@ -5037,13 +5037,11 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser: async (showSubstitute: boolean, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'showSubstitute' is not null or undefined
-            assertParamExists('dashboardControllerFindForUser', 'showSubstitute', showSubstitute)
+        dashboardControllerFindForUser: async (showSubstitute?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/dashboard`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5187,11 +5185,11 @@ export const DashboardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerFindForUser(showSubstitute: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+        async dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(showSubstitute, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5231,11 +5229,11 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser(showSubstitute: boolean, options?: any): AxiosPromise<DashboardResponse> {
+        dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): AxiosPromise<DashboardResponse> {
             return localVarFp.dashboardControllerFindForUser(showSubstitute, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5271,12 +5269,12 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
 export interface DashboardApiInterface {
     /**
      * 
-     * @param {boolean} showSubstitute 
+     * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerFindForUser(showSubstitute: boolean, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): AxiosPromise<DashboardResponse>;
 
     /**
      * 
@@ -5311,12 +5309,12 @@ export interface DashboardApiInterface {
 export class DashboardApi extends BaseAPI implements DashboardApiInterface {
     /**
      * 
-     * @param {boolean} showSubstitute 
+     * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerFindForUser(showSubstitute: boolean, options?: any) {
+    public dashboardControllerFindForUser(showSubstitute?: boolean, options?: any) {
         return DashboardApiFp(this.configuration).dashboardControllerFindForUser(showSubstitute, options).then((request) => request(this.axios, this.basePath));
     }
 
