@@ -5,7 +5,7 @@ export default {
 	theme: {
 		options: {
 			customProperties: true,
-			cspNonce: "**CSP_NONCE**",
+			cspNonce: document.querySelector("head link").nonce,
 		},
 		themes: {
 			light: {
