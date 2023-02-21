@@ -4,6 +4,7 @@ import Vue, { ref } from "vue";
 import CardHost from "./CardHost.vue";
 import { useCardState } from "./CardState.composable";
 import { LegacyLessonCard, LegacyTaskCard } from "./types/Card";
+import { CardResponseCardTypeEnum as BoardCardType } from "@/serverApi/v3";
 
 const MOCK_PROP_DEFAULT = {
 	height: 200,
@@ -16,7 +17,7 @@ const MOCK_TASK_REFERENCE: LegacyTaskCard = {
 	height: 200,
 	elements: [],
 	taskId: "25",
-	cardType: "legacy-task-reference",
+	cardType: BoardCardType.LegacyTask,
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
@@ -26,7 +27,7 @@ const MOCK_LESSON_REFERENCE: LegacyLessonCard = {
 	height: 200,
 	elements: [],
 	lessonId: "25",
-	cardType: "legacy-lesson-reference",
+	cardType: BoardCardType.LegacyLesson,
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 

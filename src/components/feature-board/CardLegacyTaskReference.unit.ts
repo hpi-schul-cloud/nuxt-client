@@ -3,6 +3,7 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import { LegacyTaskCard } from "./types/Card";
+import { CardResponseCardTypeEnum as BoardCardType } from "@/serverApi/v3";
 
 const MOCK_PROP: LegacyTaskCard = {
 	id: "0123456789abcdef00000003",
@@ -10,7 +11,7 @@ const MOCK_PROP: LegacyTaskCard = {
 	height: 200,
 	elements: [],
 	taskId: "25",
-	cardType: "legacy-task-reference",
+	cardType: BoardCardType.LegacyTask,
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 

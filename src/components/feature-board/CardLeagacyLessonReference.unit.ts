@@ -3,13 +3,14 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 import { LegacyLessonCard } from "./types/Card";
+import { CardResponseCardTypeEnum as BoardCardType } from "@/serverApi/v3";
 
 const MOCK_PROP: LegacyLessonCard = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
 	height: 100,
 	elements: [],
 	lessonId: "24",
-	cardType: "legacy-lesson-reference",
+	cardType: BoardCardType.LegacyLesson,
 	visibility: {
 		publishedAt: "2022-01-01 20:00:00",
 	},
