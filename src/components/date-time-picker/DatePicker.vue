@@ -26,6 +26,8 @@
 				@keydown.prevent.enter="showDateDialog = true"
 				@keydown.prevent.down="focusDatePicker"
 				@focus="resetErrors"
+				@click:clear="clearDate"
+				@blur="(e) => validate(e.target.value)"
 			/>
 		</template>
 		<v-date-picker
@@ -111,12 +113,6 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
-				validate(selectedDate.value);
-			}
-		};
-
 		const errors = ref<string[]>([]);
 		const validate = (dateValue: string) => {
 			if (!props.required) {
@@ -130,6 +126,16 @@ export default defineComponent({
 			}
 
 			return true;
+		};
+
+		const onMenuToggle = (menuOpen: boolean) => {
+			if (menuOpen === false) {
+				validate(selectedDate.value);
+			}
+		};
+
+		const clearDate = () => {
+			selectedDate.value = "";
 		};
 
 		const resetErrors = () => {
@@ -156,6 +162,7 @@ export default defineComponent({
 			validate,
 			resetErrors,
 			onMenuToggle,
+			clearDate,
 		};
 	},
 });
