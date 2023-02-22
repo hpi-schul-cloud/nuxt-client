@@ -76,8 +76,10 @@ export default defineComponent({
 			inputTime.value = selected;
 			showTimeDialog.value = false;
 
-			resetErrors();
-			emit("input", inputTime.value);
+			const validated = validate(inputTime.value);
+			if (validated) {
+				emit("input", inputTime.value);
+			}
 		};
 
 		let inputTimeout: number | null = null;
