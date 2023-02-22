@@ -85,7 +85,7 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
-	ToolConfigurationTemplateParameter,
+	ToolParameter,
 } from "@/store/external-tool";
 import { useRouter } from "vue-router/composables";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
@@ -213,7 +213,7 @@ export default defineComponent({
 
 				toolTemplate.value.configId = config.id;
 				toolTemplate.value.parameters.forEach(
-					(templateParameter: ToolConfigurationTemplateParameter) => {
+					(templateParameter: ToolParameter) => {
 						const configuredParameter: ToolParameterEntry | undefined =
 							config.parameters.find(
 								(parameter: ToolParameterEntry) =>

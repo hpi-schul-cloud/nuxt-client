@@ -43,7 +43,7 @@ import { useExternalToolValidation } from "./external-tool-validation.composable
 import VueI18n from "vue-i18n";
 import { defineComponent, inject, PropType, ref, Ref, watch } from "vue";
 import {
-	ToolConfigurationTemplateParameter,
+	ToolParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
 
@@ -52,7 +52,7 @@ export default defineComponent({
 	name: "ExternalToolConfigParameter",
 	props: {
 		value: {
-			type: Object as PropType<ToolConfigurationTemplateParameter>,
+			type: Object as PropType<ToolParameter>,
 			required: true,
 		},
 	},
@@ -62,7 +62,7 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const parameter: Ref<ToolConfigurationTemplateParameter> = ref(props.value);
+		const parameter: Ref<ToolParameter> = ref(props.value);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values | undefined) => {

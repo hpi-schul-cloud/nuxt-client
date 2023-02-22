@@ -2,7 +2,7 @@ import { ToolParameterScope } from "./tool-parameter-scope.enum";
 import { ToolParameterLocation } from "./tool-parameter-location.enum";
 import { ToolParameterType } from "./tool-parameter.enum";
 
-export interface ToolConfigurationTemplateParameter {
+export interface ToolParameter {
 	name: string;
 
 	default?: string;

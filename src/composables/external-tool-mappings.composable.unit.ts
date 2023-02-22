@@ -15,7 +15,7 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationTemplate,
-	ToolConfigurationTemplateParameter,
+	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -220,20 +220,19 @@ describe("useExternalToolUtils", () => {
 					id: toolConfigurationTemplateResponse.id,
 					name: toolConfigurationTemplateResponse.name,
 					logoUrl: toolConfigurationTemplateResponse.logoUrl,
-					parameters:
-						expect.arrayContaining<ToolConfigurationTemplateParameter>([
-							{
-								name: customParameterResponse.name,
-								value: customParameterResponse.defaultValue,
-								type: ToolParameterType.String,
-								location: ToolParameterLocation.Path,
-								scope: ToolParameterScope.School,
-								default: customParameterResponse.defaultValue,
-								isOptional: customParameterResponse.isOptional,
-								regexComment: customParameterResponse.regexComment,
-								regex: customParameterResponse.regex,
-							},
-						]),
+					parameters: expect.arrayContaining<ToolParameter>([
+						{
+							name: customParameterResponse.name,
+							value: customParameterResponse.defaultValue,
+							type: ToolParameterType.String,
+							location: ToolParameterLocation.Path,
+							scope: ToolParameterScope.School,
+							default: customParameterResponse.defaultValue,
+							isOptional: customParameterResponse.isOptional,
+							regexComment: customParameterResponse.regexComment,
+							regex: customParameterResponse.regex,
+						},
+					]),
 					version: toolConfigurationTemplateResponse.version,
 				})
 			);

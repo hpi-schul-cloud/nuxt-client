@@ -17,7 +17,7 @@ import {
 	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
-	ToolConfigurationTemplateParameter,
+	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -101,7 +101,7 @@ export function useExternalToolMappings() {
 
 	const mapCustomParameterResponse = (
 		parameters: CustomParameterResponse[]
-	): ToolConfigurationTemplateParameter[] => {
+	): ToolParameter[] => {
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
@@ -166,18 +166,14 @@ export function useExternalToolMappings() {
 	};
 
 	const mapToolParametersToCustomParameterEntryParams = (
-		params: ToolConfigurationTemplateParameter[]
+		params: ToolParameter[]
 	) => {
-		return params.map(
-			(
-				param: ToolConfigurationTemplateParameter
-			): CustomParameterEntryParam => {
-				return {
-					name: param.name,
-					value: param.value ?? "",
-				};
-			}
-		);
+		return params.map((param: ToolParameter): CustomParameterEntryParam => {
+			return {
+				name: param.name,
+				value: param.value ?? "",
+			};
+		});
 	};
 
 	const getTranslationKey = (businessError: BusinessError) => {

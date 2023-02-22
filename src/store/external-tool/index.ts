@@ -1,5 +1,5 @@
 export * from "./tool-parameter-location.enum";
-export * from "./tool-configuration-template-parameter";
+export * from "./tool-parameter";
 export * from "./tool-parameter.enum";
 export * from "./tool-parameter-scope.enum";
 export * from "./tool-configuration-template";

@@ -19,7 +19,7 @@ import {
 	ToolConfigurationListItem,
 	ToolConfigurationScope,
 	ToolConfigurationTemplate,
-	ToolConfigurationTemplateParameter,
+	ToolParameter,
 } from "./external-tool";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { User } from "./types/auth";
@@ -797,13 +797,12 @@ describe("ExternalToolsModule", () => {
 					expect.objectContaining(
 						toolConfigurationTemplateFactory({
 							id: externalToolConfigurationTemplateResponse.id,
-							parameters:
-								expect.arrayContaining<ToolConfigurationTemplateParameter>([
-									{
-										name: externalToolConfigurationTemplateResponse
-											.parameters[0].name,
-									} as ToolConfigurationTemplateParameter,
-								]),
+							parameters: expect.arrayContaining<ToolParameter>([
+								{
+									name: externalToolConfigurationTemplateResponse.parameters[0]
+										.name,
+								} as ToolParameter,
+							]),
 						})
 					)
 				);
