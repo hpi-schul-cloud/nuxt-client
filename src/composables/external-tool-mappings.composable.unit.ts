@@ -43,7 +43,6 @@ describe("useExternalToolUtils", () => {
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
-			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
@@ -110,7 +109,6 @@ describe("useExternalToolUtils", () => {
 			schoolExternaToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
-			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
@@ -146,33 +144,15 @@ describe("useExternalToolUtils", () => {
 					expect.objectContaining<SchoolExternalTool[]>([
 						{
 							id: toolResponse.id,
+							toolId: toolResponse.toolId,
 							name: toolResponse.name,
+							parameters: toolResponse.parameters,
 							version: toolResponse.toolVersion,
 							status: SchoolExternalToolStatus.Latest,
 						},
 					])
 				);
 			});
-		});
-	});
-
-	describe("mapSchoolExternalToolItemToSchoolExternalTool is called", () => {
-		it("should return mapped schoolExternalTool", () => {
-			const {
-				mapSchoolExternalToolItemToSchoolExternalTool,
-				schoolExternaToolItem,
-			} = setup();
-
-			const schoolExternalTool: SchoolExternalTool =
-				mapSchoolExternalToolItemToSchoolExternalTool(schoolExternaToolItem);
-
-			expect(schoolExternalTool).toEqual(
-				expect.objectContaining<SchoolExternalTool>({
-					id: schoolExternaToolItem.id,
-					name: schoolExternaToolItem.name,
-					status: SchoolExternalToolStatus.Unknown,
-				})
-			);
 		});
 	});
 
@@ -257,6 +237,7 @@ describe("useExternalToolUtils", () => {
 
 			expect(schoolExternalToolPostParams).toEqual(
 				expect.objectContaining<SchoolExternalToolPostParams>({
+					id: template.configId,
 					toolId: template.id,
 					version: template.version,
 					schoolId: "schoolId",

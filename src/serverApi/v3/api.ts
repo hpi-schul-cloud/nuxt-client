@@ -2782,6 +2782,12 @@ export interface SchoolExternalToolPostParams {
      * @type {string}
      * @memberof SchoolExternalToolPostParams
      */
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolExternalToolPostParams
+     */
     toolId: string;
     /**
      * 
