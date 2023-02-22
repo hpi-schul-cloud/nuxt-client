@@ -1,5 +1,8 @@
 <template>
 	<v-row>
+		<div>
+			<v-icon :color="iconColor" class="icon">{{ mdiCalendarClock }} </v-icon>
+		</div>
 		<v-col class="col-sm-4">
 			<date-picker
 				required
@@ -7,6 +10,7 @@
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
 				@input="handleDateInput"
+				@error="hasErrors = true"
 			/>
 		</v-col>
 		<v-col class="col-sm-3">
@@ -16,16 +20,18 @@
 				:label="timeInputLabel"
 				:aria-label="timeInputAriaLabel"
 				@input="handleTimeInput"
+				@error="hasErrors = true"
 			/>
 		</v-col>
 	</v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch } from "vue";
+import { defineComponent, inject, ref, watch, computed } from "vue";
 import VueI18n from "vue-i18n";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
+import { mdiCalendarClock } from "@mdi/js";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -110,20 +116,36 @@ export default defineComponent({
 		});
 
 		const handleDateInput = (selectedDate: string) => {
+			hasErrors.value = false;
 			date.value = selectedDate;
 		};
 
 		const handleTimeInput = (selectedTime: string) => {
+			hasErrors.value = false;
 			time.value = selectedTime;
 		};
 
+		const hasErrors = ref(false);
+		const iconColor = computed(() => {
+			return hasErrors.value === true ? "error" : "";
+		});
+
 		return {
+			mdiCalendarClock,
 			selectedDateTime,
 			date,
 			time,
 			handleDateInput,
 			handleTimeInput,
+			iconColor,
+			hasErrors,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.icon {
+	top: 26px;
+}
+</style>

@@ -48,7 +48,6 @@
 import { defineComponent, ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 
-// TODO - validation (numbers, colon)
 export default defineComponent({
 	name: "TimePicker",
 	props: {
@@ -77,6 +76,7 @@ export default defineComponent({
 			inputTime.value = selected;
 			showTimeDialog.value = false;
 
+			resetErrors();
 			emit("input", inputTime.value);
 		};
 
@@ -108,9 +108,11 @@ export default defineComponent({
 			if (!props.required) {
 				return true;
 			}
+
 			// is empty
-			if (timeValue === "") {
+			if (timeValue === "" || timeValue === null) {
 				errors.value.push("required");
+				emit("error");
 				return false;
 			}
 
@@ -119,6 +121,7 @@ export default defineComponent({
 			const found = timeValue.match(regex);
 			if (!found) {
 				errors.value.push("please enter proper time format like 08:36");
+				emit("error");
 				return false;
 			}
 

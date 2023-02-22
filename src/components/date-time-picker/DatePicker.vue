@@ -18,7 +18,6 @@
 				filled
 				dense
 				clearable
-				:prepend-icon="mdiCalendarClock"
 				:error-messages="errors"
 				:error="errors.length > 0"
 				v-bind="attrs"
@@ -126,6 +125,7 @@ export default defineComponent({
 
 			if (dateValue === "") {
 				errors.value.push("required");
+				emit("error");
 				return false;
 			}
 
