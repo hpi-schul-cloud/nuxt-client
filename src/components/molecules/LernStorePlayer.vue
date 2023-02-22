@@ -40,6 +40,8 @@ export default {
 						(this.scriptSrc = response.data.script_src)
 					)
 				);
+			console.log("iframeSrc: " + this.iframeSrc);
+			console.log("scriptSrc: " + this.scriptSrc);
 			this.loading = false;
 		},
 	},
