@@ -111,33 +111,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async fetchSharedLesson(lessonId: string): Promise<void> {
-		try {
-			const lessonShareResult = (await $axios.get(`/v1/lessons/${lessonId}`))
-				.data;
-			if (!lessonShareResult.shareToken) {
-				lessonShareResult.shareToken = nanoid(9);
-				await $axios.patch(
-					`/v1/lessons/${lessonShareResult._id}`,
-					lessonShareResult
-				);
-			}
-			this.setSharedLessonData({
-				code: lessonShareResult.shareToken,
-				lessonName: lessonShareResult.name,
-				status: "",
-				message: "",
-			});
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async confirmImportLesson(shareToken: string): Promise<void> {
 		try {
 			this.resetBusinessError();
@@ -353,11 +326,6 @@ export default class RoomModule extends VuexModule {
 			message: "",
 			error: {},
 		};
-	}
-
-	@Mutation
-	setSharedLessonData(payload: SharedLessonObject): void {
-		this.sharedLessonData = payload;
 	}
 
 	@Mutation
