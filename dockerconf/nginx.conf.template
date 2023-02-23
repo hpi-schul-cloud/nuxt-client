@@ -36,6 +36,10 @@ server {
     location ~ '^/administration/students/[a-z0-9]{24}/pw/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
+   
+    location ~ '^/administration/students/[a-z0-9]{24}/skipregistration/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
 
     location ~ '^/administration/students/import/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
