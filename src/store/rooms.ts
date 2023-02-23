@@ -245,7 +245,7 @@ export default class RoomsModule extends VuexModule {
 		this.setLoading(true);
 		this.setAlignedSuccessfully(true);
 		try {
-			const response = await this.dashboardashboardControllerMoveElement(
+			const response = await this.dashboardApi.dashboardControllerMoveElement(
 				this.getRoomsId,
 				reqObject
 			);
