@@ -2,7 +2,7 @@ server {
     listen 4000;
     server_name  localhost;
 
-    set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'"; child-src 'self' data: https://rendering.edu-2.services.sc-dev-edusharing.dbildungscloud.dev;
+    set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'"; frame-src 'self' data: https://rendering.edu-2.services.sc-dev-edusharing.dbildungscloud.dev;
 
     location /status {
         stub_status;
@@ -20,11 +20,11 @@ server {
     location ~ '^/news/[a-z0-9]{24}/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
-   
+
     location ~ '^/administration/students/[a-z0-9]{24}/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
-   
+
     location ~ '^/administration/students/[a-z0-9]{24}/edit/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
@@ -42,9 +42,6 @@ server {
     }
 
         location ~ '^/administration/teachers/import/?$' {
-        proxy_pass ${LEGACY_CLIENT_URL};
-    }
-    location ~ '^/content/[a-z0-9]{24}/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
