@@ -38,13 +38,13 @@ spec:
         envFrom:
         - configMapRef:
             name: nuxtclient-configmap
-        env:
-        - name: LEGACY_CLIENT_URL
-          value: "http://client-ldap-svc:3100"
         volumeMounts:
-        - mountPath: /app/http-headers.config.js
-          subPath: http-headers.js
-          name: http-headers
+        - mountPath: /var/run
+          name: pid-dir
+        - mountPath: /var/cache/nginx
+          name: cache-dir
+        - mountPath: /etc/nginx/conf.d
+          name: conf-dir
         readinessProbe:
           httpGet:
             path: /nuxtversion
@@ -69,14 +69,14 @@ spec:
         resources:
           limits:
             cpu: {{ NUXTCLIENT_CPU_LIMITS|default("2000m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("1Gi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("256Mi", true) }}
           requests:
             cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
-            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("128Mi", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("32Mi", true) }}
       volumes:
-      - name: http-headers
-        configMap:
-          name: nuxtclient-configmap-files
-          items:
-          - key: http-headers.js
-            path: http-headers.js
+      - name: pid-dir
+        emptyDir: {}
+      - name: cache-dir
+        emptyDir: {}
+      - name: conf-dir
+        emptyDir: {}
