@@ -2,7 +2,7 @@ server {
     listen 4000;
     server_name  localhost;
 
-    set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self'";
+    set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self' data:";
 
     location /status {
         stub_status;
