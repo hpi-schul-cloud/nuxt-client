@@ -143,7 +143,10 @@ export default defineComponent({
 
 		const { getTranslationKey } = useExternalToolMappings();
 
-		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
+		const hasData: Ref<boolean> = ref(false);
+		const loading: ComputedRef<boolean> = computed(
+			() => !hasData.value || externalToolsModule.getLoading
+		);
 		const isEdit: Ref<boolean> = ref(!!props.configId && props.configId !== "");
 
 		const configurationItems: ComputedRef<ToolConfigurationListItem[]> =
@@ -238,6 +241,7 @@ export default defineComponent({
 			} else {
 				await externalToolsModule.loadAvailableToolConfigurations();
 			}
+			hasData.value = true;
 		});
 
 		return {
