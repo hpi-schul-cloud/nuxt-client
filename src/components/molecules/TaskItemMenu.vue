@@ -61,7 +61,7 @@
 						{{ $t("pages.room.taskCard.label.shareTask") }}
 					</v-list-item-title>
 				</v-list-item>
-        <v-list-item
+				<v-list-item
 					v-if="isTeacher && taskIsPublished"
 					id="task-action-revert"
 					class="task-action"
