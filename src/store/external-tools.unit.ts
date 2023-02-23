@@ -1,5 +1,12 @@
-import { ToolApiInterface } from "@/serverApi/v3";
-import ExternalToolsModule from "./external-tools";
+import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
+import {
+	ApiValidationError,
+	SchoolExternalToolResponse,
+	SchoolExternalToolResponseStatusEnum,
+	SchoolExternalToolSearchListResponse,
+	ToolApiInterface,
+	ToolConfigurationEntryResponse,
+} from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	CustomParameterResponse,
@@ -7,13 +14,16 @@ import {
 	SchoolExternalToolPostParams,
 	ToolConfigurationListResponse,
 } from "@/serverApi/v3/api";
+import { authModule } from "@/store";
+import AuthModule from "@/store/auth";
 import {
-	ApiValidationError,
-	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolSearchListResponse,
-	ToolConfigurationEntryResponse,
-} from "@/serverApi/v3";
+	businessErrorFactory,
+	schoolExternalToolFactory,
+	toolConfigurationFactory,
+} from "@@/tests/test-utils/factory";
+import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
@@ -22,19 +32,9 @@ import {
 	ToolConfigurationTemplate,
 	ToolParameter,
 } from "./external-tool";
-import setupStores from "@@/tests/test-utils/setupStores";
+import ExternalToolsModule from "./external-tools";
 import { User } from "./types/auth";
-import AuthModule from "@/store/auth";
-import { authModule } from "@/store";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import {
-	businessErrorFactory,
-	schoolExternalToolFactory,
-	toolConfigurationFactory,
-} from "@@/tests/test-utils/factory";
 import { BusinessError } from "./types/commons";
-import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -176,6 +176,7 @@ describe("ExternalToolsModule", () => {
 			toolConfigurationControllerGetAvailableToolsForSchool,
 			toolConfigurationControllerGetExternalToolForScope,
 			toolSchoolControllerUpdateSchoolExternalTool: jest.fn(),
+			toolSchoolControllerGetSchoolExternalTool: jest.fn(),
 		};
 		jest
 			.spyOn(serverApi, "ToolApiFactory")
@@ -969,6 +970,91 @@ describe("ExternalToolsModule", () => {
 						schoolExternalToolPostParams.id,
 						schoolExternalToolPostParams
 					);
+				});
+			});
+		});
+
+		describe("loadSchoolExternalTool is called", () => {
+			describe("when an error occurs", () => {
+				it("should set the businessError", async () => {
+					const { axiosError, axiosErrorResponse } = setupWithAuth();
+					const { toolApiMock } = mockToolApi();
+
+					toolApiMock.toolSchoolControllerGetSchoolExternalTool.mockRejectedValue(
+						axiosError
+					);
+
+					const result: SchoolExternalTool | undefined =
+						await module.loadSchoolExternalTool("configId");
+
+					expect(module.getBusinessError).toEqual<BusinessError>({
+						...axiosError,
+						statusCode: axiosErrorResponse.data.code,
+						message: axiosErrorResponse.data.message,
+					});
+					expect(result).toBeUndefined();
+				});
+			});
+
+			describe("when no error occurs", () => {
+				it("should call the toolApi.toolSchoolControllerGetSchoolExternalTool", async () => {
+					setupWithAuth();
+					const { toolApiMock } = mockToolApi();
+
+					const configId = "configId";
+					const mockResponse: SchoolExternalToolResponse = {
+						id: "id",
+						name: "name",
+						toolId: "toolId",
+						schoolId: "schoolId",
+						parameters: [],
+						status: SchoolExternalToolResponseStatusEnum.Unknown,
+						toolVersion: 1,
+					};
+					toolApiMock.toolSchoolControllerGetSchoolExternalTool.mockResolvedValue(
+						{
+							data: mockResponse,
+						}
+					);
+
+					await module.loadSchoolExternalTool(configId);
+
+					expect(
+						toolApiMock.toolSchoolControllerGetSchoolExternalTool
+					).toHaveBeenCalledWith(configId);
+				});
+
+				it("should return the SchoolExternalTool", async () => {
+					setupWithAuth();
+					const { toolApiMock } = mockToolApi();
+
+					const configId = "configId";
+					const mockResponse: SchoolExternalToolResponse = {
+						id: "id",
+						name: "name",
+						toolId: "toolId",
+						schoolId: "schoolId",
+						parameters: [],
+						status: SchoolExternalToolResponseStatusEnum.Unknown,
+						toolVersion: 1,
+					};
+					toolApiMock.toolSchoolControllerGetSchoolExternalTool.mockResolvedValue(
+						{
+							data: mockResponse,
+						}
+					);
+
+					const result: SchoolExternalTool | undefined =
+						await module.loadSchoolExternalTool(configId);
+
+					expect(result).toEqual<SchoolExternalTool>({
+						id: mockResponse.id,
+						name: mockResponse.name,
+						status: SchoolExternalToolStatus.Unknown,
+						version: mockResponse.toolVersion,
+						toolId: mockResponse.toolId,
+						parameters: mockResponse.parameters,
+					});
 				});
 			});
 		});
