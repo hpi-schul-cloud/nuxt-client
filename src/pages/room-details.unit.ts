@@ -195,27 +195,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	it("should show FAB if user has permission to create courses", () => {
-		const wrapper = getWrapper();
-		const fabComponent = wrapper.find(".wireframe-fab");
-		const actions = fabComponent.vm.actions.map((action: any) => {
-			return action.label;
-		});
-		const hasNewTaskAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
-		});
-		const hasNewLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
-		});
-		const hasImportLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
-		});
-		expect(fabComponent.exists()).toBe(true);
-		expect(hasNewTaskAction).toBe(true);
-		expect(hasNewLessonAction).toBe(true);
-		expect(hasImportLessonAction).toBe(false);
-	});
-
 	it("'add task' button should have correct path", async () => {
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");

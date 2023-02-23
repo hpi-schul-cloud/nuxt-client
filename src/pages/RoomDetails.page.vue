@@ -224,18 +224,6 @@ export default defineComponent({
 						},
 					],
 				};
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					items.actions.push({
-						label: this.$t("pages.rooms.fab.import.lesson"),
-						icon: mdiCloudDownload,
-						dataTestid: "fab_button_import_lesson",
-						ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
-						customEvent: {
-							name: "fabButtonEvent",
-							value: true,
-						},
-					});
-				}
 				return items;
 			}
 
