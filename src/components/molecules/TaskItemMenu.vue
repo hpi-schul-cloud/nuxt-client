@@ -61,6 +61,18 @@
 						{{ $t("pages.room.taskCard.label.shareTask") }}
 					</v-list-item-title>
 				</v-list-item>
+        <v-list-item
+					v-if="isTeacher && taskIsPublished"
+					id="task-action-revert"
+					class="task-action"
+					data-testId="task-revert"
+					@click.stop.prevent="handleRevertPublished"
+				>
+					<v-list-item-title>
+						<v-icon class="task-action-icon"> {{ mdiUndoVariant }} </v-icon>
+						{{ $t("pages.room.cards.label.revert") }}
+					</v-list-item-title>
+				</v-list-item>
 				<v-list-item
 					id="task-action-finish"
 					class="task-action"
@@ -150,6 +162,10 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		taskIsPublished: {
+			type: Boolean,
+			required: true,
+		},
 		taskTitle: {
 			type: String,
 			required: false,
@@ -207,6 +223,9 @@ export default defineComponent({
 			} else {
 				this.tasksModule.finishTask(this.taskId);
 			}
+		},
+		handleRevertPublished() {
+			this.tasksModule.revertPublishedTask(this.taskId);
 		},
 		handleDelete() {
 			this.tasksModule.deleteTask(this.taskId);

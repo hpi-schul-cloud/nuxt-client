@@ -184,6 +184,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 // stylelint-disable sh-waqar/declaration-use-variable
 .padding-bottom {
-	padding-bottom: 100px;
+	padding-bottom: 140px;
 }
 </style>

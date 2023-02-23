@@ -95,6 +95,7 @@
 				<task-item-menu
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
+					:task-is-published="!task.status.isDraft && !task.status.isFinished"
 					:task-title="task.name"
 					:course-id="task.courseId"
 					user-role="teacher"
