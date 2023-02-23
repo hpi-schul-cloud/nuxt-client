@@ -210,7 +210,7 @@
 	"components.organisms.TasksDashboardMain.tab.current": "Current",
 	"components.organisms.TasksDashboardMain.tab.finished": "Finished",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Drafts",
-	"components.organisms.TasksDashboardMain.filter.substitute": "Tasks from substitutes",
+	"components.organisms.TasksDashboardMain.filter.substitute": "Tasks from substitute courses",
 	"components.organisms.LegacyFooter.contact": "Contact",
 	"components.organisms.LegacyFooter.job-offer": "Job advertisements",
 	"components.organisms.Pagination.currentPage": "{start} to {end} from {total}",

@@ -1,10 +1,6 @@
 <template>
 	<div
-		:class="{
-			'alert-wrapper-mobile': isMobile,
-			'alert-wrapper': !isMobile,
-			'alert-wrapper-bottom': !isMobile && !isTop,
-		}"
+		:class="{ 'alert-wrapper-mobile': isMobile, 'alert-wrapper': !isMobile }"
 	>
 		<v-alert
 			v-model="showNotifier"
@@ -71,9 +67,6 @@ export default {
 				this.closeNotification();
 			},
 		},
-		isTop() {
-			return this.notifierData?.position === "top";
-		},
 	},
 	methods: {
 		closeNotification() {
@@ -87,14 +80,6 @@ export default {
 .alert-wrapper {
 	position: fixed;
 	right: 0;
-	z-index: var(--layer-tooltip);
-	overflow: visible;
-}
-
-.alert-wrapper-bottom {
-	position: fixed;
-	right: 52px;
-	bottom: 37px;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
 }

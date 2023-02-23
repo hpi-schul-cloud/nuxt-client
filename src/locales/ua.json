@@ -338,7 +338,7 @@
 	"components.organisms.Pagination.recordsPerPage": "Записів на сторінці",
 	"components.organisms.Pagination.showTotalRecords": "Показати всі {total} записи (-ів)",
 	"components.organisms.TasksDashboardMain.addTask": "Додати завдання",
-	"components.organisms.TasksDashboardMain.filter.substitute": "Завдання від викладачів на заміну",
+	"components.organisms.TasksDashboardMain.filter.substitute": "Завдання з курсів-замінників",
 	"components.organisms.TasksDashboardMain.tab.completed": "Завершено",
 	"components.organisms.TasksDashboardMain.tab.current": "Поточні",
 	"components.organisms.TasksDashboardMain.tab.finished": "Завершено",

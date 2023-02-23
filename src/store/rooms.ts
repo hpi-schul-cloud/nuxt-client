@@ -245,7 +245,7 @@ export default class RoomsModule extends VuexModule {
 		this.setLoading(true);
 		this.setAlignedSuccessfully(true);
 		try {
-			const response = await this.dashboardApi.dashboardControllerMoveElement(
+			const response = await this.dashboardashboardControllerMoveElement(
 				this.getRoomsId,
 				reqObject
 			);
@@ -262,7 +262,6 @@ export default class RoomsModule extends VuexModule {
 					text: "pages.courses.index.courses.cannotArrangeSubstitute",
 					status: "info",
 					timeout: 10000,
-					position: "bottom",
 				});
 				this.setLoading(false);
 				this.setAlignedSuccessfully(false);

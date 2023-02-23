@@ -18,16 +18,16 @@
 						data-testid="go-to-all-courses"
 						>{{ $t("pages.courses.index.courses.all") }}
 					</v-btn>
+					<user-has-role :role="isTeacher">
+						<div class="toggle-div">
+							<v-custom-switch
+								v-model="showSubstitute"
+								class="enable-disable"
+								:label="$t('pages.courses.index.courses.substituteCourses')"
+							/>
+						</div>
+					</user-has-role>
 				</div>
-				<user-has-role :role="isTeacher">
-					<div class="toggle-div">
-						<v-custom-switch
-							v-model="showSubstitute"
-							class="enable-disable"
-							:label="$t('pages.courses.index.courses.substituteCourses')"
-						/>
-					</div>
-				</user-has-role>
 				<div class="toggle-div">
 					<v-custom-switch
 						v-if="isTouchDevice"
@@ -450,13 +450,14 @@ export default {
 	width: 100%;
 
 	.btn {
-		display: inline-block;
+		display: flex;
+		flex-direction: row;
 		flex: 1;
 	}
 
 	.toggle-div {
 		display: inline-block;
-		margin-left: var(--space-xl-3);
+		margin-left: var(--space-md);
 	}
 }
 
