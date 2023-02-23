@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
+import { defineComponent, inject, ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, authModule } from "@/store";
+import { taskCardModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -47,15 +47,6 @@ export default defineComponent({
 	},
 	setup() {
 		const router = useRouter();
-
-		// TODO - FIX THIS, can this be a navigation guard?
-		onBeforeMount(() => {
-			if (
-				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
-			) {
-				router.go(-1);
-			}
-		});
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
