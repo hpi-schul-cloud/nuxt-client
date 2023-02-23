@@ -8,7 +8,7 @@ initializeAxios({
 	get: async (path: string) => {
 		return {
 			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id2" }],
+				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
 			},
 		};
 	},
@@ -18,7 +18,7 @@ initializeAxios({
 	request: async (path: string) => {
 		return {
 			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id2" }],
+				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
 			},
 		};
 	},
@@ -28,9 +28,9 @@ jest.mock("axios");
 
 const setup = () => {
 	const cardsApiFactoryMock = {
-		cardsControllerGetCards: () => ({
+		cardsControllerGetCards: jest.fn().mockResolvedValue({
 			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id2" }],
+				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
 			},
 		}),
 	};
