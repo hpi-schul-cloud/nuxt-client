@@ -5818,13 +5818,11 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser: async (showSubstitute: boolean, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'showSubstitute' is not null or undefined
-            assertParamExists('dashboardControllerFindForUser', 'showSubstitute', showSubstitute)
+        dashboardControllerFindForUser: async (showSubstitute?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/dashboard`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5968,11 +5966,11 @@ export const DashboardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerFindForUser(showSubstitute: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+        async dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(showSubstitute, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6012,11 +6010,11 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {boolean} showSubstitute 
+         * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerFindForUser(showSubstitute: boolean, options?: any): AxiosPromise<DashboardResponse> {
+        dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): AxiosPromise<DashboardResponse> {
             return localVarFp.dashboardControllerFindForUser(showSubstitute, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6052,12 +6050,12 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
 export interface DashboardApiInterface {
     /**
      * 
-     * @param {boolean} showSubstitute 
+     * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerFindForUser(showSubstitute: boolean, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerFindForUser(showSubstitute?: boolean, options?: any): AxiosPromise<DashboardResponse>;
 
     /**
      * 
@@ -6092,12 +6090,12 @@ export interface DashboardApiInterface {
 export class DashboardApi extends BaseAPI implements DashboardApiInterface {
     /**
      * 
-     * @param {boolean} showSubstitute 
+     * @param {boolean} [showSubstitute] Flag that indicates if the substitute courses should be shown
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerFindForUser(showSubstitute: boolean, options?: any) {
+    public dashboardControllerFindForUser(showSubstitute?: boolean, options?: any) {
         return DashboardApiFp(this.configuration).dashboardControllerFindForUser(showSubstitute, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -9929,6 +9927,43 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRevertPublished: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerRevertPublished', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}/revertPublished`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10002,6 +10037,16 @@ export const TaskApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRestore(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerRevertPublished(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRevertPublished(taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -10069,6 +10114,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
         taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse> {
             return localVarFp.taskControllerRestore(taskId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRevertPublished(taskId: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerRevertPublished(taskId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10134,6 +10188,15 @@ export interface TaskApiInterface {
      * @memberof TaskApiInterface
      */
     taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse>;
+
+    /**
+     * 
+     * @param {string} taskId The id of the task.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerRevertPublished(taskId: string, options?: any): AxiosPromise<TaskResponse>;
 
 }
 
@@ -10211,6 +10274,17 @@ export class TaskApi extends BaseAPI implements TaskApiInterface {
      */
     public taskControllerRestore(taskId: string, options?: any) {
         return TaskApiFp(this.configuration).taskControllerRestore(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} taskId The id of the task.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerRevertPublished(taskId: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerRevertPublished(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

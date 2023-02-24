@@ -88,6 +88,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { unchangedPassword } from "@/utils/ldapConstants";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
@@ -178,13 +179,13 @@ export default {
 			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
-						const systemData = {
-							...this.systemData,
-							searchUserPassword: undefined,
-						};
+						if (this.systemData.searchUserPassword === unchangedPassword) {
+							this.systemData.searchUserPassword = undefined;
+						}
+
 						await this.$store.dispatch("ldap-config/verifyExisting", {
-							systemData,
-							systemId,
+							systemId: systemId,
+							systemData: this.systemData,
 						});
 					} else {
 						await this.$store.dispatch(
