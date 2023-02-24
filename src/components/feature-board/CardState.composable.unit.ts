@@ -35,28 +35,32 @@ describe("CardState composable", () => {
 	});
 
 	it("should fetch card on mount", async () => {
-		mountComposable(() => useCardState("123124"));
+		const cardId = "123124";
+		mountComposable(() => useCardState(cardId));
 
-		expect(fetchMock).toHaveBeenCalledWith("123124");
+		expect(fetchMock).toHaveBeenCalledWith(cardId);
 	});
 
 	it("should return fetch function that updates card and loading state", async () => {
+		const cardId1 = "123124a";
+		const cardId2 = "123125b";
 		const { fetchCard, card, isLoading } = mountComposable(() =>
-			useCardState("123124")
+			useCardState(cardId1)
 		);
 
-		await fetchCard("123");
-		expect(fetchMock).toHaveBeenLastCalledWith("123");
+		await fetchCard(cardId2);
+		expect(fetchMock).toHaveBeenLastCalledWith(cardId2);
 		expect(card.value?.id).toBe("abc");
 		expect(isLoading.value).toBe(false);
 	});
 
 	it("should log on error", async () => {
+		const cardId = "123124";
 		const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 		const errorToThrow = new Error("something went wrong");
 
 		fetchMock.mockRejectedValue(errorToThrow);
-		mountComposable(() => useCardState("123124"));
+		mountComposable(() => useCardState(cardId));
 		await nextTick();
 		await nextTick(); // test mounts it twice
 

@@ -33,11 +33,11 @@ describe("BoardState composable", () => {
 	});
 
 	it("should fetch board on mount", async () => {
-		const boardId1 = "123124";
-		mountComposable(() => useBoardState(boardId1));
+		const boardId = "123124";
+		mountComposable(() => useBoardState(boardId));
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
-			boardId1
+			boardId
 		);
 	});
 
