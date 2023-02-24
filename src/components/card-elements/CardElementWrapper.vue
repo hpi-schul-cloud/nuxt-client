@@ -1,6 +1,6 @@
 <template>
 	<v-card flat class="card mb-7" :class="{ active: isActive }">
-		<div class="card-actions">
+		<div v-if="editable" class="card-actions">
 			<v-btn
 				v-show="actionable"
 				icon
