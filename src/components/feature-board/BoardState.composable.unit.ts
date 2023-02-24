@@ -24,7 +24,6 @@ const mountComposable = <R>(composable: () => R): R => {
 describe("BoardState composable", () => {
 	let mockApi: any;
 	beforeEach(() => {
-		jest.useFakeTimers();
 		const boardControllerGetBoardSkeleton = jest
 			.fn()
 			.mockResolvedValue({ data: {} });
@@ -34,29 +33,28 @@ describe("BoardState composable", () => {
 	});
 
 	it("should fetch board on mount", async () => {
-		mountComposable(() => useBoardState("123124"));
-
-		jest.advanceTimersByTime(1000);
-		await nextTick();
+		const boardId1 = "123124";
+		mountComposable(() => useBoardState(boardId1));
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
-			"123124"
+			boardId1
 		);
 	});
 
 	it("should return fetch function that updates board and loading state", async () => {
+		const boardId1 = "123124";
+		const boardId2 = "a1b1c1";
 		const { fetchBoard, board, isLoading } = mountComposable(() =>
-			useBoardState("123124")
+			useBoardState(boardId1)
 		);
 
-		const fetchPromise = fetchBoard("123");
-		jest.advanceTimersByTime(1000);
-		await fetchPromise;
+		await fetchBoard(boardId2);
+		await nextTick();
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenLastCalledWith(
-			"123"
+			boardId2
 		);
-		expect(board.value?.id).toBe("123");
+		expect(board.value?.id).toBe(boardId2);
 		expect(isLoading.value).toBe(false);
 	});
 });
