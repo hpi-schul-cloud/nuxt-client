@@ -4,36 +4,20 @@ import * as serverApi from "../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
 
-initializeAxios({
-	get: async (path: string) => {
-		return {
-			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
-			},
-		};
-	},
-	post: async (path: string) => {
-		return { data: [] };
-	},
-	request: async (path: string) => {
-		return {
-			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
-			},
-		};
-	},
-} as axios.AxiosInstance);
-
 jest.mock("axios");
 
-const setup = () => {
-	const cardsApiFactoryMock = {
-		cardsControllerGetCards: jest.fn().mockResolvedValue({
-			data: {
-				data: [{ id: "test-id1" }, { id: "test-id2" }, { id: "test-id3" }],
-			},
-		}),
-	};
+let mockReturnData: { data: { data: { id: string }[] } };
+const cardsApiFactoryMock = {
+	cardsControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
+};
+initializeAxios({
+	request: async (path: string) => mockReturnData,
+} as axios.AxiosInstance);
+
+const setup = (...cardIds: string[]) => {
+	const returnedCards = cardIds.map((id) => ({ id }));
+	mockReturnData = { data: { data: returnedCards } };
+
 	jest
 		.spyOn(serverApi, "CardsApiFactory")
 		.mockReturnValue(cardsApiFactoryMock as unknown as CardsApiInterface);
@@ -42,22 +26,35 @@ const setup = () => {
 };
 
 describe("card-request-pool.composable", () => {
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	it("should return Card data", async () => {
-		const mockFetchCard = jest.spyOn(useSharedCardRequestPool(), "fetchCard");
+		const CARD_ID = "test-id";
+		const { cardsApiFactoryMock } = setup(CARD_ID);
 
-		useSharedCardRequestPool().fetchCard("test-id");
+		const { fetchCard } = useSharedCardRequestPool();
+		await fetchCard(CARD_ID);
 
-		expect(mockFetchCard).toHaveBeenCalledWith("test-id");
+		expect(cardsApiFactoryMock.cardsControllerGetCards).toHaveBeenCalledWith([
+			CARD_ID,
+		]);
 	});
 
 	it("should batch requests", async () => {
-		const { cardsApiFactoryMock } = setup();
+		const CARD_ID1 = "test-id1";
+		const CARD_ID2 = "test-id2";
+		const CARD_ID3 = "test-id3";
+
+		const { cardsApiFactoryMock } = setup(CARD_ID1, CARD_ID2, CARD_ID3);
 
 		const { fetchCard } = useSharedCardRequestPool();
+
 		await Promise.all([
-			fetchCard("test-id1"),
-			fetchCard("test-id2"),
-			fetchCard("test-id3"),
+			fetchCard(CARD_ID1),
+			fetchCard(CARD_ID2),
+			fetchCard(CARD_ID3),
 		]);
 
 		expect(cardsApiFactoryMock.cardsControllerGetCards).toHaveBeenCalledTimes(
