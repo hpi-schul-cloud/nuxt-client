@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isEditMode">
+	<div v-if="editMode">
 		<draggable
 			ref="draggable"
 			v-model="elements"
@@ -23,6 +23,7 @@
 				:disabled="dragInProgress"
 				@delete-element="deleteElement(index)"
 				@add-element="addElementAfter(index)"
+				:editMode="editMode"
 			/>
 		</draggable>
 		<add-card-element @click="addElementAfter()" />
@@ -34,13 +35,13 @@
 			:key="index"
 			v-model="element.model"
 			v-bind="element.props"
-			:editable="false"
+			:editMode="editMode"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
+import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import AddCardElement from "@/components/card-elements/AddCardElement.vue";
@@ -62,10 +63,9 @@ export default defineComponent({
 			type: Array,
 			default: () => [],
 		},
-		permission: {
-			type: String,
-			required: false,
-			validator: (permission: string) => ["edit", "view"].includes(permission),
+		editMode: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
@@ -100,8 +100,6 @@ export default defineComponent({
 
 		const onSort = () => emit("input", elements.value);
 
-		const isEditMode = computed(() => props.permission === "edit");
-
 		return {
 			elements,
 			addElementAfter,
@@ -111,7 +109,6 @@ export default defineComponent({
 			endDragging,
 			onSort,
 			dragInProgress,
-			isEditMode,
 		};
 	},
 });

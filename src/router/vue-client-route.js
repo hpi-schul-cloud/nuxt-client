@@ -39,7 +39,6 @@ const vueRoutes = [
 	`^/rooms/${mongoId}/board?$`,
 	`^/tasks/?$`,
 	`^/task-cards/new/?$`,
-	`^/task-cards/${mongoId}/?$`,
 	`^/task-cards/${mongoId}/edit/?$`,
 	`^/termsofuse/?`,
 	`^/login-instances/?$`,

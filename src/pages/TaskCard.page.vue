@@ -4,9 +4,13 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Card"
 	>
-		<v-form class="d-flex flex-column">
-			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<card-element-list v-model="elements" />
+		<v-form v-if="isEditMode" class="d-flex flex-column">
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="isEditMode"
+			/>
+			<card-element-list v-model="elements" :editMode="isEditMode" />
 			<div>
 				<v-btn color="secondary" outlined @click="cancel">
 					{{ $t("common.actions.cancel") }}
@@ -16,11 +20,19 @@
 				</v-btn>
 			</div>
 		</v-form>
+		<v-form v-else class="d-flex flex-column">
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="isEditMode"
+			/>
+			<card-element-list v-model="elements" :editMode="isEditMode" />
+		</v-form>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted } from "vue";
+import { defineComponent, inject, ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule } from "@/store";
@@ -36,6 +48,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -49,7 +62,8 @@ export default defineComponent({
 		const router = useRouter();
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		if (!i18n || !authModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const breadcrumbs = [
@@ -88,7 +102,7 @@ export default defineComponent({
 							placeholder: i18n.t(
 								"components.cardElement.titleElement.placeholder"
 							) as string,
-							editable: true,
+							editable: isEditMode.value,
 						},
 					};
 					return;
@@ -103,7 +117,7 @@ export default defineComponent({
 						placeholder: i18n.t(
 							"components.cardElement.richTextElement.placeholder"
 						) as string,
-						editable: true,
+						editable: isEditMode.value,
 					},
 				});
 			});
@@ -176,12 +190,20 @@ export default defineComponent({
 			router.go(-1);
 		};
 
+		const getUserPermissions = ref(authModule.getUserPermissions);
+
+		const isEditMode = computed(() => {
+			if (getUserPermissions.value.includes("task_card_edit")) return true;
+			return false;
+		});
+
 		return {
 			breadcrumbs,
 			title,
 			elements,
 			save,
 			cancel,
+			isEditMode,
 		};
 	},
 	mounted() {

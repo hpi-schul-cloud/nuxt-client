@@ -1,6 +1,6 @@
 <template>
-	<v-card flat class="card mb-7" :class="{ active: isActive }">
-		<div v-if="editable" class="card-actions">
+	<v-card v-if="editMode" flat class="card mb-7" :class="{ active: isActive }">
+		<div class="card-actions">
 			<v-btn
 				v-show="actionable"
 				icon
@@ -48,6 +48,9 @@
 			<v-icon>{{ mdiPlus }}</v-icon>
 		</v-btn>
 	</v-card>
+	<v-card v-else flat class="card mb-7">
+		<component :is="component" v-model="model" :placeholder="placeholder" />
+	</v-card>
 </template>
 
 <script lang="ts">
@@ -82,6 +85,10 @@ export default defineComponent({
 		},
 		editable: {
 			type: Boolean,
+		},
+		editMode: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
