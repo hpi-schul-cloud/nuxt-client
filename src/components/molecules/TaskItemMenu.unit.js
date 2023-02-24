@@ -88,6 +88,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -99,6 +100,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -112,10 +114,31 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
 			expect(wrapper.vm.isTeacher).toBe(true);
+		});
+	});
+
+	describe("when reverting a published task", () => {
+		it("should call revertPublishedTask of TasksModule", async () => {
+			const task = tasksTeacher[0];
+			const wrapper = getWrapper({
+				taskId: task.id,
+				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
+				userRole: "teacher",
+			});
+
+			const menuBtn = wrapper.find("#task-menu-btn");
+			await menuBtn.trigger("click");
+
+			const finishBtn = wrapper.find("#task-action-revert");
+			await finishBtn.trigger("click");
+
+			expect(tasksModuleMock.revertPublishedTask).toHaveBeenCalled();
 		});
 	});
 
@@ -125,6 +148,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -145,6 +169,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -164,6 +189,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 
@@ -187,6 +213,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				const wrapper = getWrapper({
 					taskId: task.id,
 					taskIsFinished: task.status.isFinished,
+					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 					courseId: "18",
 				});
@@ -214,6 +241,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				const wrapper = getWrapper({
 					taskId: task.id,
 					taskIsFinished: task.status.isFinished,
+					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
@@ -241,6 +269,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const wrapper = getWrapper({
 				taskId: task.id,
 				taskIsFinished: task.status.isFinished,
+				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
 			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });

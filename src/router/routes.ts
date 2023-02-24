@@ -169,11 +169,13 @@ export const routes: Array<RouteConfig> = [
 		path: `/task-cards/:id(${REGEX_ID})/edit`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "task-card-edit",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
 		path: "/task-cards/new",
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "task-card-new",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	// deprecated?
 	{
