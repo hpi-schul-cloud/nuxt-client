@@ -54,9 +54,11 @@ describe("card-request-pool.composable", () => {
 		const { cardsApiFactoryMock } = setup();
 
 		const { fetchCard } = useSharedCardRequestPool();
-		await fetchCard("test-id1");
-		await fetchCard("test-id2");
-		await fetchCard("test-id3");
+		await Promise.all([
+			fetchCard("test-id1"),
+			fetchCard("test-id2"),
+			fetchCard("test-id3"),
+		]);
 
 		expect(cardsApiFactoryMock.cardsControllerGetCards).toHaveBeenCalledTimes(
 			1
