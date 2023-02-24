@@ -1,19 +1,19 @@
 <template>
-	<v-card flat class="dashed mb-4">
-		<v-col class="text-center">
-			<v-btn
-				icon
-				outlined
-				color="secondary"
-				class="add-element-btn"
-				:aria-label="$t('pages.taskCard.addElement')"
-				data-testid="add-element-btn"
-				@click="addElement"
-			>
-				<v-icon>{{ mdiPlus }}</v-icon>
-			</v-btn>
-		</v-col>
-	</v-card>
+	<div class="mb-4">
+		<hr />
+		<v-btn
+			icon
+			outlined
+			color="secondary"
+			class="add-element-btn"
+			:aria-label="$t('pages.taskCard.addElement')"
+			data-testid="add-element-btn"
+			@click="addElement"
+		>
+			<v-icon>{{ mdiPlus }}</v-icon>
+		</v-btn>
+		<hr />
+	</div>
 </template>
 
 <script lang="ts">
@@ -37,15 +37,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 $btn-radius: 18;
 
-.dashed {
-	border: dashed thin var(--v-grey-base);
+div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.add-element-btn {
-	position: absolute;
-	top: -#{$btn-radius / 3}px;
-	left: 50%;
-	margin-left: -#{$btn-radius}px;
-	background-color: var(--v-white-base);
+hr {
+	flex: 1;
+	border: dashed thin var(--v-grey-base);
 }
 </style>
