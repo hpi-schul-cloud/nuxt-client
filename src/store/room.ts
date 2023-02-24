@@ -1,6 +1,5 @@
 import { applicationErrorModule, authModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SingleColumnBoardResponse,
@@ -15,7 +14,6 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { SharedLessonObject } from "./types/room";
 
 @Module({
 	name: "roomModule",
@@ -36,12 +34,6 @@ export default class RoomModule extends VuexModule {
 		statusCode: "",
 		message: "",
 		error: {},
-	};
-	sharedLessonData: SharedLessonObject = {
-		code: "",
-		lessonName: "",
-		status: "",
-		message: "",
 	};
 	private courseShareToken = "";
 
@@ -351,10 +343,6 @@ export default class RoomModule extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
-	}
-
-	get getSharedLessonData(): SharedLessonObject {
-		return this.sharedLessonData;
 	}
 
 	get getCourseShareToken(): string {
