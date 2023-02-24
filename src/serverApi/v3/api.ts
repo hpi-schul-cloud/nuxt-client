@@ -839,7 +839,7 @@ export interface CustomParameterEntryParam {
      * @type {string}
      * @memberof CustomParameterEntryParam
      */
-    value: string;
+    value?: string;
 }
 /**
  * 
@@ -859,6 +859,61 @@ export interface CustomParameterEntryResponse {
      * @memberof CustomParameterEntryResponse
      */
     value?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CustomParameterPostParams
+ */
+export interface CustomParameterPostParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    defaultValue?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    regex?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    regexComment?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    scope: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    location: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CustomParameterPostParams
+     */
+    isOptional: boolean;
 }
 /**
  * 
@@ -1170,10 +1225,10 @@ export interface ExternalToolPostParams {
     config: BasicToolConfigParams | Lti11ToolConfigParams | Oauth2ToolConfigParams;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<CustomParameterPostParams>}
      * @memberof ExternalToolPostParams
      */
-    parameters?: Array<string>;
+    parameters?: Array<CustomParameterPostParams>;
     /**
      * 
      * @type {boolean}
@@ -3178,6 +3233,12 @@ export interface TargetInfoResponse {
  */
 export interface TaskCardParams {
     /**
+     * The id of an course object.
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    courseId?: string;
+    /**
      * Visible at date of the card
      * @type {string}
      * @memberof TaskCardParams
@@ -3214,6 +3275,18 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     cardElements: Array<CardElementResponse>;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    courseId?: string;
     /**
      * Are the card elements draggable?
      * @type {boolean}
@@ -3337,6 +3410,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    taskCardId?: string;
     /**
      * Task description object, with props content: string and type: input format types
      * @type {RichText}
@@ -4423,6 +4502,50 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerLoginOauth: async (code?: string, error?: string, redirect?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/authentication/oauth/{systemId}`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (code !== undefined) {
+                localVarQueryParameter['code'] = code;
+            }
+
+            if (error !== undefined) {
+                localVarQueryParameter['error'] = error;
+            }
+
+            if (redirect !== undefined) {
+                localVarQueryParameter['redirect'] = redirect;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -4451,6 +4574,18 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth(code, error, redirect, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -4477,6 +4612,17 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         loginControllerLoginLocal(options?: any): AxiosPromise<void> {
             return localVarFp.loginControllerLoginLocal(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void> {
+            return localVarFp.loginControllerLoginOauth(code, error, redirect, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -4501,6 +4647,17 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     loginControllerLoginLocal(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} [code] 
+     * @param {string} [error] 
+     * @param {string} [redirect] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -4529,6 +4686,19 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public loginControllerLoginLocal(options?: any) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [code] 
+     * @param {string} [error] 
+     * @param {string} [redirect] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginOauth(code, error, redirect, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8531,6 +8701,43 @@ export const SSOApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
+         * @param {string} systemId The id of the system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerMigrateUser: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('oauthSSOControllerMigrateUser', 'systemId', systemId)
+            const localVarPath = `/sso/oauth/{systemId}/migration`
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} oauthClientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8621,6 +8828,16 @@ export const SSOApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} systemId The id of the system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async oauthSSOControllerMigrateUser(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerMigrateUser(systemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} oauthClientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8660,6 +8877,15 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
         },
         /**
          * 
+         * @param {string} systemId The id of the system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        oauthSSOControllerMigrateUser(systemId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthSSOControllerMigrateUser(systemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} oauthClientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8693,6 +8919,15 @@ export interface SSOApiInterface {
      * @memberof SSOApiInterface
      */
     oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): AxiosPromise<object>;
+
+    /**
+     * 
+     * @param {string} systemId The id of the system.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApiInterface
+     */
+    oauthSSOControllerMigrateUser(systemId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8730,6 +8965,17 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
      */
     public oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any) {
         return SSOApiFp(this.configuration).oauthSSOControllerGetHydraOauthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} systemId The id of the system.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSOApi
+     */
+    public oauthSSOControllerMigrateUser(systemId: string, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerMigrateUser(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -9910,6 +10156,43 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRevertPublished: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskControllerRevertPublished', 'taskId', taskId)
+            const localVarPath = `/tasks/{taskId}/revertPublished`
+                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -9983,6 +10266,16 @@ export const TaskApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRestore(taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskControllerRevertPublished(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRevertPublished(taskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -10050,6 +10343,15 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
         taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse> {
             return localVarFp.taskControllerRestore(taskId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} taskId The id of the task.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskControllerRevertPublished(taskId: string, options?: any): AxiosPromise<TaskResponse> {
+            return localVarFp.taskControllerRevertPublished(taskId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10115,6 +10417,15 @@ export interface TaskApiInterface {
      * @memberof TaskApiInterface
      */
     taskControllerRestore(taskId: string, options?: any): AxiosPromise<TaskResponse>;
+
+    /**
+     * 
+     * @param {string} taskId The id of the task.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApiInterface
+     */
+    taskControllerRevertPublished(taskId: string, options?: any): AxiosPromise<TaskResponse>;
 
 }
 
@@ -10192,6 +10503,17 @@ export class TaskApi extends BaseAPI implements TaskApiInterface {
      */
     public taskControllerRestore(taskId: string, options?: any) {
         return TaskApiFp(this.configuration).taskControllerRestore(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} taskId The id of the task.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TaskApi
+     */
+    public taskControllerRevertPublished(taskId: string, options?: any) {
+        return TaskApiFp(this.configuration).taskControllerRevertPublished(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

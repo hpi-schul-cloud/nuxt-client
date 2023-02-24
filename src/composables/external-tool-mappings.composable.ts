@@ -172,7 +172,7 @@ export function useExternalToolMappings() {
 		return params.map((param: ToolParameter): CustomParameterEntryParam => {
 			return {
 				name: param.name,
-				value: param.value ?? "",
+				value: param.value,
 			};
 		});
 	};
