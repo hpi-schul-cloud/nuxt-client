@@ -46,5 +46,6 @@ div {
 hr {
 	flex: 1;
 	border: dashed thin var(--v-grey-base);
+	opacity: 0.5;
 }
 </style>
