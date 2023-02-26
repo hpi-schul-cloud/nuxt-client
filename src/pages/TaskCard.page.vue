@@ -12,10 +12,21 @@
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
 			<div>
-				<v-btn color="secondary" outlined @click="cancel">
+				<v-btn
+					color="secondary"
+					outlined
+					@click="cancel"
+					data-testid="cancel-btn"
+				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn class="float-right" color="primary" depressed @click="save">
+				<v-btn
+					class="float-right"
+					color="primary"
+					depressed
+					@click="save"
+					data-testid="save-btn"
+				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
 			</div>
