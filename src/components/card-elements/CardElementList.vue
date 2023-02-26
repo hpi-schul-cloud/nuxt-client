@@ -23,7 +23,7 @@
 				:disabled="dragInProgress"
 				@delete-element="deleteElement(index)"
 				@add-element="addElementAfter(index)"
-				:editMode="editMode"
+				:editMode="true"
 			/>
 		</draggable>
 		<add-card-element @click="addElementAfter()" />
@@ -35,7 +35,7 @@
 			:key="index"
 			v-model="element.model"
 			v-bind="element.props"
-			:editMode="editMode"
+			:editMode="false"
 		/>
 	</div>
 </template>

@@ -8,9 +8,9 @@
 			<card-element-wrapper
 				v-model="title.model"
 				v-bind="title.props"
-				:editMode="isEditMode"
+				:editMode="true"
 			/>
-			<card-element-list v-model="elements" :editMode="isEditMode" />
+			<card-element-list v-model="elements" :editMode="true" />
 			<div>
 				<v-btn color="secondary" outlined @click="cancel">
 					{{ $t("common.actions.cancel") }}
@@ -24,9 +24,9 @@
 			<card-element-wrapper
 				v-model="title.model"
 				v-bind="title.props"
-				:editMode="isEditMode"
+				:editMode="false"
 			/>
-			<card-element-list v-model="elements" :editMode="isEditMode" />
+			<card-element-list v-model="elements" :editMode="false" />
 		</v-form>
 	</default-wireframe>
 </template>
