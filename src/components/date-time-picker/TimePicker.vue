@@ -26,21 +26,23 @@
 				@input="onInput"
 				@keydown.prevent.space="showTimeDialog = true"
 				@keydown.prevent.enter="showTimeDialog = true"
-				@focus="resetErrors"
 			/>
 		</template>
 		<v-list height="200" class="col-12 pt-1 px-0">
 			<v-list-item-group v-model="selectedTime" color="primary">
-				<v-list-item
+				<div
 					v-for="(timeOfDay, index) in timesOfDayList"
 					:key="`time-select-${index}`"
-					:data-testid="`time-select-${index}`"
-					class="time-list-item"
-					@click="selectTime(timeOfDay)"
 				>
-					<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
-				</v-list-item>
-				<v-divider v-if="index < timesOfDayList.length - 1" />
+					<v-list-item
+						:data-testid="`time-select-${index}`"
+						class="time-list-item"
+						@click="selectTime(timeOfDay)"
+					>
+						<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+					</v-list-item>
+					<v-divider v-if="index < timesOfDayList.length - 1" />
+				</div>
 			</v-list-item-group>
 		</v-list>
 	</v-menu>
@@ -91,8 +93,9 @@ export default defineComponent({
 			inputTime.value = input;
 			showTimeDialog.value = false;
 
-			const validated = validate(inputTime.value);
 			inputTimeout = setTimeout(() => {
+				const validated = validate(inputTime.value);
+
 				if (validated) {
 					emit("input", inputTime.value);
 				}
@@ -109,12 +112,13 @@ export default defineComponent({
 		const validate = (timeValue: string) => {
 			resetErrors();
 
-			if (!props.required) {
+			// is empty, but not required
+			if (!props.required && (timeValue === "" || timeValue === null)) {
 				return true;
 			}
 
-			// is empty
-			if (timeValue === "" || timeValue === null) {
+			// is required, but empty
+			if (props.required && (timeValue === "" || timeValue === null)) {
 				errors.value.push("required");
 				emit("error");
 				return false;

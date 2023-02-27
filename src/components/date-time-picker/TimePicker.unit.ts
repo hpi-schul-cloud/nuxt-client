@@ -1,4 +1,3 @@
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
@@ -8,8 +7,8 @@ const getWrapper = (props?: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 		}),
-		setup() {
-			provide("i18n", { t: (key: string) => key });
+		provide: {
+			i18n: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,
@@ -31,41 +30,115 @@ describe("@components/date-time-picker/TimePicker", () => {
 		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
 	});
 
-	it("should compute correct values for timesOfDayList", async () => {
-		const wrapper = getWrapper({
-			time: "",
+	describe("when picking a time through typing", () => {
+		it("should emit event on input", async () => {
+			jest.useFakeTimers();
+
+			const wrapper = getWrapper({
+				time: new Date().toISOString(),
+			});
+
+			const textField = wrapper.findComponent({ name: "v-text-field" });
+			const input = textField.find("input");
+			input.setValue("13:12");
+
+			expect(textField.emitted("input")).toHaveLength(1);
+			jest.advanceTimersByTime(1000);
+
+			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
-
-		const textField = wrapper
-			.findComponent({ name: "v-text-field" })
-			.find("input");
-		expect(textField.exists()).toBe(true);
-		await textField.trigger("click");
-
-		const menu = wrapper.find(".v-menu");
-		const listItem = menu.find("[data-testid='time-select-1']");
-		const listItemValue = menu.find(".v-list-item__title");
-		console.log(listItemValue);
-		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
 	});
 
-	// it("should emit event on input", async () => {
-	// 	const wrapper = getWrapper({
-	// 		date: new Date().toISOString(),
-	// 		ariaLabel: "aria label",
-	// 	});
+	describe("when picking a time through select", () => {
+		it("should emit event on input", async () => {
+			const wrapper = getWrapper({
+				time: "12:30",
+			});
 
-	// 	const textField = wrapper
-	// 		.findComponent({ name: "v-text-field" })
-	// 		.find("input");
-	// 	expect(textField.exists()).toBe(true);
-	// 	await textField.trigger("click");
+			const textField = wrapper.findComponent({ name: "v-text-field" });
+			const input = textField.find("input");
+			expect(input.exists()).toBe(true);
+			await input.trigger("click");
 
-	// 	const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
-	// 	expect(dateSelector.exists()).toBe(true);
-	// 	dateSelector.vm.$emit("input");
-	// 	await wrapper.vm.$nextTick();
+			const listItem = wrapper.findComponent({ name: "v-list-item" });
+			expect(listItem.exists()).toBe(true);
+			await listItem.trigger("click");
 
-	// 	expect(wrapper.emitted("input")).toHaveLength(1);
-	// });
+			expect(wrapper.emitted("input")).toHaveLength(1);
+		});
+	});
+
+	describe("validation", () => {
+		beforeEach(() => {
+			jest.useFakeTimers();
+		});
+
+		describe("when time is required", () => {
+			it("should emit error event on clear", async () => {
+				const wrapper = getWrapper({
+					time: "12:30",
+					required: true,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const clearBtn = textField.find(".v-icon");
+				expect(clearBtn.exists()).toBe(true);
+				await clearBtn.trigger("click");
+
+				expect(textField.emitted("input")).toHaveLength(1);
+				jest.advanceTimersByTime(1000);
+
+				expect(wrapper.emitted("error")).toHaveLength(1);
+			});
+
+			it("should emit error event on empty input", async () => {
+				const wrapper = getWrapper({
+					time: "12:30",
+					required: true,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("");
+
+				expect(textField.emitted("input")).toHaveLength(1);
+				jest.advanceTimersByTime(1000);
+
+				expect(wrapper.emitted("error")).toHaveLength(1);
+			});
+		});
+
+		describe("when time is not required and value is empty", () => {
+			it("should not emit error event", () => {
+				const wrapper = getWrapper({
+					time: "",
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("");
+
+				expect(textField.emitted("input")).toHaveLength(1);
+				jest.advanceTimersByTime(1000);
+
+				expect(wrapper.emitted("error")).toBe(undefined);
+			});
+		});
+
+		describe("when time does not fit format", () => {
+			it("should emit error event", async () => {
+				const wrapper = getWrapper({
+					time: "02:00",
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("25:65");
+
+				expect(textField.emitted("input")).toHaveLength(1);
+				jest.advanceTimersByTime(1000);
+				expect(wrapper.emitted("error")).toHaveLength(1);
+			});
+		});
+	});
 });

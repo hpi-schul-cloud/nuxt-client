@@ -22,6 +22,7 @@
 				:error="hasErrors"
 				v-bind="attrs"
 				v-on="on"
+				@input="onInput"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
 				@keydown.prevent.down="focusDatePicker"

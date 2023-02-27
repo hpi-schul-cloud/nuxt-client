@@ -19,7 +19,6 @@ describe("@components/date-time-picker/DatePicker", () => {
 	it("should render component", () => {
 		const wrapper = getWrapper({
 			date: new Date().toISOString(),
-			ariaLabel: "aria label",
 		});
 		expect(wrapper.findComponent(DatePicker).exists()).toBe(true);
 	});
@@ -55,8 +54,6 @@ describe("@components/date-time-picker/DatePicker", () => {
 			expect(clearBtn.exists()).toBe(true);
 			await clearBtn.trigger("click");
 
-			textField.vm.$emit("blur", { target: { value: "" } });
-			await wrapper.vm.$nextTick();
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
 	});
