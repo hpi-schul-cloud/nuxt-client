@@ -27,7 +27,7 @@ const useCardRequestPool = () => {
 
 	const debouncedFetchCards = useDebounceFn(
 		async () => {
-			const poolCopy = requestPool.splice(0, 9999999); // atomic operation needed
+			const poolCopy = requestPool.splice(0, 9999999); // atomic operation
 			const requestChunks = cutIntoChunks(poolCopy, MAX_CARDIDS_PER_REQUEST);
 			await fetchCardChunks(requestChunks);
 		},
