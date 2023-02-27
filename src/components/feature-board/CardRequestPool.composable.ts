@@ -48,7 +48,7 @@ const useCardRequestPool = () => {
 		for (const chunk of chunks) {
 			promises.push(fetchCards(chunk));
 		}
-		return Promise.all(promises); // TODO: test failed requests
+		return Promise.all(promises); // TODO: handle failed requests
 	};
 
 	const fetchCards = async (cardRequests: CardRequest[]) => {
