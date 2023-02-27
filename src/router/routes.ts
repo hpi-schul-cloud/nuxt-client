@@ -172,9 +172,9 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
-		path: `/task-cards/new/rooms/:id(${REGEX_ID})`,
+		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-card-new",
+		name: "task-card-new2",
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	// deprecated?
