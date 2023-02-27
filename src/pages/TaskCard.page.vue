@@ -31,7 +31,7 @@
 import { defineComponent, inject, ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule } from "@/store";
+import { taskCardModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
