@@ -19,7 +19,7 @@
 				dense
 				clearable
 				:error-messages="errors"
-				:error="errors.length > 0"
+				:error="hasErrors"
 				v-bind="attrs"
 				v-on="on"
 				@keydown.space="showDateDialog = true"
@@ -138,13 +138,18 @@ export default defineComponent({
 			selectedDate.value = "";
 		};
 
+		const hasErrors = computed(() => {
+			return errors.value.length > 0;
+		});
+
 		const resetErrors = () => {
 			errors.value = [];
 		};
 
 		watch(
 			() => props.date,
-			(newValue: string) => {
+			(newValue: string, prevValue: string) => {
+				console.log(prevValue, newValue);
 				selectedDate.value = newValue;
 			}
 		);
@@ -160,6 +165,7 @@ export default defineComponent({
 			focusDatePicker,
 			errors,
 			validate,
+			hasErrors,
 			resetErrors,
 			onMenuToggle,
 			clearDate,

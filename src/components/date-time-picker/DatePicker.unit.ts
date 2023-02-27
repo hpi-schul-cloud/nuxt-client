@@ -42,6 +42,8 @@ describe("@components/date-time-picker/DatePicker", () => {
 		dateSelector.vm.$emit("input");
 		await wrapper.vm.$nextTick();
 
+		console.log(wrapper.emitted("input"));
+
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 });

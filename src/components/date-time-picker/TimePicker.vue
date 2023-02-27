@@ -5,11 +5,13 @@
 		transition="scale-transition"
 		offset-y
 		min-width="85"
+		attach
 		@input="onMenuToggle"
 	>
 		<template #activator="{ on, attrs }">
 			<v-text-field
 				v-model="inputTime"
+				id="time-input"
 				data-testid="time-input"
 				placeholder="HH:MM"
 				filled
@@ -17,7 +19,7 @@
 				clearable
 				:label="label"
 				:aria-label="ariaLabel"
-				:errors="errors.length > 0"
+				:errors="hasErrors"
 				:error-messages="errors"
 				v-bind="attrs"
 				v-on="on"
@@ -29,16 +31,16 @@
 		</template>
 		<v-list height="200" class="col-12 pt-1 px-0">
 			<v-list-item-group v-model="selectedTime" color="primary">
-				<div
+				<v-list-item
 					v-for="(timeOfDay, index) in timesOfDayList"
 					:key="`time-select-${index}`"
 					:data-testid="`time-select-${index}`"
+					class="time-list-item"
+					@click="selectTime(timeOfDay)"
 				>
-					<v-list-item class="time-list-item" @click="selectTime(timeOfDay)">
-						<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
-					</v-list-item>
-					<v-divider v-if="index < timesOfDayList.length - 1" />
-				</div>
+					<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+				</v-list-item>
+				<v-divider v-if="index < timesOfDayList.length - 1" />
 			</v-list-item-group>
 		</v-list>
 	</v-menu>
@@ -130,6 +132,10 @@ export default defineComponent({
 			return true;
 		};
 
+		const hasErrors = computed(() => {
+			return errors.value.length > 0;
+		});
+
 		const resetErrors = () => {
 			errors.value = [];
 		};
@@ -151,6 +157,7 @@ export default defineComponent({
 			onMenuToggle,
 			validate,
 			errors,
+			hasErrors,
 			resetErrors,
 		};
 	},
