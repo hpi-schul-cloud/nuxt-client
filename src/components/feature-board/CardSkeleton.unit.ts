@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardSkeleton from "./CardSkeleton.vue";
 
@@ -8,7 +8,7 @@ describe("CardSkeleton", () => {
 
 	const setup = (props: object) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardSkeleton, {
+		wrapper = shallowMount(CardSkeleton as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
 		});
