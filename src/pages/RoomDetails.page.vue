@@ -251,7 +251,6 @@ export default defineComponent({
 							params: { course: this.roomData.roomId },
 						}).href,
 						dataTestid: "fab_button_add_beta_task",
-						ariaLabel: this.$t("pages.rooms.fab.add.betatask"),
 					});
 				}
 				return items;

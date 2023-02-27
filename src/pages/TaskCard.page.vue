@@ -12,7 +12,7 @@
 				item-text="title"
 				filled
 				:label="$t('common.labels.course')"
-			></v-select>
+			/>
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<card-element-list v-model="elements" />
 			<div>
