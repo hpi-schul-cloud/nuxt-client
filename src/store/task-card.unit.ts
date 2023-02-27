@@ -276,4 +276,14 @@ describe("task-card store", () => {
 			});
 		});
 	});
+
+	describe("mutations", () => {
+		it('should set setCourseId', () => {
+			const taskCardModule = new TaskCardModule({});
+			const courseId = "courseId_test";
+			taskCardModule.setCourseId(courseId);
+
+			expect(taskCardModule.taskCardData.courseId).toStrictEqual(courseId);
+		})
+	});
 });
