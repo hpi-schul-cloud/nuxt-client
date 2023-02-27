@@ -58,6 +58,7 @@ export default defineComponent({
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
 	},
+	emits: ["input", "error"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
