@@ -1,6 +1,6 @@
 <template>
-	<div class="mb-4">
-		<hr />
+	<div class="d-flex justify-center align-center mb-4">
+		<hr class="dashed-divider" />
 		<v-btn
 			icon
 			outlined
@@ -12,7 +12,7 @@
 		>
 			<v-icon>{{ mdiPlus }}</v-icon>
 		</v-btn>
-		<hr />
+		<hr class="dashed-divider" />
 	</div>
 </template>
 
@@ -37,13 +37,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 $btn-radius: 18;
 
-div {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-hr {
+.dashed-divider {
 	flex: 1;
 	border: 0;
 	border-bottom: dashed thin var(--v-grey-base);
