@@ -16,32 +16,27 @@ import { useApplicationError } from "@/composables/application-error.composable"
 export default defineComponent({
 	name: "ApplicationErrorRouting",
 	setup() {
-		const router = useRouter();
-
-		const { createApplicationError } = useApplicationError();
-
-		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-			"applicationErrorModule"
-		);
-
-		if (applicationErrorModule === undefined) {
-			throw createApplicationError(500);
-		}
-
-		const routeToErrorPage = () => {
-			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
-			if (router.currentRoute.path !== "/error") {
-				router.replace("/error");
-			}
-		};
-
-		watch(
-			() => applicationErrorModule.getStatusCode,
-			(to) => {
-				to !== null ? routeToErrorPage() : null;
-			},
-			{ immediate: true }
-		);
+		// const router = useRouter();
+		// const { createApplicationError } = useApplicationError();
+		// const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
+		// 	"applicationErrorModule"
+		// );
+		// if (applicationErrorModule === undefined) {
+		// 	throw createApplicationError(500);
+		// }
+		// const routeToErrorPage = () => {
+		// 	// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
+		// 	if (router.currentRoute.path !== "/error") {
+		// 		router.replace("/error");
+		// 	}
+		// };
+		// watch(
+		// 	() => applicationErrorModule.getStatusCode,
+		// 	(to) => {
+		// 		to !== null ? routeToErrorPage() : null;
+		// 	},
+		// 	{ immediate: true }
+		// );
 	},
 });
 </script>
