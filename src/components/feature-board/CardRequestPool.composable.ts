@@ -15,14 +15,11 @@ const WAIT_AFTER_LAST_CALL_IN_MS = 5;
 const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 
 const useCardRequestPool = () => {
-	console.log("pool init");
-
 	const cardsApi = CardsApiFactory(undefined, "/v3", $axios);
 	const requestPool: CardRequest[] = [];
 
 	const fetchCard = async (cardId: string): Promise<AnyCard> => {
 		return new Promise((resolve, reject) => {
-			console.log("added id");
 			requestPool.push({ id: cardId, resolve, reject });
 			debouncedFetchCards();
 		});
@@ -38,10 +35,10 @@ const useCardRequestPool = () => {
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
-	const cutIntoChunks = (array: any[], chunkSize: number) => {
+	const cutIntoChunks = <T>(data: T[], chunkSize: number): T[][] => {
 		const chunks = [];
-		for (let i = 0; i < array.length; i += chunkSize) {
-			chunks.push(array.slice(i, i + chunkSize));
+		for (let i = 0; i < data.length; i += chunkSize) {
+			chunks.push(data.slice(i, i + chunkSize));
 		}
 		return chunks;
 	};
