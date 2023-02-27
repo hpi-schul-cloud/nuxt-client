@@ -1,8 +1,7 @@
+import { createSharedComposable, useDebounceFn } from "@vueuse/core";
 import { CardsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { createSharedComposable } from "@vueuse/core";
 import { AnyCard } from "./types/Card";
-import { useDebounceFn } from "@vueuse/core";
 
 type CardRequest = {
 	id: string;
