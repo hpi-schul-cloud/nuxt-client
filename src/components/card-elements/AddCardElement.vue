@@ -45,7 +45,7 @@ div {
 
 hr {
 	flex: 1;
-	border: dashed thin var(--v-grey-base);
-	opacity: 0.5;
+	border: 0;
+	border-bottom: dashed thin var(--v-grey-base);
 }
 </style>
