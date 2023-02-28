@@ -202,13 +202,13 @@ export default defineComponent({
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
 			}
-			// TODO
-			//router.go(-1);
+
+			router.go(-1);
 		};
 
 		const cancel = () => {
