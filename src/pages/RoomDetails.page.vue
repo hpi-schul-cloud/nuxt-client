@@ -243,15 +243,16 @@ export default defineComponent({
 				}
 				if (envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED) {
 					const router = useRouter();
-					items.actions.push({
+					const action = {
 						label: this.$t("pages.rooms.fab.add.betatask"),
 						icon: mdiFormatListChecks,
 						href: router.resolve({
-							name: "task-card-new",
+							name: "rooms-task-card-new",
 							params: { course: this.roomData.roomId },
 						}).href,
 						dataTestid: "fab_button_add_beta_task",
-					});
+					};
+					items.actions.splice(1, 0, action);
 				}
 				return items;
 			}

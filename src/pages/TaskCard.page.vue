@@ -79,7 +79,7 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
 				const roomData = roomModule.getRoomData;
