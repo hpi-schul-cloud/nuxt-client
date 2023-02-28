@@ -174,7 +174,7 @@ export const routes: Array<RouteConfig> = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-card-new2",
+		name: "task-card-new",
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	// deprecated?
