@@ -113,9 +113,7 @@ let notifierModuleMock: NotifierModule;
 let shareCourseModuleMock: ShareCourseModule;
 let shareLessonModuleMock: ShareLessonModule;
 
-
-const $router = { push: jest.fn(), resolve: jest.fn() }
-
+const $router = { push: jest.fn(), resolve: jest.fn() };
 
 const getWrapper: any = () => {
 	return mount(Room, {
@@ -237,12 +235,12 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		);
 	});
 
-	describe('new task-card button', () => {
+	describe("new task-card button", () => {
 		const mockRoute = "/rooms/123/create-task-card";
 		beforeEach(() => {
 			// @ts-ignore
 			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true });
-			$router.resolve.mockReturnValue( { href: mockRoute})
+			$router.resolve.mockReturnValue({ href: mockRoute });
 		});
 		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
 			const wrapper = getWrapper();
@@ -260,10 +258,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		it("should have correct path", async () => {
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.find(".wireframe-fab");
-			const newTaskCardAction = fabComponent.vm.actions[2];
+			const newTaskCardAction = fabComponent.vm.actions[1];
 			expect(newTaskCardAction.href).toStrictEqual(mockRoute);
 		});
-	})
+	});
 
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
 		// @ts-ignore
