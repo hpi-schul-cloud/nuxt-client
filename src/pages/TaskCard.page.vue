@@ -62,12 +62,14 @@ export default defineComponent({
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
-		const breadcrumbs = [
+		const breadcrumbs = ref([
 			{
-				text: i18n.t("common.words.tasks"),
-				to: "/tasks",
+				text: i18n.t("pages.courses.index.title"),
+				to: router.resolve({
+					name: "rooms-overview",
+				}).href,
 			},
-		];
+		]);
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
@@ -93,7 +95,15 @@ export default defineComponent({
 				const taskCardData = taskCardModule.getTaskCardData;
 				taskCardModule.setCourseId(course.value);
 				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: roomData.title,
+					to: router.resolve({
+						name: "rooms-id",
+					}).href,
+				});
 			}
+
 			if (route.name === "task-card-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
