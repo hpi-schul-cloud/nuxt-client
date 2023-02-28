@@ -247,7 +247,7 @@ export default defineComponent({
 						label: this.$t("pages.rooms.fab.add.betatask"),
 						icon: mdiFormatListChecks,
 						href: router.resolve({
-							name: "task-card-new",
+							name: "task-card-new2",
 							params: { course: this.roomData.roomId },
 						}).href,
 						dataTestid: "fab_button_add_beta_task",

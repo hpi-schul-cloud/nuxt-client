@@ -79,7 +79,7 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "task-card-new2") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
 				const roomData = roomModule.getRoomData;
@@ -201,7 +201,7 @@ export default defineComponent({
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "task-card-new2") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
