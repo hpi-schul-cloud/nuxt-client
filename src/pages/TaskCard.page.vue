@@ -11,6 +11,7 @@
 				item-value="id"
 				item-text="title"
 				filled
+				disabled
 				:label="$t('common.labels.course')"
 			/>
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
