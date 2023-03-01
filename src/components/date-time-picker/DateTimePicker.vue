@@ -56,6 +56,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -109,8 +110,10 @@ export default defineComponent({
 
 				date.value = selectedDateTime.value.toISOString();
 			}
+		});
 
-			if (newDate !== "" && newTime !== "") {
+		watch(selectedDateTime, (newDate, prevDate) => {
+			if (newDate !== prevDate) {
 				emit("input", selectedDateTime.value.toISOString());
 			}
 		});

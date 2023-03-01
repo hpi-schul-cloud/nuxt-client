@@ -60,6 +60,7 @@ export default defineComponent({
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
 	},
+	emits: ["input", "error"],
 	setup(props, { emit }) {
 		const timesOfDayList = computed(() => {
 			const times = [];
