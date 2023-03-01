@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { BoardColumn } from "./types/Board";
@@ -20,7 +20,7 @@ describe("BoardColumn", () => {
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(BoardColumnVue, {
+		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: { column: MOCK_PROP },
 		});

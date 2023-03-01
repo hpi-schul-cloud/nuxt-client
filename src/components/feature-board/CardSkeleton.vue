@@ -1,16 +1,14 @@
 <template>
-	<VCard :height="height" class="w-100">
-		<div
-			class="d-flex justify-center align-center"
-			:style="{ 'min-height': height + 'px' }"
-		>
-			<VProgressCircular
-				color="primary"
-				indeterminate
-				:size="36"
-			></VProgressCircular>
-		</div>
-	</VCard>
+	<div
+		class="d-flex justify-center align-center"
+		:style="{ 'min-height': height + 'px' }"
+	>
+		<VProgressCircular
+			color="primary"
+			indeterminate
+			:size="36"
+		></VProgressCircular>
+	</div>
 </template>
 
 <script lang="ts">
