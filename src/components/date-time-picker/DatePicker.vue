@@ -4,7 +4,7 @@
 			v-model="showDateDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
-			offset-y
+			nudge-bottom="70"
 			min-width="auto"
 			@input="onMenuToggle"
 		>
