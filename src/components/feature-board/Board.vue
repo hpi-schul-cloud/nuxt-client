@@ -66,16 +66,14 @@ export default defineComponent({
 		});
 
 		const onColumnDrop = (columnPayload: ColumnDndPayload): void => {
-			console.log("column-drop", columnPayload);
 			changeColumnPosition(columnPayload);
 		};
 
-		const updatePosition = (payload: CardDndPayload): void => {
-			console.log("updatePosition", payload);
-			Object.assign(dndCardPayload, { ...payload });
+		const updatePosition = (cardPayload: CardDndPayload): void => {
+			Object.assign(dndCardPayload, { ...cardPayload });
 		};
-		const updatePositionByKeyboard = (payload: CardDndPayload) => {
-			changeCardPosition(payload);
+		const updatePositionByKeyboard = (cardPayload: CardDndPayload) => {
+			changeCardPosition(cardPayload);
 		};
 
 		const getChildPayload = (index: number): string => {

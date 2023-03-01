@@ -43,13 +43,12 @@ export const useBoardState = (id: string) => {
 		// await new Promise((r) => {
 		// 	setTimeout(r, 1000);
 		// });
-
 		// const boardsApi = BoardsApiFactory(undefined, "/v3", $axios);
 		// board.value = {
 		// 	...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
 		// 	id,
 		// };
-		board.value = dummyBoard;
+		// board.value = dummyBoard;
 	};
 
 	const changeColumnPosition = (payload: ColumnDndPayload) => {

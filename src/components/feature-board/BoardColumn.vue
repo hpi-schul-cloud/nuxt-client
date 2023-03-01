@@ -78,7 +78,7 @@ export default defineComponent({
 
 		const cardHostRefs = ref<{ id: string }[]>();
 
-		const moveByKeyboard = (card: BoardSkeletonCard, payload: string) => {
+		const moveByKeyboard = (card: BoardSkeletonCard, keyString: string) => {
 			const cardIndex = findCardPosition(card.cardId);
 			const dndObject = {
 				cardId: card.cardId,
@@ -88,14 +88,14 @@ export default defineComponent({
 				targetColumnPosition: -1,
 			};
 
-			if (["ArrowUp", "ArrowDown"].includes(payload)) {
+			if (["ArrowUp", "ArrowDown"].includes(keyString)) {
 				dndObject.targetColumnIndex = props.index;
 				dndObject.targetColumnPosition =
-					payload === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
+					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
-			if (["ArrowLeft", "ArrowRight"].includes(payload)) {
+			if (["ArrowLeft", "ArrowRight"].includes(keyString)) {
 				dndObject.targetColumnIndex =
-					payload === "ArrowLeft" ? props.index - 1 : props.index + 1;
+					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
 				dndObject.targetColumnPosition = 0;
 			}
 
