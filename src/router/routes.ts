@@ -151,6 +151,12 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-board",
 	},
 	{
+		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
+		component: () => import("../pages/TaskCard.page.vue"),
+		name: "rooms-task-card-new",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
+	},
+	{
 		path: "/rooms-list",
 		component: () => import("../pages/RoomList.page.vue"),
 		name: "rooms-list",
@@ -171,12 +177,7 @@ export const routes: Array<RouteConfig> = [
 		name: "task-card-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
-	{
-		path: "/task-cards/new",
-		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-card-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
-	},
+
 	// deprecated?
 	{
 		path: "/termsofuse",
