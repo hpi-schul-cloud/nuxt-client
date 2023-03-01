@@ -117,6 +117,16 @@ export default defineComponent({
 					},
 				];
 				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: taskCardData.courseName || "",
+					to: router.resolve({
+						name: "rooms-id",
+						params: {
+							id: taskCardData.courseId || "",
+						},
+					}).href,
+				});
 			}
 		});
 
