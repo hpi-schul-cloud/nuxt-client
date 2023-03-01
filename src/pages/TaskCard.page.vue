@@ -5,6 +5,15 @@
 		headline="Task Card"
 	>
 		<v-form class="d-flex flex-column">
+			<v-select
+				v-model="course"
+				:items="courses"
+				item-value="id"
+				item-text="title"
+				filled
+				disabled
+				:label="$t('common.labels.course')"
+			/>
 			<date-time-picker
 				class="mb-4"
 				required
@@ -31,7 +40,7 @@
 import { defineComponent, inject, ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, schoolsModule } from "@/store";
+import { taskCardModule, roomModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -40,6 +49,7 @@ import {
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
 import {
+	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
@@ -70,13 +80,17 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const breadcrumbs = [
+		const breadcrumbs = ref([
 			{
-				text: i18n.t("common.words.tasks"),
-				to: "/tasks",
+				text: i18n.t("pages.courses.index.title"),
+				to: router.resolve({
+					name: "rooms-overview",
+				}).href,
 			},
-		];
+		]);
 
+		const course = ref("");
+		const courses = ref<object[]>([]);
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -87,17 +101,58 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			const taskCardId =
-				route.name === "task-card-edit" ? route.params.id : undefined;
+			if (route.name === "rooms-task-card-new") {
+				course.value = route.params.id || "";
+				await roomModule.fetchContent(course.value);
+				const roomData = roomModule.getRoomData;
+				courses.value = [
+					{
+						id: roomData.roomId,
+						title: roomData.title,
+					},
+				];
+				const taskCardData = taskCardModule.getTaskCardData;
+				taskCardModule.setCourseId(course.value);
+				initElements(taskCardData.cardElements);
 
-			if (taskCardId) {
-				await taskCardModule.findTaskCard(taskCardId);
+				breadcrumbs.value.push({
+					text: roomData.title,
+					to: router.resolve({
+						name: "rooms-id",
+					}).href,
+				});
 			}
 
-			const taskCardData = taskCardModule.getTaskCardData;
-			dueDate.value =
-				taskCardData.dueDate || schoolsModule.getCurrentYear.endDate;
-			taskCardData.cardElements.forEach((cardElement) => {
+			if (route.name === "task-card-edit") {
+				const taskCardId = route.params.id;
+				await taskCardModule.findTaskCard(taskCardId);
+
+				const taskCardData = taskCardModule.getTaskCardData;
+				dueDate.value =
+					taskCardData.dueDate || schoolsModule.getCurrentYear.endDate;
+				course.value = taskCardData.courseId || "";
+				courses.value = [
+					{
+						id: taskCardData.courseId || "",
+						title: taskCardData.courseName || "",
+					},
+				];
+				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: taskCardData.courseName || "",
+					to: router.resolve({
+						name: "rooms-id",
+						params: {
+							id: taskCardData.courseId || "",
+						},
+					}).href,
+				});
+			}
+		});
+
+		const initElements = (cardElements: Array<CardElementResponse>) => {
+			cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
@@ -130,7 +185,7 @@ export default defineComponent({
 					},
 				});
 			});
-		});
+		};
 
 		const createTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
@@ -153,6 +208,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.createTaskCard({
+				courseId: course.value,
 				cardElements: cardElements,
 				dueDate: dueDate.value,
 			});
@@ -183,18 +239,19 @@ export default defineComponent({
 
 			taskCardModule.updateTaskCard({
 				dueDate: dueDate.value,
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
 			}
-			// TODO
-			//router.go(-1);
+
+			router.go(-1);
 		};
 
 		const cancel = () => {
@@ -214,6 +271,8 @@ export default defineComponent({
 			cancel,
 			t,
 			handleDateTimeInput,
+			course,
+			courses,
 		};
 	},
 	mounted() {
