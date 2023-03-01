@@ -1,5 +1,9 @@
 <template>
-	<div class="d-flex mb-6">
+	<div
+		class="d-flex mb-6"
+		tabindex="0"
+		@keydown.up.down.left.right.space.prevent="onKeyStroke"
+	>
 		<VCard :height="height" class="w-100">
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
@@ -40,13 +44,18 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
 	},
-	setup(props) {
+	setup(props, ctx) {
 		const { isLoading, card } = useCardState(props.id);
+
+		const onKeyStroke = (key: KeyboardEvent) => {
+			ctx.emit("move-card-keyboard", key.code);
+		};
 
 		return {
 			isLoading,
 			card,
 			BoardCardType,
+			onKeyStroke,
 		};
 	},
 });
