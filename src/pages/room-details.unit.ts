@@ -6,6 +6,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareCourseModule from "@/store/share-course";
+import ShareLessonModule from "@/store/share-lesson";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -110,8 +111,10 @@ let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareCourseModuleMock: ShareCourseModule;
+let shareLessonModuleMock: ShareLessonModule;
 
-const $router = { push: jest.fn() };
+const $router = { push: jest.fn(), resolve: jest.fn() };
+
 const getWrapper: any = () => {
 	return mount(Room, {
 		...createComponentMocks({}),
@@ -128,6 +131,7 @@ const getWrapper: any = () => {
 			provide("notifierModule", notifierModuleMock);
 			provide("i18n", { t: (key: string) => key });
 			provide("shareCourseModule", shareCourseModuleMock);
+			provide("shareLessonModule", shareLessonModuleMock);
 		},
 	});
 };
@@ -155,6 +159,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
 			getIsShareModalOpen: true,
 			startShareFlow: jest.fn(),
+		});
+		shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
+			getIsShareModalOpen: true,
 		});
 
 		initializeAxios({
@@ -226,6 +233,34 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(newTaskAction.href).toStrictEqual(
 			"/courses/123/topics/add?returnUrl=rooms/123"
 		);
+	});
+
+	describe("new task-card button", () => {
+		const mockRoute = "/rooms/123/create-task-card";
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true });
+			$router.resolve.mockReturnValue({ href: mockRoute });
+		});
+		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.actions.length).toBe(3);
+		});
+		it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false });
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.actions.length).toBe(2);
+		});
+
+		it("should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			const newTaskCardAction = fabComponent.vm.actions[1];
+			expect(newTaskCardAction.href).toStrictEqual(mockRoute);
+		});
 	});
 
 	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {

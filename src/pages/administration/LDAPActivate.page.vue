@@ -229,7 +229,10 @@ export default {
 			status: "getStatus",
 		}),
 		showUserMigrationOption() {
-			return envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED;
+			return (
+				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
+				!this.$route?.query?.id
+			);
 		},
 		schoolErrors() {
 			return schoolsModule.error;
@@ -259,8 +262,9 @@ export default {
 			const temporaryConfigData = { ...this.temp };
 
 			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
-				delete temporaryConfigData.searchUserPassword;
+				temporaryConfigData.searchUserPassword = undefined;
 			}
+
 			if (this.migrateUsersCheckbox) {
 				await schoolsModule.setSchoolInUserMigration(false);
 				if (this.schoolErrors) {

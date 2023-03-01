@@ -66,10 +66,6 @@ export default defineComponent({
 				icon: "thr",
 				url: i18n.tc("pages.loginInstances.thr_link"),
 			},
-			{
-				icon: "HPI-Int",
-				url: i18n.tc("pages.loginInstances.hpi_int_link"),
-			},
 		]);
 
 		return {

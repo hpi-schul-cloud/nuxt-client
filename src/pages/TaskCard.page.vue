@@ -5,31 +5,17 @@
 		headline="Task Card"
 	>
 		<v-form class="d-flex flex-column">
+			<v-select
+				v-model="course"
+				:items="courses"
+				item-value="id"
+				item-text="title"
+				filled
+				disabled
+				:label="$t('common.labels.course')"
+			/>
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<draggable
-				v-model="elements"
-				:animation="400"
-				:delay="touchDelay"
-				handle=".handle"
-				ghost-class="ghost"
-				chosen-class="chosen"
-				drag-class="drag"
-				force-fallback="true"
-				@start="startDragging"
-				@end="endDragging"
-			>
-				<card-element-wrapper
-					v-for="(element, index) in elements"
-					:key="index"
-					v-model="element.model"
-					v-bind="element.props"
-					:disabled="dragInProgress"
-					@delete-element="deleteElement(index)"
-				/>
-			</draggable>
-			<v-btn fab color="primary" class="align-self-center" @click="addElement">
-				<v-icon>{{ mdiPlus }}</v-icon>
-			</v-btn>
+			<card-element-list v-model="elements" />
 			<div>
 				<v-btn color="secondary" outlined @click="cancel">
 					{{ $t("common.actions.cancel") }}
@@ -43,20 +29,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onBeforeMount, onMounted } from "vue";
+import { defineComponent, inject, ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, authModule } from "@/store";
-import { useDrag } from "@/composables/drag";
+import { taskCardModule, roomModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CardElementWrapper from "@/components/card-elements/CardElement.vue";
+import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
+import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
-import { mdiPlus } from "@mdi/js";
-import draggable from "vuedraggable";
+import {
+	CardElementResponse,
+	CardElementResponseCardElementTypeEnum,
+	RichTextCardElementParamInputFormatEnum,
+	CardElementParams,
+} from "@/serverApi/v3";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -64,31 +53,26 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		CardElementWrapper,
-		draggable,
+		CardElementList,
 	},
 	setup() {
 		const router = useRouter();
-
-		// TODO - FIX THIS, can this be a navigation guard?
-		onBeforeMount(() => {
-			if (
-				!authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
-			) {
-				router.go(-1);
-			}
-		});
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
-		const breadcrumbs = [
+		const breadcrumbs = ref([
 			{
-				text: i18n.t("common.words.tasks"),
-				to: "/tasks",
+				text: i18n.t("pages.courses.index.title"),
+				to: router.resolve({
+					name: "rooms-overview",
+				}).href,
 			},
-		];
+		]);
 
+		const course = ref("");
+		const courses = ref<object[]>([]);
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -98,13 +82,56 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			const taskCardId =
-				route.name === "task-card-edit" ? route.params.id : undefined;
-			if (taskCardId) {
-				await taskCardModule.findTaskCard(taskCardId);
+			if (route.name === "rooms-task-card-new") {
+				course.value = route.params.id || "";
+				await roomModule.fetchContent(course.value);
+				const roomData = roomModule.getRoomData;
+				courses.value = [
+					{
+						id: roomData.roomId,
+						title: roomData.title,
+					},
+				];
+				const taskCardData = taskCardModule.getTaskCardData;
+				taskCardModule.setCourseId(course.value);
+				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: roomData.title,
+					to: router.resolve({
+						name: "rooms-id",
+					}).href,
+				});
 			}
-			const taskCardData = taskCardModule.getTaskCardData;
-			taskCardData.cardElements.forEach((cardElement) => {
+
+			if (route.name === "task-card-edit") {
+				const taskCardId = route.params.id;
+				await taskCardModule.findTaskCard(taskCardId);
+
+				const taskCardData = taskCardModule.getTaskCardData;
+				course.value = taskCardData.courseId || "";
+				courses.value = [
+					{
+						id: taskCardData.courseId || "",
+						title: taskCardData.courseName || "",
+					},
+				];
+				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: taskCardData.courseName || "",
+					to: router.resolve({
+						name: "rooms-id",
+						params: {
+							id: taskCardData.courseId || "",
+						},
+					}).href,
+				});
+			}
+		});
+
+		const initElements = (cardElements: Array<CardElementResponse>) => {
+			cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
@@ -115,7 +142,9 @@ export default defineComponent({
 						model: cardElement.content.value,
 						props: {
 							component: CardElementComponentEnum.Title,
-							placeholder: i18n.t("common.labels.title"),
+							placeholder: i18n.t(
+								"components.cardElement.titleElement.placeholder"
+							) as string,
 							editable: true,
 						},
 					};
@@ -128,32 +157,17 @@ export default defineComponent({
 					model: cardElement.content.value,
 					props: {
 						component: CardElementComponentEnum.RichText,
-						placeholder: i18n.t("common.labels.description"),
+						placeholder: i18n.t(
+							"components.cardElement.richTextElement.placeholder"
+						) as string,
 						editable: true,
 					},
 				});
 			});
-		});
-
-		const addElement = () => {
-			elements.value.push({
-				id: "",
-				type: CardElementResponseCardElementTypeEnum.RichText,
-				model: "",
-				props: {
-					component: CardElementComponentEnum.RichText,
-					placeholder: i18n.t("common.labels.description"),
-					editable: true,
-				},
-			});
-		};
-
-		const deleteElement = (index: number) => {
-			elements.value.splice(index, 1);
 		};
 
 		const createTaskCard = () => {
-			const cardElements = [];
+			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				content: {
 					type: title.value.type,
@@ -166,19 +180,20 @@ export default defineComponent({
 						content: {
 							type: element.type,
 							value: element.model,
-							inputFormat: "richtext_ck5",
+							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
 						},
 					});
 				}
 			});
 
 			taskCardModule.createTaskCard({
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
 		const updateTaskCard = () => {
-			const cardElements = [];
+			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				id: title.value.id,
 				content: {
@@ -187,53 +202,47 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				if (element.model && element.model.length > 2) {
-					cardElements.push({
-						...(element.id && { id: element.id }),
-						content: {
-							type: element.type,
-							value: element.model,
-							inputFormat: "richtext_ck5",
-						},
-					});
+				const cardElement: CardElementParams = {
+					content: {
+						type: element.type,
+						value: element.model,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+					},
+				};
+				if (element.id) {
+					cardElement.id = element.id;
 				}
+				cardElements.push(cardElement);
 			});
 
 			taskCardModule.updateTaskCard({
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
 			}
-			// TODO
-			//router.go(-1);
+
+			router.go(-1);
 		};
 
 		const cancel = () => {
 			router.go(-1);
 		};
 
-		const { touchDelay, startDragging, endDragging, dragInProgress } =
-			useDrag();
-
 		return {
-			mdiPlus,
 			breadcrumbs,
 			title,
 			elements,
 			save,
 			cancel,
-			addElement,
-			deleteElement,
-			touchDelay,
-			startDragging,
-			endDragging,
-			dragInProgress,
+			course,
+			courses,
 		};
 	},
 	mounted() {
@@ -241,16 +250,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.chosen,
-.drag {
-	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-		0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
-	opacity: 1 !important;
-}
-
-.ghost {
-	opacity: 0 !important;
-}
-</style>

@@ -41,6 +41,15 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
+		path: "/administration/school-settings/tool",
+		component: () =>
+			import(
+				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
+			),
+		name: "administration-tool-config-overview",
+		beforeEnter: createPermissionGuard(["school_tool_admin"]),
+	},
+	{
 		path: "/administration/students",
 		component: () => import("../pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
@@ -137,6 +146,17 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-id",
 	},
 	{
+		path: `/rooms/:id(${REGEX_ID})/board`,
+		component: () => import("../components/feature-board/Board.vue"),
+		name: "rooms-board",
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
+		component: () => import("../pages/TaskCard.page.vue"),
+		name: "rooms-task-card-new",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
+	},
+	{
 		path: "/rooms-list",
 		component: () => import("../pages/RoomList.page.vue"),
 		name: "rooms-list",
@@ -154,13 +174,10 @@ export const routes: Array<RouteConfig> = [
 	{
 		path: `/task-cards/:id(${REGEX_ID})/edit`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-edit",
+		name: "task-card-edit",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
-	{
-		path: "/task-cards/new",
-		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-new",
-	},
+
 	// deprecated?
 	{
 		path: "/termsofuse",

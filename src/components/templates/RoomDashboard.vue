@@ -115,6 +115,7 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
+		<share-modal type="lesson"></share-modal>
 		<vCustomDialog
 			ref="customDialog"
 			:is-open="lessonShare.isOpen"
@@ -168,7 +169,7 @@ import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
-import { copyModule, roomModule, tasksModule } from "@/store";
+import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import topicsEmptyStateImage from "@/assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
@@ -176,6 +177,7 @@ import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
+import ShareModal from "@/components/share/ShareModal.vue";
 
 export default {
 	components: {
@@ -184,6 +186,7 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
+		ShareModal,
 	},
 	props: {
 		roomDataObject: {
@@ -193,6 +196,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
+	inject: ["shareLessonModule"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
@@ -283,15 +287,17 @@ export default {
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			await roomModule.fetchSharedLesson(lessonId);
-			const sharedLesson = roomModule.getSharedLessonData;
-
-			this.lessonShare.token = sharedLesson.code;
-			this.lessonShare.lessonName = sharedLesson.lessonName;
-			this.lessonShare.status = sharedLesson.status;
-			this.lessonShare.messageTranslationKey = sharedLesson.message;
-
-			this.lessonShare.isOpen = true;
+			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW) {
+				this.shareLessonModule.startShareFlow(lessonId);
+			} else if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				await roomModule.fetchSharedLesson(lessonId);
+				const sharedLesson = roomModule.getSharedLessonData;
+				this.lessonShare.token = sharedLesson.code;
+				this.lessonShare.lessonName = sharedLesson.lessonName;
+				this.lessonShare.status = sharedLesson.status;
+				this.lessonShare.messageTranslationKey = sharedLesson.message;
+				this.lessonShare.isOpen = true;
+			}
 		},
 		endDragging() {
 			setTimeout(() => {

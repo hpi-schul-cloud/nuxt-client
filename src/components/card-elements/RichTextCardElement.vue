@@ -9,6 +9,8 @@
 			:disabled="disabled"
 			mode="regular"
 			@input="handleInput"
+			@focus="handleFocus"
+			@blur="handleBlur"
 		/>
 	</div>
 </template>
@@ -49,10 +51,14 @@ export default defineComponent({
 		);
 
 		const handleInput = () => emit("input", content.value);
+		const handleFocus = () => emit("focus");
+		const handleBlur = () => emit("blur");
 
 		return {
 			content,
 			handleInput,
+			handleFocus,
+			handleBlur,
 		};
 	},
 });
