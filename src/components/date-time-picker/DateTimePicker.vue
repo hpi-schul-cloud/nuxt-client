@@ -18,7 +18,7 @@
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
 			@input="handleTimeInput"
-			@error="hasErrors = true"
+			@error="onError"
 		/>
 	</div>
 </template>
@@ -53,7 +53,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["input"],
+	emits: ["input", "error"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -73,6 +73,7 @@ export default defineComponent({
 		const selectedDateTime = ref(new Date(initDate));
 		const date = ref("");
 		const time = ref("");
+		const hasErrors = ref(false);
 
 		watch(
 			() => props.dateTime,
@@ -123,10 +124,14 @@ export default defineComponent({
 			time.value = selectedTime;
 		};
 
-		const hasErrors = ref(false);
 		const iconColor = computed(() => {
 			return hasErrors.value === true ? "error" : "";
 		});
+
+		const onError = () => {
+			hasErrors.value = true;
+			emit("error");
+		};
 
 		return {
 			mdiCalendarClock,
@@ -137,6 +142,7 @@ export default defineComponent({
 			handleTimeInput,
 			iconColor,
 			hasErrors,
+			onError,
 		};
 	},
 });

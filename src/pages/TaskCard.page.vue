@@ -21,6 +21,7 @@
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
+				@error="onError"
 			/>
 			<card-element-wrapper v-model="title.model" v-bind="title.props" />
 			<card-element-list v-model="elements" />
@@ -245,6 +246,9 @@ export default defineComponent({
 		};
 
 		const save = () => {
+			if (hasErrors.value) {
+				return;
+			}
 			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
@@ -252,6 +256,11 @@ export default defineComponent({
 			}
 
 			router.go(-1);
+		};
+
+		const hasErrors = ref(false);
+		const onError = () => {
+			hasErrors.value = true;
 		};
 
 		const cancel = () => {
@@ -273,6 +282,7 @@ export default defineComponent({
 			handleDateTimeInput,
 			course,
 			courses,
+			onError,
 		};
 	},
 	mounted() {
