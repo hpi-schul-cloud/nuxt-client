@@ -1,11 +1,22 @@
 <template>
 	<div class="d-flex mb-6">
-		<template v-if="isLoading">
-			<CardSkeleton :height="height"></CardSkeleton>
-		</template>
-		<template v-if="!isLoading && card">
-			{{ card.id }}
-		</template>
+		<VCard :height="height" class="w-100">
+			<template v-if="isLoading">
+				<CardSkeleton :height="height" />
+			</template>
+			<template v-if="!isLoading && card">
+				<VCardTitle>{{ card.title }}</VCardTitle>
+				<CardLegacyTaskReference
+					v-if="card.cardType === BoardCardType.LegacyTask"
+					:card="card"
+				/>
+				<CardLegacyLessonReference
+					v-else-if="card.cardType === BoardCardType.LegacyLesson"
+					:card="card"
+				/>
+				<div v-else>Unknown card-type</div>
+			</template>
+		</VCard>
 	</div>
 </template>
 
@@ -13,10 +24,18 @@
 import { defineComponent } from "vue";
 import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
+import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
+import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
+import { BoardCardType } from "./types/Card";
 
+// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "CardHost",
-	components: { CardSkeleton },
+	components: {
+		CardSkeleton,
+		CardLegacyTaskReference,
+		CardLegacyLessonReference,
+	},
 	props: {
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
@@ -27,6 +46,7 @@ export default defineComponent({
 		return {
 			isLoading,
 			card,
+			BoardCardType,
 		};
 	},
 });

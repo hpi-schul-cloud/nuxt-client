@@ -364,7 +364,7 @@ export interface CardResponse {
      * @type {string}
      * @memberof CardResponse
      */
-    cardType: string;
+    cardType: CardResponseCardTypeEnum;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -372,6 +372,18 @@ export interface CardResponse {
      */
     visibilitySettings: VisibilitySettingsResponse;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CardResponseCardTypeEnum {
+    Task = 'task',
+    Content = 'content',
+    LegacyTask = 'legacy-task',
+    LegacyLesson = 'legacy-lesson'
+}
+
 /**
  * 
  * @export
@@ -5041,10 +5053,13 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardsControllerGetCards: async (options: any = {}): Promise<RequestArgs> => {
+        cardsControllerGetCards: async (ids: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ids' is not null or undefined
+            assertParamExists('cardsControllerGetCards', 'ids', ids)
             const localVarPath = `/cards`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5060,6 +5075,10 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (ids) {
+                localVarQueryParameter['ids'] = ids;
+            }
 
 
     
@@ -5240,11 +5259,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardsControllerGetCards(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardsControllerGetCards(options);
+        async cardsControllerGetCards(ids: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardsControllerGetCards(ids, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5300,11 +5320,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardsControllerGetCards(options?: any): AxiosPromise<CardListResponse> {
-            return localVarFp.cardsControllerGetCards(options).then((request) => request(axios, basePath));
+        cardsControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse> {
+            return localVarFp.cardsControllerGetCards(ids, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5354,11 +5375,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
 export interface CardsApiInterface {
     /**
      * 
+     * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApiInterface
      */
-    cardsControllerGetCards(options?: any): AxiosPromise<CardListResponse>;
+    cardsControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
 
     /**
      * 
@@ -5408,12 +5430,13 @@ export interface CardsApiInterface {
 export class CardsApi extends BaseAPI implements CardsApiInterface {
     /**
      * 
+     * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public cardsControllerGetCards(options?: any) {
-        return CardsApiFp(this.configuration).cardsControllerGetCards(options).then((request) => request(this.axios, this.basePath));
+    public cardsControllerGetCards(ids: Array<string>, options?: any) {
+        return CardsApiFp(this.configuration).cardsControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
