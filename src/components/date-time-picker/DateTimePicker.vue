@@ -110,10 +110,8 @@ export default defineComponent({
 
 				date.value = selectedDateTime.value.toISOString();
 			}
-		});
 
-		watch(selectedDateTime, (newDate, prevDate) => {
-			if (newDate !== prevDate) {
+			if (newDate !== "" && newTime !== "") {
 				emit("input", selectedDateTime.value.toISOString());
 			}
 		});

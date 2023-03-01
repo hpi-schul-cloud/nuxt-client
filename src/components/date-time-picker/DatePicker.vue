@@ -59,7 +59,6 @@ export default defineComponent({
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
 	},
-	emits: ["input", "error"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -122,7 +121,7 @@ export default defineComponent({
 			}
 
 			if (dateValue === "") {
-				errors.value.push(t("common.validation.required"));
+				errors.value.push("required");
 				emit("error");
 				return false;
 			}
