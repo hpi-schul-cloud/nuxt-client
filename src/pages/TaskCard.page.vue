@@ -263,8 +263,7 @@ export default defineComponent({
 		const getUserPermissions = ref(authModule.getUserPermissions);
 
 		const isEditMode = computed(() => {
-			if (getUserPermissions.value.includes("task_card_edit")) return true;
-			return false;
+			return getUserPermissions.value.includes("task_card_edit");
 		});
 
 		return {
