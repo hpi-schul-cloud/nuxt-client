@@ -25,6 +25,36 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
 		});
 
+		it("delete element button for title should not be present", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.Title,
+				editMode: false,
+			});
+			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
+
+			expect(deleteBtn.exists()).toBe(false);
+		});
+
+		it("add element button for title should not be present", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.Title,
+				editMode: false,
+			});
+			const addBtn = wrapper.find('[data-testid="add-element-btn"]');
+
+			expect(addBtn.exists()).toBe(false);
+		});
+
+		it("should not render drag handle for title", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.Title,
+				editMode: true,
+			});
+			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
+
+			expect(dragBtn.isVisible()).toBe(false);
+		});
+
 		it("should emit delete-element event for rich text", async () => {
 			const wrapper = getWrapper({
 				component: CardElementComponentEnum.RichText,

@@ -31,14 +31,14 @@
 				</v-btn>
 			</div>
 		</v-form>
-		<v-form v-else class="d-flex flex-column">
+		<article v-else class="d-flex flex-column">
 			<card-element-wrapper
 				v-model="title.model"
 				v-bind="title.props"
 				:editMode="false"
 			/>
 			<card-element-list v-model="elements" :editMode="false" />
-		</v-form>
+		</article>
 	</default-wireframe>
 </template>
 

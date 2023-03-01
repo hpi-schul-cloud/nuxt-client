@@ -29,7 +29,9 @@ const getWrapper = (
 	const componentOptions = createComponentMocks({ i18n: true });
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
-	const router = new VueRouter({ routes: [{ path: "task-card-view-edit" }] });
+	const router = new VueRouter({
+		routes: [{ name: "task-card-view-edit", path: "/task-cards" }],
+	});
 
 	return mount(TaskCard, {
 		...componentOptions,
