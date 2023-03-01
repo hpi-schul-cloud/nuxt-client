@@ -2,7 +2,11 @@ import { BoardsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { onMounted, ref, reactive } from "vue";
 import { Board } from "./types/Board";
-import { ColumnDndPayload, CardDndPayload } from "./types/DragAndDrop";
+import {
+	ColumnDndPayload,
+	CardDndPayload,
+	CardMovePayload,
+} from "./types/DragAndDrop";
 
 export const useBoardState = (id: string) => {
 	const dummyBoard = reactive({
@@ -57,28 +61,23 @@ export const useBoardState = (id: string) => {
 		dummyBoard.columns.splice(payload.addedIndex, 0, element);
 	};
 
-	const changeCardPosition = (payload: CardDndPayload): void => {
-		if (
-			payload.targetColumnIndex === -1 ||
-			(board.value?.columns.length &&
-				payload.targetColumnIndex + 1 > board.value?.columns.length)
-		) {
-			return;
+	const changePosition = (
+		columnIndex: number,
+		cardPayload: CardMovePayload
+	): void => {
+		if (cardPayload.removedIndex !== null) {
+			dummyBoard.columns[columnIndex].cards.splice(cardPayload.removedIndex, 1);
 		}
 
-		const element = dummyBoard.columns[payload.columnIndex].cards.filter(
-			(card) => card.cardId === payload.cardId
-		)[0];
+		if (cardPayload.addedIndex !== null) {
+			const card = cardPayload.payload;
 
-		dummyBoard.columns[payload.columnIndex].cards.splice(
-			payload.cardPosition,
-			1
-		);
-		dummyBoard.columns[payload.targetColumnIndex].cards.splice(
-			payload.targetColumnPosition,
-			0,
-			element
-		);
+			dummyBoard.columns[columnIndex].cards.splice(
+				cardPayload.addedIndex,
+				0,
+				card
+			);
+		}
 	};
 
 	const isLoading = ref<boolean>(false);
@@ -92,6 +91,6 @@ export const useBoardState = (id: string) => {
 		board: dummyBoard,
 		isLoading,
 		changeColumnPosition,
-		changeCardPosition,
+		changePosition,
 	};
 };

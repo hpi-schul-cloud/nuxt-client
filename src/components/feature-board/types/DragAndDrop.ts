@@ -31,12 +31,12 @@ export const keyStrokeList = [
 
 export const dropPlaceholderOptions = {
 	className: "drop-preview",
-	animationDuration: "1500",
+	animationDuration: "150",
 	showOnTop: true,
 };
 
 export const upperDropPlaceholderOptions = {
 	className: "cards-drop-preview",
-	animationDuration: "1500",
+	animationDuration: "150",
 	showOnTop: true,
 };

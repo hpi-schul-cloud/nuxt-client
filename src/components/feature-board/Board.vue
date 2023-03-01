@@ -17,9 +17,8 @@
 							<BoardColumn
 								:column="column"
 								:index="index"
-								@remove-from-column="updatePosition"
-								@add-to-column="updatePosition"
 								@position-change-keyboard="updatePositionByKeyboard"
+								@card-position-change="onCardPositionChange(index, $event)"
 							/>
 						</Draggable>
 					</template>
@@ -35,7 +34,7 @@ import BoardColumn from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
 import { Container, Draggable } from "vue-smooth-dnd";
 import {
-	CardDndPayload,
+	CardMovePayload,
 	ColumnDndPayload,
 	upperDropPlaceholderOptions,
 } from "./types/DragAndDrop";
@@ -44,36 +43,27 @@ export default defineComponent({
 	name: "Board",
 	components: { BoardColumn, Container, Draggable },
 	setup() {
-		const { board, changeColumnPosition, changeCardPosition } = useBoardState(
+		const { board, changeColumnPosition, changePosition } = useBoardState(
 			"0000d213816abba584714caa"
 		);
 
-		const dndCardPayload: CardDndPayload = reactive({
-			cardId: "",
-			cardPosition: -1,
-			columnIndex: -1,
-			targetColumnIndex: -1,
-			targetColumnPosition: -1,
-		});
-
-		watch(dndCardPayload, () => {
-			if (
-				dndCardPayload.columnIndex !== -1 &&
-				dndCardPayload.targetColumnIndex !== -1
-			) {
-				changeCardPosition(dndCardPayload);
-			}
-		});
+		const onCardPositionChange = (
+			columnIndex: number,
+			payload: CardMovePayload
+		) => {
+			console.log("card-position ->", columnIndex, payload);
+			changePosition(columnIndex, payload);
+		};
 
 		const onColumnDrop = (columnPayload: ColumnDndPayload): void => {
 			changeColumnPosition(columnPayload);
 		};
 
-		const updatePosition = (cardPayload: CardDndPayload): void => {
-			Object.assign(dndCardPayload, { ...cardPayload });
-		};
-		const updatePositionByKeyboard = (cardPayload: CardDndPayload) => {
-			changeCardPosition(cardPayload);
+		const updatePositionByKeyboard = (
+			columnIndex: number,
+			payload: CardMovePayload
+		) => {
+			changePosition(columnIndex, payload);
 		};
 
 		const getChildPayload = (index: number): string => {
@@ -84,10 +74,9 @@ export default defineComponent({
 			board,
 			upperDropPlaceholderOptions,
 			onColumnDrop,
-			updatePosition,
-			dndCardPayload,
 			getChildPayload,
 			updatePositionByKeyboard,
+			onCardPositionChange,
 		};
 	},
 });

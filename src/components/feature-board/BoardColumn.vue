@@ -48,24 +48,10 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 
 		const onCardDrop = (dropResult: CardMovePayload): void => {
-			const { removedIndex, addedIndex, payload } = dropResult;
+			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
 
-			if (removedIndex !== null) {
-				ctx.emit("remove-from-column", {
-					columnIndex: props.index,
-					cardId: payload.cardId,
-					cardPosition: removedIndex,
-				});
-			}
-
-			if (addedIndex !== null) {
-				ctx.emit("add-to-column", {
-					targetColumnIndex: props.index,
-					cardId: payload.cardId,
-					targetColumnPosition: addedIndex,
-				});
-			}
+			ctx.emit("card-position-change", dropResult);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
