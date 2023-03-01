@@ -1,10 +1,7 @@
 <template>
-	<div>
-		<h2>{{ column.title }}</h2>
-		<div
-			class="d-flex flex-column flex-grow-1 mr-4"
-			:style="{ 'min-width': colWidth + 'px' }"
-		>
+	<div :style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }">
+		<h4 class="text-truncate pr-4">{{ column.title }}</h4>
+		<div class="d-flex flex-column flex-grow-1 mr-4">
 			<template v-for="card in column.cards">
 				<CardHost
 					:key="card.cardId"
