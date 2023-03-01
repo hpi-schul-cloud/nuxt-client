@@ -26,6 +26,7 @@
 					@input="onInput"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
+					@blur="onBlur"
 				/>
 			</template>
 			<v-list height="200" class="col-12 pt-1 px-0">
@@ -102,20 +103,17 @@ export default defineComponent({
 			}
 		};
 
-		let inputTimeout: number | null = null;
 		const onInput = (input: string) => {
-			if (inputTimeout) clearTimeout(inputTimeout);
-
 			inputTime.value = input;
 			showTimeDialog.value = false;
+		};
 
-			inputTimeout = setTimeout(() => {
-				const validated = validate(inputTime.value);
+		const onBlur = () => {
+			const validated = validate(inputTime.value);
 
-				if (validated) {
-					emit("input", inputTime.value);
-				}
-			}, 1000);
+			if (validated) {
+				emit("input", inputTime.value);
+			}
 		};
 
 		const onMenuToggle = (menuOpen: boolean) => {
@@ -174,6 +172,7 @@ export default defineComponent({
 			selectedTime,
 			selectTime,
 			onInput,
+			onBlur,
 			onMenuToggle,
 			validate,
 			errors,
