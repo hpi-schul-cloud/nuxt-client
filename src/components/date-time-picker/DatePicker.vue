@@ -12,7 +12,7 @@
 				:value="formattedDate"
 				:label="label"
 				:aria-label="ariaLabel"
-				:placeholder="$t('format.date')"
+				:placeholder="$t('common.placeholder.dateformat')"
 				data-testid="date-input"
 				readonly
 				filled
@@ -122,7 +122,7 @@ export default defineComponent({
 			}
 
 			if (dateValue === "") {
-				errors.value.push("required");
+				errors.value.push(t("common.validation.required"));
 				emit("error");
 				return false;
 			}

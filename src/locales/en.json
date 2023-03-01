@@ -116,6 +116,7 @@
 	"common.words.times": "Times",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"components.timePicker.timeFormat": "Please enter time in the format 'hh:mm' (e.g. 08:36)",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Ok",
 	"components.administration.adminMigrationSection.endWarningCard.disagree": "Abort",

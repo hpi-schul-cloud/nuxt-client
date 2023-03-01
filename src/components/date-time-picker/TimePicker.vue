@@ -49,7 +49,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, computed, watch, inject } from "vue";
+import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -62,6 +63,19 @@ export default defineComponent({
 	},
 	emits: ["input", "error"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const timesOfDayList = computed(() => {
 			const times = [];
 
@@ -120,7 +134,7 @@ export default defineComponent({
 
 			// is required, but empty
 			if (props.required && (timeValue === "" || timeValue === null)) {
-				errors.value.push("required");
+				errors.value.push(t("common.validation.required"));
 				emit("error");
 				return false;
 			}
@@ -129,7 +143,7 @@ export default defineComponent({
 			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 			const found = timeValue.match(regex);
 			if (!found) {
-				errors.value.push("please enter proper time format like 08:36");
+				errors.value.push(t("components.timePicker.timeFormat"));
 				emit("error");
 				return false;
 			}
