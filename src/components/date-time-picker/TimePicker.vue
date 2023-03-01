@@ -1,51 +1,52 @@
 <template>
-	<v-menu
-		v-model="showTimeDialog"
-		:close-on-content-click="false"
-		transition="scale-transition"
-		offset-y
-		min-width="85"
-		attach
-		@input="onMenuToggle"
-	>
-		<template #activator="{ on, attrs }">
-			<v-text-field
-				v-model="inputTime"
-				id="time-input"
-				data-testid="time-input"
-				placeholder="HH:MM"
-				filled
-				dense
-				clearable
-				:label="label"
-				:aria-label="ariaLabel"
-				:errors="hasErrors"
-				:error-messages="errors"
-				v-bind="attrs"
-				v-on="on"
-				@input="onInput"
-				@keydown.prevent.space="showTimeDialog = true"
-				@keydown.prevent.enter="showTimeDialog = true"
-			/>
-		</template>
-		<v-list height="200" class="col-12 pt-1 px-0">
-			<v-list-item-group v-model="selectedTime" color="primary">
-				<div
-					v-for="(timeOfDay, index) in timesOfDayList"
-					:key="`time-select-${index}`"
-				>
-					<v-list-item
-						:data-testid="`time-select-${index}`"
-						class="time-list-item"
-						@click="selectTime(timeOfDay)"
+	<div>
+		<v-menu
+			v-model="showTimeDialog"
+			:close-on-content-click="false"
+			transition="scale-transition"
+			offset-y
+			min-width="85"
+			attach
+			@input="onMenuToggle"
+		>
+			<template #activator="{ on, attrs }">
+				<v-text-field
+					v-model="inputTime"
+					id="time-input"
+					data-testid="time-input"
+					placeholder="HH:MM"
+					filled
+					clearable
+					:label="label"
+					:aria-label="ariaLabel"
+					:errors="hasErrors"
+					:error-messages="errors"
+					v-bind="attrs"
+					v-on="on"
+					@input="onInput"
+					@keydown.prevent.space="showTimeDialog = true"
+					@keydown.prevent.enter="showTimeDialog = true"
+				/>
+			</template>
+			<v-list height="200" class="col-12 pt-1 px-0">
+				<v-list-item-group v-model="selectedTime" color="primary">
+					<div
+						v-for="(timeOfDay, index) in timesOfDayList"
+						:key="`time-select-${index}`"
 					>
-						<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
-					</v-list-item>
-					<v-divider v-if="index < timesOfDayList.length - 1" />
-				</div>
-			</v-list-item-group>
-		</v-list>
-	</v-menu>
+						<v-list-item
+							:data-testid="`time-select-${index}`"
+							class="time-list-item"
+							@click="selectTime(timeOfDay)"
+						>
+							<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+						</v-list-item>
+						<v-divider v-if="index < timesOfDayList.length - 1" />
+					</div>
+				</v-list-item-group>
+			</v-list>
+		</v-menu>
+	</div>
 </template>
 
 <script lang="ts">

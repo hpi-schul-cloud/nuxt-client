@@ -1,48 +1,49 @@
 <template>
-	<v-menu
-		v-model="showDateDialog"
-		:close-on-content-click="false"
-		transition="scale-transition"
-		offset-y
-		min-width="auto"
-		@input="onMenuToggle"
-	>
-		<template #activator="{ on, attrs }">
-			<v-text-field
-				:value="formattedDate"
-				:label="label"
-				:aria-label="ariaLabel"
-				:placeholder="$t('common.placeholder.dateformat')"
-				data-testid="date-input"
-				readonly
-				filled
-				dense
-				clearable
-				:error-messages="errors"
-				:error="hasErrors"
-				v-bind="attrs"
-				v-on="on"
+	<div>
+		<v-menu
+			v-model="showDateDialog"
+			:close-on-content-click="false"
+			transition="scale-transition"
+			offset-y
+			min-width="auto"
+			@input="onMenuToggle"
+		>
+			<template #activator="{ on, attrs }">
+				<v-text-field
+					:value="formattedDate"
+					:label="label"
+					:aria-label="ariaLabel"
+					:placeholder="$t('common.placeholder.dateformat')"
+					data-testid="date-input"
+					readonly
+					filled
+					clearable
+					:error-messages="errors"
+					:error="hasErrors"
+					v-bind="attrs"
+					v-on="on"
+					@input="onInput"
+					@keydown.space="showDateDialog = true"
+					@keydown.prevent.enter="showDateDialog = true"
+					@keydown.prevent.down="focusDatePicker"
+					@focus="resetErrors"
+					@click:clear="clearDate"
+					@blur="(e) => validate(e.target.value)"
+				/>
+			</template>
+			<v-date-picker
+				v-model="selectedDate"
+				:aria-expanded="showDateDialog"
+				color="primary"
+				no-title
+				:locale="locale"
+				first-day-of-week="1"
+				:allowed-dates="allowedDates"
+				show-adjacent-months
 				@input="onInput"
-				@keydown.space="showDateDialog = true"
-				@keydown.prevent.enter="showDateDialog = true"
-				@keydown.prevent.down="focusDatePicker"
-				@focus="resetErrors"
-				@click:clear="clearDate"
-				@blur="(e) => validate(e.target.value)"
 			/>
-		</template>
-		<v-date-picker
-			v-model="selectedDate"
-			:aria-expanded="showDateDialog"
-			color="primary"
-			no-title
-			:locale="locale"
-			first-day-of-week="1"
-			:allowed-dates="allowedDates"
-			show-adjacent-months
-			@input="onInput"
-		/>
-	</v-menu>
+		</v-menu>
+	</div>
 </template>
 
 <script lang="ts">

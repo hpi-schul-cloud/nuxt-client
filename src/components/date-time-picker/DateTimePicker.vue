@@ -1,29 +1,26 @@
 <template>
-	<v-row>
-		<div>
-			<v-icon :color="iconColor" class="icon">{{ mdiCalendarClock }} </v-icon>
-		</div>
-		<v-col class="col-sm-4">
-			<date-picker
-				required
-				:date="date"
-				:label="dateInputLabel"
-				:aria-label="dateInputAriaLabel"
-				@input="handleDateInput"
-				@error="hasErrors = true"
-			/>
-		</v-col>
-		<v-col class="col-sm-3">
-			<time-picker
-				required
-				:time="time"
-				:label="timeInputLabel"
-				:aria-label="timeInputAriaLabel"
-				@input="handleTimeInput"
-				@error="hasErrors = true"
-			/>
-		</v-col>
-	</v-row>
+	<div class="d-flex flex-row">
+		<v-icon :color="iconColor" class="icon mr-2">
+			{{ mdiCalendarClock }}
+		</v-icon>
+		<date-picker
+			class="mr-2"
+			required
+			:date="date"
+			:label="dateInputLabel"
+			:aria-label="dateInputAriaLabel"
+			@input="handleDateInput"
+			@error="hasErrors = true"
+		/>
+		<time-picker
+			required
+			:time="time"
+			:label="timeInputLabel"
+			:aria-label="timeInputAriaLabel"
+			@input="handleTimeInput"
+			@error="hasErrors = true"
+		/>
+	</div>
 </template>
 
 <script lang="ts">
@@ -147,6 +144,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .icon {
-	top: 26px;
+	top: 18px;
 }
 </style>
