@@ -112,7 +112,9 @@ describe("BoardColumn", () => {
 				setup({ card: MOCK_LESSON_REFERENCE });
 
 				await wrapper.trigger(`keydown.${key}`);
-				expect(wrapper).toBeDefined();
+
+				const emitted = wrapper.emitted("move-card-keyboard") || [[]];
+				expect(emitted[0][0]).toBeDefined();
 			}
 		);
 	});
