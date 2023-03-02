@@ -8,14 +8,15 @@
 			<Container
 				group-name="col"
 				@drop="onCardDrop"
-				drag-class="card-ghost"
-				drop-class="card-ghost-drop"
-				:drop-placeholder="upperDropPlaceholderOptions"
+				drag-class="elevation-12"
+				drop-class="elevation-0"
+				:drop-placeholder="cardDropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
 			>
 				<template v-for="card in column.cards">
 					<Draggable :key="card.cardId">
 						<CardHost
+							class="mb-6"
 							:id="card.cardId"
 							:height="card.height"
 							@move-card-keyboard="moveByKeyboard(card, $event)"
@@ -34,7 +35,7 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { BoardColumn, BoardSkeletonCard } from "./types/Board";
 import {
 	CardMove,
-	dropPlaceholderOptions,
+	cardDropPlaceholderOptions,
 	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
 } from "./types/DragAndDrop";
@@ -90,7 +91,7 @@ export default defineComponent({
 
 		return {
 			colWidth,
-			dropPlaceholderOptions,
+			cardDropPlaceholderOptions,
 			upperDropPlaceholderOptions,
 			onCardDrop,
 			getChildPayload,
@@ -99,15 +100,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.card-ghost {
-	transition: transform 0.18s ease;
-	transform: rotateZ(2deg);
-}
-
-.card-ghost-drop {
-	transition: transform 0.18s ease-in-out;
-	transform: rotateZ(0deg);
-}
-</style>

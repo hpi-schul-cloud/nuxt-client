@@ -1,10 +1,12 @@
 <template>
-	<div
-		class="d-flex mb-6"
-		tabindex="0"
-		@keydown.up.down.left.right.space.prevent="onKeyStroke"
-	>
-		<VCard :height="height" class="w-100">
+	<div class="d-flex">
+		<VCard
+			:height="height"
+			class="w-100"
+			outlined
+			tabindex="0"
+			@keydown.up.down.left.right.space.prevent="onKeyStroke"
+		>
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
 			</template>

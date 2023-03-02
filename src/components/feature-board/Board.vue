@@ -9,8 +9,8 @@
 					orientation="horizontal"
 					@drop="onColumnDrop"
 					drag-handle-selector=".column-drag-handle"
-					:drop-placeholder="upperDropPlaceholderOptions"
 					:get-child-payload="getChildPayload"
+					:drop-placeholder="cardDropPlaceholderOptions"
 				>
 					<template v-for="(column, index) in board.columns">
 						<Draggable :key="column.id">
@@ -38,6 +38,7 @@ import {
 	ColumnMove,
 	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
+	cardDropPlaceholderOptions,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
@@ -52,7 +53,6 @@ export default defineComponent({
 		} = useBoardState("0000d213816abba584714caa");
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
-			console.log("card-position ->", columnIndex, payload);
 			changePosition(columnIndex, payload);
 		};
 
@@ -71,6 +71,7 @@ export default defineComponent({
 		return {
 			board,
 			upperDropPlaceholderOptions,
+			cardDropPlaceholderOptions,
 			onColumnDrop,
 			getChildPayload,
 			updatePositionByKeyboard,

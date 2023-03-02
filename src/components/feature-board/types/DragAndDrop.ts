@@ -30,8 +30,8 @@ export const keyStrokeList = [
 	"Enter",
 ];
 
-export const dropPlaceholderOptions = {
-	className: "drop-preview",
+export const cardDropPlaceholderOptions = {
+	className: "mb-6 rounded-sm grey lighten-1",
 	animationDuration: "150",
 	showOnTop: true,
 };
