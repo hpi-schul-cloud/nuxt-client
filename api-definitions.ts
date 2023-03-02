@@ -107,7 +107,7 @@ interface BoardLegacyLessonCard extends BoardCard {
 }
 
 interface BoardLegacyTaskCard extends BoardCard {
-	cardType: "legacy-task";
+	cardType: "legacy-task-reference";
 	taskId: string;
 	elements: ContentElement[]; // narrowed down to allowed Elements: LegacyTask
 	// some properties
