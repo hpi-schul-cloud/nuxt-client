@@ -133,7 +133,7 @@ export default defineComponent({
 
 			// is required, but empty
 			if (props.required && (timeValue === "" || timeValue === null)) {
-				errors.value.push(t("common.validation.required"));
+				errors.value.push(t("components.timePicker.validation.required"));
 				emit("error");
 				return false;
 			}
@@ -142,7 +142,7 @@ export default defineComponent({
 			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 			const found = timeValue.match(regex);
 			if (!found) {
-				errors.value.push(t("components.timePicker.timeFormat"));
+				errors.value.push(t("components.timePicker.validation.format"));
 				emit("error");
 				return false;
 			}
