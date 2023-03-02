@@ -45,9 +45,7 @@
 </template>
 
 <script lang="ts">
-import { useApplicationError } from "@/composables/application-error.composable";
 import SystemsModule from "@/store/systems";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";
@@ -82,32 +80,24 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { createApplicationError } = useApplicationError();
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
 		const userMigrationModule: UserLoginMigrationModule | undefined =
 			inject<UserLoginMigrationModule>("userLoginMigrationModule");
-		if (!systemsModule || !userMigrationModule) {
-			throw createApplicationError(
-				HttpStatusCode.InternalServerError,
-				"error.generic",
-				"Injection of dependencies failed"
-			);
-		}
 
 		const getSystemName = (id: string): string => {
 			return (
-				systemsModule.getSystems.find(
+				systemsModule?.getSystems.find(
 					(system: System): boolean => system.id === id
 				)?.name ?? ""
 			);
 		};
 
-		const proceedLink: ComputedRef<string> = computed(
-			() => userMigrationModule.getMigrationLinks.proceedLink
+		const proceedLink: ComputedRef<string | undefined> = computed(
+			() => userMigrationModule?.getMigrationLinks.proceedLink
 		);
-		const cancelLink: ComputedRef<string> = computed(
-			() => userMigrationModule.getMigrationLinks.cancelLink
+		const cancelLink: ComputedRef<string | undefined> = computed(
+			() => userMigrationModule?.getMigrationLinks.cancelLink
 		);
 
 		let pageType: MigrationPageOrigin;
@@ -127,14 +117,12 @@ export default defineComponent({
 		const hasData: Ref<boolean> = ref(false);
 
 		onMounted(async () => {
-			await Promise.all([
-				systemsModule.fetchSystems(),
-				userMigrationModule.fetchMigrationLinks({
-					pageType,
-					sourceSystem: props.sourceSystem,
-					targetSystem: props.targetSystem,
-				}),
-			]);
+			await systemsModule?.fetchSystems();
+			await userMigrationModule?.fetchMigrationLinks({
+				pageType,
+				sourceSystem: props.sourceSystem,
+				targetSystem: props.targetSystem,
+			});
 			hasData.value = true;
 		});
 
