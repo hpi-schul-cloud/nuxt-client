@@ -1,9 +1,11 @@
 <template>
-	<default-wireframe
-		:full-width="false"
-		:breadcrumbs="breadcrumbs"
-		headline="Task Card"
-	>
+	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
+		<div slot="header" class="d-flex flex-row align-end">
+			<v-icon size="20" class="mr-2 mb-4">$tasks</v-icon>
+			<h1 class="h6 mt-10">
+				{{ t("pages.rooms.fab.add.betatask") }}
+			</h1>
+		</div>
 		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
 				v-model="course"
@@ -62,10 +64,12 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref, onMounted, computed } from "vue";
+import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, roomModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
+import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -105,6 +109,12 @@ export default defineComponent({
 			}
 			return "unknown translation-key:" + key;
 		};
+
+		useTitle(
+			`${i18n.t("pages.rooms.fab.add.betatask").toString()} - ${
+				Theme.short_name
+			}`
+		);
 
 		const breadcrumbs = ref([
 			{
@@ -320,11 +330,6 @@ export default defineComponent({
 			courses,
 			onError,
 		};
-	},
-	mounted() {
-		document.title = `${this.$t("common.words.tasks")} - ${
-			this.$theme.short_name
-		}`;
 	},
 });
 </script>
