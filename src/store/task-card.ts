@@ -1,15 +1,38 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+// TODO adjust imports when interfaces below are not needed anymore (API includes title)
 import {
-	TaskCardResponse,
+	// TaskCardResponse,
+	CardElementResponse,
+	TaskResponse,
+	CardElementParams,
 	CardsApiFactory,
 	CardsApiInterface,
-	TaskCardParams,
+	// TaskCardParams,
 	CardElementResponseCardElementTypeEnum,
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 
+// TODO remove when interfaces in generated API include title
+interface TaskCardResponse {
+	id: string;
+	cardElements: Array<CardElementResponse>;
+	courseName?: string;
+	courseId?: string;
+	draggable: boolean;
+	task: TaskResponse;
+	visibleAtDate: string;
+	dueDate: string;
+	title: string;
+}
+interface TaskCardParams {
+	courseId?: string;
+	visibleAtDate?: string;
+	dueDate?: string;
+	cardElements: Array<CardElementParams>;
+	title: string;
+}
 @Module({
 	name: "taskCardModule",
 	namespaced: true,
@@ -20,14 +43,8 @@ export default class TaskCardModule extends VuexModule {
 		id: "",
 		courseId: "",
 		courseName: "",
+		title: "",
 		cardElements: [
-			{
-				id: "",
-				cardElementType: CardElementResponseCardElementTypeEnum.Title,
-				content: {
-					value: "",
-				},
-			},
 			{
 				id: "",
 				cardElementType: CardElementResponseCardElementTypeEnum.RichText,
@@ -124,6 +141,8 @@ export default class TaskCardModule extends VuexModule {
 	@Mutation
 	setTaskCardData(payload: any): void {
 		this.taskCardData = payload;
+		// TODO remove when title is coming from API
+		this.taskCardData.title = "Mock Title";
 	}
 
 	@Mutation

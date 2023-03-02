@@ -2,7 +2,7 @@
 	<default-wireframe
 		:full-width="false"
 		:breadcrumbs="breadcrumbs"
-		headline="Task Card"
+		headline="Beta Aufgabe"
 	>
 		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
@@ -14,10 +14,10 @@
 				disabled
 				:label="$t('common.labels.course')"
 			/>
-			<card-element-wrapper
-				v-model="title.model"
-				v-bind="title.props"
-				:editMode="true"
+			<title-card-element
+				v-model="title"
+				:placeholder="$t('components.cardElement.titleElement.placeholder')"
+				:editable="true"
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
 			<div>
@@ -41,11 +41,7 @@
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
-			<card-element-wrapper
-				v-model="title.model"
-				v-bind="title.props"
-				:editMode="false"
-			/>
+			<title-card-element v-model="title" editable="false" />
 			<card-element-list v-model="elements" :editMode="false" />
 		</article>
 	</default-wireframe>
@@ -57,7 +53,7 @@ import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, roomModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
+import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
@@ -76,7 +72,7 @@ export default defineComponent({
 	name: "TaskCard",
 	components: {
 		DefaultWireframe,
-		CardElementWrapper,
+		TitleCardElement,
 		CardElementList,
 	},
 	setup() {
@@ -98,11 +94,7 @@ export default defineComponent({
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
-		const title = ref<CardElement>({
-			id: "",
-			type: CardElementResponseCardElementTypeEnum.Title,
-			model: "",
-		});
+		const title = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
 
@@ -134,6 +126,7 @@ export default defineComponent({
 				await taskCardModule.findTaskCard(taskCardId);
 
 				const taskCardData = taskCardModule.getTaskCardData;
+				title.value = taskCardData.title;
 				course.value = taskCardData.courseId || "";
 				courses.value = [
 					{
@@ -157,25 +150,6 @@ export default defineComponent({
 
 		const initElements = (cardElements: Array<CardElementResponse>) => {
 			cardElements.forEach((cardElement) => {
-				if (
-					cardElement.cardElementType ===
-					CardElementResponseCardElementTypeEnum.Title
-				) {
-					title.value = {
-						id: cardElement.id,
-						type: CardElementResponseCardElementTypeEnum.Title,
-						model: cardElement.content.value,
-						props: {
-							component: CardElementComponentEnum.Title,
-							placeholder: i18n.t(
-								"components.cardElement.titleElement.placeholder"
-							) as string,
-							editable: isEditMode.value,
-						},
-					};
-					return;
-				}
-
 				elements.value.push({
 					id: cardElement.id,
 					type: CardElementResponseCardElementTypeEnum.RichText,
@@ -198,39 +172,27 @@ export default defineComponent({
 
 		const createTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
-			cardElements.push({
-				content: {
-					type: title.value.type,
-					value: title.value.model,
-				},
-			});
 			elements.value.forEach((element) => {
 				if (validate(element.model)) {
-					cardElements.push({
+					const cardElement: CardElementParams = {
 						content: {
 							type: element.type,
 							value: element.model,
 							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
 						},
-					});
+					};
+					cardElements.push(cardElement);
 				}
 			});
-
 			taskCardModule.createTaskCard({
 				courseId: course.value,
+				title: title.value,
 				cardElements: cardElements,
 			});
 		};
 
 		const updateTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
-			cardElements.push({
-				id: title.value.id,
-				content: {
-					type: title.value.type,
-					value: title.value.model,
-				},
-			});
 			elements.value.forEach((element) => {
 				const cardElement: CardElementParams = {
 					content: {
@@ -244,9 +206,9 @@ export default defineComponent({
 				}
 				cardElements.push(cardElement);
 			});
-
 			taskCardModule.updateTaskCard({
 				courseId: course.value,
+				title: title.value,
 				cardElements: cardElements,
 			});
 		};
