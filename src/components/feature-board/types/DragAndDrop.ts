@@ -1,10 +1,9 @@
-import { BoardSkeletonCardReponse } from "@/serverApi/v3";
 import { BoardSkeletonCard } from "./Board";
 
 export interface CardMove {
 	removedIndex: number | null;
 	addedIndex: number | null;
-	payload: BoardSkeletonCardReponse;
+	payload: BoardSkeletonCard;
 }
 
 export interface CardMoveByKeyboard {

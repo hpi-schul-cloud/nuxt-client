@@ -13,13 +13,13 @@
 				:drop-placeholder="cardDropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
 			>
-				<template v-for="card in column.cards">
+				<template v-for="(card, index) in column.cards">
 					<Draggable :key="card.cardId">
 						<CardHost
 							class="mb-6"
 							:id="card.cardId"
 							:height="card.height"
-							@move-card-keyboard="moveByKeyboard(card, $event)"
+							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						/>
 					</Draggable>
 				</template>
@@ -50,43 +50,43 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
-	setup(props, ctx) {
+	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
 		const onCardDrop = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-
-			ctx.emit("card-position-change", dropResult);
+			emit("card-position-change", dropResult);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
 			return props.column.cards[index];
 		};
 
-		const moveByKeyboard = (card: BoardSkeletonCard, keyString: string) => {
-			const cardIndex = props.column.cards.findIndex(
-				(c) => c.cardId === card.cardId
-			);
-			const dndObject: CardMoveByKeyboard = {
+		const onMoveCardKeyboard = (
+			cardIndex: number,
+			card: BoardSkeletonCard,
+			keyString: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
+		) => {
+			const cardMoveByKeyboard: CardMoveByKeyboard = {
 				card: card,
-				cardIndex: cardIndex,
+				cardIndex,
 				columnIndex: props.index,
 				targetColumnIndex: props.index,
 				targetColumnPosition: -1,
 			};
 
 			if (["ArrowUp", "ArrowDown"].includes(keyString)) {
-				dndObject.targetColumnPosition =
+				cardMoveByKeyboard.targetColumnPosition =
 					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
 			if (["ArrowLeft", "ArrowRight"].includes(keyString)) {
-				dndObject.targetColumnIndex =
+				cardMoveByKeyboard.targetColumnIndex =
 					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
-				dndObject.targetColumnPosition = 0;
+				cardMoveByKeyboard.targetColumnPosition = 0;
 			}
 
-			ctx.emit("position-change-keyboard", dndObject);
+			emit("position-change-keyboard", cardMoveByKeyboard);
 		};
 
 		return {
@@ -95,7 +95,7 @@ export default defineComponent({
 			upperDropPlaceholderOptions,
 			onCardDrop,
 			getChildPayload,
-			moveByKeyboard,
+			onMoveCardKeyboard,
 		};
 	},
 });
