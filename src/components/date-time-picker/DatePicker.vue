@@ -150,8 +150,7 @@ export default defineComponent({
 
 		watch(
 			() => props.date,
-			(newValue: string, prevValue: string) => {
-				console.log(prevValue, newValue);
+			(newValue: string) => {
 				selectedDate.value = newValue;
 			}
 		);

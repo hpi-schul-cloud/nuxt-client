@@ -102,6 +102,12 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
+			const taskCardData = taskCardModule.getTaskCardData;
+
+			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+			endOfSchoolYear.setHours(12);
+			dueDate.value = taskCardData.dueDate || endOfSchoolYear.toISOString();
+
 			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
@@ -112,7 +118,7 @@ export default defineComponent({
 						title: roomData.title,
 					},
 				];
-				const taskCardData = taskCardModule.getTaskCardData;
+
 				taskCardModule.setCourseId(course.value);
 				initElements(taskCardData.cardElements);
 
@@ -128,9 +134,6 @@ export default defineComponent({
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 
-				const taskCardData = taskCardModule.getTaskCardData;
-				dueDate.value =
-					taskCardData.dueDate || schoolsModule.getCurrentYear.endDate;
 				course.value = taskCardData.courseId || "";
 				courses.value = [
 					{
