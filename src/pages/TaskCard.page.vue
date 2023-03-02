@@ -249,6 +249,7 @@ export default defineComponent({
 			if (hasErrors.value) {
 				return;
 			}
+
 			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
@@ -268,6 +269,7 @@ export default defineComponent({
 		};
 
 		const handleDateTimeInput = (dateTime: string) => {
+			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
 
