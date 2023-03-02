@@ -26,9 +26,10 @@
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
+					@keydown.tab="showDateDialog = false"
 					@focus="resetErrors"
 					@click:clear="clearDate"
-					@blur="(e) => validate(e.target.value)"
+					@blur="onBlur"
 				/>
 			</template>
 			<v-date-picker
@@ -41,6 +42,7 @@
 				:allowed-dates="allowedDates"
 				show-adjacent-months
 				@input="onInput"
+				@blur="test"
 			/>
 		</v-menu>
 	</div>
@@ -85,6 +87,7 @@ export default defineComponent({
 
 		const selectedDate = ref(props.date);
 		const showDateDialog = ref(false);
+		const errors = ref<string[]>([]);
 
 		const formattedDate = computed(() => {
 			return selectedDate.value
@@ -105,6 +108,20 @@ export default defineComponent({
 			}
 		};
 
+		const validate = (dateValue: string) => {
+			if (!props.required) {
+				return true;
+			}
+
+			if (dateValue === "") {
+				errors.value.push(t("components.timePicker.validation.required"));
+				emit("error");
+				return false;
+			}
+
+			return true;
+		};
+
 		const focusDatePicker = () => {
 			setTimeout(() => {
 				const prevMonthBtn = document.querySelector<HTMLElement>(
@@ -115,19 +132,11 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const errors = ref<string[]>([]);
-		const validate = (dateValue: string) => {
-			if (!props.required) {
-				return true;
+		const onBlur = (event: any) => {
+			if (showDateDialog.value === false) {
+				const value = event.target.value;
+				validate(value);
 			}
-
-			if (dateValue === "") {
-				errors.value.push(t("common.validation.required"));
-				emit("error");
-				return false;
-			}
-
-			return true;
 		};
 
 		const onMenuToggle = (menuOpen: boolean) => {
@@ -170,6 +179,7 @@ export default defineComponent({
 			resetErrors,
 			onMenuToggle,
 			clearDate,
+			onBlur,
 		};
 	},
 });
