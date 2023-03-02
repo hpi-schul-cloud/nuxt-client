@@ -1,15 +1,29 @@
+import { mdiPlus } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 
 describe("DefaultWireframe", () => {
-	it("shows title", () => {
+	it("shows title without icon", () => {
 		const wrapper = mount(DefaultWireframe, {
 			...createComponentMocks({}),
 			propsData: { fullWidth: true, headline: "dummy titel" },
 		});
 
 		const h1 = wrapper.find("h1");
+		const isHeadlineIconPresent = wrapper.find(".headline-icon").exists();
 		expect(h1.text()).toBe("dummy titel");
+		expect(isHeadlineIconPresent).toBe(false);
+	});
+	it("shows title with icon", () => {
+		const wrapper = mount(DefaultWireframe, {
+			...createComponentMocks({}),
+			propsData: { fullWidth: true, headline: "dummy titel", icon: mdiPlus },
+		});
+
+		const h1 = wrapper.find("h1");
+		const isHeadlineIconPresent = wrapper.find(".headline-icon").exists();
+		expect(h1.text()).toBe("dummy titel");
+		expect(isHeadlineIconPresent).toBe(true);
 	});
 	it("shows breadcrumbs", () => {
 		const wrapper = mount(DefaultWireframe, {

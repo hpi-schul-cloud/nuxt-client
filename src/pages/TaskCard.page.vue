@@ -1,8 +1,9 @@
 <template>
 	<default-wireframe
-		:full-width="false"
+		:icon="mdiFormatListChecks"
+		:headline="$t('pages.rooms.fab.add.betatask')"
 		:breadcrumbs="breadcrumbs"
-		headline="Task Card"
+		:full-width="false"
 	>
 		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
@@ -70,6 +71,7 @@ import {
 	CardElementParams,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import { mdiFormatListChecks } from "@mdi/js";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -275,10 +277,11 @@ export default defineComponent({
 			isEditMode,
 			course,
 			courses,
+			mdiFormatListChecks,
 		};
 	},
 	mounted() {
-		document.title = this.$t("common.words.tasks") as string;
+		document.title = this.$t("pages.rooms.fab.add.betatask") as string;
 	},
 });
 </script>

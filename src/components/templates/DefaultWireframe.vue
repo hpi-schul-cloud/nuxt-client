@@ -8,6 +8,7 @@
 			<div v-else class="breadcrumbs-placeholder"></div>
 			<slot name="header">
 				<h1 class="text-h3">
+					<v-icon v-if="icon" class="headline-icon">{{ icon }}</v-icon>
 					{{ headline }}
 				</h1>
 			</slot>
@@ -72,6 +73,11 @@ export default defineComponent({
 		ariaLabel: {
 			type: String,
 			default: "",
+		},
+		icon: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	computed: {
@@ -153,5 +159,9 @@ $fab-wrapper-height: 80px;
 	* {
 		pointer-events: auto;
 	}
+}
+
+.headline-icon {
+	color: currentColor;
 }
 </style>
