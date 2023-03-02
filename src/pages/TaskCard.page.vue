@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Card"
 	>
-		<v-form class="d-flex flex-column">
+		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -14,22 +14,45 @@
 				disabled
 				:label="$t('common.labels.course')"
 			/>
-			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<card-element-list v-model="elements" />
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="true"
+			/>
+			<card-element-list v-model="elements" :editMode="true" />
 			<div>
-				<v-btn color="secondary" outlined @click="cancel">
+				<v-btn
+					color="secondary"
+					outlined
+					@click="cancel"
+					data-testid="cancel-btn"
+				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn class="float-right" color="primary" depressed @click="save">
+				<v-btn
+					class="float-right"
+					color="primary"
+					depressed
+					@click="save"
+					data-testid="save-btn"
+				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
 			</div>
 		</v-form>
+		<article v-else class="d-flex flex-column">
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="false"
+			/>
+			<card-element-list v-model="elements" :editMode="false" />
+		</article>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted } from "vue";
+import { defineComponent, inject, ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, roomModule } from "@/store";
@@ -46,6 +69,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -59,7 +83,8 @@ export default defineComponent({
 		const router = useRouter();
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		if (!i18n || !authModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const breadcrumbs = ref([
@@ -104,7 +129,7 @@ export default defineComponent({
 				});
 			}
 
-			if (route.name === "task-card-edit") {
+			if (route.name === "task-card-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 
@@ -145,7 +170,7 @@ export default defineComponent({
 							placeholder: i18n.t(
 								"components.cardElement.titleElement.placeholder"
 							) as string,
-							editable: true,
+							editable: isEditMode.value,
 						},
 					};
 					return;
@@ -160,7 +185,7 @@ export default defineComponent({
 						placeholder: i18n.t(
 							"components.cardElement.richTextElement.placeholder"
 						) as string,
-						editable: true,
+						editable: isEditMode.value,
 					},
 				});
 			});
@@ -235,12 +260,19 @@ export default defineComponent({
 			router.go(-1);
 		};
 
+		const getUserPermissions = ref(authModule.getUserPermissions);
+
+		const isEditMode = computed(() => {
+			return getUserPermissions.value.includes("task_card_edit");
+		});
+
 		return {
 			breadcrumbs,
 			title,
 			elements,
 			save,
 			cancel,
+			isEditMode,
 			course,
 			courses,
 		};
