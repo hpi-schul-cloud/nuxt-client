@@ -19,7 +19,7 @@
 				"
 			></p>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
-				{{ $t("pages.userMigration.success.backToLogin") }}
+				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
 		</div>
 	</div>

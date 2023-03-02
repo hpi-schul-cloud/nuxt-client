@@ -88,9 +88,7 @@ describe("UserLoginMigrationSuccess", () => {
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
-				expect(button.text()).toEqual(
-					"pages.userMigration.success.backToLogin"
-				);
+				expect(button.text()).toEqual("pages.userMigration.backToLogin");
 				expect(button.props().to).toEqual("/logout");
 			});
 		});
