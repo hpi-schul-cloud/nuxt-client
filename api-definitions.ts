@@ -99,7 +99,7 @@ interface VisibilitySettings {
 declare type AnyBoardCard = BoardLegacyLessonCard | BoardLegacyTaskCard; // union of all BoardCard-Interfaces
 
 interface BoardLegacyLessonCard extends BoardCard {
-	cardType: "legacy-lesson";
+	cardType: "legacy-lesson-reference";
 	lessonId: string;
 	elements: ContentElement[]; // narrowed down to allowed Elements: LegacyLesson
 
