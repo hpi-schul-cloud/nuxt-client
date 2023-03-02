@@ -172,10 +172,10 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
-		path: `/task-cards/:id(${REGEX_ID})/edit`,
+		path: `/task-cards/:id(${REGEX_ID})`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-card-edit",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
+		name: "task-card-view-edit",
+		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
 
 	// deprecated?

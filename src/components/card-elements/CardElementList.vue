@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="editMode">
 		<draggable
 			ref="draggable"
 			v-model="elements"
@@ -23,9 +23,20 @@
 				:disabled="dragInProgress"
 				@delete-element="deleteElement(index)"
 				@add-element="addElementAfter(index)"
+				:editMode="true"
 			/>
 		</draggable>
 		<add-card-element @click="addElementAfter()" />
+	</div>
+	<div v-else>
+		<card-element-wrapper
+			v-for="(element, index) in elements"
+			ref="card-element"
+			:key="index"
+			v-model="element.model"
+			v-bind="element.props"
+			:editMode="false"
+		/>
 	</div>
 </template>
 
@@ -51,6 +62,10 @@ export default defineComponent({
 		value: {
 			type: Array,
 			default: () => [],
+		},
+		editMode: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
