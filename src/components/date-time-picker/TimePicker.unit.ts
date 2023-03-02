@@ -32,8 +32,6 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("when picking a time through typing", () => {
 		it("should emit event on input", async () => {
-			jest.useFakeTimers();
-
 			const wrapper = getWrapper({
 				time: new Date().toISOString(),
 			});
@@ -42,8 +40,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 			const input = textField.find("input");
 			input.setValue("13:12");
 
-			expect(textField.emitted("input")).toHaveLength(1);
-			jest.advanceTimersByTime(1000);
+			textField.vm.$emit("blur");
+			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
@@ -69,10 +67,6 @@ describe("@components/date-time-picker/TimePicker", () => {
 	});
 
 	describe("validation", () => {
-		beforeEach(() => {
-			jest.useFakeTimers();
-		});
-
 		describe("when time is required", () => {
 			it("should emit error event on clear", async () => {
 				const wrapper = getWrapper({
@@ -85,8 +79,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(clearBtn.exists()).toBe(true);
 				await clearBtn.trigger("click");
 
-				expect(textField.emitted("input")).toHaveLength(1);
-				jest.advanceTimersByTime(1000);
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
@@ -101,8 +95,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 				const input = textField.find("input");
 				input.setValue("");
 
-				expect(textField.emitted("input")).toHaveLength(1);
-				jest.advanceTimersByTime(1000);
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
@@ -135,8 +129,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 				const input = textField.find("input");
 				input.setValue("25:65");
 
-				expect(textField.emitted("input")).toHaveLength(1);
-				jest.advanceTimersByTime(1000);
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
+
 				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
 		});
