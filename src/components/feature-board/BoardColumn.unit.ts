@@ -22,7 +22,7 @@ describe("BoardColumn", () => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: { column: MOCK_PROP },
+			propsData: { column: MOCK_PROP, index: 1 },
 		});
 	};
 
@@ -35,6 +35,25 @@ describe("BoardColumn", () => {
 		it("should get props and render CarHost components", () => {
 			setup();
 			expect(wrapper.findAllComponents(CardHost)).toHaveLength(3);
+		});
+	});
+
+	describe("when a card moved by key stroke", () => {
+		it("should emit 'position-change-keyboard'", () => {
+			setup();
+			const expectedEmitObject = {
+				card: MOCK_PROP.cards[0],
+				cardIndex: 0,
+				columnIndex: 1,
+				targetColumnIndex: 0,
+				targetColumnPosition: 0,
+			};
+			const cardHostComponent = wrapper.findComponent(CardHost);
+			cardHostComponent.vm.$emit("move-card-keyboard", "ArrowLeft");
+
+			const emitted = wrapper.emitted("position-change-keyboard") || [[]];
+
+			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
 		});
 	});
 });
