@@ -191,6 +191,11 @@ export default defineComponent({
 			});
 		};
 
+		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
+		const validate = (content: string) => {
+			return content.length > 2;
+		};
+
 		const createTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
@@ -200,7 +205,7 @@ export default defineComponent({
 				},
 			});
 			elements.value.forEach((element) => {
-				if (element.model && element.model.length > 2) {
+				if (validate(element.model)) {
 					cardElements.push({
 						content: {
 							type: element.type,
