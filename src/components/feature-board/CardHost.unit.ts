@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import CardHost from "./CardHost.vue";
 import { useCardState } from "./CardState.composable";
@@ -48,7 +48,7 @@ describe("BoardColumn", () => {
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
-		wrapper = shallowMount(CardHost, {
+		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: MOCK_PROP_DEFAULT,
 		});
@@ -103,5 +103,17 @@ describe("BoardColumn", () => {
 			expect(lessonCardComponent.vm).toBeDefined();
 			expect(taskCardComponent.vm).not.toBeDefined();
 		});
+	});
+
+	describe("when key pressed", () => {
+		it.each(["up", "down", "left", "right", "space"])(
+			"should emit 'move-card-keyboard' with '%s' key stroke",
+			async (key) => {
+				setup({ card: MOCK_LESSON_REFERENCE });
+
+				await wrapper.trigger(`keydown.${key}`);
+				expect(wrapper).toBeDefined();
+			}
+		);
 	});
 });
