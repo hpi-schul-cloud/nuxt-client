@@ -6,6 +6,7 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="auto"
+			attach
 			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
@@ -42,7 +43,6 @@
 				:allowed-dates="allowedDates"
 				show-adjacent-months
 				@input="onInput"
-				@blur="test"
 			/>
 		</v-menu>
 	</div>
