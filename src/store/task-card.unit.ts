@@ -4,21 +4,31 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
+// TODO adjust imports when interfaces below are not needed anymore (API includes title)
 import {
 	RichTextCardElementParamInputFormatEnum,
-	TaskCardResponse,
+	// TaskCardResponse,
+	CardElementResponse,
+	TaskResponse,
 } from "../serverApi/v3/api";
+
+// TODO remove when interfaces in generated API include title
+interface TaskCardResponse {
+	id: string;
+	cardElements: Array<CardElementResponse>;
+	courseName?: string;
+	courseId?: string;
+	draggable: boolean;
+	task: TaskResponse;
+	visibleAtDate: string;
+	dueDate: string;
+	title: string;
+}
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
+	title: "the title",
 	cardElements: [
-		{
-			id: "456",
-			cardElementType: CardElementResponseCardElementTypeEnum.Title,
-			content: {
-				value: "The Title",
-			},
-		},
 		{
 			id: "789",
 			cardElementType: CardElementResponseCardElementTypeEnum.RichText,
@@ -134,13 +144,8 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
+					title: "some title",
 					cardElements: [
-						{
-							content: {
-								type: "title",
-								value: "abc",
-							},
-						},
 						{
 							content: {
 								type: "richtext",
@@ -172,6 +177,7 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
+					title: "some title",
 					cardElements: [],
 				});
 
@@ -202,7 +208,10 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.updateTaskCard({ cardElements: [] });
+				await taskCardModule.updateTaskCard({
+					title: mockTaskCardData.title,
+					cardElements: [],
+				});
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
 					1
@@ -210,6 +219,7 @@ describe("task-card store", () => {
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledWith(
 					mockTaskCardData.id,
 					{
+						title: mockTaskCardData.title,
 						cardElements: [],
 					}
 				);
@@ -230,7 +240,7 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.updateTaskCard({ cardElements: [] });
+				await taskCardModule.updateTaskCard({ title: "", cardElements: [] });
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
 					1
@@ -278,12 +288,12 @@ describe("task-card store", () => {
 	});
 
 	describe("mutations", () => {
-		it('should set setCourseId', () => {
+		it("should set setCourseId", () => {
 			const taskCardModule = new TaskCardModule({});
 			const courseId = "courseId_test";
 			taskCardModule.setCourseId(courseId);
 
 			expect(taskCardModule.taskCardData.courseId).toStrictEqual(courseId);
-		})
+		});
 	});
 });
