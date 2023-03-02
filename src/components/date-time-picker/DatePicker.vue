@@ -122,7 +122,7 @@ export default defineComponent({
 			}
 
 			if (dateValue === "") {
-				errors.value.push("required");
+				errors.value.push(t("common.validation.required"));
 				emit("error");
 				return false;
 			}
