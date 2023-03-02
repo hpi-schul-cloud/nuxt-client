@@ -10,7 +10,7 @@
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
 			@input="handleDateInput"
-			@error="hasErrors = true"
+			@error="dateError = true"
 		/>
 		<time-picker
 			required
@@ -18,7 +18,7 @@
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
 			@input="handleTimeInput"
-			@error="onError"
+			@error="timeError = true"
 		/>
 	</div>
 </template>
@@ -69,81 +69,94 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		const initDate = props.dateTime || props.defaultDate;
-		const selectedDateTime = ref(new Date(initDate));
 		const date = ref("");
 		const time = ref("");
-		const hasErrors = ref(false);
+		const dateError = ref(false);
+		const timeError = ref(false);
+
+		const setDateTime = (s: string) => {
+			date.value = s;
+			time.value = new Date(s).toLocaleTimeString(locale, {
+				timeStyle: "short",
+				hourCycle: "h23",
+			});
+		};
+		setDateTime(props.dateTime || props.defaultDate);
 
 		watch(
 			() => props.dateTime,
-			(newValue) => {
-				selectedDateTime.value = new Date(newValue);
-				date.value = newValue;
-				time.value = new Date(newValue).toLocaleTimeString(locale, {
-					timeStyle: "short",
-					hourCycle: "h23",
-				});
+			(newDateTime) => {
+				setDateTime(newDateTime);
 			}
 		);
 
-		watch([date, time], ([newDate, newTime], [prevDate, prevTime]) => {
-			if (newDate !== prevDate) {
-				selectedDateTime.value = new Date(newDate);
-				if (newTime !== "") {
-					const hoursAndMinutes = newTime.split(":");
-					selectedDateTime.value.setHours(
-						parseInt(hoursAndMinutes[0]),
-						parseInt(hoursAndMinutes[1])
-					);
-				}
-			}
+		// watch([date, time], ([newDate, newTime], [prevDate, prevTime]) => {
+		// 	if (newDate !== prevDate) {
+		// 		selectedDateTime.value = new Date(newDate);
+		// 		if (newTime !== "") {
+		// 			const hoursAndMinutes = newTime.split(":");
+		// 			selectedDateTime.value.setHours(
+		// 				parseInt(hoursAndMinutes[0]),
+		// 				parseInt(hoursAndMinutes[1])
+		// 			);
+		// 		}
+		// 	}
 
-			if (newTime !== prevTime) {
-				const hoursAndMinutes = newTime.split(":");
-				selectedDateTime.value.setHours(
-					parseInt(hoursAndMinutes[0]),
-					parseInt(hoursAndMinutes[1])
-				);
+		// 	if (newTime !== prevTime) {
+		// 		const hoursAndMinutes = newTime.split(":");
+		// 		selectedDateTime.value.setHours(
+		// 			parseInt(hoursAndMinutes[0]),
+		// 			parseInt(hoursAndMinutes[1])
+		// 		);
 
-				date.value = selectedDateTime.value.toISOString();
-			}
-		});
+		// 		date.value = selectedDateTime.value.toISOString();
+		// 	}
+		// });
 
-		watch(selectedDateTime, (newDateTime, prevDateTime) => {
-			if (newDateTime !== prevDateTime) {
-				hasErrors.value = false;
-				emit("input", selectedDateTime.value.toISOString());
-			}
-		});
+		// watch(selectedDateTime, (newDateTime, prevDateTime) => {
+		// 	if (newDateTime !== prevDateTime) {
+		// 		hasErrors.value = false;
+		// 		emit("input", selectedDateTime.value.toISOString());
+		// 	}
+		// });
 
-		const handleDateInput = (selectedDate: string) => {
-			date.value = selectedDate;
+		const generateDateTime = () => {
+			const d = new Date(date.value);
+			const hoursAndMinutes = time.value.split(":");
+			d.setHours(parseInt(hoursAndMinutes[0]), parseInt("12"));
+			// console.log(d.toISOString());
+			emit("input", d.toISOString());
 		};
 
-		const handleTimeInput = (selectedTime: string) => {
-			time.value = selectedTime;
+		const handleDateInput = (newDate: string) => {
+			dateError.value = false;
+			date.value = newDate;
+			if (!dateError.value && !timeError.value) {
+				generateDateTime();
+			}
+		};
+
+		const handleTimeInput = (newTime: string) => {
+			timeError.value = false;
+			time.value = newTime;
+			if (!dateError.value && !timeError.value) {
+				generateDateTime();
+			}
 		};
 
 		const iconColor = computed(() => {
-			return hasErrors.value === true ? "error" : "";
+			return dateError.value || timeError.value ? "error" : "";
 		});
-
-		const onError = () => {
-			hasErrors.value = true;
-			emit("error");
-		};
 
 		return {
 			mdiCalendarClock,
-			selectedDateTime,
 			date,
 			time,
 			handleDateInput,
 			handleTimeInput,
 			iconColor,
-			hasErrors,
-			onError,
+			dateError,
+			timeError,
 		};
 	},
 });
