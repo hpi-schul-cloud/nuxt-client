@@ -108,19 +108,20 @@ export default defineComponent({
 
 				date.value = selectedDateTime.value.toISOString();
 			}
+		});
 
-			if (newDate !== "" && newTime !== "") {
+		watch(selectedDateTime, (newDateTime, prevDateTime) => {
+			if (newDateTime !== prevDateTime) {
+				hasErrors.value = false;
 				emit("input", selectedDateTime.value.toISOString());
 			}
 		});
 
 		const handleDateInput = (selectedDate: string) => {
-			hasErrors.value = false;
 			date.value = selectedDate;
 		};
 
 		const handleTimeInput = (selectedTime: string) => {
-			hasErrors.value = false;
 			time.value = selectedTime;
 		};
 
