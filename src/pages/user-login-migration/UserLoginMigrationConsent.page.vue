@@ -48,9 +48,9 @@
 import { useApplicationError } from "@/composables/application-error.composable";
 import SystemsModule from "@/store/systems";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import UserMigrationModule from "@/store/user-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
-import { MigrationPageOrigin } from "@/store/types/user-migration";
+import { MigrationPageOrigin } from "@/store/types/user-login-migration";
 import {
 	computed,
 	ComputedRef,
@@ -62,7 +62,7 @@ import {
 } from "vue";
 
 export default defineComponent({
-	name: "UserMigration",
+	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
 	props: {
 		sourceSystem: {
@@ -83,14 +83,10 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { createApplicationError } = useApplicationError();
-		if (!props.targetSystem || !props.sourceSystem || !props.origin) {
-			throw createApplicationError(HttpStatusCode.BadRequest);
-		}
-
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
-		const userMigrationModule: UserMigrationModule | undefined =
-			inject<UserMigrationModule>("userMigrationModule");
+		const userMigrationModule: UserLoginMigrationModule | undefined =
+			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 		if (!systemsModule || !userMigrationModule) {
 			throw createApplicationError(
 				HttpStatusCode.InternalServerError,
@@ -123,15 +119,9 @@ export default defineComponent({
 			migrationDescription = props.mandatory
 				? "pages.userMigration.description.fromSourceMandatory"
 				: "pages.userMigration.description.fromSource";
-		} else if (props.origin === props.targetSystem) {
+		} else {
 			pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
 			migrationDescription = "pages.userMigration.description.fromTarget";
-		} else {
-			throw createApplicationError(
-				HttpStatusCode.BadRequest,
-				"error.400",
-				`Unknown origin system ${props.origin}. Expected ${props.sourceSystem} or ${props.targetSystem}`
-			);
 		}
 
 		const hasData: Ref<boolean> = ref(false);

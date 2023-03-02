@@ -3,8 +3,8 @@ import {
 	MigrationLinkRequest,
 	MigrationLinks,
 	MigrationPageOrigin,
-} from "./types/user-migration";
-import UserMigrationModule from "./user-migration";
+} from "./types/user-login-migration";
+import UserLoginMigrationModule from "./user-login-migration";
 
 // const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
 // 	data,
@@ -14,11 +14,11 @@ import UserMigrationModule from "./user-migration";
 // 	config: {},
 // });
 
-describe("UserMigrationModule", () => {
-	let module: UserMigrationModule;
+describe("UserLoginMigrationModule", () => {
+	let module: UserLoginMigrationModule;
 
 	beforeEach(() => {
-		module = new UserMigrationModule({});
+		module = new UserLoginMigrationModule({});
 	});
 
 	afterEach(() => {

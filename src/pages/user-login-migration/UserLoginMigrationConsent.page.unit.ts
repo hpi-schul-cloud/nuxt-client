@@ -1,20 +1,20 @@
-import UserMigration from "@/pages/user-migration/UserMigration.page.vue";
+import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
-import UserMigrationModule from "@/store/user-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
 import {
 	MigrationLinks,
 	MigrationPageOrigin,
-} from "@/store/types/user-migration";
+} from "@/store/types/user-login-migration";
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
 import { ApplicationError } from "@/store/types/application-error";
 
-describe("UserMigration", () => {
+describe("UserLoginMigrationConsent", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
-	let userMigrationModule: jest.Mocked<UserMigrationModule>;
+	let userMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 
 	const setup = (props: object) => {
 		Vue.config.silent = true;
@@ -37,92 +37,33 @@ describe("UserMigration", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
-		userMigrationModule = createModuleMocks(UserMigrationModule, {
+		userMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getMigrationLinks: migrationLinksMock,
 		});
 
-		const wrapper: Wrapper<any> = mount(UserMigration as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				systemsModule,
-				userMigrationModule,
-			},
-			propsData: props,
-			mocks: {
-				$t: (key: string, dynamic?: object): string =>
-					key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
-			},
-		});
+		const wrapper: Wrapper<any> = mount(
+			UserLoginMigrationConsent as MountOptions<Vue>,
+			{
+				...createComponentMocks({
+					i18n: true,
+				}),
+				provide: {
+					systemsModule,
+					userMigrationModule,
+				},
+				propsData: props,
+				mocks: {
+					$t: (key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				},
+			}
+		);
 
 		return {
 			wrapper,
 			migrationLinksMock,
 		};
 	};
-
-	describe("Prop validation", () => {
-		describe("when prop sourceSystem is missing", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					setup({
-						targetSystem: "targetSystemId",
-						origin: "sourceSystemId",
-					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.any(ApplicationError)
-				);
-				consoleErrorSpy.mockRestore();
-			});
-		});
-
-		describe("when prop targetSystem is missing", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					setup({
-						sourceSystem: "sourceSystemId",
-						origin: "sourceSystemId",
-					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.any(ApplicationError)
-				);
-				consoleErrorSpy.mockRestore();
-			});
-		});
-
-		describe("when prop origin is missing", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					setup({
-						sourceSystem: "sourceSystemId",
-						targetSystem: "targetSystemId",
-					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.any(ApplicationError)
-				);
-				consoleErrorSpy.mockRestore();
-			});
-		});
-	});
 
 	describe("Injection", () => {
 		describe("when injection userMigrationModule is missing", () => {
@@ -132,7 +73,7 @@ describe("UserMigration", () => {
 					.mockImplementation();
 
 				try {
-					shallowMount(UserMigration as MountOptions<Vue>, {
+					shallowMount(UserLoginMigrationConsent as MountOptions<Vue>, {
 						...createComponentMocks({
 							i18n: true,
 						}),
@@ -161,7 +102,7 @@ describe("UserMigration", () => {
 					.mockImplementation();
 
 				try {
-					shallowMount(UserMigration as MountOptions<Vue>, {
+					shallowMount(UserLoginMigrationConsent as MountOptions<Vue>, {
 						...createComponentMocks({
 							i18n: true,
 						}),
@@ -193,7 +134,9 @@ describe("UserMigration", () => {
 					origin: "sourceSystemId",
 				});
 
-				const result: boolean = wrapper.findComponent(UserMigration).exists();
+				const result: boolean = wrapper
+					.findComponent(UserLoginMigrationConsent)
+					.exists();
 
 				expect(result).toEqual(true);
 			});
