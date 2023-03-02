@@ -1,20 +1,21 @@
 import { BoardSkeletonCardReponse } from "@/serverApi/v3";
+import { BoardSkeletonCard } from "./Board";
 
-export interface CardMovePayload {
+export interface CardMove {
 	removedIndex: number | null;
 	addedIndex: number | null;
 	payload: BoardSkeletonCardReponse;
 }
 
-export interface CardDndPayload {
-	cardId: string;
-	cardPosition: number;
+export interface CardMoveByKeyboard {
+	card: BoardSkeletonCard;
+	cardIndex: number;
 	columnIndex: number;
 	targetColumnIndex: number;
 	targetColumnPosition: number;
 }
 
-export interface ColumnDndPayload {
+export interface ColumnMove {
 	addedIndex: number;
 	removedIndex: number;
 	payload: string;

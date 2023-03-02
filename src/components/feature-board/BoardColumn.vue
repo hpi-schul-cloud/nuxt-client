@@ -10,7 +10,7 @@
 				@drop="onCardDrop"
 				drag-class="card-ghost"
 				drop-class="card-ghost-drop"
-				:drop-placeholder="dropPlaceholderOptions"
+				:drop-placeholder="upperDropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
 			>
 				<template v-for="card in column.cards">
@@ -32,7 +32,12 @@ import { defineComponent, PropType, ref } from "vue";
 import CardHost from "./CardHost.vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { BoardColumn, BoardSkeletonCard } from "./types/Board";
-import { CardMovePayload, dropPlaceholderOptions } from "./types/DragAndDrop";
+import {
+	CardMove,
+	dropPlaceholderOptions,
+	upperDropPlaceholderOptions,
+	CardMoveByKeyboard,
+} from "./types/DragAndDrop";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -47,7 +52,7 @@ export default defineComponent({
 	setup(props, ctx) {
 		const colWidth = ref<number>(400);
 
-		const onCardDrop = (dropResult: CardMovePayload): void => {
+		const onCardDrop = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
 
@@ -58,24 +63,19 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const findCardPosition = (cardId: string): number => {
-			return props.column.cards.findIndex((card) => card.cardId === cardId);
-		};
-
-		const cardHostRefs = ref<{ id: string }[]>();
-
 		const moveByKeyboard = (card: BoardSkeletonCard, keyString: string) => {
-			const cardIndex = findCardPosition(card.cardId);
-			const dndObject = {
-				cardId: card.cardId,
-				cardPosition: cardIndex,
+			const cardIndex = props.column.cards.findIndex(
+				(c) => c.cardId === card.cardId
+			);
+			const dndObject: CardMoveByKeyboard = {
+				card: card,
+				cardIndex: cardIndex,
 				columnIndex: props.index,
-				targetColumnIndex: -1,
+				targetColumnIndex: props.index,
 				targetColumnPosition: -1,
 			};
 
 			if (["ArrowUp", "ArrowDown"].includes(keyString)) {
-				dndObject.targetColumnIndex = props.index;
 				dndObject.targetColumnPosition =
 					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
@@ -86,19 +86,15 @@ export default defineComponent({
 			}
 
 			ctx.emit("position-change-keyboard", dndObject);
-			const selectedCard = cardHostRefs.value?.find(
-				(c) => c.id === card.cardId
-			);
-			console.log(selectedCard);
 		};
 
 		return {
 			colWidth,
 			dropPlaceholderOptions,
+			upperDropPlaceholderOptions,
 			onCardDrop,
 			getChildPayload,
 			moveByKeyboard,
-			cardHostRefs,
 		};
 	},
 });

@@ -29,41 +29,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, reactive } from "vue";
+import { defineComponent } from "vue";
 import BoardColumn from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
 import { Container, Draggable } from "vue-smooth-dnd";
 import {
-	CardMovePayload,
-	ColumnDndPayload,
+	CardMove,
+	ColumnMove,
 	upperDropPlaceholderOptions,
+	CardMoveByKeyboard,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
 	name: "Board",
 	components: { BoardColumn, Container, Draggable },
 	setup() {
-		const { board, changeColumnPosition, changePosition } = useBoardState(
-			"0000d213816abba584714caa"
-		);
+		const {
+			board,
+			changeColumnPosition,
+			changePosition,
+			changePositionByKeyboard,
+		} = useBoardState("0000d213816abba584714caa");
 
-		const onCardPositionChange = (
-			columnIndex: number,
-			payload: CardMovePayload
-		) => {
+		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
 			console.log("card-position ->", columnIndex, payload);
 			changePosition(columnIndex, payload);
 		};
 
-		const onColumnDrop = (columnPayload: ColumnDndPayload): void => {
+		const onColumnDrop = (columnPayload: ColumnMove): void => {
 			changeColumnPosition(columnPayload);
 		};
 
-		const updatePositionByKeyboard = (
-			columnIndex: number,
-			payload: CardMovePayload
-		) => {
-			changePosition(columnIndex, payload);
+		const updatePositionByKeyboard = (payload: CardMoveByKeyboard) => {
+			changePositionByKeyboard(payload);
 		};
 
 		const getChildPayload = (index: number): string => {
