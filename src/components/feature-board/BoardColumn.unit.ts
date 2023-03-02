@@ -4,6 +4,7 @@ import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { BoardColumn } from "./types/Board";
 import CardHost from "./CardHost.vue";
+import { Container } from "vue-smooth-dnd";
 
 const MOCK_PROP: BoardColumn = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
@@ -54,6 +55,42 @@ describe("BoardColumn", () => {
 			const emitted = wrapper.emitted("position-change-keyboard") || [[]];
 
 			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
+		});
+	});
+
+	describe("when a card moved ", () => {
+		it("should emit 'card-position-change'", async () => {
+			setup();
+			const emitObject = {
+				removedIndex: 0,
+				addedIndex: 0,
+				payload: MOCK_PROP.cards[0],
+			};
+			const containerComponent = wrapper.findComponent(Container);
+			await containerComponent.vm.$emit("drop", emitObject);
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			const emitted = wrapper.emitted("card-position-change") || [[]];
+
+			expect(emitted[0][0]).toStrictEqual(emitObject);
+		});
+
+		it("should not emit 'card-position-change'", async () => {
+			setup();
+			const emitObject = {
+				removedIndex: null,
+				addedIndex: null,
+				payload: MOCK_PROP.cards[0],
+			};
+			const containerComponent = wrapper.findComponent(Container);
+			await containerComponent.vm.$emit("drop", emitObject);
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			const emitted = wrapper.emitted("card-position-change");
+
+			expect(emitted).toBeUndefined();
 		});
 	});
 });
