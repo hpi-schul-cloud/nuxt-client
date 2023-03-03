@@ -1,12 +1,6 @@
 <template>
-	<div class="d-flex">
-		<VCard
-			:height="height"
-			class="w-100"
-			outlined
-			tabindex="0"
-			@keydown.up.down.left.right.space.prevent="onKeyStroke"
-		>
+	<div class="d-flex" @keydown.up.down.left.right.space.prevent="onKeyStroke">
+		<VCard :height="height" class="w-100" outlined tabindex="0">
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
 			</template>
@@ -34,7 +28,6 @@ import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 import { BoardCardType } from "./types/Card";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "CardHost",
 	components: {
