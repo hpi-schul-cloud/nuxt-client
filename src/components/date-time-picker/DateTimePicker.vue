@@ -37,6 +37,9 @@ export default defineComponent({
 		TimePicker,
 	},
 	props: {
+		// Refactor info (to be removed)
+		// I didnt get what the second property with defaultDate was for
+		// cant we have dateTime optional and have current date as default?
 		dateTime: {
 			type: String,
 			default: new Date().toISOString(),
@@ -96,6 +99,10 @@ export default defineComponent({
 			emit("input", dateTime.toISOString());
 		};
 
+		// Refactor info (to be removed)
+		// instead of the watchers: we know that date or time has changed (and has no error)
+		// when date or time emits input
+		// so lets just emit input with new dateTime when both have no error / dateTime is valid
 		const handleDateInput = (newDate: string) => {
 			dateError.value = false;
 			date.value = newDate;
