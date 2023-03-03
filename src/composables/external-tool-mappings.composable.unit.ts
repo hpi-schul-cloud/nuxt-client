@@ -22,8 +22,10 @@ import {
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
-import { toolParameterFactory } from "../../tests/test-utils/factory";
-import { toolConfigurationTemplateFactory } from "../../tests/test-utils/factory/toolConfigurationTemplateFactory";
+import {
+	toolParameterFactory,
+	toolConfigurationTemplateFactory,
+} from "@@/tests/test-utils/factory";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -244,7 +246,6 @@ describe("useExternalToolUtils", () => {
 					parameters: expect.arrayContaining<CustomParameterEntryParam>([
 						{
 							name: template.parameters[0].name,
-							value: "",
 						},
 						{
 							name: template.parameters[1].name,
