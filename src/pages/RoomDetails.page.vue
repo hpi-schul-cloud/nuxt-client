@@ -137,6 +137,7 @@ import {
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
+import { useRouter } from "vue-router/composables";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
@@ -239,6 +240,19 @@ export default defineComponent({
 							value: true,
 						},
 					});
+				}
+				if (envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED) {
+					const router = useRouter();
+					const action = {
+						label: this.$t("pages.rooms.fab.add.betatask"),
+						icon: mdiFormatListChecks,
+						href: router.resolve({
+							name: "rooms-task-card-new",
+							params: { course: this.roomData.roomId },
+						}).href,
+						dataTestid: "fab_button_add_beta_task",
+					};
+					items.actions.splice(1, 0, action);
 				}
 				return items;
 			}

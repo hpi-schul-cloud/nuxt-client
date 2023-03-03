@@ -18,6 +18,8 @@ import { BusinessError } from "./types/commons";
 export default class TaskCardModule extends VuexModule {
 	taskCardData: TaskCardResponse = {
 		id: "",
+		courseId: "",
+		courseName: "",
 		cardElements: [
 			{
 				id: "",
@@ -122,6 +124,11 @@ export default class TaskCardModule extends VuexModule {
 	@Mutation
 	setTaskCardData(payload: any): void {
 		this.taskCardData = payload;
+	}
+
+	@Mutation
+	setCourseId(id: string): void {
+		this.taskCardData.courseId = id;
 	}
 
 	@Mutation

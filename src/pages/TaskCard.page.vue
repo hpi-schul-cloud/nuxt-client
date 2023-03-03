@@ -4,26 +4,58 @@
 		:breadcrumbs="breadcrumbs"
 		headline="Task Card"
 	>
-		<v-form class="d-flex flex-column">
-			<card-element-wrapper v-model="title.model" v-bind="title.props" />
-			<card-element-list v-model="elements" />
+		<v-form v-if="isEditMode" class="d-flex flex-column">
+			<v-select
+				v-model="course"
+				:items="courses"
+				item-value="id"
+				item-text="title"
+				filled
+				disabled
+				:label="$t('common.labels.course')"
+			/>
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="true"
+			/>
+			<card-element-list v-model="elements" :editMode="true" />
 			<div>
-				<v-btn color="secondary" outlined @click="cancel">
+				<v-btn
+					color="secondary"
+					outlined
+					@click="cancel"
+					data-testid="cancel-btn"
+				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn class="float-right" color="primary" depressed @click="save">
+				<v-btn
+					class="float-right"
+					color="primary"
+					depressed
+					@click="save"
+					data-testid="save-btn"
+				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
 			</div>
 		</v-form>
+		<article v-else class="d-flex flex-column">
+			<card-element-wrapper
+				v-model="title.model"
+				v-bind="title.props"
+				:editMode="false"
+			/>
+			<card-element-list v-model="elements" :editMode="false" />
+		</article>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted } from "vue";
+import { defineComponent, inject, ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule } from "@/store";
+import { taskCardModule, roomModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -32,10 +64,12 @@ import {
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
 import {
+	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -49,16 +83,21 @@ export default defineComponent({
 		const router = useRouter();
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		if (!i18n || !authModule) {
 			throw new Error("Injection of dependencies failed");
 		}
-		const breadcrumbs = [
+		const breadcrumbs = ref([
 			{
-				text: i18n.t("common.words.tasks"),
-				to: "/tasks",
+				text: i18n.t("pages.courses.index.title"),
+				to: router.resolve({
+					name: "rooms-overview",
+				}).href,
 			},
-		];
+		]);
 
+		const course = ref("");
+		const courses = ref<object[]>([]);
 		const title = ref<CardElement>({
 			id: "",
 			type: CardElementResponseCardElementTypeEnum.Title,
@@ -68,13 +107,56 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			const taskCardId =
-				route.name === "task-card-edit" ? route.params.id : undefined;
-			if (taskCardId) {
-				await taskCardModule.findTaskCard(taskCardId);
+			if (route.name === "rooms-task-card-new") {
+				course.value = route.params.id || "";
+				await roomModule.fetchContent(course.value);
+				const roomData = roomModule.getRoomData;
+				courses.value = [
+					{
+						id: roomData.roomId,
+						title: roomData.title,
+					},
+				];
+				const taskCardData = taskCardModule.getTaskCardData;
+				taskCardModule.setCourseId(course.value);
+				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: roomData.title,
+					to: router.resolve({
+						name: "rooms-id",
+					}).href,
+				});
 			}
-			const taskCardData = taskCardModule.getTaskCardData;
-			taskCardData.cardElements.forEach((cardElement) => {
+
+			if (route.name === "task-card-view-edit") {
+				const taskCardId = route.params.id;
+				await taskCardModule.findTaskCard(taskCardId);
+
+				const taskCardData = taskCardModule.getTaskCardData;
+				course.value = taskCardData.courseId || "";
+				courses.value = [
+					{
+						id: taskCardData.courseId || "",
+						title: taskCardData.courseName || "",
+					},
+				];
+				initElements(taskCardData.cardElements);
+
+				breadcrumbs.value.push({
+					text: taskCardData.courseName || "",
+					to: router.resolve({
+						name: "rooms-id",
+						params: {
+							id: taskCardData.courseId || "",
+						},
+					}).href,
+				});
+			}
+		});
+
+		const initElements = (cardElements: Array<CardElementResponse>) => {
+			cardElements.forEach((cardElement) => {
 				if (
 					cardElement.cardElementType ===
 					CardElementResponseCardElementTypeEnum.Title
@@ -88,7 +170,7 @@ export default defineComponent({
 							placeholder: i18n.t(
 								"components.cardElement.titleElement.placeholder"
 							) as string,
-							editable: true,
+							editable: isEditMode.value,
 						},
 					};
 					return;
@@ -103,11 +185,11 @@ export default defineComponent({
 						placeholder: i18n.t(
 							"components.cardElement.richTextElement.placeholder"
 						) as string,
-						editable: true,
+						editable: isEditMode.value,
 					},
 				});
 			});
-		});
+		};
 
 		const createTaskCard = () => {
 			const cardElements: Array<CardElementParams> = [];
@@ -130,6 +212,7 @@ export default defineComponent({
 			});
 
 			taskCardModule.createTaskCard({
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
@@ -158,23 +241,30 @@ export default defineComponent({
 			});
 
 			taskCardModule.updateTaskCard({
+				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
 		const save = () => {
-			if (route.name === "task-card-new") {
+			if (route.name === "rooms-task-card-new") {
 				createTaskCard();
 			} else {
 				updateTaskCard();
 			}
-			// TODO
-			//router.go(-1);
+
+			router.go(-1);
 		};
 
 		const cancel = () => {
 			router.go(-1);
 		};
+
+		const getUserPermissions = ref(authModule.getUserPermissions);
+
+		const isEditMode = computed(() => {
+			return getUserPermissions.value.includes("task_card_edit");
+		});
 
 		return {
 			breadcrumbs,
@@ -182,6 +272,9 @@ export default defineComponent({
 			elements,
 			save,
 			cancel,
+			isEditMode,
+			course,
+			courses,
 		};
 	},
 	mounted() {

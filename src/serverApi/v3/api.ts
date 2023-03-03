@@ -3184,6 +3184,12 @@ export interface TargetInfoResponse {
  */
 export interface TaskCardParams {
     /**
+     * The id of an course object.
+     * @type {string}
+     * @memberof TaskCardParams
+     */
+    courseId?: string;
+    /**
      * Visible at date of the card
      * @type {string}
      * @memberof TaskCardParams
@@ -3220,6 +3226,18 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     cardElements: Array<CardElementResponse>;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskCardResponse
+     */
+    courseId?: string;
     /**
      * Are the card elements draggable?
      * @type {boolean}
@@ -3343,6 +3361,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    taskCardId?: string;
     /**
      * Task description object, with props content: string and type: input format types
      * @type {RichText}
