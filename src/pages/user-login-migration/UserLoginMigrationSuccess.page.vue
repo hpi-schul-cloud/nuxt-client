@@ -1,5 +1,5 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto">
+	<div v-show="hasData" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_successful.svg"
 			alt="migration successful logo"
@@ -69,4 +69,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container-max-width {
+	max-width: var(--size-content-width-max);
+}
+</style>

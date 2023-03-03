@@ -894,7 +894,7 @@
 	"pages.userMigration.description.fromSource": "Your school is changing the registration system from {sourceSystem} to {targetSystem} and you can have your registration procedure migrated from {sourceSystem} to {targetSystem}.<br><br>You can start the migration now. At the beginning of the move you log in one last time with {sourceSystem}. After that you can only register via {targetSystem}.",
 	"pages.userMigration.description.fromSourceMandatory": "Your school is currently changing the registration system from {sourceSystem} to {targetSystem} and with it your registration procedure will also be permanently moving.<br><br>You must start the migration now. At the beginning of the move you log in one last time with {sourceSystem}. After that you can only register via {targetSystem}.",
 	"pages.userMigration.success.title": "Successful migration of the registration system",
-	"pages.userMigration.success.description": "The migration of the login system from {sourceSystem} to {targetSystem} was successfully completed. This user account has now been logged out and can now be logged in via {targetSystem}.",
+	"pages.userMigration.success.description": "The migration of the login system from {sourceSystem} to {targetSystem} was successfully completed. This user account has been logged out and can now be logged in via {targetSystem}.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
 	"utils.adminFilter.consent.label.missing": "User created",
