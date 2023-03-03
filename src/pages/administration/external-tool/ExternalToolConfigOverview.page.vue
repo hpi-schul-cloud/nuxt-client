@@ -14,7 +14,7 @@
 			v-model="selectedItem"
 			:no-data-text="$t('common.nodata')"
 			return-object
-			:disabled="isEdit"
+			:disabled="isInEditMode"
 			:loading="loading"
 			@change="onSelectTemplate"
 			data-testId="configuration-select"
@@ -58,7 +58,7 @@
 				data-testId="save-button"
 			>
 				{{
-					isEdit
+					isInEditMode
 						? $t("pages.tool.editBtn.label")
 						: $t("pages.tool.addBtn.label")
 				}}
@@ -147,11 +147,13 @@ export default defineComponent({
 		const loading: ComputedRef<boolean> = computed(
 			() => !hasData.value || externalToolsModule.getLoading
 		);
-		const isEdit: Ref<boolean> = ref(!!props.configId && props.configId !== "");
+		const isInEditMode: Ref<boolean> = ref(
+			!!props.configId && props.configId !== ""
+		);
 
 		const configurationItems: ComputedRef<ToolConfigurationListItem[]> =
 			computed(() => {
-				if (isEdit.value && toolTemplate.value) {
+				if (isInEditMode.value && toolTemplate.value) {
 					const editItem: ToolConfigurationListItem = {
 						id: toolTemplate.value.id,
 						name: toolTemplate.value.name,
@@ -189,7 +191,7 @@ export default defineComponent({
 
 		const onSaveTool = async () => {
 			if (toolTemplate.value) {
-				if (isEdit.value) {
+				if (isInEditMode.value) {
 					await externalToolsModule.updateSchoolExternalTool(
 						toolTemplate.value
 					);
@@ -217,22 +219,30 @@ export default defineComponent({
 				toolTemplate.value.configId = config.id;
 				toolTemplate.value.parameters.forEach(
 					(templateParameter: ToolParameter) => {
-						const configuredParameter: ToolParameterEntry | undefined =
-							config.parameters.find(
-								(parameter: ToolParameterEntry) =>
-									parameter.name === templateParameter.name
-							);
-
-						if (configuredParameter) {
-							templateParameter.value = configuredParameter.value;
-						}
+						templateParameter.value = getParameterValueFromConfig(
+							config,
+							templateParameter.name
+						);
 					}
 				);
 			}
 		};
 
+		const getParameterValueFromConfig = (
+			config: SchoolExternalTool,
+			parameterName: string
+		) => {
+			const configuredParameter: ToolParameterEntry | undefined =
+				config.parameters.find(
+					(configParameter: ToolParameterEntry) =>
+						configParameter.name === parameterName
+				);
+
+			return configuredParameter ? configuredParameter.value : undefined;
+		};
+
 		onMounted(async () => {
-			if (isEdit.value && props.configId) {
+			if (isInEditMode.value && props.configId) {
 				const editConfig: SchoolExternalTool | undefined =
 					await externalToolsModule.loadSchoolExternalTool(props.configId);
 				if (editConfig) {
@@ -257,7 +267,7 @@ export default defineComponent({
 			onSelectTemplate,
 			onCancel,
 			onSaveTool,
-			isEdit,
+			isInEditMode,
 		};
 	},
 });

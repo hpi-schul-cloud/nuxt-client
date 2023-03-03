@@ -108,12 +108,12 @@ export default class ExternalToolsModule extends VuexModule {
 				this.setSchoolExternalTools(schoolExternalTools);
 			}
 			this.setLoading(false);
-		} catch (e: any) {
-			console.log(`Some error occurred while loading tools data: ${e}`);
+		} catch (error: any) {
+			console.log(`Some error occurred while loading tools data: ${error}`);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -128,14 +128,14 @@ export default class ExternalToolsModule extends VuexModule {
 			this.removeSchoolExternalTool(configId);
 
 			this.setLoading(false);
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while deleting tool configuration with id ${configId}: ${e}`
+				`Some error occurred while deleting tool configuration with id ${configId}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -160,14 +160,14 @@ export default class ExternalToolsModule extends VuexModule {
 				);
 			}
 			this.setLoading(false);
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while loading available tools for scope SCHOOL and schoolId ${authModule.getUser?.schoolId}: ${e}`
+				`Some error occurred while loading available tools for scope SCHOOL and schoolId ${authModule.getUser?.schoolId}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -191,14 +191,14 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 
 			return toolConfigurationTemplate;
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${e}`
+				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -223,14 +223,14 @@ export default class ExternalToolsModule extends VuexModule {
 				);
 			}
 			this.setLoading(false);
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while saving schoolExternalTool for externalTool with id ${toolTemplate.id}: ${e}`
+				`Some error occurred while saving schoolExternalTool for externalTool with id ${toolTemplate.id}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -256,14 +256,14 @@ export default class ExternalToolsModule extends VuexModule {
 				);
 			}
 			this.setLoading(false);
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while updating schoolExternalTool with id ${toolTemplate.configId} for externalTool with id ${toolTemplate.id}: ${e}`
+				`Some error occurred while updating schoolExternalTool with id ${toolTemplate.configId} for externalTool with id ${toolTemplate.id}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
@@ -285,14 +285,14 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 
 			return schoolExternalTool;
-		} catch (e: any) {
+		} catch (error: any) {
 			console.log(
-				`Some error occurred while loading schoolExternalTool with id ${configId}: ${e}`
+				`Some error occurred while loading schoolExternalTool with id ${configId}: ${error}`
 			);
 			this.setBusinessError({
-				...e,
-				statusCode: e?.response?.status,
-				message: e?.response?.data.message,
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
 			});
 			this.setLoading(false);
 		}
