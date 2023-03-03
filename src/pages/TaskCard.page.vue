@@ -137,12 +137,6 @@ export default defineComponent({
 		const route = useRoute();
 
 		onMounted(async () => {
-			const taskCardData = taskCardModule.getTaskCardData;
-
-			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
-			endOfSchoolYear.setHours(12);
-			dueDate.value = taskCardData.dueDate || endOfSchoolYear.toISOString();
-
 			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
@@ -153,8 +147,12 @@ export default defineComponent({
 						title: roomData.title,
 					},
 				];
+				const taskCardData = taskCardModule.getTaskCardData;
 
 				taskCardModule.setCourseId(course.value);
+				const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+				endOfSchoolYear.setHours(12);
+				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push({
@@ -168,6 +166,7 @@ export default defineComponent({
 			if (route.name === "task-card-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
+				const taskCardData = taskCardModule.getTaskCardData;
 
 				course.value = taskCardData.courseId || "";
 				courses.value = [
@@ -176,6 +175,7 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push({
