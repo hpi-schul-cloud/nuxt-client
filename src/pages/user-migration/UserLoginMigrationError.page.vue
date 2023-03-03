@@ -1,7 +1,7 @@
 <template>
 	<div v-show="hasData" class="text-center mx-auto">
 		<img
-			src="@/assets/img/migration/migration.svg"
+			src="@/assets/img/migration/migration_error.svg"
 			alt="migration error logo"
 		/>
 		<h1 class="pl-4 pr-4">
