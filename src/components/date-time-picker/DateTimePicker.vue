@@ -10,7 +10,7 @@
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
 			@input="handleDateInput"
-			@error="dateError = true"
+			@error="handleDateError"
 		/>
 		<time-picker
 			required
@@ -18,7 +18,7 @@
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
 			@input="handleTimeInput"
-			@error="timeError = true"
+			@error="handleTimeError"
 		/>
 	</div>
 </template>
@@ -38,10 +38,6 @@ export default defineComponent({
 	},
 	props: {
 		dateTime: {
-			type: String,
-			required: true,
-		},
-		defaultDate: {
 			type: String,
 			default: new Date().toISOString(),
 		},
@@ -74,15 +70,15 @@ export default defineComponent({
 		const dateError = ref(false);
 		const timeError = ref(false);
 
-		const setDateTime = (s: string) => {
-			date.value = s;
-			time.value = new Date(s).toLocaleTimeString(locale, {
+		const setDateTime = (dateIsoString: string) => {
+			date.value = dateIsoString;
+			time.value = new Date(dateIsoString).toLocaleTimeString(locale, {
 				timeStyle: "short",
 				hourCycle: "h23",
 			});
 		};
-		setDateTime(props.dateTime || props.defaultDate);
 
+		setDateTime(props.dateTime);
 		watch(
 			() => props.dateTime,
 			(newDateTime) => {
@@ -90,73 +86,57 @@ export default defineComponent({
 			}
 		);
 
-		// watch([date, time], ([newDate, newTime], [prevDate, prevTime]) => {
-		// 	if (newDate !== prevDate) {
-		// 		selectedDateTime.value = new Date(newDate);
-		// 		if (newTime !== "") {
-		// 			const hoursAndMinutes = newTime.split(":");
-		// 			selectedDateTime.value.setHours(
-		// 				parseInt(hoursAndMinutes[0]),
-		// 				parseInt(hoursAndMinutes[1])
-		// 			);
-		// 		}
-		// 	}
-
-		// 	if (newTime !== prevTime) {
-		// 		const hoursAndMinutes = newTime.split(":");
-		// 		selectedDateTime.value.setHours(
-		// 			parseInt(hoursAndMinutes[0]),
-		// 			parseInt(hoursAndMinutes[1])
-		// 		);
-
-		// 		date.value = selectedDateTime.value.toISOString();
-		// 	}
-		// });
-
-		// watch(selectedDateTime, (newDateTime, prevDateTime) => {
-		// 	if (newDateTime !== prevDateTime) {
-		// 		hasErrors.value = false;
-		// 		emit("input", selectedDateTime.value.toISOString());
-		// 	}
-		// });
-
-		const generateDateTime = () => {
-			const d = new Date(date.value);
+		const emitDateTime = () => {
+			const dateTime = new Date(date.value);
 			const hoursAndMinutes = time.value.split(":");
-			d.setHours(parseInt(hoursAndMinutes[0]), parseInt("12"));
-			// console.log(d.toISOString());
-			emit("input", d.toISOString());
+			dateTime.setHours(
+				parseInt(hoursAndMinutes[0]),
+				parseInt(hoursAndMinutes[1])
+			);
+			emit("input", dateTime.toISOString());
 		};
 
 		const handleDateInput = (newDate: string) => {
 			dateError.value = false;
 			date.value = newDate;
-			if (!dateError.value && !timeError.value) {
-				generateDateTime();
+			if (valid.value) {
+				emitDateTime();
 			}
 		};
 
 		const handleTimeInput = (newTime: string) => {
 			timeError.value = false;
 			time.value = newTime;
-			if (!dateError.value && !timeError.value) {
-				generateDateTime();
+			if (valid.value) {
+				emitDateTime();
 			}
 		};
 
+		const handleDateError = () => {
+			dateError.value = true;
+			emit("error");
+		};
+
+		const handleTimeError = () => {
+			timeError.value = true;
+			emit("error");
+		};
+
+		const valid = computed(() => !dateError.value && !timeError.value);
+
 		const iconColor = computed(() => {
-			return dateError.value || timeError.value ? "error" : "";
+			return valid.value ? "" : "error";
 		});
 
 		return {
-			mdiCalendarClock,
 			date,
 			time,
 			handleDateInput,
 			handleTimeInput,
+			handleDateError,
+			handleTimeError,
 			iconColor,
-			dateError,
-			timeError,
+			mdiCalendarClock,
 		};
 	},
 });
