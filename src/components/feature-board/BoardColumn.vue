@@ -38,6 +38,7 @@ import {
 	cardDropPlaceholderOptions,
 	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
+	KeyStokeList,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
@@ -66,7 +67,7 @@ export default defineComponent({
 		const onMoveCardKeyboard = (
 			cardIndex: number,
 			card: BoardSkeletonCard,
-			keyString: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
+			keyString: KeyStokeList
 		) => {
 			const cardMoveByKeyboard: CardMoveByKeyboard = {
 				card: card,

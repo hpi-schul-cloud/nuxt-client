@@ -20,14 +20,13 @@ export interface ColumnMove {
 	payload: string;
 }
 
-export const keyStrokeList = [
-	"ArrowUp",
-	"ArrowDown",
-	"ArrowLeft",
-	"ArrowRight",
-	" ",
-	"Enter",
-];
+export type KeyStokeList =
+	| "ArrowUp"
+	| "ArrowDown"
+	| "ArrowLeft"
+	| "ArrowRight"
+	| " "
+	| "Enter";
 
 export const cardDropPlaceholderOptions = {
 	className: "mb-6 rounded-sm grey lighten-1",
