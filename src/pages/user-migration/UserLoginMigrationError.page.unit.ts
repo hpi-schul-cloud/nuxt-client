@@ -4,9 +4,9 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
-import UserLoginMigrationErrorPage from "./UserLoginMigrationSuccess.page.vue";
+import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 
-describe("UserLoginMigrationSuccess", () => {
+describe("UserLoginMigrationError", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 
 	const setup = (props: { sourceSystem: string; targetSystem: string }) => {
@@ -27,7 +27,7 @@ describe("UserLoginMigrationSuccess", () => {
 		});
 
 		const wrapper: Wrapper<Vue> = mount(
-			UserLoginMigrationErrorPage as MountOptions<Vue>,
+			UserLoginMigrationError as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
@@ -57,7 +57,7 @@ describe("UserLoginMigrationSuccess", () => {
 				});
 
 				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationErrorPage)
+					.findComponent(UserLoginMigrationError)
 					.exists();
 
 				expect(result).toEqual(true);
@@ -76,7 +76,7 @@ describe("UserLoginMigrationSuccess", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 

@@ -1,5 +1,5 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto">
+	<div v-show="hasData" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_error.svg"
 			alt="migration error logo"
@@ -15,6 +15,8 @@
 					$t('pages.userMigration.error.description', {
 						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
+						supportLink:
+							'mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration',
 					})
 				"
 			></p>
@@ -69,4 +71,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container-max-width {
+	max-width: var(--size-content-width-max);
+}
+</style>
