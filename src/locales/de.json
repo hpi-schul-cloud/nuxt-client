@@ -894,7 +894,7 @@
 	"pages.userMigration.description.fromSource": "Deine Schule wechselt gerade das Anmeldesystem von {sourceSystem} zu {targetSystem} und Du kannst Dein Anmeldeverfahren von {sourceSystem} zu {targetSystem} umziehen lassen.<br><br>Du kannst den Umzug jetzt starten. Zu Beginn des Umzugs meldest Du Dich ein letztes Mal mit {sourceSystem} an. Danach kannst Du Dich nur noch über {targetSystem} anmelden.",
 	"pages.userMigration.description.fromSourceMandatory": "Deine Schule wechselt gerade das Anmeldesystem von {sourceSystem} zu {targetSystem} und damit zieht auch Dein Anmeldeverfahren endgültig um.<br><br>Du musst den Umzug jetzt starten. Zu Beginn des Umzugs meldest Du Dich ein letztes Mal mit {sourceSystem} an. Danach kannst Du Dich nur noch über {targetSystem} anmelden.",
 	"pages.userMigration.error.title": "Umzug des Anmeldesystems ist fehlgeschlagen",
-	"pages.userMigration.error.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} ist leider fehlgeschlagen. Um die Niedersächsische Bildungscloud mit dem Anmeldesystem {targetSystem} nutzen zu können, bitte <span class=\"blue--text\">Kontakt zum Support</span> aufnehmen",
+	"pages.userMigration.error.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} ist leider fehlgeschlagen. Um die Niedersächsische Bildungscloud mit dem Anmeldesystem {targetSystem} nutzen zu können, bitte <span class=\"blue--text\">Kontakt zum Support</span> aufnehmen.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

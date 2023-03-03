@@ -920,7 +920,7 @@
 	"pages.userMigration.description.fromSource": "Ваша школа змінює систему реєстрації з {sourceSystem} на {targetSystem}, і ви можете перенести процедуру реєстрації з {sourceSystem} на {targetSystem}.<br><br>Ви можете почати міграцію зараз. На початку переміщення ви востаннє входите в {sourceSystem}. Після цього ви можете зареєструватися лише через {targetSystem}.",
 	"pages.userMigration.description.fromSourceMandatory": "Ваша школа наразі змінює систему реєстрації з {sourceSystem} на {targetSystem}, і разом із цим ваша процедура реєстрації також буде остаточно переміщена.<br><br>Ви повинні почати міграцію зараз. На початку переміщення ви востаннє входите в {sourceSystem}. Після цього ви можете зареєструватися лише через {targetSystem}.",
 	"pages.userMigration.error.title": "Не вдалося перемістити систему входу",
-	"pages.userMigration.error.description": "На жаль, не вдалося перемістити систему входу з {sourceSystem} на {targetSystem}. Щоб мати можливість використовувати Niedersächsische Bildungscloud із системою реєстрації {targetSystem}, <span class=\"blue--text\">зверніться до служби підтримки<span>",
+	"pages.userMigration.error.description": "На жаль, не вдалося перемістити систему входу з {sourceSystem} на {targetSystem}. Щоб мати можливість використовувати Niedersächsische Bildungscloud із системою реєстрації {targetSystem}, <span class=\"blue--text\">зверніться до служби підтримки<span>.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent": "Форма згоди:",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
