@@ -5,10 +5,6 @@ import { Board } from "./types/Board";
 
 export const useBoardState = (id: string) => {
 	const fetchBoard = async (id: string): Promise<void> => {
-		await new Promise((r) => {
-			setTimeout(r, 1000);
-		});
-
 		const boardsApi = BoardsApiFactory(undefined, "/v3", $axios);
 		board.value = {
 			...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,

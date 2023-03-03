@@ -103,6 +103,13 @@ describe("Board", () => {
 	};
 
 	describe("when component is mounted", () => {
+		it("should call 'useBoardState' composable", () => {
+			setup();
+			expect(mockedUseBoardState).toHaveBeenCalled();
+			// @ts-ignore
+			expect(wrapper.vm.board).toStrictEqual(MOCK_BOARD_ONE_COLUMN);
+		});
+
 		it("should be found in the dom", () => {
 			setup();
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
