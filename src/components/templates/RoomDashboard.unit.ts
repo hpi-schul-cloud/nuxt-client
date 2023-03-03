@@ -317,57 +317,19 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("Sharing Lesson", () => {
-		describe("old flow", () => {
-			it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const lessonCard = wrapper.find(".lesson-card");
-
-				expect(wrapper.vm.lessonShare.isOpen).toBe(false);
-				lessonCard.vm.$emit("open-modal", "12345");
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				expect(wrapper.vm.lessonShare.isOpen).toBe(true);
+		it("should call startShareFlow when share lesson item clicked", async () => {
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
 			});
-
-			it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const shareModal: any = wrapper.find(".room-dialog");
-
-				expect(shareModal.vm.isOpen).toBe(false);
-				wrapper.vm.lessonShare.isOpen = true;
-				await wrapper.vm.$nextTick();
-				expect(shareModal.vm.isOpen).toBe(true);
-			});
-		});
-
-		describe("new flow", () => {
-			beforeEach(() => {
-				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE_NEW: true });
-			});
-
-			it("should call startShareFlow when share lesson item clicked", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const lessonCard = wrapper.find(".lesson-card");
-
-				lessonCard.vm.$emit("open-modal", "12345");
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				expect(shareModuleMock.startShareFlow).toBeCalledWith({
-					id: "12345",
-					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
-				});
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("open-modal", "12345");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "12345",
+				type: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			});
 		});
 	});

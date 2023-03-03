@@ -113,24 +113,6 @@ describe("room module", () => {
 			});
 		});
 
-		describe("getSharedLesson", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
-			it("should call the backend", async () => {
-				const roomModule = new RoomModule({});
-				const fetchSharedLessonSpy = jest.spyOn(
-					roomModule,
-					"fetchSharedLesson"
-				);
-				await roomModule.fetchSharedLesson("123456");
-
-				expect(receivedRequests[0].path).toStrictEqual("/v1/lessons/123456");
-				expect(fetchSharedLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
-			});
-		});
-
 		describe("confirmImportLesson", () => {
 			beforeEach(() => {
 				receivedRequests = [];
@@ -775,21 +757,6 @@ describe("room module", () => {
 				roomModule.resetBusinessError();
 				expect(roomModule.businessError.statusCode).toStrictEqual("");
 				expect(roomModule.businessError.message).toStrictEqual("");
-			});
-		});
-
-		describe("setSharedLessonData", () => {
-			it("should set the state", () => {
-				const roomModule = new RoomModule({});
-				const shareLessonData = {
-					code: "123",
-					lessonName: "Lesson_1",
-					status: "success",
-					message: "",
-				};
-
-				roomModule.setSharedLessonData(shareLessonData);
-				expect(roomModule.sharedLessonData).toStrictEqual(shareLessonData);
 			});
 		});
 
