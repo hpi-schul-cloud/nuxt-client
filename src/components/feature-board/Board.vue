@@ -17,6 +17,7 @@
 							<BoardColumn
 								:column="column"
 								:index="index"
+								:moved-card="movedCard"
 								@position-change-keyboard="updatePositionByKeyboard"
 								@card-position-change="onCardPositionChange(index, $event)"
 							/>
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import BoardColumn from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
 import { Container, Draggable } from "vue-smooth-dnd";
@@ -52,7 +53,10 @@ export default defineComponent({
 			changePositionByKeyboard,
 		} = useBoardState("0000d213816abba584714caa");
 
+		const movedCard = ref("");
+
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
+			movedCard.value = payload.payload.cardId;
 			changePosition(columnIndex, payload);
 		};
 
@@ -61,6 +65,7 @@ export default defineComponent({
 		};
 
 		const updatePositionByKeyboard = (payload: CardMoveByKeyboard) => {
+			movedCard.value = payload.card.cardId;
 			changePositionByKeyboard(payload);
 		};
 
@@ -76,6 +81,7 @@ export default defineComponent({
 			getChildPayload,
 			updatePositionByKeyboard,
 			onCardPositionChange,
+			movedCard,
 		};
 	},
 });

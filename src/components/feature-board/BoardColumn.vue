@@ -19,6 +19,7 @@
 							class="mb-6"
 							:id="card.cardId"
 							:height="card.height"
+							:focused="movedCard === card.cardId"
 							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						/>
 					</Draggable>
@@ -50,6 +51,7 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
+		movedCard: { type: String },
 	},
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);

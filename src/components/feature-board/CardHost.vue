@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex" @keydown.up.down.left.right.space.prevent="onKeyStroke">
-		<VCard :height="height" class="w-100" outlined tabindex="0">
+		<VCard :height="height" class="w-100" outlined tabindex="0" :id="id">
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
 			</template>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onUpdated } from "vue";
 import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
@@ -38,9 +38,16 @@ export default defineComponent({
 	props: {
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
+		focused: { type: Boolean },
 	},
 	setup(props, ctx) {
 		const { isLoading, card } = useCardState(props.id);
+
+		onUpdated(() => {
+			if (props.focused) {
+				document.getElementById(props.id)?.focus();
+			}
+		});
 
 		const onKeyStroke = (key: KeyboardEvent) => {
 			ctx.emit("move-card-keyboard", key.code);
