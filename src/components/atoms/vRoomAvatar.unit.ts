@@ -260,8 +260,7 @@ describe("vRoomAvatar", () => {
 			const element = wrapper.find(".subtitle").element as HTMLElement;
 
 			expect(element.innerHTML.trim()).toContain("Kurs wird erstellt");
-			expect(element.className).toContain("grey--text");
-			expect(element.className).toContain("text--darken-1");
+			expect(element.className).toContain("copy-mode--text");
 		});
 
 		it("should display avatar in grey", () => {

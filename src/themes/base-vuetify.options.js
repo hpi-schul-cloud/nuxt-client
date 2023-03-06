@@ -49,6 +49,9 @@ export default {
 					base: "#ff1134",
 					darken1: "#bf0d26",
 				},
+				"copy-mode": {
+					base: colors.grey.darken1,
+				},
 			},
 		},
 	},

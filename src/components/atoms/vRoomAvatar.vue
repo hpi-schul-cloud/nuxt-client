@@ -88,7 +88,7 @@ export default {
 				classes.push("single-avatar", "text-h3");
 			}
 			if (this.stillBeingCopied) {
-				classes.push("grey--text", "text--darken-1");
+				classes.push("copy-mode--text");
 			} else {
 				classes.push("white--text");
 			}
@@ -111,9 +111,7 @@ export default {
 		},
 		titleClasses() {
 			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
-			const copyingClass = this.stillBeingCopied
-				? ["grey--text", "text--darken-1"]
-				: [];
+			const copyingClass = this.stillBeingCopied ? ["copy-mode--text"] : [];
 			return [
 				"justify-center",
 				"mt-2",
