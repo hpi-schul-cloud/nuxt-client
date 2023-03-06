@@ -21,7 +21,7 @@
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
-				<div class="dot-menu-section">
+				<div v-if="!isBetaTask" class="dot-menu-section">
 					<more-item-menu
 						:menu-items="moreActionsMenuItems[role]"
 						:show="true"
@@ -177,6 +177,9 @@ export default {
 				scheduledDate &&
 				new Date(scheduledDate).getTime() - delay > new Date().getTime()
 			);
+		},
+		isBetaTask() {
+			return !!this.task.taskCard;
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -367,7 +370,11 @@ export default {
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
-				window.location = `/homework/${this.task.id}`;
+				if (this.isBetaTask) {
+					window.location = `/task-cards/${this.task.taskCard}`;
+				} else {
+					window.location = `/homework/${this.task.id}`;
+				}
 			}
 		},
 		redirectAction(value) {
