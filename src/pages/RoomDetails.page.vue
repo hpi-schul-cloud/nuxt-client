@@ -62,8 +62,6 @@
 			:role="dashBoardRole"
 			@copy-board-element="onCopyBoardElement"
 		/>
-		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
-		</import-lesson-modal>
 		<v-custom-dialog
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
@@ -118,7 +116,6 @@ import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import ImportLessonModal from "@/components/molecules/ImportLessonModal";
 import MoreItemMenu from "@/components/molecules/MoreItemMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
@@ -162,7 +159,6 @@ export default defineComponent({
 		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
-		ImportLessonModal,
 		MoreItemMenu,
 		vCustomDialog,
 		CopyResultModal,
@@ -229,18 +225,6 @@ export default defineComponent({
 						},
 					],
 				};
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					items.actions.push({
-						label: this.$t("pages.rooms.fab.import.lesson"),
-						icon: mdiCloudDownload,
-						dataTestid: "fab_button_import_lesson",
-						ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
-						customEvent: {
-							name: "fabButtonEvent",
-							value: true,
-						},
-					});
-				}
 				if (envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED) {
 					const router = useRouter();
 					const action = {
