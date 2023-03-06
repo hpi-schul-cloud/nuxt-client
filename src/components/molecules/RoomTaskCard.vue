@@ -74,7 +74,11 @@
 				/>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
+		<v-card-actions
+			v-if="!isBetaTask"
+			class="pt-1 mt-2"
+			data-testid="content-card-task-actions"
+		>
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
