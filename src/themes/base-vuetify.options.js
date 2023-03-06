@@ -27,13 +27,6 @@ export default {
 				white: {
 					base: "#ffffff",
 				},
-				grey: {
-					base: colors.grey.base,
-					lighten1: colors.grey.lighten3,
-					// lighten2: colors.grey.lighten2,
-					// darken1: colors.grey.darken1,
-					// darken3: colors.grey.darken3,
-				},
 				info: {
 					base: "#0a7ac9",
 					darken1: "#085c96",

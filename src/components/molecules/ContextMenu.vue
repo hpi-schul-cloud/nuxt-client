@@ -224,7 +224,7 @@ export default {
 	border-radius: var(--radius-sm);
 
 	> :hover {
-		background-color: var(--v-grey-lighten1);
+		background-color: var(--v-grey-lighten3);
 	}
 
 	&__button {

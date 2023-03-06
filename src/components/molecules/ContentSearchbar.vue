@@ -118,7 +118,6 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		color: var(--v-grey-base);
 
 		input {
 			flex: 1;
@@ -138,7 +137,7 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--v-grey-lighten1) solid;
+				border-bottom: 2px var(--v-border-lighten1) solid;
 			}
 
 			&::placeholder {

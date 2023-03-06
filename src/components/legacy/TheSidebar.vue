@@ -182,7 +182,7 @@ export default defineComponent({
 	height: calc(100vh - 55px);
 	overflow-y: auto;
 	background-color: var(--v-white-base);
-	box-shadow: 0 5px 5px var(--v-grey-lighten1);
+	box-shadow: 0 5px 5px var(--v-grey-lighten3);
 	transition: display 2s;
 
 	&.expanded {
@@ -200,7 +200,7 @@ export default defineComponent({
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--v-grey-lighten1);
+		border-right: 1px solid var(--v-grey-lighten3);
 		border-bottom: none;
 	}
 
@@ -312,7 +312,7 @@ export default defineComponent({
 				&.active {
 					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--v-grey-lighten1);
+					background-color: var(--v-grey-lighten3);
 				}
 
 				&.active .list-content,
