@@ -1,4 +1,4 @@
-export interface ToolConfiguration {
+export interface ToolConfigurationListItem {
 	id: string;
 
 	name: string;

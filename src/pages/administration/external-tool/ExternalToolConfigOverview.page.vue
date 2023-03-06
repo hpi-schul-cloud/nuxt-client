@@ -8,10 +8,13 @@
 		<v-spacer class="mt-10"></v-spacer>
 		<v-select
 			:label="$t('pages.tool.select.label')"
-			item-text="name"
+			item-title="name"
+			item-value="id"
 			:items="configurationItems"
+			v-model="selectedItem"
 			:no-data-text="$t('common.nodata')"
 			return-object
+			:disabled="isInEditMode"
 			:loading="loading"
 			@change="onSelectTemplate"
 			data-testId="configuration-select"
@@ -27,12 +30,10 @@
 				<external-tool-selection-row :item="item" />
 			</template>
 		</v-select>
-		<template v-if="toolTemplate.parameters.length > 0">
+		<template v-if="toolTemplate && toolTemplate.parameters.length > 0">
 			<external-tool-config-settings
 				v-model="toolTemplate"
-				@update:value="(value) => (toolTemplate = value)"
-			>
-			</external-tool-config-settings>
+			></external-tool-config-settings>
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
@@ -56,7 +57,11 @@
 				@click="onSaveTool"
 				data-testId="save-button"
 			>
-				{{ $t("pages.tool.addBtn.label") }}
+				{{
+					isInEditMode
+						? $t("pages.tool.editBtn.label")
+						: $t("pages.tool.addBtn.label")
+				}}
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -65,7 +70,7 @@
 <script lang="ts">
 import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
-import { useExternalToolMappings } from "../../../composables/external-tool-mappings.composable";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
 	computed,
 	ComputedRef,
@@ -77,12 +82,15 @@ import {
 } from "vue";
 import { BusinessError } from "@/store/types/commons";
 import {
-	ToolConfiguration,
+	SchoolExternalTool,
+	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
+	ToolParameter,
 } from "@/store/external-tool";
 import { useRouter } from "vue-router/composables";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
+import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
@@ -95,17 +103,18 @@ export default defineComponent({
 		ExternalToolConfigSettings,
 		ExternalToolSelectionRow,
 	},
-	setup() {
+	props: {
+		configId: {
+			type: String,
+		},
+	},
+	setup(props) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!i18n || !externalToolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
-
-		onMounted(async () => {
-			await externalToolsModule.loadAvailableToolConfigurations();
-		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
@@ -134,31 +143,45 @@ export default defineComponent({
 
 		const { getTranslationKey } = useExternalToolMappings();
 
-		const loading: Ref<boolean> = ref(externalToolsModule.getLoading);
+		const hasData: Ref<boolean> = ref(false);
+		const loading: ComputedRef<boolean> = computed(
+			() => !hasData.value || externalToolsModule.getLoading
+		);
+		const isInEditMode: Ref<boolean> = ref(
+			!!props.configId && props.configId !== ""
+		);
 
-		const configurationItems: ComputedRef<ToolConfiguration[]> = computed(
-			() => externalToolsModule.getToolConfigurations
+		const configurationItems: ComputedRef<ToolConfigurationListItem[]> =
+			computed(() => {
+				if (isInEditMode.value && toolTemplate.value) {
+					const editItem: ToolConfigurationListItem = {
+						id: toolTemplate.value.id,
+						name: toolTemplate.value.name,
+						logoUrl: toolTemplate.value.logoUrl,
+					};
+					return [editItem];
+				} else {
+					return externalToolsModule.getToolConfigurations;
+				}
+			});
+		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
+
+		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
+		const parametersValid: ComputedRef<boolean> = computed(
+			() => !!toolTemplate.value
 		);
 
 		const apiError: ComputedRef<BusinessError> = computed(
 			() => externalToolsModule.getBusinessError
 		);
 
-		const parametersValid: Ref<boolean> = ref(false);
-
-		const toolTemplate: Ref<ToolConfigurationTemplate> = ref({
-			id: "",
-			name: "",
-			logoUrl: undefined,
-			parameters: [],
-			version: 0,
-		});
-		const onSelectTemplate = async (selectedTool: ToolConfiguration) => {
+		const onSelectTemplate = async (
+			selectedTool: ToolConfigurationListItem
+		) => {
 			toolTemplate.value =
 				await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(
 					selectedTool.id
 				);
-			parametersValid.value = true;
 		};
 
 		const router: VueRouter = useRouter();
@@ -167,12 +190,69 @@ export default defineComponent({
 		};
 
 		const onSaveTool = async () => {
-			await externalToolsModule.saveSchoolExternalTool(toolTemplate.value);
+			if (toolTemplate.value) {
+				if (isInEditMode.value) {
+					await externalToolsModule.updateSchoolExternalTool(
+						toolTemplate.value
+					);
+				} else {
+					await externalToolsModule.createSchoolExternalTool(
+						toolTemplate.value
+					);
+				}
+			}
 
 			if (!externalToolsModule.getBusinessError.message) {
 				await router.push({ path: schoolSetting.to });
 			}
 		};
+
+		const populateEditForm = async (config: SchoolExternalTool) => {
+			toolTemplate.value =
+				await externalToolsModule.loadToolConfigurationTemplateFromExternalTool(
+					config.toolId
+				);
+
+			if (toolTemplate.value) {
+				selectedItem.value = configurationItems.value[0];
+
+				toolTemplate.value.configId = config.id;
+				toolTemplate.value.parameters.forEach(
+					(templateParameter: ToolParameter) => {
+						templateParameter.value = getParameterValueFromConfig(
+							config,
+							templateParameter.name
+						);
+					}
+				);
+			}
+		};
+
+		const getParameterValueFromConfig = (
+			config: SchoolExternalTool,
+			parameterName: string
+		) => {
+			const configuredParameter: ToolParameterEntry | undefined =
+				config.parameters.find(
+					(configParameter: ToolParameterEntry) =>
+						configParameter.name === parameterName
+				);
+
+			return configuredParameter ? configuredParameter.value : undefined;
+		};
+
+		onMounted(async () => {
+			if (isInEditMode.value && props.configId) {
+				const editConfig: SchoolExternalTool | undefined =
+					await externalToolsModule.loadSchoolExternalTool(props.configId);
+				if (editConfig) {
+					await populateEditForm(editConfig);
+				}
+			} else {
+				await externalToolsModule.loadAvailableToolConfigurations();
+			}
+			hasData.value = true;
+		});
 
 		return {
 			t,
@@ -180,12 +260,14 @@ export default defineComponent({
 			getTranslationKey,
 			loading,
 			configurationItems,
+			selectedItem,
 			apiError,
 			parametersValid,
 			toolTemplate,
 			onSelectTemplate,
 			onCancel,
 			onSaveTool,
+			isInEditMode,
 		};
 	},
 });
