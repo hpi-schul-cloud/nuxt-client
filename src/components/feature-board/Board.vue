@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import BoardColumn from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
 import { Container, Draggable } from "vue-smooth-dnd";
