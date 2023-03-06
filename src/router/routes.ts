@@ -49,13 +49,22 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
-		path: "/administration/school-settings/tool",
+		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
 				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
+		children: [
+			{
+				path: ":configId",
+				name: "administration-tool-config-edit",
+			},
+		],
+		props: (route: Route) => ({
+			configId: route.params.configId,
+		}),
 	},
 	{
 		path: "/administration/students",

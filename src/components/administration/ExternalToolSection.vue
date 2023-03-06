@@ -33,7 +33,7 @@
 			class="my-5 button-save"
 			color="primary"
 			depressed
-			to="/administration/school-settings/tool"
+			:to="{ name: 'administration-tool-config-overview' }"
 		>
 			{{ $t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
@@ -96,17 +96,18 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import ExternalToolsModule from "@/store/external-tools";
+import { default as VueRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { useExternalToolMappings } from "../../composables/external-tool-mappings.composable";
-import { SchoolExternalTool } from "@/store/external-tool";
+import { useRouter } from "vue-router/composables";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
 	setup() {
+		const router: VueRouter = useRouter();
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
@@ -144,17 +145,17 @@ export default defineComponent({
 		};
 
 		const editTool = (item: SchoolExternalToolItem) => {
-			console.log(`editTool() called with ${item}`);
-			// https://ticketsystem.dbildungscloud.de/browse/N21-508
+			router.push({
+				name: "administration-tool-config-edit",
+				params: { configId: item.id },
+			});
 		};
 
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
-				const schoolExternalTool: SchoolExternalTool =
-					useExternalToolMappings().mapSchoolExternalToolItemToSchoolExternalTool(
-						itemToDelete.value
-					);
-				await externalToolsModule.deleteSchoolExternalTool(schoolExternalTool);
+				await externalToolsModule.deleteSchoolExternalTool(
+					itemToDelete.value.id
+				);
 			}
 			onCloseDeleteDialog();
 		};
