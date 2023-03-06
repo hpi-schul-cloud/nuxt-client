@@ -44,8 +44,8 @@ export default {
 				},
 				border: {
 					base: colors.grey.base,
-					lighten1: colors.grey.lighten3,
-					lighten2: colors.grey.lighten2,
+					lighten1: colors.grey.lighten2,
+					lighten2: colors.grey.lighten3,
 					darken1: colors.grey.darken3,
 				},
 				"icon-btn": {
