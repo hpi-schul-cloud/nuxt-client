@@ -208,13 +208,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		const hasNewLessonAction = actions.some((item: string) => {
 			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
 		});
-		const hasImportLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
-		});
 		expect(fabComponent.exists()).toBe(true);
 		expect(hasNewTaskAction).toBe(true);
 		expect(hasNewLessonAction).toBe(true);
-		expect(hasImportLessonAction).toBe(false);
 	});
 
 	it("'add task' button should have correct path", async () => {
@@ -261,20 +257,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const newTaskCardAction = fabComponent.vm.actions[1];
 			expect(newTaskCardAction.href).toStrictEqual(mockRoute);
 		});
-	});
-
-	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
-		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
-		const wrapper = getWrapper();
-		const fabComponent = wrapper.find(".wireframe-fab");
-		const actions = fabComponent.vm.actions.map((action: any) => {
-			return action.label;
-		});
-		const hasImportLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
-		});
-		expect(hasImportLessonAction).toBe(true);
 	});
 
 	describe("headline menus", () => {
