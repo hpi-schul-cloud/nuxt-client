@@ -1,6 +1,6 @@
 <template>
-	<div class="d-flex mb-6">
-		<VCard :height="height" class="w-100">
+	<div class="d-flex" @keydown.up.down.left.right.space.prevent="onKeyDown">
+		<VCard :height="height" class="w-100" outlined tabindex="0" :id="id">
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
 			</template>
@@ -28,7 +28,6 @@ import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
 import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 import { BoardCardType } from "./types/Card";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "CardHost",
 	components: {
@@ -40,13 +39,18 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
 	},
-	setup(props) {
+	setup(props, { emit }) {
 		const { isLoading, card } = useCardState(props.id);
+
+		const onKeyDown = (key: KeyboardEvent) => {
+			emit("move-card-keyboard", key.code);
+		};
 
 		return {
 			isLoading,
 			card,
 			BoardCardType,
+			onKeyDown,
 		};
 	},
 });
