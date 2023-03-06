@@ -897,6 +897,7 @@
 	"pages.tool.settings": "Configuración",
 	"pages.tool.select.label": "Selección de Herramientas",
 	"pages.tool.addBtn.label": "Agregar Herramienta",
+	"pages.tool.editBtn.label": "Actualizar Herramientas",
 	"pages.tool.apiError.tool_param_duplicate": "Esta Herramienta tiene al menos un parámetro duplicado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_version_mismatch": "La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
 	"pages.tool.apiError.tool_param_required": "Esta Herramienta requiere un valor de parámetro que no se ha incluido. Por favor, añada el valor.",
