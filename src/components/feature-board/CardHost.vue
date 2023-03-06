@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUpdated } from "vue";
+import { defineComponent } from "vue";
 import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
