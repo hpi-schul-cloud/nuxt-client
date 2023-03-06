@@ -143,7 +143,7 @@ $btn-radius: 18;
 }
 
 .active {
-	border: dashed thin var(--v-grey-base);
+	border: dashed thin var(--v-border-base);
 }
 
 .card-actions {
