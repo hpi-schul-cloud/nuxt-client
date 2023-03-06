@@ -18,7 +18,9 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
-					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
+					<v-icon size="14" :color="titleIconColor" class="fill">
+						{{ titleIcon }}
+					</v-icon>
 					{{ cardTitle(task.duedate) }}
 				</div>
 				<div v-if="!isBetaTask" class="dot-menu-section">
@@ -184,6 +186,12 @@ export default {
 		},
 		isBetaTask() {
 			return !!this.task.taskCard;
+		},
+		titleIcon() {
+			return this.isBetaTask ? "$taskDoneFilled" : "$tasks";
+		},
+		titleIconColor() {
+			return this.isBetaTask ? "task" : "";
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -353,7 +361,9 @@ export default {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
 
-			const titlePrefix = this.$t("common.words.task");
+			const titlePrefix = this.isBetaTask
+				? this.$t("pages.room.taskCard.label.betaTask")
+				: this.$t("common.words.task");
 			let titleSuffix = "";
 
 			if (this.isDraft) {
@@ -424,9 +434,15 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			return this.isPlanned || (this.isDraft && !this.isFinished)
-				? "task-hidden"
-				: "";
+			let classes = "";
+
+			if (this.isBetaTask) {
+				classes = classes + " beta-task";
+			}
+			if (this.isPlanned || (this.isDraft && !this.isFinished)) {
+				classes = classes + " task-hidden";
+			}
+			return classes;
 		},
 	},
 };
@@ -489,5 +505,9 @@ export default {
 	.title-section {
 		opacity: 0.65;
 	}
+}
+
+.beta-task {
+	background-color: rgba(25, 108, 158, 0.05);
 }
 </style>
