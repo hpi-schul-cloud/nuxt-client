@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { reactive, ref } from "vue";
+import Vue, { ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
