@@ -36,7 +36,6 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import {
 	CardMove,
 	ColumnMove,
-	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
 	cardDropPlaceholderOptions,
 } from "./types/DragAndDrop";
@@ -75,7 +74,6 @@ export default defineComponent({
 			onCardPositionChange,
 			onColumnDrop,
 			onPositionChangeKeyboard,
-			upperDropPlaceholderOptions,
 		};
 	},
 });

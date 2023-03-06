@@ -10,7 +10,7 @@
 				@drop="onCardDrop"
 				drag-class="elevation-12"
 				drop-class="elevation-0"
-				:drop-placeholder="cardDropPlaceholderOptions"
+				:drop-placeholder="drowpdownDropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
 			>
 				<template v-for="(card, index) in column.cards">
@@ -30,15 +30,14 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import CardHost from "./CardHost.vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import CardHost from "./CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "./types/Board";
 import {
 	CardMove,
-	cardDropPlaceholderOptions,
-	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
+	drowpdownDropPlaceholderOptions,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
@@ -98,8 +97,7 @@ export default defineComponent({
 
 		return {
 			colWidth,
-			cardDropPlaceholderOptions,
-			upperDropPlaceholderOptions,
+			drowpdownDropPlaceholderOptions,
 			onCardDrop,
 			getChildPayload,
 			onMoveCardKeyboard,
