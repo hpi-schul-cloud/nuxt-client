@@ -64,9 +64,7 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 ### Coverage
 
-[![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
-
-Um unsere Testabdeckung zu überwachen, verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
+Um unsere Testabdeckung zu überwachen, verwenden wir [Codacy](https://www.codacy.com). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://app.codacy.com/gh/hpi-schul-cloud/nuxt-client/dashboard/) einzusehen.
 
 ## Polyfills
 
