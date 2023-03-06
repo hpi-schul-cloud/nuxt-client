@@ -95,7 +95,7 @@ export default {
 			return classes;
 		},
 		avatarClass() {
-			return this.stillBeingCopied ? ["grey lighten-2"] : [];
+			return this.stillBeingCopied ? ["copy-mode lighten-1"] : [];
 		},
 		avatarColor() {
 			return this.stillBeingCopied ? undefined : this.item.displayColor;

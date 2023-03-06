@@ -30,7 +30,7 @@ export default {
 				grey: {
 					base: colors.grey.base,
 					lighten1: colors.grey.lighten3,
-					lighten2: colors.grey.lighten2,
+					// lighten2: colors.grey.lighten2,
 					// darken1: colors.grey.darken1,
 					// darken3: colors.grey.darken3,
 				},
@@ -60,6 +60,7 @@ export default {
 				},
 				"copy-mode": {
 					base: colors.grey.darken1,
+					lighten1: colors.grey.lighten1,
 				},
 			},
 		},

@@ -267,8 +267,8 @@ describe("vRoomAvatar", () => {
 			const wrapper = setup();
 			const element = wrapper.find(".v-avatar").element as HTMLElement;
 			console.log(element.className);
-			expect(element.className.split(" ")).toContain("grey");
-			expect(element.className.split(" ")).toContain("lighten-2");
+			expect(element.className.split(" ")).toContain("copy-mode");
+			expect(element.className.split(" ")).toContain("lighten-1");
 		});
 	});
 });
