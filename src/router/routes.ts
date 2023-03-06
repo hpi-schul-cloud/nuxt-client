@@ -1,15 +1,13 @@
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
+import { createQueryParameterGuard } from "./guards/query-parameter.guard";
 import {
-	createQueryParameterGuard,
 	isMongoId,
-} from "./guards/query-parameter.guard";
-
-const REGEX_ID = "[a-z0-9]{24}";
-const REGEX_UUID =
-	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
+	REGEX_ACTIVATION_CODE,
+	REGEX_ID,
+	REGEX_UUID,
+} from "@/utils/validationUtil";
 
 export const routes: Array<RouteConfig> = [
 	{
@@ -218,18 +216,13 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: createQueryParameterGuard(
-			Object.fromEntries([
-				["sourceSystem", isMongoId],
-				["targetSystem", isMongoId],
-				[
-					"origin",
-					(val, to: Route) =>
-						isMongoId(val, to) &&
-						(val === to.query.sourceSystem || val === to.query.targetSystem),
-				],
-			])
-		),
+		beforeEnter: createQueryParameterGuard({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+			origin: (val, to: Route) =>
+				isMongoId(val) &&
+				(val === to.query.sourceSystem || val === to.query.targetSystem),
+		}),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
@@ -246,12 +239,10 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
-		beforeEnter: createQueryParameterGuard(
-			Object.fromEntries([
-				["sourceSystem", isMongoId],
-				["targetSystem", isMongoId],
-			])
-		),
+		beforeEnter: createQueryParameterGuard({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,

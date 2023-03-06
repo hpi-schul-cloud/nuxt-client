@@ -1,10 +1,8 @@
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { NavigationGuardNext, Route } from "vue-router/types/router";
-import {
-	createQueryParameterGuard,
-	isMongoId,
-} from "@/router/guards/query-parameter.guard";
+import { createQueryParameterGuard } from "@/router/guards/query-parameter.guard";
+import { isMongoId } from "@/utils/validationUtil";
 import Mock = jest.Mock;
 
 jest.mock("@/store", () => ({
