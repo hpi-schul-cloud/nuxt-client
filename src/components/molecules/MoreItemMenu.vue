@@ -84,6 +84,6 @@ export default {
 	height: var(--space-md);
 	margin-top: calc(-0.5 + var(--space-base-vuetify));
 	font-size: var(--space-md);
-	color: var(--v-grey-darken3);
+	color: var(--v-icon-btn-base);
 }
 </style>
