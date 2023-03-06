@@ -1,6 +1,6 @@
 import { BoardsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Board } from "./types/Board";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "./types/DragAndDrop";
 
