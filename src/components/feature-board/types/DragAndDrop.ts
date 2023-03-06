@@ -1,4 +1,4 @@
-import { BoardSkeletonCard } from "./Board";
+import { BoardColumn, BoardSkeletonCard } from "./Board";
 
 export interface CardMove {
 	removedIndex: number | null;
@@ -17,10 +17,10 @@ export interface CardMoveByKeyboard {
 export interface ColumnMove {
 	addedIndex: number;
 	removedIndex: number;
-	payload: string;
+	payload: BoardColumn["id"];
 }
 
-export type KeyStokeList =
+export type DragAndDropKeys =
 	| "ArrowUp"
 	| "ArrowDown"
 	| "ArrowLeft"

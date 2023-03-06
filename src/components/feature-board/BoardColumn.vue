@@ -19,7 +19,6 @@
 							class="mb-6"
 							:id="card.cardId"
 							:height="card.height"
-							:focused="movedCard === card.cardId"
 							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						/>
 					</Draggable>
@@ -39,7 +38,7 @@ import {
 	cardDropPlaceholderOptions,
 	upperDropPlaceholderOptions,
 	CardMoveByKeyboard,
-	KeyStokeList,
+	DragAndDropKeys,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
@@ -51,7 +50,6 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
-		movedCard: { type: String },
 	},
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
@@ -69,7 +67,7 @@ export default defineComponent({
 		const onMoveCardKeyboard = (
 			cardIndex: number,
 			card: BoardSkeletonCard,
-			keyString: KeyStokeList
+			keyString: DragAndDropKeys
 		) => {
 			const cardMoveByKeyboard: CardMoveByKeyboard = {
 				card: card,
@@ -79,11 +77,17 @@ export default defineComponent({
 				targetColumnPosition: -1,
 			};
 
-			if (["ArrowUp", "ArrowDown"].includes(keyString)) {
+			if (
+				new Array<DragAndDropKeys>("ArrowUp", "ArrowDown").includes(keyString)
+			) {
 				cardMoveByKeyboard.targetColumnPosition =
 					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
-			if (["ArrowLeft", "ArrowRight"].includes(keyString)) {
+			if (
+				new Array<DragAndDropKeys>("ArrowLeft", "ArrowRight").includes(
+					keyString
+				)
+			) {
 				cardMoveByKeyboard.targetColumnIndex =
 					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
 				cardMoveByKeyboard.targetColumnPosition = 0;

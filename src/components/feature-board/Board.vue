@@ -9,7 +9,7 @@
 					orientation="horizontal"
 					@drop="onColumnDrop"
 					drag-handle-selector=".column-drag-handle"
-					:get-child-payload="getChildPayload"
+					:get-child-payload="getColumnId"
 					:drop-placeholder="cardDropPlaceholderOptions"
 				>
 					<template v-for="(column, index) in board.columns">
@@ -17,8 +17,7 @@
 							<BoardColumn
 								:column="column"
 								:index="index"
-								:moved-card="movedCard"
-								@position-change-keyboard="updatePositionByKeyboard"
+								@position-change-keyboard="onPositionChangeKeyboard"
 								@card-position-change="onCardPositionChange(index, $event)"
 							/>
 						</Draggable>
@@ -46,42 +45,37 @@ export default defineComponent({
 	name: "Board",
 	components: { BoardColumn, Container, Draggable },
 	setup() {
-		const {
-			board,
-			changeColumnPosition,
-			changePosition,
-			changePositionByKeyboard,
-		} = useBoardState("0000d213816abba584714caa");
-
-		const movedCard = ref("");
+		const { board, moveCard, moveColumn, moveCardByKeyboard } = useBoardState(
+			"0000d213816abba584714caa"
+		);
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
-			movedCard.value = payload.payload.cardId;
-			changePosition(columnIndex, payload);
+			moveCard(columnIndex, payload);
 		};
 
 		const onColumnDrop = (columnPayload: ColumnMove): void => {
-			changeColumnPosition(columnPayload);
+			moveColumn(columnPayload);
 		};
 
-		const updatePositionByKeyboard = (payload: CardMoveByKeyboard) => {
-			movedCard.value = payload.card.cardId;
-			changePositionByKeyboard(payload);
+		const onPositionChangeKeyboard = (payload: CardMoveByKeyboard) => {
+			moveCardByKeyboard(payload);
 		};
 
-		const getChildPayload = (index: number): string => {
-			return board.columns[index].id;
+		const getColumnId = (index: number): string => {
+			if (board.value === undefined) {
+				return "";
+			}
+			return board.value.columns[index].id;
 		};
 
 		return {
 			board,
-			upperDropPlaceholderOptions,
 			cardDropPlaceholderOptions,
-			onColumnDrop,
-			getChildPayload,
-			updatePositionByKeyboard,
+			getColumnId,
 			onCardPositionChange,
-			movedCard,
+			onColumnDrop,
+			onPositionChangeKeyboard,
+			upperDropPlaceholderOptions,
 		};
 	},
 });
