@@ -6,14 +6,6 @@ import {
 } from "./types/user-login-migration";
 import UserLoginMigrationModule from "./user-login-migration";
 
-// const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-// 	data,
-// 	status: 200,
-// 	statusText: "OK",
-// 	headers: {},
-// 	config: {},
-// });
-
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
@@ -24,16 +16,6 @@ describe("UserLoginMigrationModule", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
-
-	// const mockApi = () => {
-	// 	const apiMock: jest.Mocked<UserMigrationApiInterface> = {
-	// 		userMigrationControllerGetMigrationPageDetails: jest.fn(),
-	// 	};
-
-	// 	jest.spyOn(serverApi, "UserMigrationApiFactory").mockReturnValue(apiMock);
-
-	// 	return { apiMock };
-	// };
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
