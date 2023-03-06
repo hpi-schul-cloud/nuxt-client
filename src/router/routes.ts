@@ -1,19 +1,15 @@
-import { isString } from "@vueuse/core";
-import { isDef } from "@vueuse/shared";
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { NavigationGuardNext } from "vue-router/types/router";
-import { useApplicationError } from "@/composables/application-error.composable";
-import { applicationErrorModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import {
+	createQueryParameterGuard,
+	isMongoId,
+} from "./guards/query-parameter.guard";
 
 const REGEX_ID = "[a-z0-9]{24}";
 const REGEX_UUID =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
-const isMongoId = (val: unknown) =>
-	isDef(val) && isString(val) && new RegExp(REGEX_ID).test(val);
 
 export const routes: Array<RouteConfig> = [
 	{
@@ -222,23 +218,18 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
-			const { createApplicationError } = useApplicationError();
-
-			if (
-				isMongoId(to.query.sourceSystem) &&
-				isMongoId(to.query.targetSystem) &&
-				isMongoId(to.query.origin) &&
-				(to.query.origin === to.query.sourceSystem ||
-					to.query.origin === to.query.targetSystem)
-			) {
-				return next();
-			}
-
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.BadRequest)
-			);
-		},
+		beforeEnter: createQueryParameterGuard(
+			Object.fromEntries([
+				["sourceSystem", isMongoId],
+				["targetSystem", isMongoId],
+				[
+					"origin",
+					(val, to: Route) =>
+						isMongoId(val, to) &&
+						(val === to.query.sourceSystem || val === to.query.targetSystem),
+				],
+			])
+		),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
@@ -255,20 +246,12 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
-		beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
-			const { createApplicationError } = useApplicationError();
-
-			if (
-				isMongoId(to.query.sourceSystem) &&
-				isMongoId(to.query.targetSystem)
-			) {
-				return next();
-			}
-
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.BadRequest)
-			);
-		},
+		beforeEnter: createQueryParameterGuard(
+			Object.fromEntries([
+				["sourceSystem", isMongoId],
+				["targetSystem", isMongoId],
+			])
+		),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,

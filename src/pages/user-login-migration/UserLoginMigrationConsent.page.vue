@@ -52,11 +52,11 @@ import { MigrationPageOrigin } from "@/store/types/user-login-migration";
 import {
 	computed,
 	ComputedRef,
-	ref,
-	Ref,
 	defineComponent,
 	inject,
 	onMounted,
+	Ref,
+	ref,
 } from "vue";
 
 export default defineComponent({

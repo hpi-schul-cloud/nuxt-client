@@ -2,7 +2,7 @@
 	<div v-show="hasData" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_successful.svg"
-			alt="migration successful logo"
+			:alt="$t('pages.userMigration.success.img.alt')"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.success.title") }}
