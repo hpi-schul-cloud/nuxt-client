@@ -200,48 +200,57 @@ export default defineComponent({
 	},
 	computed: {
 		fabItems() {
+			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
 			) {
-				const items = {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "add-content-button",
-					actions: [
-						{
-							label: this.$t("pages.rooms.fab.add.task"),
-							icon: mdiFormatListChecks,
-							href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_task",
-							ariaLabel: this.$t("pages.rooms.fab.add.task"),
-						},
-						{
-							label: this.$t("pages.rooms.fab.add.lesson"),
-							icon: mdiViewListOutline,
-							href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
-						},
-					],
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.task"),
+					icon: mdiFormatListChecks,
+					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_task",
+					ariaLabel: this.$t("pages.rooms.fab.add.task"),
+				});
+			}
+			if (
+				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
+				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
+			) {
+				const router = useRouter();
+				const action = {
+					label: this.$t("pages.rooms.fab.add.betatask"),
+					icon: mdiFormatListChecks,
+					href: router.resolve({
+						name: "rooms-task-card-new",
+						params: { course: this.roomData.roomId },
+					}).href,
+					dataTestid: "fab_button_add_beta_task",
 				};
-				if (envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED) {
-					const router = useRouter();
-					const action = {
-						label: this.$t("pages.rooms.fab.add.betatask"),
-						icon: mdiFormatListChecks,
-						href: router.resolve({
-							name: "rooms-task-card-new",
-							params: { course: this.roomData.roomId },
-						}).href,
-						dataTestid: "fab_button_add_beta_task",
-					};
-					items.actions.splice(1, 0, action);
-				}
-				return items;
+				actions.push(action);
+			}
+			if (
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+			) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.lesson"),
+					icon: mdiViewListOutline,
+					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_lesson",
+					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+				});
 			}
 
-			return null;
+			if (actions.length === 0) {
+				return null;
+			}
+			const items = {
+				icon: mdiPlus,
+				title: this.$t("common.actions.create"),
+				ariaLabel: this.$t("common.actions.create"),
+				testId: "add-content-button",
+				actions: actions,
+			};
+			return items;
 		},
 		roomData() {
 			return roomModule.getRoomData;
