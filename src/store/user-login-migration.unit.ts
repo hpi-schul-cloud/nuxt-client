@@ -3,37 +3,19 @@ import {
 	MigrationLinkRequest,
 	MigrationLinks,
 	MigrationPageOrigin,
-} from "./types/user-migration";
-import UserMigrationModule from "./user-migration";
+} from "./types/user-login-migration";
+import UserLoginMigrationModule from "./user-login-migration";
 
-// const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-// 	data,
-// 	status: 200,
-// 	statusText: "OK",
-// 	headers: {},
-// 	config: {},
-// });
-
-describe("UserMigrationModule", () => {
-	let module: UserMigrationModule;
+describe("UserLoginMigrationModule", () => {
+	let module: UserLoginMigrationModule;
 
 	beforeEach(() => {
-		module = new UserMigrationModule({});
+		module = new UserLoginMigrationModule({});
 	});
 
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
-
-	// const mockApi = () => {
-	// 	const apiMock: jest.Mocked<UserMigrationApiInterface> = {
-	// 		userMigrationControllerGetMigrationPageDetails: jest.fn(),
-	// 	};
-
-	// 	jest.spyOn(serverApi, "UserMigrationApiFactory").mockReturnValue(apiMock);
-
-	// 	return { apiMock };
-	// };
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
