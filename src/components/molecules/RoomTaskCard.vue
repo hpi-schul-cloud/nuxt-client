@@ -185,7 +185,7 @@ export default {
 			);
 		},
 		isBetaTask() {
-			return !!this.task.taskCard;
+			return !!this.task.taskCardId;
 		},
 		titleIcon() {
 			return this.isBetaTask ? "$taskDoneFilled" : "$tasks";
