@@ -508,6 +508,6 @@ export default {
 }
 
 .beta-task {
-	background-color: rgba(25, 108, 158, 0.05);
+	background-color: rgba(25, 108, 158, 0.05) !important;
 }
 </style>
