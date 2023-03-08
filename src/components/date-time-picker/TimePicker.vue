@@ -92,6 +92,7 @@ export default defineComponent({
 		const inputTime = ref(props.time);
 		const showTimeDialog = ref(false);
 		const selectedTime = ref(null);
+		const errors = ref<string[]>([]);
 
 		const selectTime = (selected: string) => {
 			inputTime.value = selected;
@@ -122,16 +123,13 @@ export default defineComponent({
 			}
 		};
 
-		const errors = ref<string[]>([]);
 		const validate = (timeValue: string) => {
 			resetErrors();
 
-			// is empty, but not required
 			if (!props.required && (timeValue === "" || timeValue === null)) {
 				return true;
 			}
 
-			// is required, but empty
 			if (props.required && (timeValue === "" || timeValue === null)) {
 				errors.value.push(t("components.timePicker.validation.required"));
 				emit("error");
