@@ -428,7 +428,7 @@ describe("room module", () => {
 				spy.mockRestore();
 			});
 		});
-
+		// TODO Fix this tests
 		describe("finishTask", () => {
 			beforeEach(() => {
 				// @ts-ignore

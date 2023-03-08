@@ -10,6 +10,8 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	TaskApiFactory,
+	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -214,7 +216,6 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
-		const userId = authModule.getUser?.id;
 		try {
 			const requestUrl = `/v1/homework/${payload.itemId}`;
 			const response = await $axios.get(requestUrl);
@@ -227,31 +228,11 @@ export default class RoomModule extends VuexModule {
 				});
 				return;
 			}
-			let archived = [];
 			if (payload.action === "finish") {
-				// @ts-ignore
-				archived = homework?.archived;
-				archived.push(userId);
+				await this.taskApi.taskControllerFinish(payload.itemId);
+			} else if (payload.action === "restore") {
+				await this.taskApi.taskControllerRestore(payload.itemId);
 			}
-			if (payload.action === "restore") {
-				// @ts-ignore
-				archived = homework?.archived.filter((item: string) => item !== userId);
-			}
-
-			const patchedData = (
-				await $axios.patch(`/v1/homework/${payload.itemId}`, {
-					archived,
-				})
-			).data;
-			// @ts-ignore
-			if (!patchedData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "archived-not-patched",
-				});
-				return;
-			}
-
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -359,5 +340,9 @@ export default class RoomModule extends VuexModule {
 
 	private get finishedLoading(): boolean {
 		return this.getLoading === false;
+	}
+
+	private get taskApi(): TaskApiInterface {
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 }
