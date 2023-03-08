@@ -194,7 +194,7 @@ export default {
 			return this.isBetaTask ? "$taskDoneFilled" : "$tasks";
 		},
 		titleIconColor() {
-			return this.isBetaTask ? "task" : "";
+			return this.isBetaTask ? "beta-task" : "";
 		},
 		cardActions() {
 			const roleBasedActions = {

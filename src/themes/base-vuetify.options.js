@@ -49,7 +49,7 @@ export default {
 					base: "#ff1134",
 					darken1: "#bf0d26",
 				},
-				task: {
+				"beta-task": {
 					base: "#196C9E",
 				},
 			},
