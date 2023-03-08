@@ -4,7 +4,7 @@
 			{{ mdiCalendarClock }}
 		</v-icon>
 		<date-picker
-			class="mr-2"
+			class="mr-2 picker-width"
 			required
 			:date="date"
 			:label="dateInputLabel"
@@ -15,6 +15,7 @@
 			@error="handleDateError"
 		/>
 		<time-picker
+			class="picker-width"
 			required
 			:time="time"
 			:label="timeInputLabel"
@@ -156,5 +157,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .icon {
 	top: 18px;
+}
+
+.picker-width {
+	width: 225px;
 }
 </style>
