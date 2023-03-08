@@ -387,11 +387,11 @@ export default {
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
-				if (this.isBetaTask) {
-					window.location = `/task-cards/${this.task.taskCard}`;
-				} else {
-					window.location = `/homework/${this.task.id}`;
-				}
+				const route = this.isBetaTask
+					? `/task-cards/${this.task.taskCard}`
+					: `/homework/${this.task.id}`;
+
+				this.redirectAction(route);
 			}
 		},
 		redirectAction(value) {
