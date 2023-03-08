@@ -1,7 +1,7 @@
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { createQueryParameterGuard } from "./guards/query-parameter.guard";
+import { createQueryParameterValidationGuard } from "./guards/query-parameter.guard";
 import {
 	isMongoId,
 	REGEX_ACTIVATION_CODE,
@@ -216,7 +216,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: createQueryParameterGuard({
+		beforeEnter: createQueryParameterValidationGuard({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 			origin: (val, to: Route) =>
@@ -239,7 +239,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
-		beforeEnter: createQueryParameterGuard({
+		beforeEnter: createQueryParameterValidationGuard({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		}),
@@ -257,7 +257,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
-		beforeEnter: createQueryParameterGuard({
+		beforeEnter: createQueryParameterValidationGuard({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		}),

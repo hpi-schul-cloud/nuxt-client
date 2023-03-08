@@ -8,7 +8,7 @@ const { createApplicationError } = useApplicationError();
 
 type ParameterValidationFunction = (value: unknown, to: Route) => boolean;
 
-export function createQueryParameterGuard(
+export function createQueryParameterValidationGuard(
 	parameters: Record<string, ParameterValidationFunction>
 ): NavigationGuard {
 	return (to: Route, from: Route, next) => {
