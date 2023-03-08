@@ -31,7 +31,10 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2 task-name">
+			<div
+				class="text-h6 text--primary mb-2 task-name"
+				:class="{ 'mt-1': isBetaTask }"
+			>
 				{{ task.name }}
 			</div>
 			<!-- eslint-disable vue/no-v-html -->
