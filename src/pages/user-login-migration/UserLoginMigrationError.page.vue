@@ -39,7 +39,7 @@ import {
 } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import EnvConfigModule from "../../store/env-config";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",

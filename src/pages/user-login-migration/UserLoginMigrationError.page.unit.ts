@@ -4,7 +4,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
-import EnvConfigModule from "../../store/env-config";
+import EnvConfigModule from "@/store/env-config";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 
 describe("UserLoginMigrationError", () => {
