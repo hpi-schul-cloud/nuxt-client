@@ -15,8 +15,8 @@
 					$t('pages.userMigration.error.description', {
 						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
-						supportLink:
-							'mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration',
+						instance: this.$theme.name,
+						supportLink,
 					})
 				"
 			></p>
@@ -28,9 +28,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import EnvConfigModule from "../../store/env-config";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -47,6 +56,8 @@ export default defineComponent({
 	setup() {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
+		const envConfigModule: EnvConfigModule | undefined =
+			inject<EnvConfigModule>("envConfigModule");
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -58,6 +69,12 @@ export default defineComponent({
 
 		const hasData: Ref<boolean> = ref(false);
 
+		const supportLink: ComputedRef<string> = computed(() =>
+			envConfigModule?.getAccessibilityReportEmail
+				? `mailto:${envConfigModule.getAccessibilityReportEmail}?subject=Fehler%20bei%20der%20Migration`
+				: ""
+		);
+
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
 			hasData.value = true;
@@ -65,6 +82,7 @@ export default defineComponent({
 
 		return {
 			hasData,
+			supportLink,
 			getSystemName,
 		};
 	},

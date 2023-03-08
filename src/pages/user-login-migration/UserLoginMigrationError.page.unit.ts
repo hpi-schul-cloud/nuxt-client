@@ -4,10 +4,12 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
+import EnvConfigModule from "../../store/env-config";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
+	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
 	const setup = (props: { sourceSystem: string; targetSystem: string }) => {
 		document.body.setAttribute("data-app", "true");
@@ -25,6 +27,9 @@ describe("UserLoginMigrationError", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
+		envConfigModule = createModuleMocks(EnvConfigModule, {
+			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+		});
 
 		const wrapper: Wrapper<Vue> = mount(
 			UserLoginMigrationError as MountOptions<Vue>,
@@ -34,11 +39,15 @@ describe("UserLoginMigrationError", () => {
 				}),
 				provide: {
 					systemsModule,
+					envConfigModule,
 				},
 				propsData: props,
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+					$theme: {
+						name: "Testcloud",
+					},
 				},
 			}
 		);
@@ -76,7 +85,7 @@ describe("UserLoginMigrationError", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
+					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 

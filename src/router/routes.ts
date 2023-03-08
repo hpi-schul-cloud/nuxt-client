@@ -255,7 +255,7 @@ export const routes: Array<RouteConfig> = [
 	{
 		path: "/migration/error",
 		component: () =>
-			import("@/pages/user-migration/UserLoginMigrationError.page.vue"),
+			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
 		beforeEnter: createQueryParameterValidationGuard({
 			sourceSystem: isMongoId,

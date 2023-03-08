@@ -886,7 +886,7 @@
 	"pages.userMigration.success.title": "Erfolgreicher Umzug des Anmeldesystems",
 	"pages.userMigration.success.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} wurde erfolgreich abgeschlossen. Dieses Benutzerkonto wurde ausgeloggt und der Login kann jetzt über {targetSystem} erfolgen.",
 	"pages.userMigration.error.title": "Umzug des Anmeldesystems ist fehlgeschlagen",
-	"pages.userMigration.error.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} ist leider fehlgeschlagen. Um die Niedersächsische Bildungscloud mit dem Anmeldesystem {targetSystem} nutzen zu können, bitte <a href=\"{supportLink}\">Kontakt zum Support</a> aufnehmen.",
+	"pages.userMigration.error.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} ist leider fehlgeschlagen. Um die {instance} mit dem Anmeldesystem {targetSystem} nutzen zu können, bitte <a href=\"{supportLink}\">Kontakt zum Support</a> aufnehmen.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

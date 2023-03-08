@@ -879,7 +879,7 @@
 	"pages.userMigration.success.title": "Migración exitosa del sistema de registro",
 	"pages.userMigration.success.description": "La migración del sistema de inicio de sesión de {sourceSystem} a {targetSystem} se completó con éxito. Se ha cerrado la sesión de esta cuenta de usuario y ahora se puede iniciar sesión a través de {targetSystem}.",
 	"pages.userMigration.error.title": "La reubicación del sistema de inicio de sesión falló",
-	"pages.userMigration.error.description": "Lamentablemente, no se pudo mover el sistema de inicio de sesión de {sourceSystem} a {targetSystem}. Para poder utilizar Niedersächsische Bildungscloud con el sistema de registro {targetSystem}, <a href=\"{supportLink}\">póngase en contacto con el servicio de asistencia</a>.",
+	"pages.userMigration.error.description": "Lamentablemente, no se pudo mover el sistema de inicio de sesión de {sourceSystem} a {targetSystem}. Para poder utilizar {instance} con el sistema de registro {targetSystem}, <a href=\"{supportLink}\">póngase en contacto con el servicio de asistencia</a>.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
