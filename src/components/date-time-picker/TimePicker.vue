@@ -5,7 +5,7 @@
 			:close-on-content-click="false"
 			transition="scale-transition"
 			nudge-bottom="70"
-			min-width="85"
+			min-width="180"
 			attach
 			@input="onMenuToggle"
 		>
@@ -37,7 +37,7 @@
 					>
 						<v-list-item
 							:data-testid="`time-select-${index}`"
-							class="time-list-item"
+							class="time-list-item text-left"
 							@click="selectTime(timeOfDay)"
 						>
 							<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
@@ -183,7 +183,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .time-list-item {
-	min-height: 36px;
+	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
 }
