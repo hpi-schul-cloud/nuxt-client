@@ -2,7 +2,7 @@
 	<div v-show="hasData" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_error.svg"
-			alt="migration error logo"
+			:alt="$t('pages.userMigration.error.img.alt')"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.error.title") }}
