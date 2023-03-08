@@ -1,7 +1,7 @@
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { validateQueryParameters } from "./guards/query-parameter.guard";
+import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
 import {
 	isMongoId,
 	REGEX_ACTIVATION_CODE,
@@ -219,7 +219,7 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
-			origin: (val, to: Route) =>
+			origin: (val: unknown, to: Route) =>
 				isMongoId(val) &&
 				(val === to.query.sourceSystem || val === to.query.targetSystem),
 		}),
