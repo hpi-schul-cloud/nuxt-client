@@ -40,7 +40,8 @@
 				no-title
 				:locale="locale"
 				first-day-of-week="1"
-				:allowed-dates="allowedDates"
+				:min="minDate"
+				:max="maxDate"
 				show-adjacent-months
 				@input="onInput"
 			/>
@@ -61,6 +62,8 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
+		minDate: { type: String },
+		maxDate: { type: String },
 	},
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -94,9 +97,6 @@ export default defineComponent({
 				? dayjs(selectedDate.value).format(t("format.date"))
 				: selectedDate.value;
 		});
-
-		const allowedDates = (value: string) =>
-			value >= new Date().toISOString().substr(0, 10);
 
 		const onInput = () => {
 			const validated = validate(selectedDate.value);
@@ -170,7 +170,6 @@ export default defineComponent({
 			selectedDate,
 			showDateDialog,
 			formattedDate,
-			allowedDates,
 			onInput,
 			focusDatePicker,
 			errors,

@@ -21,6 +21,8 @@
 				required
 				:date-time="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
+				:minDate="minDate"
+				:maxDate="maxDate"
 				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
 				@error="onError"
@@ -136,6 +138,11 @@ export default defineComponent({
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
 
+		const minDate = new Date().toISOString();
+		const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+		endOfSchoolYear.setHours(12);
+		const maxDate = endOfSchoolYear.toISOString();
+
 		onMounted(async () => {
 			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
@@ -150,8 +157,6 @@ export default defineComponent({
 				const taskCardData = taskCardModule.getTaskCardData;
 
 				taskCardModule.setCourseId(course.value);
-				const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
-				endOfSchoolYear.setHours(12);
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(taskCardData.cardElements);
 
@@ -329,6 +334,8 @@ export default defineComponent({
 			course,
 			courses,
 			onError,
+			minDate,
+			maxDate,
 		};
 	},
 });

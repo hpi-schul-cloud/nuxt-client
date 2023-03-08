@@ -9,6 +9,8 @@
 			:date="date"
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
+			:minDate="minDate"
+			:maxDate="maxDate"
 			@input="handleDateInput"
 			@error="handleDateError"
 		/>
@@ -46,6 +48,8 @@ export default defineComponent({
 		},
 		dateInputLabel: { type: String, default: "" },
 		dateInputAriaLabel: { type: String, default: "" },
+		minDate: { type: String },
+		maxDate: { type: String },
 		timeInputLabel: { type: String, default: "" },
 		timeInputAriaLabel: { type: String, default: "" },
 		required: {
