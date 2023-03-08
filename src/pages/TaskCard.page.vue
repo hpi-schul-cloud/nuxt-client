@@ -231,7 +231,7 @@ export default defineComponent({
 			});
 		};
 
-		const createTaskCard = () => {
+		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				content: {
@@ -251,14 +251,14 @@ export default defineComponent({
 				}
 			});
 
-			taskCardModule.createTaskCard({
+			await taskCardModule.createTaskCard({
 				courseId: course.value,
 				cardElements: cardElements,
 				dueDate: dueDate.value,
 			});
 		};
 
-		const updateTaskCard = () => {
+		const updateTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				id: title.value.id,
@@ -281,22 +281,22 @@ export default defineComponent({
 				cardElements.push(cardElement);
 			});
 
-			taskCardModule.updateTaskCard({
+			await taskCardModule.updateTaskCard({
 				dueDate: dueDate.value,
 				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
-		const save = () => {
+		const save = async () => {
 			if (hasErrors.value) {
 				return;
 			}
 
 			if (route.name === "rooms-task-card-new") {
-				createTaskCard();
+				await createTaskCard();
 			} else {
-				updateTaskCard();
+				await updateTaskCard();
 			}
 
 			router.go(-1);
