@@ -44,6 +44,7 @@ const vueRoutes = [
 	`^/login-instances/?$`,
 	`^/error/?$`,
 	`^/migration/?$`,
+	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 ];
 

@@ -1,18 +1,13 @@
-import { isDef, isString } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { NavigationGuardNext } from "vue-router/types/router";
-import { useApplicationError } from "@/composables/application-error.composable";
-import { applicationErrorModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-
-const REGEX_ID = "[a-z0-9]{24}";
-const REGEX_UUID =
-	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
-const isMongoId = (val: unknown) =>
-	isDef(val) && isString(val) && new RegExp(REGEX_ID).test(val);
+import { createQueryParameterGuard } from "./guards/query-parameter.guard";
+import {
+	isMongoId,
+	REGEX_ACTIVATION_CODE,
+	REGEX_ID,
+	REGEX_UUID,
+} from "@/utils/validationUtil";
 
 export const routes: Array<RouteConfig> = [
 	{
@@ -48,13 +43,22 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
 	{
-		path: "/administration/school-settings/tool",
+		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
 				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
+		children: [
+			{
+				path: ":configId",
+				name: "administration-tool-config-edit",
+			},
+		],
+		props: (route: Route) => ({
+			configId: route.params.configId,
+		}),
 	},
 	{
 		path: "/administration/students",
@@ -209,9 +213,17 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/migration",
-		component: () => import("@/pages/user-migration/UserMigration.page.vue"),
-		name: "user-migration",
-		props: (route) => ({
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
+		name: "user-login-migration-consent",
+		beforeEnter: createQueryParameterGuard({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+			origin: (val, to: Route) =>
+				isMongoId(val) &&
+				(val === to.query.sourceSystem || val === to.query.targetSystem),
+		}),
+		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
 			origin: route.query.origin,
@@ -223,24 +235,32 @@ export const routes: Array<RouteConfig> = [
 		},
 	},
 	{
+		path: "/migration/success",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
+		name: "user-login-migration-success",
+		beforeEnter: createQueryParameterGuard({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
 		path: "/migration/error",
 		component: () =>
 			import("@/pages/user-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
-		beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
-			const { createApplicationError } = useApplicationError();
-
-			if (
-				isMongoId(to.query.sourceSystem) &&
-				isMongoId(to.query.targetSystem)
-			) {
-				return next();
-			}
-
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.BadRequest)
-			);
-		},
+		beforeEnter: createQueryParameterGuard({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,

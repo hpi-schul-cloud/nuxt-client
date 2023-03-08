@@ -1,8 +1,8 @@
-import { ToolConfiguration } from "@/store/external-tool";
+import { ToolConfigurationListItem } from "@/store/external-tool";
 
 export const toolConfigurationFactory = (
-	param: Partial<ToolConfiguration> = {}
-): ToolConfiguration => {
+	param: Partial<ToolConfigurationListItem> = {}
+): ToolConfigurationListItem => {
 	return {
 		name: "name",
 		id: "id",

@@ -1,13 +1,21 @@
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
+import flushPromises from "flush-promises";
+import Vue from "vue";
+import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
+import {
+	SchoolExternalTool,
+	ToolConfigurationTemplate,
+} from "@/store/external-tool";
 import ExternalToolConfigOverviewPage from "./ExternalToolConfigOverview.page.vue";
 import {
 	businessErrorFactory,
+	schoolExternalToolFactory,
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
-import * as useExternalToolUtilsComposable from "../../../composables/external-tool-mappings.composable";
+import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 
 describe("ExternalToolConfigOverview", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -19,7 +27,10 @@ describe("ExternalToolConfigOverview", () => {
 			getTranslationKey: () => "",
 		});
 
-	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
+	const setup = async (
+		getters: Partial<ExternalToolsModule> = {},
+		propsData?: { configId: string }
+	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory()],
@@ -32,29 +43,50 @@ describe("ExternalToolConfigOverview", () => {
 			push: routerPush,
 		};
 
-		const wrapper: Wrapper<any> = mount(ExternalToolConfigOverviewPage, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				i18n: { t: (key: string) => key },
-				externalToolsModule,
-			},
-			propsData: {},
-			mocks: {
-				$router,
-			},
-		});
+		const toolTemplate: ToolConfigurationTemplate =
+			toolConfigurationTemplateFactory();
+		const loadedSchoolExternalTool: SchoolExternalTool =
+			schoolExternalToolFactory();
+
+		externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+			toolTemplate
+		);
+		externalToolsModule.loadSchoolExternalTool.mockResolvedValue(
+			loadedSchoolExternalTool
+		);
+
+		const wrapper: Wrapper<any> = mount(
+			ExternalToolConfigOverviewPage as MountOptions<Vue>,
+			{
+				...createComponentMocks({
+					i18n: true,
+				}),
+				provide: {
+					i18n: { t: (key: string) => key },
+					externalToolsModule,
+				},
+				propsData: {
+					...propsData,
+				},
+				mocks: {
+					$router,
+				},
+			}
+		);
+
+		await flushPromises();
 
 		return {
 			wrapper,
 			routerPush,
+			toolTemplate,
+			loadedSchoolExternalTool,
 		};
 	};
 
 	describe("basic functions", () => {
-		it("should render component", () => {
-			const { wrapper } = setup();
+		it("should render component", async () => {
+			const { wrapper } = await setup();
 			expect(
 				wrapper.findComponent(ExternalToolConfigOverviewPage).exists()
 			).toBe(true);
@@ -66,7 +98,7 @@ describe("ExternalToolConfigOverview", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
 			try {
-				shallowMount(ExternalToolConfigOverviewPage, {
+				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
 					provide: {
 						i18n: { t: (key: string) => key },
 					},
@@ -84,7 +116,7 @@ describe("ExternalToolConfigOverview", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
 			try {
-				shallowMount(ExternalToolConfigOverviewPage, {
+				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},
@@ -100,8 +132,8 @@ describe("ExternalToolConfigOverview", () => {
 	});
 
 	describe("t", () => {
-		it("should return translation", () => {
-			const { wrapper } = setup({});
+		it("should return translation", async () => {
+			const { wrapper } = await setup({});
 			const testKey = "testKey";
 
 			const result: string = wrapper.vm.t(testKey);
@@ -109,8 +141,8 @@ describe("ExternalToolConfigOverview", () => {
 			expect(result).toEqual(testKey);
 		});
 
-		it("should return 'unknown translation-key'", () => {
-			const { wrapper } = setup({});
+		it("should return 'unknown translation-key'", async () => {
+			const { wrapper } = await setup({});
 			const testKey = 123;
 
 			const result: string = wrapper.vm.t(testKey);
@@ -129,8 +161,8 @@ describe("ExternalToolConfigOverview", () => {
 	});
 
 	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", () => {
-			const { wrapper } = setup();
+		it("should render static breadcrumbs", async () => {
+			const { wrapper } = await setup();
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
@@ -145,69 +177,106 @@ describe("ExternalToolConfigOverview", () => {
 	});
 
 	describe("title", () => {
-		it("should render title", () => {
-			const { wrapper } = setup();
+		it("should render title", async () => {
+			const { wrapper } = await setup();
 			expect(wrapper.find("h1").exists()).toBeTruthy();
 		});
 	});
 
 	describe("select", () => {
-		const openSelect = async (wrapper: Wrapper<any>) => {
-			await wrapper
-				.find('[data-testid="configuration-select"]')
-				.trigger("click");
-			await wrapper
-				.find(".menuable__content__active")
-				.findAll(".v-list-item")
-				.at(0)
-				.trigger("click");
-		};
+		describe("when creating a new configuration", () => {
+			const openSelect = async (wrapper: Wrapper<any>) => {
+				await wrapper
+					.find('[data-testid="configuration-select"]')
+					.trigger("click");
+				await wrapper
+					.find(".menuable__content__active")
+					.findAll(".v-list-item")
+					.at(0)
+					.trigger("click");
+				await Vue.nextTick();
+			};
 
-		it("should display name and logo of an tool configuration in selection list", async () => {
-			const name = "nameForSelect";
-			const { wrapper } = setup({
-				getToolConfigurations: [
-					toolConfigurationFactory({
-						name,
-					}),
-				],
+			it("should display name and logo of an tool configuration in selection list", async () => {
+				const name = "nameForSelect";
+				const { wrapper } = await setup({
+					getToolConfigurations: [
+						toolConfigurationFactory({
+							name,
+						}),
+					],
+				});
+
+				await openSelect(wrapper);
+
+				const selectionRow = wrapper.find(".row");
+				expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
+				expect(selectionRow.find("span").text().includes(name));
 			});
 
-			await openSelect(wrapper);
+			it("should load template when tool configuration was changed", async () => {
+				const id = "expectedToolId";
+				const { wrapper } = await setup({
+					getToolConfigurations: [toolConfigurationFactory({ id })],
+				});
 
-			const selectionRow = wrapper.find(".row");
-			expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
-			expect(selectionRow.find("span").text().includes(name));
+				await openSelect(wrapper);
+
+				expect(
+					externalToolsModule.loadToolConfigurationTemplateFromExternalTool
+				).toHaveBeenCalledWith(id);
+			});
+
+			it("should set parameters valid on selection", async () => {
+				const id = "expectedToolId";
+				const toolTemplate: ToolConfigurationTemplate =
+					toolConfigurationTemplateFactory({
+						id,
+					});
+				const { wrapper } = await setup({
+					getToolConfigurations: [toolTemplate],
+				});
+				externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+					toolTemplate
+				);
+
+				await openSelect(wrapper);
+
+				expect(wrapper.vm.parametersValid).toBeTruthy();
+			});
 		});
 
-		it("should load template when tool configuration was changed", async () => {
-			const id = "expectedToolId";
-			const { wrapper } = setup({
-				getToolConfigurations: [toolConfigurationFactory({ id })],
+		describe("when editing a configuration", () => {
+			it("should disable the selection", async () => {
+				const { wrapper } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
+
+				const select = wrapper.find('[data-testid="configuration-select"]');
+
+				expect(select.attributes().disabled).toBeDefined();
 			});
 
-			await openSelect(wrapper);
+			it("should display the edited tool in the selection", async () => {
+				const { toolTemplate, wrapper } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
 
-			expect(
-				externalToolsModule.loadToolConfigurationTemplateFromExternalTool
-			).toHaveBeenCalledWith(id);
-		});
-
-		it("should set parameters valid on selection", async () => {
-			const id = "expectedToolId";
-			const { wrapper } = setup({
-				getToolConfigurations: [toolConfigurationFactory({ id })],
+				const selectionRow = wrapper.find(".row");
+				expect(selectionRow.find("span").text().includes(toolTemplate.name));
 			});
-
-			await openSelect(wrapper);
-
-			expect(wrapper.vm.parametersValid).toBeTruthy();
 		});
 	});
 
 	describe("cancel button", () => {
 		it("should change page when cancel button was clicked", async () => {
-			const { wrapper, routerPush } = setup();
+			const { wrapper, routerPush } = await setup();
 
 			await wrapper.find('[data-testid="cancel-button"]').trigger("click");
 
@@ -218,45 +287,90 @@ describe("ExternalToolConfigOverview", () => {
 	});
 
 	describe("save button", () => {
-		it("should call store action to save tool", async () => {
-			const { wrapper } = setup();
+		describe("when creating a new configuration", () => {
+			it("should call store action to save tool", async () => {
+				const { wrapper } = await setup();
+				wrapper.vm.toolTemplate = toolConfigurationTemplateFactory();
 
-			wrapper.vm.parametersValid = true;
-			const saveButton = wrapper.find('[data-testid="save-button"]');
-			await saveButton.vm.$emit("click");
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
 
-			expect(externalToolsModule.saveSchoolExternalTool).toHaveBeenCalledWith(
-				wrapper.vm.toolTemplate
-			);
+				expect(
+					externalToolsModule.createSchoolExternalTool
+				).toHaveBeenCalledWith(wrapper.vm.toolTemplate);
+			});
+
+			it("should redirect back to school settings page when there is no error", async () => {
+				const { wrapper, routerPush } = await setup({
+					getBusinessError: businessErrorFactory({ message: undefined }),
+				});
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(routerPush).toHaveBeenCalledWith({
+					path: "/administration/school-settings",
+				});
+			});
+
+			it("should display alert when server side error on save occurred", async () => {
+				const { wrapper, routerPush } = await setup({
+					getBusinessError: businessErrorFactory({
+						message: "someErrorOccurred",
+					}),
+				});
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(routerPush).not.toHaveBeenCalled();
+				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
+			});
 		});
 
-		it("should redirect back to school settings page when there is no error", async () => {
-			const { wrapper, routerPush } = setup({
-				getBusinessError: businessErrorFactory({ message: undefined }),
+		describe("when editing a configuration", () => {
+			it("should call store action to update tool", async () => {
+				const { wrapper } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(
+					externalToolsModule.updateSchoolExternalTool
+				).toHaveBeenCalledWith(wrapper.vm.toolTemplate);
 			});
 
-			wrapper.vm.parametersValid = true;
-			const saveButton = wrapper.find('[data-testid="save-button"]');
-			await saveButton.vm.$emit("click");
+			it("should redirect back to school settings page when there is no error", async () => {
+				const { wrapper, routerPush } = await setup({
+					getBusinessError: businessErrorFactory({ message: undefined }),
+				});
 
-			expect(routerPush).toHaveBeenCalledWith({
-				path: "/administration/school-settings",
-			});
-		});
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
 
-		it("should display alert when server side error on save occurred", async () => {
-			const { wrapper, routerPush } = setup({
-				getBusinessError: businessErrorFactory({
-					message: "someErrorOccurred",
-				}),
+				expect(routerPush).toHaveBeenCalledWith({
+					path: "/administration/school-settings",
+				});
 			});
 
-			wrapper.vm.parametersValid = true;
-			const saveButton = wrapper.find('[data-testid="save-button"]');
-			await saveButton.vm.$emit("click");
+			it("should display alert when server side error on save occurred", async () => {
+				const { wrapper, routerPush } = await setup({
+					getBusinessError: businessErrorFactory({
+						message: "someErrorOccurred",
+					}),
+				});
 
-			expect(routerPush).not.toHaveBeenCalled();
-			expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(routerPush).not.toHaveBeenCalled();
+				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
+			});
 		});
 	});
 });
