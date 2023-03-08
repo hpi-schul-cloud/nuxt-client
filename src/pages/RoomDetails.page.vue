@@ -316,20 +316,12 @@ export default defineComponent({
 			return this.copyModule.getIsResultModalOpen;
 		},
 	},
-	// async created() {
-	// 	await roomModule.fetchContent(this.courseId);
-	// 	await roomModule.fetchScopePermission({
-	// 		courseId: this.courseId,
-	// 		userId: authModule.getUser.id,
-	// 	});
-	// },
-	async beforeRouteEnter(to, from, next) {
-		await roomModule.fetchContent(to.params.id);
+	async created() {
+		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
-			courseId: to.params.id,
+			courseId: this.courseId,
 			userId: authModule.getUser.id,
 		});
-		next();
 	},
 	methods: {
 		fabClick() {
