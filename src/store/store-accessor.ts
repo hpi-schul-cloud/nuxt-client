@@ -29,7 +29,7 @@ import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
-import UserMigrationModule from "@/store/user-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ShareLessonModule from "@/store/share-lesson";
@@ -61,7 +61,7 @@ export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
 export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
-export let userMigrationModule: UserMigrationModule;
+export let userLoginMigrationModule: UserLoginMigrationModule;
 export let shareLessonModule: ShareLessonModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
@@ -90,7 +90,7 @@ export function initializeStores(store: Store<any>): void {
 	systemsModule = getModule(SystemsModule, store);
 	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
-	userMigrationModule = getModule(UserMigrationModule, store);
+	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	shareLessonModule = getModule(ShareLessonModule, store);
 }
 
@@ -122,6 +122,6 @@ export const modules = {
 	systemsModule: SystemsModule,
 	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
-	userMigrationModule: UserMigrationModule,
+	userLoginMigrationModule: UserLoginMigrationModule,
 	shareLessonModule: ShareLessonModule,
 };

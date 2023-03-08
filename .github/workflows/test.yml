@@ -29,10 +29,6 @@ jobs:
         run: npm run test:unit:ci
         env:
           NODE_OPTIONS: "--unhandled-rejections=warn"
-      - name: codecov
-        run: npx codecov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   lint:
     strategy:
       matrix:

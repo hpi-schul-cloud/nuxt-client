@@ -23,7 +23,7 @@ import {
 	systemsModule,
 	taskCardModule,
 	tasksModule,
-	userMigrationModule,
+	userLoginMigrationModule,
 	shareLessonModule,
 } from "@/store";
 import Vue from "vue";
@@ -140,7 +140,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			systemsModule,
 			taskCardModule,
 			tasksModule,
-			userMigrationModule,
+			userLoginMigrationModule,
 			i18n,
 		},
 		render: (h) => h(App),
