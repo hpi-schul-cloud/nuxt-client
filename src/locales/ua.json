@@ -842,7 +842,7 @@
 	"pages.room.taskCard.label.taskDone": "Завдання виконано",
 	"pages.room.taskCard.student.label.overdue": "Відсутня",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
-	"pages.room.taskCard.label.betaTask": "Бета-завдання",
+	"pages.room.taskCard.label.betaTask": "Бета завдання",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів), натисніть Enter, щоб відкрити",
 	"pages.rooms.fab.add": "Створити",
 	"pages.rooms.fab.add.aria": "Створити курс",
