@@ -511,6 +511,7 @@ export default {
 }
 
 .beta-task {
+	// based on beta-task color #196c9e
 	background-color: rgba(25, 108, 158, 0.05) !important;
 }
 </style>
