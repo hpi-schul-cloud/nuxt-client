@@ -15,10 +15,7 @@ import { AxiosResponse } from "axios";
 const SCHOOL_FEATURES: any = [
 	"rocketChat",
 	"videoconference",
-	"messenger",
 	"studentVisibility", // deprecated
-	"messengerSchoolRoom",
-	"messengerStudentRoomCreate",
 	"ldapUniventionMigrationSchool",
 ];
 
@@ -71,10 +68,7 @@ export default class SchoolsModule extends VuexModule {
 		features: {
 			rocketChat: false,
 			videoconference: false,
-			messenger: false,
 			studentVisibility: false,
-			messengerSchoolRoom: false,
-			messengerStudentRoomCreate: false,
 			ldapUniventionMigrationSchool: false,
 		},
 		enableStudentTeamCreation: false,
