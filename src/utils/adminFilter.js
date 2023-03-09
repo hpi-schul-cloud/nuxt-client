@@ -72,7 +72,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 const getFilterDateOutdatedSinceFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.outdatedSince.title"),
 	chipTemplate: (filter) => {
-		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
+		return `${ctx.$t("utils.adminFilter.outdatedSince.title")} ${printDate(
 			filter[0] || defaultFilterFromDate
 		)} ${ctx.$t("common.words.and")} ${printDate(
 			filter[1] || defaultFilterToDate
@@ -113,7 +113,7 @@ const getFilterDateOutdatedSinceFromTo = (ctx) => ({
 		{
 			attribute: "outdatedSince",
 			input: InputDefault,
-			label: ctx.$t("utils.adminFilter.date.label.from"),
+			label: ctx.$t("utils.adminFilter.outdatedSince.label.from"),
 			attributes: {
 				type: "date",
 				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
@@ -122,7 +122,69 @@ const getFilterDateOutdatedSinceFromTo = (ctx) => ({
 		{
 			attribute: "outdatedSince",
 			input: InputDefault,
-			label: ctx.$t("utils.adminFilter.date.label.until"),
+			label: ctx.$t("utils.adminFilter.outdatedSince.label.until"),
+			attributes: {
+				type: "date",
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
+			},
+		},
+	],
+});
+
+const getFilterDateLastMigrationSinceFromTo = (ctx) => ({
+	title: ctx.$t("utils.adminFilter.lastMigration.title"),
+	chipTemplate: (filter) => {
+		return `${ctx.$t("utils.adminFilter.lastMigration.title")} ${printDate(
+			filter[0] || defaultFilterFromDate
+		)} ${ctx.$t("common.words.and")} ${printDate(
+			filter[1] || defaultFilterToDate
+		)} `;
+	},
+	dataTestid: "filter_lastMigrationDate",
+	parser: {
+		generator: (filterGroupConfig, values) => {
+			try {
+				return {
+					outdatedSince: {
+						$gte: fromInputDateTime(
+							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
+						)
+							.utc()
+							.format(),
+						$lte: fromInputDateTime(
+							values[filterGroupConfig.filter[1].id] || defaultFilterToDate
+						)
+							.endOf("day")
+							.utc()
+							.format(),
+					},
+				};
+			} catch (error) {
+				console.warn(error);
+				return;
+			}
+		},
+		parser: (filterGroupConfig, query) => {
+			return {
+				[filterGroupConfig.filter[0].id]: query?.lastLoginSystemChange?.$gte,
+				[filterGroupConfig.filter[1].id]: query?.lastLoginSystemChange?.$lte,
+			};
+		},
+	},
+	filter: [
+		{
+			attribute: "lastLoginSystemChange",
+			input: InputDefault,
+			label: ctx.$t("utils.adminFilter.lastMigration.label.from"),
+			attributes: {
+				type: "date",
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
+			},
+		},
+		{
+			attribute: "lastLoginSystemChange",
+			input: InputDefault,
+			label: ctx.$t("utils.adminFilter.lastMigration.label.until"),
 			attributes: {
 				type: "date",
 				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
@@ -213,6 +275,7 @@ export function studentFilter(ctx) {
 		},
 		getFilterDateCreatedFromTo(ctx),
 		getFilterDateOutdatedSinceFromTo(ctx),
+		getFilterDateLastMigrationSinceFromTo(ctx),
 	];
 }
 
@@ -268,5 +331,7 @@ export function teacherFilter(ctx) {
 			],
 		},
 		getFilterDateCreatedFromTo(ctx),
+		getFilterDateOutdatedSinceFromTo(ctx),
+		getFilterDateLastMigrationSinceFromTo(ctx),
 	];
 }

@@ -205,7 +205,14 @@
 					class="th-wrap"
 					@click.stop="sort(column)"
 				>
-					<span>{{ column.label }}</span>
+					<div class="tooltip">
+						<span>
+							{{ column.label }}
+						</span>
+						<span v-if="column.tooltipText" class="tooltiptext">{{
+							column.tooltipText
+						}}</span>
+					</div>
 					<base-icon
 						v-if="sortBy === column.field"
 						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
@@ -406,5 +413,30 @@ export default {
 	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
 	.v-btn__content {
 	opacity: 1;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	background-color: var(--v-grey-darken3);
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 10px;
+	position: absolute;
+	z-index: 1;
+	top: 140%;
+	left: 50%;
+	margin-left: -50%;
+	white-space: pre-wrap;
+	display: inline-block;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
 }
 </style>

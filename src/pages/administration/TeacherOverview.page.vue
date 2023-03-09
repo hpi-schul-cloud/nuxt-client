@@ -28,8 +28,8 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search"
-				/></template>
+					<base-icon source="material" icon="search" />
+				</template>
 			</base-input>
 
 			<data-filter
@@ -80,6 +80,12 @@
 						/>
 					</span>
 				</template>
+				<template #datacolumn-lastLoginSystemChange="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
+				<template #datacolumn-outdatedSince="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
 
 				<template #datacolumn-_id="{ data, selected, highlighted }">
 					<v-btn
@@ -115,8 +121,8 @@
 import {
 	authModule,
 	envConfigModule,
-	schoolsModule,
 	notifierModule,
+	schoolsModule,
 } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -251,6 +257,18 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "lastLoginSystemChange",
+					label: this.$t("common.labels.migrated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.migrated.tooltip"),
+				},
+				{
+					field: "outdatedSince",
+					label: this.$t("common.labels.outdated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.outdated.tooltip"),
+				},
+				{
 					// edit column
 					field: "_id",
 					label: "",
@@ -343,6 +361,13 @@ export default {
 					// _id field sets the edit column
 					(col) => col.field !== "_id"
 				);
+			}
+
+			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED env is disabled
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
