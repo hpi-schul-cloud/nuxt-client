@@ -30,7 +30,7 @@
 		<v-custom-dialog
 			ref="delete-dialog"
 			v-model="deleteDialog.isOpen"
-			data-testid="delete-dialog-item"
+			data-testid="delete-element-dialog"
 			:size="375"
 			has-buttons
 			confirm-btn-title-key="common.actions.remove"
