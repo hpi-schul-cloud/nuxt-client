@@ -8,6 +8,7 @@
 		:outlined="isDraft"
 		hover
 		data-testid="content-card-task"
+		role="button"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -18,22 +19,22 @@
 		<template v-if="isBetaTask">
 			<v-card-text data-testid="content-card-task-content">
 				<div class="top-row-container mb-0">
-					<div class="title-section" tabindex="0">
+					<div class="title-section">
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
 						{{ cardTitle(task.duedate) }}
 					</div>
 				</div>
-				<div class="text-h6 text--primary mb-2 task-name mt-1">
+				<h6 class="mb-2 task-name mt-1">
 					{{ task.name }}
-				</div>
+				</h6>
 			</v-card-text>
 		</template>
 		<template v-else>
 			<v-card-text data-testid="content-card-task-content">
 				<div class="top-row-container mb-0">
-					<div class="title-section" tabindex="0">
+					<div class="title-section">
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
@@ -47,9 +48,9 @@
 						/>
 					</div>
 				</div>
-				<div class="text-h6 text--primary mb-2 task-name">
+				<h6 class="mt-1 mb-2 task-name">
 					{{ task.name }}
-				</div>
+				</h6>
 				<!-- eslint-disable vue/no-v-html -->
 				<div
 					v-if="canShowDescription"
