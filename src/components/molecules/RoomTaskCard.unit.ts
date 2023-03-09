@@ -250,15 +250,15 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should have correct combined title for beta task", () => {
 			const wrapper = getWrapper({ ...betaTaskTestProps, role });
-			const title = wrapper.find(".title-section");
+			const title = wrapper.find("[data-testid='tagline']");
 
 			expect(title.element.textContent).toContain("Beta-Aufgabe – Entwurf");
 		});
 
-		it("should redirect to homework page", () => {
+		it("should redirect to task-cards page", () => {
 			const { location } = window;
 			const wrapper = getWrapper({ ...betaTaskTestProps, role });
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent({ name: "v-card" });
 			taskCard.trigger("click");
 
 			expect(location.pathname).toStrictEqual("/task-cards/789");
