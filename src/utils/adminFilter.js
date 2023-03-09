@@ -274,8 +274,8 @@ export function studentFilter(ctx) {
 			],
 		},
 		getFilterDateCreatedFromTo(ctx),
-		getFilterDateOutdatedSinceFromTo(ctx),
 		getFilterDateLastMigrationSinceFromTo(ctx),
+		getFilterDateOutdatedSinceFromTo(ctx),
 	];
 }
 
@@ -331,7 +331,7 @@ export function teacherFilter(ctx) {
 			],
 		},
 		getFilterDateCreatedFromTo(ctx),
-		getFilterDateOutdatedSinceFromTo(ctx),
 		getFilterDateLastMigrationSinceFromTo(ctx),
+		getFilterDateOutdatedSinceFromTo(ctx),
 	];
 }
