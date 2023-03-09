@@ -430,10 +430,8 @@ export default {
 	position: absolute;
 	z-index: 1;
 	top: 140%;
-	left: 50%;
-	margin-left: -50%;
-	white-space: pre-wrap;
-	display: inline-block;
+	right: 0;
+	white-space: nowrap;
 }
 
 .tooltip:hover .tooltiptext {

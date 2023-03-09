@@ -310,6 +310,9 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
+		getFeatureSchoolSanisUserMigrationEnabled() {
+			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
+		},
 		env() {
 			return envConfigModule.getEnv;
 		},
@@ -363,18 +366,17 @@ export default {
 				);
 			}
 
-			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED env is disabled
-			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
-				editedColumns = editedColumns
-					.filter((col) => col.field !== "lastLoginSystemChange")
-					.filter((col) => col.field !== "outdatedSince");
-			}
-
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
 			if (!this.showConsent) {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
+			}
+
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			return editedColumns;

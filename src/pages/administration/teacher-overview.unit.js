@@ -17,6 +17,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
+		lastLoginSystemChange: "01.01.2022",
 	},
 	{
 		_id: "0000d231816abba584714c9f",
@@ -26,6 +27,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
+		outdatedSince: "02.02.2020",
 	},
 ];
 
@@ -378,6 +380,58 @@ describe("teachers/index", () => {
 		});
 		const table = wrapper.find(`[data-testid="teachers_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
+	});
+
+	it("should display the columns behind the migration feature flag", () => {
+		envConfigModule.setEnvs({
+			...envs,
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+		});
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
+		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
+
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(true);
+		expect(column1.exists()).toBe(true);
+		expect(column2.exists()).toBe(true);
+	});
+
+	it("should not display the columns behind the migration feature flag", () => {
+		envConfigModule.setEnvs({
+			...envs,
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+		});
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
+		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
+
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(false);
+		expect(column1.exists()).toBe(false);
+		expect(column2.exists()).toBe(false);
 	});
 
 	it("should display the edit button if school is not external", () => {
