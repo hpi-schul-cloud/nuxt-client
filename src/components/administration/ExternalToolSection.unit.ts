@@ -154,12 +154,16 @@ describe("ExternalToolSection", () => {
 				getSchoolExternalTools: [
 					{
 						id: "testId",
+						toolId: "toolId",
+						parameters: [],
 						name: firstToolName,
 						status: SchoolExternalToolStatus.Latest,
 						version: 1,
 					},
 					{
 						id: "testId2",
+						toolId: "toolId",
+						parameters: [],
 						name: secondToolName,
 						status: SchoolExternalToolStatus.Outdated,
 						version: 1,
@@ -250,6 +254,8 @@ describe("ExternalToolSection", () => {
 							getSchoolExternalTools: [
 								{
 									id: "testId",
+									toolId: "toolId",
+									parameters: [],
 									name: "firstToolName",
 									status: SchoolExternalToolStatus.Latest,
 									version: 1,

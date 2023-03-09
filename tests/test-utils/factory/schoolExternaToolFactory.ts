@@ -7,9 +7,11 @@ export const schoolExternalToolFactory = (
 	param: Partial<SchoolExternalTool> = {}
 ): SchoolExternalTool => {
 	return {
-		name: "name",
-		status: SchoolExternalToolStatus.Latest,
 		id: "id",
+		toolId: "toolId",
+		name: "name",
+		parameters: [],
+		status: SchoolExternalToolStatus.Latest,
 		version: 1,
 		...param,
 	};

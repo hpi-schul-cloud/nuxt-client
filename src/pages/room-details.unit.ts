@@ -113,7 +113,8 @@ let notifierModuleMock: NotifierModule;
 let shareCourseModuleMock: ShareCourseModule;
 let shareLessonModuleMock: ShareLessonModule;
 
-const $router = { push: jest.fn() };
+const $router = { push: jest.fn(), resolve: jest.fn() };
+
 const getWrapper: any = () => {
 	return mount(Room, {
 		...createComponentMocks({}),
@@ -207,13 +208,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		const hasNewLessonAction = actions.some((item: string) => {
 			return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
 		});
-		const hasImportLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
-		});
 		expect(fabComponent.exists()).toBe(true);
 		expect(hasNewTaskAction).toBe(true);
 		expect(hasNewLessonAction).toBe(true);
-		expect(hasImportLessonAction).toBe(false);
 	});
 
 	it("'add task' button should have correct path", async () => {
@@ -234,18 +231,32 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		);
 	});
 
-	it("should show import lesson FAB if FEATURE_LESSON_SHARE is set", () => {
-		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
-		const wrapper = getWrapper();
-		const fabComponent = wrapper.find(".wireframe-fab");
-		const actions = fabComponent.vm.actions.map((action: any) => {
-			return action.label;
+	describe("new task-card button", () => {
+		const mockRoute = "/rooms/123/create-task-card";
+		beforeEach(() => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true });
+			$router.resolve.mockReturnValue({ href: mockRoute });
 		});
-		const hasImportLessonAction = actions.some((item: string) => {
-			return item === wrapper.vm.$i18n.t("pages.rooms.fab.import.lesson");
+		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.actions.length).toBe(3);
 		});
-		expect(hasImportLessonAction).toBe(true);
+		it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
+			// @ts-ignore
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false });
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.actions.length).toBe(2);
+		});
+
+		it("should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.find(".wireframe-fab");
+			const newTaskCardAction = fabComponent.vm.actions[1];
+			expect(newTaskCardAction.href).toStrictEqual(mockRoute);
+		});
 	});
 
 	describe("headline menus", () => {
