@@ -17,9 +17,9 @@
 		@keydown.tab="$emit('tab-pressed')"
 	>
 		<template v-if="isBetaTask">
-			<v-card-text data-testid="content-card-task-content">
+			<v-card-text>
 				<div class="top-row-container mb-0">
-					<div class="title-section">
+					<div class="tagline" data-testid="tagline">
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
@@ -34,7 +34,7 @@
 		<template v-else>
 			<v-card-text data-testid="content-card-task-content">
 				<div class="top-row-container mb-0">
-					<div class="title-section">
+					<div class="tagline">
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
@@ -471,7 +471,7 @@ export default {
 	grid-template-columns: 95% 5%;
 	align-items: center;
 
-	.title-section {
+	.tagline {
 		text-align: left;
 
 		.v-icon {
@@ -515,7 +515,7 @@ export default {
 		opacity: 0.5;
 	}
 
-	.title-section {
+	.tagline {
 		opacity: 0.65;
 	}
 }
