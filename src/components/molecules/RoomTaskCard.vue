@@ -15,87 +15,96 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text data-testid="content-card-task-content">
-			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0">
-					<v-icon size="14" :color="titleIconColor" class="fill">
-						{{ titleIcon }}
-					</v-icon>
-					{{ cardTitle(task.duedate) }}
+		<template v-if="isBetaTask">
+			<v-card-text data-testid="content-card-task-content">
+				<div class="top-row-container mb-0">
+					<div class="title-section" tabindex="0">
+						<v-icon size="14" :color="titleIconColor" class="fill">
+							{{ titleIcon }}
+						</v-icon>
+						{{ cardTitle(task.duedate) }}
+					</div>
 				</div>
-				<div v-if="!isBetaTask" class="dot-menu-section">
-					<more-item-menu
-						:menu-items="moreActionsMenuItems[role]"
-						:show="true"
-						data-testid="content-card-task-menu"
+				<div class="text-h6 text--primary mb-2 task-name mt-1">
+					{{ task.name }}
+				</div>
+			</v-card-text>
+		</template>
+		<template v-else>
+			<v-card-text data-testid="content-card-task-content">
+				<div class="top-row-container mb-0">
+					<div class="title-section" tabindex="0">
+						<v-icon size="14" :color="titleIconColor" class="fill">
+							{{ titleIcon }}
+						</v-icon>
+						{{ cardTitle(task.duedate) }}
+					</div>
+					<div class="dot-menu-section">
+						<more-item-menu
+							:menu-items="moreActionsMenuItems[role]"
+							:show="true"
+							data-testid="content-card-task-menu"
+						/>
+					</div>
+				</div>
+				<div class="text-h6 text--primary mb-2 task-name">
+					{{ task.name }}
+				</div>
+				<!-- eslint-disable vue/no-v-html -->
+				<div
+					v-if="canShowDescription"
+					class="text--primary mt-1 mb-0 pb-0 text-description"
+					tabindex="0"
+					v-html="task.description"
+				></div>
+			</v-card-text>
+			<v-card-text
+				v-if="!isPlanned && !isDraft && !isFinished"
+				class="ma-0 pb-0 pt-0 submitted-section"
+				data-testid="content-card-task-info"
+			>
+				<div class="chip-items-group">
+					<v-chip
+						v-for="(chip, index) in chipItems[role]"
+						:key="index"
+						:class="[chip.class]"
+						small
+						:data-testid="[chip.testid]"
+					>
+						<v-icon
+							v-if="chip.icon"
+							left
+							small
+							class="fill"
+							color="rgba(0, 0, 0, 0.87)"
+							d
+						>
+							{{ chip.icon }}
+						</v-icon>
+						{{ chip.name }}
+					</v-chip>
+					<v-custom-chip-time-remaining
+						v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
+						type="warning"
+						:due-date="task.duedate"
+						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</div>
-			</div>
-			<div
-				class="text-h6 text--primary mb-2 task-name"
-				:class="{ 'mt-1': isBetaTask }"
-			>
-				{{ task.name }}
-			</div>
-			<!-- eslint-disable vue/no-v-html -->
-			<div
-				v-if="canShowDescription"
-				class="text--primary mt-1 mb-0 pb-0 text-description"
-				tabindex="0"
-				v-html="task.description"
-			></div>
-		</v-card-text>
-		<v-card-text
-			v-if="!isPlanned && !isDraft && !isFinished"
-			class="ma-0 pb-0 pt-0 submitted-section"
-			data-testid="content-card-task-info"
-		>
-			<div class="chip-items-group">
-				<v-chip
-					v-for="(chip, index) in chipItems[role]"
+			</v-card-text>
+			<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
+				<v-btn
+					v-for="(action, index) in cardActions[role]"
 					:key="index"
-					:class="[chip.class]"
-					small
-					:data-testid="[chip.testid]"
+					:class="`action-button action-button-${action.name
+						.split(' ')
+						.join('-')}`"
+					text
+					@click.stop="action.action"
 				>
-					<v-icon
-						v-if="chip.icon"
-						left
-						small
-						class="fill"
-						color="rgba(0, 0, 0, 0.87)"
-						d
-					>
-						{{ chip.icon }}
-					</v-icon>
-					{{ chip.name }}
-				</v-chip>
-
-				<v-custom-chip-time-remaining
-					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
-					type="warning"
-					:due-date="task.duedate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
-				/>
-			</div>
-		</v-card-text>
-		<v-card-actions
-			v-if="!isBetaTask"
-			class="pt-1 mt-2"
-			data-testid="content-card-task-actions"
-		>
-			<v-btn
-				v-for="(action, index) in cardActions[role]"
-				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
-				text
-				@click.stop="action.action"
-			>
-				{{ action.name }}</v-btn
-			>
-		</v-card-actions>
+					{{ action.name }}</v-btn
+				>
+			</v-card-actions>
+		</template>
 	</v-card>
 </template>
 
