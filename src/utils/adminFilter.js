@@ -145,7 +145,7 @@ const getFilterDateLastMigrationSinceFromTo = (ctx) => ({
 		generator: (filterGroupConfig, values) => {
 			try {
 				return {
-					outdatedSince: {
+					lastLoginSystemChange: {
 						$gte: fromInputDateTime(
 							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
 						)
