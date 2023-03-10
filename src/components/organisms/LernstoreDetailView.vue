@@ -259,7 +259,7 @@ export default {
 				"ccm:hpi_lom_relation"
 			);
 			if (relation) {
-				relation = JSON.parse(relation.replace(/\'/g, '"'));
+				relation = JSON.parse(relation.replace(/'/g, '"'));
 				if (relation.kind === "ispartof") {
 					return {
 						name: "content-id",

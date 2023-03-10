@@ -12,7 +12,7 @@ import { helpers } from "vuelidate/lib/validators";
 // It matches the following format: nameComponent[, or ;;]nameComponent
 export const ldapPathRegexValidator = helpers.regex(
 	"alpha",
-	/^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
+	/^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
 );
 
 // Regex-based validator for the LDAP URL (possibly unsecured).
@@ -20,7 +20,7 @@ export const ldapPathRegexValidator = helpers.regex(
 // Not recommended for use in production environment.
 export const ldapURLRegexValidator = helpers.regex(
 	"alpha",
-	/^ldaps?:\/\/(([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
+	/^ldaps?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
 );
 
 // Regex-based validator for the secured LDAP URL.
@@ -28,7 +28,7 @@ export const ldapURLRegexValidator = helpers.regex(
 // Should be used in every production environment.
 export const ldapSecuredURLRegexValidator = helpers.regex(
 	"alpha",
-	/^ldaps:\/\/(([\w\.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
+	/^ldaps:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
 );
 
 // Placeholder used for an unchanged password.

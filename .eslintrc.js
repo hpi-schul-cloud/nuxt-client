@@ -18,7 +18,7 @@ module.exports = {
 		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
 		"no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
 		// ----
-		"no-useless-escape": NUXT_REMOVAL ? "warn" : "error",
+		"no-useless-escape": "error",
 		"no-irregular-whitespace": NUXT_REMOVAL ? "warn" : "error",
 		"vue/no-useless-template-attributes": NUXT_REMOVAL ? "warn" : "error",
 		"@typescript-eslint/no-empty-function": NUXT_REMOVAL ? "warn" : "error",
