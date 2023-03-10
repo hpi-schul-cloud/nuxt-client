@@ -34,7 +34,7 @@ module.exports = {
 		"vue/no-v-text-v-html-on-component": "warn",
 		"vue/no-v-html": "warn",
 		"no-prototype-builtins": "error",
-		"no-empty": NUXT_REMOVAL ? "warn" : "error",
+		"no-empty": "error",
 	},
 	overrides: [
 		{

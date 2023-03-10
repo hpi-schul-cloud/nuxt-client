@@ -54,13 +54,13 @@ describe("ExternalToolSection", () => {
 							externalToolsModule,
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
+				} catch (e) {
+					expect(consoleErrorSpy).toHaveBeenCalledWith(
+						expect.stringMatching(
+							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
+						)
+					);
+				}
 
 				consoleErrorSpy.mockRestore();
 			});
@@ -78,13 +78,13 @@ describe("ExternalToolSection", () => {
 							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
+				} catch (e) {
+					expect(consoleErrorSpy).toHaveBeenCalledWith(
+						expect.stringMatching(
+							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
+						)
+					);
+				}
 
 				consoleErrorSpy.mockRestore();
 			});
