@@ -2,8 +2,8 @@ server {
     listen 4000;
     server_name  localhost;
 
+    set $csp "default-src 'self'; base-uri 'self'; script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' data:; frame-src 'self' data: https://rendering.edu-2.services.sc-dev-edusharing.dbildungscloud.dev/";
     set $csp "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self' data: https://rendering.edu-2.services.sc-dev-edusharing.dbildungscloud.dev/";
-
     location /status {
         stub_status;
     }
@@ -12,6 +12,10 @@ server {
         return 200 '{ "apiURL" : "${API_URL}" }';
         add_header Content-Type application/json;
     }
+
+    # IMPORTANT: Please do not add any further nested routes
+    # either: implement everything in this client
+    # or: use an entirely different route
 
     location ~ '^/news/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
@@ -29,6 +33,14 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
+    location ~ '^/administration/students/[a-z0-9]{24}/pw/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/students/[a-z0-9]{24}/skipregistration/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
     location ~ '^/administration/students/import/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
@@ -41,7 +53,11 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
-        location ~ '^/administration/teachers/import/?$' {
+    location ~ '^/administration/teachers/[a-z0-9]{24}/pw/?$' {
+        proxy_pass ${LEGACY_CLIENT_URL};
+    }
+
+    location ~ '^/administration/teachers/import/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 

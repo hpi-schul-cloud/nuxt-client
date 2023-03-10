@@ -6,14 +6,17 @@ import {
 	UserMigrationApiFactory,
 	UserMigrationApiInterface,
 } from "@/serverApi/v3";
-import { MigrationLinkRequest, MigrationLinks } from "./types/user-migration";
+import {
+	MigrationLinkRequest,
+	MigrationLinks,
+} from "./types/user-login-migration";
 
 @Module({
-	name: "userMigrationModule",
+	name: "userLoginMigrationModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class UserMigrationModule extends VuexModule {
+export default class UserLoginMigrationModule extends VuexModule {
 	private migrationLinks: MigrationLinks = {
 		proceedLink: "",
 		cancelLink: "",
@@ -21,13 +24,8 @@ export default class UserMigrationModule extends VuexModule {
 	private loading = false;
 	private error: {} | null = null;
 
-	private _userMigrationApi?: UserMigrationApiInterface;
-
 	private get userMigrationApi(): UserMigrationApiInterface {
-		if (!this._userMigrationApi) {
-			this._userMigrationApi = UserMigrationApiFactory(undefined, "v3", $axios);
-		}
-		return this._userMigrationApi;
+		return UserMigrationApiFactory(undefined, "v3", $axios);
 	}
 
 	@Mutation

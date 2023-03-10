@@ -33,10 +33,7 @@
 								>{{ tabTwoHeader.title }}</span
 							>
 						</v-tab>
-						<v-tab
-							:href="tabThreeHeader.route"
-							@change="onOpenFinishedTasksTab"
-						>
+						<v-tab :href="tabThreeHeader.route">
 							<v-icon class="tab-icon mr-sm-3">{{
 								tabThreeHeader.icon
 							}}</v-icon>
@@ -301,6 +298,9 @@ export default {
 			if (oldTab !== "") {
 				this.$router.replace({ query: { ...this.$route.query, tab } });
 			}
+			if (tab === "finished") {
+				this.finishedTasksModule.fetchFinishedTasks();
+			}
 		},
 	},
 	created() {
@@ -325,21 +325,10 @@ export default {
 					: this.tasksCountTeacher.drafts[courseName];
 			}
 		},
-		onOpenFinishedTasksTab() {
-			// TODO - this only properly works, because we switch between clients when archiving a task and therefor trigger a full reload
-			// we should probably find a better solution :D
-			if (!this.finishedTasksIsInitialized) {
-				this.finishedTasksModule.fetchFinishedTasks();
-			}
-		},
 		initTabState() {
 			if (!this.tabRoutes.includes(this.$route.query.tab)) {
 				this.setActiveTab(this.tabRoutes[0]);
 				return;
-			}
-
-			if (this.$route.query.tab == this.tabRoutes[2]) {
-				this.onOpenFinishedTasksTab();
 			}
 
 			this.setActiveTab(this.$route.query.tab);

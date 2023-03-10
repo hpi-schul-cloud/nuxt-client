@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="editMode">
 		<draggable
 			ref="draggable"
 			v-model="elements"
@@ -21,11 +21,40 @@
 				v-model="element.model"
 				v-bind="element.props"
 				:disabled="dragInProgress"
-				@delete-element="deleteElement(index)"
+				@delete-element="openDeleteDialog(index)"
 				@add-element="addElementAfter(index)"
+				:editMode="true"
 			/>
 		</draggable>
 		<add-card-element @click="addElementAfter()" />
+		<v-custom-dialog
+			ref="delete-dialog"
+			v-model="deleteDialog.isOpen"
+			data-testid="delete-element-dialog"
+			:size="375"
+			has-buttons
+			confirm-btn-title-key="common.actions.remove"
+			@dialog-confirmed="deleteElement(deleteDialog.index)"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ $t("pages.taskCard.deleteElement.title") }}
+			</h2>
+			<template slot="content">
+				<p class="text-md mt-2">
+					{{ $t("pages.taskCard.deleteElement.text") }}
+				</p>
+			</template>
+		</v-custom-dialog>
+	</div>
+	<div v-else>
+		<card-element-wrapper
+			v-for="(element, index) in elements"
+			ref="card-element"
+			:key="index"
+			v-model="element.model"
+			v-bind="element.props"
+			:editMode="false"
+		/>
 	</div>
 </template>
 
@@ -36,6 +65,7 @@ import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vu
 import AddCardElement from "@/components/card-elements/AddCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
 
@@ -45,12 +75,17 @@ export default defineComponent({
 		CardElementWrapper,
 		AddCardElement,
 		draggable,
+		vCustomDialog,
 	},
 	emits: ["input"],
 	props: {
 		value: {
 			type: Array,
 			default: () => [],
+		},
+		editMode: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
@@ -76,8 +111,20 @@ export default defineComponent({
 			});
 		};
 
+		const deleteDialog = ref({
+			isOpen: false,
+			index: NaN,
+		});
+
+		const openDeleteDialog = (index: number) => {
+			deleteDialog.value.isOpen = true;
+			deleteDialog.value.index = index;
+		};
+
 		const deleteElement = (index: number) => {
 			elements.value.splice(index, 1);
+			deleteDialog.value.isOpen = false;
+			deleteDialog.value.index = NaN;
 		};
 
 		const { touchDelay, startDragging, endDragging, dragInProgress } =
@@ -88,7 +135,9 @@ export default defineComponent({
 		return {
 			elements,
 			addElementAfter,
+			deleteDialog,
 			deleteElement,
+			openDeleteDialog,
 			touchDelay,
 			startDragging,
 			endDragging,

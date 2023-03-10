@@ -4,9 +4,10 @@ export const toolConfigurationTemplateFactory = (
 	param: Partial<ToolConfigurationTemplate> = {}
 ): ToolConfigurationTemplate => {
 	return {
-		id: "id",
+		id: "toolId",
+		configId: "configId",
 		version: 1,
-		name: "name",
+		name: "toolName",
 		logoUrl: "logoUrl",
 		parameters: [],
 		...param,

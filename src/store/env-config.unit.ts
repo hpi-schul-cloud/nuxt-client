@@ -28,6 +28,7 @@ const mockEnvs: Envs = {
 	SC_SHORT_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",
 	FEATURE_CONSENT_NECESSARY: true,
+	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
 };
 
 const URL = "/v1/config/app/public";

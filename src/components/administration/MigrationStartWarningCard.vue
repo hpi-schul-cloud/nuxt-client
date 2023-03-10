@@ -1,6 +1,6 @@
 <template>
 	<v-card class="migration-start-card">
-		<v-card-title
+		<v-card-title class="card-title"
 			>{{
 				$t(
 					"components.administration.adminMigrationSection.startWarningCard.title"
@@ -18,6 +18,18 @@
 		</v-card-text>
 		<v-card-actions>
 			<v-btn
+				class="disagree-btn-start"
+				color="secondary"
+				data-testid="migration-start-disagree-button"
+				@click="$emit('start')"
+			>
+				{{
+					$t(
+						"components.administration.adminMigrationSection.startWarningCard.disagree"
+					)
+				}}
+			</v-btn>
+			<v-btn
 				class="agree-btn-start"
 				color="primary"
 				data-testid="migration-start-agree-button"
@@ -32,28 +44,21 @@
 					)
 				}}
 			</v-btn>
-
-			<v-btn
-				class="disagree-btn-start"
-				color="secondary"
-				data-testid="migration-start-disagree-button"
-				@click="$emit('start')"
-			>
-				{{
-					$t(
-						"components.administration.adminMigrationSection.startWarningCard.disagree"
-					)
-				}}
-			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 
+// TODO https://ticketsystem.dbildungscloud.de/browse/N21-618 Combine MigrationEndWarningCard and MigrationStartWarningCard
 export default defineComponent({
 	name: "MigrationStartWarningCard",
 	emits: ["start", "set"],
-	setup() {},
 });
 </script>
+
+<style lang="scss" scoped>
+.card-title {
+	word-break: break-word;
+}
+</style>

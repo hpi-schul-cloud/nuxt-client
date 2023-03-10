@@ -1,9 +1,8 @@
 import { applicationErrorModule, authModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { nanoid } from "nanoid";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	BoardResponse,
+	SingleColumnBoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
@@ -15,7 +14,6 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { SharedLessonObject } from "./types/room";
 
 @Module({
 	name: "roomModule",
@@ -23,7 +21,7 @@ import { SharedLessonObject } from "./types/room";
 	stateFactory: true,
 })
 export default class RoomModule extends VuexModule {
-	roomData: BoardResponse = {
+	roomData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",
 		displayColor: "",
@@ -36,12 +34,6 @@ export default class RoomModule extends VuexModule {
 		statusCode: "",
 		message: "",
 		error: {},
-	};
-	sharedLessonData: SharedLessonObject = {
-		code: "",
-		lessonName: "",
-		status: "",
-		message: "",
 	};
 	private courseShareToken = "";
 
@@ -107,33 +99,6 @@ export default class RoomModule extends VuexModule {
 				...error,
 			});
 			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async fetchSharedLesson(lessonId: string): Promise<void> {
-		try {
-			const lessonShareResult = (await $axios.get(`/v1/lessons/${lessonId}`))
-				.data;
-			if (!lessonShareResult.shareToken) {
-				lessonShareResult.shareToken = nanoid(9);
-				await $axios.patch(
-					`/v1/lessons/${lessonShareResult._id}`,
-					lessonShareResult
-				);
-			}
-			this.setSharedLessonData({
-				code: lessonShareResult.shareToken,
-				lessonName: lessonShareResult.name,
-				status: "",
-				message: "",
-			});
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
 		}
 	}
 
@@ -309,7 +274,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setRoomData(payload: BoardResponse): void {
+	setRoomData(payload: SingleColumnBoardResponse): void {
 		this.roomData = payload;
 	}
 
@@ -356,11 +321,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setSharedLessonData(payload: SharedLessonObject): void {
-		this.sharedLessonData = payload;
-	}
-
-	@Mutation
 	setCourseShareToken(payload: string): void {
 		this.courseShareToken = payload;
 	}
@@ -373,7 +333,7 @@ export default class RoomModule extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomData(): BoardResponse {
+	get getRoomData(): SingleColumnBoardResponse {
 		return this.roomData;
 	}
 
@@ -383,10 +343,6 @@ export default class RoomModule extends VuexModule {
 
 	get getBusinessError() {
 		return this.businessError;
-	}
-
-	get getSharedLessonData(): SharedLessonObject {
-		return this.sharedLessonData;
 	}
 
 	get getCourseShareToken(): string {

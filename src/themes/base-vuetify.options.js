@@ -5,6 +5,7 @@ export default {
 	theme: {
 		options: {
 			customProperties: true,
+			cspNonce: window.nonce,
 		},
 		themes: {
 			light: {
@@ -47,6 +48,9 @@ export default {
 				error: {
 					base: "#ff1134",
 					darken1: "#bf0d26",
+				},
+				"beta-task": {
+					base: "#196C9E",
 				},
 			},
 		},

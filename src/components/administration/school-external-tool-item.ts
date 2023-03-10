@@ -1,7 +1,10 @@
 export class SchoolExternalToolItem {
 	id: string;
+
 	name: string;
+
 	status: string;
+
 	outdated: boolean;
 
 	constructor(props: SchoolExternalToolItem) {
