@@ -1,5 +1,5 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto container-max-width">
+	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_error.svg"
 			:alt="$t('pages.userMigration.error.img.alt')"
@@ -67,7 +67,7 @@ export default defineComponent({
 			);
 		};
 
-		const hasData: Ref<boolean> = ref(false);
+		const isLoading: Ref<boolean> = ref(true);
 
 		const supportLink: ComputedRef<string> = computed(() =>
 			envConfigModule?.getAccessibilityReportEmail
@@ -77,11 +77,11 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
-			hasData.value = true;
+			isLoading.value = false;
 		});
 
 		return {
-			hasData,
+			isLoading,
 			supportLink,
 			getSystemName,
 		};
