@@ -11,7 +11,7 @@ import {
 	MigrationResponse,
 	SchoolApiInterface,
 } from "@/serverApi/v3/api";
-import { OauthMigration, School } from "./types/schools";
+import { OauthMigration } from "./types/schools";
 import { AxiosPromise } from "axios";
 
 let receivedRequests: any[] = [];
@@ -68,7 +68,10 @@ describe("schools module", () => {
 					receivedRequests.push({ path });
 					return getRequestReturn;
 				},
-				post: async (path: string) => {},
+				post: async (path: string) => {
+					receivedRequests.push({ path });
+					return getRequestReturn;
+				},
 			} as AxiosInstance);
 			setupStores({ authModule: AuthModule });
 		});
@@ -117,6 +120,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return;
 					},
@@ -193,6 +197,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return;
 					},
@@ -247,6 +252,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return;
 					},
@@ -306,6 +312,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return;
 					},
@@ -381,6 +388,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					patch: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return;
 					},
@@ -469,6 +477,7 @@ describe("schools module", () => {
 				const systemId = "id_1";
 				initializeAxios({
 					delete: async (path: string) => {
+						receivedRequests.push({ path });
 						throw new Error("");
 						return "";
 					},
