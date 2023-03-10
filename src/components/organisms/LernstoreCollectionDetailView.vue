@@ -35,7 +35,6 @@
 							({{ $t("pages.content._id.metadata.provider") }})
 						</span>
 					</div>
-					<!-- eslint-disable vue/no-v-html -->
 					<div
 						v-if="description"
 						class="description text-wrap"
