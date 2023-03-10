@@ -104,7 +104,7 @@ describe("students/index", () => {
 	});
 
 	const mockUiState = {
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		get: (key, identifier) => {
 			const state = {
 				pagination: {},
@@ -113,7 +113,7 @@ describe("students/index", () => {
 			};
 			return state[key];
 		},
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		set: (key, identifier) => {},
 	};
 

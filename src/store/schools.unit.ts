@@ -1,7 +1,6 @@
 import SchoolsModule from "./schools";
-import ImportUsersModule from "@/store/import-users";
 import { initializeAxios } from "@/utils/api";
-import { AxiosInstance, AxiosRequestConfig } from "axios";
+import { AxiosInstance } from "axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";

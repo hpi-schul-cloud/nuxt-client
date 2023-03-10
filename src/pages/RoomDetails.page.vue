@@ -122,7 +122,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
 	mdiContentCopy,
 	mdiDownload,
 	mdiEmailPlusOutline,

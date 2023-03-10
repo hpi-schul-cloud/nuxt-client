@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
+import { NewsApiFactory } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
