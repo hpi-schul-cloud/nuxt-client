@@ -33,7 +33,7 @@ module.exports = {
 		"no-var": "error",
 		"vue/no-v-text-v-html-on-component": "warn",
 		"vue/no-v-html": "warn",
-		"no-prototype-builtins": NUXT_REMOVAL ? "warn" : "error",
+		"no-prototype-builtins": "error",
 		"no-empty": NUXT_REMOVAL ? "warn" : "error",
 	},
 	overrides: [
