@@ -90,7 +90,6 @@
 						</p>
 					</div>
 				</div>
-				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">

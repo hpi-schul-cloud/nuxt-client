@@ -6,7 +6,6 @@
 	>
 		<template #description>
 			<div class="initial-state-description">
-				<!-- eslint-disable vue/no-v-html -->
 				<span v-html="$t('pages.content.init_state.message')" />
 			</div>
 		</template>

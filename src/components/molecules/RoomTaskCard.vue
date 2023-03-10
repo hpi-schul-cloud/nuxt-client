@@ -32,7 +32,6 @@
 			<div class="text-h6 text--primary mb-2 task-name">
 				{{ task.name }}
 			</div>
-			<!-- eslint-disable vue/no-v-html -->
 			<div
 				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
