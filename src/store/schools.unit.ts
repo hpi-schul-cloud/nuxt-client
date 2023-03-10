@@ -552,10 +552,12 @@ describe("schools module", () => {
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				const error = { statusCode: "500", message: "foo" };
+				const error = new Error(
+					JSON.stringify({ statusCode: "500", message: "foo" })
+				);
 				mockApi = {
 					importUserControllerEndSchoolInMaintenance: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(error)
 					),
 				};
 				spy.mockReturnValue(
