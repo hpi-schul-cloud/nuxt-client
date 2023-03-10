@@ -29,7 +29,7 @@ export default class RoomModule extends VuexModule {
 	};
 	scopePermissions: string[] = [];
 	loading = false;
-	error: null | {} = null;
+	error: null | object = null;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -289,7 +289,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
+	setError(error: object | null): void {
 		this.error = error;
 		const handledApplicationErrors: Array<HttpStatusCode> = [
 			HttpStatusCode.BadRequest,
@@ -299,7 +299,6 @@ export default class RoomModule extends VuexModule {
 			HttpStatusCode.RequestTimeout,
 			HttpStatusCode.InternalServerError,
 		];
-		// NUXT_REMOVAL: This error handling should be centralized later to manage business errors better.
 		// @ts-ignore
 		const errorCode = error.response?.data.code;
 		if (errorCode && handledApplicationErrors.includes(errorCode))
@@ -329,7 +328,7 @@ export default class RoomModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 

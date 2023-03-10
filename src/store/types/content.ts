@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+/* eslint-disable @typescript-eslint/ban-types */
 export type Query = {
 	$limit: number;
 	$skip: number;
