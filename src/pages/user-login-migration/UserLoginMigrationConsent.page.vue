@@ -1,7 +1,7 @@
 <template>
 	<div v-show="hasData" class="text-center mx-auto container-max-width">
 		<img
-			src="@/assets/img/migration/migration.svg"
+			src="@/assets/img/migration/move.svg"
 			:alt="$t('pages.userMigration.consent.img.alt')"
 		/>
 		<h1 class="pl-4 pr-4">
@@ -9,7 +9,7 @@
 		</h1>
 		<div>
 			<p
-				class="text-left pa-4"
+				class="pa-4"
 				data-testId="text-description"
 				v-html="
 					$t(migrationDescription, {
