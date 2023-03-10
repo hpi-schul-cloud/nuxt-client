@@ -28,8 +28,8 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search"
-				/></template>
+					<base-icon source="material" icon="search" />
+				</template>
 			</base-input>
 
 			<data-filter
@@ -80,6 +80,12 @@
 						/>
 					</span>
 				</template>
+				<template #datacolumn-lastLoginSystemChange="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
+				<template #datacolumn-outdatedSince="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
 
 				<template #datacolumn-_id="{ data, selected, highlighted }">
 					<v-btn
@@ -115,8 +121,8 @@
 import {
 	authModule,
 	envConfigModule,
-	schoolsModule,
 	notifierModule,
+	schoolsModule,
 } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -251,6 +257,18 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "lastLoginSystemChange",
+					label: this.$t("common.labels.migrated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.migrated.tooltip"),
+				},
+				{
+					field: "outdatedSince",
+					label: this.$t("common.labels.outdated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.outdated.tooltip"),
+				},
+				{
 					// edit column
 					field: "_id",
 					label: "",
@@ -292,6 +310,9 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
+		getFeatureSchoolSanisUserMigrationEnabled() {
+			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
+		},
 		env() {
 			return envConfigModule.getEnv;
 		},
@@ -313,7 +334,7 @@ export default {
 			);
 
 			// filters out the QR bulk action is user is not an admin
-			if (!this.user.roles.some((role) => role.name === "administrator")) {
+			if (!this.user?.roles?.some((role) => role.name === "administrator")) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -337,7 +358,7 @@ export default {
 			// filters out edit column if school is external or if user is not an admin
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.user.roles.some((role) => role.name === "administrator")
+				!this.user?.roles?.some((role) => role.name === "administrator")
 			) {
 				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column
@@ -350,6 +371,12 @@ export default {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
+			}
+
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			return editedColumns;

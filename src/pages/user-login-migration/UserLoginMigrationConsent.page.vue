@@ -1,12 +1,15 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto">
-		<img src="@/assets/img/migration/migration.svg" alt="migration logo" />
+	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
+		<img
+			src="@/assets/img/migration/move.svg"
+			:alt="$t('pages.userMigration.consent.img.alt')"
+		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
 		<div>
 			<p
-				class="text-left pa-4"
+				class="pa-4"
 				data-testId="text-description"
 				v-html="
 					$t(migrationDescription, {
@@ -45,24 +48,22 @@
 </template>
 
 <script lang="ts">
-import { useApplicationError } from "@/composables/application-error.composable";
 import SystemsModule from "@/store/systems";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import UserMigrationModule from "@/store/user-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
-import { MigrationPageOrigin } from "@/store/types/user-migration";
+import { MigrationPageOrigin } from "@/store/types/user-login-migration";
 import {
 	computed,
 	ComputedRef,
-	ref,
-	Ref,
 	defineComponent,
 	inject,
 	onMounted,
+	Ref,
+	ref,
 } from "vue";
 
 export default defineComponent({
-	name: "UserMigration",
+	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
 	props: {
 		sourceSystem: {
@@ -82,36 +83,24 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { createApplicationError } = useApplicationError();
-		if (!props.targetSystem || !props.sourceSystem || !props.origin) {
-			throw createApplicationError(HttpStatusCode.BadRequest);
-		}
-
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
-		const userMigrationModule: UserMigrationModule | undefined =
-			inject<UserMigrationModule>("userMigrationModule");
-		if (!systemsModule || !userMigrationModule) {
-			throw createApplicationError(
-				HttpStatusCode.InternalServerError,
-				"error.generic",
-				"Injection of dependencies failed"
-			);
-		}
+		const userMigrationModule: UserLoginMigrationModule | undefined =
+			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 
 		const getSystemName = (id: string): string => {
 			return (
-				systemsModule.getSystems.find(
+				systemsModule?.getSystems.find(
 					(system: System): boolean => system.id === id
 				)?.name ?? ""
 			);
 		};
 
-		const proceedLink: ComputedRef<string> = computed(
-			() => userMigrationModule.getMigrationLinks.proceedLink
+		const proceedLink: ComputedRef<string | undefined> = computed(
+			() => userMigrationModule?.getMigrationLinks.proceedLink
 		);
-		const cancelLink: ComputedRef<string> = computed(
-			() => userMigrationModule.getMigrationLinks.cancelLink
+		const cancelLink: ComputedRef<string | undefined> = computed(
+			() => userMigrationModule?.getMigrationLinks.cancelLink
 		);
 
 		let pageType: MigrationPageOrigin;
@@ -123,33 +112,25 @@ export default defineComponent({
 			migrationDescription = props.mandatory
 				? "pages.userMigration.description.fromSourceMandatory"
 				: "pages.userMigration.description.fromSource";
-		} else if (props.origin === props.targetSystem) {
+		} else {
 			pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
 			migrationDescription = "pages.userMigration.description.fromTarget";
-		} else {
-			throw createApplicationError(
-				HttpStatusCode.BadRequest,
-				"error.400",
-				`Unknown origin system ${props.origin}. Expected ${props.sourceSystem} or ${props.targetSystem}`
-			);
 		}
 
-		const hasData: Ref<boolean> = ref(false);
+		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
-			await Promise.all([
-				systemsModule.fetchSystems(),
-				userMigrationModule.fetchMigrationLinks({
-					pageType,
-					sourceSystem: props.sourceSystem,
-					targetSystem: props.targetSystem,
-				}),
-			]);
-			hasData.value = true;
+			await systemsModule?.fetchSystems();
+			await userMigrationModule?.fetchMigrationLinks({
+				pageType,
+				sourceSystem: props.sourceSystem,
+				targetSystem: props.targetSystem,
+			});
+			isLoading.value = false;
 		});
 
 		return {
-			hasData,
+			isLoading,
 			migrationDescription,
 			proceedLink,
 			cancelLink,

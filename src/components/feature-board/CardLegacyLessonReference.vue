@@ -1,6 +1,7 @@
 <template>
 	<VCardText>
-		<div>Legacy Lesson: {{ card.id }}</div>
+		<div>CardID: {{ card.id }}</div>
+		<div>Legacy Lesson: {{ card.lessonId }}</div>
 	</VCardText>
 </template>
 

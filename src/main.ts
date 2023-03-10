@@ -23,7 +23,7 @@ import {
 	systemsModule,
 	taskCardModule,
 	tasksModule,
-	userMigrationModule,
+	userLoginMigrationModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -138,7 +138,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			systemsModule,
 			taskCardModule,
 			tasksModule,
-			userMigrationModule,
+			userLoginMigrationModule,
 			i18n,
 		},
 		render: (h) => h(App),

@@ -6,4 +6,4 @@ export * from "./tool-configuration-template";
 export * from "./school-external-tool-status.enum";
 export * from "./school-external-tool";
 export * from "./tool-configuration-scope";
-export * from "./tool-configuration";
+export * from "./tool-configuration-list-item";
