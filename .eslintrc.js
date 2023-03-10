@@ -27,7 +27,7 @@ module.exports = {
 		"vue/no-mutating-props": "error",
 		"no-undef": NUXT_REMOVAL ? "warn" : "error",
 		"prefer-const": "error",
-		"@typescript-eslint/no-inferrable-types": NUXT_REMOVAL ? "warn" : "error",
+		"@typescript-eslint/no-inferrable-types": "error",
 		"@typescript-eslint/ban-types": "error",
 		"prettier/prettier": "error",
 		"no-var": "error",
