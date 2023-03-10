@@ -856,6 +856,7 @@
 	"pages.room.taskCard.label.open": "Abrir",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.edit": "Editar",
+	"pages.room.taskCard.label.betaTask": "Tarea beta",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.itemDelete.text": "¿Estás seguro de que deseas eliminar el elemento \"{itemTitle}\"?",

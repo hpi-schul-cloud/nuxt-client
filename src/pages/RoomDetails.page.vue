@@ -122,7 +122,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
 	mdiContentCopy,
 	mdiDownload,
 	mdiEmailPlusOutline,
@@ -138,7 +137,6 @@ import { useRouter } from "vue-router/composables";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const i18n = inject("i18n");

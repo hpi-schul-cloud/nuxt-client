@@ -9,6 +9,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 
+// routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
@@ -121,6 +122,7 @@ export const routes: Array<RouteConfig> = [
 			isPublic: true,
 		},
 	},
+	// deprecated?
 	{
 		path: "/imprint",
 		component: () => import("../pages/Imprint.page.vue"),
@@ -129,7 +131,6 @@ export const routes: Array<RouteConfig> = [
 			isPublic: true,
 		},
 	},
-	// deprecated?
 	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
