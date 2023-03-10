@@ -200,7 +200,7 @@ export default defineComponent({
 		fabItems() {
 			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
@@ -227,7 +227,7 @@ export default defineComponent({
 				actions.push(action);
 			}
 			if (
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
