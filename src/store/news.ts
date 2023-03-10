@@ -165,7 +165,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await this.newsApi.newsControllerDelete(id);
+			await this.newsApi.newsControllerDelete(id);
 			this.setCurrent(null);
 			this.setStatus("completed");
 		} catch (error) {
