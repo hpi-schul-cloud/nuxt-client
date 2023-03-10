@@ -271,6 +271,8 @@
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"pages.taskCard.addElement": "Додати елемент",
+	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
+	"pages.taskCard.deleteElement.title": "Видалити елемент",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error": "Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
 	"components.organisms.AutoLogoutWarning.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",

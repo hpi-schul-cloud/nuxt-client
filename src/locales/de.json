@@ -785,6 +785,8 @@
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"pages.taskCard.addElement": "Element hinzufügen",
+	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
+	"pages.taskCard.deleteElement.title": "Element löschen",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.labels.noCoursesAvailable": "Es gibt keinen Kurs mit diesem Namen.",
