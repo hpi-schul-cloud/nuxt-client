@@ -11,7 +11,7 @@ import {
 	MigrationResponse,
 	SchoolApiInterface,
 } from "@/serverApi/v3/api";
-import { OauthMigration } from "./types/schools";
+import { OauthMigration, School } from "./types/schools";
 import { AxiosPromise } from "axios";
 
 let receivedRequests: any[] = [];

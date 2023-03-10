@@ -28,7 +28,7 @@ module.exports = {
 		"no-undef": NUXT_REMOVAL ? "warn" : "error",
 		"prefer-const": "error",
 		"@typescript-eslint/no-inferrable-types": NUXT_REMOVAL ? "warn" : "error",
-		"@typescript-eslint/ban-types": NUXT_REMOVAL ? "warn" : "error",
+		"@typescript-eslint/ban-types": "warn",
 		"prettier/prettier": "error",
 		"no-var": "error",
 		"vue/no-v-text-v-html-on-component": NUXT_REMOVAL ? "warn" : "error",
