@@ -14,13 +14,13 @@ const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		get: async (path: string, params: {}) => {
+		get: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
 		post: async (path: string) => {},
-		patch: async (path: string, params: {}) => {
+		patch: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
@@ -139,7 +139,7 @@ describe("room module", () => {
 
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
@@ -166,14 +166,14 @@ describe("room module", () => {
 
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
 								return (returned = { data: { data: ["123", "465"] } });
 							}
 						},
-						post: async (path: string, params: {}) => {
+						post: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons/copy") {
@@ -200,14 +200,14 @@ describe("room module", () => {
 
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
 								return { data: { data: ["123", "465"] } };
 							}
 						},
-						post: async (path: string, params: {}) => {
+						post: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons/copy") {
@@ -231,7 +231,7 @@ describe("room module", () => {
 
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							if (path === "/v1/lessons") {
@@ -304,7 +304,7 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 						},
 					} as AxiosInstance);
@@ -439,10 +439,10 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: object) => {
 							return { data: { _id: "returnId" } };
 						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return {
@@ -475,10 +475,10 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: object) => {
 							return { data: { _id: "returnId" } };
 						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return {
@@ -511,12 +511,12 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return { data: { _id: "returnId" } };
 						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							return {
 								data: {
 									archived: ["firstId"],
@@ -545,12 +545,12 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return { data: { someValue: "some value for error case" } };
 						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							return {
 								data: {
 									archived: ["firstId"],
@@ -584,12 +584,12 @@ describe("room module", () => {
 
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
+						patch: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return Promise.reject({ ...error });
 						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							return {
 								data: {
 									archived: ["firstId"],
@@ -628,7 +628,7 @@ describe("room module", () => {
 				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
 							received.push({ path });
 							received.push({ params });
 							return {
