@@ -6,6 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import Vue from "vue";
 
 const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {

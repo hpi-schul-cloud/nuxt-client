@@ -3,6 +3,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { defineComponent, provide } from "vue";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import { useLoadingState } from "./loadingState";
+import Vue from "vue";
 
 export interface MountOptions {
 	provider?: () => void;
