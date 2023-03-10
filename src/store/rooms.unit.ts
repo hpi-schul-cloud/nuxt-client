@@ -14,7 +14,6 @@ const axiosInitializer = () => {
 			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
 		patch: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });

@@ -117,7 +117,7 @@ export default {
 		},
 		room: {
 			type: Object,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, required: true },
 		ariaLabel: {

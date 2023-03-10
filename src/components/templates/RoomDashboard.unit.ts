@@ -263,7 +263,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should be sorted the elements by keyboard'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -281,7 +281,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should NOT be sorted the elements by keyboard for students'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -299,7 +299,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;

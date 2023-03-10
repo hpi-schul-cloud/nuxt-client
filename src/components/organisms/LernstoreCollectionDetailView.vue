@@ -163,7 +163,7 @@ export default defineComponent({
 	props: {
 		resource: {
 			type: Object,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, default: "" },
 	},

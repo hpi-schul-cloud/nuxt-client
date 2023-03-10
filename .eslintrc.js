@@ -21,7 +21,7 @@ module.exports = {
 		"no-useless-escape": "error",
 		"no-irregular-whitespace": "error",
 		"vue/no-useless-template-attributes": "error",
-		"@typescript-eslint/no-empty-function": NUXT_REMOVAL ? "warn" : "error",
+		"@typescript-eslint/no-empty-function": "error",
 		"vue/multi-word-component-names": NUXT_REMOVAL ? "warn" : "error",
 		"@typescript-eslint/ban-ts-comment": NUXT_REMOVAL ? "warn" : "error",
 		"vue/no-mutating-props": NUXT_REMOVAL ? "warn" : "error",

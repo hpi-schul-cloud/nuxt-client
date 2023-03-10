@@ -168,7 +168,7 @@ export default {
 		roomDataObject: {
 			type: Object,
 			required: true,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, required: true },
 	},

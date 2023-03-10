@@ -68,7 +68,7 @@ describe("schools module", () => {
 					receivedRequests.push({ path });
 					return getRequestReturn;
 				},
-				post: async (path: string) => {
+				post: async (path?: string) => {
 					receivedRequests.push({ path });
 					return getRequestReturn;
 				},
@@ -197,8 +197,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -252,8 +251,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -312,8 +310,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -388,8 +385,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					patch: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -477,8 +473,7 @@ describe("schools module", () => {
 				const systemId = "id_1";
 				initializeAxios({
 					delete: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return "";
 					},
 				} as AxiosInstance);
@@ -509,7 +504,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() => {}),
+					importUserControllerEndSchoolInMaintenance: jest.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -602,7 +597,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() => {}),
+					importUserControllerStartSchoolInUserMigration: jest.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface

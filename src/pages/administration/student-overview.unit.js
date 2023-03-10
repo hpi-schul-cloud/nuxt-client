@@ -114,7 +114,7 @@ describe("students/index", () => {
 			return state[key];
 		},
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		set: (key, identifier) => {},
+		set: (key, identifier) => ({}),
 	};
 
 	afterAll(() => {

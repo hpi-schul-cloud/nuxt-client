@@ -188,7 +188,7 @@ export default {
 	props: {
 		resource: {
 			type: Object,
-			default: () => {},
+			default: () => ({}),
 		},
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
