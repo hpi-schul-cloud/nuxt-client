@@ -19,7 +19,10 @@ const axiosInitializer = () => {
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-		post: async (path: string) => ({}),
+		post: async (path: string) => {
+			receivedRequests.push({ path });
+			return getRequestReturn;
+		},
 		patch: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
@@ -134,16 +137,13 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if server couldn't find any lesson", async () => {
-				const received: any[] = [];
-				let returned: any = {};
-
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: { data: [] } });
+								return { data: { data: [] } };
 							}
 						},
 					} as AxiosInstance);
@@ -161,23 +161,20 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if the server sends nothing after creating lesson ", async () => {
-				const received: any[] = [];
-				let returned: any = {};
-
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: { data: ["123", "465"] } });
+								return { data: { data: ["123", "465"] } };
 							}
 						},
 						post: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons/copy") {
-								return (returned = undefined);
+								return undefined;
 							}
 						},
 					} as AxiosInstance);
@@ -195,21 +192,18 @@ describe("room module", () => {
 			});
 
 			it("should trigger fetchContent method after copying lesson", async () => {
-				const received: any[] = [];
-				const returned: any = {};
-
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
 								return { data: { data: ["123", "465"] } };
 							}
 						},
 						post: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons/copy") {
 								return { data: { _id: "123456" } };
 							}
@@ -225,17 +219,15 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const received: any[] = [];
-				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = Promise.reject({ ...error }));
+								return Promise.reject({ ...error });
 							}
 						},
 					} as AxiosInstance);
@@ -301,11 +293,11 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 						},
 					} as AxiosInstance);
 				})();
@@ -320,7 +312,9 @@ describe("room module", () => {
 				);
 				await roomModule.createCourseShareToken("123456");
 
-				expect(received[0].path).toStrictEqual("/v1/courses-share/123456");
+				expect(receivedRequests[0].path).toStrictEqual(
+					"/v1/courses-share/123456"
+				);
 				expect(createCourseShareTokenSpy.mock.calls[0][0]).toStrictEqual(
 					"123456"
 				);
@@ -431,20 +425,22 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
+				receivedRequests = [];
 				// @ts-ignore
 				authModule.setUser({ id: "testUser" });
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return { data: { _id: "returnId" } };
 						},
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["testUserId"],
@@ -464,7 +460,7 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
-				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
+				expect(receivedRequests[0].path).toStrictEqual("/v1/homework/finishId");
 				expect(finishTaskSpy.mock.calls[0][0]).toStrictEqual({
 					itemId: "finishId",
 					action: "finish",
@@ -472,15 +468,16 @@ describe("room module", () => {
 			});
 
 			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return { data: { _id: "returnId" } };
 						},
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									incorrectResponse: [],
@@ -508,14 +505,14 @@ describe("room module", () => {
 			});
 
 			it("should make a 'PATCH' call to the backend with archived list", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return { data: { _id: "returnId" } };
 						},
+						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						get: async (path: string, params: object) => {
 							return {
 								data: {
@@ -535,22 +532,23 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
-				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
-				expect(received[1].params).toStrictEqual({
+				expect(receivedRequests[0].path).toStrictEqual("/v1/homework/finishId");
+				expect(receivedRequests[1].params).toStrictEqual({
 					archived: ["firstId", "testUser"],
 				});
 			});
 
 			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return { data: { someValue: "some value for error case" } };
 						},
 						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["firstId"],
@@ -578,18 +576,18 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const received: any[] = [];
-				const returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
 						patch: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return Promise.reject({ ...error });
 						},
 						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["firstId"],
@@ -620,17 +618,17 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
+				receivedRequests = [];
 				// @ts-ignore
 				authModule.setUser({ id: "testUser" });
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							received.push({ path });
-							received.push({ params });
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									userId: ["testScopedPermission"],
@@ -649,7 +647,7 @@ describe("room module", () => {
 					userId: "userId",
 				});
 
-				expect(received[0].path).toStrictEqual(
+				expect(receivedRequests[0].path).toStrictEqual(
 					"/v1/courses/courseId/userPermissions?userId=userId"
 				);
 				expect(fetchScopePermissionSpy.mock.calls[0][0]).toStrictEqual({
