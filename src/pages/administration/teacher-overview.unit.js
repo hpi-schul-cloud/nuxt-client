@@ -17,7 +17,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
-		lastLoginSystemChange: "01.01.2022",
+		lastLoginSystemChange: "2022-01-01T13:36:12.148Z",
 	},
 	{
 		_id: "0000d231816abba584714c9f",
@@ -27,7 +27,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
-		outdatedSince: "02.02.2020",
+		outdatedSince: "2022-02-02T13:36:12.148Z",
 	},
 ];
 
