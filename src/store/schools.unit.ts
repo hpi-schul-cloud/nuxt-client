@@ -120,8 +120,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						receivedRequests.push({ path });
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
