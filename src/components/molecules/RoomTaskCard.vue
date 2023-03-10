@@ -34,7 +34,7 @@
 		<template v-else>
 			<v-card-text data-testid="content-card-task-content">
 				<div class="top-row-container mb-0">
-					<div class="tagline">
+					<div class="tagline" data-testid="tagline">
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>

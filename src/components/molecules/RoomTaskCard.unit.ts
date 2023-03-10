@@ -250,9 +250,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should have correct combined title for beta task", () => {
 			const wrapper = getWrapper({ ...betaTaskTestProps, role });
-			const title = wrapper.find("[data-testid='tagline']");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Beta-Aufgabe – Entwurf");
+			expect(tagline.element.textContent).toContain("Beta-Aufgabe – Entwurf");
 		});
 
 		it("should redirect to task-cards page", () => {
@@ -294,30 +294,36 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should have correct combined title for published task with due date ", () => {
 			const wrapper = getWrapper({ ...testProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Abgabe 28.09.00");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Abgabe 28.09.00"
+			);
 		});
 
 		it("should have correct combined title for published task with no due date ", () => {
 			const wrapper = getWrapper({ ...noDueTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Kein Abgabedatum");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Kein Abgabedatum"
+			);
 		});
 
 		it("should have correct combined title for planned task", () => {
 			const wrapper = getWrapper({ ...plannedTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Geplant 01.09.00");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Geplant 01.09.00"
+			);
 		});
 
 		it("should have correct combined title for draft", () => {
 			const wrapper = getWrapper({ ...draftTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Entwurf");
+			expect(tagline.element.textContent).toContain("Aufgabe – Entwurf");
 		});
 
 		it("should show or hide description area", async () => {
