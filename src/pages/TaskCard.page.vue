@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
 		<div slot="header" class="d-flex flex-row align-end">
-			<v-icon size="20" class="mr-2 mb-4">$tasks</v-icon>
+			<v-icon size="20" class="mr-2 mb-4 pb-1">$tasks</v-icon>
 			<h1 class="h6 mt-10">
 				{{ t("pages.rooms.fab.add.betatask") }}
 			</h1>
@@ -141,7 +141,9 @@ export default defineComponent({
 		const minDate = new Date().toISOString();
 		const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
 		endOfSchoolYear.setHours(12);
+		console.log(endOfSchoolYear, typeof endOfSchoolYear);
 		const maxDate = endOfSchoolYear.toISOString();
+		console.log(maxDate);
 
 		onMounted(async () => {
 			if (route.name === "rooms-task-card-new") {
