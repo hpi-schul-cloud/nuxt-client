@@ -139,6 +139,7 @@ export default defineComponent({
 		const route = useRoute();
 
 		const minDate = new Date().toISOString();
+		console.log(schoolsModule.getCurrentYear.endDate);
 		const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
 		endOfSchoolYear.setHours(12);
 		console.log(endOfSchoolYear, typeof endOfSchoolYear);
