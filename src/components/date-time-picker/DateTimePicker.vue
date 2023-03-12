@@ -95,7 +95,6 @@ export default defineComponent({
 		);
 
 		const emitDateTime = () => {
-			console.log(date.value, time.value);
 			const dateTime = new Date(date.value);
 			const hoursAndMinutes = time.value.split(":");
 			dateTime.setHours(

@@ -139,14 +139,13 @@ export default defineComponent({
 		const route = useRoute();
 
 		const minDate = new Date().toISOString();
-		console.log(schoolsModule.getCurrentYear.endDate);
-		const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
-		endOfSchoolYear.setHours(12);
-		console.log(endOfSchoolYear, typeof endOfSchoolYear);
-		const maxDate = endOfSchoolYear.toISOString();
-		console.log(maxDate);
+		const maxDate = ref("");
 
 		onMounted(async () => {
+			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+			endOfSchoolYear.setHours(12);
+			maxDate.value = endOfSchoolYear.toISOString();
+
 			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
