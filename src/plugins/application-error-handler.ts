@@ -2,6 +2,7 @@ import { ApplicationError } from "@/store/types/application-error";
 import { applicationErrorModule } from "@/store";
 
 export const handleApplicationError = (err: Error) => {
+	console.log(err);
 	/**
 	 * Note: The Global-ErrorHandler wraps the error
 	 * so we can't use instanceof ApplicationError here.
