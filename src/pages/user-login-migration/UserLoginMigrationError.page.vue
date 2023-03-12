@@ -1,20 +1,22 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
-			src="@/assets/img/migration/migration_successful.svg"
-			:alt="$t('pages.userMigration.success.img.alt')"
+			src="@/assets/img/migration/migration_error.svg"
+			:alt="$t('pages.userMigration.error.img.alt')"
 		/>
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.success.title") }}
+			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
 			<p
 				class="pa-4"
 				data-testId="text-description"
 				v-html="
-					$t('pages.userMigration.success.description', {
+					$t('pages.userMigration.error.description', {
 						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
+						instance: this.$theme.name,
+						supportLink,
 					})
 				"
 			></p>
@@ -26,12 +28,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
-	name: "UserLoginMigrationSuccess",
+	name: "UserLoginMigrationError",
 	props: {
 		sourceSystem: {
 			type: String,
@@ -45,6 +56,8 @@ export default defineComponent({
 	setup() {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
+		const envConfigModule: EnvConfigModule | undefined =
+			inject<EnvConfigModule>("envConfigModule");
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -56,6 +69,12 @@ export default defineComponent({
 
 		const isLoading: Ref<boolean> = ref(true);
 
+		const supportLink: ComputedRef<string> = computed(() =>
+			envConfigModule?.getAccessibilityReportEmail
+				? `mailto:${envConfigModule.getAccessibilityReportEmail}?subject=Fehler%20bei%20der%20Migration`
+				: ""
+		);
+
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
 			isLoading.value = false;
@@ -63,6 +82,7 @@ export default defineComponent({
 
 		return {
 			isLoading,
+			supportLink,
 			getSystemName,
 		};
 	},
