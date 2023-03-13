@@ -1,6 +1,9 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto container-max-width">
-		<img src="@/assets/img/migration/move.svg" alt="migration logo" />
+	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
+		<img
+			src="@/assets/img/migration/move.svg"
+			:alt="$t('pages.userMigration.consent.img.alt')"
+		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
@@ -114,7 +117,7 @@ export default defineComponent({
 			migrationDescription = "pages.userMigration.description.fromTarget";
 		}
 
-		const hasData: Ref<boolean> = ref(false);
+		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
@@ -123,11 +126,11 @@ export default defineComponent({
 				sourceSystem: props.sourceSystem,
 				targetSystem: props.targetSystem,
 			});
-			hasData.value = true;
+			isLoading.value = false;
 		});
 
 		return {
-			hasData,
+			isLoading,
 			migrationDescription,
 			proceedLink,
 			cancelLink,

@@ -1,7 +1,7 @@
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { NavigationGuardNext, Route } from "vue-router/types/router";
-import { createQueryParameterGuard } from "@/router/guards/query-parameter.guard";
+import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
 import { isMongoId } from "@/utils/validationUtil";
 import Mock = jest.Mock;
 
@@ -20,7 +20,7 @@ jest.mock("@/composables/application-error.composable", () => ({
 	}),
 }));
 
-describe("createQueryParameterGuard", () => {
+describe("validateQueryParameters", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -37,7 +37,7 @@ describe("createQueryParameterGuard", () => {
 			sourceSystem: "60b5c5b33f50c52fd0fd9d5c",
 			targetSystem: "60b5c5b33f50c52fd0fd9d5d",
 		};
-		const guard = createQueryParameterGuard({
+		const guard = validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		});
@@ -54,7 +54,7 @@ describe("createQueryParameterGuard", () => {
 			sourceSystem: "invalid",
 			targetSystem: "60b5c5b33f50c52fd0fd9d5d",
 		};
-		const guard = createQueryParameterGuard({
+		const guard = validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		});

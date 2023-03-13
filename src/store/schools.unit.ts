@@ -99,7 +99,7 @@ describe("schools module", () => {
 					"/v1/schools/sampleSchoolId "
 				);
 
-				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy).toHaveBeenCalledTimes(4);
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSchoolSpy).toHaveBeenCalled();
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
@@ -114,7 +114,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				expect(setLoadingSpy.mock.calls[3][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
