@@ -3,5 +3,4 @@ export interface AlertPayload {
 	status: "success" | "error" | "warning" | "info";
 	autoClose?: boolean;
 	timeout?: number;
-	position?: "top" | "bottom";
 }
