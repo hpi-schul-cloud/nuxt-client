@@ -29,7 +29,7 @@ module.exports = {
 		"prefer-const": "error",
 		"@typescript-eslint/no-inferrable-types": "error",
 		"@typescript-eslint/ban-types": "error",
-		"prettier/prettier": "error",
+		"prettier/prettier": NUXT_REMOVAL ? "warn" : "error",
 		"no-var": "error",
 		"vue/no-v-text-v-html-on-component": "warn",
 		"vue/no-v-html": "warn",
