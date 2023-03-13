@@ -4,26 +4,10 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
-// TODO adjust imports when interfaces below are not needed anymore (API includes title)
 import {
 	RichTextCardElementParamInputFormatEnum,
-	// TaskCardResponse,
-	CardElementResponse,
-	TaskResponse,
+	TaskCardResponse,
 } from "../serverApi/v3/api";
-
-// TODO remove when interfaces in generated API include title
-interface TaskCardResponse {
-	id: string;
-	cardElements: Array<CardElementResponse>;
-	courseName?: string;
-	courseId?: string;
-	draggable: boolean;
-	task: TaskResponse;
-	visibleAtDate: string;
-	dueDate: string;
-	title: string;
-}
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
