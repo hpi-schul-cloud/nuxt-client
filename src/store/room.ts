@@ -1,5 +1,6 @@
 import { applicationErrorModule, authModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SingleColumnBoardResponse,
@@ -10,6 +11,7 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	ApiValidationError,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -193,14 +195,12 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
-			// @ts-ignore
 			if (!data.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
-			// @ts-ignore
 			this.setCourseShareToken(data.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -219,7 +219,6 @@ export default class RoomModule extends VuexModule {
 			const requestUrl = `/v1/homework/${payload.itemId}`;
 			const response = await $axios.get(requestUrl);
 			const homework = response?.data;
-			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -229,12 +228,10 @@ export default class RoomModule extends VuexModule {
 			}
 			let archived = [];
 			if (payload.action === "finish") {
-				// @ts-ignore
 				archived = homework?.archived;
 				archived.push(userId);
 			}
 			if (payload.action === "restore") {
-				// @ts-ignore
 				archived = homework?.archived.filter((item: string) => item !== userId);
 			}
 
@@ -243,7 +240,6 @@ export default class RoomModule extends VuexModule {
 					archived,
 				})
 			).data;
-			// @ts-ignore
 			if (!patchedData._id) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -269,7 +265,6 @@ export default class RoomModule extends VuexModule {
 	}): Promise<void> {
 		const requestUrl = `/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`;
 		const ret_val = (await $axios.get(requestUrl)).data;
-		// @ts-ignore
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
@@ -299,6 +294,12 @@ export default class RoomModule extends VuexModule {
 			HttpStatusCode.RequestTimeout,
 			HttpStatusCode.InternalServerError,
 		];
+		if (error === null) {
+			applicationErrorModule.resetError();
+			return;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const errorCode = error.response?.data.code;
 		if (errorCode && handledApplicationErrors.includes(errorCode))
