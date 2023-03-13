@@ -227,10 +227,11 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const data = (
-				await $axios.get(`/v1/federalStates/${this.school.federalState}`)
+				await $axios.get<FederalState>(
+					`/v1/federalStates/${this.school.federalState}`
+				)
 			).data;
 
-			// @ts-ignore
 			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -246,9 +247,8 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const currentYear = (
-				await $axios.get(`/v1/years/${this.school.currentYear}`)
+				await $axios.get<Year>(`/v1/years/${this.school.currentYear}`)
 			).data;
-			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: unknown) {
