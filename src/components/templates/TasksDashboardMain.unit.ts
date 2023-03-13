@@ -4,6 +4,7 @@ import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -46,6 +47,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
+	let shareModuleMock: ShareModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -61,6 +63,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
+				shareModule: shareModuleMock,
 				i18n: { t: (key: string) => key },
 			},
 			...attrs,
@@ -180,6 +183,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 			notifierModuleMock = createModuleMocks(NotifierModule);
+			shareModuleMock = createModuleMocks(ShareModule);
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
