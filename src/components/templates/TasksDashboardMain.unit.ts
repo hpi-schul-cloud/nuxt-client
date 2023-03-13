@@ -71,6 +71,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		it("should receive valid role props", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			const { validator } = TasksDashboardMain.props.role;
 
 			validRoles.forEach((role) => {

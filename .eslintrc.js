@@ -23,7 +23,7 @@ module.exports = {
 		"vue/no-useless-template-attributes": "error",
 		"@typescript-eslint/no-empty-function": "error",
 		"vue/multi-word-component-names": NUXT_REMOVAL ? "warn" : "error",
-		"@typescript-eslint/ban-ts-comment": NUXT_REMOVAL ? "warn" : "error",
+		"@typescript-eslint/ban-ts-comment": "error",
 		"vue/no-mutating-props": "error",
 		"no-undef": NUXT_REMOVAL ? "warn" : "error",
 		"prefer-const": "error",

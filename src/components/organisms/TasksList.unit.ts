@@ -56,7 +56,11 @@ describe("@/components/organisms/TasksList", () => {
 
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			const typeValidator = TasksList.props.type.validator;
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			const roleValidator = TasksList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
@@ -192,9 +196,6 @@ describe("@/components/organisms/TasksList", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSpinner).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
 			expect(

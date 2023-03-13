@@ -8,10 +8,11 @@ import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { Envs } from "@/store/types/env-config";
 
 const mockData = {
 	roomId: "123",
@@ -100,7 +101,7 @@ const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (props: object, options?: object) => {
-	return mount<any>(RoomDashboard as MountOptions<Vue>, {
+	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -123,8 +124,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
-		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true } as Envs);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -172,12 +172,12 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "teacher",
 			});
-			const emptyStateComponent: any = wrapper.find(
+			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(
+			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
+			expect(emptyStateComponent.props("title")).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.room.teacher.emptyState")
 			);
 		});
@@ -187,12 +187,12 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "student",
 			});
-			const emptyStateComponent: any = wrapper.find(
+			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(
+			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
+			expect(emptyStateComponent.props("title")).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.room.student.emptyState")
 			);
 		});
@@ -495,8 +495,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
@@ -532,8 +531,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {

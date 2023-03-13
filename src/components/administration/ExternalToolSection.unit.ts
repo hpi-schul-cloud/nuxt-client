@@ -106,6 +106,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 				const testKey = "testKey";
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
@@ -118,6 +119,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 				const testKey = 123;
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
@@ -230,6 +232,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					//@ts-ignore
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
@@ -318,6 +321,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const expectedName = "Name";
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
@@ -325,6 +329,7 @@ describe("ExternalToolSection", () => {
 					outdated: false,
 				};
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
@@ -336,9 +341,11 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = setup();
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 

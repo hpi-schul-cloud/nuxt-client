@@ -5,6 +5,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { Envs } from "@/store/types/env-config";
 
 const testProps = {
 	room: {
@@ -550,8 +551,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-						// @ts-ignore
-						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+						envConfigModule.setEnvs({
+							FEATURE_COPY_SERVICE_ENABLED: true,
+						} as Envs);
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ ...testProps, role });
 						wrapper.vm.copyCard = copyCard;
@@ -570,8 +572,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
-						// @ts-ignore
-						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
+						envConfigModule.setEnvs({
+							FEATURE_COPY_SERVICE_ENABLED: false,
+						} as Envs);
 						const wrapper = getWrapper({ ...testProps, role });
 
 						const threeDotButton = wrapper.find(".three-dot-button");
