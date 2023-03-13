@@ -30,6 +30,7 @@
 					v-intersect="loadMore"
 					:task="task"
 					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 				<task-item-teacher
 					v-else
@@ -37,6 +38,7 @@
 					:task="task"
 					role="article"
 					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
@@ -128,6 +130,9 @@ export default {
 		},
 		onCopyTask(payload) {
 			this.$emit("copy-task", payload);
+		},
+		onShareTask(taskId) {
+			this.$emit("share-task", taskId);
 		},
 	},
 };
