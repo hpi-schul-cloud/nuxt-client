@@ -107,6 +107,10 @@ export default defineComponent({
 		const handleDateInput = (newDate: string) => {
 			dateError.value = false;
 			date.value = newDate;
+
+			if (time.value === "") {
+				time.value = "12:00";
+			}
 			if (valid.value) {
 				emitDateTime();
 			}
