@@ -4,7 +4,6 @@ import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -12,6 +11,8 @@ import { mount, MountOptions } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import ShareModule from "@/store/share";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 const mockData = {
 	roomId: "123",
@@ -94,7 +95,7 @@ const emptyMockData = {
 	elements: [],
 };
 
-const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
+const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
@@ -106,7 +107,7 @@ const getWrapper = (props: object, options?: object) => {
 		}),
 		provide: {
 			notifierModule: notifierModuleMock,
-			shareLessonModule: shareLessonModuleMock,
+			shareModule: shareModuleMock,
 		},
 		propsData: props,
 		...options,
@@ -123,8 +124,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
+		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
 		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		envConfigModule.setEnvs(env);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -321,12 +323,33 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				role: "teacher",
 			});
 			const lessonCard = wrapper.find(".lesson-card");
-
 			lessonCard.vm.$emit("open-modal", "12345");
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
-			expect(shareLessonModuleMock.startShareFlow).toBeCalledWith("12345");
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "12345",
+				type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+			});
+		});
+	});
+
+	describe("Sharing Task", () => {
+		it("should call startShareFlow when share task item clicked", async () => {
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
+			});
+			const taskCard = wrapper.find(".task-card");
+
+			taskCard.vm.$emit("share-task", "1234");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "1234",
+				type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+			});
 		});
 	});
 

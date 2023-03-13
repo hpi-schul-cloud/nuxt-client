@@ -107,6 +107,7 @@ import {
 	mdiShareVariant,
 } from "@mdi/js";
 import { defineComponent, inject, ref } from "vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -122,7 +123,8 @@ export default defineComponent({
 		type: {
 			type: String,
 			required: true,
-			validator: (type) => ["course", "lesson", "task"].includes(type),
+			validator: (type) =>
+				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 		},
 	},
 	setup(props, { emit }) {

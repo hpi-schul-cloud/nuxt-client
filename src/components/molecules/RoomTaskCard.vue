@@ -119,6 +119,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
+	mdiShareVariant,
 } from "@mdi/js";
 import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -157,6 +158,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 				mdiTextBoxCheckOutline,
+				mdiShareVariant,
 			},
 			roles: Roles,
 			canShowDescription: false,
@@ -327,6 +329,15 @@ export default {
 						action: () => this.copyCard(),
 						name: this.$t("common.actions.copy"),
 						dataTestId: "content-card-task-menu-copy",
+					});
+				}
+
+				if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.$emit("share-task", this.task.id),
+						name: this.$t("pages.room.taskCard.label.shareTask"),
+						dataTestId: "content-card-task-menu-share",
 					});
 				}
 
