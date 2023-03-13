@@ -98,6 +98,7 @@ describe("@/components/share/ShareModal", () => {
 
 		form.vm.$emit("share-options-change", payload);
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		expect(wrapper.vm.shareOptions).toStrictEqual(payload);
 	});

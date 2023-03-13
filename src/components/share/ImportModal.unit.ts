@@ -75,12 +75,10 @@ describe("@components/share/ImportModal", () => {
 		await dialog.vm.$emit("dialog-confirmed");
 
 		const emitted = wrapper.emitted("import");
-		if (emitted === undefined) {
-			return fail("Unknown emit");
-		}
 
+		expect(emitted).not.toBeUndefined();
 		expect(emitted).toHaveLength(1);
-		expect(emitted[0][0]).toStrictEqual("TestParentName");
+		expect(emitted?.[0][0]).toStrictEqual("TestParentName");
 	});
 
 	it("should cancel on dialog cancel", async () => {
