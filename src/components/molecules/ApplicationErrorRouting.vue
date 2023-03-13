@@ -17,7 +17,6 @@ export default defineComponent({
 	name: "ApplicationErrorRouting",
 	setup() {
 		const router = useRouter();
-
 		const { createApplicationError } = useApplicationError();
 
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(

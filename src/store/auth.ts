@@ -237,7 +237,7 @@ export default class AuthModule extends VuexModule {
 		this.setUser(user);
 
 		if (user.schoolId) {
-			schoolsModule.fetchSchool();
+			await schoolsModule.fetchSchool();
 		}
 		if (user.language) {
 			this.setLocale(user.language);
