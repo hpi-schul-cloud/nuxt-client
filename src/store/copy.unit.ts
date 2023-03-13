@@ -211,7 +211,7 @@ describe("copy module", () => {
 				const newName = "My Course";
 				const payload = {
 					token,
-					type: CopyParamsTypeEnum.Course,
+					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Courses,
 					newName,
 				};
 
@@ -235,7 +235,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: CopyParamsTypeEnum.Course,
+					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Courses,
 					newName: "My Course",
 				};
 
@@ -263,7 +263,7 @@ describe("copy module", () => {
 				const newName = "My Lesson";
 				const payload = {
 					token,
-					type: CopyParamsTypeEnum.Lesson,
+					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Lessons,
 					newName,
 				};
 
@@ -287,7 +287,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: CopyParamsTypeEnum.Lesson,
+					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Lessons,
 					newName: "My Lesson",
 				};
 

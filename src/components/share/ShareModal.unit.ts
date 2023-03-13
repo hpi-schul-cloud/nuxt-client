@@ -1,4 +1,4 @@
-import ShareCourseModule from "@/store/share-course";
+import ShareModule from "@/store/share";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
@@ -6,12 +6,13 @@ import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 describe("@/components/share/ShareModal", () => {
-	let shareCourseModuleMock: ShareCourseModule;
+	let shareModuleMock: ShareModule;
 	const showMock = jest.fn();
 
-	const getWrapper = (attrs = { propsData: { type: "course" } }) => {
+	const getWrapper = (attrs = { propsData: { type: "courses" } }) => {
 		const wrapper = mount(ShareModal, {
 			...createComponentMocks({
 				i18n: true,
@@ -20,7 +21,7 @@ describe("@/components/share/ShareModal", () => {
 				notifierModule: {
 					show: showMock,
 				},
-				shareCourseModule: shareCourseModuleMock,
+				shareModule: shareModuleMock,
 				i18n: { t: (key: string) => key },
 			},
 			...attrs,
@@ -33,8 +34,9 @@ describe("@/components/share/ShareModal", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			createShareUrl: jest.fn(),
 			resetShareFlow: jest.fn(),
 		});
@@ -63,7 +65,7 @@ describe("@/components/share/ShareModal", () => {
 
 		dialog.vm.$emit("next");
 
-		expect(shareCourseModuleMock.createShareUrl).toHaveBeenCalled();
+		expect(shareModuleMock.createShareUrl).toHaveBeenCalled();
 	});
 
 	it("should call 'resetShareFlow' store method when dialog closed", () => {
@@ -72,12 +74,13 @@ describe("@/components/share/ShareModal", () => {
 
 		dialog.vm.$emit("dialog-closed");
 
-		expect(shareCourseModuleMock.resetShareFlow).toHaveBeenCalled();
+		expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
 	});
 
 	it("should call 'resetShareFlow' store method when sub component emits 'done'", () => {
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
 		const wrapper = getWrapper();
@@ -85,7 +88,7 @@ describe("@/components/share/ShareModal", () => {
 
 		form.vm.$emit("done");
 
-		expect(shareCourseModuleMock.resetShareFlow).toHaveBeenCalled();
+		expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
 	});
 
 	it("should call 'onShareOptionsChange' method when sub component emits 'share-options-change'", () => {
@@ -101,8 +104,9 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	it("should call 'onCopy' method when sub component emits 'copied'", async () => {
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
 		const wrapper = getWrapper();

@@ -5,8 +5,7 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import ShareCourseModule from "@/store/share-course";
-import ShareLessonModule from "@/store/share-lesson";
+import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -17,6 +16,7 @@ import Room from "./RoomDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import { Envs } from "@/store/types/env-config";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 const mockData = {
 	roomId: "123",
@@ -117,8 +117,7 @@ const $route = {
 let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
-let shareCourseModuleMock: ShareCourseModule;
-let shareLessonModuleMock: ShareLessonModule;
+let shareModuleMock: ShareModule;
 
 const $router = { push: jest.fn(), resolve: jest.fn() };
 
@@ -137,8 +136,7 @@ const getWrapper: any = () => {
 			provide("loadingStateModule", loadingStateModuleMock);
 			provide("notifierModule", notifierModuleMock);
 			provide("i18n", { t: (key: string) => key });
-			provide("shareCourseModule", shareCourseModuleMock);
-			provide("shareLessonModule", shareLessonModuleMock);
+			provide("shareModule", shareModuleMock);
 		},
 	});
 };
@@ -163,12 +161,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsOpen: false,
 		});
 		notifierModuleMock = createModuleMocks(NotifierModule);
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			startShareFlow: jest.fn(),
-		});
-		shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
-			getIsShareModalOpen: true,
 		});
 
 		initializeAxios({
@@ -394,8 +390,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
-			// const createCourseShareTokenSpy = jest.fn();
-			// shareCourseModule.createCourseShareToken = createCourseShareTokenSpy;
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -403,8 +397,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
 			await moreActionButton.trigger("click");
 
-			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalled();
-			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalledWith("123");
+			expect(shareModuleMock.startShareFlow).toHaveBeenCalled();
+			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
+				id: "123",
+				type: ShareTokenBodyParamsParentTypeEnum.Courses,
+			});
 		});
 
 		describe("modal views", () => {
