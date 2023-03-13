@@ -125,8 +125,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			copyModule: CopyModule,
 		});
 		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
-		// @ts-ignore
-		envConfigModule.setEnvs(env);
+		envConfigModule.setEnvs(env as unknown as Envs);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
