@@ -148,7 +148,7 @@ export default defineComponent({
 			}
 		});
 
-		const initElements = (cardElements: Array<CardElementResponse>) => {
+		const initElements = (cardElements: Array<CardElementResponse> = []) => {
 			cardElements.forEach((cardElement) => {
 				elements.value.push({
 					id: cardElement.id,
