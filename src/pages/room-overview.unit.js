@@ -92,13 +92,13 @@ setupStores({
 const spyMocks = {
 	storeRoomAlignMock: jest
 		.spyOn(roomsModule, "align")
-		.mockImplementation(async () => {}),
+		.mockImplementation(async () => ({})),
 	storeModuleFetchMock: jest
 		.spyOn(roomsModule, "fetch")
-		.mockImplementation(async () => {}),
+		.mockImplementation(async () => ({})),
 	storeModuleFetchAllMock: jest
 		.spyOn(roomsModule, "fetchAllElements")
-		.mockImplementation(async () => {}),
+		.mockImplementation(async () => ({})),
 	getElementNameByRefMock: jest.spyOn(
 		RoomOverview.methods,
 		"getElementNameByRef"

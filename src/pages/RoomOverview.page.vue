@@ -143,7 +143,7 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
-	inject: ["notifierModule"],
+	inject: ["notifierModule", "i18n"],
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -374,9 +374,19 @@ export default {
 			};
 			roomsModule.update(payload);
 		},
-		onImportSuccess() {
+		onImportSuccess(name) {
+			this.showImportSuccess(name);
 			this.$router.replace({ path: "/rooms-overview" });
 			roomsModule.fetch();
+		},
+		showImportSuccess(name) {
+			this.notifierModule?.show({
+				text: this.i18n?.t("components.molecules.import.options.success", {
+					name,
+				}),
+				status: "success",
+				timeout: 10000,
+			});
 		},
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;

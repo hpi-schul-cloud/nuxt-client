@@ -59,12 +59,10 @@ describe("@components/share/SelectCourseModal", () => {
 		await dialog.vm.$emit("next");
 
 		const emitted = wrapper.emitted("next");
-		if (emitted === undefined) {
-			return fail("Unknown emit");
-		}
 
+		expect(emitted).not.toBeUndefined();
 		expect(emitted).toHaveLength(1);
-		expect(emitted[0][0]).toStrictEqual(course.id);
+		expect(emitted?.[0][0]).toStrictEqual(course.id);
 	});
 
 	it("should not emit value on next if course not selected", async () => {

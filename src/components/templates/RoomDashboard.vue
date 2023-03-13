@@ -38,6 +38,7 @@
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
 						@copy-task="copyTask(item.content.id)"
+						@share-task="getSharedTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -115,7 +116,8 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
-		<share-modal type="lesson"></share-modal>
+		<share-modal type="lessons" />
+		<share-modal type="tasks" />
 		<v-custom-dialog
 			v-model="itemDelete.isOpen"
 			data-testid="delete-dialog-item"
@@ -154,6 +156,7 @@ import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -168,11 +171,11 @@ export default {
 		roomDataObject: {
 			type: Object,
 			required: true,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareLessonModule"],
+	inject: ["shareModule"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
@@ -263,7 +266,18 @@ export default {
 		},
 		async getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-				this.shareLessonModule.startShareFlow(lessonId);
+				this.shareModule.startShareFlow({
+					id: lessonId,
+					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				});
+			}
+		},
+		async getSharedTask(taskId) {
+			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+				this.shareModule.startShareFlow({
+					id: taskId,
+					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				});
 			}
 		},
 		endDragging() {

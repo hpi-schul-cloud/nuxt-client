@@ -62,7 +62,6 @@ describe("vCustomSwitch", () => {
 			},
 		});
 		const customSwitch = wrapper.find("label");
-		const customSwitchElement = customSwitch.element;
 		expect(customSwitch.text()).toBe("mock label");
 	});
 

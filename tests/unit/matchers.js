@@ -57,12 +57,14 @@ customMatchers.toBeAViewComponent = function (options, mockInstance) {
 			typeof options.page === "function"
 				? options.page.apply(mockInstance || {})
 				: options.page;
-		if (!pageObject.hasOwnProperty("title")) return false;
+		// if (!pageObject.hasOwnProperty("title")) return false;
+		if (!Object.prototype.hasOwnProperty.call(pageObject, "title"))
+			return false;
 		if (!pageObject.meta) return false;
 		const hasMetaDescription = pageObject.meta.some(
 			(metaProperty) =>
 				metaProperty.name === "description" &&
-				metaProperty.hasOwnProperty("content")
+				Object.prototype.hasOwnProperty.call(metaProperty, "content")
 		);
 		if (!hasMetaDescription) return false;
 		return true;
