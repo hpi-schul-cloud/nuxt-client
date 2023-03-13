@@ -55,12 +55,6 @@ describe("copy module", () => {
 			jest.clearAllMocks();
 		});
 
-		const mockApi = {
-			roomsControllerGetRoomBoard: jest.fn(),
-			roomsControllerPatchElementVisibility: jest.fn(),
-			roomsControllerPatchOrderingOfElements: jest.fn(),
-		};
-
 		describe("copy", () => {
 			it("should throw an error if copyResult is undefined", async () => {
 				const roomCopyMockApi = {

@@ -41,6 +41,7 @@ import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueMq from "vue-mq";
 Vue.use(VueMq, {
@@ -54,8 +55,6 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
-// NUXT_REMOVAL try to solve without vuelidate dependency
-// @ts-ignore
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 

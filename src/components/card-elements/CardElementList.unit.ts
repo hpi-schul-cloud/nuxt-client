@@ -54,9 +54,15 @@ const getNotEditableCardElementsMockData = (): CardElement[] => [
 ];
 
 class ResizeObserver {
-	observe() {}
-	unobserve() {}
-	disconnect() {}
+	observe() {
+		return;
+	}
+	unobserve() {
+		return;
+	}
+	disconnect() {
+		return;
+	}
 }
 
 const getWrapper = (props?: object) => {

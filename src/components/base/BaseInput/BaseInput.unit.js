@@ -16,7 +16,10 @@ describe("@/components/base/BaseInput", () => {
 				slots,
 			});
 			const childSlots = wrapper.vm.$children[0].$slots;
-			expect(childSlots.hasOwnProperty(slotName)).toBe(true);
+			// expect(childSlots.hasOwnProperty(slotName)).toBe(true);
+			expect(Object.prototype.hasOwnProperty.call(childSlots, slotName)).toBe(
+				true
+			);
 			expect(childSlots[slotName]).toHaveLength(1);
 		});
 	});

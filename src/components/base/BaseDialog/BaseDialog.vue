@@ -82,15 +82,15 @@ export default {
 		},
 		onClickOutside: {
 			type: Function,
-			default: () => {},
+			default: () => ({}),
 		},
 		onCancel: {
 			type: Function,
-			default: () => {},
+			default: () => ({}),
 		},
 		onConfirm: {
 			type: Function,
-			default: () => {},
+			default: () => ({}),
 		},
 		invertedDesign: {
 			type: Boolean,

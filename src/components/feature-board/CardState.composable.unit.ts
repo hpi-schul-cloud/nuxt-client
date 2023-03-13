@@ -2,6 +2,7 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
+import Vue from "vue";
 
 let wrapper: Wrapper<Vue>;
 
@@ -17,6 +18,7 @@ const mountComposable = <R>(composable: () => R): R => {
 		},
 	});
 
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	//@ts-ignore
 	return wrapper.vm.result;
 };

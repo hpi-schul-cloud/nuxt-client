@@ -74,6 +74,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		it("should receive valid role props", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			const { validator } = TasksDashboardMain.props.role;
 
@@ -108,8 +110,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should set isStudent true", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isStudent).toBe(true);
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isTeacher).toBe(false);
 		});
@@ -127,11 +131,13 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.tab).toStrictEqual("open");
 		});
 
 		it("should hide substituteFilter", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
@@ -202,8 +208,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should set isTeacher true", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isTeacher).toBe(true);
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isStudent).toBe(false);
 		});
@@ -221,6 +229,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.tab).toStrictEqual("current");
 		});
@@ -237,6 +246,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
@@ -253,6 +263,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
@@ -269,6 +280,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
@@ -346,6 +358,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
 		});
@@ -378,6 +391,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
 		});
