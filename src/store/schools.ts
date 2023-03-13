@@ -208,6 +208,8 @@ export default class SchoolsModule extends VuexModule {
 
 				this.setSchool(transformSchoolServerToClient(school));
 
+				await this.fetchCurrentYear();
+
 				this.setLoading(false);
 			} catch (error: any) {
 				this.setError(error);
