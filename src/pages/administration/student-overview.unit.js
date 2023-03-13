@@ -30,14 +30,14 @@ const mockData = [
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
 		birthday: "01.01.2000",
-		lastLoginSystemChange: "01.01.2022",
+		lastLoginSystemChange: "2022-01-01T13:36:12.148Z",
 	},
 	{
 		firstName: "Waldemar",
 		lastName: "Wunderlich",
 		birthday: "01.01.1989",
 		email: "waldemar.wunderlich@schul-cloud.org",
-		outdatedSince: "02.02.2020",
+		outdatedSince: "2022-02-02T13:36:12.148Z",
 	},
 ];
 

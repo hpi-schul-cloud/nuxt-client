@@ -433,11 +433,6 @@ describe("room module", () => {
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							return { data: { _id: "returnId" } };
-						},
 						get: async (path: string, params: object) => {
 							receivedRequests.push({ path });
 							receivedRequests.push({ params });
@@ -449,8 +444,14 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
 				const roomModule = new RoomModule({});
-				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
 					roomModule,
@@ -461,20 +462,11 @@ describe("room module", () => {
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
 				expect(receivedRequests[0].path).toStrictEqual("/v1/homework/finishId");
-				expect(finishTaskSpy.mock.calls[0][0]).toStrictEqual({
-					itemId: "finishId",
-					action: "finish",
-				});
 			});
 
 			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							return { data: { _id: "returnId" } };
-						},
 						get: async (path: string, params: object) => {
 							receivedRequests.push({ path });
 							receivedRequests.push({ params });
@@ -504,16 +496,12 @@ describe("room module", () => {
 				);
 			});
 
-			it("should make a 'PATCH' call to the backend with archived list", async () => {
+			it("should make a 'PATCH' call to the backend", async () => {
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: object) => {
+						get: async (path: string, params: object) => {
 							receivedRequests.push({ path });
 							receivedRequests.push({ params });
-							return { data: { _id: "returnId" } };
-						},
-						// eslint-disable-next-line @typescript-eslint/no-unused-vars
-						get: async (path: string, params: object) => {
 							return {
 								data: {
 									archived: ["firstId"],
@@ -522,6 +510,13 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
 				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -532,59 +527,12 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
-				expect(receivedRequests[0].path).toStrictEqual("/v1/homework/finishId");
-				expect(receivedRequests[1].params).toStrictEqual({
-					archived: ["firstId", "testUser"],
-				});
-			});
-
-			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
-				(() => {
-					initializeAxios({
-						patch: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							return { data: { someValue: "some value for error case" } };
-						},
-						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							return {
-								data: {
-									archived: ["firstId"],
-								},
-							};
-						},
-					} as AxiosInstance);
-				})();
-				const roomModule = new RoomModule({});
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
-				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
-					"resetBusinessError"
-				);
-				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
-
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
-					"400"
-				);
-				expect(setBusinessErrorSpy.mock.calls[0][0].message).toStrictEqual(
-					"archived-not-patched"
-				);
+				expect(mockApi.taskControllerFinish).toBeCalledWith("finishId");
 			});
 
 			it("should catch error in catch block", async () => {
-				const error = { statusCode: 404, message: "friendly error" };
-
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							return Promise.reject({ ...error });
-						},
 						get: async (path: string, params: object) => {
 							receivedRequests.push({ path });
 							receivedRequests.push({ params });
@@ -596,6 +544,16 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: () => {
+						throw {
+							response: { status: 404, statusText: "friendly error" },
+						};
+					},
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 				const roomModule = new RoomModule({});
 				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");

@@ -89,7 +89,13 @@ const mockAuthStoreDataTeacher = {
 	lastName: "Parker",
 	email: "peter.parker@hitchhiker.org",
 	roles: [{ name: "teacher" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+	permissions: [
+		"COURSE_CREATE",
+		"COURSE_EDIT",
+		"TOPIC_CREATE",
+		"TASK_CARD_EDIT",
+		"HOMEWORK_CREATE",
+	],
 };
 
 const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
