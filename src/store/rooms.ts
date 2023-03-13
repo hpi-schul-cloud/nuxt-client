@@ -37,7 +37,7 @@ export default class RoomsModule extends VuexModule {
 	importedCourseId = "";
 
 	loading = false;
-	error: null | {} = null;
+	error: null | object = null;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -111,7 +111,7 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
+	setError(error: object): void {
 		this.error = error;
 	}
 
@@ -169,7 +169,7 @@ export default class RoomsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 
@@ -278,7 +278,7 @@ export default class RoomsModule extends VuexModule {
 	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await this.dashboardApi.dashboardControllerPatchGroup(
+			await this.dashboardApi.dashboardControllerPatchGroup(
 				this.getRoomsId,
 				payload.xPosition,
 				payload.yPosition,
@@ -347,7 +347,6 @@ export default class RoomsModule extends VuexModule {
 			).data;
 			this.setSharedCourseData({
 				code: courseCode,
-				// @ts-ignore
 				courseName: courseName,
 				status: "success",
 				message: "",
@@ -373,7 +372,6 @@ export default class RoomsModule extends VuexModule {
 					courseName: courseData.courseName,
 				})
 			).data;
-			// @ts-ignore
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
 		} catch (error: any) {
 			this.setBusinessError({

@@ -63,7 +63,7 @@ export default {
 			get() {
 				return this.isSuccess ? this.successMsg : this.errorMsg;
 			},
-			set() {},
+			set: () => ({}),
 		},
 	},
 	methods: {

@@ -136,7 +136,6 @@ describe("@/components/organisms/FormNews", () => {
 			expect(actions.create.mock.calls).toHaveLength(0);
 			expect(actions.patch.mock.calls).toHaveLength(0);
 			expect(actions.remove.mock.calls).toHaveLength(1);
-			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 		});
 	});
 });

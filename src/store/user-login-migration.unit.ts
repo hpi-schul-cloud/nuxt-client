@@ -56,13 +56,13 @@ describe("UserLoginMigrationModule", () => {
 
 		describe("Error", () => {
 			it("should return the default state", () => {
-				const error: {} | null = module.getError;
+				const error: object | null = module.getError;
 
 				expect(error).toEqual(null);
 			});
 
 			it("should return the changed state", () => {
-				const error: {} | null = new Error();
+				const error: object | null = new Error();
 
 				module.setError(error);
 

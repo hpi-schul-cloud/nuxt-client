@@ -7,13 +7,13 @@ export type User = {
 	updatedAt: string;
 	birthday: string;
 	createdAt: string;
-	preferences: {};
+	preferences: object;
 	schoolId: string;
 	roles: any[];
 	emailSearchValues: string[];
 	firstNameSearchValues: string[];
 	lastNameSearchValues: string[];
-	consent: {};
+	consent: object;
 	forcePasswordChange: boolean;
 	language: string;
 	fullName: string;

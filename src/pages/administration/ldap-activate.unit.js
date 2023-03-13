@@ -64,7 +64,7 @@ describe("ldap/activate", () => {
 				getSubmitted: () => ({ ...mockResponseData }),
 				getTemp: () => ({}),
 				getStatus: () => "completed",
-				getData: () => {},
+				getData: () => ({}),
 			},
 		},
 	};
@@ -229,7 +229,7 @@ describe("ldap/activate", () => {
 			}),
 			getTemp: () => ({}),
 			getStatus: () => "completed",
-			getData: () => {},
+			getData: () => ({}),
 		};
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({
