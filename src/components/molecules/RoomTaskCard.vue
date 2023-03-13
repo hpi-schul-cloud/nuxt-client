@@ -461,7 +461,7 @@ export default {
 			let classes = "";
 
 			if (this.isBetaTask) {
-				classes = classes + " beta-task";
+				classes = classes + " beta-task-bg";
 			}
 			if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 				classes = classes + " task-hidden";
@@ -531,7 +531,7 @@ export default {
 	}
 }
 
-.beta-task {
+.beta-task-bg {
 	// based on beta-task color #196c9e
 	background-color: rgba(25, 108, 158, 0.05) !important;
 }
