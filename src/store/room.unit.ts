@@ -8,6 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosInstance } from "axios";
 import { authModule, applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "./types/http-status-code.enum";
+import { User } from "./types/auth";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -426,8 +427,7 @@ describe("room module", () => {
 		describe("finishTask", () => {
 			beforeEach(() => {
 				receivedRequests = [];
-				// @ts-ignore
-				authModule.setUser({ id: "testUser" });
+				authModule.setUser({ id: "testUser" } as User);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
@@ -619,8 +619,7 @@ describe("room module", () => {
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
 				receivedRequests = [];
-				// @ts-ignore
-				authModule.setUser({ id: "testUser" });
+				authModule.setUser({ id: "testUser" } as User);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
