@@ -77,7 +77,7 @@ jobs:
   branch_meta:
     runs-on: ubuntu-latest
     outputs:
-      branch: ${{ steps.extract_branch.outputs.branch }}
+      branch: ${{ steps.extract_branch_meta.outputs.branch }}
       sha: ${{ steps.extract_branch_meta.outputs.sha }}
     steps:
       - name: Extract branch meta
