@@ -28,8 +28,8 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search"
-				/></template>
+					<base-icon source="material" icon="search" />
+				</template>
 			</base-input>
 
 			<data-filter
@@ -65,7 +65,7 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent> </template>
+				<template #headcolumn-consent></template>
 				<template #columnlabel-consent></template>
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
@@ -132,7 +132,7 @@
 <script>
 /* eslint-disable max-lines */
 import { mapGetters } from "vuex";
-import { envConfigModule, schoolsModule, notifierModule } from "@/store";
+import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter";
@@ -229,11 +229,13 @@ export default {
 					field: "lastLoginSystemChange",
 					label: this.$t("common.labels.migrated"),
 					sortable: true,
+					tooltipText: this.$t("common.labels.migrated.tooltip"),
 				},
 				{
 					field: "outdatedSince",
 					label: this.$t("common.labels.outdated"),
 					sortable: true,
+					tooltipText: this.$t("common.labels.outdated.tooltip"),
 				},
 				{
 					// edit column

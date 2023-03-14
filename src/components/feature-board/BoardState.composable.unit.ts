@@ -16,6 +16,7 @@ const mountComposable = <R>(composable: () => R): R => {
 			return { result };
 		},
 	});
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return wrapper.vm.result;
 };

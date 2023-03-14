@@ -1,6 +1,5 @@
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
-import Pagination from "@/components/organisms/Pagination.vue";
 
 const defaultData = tableData(5);
 

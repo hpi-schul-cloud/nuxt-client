@@ -30,8 +30,7 @@ declare module "vue/types/vue" {
 }
 // NUXT_REMOVAL remove $ts when refactored
 Vue.prototype.$ts = (key: string) => {
-	// @ts-ignore
-	const result = this.$t(key);
+	const result = (this as unknown as Vue).$t(key);
 	if (typeof result !== "string") {
 		throw new Error("Translation Result is not a string");
 	}

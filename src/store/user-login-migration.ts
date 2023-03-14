@@ -22,7 +22,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 		cancelLink: "",
 	};
 	private loading = false;
-	private error: {} | null = null;
+	private error: object | null = null;
 
 	private get userMigrationApi(): UserMigrationApiInterface {
 		return UserMigrationApiFactory(undefined, "v3", $axios);
@@ -39,7 +39,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {} | null): void {
+	setError(error: object | null): void {
 		this.error = error;
 	}
 
@@ -51,7 +51,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 		return this.migrationLinks;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 

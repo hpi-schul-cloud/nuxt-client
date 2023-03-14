@@ -9,6 +9,7 @@ import {
 	RoomsApiInterface,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
+	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenInfoResponse,
 	TaskApiFactory,
 	TaskApiInterface,
@@ -28,7 +29,7 @@ export enum CopyParamsTypeEnum {
 }
 
 interface CopyByShareTokenPayload {
-	type: string;
+	type: ShareTokenBodyParamsParentTypeEnum;
 	token: string;
 	newName: string;
 	destinationCourseId?: string;
@@ -113,12 +114,15 @@ export default class CopyModule extends VuexModule {
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
-		if (type === CopyParamsTypeEnum.Course) {
+		if (type === ShareTokenBodyParamsParentTypeEnum.Courses) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, { newName })
 				.then((response) => response.data);
 		}
-		if (type === CopyParamsTypeEnum.Lesson) {
+		if (
+			type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
+			type === ShareTokenBodyParamsParentTypeEnum.Tasks
+		) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, {
 					newName,
